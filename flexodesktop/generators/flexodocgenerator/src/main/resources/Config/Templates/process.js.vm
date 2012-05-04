@@ -13,7 +13,7 @@
 @end#end
 
 #macro(getNodeType $node)~@single
-    #if(${node.isArtefact()})
+    #if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
 		TYPE_ARTEFACT
     #elseif(${node.getClassNameKey()} == "flexo_project")
         TYPE_PROJECT
@@ -171,7 +171,7 @@
         descDiv.appendChild(h2Element);
         
         /*ROLE*/
-        #if(${node.getRoleName()})
+        #if(${generator.isInstance($node, "org.openflexo.foundation.wkf.node.AbstractActivityNode")} && ${node.getRoleName()})
             var h3RoleElement = document.createElement('h3');
             h3RoleElement.appendChild(document.createTextNode('Role: '));
             var spanH3RoleContentElement = document.createElement('span');
@@ -187,7 +187,7 @@
         divDescriptionElement.innerHTML = '<p><strong>Description:</strong></p>';
         divDescriptionElement.innerHTML = divDescriptionElement.innerHTML + '${generator.escapeStringForJS("${node.getFullDescriptionWithOnlyBodyContent(${repository.getDocType().getName()})}")}';
         
-        #if(${node.getLevel()} == "OPERATION" && ${node.hasWOComponent()})
+        #if(${generator.isInstance($node, "org.openflexo.foundation.wkf.node.OperationNode")} && ${node.hasWOComponent()})
             var pScreenElement = document.createElement('p');
             pScreenElement.innerHTML = '<strong>Screen: </strong>';
             #set($screenShot = ${generator.screenshot($node, $projectGenerator)})
@@ -199,7 +199,7 @@
             
             divDescriptionElement.appendChild(pScreenElement);
         #end
-        #if(${node.isMessageSent()})
+        #if(${node.getClassNameKey()}=="event_node" && ${node.isMessageSent()})
             var pMailElement = document.createElement('p');
             var aMailElement = document.createElement('a');
             aMailElement.href = 'javascript: void(0);';
@@ -253,8 +253,8 @@
     #set($y1 = $nodeGraphicalRepresentation.getLocationInDrawing().getY()*$scale - $trimInfo.getY() - 1)
     #set($x2 = $x1+$nodeGraphicalRepresentation.getWidth()*$scale + $shadow + 2)
     #set($y2 = $y1+$nodeGraphicalRepresentation.getHeight()*$scale + $shadow + 2)
-    
-    #if($node.isSubProcessNode() && !${node.getDontGenerate()})
+    #set($isActivity = ${generator.isInstance($node, "org.openflexo.foundation.wkf.node.AbstractActivityNode")})
+    #if($isActivity && $node.isSubProcessNode() && !${node.getDontGenerate()})
         
         #set($expandingRect = $nodeGraphicalRepresentation.getExpandingRect())
         #set($x1Plus = $x1 + $nodeGraphicalRepresentation.getWidth() * $expandingRect.getX()*$scale)
@@ -300,8 +300,7 @@
     areaElement.shape = 'rect';
     areaElement.href = 'javascript:void(0);';
     areaElement.coords = (${generator.getNumberAsInteger($x1)} + areaOffset) + ',${generator.getNumberAsInteger($y1)},' +(${generator.getNumberAsInteger($x2)} + areaOffset)+ ',${generator.getNumberAsInteger($y2)}';
-    
-    #if(!${node.getDontGenerate()} || ${node.getLinkedProcess()} || ${node.getDocumentationUrl()})
+    #if(!${node.getDontGenerate()} || ($isActivity && (${node.getLinkedProcess()} || ${node.getDocumentationUrl()})))
         areaElement.className = 'htmlDocArea';
         areaElement.title = '${generator.escapeStringForJS(${node.getName()})}';
         
@@ -337,7 +336,7 @@
 				{type: 'html', height: 'auto', width: 'auto', draggable: true, resizable: true, overlay: false, opacity:1});
 			@end
 			}
-		#elseif(${node.getLinkedProcess()})
+		#elseif($isActivity && ${node.getLinkedProcess()})
 			areaElement.ondblclick = function(event)
             {
                 FlexoReader.open('${node.getLinkedProcess().getURI()}');
@@ -350,7 +349,7 @@
                 event.returnValue = false;
                 return false;
             }
-		#elseif(${node.getDocumentationUrl()})
+		#elseif($isActivity && ${node.getDocumentationUrl()})
 			
 			areaElement.ondblclick = function(event)
             {
@@ -363,12 +362,12 @@
                 event.returnValue = false;
                 return false;
             }
-		#elseif(${node.isMessageSent()})
+		#elseif(${node.getClassNameKey()}=="event_node" && ${node.isMessageSent()})
 			areaElement.ondblclick = function(event)
             {
 				#getMailOutLitbox($node)
             }
-		#else
+		#elseif($isActivity)
 			#set($pg = ${node.getOperationPetriGraph()})
 			#if(!$pg)
 				#set($pg = ${node.getExecutionPetriGraph()})
@@ -409,13 +408,13 @@
 #end
 
 #macro(getCreateContentFunction $node)
-    #if(${node.getLevel()} == "PROCESS" || (${node.getLevel()} == "ACTIVITY" && (${node.getOperationPetriGraph()} || ${node.getExecutionPetriGraph()})) || ${node.isArtefact()})
+    #if(${node.getLevel()} == "PROCESS" || (${node.getLevel()} == "ACTIVITY" && (${node.getOperationPetriGraph()} || ${node.getExecutionPetriGraph()})) || ${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
         function(fatherDiv, flexoNode)
         {
             #set($screenShot = "")
             #set($trimInfo = "")
 			#set($screenshotName = "")
-			#if(${node.isArtefact()})
+			#if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
 				#set($screenShot = ${generator.screenshot($node.getParentPetriGraph().getContainer(), $projectGenerator)})
 				#set($trimInfo = ${project.getScreenshotResource($node.getParentPetriGraph().getContainer(), true).getTrimInfo()})
 				#set($screenshotName = ${generator.screenshotName($node.getParentPetriGraph().getContainer(), $projectGenerator)})
@@ -540,10 +539,10 @@
         #set($uri=${node.getURI()})
 		#set($name=${generator.escapeStringForHTML(${node.getName()}, true)})
 		#set($index = 0)
-		#if(!${node.isArtefact()})
+		#if(!${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
 			#set($index=${node.getIndex()})
 		#end
-        FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${node.isArtefact()}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()}) false #else true #end);
+        FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()}) false #else true #end);
         
         #if(${node.getLevel()} == "ACTIVITY" && ${node.getOperationPetriGraph()})
             #foreach($subNode in ${node.getOperationPetriGraph().getNodes()})

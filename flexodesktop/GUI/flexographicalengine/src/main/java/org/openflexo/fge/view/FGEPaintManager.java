@@ -191,6 +191,9 @@ public class FGEPaintManager {
 	}
 
 	public void repaint(final FGEView view) {
+		if (view.isDeleted()) {
+			return;
+		}
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -232,7 +235,7 @@ public class FGEPaintManager {
 			}
 			// What may happen here ?
 			// Control points displayed focus or selection might changed, and to be refresh correctely
-			// we mut assume that a request to an extended area embedding those control points
+			// we must assume that a request to an extended area embedding those control points
 			// must be performed (in case of border is not sufficient)
 			ShapeGraphicalRepresentation<?> gr = ((ShapeView<?>) view).getGraphicalRepresentation();
 			int requiredControlPointSpace = FGEConstants.CONTROL_POINT_SIZE;

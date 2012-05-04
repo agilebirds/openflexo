@@ -99,7 +99,6 @@ public class NodeSelector<N extends AbstractNode> extends AbstractBrowserSelecto
 			setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 			setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.STATUS, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.DEADLINE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.SHOW);
 			setFilterStatus(BrowserElementType.MESSAGE_DEFINITION, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.COMPONENT, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);

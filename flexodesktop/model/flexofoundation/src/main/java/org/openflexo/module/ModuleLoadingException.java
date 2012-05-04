@@ -26,8 +26,13 @@ public class ModuleLoadingException extends FlexoException {
 
 	private IModule module;
 
-	public ModuleLoadingException(IModule module) {
+	public ModuleLoadingException(IModule module, Exception cause) {
+		super(cause);
 		this.module = module;
+	}
+
+	public ModuleLoadingException(IModule module) {
+		this(module, null);
 	}
 
 	public IModule getModule() {

@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -139,7 +140,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public void delete() {
+	public synchronized void delete() {
 		logger.fine("Delete ShapeView " + Integer.toHexString(hashCode()) + " for " + getGraphicalRepresentation());
 		if (getParentView() != null) {
 			FGELayeredView parentView = getParentView();
@@ -207,6 +208,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		return getController().getScale();
 	}
 
+	@Override
 	public void rescale() {
 		relocateAndResizeView();
 	}
@@ -340,166 +342,177 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public void update(Observable o, Object aNotification) {
+	public void update(final Observable o, final Object aNotification) {
 		if (isDeleted) {
 			logger.warning("Received notifications for deleted view: observable=" + o);
 			return;
 		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
 
-		// logger.info("For "+getGraphicalRepresentation().getClass().getSimpleName()+" received: "+aNotification);
-
-		if (aNotification instanceof FGENotification) {
-			FGENotification notification = (FGENotification) aNotification;
-			if (notification instanceof GraphicalRepresentationAdded) {
-				GraphicalRepresentation<?> newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
-				logger.fine("ShapeView: Received ObjectAdded notification, creating view for " + newGR);
-				if (newGR instanceof ShapeGraphicalRepresentation) {
-					ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) newGR;
-					add(shapeGR.makeShapeView(getController()));
-					revalidate();
-					getPaintManager().repaint(this);
-					shapeGR.notifyShapeNeedsToBeRedrawn();
-				} else if (newGR instanceof ConnectorGraphicalRepresentation) {
-					ConnectorGraphicalRepresentation<?> connectorGR = (ConnectorGraphicalRepresentation<?>) newGR;
-					add(connectorGR.makeConnectorView(getController()));
-					revalidate();
-					getPaintManager().repaint(this);
-				} else if (newGR instanceof GeometricGraphicalRepresentation) {
-					newGR.addObserver(this);
-					revalidate();
-					getPaintManager().repaint(this);
+				@Override
+				public void run() {
+					update(o, aNotification);
 				}
-			} else if (notification instanceof GraphicalRepresentationRemoved) {
-				GraphicalRepresentation<?> removedGR = ((GraphicalRepresentationRemoved) notification).getRemovedGraphicalRepresentation();
-				if (removedGR instanceof ShapeGraphicalRepresentation) {
-					ShapeView<?> view = getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) removedGR);
-					if (view != null) {
-						remove(view);
-						revalidate();
-						getPaintManager().invalidate(getGraphicalRepresentation());
-						getPaintManager().repaint(this);
-					} else {
-						logger.warning("Cannot find view for " + removedGR);
-					}
-				} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
-					ConnectorView<?> view = getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) removedGR);
-					if (view != null) {
-						remove(view);
-						revalidate();
-						getPaintManager().invalidate(getGraphicalRepresentation());
-						getPaintManager().repaint(this);
-					} else {
-						logger.warning("Cannot find view for " + removedGR);
-					}
-				} else if (removedGR instanceof GeometricGraphicalRepresentation) {
-					removedGR.deleteObserver(this);
-					revalidate();
-					getPaintManager().repaint(this);
-				}
-			} else if (notification instanceof GraphicalRepresentationDeleted) {
-				GraphicalRepresentation<?> deletedGR = ((GraphicalRepresentationDeleted) notification).getDeletedGraphicalRepresentation();
-				// If was not removed, try to do it now
-				if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
-						&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
-					getGraphicalRepresentation().getContainerGraphicalRepresentation().notifyDrawableRemoved(deletedGR);
-				}
-				if (getGraphicalRepresentation() != null && getController().getFocusedObjects().contains(getGraphicalRepresentation())) {
-					getController().removeFromFocusedObjects(getGraphicalRepresentation());
-				}
-				if (getGraphicalRepresentation() != null && getController().getSelectedObjects().contains(getGraphicalRepresentation())) {
-					getController().removeFromSelectedObjects(getGraphicalRepresentation());
-				}
-				delete();
-			} else if (notification instanceof ObjectWillMove) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
-				}
-			} else if (notification instanceof ObjectMove) {
-				relocateView();
-				if (getParentView() != null) {
-					getPaintManager().repaint(this);
-				}
-			} else if (notification instanceof ObjectHasMoved) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
-					getPaintManager().repaint(getParentView());
-				}
-			} else if (notification instanceof ObjectWillResize) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
-				}
-			} else if (notification instanceof ObjectResized) {
-				resizeView();
-				if (getParentView() != null) {
-					getParentView().revalidate();
-					getPaintManager().repaint(this);
-				}
-			} else if (notification instanceof ObjectHasResized) {
-				resizeView();
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
-					getPaintManager().repaint(getParentView());
-				}
-			} else if (notification instanceof ShapeNeedsToBeRedrawn) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					/*getPaintManager().resetTemporaryObjects();
-					getPaintManager().invalidate(getGraphicalRepresentation());
-					getPaintManager().repaint(getParentView());*/
-					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().repaint(this);
-				}
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
-				updateLayer();
-				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-					getPaintManager().invalidate(getGraphicalRepresentation());
-				}
-				getPaintManager().repaint(this);
-				/*if (getParentView() != null) {
-					getParentView().revalidate();
-					getPaintManager().repaint(this);
-				}*/
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
-				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
-				updateLabelView();
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
-				if (getParent() != null) {
-					getParent().moveToFront(this);
-				}
-				if (getParent() != null && getLabelView() != null) {
-					getParent().moveToFront(getLabelView());
-				}
-				getPaintManager().repaint(this);
-
-				requestFocusInWindow();
-				// requestFocus();
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
-				updateVisibility();
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-						getPaintManager().invalidate(getGraphicalRepresentation());
-					}
-				}
-				getPaintManager().repaint(this);
-
-			} else {
-				// revalidate();
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-						getPaintManager().invalidate(getGraphicalRepresentation());
-					}
-				}
-				getPaintManager().repaint(this);
-				// revalidate();
-				// getPaintManager().repaint(this);
-			}
+			});
 		} else {
-			revalidate();
-			getPaintManager().repaint(this);
+			// logger.info("For "+getGraphicalRepresentation().getClass().getSimpleName()+" received: "+aNotification);
+
+			if (aNotification instanceof FGENotification) {
+				FGENotification notification = (FGENotification) aNotification;
+				if (notification instanceof GraphicalRepresentationAdded) {
+					GraphicalRepresentation<?> newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
+					logger.fine("ShapeView: Received ObjectAdded notification, creating view for " + newGR);
+					if (newGR instanceof ShapeGraphicalRepresentation) {
+						ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) newGR;
+						add(shapeGR.makeShapeView(getController()));
+						revalidate();
+						getPaintManager().repaint(this);
+						shapeGR.notifyShapeNeedsToBeRedrawn();
+					} else if (newGR instanceof ConnectorGraphicalRepresentation) {
+						ConnectorGraphicalRepresentation<?> connectorGR = (ConnectorGraphicalRepresentation<?>) newGR;
+						add(connectorGR.makeConnectorView(getController()));
+						revalidate();
+						getPaintManager().repaint(this);
+					} else if (newGR instanceof GeometricGraphicalRepresentation) {
+						newGR.addObserver(this);
+						revalidate();
+						getPaintManager().repaint(this);
+					}
+				} else if (notification instanceof GraphicalRepresentationRemoved) {
+					GraphicalRepresentation<?> removedGR = ((GraphicalRepresentationRemoved) notification)
+							.getRemovedGraphicalRepresentation();
+					if (removedGR instanceof ShapeGraphicalRepresentation) {
+						ShapeView<?> view = getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) removedGR);
+						if (view != null) {
+							remove(view);
+							revalidate();
+							getPaintManager().invalidate(getGraphicalRepresentation());
+							getPaintManager().repaint(this);
+						} else {
+							logger.warning("Cannot find view for " + removedGR);
+						}
+					} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
+						ConnectorView<?> view = getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) removedGR);
+						if (view != null) {
+							remove(view);
+							revalidate();
+							getPaintManager().invalidate(getGraphicalRepresentation());
+							getPaintManager().repaint(this);
+						} else {
+							logger.warning("Cannot find view for " + removedGR);
+						}
+					} else if (removedGR instanceof GeometricGraphicalRepresentation) {
+						removedGR.deleteObserver(this);
+						revalidate();
+						getPaintManager().repaint(this);
+					}
+				} else if (notification instanceof GraphicalRepresentationDeleted) {
+					GraphicalRepresentation<?> deletedGR = ((GraphicalRepresentationDeleted) notification)
+							.getDeletedGraphicalRepresentation();
+					// If was not removed, try to do it now
+					if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
+							&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
+						getGraphicalRepresentation().getContainerGraphicalRepresentation().notifyDrawableRemoved(deletedGR);
+					}
+					if (getGraphicalRepresentation() != null && getController().getFocusedObjects().contains(getGraphicalRepresentation())) {
+						getController().removeFromFocusedObjects(getGraphicalRepresentation());
+					}
+					if (getGraphicalRepresentation() != null && getController().getSelectedObjects().contains(getGraphicalRepresentation())) {
+						getController().removeFromSelectedObjects(getGraphicalRepresentation());
+					}
+					delete();
+				} else if (notification instanceof ObjectWillMove) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+				} else if (notification instanceof ObjectMove) {
+					relocateView();
+					if (getParentView() != null) {
+						getPaintManager().repaint(this);
+					}
+				} else if (notification instanceof ObjectHasMoved) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());
+					}
+				} else if (notification instanceof ObjectWillResize) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+				} else if (notification instanceof ObjectResized) {
+					resizeView();
+					if (getParentView() != null) {
+						getParentView().revalidate();
+						getPaintManager().repaint(this);
+					}
+				} else if (notification instanceof ObjectHasResized) {
+					resizeView();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());
+					}
+				} else if (notification instanceof ShapeNeedsToBeRedrawn) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						/*getPaintManager().resetTemporaryObjects();
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());*/
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().repaint(this);
+					}
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
+					updateLayer();
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+					getPaintManager().repaint(this);
+					/*if (getParentView() != null) {
+						getParentView().revalidate();
+						getPaintManager().repaint(this);
+					}*/
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
+					updateLabelView();
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
+					if (getParent() != null) {
+						getParent().moveToFront(this);
+					}
+					if (getParent() != null && getLabelView() != null) {
+						getParent().moveToFront(getLabelView());
+					}
+					getPaintManager().repaint(this);
+
+					requestFocusInWindow();
+					// requestFocus();
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
+					updateVisibility();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+							getPaintManager().invalidate(getGraphicalRepresentation());
+						}
+					}
+					getPaintManager().repaint(this);
+
+				} else {
+					// revalidate();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+							getPaintManager().invalidate(getGraphicalRepresentation());
+						}
+					}
+					getPaintManager().repaint(this);
+					// revalidate();
+					// getPaintManager().repaint(this);
+				}
+			} else {
+				revalidate();
+				getPaintManager().repaint(this);
+			}
 		}
 	}
 

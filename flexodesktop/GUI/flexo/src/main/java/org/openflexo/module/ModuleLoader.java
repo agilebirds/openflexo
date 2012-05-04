@@ -22,13 +22,13 @@ package org.openflexo.module;
 import java.awt.Frame;
 import java.awt.Window;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,6 +64,7 @@ import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.module.external.IModule;
 import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
+import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.view.ModuleBar;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.ToolsMenu;
@@ -326,7 +327,7 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 	}
 
-	private FlexoModule loadModule(Module module, FlexoProject project) throws ModuleLoadingException {
+	private FlexoModule loadModule(Module module, FlexoProject project) throws Exception {
 		if (!ProgressWindow.hasInstance()) {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName(), 8);
 		}
@@ -340,43 +341,40 @@ public final class ModuleLoader implements IModuleLoader {
 		return returned;
 	}
 
-	private FlexoModule doInternalLoadModule(Module module, FlexoProject project) throws ModuleLoadingException {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Loading module " + module.getName());
+	private class ModuleLoaderCallable implements Callable<FlexoModule> {
+
+		private final Module module;
+		private final FlexoProject project;
+
+		public ModuleLoaderCallable(Module module, FlexoProject project) {
+			this.module = module;
+			// TODO Auto-generated constructor stub
+			this.project = project;
 		}
-		Object[] params;
-		if (module.requireProject()) {
-			params = new Object[1];
-			params[0] = project.getResourceManagerInstance().getEditor();
-		} else {
-			params = new Object[0];
+
+		@Override
+		public FlexoModule call() throws Exception {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Loading module " + module.getName());
+			}
+			Object[] params;
+			if (module.requireProject()) {
+				params = new Object[1];
+				params[0] = project.getResourceManagerInstance().getEditor();
+			} else {
+				params = new Object[0];
+			}
+			FlexoModule flexoModule = (FlexoModule) module.getConstructor().newInstance(params);
+			FCH.ensureHelpEntryForModuleHaveBeenCreated(flexoModule);
+			return flexoModule;
 		}
-		FlexoModule returned = null;
-		try {
-			returned = (FlexoModule) module.getConstructor().newInstance(params);
-			FCH.ensureHelpEntryForModuleHaveBeenCreated(returned);
-		} catch (IllegalArgumentException e) {
-			printAndWrap(e, module);
-		} catch (InstantiationException e) {
-			printAndWrap(e, module);
-		} catch (IllegalAccessException e) {
-			printAndWrap(e, module);
-		} catch (InvocationTargetException e) {
-			printAndWrap(e, module);
-		}
-		return returned;
+
 	}
 
-	private void printAndWrap(Throwable e, Module module) throws ModuleLoadingException {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Could not load module " + module.getName() + " : exception raised " + e.getClass().getName());
-		}
-		if (logger.isLoggable(Level.WARNING) && e.getCause() != null) {
-			logger.warning("Caused by " + e.getCause().getClass().getName() + " " + e.getCause().getMessage());
-			e.getCause().printStackTrace();
-		}
-		e.printStackTrace();
-		throw new ModuleLoadingException(module);
+	private FlexoModule doInternalLoadModule(Module module, FlexoProject project) throws Exception {
+		ModuleLoaderCallable loader = new ModuleLoaderCallable(module, project);
+		return FlexoSwingUtils.syncRunInEDT(loader);
+
 	}
 
 	public boolean isAvailable(Module module) {
@@ -410,7 +408,11 @@ public final class ModuleLoader implements IModuleLoader {
 				if (module.requireProject() && project == null) {
 					throw new IllegalArgumentException("Module " + module.getName() + " needs a project. project cannot be null");
 				}
-				return loadModule(module, project);
+				try {
+					return loadModule(module, project);
+				} catch (Exception e) {
+					throw new ModuleLoadingException(module);
+				}
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {

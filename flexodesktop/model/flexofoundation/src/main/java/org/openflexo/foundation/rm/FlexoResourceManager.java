@@ -231,12 +231,16 @@ public class FlexoResourceManager {
 	private static void checkExternalRepositories(FlexoProject project) {
 		for (ProjectExternalRepository repository : project.getExternalRepositories()) {
 			if (!repository.isConnected()) {
-				logger.info("Found external repository " + repository + " DISCONNECTED, desactivate resources");
-				for (FlexoResource resource : repository.getRelatedResources()) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Found external repository " + repository + " DISCONNECTED, desactivate resources");
+				}
+				for (FlexoResource<?> resource : repository.getRelatedResources()) {
 					resource.desactivate();
 				}
 			} else {
-				logger.info("Found external repository " + repository.getDirectory().getAbsolutePath() + " well CONNECTED");
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Found external repository " + repository.getDirectory().getAbsolutePath() + " well CONNECTED");
+				}
 			}
 		}
 	}

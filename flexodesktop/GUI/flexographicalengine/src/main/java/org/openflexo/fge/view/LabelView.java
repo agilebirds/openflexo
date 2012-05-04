@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.Arrays;
 import java.util.Observable;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,6 +64,7 @@ import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.LabelViewMouseListener;
+import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.ToolBox;
 
 public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetricsProvider {
@@ -210,7 +212,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		return textComponent;
 	}
 
-	private boolean isDeleted = false;
+	private volatile boolean isDeleted = false;
 
 	private LabelDocumentListener textComponentListener;
 
@@ -220,7 +222,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
-	public void delete() {
+	public synchronized void delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete LabelView for " + getGraphicalRepresentation());
 		}
@@ -243,10 +245,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 				((ShapeGraphicalRepresentation<O>) graphicalRepresentation).setLabelMetricsProvider(null);
 			}
 		}
+		isDeleted = true;
 		controller = null;
 		mouseListener = null;
 		graphicalRepresentation = null;
-		isDeleted = true;
 	}
 
 	public void enableTextComponentMouseListeners() {
@@ -327,48 +329,57 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
-	public void update(Observable o, Object aNotification) {
+	public synchronized void update(final Observable o, final Object aNotification) {
 		if (isDeleted) {
 			// logger.warning("Received notifications for deleted view: observable="+(o!=null?o.getClass().getSimpleName():"null"));
 			return;
 		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
 
-		// System.out.println("Received: "+aNotification);
-
-		if (aNotification instanceof FGENotification) {
-			FGENotification notification = (FGENotification) aNotification;
-			if (notification.getParameter() == GraphicalRepresentation.Parameters.text) {
-				updateText();
-				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle) {
-				updateFont();
-				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.paragraphAlignment) {
-				updateFont();
-				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.horizontalTextAlignment
-					|| notification.getParameter() == GraphicalRepresentation.Parameters.verticalTextAlignment) {
-				updateBounds();
-				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextX
-					|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextY
-					|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextX
-					|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextY
-					|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel) {
-				updateBounds();
-				getPaintManager().repaint(this);
-			} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
-					|| notification instanceof LabelWillMove) {
-				setDoubleBuffered(false);
-				if (notification instanceof LabelWillMove) {
-					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
+				@Override
+				public void run() {
+					update(o, aNotification);
 				}
-			} else if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
-					|| notification instanceof LabelHasMoved) {
-				setDoubleBuffered(true);
-				if (notification instanceof LabelHasMoved) {
-					getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+			});
+		} else {
+			// System.out.println("Received: "+aNotification);
+
+			if (aNotification instanceof FGENotification) {
+				FGENotification notification = (FGENotification) aNotification;
+				if (notification.getParameter() == GraphicalRepresentation.Parameters.text) {
+					updateText();
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle) {
+					updateFont();
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.paragraphAlignment) {
+					updateFont();
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.horizontalTextAlignment
+						|| notification.getParameter() == GraphicalRepresentation.Parameters.verticalTextAlignment) {
+					updateBounds();
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextX
+						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextY
+						|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextX
+						|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextY
+						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel) {
+					updateBounds();
+					getPaintManager().repaint(this);
+				} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
+						|| notification instanceof LabelWillMove) {
+					setDoubleBuffered(false);
+					if (notification instanceof LabelWillMove) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+				} else if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
+						|| notification instanceof LabelHasMoved) {
+					setDoubleBuffered(true);
+					if (notification instanceof LabelHasMoved) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+					}
 				}
 			}
 		}
@@ -378,8 +389,17 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		updateBounds(true);
 	}
 
-	protected void updateBounds(boolean repeat) {
-		if (isDeleted) {
+	protected synchronized void updateBounds(final boolean repeat) {
+		if (isDeleted()) {
+			return;
+		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateBounds(repeat);
+				}
+			});
 			return;
 		}
 		Rectangle bounds = graphicalRepresentation.getLabelBounds(getScale());
@@ -407,15 +427,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 	@Override
 	public Dimension getScaledPreferredDimension(double scale) {
-		int width = getGraphicalRepresentation().getAvailableLabelWidth(scale);
-		if (getGraphicalRepresentation().getLineWrap()) {
-			textComponent.setSize(width, Short.MAX_VALUE);
-		}
-
-		Dimension preferredSize = textComponent.getPreferredScrollableViewportSize();
-		if (preferredSize.width > width) {
-			preferredSize.width = width;
-		}
+		Dimension preferredSize = getCurrentPreferredSize(scale);
 		if (scale == getScale()) {
 			return preferredSize;
 		} else {
@@ -426,6 +438,52 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			d.height /= getScale();
 			return d;
 		}
+	}
+
+	private class PreferredSizeRetriever implements Callable<Dimension> {
+
+		private double scale;
+
+		protected PreferredSizeRetriever(double scale) {
+			super();
+			this.scale = scale;
+		}
+
+		@Override
+		public Dimension call() {
+			if (isDeleted()) {
+				return getSize();
+			}
+			return getCurrentPreferredSize(scale);
+		}
+
+	}
+
+	private Dimension getCurrentPreferredSize(final double scale) {
+		if (isDeleted || getGraphicalRepresentation() == null) {
+			return getSize();
+		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			final PreferredSizeRetriever retriever = new PreferredSizeRetriever(scale);
+			try {
+				return FlexoSwingUtils.syncRunInEDT(retriever);
+			} catch (Exception e) {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.log(Level.SEVERE, "Exception when computing preferredSize of " + this, e);
+				}
+
+			}
+		}
+		int width = getGraphicalRepresentation().getAvailableLabelWidth(scale);
+		if (getGraphicalRepresentation().getLineWrap()) {
+			textComponent.setSize(width, Short.MAX_VALUE);
+		}
+
+		Dimension preferredSize = textComponent.getPreferredScrollableViewportSize();
+		if (preferredSize.width > width) {
+			preferredSize.width = width;
+		}
+		return preferredSize;
 	}
 
 	private void updateFont() {
@@ -480,7 +538,16 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	private void updateText() {
-		if (isEditing) {
+		if (isEditing || isDeleted) {
+			return;
+		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateText();
+				}
+			});
 			return;
 		}
 		if (getGraphicalRepresentation().hasText()) {

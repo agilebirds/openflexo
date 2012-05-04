@@ -65,7 +65,6 @@ public class WorkflowBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.STATUS, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		setFilterStatus(BrowserElementType.DEADLINE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PORT_REGISTERY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 		setFilterStatus(BrowserElementType.MESSAGE_DEFINITION, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.SERVICE_INTERFACE, BrowserFilterStatus.HIDE);

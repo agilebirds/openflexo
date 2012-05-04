@@ -2,6 +2,7 @@ package org.openflexo.fib.utils;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.Window;
 import java.io.File;
 import java.util.logging.Logger;
 
@@ -36,14 +37,15 @@ public class LocalizedDelegateGUIImpl extends LocalizedDelegateImpl {
 		super(localizedDirectory, parent);
 	}
 
-	public void showLocalizedEditor() {
+	public void showLocalizedEditor(Window parentFrame) {
 		FIBComponent localizedEditorComponent = FIBLibrary.instance().retrieveFIBComponent(LOCALIZED_EDITOR_FIB);
-		FIBDialog dialog = FIBDialog.instanciateComponent(localizedEditorComponent, this, null, true, FlexoLocalization.getMainLocalizer());
+		FIBDialog dialog = FIBDialog.instanciateComponent(localizedEditorComponent, this, parentFrame, true,
+				FlexoLocalization.getMainLocalizer());
 	}
 
 	public void showParentLocalizedEditor() {
 		if (getParent() instanceof LocalizedDelegateGUIImpl) {
-			((LocalizedDelegateGUIImpl) getParent()).showLocalizedEditor();
+			((LocalizedDelegateGUIImpl) getParent()).showLocalizedEditor(null);
 		}
 	}
 

@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -55,6 +56,7 @@ import org.openflexo.module.external.ExternalModule;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.module.external.ExternalOEModule;
 import org.openflexo.module.external.ExternalWKFModule;
+import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.toolbox.FileResource;
 
@@ -219,6 +221,34 @@ public class ScreenshotGenerator {
 			return getEmptyScreenshot();
 		}
 		logger.info("Generating screenshot for " + object + " of " + object.getClass().getSimpleName());
+		ScreenshotImageRunnable runnable = new ScreenshotImageRunnable(object);
+		ScreenshotImage i = null;
+		try {
+			i = FlexoSwingUtils.syncRunInEDT(runnable);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (i == null) {
+			return getEmptyScreenshot();
+		}
+		return i;
+	}
+
+	private static class ScreenshotImageRunnable implements Callable<ScreenshotImage> {
+		private FlexoModelObject object;
+
+		protected ScreenshotImageRunnable(FlexoModelObject object) {
+			this.object = object;
+		}
+
+		@Override
+		public ScreenshotImage call() {
+			return getScreenshotImage(object);
+		}
+
+	}
+
+	public static ScreenshotImage getScreenshotImage(FlexoModelObject object) {
 		ScreenshotImage i = null;
 		JFrame frame = null;
 		ExternalWKFModule wkfModule = null;
@@ -228,9 +258,9 @@ public class ScreenshotGenerator {
 		if (object.getXMLResourceData() instanceof FlexoXMLSerializableObject) {
 			((FlexoXMLSerializableObject) object.getXMLResourceData()).setIgnoreNotifications();
 		}
+		JComponent c = null;
 		try {
 			BufferedImage bi = null;
-			JComponent c = null;
 			try {
 				if (object instanceof AbstractActivityNode || object instanceof FlexoProcess || object instanceof LOOPOperator
 						|| object instanceof RoleList || object instanceof FlexoWorkflow) {
@@ -242,7 +272,7 @@ public class ScreenshotGenerator {
 				} else if (object instanceof ERDiagram) {
 					dmModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
 							.getDMModuleInstance(object.getProject()) : null;
-				} else if ((object instanceof View) || (object instanceof ViewDefinition)) {
+				} else if (object instanceof View || object instanceof ViewDefinition) {
 					oeModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
 							.getOEModuleInstance(object.getProject()) : null;
 				}
@@ -325,8 +355,8 @@ public class ScreenshotGenerator {
 				}
 				frame.dispose();
 			}
-			if (wkfModule != null) {
-				wkfModule.finalizeScreenshotGeneration();
+			if (wkfModule != null && c != null) {
+				wkfModule.finalizeScreenshotGeneration(c);
 			}
 			if (ieModule != null) {
 				ieModule.finalizeScreenshot();
@@ -337,9 +367,6 @@ public class ScreenshotGenerator {
 			if (object.getXMLResourceData() instanceof FlexoXMLSerializableObject) {
 				((FlexoXMLSerializableObject) object.getXMLResourceData()).resetIgnoreNotifications();
 			}
-		}
-		if (i == null) {
-			return getEmptyScreenshot();
 		}
 		return i;
 	}

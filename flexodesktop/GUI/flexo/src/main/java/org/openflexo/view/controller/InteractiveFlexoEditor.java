@@ -26,8 +26,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -255,8 +256,26 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public void performPendingActions() {
-		FlexoApplication.flushPendingEvents(true);
+	public <A extends org.openflexo.foundation.action.FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(
+			final A action) throws org.openflexo.foundation.FlexoException {
+		if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
+			ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					action.execute();
+					return null;
+				}
+
+				@Override
+				protected void done() {
+					super.done();
+				}
+			};
+			worker.execute();
+		} else {
+			action.execute();
+		}
 	}
 
 	public abstract boolean isAutoSaveEnabledByDefault();
@@ -285,7 +304,7 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		_undoManager.actionHasBeenPerformed(action, success);
 		if (success) {
 			if (_scenarioRecorder != null) {
-				if (!action.isEmbedded() || (action.getOwnerAction().getExecutionStatus() != ExecutionStatus.EXECUTING_CORE)) {
+				if (!action.isEmbedded() || action.getOwnerAction().getExecutionStatus() != ExecutionStatus.EXECUTING_CORE) {
 					_scenarioRecorder.registerDoneAction(action);
 				}
 			}

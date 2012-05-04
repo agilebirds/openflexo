@@ -236,13 +236,33 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	@Override
 	public void update(Observable o, Object arg) {
 		// System.out.println("Widget "+getWidget()+" : receive notification "+o);
-		update();
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					update();
+				}
+			});
+		} else {
+			update();
+		}
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// System.out.println("Widget "+getWidget()+" : propertyChange "+evt);
-		update();
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					update();
+				}
+			});
+		} else {
+			update();
+		}
 	}
 
 	@Override

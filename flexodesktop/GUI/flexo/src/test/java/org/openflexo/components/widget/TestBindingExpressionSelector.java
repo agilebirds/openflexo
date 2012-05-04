@@ -135,7 +135,7 @@ public class TestBindingExpressionSelector {
 		logButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), dialog);
 			}
 		});
 

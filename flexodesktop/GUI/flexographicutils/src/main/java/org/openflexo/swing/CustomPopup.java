@@ -28,9 +28,11 @@ import java.awt.Dimension;
 import java.awt.FocusTraversalPolicy;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.IllegalComponentStateException;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -603,30 +605,37 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			}
 		});
 		if (isShowing()) {
-			Point p = this.getLocationOnScreen();
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// Multiple screen management
-			if (GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length > 1) {
-				screenSize = new Dimension(0, 0);
-				boolean found = false;
-				for (int i = 0; !found && i < GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length; i++) {
-					GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[i];
-					screenSize.width = Math.max(screenSize.width, gd.getDefaultConfiguration().getBounds().x
-							+ gd.getDefaultConfiguration().getBounds().width);
-					screenSize.height = Math.max(screenSize.height, gd.getDefaultConfiguration().getBounds().y
-							+ gd.getDefaultConfiguration().getBounds().height);
+			Point p = _downButton.getLocationOnScreen(); // This can have negative x or y if the secondary screen is on the right ir or on
+															// top of the main screen.
+			GraphicsConfiguration graphicsConfiguration = _downButton.getGraphicsConfiguration();
+			if (!graphicsConfiguration.getBounds().contains(p)) {
+				// Sometimes, if the CustomPopup is across two screens, the graphics configuration returned is not the one containing the
+				// _downButton.
+				// We can then perform a look-up to find the actual screen where the button is located and show the CustomPopup on that
+				// screen
+				// it feels a lot more natural.
+				for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
 					if (gd.getDefaultConfiguration().getBounds().contains(p)) {
-						found = true;
+						graphicsConfiguration = gd.getDefaultConfiguration();
+						break;
 					}
 				}
+
 			}
-			Point position = new Point(p.x, p.y + getHeight());
-			if (position.x + getCustomPanel().getDefaultSize().width > screenSize.width) {
-				position.x = screenSize.width - getCustomPanel().getDefaultSize().width;
+			Rectangle screenBounds = graphicsConfiguration.getBounds();
+			Dimension screenSize = screenBounds.getSize();
+			Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(graphicsConfiguration);
+			// screen insets reflect the possible Dock/Task bar size and possibly the menu on MacOS.
+			Point position = new Point(p.x, p.y + _downButton.getHeight());
+			if (position.x + getCustomPanel().getDefaultSize().width > screenBounds.x + screenSize.width) {
+				// If we are too close to the right edged of the screen, we offset the location
+				position.x = screenBounds.x + screenSize.width - getCustomPanel().getDefaultSize().width - screenInsets.right;
 			}
-			if (position.y + getCustomPanel().getDefaultSize().height > screenSize.height) {
-				position.y = screenSize.height - getCustomPanel().getDefaultSize().height;
+			if (position.y + getCustomPanel().getDefaultSize().height > screenBounds.y + screenSize.height) {
+				position.y = screenBounds.y + screenSize.height - getCustomPanel().getDefaultSize().height - screenInsets.bottom;
 			}
+			position.x = Math.max(position.x, screenBounds.x + screenInsets.left);
+			position.y = Math.max(position.y, screenBounds.y + screenInsets.top);
 			_popup.setLocation(position);
 			_popup.pack();
 			_popup.setVisible(true);

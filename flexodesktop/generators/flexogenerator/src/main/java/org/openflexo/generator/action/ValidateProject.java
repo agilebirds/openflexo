@@ -70,6 +70,11 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 		FlexoModelObject.addActionForClass(ValidateProject.actionType, GenerationRepository.class);
 	}
 
+	@Override
+	public boolean isLongRunningAction() {
+		return true;
+	}
+
 	ValidateProject(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -101,7 +106,7 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 	private ValidationReport dmValidationReport = null;
 
 	public boolean isProjectValid() {
-		return (getErrorsNb() == 0);
+		return getErrorsNb() == 0;
 	}
 
 	public int getErrorsNb() {

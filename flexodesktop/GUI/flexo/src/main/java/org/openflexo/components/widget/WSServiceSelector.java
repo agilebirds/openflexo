@@ -70,7 +70,7 @@ public class WSServiceSelector extends AbstractBrowserSelector<WSService> {
 	@Override
 	public String renderedString(WSService editedObject) {
 		if (editedObject != null) {
-			return (editedObject).getName();
+			return editedObject.getName();
 		}
 		return EMPTY_STRING;
 	}
@@ -107,7 +107,6 @@ public class WSServiceSelector extends AbstractBrowserSelector<WSService> {
 			setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.STATUS, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.DEADLINE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.COMPONENT, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ACTIVITY_NODE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ACTION_NODE, BrowserFilterStatus.HIDE);

@@ -278,6 +278,9 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			boolean found = false;
 			for (ViewDefinition vd : project.getShemaLibrary().getAllShemaList()) {
 				View view = vd.getShema();
+				if (view == null) {
+					continue;
+				}
 				EditionPattern pattern = null;
 				for (EditionPattern ep : view.getCalc().getEditionPatterns()) {
 					if (ep.getURI().equals(epi.getEditionPatternURI())) {

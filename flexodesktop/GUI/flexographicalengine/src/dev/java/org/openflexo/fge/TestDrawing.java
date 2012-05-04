@@ -175,7 +175,7 @@ public class TestDrawing {
 		logButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), dialog);
 			}
 		});
 
@@ -246,31 +246,34 @@ public class TestDrawing {
 
 		@Override
 		public List getContainedObjects(Object aDrawable) {
-			if (aDrawable == getModel())
+			if (aDrawable == getModel()) {
 				return list;
-			if (aDrawable == rectangle2)
+			}
+			if (aDrawable == rectangle2) {
 				return list2;
+			}
 			return null;
 		}
 
 		@Override
 		public Object getContainer(Object aDrawable) {
-			if (aDrawable == getModel())
+			if (aDrawable == getModel()) {
 				return null;
-			else if (aDrawable == rectangle1)
+			} else if (aDrawable == rectangle1) {
 				return this;
-			else if (aDrawable == rectangle2)
+			} else if (aDrawable == rectangle2) {
 				return this;
-			else if (aDrawable == pentagon)
+			} else if (aDrawable == pentagon) {
 				return this;
-			else if (aDrawable == image)
+			} else if (aDrawable == image) {
 				return this;
-			else if (aDrawable == circle)
+			} else if (aDrawable == circle) {
 				return rectangle2;
-			else if (aDrawable == line1)
+			} else if (aDrawable == line1) {
 				return this;
-			else if (aDrawable == line2)
+			} else if (aDrawable == line2) {
 				return this;
+			}
 			return null;
 		}
 
@@ -281,12 +284,15 @@ public class TestDrawing {
 
 		@Override
 		public GraphicalRepresentation getGraphicalRepresentation(Object aDrawable) {
-			if (aDrawable == this)
+			if (aDrawable == this) {
 				return getDrawingGraphicalRepresentation();
-			if (aDrawable instanceof MyShape)
+			}
+			if (aDrawable instanceof MyShape) {
 				return ((MyShape) aDrawable).getGraphicalRepresentation();
-			if (aDrawable instanceof MyConnector)
+			}
+			if (aDrawable instanceof MyConnector) {
 				return ((MyConnector) aDrawable).getGraphicalRepresentation();
+			}
 			return null;
 		}
 

@@ -576,7 +576,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			}
 		}
 		if (getModelObject() instanceof ComponentDefinition) {
-			FlexoComponentResource compRes = ((ComponentDefinition) getModelObject()).getComponentResource(false);
+			// On the next line we pass true because the WDLDateAssistantPopup is virtually created but does not
+			// create its res resource automatically.
+			FlexoComponentResource compRes = ((ComponentDefinition) getModelObject()).getComponentResource(true);
 			if (compRes != null) {
 				addToDependentResources(compRes);
 			}

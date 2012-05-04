@@ -1214,7 +1214,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	public Dimension getLabelDimension(double scale) {
 		Dimension d;
 		if (labelMetricsProvider != null) {
-			d = getLabelMetricsProvider().getScaledPreferredDimension(scale);
+			d = labelMetricsProvider.getScaledPreferredDimension(scale);
 		} else {
 			d = new Dimension(0, 0);
 		}

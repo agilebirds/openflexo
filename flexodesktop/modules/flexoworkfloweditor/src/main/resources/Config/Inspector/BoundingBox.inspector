@@ -18,11 +18,11 @@
 		<property name="textFont" label="text_font" widget="FONT" constraint="1">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="textAlignment" label="text_alignment" widget="DROPDOWN" constraint="2">
+		<property name="paragraphAlignment" label="text_alignment" widget="DROPDOWN" constraint="2">
 			<param name="formatter" value="name"/>
 			<param name="columns" value="10"/>
 			<param name="showReset" value="false"/>
-			<param name="type" value="org.openflexo.fge.GraphicalRepresentation$TextAlignment"/>
+			<param name="type" value="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment"/>
 		</property>
 		<property name="dashStyle" label="dash_style" widget="DROPDOWN" constraint="3">
 			<param name="formatter" value="name"/>

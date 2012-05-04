@@ -252,109 +252,119 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	@Override
-	public void update(Observable o, Object notification) {
+	public void update(final Observable o, final Object notification) {
 		if (isDeleted) {
 			logger.warning("Received notifications for deleted view: observable=" + o);
 			return;
 		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
 
-		// logger.info("Received: "+notification);
-
-		if (notification instanceof FGENotification) {
-			FGENotification notif = (FGENotification) notification;
-			if (notification instanceof GraphicalRepresentationAdded) {
-				GraphicalRepresentation newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
-				logger.fine("DrawingView: Received ObjectAdded notification, creating view for " + newGR);
-				if (newGR instanceof ShapeGraphicalRepresentation) {
-					ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
-					add(shapeGR.makeShapeView(getController()));
-					revalidate();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-					getPaintManager().repaint(this);
-				} else if (newGR instanceof ConnectorGraphicalRepresentation) {
-					ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) newGR;
-					add(connectorGR.makeConnectorView(getController()));
-					revalidate();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-					getPaintManager().repaint(this);
-				} else if (newGR instanceof GeometricGraphicalRepresentation) {
-					newGR.addObserver(this);
-					revalidate();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-					getPaintManager().repaint(this);
+				@Override
+				public void run() {
+					update(o, notification);
 				}
-			} else if (notification instanceof GraphicalRepresentationRemoved) {
-				GraphicalRepresentation<?> removedGR = ((GraphicalRepresentationRemoved) notification).getRemovedGraphicalRepresentation();
-				if (removedGR instanceof ShapeGraphicalRepresentation) {
-					ShapeView<?> view = shapeViewForObject((ShapeGraphicalRepresentation<?>) removedGR);
-					if (view != null) {
-						remove(view);
+			});
+		} else {
+			// logger.info("Received: "+notification);
+
+			if (notification instanceof FGENotification) {
+				FGENotification notif = (FGENotification) notification;
+				if (notification instanceof GraphicalRepresentationAdded) {
+					GraphicalRepresentation newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
+					logger.fine("DrawingView: Received ObjectAdded notification, creating view for " + newGR);
+					if (newGR instanceof ShapeGraphicalRepresentation) {
+						ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
+						add(shapeGR.makeShapeView(getController()));
 						revalidate();
 						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 						getPaintManager().repaint(this);
-					} else {
-						// That may happen, remove warning
-						// logger.warning("Cannot find view for " + removedGR);
-					}
-				} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
-					ConnectorView<?> view = connectorViewForObject((ConnectorGraphicalRepresentation<?>) removedGR);
-					if (view != null) {
-						remove(view);
+					} else if (newGR instanceof ConnectorGraphicalRepresentation) {
+						ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) newGR;
+						add(connectorGR.makeConnectorView(getController()));
 						revalidate();
 						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 						getPaintManager().repaint(this);
-					} else {
-						// That may happen, remove warning
-						// logger.warning("Cannot find view for " + removedGR);
+					} else if (newGR instanceof GeometricGraphicalRepresentation) {
+						newGR.addObserver(this);
+						revalidate();
+						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+						getPaintManager().repaint(this);
 					}
-				} else if (removedGR instanceof GeometricGraphicalRepresentation) {
-					removedGR.deleteObserver(this);
-					revalidate();
+				} else if (notification instanceof GraphicalRepresentationRemoved) {
+					GraphicalRepresentation<?> removedGR = ((GraphicalRepresentationRemoved) notification)
+							.getRemovedGraphicalRepresentation();
+					if (removedGR instanceof ShapeGraphicalRepresentation) {
+						ShapeView<?> view = shapeViewForObject((ShapeGraphicalRepresentation<?>) removedGR);
+						if (view != null) {
+							remove(view);
+							revalidate();
+							getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+							getPaintManager().repaint(this);
+						} else {
+							// That may happen, remove warning
+							// logger.warning("Cannot find view for " + removedGR);
+						}
+					} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
+						ConnectorView<?> view = connectorViewForObject((ConnectorGraphicalRepresentation<?>) removedGR);
+						if (view != null) {
+							remove(view);
+							revalidate();
+							getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+							getPaintManager().repaint(this);
+						} else {
+							// That may happen, remove warning
+							// logger.warning("Cannot find view for " + removedGR);
+						}
+					} else if (removedGR instanceof GeometricGraphicalRepresentation) {
+						removedGR.deleteObserver(this);
+						revalidate();
+						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+						getPaintManager().repaint(this);
+					}
+				} else if (notification instanceof ObjectResized) {
+					rescale();
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.backgroundColor) {
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					updateBackground();
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.drawWorkingArea) {
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					updateBackground();
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.width) {
+					rescale();
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.height) {
+					rescale();
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.isResizable) {
+					if (getDrawingGraphicalRepresentation().isResizable()) {
+						removeMouseListener(mouseListener); // We remove the mouse
+															// listener, so that the
+															// mouse resizer is
+															// called before
+															// mouseListener
+						if (resizer == null) {
+							resizer = new DrawingViewResizer();
+						} else {
+							addMouseListener(resizer);
+						}
+						addMouseListener(mouseListener);
+					} else {
+						removeMouseListener(resizer);
+					}
+				} else if (notif instanceof DrawingNeedsToBeRedrawn) {
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().repaint(this);
+				} else if (o instanceof GeometricGraphicalRepresentation) {
 					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 					getPaintManager().repaint(this);
 				}
-			} else if (notification instanceof ObjectResized) {
-				rescale();
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.backgroundColor) {
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				updateBackground();
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.drawWorkingArea) {
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				updateBackground();
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.width) {
-				rescale();
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.height) {
-				rescale();
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.isResizable) {
-				if (getDrawingGraphicalRepresentation().isResizable()) {
-					removeMouseListener(mouseListener); // We remove the mouse
-														// listener, so that the
-														// mouse resizer is
-														// called before
-														// mouseListener
-					if (resizer == null) {
-						resizer = new DrawingViewResizer();
-					} else {
-						addMouseListener(resizer);
-					}
-					addMouseListener(mouseListener);
-				} else {
-					removeMouseListener(resizer);
-				}
-			} else if (notif instanceof DrawingNeedsToBeRedrawn) {
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
-			} else if (o instanceof GeometricGraphicalRepresentation) {
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
 			}
 		}
 	}
@@ -806,6 +816,9 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	public boolean contains(FGEView<?> view) {
+		if (view == null) {
+			return false;
+		}
 		if (view == this) {
 			return true;
 		}

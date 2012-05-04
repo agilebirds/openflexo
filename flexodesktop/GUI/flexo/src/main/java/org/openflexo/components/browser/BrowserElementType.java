@@ -135,8 +135,6 @@ import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.wkf.DeadLine;
-import org.openflexo.foundation.wkf.DeadLineList;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
@@ -232,9 +230,6 @@ public enum BrowserElementType {
 	ROLE_LIST("role_list", RoleList.class, WKFIconLibrary.ROLE_LIBRARY_ICON),
 	STATUS_LIST("status_list", StatusList.class, WKFIconLibrary.STATUS_ICON),
 	STATUS("status", Status.class, STATUS_LIST.getIcon()),
-	@Deprecated
-	DEADLINE_LIST("deadline_list", DeadLineList.class, null),
-	DEADLINE("deadline", DeadLine.class, DEADLINE_LIST.getIcon()),
 	COMPONENT("component", ComponentDefinition.class, SEIconLibrary.SCREEN_COMPONENT_ICON),
 	OPERATION_COMPONENT("operation_component", OperationComponentDefinition.class, SEIconLibrary.OPERATION_COMPONENT_ICON),
 	REUSABLE_COMPONENT("reusable_component", ReusableComponentDefinition.class, SEIconLibrary.REUSABLE_COMPONENT_ICON),
@@ -455,7 +450,7 @@ public enum BrowserElementType {
 
 	private static BrowserElementType findElementTypeByClassName(String className) {
 		for (BrowserElementType type : values()) {
-			if ((type.getModelObjectClass() != null) && className.equals(type.getModelObjectClass().getName())) {
+			if (type.getModelObjectClass() != null && className.equals(type.getModelObjectClass().getName())) {
 				return type;
 			}
 		}
