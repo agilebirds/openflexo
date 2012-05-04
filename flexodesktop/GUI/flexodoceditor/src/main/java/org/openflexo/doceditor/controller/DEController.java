@@ -65,7 +65,7 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 
 	@Override
 	public boolean useNewInspectorScheme() {
-		return true;
+		return false;
 	}
 
 	@Override

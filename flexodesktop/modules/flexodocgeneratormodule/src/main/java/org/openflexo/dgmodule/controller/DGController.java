@@ -107,7 +107,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	@Override
 	public boolean useNewInspectorScheme() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -306,7 +306,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			} else {
 				refreshProgressWindow(((GenerationProgressNotification) dataModification).getProgressMessage());
 			}
-		} else if ((observable instanceof DGRepository) && (dataModification instanceof ObjectDeleted)) {
+		} else if (observable instanceof DGRepository && dataModification instanceof ObjectDeleted) {
 			observedRepositories.remove(observable);
 			observable.deleteObserver(this);
 		}
@@ -578,7 +578,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		public void focusGained(FocusEvent e) {
 			if (e.getComponent() instanceof JEditTextArea) {
 				((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
-				_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
+				_activeGenericCodeDisplayer = (JEditTextArea) e.getComponent();
 				refresh();
 			}
 		}
@@ -608,8 +608,8 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 				editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
 			} else {
 				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
-				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
-						: FlexoLocalization.localizedForKey("read_only")));
+				editorStatusLabel.setText(_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+						: FlexoLocalization.localizedForKey("read_only"));
 			}
 		}
 
@@ -634,7 +634,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 		@Override
 		public void handleGeneratedResourceModified(FlexoGeneratedResource aGeneratedResource) {
-			if ((aGeneratedResource instanceof CGRepositoryFileResource) && !(aGeneratedResource instanceof FlexoCopiedResource)) {
+			if (aGeneratedResource instanceof CGRepositoryFileResource && !(aGeneratedResource instanceof FlexoCopiedResource)) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Resource " + aGeneratedResource + " has been modified on the disk.");
 				}
