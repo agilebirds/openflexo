@@ -50,7 +50,10 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	@Override
 	public List<IndividualPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(IndividualPatternRole.class);
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getPatternRoles(IndividualPatternRole.class);
+		}
+		return null;
 	}
 
 	@Override
