@@ -79,14 +79,12 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 
 	private Hashtable<Object, DrawingTreeNode<?>> _hashMap;
 	private DrawingTreeNode<M> _root;
-	// private Hashtable<Object,GraphicalRepresentation> _graphicalRepresentations;
 	private M model;
 
 	public DefaultDrawing(M aModel) {
 		model = aModel;
 		_hashMap = new Hashtable<Object, DrawingTreeNode<?>>();
 		_root = new DrawingTreeNode<M>(model, null);
-		// logger.info("Store: "+_root+" for "+model);
 		_hashMap.put(model, _root);
 	}
 
@@ -96,7 +94,6 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			logger.warning("Cannot find DrawingTreeNode for " + aDrawable);
 			return;
 		}
-		// alreadyExistingNode.update();
 		if (alreadyExistingNode.parentNode != null) {
 			Object parentDrawable = alreadyExistingNode.parentNode.drawable;
 			removeDrawable(aDrawable, parentDrawable);
@@ -643,8 +640,15 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 
 	public abstract <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable);
 
+	@Override
+	public String toString() {
+		return "Drawing of " + model;
+	}
+
 	public void delete() {
-		logger.info("deleting drawing " + this + " " + Integer.toHexString(hashCode()));
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("deleting " + this);
+		}
 		if (_hashMap != null) {
 			for (Entry<Object, DrawingTreeNode<?>> e : new ArrayList<Entry<Object, DrawingTreeNode<?>>>(_hashMap.entrySet())) {
 				DrawingTreeNode<?> dtn = e.getValue();
@@ -661,6 +665,7 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			}
 			_hashMap.clear();
 		}
+		model = null;
 		// _hashMap = null;
 	}
 
