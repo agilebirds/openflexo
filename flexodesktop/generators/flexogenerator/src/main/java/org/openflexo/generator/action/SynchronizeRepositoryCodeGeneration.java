@@ -89,6 +89,11 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 	private boolean hasFailed = false;
 
 	@Override
+	public boolean isLongRunningAction() {
+		return true;
+	}
+
+	@Override
 	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Synchronize repository code generation " + getFocusedObject());
 		PlaySound.tryToPlayRandomSound();

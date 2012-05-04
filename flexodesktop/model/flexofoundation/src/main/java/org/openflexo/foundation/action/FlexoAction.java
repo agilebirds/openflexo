@@ -162,6 +162,8 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 
 	private boolean _logActionTime = true;
 
+	private ActionEvent originalActionEvent;
+
 	public FlexoAction(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super();
 		_editor = editor;
@@ -297,6 +299,10 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 		return thrownException;
 	}
 
+	public boolean isLongRunningAction() {
+		return false;
+	}
+
 	private void notifyEmbeddedExecution(FlexoAction<?, ?, ?> embeddedAction) {
 		if (getExecutionStatus() == ExecutionStatus.EXECUTING_CORE) {
 			_embbededActionsExecutedDuringCore.add(embeddedAction);
@@ -310,6 +316,20 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	}
 
 	public A doAction(ActionEvent e) throws FlexoException {
+		setOriginalActionEvent(e);
+		if (getEditor() != null) {
+			getEditor().executeAction(this);
+		} else {
+			execute();
+		}
+		return (A) this;
+	}
+
+	private void setOriginalActionEvent(ActionEvent e) {
+		this.originalActionEvent = e;
+	}
+
+	public void execute() throws FlexoException {
 		long start = 0, end = 0;
 		if (_logActionTime) {
 			start = System.currentTimeMillis();
@@ -322,7 +342,7 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 		boolean confirmDoAction = true;
 		if (getInitializer() != null) {
 			executionStatus = ExecutionStatus.EXECUTING_INITIALIZER;
-			confirmDoAction = getInitializer().run(e, (A) this);
+			confirmDoAction = getInitializer().run(originalActionEvent, (A) this);
 		}
 
 		String actionName = getLocalizedName();
@@ -364,7 +384,7 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 
 			if (getFinalizer() != null && executionStatus == ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED) {
 				executionStatus = ExecutionStatus.EXECUTING_FINALIZER;
-				executionStatus = getFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED
+				executionStatus = getFinalizer().run(originalActionEvent, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED
 						: ExecutionStatus.FAILED_EXECUTION;
 			}
 		}
@@ -375,7 +395,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 				logger.info("Action " + actionName + " took " + (end - start) + "ms to complete");
 			}
 		}
-		return (A) this;
 	}
 
 	public void hideFlexoProgress() {

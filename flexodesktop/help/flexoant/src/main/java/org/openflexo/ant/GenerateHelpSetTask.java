@@ -32,6 +32,7 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.GenerateHelpSet;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
@@ -81,12 +82,6 @@ public class GenerateHelpSetTask extends Task {
 			public boolean performResourceScanning() {
 				// TODO Auto-generated method stub
 				return false;
-			}
-
-			@Override
-			public void performPendingActions() {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
@@ -253,6 +248,12 @@ public class GenerateHelpSetTask extends Task {
 					FlexoAction<A, T1, T2> action, boolean success) {
 				// TODO Auto-generated method stub
 
+			}
+
+			@Override
+			public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(A action)
+					throws FlexoException {
+				action.execute();
 			}
 		});
 		action.setNote("none");

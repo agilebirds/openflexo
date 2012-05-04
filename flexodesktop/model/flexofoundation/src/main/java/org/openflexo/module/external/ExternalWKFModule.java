@@ -36,11 +36,9 @@ public interface ExternalWKFModule extends ExternalModule {
 
 	public JComponent createScreenshotForObject(FlexoModelObject target);
 
-	public JComponent createScreenshotForProcess(FlexoProcess target);
-
 	public float getScreenshotQuality();
 
-	public void finalizeScreenshotGeneration();
+	public void finalizeScreenshotGeneration(JComponent screenshot);
 
 	public Object getProcessRepresentation(FlexoProcess process, boolean showAll);
 

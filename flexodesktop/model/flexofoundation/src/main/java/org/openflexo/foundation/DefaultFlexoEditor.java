@@ -68,6 +68,12 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
+	public <A extends org.openflexo.foundation.action.FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(
+			A action) throws FlexoException {
+		action.execute();
+	}
+
+	@Override
 	public FlexoProject getProject() {
 		return _project;
 	}
@@ -226,10 +232,6 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	public FlexoProgressFactory getFlexoProgressFactory() {
 		// Only interactive editor have a progress window
 		return null;
-	}
-
-	@Override
-	public void performPendingActions() {
 	}
 
 	@Override

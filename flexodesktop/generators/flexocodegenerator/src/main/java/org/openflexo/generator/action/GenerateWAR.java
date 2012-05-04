@@ -72,6 +72,11 @@ public class GenerateWAR extends GCAction<GenerateWAR, CGRepository> {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
+	@Override
+	public boolean isLongRunningAction() {
+		return true;
+	}
+
 	private File generatedWar;
 	private boolean cleanImmediately = false;
 
