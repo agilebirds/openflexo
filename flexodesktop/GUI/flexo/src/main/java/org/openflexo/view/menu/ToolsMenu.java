@@ -135,7 +135,7 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
+			FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), getController().getFlexoFrame());
 		}
 	}
 
@@ -159,7 +159,7 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			((FlexoMainLocalizer) FlexoLocalization.getMainLocalizer()).showLocalizedEditor();
+			((FlexoMainLocalizer) FlexoLocalization.getMainLocalizer()).showLocalizedEditor(getController().getFlexoFrame());
 		}
 
 	}

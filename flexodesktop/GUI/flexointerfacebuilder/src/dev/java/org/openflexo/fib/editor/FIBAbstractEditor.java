@@ -284,7 +284,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		logsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), frame);
 			}
 		});
 
@@ -292,7 +292,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		localizedItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LOCALIZATION.showLocalizedEditor();
+				LOCALIZATION.showLocalizedEditor(frame);
 			}
 		});
 

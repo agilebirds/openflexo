@@ -1,6 +1,7 @@
 package org.openflexo.fib.utils;
 
 import java.awt.Color;
+import java.awt.Window;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.Vector;
@@ -52,12 +53,12 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 	private static FlexoLoggingViewer instance;
 	private static FIBDialog<FlexoLoggingViewer> dialog;
 
-	public static void showLoggingViewer(FlexoLoggingManager loggingManager) {
+	public static void showLoggingViewer(FlexoLoggingManager loggingManager, Window parent) {
 		System.out.println("showLoggingViewer with " + loggingManager);
 		FIBComponent loggingViewerComponent = FIBLibrary.instance().retrieveFIBComponent(LOGGING_VIEWER_FIB);
 		if (instance == null || dialog == null) {
 			instance = new FlexoLoggingViewer(loggingManager);
-			dialog = FIBDialog.instanciateComponent(loggingViewerComponent, instance, null, false, FlexoLocalization.getMainLocalizer());
+			dialog = FIBDialog.instanciateComponent(loggingViewerComponent, instance, parent, false, FlexoLocalization.getMainLocalizer());
 		} else {
 			dialog.showDialog();
 		}
@@ -100,8 +101,9 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 	public Color getBgColorForLogRecord(LogRecord record) {
 		if (getRecords().filtersApplied()) {
 			for (LoggingFilter f : filters) {
-				if (f.type == FilterType.Highlight && f.filterDoesApply(record))
+				if (f.type == FilterType.Highlight && f.filterDoesApply(record)) {
 					return Color.YELLOW;
+				}
 			}
 		}
 		return null;
@@ -146,7 +148,7 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 	public File getConfigurationFile() {
 		if (configurationFile == null) {
 			String loggingFileName = loggingManager.getConfigurationFileName();
-			if (loggingFileName != null && (new File(loggingFileName)).exists()) {
+			if (loggingFileName != null && new File(loggingFileName).exists()) {
 				configurationFile = new File(loggingFileName);
 			}
 		}

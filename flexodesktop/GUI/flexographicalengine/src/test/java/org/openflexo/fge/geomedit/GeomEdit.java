@@ -263,7 +263,7 @@ public class GeomEdit {
 		logsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), frame);
 			}
 		});
 
@@ -271,7 +271,7 @@ public class GeomEdit {
 		localizedItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LOCALIZATION.showLocalizedEditor();
+				LOCALIZATION.showLocalizedEditor(frame);
 			}
 		});
 
