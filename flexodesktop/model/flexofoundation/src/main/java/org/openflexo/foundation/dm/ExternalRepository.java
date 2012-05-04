@@ -120,8 +120,8 @@ public class ExternalRepository extends DMRepository {
 			progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + aJarFile.getName());
 		}
 		try {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Copying file " + aJarFile.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Copying file " + aJarFile.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
 			}
 			FileUtils.copyFileToFile(aJarFile, copiedFile);
 		} catch (IOException e) {
@@ -149,8 +149,7 @@ public class ExternalRepository extends DMRepository {
 			progress.setProgress(FlexoLocalization.localizedForKey("importing_classes_from") + " " + aJarFile.getName());
 			progress.resetSecondaryProgress(jarLoader.getContainedClasses().size());
 		}
-		for (Enumeration e = jarLoader.getContainedClasses().elements(); e.hasMoreElements();) {
-			Class next = (Class) e.nextElement();
+		for (Class<?> next : jarLoader.getContainedClasses().values()) {
 			if (next == null) {
 				logger.warning("Entity: null IGNORED");
 			} else {
@@ -158,7 +157,9 @@ public class ExternalRepository extends DMRepository {
 					if (progress != null) {
 						progress.setSecondaryProgress(FlexoLocalization.localizedForKey("importing_class") + " " + next.getName());
 					}
-					logger.info("Import " + next);
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Import " + next);
+					}
 					if (importedClassSet == null) {
 						LoadableDMEntity.createLoadableDMEntity(dmModel, next);
 					} else {

@@ -27,6 +27,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JDialog;
@@ -66,7 +67,7 @@ public class MainInspectorController implements Observer, ChangeListener {
 	private final InteractiveFlexoEditor editor;
 
 	private final Map<Class<?>, FIBInspector> inspectors;
-	private final Map<FIBInspector, FIBView> inspectorViews;
+	private final Map<FIBInspector, FIBView<?, ?>> inspectorViews;
 
 	private final FlexoController flexoController;
 
@@ -77,7 +78,7 @@ public class MainInspectorController implements Observer, ChangeListener {
 		this.editor = flexoController.getEditor();
 
 		inspectors = new Hashtable<Class<?>, FIBInspector>();
-		inspectorViews = new Hashtable<FIBInspector, FIBView>();
+		inspectorViews = new Hashtable<FIBInspector, FIBView<?, ?>>();
 
 		File inspectorsDir = new FileResource("Inspectors/COMMON");
 		loadDirectory(inspectorsDir);
@@ -105,8 +106,9 @@ public class MainInspectorController implements Observer, ChangeListener {
 	}
 
 	public void loadDirectory(File dir) {
-		logger.info("Directory: " + dir);
-		logger.info("Exists: " + dir.exists());
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Loading directory: " + dir);
+		}
 		if (!dir.exists()) {
 			logger.warning("Directory does NOT exist: " + dir.getAbsolutePath());
 			// (new Exception("???")).printStackTrace();
@@ -126,7 +128,9 @@ public class MainInspectorController implements Observer, ChangeListener {
 				if (inspector.getDataClass() != null) {
 					// try {
 					inspectors.put(inspector.getDataClass(), inspector);
-					logger.info("Loaded inspector: " + f.getName() + " for " + inspector.getDataClass());
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Loaded inspector: " + f.getName() + " for " + inspector.getDataClass());
+					}
 					/*
 					 * } catch (ClassNotFoundException e) {
 					 * logger.warning("Not found: " +
@@ -138,39 +142,26 @@ public class MainInspectorController implements Observer, ChangeListener {
 			}
 		}
 
-		for (Class c : inspectors.keySet()) {
+		for (Class<?> c : inspectors.keySet()) {
 			FIBInspector inspector = inspectors.get(c);
 			inspector.appendSuperInspectors(this);
 		}
 
-		for (Class c : inspectors.keySet()) {
+		for (Class<?> c : inspectors.keySet()) {
 			FIBInspector inspector = inspectors.get(c);
 			inspector.recursivelyReorderComponents();
-
-			/*
-			 * if (inspector.getDataClass().equals(ProjectOntology.class)) {
-			 * FIBTabPanel tabPanel = (FIBTabPanel)inspector.getChildAt(0);
-			 * FIBTab basicTab = (FIBTab)tabPanel.getComponentNamed("BasicTab");
-			 * for (FIBComponent cpt : basicTab.getSubComponents()) {
-			 * System.out.
-			 * println("Component "+cpt+" constraints="+cpt.getConstraints()); }
-			 * basicTab.reorderComponents(); System.out.println("Ensuite"); for
-			 * (FIBComponent cpt : basicTab.getSubComponents()) {
-			 * System.out.println
-			 * ("Component "+cpt+" constraints="+cpt.getConstraints()); }
-			 * System.exit(-1); }
-			 */
-
-			FIBView inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
+			FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
 			((FIBInspectorController) inspectorView.getController()).setEditor(editor);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
-			logger.info("Initialized inspector for " + inspector.getDataClass());
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Initialized inspector for " + inspector.getDataClass());
+			}
 		}
 	}
 
 	private FIBInspector currentInspector = null;
-	private FIBView currentInspectorView = null;
+	private FIBView<?, ?> currentInspectorView = null;
 
 	private Object currentInspectedObject = null;
 
@@ -211,8 +202,8 @@ public class MainInspectorController implements Observer, ChangeListener {
 
 	private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
 		if (inspector.updateEditionPatternReferences(object)) {
-			FIBView view = viewForInspector(inspector);
-			FIBController controller = view.getController();
+			FIBView<?, ?> view = viewForInspector(inspector);
+			FIBController<?> controller = view.getController();
 			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller.viewForComponent(inspector.getTabPanel());
 			tabPanelView.updateLayout();
 		} else {
@@ -254,7 +245,7 @@ public class MainInspectorController implements Observer, ChangeListener {
 		}
 
 		// System.out.println("switchToInspector() "+newInspector);
-		FIBView view = viewForInspector(newInspector);
+		FIBView<?, ?> view = viewForInspector(newInspector);
 		if (view != null) {
 			currentInspectorView = view;
 			rootPane.removeAll();
@@ -276,7 +267,7 @@ public class MainInspectorController implements Observer, ChangeListener {
 		}
 	}
 
-	private FIBView viewForInspector(FIBInspector inspector) {
+	private FIBView<?, ?> viewForInspector(FIBInspector inspector) {
 		return inspectorViews.get(inspector);
 	}
 
@@ -287,8 +278,8 @@ public class MainInspectorController implements Observer, ChangeListener {
 		return inspectorForClass(object.getClass());
 	}
 
-	protected FIBInspector inspectorForClass(Class aClass) {
-		Class c = aClass;
+	protected FIBInspector inspectorForClass(Class<?> aClass) {
+		Class<?> c = aClass;
 		while (c != null) {
 			FIBInspector returned = inspectors.get(c);
 			if (returned != null) {

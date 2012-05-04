@@ -20,6 +20,7 @@
 package org.openflexo.foundation.dm;
 
 import java.util.Enumeration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
@@ -123,7 +124,9 @@ public class ProcessInstanceRepository extends DMRepository {
 			DMPackage next = (DMPackage) en.nextElement();
 			DMEntity found = getDMEntity(next.getName(), process.getProcessInstanceEntityName());
 			if (found != null) {
-				logger.info("Found process instance entity for process " + process.getName());
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Found process instance entity for process " + process.getName());
+				}
 				ProcessDMEntity returned = (ProcessDMEntity) found;
 				returned.setProcess(process);
 				returned.createParentProcessPropertyIfRequired();

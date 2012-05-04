@@ -205,7 +205,7 @@ public class InspectorController implements Observer, AbstractController {
 		Iterator<InspectorModel> it = _inspectors.values().iterator();
 		while (it.hasNext()) {
 			InspectorModel inspector = it.next();
-			if (inspector.superInspectorName != null && inspector.superInspectorName != "") {
+			if (inspector.superInspectorName != null) {
 				InspectorModel superInspector = _inspectors.get(inspector.superInspectorName);
 				if (superInspector == null) {
 					if (logger.isLoggable(Level.WARNING)) {

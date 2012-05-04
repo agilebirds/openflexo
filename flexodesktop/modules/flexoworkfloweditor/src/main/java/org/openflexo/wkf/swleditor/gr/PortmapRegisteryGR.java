@@ -22,6 +22,7 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.util.Observable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
@@ -150,7 +151,7 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 	@Override
 	public final void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getPortMapRegistery()) {
-			if ((dataModification instanceof PortMapInserted) || (dataModification instanceof PortMapRemoved)) {
+			if (dataModification instanceof PortMapInserted || dataModification instanceof PortMapRemoved) {
 				parentGR = null;
 				refreshOrientation();
 				// GPO: We need to invalidate the hierarchy because portmaps play with visibility and not with add/remove
@@ -172,10 +173,10 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 	@Override
 	public void update(Observable observable, Object dataModification) {
 		if (observable == getContainerGraphicalRepresentation()) {
-			if ((dataModification instanceof ObjectWillMove) || (dataModification instanceof ObjectWillResize)
-					|| (dataModification instanceof ObjectHasMoved) || (dataModification instanceof ObjectHasResized)
-					|| (dataModification instanceof ObjectMove) || (dataModification instanceof ObjectResized)
-					|| (dataModification instanceof ShapeChanged)) {
+			if (dataModification instanceof ObjectWillMove || dataModification instanceof ObjectWillResize
+					|| dataModification instanceof ObjectHasMoved || dataModification instanceof ObjectHasResized
+					|| dataModification instanceof ObjectMove || dataModification instanceof ObjectResized
+					|| dataModification instanceof ShapeChanged) {
 				// Reinit parent outline that will change
 				parentGR = null;
 			}
@@ -197,7 +198,9 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 		FGEPoint locationInSubProcessNode = GraphicalRepresentation.convertNormalizedPoint(this, new FGEPoint(0.5, 0.5), subProcessNodeGR);
 		SimplifiedCardinalDirection orientation = FGEPoint.getSimplifiedOrientation(new FGEPoint(0.5, 0.5), locationInSubProcessNode);
 		if (orientation != _orientation) {
-			logger.info("Switch to orientation = " + orientation);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Switch to orientation = " + orientation);
+			}
 			_orientation = orientation;
 			int portmapNb = 0;
 			for (FlexoPortMap pm : getPortMapRegistery().getPortMaps()) {

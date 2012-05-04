@@ -139,8 +139,8 @@ public abstract class FlexoInspectorController extends InspectorController {
 
 				for (String inspectorName : inspectorsToLoad) {
 					if (inspectorName.endsWith(".inspector")) {
-						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Loading " + inspectorName + "...");
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Loading " + inspectorName + "...");
 						}
 						ProgressWindow.setSecondaryProgressInstance(FlexoLocalization.localizedForKey("loading") + " " + inspectorName
 								+ "...");
@@ -289,7 +289,7 @@ public abstract class FlexoInspectorController extends InspectorController {
 				return true;
 			}
 			UserType nextUT = UserType.getUserTypeNamed(token);
-			if ((nextUT != null) && (nextUT.equals(userType))) {
+			if (nextUT != null && nextUT.equals(userType)) {
 				return true;
 			}
 		}
@@ -306,7 +306,7 @@ public abstract class FlexoInspectorController extends InspectorController {
 				return false;
 			}
 			UserType nextUT = UserType.getUserTypeNamed(token);
-			if ((nextUT != null) && (nextUT.equals(userType))) {
+			if (nextUT != null && nextUT.equals(userType)) {
 				return false;
 			}
 		}

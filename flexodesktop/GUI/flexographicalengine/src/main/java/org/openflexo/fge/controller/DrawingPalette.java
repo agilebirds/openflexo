@@ -89,7 +89,9 @@ public class DrawingPalette {
 		this.title = title;
 		elements = new Vector<PaletteElement>();
 		_paletteDrawing = new PaletteDrawing();
-		logger.info("Build palette " + title + " " + Integer.toHexString(hashCode()) + " of " + getClass().getName());
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Build palette " + title + " " + Integer.toHexString(hashCode()) + " of " + getClass().getName());
+		}
 	}
 
 	public void delete() {
