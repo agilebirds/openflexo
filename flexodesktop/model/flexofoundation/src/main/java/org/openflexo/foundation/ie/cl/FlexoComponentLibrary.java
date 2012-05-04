@@ -165,16 +165,6 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 		}
 
 		try {
-			clRes.saveResourceData();
-			project.registerResource(clRes);
-		} catch (Exception e1) {
-			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-			}
-			e1.printStackTrace();
-		}
-		try {
 			FlexoComponentFolder.createNewRootFolder(newLibrary);
 			FlexoComponentFolder utilsFolder = new FlexoComponentFolder("Utils", newLibrary);
 			newLibrary.getRootFolder().addToSubFolders(utilsFolder);
@@ -189,6 +179,16 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 			}
 		}
 
+		try {
+			clRes.saveResourceData();
+			project.registerResource(clRes);
+		} catch (Exception e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
+			e1.printStackTrace();
+		}
 		return newLibrary;
 	}
 

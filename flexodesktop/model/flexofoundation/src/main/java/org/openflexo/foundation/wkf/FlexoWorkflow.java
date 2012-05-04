@@ -178,6 +178,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		super(project);
 		if (project == null) {
 			logger.severe("No project for Workflow");
+		} else {
+			setProject(project);
 		}
 		_topLevelNodeProcesses = new Vector<FlexoProcessNode>();
 		importedRootNodeProcesses = new Vector<FlexoProcessNode>();
@@ -230,10 +232,24 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		File wkfFile = ProjectRestructuration.getExpectedWorkflowFile(project, project.getProjectName());
 		FlexoProjectFile workflowFile = new FlexoProjectFile(wkfFile, project);
 		FlexoWorkflowResource wkfRes = new FlexoWorkflowResource(project, newWorkflow, workflowFile);
+		try {
+			project.registerResource(wkfRes);
+		} catch (DuplicateResourceException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
+			e.printStackTrace();
+		}
+		newWorkflow.createDefaultProcessMetricsDefinitions();
+		newWorkflow.createDefaultActivityMetricsDefinitions();
+		newWorkflow.createDefaultOperationMetricsDefinitions();
+		newWorkflow.createDefaultEdgeMetricsDefinitions();
+		newWorkflow.createDefaultArtefactMetricsDefinitions();
+
+		FlexoProcess.createNewRootProcess(newWorkflow);
 
 		try {
 			wkfRes.saveResourceData();
-			project.registerResource(wkfRes);
 		} catch (Exception e1) {
 			// Warns about the exception
 			if (logger.isLoggable(Level.WARNING)) {
@@ -242,12 +258,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 			e1.printStackTrace();
 		}
 
-		FlexoProcess.createNewRootProcess(newWorkflow);
-		newWorkflow.createDefaultProcessMetricsDefinitions();
-		newWorkflow.createDefaultActivityMetricsDefinitions();
-		newWorkflow.createDefaultOperationMetricsDefinitions();
-		newWorkflow.createDefaultEdgeMetricsDefinitions();
-		newWorkflow.createDefaultArtefactMetricsDefinitions();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("END createNewWorkflow(), project=" + project);
 		}

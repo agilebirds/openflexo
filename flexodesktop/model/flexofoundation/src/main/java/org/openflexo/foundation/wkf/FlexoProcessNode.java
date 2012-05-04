@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
 import org.openflexo.foundation.validation.Validable;
@@ -87,8 +86,8 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		_childs = new Vector<FlexoProcessNode>();
 	}
 
-	public FlexoProcessNode(String aName, String aFileName, FlexoProcess aProcess, FlexoProject project) {
-		this(project.getFlexoWorkflow());
+	public FlexoProcessNode(String aName, String aFileName, FlexoProcess aProcess, FlexoWorkflow workflow) {
+		this(workflow);
 		name = aName;
 		fileName = aFileName;
 		if (aProcess != null) {
