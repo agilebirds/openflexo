@@ -219,19 +219,18 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 			if (_lastWrittenOnDisk == null) {
 				_lastWrittenOnDisk = _diskLastModifiedDate;
 			}
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM HH:mm:ss SSS");
 			if (_diskLastModifiedDate.getTime() > _lastWrittenOnDisk.getTime() + ACCEPTABLE_FS_DELAY) {
 				if (_lastWrittenOnDisk.getTime() != 0) {
 					// Here we have written on disk, and somehow the disk last modified date is still bigger than the acceptable delay
 					// This can happen sometimes if it takes too long to write on disk
-					logger.info("Resource "
-							+ this
-							+ " : declared lastWrittenOnDisk date is anterior to current effective last modified date: which means that file on disk in newer than expected"
-							+ "_diskLastModifiedDate["
-							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_diskLastModifiedDate)
-							+ "]"
-							+ " > lastWrittenOnDisk["
-							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(new Date(_lastWrittenOnDisk.getTime() + ACCEPTABLE_FS_DELAY))
-							+ "]");
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Resource "
+								+ this
+								+ " : declared lastWrittenOnDisk date is anterior to current effective last modified date: which means that file on disk in newer than expected"
+								+ "_diskLastModifiedDate[" + simpleDateFormat.format(_diskLastModifiedDate) + "]" + " > lastWrittenOnDisk["
+								+ simpleDateFormat.format(new Date(_lastWrittenOnDisk.getTime() + ACCEPTABLE_FS_DELAY)) + "]");
+					}
 				}
 				// Since we are in this block (diskLastModified was null see the top 'if'), we consider that it is some kind of bug in the
 				// FS
@@ -244,8 +243,10 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 					logger.warning("Resource "
 							+ this
 							+ " : declared lastWrittenOnDisk date is posterior to current effective last modified date (with a delay, due to FS date implementation): which means that something strange happened"
-							+ "_diskLastModifiedDate[" + new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_diskLastModifiedDate) + "]"
-							+ " < lastWrittenOnDisk[" + new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_lastWrittenOnDisk) + "]");
+							+ "_diskLastModifiedDate[" + simpleDateFormat.format(_diskLastModifiedDate) + "]" + " < lastWrittenOnDisk["
+							+ simpleDateFormat.format(_lastWrittenOnDisk) + "]");
+					// We should rather go back in time and consider that the information we stored is no longer correct.
+					_lastWrittenOnDisk = _diskLastModifiedDate;
 				}
 			}
 		}
