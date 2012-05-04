@@ -136,7 +136,6 @@
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">304.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textAlignment_default className="org.openflexo.fge.GraphicalRepresentation$TextAlignment">CENTER</textAlignment_default>
         <textColor_default className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_default>
         <textFont_default className="org.openflexo.foundation.utils.FlexoFont">Lucida Sans,0,10</textFont_default>
         <width_bpe className="java.lang.Double">30.0</width_bpe>
@@ -162,7 +161,6 @@ lkmkmklmklmlkt</text>
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">309.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textAlignment_default className="org.openflexo.fge.GraphicalRepresentation$TextAlignment">CENTER</textAlignment_default>
         <textColor_default className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_default>
         <textFont_default className="org.openflexo.foundation.utils.FlexoFont">Lucida Sans,2,10</textFont_default>
         <width_bpe className="java.lang.Double">80.0</width_bpe>
@@ -186,7 +184,6 @@ on</text>
         <labely_bpe className="java.lang.Double">0.0</labely_bpe>
         <posx_bpe className="java.lang.Double">472.0</posx_bpe>
         <posy_bpe className="java.lang.Double">354.0</posy_bpe>
-        <textAlignment_default className="org.openflexo.fge.GraphicalRepresentation$TextAlignment">CENTER</textAlignment_default>
         <textColor_default className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_default>
         <textFont_default className="org.openflexo.foundation.utils.FlexoFont">Lucida Sans,2,10</textFont_default>
         <width_bpe className="java.lang.Double">116.0</width_bpe>
