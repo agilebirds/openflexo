@@ -1283,6 +1283,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	public EditionPatternReference getEditionPatternReference(EditionPatternInstance epInstance) {
+		if (_editionPatternReferences == null) {
+			logger.warning("Unexpected _editionPatternReferences=null !!!");
+			return null;
+		}
 		for (EditionPatternReference r : _editionPatternReferences) {
 			if (r.getEditionPatternInstance() == epInstance) {
 				return r;
