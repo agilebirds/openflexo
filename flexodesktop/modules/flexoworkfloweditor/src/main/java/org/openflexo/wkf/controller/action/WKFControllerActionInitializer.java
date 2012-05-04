@@ -128,7 +128,6 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new DeleteRoleInitializer(this).init();
 		new DeleteRoleSpecializationInitializer(this).init();
 		new AddStatusInitializer(this).init();
-		// new AddDeadlineInitializer(this).init();
 		new AddPortInitializer(this).init();
 
 		new ImportRolesInitializer(this).init();
