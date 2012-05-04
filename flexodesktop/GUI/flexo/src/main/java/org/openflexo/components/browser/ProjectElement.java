@@ -67,10 +67,10 @@ public class ProjectElement extends BrowserElement {
 			addToChilds(getProject().getImportedProcessLibrary());
 		}
 
-		if (getFlexoResourceCenterService().getFlexoResourceCenter(false) != null) {
+		/*if (getFlexoResourceCenterService().getFlexoResourceCenter(false) != null) {
 			addToChilds(getFlexoResourceCenterService().getFlexoResourceCenter().retrieveBaseOntologyLibrary());
 			addToChilds(getFlexoResourceCenterService().getFlexoResourceCenter().retrieveViewPointLibrary());
-		}
+		}*/
 
 		/*if (getProject().getOntologyLibrary(false)!=null)
 			addToChilds(getProject().getOntologyLibrary(false));
