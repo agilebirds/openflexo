@@ -932,7 +932,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public void setTextStyle(TextStyle aTextStyle) {
-		FGENotification notification = requireChange(Parameters.textStyle, aTextStyle);
+		FGENotification notification = requireChange(Parameters.textStyle, aTextStyle, false);
 		if (notification != null) {
 			if (textStyle != null) {
 				textStyle.deleteObserver(this);
@@ -1264,7 +1264,34 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		notifyChange(parameter);
 	}
 
+	/**
+	 * Build and return a new notification for a potential parameter change, given a new value. Change is required if values are different
+	 * considering equals() method
+	 * 
+	 * @param parameter
+	 * @param value
+	 * @param useEquals
+	 * @return
+	 */
 	protected FGENotification requireChange(GRParameter parameter, Object value) {
+		return requireChange(parameter, value, true);
+	}
+
+	/**
+	 * Build and return a new notification for a potential parameter change, given a new value. Change is required if values are different
+	 * considering:
+	 * <ul>
+	 * <li>If useEquals flag set to true, equals() method
+	 * <li>
+	 * <li>If useEquals flag set to false, same reference for objects, same value for primitives</li>
+	 * </ul>
+	 * 
+	 * @param parameter
+	 * @param value
+	 * @param useEquals
+	 * @return
+	 */
+	protected FGENotification requireChange(GRParameter parameter, Object value, boolean useEquals) {
 		Class<?> type = getTypeForKey(parameter.name());
 		Object oldValue = null;
 		if (type.isPrimitive()) {
@@ -1306,10 +1333,18 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 				return new FGENotification(parameter, oldValue, value);
 			}
 		} else {
-			if (oldValue.equals(value)) {
-				return null; // No change
+			if (useEquals) {
+				if (oldValue.equals(value)) {
+					return null; // No change
+				} else {
+					return new FGENotification(parameter, oldValue, value);
+				}
 			} else {
-				return new FGENotification(parameter, oldValue, value);
+				if (oldValue == value) {
+					return null; // No change
+				} else {
+					return new FGENotification(parameter, oldValue, value);
+				}
 			}
 		}
 	}

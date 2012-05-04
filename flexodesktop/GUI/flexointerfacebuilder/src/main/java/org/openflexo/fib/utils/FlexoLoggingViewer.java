@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Window;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -190,7 +191,10 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 			return;
 		}
 		System.err.println("Stack trace for '" + record.message + "':");
-		System.err.println(record.getStackTraceAsString());
+		StringTokenizer st = new StringTokenizer(record.getStackTraceAsString(), StringUtils.LINE_SEPARATOR);
+		while (st.hasMoreTokens()) {
+			System.err.println("\t" + st.nextToken());
+		}
 	}
 
 	public LoggingFilter createFilter() {

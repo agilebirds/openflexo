@@ -738,11 +738,43 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		return _editedObject;
 	}
 
-	// WARNING: this method uses the equals(Object) method to see if a change is required or not. Therefore, if the edited object type
-	// overrides the equals method, some objects that are different may not be swapped and cause very unpredictable behaviour. The
-	// workaround for this is to clone the value when setting on the model. See bug 1004363
+	private boolean requireChange(T value) {
+		T currentValue = _editedObject;
+		if (value == null) {
+			return currentValue != null;
+		} else {
+			if (useEqualsLookup()) {
+				return !value.equals(currentValue);
+			} else {
+				return value != currentValue;
+			}
+		}
+	}
+
+	/**
+	 * Return a flag indicating if equals() method should be used to determine equality.<br>
+	 * If this method return false (should be overriden), equality lookup is performed using references (pointer equality) Default behaviour
+	 * is to use equals() lookup method, please override this method (and return false) whenever a CustomPopup is used to edit a value and
+	 * not only choose a value
+	 * 
+	 * @return true
+	 */
+	protected boolean useEqualsLookup() {
+		return true;
+	}
+
+	/**
+	 * Sets edited object<br>
+	 * Before to set edited object, an equality test is performed to determine if setting is required. When not, just return.<br>
+	 * Default behaviour is to use the equals(Object) method to see if a change is required or not. Therefore, if the edited object type
+	 * overrides the equals method, some objects that are different may not be swapped and cause very unpredictable behaviour. A workaround
+	 * for this is to clone the value when setting on the model. See bug 1004363. An other workaround is to override useEqualsLookup()
+	 * method with false value, to use pointer comparison.
+	 * 
+	 * @param object
+	 */
 	public void setEditedObject(T object) {
-		if (_editedObject == null || !_editedObject.equals(object)) {
+		if (requireChange(object)) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("CustomPopup setEditedObject: " + object);
 			}

@@ -66,6 +66,7 @@ public class EditorToolbox {
 	}
 
 	public void delete() {
+
 		if (backgroundSelector != null) {
 			backgroundSelector.delete();
 			backgroundSelector = null;

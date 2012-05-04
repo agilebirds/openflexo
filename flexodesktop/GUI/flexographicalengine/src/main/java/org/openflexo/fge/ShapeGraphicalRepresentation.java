@@ -1494,27 +1494,35 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	private void updateXPosition() {
-		double newValue = ((Number) xConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for x is now: " + newValue);
-		setX(newValue);
+		Number n = (Number) xConstraints.getBindingValue(this);
+		if (n != null) {
+			// System.out.println("New value for x is now: " + newValue);
+			setX(n.doubleValue());
+		}
 	}
 
 	private void updateYPosition() {
-		double newValue = ((Number) yConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for y is now: " + newValue);
-		setY(newValue);
+		Number n = (Number) yConstraints.getBindingValue(this);
+		if (n != null) {
+			// System.out.println("New value for y is now: " + newValue);
+			setY(n.doubleValue());
+		}
 	}
 
 	private void updateWidthPosition() {
-		double newValue = ((Number) widthConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for width is now: " + newValue);
-		setWidth(newValue);
+		Number n = (Number) widthConstraints.getBindingValue(this);
+		if (n != null) {
+			// System.out.println("New value for width is now: " + newValue);
+			setWidth(n.doubleValue());
+		}
 	}
 
 	private void updateHeightPosition() {
-		double newValue = ((Number) heightConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for height is now: " + newValue);
-		setHeight(newValue);
+		Number n = (Number) heightConstraints.getBindingValue(this);
+		if (n != null) {
+			// System.out.println("New value for height is now: " + newValue);
+			setHeight(n.doubleValue());
+		}
 	}
 
 	public void constraintChanged(DataBinding constraint) {
@@ -1542,7 +1550,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.foreground, aForeground);
+		FGENotification notification = requireChange(Parameters.foreground, aForeground, false);
 		if (notification != null) {
 			if (foreground != null) {
 				foreground.deleteObserver(this);
@@ -1568,7 +1576,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	public void setBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(Parameters.background, aBackground);
+		FGENotification notification = requireChange(Parameters.background, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (background != null) {
