@@ -21,6 +21,7 @@ package org.openflexo.foundation.view;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +62,8 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	private int index = -1;
 	private ViewPoint _calc;
 	private ViewPointLibrary _calcLibrary;
+	private boolean lookupDone = false;
+	private String viewPointURI;
 
 	public ViewDefinition(VEShemaLibraryBuilder builder) throws DuplicateResourceException {
 		this(null, builder.shemaLibrary, null, builder.getProject(), false);
@@ -142,7 +145,11 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
-		return getShema().getEPInstances(epName);
+		if (getShema() != null) {
+			return getShema().getEPInstances(epName);
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 	public FlexoOEShemaResource getShemaResource() {
@@ -372,26 +379,41 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		return Inspectors.VE.OE_SHEMA_DEFINITION_INSPECTOR;
 	}
 
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
+		if (_calc == null && !lookupDone) {
+			_calc = _calcLibrary.getViewPoint(viewPointURI);
+			lookupDone = true;
+		}
 		return _calc;
 	}
 
-	public void setCalc(ViewPoint calc) {
-		_calc = calc;
+	public void setViewPoint(ViewPoint viewPoint) {
+		_calc = viewPoint;
 		setChanged();
+		viewPointURI = null;
+	}
+
+	@Deprecated
+	public ViewPoint getCalc() {
+		return getViewPoint();
+	}
+
+	@Deprecated
+	public void setCalc(ViewPoint viewPoint) {
+		setViewPoint(viewPoint);
 	}
 
 	// Don't use it, serialization only
 	public String _getCalcURI() {
-		if (getCalc() != null) {
-			return getCalc().getViewPointURI();
+		if (getViewPoint() != null) {
+			return getViewPoint().getViewPointURI();
 		}
-		return null;
+		return viewPointURI;
 	}
 
 	// Don't use it, deserialization only
 	public void _setCalcURI(String ontologyCalcUri) {
-		_calc = _calcLibrary.getOntologyCalc(ontologyCalcUri);
+		viewPointURI = ontologyCalcUri;
 	}
 
 }
