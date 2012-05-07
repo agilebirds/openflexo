@@ -19,12 +19,14 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
@@ -34,11 +36,12 @@ import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 
-public class EditionPattern extends ViewPointObject implements StringConvertable<EditionPattern> {
+public class EditionPattern extends ViewPointObject implements StringConvertable<EditionPattern>, CustomType {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
 
@@ -692,6 +695,26 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	public void setPrimaryRepresentationRole(GraphicalElementPatternRole primaryRepresentationRole) {
 		this.primaryRepresentationRole = primaryRepresentationRole;
+	}
+
+	@Override
+	public String simpleRepresentation() {
+		return FlexoLocalization.localizedForKey(getLocalizedDictionary(), getName());
+	}
+
+	@Override
+	public String fullQualifiedRepresentation() {
+		return simpleRepresentation();
+	}
+
+	@Override
+	public Class getBaseClass() {
+		return EditionPattern.class;
+	}
+
+	@Override
+	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+		return (aType == this);
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint.binding;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -110,9 +111,17 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		return allProperties;
 	}
 
+	@Override
+	public abstract Type getType();
+
 	public static class OntologicClassPatternRolePathElement extends OntologicObjectPatternRolePathElement<OntologyClass> {
 		public OntologicClassPatternRolePathElement(ClassPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
+		}
+
+		@Override
+		public Type getType() {
+			return ((ClassPatternRole) getPatternRole()).getOntologicType();
 		}
 	}
 
@@ -161,6 +170,12 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			// + ((IndividualPatternRole) getPatternRole()).getOntologicType() + " have this " + super.getAllProperties());
 			return super.getAllProperties();
 		}
+
+		@Override
+		public Type getType() {
+			return ((IndividualPatternRole) getPatternRole()).getOntologicType();
+		}
+
 	}
 
 	public static abstract class OntologicPropertyPatternRolePathElement<T extends OntologyProperty> extends
@@ -174,12 +189,22 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		public OntologicDataPropertyPatternRolePathElement(DataPropertyPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
 		}
+
+		@Override
+		public Type getType() {
+			return ((DataPropertyPatternRole) getPatternRole()).getParentProperty();
+		}
 	}
 
 	public static class OntologicObjectPropertyPatternRolePathElement extends
 			OntologicPropertyPatternRolePathElement<OntologyObjectProperty> {
 		public OntologicObjectPropertyPatternRolePathElement(ObjectPropertyPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
+		}
+
+		@Override
+		public Type getType() {
+			return ((ObjectPropertyPatternRole) getPatternRole()).getParentProperty();
 		}
 	}
 

@@ -194,6 +194,14 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		}
 	}
 
+	public String simpleRepresentation() {
+		return getName();
+	}
+
+	public String fullQualifiedRepresentation() {
+		return getURI();
+	}
+
 	public void updateOntologyStatements() {
 		// TODO: optimize this (do not always recalculate)
 

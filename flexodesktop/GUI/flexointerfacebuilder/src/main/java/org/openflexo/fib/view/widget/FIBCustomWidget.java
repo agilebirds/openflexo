@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBCustomDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -56,8 +57,7 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 	public FIBCustomWidget(FIBCustom model, FIBController controller) {
 		super(model, controller);
 		try {
-			customComponent = makeCustomComponent((Class<FIBCustomComponent<T, J>>) model.getComponentClass(),
-					(Class<T>) model.getDataType(), controller);
+			customComponent = makeCustomComponent(model.getComponentClass(), TypeUtils.getBaseClass(model.getDataType()), controller);
 		} catch (ClassCastException e) {
 			logger.warning("Could not instanciate component: ClassCastException, see logs for details");
 			e.printStackTrace();

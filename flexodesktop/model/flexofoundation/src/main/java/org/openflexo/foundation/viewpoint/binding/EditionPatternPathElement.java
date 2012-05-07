@@ -58,7 +58,7 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 
 	@Override
 	public Type getType() {
-		return EditionPattern.class;
+		return editionPattern;
 	}
 
 	@Override

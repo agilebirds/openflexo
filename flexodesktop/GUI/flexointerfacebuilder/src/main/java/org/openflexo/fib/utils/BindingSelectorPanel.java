@@ -1514,7 +1514,6 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (TypeUtils.getBaseClass(_type) == null) {
 				return;
 			}
-
 			// _accessibleProperties.addAll(KeyValueLibrary.getAccessibleProperties(_type));
 			_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleBindingPathElements(_element));
 			// _accessibleProperties.addAll(_element.getAccessibleBindingPathElements());
