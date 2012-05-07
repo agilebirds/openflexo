@@ -154,8 +154,8 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	@Override
 	public void delete() {
-		if (getCalc() != null) {
-			getCalc().removeFromCalcPalettes(this);
+		if (getViewPoint() != null) {
+			getViewPoint().removeFromCalcPalettes(this);
 		}
 		logger.info("Deleting file " + _paletteFile);
 		_paletteFile.delete();
@@ -170,7 +170,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	@Override
 	public String toString() {
-		return "OntologyCalcPalette:" + (getCalc() != null ? getCalc().getName() : "null");
+		return "OntologyCalcPalette:" + (getViewPoint() != null ? getViewPoint().getName() : "null");
 	}
 
 	public int getIndex() {
@@ -205,13 +205,13 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		return _calc;
 	}
 
 	@Override
 	public ViewPointLibrary getViewPointLibrary() {
-		return getCalc().getViewPointLibrary();
+		return getViewPoint().getViewPointLibrary();
 	}
 
 	@Override
@@ -407,7 +407,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 
 }

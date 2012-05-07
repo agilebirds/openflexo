@@ -34,8 +34,8 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole {
 	}
 
 	public OntologyProperty getObjectProperty() {
-		if (getCalc() != null) {
-			getCalc().loadWhenUnloaded();
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
 		}
 		if (getOntologyLibrary() != null) {
 			return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());

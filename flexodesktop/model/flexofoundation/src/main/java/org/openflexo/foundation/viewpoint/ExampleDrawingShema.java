@@ -138,8 +138,8 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 
 	@Override
 	public void delete() {
-		if (getCalc() != null) {
-			getCalc().removeFromCalcShemas(this);
+		if (getViewPoint() != null) {
+			getViewPoint().removeFromCalcShemas(this);
 		}
 		_drawingFile.delete();
 		super.delete();
@@ -206,7 +206,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		return _calc;
 	}
 

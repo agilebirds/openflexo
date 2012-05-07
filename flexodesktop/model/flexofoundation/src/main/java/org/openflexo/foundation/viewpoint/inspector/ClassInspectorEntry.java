@@ -50,8 +50,8 @@ public class ClassInspectorEntry extends InspectorEntry {
 	}
 
 	public OntologyClass getConcept() {
-		if (getCalc() != null) {
-			getCalc().loadWhenUnloaded();
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
 		}
 		return getOntologyLibrary().getClass(_getConceptURI());
 	}

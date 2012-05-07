@@ -90,9 +90,9 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getCalc();
+			return getEditionPattern().getViewPoint();
 		}
 		return null;
 	}

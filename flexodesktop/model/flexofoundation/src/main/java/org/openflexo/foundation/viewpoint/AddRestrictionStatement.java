@@ -59,7 +59,7 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 	}
 
 	public OntologyProperty getObjectProperty() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getObjectProperty(_getPropertyURI());
 	}
 

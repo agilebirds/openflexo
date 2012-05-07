@@ -78,9 +78,9 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getElement() != null) {
-			return getElement().getCalc();
+			return getElement().getViewPoint();
 		}
 		return null;
 	}
@@ -103,7 +103,7 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 
 }

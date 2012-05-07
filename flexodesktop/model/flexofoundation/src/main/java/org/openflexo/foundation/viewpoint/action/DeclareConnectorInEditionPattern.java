@@ -86,7 +86,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
-			return connector != null && connector.getCalc().getEditionPatterns().size() > 0;
+			return connector != null && connector.getViewPoint().getEditionPatterns().size() > 0;
 		}
 
 	};
@@ -362,7 +362,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				}
 
 				// And add the newly created edition pattern
-				getFocusedObject().getCalc().addToEditionPatterns(newEditionPattern);
+				getFocusedObject().getViewPoint().addToEditionPatterns(newEditionPattern);
 
 			default:
 				logger.warning("Pattern not implemented");

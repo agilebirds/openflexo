@@ -49,8 +49,8 @@ public abstract class PropertyInspectorEntry extends InspectorEntry {
 	}
 
 	public OntologyProperty getParentProperty() {
-		if (getCalc() != null) {
-			getCalc().loadWhenUnloaded();
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
 		}
 		return getOntologyLibrary().getProperty(_getParentPropertyURI());
 	}
@@ -68,8 +68,8 @@ public abstract class PropertyInspectorEntry extends InspectorEntry {
 	}
 
 	public OntologyClass getDomain() {
-		if (getCalc() != null) {
-			getCalc().loadWhenUnloaded();
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
 		}
 		return getOntologyLibrary().getClass(_getDomainURI());
 	}

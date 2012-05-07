@@ -55,7 +55,7 @@ public class ObjectPropertyParameter extends PropertyParameter {
 	}
 
 	public OntologyClass getRange() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getClass(_getRangeURI());
 	}
 

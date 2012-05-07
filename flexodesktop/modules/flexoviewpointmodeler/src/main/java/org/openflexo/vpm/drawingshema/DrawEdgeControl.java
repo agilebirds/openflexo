@@ -79,8 +79,8 @@ public class DrawEdgeControl extends MouseDragControl {
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge && toShape != null) {
 
-				if (fromShape.getDrawable().getCalc() != null) {
-					Vector<LinkScheme> availableConnectors = fromShape.getDrawable().getCalc().getAllConnectors();
+				if (fromShape.getDrawable().getViewPoint() != null) {
+					Vector<LinkScheme> availableConnectors = fromShape.getDrawable().getViewPoint().getAllConnectors();
 
 					if (availableConnectors.size() > 0) {
 						JPopupMenu popup = new JPopupMenu();

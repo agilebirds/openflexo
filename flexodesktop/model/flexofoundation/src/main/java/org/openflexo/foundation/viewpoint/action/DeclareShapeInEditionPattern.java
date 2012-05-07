@@ -87,7 +87,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return shape != null && shape.getCalc() != null;
+			return shape != null && shape.getViewPoint() != null;
 		}
 
 	};
@@ -385,7 +385,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					}
 
 					// And add the newly created edition pattern
-					getFocusedObject().getCalc().addToEditionPatterns(newEditionPattern);
+					getFocusedObject().getViewPoint().addToEditionPatterns(newEditionPattern);
 
 				default:
 					break;

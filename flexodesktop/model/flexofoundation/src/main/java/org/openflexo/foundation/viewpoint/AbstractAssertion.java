@@ -47,9 +47,9 @@ public abstract class AbstractAssertion extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getAction() != null) {
-			return getAction().getCalc();
+			return getAction().getViewPoint();
 		}
 		return null;
 	}

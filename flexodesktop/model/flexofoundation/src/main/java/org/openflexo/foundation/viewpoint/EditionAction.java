@@ -86,9 +86,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getScheme() != null) {
-			return getScheme().getCalc();
+			return getScheme().getViewPoint();
 		}
 		return null;
 	}

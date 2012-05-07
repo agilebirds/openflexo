@@ -28,12 +28,12 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public abstract class ViewPointObject extends ViewPointLibraryObject implements Bindable {
 
-	public abstract ViewPoint getCalc();
+	public abstract ViewPoint getViewPoint();
 
 	@Override
 	public ViewPointLibrary getViewPointLibrary() {
-		if (getCalc() != null) {
-			return getCalc().getViewPointLibrary();
+		if (getViewPoint() != null) {
+			return getViewPoint().getViewPointLibrary();
 		}
 		return null;
 	}
@@ -41,8 +41,8 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	@Override
 	public void setChanged() {
 		super.setChanged();
-		if (getCalc() != null) {
-			getCalc().setIsModified();
+		if (getViewPoint() != null) {
+			getViewPoint().setIsModified();
 		}
 	}
 
@@ -54,7 +54,7 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 	@Override
 	public BindingFactory getBindingFactory() {
-		return getCalc().getBindingFactory();
+		return getViewPoint().getBindingFactory();
 	}
 
 	public void notifyBindingModelChanged() {
@@ -62,6 +62,12 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	}
 
 	public LocalizedDictionary getLocalizedDictionary() {
-		return getCalc().getLocalizedDictionary();
+		return getViewPoint().getLocalizedDictionary();
 	}
+
+	@Deprecated
+	public ViewPoint getCalc() {
+		return getViewPoint();
+	}
+
 }

@@ -46,7 +46,7 @@ public class ClassParameter extends EditionSchemeParameter {
 	}
 
 	public OntologyClass getConcept() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getClass(_getConceptURI());
 	}
 

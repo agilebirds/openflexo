@@ -73,9 +73,9 @@ public abstract class PatternRole extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getCalc();
+			return getEditionPattern().getViewPoint();
 		}
 		return null;
 	}

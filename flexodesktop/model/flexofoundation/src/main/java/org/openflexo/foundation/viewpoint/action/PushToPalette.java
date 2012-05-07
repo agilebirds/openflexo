@@ -56,7 +56,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return (shape != null && shape.getCalc().getPalettes().size() > 0);
+			return (shape != null && shape.getViewPoint().getPalettes().size() > 0);
 		}
 
 	};

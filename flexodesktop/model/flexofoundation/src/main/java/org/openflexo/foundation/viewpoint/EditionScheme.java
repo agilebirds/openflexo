@@ -228,17 +228,12 @@ public abstract class EditionScheme extends ViewPointObject {
 		return null;
 	}
 
+	@Override
 	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getCalc();
+			return getEditionPattern().getViewPoint();
 		}
 		return null;
-	}
-
-	@Override
-	@Deprecated
-	public ViewPoint getCalc() {
-		return getViewPoint();
 	}
 
 	public AddShape createAddShapeAction() {

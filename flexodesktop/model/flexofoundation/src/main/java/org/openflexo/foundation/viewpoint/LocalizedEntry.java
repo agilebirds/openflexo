@@ -49,8 +49,8 @@ public class LocalizedEntry extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
-		return getLocalizedDictionary().getCalc();
+	public ViewPoint getViewPoint() {
+		return getLocalizedDictionary().getViewPoint();
 	}
 
 	public String getKey() {
@@ -85,7 +85,7 @@ public class LocalizedEntry extends ViewPointObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 
 }

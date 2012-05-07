@@ -59,7 +59,7 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 	}
 
 	public OntologyClass getRange() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getClass(_getRangeURI());
 	}
 

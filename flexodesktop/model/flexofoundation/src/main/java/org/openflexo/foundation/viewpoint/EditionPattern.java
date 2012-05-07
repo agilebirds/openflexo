@@ -54,7 +54,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	private OntologicObjectPatternRole primaryConceptRole;
 	private GraphicalElementPatternRole primaryRepresentationRole;
 
-	private ViewPoint _calc;
+	private ViewPoint _viewPoint;
 
 	@Override
 	public String getDescription() {
@@ -69,8 +69,8 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	@Override
 	public void delete() {
-		if (getCalc() != null) {
-			getCalc().removeFromEditionPatterns(this);
+		if (getViewPoint() != null) {
+			getViewPoint().removeFromEditionPatterns(this);
 		}
 		super.delete();
 		deleteObservers();
@@ -78,7 +78,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	@Override
 	public String getURI() {
-		return getCalc().getURI() + "#" + getName();
+		return getViewPoint().getURI() + "#" + getName();
 	}
 
 	@Override
@@ -116,8 +116,8 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	public void addToEditionSchemes(EditionScheme anEditionScheme) {
 		anEditionScheme.setEditionPattern(this);
 		editionSchemes.add(anEditionScheme);
-		if (getCalc() != null) {
-			getCalc().notifyEditionSchemeModified();
+		if (getViewPoint() != null) {
+			getViewPoint().notifyEditionSchemeModified();
 		}
 		setChanged();
 		notifyObservers(new EditionSchemeInserted(anEditionScheme, this));
@@ -126,8 +126,8 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	public void removeFromEditionSchemes(EditionScheme anEditionScheme) {
 		anEditionScheme.setEditionPattern(null);
 		editionSchemes.remove(anEditionScheme);
-		if (getCalc() != null) {
-			getCalc().notifyEditionSchemeModified();
+		if (getViewPoint() != null) {
+			getViewPoint().notifyEditionSchemeModified();
 		}
 		setChanged();
 		notifyObservers(new EditionSchemeRemoved(anEditionScheme, this));
@@ -509,19 +509,18 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		this.inspector = inspector;
 	}
 
-	public ViewPoint getViewPoint() {
-		return _calc;
-	}
-
 	@Override
-	@Deprecated
-	public ViewPoint getCalc() {
-		return getViewPoint();
+	public ViewPoint getViewPoint() {
+		return _viewPoint;
+	}
+
+	public void setViewPoint(ViewPoint viewPoint) {
+		_viewPoint = viewPoint;
 	}
 
 	@Deprecated
-	public void setCalc(ViewPoint calc) {
-		_calc = calc;
+	public void setCalc(ViewPoint viewPoint) {
+		setViewPoint(viewPoint);
 	}
 
 	@Override
@@ -565,7 +564,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 		@Override
 		public String convertToString(EditionPattern value) {
-			return value.getCalc().getViewPointURI() + "#" + value.getName();
+			return value.getViewPoint().getViewPointURI() + "#" + value.getName();
 		}
 	}
 
@@ -629,7 +628,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	}
 
 	public void save() {
-		getCalc().save();
+		getViewPoint().save();
 	}
 
 	private BindingModel _bindingModel;

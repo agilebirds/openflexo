@@ -77,9 +77,9 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getShema() != null) {
-			return getShema().getCalc();
+			return getShema().getViewPoint();
 		}
 		return null;
 	}
@@ -210,6 +210,6 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 }

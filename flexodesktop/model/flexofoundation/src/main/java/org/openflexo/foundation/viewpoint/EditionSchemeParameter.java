@@ -109,8 +109,8 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 	}
 
 	@Override
-	public ViewPoint getCalc() {
-		return getScheme().getCalc();
+	public ViewPoint getViewPoint() {
+		return getScheme().getViewPoint();
 	}
 
 	@Override

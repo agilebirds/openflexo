@@ -17,8 +17,8 @@ public abstract class PropertyPatternRole extends OntologicObjectPatternRole {
 	}
 
 	public OntologyProperty getParentProperty() {
-		if (getCalc() != null) {
-			getCalc().loadWhenUnloaded();
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
 		}
 		if (getOntologyLibrary() != null) {
 			return getOntologyLibrary().getProperty(_getParentPropertyURI());
@@ -39,7 +39,7 @@ public abstract class PropertyPatternRole extends OntologicObjectPatternRole {
 	}
 
 	public OntologyClass getDomain() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getClass(_getDomainURI());
 	}
 

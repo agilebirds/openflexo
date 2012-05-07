@@ -72,9 +72,9 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getPalette() != null) {
-			return getPalette().getCalc();
+			return getPalette().getViewPoint();
 		}
 		return null;
 	}
@@ -134,8 +134,8 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		if (editionPattern != null) {
 			return editionPattern;
 		}
-		if ((_editionPatternId != null) && (getCalc() != null)) {
-			editionPattern = getCalc().getEditionPattern(_editionPatternId);
+		if ((_editionPatternId != null) && (getViewPoint() != null)) {
+			editionPattern = getViewPoint().getEditionPattern(_editionPatternId);
 			updateParameters();
 		}
 		return editionPattern;
@@ -238,15 +238,15 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	}
 
 	public Vector<EditionPattern> allAvailableEditionPatterns() {
-		if (getCalc() != null) {
-			return getCalc().getAllEditionPatternWithDropScheme();
+		if (getViewPoint() != null) {
+			return getViewPoint().getAllEditionPatternWithDropScheme();
 		}
 		return null;
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 
 	public String getPatternRoleName() {

@@ -47,7 +47,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		return _calc;
 	}
 
@@ -289,7 +289,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	public void searchNewEntries() {
 		logger.info("Search new entries");
-		for (EditionPattern ep : getCalc().getEditionPatterns()) {
+		for (EditionPattern ep : getViewPoint().getEditionPatterns()) {
 			checkAndRegisterLocalized(ep.getName());
 			for (EditionScheme es : ep.getEditionSchemes()) {
 				checkAndRegisterLocalized(es.getLabel());
@@ -303,8 +303,8 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 			}
 		}
 		dynamicEntries = null;
-		getCalc().setChanged();
-		getCalc().notifyObservers();
+		getViewPoint().setChanged();
+		getViewPoint().notifyObservers();
 	}
 
 	private void checkAndRegisterLocalized(String key) {
@@ -316,7 +316,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 
 	@Override

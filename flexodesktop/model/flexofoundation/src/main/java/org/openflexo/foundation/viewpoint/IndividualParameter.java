@@ -47,7 +47,7 @@ public class IndividualParameter extends EditionSchemeParameter {
 	}
 
 	public OntologyClass getConcept() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getClass(_getConceptURI());
 	}
 

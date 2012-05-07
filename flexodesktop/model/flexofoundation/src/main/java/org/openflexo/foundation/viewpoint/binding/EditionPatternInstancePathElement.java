@@ -54,7 +54,7 @@ public class EditionPatternInstancePathElement<E extends Bindable> implements Bi
 
 	@Override
 	public String getSerializationRepresentation() {
-		return editionPattern.getCalc().getName() + "_" + editionPattern.getName() + "_" + index;
+		return editionPattern.getViewPoint().getName() + "_" + editionPattern.getName() + "_" + index;
 	}
 
 	@Override

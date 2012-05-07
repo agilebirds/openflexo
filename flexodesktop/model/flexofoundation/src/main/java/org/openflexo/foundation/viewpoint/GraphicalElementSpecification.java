@@ -123,8 +123,8 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	}
 
 	@Override
-	public ViewPoint getCalc() {
-		return getEditionPattern().getCalc();
+	public ViewPoint getViewPoint() {
+		return getEditionPattern().getViewPoint();
 	}
 
 	/**

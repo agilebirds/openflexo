@@ -91,8 +91,8 @@ public class GraphicalElementAction extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
-		return getEditionPattern().getCalc();
+	public ViewPoint getViewPoint() {
+		return getEditionPattern().getViewPoint();
 	}
 
 	public AbstractActionScheme getAbstractActionScheme() {

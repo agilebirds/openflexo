@@ -92,7 +92,7 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Link palette connector");
 
-		getEditionPattern().getCalc().getViewpointOntology().loadWhenUnloaded();
+		getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
 		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 

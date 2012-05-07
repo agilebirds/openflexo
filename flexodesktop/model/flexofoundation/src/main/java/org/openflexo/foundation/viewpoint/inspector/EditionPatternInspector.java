@@ -72,15 +72,15 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getCalc();
+			return getEditionPattern().getViewPoint();
 		}
 		return null;
 	}
 
 	public ViewPointLibrary getCalcLibrary() {
-		return getCalc().getViewPointLibrary();
+		return getViewPoint().getViewPointLibrary();
 	}
 
 	@Override

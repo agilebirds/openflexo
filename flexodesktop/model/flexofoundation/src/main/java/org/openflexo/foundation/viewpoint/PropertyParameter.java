@@ -51,7 +51,7 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 	}
 
 	public OntologyClass getDomain() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getClass(_getDomainURI());
 	}
 
@@ -108,8 +108,8 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 	}
 
 	public OntologyProperty getParentProperty() {
-		if (getCalc() != null) {
-			getCalc().loadWhenUnloaded();
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
 		}
 		return getOntologyLibrary().getProperty(_getParentPropertyURI());
 	}

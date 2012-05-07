@@ -457,7 +457,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		return this;
 	}
 
@@ -548,7 +548,7 @@ public class ViewPoint extends ViewPointObject {
 
 	public Vector<LinkScheme> getAllConnectors() {
 		Vector<LinkScheme> returned = new Vector<LinkScheme>();
-		for (EditionPattern ep : getCalc().getEditionPatterns()) {
+		for (EditionPattern ep : getViewPoint().getEditionPatterns()) {
 			for (LinkScheme s : ep.getLinkSchemes()) {
 				returned.add(s);
 			}
@@ -558,7 +558,7 @@ public class ViewPoint extends ViewPointObject {
 
 	public Vector<LinkScheme> getConnectorsMatching(EditionPattern fromConcept, EditionPattern toConcept) {
 		Vector<LinkScheme> returned = new Vector<LinkScheme>();
-		for (EditionPattern ep : getCalc().getEditionPatterns()) {
+		for (EditionPattern ep : getViewPoint().getEditionPatterns()) {
 			for (LinkScheme s : ep.getLinkSchemes()) {
 				if (s.isValidTarget(fromConcept, toConcept)) {
 					returned.add(s);

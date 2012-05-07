@@ -43,7 +43,7 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 	}
 
 	public OntologyClass getRange() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getClass(_getRangeURI());
 	}
 

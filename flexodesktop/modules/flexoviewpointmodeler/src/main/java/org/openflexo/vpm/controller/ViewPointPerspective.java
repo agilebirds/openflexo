@@ -236,7 +236,7 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 			return new CalcView((ViewPoint) object, (CEDController) controller);
 		}
 		if (object instanceof EditionPattern) {
-			((EditionPattern) object).getCalc().loadWhenUnloaded();
+			((EditionPattern) object).getViewPoint().loadWhenUnloaded();
 			return new EditionPatternView((EditionPattern) object, (CEDController) controller);
 		}
 		if (object instanceof ViewPointPalette) {

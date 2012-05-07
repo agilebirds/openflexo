@@ -35,7 +35,7 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole {
 	}
 
 	public OntologyDataProperty getDataProperty() {
-		getCalc().loadWhenUnloaded();
+		getViewPoint().loadWhenUnloaded();
 		return getOntologyLibrary().getDataProperty(_getDataPropertyURI());
 	}
 
