@@ -145,6 +145,9 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public Type getType() {
+			if (getOntologyProperty().getRange() instanceof OntologyClass) {
+				return (OntologyClass) getOntologyProperty().getRange();
+			}
 			return OntologyIndividual.class;
 		}
 

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.lang.reflect.Type;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,11 +28,13 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.CustomType;
+
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
 
-public abstract class OntologyProperty extends OntologyObject {
+public abstract class OntologyProperty extends OntologyObject implements CustomType {
 
 	private static final Logger logger = Logger.getLogger(OntologyProperty.class.getPackage().getName());
 
@@ -359,4 +362,13 @@ public abstract class OntologyProperty extends OntologyObject {
 		}
 		return rangeList;
 	}
+
+	@Override
+	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+		if (aType instanceof OntologyProperty) {
+			return isSuperConceptOf((OntologyProperty) aType);
+		}
+		return false;
+	}
+
 }

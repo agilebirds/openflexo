@@ -19,8 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
  * Represents an inspector entry for an ontology property
@@ -32,6 +35,10 @@ public abstract class PropertyInspectorEntry extends InspectorEntry {
 
 	private String parentPropertyURI;
 	private String domainURI;
+
+	private ViewPointDataBinding domainValue;
+
+	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", OntologyClass.class, BindingDefinitionType.GET, false);
 
 	public String _getParentPropertyURI() {
 		return parentPropertyURI;
@@ -69,6 +76,39 @@ public abstract class PropertyInspectorEntry extends InspectorEntry {
 
 	public void setDomain(OntologyClass c) {
 		_setDomainURI(c != null ? c.getURI() : null);
+	}
+
+	public BindingDefinition getDomainValueBindingDefinition() {
+		return DOMAIN_VALUE;
+	}
+
+	public ViewPointDataBinding getDomainValue() {
+		if (domainValue == null) {
+			domainValue = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.domainValue, getDomainValueBindingDefinition());
+		}
+		return domainValue;
+	}
+
+	public void setDomainValue(ViewPointDataBinding domainValue) {
+		domainValue.setOwner(this);
+		domainValue.setBindingAttribute(InspectorEntryBindingAttribute.domainValue);
+		domainValue.setBindingDefinition(getDomainValueBindingDefinition());
+		this.domainValue = domainValue;
+	}
+
+	private boolean isDynamicDomainValueSet = false;
+
+	public boolean getIsDynamicDomainValue() {
+		return getDomainValue().isSet() || isDynamicDomainValueSet;
+	}
+
+	public void setIsDynamicDomainValue(boolean isDynamic) {
+		if (isDynamic) {
+			isDynamicDomainValueSet = true;
+		} else {
+			domainValue = null;
+			isDynamicDomainValueSet = false;
+		}
 	}
 
 }

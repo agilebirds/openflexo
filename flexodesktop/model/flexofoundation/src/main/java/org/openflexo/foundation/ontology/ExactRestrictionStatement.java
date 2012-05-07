@@ -39,7 +39,9 @@ public class ExactRestrictionStatement extends ObjectRestrictionStatement {
 
 	public ExactRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
 		super(subject, s, r);
-		property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		if (r.getOnProperty() != null) {
+			property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		}
 
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS = ResourceFactory.createProperty(OWL + "onClass");

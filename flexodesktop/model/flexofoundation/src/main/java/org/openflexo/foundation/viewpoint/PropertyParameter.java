@@ -21,13 +21,21 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public abstract class PropertyParameter extends EditionSchemeParameter {
 
 	private String domainURI;
 	private String parentPropertyURI;
+
+	private ViewPointDataBinding domainValue;
+
+	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", OntologyClass.class, BindingDefinitionType.GET, false);
 
 	@Override
 	public Type getType() {
@@ -49,6 +57,46 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 
 	public void setDomain(OntologyClass c) {
 		_setDomainURI(c != null ? c.getURI() : null);
+	}
+
+	public BindingDefinition getDomainValueBindingDefinition() {
+		return DOMAIN_VALUE;
+	}
+
+	public ViewPointDataBinding getDomainValue() {
+		if (domainValue == null) {
+			domainValue = new ViewPointDataBinding(this, ParameterBindingAttribute.domainValue, getDomainValueBindingDefinition());
+		}
+		return domainValue;
+	}
+
+	public void setDomainValue(ViewPointDataBinding domainValue) {
+		domainValue.setOwner(this);
+		domainValue.setBindingAttribute(ParameterBindingAttribute.domainValue);
+		domainValue.setBindingDefinition(getDomainValueBindingDefinition());
+		this.domainValue = domainValue;
+	}
+
+	private boolean isDynamicDomainValueSet = false;
+
+	public boolean getIsDynamicDomainValue() {
+		return getDomainValue().isSet() || isDynamicDomainValueSet;
+	}
+
+	public void setIsDynamicDomainValue(boolean isDynamic) {
+		if (isDynamic) {
+			isDynamicDomainValueSet = true;
+		} else {
+			domainValue = null;
+			isDynamicDomainValueSet = false;
+		}
+	}
+
+	public OntologyClass evaluateDomainValue(BindingEvaluationContext parameterRetriever) {
+		if (getDomainValue().isValid()) {
+			return (OntologyClass) getDomainValue().getBindingValue(parameterRetriever);
+		}
+		return null;
 	}
 
 	public String _getParentPropertyURI() {

@@ -33,8 +33,12 @@ public class OnlyRestrictionStatement extends ObjectRestrictionStatement {
 
 	public OnlyRestrictionStatement(OntologyObject subject, Statement s, AllValuesFromRestriction r) {
 		super(subject, s, r);
-		property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		object = (OntologyClass) getOntologyLibrary().getOntologyObject(r.getAllValuesFrom().getURI());
+		if (r.getOnProperty() != null) {
+			property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		}
+		if (r.getAllValuesFrom() != null) {
+			object = (OntologyClass) getOntologyLibrary().getOntologyObject(r.getAllValuesFrom().getURI());
+		}
 	}
 
 	@Override

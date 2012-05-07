@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.module.ModuleLoadingException;
@@ -121,11 +122,20 @@ public class FlexoProcessImageBuilder {
 		}
 	}
 
-	public static void writeSnapshot(FlexoProcess process) {
+	public static void writeSnapshot(final FlexoProcess process) {
 		if (!process.getProject().isGenerateSnapshot()) {
 			return;
 		}
 		if (!process.isImported()) {
+			if (!SwingUtilities.isEventDispatchThread()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						writeSnapshot(process);
+					}
+				});
+				return;
+			}
 			File dest = getImageFile(process);
 			saveImageOfProcess(process, dest);
 		}

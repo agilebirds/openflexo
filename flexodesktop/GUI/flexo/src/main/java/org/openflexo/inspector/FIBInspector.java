@@ -42,6 +42,7 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
@@ -281,10 +282,29 @@ public class FIBInspector extends FIBPanel {
 			newTab.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return classSelector;
 		} else if (entry instanceof PropertyInspectorEntry) {
+			PropertyInspectorEntry propertyEntry = (PropertyInspectorEntry) entry;
 			FIBCustom propertySelector = new FIBCustom();
 			propertySelector.setComponentClass(org.openflexo.components.widget.OntologyPropertySelector.class);
 			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.project"),
 					new DataBinding("data.project"), true));
+			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
+			OntologyClass domainClass = null;
+			if (propertyEntry.getIsDynamicDomainValue()) {
+				// domainClass = propertyEntry.evaluateDomainValue(action);
+				// TODO: implement proper scheme with new binding support
+				logger.warning("Please implement me !!!!!!!!!");
+			} else {
+				domainClass = propertyEntry.getDomain();
+			}
+			if (domainClass != null) {
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
+						new DataBinding('"' + domainClass.getURI() + '"') {
+							@Override
+							public BindingFactory getBindingFactory() {
+								return entry.getBindingFactory();
+							}
+						}, true));
+			}
 			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
 			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
 					new DataBinding('"' + ((PropertyInspectorEntry) entry)._getDomainURI() + '"') {

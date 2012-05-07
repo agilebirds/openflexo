@@ -619,7 +619,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		@Override
 		public void setModel(ListModel model) {
 			if (!(model instanceof BindingColumnListModel)) {
-				new Exception("oops").printStackTrace();
+				new Exception("oops, this model is " + model).printStackTrace();
 			}
 			setFilter(null);
 			if (model != null) {
@@ -1514,7 +1514,6 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (TypeUtils.getBaseClass(_type) == null) {
 				return;
 			}
-
 			// _accessibleProperties.addAll(KeyValueLibrary.getAccessibleProperties(_type));
 			_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleBindingPathElements(_element));
 			// _accessibleProperties.addAll(_element.getAccessibleBindingPathElements());

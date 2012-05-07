@@ -19,19 +19,21 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.lang.reflect.Type;
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.CustomType;
 import org.openflexo.foundation.Inspectors;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntResource;
 
-public class OntologyClass extends OntologyObject implements Comparable<OntologyClass> {
+public class OntologyClass extends OntologyObject implements Comparable<OntologyClass>, CustomType {
 
 	private static final Logger logger = Logger.getLogger(OntologyClass.class.getPackage().getName());
 
@@ -346,5 +348,18 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
 			_appendRangeAndDomains(superSuperClass, alreadyComputed);
 		}
+	}
+
+	@Override
+	public Class getBaseClass() {
+		return OntologyClass.class;
+	}
+
+	@Override
+	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+		if (aType instanceof OntologyClass) {
+			return isSuperConceptOf((OntologyClass) aType);
+		}
+		return false;
 	}
 }

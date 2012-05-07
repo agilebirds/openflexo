@@ -74,11 +74,13 @@
 		name="org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry" abstract="yes">
 		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
 		<property name="domainURI" xmlTag="domain" attribute="YES" />
+		<property name="domainValue" xmlTag="domainValue" attribute="YES" />
 	</entity>
 
 	<entity
 		name="org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry" xmlTag="ObjectProperty">
 		<property name="rangeURI" xmlTag="range" attribute="YES" />
+		<property name="rangeValue" xmlTag="rangeValue" attribute="YES" />
 	</entity>
 
 	<entity
@@ -287,11 +289,13 @@
 		name="org.openflexo.foundation.viewpoint.PropertyParameter" abstract="yes">
 		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
 		<property name="domainURI" xmlTag="domain" attribute="YES" />
+		<property name="domainValue" xmlTag="domainValue" attribute="YES" />
 	</entity>
 
 	<entity
 		name="org.openflexo.foundation.viewpoint.ObjectPropertyParameter" xmlTag="ObjectPropertyParameter">
 		<property name="rangeURI" xmlTag="range" attribute="YES" />
+		<property name="rangeValue" xmlTag="rangeValue" attribute="YES" />
 	</entity>
 
 	<entity

@@ -33,8 +33,13 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 	}
 
 	public OntologyClass getOntologicType() {
-		getCalc().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getConceptURI());
+		if (getCalc() != null) {
+			getCalc().loadWhenUnloaded();
+		}
+		if (getOntologyLibrary() != null) {
+			return getOntologyLibrary().getClass(_getConceptURI());
+		}
+		return null;
 	}
 
 	public void setOntologicType(OntologyClass ontologyClass) {

@@ -17,8 +17,13 @@ public abstract class PropertyPatternRole extends OntologicObjectPatternRole {
 	}
 
 	public OntologyProperty getParentProperty() {
-		getCalc().loadWhenUnloaded();
-		return getOntologyLibrary().getProperty(_getParentPropertyURI());
+		if (getCalc() != null) {
+			getCalc().loadWhenUnloaded();
+		}
+		if (getOntologyLibrary() != null) {
+			return getOntologyLibrary().getProperty(_getParentPropertyURI());
+		}
+		return null;
 	}
 
 	public void setParentProperty(OntologyProperty ontologyProperty) {

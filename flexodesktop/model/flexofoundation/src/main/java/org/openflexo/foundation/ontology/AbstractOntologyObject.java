@@ -72,7 +72,10 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 	}
 
 	public OntologyLibrary getOntologyLibrary() {
-		return getFlexoOntology().getOntologyLibrary();
+		if (getFlexoOntology() != null) {
+			return getFlexoOntology().getOntologyLibrary();
+		}
+		return null;
 	}
 
 	@Override

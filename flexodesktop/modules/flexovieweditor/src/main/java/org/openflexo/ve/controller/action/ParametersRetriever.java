@@ -55,6 +55,7 @@ import org.openflexo.fib.model.GridBagLayoutConstraints.AnchorType;
 import org.openflexo.fib.model.GridBagLayoutConstraints.FillType;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
@@ -323,18 +324,27 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			panel.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return classSelector;
 		} else if (parameter instanceof PropertyParameter) {
+			PropertyParameter propertyParameter = (PropertyParameter) parameter;
 			FIBCustom propertySelector = new FIBCustom();
 			propertySelector.setComponentClass(org.openflexo.components.widget.OntologyPropertySelector.class);
 			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.project"),
 					new DataBinding("data.project"), true));
 			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
-			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
-					new DataBinding('"' + ((PropertyParameter) parameter)._getDomainURI() + '"') {
-						@Override
-						public BindingFactory getBindingFactory() {
-							return parameter.getBindingFactory();
-						}
-					}, true));
+			OntologyClass domainClass = null;
+			if (propertyParameter.getIsDynamicDomainValue()) {
+				domainClass = propertyParameter.evaluateDomainValue(action);
+			} else {
+				domainClass = propertyParameter.getDomain();
+			}
+			if (domainClass != null) {
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
+						new DataBinding('"' + domainClass.getURI() + '"') {
+							@Override
+							public BindingFactory getBindingFactory() {
+								return parameter.getBindingFactory();
+							}
+						}, true));
+			}
 			propertySelector.setData(new DataBinding("parameters." + parameter.getName()) {
 				@Override
 				public BindingFactory getBindingFactory() {

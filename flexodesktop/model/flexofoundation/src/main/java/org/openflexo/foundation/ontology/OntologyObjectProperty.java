@@ -91,4 +91,10 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 	public boolean isLiteralRange() {
 		return (getRange() == getOntologyLibrary().getOntologyObject(OntologyLibrary.RDFS_LITERAL_URI));
 	}
+
+	@Override
+	public Class getBaseClass() {
+		return OntologyObjectProperty.class;
+	}
+
 }

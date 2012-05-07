@@ -51,7 +51,10 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	}
 
 	public OntologyProperty getOntologyProperty() {
-		return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());
+		if (getOntologyLibrary() != null) {
+			return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());
+		}
+		return null;
 	}
 
 	public void setOntologyProperty(OntologyProperty p) {
