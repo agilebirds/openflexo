@@ -82,7 +82,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	// Instanciate a new localizer in directory src/dev/resources/FGELocalized
 	// Little hack to be removed: linked to parent localizer (which is Openflexo main localizer)
 	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FGELocalized"),
-			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null));
+			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null, false), true);
 
 	private Stroke specificStroke = null;
 

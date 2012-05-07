@@ -41,7 +41,7 @@ public class FlexoMainLocalizer extends LocalizedDelegateGUIImpl {
 	}
 
 	public FlexoMainLocalizer() {
-		super(getMainLocalizerLocalizedDirectory(), null);
+		super(getMainLocalizerLocalizedDirectory(), null, false);
 	}
 
 	public static void main(String[] args) {

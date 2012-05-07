@@ -54,7 +54,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	// Instanciate a new localizer in directory src/dev/resources/FIBLocalizer
 	// Little hack to be removed: linked to parent localizer (which is Openflexo main localizer)
 	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FIBLocalized"),
-			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null));
+			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null, false), true);
 
 	public static interface FIBModelAttribute {
 		public String name();

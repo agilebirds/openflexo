@@ -41,7 +41,8 @@ public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationIssue.class.getPackage().getName());
 
-	public static LocalizedDelegate VALIDATION_LOCALIZATION = new LocalizedDelegateImpl(new FileResource("FIBValidationLocalized"), null);
+	public static LocalizedDelegate VALIDATION_LOCALIZATION = new LocalizedDelegateImpl(new FileResource("FIBValidationLocalized"), null,
+			true);
 
 	private C _object;
 

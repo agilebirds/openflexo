@@ -33,8 +33,8 @@ public class LocalizedDelegateGUIImpl extends LocalizedDelegateImpl {
 	private SearchMode searchMode = SearchMode.Contains;
 	private String searchedString;
 
-	public LocalizedDelegateGUIImpl(File localizedDirectory, LocalizedDelegate parent) {
-		super(localizedDirectory, parent);
+	public LocalizedDelegateGUIImpl(File localizedDirectory, LocalizedDelegate parent, boolean automaticSaving) {
+		super(localizedDirectory, parent, automaticSaving);
 	}
 
 	public void showLocalizedEditor(Window parentFrame) {

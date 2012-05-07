@@ -58,6 +58,8 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 	private File _localizedDirectory;
 	private Hashtable<Language, Properties> _localizedDictionaries;
 
+	private boolean automaticSaving = false;
+
 	private Vector<Entry> entries;
 	private Vector<Entry> issuesEntries;
 	private Vector<Entry> matchingEntries;
@@ -66,7 +68,8 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		Contains, BeginsWith, EndsWith
 	}
 
-	public LocalizedDelegateImpl(File localizedDirectory, LocalizedDelegate parent) {
+	public LocalizedDelegateImpl(File localizedDirectory, LocalizedDelegate parent, boolean automaticSaving) {
+		this.automaticSaving = automaticSaving;
 		this.parent = parent;
 		_localizedDirectory = localizedDirectory;
 		loadLocalizedDictionaries();
@@ -546,6 +549,9 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 	@Override
 	public boolean registerNewEntry(String key, Language language, String value) {
 		addEntryInDictionary(language, key, value, true);
+		if (automaticSaving) {
+			save();
+		}
 		return true;
 	}
 

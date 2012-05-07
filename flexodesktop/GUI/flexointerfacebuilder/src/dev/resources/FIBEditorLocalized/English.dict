@@ -1,5 +1,5 @@
 #English
-#Mon Apr 23 01:05:03 CEST 2012
+#Mon May 07 14:49:41 CEST 2012
 ARITHMETIC_FLOAT=[FLOAT]
 ARITHMETIC_INTEGER=[INTEGER]
 BOOLEAN=BOOLEAN
@@ -30,6 +30,7 @@ quit=Quit
 reset=Reset
 save_interface=Save component
 save_interface_as=Save component as
+shape=Shape
 switch_to_language=Switch to language
 test_interface=Test component
 tools=Tools

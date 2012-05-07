@@ -99,7 +99,7 @@ public class FlexoLocalization {
 	 * @param localizedDirectory
 	 */
 	public static void initWith(File localizedDirectory) {
-		mainLocalizer = new LocalizedDelegateImpl(localizedDirectory, null);
+		mainLocalizer = new LocalizedDelegateImpl(localizedDirectory, null, false);
 	}
 
 	/**

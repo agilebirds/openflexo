@@ -1,5 +1,5 @@
 #French
-#Mon Apr 23 01:05:03 CEST 2012
+#Mon May 07 14:49:41 CEST 2012
 ARITHMETIC_FLOAT=[FLOTTANT]
 ARITHMETIC_INTEGER=[ENTIER]
 BOOLEAN=BOOLEEN
@@ -30,6 +30,7 @@ quit=Quitter
 reset=RAZ
 save_interface=Sauver le composant
 save_interface_as=Sauver le composant sous...
+shape=Forme
 switch_to_language=Basculer \u00E0 la langue...
 test_interface=Tester le composant
 tools=Outils
