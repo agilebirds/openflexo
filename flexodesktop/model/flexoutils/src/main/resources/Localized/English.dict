@@ -1,5 +1,5 @@
 #English
-#Fri May 04 11:15:44 CEST 2012
+#Mon May 07 12:39:55 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -2042,6 +2042,7 @@ duplicate_class_name=Duplicate class name
 duplicate_code_repository_name=Duplicate code repository name
 duplicate_component=Duplicate screen
 duplicate_contained_wo=Duplicate all selected Screens
+duplicate_edition_pattern=Duplicate edition pattern
 duplicate_method=Duplicate Method
 duplicate_method_signature=Duplicate method signature
 duplicated_method_signature=Duplicate method signature
@@ -3809,6 +3810,7 @@ please_enter_parameters_for_licence_generation=Please enter parameters for licen
 please_enter_parameters_for_new_transtyper=Please enter parameters for new transtyper
 please_indicate_an_integer_as_logcount=Please indicate an integer as log count
 please_press_refresh_button_to_get_up_to_date_control_flow_graph=Please press refresh button to get up-to-date control flow graph
+please_provide_new_name=Please provide new name
 please_provide_some_comments=Please provide some comments
 please_resolve_conflict=Please resolve conflicts
 please_select_a_child_item_related_to_inheritance=Please select a child item related to inheritance
@@ -4809,7 +4811,7 @@ this_project_doesn_t_define_any_repository_location=This project does not define
 this_project_seems_to_have_been_created_with_an_older_version_of_flexo=This project seems to have been created with an older version of OpenFlexo.
 this_resource_could_not_be_deserialized_with_declared_version=This resource could not be deserialized with declared version.
 this_resource_has_been_serialized_with_an_older_version_than_the_one_declared_as_current_application_version=This resource has been serialized with an older version than the one declared as current application version.
-this_template_name_is_already_used_please_choose_another=this_template_name_is_already_used_please_choose_another
+this_template_name_is_already_used_please_choose_another=This template name is already used. Please choose another
 those_resources_are_not_saved=Those resources are modified and needs to be saved
 those_settings_only_apply_to_this_computer,_and_not_on_the_flexobpm_server._consequently,_the_storyboard_and_documentation_generated_on_the_server_may_not_reflect_your_process_display_settings_(transparency,_shadows,_fonts,_edge_representation)=Those settings only apply to this computer and not on the OpenFlexo Server. Consequently, the storyboard and documentation generated on the server may not reflect your process display settings (transparency, shadows, fonts, edge representation)
 thumbnail_label=Tab label

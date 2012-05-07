@@ -1,5 +1,5 @@
 #French
-#Fri May 04 11:15:44 CEST 2012
+#Mon May 07 12:39:55 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -2042,6 +2042,7 @@ duplicate_class_name=Nom de classe d\u00E9j\u00E0 utilis\u00E9
 duplicate_code_repository_name=Nom de r\u00E9positaire en double
 duplicate_component=Dupliquer l'\u00E9cran
 duplicate_contained_wo=Dupliquer tous les \u00E9crans  selectionn\u00E9s
+duplicate_edition_pattern=Dupliquer l'EditionPattern
 duplicate_method=M\u00E9thode dupliqu\u00E9e
 duplicate_method_signature=M\u00E9thode dupliqu\u00E9e
 duplicated_method_signature=Signature de m\u00E9thode en double
@@ -3807,6 +3808,7 @@ please_enter_parameters_for_licence_generation=Veuillez saisir les param\u00E8tr
 please_enter_parameters_for_new_transtyper=Veuillez saisir les param\u00E8tres du transtypeur \u00E0 cr\u00E9er
 please_indicate_an_integer_as_logcount=Veuillez indiquer un entier pour le nombre de logs
 please_press_refresh_button_to_get_up_to_date_control_flow_graph=Veuillez presser sur le bouton "rafraichir" pour disposer d'un graphe de contr\u00F4le \u00E0 jour
+please_provide_new_name=Veuillez entrer un nom valide
 please_provide_some_comments=Veuillez entrer un commentaire
 please_resolve_conflict=Veuillez r\u00E9soudre les conflits
 please_select_a_child_item_related_to_inheritance=Veuillez s\u00E9lectionner un \u00E9l\u00E9ment fils li\u00E9 \u00E0 l'h\u00E9ritage
@@ -4806,7 +4808,7 @@ this_project_doesn_t_define_any_repository_location=Ce projet ne pr\u00E9cise pa
 this_project_seems_to_have_been_created_with_an_older_version_of_flexo=Ce projet semble avoir \u00E9t\u00E9 cr\u00E9\u00E9 avec une version plus ancienne de OpenFlexo.
 this_resource_could_not_be_deserialized_with_declared_version=Cette resource ne peut pas \u00EAtre d\u00E9s\u00E9rialis\u00E9e avec la version d\u00E9clar\u00E9e.
 this_resource_has_been_serialized_with_an_older_version_than_the_one_declared_as_current_application_version=Cette resource a \u00E9t\u00E9 s\u00E9rialis\u00E9e avec une version ant\u00E9rieure que la version courante.
-this_template_name_is_already_used_please_choose_another=this_template_name_is_already_used_please_choose_another
+this_template_name_is_already_used_please_choose_another=Ce nom de template est d\u00E9j\u00E0 utilis\u00E9, veuillez en choisir un autre
 those_resources_are_not_saved=Ces ressources ont \u00E9t\u00E9 modifi\u00E9es et doivent \u00EAtre sauvegard\u00E9es
 those_settings_only_apply_to_this_computer,_and_not_on_the_flexobpm_server._consequently,_the_storyboard_and_documentation_generated_on_the_server_may_not_reflect_your_process_display_settings_(transparency,_shadows,_fonts,_edge_representation)=Ces param\u00E8tres ne s'appliquent qu'\u00E0 cet ordinateur et pas au serveur OpenFlexo. Par cons\u00E9quent, les storyboards et les documentations g\u00E9n\u00E9r\u00E9es sur le serveur peuvent diff\u00E9rer de vos pr\u00E9f\u00E9rences d'affichage (transparence, ombres, polices, repr\u00E9sentation des ar\u00EAtes)
 thumbnail_label=Label de l'onglet
