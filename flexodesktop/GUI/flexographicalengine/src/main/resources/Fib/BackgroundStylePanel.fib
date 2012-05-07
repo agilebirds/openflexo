@@ -77,7 +77,7 @@
     <Label label="image" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
-    <File mode="OpenMode" filter="" title="select_an_image" isDirectory="false" data="ImageBackgroundPanel.data.imageFile" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <File mode="OpenMode" filter="" title="select_an_image" isDirectory="false" data="ImageBackgroundPanel.data.imageFile" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=5;insetsRight=2;insetsTop=0;location=right)" localize="true" valueChangedAction="controller.parameterChanged()" />
     <Label label="background" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
