@@ -1,5 +1,28 @@
 #English
-#Mon May 07 14:49:32 CEST 2012
+#Mon May 07 15:59:25 CEST 2012
+boolean=Boolean
+cancel=Cancel
 choose=Choose
+connect=Connect
+date=Date
+define_a_static_value=Define a constant value
+duration=Duration
+enum=Enum
+expression=Expression
+false=false
+float=Float
+icon=icon
+integer=Integer
+name=Name
 no_file=No file
+no_selection=No selection
+no_type=No type
 reset=Reset
+select=Select
+select_a_value=Select
+specify_basic_binding=Specify basic binding
+specify_compound_binding=Specify compound binding
+string=String
+true=true
+type=Type
+value=Value

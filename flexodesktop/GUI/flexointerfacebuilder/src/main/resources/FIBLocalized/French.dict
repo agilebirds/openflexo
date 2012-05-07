@@ -1,5 +1,28 @@
 #French
-#Mon May 07 14:49:32 CEST 2012
+#Mon May 07 15:59:25 CEST 2012
+boolean=Bool\u00E9en
+cancel=Annuler
 choose=Choisir
+connect=Connecter
+date=Date
+define_a_static_value=D\u00E9finir une valeur
+duration=Dur\u00E9e
+enum=Enum
+expression=Expression
+false=faux
+float=Flottant
+icon=ic\u00F4ne
+integer=Entier
+name=Nom
 no_file=Pas de fichier
+no_selection=Pas de s\u00E9lection
+no_type=Pas de type
 reset=RAZ
+select=S\u00E9lectionner
+select_a_value=S\u00E9lectionner
+specify_basic_binding=Sp\u00E9cifier un lien simplifi\u00E9
+specify_compound_binding=Sp\u00E9cifier un lien complexe
+string=Texte
+true=true
+type=Type
+value=Valeur
