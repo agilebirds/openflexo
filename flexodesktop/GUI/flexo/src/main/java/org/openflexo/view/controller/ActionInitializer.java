@@ -42,7 +42,7 @@ public abstract class ActionInitializer<A extends FlexoAction<?, T1, T2>, T1 ext
 	private final ControllerActionInitializer _controllerActionInitializer;
 	private final FlexoActionType _actionType;
 
-	public ActionInitializer(FlexoActionType actionType, ControllerActionInitializer controllerActionInitializer) {
+	public ActionInitializer(FlexoActionType<A, T1, T2> actionType, ControllerActionInitializer controllerActionInitializer) {
 		super();
 		_controllerActionInitializer = controllerActionInitializer;
 		_actionType = actionType;
