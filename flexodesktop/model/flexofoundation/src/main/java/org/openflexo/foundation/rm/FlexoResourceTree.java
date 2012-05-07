@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * 
@@ -28,7 +28,7 @@ import java.util.Vector;
 public interface FlexoResourceTree {
 	public FlexoResource getRootNode();
 
-	public Vector<FlexoResourceTree> getChildNodes();
+	public List<FlexoResourceTree> getChildNodes();
 
 	public boolean isEmpty();
 

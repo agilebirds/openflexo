@@ -20,6 +20,8 @@
 package org.openflexo.foundation.rm;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -621,7 +623,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws ResourceDependancyLoopException
 	 *             if a loop was detected (loop in dependancies definition)
 	 */
-	private final FlexoResourceTree buildDependanciesTree(Vector<FlexoResource<FlexoResourceData>> processedResources)
+	private final FlexoResourceTree buildDependanciesTree(List<FlexoResource<FlexoResourceData>> processedResources)
 			throws ResourceDependancyLoopException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
 		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false, getProject().getDependancyScheme()); e
@@ -630,8 +632,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 			if (processedResources.contains(resource)) {
 				throw new ResourceDependancyLoopException(resource);
 			}
-			Vector<FlexoResource<FlexoResourceData>> newProcessesResources = (Vector<FlexoResource<FlexoResourceData>>) processedResources
-					.clone();
+			List<FlexoResource<FlexoResourceData>> newProcessesResources = new ArrayList<FlexoResource<FlexoResourceData>>(
+					processedResources);
 			newProcessesResources.add(resource);
 			if (resource._needsUpdate(newProcessesResources) || requireUpdateBecauseOf(resource)) {
 				// Add this resource to dependancies tree
@@ -655,7 +657,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
-	protected final FlexoResourceTree performUpdateDependanciesModel(Vector<FlexoResource<FlexoResourceData>> processedResources)
+	protected final FlexoResourceTree performUpdateDependanciesModel(List<FlexoResource<FlexoResourceData>> processedResources)
 			throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
 			FlexoException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
@@ -665,8 +667,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 			if (processedResources.contains(resource)) {
 				throw new ResourceDependancyLoopException(resource);
 			}
-			Vector<FlexoResource<FlexoResourceData>> newProcessesResources = (Vector<FlexoResource<FlexoResourceData>>) processedResources
-					.clone();
+			List<FlexoResource<FlexoResourceData>> newProcessesResources = new ArrayList<FlexoResource<FlexoResourceData>>(
+					processedResources);
 			newProcessesResources.add(resource);
 			try {
 				if (resource._needsUpdate(newProcessesResources)) {
@@ -690,10 +692,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @return
 	 */
-	private Vector<FlexoResource<FlexoResourceData>> makeSingleton() {
-		Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>();
-		returned.add((FlexoResource<FlexoResourceData>) this);
-		return returned;
+	private List<FlexoResource<FlexoResourceData>> makeSingleton() {
+		return Arrays.asList((FlexoResource<FlexoResourceData>) this);
 	}
 
 	/**
@@ -702,7 +702,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @return a flag indicating if this resource needs to be updated
 	 * @throws ResourceDependancyLoopException
 	 */
-	private final boolean _needsUpdate(Vector<FlexoResource<FlexoResourceData>> callingResources) throws ResourceDependancyLoopException {
+	private final boolean _needsUpdate(List<FlexoResource<FlexoResourceData>> callingResources) throws ResourceDependancyLoopException {
 		FlexoResourceTree tree = buildDependanciesTree(callingResources);
 		if (!tree.isEmpty()) {
 			/*StringBuilder sb = new StringBuilder(this+" ").append('(').append(new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastUpdate())).append(") needs update because of ");
@@ -727,7 +727,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
-	private final FlexoResourceTree _update(Vector<FlexoResource<FlexoResourceData>> callingResources)
+	private final FlexoResourceTree _update(List<FlexoResource<FlexoResourceData>> callingResources)
 			throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
 			FlexoException {
 		// First update all dependancies model
@@ -789,8 +789,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 			logger.fine("setLastSynchronizedWithResource " + aResource + " with " + aDate);
 		}
 		_lastSynchronizedForResources.put(aResource, new LastSynchronizedWithResourceEntry(this, aResource, aDate));
-		for (Enumeration en = getAlteredResources().elements(); en.hasMoreElements();) {
-			FlexoResource alteredResource = (FlexoResource) en.nextElement();
+		for (FlexoResource<?> alteredResource : getAlteredResources()) {
 			alteredResource.resetLastSynchronizedWithResource(this);
 		}
 		notifyResourceChanged();

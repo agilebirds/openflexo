@@ -358,7 +358,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			}
 
 			// After loading the resources, we clear the isModified flag on RMResource (since basically we haven't changed anything yet)
-			project.clearIsModified(false);
+			if (!project.hasBackwardSynchronizationBeenPerformed()) {
+				project.clearIsModified(false);
+			}
 
 			// Look-up observed object for screenshot resources
 			// (pas terrible comme technique, mais on verra plus tard)

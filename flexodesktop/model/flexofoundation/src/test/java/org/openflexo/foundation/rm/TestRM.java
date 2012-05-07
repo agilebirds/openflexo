@@ -512,11 +512,14 @@ public class TestRM extends FlexoTestCase {
 		assertEquals(0, dmReport.getErrorNb());
 		ValidationReport ieReport = _project.getFlexoComponentLibrary().validate();
 		System.out.println(ieReport.errorAsString());
+		// Expected errors are
+		// VALIDATION / ERROR: Root menu item must select an operation
+		// VALIDATION / ERROR: Menu item must be bound to an operation
 		assertEquals(2, ieReport.getErrorNb());
 		ValidationReport dkvReport = _project.getDKVModel().validate();
 		assertEquals(0, dkvReport.getErrorNb());
 		ValidationReport wkfReport = _project.getFlexoWorkflow().validate();
-		assertEquals(1, wkfReport.getErrorNb());
+		assertEquals(0, wkfReport.getErrorNb());
 	}
 
 	/**
