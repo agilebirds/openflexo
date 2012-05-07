@@ -380,7 +380,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	}
 
 	public ViewPoint getViewPoint() {
-		if (_calc == null && !lookupDone) {
+		if (_calc == null && !lookupDone && _calcLibrary != null) {
 			_calc = _calcLibrary.getViewPoint(viewPointURI);
 			lookupDone = true;
 		}
