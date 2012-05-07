@@ -463,4 +463,18 @@ public abstract class EditionScheme extends ViewPointObject {
 		bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement(TOP_LEVEL, null));
 	}
 
+	/**
+	 * Duplicates this EditionScheme, given a new name<br>
+	 * Newly created EditionScheme is added to parent EditionPattern
+	 * 
+	 * @param newName
+	 * @return
+	 */
+	public EditionScheme duplicate(String newName) {
+		EditionScheme newEditionScheme = (EditionScheme) cloneUsingXMLMapping();
+		newEditionScheme.setName(newName);
+		getEditionPattern().addToEditionSchemes(newEditionScheme);
+		return newEditionScheme;
+	}
+
 }
