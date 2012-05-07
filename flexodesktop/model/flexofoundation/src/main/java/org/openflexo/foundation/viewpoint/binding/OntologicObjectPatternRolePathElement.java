@@ -192,7 +192,11 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 		@Override
 		public Type getType() {
-			return ((DataPropertyPatternRole) getPatternRole()).getParentProperty();
+			if (((DataPropertyPatternRole) getPatternRole()).getParentProperty() != null) {
+				return ((DataPropertyPatternRole) getPatternRole()).getParentProperty();
+			} else {
+				return getPatternRole().getAccessedClass();
+			}
 		}
 	}
 
@@ -204,7 +208,11 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 		@Override
 		public Type getType() {
-			return ((ObjectPropertyPatternRole) getPatternRole()).getParentProperty();
+			if (((ObjectPropertyPatternRole) getPatternRole()).getParentProperty() != null) {
+				return ((ObjectPropertyPatternRole) getPatternRole()).getParentProperty();
+			} else {
+				return getPatternRole().getAccessedClass();
+			}
 		}
 	}
 
