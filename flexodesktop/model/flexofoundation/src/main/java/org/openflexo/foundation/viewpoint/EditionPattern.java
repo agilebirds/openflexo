@@ -717,4 +717,18 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return (aType == this);
 	}
 
+	/**
+	 * Duplicates this EditionPattern, given a new name<br>
+	 * Newly created EditionPattern is added to ViewPoint
+	 * 
+	 * @param newName
+	 * @return
+	 */
+	public EditionPattern duplicate(String newName) {
+		EditionPattern newEditionPattern = (EditionPattern) cloneUsingXMLMapping();
+		newEditionPattern.setName(newName);
+		getViewPoint().addToEditionPatterns(newEditionPattern);
+		return newEditionPattern;
+	}
+
 }

@@ -60,6 +60,7 @@ public class CEDControllerActionInitializer extends ControllerActionInitializer 
 		(new CreateOntologyCalcInitializer(this)).init();
 		(new AddEditionPatternInitializer(this)).init();
 		(new DeleteEditionPatternInitializer(this)).init();
+		(new DuplicateEditionPatternInitializer(this)).init();
 
 		// CalcDrawing edition
 		(new CreateCalcDrawingShemaInitializer(this)).init();
