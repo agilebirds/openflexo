@@ -223,14 +223,13 @@ public class Cloner {
 			StringEncoder stringEncoder) throws InvalidObjectSpecificationException, InvalidModelException, AccessorInvocationException {
 
 		Cloner cloner = new Cloner(xmlMapping, aBuilder, stringEncoder);
-		Object returned = cloner.cloneObject(anObject);
+		Object returned = cloner.cloneObject(anObject, anObject);
 		cloner.runCloningFinalization();
 		return returned;
 	}
 
 	/**
-	 * Encode to an XML string object <code>anObject</code> according to mapping defined for this <code>XMLCoder</code>, and returns this
-	 * newly created string.
+	 * Creates a new instance according to mapping defined for this <code>XMLCoder</code>, and returns this newly created object.
 	 * 
 	 * @param anObject
 	 *            an <code>Object</code> value
@@ -248,8 +247,33 @@ public class Cloner {
 	 * @exception AccessorInvocationException
 	 *                if an error occurs during accessor invocation
 	 */
-	@SuppressWarnings("unchecked")
 	private Object cloneObject(Object anObject) throws InvalidObjectSpecificationException, InvalidModelException,
+			AccessorInvocationException {
+		return cloneObject(anObject, (Object) null);
+	}
+
+	/**
+	 * Creates a new instance according to mapping defined for this <code>XMLCoder</code>, and returns this newly created object.
+	 * 
+	 * @param anObject
+	 *            an <code>Object</code> value
+	 * @param rootObject
+	 *            root object being deserialized: if a converter is defined for that value, don't use it
+	 * @return an <code>Object</code> value
+	 * @exception InvalidObjectSpecificationException
+	 *                if an error occurs
+	 * @exception SAXException
+	 *                if an error occurs
+	 * @exception ParserConfigurationException
+	 *                if an error occurs
+	 * @exception InvalidModelException
+	 *                if no valid mapping nor mapping file were specified
+	 * @exception InvalidXMLDataException
+	 *                if an error occurs
+	 * @exception AccessorInvocationException
+	 *                if an error occurs during accessor invocation
+	 */
+	private Object cloneObject(Object anObject, Object rootObject) throws InvalidObjectSpecificationException, InvalidModelException,
 			AccessorInvocationException {
 
 		if (anObject == null) {
@@ -258,7 +282,7 @@ public class Cloner {
 		if (xmlMapping == null) {
 			throw new InvalidModelException("No mapping specified.");
 		}
-		if (stringEncoder._isEncodable(anObject.getClass())) {
+		if (stringEncoder._isEncodable(anObject.getClass()) && anObject != rootObject) {
 			return stringEncoder._decodeObject(stringEncoder._encodeObject(anObject), anObject.getClass());
 		}
 		if (anObject instanceof PropertiesKeyValueProperty.UndecodableProperty) {
@@ -295,7 +319,7 @@ public class Cloner {
 		// Search the right ModelEntity from class name
 		// NB: the best one is the more specialized.
 
-		Class searchedClass = anObject.getClass();
+		Class<?> searchedClass = anObject.getClass();
 		while (searchedClass != null && xmlMapping.entityWithClassName(searchedClass.getName()) == null) {
 			searchedClass = searchedClass.getSuperclass();
 		}
