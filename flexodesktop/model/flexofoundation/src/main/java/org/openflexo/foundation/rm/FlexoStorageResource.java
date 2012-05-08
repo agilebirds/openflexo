@@ -452,6 +452,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 			logger.finer("Backsynchronizing " + this + " with " + aResource);
 		}
 		setLastSynchronizedWithResource(aResource, new Date());
+		getProject().notifyResourceHasBeenBackwardSynchronized(this);
 	}
 
 	@Override

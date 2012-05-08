@@ -828,6 +828,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		boolean resourceSaved = false;
 		try {
 			for (FlexoStorageResource<? extends StorageResourceData> data : unsaved) {
+				if (data == getFlexoRMResource()) {
+					continue;
+				}
 				if (progress != null) {
 					progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
 				}
@@ -838,7 +841,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 				resourceSaved = true;
 			}
 		} finally {
-			if (resourceSaved) {
+			if (resourceSaved || getFlexoRMResource().isModified()) {
 				// If at least one resource has been saved, let's try to save the RM so that the lastID is also saved, avoiding possible
 				// duplication of flexoID's.
 				writeDotVersion();
@@ -2102,6 +2105,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	@Override
 	public synchronized void clearIsModified(boolean clearLastMemoryUpdate) {
 		// logger.info("Project clearIsModified()");
+		if (isDeserializing() && hasBackwardSynchronizationBeenPerformed()) {
+			return;
+		}
 		super.clearIsModified(clearLastMemoryUpdate);
 		_backwardSynchronizationHasBeenPerformed = false;
 	}
