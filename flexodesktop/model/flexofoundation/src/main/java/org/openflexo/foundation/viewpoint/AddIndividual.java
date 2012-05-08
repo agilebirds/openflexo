@@ -29,6 +29,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.StringUtils;
 
 public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
@@ -36,6 +37,7 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
+	private String ontologyClassURI;
 
 	public AddIndividual() {
 		super();
@@ -58,17 +60,51 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	@Override
 	public OntologyClass getOntologyClass() {
-		if (getPatternRole() != null) {
-			return getPatternRole().getOntologicType();
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
+		}
+		if (StringUtils.isNotEmpty(ontologyClassURI)) {
+			if (getOntologyLibrary() != null) {
+				return getOntologyLibrary().getClass(ontologyClassURI);
+			}
+		} else {
+			if (getPatternRole() != null) {
+				return getPatternRole().getOntologicType();
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public void setOntologyClass(OntologyClass ontologyClass) {
-		if (getPatternRole() != null) {
-			getPatternRole().setOntologicType(ontologyClass);
+		if (ontologyClass != null) {
+			if (getPatternRole() != null) {
+				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
+					ontologyClassURI = ontologyClass.getURI();
+				} else {
+					getPatternRole().setOntologicType(ontologyClass);
+				}
+			} else {
+				ontologyClassURI = ontologyClass.getURI();
+			}
+		} else {
+			ontologyClassURI = null;
 		}
+	}
+
+	public String _getOntologyClassURI() {
+		if (getOntologyClass() != null) {
+			if (getPatternRole() != null && getPatternRole().getOntologicType() == getOntologyClass()) {
+				// No need to store an overriding type, just use default provided by pattern role
+				return null;
+			}
+			return getOntologyClass().getURI();
+		}
+		return ontologyClassURI;
+	}
+
+	public void _setOntologyClassURI(String ontologyClassURI) {
+		this.ontologyClassURI = ontologyClassURI;
 	}
 
 	public Vector<DataPropertyAssertion> getDataAssertions() {

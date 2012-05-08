@@ -373,6 +373,7 @@
 			primary="yes" />
 		<property name="objectAssertions" type="vector"
 			xmlTag="ObjectPropertyAssertion" primary="yes" />
+		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddClass"
