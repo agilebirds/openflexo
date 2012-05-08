@@ -1,28 +1,41 @@
 #English
-#Mon May 07 15:59:25 CEST 2012
+#Tue May 08 23:11:37 CEST 2012
+apply=Apply
+arithmetic=Arithmetic
 boolean=Boolean
 cancel=Cancel
 choose=Choose
+comparison=Comparison
 connect=Connect
 date=Date
 define_a_static_value=Define a constant value
 duration=Duration
 enum=Enum
+evaluation=Evaluation
 expression=Expression
+expression_is_valid_and_conform_to_required_type=Expression is valid and conform to required type
 false=false
 float=Float
 icon=icon
 integer=Integer
+invalid_binding=Invalid binding
+logical=Logical
 name=Name
 no_file=No file
 no_selection=No selection
 no_type=No type
+please_define_expression=Please define expression
 reset=Reset
+scientific=Scientific
 select=Select
 select_a_value=Select
+show_evaluation=Show evaluation
+show_more_operators=Show more operators
 specify_basic_binding=Specify basic binding
 specify_compound_binding=Specify compound binding
 string=String
+trigonometric=Trigonometric
 true=true
 type=Type
+validate=Validate
 value=Value
