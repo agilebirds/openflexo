@@ -1,5 +1,5 @@
 #French
-#Mon May 07 23:38:24 CEST 2012
+#Tue May 08 09:36:31 CEST 2012
 ARITHMETIC_FLOAT=[FLOTTANT]
 ARITHMETIC_INTEGER=[ENTIER]
 BOOLEAN=BOOLEEN
@@ -65,7 +65,9 @@ switch_to_language=Basculer \u00E0 la langue...
 test_interface=Tester le composant
 tools=Outils
 undo=D\u00E9faire
+unexpected_exception_occured=OpenFlexo a d\u00E9tect\u00E9 une erreur interne. OpenFlexo continuera de fonctionner mais il est cependant recommand\u00E9 de le red\u00E9marrer.
 validate_component=Valider le composant
 view_point_library=Biblioth\u00E8que de View Point
 vpm_module_name=Editeur de Points de Vues
+would_you_like_to_send_a_report=Souhaitez-vous soumettre un rapport afin de nous aider \u00E0 am\u00E9liorer OpenFlexo?
 yes=Oui

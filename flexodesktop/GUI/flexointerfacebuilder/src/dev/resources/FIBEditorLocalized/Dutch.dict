@@ -1,5 +1,5 @@
 #Dutch
-#Mon May 07 23:38:24 CEST 2012
+#Tue May 08 09:36:31 CEST 2012
 ARITHMETIC_FLOAT=[FLOAT]
 ARITHMETIC_INTEGER=[INTEGER]
 BOOLEAN=BOOLEAN
@@ -65,7 +65,9 @@ switch_to_language=Switch to language
 test_interface=Test component
 tools=Tools
 undo=Undo
+unexpected_exception_occured=OpenFlexo has detected an internal error. OpenFlexo will continue to work but it is highly recommended to restart it.
 validate_component=Validate component
 view_point_library=View Point Library
 vpm_module_name=ViewPoint Modeller
+would_you_like_to_send_a_report=Would you like to send a report to help us improve OpenFlexo?
 yes=Yes
