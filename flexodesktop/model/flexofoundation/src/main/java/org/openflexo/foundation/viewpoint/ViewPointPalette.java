@@ -31,6 +31,7 @@ import javax.swing.JComponent;
 
 import org.jdom.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
@@ -81,6 +82,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 				ViewPointPalette returned = (ViewPointPalette) XMLDecoder.decodeObjectWithMapping(inputStream, calc.getViewPointLibrary()
 						.get_VIEW_POINT_PALETTE_MODEL(), null, new StringEncoder(StringEncoder.getDefaultInstance(),
 						relativePathFileConverter));
+				logger.info("Loaded file " + paletteFile.getAbsolutePath());
 				returned.init(calc, paletteFile);
 				return returned;
 			} catch (FileNotFoundException e) {
@@ -102,6 +104,9 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (JDOMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
@@ -307,7 +312,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	public ViewPointPaletteElement addPaletteElement(String name, Object graphicalRepresentation) {
 		ViewPointPaletteElement newElement = new ViewPointPaletteElement();
 		newElement.setName(name);
-		newElement.setGraphicalRepresentation(graphicalRepresentation);
+		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation) graphicalRepresentation);
 		addToElements(newElement);
 		return newElement;
 	}

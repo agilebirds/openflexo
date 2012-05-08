@@ -19,18 +19,41 @@
  */
 package org.openflexo.foundation.viewpoint.action;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
+import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.graphics.ShadowStyle;
+import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
+import org.openflexo.swing.ImageUtils;
+import org.openflexo.swing.ImageUtils.ImageType;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
 public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShape, ExampleDrawingObject> {
@@ -67,22 +90,71 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 
 	public Object graphicalRepresentation;
 	public ViewPointPalette palette;
-	public EditionPattern editionPattern;
+	private EditionPattern editionPattern;
+	public DropScheme dropScheme;
 	public String newElementName;
+	public boolean takeScreenshotForTopLevelElement = false;
+	public boolean overrideDefaultGraphicalRepresentations = false;
+
+	private ScreenshotImage screenshot;
+	public int imageWidth;
+	public int imageHeight;
 
 	private ViewPointPaletteElement _newPaletteElement;
 
 	PushToPalette(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+		drawingObjectEntries = new Vector<ExampleDrawingObjectEntry>();
+		updateDrawingObjectEntries();
 	}
 
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Push to palette");
+
 		if (getFocusedObject() != null && palette != null) {
 
-			_newPaletteElement = palette.addPaletteElement(newElementName, getFocusedObject().getGraphicalRepresentation());
+			if (takeScreenshotForTopLevelElement) {
+				File screenshotFile = saveScreenshot();
+				ShapeGraphicalRepresentation gr = new ShapeGraphicalRepresentation();
+				gr.setShapeType(ShapeType.RECTANGLE);
+				gr.setForeground(ForegroundStyle.makeNone());
+				gr.setBackground(new BackgroundStyle.BackgroundImage(screenshotFile));
+				gr.setShadowStyle(ShadowStyle.makeNone());
+				gr.setTextStyle(TextStyle.makeDefault());
+				gr.setText("");
+				gr.setWidth(imageWidth);
+				gr.setHeight(imageHeight);
+				gr.setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
+				gr.setIsFloatingLabel(false);
+				graphicalRepresentation = gr;
+			} else {
+				GraphicalRepresentation gr = ((GraphicalRepresentation) getFocusedObject().getGraphicalRepresentation());
+				if (gr instanceof ShapeGraphicalRepresentation) {
+					graphicalRepresentation = new ShapeGraphicalRepresentation();
+					((ShapeGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
+				} else if (gr instanceof ConnectorGraphicalRepresentation) {
+					graphicalRepresentation = new ConnectorGraphicalRepresentation();
+					((ConnectorGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
+				}
+			}
+			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
 			_newPaletteElement.setEditionPattern(editionPattern);
+			_newPaletteElement.setDropScheme(dropScheme);
+			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
+
+			for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
+				if (entry.getSelectThis()) {
+					if (entry.graphicalObject instanceof ExampleDrawingShape) {
+						_newPaletteElement.addToOverridingGraphicalRepresentations(new ShapeOverridingGraphicalRepresentation(
+								entry.patternRole, (ShapeGraphicalRepresentation) entry.graphicalObject.getGraphicalRepresentation()));
+					} else if (entry.graphicalObject instanceof ExampleDrawingConnector) {
+						_newPaletteElement.addToOverridingGraphicalRepresentations(new ConnectorOverridingGraphicalRepresentation(
+								entry.patternRole, (ConnectorGraphicalRepresentation) entry.graphicalObject.getGraphicalRepresentation()));
+					}
+				}
+			}
+
 		} else {
 			logger.warning("Focused role is null !");
 		}
@@ -93,6 +165,134 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 	}
 
 	public boolean isValid() {
-		return StringUtils.isNotEmpty(newElementName) && palette != null && editionPattern != null;
+		return StringUtils.isNotEmpty(newElementName) && palette != null && editionPattern != null && dropScheme != null;
+	}
+
+	public Vector<ExampleDrawingObjectEntry> drawingObjectEntries;
+
+	public class ExampleDrawingObjectEntry {
+		private boolean selectThis;
+		public ExampleDrawingObject graphicalObject;
+		public String elementName;
+		public GraphicalElementPatternRole patternRole;
+
+		public ExampleDrawingObjectEntry(ExampleDrawingObject graphicalObject, String elementName) {
+			super();
+			this.graphicalObject = graphicalObject;
+			this.elementName = elementName;
+			this.selectThis = isMainEntry();
+			if (isMainEntry() && editionPattern != null) {
+				patternRole = editionPattern.getDefaultPrimaryRepresentationRole();
+			}
+		}
+
+		public boolean isMainEntry() {
+			return (graphicalObject == getFocusedObject());
+		}
+
+		public boolean getSelectThis() {
+			if (isMainEntry())
+				return true;
+			return selectThis;
+		}
+
+		public void setSelectThis(boolean aFlag) {
+			selectThis = aFlag;
+			if (patternRole == null && graphicalObject instanceof ExampleDrawingShape) {
+				GraphicalElementPatternRole parentEntryPatternRole = getParentEntry().patternRole;
+				for (ShapePatternRole r : editionPattern.getShapePatternRoles()) {
+					if (r.getParentShapePatternRole() == parentEntryPatternRole && patternRole == null) {
+						patternRole = r;
+					}
+				}
+			}
+		}
+
+		public ExampleDrawingObjectEntry getParentEntry() {
+			return getEntry(graphicalObject.getParent());
+		}
+
+		public List<? extends GraphicalElementPatternRole> getAvailablePatternRoles() {
+			if (graphicalObject instanceof ExampleDrawingShape) {
+				return editionPattern.getPatternRoles(ShapePatternRole.class);
+			} else if (graphicalObject instanceof ExampleDrawingConnector) {
+				return editionPattern.getPatternRoles(ConnectorPatternRole.class);
+			}
+			return null;
+		}
+	}
+
+	public int getSelectedEntriesCount() {
+		int returned = 0;
+		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
+			if (e.selectThis)
+				returned++;
+		}
+		return returned;
+	}
+
+	public ExampleDrawingObjectEntry getEntry(ExampleDrawingObject o) {
+		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
+			if (e.graphicalObject == o) {
+				return e;
+			}
+		}
+		return null;
+	}
+
+	public EditionPattern getEditionPattern() {
+		return editionPattern;
+	}
+
+	public void setEditionPattern(EditionPattern editionPattern) {
+		this.editionPattern = editionPattern;
+		updateDrawingObjectEntries();
+	}
+
+	private void updateDrawingObjectEntries() {
+		drawingObjectEntries.clear();
+		int shapeIndex = 1;
+		int connectorIndex = 1;
+		for (ExampleDrawingObject o : getFocusedObject().getDescendants()) {
+			if (o instanceof ExampleDrawingShape) {
+				ExampleDrawingShape shape = (ExampleDrawingShape) o;
+				String shapeRoleName = StringUtils.isEmpty(shape.getName()) ? "shape" + (shapeIndex > 1 ? shapeIndex : "") : shape
+						.getName();
+				drawingObjectEntries.add(new ExampleDrawingObjectEntry(shape, shapeRoleName));
+				shapeIndex++;
+			}
+			if (o instanceof ExampleDrawingConnector) {
+				ExampleDrawingConnector connector = (ExampleDrawingConnector) o;
+				String connectorRoleName = "connector" + (connectorIndex > 1 ? connectorIndex : "");
+				drawingObjectEntries.add(new ExampleDrawingObjectEntry(connector, connectorRoleName));
+				connectorIndex++;
+			}
+		}
+
+	}
+
+	public ScreenshotImage getScreenshot() {
+		return screenshot;
+	}
+
+	public void setScreenshot(ScreenshotImage screenshot) {
+		this.screenshot = screenshot;
+		imageWidth = screenshot.image.getWidth(null);
+		imageHeight = screenshot.image.getHeight(null);
+	}
+
+	public File saveScreenshot() {
+		File imageFile = new File(getFocusedObject().getViewPoint().getViewPointDirectory(), JavaUtils.getClassName(newElementName)
+				+ ".png");
+		logger.info("Saving " + imageFile);
+		try {
+			ImageUtils.saveImageToFile(getScreenshot().image, imageFile, ImageType.PNG);
+			return imageFile;
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.warning("Could not save " + imageFile.getAbsolutePath());
+			return null;
+		}
+
 	}
 }

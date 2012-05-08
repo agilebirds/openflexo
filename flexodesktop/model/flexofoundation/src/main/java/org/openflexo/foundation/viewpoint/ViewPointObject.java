@@ -49,7 +49,12 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	public void notifyBindingChanged(ViewPointDataBinding binding) {
 	}
 
-	public void notifyChange(InspectorBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) {
+	public void notifyChange(String propertyName, Object oldValue, Object newValue) {
+		getPropertyChangeSupport().firePropertyChange(propertyName, oldValue, newValue);
+	}
+
+	public void notifyChange(InspectorBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding newValue) {
+		getPropertyChangeSupport().firePropertyChange(bindingAttribute.toString(), oldValue, newValue);
 	}
 
 	@Override

@@ -82,9 +82,6 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 		if (getParent() == null) {
 			throw new InvalidParametersException("folder is undefined");
 		}
-		if (newShapeName == null && !nameSetToNull) {
-			throw new InvalidParametersException("shape name is undefined");
-		}
 
 		_newShape = new ExampleDrawingShape();
 		if (graphicalRepresentation != null) {

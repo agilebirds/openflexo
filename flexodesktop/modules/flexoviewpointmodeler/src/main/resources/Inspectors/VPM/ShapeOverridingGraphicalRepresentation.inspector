@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.ViewPointPaletteElement" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.ViewPointPaletteElement$ShapeOverridingGraphicalRepresentation" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab index="0" title="Semantic" layout="twocols" font="SansSerif,0,11" name="SemanticTab">
       <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="edition_pattern" localize="true" name="EditionPatternLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="EditionPattern" data="data.editionPattern" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" list="data.allAvailableEditionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" />
-      <Label label="drop_scheme" localize="true" name="DropSchemeLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="DropScheme" data="data.dropScheme" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" list="data.editionPattern.dropSchemes" iteratorClassName="org.openflexo.foundation.viewpoint.DropScheme" />
-      <Label label="bound_label" localize="true" name="BoundLabelLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="BoundLabelCB" data="data.boundLabelToElementName" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
-      <Label label="parameters" align="center" localize="true" name="ParametersLabel" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.parameters" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="Parameters" localize="true" manageDynamicModel="true">
-        <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
-        <TextFieldColumn isEditable="iterator.isEditable" data="iterator.value" title="value" columnWidth="100" resizable="true" displayTitle="true" />
-      </Table>
-      <TextArea columns="10" data="data.description" constraints="twocols(location=center;index=11;expandHorizontally=true;expandVertically=true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Description" localize="true" />
-    </Tab>
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Name" data="data.patternRoleName" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+     </Tab>
 
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=true)">
@@ -366,6 +354,6 @@
     <Localized key="arc_type" lang="French">Type d'arc</Localized>
     <Localized key="arc_type" lang="Dutch">Arc type</Localized>
   </LocalizedDictionary>
-   <Parameter name="title" value="Palette element" />
+   <Parameter name="title" value="Overriding graphical representation" />
 </Panel>
 

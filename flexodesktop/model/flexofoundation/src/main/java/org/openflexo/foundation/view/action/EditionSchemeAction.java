@@ -79,13 +79,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 
 	public boolean escapeParameterRetrievingWhenValid = true;
 
-	private Hashtable<GraphicalElementPatternRole, Object> overridenGraphicalRepresentations;
-
 	public EditionSchemeAction(FlexoActionType<A, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject focusedObject,
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		parameterValues = new Hashtable<EditionSchemeParameter, Object>();
-		overridenGraphicalRepresentations = new Hashtable<GraphicalElementPatternRole, Object>();
 	}
 
 	/**
@@ -309,8 +306,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		ViewShape newShape = new ViewShape(retrieveOEShema());
 
 		// If an overriden graphical representation is defined, use it
-		if (getOverridenGraphicalRepresentation(action.getPatternRole()) != null) {
-			newShape.setGraphicalRepresentation(getOverridenGraphicalRepresentation(action.getPatternRole()));
+		if (getOverridingGraphicalRepresentation(action.getPatternRole()) != null) {
+			newShape.setGraphicalRepresentation(getOverridingGraphicalRepresentation(action.getPatternRole()));
 		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
 			newShape.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
 		}
@@ -481,8 +478,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		}
 
 		// If an overriden graphical representation is defined, use it
-		if (getOverridenGraphicalRepresentation(action.getPatternRole()) != null) {
-			newConnector.setGraphicalRepresentation(getOverridenGraphicalRepresentation(action.getPatternRole()));
+		if (getOverridingGraphicalRepresentation(action.getPatternRole()) != null) {
+			newConnector.setGraphicalRepresentation(getOverridingGraphicalRepresentation(action.getPatternRole()));
 		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
 			newConnector.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
 		}
@@ -648,62 +645,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		return null;
 	}
 
-	public Object getOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+	public Object getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
 		// return overridenGraphicalRepresentations.get(patternRole);
 		// TODO temporary desactivate overriden GR
 		return null;
 	}
 
-	public void setOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole, Object graphicalRepresentation) {
-		overridenGraphicalRepresentations.put(patternRole, graphicalRepresentation);
-	}
-
-	/*
-	@Override
-	public Class<?> getDeclaringClass() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Type getType() {
-		return getClass();
-	}
-
-	@Override
-	public String getSerializationRepresentation() {
-		return getEditionScheme().getName();
-	}
-
-	@Override
-	public boolean isBindingValid() {
-		return true;
-	}
-
-	@Override
-	public String getLabel() {
-		return getEditionScheme().getName();
-	}
-
-	@Override
-	public String getTooltipText(Type resultingType) {
-		return getEditionScheme().getDescription();
-	}
-
-	@Override
-	public boolean isSettable() {
-		return false;
-	}
-
-	@Override
-	public Object getBindingValue(Object target, BindingEvaluationContext context) {
-		System.out.println("On me demande la value pour " + target);
-		return null;
-	}
-
-	@Override
-	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
-		System.out.println("On set la value " + value + " pour " + target);
-	}
-	*/
 }

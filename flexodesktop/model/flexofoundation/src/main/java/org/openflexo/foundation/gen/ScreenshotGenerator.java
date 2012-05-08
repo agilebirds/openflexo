@@ -378,6 +378,13 @@ public class ScreenshotGenerator {
 		return i;
 	}
 
+	public static ScreenshotImage makeImage(BufferedImage bi, int left, int top, int width, int height) {
+		ScreenshotImage i = new ScreenshotImage();
+		i.image = bi.getSubimage(left, top, width, height);
+		i.trimInfo = new Rectangle(left, top, width, height);
+		return i;
+	}
+
 	public static ScreenshotImage trimImage(BufferedImage bi) {
 		// Trim operation to remove white borders.
 		int border = 10;

@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.geom.FGEPoint;
@@ -39,6 +40,7 @@ import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddShape;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
@@ -223,6 +225,19 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 			return parameterValues;
 		}
 		return super.getValue(variable);
+	}
+
+	@Override
+	public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+		if (getPaletteElement() != null) {
+			if (getPaletteElement().getOverridingGraphicalRepresentation(patternRole) != null) {
+				return getPaletteElement().getOverridingGraphicalRepresentation(patternRole);
+			}
+		}
+
+		// return overridenGraphicalRepresentations.get(patternRole);
+		// TODO temporary desactivate overriden GR
+		return null;
 	}
 
 }

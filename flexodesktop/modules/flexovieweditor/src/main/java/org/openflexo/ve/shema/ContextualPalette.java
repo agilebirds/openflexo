@@ -116,8 +116,16 @@ public class ContextualPalette extends DrawingPalette {
 	}
 
 	private PaletteElement makePaletteElement(final ViewPointPaletteElement element) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(
-				(ShapeGraphicalRepresentation) element.getGraphicalRepresentation(), null, getPaletteDrawing());
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(element.getGraphicalRepresentation(),
+				null, getPaletteDrawing()) {
+			@Override
+			public String getText() {
+				if (element != null && element.getBoundLabelToElementName()) {
+					return element.getName();
+				}
+				return "";
+			}
+		};
 
 		gr.setText(element.getName());
 
@@ -187,8 +195,6 @@ public class ContextualPalette extends DrawingPalette {
 										action.dropLocation = dropLocation;
 										action.setDropScheme(dropScheme);
 										action.setPaletteElement(element);
-										action.setOverridenGraphicalRepresentation(dropScheme.getEditionPattern()
-												.getPrimaryRepresentationRole(), shapeGR);
 										action.doAction();
 									}
 								});
@@ -205,8 +211,6 @@ public class ContextualPalette extends DrawingPalette {
 							action.dropLocation = dropLocation;
 							action.setDropScheme(availableDropPatterns.firstElement());
 							action.setPaletteElement(element);
-							action.setOverridenGraphicalRepresentation(availableDropPatterns.firstElement().getEditionPattern()
-									.getPrimaryRepresentationRole(), shapeGR);
 							action.doAction();
 							return action.hasActionExecutionSucceeded();
 						}

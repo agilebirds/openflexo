@@ -47,6 +47,8 @@ import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
 
 public class OEBrowserElementFactory implements BrowserElementFactory {
 	@Override
@@ -82,6 +84,10 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 			return new CalcPaletteBrowserElement((ViewPointPalette) object, browser, parent);
 		} else if (object instanceof ViewPointPaletteElement) {
 			return new CalcPaletteElementBrowserElement((ViewPointPaletteElement) object, browser, parent);
+		} else if (object instanceof ShapeOverridingGraphicalRepresentation) {
+			return new ShapeOverridingGRBrowserElement((ShapeOverridingGraphicalRepresentation) object, browser, parent);
+		} else if (object instanceof ConnectorOverridingGraphicalRepresentation) {
+			return new ConnectorOverridingGRBrowserElement((ConnectorOverridingGraphicalRepresentation) object, browser, parent);
 		} else if (object instanceof ExampleDrawingShema) {
 			return new CalcDrawingShemaBrowserElement((ExampleDrawingShema) object, browser, parent);
 		} else if (object instanceof ExampleDrawingShape) {

@@ -87,6 +87,9 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 			} catch (JDOMException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} finally {
 				try {
 					if (inputStream != null) {

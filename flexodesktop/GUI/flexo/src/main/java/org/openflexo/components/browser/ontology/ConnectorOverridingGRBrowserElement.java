@@ -22,35 +22,32 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.OverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
 
 /**
- * Browser element representing the calc palette element
+ * Browser element representing an overriding GR in a palette element
  * 
  * @author sguerin
  * 
  */
-public class CalcPaletteElementBrowserElement extends BrowserElement {
+public class ConnectorOverridingGRBrowserElement extends BrowserElement {
 
-	protected CalcPaletteElementBrowserElement(ViewPointPaletteElement element, ProjectBrowser browser, BrowserElement parent) {
-		super(element, BrowserElementType.ONTOLOGY_CALC_PALETTE_ELEMENT, browser, parent);
+	protected ConnectorOverridingGRBrowserElement(ConnectorOverridingGraphicalRepresentation ogr, ProjectBrowser browser,
+			BrowserElement parent) {
+		super(ogr, BrowserElementType.OVERRIDING_CONNECTOR_GR, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		for (OverridingGraphicalRepresentation ogr : getPaletteElement().getOverridingGraphicalRepresentations()) {
-			addToChilds(ogr);
-		}
 	}
 
 	@Override
 	public String getName() {
-		return getPaletteElement().getName();
+		return getOverridingGraphicalRepresentation().getPatternRoleName();
 	}
 
-	protected ViewPointPaletteElement getPaletteElement() {
-		return (ViewPointPaletteElement) getObject();
+	protected ConnectorOverridingGraphicalRepresentation getOverridingGraphicalRepresentation() {
+		return (ConnectorOverridingGraphicalRepresentation) getObject();
 	}
 
 }

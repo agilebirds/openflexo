@@ -22,6 +22,7 @@ package org.openflexo.vpm.palette;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -80,11 +81,13 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPale
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getCalcPaletteElement()) {
-			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof CalcPaletteElementInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof CalcPaletteElementRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (dataModification != null && dataModification.propertyName() != null
+					&& dataModification.propertyName().equals("boundLabelToElementName")) {
+				notifyChange(GraphicalRepresentation.Parameters.text);
 			}
 		}
 	}
@@ -96,7 +99,7 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPale
 
 	@Override
 	public String getText() {
-		if (getCalcPaletteElement() != null) {
+		if (getCalcPaletteElement() != null && getCalcPaletteElement().getBoundLabelToElementName()) {
 			return getCalcPaletteElement().getName();
 		}
 		return super.getText();

@@ -102,7 +102,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		return false;
 	}*/
 
-	@Override
+	/*@Override
 	public String getText() {
 		if (getCalcDrawingShape() != null) {
 			return getCalcDrawingShape().getName();
@@ -115,7 +115,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		if (getCalcDrawingShape() != null) {
 			getCalcDrawingShape().setName(text);
 		}
-	}
+	}*/
 
 	@Override
 	public void notifyObservers(Object arg) {

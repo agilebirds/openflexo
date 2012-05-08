@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.ExampleDrawingConnector" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center;index=0)">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.ViewPointPaletteElement$ConnectorOverridingGraphicalRepresentation" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Semantic" layout="twocols" font="SansSerif,0,11" name="SemanticTab">
+      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Name" data="data.patternRoleName" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+     </Tab>
+
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-       <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" localize="true" name="NameTF" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ConnectorGraphicalRepresentation" constraints="twocols(location=center;index=2;expandHorizontally=true;expandVertically=true)">
+      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ConnectorGraphicalRepresentation" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=true)">
         <Tab index="0" title="Connector" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ConnectorTab">
           <Label label="foreground" align="right" localize="true" name="ForegroundLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" width="130" height="16" />
           <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" data="GRTab.data.foreground" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" name="Foreground" localize="true" manageDynamicModel="true" />
@@ -77,10 +80,10 @@
           <CheckBox selected="false" localize="true" name="Connectordebug" data="GRTab.data.connector.debug" constraints="twocols(location=right;index=17;expandHorizontally=false;expandVertically=false)" />
         </Tab>
         <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="TextTab">
-          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" name="AbsoluteTextX" localize="true" />
-          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" name="AbsoluteTextY" localize="true" />
+          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" name="AbsoluteTextX" localize="true" />
+          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" name="AbsoluteTextY" localize="true" />
         </Tab>
         <Tab index="2" title="Location/Size" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="LocationSizeTab">
           <Label label="layer" localize="true" name="LayerLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
@@ -90,9 +93,6 @@
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
-    <Localized key="debug_covering_area" lang="English">Debug covering area</Localized>
-    <Localized key="debug_covering_area" lang="French">Couverture de déverminage</Localized>
-    <Localized key="debug_covering_area" lang="Dutch">Debug covering area</Localized>
     <Localized key="Location/Size" lang="French">Emplacement/Taille</Localized>
     <Localized key="layer" lang="English">Layer</Localized>
     <Localized key="layer" lang="French">Couche</Localized>
@@ -183,6 +183,6 @@
     <Localized key="middle_location" lang="Dutch">Middle location</Localized>
     <Localized key="debug" lang="French">Déverminage</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Connector" />
+   <Parameter name="title" value="Overriding graphical representation" />
 </Panel>
 

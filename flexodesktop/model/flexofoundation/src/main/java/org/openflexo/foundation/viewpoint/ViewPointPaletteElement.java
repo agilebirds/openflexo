@@ -23,6 +23,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -33,21 +37,28 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	private String name;
 	private String description;
 	private String _editionPatternId;
+	private String _dropSchemeName;
+
 	private EditionPattern editionPattern;
+	private DropScheme dropScheme;
 	private Vector<PaletteElementPatternParameter> parameters;
 	private String patternRoleName;
 
-	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation here is a org.openflexo.fge.GraphicalRepresentation.
-	private Object graphicalRepresentation;
+	private boolean boundLabelToElementName = true;
+
+	// Represent graphical representation to be used as representation in the palette
+	private ShapeGraphicalRepresentation graphicalRepresentation;
+
+	// Represent graphical representation to be used as overriding representation
+	private Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations;
 
 	private ViewPointPaletteElement parent = null;
-	private Vector<ViewPointPaletteElement> childs;
+	// private Vector<ViewPointPaletteElement> childs;
 
 	private ViewPointPalette _palette;
 
 	public ViewPointPaletteElement() {
-		childs = new Vector<ViewPointPaletteElement>();
+		overridingGraphicalRepresentations = new Vector<OverridingGraphicalRepresentation>();
 		parameters = new Vector<PaletteElementPatternParameter>();
 	}
 
@@ -92,6 +103,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		_palette = palette;
 	}
 
+	// Deserialization only, do not use
 	public String _getEditionPatternId() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getName();
@@ -99,35 +111,26 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		return _editionPatternId;
 	}
 
-	public void _setEditionPatternId(String editableConcept) {
-		_editionPatternId = editableConcept;
+	// Deserialization only, do not use
+	public void _setEditionPatternId(String editionPatternId) {
+		_editionPatternId = editionPatternId;
+	}
+
+	// Deserialization only, do not use
+	public String _getDropSchemeName() {
+		if (getDropScheme() != null) {
+			return getDropScheme().getName();
+		}
+		return _dropSchemeName;
+	}
+
+	// Deserialization only, do not use
+	public void _setDropSchemeName(String _dropSchemeName) {
+		this._dropSchemeName = _dropSchemeName;
 	}
 
 	public ViewPointPaletteElement getParent() {
 		return parent;
-	}
-
-	public Vector<ViewPointPaletteElement> getChilds() {
-		return childs;
-	}
-
-	public void setChilds(Vector<ViewPointPaletteElement> someChilds) {
-		childs.addAll(someChilds);
-	}
-
-	public void addToChilds(ViewPointPaletteElement aChild) {
-		childs.add(aChild);
-		aChild.parent = this;
-		setChanged();
-		notifyObservers();
-	}
-
-	public void removeFromChilds(ViewPointPaletteElement aChild) {
-		childs.remove(aChild);
-		aChild.parent = null;
-		setChanged();
-		setChanged();
-		notifyObservers();
 	}
 
 	public EditionPattern getEditionPattern() {
@@ -144,6 +147,28 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	public void setEditionPattern(EditionPattern anEditionPattern) {
 		if (anEditionPattern != editionPattern) {
 			editionPattern = anEditionPattern;
+			updateParameters();
+		}
+	}
+
+	public DropScheme getDropScheme() {
+		if (dropScheme != null) {
+			return dropScheme;
+		}
+		if ((_dropSchemeName != null) && (getEditionPattern() != null)
+				&& getEditionPattern().getEditionScheme(_dropSchemeName) instanceof DropScheme) {
+			dropScheme = (DropScheme) getEditionPattern().getEditionScheme(_dropSchemeName);
+			updateParameters();
+		}
+		if ((dropScheme == null) && (getEditionPattern() != null) && (getEditionPattern().getDropSchemes().size() > 0)) {
+			dropScheme = getEditionPattern().getDropSchemes().firstElement();
+		}
+		return dropScheme;
+	}
+
+	public void setDropScheme(DropScheme aDropScheme) {
+		if (dropScheme != aDropScheme) {
+			dropScheme = aDropScheme;
 			updateParameters();
 		}
 	}
@@ -200,6 +225,37 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		}
 	}
 
+	public Vector<OverridingGraphicalRepresentation> getOverridingGraphicalRepresentations() {
+		return overridingGraphicalRepresentations;
+	}
+
+	public void setOverridingGraphicalRepresentations(Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations) {
+		this.overridingGraphicalRepresentations.addAll(overridingGraphicalRepresentations);
+	}
+
+	public void addToOverridingGraphicalRepresentations(OverridingGraphicalRepresentation anOverridingGraphicalRepresentation) {
+		overridingGraphicalRepresentations.add(anOverridingGraphicalRepresentation);
+		anOverridingGraphicalRepresentation.paletteElement = this;
+		setChanged();
+		notifyObservers();
+	}
+
+	public void removeFromOverridingGraphicalRepresentations(OverridingGraphicalRepresentation anOverridingGraphicalRepresentation) {
+		overridingGraphicalRepresentations.remove(anOverridingGraphicalRepresentation);
+		anOverridingGraphicalRepresentation.paletteElement = null;
+		setChanged();
+		notifyObservers();
+	}
+
+	public GraphicalRepresentation<?> getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+		for (OverridingGraphicalRepresentation ogr : getOverridingGraphicalRepresentations()) {
+			if (ogr.getPatternRoleName().equals(patternRole.getPatternRoleName())) {
+				return ogr.getGraphicalRepresentation();
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
@@ -229,11 +285,11 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		return Inspectors.VPM.CALC_PALETTE_ELEMENT_INSPECTOR;
 	}
 
-	public Object getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
 	}
 
@@ -255,6 +311,116 @@ public class ViewPointPaletteElement extends ViewPointObject {
 
 	public void setPatternRoleName(String patternRoleName) {
 		this.patternRoleName = patternRoleName;
+	}
+
+	public static abstract class OverridingGraphicalRepresentation extends ViewPointObject {
+		private ViewPointPaletteElement paletteElement;
+		private String patternRoleName;
+
+		// Do not use, required for deserialization
+		public OverridingGraphicalRepresentation() {
+		}
+
+		// Do not use, required for deserialization
+		public OverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+			patternRoleName = patternRole.getPatternRoleName();
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (getPaletteElement() != null) {
+				return getPaletteElement().getBindingModel();
+			}
+			return null;
+		}
+
+		@Override
+		public String getInspectorName() {
+			return null;
+		}
+
+		@Override
+		public ViewPoint getViewPoint() {
+			if (getPaletteElement() != null) {
+				return getPaletteElement().getViewPoint();
+			}
+			return null;
+		}
+
+		public ViewPointPaletteElement getPaletteElement() {
+			return paletteElement;
+		}
+
+		public String getPatternRoleName() {
+			return patternRoleName;
+		}
+
+		public void setPatternRoleName(String patternRoleName) {
+			this.patternRoleName = patternRoleName;
+		}
+
+		public abstract GraphicalRepresentation getGraphicalRepresentation();
+
+	}
+
+	public static class ShapeOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
+
+		private ShapeGraphicalRepresentation graphicalRepresentation;
+
+		// Do not use, required for deserialization
+		public ShapeOverridingGraphicalRepresentation() {
+		}
+
+		// Do not use, required for deserialization
+		public ShapeOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ShapeGraphicalRepresentation gr) {
+			super(patternRole);
+			graphicalRepresentation = gr;
+		}
+
+		@Override
+		public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+			return graphicalRepresentation;
+		}
+
+		public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
+			this.graphicalRepresentation = graphicalRepresentation;
+		}
+	}
+
+	public static class ConnectorOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
+
+		private ConnectorGraphicalRepresentation graphicalRepresentation;
+
+		// Do not use, required for deserialization
+		public ConnectorOverridingGraphicalRepresentation() {
+		}
+
+		// Do not use, required for deserialization
+		public ConnectorOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ConnectorGraphicalRepresentation gr) {
+			super(patternRole);
+			graphicalRepresentation = gr;
+		}
+
+		@Override
+		public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
+			return graphicalRepresentation;
+		}
+
+		public void setGraphicalRepresentation(ConnectorGraphicalRepresentation graphicalRepresentation) {
+			this.graphicalRepresentation = graphicalRepresentation;
+		}
+	}
+
+	public boolean getBoundLabelToElementName() {
+		return boundLabelToElementName;
+	}
+
+	public void setBoundLabelToElementName(boolean boundLabelToElementName) {
+		if (this.boundLabelToElementName != boundLabelToElementName) {
+			this.boundLabelToElementName = boundLabelToElementName;
+			setChanged();
+			notifyObservers(new DataModification("boundLabelToElementName", !boundLabelToElementName, boundLabelToElementName));
+		}
 	}
 
 }

@@ -135,6 +135,8 @@ import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
@@ -381,6 +383,8 @@ public enum BrowserElementType {
 	EDITION_PATTERN("edition_pattern", EditionPattern.class, VPMIconLibrary.EDITION_PATTERN_ICON),
 	ONTOLOGY_CALC_PALETTE("palette", ViewPointPalette.class, VPMIconLibrary.CALC_PALETTE_ICON),
 	ONTOLOGY_CALC_PALETTE_ELEMENT("palette_element", ViewPointPaletteElement.class, VEIconLibrary.SHAPE_ICON),
+	OVERRIDING_SHAPE_GR("overriding_shape_gr", ShapeOverridingGraphicalRepresentation.class, VEIconLibrary.SHAPE_ICON),
+	OVERRIDING_CONNECTOR_GR("overriding_connector_gr", ConnectorOverridingGraphicalRepresentation.class, VEIconLibrary.CONNECTOR_ICON),
 	ONTOLOGY_CALC_DRAWING_SHEMA("calc_drawing_shema", ExampleDrawingShema.class, VPMIconLibrary.EXAMPLE_DIAGRAM_ICON),
 	ONTOLOGY_CALC_DRAWING_SHAPE("calc_drawing_shape", ExampleDrawingShape.class, VPMIconLibrary.CALC_SHAPE_ICON),
 	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector", ExampleDrawingConnector.class, VPMIconLibrary.CALC_CONNECTOR_ICON),

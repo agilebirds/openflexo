@@ -93,7 +93,7 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Exa
 		}
 	}
 
-	@Override
+	/*@Override
 	public String getText() {
 		if (getCalcDrawingConnector() != null) {
 			return getCalcDrawingConnector().getName();
@@ -106,7 +106,7 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Exa
 		if (getCalcDrawingConnector() != null) {
 			getCalcDrawingConnector().setName(text);
 		}
-	}
+	}*/
 
 	@Override
 	public void notifyObservers(Object arg) {

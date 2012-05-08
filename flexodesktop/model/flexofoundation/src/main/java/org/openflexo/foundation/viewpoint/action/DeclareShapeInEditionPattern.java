@@ -504,7 +504,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		public OntologyProperty property;
 		public String label;
-		public boolean selectEntry = true;
+		public boolean selectEntry = false;
 
 		public PropertyEntry(OntologyProperty property) {
 			this.property = property;

@@ -1138,7 +1138,7 @@
     <Localized key="delete" lang="French">Supprimer</Localized>
     <Localized key="description" lang="French">Description</Localized>
     <Localized key="name" lang="French">Nom</Localized>
-    <Localized key="conditional" lang="French">Condition</Localized>
+    <Localized key="conditional" lang="French">conditionnel</Localized>
     <Localized key="uri" lang="French">URI</Localized>
     <Localized key="action_type" lang="French">Type d'Action</Localized>
     <Localized key="target" lang="French">Cible</Localized>
@@ -1146,14 +1146,14 @@
     <Localized key="to" lang="French">À</Localized>
     <Localized key="dropdown" lang="French">Liste déroulante</Localized>
     <Localized key="values" lang="French">Valeurs</Localized>
-    <Localized key="container" lang="French">Conteneur</Localized>
+    <Localized key="container" lang="French">conteneur</Localized>
     <Localized key="subject" lang="French">Sujet</Localized>
     <Localized key="property" lang="French">Propriété</Localized>
     <Localized key="object" lang="French">Objet</Localized>
     <Localized key="cardinality" lang="French">Cardinalité</Localized>
     <Localized key="value" lang="French">Valeur</Localized>
     <Localized key="parameters" lang="French">Paramètres</Localized>
-    <Localized key="widget" lang="French">Elément graphique</Localized>
+    <Localized key="widget" lang="French">élément graphique</Localized>
     <Localized key="index" lang="French">Index</Localized>
     <Localized key="width" lang="French">Largeur</Localized>
     <Localized key="title" lang="French">Titre</Localized>
@@ -1185,83 +1185,83 @@
     <Localized key="format" lang="Dutch">Format</Localized>
     <Localized key="method" lang="Dutch">Method</Localized>
     <Localized key="inspector" lang="Dutch">Inspector</Localized>
-    <Localized key="edition_actions" lang="French">Actions d'édition</Localized>
-    <Localized key="edition_scheme" lang="French">Mécanisme d'édition</Localized>
-    <Localized key="edition_schemes" lang="French">Mécanismes d'édition</Localized>
-    <Localized key="edition_actions" lang="English">Edition actions</Localized>
-    <Localized key="edition_scheme" lang="English">Edition scheme</Localized>
-    <Localized key="edition_schemes" lang="English">Edition schemes</Localized>
-    <Localized key="from_shape" lang="French">De la forme</Localized>
-    <Localized key="from_shape" lang="English">From shape</Localized>
-    <Localized key="to_shape" lang="French">Vers la forme</Localized>
-    <Localized key="to_shape" lang="English">To shape</Localized>
+    <Localized key="edition_actions" lang="French">edition_actions</Localized>
+    <Localized key="edition_scheme" lang="French">edition_scheme</Localized>
+    <Localized key="edition_schemes" lang="French">edition_schemes</Localized>
+    <Localized key="edition_actions" lang="English">edition_actions</Localized>
+    <Localized key="edition_scheme" lang="English">edition_scheme</Localized>
+    <Localized key="edition_schemes" lang="English">edition_schemes</Localized>
+    <Localized key="from_shape" lang="French">from_shape</Localized>
+    <Localized key="from_shape" lang="English">from_shape</Localized>
+    <Localized key="to_shape" lang="French">to_shape</Localized>
+    <Localized key="to_shape" lang="English">to_shape</Localized>
     <Localized key="bound_to" lang="French">Relié à</Localized>
     <Localized key="bound_to" lang="English">Bound to</Localized>
     <Localized key="available" lang="French">Disponible</Localized>
     <Localized key="available" lang="English">Available</Localized>
-    <Localized key="assertions" lang="French">Assertions</Localized>
-    <Localized key="assertions" lang="English">Assertions</Localized>
+    <Localized key="assertions" lang="French">assertions</Localized>
+    <Localized key="assertions" lang="English">assertions</Localized>
     <Localized key="concept_uri" lang="French">URI du concept</Localized>
     <Localized key="columns" lang="French">Colonnes</Localized>
     <Localized key="columns" lang="English">Columns</Localized>
     <Localized key="concept_uri" lang="English">Concept URI</Localized>
     <Localized key="connector" lang="French">Connecteur</Localized>
     <Localized key="connector" lang="English">Connector</Localized>
-    <Localized key="conditional" lang="English">Conditional</Localized>
-    <Localized key="data" lang="French">Donnée</Localized>
-    <Localized key="default value" lang="French">Valeur par défaut</Localized>
+    <Localized key="conditional" lang="English">conditional</Localized>
+    <Localized key="data" lang="French">data</Localized>
+    <Localized key="default value" lang="French">default value</Localized>
     <Localized key="delete_data_assertion" lang="French">delete_data_assertion</Localized>
-    <Localized key="drop_scheme" lang="French">Drop scheme</Localized>
+    <Localized key="drop_scheme" lang="French">drop_scheme</Localized>
     <Localized key="dynamic_list" lang="French">Liste</Localized>
-    <Localized key="father" lang="French">Parent</Localized>
-    <Localized key="pattern_role" lang="French">Pattern role</Localized>
+    <Localized key="father" lang="French">father</Localized>
+    <Localized key="pattern_role" lang="French">pattern_role</Localized>
     <Localized key="representation" lang="French">Representation</Localized>
     <Localized key="shape" lang="French">Forme</Localized>
-    <Localized key="ontologic_class" lang="French">Class ontologique</Localized>
-    <Localized key="ontologic_type" lang="French">Type ontologique</Localized>
+    <Localized key="ontologic_class" lang="French">ontologic_class</Localized>
+    <Localized key="ontologic_type" lang="French">ontologic_type</Localized>
     <Localized key="ontology_class" lang="French">Classe ontologique</Localized>
-    <Localized key="primitive_type" lang="French">Type de primitive</Localized>
-    <Localized key="top_level" lang="French">Tout au dessus</Localized>
-    <Localized key="drop_scheme" lang="English">Drop scheme</Localized>
-    <Localized key="father" lang="English">Father</Localized>
+    <Localized key="primitive_type" lang="French">primitive_type</Localized>
+    <Localized key="top_level" lang="French">top_level</Localized>
+    <Localized key="drop_scheme" lang="English">drop_scheme</Localized>
+    <Localized key="father" lang="English">father</Localized>
     <Localized key="dynamic_list" lang="English">List</Localized>
-    <Localized key="individual_name_(uri)" lang="English">Individual name (uri)</Localized>
-    <Localized key="individual_name_(uri)" lang="French">Nom de l'individual (uri)</Localized>
-    <Localized key="new_class_name_(uri)" lang="French">Nom de la classe (uri)</Localized>
-    <Localized key="new_class_name_(uri)" lang="English">New class name (uri)</Localized>
-    <Localized key="model_object_type" lang="French">Type de l'objet-modèle</Localized>
-    <Localized key="model_object_type" lang="English">Model object type</Localized>
-    <Localized key="link_scheme" lang="English">Link Scheme</Localized>
-    <Localized key="link_scheme" lang="French">Link Scheme</Localized>
-    <Localized key="new_drop_scheme" lang="French">Nouveau DropScheme</Localized>
-    <Localized key="new_link_scheme" lang="French">Nouveau LinkScheme</Localized>
-    <Localized key="new_link_scheme" lang="English">New LinkScheme</Localized>
-    <Localized key="new_drop_scheme" lang="English">New DropScheme</Localized>
-    <Localized key="ontologic_class" lang="English">Ontologic class</Localized>
-    <Localized key="ontologic_type" lang="English">Ontologic type</Localized>
+    <Localized key="individual_name_(uri)" lang="English">individual_name_(uri)</Localized>
+    <Localized key="individual_name_(uri)" lang="French">individual_name_(uri)</Localized>
+    <Localized key="new_class_name_(uri)" lang="French">new_class_name_(uri)</Localized>
+    <Localized key="new_class_name_(uri)" lang="English">new_class_name_(uri)</Localized>
+    <Localized key="model_object_type" lang="French">model_object_type</Localized>
+    <Localized key="model_object_type" lang="English">model_object_type</Localized>
+    <Localized key="link_scheme" lang="English">link_scheme</Localized>
+    <Localized key="link_scheme" lang="French">link_scheme</Localized>
+    <Localized key="new_drop_scheme" lang="French">new_drop_scheme</Localized>
+    <Localized key="new_link_scheme" lang="French">new_link_scheme</Localized>
+    <Localized key="new_link_scheme" lang="English">new_link_scheme</Localized>
+    <Localized key="new_drop_scheme" lang="English">new_drop_scheme</Localized>
+    <Localized key="ontologic_class" lang="English">ontologic_class</Localized>
+    <Localized key="ontologic_type" lang="English">ontologic_type</Localized>
     <Localized key="ontology_class" lang="English">Ontologic class</Localized>
-    <Localized key="pattern_role" lang="English">Pattern role</Localized>
-    <Localized key="primitive_type" lang="English">Primitive type</Localized>
+    <Localized key="pattern_role" lang="English">pattern_role</Localized>
+    <Localized key="primitive_type" lang="English">primitive_type</Localized>
     <Localized key="resiz." lang="French">Resiz.</Localized>
     <Localized key="resiz." lang="English">Resiz.</Localized>
     <Localized key="representation" lang="English">Representation</Localized>
-    <Localized key="restriction type" lang="English">Restriction type</Localized>
-    <Localized key="restriction type" lang="French">Restriction type</Localized>
+    <Localized key="restriction type" lang="English">restriction type</Localized>
+    <Localized key="restriction type" lang="French">restriction type</Localized>
     <Localized key="shape" lang="English">Shape</Localized>
-    <Localized key="top_level" lang="English">Top level</Localized>
-    <Localized key="use_palette_label" lang="English">Use palette label</Localized>
+    <Localized key="top_level" lang="English">top_level</Localized>
+    <Localized key="use_palette_label" lang="English">use_palette_label</Localized>
     <Localized key="use_property" lang="English">Use property</Localized>
-    <Localized key="use_palette_label" lang="French">Utiliser le label de la palette</Localized>
+    <Localized key="use_palette_label" lang="French">use_palette_label</Localized>
     <Localized key="use_property" lang="French">Utiliser la property</Localized>
-    <Localized key="widget" lang="English">Widget</Localized>
-    <Localized key="action" lang="French">Action</Localized>
-    <Localized key="action" lang="English">Action</Localized>
-    <Localized key="default value" lang="English">Default value</Localized>
+    <Localized key="widget" lang="English">widget</Localized>
+    <Localized key="action" lang="French">action</Localized>
+    <Localized key="action" lang="English">action</Localized>
+    <Localized key="default value" lang="English">default value</Localized>
     <Localized key="kind" lang="English">Generic type</Localized>
     <Localized key="kind" lang="French">Type générique</Localized>
     <Localized key="kind" lang="Dutch">Type</Localized>
-    <Localized key="data" lang="English">Data</Localized>
-    <Localized key="container" lang="English">Container</Localized>
+    <Localized key="data" lang="English">data</Localized>
+    <Localized key="container" lang="English">container</Localized>
     <Localized key="key" lang="English">Key</Localized>
     <Localized key="english" lang="English">English</Localized>
     <Localized key="french" lang="English">French</Localized>
@@ -1271,12 +1271,12 @@
     <Localized key="key" lang="Dutch">Key</Localized>
     <Localized key="english" lang="Dutch">English</Localized>
     <Localized key="french" lang="Dutch">French</Localized>
-    <Localized key="localization" lang="French">Localisation</Localized>
-    <Localized key="localization" lang="English">Localization</Localized>
-    <Localized key="search_new_localization_entries" lang="French">Rechercher les nouvelles entrées</Localized>
-    <Localized key="search_new_localization_entries" lang="English">Search new localization entries</Localized>
-    <Localized key="edition_pattern" lang="French">Edition Pattern</Localized>
-    <Localized key="edition_pattern" lang="English">Edition Pattern</Localized>
+    <Localized key="localization" lang="French">localization</Localized>
+    <Localized key="localization" lang="English">localization</Localized>
+    <Localized key="search_new_localization_entries" lang="French">search_new_localization_entries</Localized>
+    <Localized key="search_new_localization_entries" lang="English">search_new_localization_entries</Localized>
+    <Localized key="edition_pattern" lang="French">edition_pattern</Localized>
+    <Localized key="edition_pattern" lang="English">edition_pattern</Localized>
     <Localized key="actions" lang="French">Actions</Localized>
     <Localized key="actions" lang="English">Actions</Localized>
     <Localized key="save" lang="English">Save</Localized>
@@ -1287,27 +1287,27 @@
     <Localized key="save" lang="Dutch">Save</Localized>
     <Localized key="delete_data_assertion" lang="Dutch">Delete data assertion</Localized>
     <Localized key="delete_action" lang="Dutch">Delete action</Localized>
-    <Localized key="new_action_scheme" lang="French">Nouvel Action scheme</Localized>
-    <Localized key="new_action_scheme" lang="English">New ActionScheme</Localized>
-    <Localized key="add_flexo_model_object" lang="French">Ajouter un objet Flexo</Localized>
-    <Localized key="add_flexo_model_object" lang="English">Add a Flexo object</Localized>
-    <Localized key="add_shape" lang="French">Ajouter une forme</Localized>
-    <Localized key="add_shape" lang="English">Add shape</Localized>
-    <Localized key="add_primitive" lang="French">Ajouter une primitive</Localized>
-    <Localized key="add_primitive" lang="English">Add primitive</Localized>
+    <Localized key="new_action_scheme" lang="French">new_action_scheme</Localized>
+    <Localized key="new_action_scheme" lang="English">new_action_scheme</Localized>
+    <Localized key="add_flexo_model_object" lang="French">add_flexo_model_object</Localized>
+    <Localized key="add_flexo_model_object" lang="English">add_flexo_model_object</Localized>
+    <Localized key="add_shape" lang="French">add_shape</Localized>
+    <Localized key="add_shape" lang="English">add_shape</Localized>
+    <Localized key="add_primitive" lang="French">add_primitive</Localized>
+    <Localized key="add_primitive" lang="English">add_primitive</Localized>
     <Localized key="add_ontologic_object" lang="French">Ajouter un objet ontologique</Localized>
     <Localized key="add_ontologic_object" lang="English">Add ontologic object</Localized>
     <Localized key="skip_confirmation_panel_as_no_parameters_are_defined" lang="French">Ne pas afficher la boite de dialogue de confirmation</Localized>
     <Localized key="skip_confirmation_panel_as_no_parameters_are_defined" lang="English">Skip confirmation panel as no parameters are defined</Localized>
-    <Localized key="action_scheme" lang="French">Action scheme</Localized>
-    <Localized key="action_scheme" lang="English">Action scheme</Localized>
+    <Localized key="action_scheme" lang="French">action_scheme</Localized>
+    <Localized key="action_scheme" lang="English">action_scheme</Localized>
     <Localized key="diagram_name" lang="French">Nom du diagramme</Localized>
     <Localized key="diagram_name" lang="English">Diagram name</Localized>
     <Localized key="delete_scheme" lang="English">Delete scheme</Localized>
     <Localized key="delete_scheme" lang="French">Supprimer le mécanisme</Localized>
     <Localized key="delete_scheme" lang="Dutch">Delete scheme</Localized>
-    <Localized key="add_diagram" lang="French">Ajouter un diagramme</Localized>
-    <Localized key="add_diagram" lang="English">Add diagram</Localized>
+    <Localized key="add_diagram" lang="French">add_diagram</Localized>
+    <Localized key="add_diagram" lang="English">add_diagram</Localized>
     <Localized key="shape_role" lang="French">Role de la forme</Localized>
     <Localized key="shape_role" lang="English">Shape role</Localized>
     <Localized key="top" lang="English">Top</Localized>
@@ -1323,39 +1323,39 @@
     <Localized key="read_only" lang="French">Lecture seule</Localized>
     <Localized key="ontology_class" lang="Dutch">Ontology class</Localized>
     <Localized key="read_only" lang="Dutch">Read only</Localized>
-    <Localized key="role_type" lang="French">Type du role</Localized>
-    <Localized key="role_type" lang="English">Role type</Localized>
-    <Localized key="add_action" lang="French">Action "AJOUT"</Localized>
-    <Localized key="add_checkbox" lang="French">Ajouter une case à cocher</Localized>
-    <Localized key="add_checkbox_parameter" lang="French">Ajouter un paramètre "case à cocher"</Localized>
-    <Localized key="add_class" lang="French">Ajouter une classe ontologique</Localized>
+    <Localized key="role_type" lang="French">role_type</Localized>
+    <Localized key="role_type" lang="English">role_type</Localized>
+    <Localized key="add_action" lang="French">add_action</Localized>
+    <Localized key="add_checkbox" lang="French">add_checkbox</Localized>
+    <Localized key="add_checkbox_parameter" lang="French">add_checkbox_parameter</Localized>
+    <Localized key="add_class" lang="French">add_class</Localized>
     <Localized key="add_connector_action" lang="French">AddConnector</Localized>
-    <Localized key="add_individual" lang="French">Ajouter un individuel ontologique</Localized>
+    <Localized key="add_individual" lang="French">add_individual</Localized>
     <Localized key="add_integer" lang="French">add_integer</Localized>
     <Localized key="read_only_label" lang="French">Label en lecture seule</Localized>
     <Localized key="read_only_label" lang="English">Read only label</Localized>
-    <Localized key="skip_confirmation_panel_when_possible" lang="French">Ne pas afficher la boite de dialogue de confirmation</Localized>
-    <Localized key="skip_confirmation_panel_when_possible" lang="English">Skip confirmation panel when possible</Localized>
-    <Localized key="object_type" lang="French">Type d'objet</Localized>
-    <Localized key="object_type" lang="English">Object type</Localized>
-    <Localized key="parent_shape" lang="French">Forme parente</Localized>
-    <Localized key="parent_shape" lang="English">Parent shape</Localized>
-    <Localized key="as_described_in_action" lang="French">décrit dans l'action</Localized>
-    <Localized key="as_described_in_action" lang="English">as described in action</Localized>
+    <Localized key="skip_confirmation_panel_when_possible" lang="French">skip_confirmation_panel_when_possible</Localized>
+    <Localized key="skip_confirmation_panel_when_possible" lang="English">skip_confirmation_panel_when_possible</Localized>
+    <Localized key="object_type" lang="French">object_type</Localized>
+    <Localized key="object_type" lang="English">object_type</Localized>
+    <Localized key="parent_shape" lang="French">parent_shape</Localized>
+    <Localized key="parent_shape" lang="English">parent_shape</Localized>
+    <Localized key="as_described_in_action" lang="French">as_described_in_action</Localized>
+    <Localized key="as_described_in_action" lang="English">as_described_in_action</Localized>
     <Localized key="bottom" lang="English">Bottom</Localized>
     <Localized key="bottom" lang="French">Bas</Localized>
     <Localized key="bottom" lang="Dutch">Bottom</Localized>
-    <Localized key="target_role" lang="French">Role cible</Localized>
-    <Localized key="target_role" lang="English">Target role</Localized>
+    <Localized key="target_role" lang="French">target_role</Localized>
+    <Localized key="target_role" lang="English">target_role</Localized>
     <Localized key="domain" lang="English">Domain</Localized>
     <Localized key="domain" lang="French">Domaine</Localized>
     <Localized key="domain" lang="Dutch">Domain</Localized>
-    <Localized key="parent_property" lang="French">Propriété parente</Localized>
-    <Localized key="parent_Class" lang="French">Classe parente</Localized>
-    <Localized key="parent_property" lang="English">Parent property</Localized>
-    <Localized key="parent_Class" lang="English">Classe parente</Localized>
-    <Localized key="range" lang="French">Plage de valeurs</Localized>
-    <Localized key="range" lang="English">Range</Localized>
+    <Localized key="parent_property" lang="French">parent_property</Localized>
+    <Localized key="parent_Class" lang="French">parent_Class</Localized>
+    <Localized key="parent_property" lang="English">parent_property</Localized>
+    <Localized key="parent_Class" lang="English">parent_Class</Localized>
+    <Localized key="range" lang="French">range</Localized>
+    <Localized key="range" lang="English">range</Localized>
     <Localized key="advanced" lang="English">Advanced</Localized>
     <Localized key="data_type" lang="English">Data type</Localized>
     <Localized key="advanced" lang="French">Avancé</Localized>
@@ -1392,19 +1392,296 @@
     <Localized key="add_data_property_statement_action" lang="French">AddDataPropertyStatement</Localized>
     <Localized key="add_data_property_statement_action" lang="English">AddDataPropertyStatement</Localized>
     <Localized key="add_data_property_statement_action" lang="Dutch">AddDataPropertyStatement</Localized>
-    <Localized key="add_diagram_action" lang="French">AddDiagram</Localized>
-    <Localized key="add_diagram_action" lang="English">AddDiagram</Localized>
+    <Localized key="add_diagram_action" lang="French">add_diagram_action</Localized>
+    <Localized key="add_diagram_action" lang="English">add_diagram_action</Localized>
     <Localized key="add_edition_pattern_action" lang="French">AddEditionPattern</Localized>
     <Localized key="add_edition_pattern_action" lang="English">AddEditionPattern</Localized>
     <Localized key="add_edition_pattern_action" lang="Dutch">AddEditionPattern</Localized>
-    <Localized key="navigation_scheme" lang="French">Navigation scheme</Localized>
-    <Localized key="navigation_scheme" lang="English">Navigation Scheme</Localized>
-    <Localized key="new_creation_scheme" lang="English">New CreationScheme</Localized>
-    <Localized key="new_deletion_scheme" lang="English">New DeletionScheme</Localized>
-    <Localized key="new_navigation_scheme" lang="English">New NavigationScheme</Localized>
-    <Localized key="new_navigation_scheme" lang="French">Nouveau NavigationScheme</Localized>
-    <Localized key="new_deletion_scheme" lang="French">Nouveau DeletionScheme</Localized>
-    <Localized key="new_creation_scheme" lang="French">Nouveau CreationScheme</Localized>
+    <Localized key="navigation_scheme" lang="French">navigation_scheme</Localized>
+    <Localized key="navigation_scheme" lang="English">navigation_scheme</Localized>
+    <Localized key="new_creation_scheme" lang="English">new_creation_scheme</Localized>
+    <Localized key="new_deletion_scheme" lang="English">new_deletion_scheme</Localized>
+    <Localized key="new_navigation_scheme" lang="English">new_navigation_scheme</Localized>
+    <Localized key="new_navigation_scheme" lang="French">new_navigation_scheme</Localized>
+    <Localized key="new_deletion_scheme" lang="French">new_deletion_scheme</Localized>
+    <Localized key="new_creation_scheme" lang="French">new_creation_scheme</Localized>
+    <Localized key="" lang="English" />
+    <Localized key="" lang="French" />
+    <Localized key="" lang="Dutch" />
+    <Localized key="primary" lang="English">primary</Localized>
+    <Localized key="primary" lang="French">primary</Localized>
+    <Localized key="primary" lang="Dutch">primary</Localized>
+    <Localized key="add_class" lang="English">add_class</Localized>
+    <Localized key="add_class" lang="Dutch">add_class</Localized>
+    <Localized key="add_individual" lang="English">add_individual</Localized>
+    <Localized key="add_individual" lang="Dutch">add_individual</Localized>
+    <Localized key="add_object_property" lang="English">add_object_property</Localized>
+    <Localized key="add_object_property" lang="French">add_object_property</Localized>
+    <Localized key="add_object_property" lang="Dutch">add_object_property</Localized>
+    <Localized key="add_data_property" lang="English">add_data_property</Localized>
+    <Localized key="add_data_property" lang="French">add_data_property</Localized>
+    <Localized key="add_data_property" lang="Dutch">add_data_property</Localized>
+    <Localized key="add_object_property_statement" lang="English">add_object_property_statement</Localized>
+    <Localized key="add_object_property_statement" lang="French">add_object_property_statement</Localized>
+    <Localized key="add_object_property_statement" lang="Dutch">add_object_property_statement</Localized>
+    <Localized key="add_data_property_statement" lang="English">add_data_property_statement</Localized>
+    <Localized key="add_data_property_statement" lang="French">add_data_property_statement</Localized>
+    <Localized key="add_data_property_statement" lang="Dutch">add_data_property_statement</Localized>
+    <Localized key="add_is_a_statement" lang="English">add_is_a_statement</Localized>
+    <Localized key="add_is_a_statement" lang="French">add_is_a_statement</Localized>
+    <Localized key="add_is_a_statement" lang="Dutch">add_is_a_statement</Localized>
+    <Localized key="add_restriction_statement" lang="English">add_restriction_statement</Localized>
+    <Localized key="add_restriction_statement" lang="French">add_restriction_statement</Localized>
+    <Localized key="add_restriction_statement" lang="Dutch">add_restriction_statement</Localized>
+    <Localized key="add_edition_pattern" lang="English">add_edition_pattern</Localized>
+    <Localized key="add_edition_pattern" lang="French">add_edition_pattern</Localized>
+    <Localized key="add_edition_pattern" lang="Dutch">add_edition_pattern</Localized>
+    <Localized key="example_label" lang="English">example_label</Localized>
+    <Localized key="example_label" lang="French">example_label</Localized>
+    <Localized key="example_label" lang="Dutch">example_label</Localized>
+    <Localized key="managerAsShape" lang="English">managerAsShape</Localized>
+    <Localized key="managerAsShape" lang="French">managerAsShape</Localized>
+    <Localized key="managerAsShape" lang="Dutch">managerAsShape</Localized>
+    <Localized key="workerAsShape" lang="English">workerAsShape</Localized>
+    <Localized key="workerAsShape" lang="French">workerAsShape</Localized>
+    <Localized key="workerAsShape" lang="Dutch">workerAsShape</Localized>
+    <Localized key="String" lang="English">String</Localized>
+    <Localized key="String" lang="French">Chaîne de caractères</Localized>
+    <Localized key="String" lang="Dutch">String</Localized>
+    <Localized key="Integer" lang="English">Integer</Localized>
+    <Localized key="Integer" lang="French">Integer</Localized>
+    <Localized key="Integer" lang="Dutch">Integer</Localized>
+    <Localized key="Short" lang="English">Short</Localized>
+    <Localized key="Short" lang="French">Short</Localized>
+    <Localized key="Short" lang="Dutch">Short</Localized>
+    <Localized key="Long" lang="English">Long</Localized>
+    <Localized key="Long" lang="French">Long</Localized>
+    <Localized key="Long" lang="Dutch">Long</Localized>
+    <Localized key="Byte" lang="English">Byte</Localized>
+    <Localized key="Byte" lang="French">Byte</Localized>
+    <Localized key="Byte" lang="Dutch">Byte</Localized>
+    <Localized key="Float" lang="English">Float</Localized>
+    <Localized key="Float" lang="French">Float</Localized>
+    <Localized key="Float" lang="Dutch">Float</Localized>
+    <Localized key="Double" lang="English">Double</Localized>
+    <Localized key="Double" lang="French">Double</Localized>
+    <Localized key="Double" lang="Dutch">Double</Localized>
+    <Localized key="Boolean" lang="English">Boolean</Localized>
+    <Localized key="Boolean" lang="French">Boolean</Localized>
+    <Localized key="Boolean" lang="Dutch">Boolean</Localized>
+    <Localized key="viewpoint" lang="English">viewpoint</Localized>
+    <Localized key="viewpoint" lang="French">viewpoint</Localized>
+    <Localized key="viewpoint" lang="Dutch">viewpoint</Localized>
+    <Localized key="creation_scheme" lang="English">creation_scheme</Localized>
+    <Localized key="creation_scheme" lang="French">creation_scheme</Localized>
+    <Localized key="creation_scheme" lang="Dutch">creation_scheme</Localized>
+    <Localized key="Process" lang="English">Process</Localized>
+    <Localized key="Process" lang="French">Processus</Localized>
+    <Localized key="Process" lang="Dutch">Process</Localized>
+    <Localized key="ProcessFolder" lang="English">ProcessFolder</Localized>
+    <Localized key="ProcessFolder" lang="French">Répertoire de processus</Localized>
+    <Localized key="ProcessFolder" lang="Dutch">ProcessFolder</Localized>
+    <Localized key="Role" lang="English">Role</Localized>
+    <Localized key="Role" lang="French">Rôle</Localized>
+    <Localized key="Role" lang="Dutch">Role</Localized>
+    <Localized key="Activity" lang="English">Activity</Localized>
+    <Localized key="Activity" lang="French">Activité</Localized>
+    <Localized key="Activity" lang="Dutch">Activity</Localized>
+    <Localized key="Operation" lang="English">Operation</Localized>
+    <Localized key="Operation" lang="French">Opération</Localized>
+    <Localized key="Operation" lang="Dutch">Operation</Localized>
+    <Localized key="Action" lang="English">Action</Localized>
+    <Localized key="Action" lang="French">Action</Localized>
+    <Localized key="Action" lang="Dutch">Action</Localized>
+    <Localized key="Event" lang="English">Event</Localized>
+    <Localized key="Event" lang="French">Evénement</Localized>
+    <Localized key="Event" lang="Dutch">Event</Localized>
+    <Localized key="LocalizedString" lang="English">LocalizedString</Localized>
+    <Localized key="LocalizedString" lang="French">LocalizedString</Localized>
+    <Localized key="LocalizedString" lang="Dutch">LocalizedString</Localized>
+    <Localized key="feature" lang="English">feature</Localized>
+    <Localized key="feature" lang="French">feature</Localized>
+    <Localized key="feature" lang="Dutch">feature</Localized>
+    <Localized key="RO" lang="English">RO</Localized>
+    <Localized key="RO" lang="French">RO</Localized>
+    <Localized key="RO" lang="Dutch">RO</Localized>
+    <Localized key="mask" lang="English">mask</Localized>
+    <Localized key="mask" lang="French">mask</Localized>
+    <Localized key="mask" lang="Dutch">mask</Localized>
+    <Localized key="add_action" lang="English">add_action</Localized>
+    <Localized key="add_action" lang="Dutch">add_action</Localized>
+    <Localized key="down" lang="English">down</Localized>
+    <Localized key="down" lang="French">down</Localized>
+    <Localized key="down" lang="Dutch">down</Localized>
+    <Localized key="up" lang="English">up</Localized>
+    <Localized key="up" lang="French">up</Localized>
+    <Localized key="up" lang="Dutch">up</Localized>
+    <Localized key="BOTCompany" lang="English">BOTCompany</Localized>
+    <Localized key="BOTCompany" lang="French">BOTCompany</Localized>
+    <Localized key="BOTCompany" lang="Dutch">BOTCompany</Localized>
+    <Localized key="BOTDepartment" lang="English">BOTDepartment</Localized>
+    <Localized key="BOTDepartment" lang="French">BOTDepartment</Localized>
+    <Localized key="BOTDepartment" lang="Dutch">BOTDepartment</Localized>
+    <Localized key="BOTSubDepartment" lang="English">BOTSubDepartment</Localized>
+    <Localized key="BOTSubDepartment" lang="French">BOTSubDepartment</Localized>
+    <Localized key="BOTSubDepartment" lang="Dutch">BOTSubDepartment</Localized>
+    <Localized key="Employee" lang="English">Employee</Localized>
+    <Localized key="Employee" lang="French">Employee</Localized>
+    <Localized key="Employee" lang="Dutch">Employee</Localized>
+    <Localized key="EmployeeHierarchicalRelationship" lang="English">EmployeeHierarchicalRelationship</Localized>
+    <Localized key="EmployeeHierarchicalRelationship" lang="French">EmployeeHierarchicalRelationship</Localized>
+    <Localized key="EmployeeHierarchicalRelationship" lang="Dutch">EmployeeHierarchicalRelationship</Localized>
+    <Localized key="duplicate" lang="English">Duplicate</Localized>
+    <Localized key="duplicate" lang="French">Dupliquer</Localized>
+    <Localized key="duplicate" lang="Dutch">Duplicate</Localized>
+    <Localized key="available with floating palette" lang="English">available with floating palette</Localized>
+    <Localized key="available with floating palette" lang="French">available with floating palette</Localized>
+    <Localized key="available with floating palette" lang="Dutch">available with floating palette</Localized>
+    <Localized key="target_object" lang="English">target_object</Localized>
+    <Localized key="target_object" lang="French">target_object</Localized>
+    <Localized key="target_object" lang="Dutch">target_object</Localized>
+    <Localized key="deletion_scheme" lang="English">deletion_scheme</Localized>
+    <Localized key="deletion_scheme" lang="French">deletion_scheme</Localized>
+    <Localized key="deletion_scheme" lang="Dutch">deletion_scheme</Localized>
+    <Localized key="add_textfield_parameter" lang="English">add_textfield_parameter</Localized>
+    <Localized key="add_textfield_parameter" lang="French">add_textfield_parameter</Localized>
+    <Localized key="add_textfield_parameter" lang="Dutch">add_textfield_parameter</Localized>
+    <Localized key="add_localized_textfield_parameter" lang="English">add_localized_textfield_parameter</Localized>
+    <Localized key="add_localized_textfield_parameter" lang="French">add_localized_textfield_parameter</Localized>
+    <Localized key="add_localized_textfield_parameter" lang="Dutch">add_localized_textfield_parameter</Localized>
+    <Localized key="add_textarea_parameter" lang="English">add_textarea_parameter</Localized>
+    <Localized key="add_textarea_parameter" lang="French">add_textarea_parameter</Localized>
+    <Localized key="add_textarea_parameter" lang="Dutch">add_textarea_parameter</Localized>
+    <Localized key="add_integer_parameter" lang="English">add_integer_parameter</Localized>
+    <Localized key="add_integer_parameter" lang="French">add_integer_parameter</Localized>
+    <Localized key="add_integer_parameter" lang="Dutch">add_integer_parameter</Localized>
+    <Localized key="add_checkbox_parameter" lang="English">add_checkbox_parameter</Localized>
+    <Localized key="add_checkbox_parameter" lang="Dutch">add_checkbox_parameter</Localized>
+    <Localized key="add_dropdown_parameter" lang="English">add_dropdown_parameter</Localized>
+    <Localized key="add_dropdown_parameter" lang="French">add_dropdown_parameter</Localized>
+    <Localized key="add_dropdown_parameter" lang="Dutch">add_dropdown_parameter</Localized>
+    <Localized key="add_individual_parameter" lang="English">add_individual_parameter</Localized>
+    <Localized key="add_individual_parameter" lang="French">add_individual_parameter</Localized>
+    <Localized key="add_individual_parameter" lang="Dutch">add_individual_parameter</Localized>
+    <Localized key="add_class_parameter" lang="English">add_class_parameter</Localized>
+    <Localized key="add_class_parameter" lang="French">add_class_parameter</Localized>
+    <Localized key="add_class_parameter" lang="Dutch">add_class_parameter</Localized>
+    <Localized key="add_flexo_model_parameter" lang="English">add_flexo_model_parameter</Localized>
+    <Localized key="add_flexo_model_parameter" lang="French">add_flexo_model_parameter</Localized>
+    <Localized key="add_flexo_model_parameter" lang="Dutch">add_flexo_model_parameter</Localized>
+    <Localized key="add_uri_parameter" lang="English">add_uri_parameter</Localized>
+    <Localized key="add_uri_parameter" lang="French">add_uri_parameter</Localized>
+    <Localized key="add_uri_parameter" lang="Dutch">add_uri_parameter</Localized>
+    <Localized key="add_object_property_parameter" lang="English">add_object_property_parameter</Localized>
+    <Localized key="add_object_property_parameter" lang="French">add_object_property_parameter</Localized>
+    <Localized key="add_object_property_parameter" lang="Dutch">add_object_property_parameter</Localized>
+    <Localized key="add_data_property_parameter" lang="English">add_data_property_parameter</Localized>
+    <Localized key="add_data_property_parameter" lang="French">add_data_property_parameter</Localized>
+    <Localized key="add_data_property_parameter" lang="Dutch">add_data_property_parameter</Localized>
+    <Localized key="base_uri" lang="English">base_uri</Localized>
+    <Localized key="base_uri" lang="French">base_uri</Localized>
+    <Localized key="base_uri" lang="Dutch">base_uri</Localized>
+    <Localized key="dynamic" lang="English">dynamic</Localized>
+    <Localized key="dynamic" lang="French">dynamic</Localized>
+    <Localized key="dynamic" lang="Dutch">dynamic</Localized>
+    <Localized key="view" lang="English">view</Localized>
+    <Localized key="view" lang="French">view</Localized>
+    <Localized key="view" lang="Dutch">view</Localized>
+    <Localized key="parameter" lang="English">parameter</Localized>
+    <Localized key="parameter" lang="French">parameter</Localized>
+    <Localized key="parameter" lang="Dutch">parameter</Localized>
+    <Localized key="employeeAsManager" lang="English">employeeAsManager</Localized>
+    <Localized key="employeeAsManager" lang="French">employeeAsManager</Localized>
+    <Localized key="employeeAsManager" lang="Dutch">employeeAsManager</Localized>
+    <Localized key="employeeAsWorker" lang="English">employeeAsWorker</Localized>
+    <Localized key="employeeAsWorker" lang="French">employeeAsWorker</Localized>
+    <Localized key="employeeAsWorker" lang="Dutch">employeeAsWorker</Localized>
+    <Localized key="person" lang="English">person</Localized>
+    <Localized key="person" lang="French">person</Localized>
+    <Localized key="person" lang="Dutch">person</Localized>
+    <Localized key="add_data_assertion" lang="English">add_data_assertion</Localized>
+    <Localized key="add_data_assertion" lang="French">add_data_assertion</Localized>
+    <Localized key="add_data_assertion" lang="Dutch">add_data_assertion</Localized>
+    <Localized key="add_object_assertion" lang="English">add_object_assertion</Localized>
+    <Localized key="add_object_assertion" lang="French">add_object_assertion</Localized>
+    <Localized key="add_object_assertion" lang="Dutch">add_object_assertion</Localized>
+    <Localized key="delete_object_assertion" lang="English">delete_object_assertion</Localized>
+    <Localized key="delete_object_assertion" lang="French">delete_object_assertion</Localized>
+    <Localized key="delete_object_assertion" lang="Dutch">delete_object_assertion</Localized>
+    <Localized key="add_textfield" lang="English">add_textfield</Localized>
+    <Localized key="add_textfield" lang="French">add_textfield</Localized>
+    <Localized key="add_textfield" lang="Dutch">add_textfield</Localized>
+    <Localized key="add_table" lang="English">add_table</Localized>
+    <Localized key="add_table" lang="French">add_table</Localized>
+    <Localized key="add_table" lang="Dutch">add_table</Localized>
+    <Localized key="add_textarea" lang="English">add_textarea</Localized>
+    <Localized key="add_textarea" lang="French">add_textarea</Localized>
+    <Localized key="add_textarea" lang="Dutch">add_textarea</Localized>
+    <Localized key="add_integer" lang="English">add_integer</Localized>
+    <Localized key="add_integer" lang="Dutch">add_integer</Localized>
+    <Localized key="add_checkbox" lang="English">add_checkbox</Localized>
+    <Localized key="add_checkbox" lang="Dutch">add_checkbox</Localized>
+    <Localized key="add_flexo_object" lang="English">add_flexo_object</Localized>
+    <Localized key="add_flexo_object" lang="French">add_flexo_object</Localized>
+    <Localized key="add_flexo_object" lang="Dutch">add_flexo_object</Localized>
+    <Localized key="concept" lang="English">concept</Localized>
+    <Localized key="concept" lang="French">concept</Localized>
+    <Localized key="concept" lang="Dutch">concept</Localized>
+    <Localized key="dutch" lang="English">dutch</Localized>
+    <Localized key="dutch" lang="French">dutch</Localized>
+    <Localized key="dutch" lang="Dutch">dutch</Localized>
+    <Localized key="edition_pattern" lang="Dutch">edition_pattern</Localized>
+    <Localized key="pattern_role" lang="Dutch">pattern_role</Localized>
+    <Localized key="role_type" lang="Dutch">role_type</Localized>
+    <Localized key="ontologic_type" lang="Dutch">ontologic_type</Localized>
+    <Localized key="add_shape" lang="Dutch">add_shape</Localized>
+    <Localized key="add_flexo_model_object" lang="Dutch">add_flexo_model_object</Localized>
+    <Localized key="add_primitive" lang="Dutch">add_primitive</Localized>
+    <Localized key="add_diagram" lang="Dutch">add_diagram</Localized>
+    <Localized key="parent_shape" lang="Dutch">parent_shape</Localized>
+    <Localized key="as_described_in_action" lang="Dutch">as_described_in_action</Localized>
+    <Localized key="from_shape" lang="Dutch">from_shape</Localized>
+    <Localized key="to_shape" lang="Dutch">to_shape</Localized>
+    <Localized key="parent_property" lang="Dutch">parent_property</Localized>
+    <Localized key="range" lang="Dutch">range</Localized>
+    <Localized key="model_object_type" lang="Dutch">model_object_type</Localized>
+    <Localized key="primitive_type" lang="Dutch">primitive_type</Localized>
+    <Localized key="action" lang="Dutch">action</Localized>
+    <Localized key="conditional" lang="Dutch">conditional</Localized>
+    <Localized key="data" lang="Dutch">data</Localized>
+    <Localized key="actions" lang="Dutch">Actions</Localized>
+    <Localized key="edition_scheme" lang="Dutch">edition_scheme</Localized>
+    <Localized key="skip_confirmation_panel_when_possible" lang="Dutch">skip_confirmation_panel_when_possible</Localized>
+    <Localized key="default value" lang="Dutch">default value</Localized>
+    <Localized key="use_palette_label" lang="Dutch">use_palette_label</Localized>
+    <Localized key="individual_name_(uri)" lang="Dutch">individual_name_(uri)</Localized>
+    <Localized key="drop_scheme" lang="Dutch">drop_scheme</Localized>
+    <Localized key="top_level" lang="Dutch">top_level</Localized>
+    <Localized key="new_drop_scheme" lang="Dutch">new_drop_scheme</Localized>
+    <Localized key="new_link_scheme" lang="Dutch">new_link_scheme</Localized>
+    <Localized key="new_action_scheme" lang="Dutch">new_action_scheme</Localized>
+    <Localized key="new_creation_scheme" lang="Dutch">new_creation_scheme</Localized>
+    <Localized key="new_navigation_scheme" lang="Dutch">new_navigation_scheme</Localized>
+    <Localized key="new_deletion_scheme" lang="Dutch">new_deletion_scheme</Localized>
+    <Localized key="target_role" lang="Dutch">target_role</Localized>
+    <Localized key="shape" lang="Dutch">Shape</Localized>
+    <Localized key="link_scheme" lang="Dutch">link_scheme</Localized>
+    <Localized key="action_scheme" lang="Dutch">action_scheme</Localized>
+    <Localized key="navigation_scheme" lang="Dutch">navigation_scheme</Localized>
+    <Localized key="widget" lang="Dutch">widget</Localized>
+    <Localized key="parent_Class" lang="Dutch">parent_Class</Localized>
+    <Localized key="object_type" lang="Dutch">object_type</Localized>
+    <Localized key="ontologic_class" lang="Dutch">ontologic_class</Localized>
+    <Localized key="new_class_name_(uri)" lang="Dutch">new_class_name_(uri)</Localized>
+    <Localized key="container" lang="Dutch">container</Localized>
+    <Localized key="restriction type" lang="Dutch">restriction type</Localized>
+    <Localized key="father" lang="Dutch">father</Localized>
+    <Localized key="assertions" lang="Dutch">assertions</Localized>
+    <Localized key="add_diagram_action" lang="Dutch">add_diagram_action</Localized>
+    <Localized key="edition_actions" lang="Dutch">edition_actions</Localized>
+    <Localized key="search_new_localization_entries" lang="Dutch">search_new_localization_entries</Localized>
+    <Localized key="edition_schemes" lang="Dutch">edition_schemes</Localized>
+    <Localized key="localization" lang="Dutch">localization</Localized>
   </LocalizedDictionary>
 </Panel>
 
