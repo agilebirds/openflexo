@@ -48,7 +48,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.ResourceUtils;
 
-public abstract class OntologyObject extends AbstractOntologyObject implements InspectableObject, StringConvertable<OntologyObject> {
+public abstract class OntologyObject<R extends OntResource> extends AbstractOntologyObject implements InspectableObject,
+		StringConvertable<OntologyObject> {
 
 	private static final Logger logger = Logger.getLogger(OntologyObject.class.getPackage().getName());
 
@@ -138,7 +139,7 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	@Override
 	public abstract void setName(String aName);
 
-	protected <R extends OntResource> R renameURI(String newName, R resource, Class<R> resourceClass) {
+	protected R renameURI(String newName, R resource, Class<R> resourceClass) {
 		String oldURI = getURI();
 		String oldName = getName();
 		String newURI;
@@ -171,9 +172,9 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		return returned;
 	}
 
-	public abstract OntResource getOntResource();
+	public abstract R getOntResource();
 
-	protected abstract void _setOntResource(OntResource r);
+	protected abstract void _setOntResource(R r);
 
 	public Resource getResource() {
 		return getOntResource();
@@ -203,6 +204,10 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	}
 
 	public void updateOntologyStatements() {
+		updateOntologyStatements(getOntResource());
+	}
+
+	protected void updateOntologyStatements(R anOntResource) {
 		// TODO: optimize this (do not always recalculate)
 
 		_statements.clear();
@@ -224,7 +229,7 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		if (this instanceof OntologyClass) {
 			// DescribeClass dc = new DescribeClass();
 			// dc.describeClass(System.out, (OntClass)getOntResource());
-			for (Iterator it = ((OntClass) getOntResource()).listSuperClasses(true); it.hasNext();) {
+			for (Iterator it = ((OntClass) anOntResource).listSuperClasses(true); it.hasNext();) {
 				OntClass s = (OntClass) it.next();
 				if (s.isRestriction()) {
 					Restriction r = s.asRestriction();
@@ -233,12 +238,12 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 			}
 		}
 
-		for (StmtIterator j = getOntResource().listProperties(); j.hasNext();) {
+		for (StmtIterator j = anOntResource.listProperties(); j.hasNext();) {
 			Statement s = j.nextStatement();
 
 			OntologyStatement newStatement = null;
 
-			if (!s.getSubject().equals(getOntResource())) {
+			if (!s.getSubject().equals(anOntResource)) {
 				logger.warning("Inconsistant data: subject is not " + this);
 			} else {
 				Property predicate = s.getPredicate();

@@ -24,6 +24,7 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.CustomType;
@@ -31,9 +32,8 @@ import org.openflexo.foundation.Inspectors;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntResource;
 
-public class OntologyClass extends OntologyObject implements Comparable<OntologyClass>, CustomType {
+public class OntologyClass extends OntologyObject<OntClass> implements Comparable<OntologyClass>, CustomType {
 
 	private static final Logger logger = Logger.getLogger(OntologyClass.class.getPackage().getName());
 
@@ -51,10 +51,13 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		ontClass = anOntClass;
 	}
 
+	/**
+	 * Init this OntologyClass, given base OntClass
+	 */
 	protected void init() {
-		updateOntologyStatements();
-		updateSuperClasses();
-		updateSubClasses();
+		updateOntologyStatements(ontClass);
+		updateSuperClasses(ontClass);
+		updateSubClasses(ontClass);
 	}
 
 	@Override
@@ -66,11 +69,24 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		deleteObservers();
 	}
 
+	/**
+	 * Update this OntologyClass, given base OntClass
+	 */
 	@Override
 	protected void update() {
-		updateOntologyStatements();
-		updateSuperClasses();
-		updateSubClasses();
+		update(ontClass);
+	}
+
+	/**
+	 * Update this OntologyClass, given base OntClass which is assumed to extends base OntClass
+	 * 
+	 * @param anOntClass
+	 */
+	protected void update(OntClass anOntClass) {
+		updateOntologyStatements(anOntClass);
+		updateSuperClasses(anOntClass);
+		updateSubClasses(anOntClass);
+		ontClass = anOntClass;
 	}
 
 	@Override
@@ -79,23 +95,34 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 	}
 
 	@Override
-	protected void _setOntResource(OntResource r) {
-		ontClass = (OntClass) r;
+	protected void _setOntResource(OntClass r) {
+		ontClass = r;
 	}
 
-	private void updateSuperClasses() {
+	private void updateSuperClasses(OntClass anOntClass) {
 		// superClasses.clear();
-		Iterator it = ontClass.listSuperClasses(true);
+
+		OntologyClass owlClass = getOntologyLibrary().getClass(OntologyLibrary.OWL_CLASS_URI);
+		/*if (owlClass != null) {
+			superClasses.remove(owlClass);
+			owlClass.subClasses.remove(this);
+		}*/
+
+		Iterator it = anOntClass.listSuperClasses(true);
 		while (it.hasNext()) {
 			OntClass father = (OntClass) it.next();
 			OntologyClass fatherClass = getOntologyLibrary().getClass(father.getURI());
 			if (fatherClass != null) {
 				if (!superClasses.contains(fatherClass)) {
 					superClasses.add(fatherClass);
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Add " + fatherClass.getName() + " as a super class of " + getName());
+					}
 				}
-				// System.out.println("Add "+fatherClass.getName()+" as a super class of "+getName());
 				if (!fatherClass.subClasses.contains(this)) {
-					// System.out.println("Add "+getName()+" as a sub class of "+fatherClass.getName());
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Add " + getName() + " as a sub class of " + fatherClass.getName());
+					}
 					fatherClass.subClasses.add(this);
 				}
 			}
@@ -105,14 +132,15 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		// and if a declared class has no parent, then the only one parent is OWL class itself
 		if (getFlexoOntology() != getOntologyLibrary().getRDFOntology() && getFlexoOntology() != getOntologyLibrary().getRDFSOntology()
 				&& getFlexoOntology() != getOntologyLibrary().getOWLOntology()) {
-			OntologyClass owlClass = getOntologyLibrary().getClass(OntologyLibrary.OWL_CLASS_URI);
 			if (owlClass != null) {
 				if (superClasses.size() == 0) {
 					if (!superClasses.contains(owlClass)) {
 						superClasses.add(owlClass);
 					}
 					if (!owlClass.subClasses.contains(this)) {
-						// System.out.println("Add "+getName()+" as a sub class of "+fatherClass.getName());
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Add " + getName() + " as a sub class of " + owlClass);
+						}
 						owlClass.subClasses.add(this);
 					}
 				} else {
@@ -136,7 +164,8 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 				getOntologyLibrary().THING.subClasses.remove(this);
 				}*/
 			}
-			if ((superClasses.size() == 0) && (getOntologyLibrary() != null) && (getOntologyLibrary().THING != null)) {
+			if ((superClasses.size() == 0) && (getOntologyLibrary() != null) && (getOntologyLibrary().THING != null)
+					&& (getOntologyLibrary().THING != this)) {
 				superClasses.add(getOntologyLibrary().THING);
 				if (!getOntologyLibrary().THING.subClasses.contains(this)) {
 					getOntologyLibrary().THING.subClasses.add(this);
@@ -146,9 +175,9 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 
 	}
 
-	private void updateSubClasses() {
+	private void updateSubClasses(OntClass anOntClass) {
 		// subClasses.clear();
-		Iterator it = ontClass.listSubClasses(true);
+		Iterator it = anOntClass.listSubClasses(true);
 		while (it.hasNext()) {
 			OntClass child = (OntClass) it.next();
 			OntologyClass childClass = getOntologyLibrary().getClass(child.getURI());
