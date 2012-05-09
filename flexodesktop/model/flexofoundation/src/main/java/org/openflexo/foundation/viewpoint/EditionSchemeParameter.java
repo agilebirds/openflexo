@@ -64,7 +64,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 	private ViewPointDataBinding defaultValue;
 
 	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
-		conditional, baseURI, defaultValue, domainValue, rangeValue, parentClassValue
+		conditional, baseURI, defaultValue, domainValue, rangeValue, parentClassValue, conceptValue
 	}
 
 	public EditionSchemeParameter() {

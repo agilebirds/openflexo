@@ -252,33 +252,55 @@ public class FIBInspector extends FIBPanel {
 			newTab.addToSubComponents(number, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return number;
 		} else if (entry instanceof IndividualInspectorEntry) {
+			IndividualInspectorEntry individualEntry = (IndividualInspectorEntry) entry;
 			FIBCustom individualSelector = new FIBCustom();
 			individualSelector.setComponentClass(org.openflexo.components.widget.OntologyIndividualSelector.class);
 			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.project"),
 					new DataBinding("data.project"), true));
 			// Quick and dirty hack to configure IndividualSelector: refactor this when new binding model will be in use
-			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.ontologyClassURI"),
-					new DataBinding('"' + ((IndividualInspectorEntry) entry)._getConceptURI() + '"') {
-						@Override
-						public BindingFactory getBindingFactory() {
-							return entry.getBindingFactory();
-						}
-					}, true));
+			OntologyClass conceptClass = null;
+			if (individualEntry.getIsDynamicConceptValue()) {
+				// conceptClass = classEntry.evaluateConceptValue(action);
+				// TODO: implement proper scheme with new binding support
+				logger.warning("Please implement me !!!!!!!!!");
+			} else {
+				conceptClass = individualEntry.getConcept();
+			}
+			if (conceptClass != null) {
+				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding(
+						"component.ontologyClassURI"), new DataBinding('"' + conceptClass.getURI() + '"') {
+					@Override
+					public BindingFactory getBindingFactory() {
+						return entry.getBindingFactory();
+					}
+				}, true));
+			}
 			newTab.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return individualSelector;
 		} else if (entry instanceof ClassInspectorEntry) {
+			ClassInspectorEntry classEntry = (ClassInspectorEntry) entry;
 			FIBCustom classSelector = new FIBCustom();
 			classSelector.setComponentClass(org.openflexo.components.widget.OntologyClassSelector.class);
 			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.project"), new DataBinding(
 					"data.project"), true));
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
-			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.parentClassURI"),
-					new DataBinding('"' + ((ClassInspectorEntry) entry)._getConceptURI() + '"') {
-						@Override
-						public BindingFactory getBindingFactory() {
-							return entry.getBindingFactory();
-						}
-					}, true));
+			OntologyClass conceptClass = null;
+			if (classEntry.getIsDynamicConceptValue()) {
+				// conceptClass = classEntry.evaluateConceptValue(action);
+				// TODO: implement proper scheme with new binding support
+				logger.warning("Please implement me !!!!!!!!!");
+			} else {
+				conceptClass = classEntry.getConcept();
+			}
+			if (conceptClass != null) {
+				classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.parentClassURI"),
+						new DataBinding('"' + conceptClass.getURI() + '"') {
+							@Override
+							public BindingFactory getBindingFactory() {
+								return entry.getBindingFactory();
+							}
+						}, true));
+			}
 			newTab.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return classSelector;
 		} else if (entry instanceof PropertyInspectorEntry) {

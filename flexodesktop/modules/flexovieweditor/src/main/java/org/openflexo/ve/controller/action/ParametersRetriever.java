@@ -303,18 +303,27 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			panel.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return individualSelector;
 		} else if (parameter instanceof ClassParameter) {
+			ClassParameter classParameter = (ClassParameter) parameter;
 			FIBCustom classSelector = new FIBCustom();
 			classSelector.setComponentClass(org.openflexo.components.widget.OntologyClassSelector.class);
 			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.project"), new DataBinding(
 					"data.project"), true));
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
-			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.parentClassURI"),
-					new DataBinding('"' + ((ClassParameter) parameter)._getConceptURI() + '"') {
-						@Override
-						public BindingFactory getBindingFactory() {
-							return parameter.getBindingFactory();
-						}
-					}, true));
+			OntologyClass conceptClass = null;
+			if (classParameter.getIsDynamicConceptValue()) {
+				conceptClass = classParameter.evaluateConceptValue(action);
+			} else {
+				conceptClass = classParameter.getConcept();
+			}
+			if (conceptClass != null) {
+				classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.parentClassURI"),
+						new DataBinding('"' + conceptClass.getURI() + '"') {
+							@Override
+							public BindingFactory getBindingFactory() {
+								return parameter.getBindingFactory();
+							}
+						}, true));
+			}
 			classSelector.setData(new DataBinding("parameters." + parameter.getName()) {
 				@Override
 				public BindingFactory getBindingFactory() {
