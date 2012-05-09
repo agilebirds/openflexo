@@ -32,6 +32,7 @@ public class WelcomePanelController extends FlexoFIBController {
 			getModuleLoader().switchToModule(module, null);
 			validateAndDispose();
 		} catch (ModuleLoadingException e) {
+			e.printStackTrace();
 			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
 			show();
 		}
