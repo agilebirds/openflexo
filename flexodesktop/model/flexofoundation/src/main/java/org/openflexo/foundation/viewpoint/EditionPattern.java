@@ -38,6 +38,7 @@ import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 
@@ -55,6 +56,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	private GraphicalElementPatternRole primaryRepresentationRole;
 
 	private ViewPoint _viewPoint;
+
+	private EditionPattern parentEditionPattern = null;
+	private Vector<EditionPattern> childEditionPatterns = new Vector<EditionPattern>();
 
 	@Override
 	public String getDescription() {
@@ -623,6 +627,12 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		}
 	}
 
+	public void finalizeParentEditionPatternDeserialization() {
+		if (StringUtils.isNotEmpty(parentEditionPatternURI)) {
+			setParentEditionPattern(getParentEditionPattern());
+		}
+	}
+
 	public void debug() {
 		System.out.println(getXMLRepresentation());
 	}
@@ -728,6 +738,59 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		newEditionPattern.setName(newName);
 		getViewPoint().addToEditionPatterns(newEditionPattern);
 		return newEditionPattern;
+	}
+
+	public boolean isRoot() {
+		return getParentEditionPattern() == null;
+	}
+
+	private String parentEditionPatternURI;
+
+	public String getParentEditionPatternURI() {
+		if (getParentEditionPattern() != null) {
+			return getParentEditionPattern().getURI();
+		}
+		return parentEditionPatternURI;
+	}
+
+	public void _setParentEditionPatternURI(String aParentEditionPatternURI) {
+		parentEditionPatternURI = aParentEditionPatternURI;
+	}
+
+	public EditionPattern getParentEditionPattern() {
+		if (parentEditionPattern == null && StringUtils.isNotEmpty(parentEditionPatternURI)) {
+			if (getViewPointLibrary() != null) {
+				setParentEditionPattern(getViewPointLibrary().getEditionPattern(parentEditionPatternURI));
+			}
+		}
+		return parentEditionPattern;
+	}
+
+	public void setParentEditionPattern(EditionPattern aParentEP) {
+		if (this.parentEditionPattern != aParentEP) {
+			if (aParentEP == null) {
+				this.parentEditionPattern.childEditionPatterns.remove(this);
+				this.parentEditionPattern = aParentEP;
+				this.parentEditionPattern.setChanged();
+				this.parentEditionPattern.notifyObservers(new EditionPatternHierarchyChanged(this));
+				this.parentEditionPattern.notifyChange("childEditionPatterns", null, getChildEditionPatterns());
+			} else {
+				aParentEP.childEditionPatterns.add(this);
+				this.parentEditionPattern = aParentEP;
+				aParentEP.setChanged();
+				aParentEP.notifyObservers(new EditionPatternHierarchyChanged(this));
+				aParentEP.notifyChange("childEditionPatterns", null, getChildEditionPatterns());
+			}
+			if (getViewPoint() != null) {
+				getViewPoint().setChanged();
+				getViewPoint().notifyObservers(new EditionPatternHierarchyChanged(this));
+				getViewPoint().notifyChange("allRootEditionPatterns", null, getViewPoint().getAllRootEditionPatterns());
+			}
+		}
+	}
+
+	public Vector<EditionPattern> getChildEditionPatterns() {
+		return childEditionPatterns;
 	}
 
 }

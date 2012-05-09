@@ -38,6 +38,9 @@ public class EditionPatternElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
+		for (EditionPattern ep : getEditionPattern().getChildEditionPatterns()) {
+			addToChilds(ep);
+		}
 	}
 
 	@Override

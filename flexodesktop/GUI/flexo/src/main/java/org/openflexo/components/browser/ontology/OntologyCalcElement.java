@@ -43,7 +43,9 @@ public class OntologyCalcElement extends BrowserElement {
 	protected void buildChildrenVector() {
 		addToChilds(getCalc().getViewpointOntology());
 		for (EditionPattern ep : getCalc().getEditionPatterns()) {
-			addToChilds(ep);
+			if (ep.getParentEditionPattern() == null) {
+				addToChilds(ep);
+			}
 		}
 		for (ExampleDrawingShema shema : getCalc().getShemas()) {
 			addToChilds(shema);

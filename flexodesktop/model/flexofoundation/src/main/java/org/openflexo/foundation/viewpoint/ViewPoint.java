@@ -496,6 +496,16 @@ public class ViewPoint extends ViewPointObject {
 		return _allEditionPatternWithLinkScheme;
 	}
 
+	public Vector<EditionPattern> getAllRootEditionPatterns() {
+		Vector<EditionPattern> returned = new Vector<EditionPattern>();
+		for (EditionPattern ep : getEditionPatterns()) {
+			if (ep.isRoot()) {
+				returned.add(ep);
+			}
+		}
+		return returned;
+	}
+
 	public Vector<EditionPattern> getEditionPatterns() {
 		return editionPatterns;
 	}

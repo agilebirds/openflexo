@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="SansSerif,0,11" name="main">
   <Panel layout="border" borderTitle="Panel" borderTop="2" borderBottom="5" borderLeft="10" borderRight="13" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=north;padX=0;padY=0;weightX=1.0;weightY=0.0)" width="200" height="150">
-    <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderTop="2" borderBottom="3" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)">
-      <Label label="edition_pattern" localize="true" constraints="border(index=0;location=west)" font="SansSerif,1,13" />
-      <TextField columns="6" text="TextField" data="data.name" constraints="border(index=1;location=center)" font="SansSerif,0,13" localize="true" />
-      <Button action="data.save()" buttonType="Trigger" label="save" constraints="border(index=2;location=east)" localize="true" />
+    <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderTop="2" borderBottom="3" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)">
+      <Label label="edition_pattern" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="SansSerif,1,13" />
+      <TextField columns="6" text="TextField" data="data.name" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="SansSerif,0,13" localize="true" />
+      <Button action="data.save()" buttonType="Trigger" label="save" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=east;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+      <Image imageFile="../../../../../../GUI/flexointerfacebuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" localize="true" data="controller.iconForObject(data).image" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+      <Label label="parent" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" data="data.parentEditionPattern" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
+        <Assignment variable="component.project" />
+        <Assignment variable="component.selectableCondition" />
+        <Assignment variable="component.viewPoint" value="data.viewPoint" />
+      </Custom>
     </Panel>
     <TextArea columns="6" rows="5" text="TextArea" data="data.description" constraints="border(index=1;location=center)" localize="true" />
     <LocalizedDictionary />
@@ -1185,10 +1193,10 @@
     <Localized key="format" lang="Dutch">Format</Localized>
     <Localized key="method" lang="Dutch">Method</Localized>
     <Localized key="inspector" lang="Dutch">Inspector</Localized>
-    <Localized key="edition_actions" lang="French">edition_actions</Localized>
+    <Localized key="edition_actions" lang="French">Actions d'édition</Localized>
     <Localized key="edition_scheme" lang="French">edition_scheme</Localized>
     <Localized key="edition_schemes" lang="French">edition_schemes</Localized>
-    <Localized key="edition_actions" lang="English">edition_actions</Localized>
+    <Localized key="edition_actions" lang="English">Edition actions</Localized>
     <Localized key="edition_scheme" lang="English">edition_scheme</Localized>
     <Localized key="edition_schemes" lang="English">edition_schemes</Localized>
     <Localized key="from_shape" lang="French">from_shape</Localized>
@@ -1275,8 +1283,8 @@
     <Localized key="localization" lang="English">localization</Localized>
     <Localized key="search_new_localization_entries" lang="French">search_new_localization_entries</Localized>
     <Localized key="search_new_localization_entries" lang="English">search_new_localization_entries</Localized>
-    <Localized key="edition_pattern" lang="French">edition_pattern</Localized>
-    <Localized key="edition_pattern" lang="English">edition_pattern</Localized>
+    <Localized key="edition_pattern" lang="French">Edition Pattern</Localized>
+    <Localized key="edition_pattern" lang="English">Edition Pattern</Localized>
     <Localized key="actions" lang="French">Actions</Localized>
     <Localized key="actions" lang="English">Actions</Localized>
     <Localized key="save" lang="English">Save</Localized>
@@ -1630,7 +1638,7 @@
     <Localized key="dutch" lang="English">dutch</Localized>
     <Localized key="dutch" lang="French">dutch</Localized>
     <Localized key="dutch" lang="Dutch">dutch</Localized>
-    <Localized key="edition_pattern" lang="Dutch">edition_pattern</Localized>
+    <Localized key="edition_pattern" lang="Dutch">Edition Pattern</Localized>
     <Localized key="pattern_role" lang="Dutch">pattern_role</Localized>
     <Localized key="role_type" lang="Dutch">role_type</Localized>
     <Localized key="ontologic_type" lang="Dutch">ontologic_type</Localized>
@@ -1678,7 +1686,7 @@
     <Localized key="father" lang="Dutch">father</Localized>
     <Localized key="assertions" lang="Dutch">assertions</Localized>
     <Localized key="add_diagram_action" lang="Dutch">add_diagram_action</Localized>
-    <Localized key="edition_actions" lang="Dutch">edition_actions</Localized>
+    <Localized key="edition_actions" lang="Dutch">Edition actions</Localized>
     <Localized key="search_new_localization_entries" lang="Dutch">search_new_localization_entries</Localized>
     <Localized key="edition_schemes" lang="Dutch">edition_schemes</Localized>
     <Localized key="localization" lang="Dutch">localization</Localized>
