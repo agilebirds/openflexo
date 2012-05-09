@@ -1,5 +1,5 @@
 #English
-#Wed May 09 09:54:38 CEST 2012
+#Wed May 09 18:31:16 CEST 2012
 ARITHMETIC_FLOAT=[FLOAT]
 ARITHMETIC_INTEGER=[INTEGER]
 BOOLEAN=BOOLEAN
@@ -25,6 +25,7 @@ choose=Choose
 close_interface=Close component
 component_localization=Component localization
 component_validation=Component validation
+connector=connector
 declare_in_edition_pattern=Declare in edition pattern
 delete=Delete
 delete_calc_drawing_shema=Delete drawing
@@ -43,6 +44,8 @@ hide_browser=Hide browser
 hide_palette=Hide palette
 information=Information
 inspect=Inspect
+instanciation_parameters_of_edition_scheme=instanciation_parameters_of_edition_scheme
+is_a_statement=is_a_statement
 italic=italic
 less_than_operator='less than' operator
 less_than_or_equals_operator='less than or equals' operator
@@ -59,6 +62,7 @@ natural_logarithm_(base_e)=Natural logarithm (base e)
 new_interface=New component
 no=No
 no_documentation=No documentation
+no_selection=No selection
 not_equals_operator='not equals' operator
 ok=OK
 ontology_calc=Ontologic calc
@@ -72,6 +76,7 @@ quit=Quit
 really_quit=Do you really want to quit ?
 redo=Redo
 reset=Reset
+restriction_statement=restriction_statement
 save_interface=Save component
 save_interface_as=Save component as
 shape=Shape
@@ -91,6 +96,7 @@ unary_minus=Unary minus
 undo=Undo
 unexpected_exception_occured=OpenFlexo has detected an internal error. OpenFlexo will continue to work but it is highly recommended to restart it.
 validate_component=Validate component
+view_object=view_object
 view_point_library=View Point Library
 vpm_module_name=ViewPoint Modeller
 would_you_like_to_send_a_report=Would you like to send a report to help us improve OpenFlexo?

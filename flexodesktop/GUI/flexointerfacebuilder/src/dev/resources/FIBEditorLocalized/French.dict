@@ -1,5 +1,5 @@
 #French
-#Wed May 09 09:54:38 CEST 2012
+#Wed May 09 18:31:16 CEST 2012
 ARITHMETIC_FLOAT=[FLOTTANT]
 ARITHMETIC_INTEGER=[ENTIER]
 BOOLEAN=BOOLEEN
@@ -25,6 +25,7 @@ choose=Choisir
 close_interface=Fermer le composant
 component_localization=Localisation du composant
 component_validation=Validation du composant
+connector=connector
 declare_in_edition_pattern=D\u00E9clarer dans un Edition Pattern
 delete=Supprimer
 delete_calc_drawing_shema=Supprimer le dessin
@@ -43,6 +44,8 @@ hide_browser=Masquer le browser
 hide_palette=Cacher la palette
 information=Information
 inspect=Inspecter
+instanciation_parameters_of_edition_scheme=instanciation_parameters_of_edition_scheme
+is_a_statement=is_a_statement
 italic=italic
 less_than_operator=Operator 'plus petit que'
 less_than_or_equals_operator=Operator 'plus petit ou \u00E9gal'
@@ -59,6 +62,7 @@ natural_logarithm_(base_e)=Logarithme n\u00E9p\u00E9rien (base e)
 new_interface=Nouveau composant
 no=Non
 no_documentation=Pas de documentation
+no_selection=Pas de s\u00E9lection
 not_equals_operator=Op\u00E9rateur 'diff\u00E9rent de'
 ok=OK
 ontology_calc=Calque ontologique
@@ -72,6 +76,7 @@ quit=Quitter
 really_quit=Voulez vous reellement quitter OpenFlexo ?
 redo=Refaire
 reset=RAZ
+restriction_statement=restriction_statement
 save_interface=Sauver le composant
 save_interface_as=Sauver le composant sous...
 shape=Forme
@@ -91,6 +96,7 @@ unary_minus=unary minus
 undo=D\u00E9faire
 unexpected_exception_occured=OpenFlexo a d\u00E9tect\u00E9 une erreur interne. OpenFlexo continuera de fonctionner mais il est cependant recommand\u00E9 de le red\u00E9marrer.
 validate_component=Valider le composant
+view_object=view_object
 view_point_library=Biblioth\u00E8que de View Point
 vpm_module_name=Editeur de Points de Vues
 would_you_like_to_send_a_report=Souhaitez-vous soumettre un rapport afin de nous aider \u00E0 am\u00E9liorer OpenFlexo?
