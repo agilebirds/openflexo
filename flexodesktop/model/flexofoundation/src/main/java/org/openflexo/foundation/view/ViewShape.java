@@ -196,8 +196,9 @@ public class ViewShape extends ViewElement {
 				if (ds.getTargetEditionPattern() == targetEditionPattern || (ds.getTopTarget() && targetEditionPattern == null)) {
 					for (EditionPattern ep2 : calc.getEditionPatterns()) {
 						for (LinkScheme ls : ep2.getLinkSchemes()) {
-							if (ls.getFromTargetEditionPattern() == getEditionPattern()
-									&& ls.getToTargetEditionPattern() == ds.getEditionPattern() && ls.getIsAvailableWithFloatingPalette()) {
+							if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern())
+									&& ls.getToTargetEditionPattern().isAssignableFrom(ds.getEditionPattern())
+									&& ls.getIsAvailableWithFloatingPalette()) {
 								// This candidate is acceptable
 								availableLinkSchemeFromThisShape.add(new DropAndLinkScheme(ds, ls));
 							}
@@ -227,7 +228,7 @@ public class ViewShape extends ViewElement {
 
 		for (EditionPattern ep : calc.getEditionPatterns()) {
 			for (LinkScheme ls : ep.getLinkSchemes()) {
-				if (ls.getFromTargetEditionPattern() == getEditionPattern() && ls.getIsAvailableWithFloatingPalette()) {
+				if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern()) && ls.getIsAvailableWithFloatingPalette()) {
 					// This candidate is acceptable
 					availableLinkSchemeFromThisShape.add(ls);
 				}

@@ -793,4 +793,13 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return childEditionPatterns;
 	}
 
+	public boolean isAssignableFrom(EditionPattern editionPattern) {
+		if (editionPattern == this)
+			return true;
+		if (editionPattern.getParentEditionPattern() != null) {
+			return isAssignableFrom(editionPattern.getParentEditionPattern());
+		}
+		return false;
+	}
+
 }
