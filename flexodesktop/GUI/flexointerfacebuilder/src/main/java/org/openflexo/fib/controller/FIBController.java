@@ -24,6 +24,7 @@ import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
@@ -738,6 +740,17 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	}
 
 	protected void openFIBEditor(final FIBComponent component, MouseEvent event) {
+		if (component.getDefinitionFile() == null) {
+			try {
+				File fibFile = File.createTempFile("FIBComponent", ".fib");
+				component.setDefinitionFile(fibFile.getAbsolutePath());
+				FIBLibrary.save(component, fibFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.warning("Cannot create FIB temp file definition for component, aborting FIB edition");
+				return;
+			}
+		}
 		try {
 			File fibFile = new File(component.getDefinitionFile());
 			if (!fibFile.exists()) {

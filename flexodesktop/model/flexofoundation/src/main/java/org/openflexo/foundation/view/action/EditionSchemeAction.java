@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view.action;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,6 +63,7 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
@@ -76,6 +78,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
 	protected Hashtable<EditionSchemeParameter, Object> parameterValues;
+	protected Hashtable<ListParameter, List> parameterListValues;
 
 	public boolean escapeParameterRetrievingWhenValid = true;
 
@@ -83,6 +86,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		parameterValues = new Hashtable<EditionSchemeParameter, Object>();
+		parameterListValues = new Hashtable<ListParameter, List>();
 	}
 
 	/**
@@ -99,6 +103,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			Object defaultValue = parameter.getDefaultValue(this);
 			if (defaultValue != null && !(parameter instanceof URIParameter)) {
 				parameterValues.put(parameter, defaultValue);
+			}
+			if (parameter instanceof ListParameter) {
+				List list = (List) ((ListParameter) parameter).getList(this);
+				parameterListValues.put((ListParameter) parameter, list);
 			}
 			if (!parameter.isValid(this, defaultValue)) {
 				logger.info("Parameter " + parameter + " is not valid for value " + defaultValue);
@@ -156,6 +164,12 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 				// System.out.println("Hop, je recalcule l'uri, ici");
 			}
 		}*/
+	}
+
+	public List getParameterListValue(ListParameter parameter) {
+		/*System.out.println("On me demande la valeur du parametre " + parameter.getName() + " a priori c'est "
+				+ parameterValues.get(parameter));*/
+		return parameterListValues.get(parameter);
 	}
 
 	public abstract EditionScheme getEditionScheme();

@@ -34,6 +34,7 @@ import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
+import org.openflexo.fib.model.FIBCheckboxList;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBComponent.HorizontalScrollBarPolicy;
 import org.openflexo.fib.model.FIBComponent.VerticalScrollBarPolicy;
@@ -65,12 +66,15 @@ import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FlexoObjectParameter;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
+import org.openflexo.foundation.viewpoint.ListParameter;
+import org.openflexo.foundation.viewpoint.ListParameter.ListType;
 import org.openflexo.foundation.viewpoint.PropertyParameter;
 import org.openflexo.foundation.viewpoint.TextAreaParameter;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
+import org.openflexo.foundation.viewpoint.binding.ListValueForListParameterPathElement;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ParametersRetriever /*implements BindingEvaluationContext*/{
@@ -195,6 +199,31 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			number.setNumberType(NumberType.IntegerType);
 			panel.addToSubComponents(number, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return number;
+		} else if (parameter instanceof ListParameter) {
+			ListParameter listParameter = (ListParameter) parameter;
+			FIBCheckboxList cbList = new FIBCheckboxList();
+			cbList.setName(parameter.getName() + "CheckboxList");
+			cbList.setData(new DataBinding("parameters." + parameter.getName()) {
+				@Override
+				public BindingFactory getBindingFactory() {
+					return parameter.getBindingFactory();
+				}
+			});
+			cbList.setList(new DataBinding("parameters." + parameter.getName() + ListValueForListParameterPathElement.SUFFIX) {
+				@Override
+				public BindingFactory getBindingFactory() {
+					return parameter.getBindingFactory();
+				}
+			});
+			if (listParameter.getListType() == ListType.Property) {
+				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
+			}
+			cbList.setUseScrollBar(true);
+			cbList.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			cbList.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
+			cbList.setHeight(300);
+			panel.addToSubComponents(cbList, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			return cbList;
 		} else if (parameter instanceof FlexoObjectParameter) {
 			FlexoObjectParameter foParameter = (FlexoObjectParameter) parameter;
 			switch (foParameter.getFlexoObjectType()) {
@@ -390,6 +419,11 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		returned.setBorderBottom(5);
 		returned.setBorderRight(10);
 		returned.setBorderLeft(10);
+
+		if (editionScheme.getDefinePopupDefaultSize()) {
+			returned.setWidth(editionScheme.getWidth());
+			returned.setHeight(editionScheme.getHeight());
+		}
 
 		Font f = returned.retrieveValidFont();
 		returned.setFont(f.deriveFont(11f));
