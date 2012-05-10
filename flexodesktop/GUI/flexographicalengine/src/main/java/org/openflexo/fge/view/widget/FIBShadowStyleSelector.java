@@ -77,8 +77,10 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 	@Override
 	public void delete() {
 		super.delete();
-		_selectorPanel.delete();
 		shadowStylePreviewPanel.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
 	}
 
 	@Override

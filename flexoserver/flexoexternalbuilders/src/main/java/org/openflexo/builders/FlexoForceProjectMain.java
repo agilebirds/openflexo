@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import org.openflexo.builders.exception.FlexoRunException;
 import org.openflexo.builders.exception.MissingArgumentException;
-import org.openflexo.builders.exception.SharedProjectNotFoundException;
 import org.openflexo.fps.CVSExplorable;
 import org.openflexo.fps.CVSExplorer;
 import org.openflexo.fps.CVSExplorerListener;
@@ -30,7 +28,7 @@ public class FlexoForceProjectMain extends FlexoProjectMergeMain implements CVSE
 	}
 
 	@Override
-	protected void doRun() throws FlexoRunException {
+	protected void doRun() {
 		CVSFile.xmlDiff3MergeEnabled = true;
 		File checkoutDir = checkoutProject();
 		File cvsProjectDirectory = searchProjectDirectory(checkoutDir);
@@ -41,13 +39,13 @@ public class FlexoForceProjectMain extends FlexoProjectMergeMain implements CVSE
 		touchProject(projectDirectory, System.currentTimeMillis());
 		SharedProject project = SharedProject.openProject(repositories, projectDirectory, cvsRepository, EDITOR);
 		if (project == null) {
-			setExitCode(PROJECT_NOT_FOUND);
-			throw new SharedProjectNotFoundException();
+			setExitCodeCleanUpAndExit(PROJECT_NOT_FOUND);
 		}
 		checkProjectIsOpenable();
 		synchronizeProject(project);
 		overrideConflictingFiles();
 		commitProject();
+		setExitCodeCleanUpAndExit(0);
 	}
 
 	private void touchProject(File projectDir, long touchTime) {
@@ -61,11 +59,10 @@ public class FlexoForceProjectMain extends FlexoProjectMergeMain implements CVSE
 		}
 	}
 
-	private File checkoutProject() throws FlexoRunException {
+	private File checkoutProject() {
 		CVSModule module = cvsRepository.getModuleNamed(moduleName);
 		if (module == null) {
-			setExitCode(-1);
-			throw new NullPointerException("Module named " + moduleName + " cannot be found");
+			setExitCodeCleanUpAndExit(-1);
 		}
 		String localName = moduleName;
 
@@ -73,14 +70,13 @@ public class FlexoForceProjectMain extends FlexoProjectMergeMain implements CVSE
 			localName = localName.substring(localName.lastIndexOf('/') + 1);
 		}
 		exploreModules(module);
-		File checkoutDirectory;
+		File checkoutDirectory = null;
 		try {
 			checkoutDirectory = FileUtils.createTempDirectory(localName, null);
 			checkoutDirectory = checkoutDirectory.getCanonicalFile();
 		} catch (IOException e) {
 			e.printStackTrace();
-			setExitCode(LOCAL_IO_EXCEPTION);
-			throw new FlexoRunException(e);
+			setExitCodeCleanUpAndExit(LOCAL_IO_EXCEPTION);
 		}
 		CheckoutProject checkout = CheckoutProject.actionType.makeNewAction(module, null, EDITOR);
 		checkout.setLocalDirectory(checkoutDirectory);

@@ -80,8 +80,10 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 	@Override
 	public void delete() {
 		super.delete();
-		_selectorPanel.delete();
 		textStylePreviewPanel.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
 	}
 
 	@Override

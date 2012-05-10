@@ -235,12 +235,15 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 	private boolean isInitializingProject = false;
 
+	private FlexoResourceCenter resourceCenter;
+
 	public boolean isInitializingProject() {
 		return isInitializingProject;
 	}
 
 	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler, FlexoResourceCenter resourceCenter)
 			throws RuntimeException, ProjectLoadingCancelledException {
+		this.resourceCenter = resourceCenter;
 		FlexoRMResource rmRes = null;
 		try {
 			isInitializingProject = true;
@@ -266,10 +269,6 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				e.printStackTrace();
 				_loadProjectProgress = null;
 				return null;
-			}
-
-			if (resourceCenter != null) {
-				project.setResourceCenter(resourceCenter);
 			}
 
 			//
@@ -615,6 +614,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 		returned.loadingHandler = _loadingHandler;
 		returned.projectDirectory = projectDirectory;
 		returned.progress = _loadProjectProgress;
+		returned.resourceCenter = resourceCenter;
 		return returned;
 	}
 

@@ -177,6 +177,8 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	private Vector<ERDiagram> diagrams;
 
+	private JarClassLoader jarClassLoader;
+
 	static {
 		// Register JavaParser if found in classpath (otherwise abort)
 		installJavaParser();
@@ -1112,7 +1114,12 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Class " + aClass.getName() + " not imported in DataModel: try to dynamically load it.");
 				}
-				returned = LoadableDMEntity.createLoadableDMEntity(this, aClass);
+				for (ExternalRepository repository : getExternalRepositories()) {
+					if (repository.getJarLoader() != null && repository.getJarLoader().contains(aClass.getName())) {
+						return LoadableDMEntity.createLoadableDMEntity(repository, aClass);
+
+					}
+				}
 			} else {
 				logger.warning("Sorry: class " + aClass.getName() + " not imported in DataModel");
 			}
@@ -1791,6 +1798,14 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			}
 		}
 		return null;
+	}
+
+	public JarClassLoader getJarClassLoader() {
+		return jarClassLoader;
+	}
+
+	public void setJarClassLoader(JarClassLoader jarClassLoader) {
+		this.jarClassLoader = jarClassLoader;
 	}
 
 }

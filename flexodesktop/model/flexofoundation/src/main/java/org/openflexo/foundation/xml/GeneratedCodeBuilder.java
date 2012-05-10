@@ -29,13 +29,13 @@ import org.openflexo.foundation.rm.FlexoGeneratedOutputResource;
  * 
  * @author bmangez
  */
-public class GeneratedCodeBuilder extends FlexoBuilder<FlexoGeneratedOutputResource> {
+public class GeneratedCodeBuilder extends FlexoBuilder<FlexoGeneratedOutputResource<?>> {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeneratedCodeBuilder.class.getPackage().getName());
 
 	public GeneratedOutput generatedCode;
 
-	public GeneratedCodeBuilder(FlexoGeneratedOutputResource resource) {
+	public GeneratedCodeBuilder(FlexoGeneratedOutputResource<?> resource) {
 		super(resource);
 	}
 

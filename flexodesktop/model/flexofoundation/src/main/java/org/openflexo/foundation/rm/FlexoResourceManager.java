@@ -216,9 +216,6 @@ public class FlexoResourceManager {
 			}
 
 		}
-		if (resourceCenter != null) {
-			project.setResourceCenter(resourceCenter);
-		}
 		FlexoEditor returned = editorFactory.makeFlexoEditor(project);
 		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, resourceUpdateHandler);
 		resourceManager.startResourcePeriodicChecking();
@@ -251,9 +248,8 @@ public class FlexoResourceManager {
 			aProjectDirectory.mkdirs();
 		}
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
-		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress);
+		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, resourceCenter);
 		FlexoProject project = returned.getProject();
-		project.setResourceCenter(resourceCenter);
 		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, resourceUpdateHandler);
 		resourceManager.startResourcePeriodicChecking();
 		resourceManager.isLoadingAProject = false;

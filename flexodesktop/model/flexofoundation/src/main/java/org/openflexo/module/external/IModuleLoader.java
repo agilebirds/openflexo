@@ -20,7 +20,6 @@
 package org.openflexo.module.external;
 
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.module.ModuleLoadingException;
 
 /**

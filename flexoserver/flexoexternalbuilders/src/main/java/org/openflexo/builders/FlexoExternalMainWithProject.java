@@ -63,7 +63,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		} catch (ProjectLoadingCancelledException e) {
 			// Should not happen in external builder
 			e.printStackTrace();
-			System.exit(PROJECT_CANCELED_FAILURE);
+			setExitCodeCleanUpAndExit(PROJECT_CANCELED_FAILURE);
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
 			System.exit(PROJECT_LOADING_FAILURE);
@@ -79,7 +79,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	}
 
 	@Override
-	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
+	public void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
 		handleActionFailed(action, projectDirectory);
 	}
 
@@ -155,7 +155,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			@Override
 			public FlexoEditor makeFlexoEditor(FlexoProject project) {
 
-				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(project);
+				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
 				builderEditor.setFactory(new FlexoProgressFactory() {
 					@Override
 					public FlexoProgress makeFlexoProgress(String title, int steps) {
@@ -165,7 +165,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 				return builderEditor;
 			}
 
-		}, null);
+		}, getResourceCenter());
 	}
 
 }

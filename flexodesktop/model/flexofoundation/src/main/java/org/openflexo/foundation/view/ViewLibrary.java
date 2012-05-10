@@ -143,8 +143,6 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
 			}
 			e1.printStackTrace();
-			System.out.println("C'est la que ca chie");
-			System.exit(-1);
 		}
 		try {
 			ViewFolder.createNewRootFolder(newLibrary);

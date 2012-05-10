@@ -29,13 +29,13 @@ import org.openflexo.foundation.sg.GeneratedSources;
  * 
  * @author bmangez
  */
-public class GeneratedSourcesBuilder extends FlexoBuilder<FlexoGeneratedOutputResource> {
+public class GeneratedSourcesBuilder extends FlexoBuilder<FlexoGeneratedOutputResource<GeneratedSources>> {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeneratedSourcesBuilder.class.getPackage().getName());
 
 	public GeneratedSources generatedSources;
 
-	public GeneratedSourcesBuilder(FlexoGeneratedOutputResource resource) {
+	public GeneratedSourcesBuilder(FlexoGeneratedOutputResource<GeneratedSources> resource) {
 		super(resource);
 	}
 

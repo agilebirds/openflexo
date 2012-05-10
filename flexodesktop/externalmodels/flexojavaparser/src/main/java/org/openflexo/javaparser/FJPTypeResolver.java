@@ -150,9 +150,10 @@ public class FJPTypeResolver {
 				}
 			} else if (m == ClassResolvingMethod.ClassPath) {
 				try {
-					Class searchedClass = Class.forName(type.getValue());
+					Class<?> searchedClass = Class.forName(type.getValue());
 					if (resolveNow) {
-						returned.foundEntity = LoadableDMEntity.createLoadableDMEntity(searchedClass, dataModel, false, false);
+						returned.foundEntity = LoadableDMEntity.createLoadableDMEntity(dataModel.getJDKRepository(), searchedClass, false,
+								false);
 					} else {
 						returned.resolvedButEntityNotAvailableYet = true;
 					}

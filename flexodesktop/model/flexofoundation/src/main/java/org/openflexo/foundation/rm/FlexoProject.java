@@ -400,6 +400,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			logger.info("Deserialization for FlexoProject started");
 		}
 		builder.project = this;
+		setResourceCenter(builder.resourceCenter);
 		setProjectDirectory(builder.projectDirectory);
 		_loadingHandler = builder.loadingHandler;
 		initializeDeserialization(builder);
@@ -1738,9 +1739,11 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	// ============================
 	// ==========================================================================
 
-	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress) {
+	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress,
+			FlexoResourceCenter resourceCenter) {
 		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
 		FlexoProject project = new FlexoProject(aProjectDirectory);
+		project.setResourceCenter(resourceCenter);
 		FlexoEditor editor = editorFactory.makeFlexoEditor(project);
 		project.setLastUniqueID(0);
 		if (logger.isLoggable(Level.INFO)) {
@@ -3979,7 +3982,13 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public FlexoResourceCenter getResourceCenter() {
 		if (resourceCenter == null) {
 			File file = getResourceCenterFile();
-			setResourceCenter(LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(file));
+			if (file != null && file.exists()) {
+				setResourceCenter(LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(file));
+			} else {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("This really sucks: I don't have a resource center and was unable to look up for one.");
+				}
+			}
 		}
 		// logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
 		return resourceCenter;
@@ -4045,7 +4054,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			EditionPatternConverter editionPatternConverter = new EditionPatternConverter(resourceCenter);
 			getStringEncoder()._addConverter(editionPatternConverter);
 		} else {
-			logger.warning("An attempt to set a null resource center was made. I will print a stacktrace to let you know where it came from but I am not setting the RC to null!");
+			getResourceCenter();
+			logger.warning("#@!#@!#@!#@! An attempt to set a null resource center was made. I will print a stacktrace to let you know where it came from but I am not setting the RC to null!\n"
+					+ "I will try to find one.");
 			new Exception("Attempt to set a null resource center on project " + getProjectName()).printStackTrace();
 		}
 	}

@@ -13,29 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexocodegenerator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoscreeneditor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoworkfloweditor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexovieweditor</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoprjsharing</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
 			<artifactId>flexoexternalbuilders</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>

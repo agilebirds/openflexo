@@ -81,7 +81,9 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	@Override
 	public void delete() {
 		super.delete();
-		_selectorPanel.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
 	}
 
 	@Override

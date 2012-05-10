@@ -14,11 +14,11 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoProperties;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.builders.exception.FlexoRunException;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -67,6 +67,12 @@ public abstract class FlexoExternalMain implements Runnable {
 	private PrintStream consoleStream;
 
 	protected static byte[] mem = new byte[500 * 1024]; // Let's grab 500kb to free in case of an error (especially OutOfMemoryError)
+
+	private boolean notifyOnExit;
+
+	private boolean done;
+
+	private FlexoResourceCenter resourceCenter;
 
 	public FlexoExternalMain() {
 		try {
@@ -124,15 +130,15 @@ public abstract class FlexoExternalMain implements Runnable {
 	public final void run() {
 		try {
 			doRun();
-		} catch (FlexoRunException e) {
-			e.printStackTrace();
-			if (exitCode == 0) {
-				setExitCode(UNEXPECTED_EXCEPTION);
-			}
+		} catch (Throwable t) {
+			mem = null;
+			System.gc();
+			t.printStackTrace();
+			setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
 		}
 	}
 
-	protected abstract void doRun() throws FlexoRunException;
+	protected abstract void doRun();
 
 	protected abstract String getName();
 
@@ -230,19 +236,22 @@ public abstract class FlexoExternalMain implements Runnable {
 		if (action.getThrownException() != null) {
 			action.getThrownException().printStackTrace();
 		}
-		cleanUp();
-		if (getExitCode() == 0) {
-			System.exit(FLEXO_ACTION_FAILED);
-		} else {
-			System.exit(getExitCode());
-		}
+		setExitCodeCleanUpAndExit(getExitCode() == 0 ? FLEXO_ACTION_FAILED : getExitCode());
+	}
+
+	public FlexoResourceCenter getResourceCenter() {
+		return resourceCenter;
+	}
+
+	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
+		this.resourceCenter = resourceCenter;
 	}
 
 	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
 		handleActionFailed(action, null);
 	}
 
-	private void build(String[] args) {
+	void build(String[] args) {
 		try {
 			init(args);
 		} catch (MissingArgumentException e) {
@@ -256,6 +265,7 @@ public abstract class FlexoExternalMain implements Runnable {
 		}
 		try {
 			SwingUtilities.invokeAndWait(this);
+			// Don't perform any code after this
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -263,11 +273,6 @@ public abstract class FlexoExternalMain implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cleanUp();
-		if (isDev) {
-			return;
-		}
-		System.exit(getExitCode());
 	}
 
 	public static void main(String[] args) {
@@ -434,7 +439,39 @@ public abstract class FlexoExternalMain implements Runnable {
 		return exitCode;
 	}
 
-	public void setExitCode(int exitCode) {
+	private void setExitCode(int exitCode) {
 		this.exitCode = exitCode;
+		this.done = true;
+	}
+
+	public boolean isDone() {
+		return done;
+	}
+
+	public synchronized void setExitCodeCleanUpAndExit(int exitCode) {
+		setExitCode(exitCode);
+		try {
+			cleanUp();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		if (isDev) {
+			if (notifyOnExit) {
+				synchronized (this) {
+					notifyAll();
+				}
+			}
+
+			return;
+		}
+		System.exit(getExitCode());
+	}
+
+	public boolean notifyOnExit() {
+		return notifyOnExit;
+	}
+
+	public void setNotifyOnExit(boolean notifyOnExit) {
+		this.notifyOnExit = notifyOnExit;
 	}
 }

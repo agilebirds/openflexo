@@ -20,10 +20,14 @@ public class RelativePathFileConverter extends Converter<File> {
 
 	@Override
 	public File convertFromString(String value) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("********* convertFromString " + value + " return " + (new File(relativePath, value)).getAbsolutePath());
+		File file = new File(relativePath, value);
+		if (!file.exists()) {
+			System.err.println("Shit: this does not exist: " + file.getAbsolutePath());
 		}
-		return new File(relativePath, value);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("********* convertFromString " + value + " return " + file.getAbsolutePath());
+		}
+		return file;
 	}
 
 	@Override

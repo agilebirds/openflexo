@@ -37,7 +37,7 @@ import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ZipUtils;
 
-public class GenerateZip extends GCAction<GenerateZip, GenerationRepository> {
+public class GenerateZip extends GenerateArtefact<GenerateZip, GenerationRepository> {
 
 	public static final FlexoActionType<GenerateZip, GenerationRepository, CGObject> actionType = new FlexoActionType<GenerateZip, GenerationRepository, CGObject>(
 			"generate_zip", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
@@ -92,6 +92,11 @@ public class GenerateZip extends GCAction<GenerateZip, GenerationRepository> {
 			e.printStackTrace();
 			throw new IOFlexoException(e);
 		}
+	}
+
+	@Override
+	public File getArtefactFile() {
+		return getGeneratedZipFile();
 	}
 
 	public File getGeneratedZipFile() {

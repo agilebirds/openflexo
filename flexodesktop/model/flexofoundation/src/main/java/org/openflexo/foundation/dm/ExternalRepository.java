@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,11 +94,11 @@ public class ExternalRepository extends DMRepository {
 		return createNewExternalRepository(dmModel, aJarFile, importedClassSet, null);
 	}
 
-	public static Enumeration<Class<?>> getContainedClasses(File aJarFile, ExternalRepository jarRepository, FlexoProject project,
+	public static Iterator<Class<?>> getContainedClasses(File aJarFile, ExternalRepository jarRepository, FlexoProject project,
 			FlexoProgress progress) {
 		// Parse the JAR file
 		JarLoader jarLoader = new JarLoader(aJarFile, jarRepository, project, progress);
-		return jarLoader.getContainedClasses().elements();
+		return jarLoader.getContainedClasses().values().iterator();
 	}
 
 	/**
@@ -161,9 +161,9 @@ public class ExternalRepository extends DMRepository {
 						logger.fine("Import " + next);
 					}
 					if (importedClassSet == null) {
-						LoadableDMEntity.createLoadableDMEntity(dmModel, next);
+						LoadableDMEntity.createLoadableDMEntity(newExternalRepository, next);
 					} else {
-						LoadableDMEntity.createLoadableDMEntity(next, dmModel, importedClassSet.getImportGetOnlyProperties(),
+						LoadableDMEntity.createLoadableDMEntity(newExternalRepository, next, importedClassSet.getImportGetOnlyProperties(),
 								importedClassSet.getImportMethods());
 					}
 				} else {
@@ -205,11 +205,15 @@ public class ExternalRepository extends DMRepository {
 	}
 
 	public final void delete(boolean deleteJarFile) {
+		getDMModel().removeFromExternalRepositories(this);
+		super.delete();
+		if (getJarLoader() != null) {
+			getJarLoader().delete();
+		}
+
 		if (getJarResource() != null) {
 			getJarResource().delete(deleteJarFile);
 		}
-		getDMModel().removeFromExternalRepositories(this);
-		super.delete();
 		deleteObservers();
 	}
 

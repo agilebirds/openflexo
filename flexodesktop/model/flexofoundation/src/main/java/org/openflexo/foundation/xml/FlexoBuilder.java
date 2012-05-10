@@ -26,7 +26,7 @@ import org.openflexo.foundation.rm.FlexoXMLStorageResource;
  * @author gpolet
  * 
  */
-public abstract class FlexoBuilder<R extends FlexoXMLStorageResource> {
+public abstract class FlexoBuilder<R extends FlexoXMLStorageResource<?>> {
 	private FlexoProject project;
 
 	public R resource;

@@ -92,7 +92,9 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 	public void delete() {
 		super.delete();
 		backgroundStylePreviewPanel.delete();
-		_selectorPanel.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
 	}
 
 	/**

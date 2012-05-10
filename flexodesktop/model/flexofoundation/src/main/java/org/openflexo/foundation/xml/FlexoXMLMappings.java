@@ -145,7 +145,7 @@ public class FlexoXMLMappings {
 	/**
 	 * Returns all available versions for given class, ordered in ascendant order
 	 */
-	public FlexoVersion[] getAvailableVersionsForClass(Class aClass) {
+	public FlexoVersion[] getAvailableVersionsForClass(Class<?> aClass) {
 		if (modelVersions != null) {
 			ClassModels modelsForClass = modelVersions.classModels.get(aClass.getName());
 			if (modelsForClass != null) {
@@ -158,11 +158,11 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
-	public XMLMapping getMappingForClass(Class aClass) {
+	public XMLMapping getMappingForClass(Class<?> aClass) {
 		return getMappingForClassAndVersion(aClass, getLatestVersionForClass(aClass));
 	}
 
-	public XMLMapping getMappingForClassAndVersion(Class aClass, FlexoVersion version) {
+	public XMLMapping getMappingForClassAndVersion(Class<?> aClass, FlexoVersion version) {
 		ClassModelVersion cmv = getClassModelVersion(aClass, version);
 		if (cmv != null) {
 			return cmv.getMapping();
@@ -173,11 +173,11 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
-	public ClassModels getModelsForClass(Class aClass) {
+	public ClassModels getModelsForClass(Class<?> aClass) {
 		return modelVersions.classModels.get(aClass.getName());
 	}
 
-	public ClassModelVersion getClassModelVersion(Class aClass, FlexoVersion version) {
+	public ClassModelVersion getClassModelVersion(Class<?> aClass, FlexoVersion version) {
 		if (modelVersions != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finest("Searching ClassModelFlexoVersion for class " + aClass.getName());
@@ -199,7 +199,7 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
-	public FlexoVersion getLatestVersionForClass(Class aClass) {
+	public FlexoVersion getLatestVersionForClass(Class<?> aClass) {
 		if (modelVersions != null && aClass != null) {
 			ClassModels modelsForClass = modelVersions.classModels.get(aClass.getName());
 			if (modelsForClass != null) {
@@ -209,7 +209,7 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
-	public FlexoVersion getVersionForClassAndRelease(Class aClass, FlexoVersion releaseVersion) {
+	public FlexoVersion getVersionForClassAndRelease(Class<?> aClass, FlexoVersion releaseVersion) {
 		if (modelVersions != null && aClass != null) {
 			ReleaseModels modelsForRelease = modelVersions.releaseModels.get(releaseVersion);
 			if (modelsForRelease != null) {

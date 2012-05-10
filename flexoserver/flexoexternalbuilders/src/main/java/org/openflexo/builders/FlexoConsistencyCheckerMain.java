@@ -5,8 +5,6 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.builders.exception.CorruptedProjectException;
-import org.openflexo.builders.exception.FlexoRunException;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.CodeType;
@@ -35,6 +33,8 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 
 	private String codeType;
 
+	private ValidationReport[] reports;
+
 	public FlexoConsistencyCheckerMain() {
 
 	}
@@ -52,12 +52,12 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 	}
 
 	@Override
-	protected void doRun() throws FlexoRunException {
+	protected void doRun() {
 		CodeType target = CodeType.get(codeType);
 		if (target == null) {
 			target = CodeType.PROTOTYPE;
 		}
-		ValidationReport[] reports = checkConsistency(projectDirectory, target);
+		reports = checkConsistency(projectDirectory, target);
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < reports.length; i++) {
 			ValidationReport report = reports[i];
@@ -67,8 +67,14 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 		}
 		if (sb.length() > 0) {
 			reportMessage(sb.toString());
-			setExitCode(CONSISTENCY_FAILED_RETURN_CODE);
+			setExitCodeCleanUpAndExit(CONSISTENCY_FAILED_RETURN_CODE);
 		}
+		setExitCodeCleanUpAndExit(0);
+
+	}
+
+	public ValidationReport[] getReports() {
+		return reports;
 	}
 
 	private void printTOCRepositories(FlexoEditor editor) throws ProjectInitializerException {
@@ -120,7 +126,7 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 	 * @throws CorruptedProjectException
 	 * @throws ProjectLoadingCancelledException
 	 */
-	private ValidationReport[] checkConsistency(File projectDirectory, CodeType target) throws CorruptedProjectException {
+	private ValidationReport[] checkConsistency(File projectDirectory, CodeType target) {
 		long start = System.currentTimeMillis();
 		try {
 			editor.getProject().setTargetType(target);
@@ -139,13 +145,14 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 			return new ValidationReport[] { workflowReport, componentLibraryReport, datamodelReport, dkvReport };
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
-			setExitCode(CORRUPTED_PROJECT_EXCEPTION);
-			throw new CorruptedProjectException(e);
+			setExitCodeCleanUpAndExit(CORRUPTED_PROJECT_EXCEPTION);
 		} finally {
+			// Only executed if no error occur
 			if (editor != null) {
 				editor.getProject().close();
 			}
 		}
+		return null;
 	}
 
 	public static void main(String[] args) {

@@ -37,13 +37,13 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
-import org.openflexo.generator.action.GCAction;
+import org.openflexo.generator.action.GenerateArtefact;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.ZipUtils;
 
-public class GenerateDocx extends GCAction<GenerateDocx, GenerationRepository> {
+public class GenerateDocx extends GenerateArtefact<GenerateDocx, GenerationRepository> {
 
 	public static final FlexoActionType<GenerateDocx, GenerationRepository, CGObject> actionType = new FlexoActionType<GenerateDocx, GenerationRepository, CGObject>(
 			"generate_docx", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
@@ -112,6 +112,11 @@ public class GenerateDocx extends GCAction<GenerateDocx, GenerationRepository> {
 			e.printStackTrace();
 			throw new IOFlexoException(e);
 		}
+	}
+
+	@Override
+	public File getArtefactFile() {
+		return getGeneratedDocxFile();
 	}
 
 	public File getGeneratedDocxFile() {

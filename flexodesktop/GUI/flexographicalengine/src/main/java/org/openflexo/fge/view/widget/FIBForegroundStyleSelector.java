@@ -80,7 +80,9 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 	public void delete() {
 		super.delete();
 		foregroundStylePreviewPanel.delete();
-		_selectorPanel.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
 	}
 
 	@Override

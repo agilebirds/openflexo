@@ -55,7 +55,7 @@ public class UpdateDMRepository extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return object != null && object instanceof DMRepository && ((DMRepository) object).isUpdatable();
+			return object instanceof DMRepository && ((DMRepository) object).isUpdatable();
 		}
 
 	};
@@ -106,8 +106,8 @@ public class UpdateDMRepository extends FlexoAction {
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Create entity for " + classReference.getReferencedClass());
 					}
-					LoadableDMEntity.createLoadableDMEntity(classReference.getReferencedClass(), getRepository().getDMModel(),
-							getUpdatedSet().getImportGetOnlyProperties(), getUpdatedSet().getImportMethods());
+					LoadableDMEntity.createLoadableDMEntity(getRepository(), classReference.getReferencedClass(), getUpdatedSet()
+							.getImportGetOnlyProperties(), getUpdatedSet().getImportMethods());
 				}
 			}
 		}

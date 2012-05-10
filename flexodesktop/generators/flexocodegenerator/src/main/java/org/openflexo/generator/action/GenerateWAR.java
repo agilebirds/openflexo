@@ -35,7 +35,7 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.localization.FlexoLocalization;
 
-public class GenerateWAR extends GCAction<GenerateWAR, CGRepository> {
+public class GenerateWAR extends GenerateArtefact<GenerateWAR, CGRepository> {
 
 	private static final Logger logger = Logger.getLogger(GenerateWAR.class.getPackage().getName());
 
@@ -143,6 +143,11 @@ public class GenerateWAR extends GCAction<GenerateWAR, CGRepository> {
 
 	public File getGeneratedWar() {
 		return generatedWar;
+	}
+
+	@Override
+	public File getArtefactFile() {
+		return getGeneratedWar();
 	}
 
 	public void setCleanImmediately(boolean cleanImmediately) {

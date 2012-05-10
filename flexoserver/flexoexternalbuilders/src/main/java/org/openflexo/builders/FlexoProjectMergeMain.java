@@ -11,12 +11,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.builders.exception.CorruptedProjectException;
-import org.openflexo.builders.exception.FlexoRunException;
-import org.openflexo.builders.exception.MergeFailedException;
 import org.openflexo.builders.exception.MissingArgumentException;
-import org.openflexo.builders.exception.ProjectNotFoundException;
-import org.openflexo.builders.exception.SharedProjectNotFoundException;
 import org.openflexo.builders.utils.FlexoBuilderEditor;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.builders.utils.FlexoCVSConsoleListener;
@@ -184,7 +179,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 	}
 
 	@Override
-	protected void doRun() throws FlexoRunException {
+	protected void doRun() {
 		CVSFile.xmlDiff3MergeEnabled = true;
 		SharedProject project = null;
 		if (isFirstCommit) {
@@ -193,8 +188,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		} else {
 			project = SharedProject.openProject(repositories, projectDirectory, cvsRepository, EDITOR);
 			if (project == null) {
-				setExitCode(PROJECT_NOT_FOUND);
-				throw new SharedProjectNotFoundException();
+				setExitCodeCleanUpAndExit(PROJECT_NOT_FOUND);
 			}
 			synchronizeProject(project);
 			if (override) {
@@ -217,6 +211,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 			checkProjectIsOpenable();
 			commitProject();
 		}
+		setExitCodeCleanUpAndExit(0);
 	}
 
 	/**
@@ -263,7 +258,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 	/**
 	 * @throws MergeFailedException
 	 */
-	private void prepareMergeFailed() throws MergeFailedException {
+	private void prepareMergeFailed() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Merge cannot be performed: " + conflictingFiles.size() + " are conflicting. Set logger named " + logger.getName()
 					+ " level to FINE to see files and to FINEST to see merge detail.");
@@ -288,7 +283,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 				@Override
 				public FlexoEditor makeFlexoEditor(FlexoProject project) {
 
-					return new FlexoBuilderEditor(project);
+					return new FlexoBuilderEditor(null, project);
 				}
 			}, null);
 			for (CVSFile file : conflictingFiles) {
@@ -312,14 +307,13 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 				editor.getProject().close();
 			}
 		}
-		setExitCode(CONFLICTING_FILES);
-		throw new MergeFailedException(conflictingFiles);
+		setExitCodeCleanUpAndExit(CONFLICTING_FILES);
 	}
 
 	/**
 	 * @throws MergeFailedException
 	 */
-	private void mergeFiles() throws MergeFailedException {
+	private void mergeFiles() {
 		if (conflictingMergeableFiles.size() > 0) {
 			MarkAsMergedFiles markAsMerged = MarkAsMergedFiles.actionType.makeNewAction(null, conflictingMergeableFiles, EDITOR);
 			markAsMerged.doAction();
@@ -412,7 +406,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 	 * @throws ProjectNotFoundException
 	 * @throws CorruptedProjectException
 	 */
-	protected void checkProjectIsOpenable() throws ProjectNotFoundException, CorruptedProjectException {
+	protected void checkProjectIsOpenable() {
 		// at this point all files to update are updated.
 		// so we can try to load the project... and see if it's going right !!!
 		File projectCopyDirectory = null;
@@ -421,8 +415,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 			FileUtils.copyContentDirToDir(projectDirectory, projectCopyDirectory);
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			setExitCode(PROJECT_NOT_FOUND);
-			throw new ProjectNotFoundException(e1);
+			setExitCodeCleanUpAndExit(PROJECT_NOT_FOUND);
 		}
 		FlexoEditor editor = null;
 		try {
@@ -431,27 +424,21 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 				@Override
 				public FlexoEditor makeFlexoEditor(FlexoProject project) {
 
-					return new FlexoBuilderEditor(project);
+					return new FlexoBuilderEditor(null, project);
 				}
 			}, null);
 
 			if (editor == null) {
-				setExitCode(CORRUPTED_PROJECT_EXCEPTION);
-				throw new CorruptedProjectException(
-						"Try to open the merged project, but I got no editor, and the call to FlexoResourceManager.initializeExistingProject didn't throw any exception.");
+				setExitCodeCleanUpAndExit(CORRUPTED_PROJECT_EXCEPTION);
 			}
 			if (editor.getProject() == null) {
-				setExitCode(CORRUPTED_PROJECT_EXCEPTION);
-				throw new CorruptedProjectException(
-						"Try to open the merged project, but I got no project, and the call to FlexoResourceManager.initializeExistingProject call didn't throw any exception.");
+				setExitCodeCleanUpAndExit(CORRUPTED_PROJECT_EXCEPTION);
 			}
 			// printTOCRepositories(editor);
 		} catch (ProjectLoadingCancelledException e) {
-			setExitCode(CORRUPTED_PROJECT_EXCEPTION);
-			throw new CorruptedProjectException(e);
+			setExitCodeCleanUpAndExit(CORRUPTED_PROJECT_EXCEPTION);
 		} catch (ProjectInitializerException e) {
-			setExitCode(CORRUPTED_PROJECT_EXCEPTION);
-			throw new CorruptedProjectException(e);
+			setExitCodeCleanUpAndExit(CORRUPTED_PROJECT_EXCEPTION);
 		} finally {
 			if (editor != null && editor.getProject() != null) {
 				editor.getProject().close();

@@ -227,10 +227,6 @@ public class FGEPaintManager {
 		if (view instanceof ShapeView /*&& isPaintingCacheEnabled()*/) {
 			Container parent = ((Component) view).getParent();
 			if (parent == null) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Parent view to repaint is null: "
-							+ (view.getGraphicalRepresentation() != null ? view.getModel() : view));
-				}
 				return;
 			}
 			// What may happen here ?

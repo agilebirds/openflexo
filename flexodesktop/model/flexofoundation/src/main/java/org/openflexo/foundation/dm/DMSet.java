@@ -22,10 +22,13 @@ package org.openflexo.foundation.dm;
 import java.io.File;
 import java.lang.reflect.TypeVariable;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -61,8 +64,9 @@ public class DMSet extends TemporaryFlexoModelObject {
 	public DMSet(FlexoProject project, File jarFile, boolean parseMethodsAndProperties, FlexoProgress progress) {
 		this(project);
 		_jarFile = jarFile;
-		for (Enumeration<Class<?>> en = ExternalRepository.getContainedClasses(jarFile, null, project, progress); en.hasMoreElements();) {
-			Class<?> aClass = en.nextElement();
+		Iterator<Class<?>> i = ExternalRepository.getContainedClasses(jarFile, null, project, progress);
+		while (i.hasNext()) {
+			Class<?> aClass = i.next();
 			String packageName = packageNameForClass(aClass);
 			if (_packages.get(packageName) == null) {
 				_packages.put(packageName, new PackageReference(packageName));
@@ -75,8 +79,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 	public DMSet(FlexoProject project, ExternalRepository externalRepository, boolean parseMethodsAndProperties, FlexoProgress progress) {
 		this(project);
 		_externalRepository = externalRepository;
-		for (Enumeration<Class<?>> en = externalRepository.getJarLoader().getContainedClasses().elements(); en.hasMoreElements();) {
-			Class<?> aClass = en.nextElement();
+		for (Class<?> aClass : externalRepository.getJarLoader().getContainedClasses().values()) {
 			String packageName = packageNameForClass(aClass);
 			if (_packages.get(packageName) == null) {
 				_packages.put(packageName, new PackageReference(packageName));
@@ -117,7 +120,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 			progress.resetSecondaryProgress(entities.size());
 		}
 		for (LoadableDMEntity entity : entities) {
-			Class aClass = entity.retrieveJavaType();
+			Class<?> aClass = entity.retrieveJavaType();
 			if (aClass != null) {
 				if (progress != null) {
 					progress.setSecondaryProgress(FlexoLocalization.localizedForKey("analysing") + " " + aClass.getName());
@@ -230,7 +233,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 		return getName() == null ? 0 : getName().hashCode();
 	}
 
-	public Enumeration getPackages() {
+	public Enumeration<PackageReference> getPackages() {
 		Vector<PackageReference> orderedPackages = new Vector<PackageReference>(_packages.values());
 		Collections.sort(orderedPackages, new Comparator<PackageReference>() {
 			@Override
@@ -306,11 +309,11 @@ public class DMSet extends TemporaryFlexoModelObject {
 			return getName() == null ? 0 : getName().hashCode();
 		}
 
-		public ClassReference add(Class aClass, boolean parseMethodsAndProperties) {
+		public ClassReference add(Class<?> aClass, boolean parseMethodsAndProperties) {
 			return add(aClass, parseMethodsAndProperties, null);
 		}
 
-		public ClassReference add(Class aClass, boolean parseMethodsAndProperties, LoadableDMEntity entity) {
+		public ClassReference add(Class<?> aClass, boolean parseMethodsAndProperties, LoadableDMEntity entity) {
 			ClassReference aClassReference = new ClassReference(aClass, parseMethodsAndProperties, entity);
 			_classes.add(aClassReference);
 			return aClassReference;
@@ -320,17 +323,16 @@ public class DMSet extends TemporaryFlexoModelObject {
 			private String _className;
 			protected Vector<PropertyReference> _properties;
 			protected Vector<MethodReference> _methods;
-			private Class _referencedClass;
+			private Class<?> _referencedClass;
 
-			public ClassReference(Class aClass, boolean parseMethodsAndProperties, LoadableDMEntity entity) {
+			public ClassReference(Class<?> aClass, boolean parseMethodsAndProperties, LoadableDMEntity entity) {
 				this(classNameForClass(aClass));
 				_referencedClass = aClass;
 				if (parseMethodsAndProperties) {
-					Vector<String> excludedSignatures = new Vector<String>();
-					Vector<DMProperty> properties = LoadableDMEntity.searchForProperties(aClass, _project.getDataModel(), null, true,/*true,*/
+					List<String> excludedSignatures = new ArrayList<String>();
+					List<DMProperty> properties = LoadableDMEntity.searchForProperties(aClass, _project.getDataModel(), null, true,/*true,*/
 							false, excludedSignatures);
-					for (Enumeration en = properties.elements(); en.hasMoreElements();) {
-						DMProperty next = (DMProperty) en.nextElement();
+					for (DMProperty next : properties) {
 						PropertyReference propertyReference = new PropertyReference(next.getName(), next.getIsSettable(),
 								next.getCardinality(),
 								// (next.getType()!=null?next.getType().getName():next.getUnresolvedTypeName()+"<unloaded>"));
@@ -341,10 +343,9 @@ public class DMSet extends TemporaryFlexoModelObject {
 							addToSelectedObjects(propertyReference);
 						}
 					}
-					Vector methods = LoadableDMEntity.searchForMethods(aClass, _project.getDataModel(), null,/*true,true,*/false,
+					List<DMMethod> methods = LoadableDMEntity.searchForMethods(aClass, _project.getDataModel(), null,/*true,true,*/false,
 							excludedSignatures);
-					for (Enumeration en = methods.elements(); en.hasMoreElements();) {
-						DMMethod next = (DMMethod) en.nextElement();
+					for (DMMethod next : methods) {
 						MethodReference methodReference = new MethodReference(next.getSignature(), next.getSimplifiedSignature(),
 						// (next.getReturnType()!=null?next.getReturnType().getName():next.getUnresolvedReturnType().getValue()+"<unloaded>"));
 								next.getReturnType().getStringRepresentation(), next.getReturnType().getSimplifiedStringRepresentation()
@@ -364,7 +365,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 				_methods = new Vector<MethodReference>();
 			}
 
-			public Class getReferencedClass() {
+			public Class<?> getReferencedClass() {
 				return _referencedClass;
 			}
 
@@ -621,7 +622,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 
 	}
 
-	public ClassReference getClassReference(Class aClass) {
+	public ClassReference getClassReference(Class<?> aClass) {
 		String packageName = packageNameForClass(aClass);
 		String className = classNameForClass(aClass);
 		PackageReference aPackage = _packages.get(packageName);
@@ -631,7 +632,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 		return null;
 	}
 
-	public boolean containsSelectedClass(Class aClass) {
+	public boolean containsSelectedClass(Class<?> aClass) {
 		ClassReference searchedClass = getClassReference(aClass);
 		return searchedClass != null && searchedClass.isSelected();
 	}

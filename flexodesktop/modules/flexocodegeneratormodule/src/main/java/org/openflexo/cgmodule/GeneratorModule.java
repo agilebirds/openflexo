@@ -19,19 +19,13 @@
  */
 package org.openflexo.cgmodule;
 
-import java.util.Map;
 import java.util.logging.Logger;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalGeneratorModule;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -66,24 +60,6 @@ public class GeneratorModule extends FlexoModule implements ExternalGeneratorMod
 
 	public GeneratorController getGeneratorController() {
 		return (GeneratorController) getFlexoController();
-	}
-
-	/**
-	 * SGU: what's that ?
-	 * 
-	 * @deprecated
-	 */
-	@Override
-	@Deprecated
-	public String generateCode(FlexoProject project, String templateName, Map replacement) {
-		logger.warning("deprecated ?");
-		/*try {
-		return Generator.generateCode(project, templateName, replacement);
-		} catch (TemplateReplacementException e) {
-		e.printStackTrace();
-		return null;
-		}*/
-		return "deprecated";
 	}
 
 	/**

@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.dm.JarLoader.JarClassLoader;
-
 import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaClassParent;
@@ -142,16 +140,16 @@ public class DMClassLibrary extends ClassLibrary {
 	private HashSet<String> _unresolvedClassName;
 
 	@Override
-	public synchronized Class getClass(String className) {
+	public synchronized Class<?> getClass(String className) {
 		if (_unresolvedClassName.contains(className)) {
 			return null;
 		}
 		potentiallyModifyingCL = true;
-		Class returned = super.getClass(className);
+		Class<?> returned = super.getClass(className);
 		if (returned == null) {
 			for (JarClassLoader cl : loadedJarClassLoaders) {
 				// Don't search in all jars since we are already iterating
-				returned = cl.findClass(className, false);
+				returned = cl.findClass(className);
 				if (returned != null) {
 					break;
 				}

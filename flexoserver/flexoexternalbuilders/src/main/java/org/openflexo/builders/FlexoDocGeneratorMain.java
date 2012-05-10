@@ -2,6 +2,8 @@ package org.openflexo.builders;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,6 +13,7 @@ import org.openflexo.dg.action.GenerateDocx;
 import org.openflexo.dg.action.GeneratePDF;
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.Format;
+import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.action.AddDocType;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
@@ -20,6 +23,7 @@ import org.openflexo.foundation.cg.templates.action.ImportTemplates;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.generator.action.GenerateArtefact;
 import org.openflexo.generator.action.GenerateZip;
 import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
@@ -72,7 +76,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 					String tocString = args[i].substring(TOC_FLEXOID.length()).trim();
 					tocFlexoID = Long.valueOf(tocString);
 				} else if (args[i].startsWith(TOC_UID)) {
-					tocUserID = args[i].substring(TOC_UID.length());
+					tocUserID = args[i].substring(TOC_UID.length()).trim();
 				} else if (args[i].startsWith(TEMPLATES_ARGUMENT_PREFIX)) {
 					templates = new File(args[i].substring(TEMPLATES_ARGUMENT_PREFIX.length()));
 					if (!templates.exists()) {
@@ -149,7 +153,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 				output = FileUtils.createTempDirectory("DocOutput", "");
 			} catch (IOException e) {
 				e.printStackTrace();
-				setExitCode(LOCAL_IO_EXCEPTION);
+				setExitCodeCleanUpAndExit(LOCAL_IO_EXCEPTION);
 				return;
 			}
 		}
@@ -219,7 +223,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 				if (rep == null) {
 					logger.severe("Cannot find TOCRepository : flexoID=" + tocFlexoID + " userID=" + tocUserID);
 					reportMessage("Cannot find TOCRepository : flexoID=" + tocFlexoID + " userID=" + tocUserID);
-					setExitCode(TOC_REPOSITORY_NOT_FOUND);
+					setExitCodeCleanUpAndExit(TOC_REPOSITORY_NOT_FOUND);
 					return;
 				}
 
@@ -238,86 +242,97 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			docType = add.getNewDocType().toString();
 			ConnectCGRepository connect = ConnectCGRepository.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
 			connect.doAction();
+			List<FlexoAction<?, ?, ?>> actions = new ArrayList<FlexoAction<?, ?, ?>>();
 			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
 					add.getNewGeneratedCodeRepository(), null, editor);
 			sync.setSaveBeforeGenerating(false);
-			sync.doAction();
-			if (!sync.hasActionExecutionSucceeded()) {
-				handleActionFailed(sync);
-			}
+			actions.add(sync);
 			WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(add.getNewGeneratedCodeRepository(),
 					null, editor);
 			write.setSaveBeforeGenerating(false);
-			write.doAction();
-			if (!write.hasActionExecutionSucceeded()) {
-				handleActionFailed(write);
-			}
-			if (noPostBuild) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("No post build option is true, ignoring post build generation.\nReturning now.");
-				}
-				return;
-			}
-			File postBuildFile = null;
-			switch (format) {
-			case LATEX:
-				String latexCommand = LatexUtils.getDefaultLatex2PDFCommand(false); // Little hack for server (see bug #1006055)
-				GeneratePDF pdf = GeneratePDF.actionType.makeNewAction((DGRepository) add.getNewGeneratedCodeRepository(), null, editor);
-				pdf.setLatexCommand(latexCommand);
-				pdf.setSaveBeforeGenerating(false);
-				pdf.setLatexTimeOutInSeconds(120);
-				pdf.doAction();
-				if (pdf.getLatexErrorMessage() != null) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("PDF generation error: " + pdf.getLatexErrorMessage());
+			actions.add(write);
+			final GenerateArtefact<?, ?> generateArtefact;
+			if (!noPostBuild) {
+				switch (format) {
+				case LATEX:
+					String latexCommand = LatexUtils.getDefaultLatex2PDFCommand(false); // Little hack for server (see bug #1006055)
+					GeneratePDF pdf = GeneratePDF.actionType
+							.makeNewAction((DGRepository) add.getNewGeneratedCodeRepository(), null, editor);
+					pdf.setLatexCommand(latexCommand);
+					pdf.setSaveBeforeGenerating(false);
+					pdf.setLatexTimeOutInSeconds(120);
+					actions.add(pdf);
+					generateArtefact = pdf;
+					break;
+				case HTML:
+					GenerateZip zip = GenerateZip.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
+					zip.setSaveBeforeGenerating(false);
+					actions.add(zip);
+					generateArtefact = zip;
+
+					break;
+				case DOCX:
+					GenerateDocx docxAction = GenerateDocx.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
+					docxAction.setSaveBeforeGenerating(false);
+					docxAction.doAction();
+					generateArtefact = docxAction;
+					break;
+				default:
+					generateArtefact = null;
+					if (logger.isLoggable(Level.SEVERE)) {
+						logger.severe("Unknown doc format");
 					}
+					setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
+					break;
 				}
-				if (!pdf.hasActionExecutionSucceeded()) {
-					handleActionFailed(pdf);
-				}
-				postBuildFile = pdf.getGeneratedPDF();
-				break;
-			case HTML:
-				GenerateZip zip = GenerateZip.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
-				zip.setSaveBeforeGenerating(false);
-				zip.doAction();
-				if (!zip.hasActionExecutionSucceeded()) {
-					handleActionFailed(zip);
-				}
-				postBuildFile = zip.getGeneratedZipFile();
-				break;
-			case DOCX:
-				GenerateDocx docxAction = GenerateDocx.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
-				docxAction.setSaveBeforeGenerating(false);
-				docxAction.doAction();
-				if (!docxAction.hasActionExecutionSucceeded()) {
-					handleActionFailed(docxAction);
-				}
-				postBuildFile = docxAction.getGeneratedDocxFile();
-				break;
-			default:
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Unknown doc format");
-				}
-				break;
+			} else {
+				generateArtefact = null;
 			}
-			if (postBuildFile == null) {
-				setExitCode(POST_BUILD_ERROR);
-			}
-			try {
-				FileUtils.copyFileToFile(postBuildFile, new File(outputPath));
-			} catch (IOException e) {
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Could not copy " + postBuildFile.getAbsolutePath() + " to " + outputPath);
+			Runnable whenDone = new Runnable() {
+
+				@Override
+				public void run() {
+					if (noPostBuild) {
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("No post build option is true, ignoring post build generation.\nReturning now.");
+						}
+						setExitCodeCleanUpAndExit(0);
+						return;
+					}
+					if (generateArtefact instanceof GeneratePDF) {
+						GeneratePDF pdf = (GeneratePDF) generateArtefact;
+						if (pdf.getLatexErrorMessage() != null) {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning("PDF generation error: " + pdf.getLatexErrorMessage());
+							}
+						}
+					}
+					File postBuildFile = null;
+					if (generateArtefact != null) {
+						postBuildFile = generateArtefact.getArtefactFile();
+					}
+					if (postBuildFile == null) {
+						setExitCodeCleanUpAndExit(POST_BUILD_ERROR);
+						return;
+					}
+					try {
+						FileUtils.copyFileToFile(postBuildFile, new File(outputPath));
+					} catch (IOException e) {
+						if (logger.isLoggable(Level.SEVERE)) {
+							logger.severe("Could not copy " + postBuildFile.getAbsolutePath() + " to " + outputPath);
+						}
+						setExitCodeCleanUpAndExit(LOCAL_IO_EXCEPTION);
+						return;
+					}
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Documentation generated at " + outputPath);
+					}
+					setExitCodeCleanUpAndExit(0);
 				}
-				setExitCode(LOCAL_IO_EXCEPTION);
-				return;
-			}
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Documentation generated at " + outputPath);
-			}
+			};
+			editor.chainActions(actions, whenDone);
 		} else {
-			setExitCode(PROJECT_NOT_FOUND);
+			setExitCodeCleanUpAndExit(PROJECT_NOT_FOUND);
 		}
 	}
 

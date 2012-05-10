@@ -38,14 +38,15 @@ public class BinaryOperatorExpression extends Expression {
 
 	@Override
 	public int getDepth() {
-		if (leftArgument == this) {
+		/* GPO: Removal of all System.exit()
+		 * if (leftArgument == this) {
 			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
 			System.exit(-1);
 		}
 		if (rightArgument == this) {
 			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
 			System.exit(-1);
-		}
+		}*/
 		return Math.max(leftArgument.getDepth(), rightArgument.getDepth()) + 1;
 	}
 
@@ -62,10 +63,11 @@ public class BinaryOperatorExpression extends Expression {
 
 	public void setLeftArgument(Expression leftArgument) {
 		this.leftArgument = leftArgument;
-		if (leftArgument == this) {
-			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
-			System.exit(-1);
-		}
+		/**
+		 * GPO: Removal of System.exit() if (leftArgument == this) {
+		 * 
+		 * new Exception("C'est quoi ce bazard ???").printStackTrace(); System.exit(-1); }
+		 */
 	}
 
 	public BinaryOperator getOperator() {
@@ -82,10 +84,10 @@ public class BinaryOperatorExpression extends Expression {
 
 	public void setRightArgument(Expression rightArgument) {
 		this.rightArgument = rightArgument;
-		if (rightArgument == this) {
-			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
-			System.exit(-1);
-		}
+		/**
+		 * GPO: Removal of System.exit() if (rightArgument == this) { new Exception("C'est quoi ce bazard ???").printStackTrace();
+		 * System.exit(-1); }
+		 */
 	}
 
 	@Override

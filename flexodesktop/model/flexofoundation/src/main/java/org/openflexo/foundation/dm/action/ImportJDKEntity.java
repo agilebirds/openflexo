@@ -48,8 +48,9 @@ public class ImportJDKEntity extends FlexoAction<ImportJDKEntity, DMObject, DMOb
 
 		@Override
 		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
-			return ((object != null) && ((object instanceof JDKRepository) || ((object instanceof DMPackage) && (((DMPackage) object)
-					.getRepository() instanceof JDKRepository))));
+			return object != null
+					&& (object instanceof JDKRepository || object instanceof DMPackage
+							&& ((DMPackage) object).getRepository() instanceof JDKRepository);
 		}
 
 		@Override
@@ -74,15 +75,15 @@ public class ImportJDKEntity extends FlexoAction<ImportJDKEntity, DMObject, DMOb
 	protected void doAction(Object context) {
 		logger.info("ImportJDKEntity");
 		if (getJDKRepository() != null) {
-			Class importedClass = getClassToImport();
+			Class<?> importedClass = getClassToImport();
 			if (importedClass != null) {
-				_newEntity = LoadableDMEntity.createLoadableDMEntity(importedClass, getJDKRepository().getDMModel(),
-						getImportGetOnlyProperties(), getImportMethods());
+				_newEntity = LoadableDMEntity.createLoadableDMEntity(getJDKRepository(), importedClass, getImportGetOnlyProperties(),
+						getImportMethods());
 			}
 		}
 	}
 
-	public Class getClassToImport() {
+	public Class<?> getClassToImport() {
 		try {
 			return Class.forName(packageName + "." + className);
 		} catch (ClassNotFoundException e) {
@@ -93,7 +94,7 @@ public class ImportJDKEntity extends FlexoAction<ImportJDKEntity, DMObject, DMOb
 
 	public JDKRepository getJDKRepository() {
 		if (getFocusedObject() != null) {
-			return (getFocusedObject()).getDMModel().getJDKRepository();
+			return getFocusedObject().getDMModel().getJDKRepository();
 		}
 		return null;
 	}

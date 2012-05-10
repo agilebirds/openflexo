@@ -20,6 +20,7 @@
 package org.openflexo.foundation.ontology;
 
 import java.util.Hashtable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -314,6 +315,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
 				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
+				if (subject == null) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not find subject with URI " + subjectURI);
+					}
+					return null;
+				}
 				OntologyObjectProperty property = getProject().getProjectOntologyLibrary().getObjectProperty(objectPropertyURI);
 				statement = subject.getObjectPropertyStatement(property);
 				// logger.info("Found statement: "+statement);
