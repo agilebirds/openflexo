@@ -729,6 +729,58 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		return propertiesTakingMySelfAsDomain;
 	}
 
+	// TODO implement a nice and documented API here !
+	public Vector<OntologyProperty> getDataPropertiesTakingMySelfAsDomain(Object range) {
+		return getPropertiesTakingMyselfAsDomain(true, false, false, false, null, null, getOntology());
+	}
+
+	public Vector<OntologyProperty> getObjectPropertiesTakingMySelfAsDomain(OntologyObject<?> range) {
+		return getPropertiesTakingMySelfAsDomain();
+	}
+
+	private Vector<OntologyProperty> getPropertiesTakingMyselfAsDomain(boolean includeDataProperties, boolean includeObjectProperties,
+			boolean includeAnnotationProperties, boolean includeBaseOntologies, OntologyObject<?> range, OntologicDataType dataType,
+			FlexoOntology... ontologies) {
+		Vector<OntologyProperty> allProperties = getPropertiesTakingMySelfAsDomain();
+		Vector<OntologyProperty> returnedProperties = new Vector<OntologyProperty>();
+		for (OntologyProperty p : allProperties) {
+			boolean takeIt = (includeDataProperties && p instanceof OntologyDataProperty)
+					|| (includeObjectProperties && p instanceof OntologyObjectProperty)
+					|| (includeAnnotationProperties && p.isAnnotationProperty());
+			if (range != null && (p instanceof OntologyObjectProperty) && !((OntologyObjectProperty) p).getRange().isSuperConceptOf(range)) {
+				takeIt = false;
+			}
+			if (dataType != null && (p instanceof OntologyDataProperty) && ((OntologyDataProperty) p).getDataType() != dataType) {
+				takeIt = false;
+			}
+			FlexoOntology containerOntology = p.getOntology();
+			if (containerOntology == p.getOntologyLibrary().getOWLOntology() && !includeBaseOntologies) {
+				takeIt = false;
+			}
+			if (containerOntology == p.getOntologyLibrary().getRDFOntology() && !includeBaseOntologies) {
+				takeIt = false;
+			}
+			if (containerOntology == p.getOntologyLibrary().getRDFSOntology() && !includeBaseOntologies) {
+				takeIt = false;
+			}
+			if (ontologies != null) {
+				boolean containedInGivenOntologies = false;
+				for (FlexoOntology o : ontologies) {
+					if (containerOntology == o) {
+						containedInGivenOntologies = true;
+					}
+				}
+				if (!containedInGivenOntologies) {
+					takeIt = false;
+				}
+			}
+			if (takeIt) {
+				returnedProperties.add(p);
+			}
+		}
+		return returnedProperties;
+	}
+
 	private void searchRangeAndDomains() {
 		declaredPropertiesTakingMySelfAsRange.clear();
 		declaredPropertiesTakingMySelfAsDomain.clear();
