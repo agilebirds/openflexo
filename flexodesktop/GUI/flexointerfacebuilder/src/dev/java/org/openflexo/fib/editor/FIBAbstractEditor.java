@@ -150,7 +150,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		palette.setVisible(true);
 
 		frame.setTitle("Flexo Interface Builder Editor");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		// mainPanel = new JPanel();
 
 		JMenuBar mb = new JMenuBar();
