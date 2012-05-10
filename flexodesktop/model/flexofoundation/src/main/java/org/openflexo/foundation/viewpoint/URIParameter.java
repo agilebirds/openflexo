@@ -68,7 +68,7 @@ public class URIParameter extends EditionSchemeParameter {
 	}
 
 	@Override
-	public boolean isMandatory() {
+	public boolean getIsRequired() {
 		return true;
 	}
 

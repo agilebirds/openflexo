@@ -50,7 +50,8 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 		CLASS,
 		OBJECT_PROPERTY,
 		DATA_PROPERTY,
-		FLEXO_OBJECT;
+		FLEXO_OBJECT,
+		LIST;
 	}
 
 	private String name;
@@ -64,7 +65,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 	private ViewPointDataBinding defaultValue;
 
 	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
-		conditional, baseURI, defaultValue, domainValue, rangeValue, parentClassValue, conceptValue
+		conditional, baseURI, defaultValue, list, domainValue, rangeValue, parentClassValue, conceptValue
 	}
 
 	public EditionSchemeParameter() {
@@ -171,9 +172,11 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 	}
 
 	public void setConditional(ViewPointDataBinding conditional) {
-		conditional.setOwner(this);
-		conditional.setBindingAttribute(ParameterBindingAttribute.conditional);
-		conditional.setBindingDefinition(getConditionalBindingDefinition());
+		if (conditional != null) {
+			conditional.setOwner(this);
+			conditional.setBindingAttribute(ParameterBindingAttribute.conditional);
+			conditional.setBindingDefinition(getConditionalBindingDefinition());
+		}
 		this.conditional = conditional;
 	}
 
@@ -194,9 +197,11 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 	}
 
 	public void setDefaultValue(ViewPointDataBinding defaultValue) {
-		defaultValue.setOwner(this);
-		defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);
-		defaultValue.setBindingDefinition(getDefaultValueBindingDefinition());
+		if (defaultValue != null) {
+			defaultValue.setOwner(this);
+			defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);
+			defaultValue.setBindingDefinition(getDefaultValueBindingDefinition());
+		}
 		this.defaultValue = defaultValue;
 	}
 
@@ -214,12 +219,18 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 		return null;
 	}
 
-	public boolean isMandatory() {
+	private boolean isRequired = false;
+
+	public boolean getIsRequired() {
 		return false;
 	}
 
+	public void setIsRequired(boolean flag) {
+		isRequired = flag;
+	}
+
 	public boolean isValid(EditionSchemeAction action, Object value) {
-		return !isMandatory() || value != null;
+		return !getIsRequired() || value != null;
 	}
 
 }
