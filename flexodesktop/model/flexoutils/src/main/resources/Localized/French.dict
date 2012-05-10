@@ -1,5 +1,5 @@
 #French
-#Mon May 07 12:39:55 CEST 2012
+#Thu May 10 14:46:09 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1548,7 +1548,7 @@ create_source_repository=create_source_repository
 create_status_property=cr\u00E9er une propri\u00E9t\u00E9 statut
 create_view=Cr\u00E9er une vue
 create_view_folder=Cr\u00E9er un r\u00E9pertoire de vues
-create_view_point=create_view_point
+create_view_point=Cr\u00E9er un point de vue
 creates=Creer
 creates_entry_in_entity=Cr\u00E9er la donn\u00E9e dans l'entit\u00E9
 creates_new_component=Creation d'un nouvel \u00E9cran
@@ -2864,6 +2864,7 @@ inspector_always_on_top=Garder l'inspecteur \u00E0 l'avant-plan
 inspector_name=Inspecteur
 installed_licences=Licences install\u00E9es
 installed_licences_description=Les licences suivantes sont install\u00E9es sur votre ordinateur. Veuillez contacter la soci\u00E9t\u00E9 Denali pour obtenir de nouvelles licences - web\: www.flexoBPM.com -  email\: info@flexoBPM.com. Les modules "Workflow Editor" et "Interface Editor" sont toujours accessibles mais sont limit\u00E9s \u00E0 un nombre maximum d'objets.
+instanciation_parameters_of_edition_scheme=instanciation_parameters_of_edition_scheme
 integer=Entier
 interactive_nodes_cannot_be_found_inside_an_execution_petri_graph=Les noeuds interactifs ne peuvent pas se trouver \u00E0 l'int\u00E9rieur d'un graphe de p\u00E9tri ex\u00E9cutable
 interactive_nodes_cannot_be_found_inside_an_execution_petri_graph_description=Les noeuds interactifs ne peuvent pas se trouver \u00E0 l'int\u00E9rieur d'un graphe de p\u00E9tri ex\u00E9cutable
@@ -3470,7 +3471,7 @@ no_type=Pas de type
 no_type_defined_for_this_new_property=Pas de type d\u00E9fini pour cette propri\u00E9t\u00E9
 no_validation_report=Pas de rapport de validation
 no_view_name_defined=no_view_name_defined
-no_view_point_selected=no_view_point_selected
+no_view_point_selected=Pas de point de vue s\u00E9lectionn\u00E9
 node=Noeud
 node_($0)=Noeud ($0)
 node_($object.name)_has_ambigous_name=Le noeud "($object.name)" a un nom ambigu dans ce contexte
@@ -5060,6 +5061,8 @@ vertical_horizontal=Vertical/horizontal
 vertical_layout=Mise en page verticale
 view=view
 view_next_operations=Voir les prochaines op\u00E9rations
+view_object=view_object
+view_point=Point de vue
 view_point_library=Biblioth\u00E8que de View Point
 viewer=viewer
 views=views

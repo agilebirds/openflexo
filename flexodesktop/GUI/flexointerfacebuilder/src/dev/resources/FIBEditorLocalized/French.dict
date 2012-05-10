@@ -1,8 +1,9 @@
 #French
-#Thu May 10 13:59:58 CEST 2012
+#Thu May 10 17:37:43 CEST 2012
 ARITHMETIC_FLOAT=[FLOTTANT]
 ARITHMETIC_INTEGER=[ENTIER]
 BOOLEAN=BOOLEEN
+CUSTOM_POLYGON=CUSTOM_POLYGON
 Common=Common
 DATE=[DATE]
 DURATION=[DUREE]
@@ -11,8 +12,11 @@ ENUM=ENUM
 English=Anglais
 French=Fran\u00E7ais
 LITERAL=[LITTERAL]
+RECTANGLE=RECTANGLE
 STRING=[CHAINE DE CARACTERES]
 actions=Actions
+add_connector=ajouter un connecteur
+add_new_shape=ajouter une forme
 addition=ajout
 bold=Gras
 bold_italic=Gras italique
@@ -64,11 +68,13 @@ look_and_feel=Look and feel
 modified=modified
 multiplication=multiplication
 natural_logarithm_(base_e)=Logarithme n\u00E9p\u00E9rien (base e)
+new=Nouveau
 new_interface=Nouveau composant
 no=Non
 no_documentation=Pas de documentation
 no_selection=Pas de s\u00E9lection
 not_equals_operator=Op\u00E9rateur 'diff\u00E9rent de'
+oe_shape=Forme oe
 ok=OK
 ontology_calc=Calque ontologique
 open_interface=Ouvrir un composant
@@ -104,6 +110,7 @@ unexpected_exception_occured=OpenFlexo a d\u00E9tect\u00E9 une erreur interne. O
 validate_component=Valider le composant
 ve_module_name=Editeur de vues
 view_object=view_object
+view_point=Point de vue
 view_point_library=Biblioth\u00E8que de View Point
 vpm_module_name=Editeur de Points de Vues
 workflow_editor=Editeur de processus

@@ -1,8 +1,9 @@
 #Dutch
-#Thu May 10 13:59:58 CEST 2012
+#Thu May 10 17:37:43 CEST 2012
 ARITHMETIC_FLOAT=[FLOAT]
 ARITHMETIC_INTEGER=[INTEGER]
 BOOLEAN=BOOLEAN
+CUSTOM_POLYGON=CUSTOM_POLYGON
 Common=Common
 DATE=[DATE]
 DURATION=[DURATION]
@@ -11,8 +12,11 @@ ENUM=ENUM
 English=English
 French=French
 LITERAL=[LITERAL]
+RECTANGLE=RECTANGLE
 STRING=[STRING]
 actions=Actions
+add_connector=add connector
+add_new_shape=Add new shape
 addition=addition
 bold=Bold
 bold_italic=Bold italic
@@ -64,11 +68,13 @@ look_and_feel=Look and feel
 modified=modified
 multiplication=multiplication
 natural_logarithm_(base_e)=Natural logarithm (base e)
+new=New
 new_interface=New component
 no=No
 no_documentation=No documentation
 no_selection=No selection
 not_equals_operator='not equals' operator
+oe_shape=OEShape
 ok=OK
 ontology_calc=Ontologic calc
 open_interface=Open component
@@ -104,6 +110,7 @@ unexpected_exception_occured=OpenFlexo has detected an internal error. OpenFlexo
 validate_component=Validate component
 ve_module_name=View Editor
 view_object=view_object
+view_point=View point
 view_point_library=View Point Library
 vpm_module_name=ViewPoint Modeller
 workflow_editor=Workflow Editor
