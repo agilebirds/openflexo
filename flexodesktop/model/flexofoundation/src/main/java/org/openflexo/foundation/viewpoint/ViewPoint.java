@@ -264,7 +264,7 @@ public class ViewPoint extends ViewPointObject {
 
 	@Override
 	public String getClassNameKey() {
-		return "ontology_calc";
+		return "view_point";
 	}
 
 	private void findPalettes(File dir) {
