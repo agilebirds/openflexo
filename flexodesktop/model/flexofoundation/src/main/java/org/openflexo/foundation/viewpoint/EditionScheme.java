@@ -54,6 +54,10 @@ public abstract class EditionScheme extends ViewPointObject {
 
 	private EditionPattern _editionPattern;
 
+	private boolean definePopupDefaultSize = false;
+	private int width = 800;
+	private int height = 600;
+
 	public EditionScheme() {
 		actions = new Vector<EditionAction>();
 		parameters = new Vector<EditionSchemeParameter>();
@@ -404,6 +408,14 @@ public abstract class EditionScheme extends ViewPointObject {
 		return newParameter;
 	}
 
+	public EditionSchemeParameter createListParameter() {
+		EditionSchemeParameter newParameter = new ListParameter();
+		newParameter.setName("list");
+		// newParameter.setLabel("label");
+		addToParameters(newParameter);
+		return newParameter;
+	}
+
 	public EditionSchemeParameter deleteParameter(EditionSchemeParameter aParameter) {
 		removeFromParameters(aParameter);
 		aParameter.delete();
@@ -470,6 +482,30 @@ public abstract class EditionScheme extends ViewPointObject {
 		newEditionScheme.setName(newName);
 		getEditionPattern().addToEditionSchemes(newEditionScheme);
 		return newEditionScheme;
+	}
+
+	public boolean getDefinePopupDefaultSize() {
+		return definePopupDefaultSize;
+	}
+
+	public void setDefinePopupDefaultSize(boolean definePopupDefaultSize) {
+		this.definePopupDefaultSize = definePopupDefaultSize;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 }

@@ -191,9 +191,13 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.EditionScheme"
 		abstract="yes">
+		
 		<property name="name" xmlTag="name" attribute="YES" />
 		<property name="label" xmlTag="label" attribute="YES" />
 		<property name="skipConfirmationPanel" xmlTag="skipConfirmationPanel" attribute="YES" />
+		<property name="definePopupDefaultSize" xmlTag="definePopupDefaultSize" attribute="YES" />
+		<property name="width" xmlTag="width" attribute="YES" />
+		<property name="height" xmlTag="height" attribute="YES" />
 		<property name="description" xmlTag="description" />
 		<property name="parameters" type="vector"
 			contains="org.openflexo.foundation.viewpoint.EditionSchemeParameter"
@@ -251,6 +255,7 @@
 			attribute="YES" />
 		<property name="description" xmlTag="description" />
 		<property name="conditional" xmlTag="conditional" attribute="YES" />
+		<property name="isRequired" xmlTag="isRequired" attribute="YES" />
 	</entity>
 
 	<entity
@@ -313,6 +318,12 @@
 	<entity
 		name="org.openflexo.foundation.viewpoint.FlexoObjectParameter" xmlTag="FlexoObjectParameter">
 		<property name="flexoObjectType" xmlTag="flexoObjectType" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.ListParameter" xmlTag="ListParameter">
+		<property name="listType" xmlTag="listType" attribute="YES" />
+		<property name="list" xmlTag="list" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.EditionAction"
