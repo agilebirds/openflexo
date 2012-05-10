@@ -1,8 +1,8 @@
 <Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
 	   name="Inspector" 
 	   layout="border" 
-	   dataClassName="org.openflexo.fib.model.FIBRadioButtonList">
-	<Parameter name="title" value="RadioButtons"/>
+	   dataClassName="org.openflexo.fib.model.FIBCheckboxList">
+	<Parameter name="title" value="Checkbox List"/>
 
 		<TabPanel name="Tab" constraints="border(location=center)">
 

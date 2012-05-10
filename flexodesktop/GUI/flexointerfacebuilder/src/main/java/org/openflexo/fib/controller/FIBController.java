@@ -43,6 +43,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
+import org.openflexo.fib.model.FIBCheckboxList;
 import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
@@ -75,6 +76,7 @@ import org.openflexo.fib.view.container.FIBTabView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBButtonWidget;
 import org.openflexo.fib.view.widget.FIBCheckBoxWidget;
+import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
 import org.openflexo.fib.view.widget.FIBColorWidget;
 import org.openflexo.fib.view.widget.FIBCustomWidget;
 import org.openflexo.fib.view.widget.FIBDropDownWidget;
@@ -704,6 +706,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			}
 			if (fibWidget instanceof FIBRadioButtonList) {
 				return new FIBRadioButtonListWidget((FIBRadioButtonList) fibWidget, FIBController.this);
+			}
+			if (fibWidget instanceof FIBCheckboxList) {
+				return new FIBCheckboxListWidget((FIBCheckboxList) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBCustom) {
 				return new FIBCustomWidget((FIBCustom) fibWidget, FIBController.this);

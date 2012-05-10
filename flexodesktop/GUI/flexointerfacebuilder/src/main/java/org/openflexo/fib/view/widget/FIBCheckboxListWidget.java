@@ -22,55 +22,60 @@ package org.openflexo.fib.view.widget;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBCheckboxList;
 
-public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioButtonList, JPanel, Object> {
+public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxList, JPanel, List> {
 
-	static final Logger logger = Logger.getLogger(FIBRadioButtonListWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBCheckboxListWidget.class.getPackage().getName());
 
-	private JRadioButton[] radioButtonArray;
+	private JCheckBox[] checkboxesArray;
 
 	private JPanel panel;
 
-	private ButtonGroup buttonGroup;
+	private List<Object> selectedValues = new Vector();
 
-	private Object selectedValue;
-
-	public FIBRadioButtonListWidget(FIBRadioButtonList model, FIBController controller) {
+	public FIBCheckboxListWidget(FIBCheckboxList model, FIBController controller) {
 		super(model, controller);
-		buttonGroup = new ButtonGroup();
 		panel = new JPanel(new GridLayout(0, model.getColumns(), model.getHGap(), model.getVGap()));
 		panel.setOpaque(false);
-		rebuildRadioButtons();
+		rebuildCheckboxes();
 		if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
-			radioButtonArray[0].setSelected(true);
+			checkboxesArray[0].setSelected(true);
 			notifyDynamicModelChanged();
 		}
 	}
 
-	protected void rebuildRadioButtons() {
+	private boolean containsObject(Object object) {
+		if (selectedValues == null) {
+			return false;
+		} else {
+			return selectedValues.contains(object);
+		}
+	}
+
+	protected void rebuildCheckboxes() {
 		panel.removeAll();
 		((GridLayout) panel.getLayout()).setColumns(getWidget().getColumns());
 		((GridLayout) panel.getLayout()).setHgap(getWidget().getHGap());
 		((GridLayout) panel.getLayout()).setVgap(getWidget().getVGap());
-		buttonGroup = new ButtonGroup();
-		radioButtonArray = new JRadioButton[getListModel().getSize()];
+		checkboxesArray = new JCheckBox[getListModel().getSize()];
 		for (int i = 0; i < getListModel().getSize(); i++) {
 			Object object = getListModel().getElementAt(i);
-			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
+			JCheckBox rb = new JCheckBox(getStringRepresentation(object), containsObject(object));
 			rb.setOpaque(false);
-			rb.addActionListener(new RadioButtonListener(rb, object, i));
-			radioButtonArray[i] = rb;
+			rb.addActionListener(new CheckboxListener(rb, object, i));
+			checkboxesArray[i] = rb;
 			panel.add(rb);
-			buttonGroup.add(rb);
+			// buttonGroup.add(rb);
 		}
 		updateFont();
 		panel.validate();
@@ -78,19 +83,15 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		Object value = getValue();
-		if (notEquals(value, selectedValue) || listModelRequireChange() || listModel == null) {
+		List value = getValue();
+		if (notEquals(value, selectedValues) || listModelRequireChange() || listModel == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
 			}
 
 			widgetUpdating = true;
-			selectedValue = value;
-			rebuildRadioButtons();
-
-			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
-				radioButtonArray[0].setSelected(true);
-			}
+			selectedValues = value;
+			rebuildCheckboxes();
 
 			widgetUpdating = false;
 			return true;
@@ -98,22 +99,33 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 		return false;
 	}
 
-	private class RadioButtonListener implements ActionListener {
+	private class CheckboxListener implements ActionListener {
 
 		private final Object value;
-		private final JRadioButton button;
+		private final JCheckBox cb;
 		private final int index;
 
-		public RadioButtonListener(JRadioButton button, Object value, int index) {
-			this.button = button;
+		public CheckboxListener(JCheckBox cb, Object value, int index) {
+			this.cb = cb;
 			this.value = value;
 			this.index = index;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == button && button.isSelected()) {
-				selectedValue = value;
+			if (e.getSource() == cb) {
+				if (cb.isSelected()) {
+					if (!containsObject(value)) {
+						if (selectedValues == null) {
+							selectedValues = new Vector<Object>();
+						}
+						selectedValues.add(value);
+					}
+				} else {
+					if (containsObject(value)) {
+						selectedValues.remove(value);
+					}
+				}
 				updateModelFromWidget();
 				getDynamicModel().selected = value;
 				getDynamicModel().selectedIndex = index;
@@ -128,13 +140,13 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), selectedValue)) {
+		if (notEquals(getValue(), selectedValues)) {
 			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("updateModelFromWidget with " + selectedValue);
+				logger.fine("updateModelFromWidget with " + selectedValues);
 			}
-			if (selectedValue != null && !widgetUpdating) {
-				setValue(selectedValue);
+			if (!widgetUpdating) {
+				setValue(selectedValues);
 			}
 			modelUpdating = false;
 			return true;
@@ -155,8 +167,8 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		for (JRadioButton rb : radioButtonArray) {
-			rb.setFont(getFont());
+		for (JCheckBox cb : checkboxesArray) {
+			cb.setFont(getFont());
 		}
 	}
 

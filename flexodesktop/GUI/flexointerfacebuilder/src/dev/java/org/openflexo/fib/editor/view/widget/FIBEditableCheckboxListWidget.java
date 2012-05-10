@@ -30,17 +30,17 @@ import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.model.FIBAttributeNotification;
+import org.openflexo.fib.model.FIBCheckboxList;
 import org.openflexo.fib.model.FIBModelNotification;
-import org.openflexo.fib.model.FIBRadioButtonList;
 import org.openflexo.fib.model.FIBWidget;
-import org.openflexo.fib.view.widget.FIBRadioButtonListWidget;
+import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget implements FIBEditableView<FIBRadioButtonList, JPanel> {
+public class FIBEditableCheckboxListWidget extends FIBCheckboxListWidget implements FIBEditableView<FIBCheckboxList, JPanel> {
 
-	private static final Logger logger = FlexoLogger.getLogger(FIBEditableRadioButtonListWidget.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(FIBEditableCheckboxListWidget.class.getPackage().getName());
 
-	private final FIBEditableViewDelegate<FIBRadioButtonList, JPanel> delegate;
+	private final FIBEditableViewDelegate<FIBCheckboxList, JPanel> delegate;
 
 	private final FIBEditorController editorController;
 
@@ -49,11 +49,11 @@ public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget i
 		return editorController;
 	}
 
-	public FIBEditableRadioButtonListWidget(FIBRadioButtonList model, FIBEditorController editorController) {
+	public FIBEditableCheckboxListWidget(FIBCheckboxList model, FIBEditorController editorController) {
 		super(model, editorController.getController());
 		this.editorController = editorController;
 
-		delegate = new FIBEditableViewDelegate<FIBRadioButtonList, JPanel>(this);
+		delegate = new FIBEditableViewDelegate<FIBCheckboxList, JPanel>(this);
 		model.addObserver(this);
 	}
 
@@ -70,7 +70,7 @@ public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget i
 	}
 
 	@Override
-	public FIBEditableViewDelegate<FIBRadioButtonList, JPanel> getDelegate() {
+	public FIBEditableViewDelegate<FIBCheckboxList, JPanel> getDelegate() {
 		return delegate;
 	}
 
@@ -79,9 +79,9 @@ public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget i
 		if (dataModification instanceof FIBAttributeNotification) {
 			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
 			if (n.getAttribute() == FIBWidget.Parameters.format || n.getAttribute() == FIBWidget.Parameters.localize
-					|| n.getAttribute() == FIBRadioButtonList.Parameters.columns || n.getAttribute() == FIBRadioButtonList.Parameters.hGap
-					|| n.getAttribute() == FIBRadioButtonList.Parameters.vGap) {
-				rebuildRadioButtons();
+					|| n.getAttribute() == FIBCheckboxList.Parameters.columns || n.getAttribute() == FIBCheckboxList.Parameters.hGap
+					|| n.getAttribute() == FIBCheckboxList.Parameters.vGap) {
+				rebuildCheckboxes();
 			}
 		}
 		if (dataModification instanceof FIBModelNotification) {

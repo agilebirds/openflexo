@@ -19,9 +19,13 @@
  */
 package org.openflexo.fib.model;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Logger;
 
-public class FIBRadioButtonList extends FIBMultipleValues {
+import org.openflexo.antar.binding.ParameterizedTypeImpl;
+
+public class FIBCheckboxList extends FIBMultipleValues {
 
 	public static enum Parameters implements FIBModelAttribute {
 		columns, hGap, vGap
@@ -31,14 +35,14 @@ public class FIBRadioButtonList extends FIBMultipleValues {
 	private int hGap = 0;
 	private int vGap = -2;
 
-	private static final Logger logger = Logger.getLogger(FIBRadioButtonList.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBCheckboxList.class.getPackage().getName());
 
-	public FIBRadioButtonList() {
+	public FIBCheckboxList() {
 	}
 
 	@Override
 	protected String getBaseName() {
-		return "RadioButtonList";
+		return "CheckboxList";
 	}
 
 	public int getColumns() {
@@ -75,6 +79,13 @@ public class FIBRadioButtonList extends FIBMultipleValues {
 			this.vGap = vGap;
 			hasChanged(notification);
 		}
+	}
+
+	@Override
+	public Type getDataType() {
+		Type[] args = new Type[1];
+		args[0] = getIteratorClass();
+		return new ParameterizedTypeImpl(List.class, args);
 	}
 
 }
