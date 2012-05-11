@@ -205,6 +205,7 @@
     <property name="buttonType" xmlTag="buttonType" attribute="YES"/> 
     <property name="label" xmlTag="label" attribute="YES"/> 
     <property name="isDefault" xmlTag="default" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="buttonIcon" xmlTag="buttonIcon" attribute="YES"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBCustom" xmlTag="Custom"> 
