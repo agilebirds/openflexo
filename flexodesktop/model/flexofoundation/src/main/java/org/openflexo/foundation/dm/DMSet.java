@@ -111,7 +111,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 		return returned;
 	}
 
-	public DMSet(FlexoProject project, String unlocalizedName, Vector<LoadableDMEntity> entities, boolean parseMethodsAndProperties,
+	public DMSet(FlexoProject project, String unlocalizedName, List<LoadableDMEntity> entities, boolean parseMethodsAndProperties,
 			FlexoProgress progress) {
 		this(project);
 		_unlocalizedName = unlocalizedName;
