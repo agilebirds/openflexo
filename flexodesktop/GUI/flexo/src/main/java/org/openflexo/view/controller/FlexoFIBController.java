@@ -46,6 +46,7 @@ import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.icon.WKFIconLibrary;
@@ -57,6 +58,11 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	private static final Logger logger = Logger.getLogger(FlexoFIBController.class.getPackage().getName());
 
 	private FlexoController controller;
+
+	public static final ImageIcon ARROW_DOWN = UtilsIconLibrary.ARROW_DOWN_2;
+	public static final ImageIcon ARROW_UP = UtilsIconLibrary.ARROW_UP_2;
+	public static final ImageIcon ARROW_BOTTOM = UtilsIconLibrary.ARROW_BOTTOM_2;
+	public static final ImageIcon ARROW_TOP = UtilsIconLibrary.ARROW_TOP_2;
 
 	public FlexoFIBController(FIBComponent component) {
 		super(component);
@@ -172,6 +178,22 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 			return true;
 		}
 		return super.handleException(t);
+	}
+
+	public ImageIcon getArrowDown() {
+		return ARROW_DOWN;
+	}
+
+	public ImageIcon getArrowUp() {
+		return ARROW_UP;
+	}
+
+	public ImageIcon getArrowTop() {
+		return ARROW_TOP;
+	}
+
+	public ImageIcon getArrowBottom() {
+		return ARROW_BOTTOM;
 	}
 
 }

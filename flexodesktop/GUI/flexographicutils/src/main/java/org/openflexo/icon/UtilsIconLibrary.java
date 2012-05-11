@@ -25,10 +25,10 @@ public class UtilsIconLibrary {
 	public static final ImageIcon ARROW_LEFT = new ImageIconResource("Icons/ArrowLeft.gif");
 	public static final ImageIcon ARROW_RIGHT = new ImageIconResource("Icons/ArrowRight.gif");
 
-	public static final ImageIcon ARROW_DOWN_2 = new ImageIconResource("Icons/Arrows/Down.gif");
-	public static final ImageIcon ARROW_UP_2 = new ImageIconResource("Icons/Arrows/Up.gif");
-	public static final ImageIcon ARROW_LEFT_2 = new ImageIconResource("Icons/Arrows/Left.gif");
-	public static final ImageIcon ARROW_RIGHT_2 = new ImageIconResource("Icons/Arrows/Right.gif");
+	public static final ImageIcon ARROW_DOWN_2 = new ImageIconResource("Icons/Arrows/Down.png");
+	public static final ImageIcon ARROW_UP_2 = new ImageIconResource("Icons/Arrows/Up.png");
+	public static final ImageIcon ARROW_BOTTOM_2 = new ImageIconResource("Icons/Arrows/Bottom.png");
+	public static final ImageIcon ARROW_TOP_2 = new ImageIconResource("Icons/Arrows/Top.png");
 
 	// Diff icons
 
