@@ -438,7 +438,6 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Detected sorting required");
 				}
-				;
 				// Sort children according to supplied list
 				Collections.sort(children, new Comparator<BrowserCell>() {
 					@Override
@@ -495,7 +494,10 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 
 			if (requireSorting) {
 				Object wasSelected = getSelectedObject();
-				System.out.println("Je dois reselectionner " + wasSelected);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Will reselect " + wasSelected);
+				}
+				nodeStructureChanged(this);
 				if (wasSelected != null) {
 					resetSelection();
 					addToSelection(wasSelected);
