@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 import org.openflexo.fib.controller.FIBController;
@@ -46,6 +47,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 			}
 		});
 		updateLabel();
+		updateIcon();
 		// updatePreferredSize();
 		updateFont();
 	}
@@ -95,6 +97,16 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 		// logger.info("Button update label with key="+getWidget().getLabel());
 		buttonWidget.setText(getValue() != null ? getValue() : (getWidget().getLocalize() ? getLocalized(getWidget().getLabel())
 				: getWidget().getLabel()));
+	}
+
+	protected void updateIcon() {
+		// logger.info("Button update label with key="+getWidget().getLabel());
+		if (getWidget().getButtonIcon() != null && getWidget().getButtonIcon().isSet() && getWidget().getButtonIcon().isValid()) {
+			Icon icon = (Icon) getWidget().getButtonIcon().getBindingValue(getController());
+			buttonWidget.setIcon(icon);
+		} else {
+			buttonWidget.setIcon(null);
+		}
 	}
 
 	@Override

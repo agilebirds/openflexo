@@ -180,7 +180,11 @@ public abstract class ParsedExpression extends Token {
 			/*for (AbstractToken token : unparsedList) {
 			    	System.out.println("token: "+token+" of "+token.getClass().getSimpleName());
 			    }*/
-			throw new ParseException("Syntax error: no operator found");
+			StringBuffer sb = new StringBuffer();
+			for (AbstractToken token : unparsedList) {
+				sb.append(token.toString());
+			}
+			throw new ParseException("Syntax error: no operator found in " + sb.toString());
 		}
 
 		IndexedOperator pivot = allOperators.firstElement();

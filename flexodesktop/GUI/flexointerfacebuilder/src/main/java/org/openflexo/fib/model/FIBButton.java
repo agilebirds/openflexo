@@ -21,11 +21,14 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
+import javax.swing.Icon;
+
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
 public class FIBButton extends FIBWidget {
 
+	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, BindingDefinitionType.GET, false);
 	public static BindingDefinition ACTION = new BindingDefinition("action", Void.class, BindingDefinitionType.EXECUTE, false);
 
 	public static enum ButtonType {
@@ -33,13 +36,14 @@ public class FIBButton extends FIBWidget {
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		action, buttonType, label, isDefault;
+		action, buttonType, label, isDefault, buttonIcon;
 	}
 
 	private DataBinding action;
 	private ButtonType buttonType = ButtonType.Trigger;
 	private String label;
 	private Boolean isDefault;
+	private DataBinding buttonIcon;
 
 	public FIBButton() {
 	}
@@ -107,6 +111,22 @@ public class FIBButton extends FIBWidget {
 			this.isDefault = isDefault;
 			hasChanged(notification);
 		}
+	}
+
+	public DataBinding getButtonIcon() {
+		if (buttonIcon == null) {
+			buttonIcon = new DataBinding(this, Parameters.buttonIcon, BUTTON_ICON);
+		}
+		return buttonIcon;
+	}
+
+	public void setButtonIcon(DataBinding buttonIcon) {
+		if (buttonIcon != null) {
+			buttonIcon.setOwner(this);
+			buttonIcon.setBindingAttribute(Parameters.buttonIcon);
+			buttonIcon.setBindingDefinition(BUTTON_ICON);
+		}
+		this.buttonIcon = buttonIcon;
 	}
 
 }

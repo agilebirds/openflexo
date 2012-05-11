@@ -1,5 +1,5 @@
 #English
-#Mon May 07 12:39:55 CEST 2012
+#Thu May 10 14:46:09 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -1548,7 +1548,7 @@ create_source_repository=create_source_repository
 create_status_property=create status property
 create_view=Create view
 create_view_folder=Create view folder
-create_view_point=create_view_point
+create_view_point=Create view point
 creates=Create
 creates_entry_in_entity=Creates entry in entity
 creates_new_component=Create new screen
@@ -2866,6 +2866,7 @@ inspector_always_on_top=Inspector always on top
 inspector_name=Inspector name
 installed_licences=Installed licences
 installed_licences_description=Following licences are installed on your computer. Please contact Agile Birds sprl to order licences - web\: www.flexoBPM.com -  email\: info@flexoBPM.com. Modules "Workflow Editor" and "Interface Editor" are always enabled but limited to a maximum number of objects.
+instanciation_parameters_of_edition_scheme=instanciation_parameters_of_edition_scheme
 integer=Integer
 interactive_nodes_cannot_be_found_inside_an_execution_petri_graph=Interactive nodes cannot be found inside execution petri graphs
 interactive_nodes_cannot_be_found_inside_an_execution_petri_graph_description=Interactive nodes cannot be found inside execution petri graphs
@@ -3472,7 +3473,7 @@ no_type=No type
 no_type_defined_for_this_new_property=No type defined for this new property
 no_validation_report=No validation report
 no_view_name_defined=no_view_name_defined
-no_view_point_selected=no_view_point_selected
+no_view_point_selected=No view point selected
 node=Node
 node_($0)=Node ($0)
 node_($object.name)_has_ambigous_name=Node "($object.name)" has ambigous name in this context
@@ -5063,6 +5064,8 @@ vertical_horizontal=Vertical/horizontal
 vertical_layout=Vertical layout
 view=view
 view_next_operations=View next operations
+view_object=view_object
+view_point=View point
 view_point_library=View Point Library
 viewer=viewer
 views=views

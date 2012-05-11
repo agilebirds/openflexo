@@ -414,6 +414,7 @@ public final class ModuleLoader implements IModuleLoader {
 				try {
 					return loadModule(module, project);
 				} catch (Exception e) {
+					e.printStackTrace();
 					throw new ModuleLoadingException(module);
 				}
 			}

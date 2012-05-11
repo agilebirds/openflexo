@@ -124,6 +124,9 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		calcs.add(vp);
 		setChanged();
 		notifyObservers(new OntologyCalcCreated(vp));
+		for (EditionPattern ep : vp.getEditionPatterns()) {
+			ep.finalizeParentEditionPatternDeserialization();
+		}
 		return vp;
 	}
 

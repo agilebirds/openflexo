@@ -34,7 +34,7 @@ public class SubClassStatement extends OntologyStatement {
 
 	public SubClassStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
-		// System.out.println("s.getObject() is a "+s.getObject().getClass().getName()+" : "+s.getObject());
+		// System.out.println("s.getObject() is a " + s.getObject().getClass().getName() + " : " + s.getObject());
 		if (s.getObject() instanceof Resource) {
 			parent = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
 		} else {

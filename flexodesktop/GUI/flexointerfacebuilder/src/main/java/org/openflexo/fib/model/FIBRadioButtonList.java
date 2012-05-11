@@ -23,7 +23,13 @@ import java.util.logging.Logger;
 
 public class FIBRadioButtonList extends FIBMultipleValues {
 
+	public static enum Parameters implements FIBModelAttribute {
+		columns, hGap, vGap
+	}
+
 	private int columns = 1;
+	private int hGap = 0;
+	private int vGap = -2;
 
 	private static final Logger logger = Logger.getLogger(FIBRadioButtonList.class.getPackage().getName());
 
@@ -40,7 +46,35 @@ public class FIBRadioButtonList extends FIBMultipleValues {
 	}
 
 	public void setColumns(int columns) {
-		this.columns = columns;
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.columns, columns);
+		if (notification != null) {
+			this.columns = columns;
+			hasChanged(notification);
+		}
+	}
+
+	public int getHGap() {
+		return hGap;
+	}
+
+	public void setHGap(int hGap) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.hGap, hGap);
+		if (notification != null) {
+			this.hGap = hGap;
+			hasChanged(notification);
+		}
+	}
+
+	public int getVGap() {
+		return vGap;
+	}
+
+	public void setVGap(int vGap) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.vGap, vGap);
+		if (notification != null) {
+			this.vGap = vGap;
+			hasChanged(notification);
+		}
 	}
 
 }

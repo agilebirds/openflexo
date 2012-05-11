@@ -29,9 +29,8 @@ import org.openflexo.foundation.Inspectors;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntResource;
 
-public class OntologyIndividual extends OntologyObject implements Comparable<OntologyIndividual> {
+public class OntologyIndividual extends OntologyObject<Individual> implements Comparable<OntologyIndividual> {
 
 	private static final Logger logger = Logger.getLogger(OntologyIndividual.class.getPackage().getName());
 
@@ -45,9 +44,12 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		superClasses = new Vector<OntologyClass>();
 	}
 
+	/**
+	 * Update this OntologyIndividual, given base Individual
+	 */
 	protected void init() {
-		updateOntologyStatements();
-		updateSuperClasses();
+		updateOntologyStatements(individual);
+		updateSuperClasses(individual);
 	}
 
 	@Override
@@ -59,10 +61,23 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		deleteObservers();
 	}
 
+	/**
+	 * Update this OntologyIndividual, given base Individual
+	 */
 	@Override
 	protected void update() {
-		updateOntologyStatements();
-		updateSuperClasses();
+		updateOntologyStatements(individual);
+		updateSuperClasses(individual);
+	}
+
+	/**
+	 * Update this OntologyIndividual, given base Individual which is assumed to extends base Individual
+	 * 
+	 * @param anOntClass
+	 */
+	protected void update(Individual anIndividual) {
+		updateOntologyStatements(anIndividual);
+		updateSuperClasses(anIndividual);
 	}
 
 	/*@Override
@@ -92,13 +107,13 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 	}
 
 	@Override
-	protected void _setOntResource(OntResource r) {
-		individual = (Individual) r;
+	protected void _setOntResource(Individual r) {
+		individual = r;
 	}
 
-	private void updateSuperClasses() {
+	private void updateSuperClasses(Individual anIndividual) {
 		// superClasses.clear();
-		Iterator it = individual.listOntClasses(true);
+		Iterator it = anIndividual.listOntClasses(true);
 		while (it.hasNext()) {
 			OntClass father = (OntClass) it.next();
 			OntologyClass fatherClass = getOntologyLibrary().getClass(father.getURI());

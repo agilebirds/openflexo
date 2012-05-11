@@ -52,7 +52,9 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handlePreferences");
 		}
-		PreferencesController.instance().showPreferences();
+		if (PreferencesController.hasInstance()) {
+			PreferencesController.instance().showPreferences();
+		}
 	}
 
 	public void handleQuit(ApplicationEvent event) {

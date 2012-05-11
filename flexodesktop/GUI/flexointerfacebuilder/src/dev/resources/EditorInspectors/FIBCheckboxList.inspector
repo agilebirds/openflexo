@@ -1,0 +1,24 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+	   name="Inspector" 
+	   layout="border" 
+	   dataClassName="org.openflexo.fib.model.FIBCheckboxList">
+	<Parameter name="title" value="Checkbox List"/>
+
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			
+				<Label label="columns" constraints="twocols(location=left)"/>
+				<Number numberType="IntegerType"  data="data.columns" constraints="twocols(location=right)"/>
+				
+				<Label label="h_gap" constraints="twocols(location=left)"/>
+				<Number numberType="IntegerType"  data="data.HGap" constraints="twocols(location=right)"/>
+				
+				<Label label="v_gap" constraints="twocols(location=left)"/>
+				<Number numberType="IntegerType"  data="data.VGap" constraints="twocols(location=right)"/>
+				
+			</Tab>
+						
+		</TabPanel>
+
+</Panel>

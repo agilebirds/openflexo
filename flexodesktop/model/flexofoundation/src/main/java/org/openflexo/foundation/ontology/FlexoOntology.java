@@ -335,6 +335,12 @@ public abstract class FlexoOntology extends OntologyObject {
 				if (_library.getClass(ontClass.getURI()) == null) {
 					// Concept not yet known, assume that this concept is declared in this ontology
 					makeNewClass(ontClass);
+				} else {
+					OntologyClass existingClass = _library.getClass(ontClass.getURI());
+					// In this case, ontClass is not the same than the one that was already declared as ontClass for OntologyClass:
+					// because new statements in loaded ontology refer to already existing class, so we have to update class with
+					// the new OntClass resource
+					existingClass.update(ontClass);
 				}
 			}
 		}
@@ -345,6 +351,12 @@ public abstract class FlexoOntology extends OntologyObject {
 				if (_library.getIndividual(individual.getURI()) == null) {
 					// Concept not yet known, assume that this concept is declared in this ontology
 					makeNewIndividual(individual);
+				} else {
+					OntologyIndividual existingIndividual = _library.getIndividual(individual.getURI());
+					// In this case, individual is not the same than the one that was already declared as Individual for OntologyIndividual:
+					// because new statements in loaded ontology refer to already existing class, so we have to update individual with
+					// the new Individual resource
+					existingIndividual.update(individual);
 				}
 			}
 		}
@@ -355,6 +367,12 @@ public abstract class FlexoOntology extends OntologyObject {
 				if (_library.getDataProperty(ontProperty.getURI()) == null) {
 					// Property not yet known, assume that this concept is declared in this ontology
 					makeNewDataProperty(ontProperty);
+				} else {
+					OntologyProperty existingProperty = _library.getDataProperty(ontProperty.getURI());
+					// In this case, ontProperty is not the same than the one that was already declared as ontProperty for DatatypeProperty:
+					// because new statements in loaded ontology refer to already existing class, so we have to update property with
+					// the new OntProperty resource
+					existingProperty.update(ontProperty);
 				}
 			}
 		}
@@ -365,6 +383,12 @@ public abstract class FlexoOntology extends OntologyObject {
 				if (_library.getObjectProperty(ontProperty.getURI()) == null) {
 					// Property not yet known, assume that this concept is declared in this ontology
 					makeNewObjectProperty(ontProperty);
+				} else {
+					OntologyProperty existingProperty = _library.getObjectProperty(ontProperty.getURI());
+					// In this case, ontProperty is not the same than the one that was already declared as ontProperty for ObjectProperty:
+					// because new statements in loaded ontology refer to already existing class, so we have to update property with
+					// the new OntProperty resource
+					existingProperty.update(ontProperty);
 				}
 			}
 		}
@@ -907,11 +931,6 @@ public abstract class FlexoOntology extends OntologyObject {
 			}*/
 		}
 
-		/*StringWriter sw = new StringWriter();
-		ontModel.write(sw);
-
-		System.out.println("Hop:\n"+sw);*/
-
 		createConceptsAndProperties();
 
 		logger.info("Finished loading ontology " + ontologyURI);
@@ -1018,7 +1037,8 @@ public abstract class FlexoOntology extends OntologyObject {
 		return topLevelClasses;
 	}
 
-	private void addTopLevelClass(OntologyClass aClass, Vector<OntologyClass> topLevelClasses) {
+	private static void addTopLevelClass(OntologyClass aClass, Vector<OntologyClass> topLevelClasses) {
+		// System.out.println("addTopLevelClass " + aClass + " for " + topLevelClasses);
 		if (aClass.getSuperClasses().size() == 0) {
 			if (!topLevelClasses.contains(aClass)) {
 				topLevelClasses.add(aClass);
@@ -1026,11 +1046,13 @@ public abstract class FlexoOntology extends OntologyObject {
 			return;
 		}
 		for (OntologyClass superClass : aClass.getSuperClasses()) {
-			addTopLevelClass(superClass, topLevelClasses);
+			if (superClass != aClass) {
+				addTopLevelClass(superClass, topLevelClasses);
+			}
 		}
 	}
 
-	private void addTopLevelClass(OntologyIndividual anIndividual, Vector<OntologyClass> topLevelClasses) {
+	private static void addTopLevelClass(OntologyIndividual anIndividual, Vector<OntologyClass> topLevelClasses) {
 		for (OntologyClass superClass : anIndividual.getSuperClasses()) {
 			addTopLevelClass(superClass, topLevelClasses);
 		}
@@ -1187,6 +1209,8 @@ public abstract class FlexoOntology extends OntologyObject {
 			subjectClass.updateOntologyStatements();
 			return subjectClass.getObjectRestrictionStatement(property, objectClass);
 		}
+
+		setIsModified();
 
 		logger.warning("Could not create restriction for " + property.getURI());
 		return null;

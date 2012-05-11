@@ -56,7 +56,7 @@ import org.openflexo.fib.view.widget.table.FIBTableModel;
  * 
  * @author sguerin
  */
-public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List> implements TableModelListener, FIBSelectable {
+public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> implements TableModelListener, FIBSelectable {
 
 	private static final Logger logger = Logger.getLogger(FIBTableWidget.class.getPackage().getName());
 

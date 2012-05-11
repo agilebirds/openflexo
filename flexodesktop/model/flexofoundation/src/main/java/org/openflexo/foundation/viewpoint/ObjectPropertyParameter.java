@@ -75,9 +75,11 @@ public class ObjectPropertyParameter extends PropertyParameter {
 	}
 
 	public void setRangeValue(ViewPointDataBinding rangeValue) {
-		rangeValue.setOwner(this);
-		rangeValue.setBindingAttribute(ParameterBindingAttribute.rangeValue);
-		rangeValue.setBindingDefinition(getRangeValueBindingDefinition());
+		if (rangeValue != null) {
+			rangeValue.setOwner(this);
+			rangeValue.setBindingAttribute(ParameterBindingAttribute.rangeValue);
+			rangeValue.setBindingDefinition(getRangeValueBindingDefinition());
+		}
 		this.rangeValue = rangeValue;
 	}
 

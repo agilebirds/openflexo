@@ -618,8 +618,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		@Override
 		public void setModel(ListModel model) {
-			if (!(model instanceof BindingColumnListModel)) {
-				new Exception("oops, this model is " + model).printStackTrace();
+			if (model != null && !(model instanceof BindingColumnListModel)) {
+				new Exception("Oops, this model is " + model).printStackTrace();
 			}
 			setFilter(null);
 			if (model != null) {
@@ -632,7 +632,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (super.getModel() instanceof BindingColumnListModel) {
 				return (BindingColumnListModel) super.getModel();
 			} else {
-				new Exception("oops, j'ai un " + super.getModel()).printStackTrace();
+				new Exception("Oops, got a " + super.getModel()).printStackTrace();
 				return null;
 			}
 		}

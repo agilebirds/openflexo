@@ -48,7 +48,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.ResourceUtils;
 
-public abstract class OntologyObject extends AbstractOntologyObject implements InspectableObject, StringConvertable<OntologyObject> {
+public abstract class OntologyObject<R extends OntResource> extends AbstractOntologyObject implements InspectableObject,
+		StringConvertable<OntologyObject> {
 
 	private static final Logger logger = Logger.getLogger(OntologyObject.class.getPackage().getName());
 
@@ -138,7 +139,7 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	@Override
 	public abstract void setName(String aName);
 
-	protected <R extends OntResource> R renameURI(String newName, R resource, Class<R> resourceClass) {
+	protected R renameURI(String newName, R resource, Class<R> resourceClass) {
 		String oldURI = getURI();
 		String oldName = getName();
 		String newURI;
@@ -171,9 +172,9 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		return returned;
 	}
 
-	public abstract OntResource getOntResource();
+	public abstract R getOntResource();
 
-	protected abstract void _setOntResource(OntResource r);
+	protected abstract void _setOntResource(R r);
 
 	public Resource getResource() {
 		return getOntResource();
@@ -203,6 +204,10 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	}
 
 	public void updateOntologyStatements() {
+		updateOntologyStatements(getOntResource());
+	}
+
+	protected void updateOntologyStatements(R anOntResource) {
 		// TODO: optimize this (do not always recalculate)
 
 		_statements.clear();
@@ -224,7 +229,7 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		if (this instanceof OntologyClass) {
 			// DescribeClass dc = new DescribeClass();
 			// dc.describeClass(System.out, (OntClass)getOntResource());
-			for (Iterator it = ((OntClass) getOntResource()).listSuperClasses(true); it.hasNext();) {
+			for (Iterator it = ((OntClass) anOntResource).listSuperClasses(true); it.hasNext();) {
 				OntClass s = (OntClass) it.next();
 				if (s.isRestriction()) {
 					Restriction r = s.asRestriction();
@@ -233,12 +238,12 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 			}
 		}
 
-		for (StmtIterator j = getOntResource().listProperties(); j.hasNext();) {
+		for (StmtIterator j = anOntResource.listProperties(); j.hasNext();) {
 			Statement s = j.nextStatement();
 
 			OntologyStatement newStatement = null;
 
-			if (!s.getSubject().equals(getOntResource())) {
+			if (!s.getSubject().equals(anOntResource)) {
 				logger.warning("Inconsistant data: subject is not " + this);
 			} else {
 				Property predicate = s.getPredicate();
@@ -611,12 +616,14 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 
 		getOntResource().addProperty(property.getOntProperty(), object.getResource());
 		updateOntologyStatements();
+		getOntology().setChanged();
 		return getPropertyStatement(property, object);
 	}
 
 	public PropertyStatement addPropertyStatement(OntologyProperty property, String value) {
 		getOntResource().addProperty(property.getOntProperty(), value);
 		updateOntologyStatements();
+		getOntology().setChanged();
 		return getPropertyStatement(property, value);
 	}
 
@@ -624,21 +631,24 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		// System.out.println("****** Add statement for property "+property.getName()+" value="+value+" language="+language);
 		getOntResource().addProperty(property.getOntProperty(), value, language.getTag());
 		updateOntologyStatements();
+		getOntology().setChanged();
 		return getPropertyStatement(property, value, language);
 	}
 
 	public DataPropertyStatement addDataPropertyStatement(OntologyDataProperty property, Object value) {
 		getOntResource().addLiteral(property.getOntProperty(), value);
 		updateOntologyStatements();
+		getOntology().setChanged();
 		return getDataPropertyStatement(property, value);
 	}
 
 	public void removePropertyStatement(PropertyStatement statement) {
 		getFlexoOntology().getOntModel().remove(statement.getStatement());
 		updateOntologyStatements();
+		getOntology().setChanged();
 	}
 
-	public void addLiteral(OntologyProperty property, Object value) {
+	public PropertyStatement addLiteral(OntologyProperty property, Object value) {
 		if (value instanceof String) {
 			getOntResource().addProperty(property.getOntProperty(), (String) value);
 		} else if (value instanceof LocalizedString) {
@@ -663,6 +673,8 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		} else {
 			// If value is null, just ignore
 		}
+		getOntology().setChanged();
+		return getPropertyStatement(property);
 	}
 
 	public boolean getIsReadOnly() {
@@ -722,6 +734,58 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 			recursivelySearchRangeAndDomains();
 		}
 		return propertiesTakingMySelfAsDomain;
+	}
+
+	// TODO implement a nice and documented API here !
+	public Vector<OntologyProperty> getDataPropertiesTakingMySelfAsDomain(Object range) {
+		return getPropertiesTakingMyselfAsDomain(true, false, false, false, null, null, getOntology());
+	}
+
+	public Vector<OntologyProperty> getObjectPropertiesTakingMySelfAsDomain(OntologyObject<?> range) {
+		return getPropertiesTakingMySelfAsDomain();
+	}
+
+	private Vector<OntologyProperty> getPropertiesTakingMyselfAsDomain(boolean includeDataProperties, boolean includeObjectProperties,
+			boolean includeAnnotationProperties, boolean includeBaseOntologies, OntologyObject<?> range, OntologicDataType dataType,
+			FlexoOntology... ontologies) {
+		Vector<OntologyProperty> allProperties = getPropertiesTakingMySelfAsDomain();
+		Vector<OntologyProperty> returnedProperties = new Vector<OntologyProperty>();
+		for (OntologyProperty p : allProperties) {
+			boolean takeIt = (includeDataProperties && p instanceof OntologyDataProperty)
+					|| (includeObjectProperties && p instanceof OntologyObjectProperty)
+					|| (includeAnnotationProperties && p.isAnnotationProperty());
+			if (range != null && (p instanceof OntologyObjectProperty) && !((OntologyObjectProperty) p).getRange().isSuperConceptOf(range)) {
+				takeIt = false;
+			}
+			if (dataType != null && (p instanceof OntologyDataProperty) && ((OntologyDataProperty) p).getDataType() != dataType) {
+				takeIt = false;
+			}
+			FlexoOntology containerOntology = p.getOntology();
+			if (containerOntology == p.getOntologyLibrary().getOWLOntology() && !includeBaseOntologies) {
+				takeIt = false;
+			}
+			if (containerOntology == p.getOntologyLibrary().getRDFOntology() && !includeBaseOntologies) {
+				takeIt = false;
+			}
+			if (containerOntology == p.getOntologyLibrary().getRDFSOntology() && !includeBaseOntologies) {
+				takeIt = false;
+			}
+			if (ontologies != null) {
+				boolean containedInGivenOntologies = false;
+				for (FlexoOntology o : ontologies) {
+					if (containerOntology == o) {
+						containedInGivenOntologies = true;
+					}
+				}
+				if (!containedInGivenOntologies) {
+					takeIt = false;
+				}
+			}
+			if (takeIt) {
+				returnedProperties.add(p);
+			}
+		}
+		return returnedProperties;
 	}
 
 	private void searchRangeAndDomains() {

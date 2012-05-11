@@ -45,7 +45,10 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 
 	@Override
 	public List<ConnectorPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(ConnectorPatternRole.class);
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getPatternRoles(ConnectorPatternRole.class);
+		}
+		return null;
 	}
 
 	@Override

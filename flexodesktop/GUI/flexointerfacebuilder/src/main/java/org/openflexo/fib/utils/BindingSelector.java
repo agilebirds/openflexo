@@ -747,6 +747,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		return _bindable;
 	}
 
+	@CustomComponentParameter(name = "bindable", type = CustomComponentParameter.Type.MANDATORY)
 	public void setBindable(Bindable bindable) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setBindable with " + bindable);
@@ -846,6 +847,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		return _bindingDefinition;
 	}
 
+	@CustomComponentParameter(name = "bindingDefinition", type = CustomComponentParameter.Type.MANDATORY)
 	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(toString() + "Setting new binding definition: " + bindingDefinition + " old: " + _bindingDefinition);

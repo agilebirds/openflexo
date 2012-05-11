@@ -5,11 +5,13 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.localization.FlexoLocalization;
 
 public class EditionSchemeParameterListPathElement implements SimplePathElement<EditionSchemeAction<?>>,
@@ -18,19 +20,22 @@ public class EditionSchemeParameterListPathElement implements SimplePathElement<
 
 	private EditionScheme editionScheme;
 	private EditionSchemePathElement parent;
-	private Vector<EditionSchemeParameterPathElement> allProperties;
+	private Vector<BindingPathElement> allProperties;
 
 	public EditionSchemeParameterListPathElement(EditionScheme editionScheme, EditionSchemePathElement aParent) {
 		super();
 		parent = aParent;
 		this.editionScheme = editionScheme;
-		allProperties = new Vector<EditionSchemeParameterPathElement>();
+		allProperties = new Vector<BindingPathElement>();
 		for (EditionSchemeParameter p : editionScheme.getParameters()) {
 			allProperties.add(new EditionSchemeParameterPathElement(this, p));
+			if (p instanceof ListParameter) {
+				allProperties.add(new ListValueForListParameterPathElement(this, (ListParameter) p));
+			}
 		}
 	}
 
-	public Vector<EditionSchemeParameterPathElement> getAllProperties() {
+	public Vector<BindingPathElement> getAllProperties() {
 		return allProperties;
 	}
 

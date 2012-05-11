@@ -23,7 +23,9 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -75,6 +77,25 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 	@CustomComponentParameter(name = "viewPointLibrary", type = CustomComponentParameter.Type.MANDATORY)
 	public void setViewPointLibrary(ViewPointLibrary viewPointLibrary) {
 		this.viewPointLibrary = viewPointLibrary;
+	}
+
+	private ViewPoint viewPoint;
+
+	public ViewPoint getViewPoint() {
+		return viewPoint;
+	}
+
+	@CustomComponentParameter(name = "viewPoint", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setViewPoint(ViewPoint viewPoint) {
+		this.viewPoint = viewPoint;
+	}
+
+	public ViewPointLibraryObject getRootObject() {
+		if (getViewPoint() != null) {
+			return getViewPoint();
+		} else {
+			return getViewPointLibrary();
+		}
 	}
 
 	// Please uncomment this for a live test

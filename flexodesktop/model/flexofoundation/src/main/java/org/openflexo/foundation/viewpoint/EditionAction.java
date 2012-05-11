@@ -55,7 +55,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		AddEditionPattern,
 		DeclarePatternRole,
 		GraphicalAction,
-		GoToObject
+		GoToObject,
+		Iteration,
+		Conditional
 	}
 
 	private EditionScheme _scheme;
@@ -506,7 +508,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		cardinality,
 		target,
 		diagramName,
-		view
+		view,
+		condition,
+		iteration
 	}
 
 	private ViewPointDataBinding conditional;
@@ -531,4 +535,12 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		this.conditional = conditional;
 	}
 
+	public String getStringRepresentation() {
+		return getClass().getSimpleName() + (getPatternRole() != null ? " (" + getPatternRole().getPatternRoleName() + ")" : "");
+	}
+
+	@Override
+	public String toString() {
+		return getStringRepresentation();
+	}
 }

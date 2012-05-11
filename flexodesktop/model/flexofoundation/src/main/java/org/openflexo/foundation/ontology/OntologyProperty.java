@@ -32,9 +32,8 @@ import org.openflexo.antar.binding.CustomType;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.ontology.OntResource;
 
-public abstract class OntologyProperty extends OntologyObject implements CustomType {
+public abstract class OntologyProperty extends OntologyObject<OntProperty> implements CustomType {
 
 	private static final Logger logger = Logger.getLogger(OntologyProperty.class.getPackage().getName());
 
@@ -67,17 +66,34 @@ public abstract class OntologyProperty extends OntologyObject implements CustomT
 		rangeList = null;
 	}
 
+	/**
+	 * Init this OntologyProperty, given base OntProperty
+	 */
 	protected void init() {
-		updateOntologyStatements();
-		updateSuperProperties();
-		updateSubProperties();
+		updateOntologyStatements(ontProperty);
+		updateSuperProperties(ontProperty);
+		updateSubProperties(ontProperty);
 	}
 
+	/**
+	 * Update this OntologyProperty, given base OntProperty
+	 */
 	@Override
 	protected void update() {
-		updateOntologyStatements();
-		updateSuperProperties();
-		updateSubProperties();
+		updateOntologyStatements(ontProperty);
+		updateSuperProperties(ontProperty);
+		updateSubProperties(ontProperty);
+	}
+
+	/**
+	 * Update this OntologyProperty given a new OntProperty which is assumed to extends base OntProperty
+	 * 
+	 * @param anOntProperty
+	 */
+	protected void update(OntProperty anOntProperty) {
+		updateOntologyStatements(anOntProperty);
+		updateSuperProperties(anOntProperty);
+		updateSubProperties(anOntProperty);
 	}
 
 	@Override
@@ -86,8 +102,8 @@ public abstract class OntologyProperty extends OntologyObject implements CustomT
 	}
 
 	@Override
-	protected void _setOntResource(OntResource r) {
-		ontProperty = (OntProperty) r;
+	protected void _setOntResource(OntProperty r) {
+		ontProperty = r;
 	}
 
 	public static final Comparator<OntologyProperty> COMPARATOR = new Comparator<OntologyProperty>() {
@@ -106,10 +122,10 @@ public abstract class OntologyProperty extends OntologyObject implements CustomT
 		return getOntProperty();
 	}
 
-	private void updateSuperProperties() {
+	private void updateSuperProperties(OntProperty anOntProperty) {
 		// superClasses.clear();
 		try {
-			Iterator it = ontProperty.listSuperProperties(true);
+			Iterator it = anOntProperty.listSuperProperties(true);
 			while (it.hasNext()) {
 				OntProperty father = (OntProperty) it.next();
 				OntologyProperty fatherProp = getOntologyLibrary().getProperty(father.getURI());
@@ -141,10 +157,10 @@ public abstract class OntologyProperty extends OntologyObject implements CustomT
 		}
 	}
 
-	private void updateSubProperties() {
+	private void updateSubProperties(OntProperty anOntProperty) {
 		// subClasses.clear();
 		try {
-			Iterator it = ontProperty.listSubProperties(true);
+			Iterator it = anOntProperty.listSubProperties(true);
 			while (it.hasNext()) {
 				OntProperty child = (OntProperty) it.next();
 				OntologyProperty childProperty = getOntologyLibrary().getProperty(child.getURI());
@@ -204,8 +220,8 @@ public abstract class OntologyProperty extends OntologyObject implements CustomT
 	}
 
 	@Override
-	public void updateOntologyStatements() {
-		super.updateOntologyStatements();
+	public void updateOntologyStatements(OntProperty anOntResource) {
+		super.updateOntologyStatements(anOntResource);
 		superDomainStatementWereAppened = false;
 		superRangeStatementWereAppened = false;
 		domainStatementList.clear();

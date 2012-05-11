@@ -93,7 +93,8 @@ public class LinkScheme extends AbstractCreationScheme {
 	}
 
 	public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget) {
-		return getFromTargetEditionPattern() == actualFromTarget && getToTargetEditionPattern() == actualToTarget;
+		return getFromTargetEditionPattern().isAssignableFrom(actualFromTarget)
+				&& getToTargetEditionPattern().isAssignableFrom(actualToTarget);
 	}
 
 	@Override

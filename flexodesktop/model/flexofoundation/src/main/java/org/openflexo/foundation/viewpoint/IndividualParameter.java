@@ -21,12 +21,20 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class IndividualParameter extends EditionSchemeParameter {
 
 	private String conceptURI;
+
+	private ViewPointDataBinding conceptValue;
+
+	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
 
 	@Override
 	public Type getType() {
@@ -53,6 +61,48 @@ public class IndividualParameter extends EditionSchemeParameter {
 
 	public void setConcept(OntologyClass c) {
 		_setConceptURI(c != null ? c.getURI() : null);
+	}
+
+	public BindingDefinition getConceptValueBindingDefinition() {
+		return CONCEPT_VALUE;
+	}
+
+	public ViewPointDataBinding getConceptValue() {
+		if (conceptValue == null) {
+			conceptValue = new ViewPointDataBinding(this, ParameterBindingAttribute.conceptValue, getConceptValueBindingDefinition());
+		}
+		return conceptValue;
+	}
+
+	public void setConceptValue(ViewPointDataBinding conceptValue) {
+		if (conceptValue != null) {
+			conceptValue.setOwner(this);
+			conceptValue.setBindingAttribute(ParameterBindingAttribute.conceptValue);
+			conceptValue.setBindingDefinition(getConceptValueBindingDefinition());
+		}
+		this.conceptValue = conceptValue;
+	}
+
+	private boolean isDynamicConceptValueSet = false;
+
+	public boolean getIsDynamicConceptValue() {
+		return getConceptValue().isSet() || isDynamicConceptValueSet;
+	}
+
+	public void setIsDynamicConceptValue(boolean isDynamic) {
+		if (isDynamic) {
+			isDynamicConceptValueSet = true;
+		} else {
+			conceptValue = null;
+			isDynamicConceptValueSet = false;
+		}
+	}
+
+	public OntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
+		if (getConceptValue().isValid()) {
+			return (OntologyClass) getConceptValue().getBindingValue(parameterRetriever);
+		}
+		return null;
 	}
 
 }

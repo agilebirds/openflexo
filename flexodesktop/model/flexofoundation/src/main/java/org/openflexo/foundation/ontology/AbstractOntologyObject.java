@@ -64,6 +64,10 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 		return null;
 	}
 
+	public FlexoOntology getOntology() {
+		return getFlexoOntology();
+	}
+
 	public abstract FlexoOntology getFlexoOntology();
 
 	@Override

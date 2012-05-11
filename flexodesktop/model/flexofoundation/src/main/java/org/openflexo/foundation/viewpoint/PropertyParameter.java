@@ -71,9 +71,11 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 	}
 
 	public void setDomainValue(ViewPointDataBinding domainValue) {
-		domainValue.setOwner(this);
-		domainValue.setBindingAttribute(ParameterBindingAttribute.domainValue);
-		domainValue.setBindingDefinition(getDomainValueBindingDefinition());
+		if (domainValue != null) {
+			domainValue.setOwner(this);
+			domainValue.setBindingAttribute(ParameterBindingAttribute.domainValue);
+			domainValue.setBindingDefinition(getDomainValueBindingDefinition());
+		}
 		this.domainValue = domainValue;
 	}
 

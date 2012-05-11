@@ -24,6 +24,7 @@ import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -40,9 +41,11 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
+import org.openflexo.fib.model.FIBCheckboxList;
 import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
@@ -75,6 +78,7 @@ import org.openflexo.fib.view.container.FIBTabView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBButtonWidget;
 import org.openflexo.fib.view.widget.FIBCheckBoxWidget;
+import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
 import org.openflexo.fib.view.widget.FIBColorWidget;
 import org.openflexo.fib.view.widget.FIBCustomWidget;
 import org.openflexo.fib.view.widget.FIBDropDownWidget;
@@ -705,6 +709,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			if (fibWidget instanceof FIBRadioButtonList) {
 				return new FIBRadioButtonListWidget((FIBRadioButtonList) fibWidget, FIBController.this);
 			}
+			if (fibWidget instanceof FIBCheckboxList) {
+				return new FIBCheckboxListWidget((FIBCheckboxList) fibWidget, FIBController.this);
+			}
 			if (fibWidget instanceof FIBCustom) {
 				return new FIBCustomWidget((FIBCustom) fibWidget, FIBController.this);
 			}
@@ -733,6 +740,17 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	}
 
 	protected void openFIBEditor(final FIBComponent component, MouseEvent event) {
+		if (component.getDefinitionFile() == null) {
+			try {
+				File fibFile = File.createTempFile("FIBComponent", ".fib");
+				component.setDefinitionFile(fibFile.getAbsolutePath());
+				FIBLibrary.save(component, fibFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.warning("Cannot create FIB temp file definition for component, aborting FIB edition");
+				return;
+			}
+		}
 		try {
 			File fibFile = new File(component.getDefinitionFile());
 			if (!fibFile.exists()) {

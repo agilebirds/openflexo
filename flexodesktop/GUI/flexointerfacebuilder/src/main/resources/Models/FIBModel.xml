@@ -130,6 +130,15 @@
   </entity>
  
   <entity name="org.openflexo.fib.model.FIBRadioButtonList" xmlTag="RadioButtonList"> 
+    <property name="columns" xmlTag="columns" attribute="YES"/> 
+    <property name="HGap" xmlTag="hGap" attribute="YES"/> 
+    <property name="VGap" xmlTag="vGap" attribute="YES"/> 
+  </entity>
+ 
+  <entity name="org.openflexo.fib.model.FIBCheckboxList" xmlTag="CheckboxList"> 
+    <property name="columns" xmlTag="columns" attribute="YES"/> 
+    <property name="HGap" xmlTag="hGap" attribute="YES"/> 
+    <property name="VGap" xmlTag="vGap" attribute="YES"/> 
   </entity>
  
   <entity name="org.openflexo.fib.model.FIBList" xmlTag="List"> 
@@ -196,6 +205,7 @@
     <property name="buttonType" xmlTag="buttonType" attribute="YES"/> 
     <property name="label" xmlTag="label" attribute="YES"/> 
     <property name="isDefault" xmlTag="default" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="buttonIcon" xmlTag="buttonIcon" attribute="YES"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBCustom" xmlTag="Custom"> 
