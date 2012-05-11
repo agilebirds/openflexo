@@ -263,7 +263,8 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			if (object != null) {
 				boolean found = false;
 				for (EditionPatternReference ref : object.getEditionPatternReferences()) {
-					if (ref.getEditionPattern().getURI().equals(epi.getEditionPatternURI()) && ref.getInstanceId() == instanceID) {
+					if (ref.getEditionPattern() != null && ref.getEditionPattern().getURI().equals(epi.getEditionPatternURI())
+							&& ref.getInstanceId() == instanceID) {
 						if (ref.getEditionPatternInstance() != null) {
 							epis.put(ref.getEditionPatternInstance(), epi);
 							found = true;

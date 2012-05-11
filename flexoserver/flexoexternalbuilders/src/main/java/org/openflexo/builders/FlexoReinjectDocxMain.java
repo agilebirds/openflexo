@@ -105,6 +105,10 @@ public class FlexoReinjectDocxMain extends FlexoExternalMainWithProject {
 		}
 	}
 
+	public ReinjectDocx getDocxAction() {
+		return docxAction;
+	}
+
 	public static void main(String[] args) {
 		launch(FlexoReinjectDocxMain.class, args);
 	}
