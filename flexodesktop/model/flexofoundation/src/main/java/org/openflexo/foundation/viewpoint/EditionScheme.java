@@ -143,42 +143,37 @@ public abstract class EditionScheme extends ViewPointObject {
 	}
 
 	public void actionFirst(EditionAction a) {
-		System.out.println("Action first, was: " + actions);
 		actions.remove(a);
 		actions.insertElementAt(a, 0);
-		System.out.println("Action first, is now: " + actions);
 		setChanged();
 		notifyObservers();
 	}
 
 	public void actionUp(EditionAction a) {
-		System.out.println("Action up, was: " + actions);
 		int index = actions.indexOf(a);
-		actions.remove(a);
-		actions.insertElementAt(a, index - 1);
-		System.out.println("Action up, is now: " + actions);
-		setChanged();
-		notifyObservers();
+		if (index > 0) {
+			actions.remove(a);
+			actions.insertElementAt(a, index - 1);
+			setChanged();
+			notifyObservers();
+		}
 	}
 
 	public void actionDown(EditionAction a) {
-		System.out.println("Action down, was: " + actions);
 		int index = actions.indexOf(a);
-		actions.remove(a);
-		actions.insertElementAt(a, index + 1);
-		System.out.println("Action down, is now: " + actions);
-		setChanged();
-		notifyObservers();
+		if (index > 0) {
+			actions.remove(a);
+			actions.insertElementAt(a, index + 1);
+			setChanged();
+			notifyObservers();
+		}
 	}
 
 	public void actionLast(EditionAction a) {
-		System.out.println("Action last, was: " + actions);
 		actions.remove(a);
 		actions.add(a);
-		System.out.println("Action last, is now: " + actions);
 		setChanged();
 		notifyObservers();
-		// notifyChange("actions", null, actions);
 	}
 
 	public Vector<EditionSchemeParameter> getParameters() {
