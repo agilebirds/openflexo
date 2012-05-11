@@ -1,5 +1,5 @@
 #English
-#Tue May 08 23:11:37 CEST 2012
+#Thu May 10 18:57:29 CEST 2012
 apply=Apply
 arithmetic=Arithmetic
 boolean=Boolean
@@ -14,6 +14,7 @@ enum=Enum
 evaluation=Evaluation
 expression=Expression
 expression_is_valid_and_conform_to_required_type=Expression is valid and conform to required type
+expression_is_valid_but_not_conform_to_requested_type_(found\:($0)_expected\:($1))=Expression is valid but not conform to requested type (found\:($0) expected\:($1))
 false=false
 float=Float
 icon=icon
