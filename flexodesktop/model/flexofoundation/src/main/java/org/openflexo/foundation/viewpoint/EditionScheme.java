@@ -29,7 +29,7 @@ import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionScheme extends ViewPointObject {
+public abstract class EditionScheme extends ViewPointObject implements ActionContainer {
 
 	protected BindingModel _bindingModel;
 
@@ -118,23 +118,28 @@ public abstract class EditionScheme extends ViewPointObject {
 		return null;
 	}
 
+	@Override
 	public Vector<EditionAction> getActions() {
 		return actions;
 	}
 
+	@Override
 	public void setActions(Vector<EditionAction> actions) {
 		this.actions = actions;
 		setChanged();
 		notifyObservers();
 	}
 
+	@Override
 	public void addToActions(EditionAction action) {
 		action.setScheme(this);
 		actions.add(action);
 		setChanged();
 		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
+	@Override
 	public void removeFromActions(EditionAction action) {
 		action.setScheme(null);
 		actions.remove(action);
@@ -142,6 +147,7 @@ public abstract class EditionScheme extends ViewPointObject {
 		notifyObservers();
 	}
 
+	@Override
 	public void actionFirst(EditionAction a) {
 		actions.remove(a);
 		actions.insertElementAt(a, 0);
@@ -149,6 +155,7 @@ public abstract class EditionScheme extends ViewPointObject {
 		notifyObservers();
 	}
 
+	@Override
 	public void actionUp(EditionAction a) {
 		int index = actions.indexOf(a);
 		if (index > 0) {
@@ -159,6 +166,7 @@ public abstract class EditionScheme extends ViewPointObject {
 		}
 	}
 
+	@Override
 	public void actionDown(EditionAction a) {
 		int index = actions.indexOf(a);
 		if (index > 0) {
@@ -169,6 +177,7 @@ public abstract class EditionScheme extends ViewPointObject {
 		}
 	}
 
+	@Override
 	public void actionLast(EditionAction a) {
 		actions.remove(a);
 		actions.add(a);
@@ -250,6 +259,7 @@ public abstract class EditionScheme extends ViewPointObject {
 		return null;
 	}
 
+	@Override
 	public AddShape createAddShapeAction() {
 		AddShape newAction = new AddShape();
 		newAction.setPatternRole(getEditionPattern().getDefaultShapePatternRole());
@@ -257,42 +267,49 @@ public abstract class EditionScheme extends ViewPointObject {
 		return newAction;
 	}
 
+	@Override
 	public AddClass createAddClassAction() {
 		AddClass newAction = new AddClass();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public AddIndividual createAddIndividualAction() {
 		AddIndividual newAction = new AddIndividual();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public AddObjectPropertyStatement createAddObjectPropertyStatementAction() {
 		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public AddDataPropertyStatement createAddDataPropertyStatementAction() {
 		AddDataPropertyStatement newAction = new AddDataPropertyStatement();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public AddIsAStatement createAddIsAPropertyAction() {
 		AddIsAStatement newAction = new AddIsAStatement();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public AddRestrictionStatement createAddRestrictionAction() {
 		AddRestrictionStatement newAction = new AddRestrictionStatement();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public AddConnector createAddConnectorAction() {
 		AddConnector newAction = new AddConnector();
 		newAction.setPatternRole(getEditionPattern().getDefaultConnectorPatternRole());
@@ -300,30 +317,49 @@ public abstract class EditionScheme extends ViewPointObject {
 		return newAction;
 	}
 
+	@Override
 	public DeclarePatternRole createDeclarePatternRoleAction() {
 		DeclarePatternRole newAction = new DeclarePatternRole();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public GraphicalAction createGraphicalAction() {
 		GraphicalAction newAction = new GraphicalAction();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public AddDiagram createAddDiagramAction() {
 		AddDiagram newAction = new AddDiagram();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
 	public AddEditionPattern createAddEditionPatternAction() {
 		AddEditionPattern newAction = new AddEditionPattern();
 		addToActions(newAction);
 		return newAction;
 	}
 
+	@Override
+	public ConditionalAction createConditionalAction() {
+		ConditionalAction newAction = new ConditionalAction();
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
+	public IterationAction createIterationAction() {
+		IterationAction newAction = new IterationAction();
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
 	public EditionAction deleteAction(EditionAction anAction) {
 		removeFromActions(anAction);
 		anAction.delete();

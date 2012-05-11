@@ -1022,6 +1022,26 @@
                   <BrowserAddAction method="selected.createAddDataPropertyStatementAction" name="add_data_property_statement_action" />
                   <BrowserAddAction method="selected.createGraphicalAction" name="add_graphical_action" />
                   <BrowserAddAction method="selected.createAddEditionPatternAction" name="add_edition_pattern_action" />
+                  <BrowserAddAction method="selected.createConditionalAction" name="add_conditional" />
+                  <BrowserAddAction method="selected.createIterationAction" name="add_iteration" />
+                </BrowserElement>
+                 <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ControlStructureAction" label="controlStructure.stringRepresentation" icon="controller.iconForObject(controlStructure)" isEditable="false" filtered="false" defaultVisible="true" name="controlStructure">
+                  <Children data="controlStructure.actions" name="children" />
+                   <BrowserAddAction method="selected.createAddShapeAction" name="add_shape_action" />
+                  <BrowserAddAction method="selected.createAddShapeAction" name="add_shape_action" />
+                  <BrowserAddAction method="selected.createAddConnectorAction" name="add_connector_action" />
+                  <BrowserAddAction method="selected.createAddIndividualAction" name="add_individual_action" />
+                  <BrowserAddAction method="selected.createAddClassAction" name="add_class_action" />
+                  <BrowserAddAction method="selected.createDeclarePatternRoleAction" name="add_declare_pattern_role_action" />
+                  <BrowserAddAction method="selected.createAddObjectPropertyStatementAction" name="add_object_property_statement_action" />
+                  <BrowserAddAction method="selected.createAddIsAPropertyAction" name="add_is_a_statement_action" />
+                  <BrowserAddAction method="selected.createAddRestrictionAction" name="add_restriction_statement_action" />
+                  <BrowserAddAction method="selected.createAddDiagramAction" name="add_diagram_action" />
+                  <BrowserAddAction method="selected.createAddDataPropertyStatementAction" name="add_data_property_statement_action" />
+                  <BrowserAddAction method="selected.createGraphicalAction" name="add_graphical_action" />
+                  <BrowserAddAction method="selected.createAddEditionPatternAction" name="add_edition_pattern_action" />
+                  <BrowserAddAction method="selected.createConditionalAction" name="add_conditional" />
+                  <BrowserAddAction method="selected.createIterationAction" name="add_iteration" />
                 </BrowserElement>
                 <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionAction" label="editionAction.stringRepresentation" icon="controller.iconForObject(editionAction)" isEditable="false" filtered="false" defaultVisible="true" name="editionAction" />
               </Browser>

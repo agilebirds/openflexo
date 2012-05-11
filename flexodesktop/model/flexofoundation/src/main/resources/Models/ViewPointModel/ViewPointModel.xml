@@ -449,6 +449,25 @@
 		<property name="object" xmlTag="object" attribute="YES" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.ControlStructureAction" abstract="yes">		
+		<property name="actions" type="vector"
+			contains="org.openflexo.foundation.viewpoint.EditionAction"
+			primary="yes" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.ConditionalAction"
+		xmlTag="ConditionalAction">
+		<property name="condition" xmlTag="condition" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.IterationAction"
+		xmlTag="IterationAction">
+		<property name="iteration" xmlTag="iteration" attribute="YES" />
+		<property name="iteratorName" xmlTag="iteratorName" attribute="YES" />
+	</entity>
+
 
 	<!-- Mapping for graphical representation stuff -->
 
