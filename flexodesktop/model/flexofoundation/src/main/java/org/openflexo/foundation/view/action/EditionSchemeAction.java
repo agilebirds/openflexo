@@ -32,10 +32,12 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
@@ -50,6 +52,7 @@ import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddClass;
+import org.openflexo.foundation.viewpoint.AddDataPropertyStatement;
 import org.openflexo.foundation.viewpoint.AddEditionPattern.AddEditionPatternParameter;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.AddIsAStatement;
@@ -214,12 +217,21 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 					}
 				} else if (action instanceof AddObjectPropertyStatement) {
 					logger.info("Add object property with patternRole=" + action.getPatternRole());
-					ObjectPropertyStatement statement = performAddObjectProperty((org.openflexo.foundation.viewpoint.AddObjectPropertyStatement) action);
+					ObjectPropertyStatement statement = performAddObjectPropertyStatement((org.openflexo.foundation.viewpoint.AddObjectPropertyStatement) action);
 					if (statement != null) {
 						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
 						performedActions.put(action, statement);
 					} else {
-						logger.warning("Could not perform AddObjectProperty for role " + action.getPatternRole());
+						logger.warning("Could not perform AddObjectPropertyStatement for role " + action.getPatternRole());
+					}
+				} else if (action instanceof AddDataPropertyStatement) {
+					logger.info("Add data property with patternRole=" + action.getPatternRole());
+					DataPropertyStatement statement = performAddDataPropertyStatement((org.openflexo.foundation.viewpoint.AddDataPropertyStatement) action);
+					if (statement != null) {
+						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
+						performedActions.put(action, statement);
+					} else {
+						logger.warning("Could not perform AddDataPropertyStatement for role " + action.getPatternRole());
 					}
 				} else if (action instanceof AddIsAStatement) {
 					logger.info("Add isA property with patternRole=" + action.getPatternRole());
@@ -275,8 +287,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			} else if (action instanceof AddClass) {
 				finalizePerformAddClass((AddClass) action, (OntologyClass) performedActions.get(action));
 			} else if (action instanceof AddObjectPropertyStatement) {
-				finalizePerformAddObjectProperty((AddObjectPropertyStatement) action,
+				finalizePerformAddObjectPropertyStatement((AddObjectPropertyStatement) action,
 						(ObjectPropertyStatement) performedActions.get(action));
+			} else if (action instanceof AddDataPropertyStatement) {
+				finalizePerformAddDataPropertyStatement((AddDataPropertyStatement) action, (DataPropertyStatement) performedActions.get(action));
 			} else if (action instanceof AddIsAStatement) {
 				finalizePerformAddIsAProperty((AddIsAStatement) action, (SubClassStatement) performedActions.get(action));
 			} else if (action instanceof AddRestrictionStatement) {
@@ -445,7 +459,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		return newClass;
 	}
 
-	protected ObjectPropertyStatement performAddObjectProperty(AddObjectPropertyStatement action) {
+	protected ObjectPropertyStatement performAddObjectPropertyStatement(AddObjectPropertyStatement action) {
 		OntologyObjectProperty property = (OntologyObjectProperty) action.getObjectProperty();
 		OntologyObject subject = action.getPropertySubject(this);
 		OntologyObject object = action.getPropertyObject(this);
@@ -458,13 +472,32 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		if (object == null) {
 			return null;
 		}
-		subject.getOntResource().addProperty(property.getOntProperty(), object.getOntResource());
-		subject.updateOntologyStatements();
-		return subject.getObjectPropertyStatement(property);
+		return subject.addPropertyStatement(property, object);
 	}
 
-	protected ObjectPropertyStatement finalizePerformAddObjectProperty(AddObjectPropertyStatement action,
+	protected ObjectPropertyStatement finalizePerformAddObjectPropertyStatement(AddObjectPropertyStatement action,
 			ObjectPropertyStatement newObjectPropertyStatement) {
+		return newObjectPropertyStatement;
+	}
+
+	protected DataPropertyStatement performAddDataPropertyStatement(AddDataPropertyStatement action) {
+		OntologyDataProperty property = (OntologyDataProperty) action.getDataProperty();
+		OntologyObject subject = action.getPropertySubject(this);
+		Object value = action.getValue(this);
+		if (property == null) {
+			return null;
+		}
+		if (subject == null) {
+			return null;
+		}
+		if (value == null) {
+			return null;
+		}
+		return (DataPropertyStatement) subject.addLiteral(property, value);
+	}
+
+	protected DataPropertyStatement finalizePerformAddDataPropertyStatement(AddDataPropertyStatement action,
+			DataPropertyStatement newObjectPropertyStatement) {
 		return newObjectPropertyStatement;
 	}
 

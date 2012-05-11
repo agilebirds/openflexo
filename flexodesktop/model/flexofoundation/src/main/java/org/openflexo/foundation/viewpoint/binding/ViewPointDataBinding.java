@@ -196,10 +196,10 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 
 		if (!binding.isBindingValid()) {
 			logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context=" + getOwner());
-			logger.info("BindingModel=" + getOwner().getBindingModel());
+			/*logger.info("BindingModel=" + getOwner().getBindingModel());
 			BindingFactory factory = getOwner().getBindingFactory();
 			logger.info("BindingFactory=" + factory);
-			logger.info("Reason: " + binding.debugIsBindingValid());
+			logger.info("Reason: " + binding.debugIsBindingValid());*/
 		}
 
 		updateDependancies();

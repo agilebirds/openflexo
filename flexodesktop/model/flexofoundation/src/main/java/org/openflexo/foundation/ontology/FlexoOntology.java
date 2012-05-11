@@ -1210,6 +1210,8 @@ public abstract class FlexoOntology extends OntologyObject {
 			return subjectClass.getObjectRestrictionStatement(property, objectClass);
 		}
 
+		setIsModified();
+
 		logger.warning("Could not create restriction for " + property.getURI());
 		return null;
 	}

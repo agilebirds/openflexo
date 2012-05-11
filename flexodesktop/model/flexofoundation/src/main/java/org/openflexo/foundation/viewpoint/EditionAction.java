@@ -531,4 +531,12 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		this.conditional = conditional;
 	}
 
+	public String getStringRepresentation() {
+		return getClass().getSimpleName() + (getPatternRole() != null ? " (" + getPatternRole().getPatternRoleName() + ")" : "");
+	}
+
+	@Override
+	public String toString() {
+		return getStringRepresentation();
+	}
 }

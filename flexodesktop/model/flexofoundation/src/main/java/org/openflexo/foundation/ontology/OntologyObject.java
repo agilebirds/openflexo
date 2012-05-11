@@ -616,12 +616,14 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 
 		getOntResource().addProperty(property.getOntProperty(), object.getResource());
 		updateOntologyStatements();
+		getOntology().setChanged();
 		return getPropertyStatement(property, object);
 	}
 
 	public PropertyStatement addPropertyStatement(OntologyProperty property, String value) {
 		getOntResource().addProperty(property.getOntProperty(), value);
 		updateOntologyStatements();
+		getOntology().setChanged();
 		return getPropertyStatement(property, value);
 	}
 
@@ -629,21 +631,24 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		// System.out.println("****** Add statement for property "+property.getName()+" value="+value+" language="+language);
 		getOntResource().addProperty(property.getOntProperty(), value, language.getTag());
 		updateOntologyStatements();
+		getOntology().setChanged();
 		return getPropertyStatement(property, value, language);
 	}
 
 	public DataPropertyStatement addDataPropertyStatement(OntologyDataProperty property, Object value) {
 		getOntResource().addLiteral(property.getOntProperty(), value);
 		updateOntologyStatements();
+		getOntology().setChanged();
 		return getDataPropertyStatement(property, value);
 	}
 
 	public void removePropertyStatement(PropertyStatement statement) {
 		getFlexoOntology().getOntModel().remove(statement.getStatement());
 		updateOntologyStatements();
+		getOntology().setChanged();
 	}
 
-	public void addLiteral(OntologyProperty property, Object value) {
+	public PropertyStatement addLiteral(OntologyProperty property, Object value) {
 		if (value instanceof String) {
 			getOntResource().addProperty(property.getOntProperty(), (String) value);
 		} else if (value instanceof LocalizedString) {
@@ -668,6 +673,8 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		} else {
 			// If value is null, just ignore
 		}
+		getOntology().setChanged();
+		return getPropertyStatement(property);
 	}
 
 	public boolean getIsReadOnly() {
