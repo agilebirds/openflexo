@@ -23,6 +23,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -30,6 +32,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.event.TreeSelectionEvent;
@@ -392,7 +395,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 			List<BrowserCell> removedChildren = new ArrayList<BrowserCell>(children);
 			List<BrowserCell> newChildren = new ArrayList<BrowserCell>();
 			boolean isEnabled = browserElementType.isEnabled(representedObject);
-			List newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
+			final List newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
 			int index = 0;
 
 			for (Object o : newChildrenObjects) {
@@ -420,6 +423,29 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 			for (BrowserCell c : removedChildren) {
 				children.remove(c);
 				c.delete();
+			}
+
+			boolean requireSorting = false;
+			for (int i = 0; i < children.size() - 1; i++) {
+				BrowserCell c1 = children.elementAt(i);
+				BrowserCell c2 = children.elementAt(i + 1);
+				if (newChildrenObjects.indexOf(c1.representedObject) != newChildrenObjects.indexOf(c2.representedObject) - 1) {
+					requireSorting = true;
+				}
+			}
+
+			if (requireSorting) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Detected sorting required");
+				}
+				;
+				// Sort children according to supplied list
+				Collections.sort(children, new Comparator<BrowserCell>() {
+					@Override
+					public int compare(BrowserCell o1, BrowserCell o2) {
+						return newChildrenObjects.indexOf(o1.representedObject) - newChildrenObjects.indexOf(o2.representedObject);
+					}
+				});
 			}
 
 			// System.out.println("removedChildren ["+removedChildren.size()+"] "+removedChildren);
@@ -466,6 +492,15 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				// We should investigate further, but since no real consequences are raised here, we just ignore exception
 				logger.warning("Unexpected NullPointerException when refreshing browser, no severity but please investigate");
 			}
+
+			if (requireSorting) {
+				Object wasSelected = getSelectedObject();
+				System.out.println("Je dois reselectionner " + wasSelected);
+				if (wasSelected != null) {
+					resetSelection();
+					addToSelection(wasSelected);
+				}
+			}
 		}
 
 		@Override
@@ -480,7 +515,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		public void propertyChange(PropertyChangeEvent evt) {
 			// logger.info("Object " + representedObject + " received " + evt);
 			if (!isDeleted) {
-				// System.out.println("cell "+this+" propertyChanged "+evt.getPropertyName()+" for "+evt.getSource());
+				// System.out.println("cell " + this + " propertyChanged " + evt.getPropertyName() + " for " + evt.getSource());
 				update(false);
 			}
 		}
