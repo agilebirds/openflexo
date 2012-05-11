@@ -65,6 +65,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 		if (getShema() != null) {
 			getShema().deleteObserver(this);
 		}
+		super.delete();
 	}
 
 	@Override

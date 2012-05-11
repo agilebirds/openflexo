@@ -88,6 +88,7 @@ public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> 
 			getPalette().deleteObserver(this);
 		}
 		paletteElementsGR.clear();
+		super.delete();
 	}
 
 	@Override

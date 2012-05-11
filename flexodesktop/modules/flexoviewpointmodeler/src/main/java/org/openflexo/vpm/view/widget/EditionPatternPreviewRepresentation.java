@@ -72,6 +72,7 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {
 			role.deleteObserver(this);
 		}
+		super.delete();
 	}
 
 	@Override

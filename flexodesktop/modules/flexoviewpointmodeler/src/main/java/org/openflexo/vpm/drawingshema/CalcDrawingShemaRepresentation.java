@@ -74,6 +74,7 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 		if (getShema() != null) {
 			getShema().deleteObserver(this);
 		}
+		super.delete();
 	}
 
 	@Override

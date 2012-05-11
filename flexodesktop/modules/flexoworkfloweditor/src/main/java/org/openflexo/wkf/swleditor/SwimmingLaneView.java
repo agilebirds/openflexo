@@ -43,6 +43,7 @@ public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> im
 	@Override
 	public void deleteModuleView() {
 		getController().delete();
+		delete();
 	}
 
 	@Override

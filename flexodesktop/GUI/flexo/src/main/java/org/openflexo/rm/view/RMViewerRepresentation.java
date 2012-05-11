@@ -60,6 +60,12 @@ public class RMViewerRepresentation extends DefaultDrawing<FlexoProject> impleme
 	}
 
 	@Override
+	public void delete() {
+		getProject().deleteObserver(this);
+		super.delete();
+	}
+
+	@Override
 	protected void buildGraphicalObjectsHierarchy() {
 		for (FlexoResource<? extends FlexoResourceData> res : getProject()) {
 			addDrawable(res, getProject());

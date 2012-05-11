@@ -211,8 +211,8 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 						return false;
 					}
 				}
-				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
+				return !(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject)
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null;
 			} else if (targetObject instanceof WKFGroup) {
 				return ((WKFGroup) targetObject).getIsVisible();
 			} else if (targetObject instanceof PortMapRegistery) {
@@ -394,8 +394,19 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		for (Role role : process.getWorkflow().getRoleList().getRoles()) {
 			role.addObserver(this);
 		}
-
 		updateGraphicalObjectsHierarchy();
+	}
+
+	@Override
+	public void delete() {
+		getFlexoProcess().deleteObserver(this);
+		getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
+		getFlexoProcess().getWorkflow().deleteObserver(this);
+		getFlexoProcess().getWorkflow().getRoleList().deleteObserver(this);
+		for (Role role : getFlexoProcess().getWorkflow().getRoleList().getRoles()) {
+			role.deleteObserver(this);
+		}
+		super.delete();
 	}
 
 	/**
@@ -913,8 +924,8 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getFlexoProcess() || observable == getFlexoProcess().getActivityPetriGraph()
 				|| observable == getFlexoProcess().getWorkflow().getRoleList()) {
-			if ((dataModification instanceof NodeInserted) || (dataModification instanceof NodeRemoved)
-					|| (dataModification instanceof ArtefactInserted) || (dataModification instanceof ArtefactRemoved)
+			if (dataModification instanceof NodeInserted || dataModification instanceof NodeRemoved
+					|| dataModification instanceof ArtefactInserted || dataModification instanceof ArtefactRemoved
 					|| dataModification instanceof AssociationInserted || dataModification instanceof PostInserted) {
 				updateGraphicalObjectsHierarchy();
 			}
@@ -943,12 +954,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			if (dataModification instanceof ObjectVisibilityChanged) {
 				updateGraphicalObjectsHierarchy();
 				updateLocations();
-			}/* else if (dataModification instanceof ActivityNodeUsingRole) {
-				if(((ActivityNodeUsingRole)dataModification).getNode().getProcess()==getProcess() && getGraphicalRepresentation(((ActivityNodeUsingRole)dataModification).getRole())==null) {
-					updateGraphicalObjectsHierarchy();
-					updateLocations();
-				}
-				}*/
+			}
 		} else if (observable == getFlexoProcess().getWorkflow()) {
 			if (FlexoWorkflow.GraphicalProperties.SHOW_SHADOWS.getSerializationName().equals(dataModification.propertyName())) {
 				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();

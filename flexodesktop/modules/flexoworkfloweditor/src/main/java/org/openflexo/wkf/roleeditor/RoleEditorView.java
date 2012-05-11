@@ -42,6 +42,7 @@ public class RoleEditorView extends DrawingView<RoleListRepresentation> implemen
 	@Override
 	public void deleteModuleView() {
 		getController().delete();
+		delete();
 	}
 
 	@Override
