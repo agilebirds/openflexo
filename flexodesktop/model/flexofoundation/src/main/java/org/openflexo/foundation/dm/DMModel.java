@@ -177,8 +177,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	private Vector<ERDiagram> diagrams;
 
-	private JarClassLoader jarClassLoader;
-
 	static {
 		// Register JavaParser if found in classpath (otherwise abort)
 		installJavaParser();
@@ -1384,6 +1382,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	public DMClassLibrary getClassLibrary() {
 		if (_classLibrary == null) {
 			_classLibrary = new DMClassLibrary(this);
+			_classLibrary.addClassLoader(getProject().getJarClassLoader());
 		}
 		return _classLibrary;
 	}
@@ -1798,14 +1797,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			}
 		}
 		return null;
-	}
-
-	public JarClassLoader getJarClassLoader() {
-		return jarClassLoader;
-	}
-
-	public void setJarClassLoader(JarClassLoader jarClassLoader) {
-		this.jarClassLoader = jarClassLoader;
 	}
 
 }

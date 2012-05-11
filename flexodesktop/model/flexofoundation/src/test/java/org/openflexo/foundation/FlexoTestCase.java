@@ -97,6 +97,7 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
 
@@ -152,6 +153,10 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	public FlexoTestCase() {
+	}
+
+	protected void initResourceLocatorFromSystemProperty() {
+		// GPO: Kept in case we need this, but we should try not to depend on this.
 		logger.severe("Here is the system property : " + System.getProperty("flexo.resources.location"));
 		if (System.getProperty("flexo.resources.location") != null) {
 			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
@@ -160,10 +165,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	public FlexoTestCase(String name) {
 		super(name);
-		logger.severe("Here is the system property : " + System.getProperty("flexo.resources.location"));
-		if (System.getProperty("flexo.resources.location") != null) {
-			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
-		}
+		// initResourceLocatorFromSystemProperty();
 		FlexoObject.initialize(false);
 	}
 
@@ -172,7 +174,7 @@ public abstract class FlexoTestCase extends TestCase {
 		if (retval.exists()) {
 			return retval;
 		}
-		retval = new File("../FlexoFoundation/src/test/resources", resourceRelativeName);
+		retval = new File("../flexofoundation/src/test/resources", resourceRelativeName);
 		if (retval.exists()) {
 			return retval;
 		}
@@ -186,7 +188,18 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	protected FlexoEditor createProject(String projectName) {
-		return createProject(projectName, null);
+		return createProject(projectName, getNewResourceCenter(projectName));
+	}
+
+	protected FlexoResourceCenter getNewResourceCenter(String name) {
+		try {
+			return LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(FileUtils.createTempDirectory(name,
+					"ResourceCenter"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		return null;
 	}
 
 	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter) {

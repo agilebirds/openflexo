@@ -62,7 +62,6 @@ public class JarLoader implements ImportedResourceData {
 	private Manifest manifest;
 	Set<String> classNames = new HashSet<String>();
 	private JarClassLoader classLoader;
-	private ExternalRepository _jarRepository = null;
 	FlexoProject _project;
 	private FlexoJarResource _jarResource;
 
@@ -70,7 +69,7 @@ public class JarLoader implements ImportedResourceData {
 		if (_jarResource != null) {
 			return _jarResource.getJarRepository();
 		}
-		return _jarRepository;
+		return null;
 	}
 
 	public JarLoader(File aJarFile, FlexoJarResource jarResource, FlexoProject project) {
@@ -92,13 +91,9 @@ public class JarLoader implements ImportedResourceData {
 	private JarLoader(File aJarFile, ExternalRepository jarRepository, FlexoJarResource jarResource, FlexoProject project,
 			FlexoProgress progress) {
 		super();
-		_jarRepository = jarRepository;
 		_jarResource = jarResource;
-		if (getJarRepository() != null) {
-			getJarRepository().getDMModel().getClassLibrary().addClassLoader(classLoader);
-		}
 		_project = project;
-		classLoader = _project.getDataModel().getJarClassLoader();
+		classLoader = _project.getJarClassLoader();
 		try {
 			jarFile = new JarFile(aJarFile);
 			if (logger.isLoggable(Level.INFO)) {
@@ -121,7 +116,6 @@ public class JarLoader implements ImportedResourceData {
 		}
 		classNames = null;
 		_jarResource = null;
-		_jarRepository = null;
 		classLoader = null;
 		jarFile = null;
 		manifest = null;
@@ -186,22 +180,7 @@ public class JarLoader implements ImportedResourceData {
 	}
 
 	boolean isClassFile(String jarentryname) {
-		return jarentryname.endsWith(".class");
-	}
-
-	String parseClassName(String jarentryname) {
-		String classname;
-		if (jarentryname.indexOf("WebServerResources/Java/") == 0) {
-			jarentryname = jarentryname.substring("WebServerResources/Java/".length());
-		}
-		int index = jarentryname.indexOf("class");
-		if (index - 1 > 0) {
-			classname = jarentryname.substring(0, index - 1);
-		} else {
-			classname = jarentryname;
-		}
-		classname = classname.replace('/', '.');
-		return classname;
+		return jarentryname.endsWith(".class") && !jarentryname.startsWith("WebServerResources/");
 	}
 
 	public FlexoJarResource getJarResource() {
@@ -216,9 +195,6 @@ public class JarLoader implements ImportedResourceData {
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_jarResource = (FlexoJarResource) resource;
-		if (_jarResource != null) {
-			_jarRepository = _jarResource.getJarRepository();
-		}
 	}
 
 	@Override

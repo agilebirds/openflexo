@@ -93,6 +93,7 @@ import org.openflexo.foundation.dkv.DKVValidationModel;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMValidationModel;
+import org.openflexo.foundation.dm.JarClassLoader;
 import org.openflexo.foundation.gen.FlexoProcessImageNotificationCenter;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.ie.IEOperationComponent;
@@ -964,6 +965,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Closing project... DONE");
 		}
+		jarClassLoader = null;
 	}
 
 	// =============================================================
@@ -1620,6 +1622,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return getFlexoWSLibraryResource().getWSLibrary();
 	}
 
+	private DMModel buildingDataModel = null;
+	private boolean dataModelIsBuilding = false;
+	private JarClassLoader jarClassLoader;
+
 	public DMModel getDataModel() {
 		if (dataModelIsBuilding) {
 			return getBuildingDataModel();
@@ -1640,8 +1646,16 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		this.buildingDataModel = buildingDataModel;
 	}
 
-	private DMModel buildingDataModel = null;
-	private boolean dataModelIsBuilding = false;
+	public JarClassLoader getJarClassLoader() {
+		if (jarClassLoader == null) {
+			jarClassLoader = new JarClassLoader();
+		}
+		return jarClassLoader;
+	}
+
+	public void setJarClassLoader(JarClassLoader jarClassLoader) {
+		this.jarClassLoader = jarClassLoader;
+	}
 
 	public DKVModel getDKVModel() {
 		return getFlexoDKVResource().getResourceData();

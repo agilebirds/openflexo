@@ -630,27 +630,22 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Load resource exception.", e);
 			}
-			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "File not found exception.", e);
 			}
-			e.printStackTrace();
 		} catch (ProjectLoadingCancelledException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Project loading cancel exception.", e);
 			}
-			e.printStackTrace();
 		} catch (ResourceDependancyLoopException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Loop in dependancies exception.", e);
 			}
-			e.printStackTrace();
 		} catch (FlexoException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Flexo exception.", e);
 			}
-			e.printStackTrace();
 		}
 	}
 

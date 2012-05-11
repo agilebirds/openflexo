@@ -263,13 +263,23 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				@Override
 				protected Void doInBackground() throws Exception {
-					action.execute();
+					try {
+						action.execute();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					return null;
 				}
 
 				@Override
 				protected void done() {
 					super.done();
+					if (!action.isEmbedded()) {
+						if (ProgressWindow.hasInstance()) {
+							ProgressWindow.hideProgressWindow();
+						}
+					}
 				}
 			};
 			worker.execute();

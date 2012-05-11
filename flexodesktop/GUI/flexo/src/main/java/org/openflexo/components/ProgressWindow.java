@@ -251,6 +251,16 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	@Override
 	public void hideWindow() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					hideWindow();
+				}
+			});
+			return;
+		}
 		setVisible(false);
 		dispose();
 		if (initOwner != null) {

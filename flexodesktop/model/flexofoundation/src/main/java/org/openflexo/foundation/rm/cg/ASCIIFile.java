@@ -88,7 +88,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 			UnresolvedConflictException {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("***** writeToFile() called in " + getFlexoResource().getFileName() + " file " + aFile.getAbsolutePath() + " on "
-					+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(new Date()));
+					+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(new Date()));
 		}
 
 		File path = aFile.getParentFile();
@@ -110,8 +110,8 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 			}
 
 			// If current generation is conflicting and not marked as merged, don't do it and throw exception
-			if (hasDiskVersion && (getFlexoResource().getGenerationStatus() == GenerationStatus.ConflictingUnMerged)
-					&& !(isOverrideScheduled())) {
+			if (hasDiskVersion && getFlexoResource().getGenerationStatus() == GenerationStatus.ConflictingUnMerged
+					&& !isOverrideScheduled()) {
 				throw new UnresolvedConflictException(getFlexoResource());
 			}
 
@@ -141,7 +141,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 			if (needsNotifyEndOfSaving) {
 				getFlexoResource().hasWrittenOnDisk(lock);
 			}
-			if ((getProject() != null) && getProject().isComputeDiff()) {
+			if (getProject() != null && getProject().isComputeDiff()) {
 				currentDiskContent = new DiffSource(getContentToWriteOnDisk());
 				lastAcceptedContent = new DiffSource(getContentToWriteOnDisk());
 			}
@@ -157,7 +157,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 
 			// If this was an overriding, discard it
 			_overrideIsScheduled = false;
-			if ((getProject() != null) && getProject().isComputeDiff()) {
+			if (getProject() != null && getProject().isComputeDiff()) {
 				rebuildMerges();
 			}
 
@@ -180,7 +180,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 		if (getCurrentGeneration() != null) {
 			try {
 				FileUtils.saveToFile(getLastGeneratedFile(), getCurrentGeneration(), getEncoding());
-				if ((getProject() != null) && getProject().isComputeDiff()) {
+				if (getProject() != null && getProject().isComputeDiff()) {
 					lastGeneratedContent = new DiffSource(getCurrentGeneration());
 				}
 			} catch (IOException e) {
@@ -311,7 +311,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 			if (_overrideIsScheduled) {
 				return getContent(_overridenVersion);
 			}
-			if ((getProject() != null) && getProject().isComputeDiff()) {
+			if (getProject() != null && getProject().isComputeDiff()) {
 				return getResultFileMerge().getMergedSource().getSourceString();
 			} else {
 				return getCurrentGeneration();
@@ -359,7 +359,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 		}
 		// Calling this method assume that this file was never generated.
 		// So, merges are not necessary, and file is simply overriden.
-		if (getFlexoResource().getGenerator().getGeneratedCode() == null) {
+		if (getFlexoResource().getGenerator() != null && getFlexoResource().getGenerator().getGeneratedCode() == null) {
 			if (getFlexoResource().getGenerator().getGenerationException() == null) {
 				logger.warning("Both GeneratedCode and exception are null: this is should never happen !");
 			} else {
@@ -380,10 +380,10 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 
 		// OK, generator has performed its job, i have now to handle merges
 
-		if ((lastGeneratedContent == null) && (getProject() != null) && getProject().isComputeDiff()) {
+		if (lastGeneratedContent == null && getProject() != null && getProject().isComputeDiff()) {
 			throw new LoadGeneratedResourceIOException(getFlexoResource(), "Unable to access last generated content");
 		}
-		if ((lastAcceptedContent == null) && (getProject() != null) && getProject().isComputeDiff()) {
+		if (lastAcceptedContent == null && getProject() != null && getProject().isComputeDiff()) {
 			throw new LoadGeneratedResourceIOException(getFlexoResource(), "Unable to access last accepted content");
 		}
 
@@ -477,9 +477,9 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 		}
 		return FlexoLocalization.localizedForKey("unable_to_access_last_accepted_file")
 				+ "\n"
-				+ (getFlexoResource().getLastGeneratedFile() != null ? (FlexoLocalization.localizedForKey("file") + " : " + getFlexoResource()
-						.getLastGeneratedFile().getAbsolutePath()) : (FlexoLocalization.localizedForKey("file") + " "
-						+ FlexoLocalization.localizedForKey("of_resource") + " " + getFlexoResource()));
+				+ (getFlexoResource().getLastGeneratedFile() != null ? FlexoLocalization.localizedForKey("file") + " : "
+						+ getFlexoResource().getLastGeneratedFile().getAbsolutePath() : FlexoLocalization.localizedForKey("file") + " "
+						+ FlexoLocalization.localizedForKey("of_resource") + " " + getFlexoResource());
 	}
 
 	protected DiffSource _getLastGeneratedContent() {
@@ -512,9 +512,9 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 		}
 		return FlexoLocalization.localizedForKey("unable_to_access_last_generated_file")
 				+ "\n"
-				+ (getFlexoResource().getLastGeneratedFile() != null ? (FlexoLocalization.localizedForKey("file") + " : " + getFlexoResource()
-						.getLastGeneratedFile().getAbsolutePath()) : (FlexoLocalization.localizedForKey("file") + " "
-						+ FlexoLocalization.localizedForKey("of_resource") + " " + getFlexoResource()));
+				+ (getFlexoResource().getLastGeneratedFile() != null ? FlexoLocalization.localizedForKey("file") + " : "
+						+ getFlexoResource().getLastGeneratedFile().getAbsolutePath() : FlexoLocalization.localizedForKey("file") + " "
+						+ FlexoLocalization.localizedForKey("of_resource") + " " + getFlexoResource());
 	}
 
 	@Override
@@ -609,19 +609,19 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 		}
 		// logger.info("doesGenerationKeepFileUnchanged() called for "+getFlexoResource().getFileName()+
 		// " changes="+_generationMerge.getChanges().size());
-		return (getResultFileMerge().getChanges().size() == 0);
+		return getResultFileMerge().getChanges().size() == 0;
 	}
 
 	@Override
 	public boolean isTriviallyMergable() {
-		return ((getGenerationMerge() != null) && (!getGenerationMerge().isReallyConflicting()) && (getResultFileMerge() != null) && (!getResultFileMerge()
-				.isReallyConflicting()));
+		return getGenerationMerge() != null && !getGenerationMerge().isReallyConflicting() && getResultFileMerge() != null
+				&& !getResultFileMerge().isReallyConflicting();
 	}
 
 	@Override
 	public boolean areAllConflictsResolved() {
-		return ((getGenerationMerge() != null) && (getGenerationMerge().isResolved()) && (getResultFileMerge() != null) && (getResultFileMerge()
-				.isResolved()));
+		return getGenerationMerge() != null && getGenerationMerge().isResolved() && getResultFileMerge() != null
+				&& getResultFileMerge().isResolved();
 	}
 
 	public MergedDocumentType getMergedDocumentType() {

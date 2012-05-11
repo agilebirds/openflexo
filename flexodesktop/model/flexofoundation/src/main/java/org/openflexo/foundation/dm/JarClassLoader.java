@@ -3,6 +3,7 @@ package org.openflexo.foundation.dm;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -18,15 +19,16 @@ public class JarClassLoader extends ClassLoader {
 
 	private Map<String, Class<?>> classForClassName = new Hashtable<String, Class<?>>();
 
-	JarClassLoader() {
+	private List<JarFile> loadingJars = new ArrayList<JarFile>();
+
+	public JarClassLoader() {
 		super();
 	}
 
 	public Class<?> findClass(JarFile jarFile, JarEntry entry) {
 		String className = entry.getName();
 		if (isClassFile(className)) {
-			String parsedClassName = parseClassName(className);
-			return findClass(parsedClassName, jarFile, entry);
+			return findClass(className, jarFile, entry);
 		}
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("This JarEntry does not match a class definition");
@@ -34,7 +36,7 @@ public class JarClassLoader extends ClassLoader {
 		return null;
 	}
 
-	public Class<?> findClass(String className, JarFile jarFile, JarEntry entry) {
+	private Class<?> findClass(String className, JarFile jarFile, JarEntry entry) {
 		className = parseClassName(className);
 		if (className != null && className.indexOf("WORPCProvider") > -1) {
 			if (logger.isLoggable(Level.INFO)) {
@@ -47,57 +49,64 @@ public class JarClassLoader extends ClassLoader {
 			// System.exit(1) causing the application to stop
 			return null;
 		}
-		Class<?> tryToLookup = lookupClass(className);
-		if (tryToLookup != null) {
-			return tryToLookup;
-		} else {
-			try {
-				InputStream is = jarFile.getInputStream(entry);
-				BufferedInputStream bis = new BufferedInputStream(is);
-				byte[] content = new byte[(int) entry.getSize()];
-				bis.read(content, 0, (int) entry.getSize());
-				Class<?> returned = defineClass(className, content, 0, content.length);
-				getClassForClassName().put(className, returned);
-				return returned;
-			} catch (ClassFormatError err) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Error: " + err + " : class not loaded: " + className);
-				}
-			} catch (NoClassDefFoundError err) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Error: " + err + " : class not loaded: " + className);
-				}
-			} catch (IllegalAccessError err) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Error: " + err + " : class not loaded: " + className);
-				}
-			} catch (IOException err) {
-				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Exception raised: " + err.getClass().getName() + ". See console for details.");
-				}
-				err.printStackTrace();
-			} catch (LinkageError err) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Error: " + err + " : class not loaded: " + className);
+		boolean addJarFile = !loadingJars.contains(jarFile);
+		if (addJarFile) {
+			loadingJars.add(jarFile);
+		}
+		try {
+			Class<?> tryToLookup = lookupClass(className);
+			if (tryToLookup != null) {
+				return tryToLookup;
+			} else {
+				try {
+					InputStream is = jarFile.getInputStream(entry);
+					BufferedInputStream bis = new BufferedInputStream(is);
+					byte[] content = new byte[(int) entry.getSize()];
+					bis.read(content, 0, (int) entry.getSize());
+					Class<?> returned = defineClass(className, content, 0, content.length);
+					classForClassName.put(className, returned);
+					return returned;
+				} catch (ClassFormatError err) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Error: " + err + " : class not loaded: " + className);
+					}
+				} catch (NoClassDefFoundError err) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Error: " + err + " : class not loaded: " + className);
+					}
+				} catch (IllegalAccessError err) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Error: " + err + " : class not loaded: " + className);
+					}
+				} catch (IOException err) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + err.getClass().getName() + ". See console for details.");
+					}
+					err.printStackTrace();
+				} catch (LinkageError err) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Error: " + err + " : class not loaded: " + className);
+					}
 				}
 			}
+			return null;
+		} finally {
+			if (addJarFile) {
+				loadingJars.remove(jarFile);
+			}
 		}
-		return null;
 	}
 
 	boolean isClassFile(String jarentryname) {
-		return jarentryname.endsWith(".class");
+		return jarentryname.endsWith(".class") && !jarentryname.startsWith("WebServerResources/");
 	}
 
 	String parseClassName(String jarentryname) {
 		String classname;
-		if (jarentryname.indexOf("WebServerResources/Java/") == 0) {
-			jarentryname = jarentryname.substring("WebServerResources/Java/".length());
-		}
-		int index = jarentryname.indexOf("class");
+		int index = jarentryname.lastIndexOf(".class");
 		if (index - 1 > 0) {
-			classname = jarentryname.substring(0, index - 1);
+			classname = jarentryname.substring(0, index);
 		} else {
 			classname = jarentryname;
 		}
@@ -112,12 +121,20 @@ public class JarClassLoader extends ClassLoader {
 		if (tryToLookup != null) {
 			return tryToLookup;
 		} else {
-			Class<?> klass = getClassForClassName().get(className);
+			Class<?> klass = classForClassName.get(className);
 			if (klass != null) {
 				return klass;
+			} else if (loadingJars.size() > 0) {
+				String entryName = className.replace('.', '/') + ".class";
+				for (JarFile file : loadingJars) {
+					JarEntry entry = (JarEntry) file.getEntry(entryName);
+					if (entry != null) {
+						return findClass(className, file, entry);
+					}
+				}
 			}
-			return null;
 		}
+		return null;
 	}
 
 	private Class<?> lookupClass(String className) {
@@ -126,7 +143,11 @@ public class JarClassLoader extends ClassLoader {
 
 		// Look in the application class loader
 		try {
-			return Class.forName(className);
+			Class<?> forName = Class.forName(className);
+			if (forName != null) {
+				classForClassName.put(className, forName);
+			}
+			return forName;
 		} catch (ClassNotFoundException e) {
 		} catch (NoClassDefFoundError e) {
 		} catch (ExceptionInInitializerError e) {

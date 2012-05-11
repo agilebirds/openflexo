@@ -328,14 +328,17 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	private FlexoModule loadModule(Module module, FlexoProject project) throws Exception {
-		if (!ProgressWindow.hasInstance()) {
+		boolean createProgress = !ProgressWindow.hasInstance();
+		if (createProgress) {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName(), 8);
 		}
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName());
 		FlexoModule returned = doInternalLoadModule(module, project);
 		_modules.put(module, returned);
 		activeModule = module;
-		ProgressWindow.hideProgressWindow();
+		if (createProgress) {
+			ProgressWindow.hideProgressWindow();
+		}
 		WindowMenu.notifyModuleLoaded(module);
 		ModuleBar.notifyStaticallyModuleHasBeenLoaded(module);
 		return returned;

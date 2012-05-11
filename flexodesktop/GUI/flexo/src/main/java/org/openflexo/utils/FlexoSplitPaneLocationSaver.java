@@ -19,11 +19,12 @@
  */
 package org.openflexo.utils;
 
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 
 import org.openflexo.GeneralPreferences;
 import org.openflexo.prefs.FlexoPreferences;
@@ -44,14 +45,13 @@ public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 	}
 
 	public void layoutSplitPaneWhenShowing(final String id, final Double defaultDividerLocation) {
-		SwingUtilities.invokeLater(new Runnable() {
+		splitPane.addHierarchyListener(new HierarchyListener() {
 
 			@Override
-			public void run() {
-				if (splitPane.isShowing() && splitPane.getHeight() > 0) {
+			public void hierarchyChanged(HierarchyEvent e) {
+				if ((e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0) {
 					layoutSplitPane(id, defaultDividerLocation);
-				} else {
-					layoutSplitPaneWhenShowing(id, defaultDividerLocation);
+					splitPane.removeHierarchyListener(this);
 				}
 			}
 		});

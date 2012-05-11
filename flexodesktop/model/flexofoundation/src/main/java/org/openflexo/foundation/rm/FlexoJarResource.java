@@ -132,7 +132,7 @@ public class FlexoJarResource extends FlexoImportedResource<JarLoader> {
 
 	@Override
 	protected JarLoader doImport() throws FlexoException {
-		logger.info("doImport() " + this + " JarRep=" + getJarRepository());
+		logger.info("doImport() " + this);
 		JarLoader returned = new JarLoader(getFile(), this, getProject());
 		returned.setProject(getProject());
 		returned.setFlexoResource(this);

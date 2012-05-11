@@ -19,10 +19,8 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -38,8 +36,11 @@ public class DMClassLibrary extends ClassLibrary {
 	private Hashtable<String, JavaClass> _javaClassCache;
 	private HashSet<Type> _unresolvedTypes;
 
+	private final DMModel dataModel;
+
 	public DMClassLibrary(DMModel dataModel) {
 		super(null);
+		this.dataModel = dataModel;
 		_javaClassCache = new Hashtable<String, JavaClass>();
 		addDefaultLoader();
 		_cachedTypes = new Hashtable<JavaClassParent, Hashtable<String, Hashtable<Integer, Type>>>();
@@ -147,13 +148,7 @@ public class DMClassLibrary extends ClassLibrary {
 		potentiallyModifyingCL = true;
 		Class<?> returned = super.getClass(className);
 		if (returned == null) {
-			for (JarClassLoader cl : loadedJarClassLoaders) {
-				// Don't search in all jars since we are already iterating
-				returned = cl.findClass(className);
-				if (returned != null) {
-					break;
-				}
-			}
+			returned = dataModel.getProject().getJarClassLoader().findClass(className);
 		}
 		if (returned != null) {
 			// logger.info("Found "+returned+" in "+returned.getClassLoader());
@@ -170,8 +165,6 @@ public class DMClassLibrary extends ClassLibrary {
 		return returned;
 	}
 
-	private transient List<JarClassLoader> loadedJarClassLoaders = new ArrayList<JarClassLoader>();
-
 	@Override
 	public synchronized boolean contains(String className) {
 		return super.contains(className);
@@ -182,11 +175,7 @@ public class DMClassLibrary extends ClassLibrary {
 		if (potentiallyModifyingCL) {
 			_classLoaderBeingAddedDuringClassResolution.add(classLoader);
 		} else {
-			if (classLoader instanceof JarClassLoader) {
-				loadedJarClassLoaders.add((JarClassLoader) classLoader);
-			} else {
-				super.addClassLoader(classLoader);
-			}
+			super.addClassLoader(classLoader);
 			// Some unresolved classes may become resolved !
 			_unresolvedClassName.clear();
 		}

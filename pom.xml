@@ -332,6 +332,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
+				<artifactId>flexoexternalbuilders</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
 				<artifactId>flexodocresourcemanager</artifactId>
 				<version>${project.version}</version>
 			</dependency>

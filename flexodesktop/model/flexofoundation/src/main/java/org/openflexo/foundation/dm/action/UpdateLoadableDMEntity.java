@@ -19,7 +19,8 @@
  */
 package org.openflexo.foundation.dm.action;
 
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,7 +54,7 @@ public class UpdateLoadableDMEntity extends FlexoAction<UpdateLoadableDMEntity, 
 
 		@Override
 		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
-			return (getAllLoadableDMEntities(object, globalSelection).size() > 0);
+			return getAllLoadableDMEntities(object, globalSelection).size() > 0;
 		}
 
 		@Override
@@ -81,11 +82,8 @@ public class UpdateLoadableDMEntity extends FlexoAction<UpdateLoadableDMEntity, 
 	protected void doAction(Object context) {
 		makeFlexoProgress(FlexoLocalization.localizedForKey("updating_repository"), 3);
 		setProgress(FlexoLocalization.localizedForKey("updating_classes"));
-
 		resetSecondaryProgress(getUpdatedEntities().size());
-
-		for (Enumeration en = getUpdatedEntities().elements(); en.hasMoreElements();) {
-			LoadableDMEntity next = (LoadableDMEntity) en.nextElement();
+		for (LoadableDMEntity next : getUpdatedEntities()) {
 			ClassReference classReference = _updatedSet.getClassReference(next.getJavaType());
 			setSecondaryProgress(FlexoLocalization.localizedForKey("updating") + " " + classReference.getName());
 			if (classReference.isSelected()) {
@@ -99,45 +97,40 @@ public class UpdateLoadableDMEntity extends FlexoAction<UpdateLoadableDMEntity, 
 				}
 			}
 		}
-
 		setProgress(FlexoLocalization.localizedForKey("updating_classes_done"));
-
 		hideFlexoProgress();
-
 	}
 
-	private Vector _updatedEntities = null;
+	private List<LoadableDMEntity> _updatedEntities = null;
 
-	public Vector getUpdatedEntities() {
+	public List<LoadableDMEntity> getUpdatedEntities() {
 		if (_updatedEntities == null) {
 			_updatedEntities = getAllLoadableDMEntities(getFocusedObject(), getGlobalSelection());
 		}
 		return _updatedEntities;
 	}
 
-	static Vector getAllLoadableDMEntities(FlexoModelObject focusedObject, Vector globalSelection) {
-		Vector returned = new Vector();
+	static List<LoadableDMEntity> getAllLoadableDMEntities(FlexoModelObject focusedObject, Vector<DMObject> globalSelection) {
+		List<LoadableDMEntity> returned = new ArrayList<LoadableDMEntity>();
 		computeLoadableDMEntitiesListWith(focusedObject, returned);
 		if (globalSelection != null) {
-			for (Enumeration en = globalSelection.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+			for (DMObject next : globalSelection) {
 				computeLoadableDMEntitiesListWith(next, returned);
 			}
 		}
 		return returned;
 	}
 
-	private static void computeLoadableDMEntitiesListWith(FlexoModelObject object, Vector list) {
-		if ((object != null) && (object instanceof LoadableDMEntity)) {
+	private static void computeLoadableDMEntitiesListWith(FlexoModelObject object, List<LoadableDMEntity> list) {
+		if (object != null && object instanceof LoadableDMEntity) {
 			if (!list.contains(object)) {
-				list.add(object);
+				list.add((LoadableDMEntity) object);
 			}
-		} else if ((object != null) && (object instanceof DMPackage)) {
-			for (Enumeration en = ((DMPackage) object).getEntities().elements(); en.hasMoreElements();) {
-				DMEntity next = (DMEntity) en.nextElement();
+		} else if (object != null && object instanceof DMPackage) {
+			for (DMEntity next : ((DMPackage) object).getEntities()) {
 				if (next instanceof LoadableDMEntity) {
 					if (!list.contains(next)) {
-						list.add(next);
+						list.add((LoadableDMEntity) next);
 					}
 				}
 			}

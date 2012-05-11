@@ -330,7 +330,8 @@ public class DMSet extends TemporaryFlexoModelObject {
 				_referencedClass = aClass;
 				if (parseMethodsAndProperties) {
 					List<String> excludedSignatures = new ArrayList<String>();
-					List<DMProperty> properties = LoadableDMEntity.searchForProperties(aClass, _project.getDataModel(), null, true,/*true,*/
+					List<DMProperty> properties = LoadableDMEntity.searchForProperties(aClass, _project.getDataModel(),
+							entity.getRepository(), true,/*true,*/
 							false, excludedSignatures);
 					for (DMProperty next : properties) {
 						PropertyReference propertyReference = new PropertyReference(next.getName(), next.getIsSettable(),
@@ -343,8 +344,8 @@ public class DMSet extends TemporaryFlexoModelObject {
 							addToSelectedObjects(propertyReference);
 						}
 					}
-					List<DMMethod> methods = LoadableDMEntity.searchForMethods(aClass, _project.getDataModel(), null,/*true,true,*/false,
-							excludedSignatures);
+					List<DMMethod> methods = LoadableDMEntity.searchForMethods(aClass, _project.getDataModel(), entity.getRepository(),/*true,true,*/
+							false, excludedSignatures);
 					for (DMMethod next : methods) {
 						MethodReference methodReference = new MethodReference(next.getSignature(), next.getSimplifiedSignature(),
 						// (next.getReturnType()!=null?next.getReturnType().getName():next.getUnresolvedReturnType().getValue()+"<unloaded>"));

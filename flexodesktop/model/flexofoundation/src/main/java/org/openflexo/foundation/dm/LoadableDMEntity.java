@@ -141,7 +141,7 @@ public class LoadableDMEntity extends DMEntity {
 
 	@Override
 	public void delete() {
-		getDMModel().getJarClassLoader().unloadClass(javaType);
+		getProject().getJarClassLoader().unloadClass(javaType);
 		super.delete();
 	};
 
