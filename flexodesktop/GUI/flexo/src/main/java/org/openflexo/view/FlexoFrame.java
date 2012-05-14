@@ -284,9 +284,6 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			if (_controller.getProject() != null) {
 				_controller.getProject().deleteObserver(this);
 			}
-			if (_controller.getConsistencyCheckWindow() != null) {
-				_controller.getConsistencyCheckWindow().dispose();
-			}
 			_controller = null;
 		}
 		if (_keyEventListener != null) {

@@ -204,8 +204,8 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		ignoreFocusGainedNotifications = true;
 		dateWhenFocusGainedWasLocked = System.currentTimeMillis();
 		getFlexoFrame().setRelativeVisible(false);
-		if (_controller.getConsistencyCheckWindow() != null) {
-			_controller.getConsistencyCheckWindow().setVisible(false);
+		if (_controller.getConsistencyCheckWindow(false) != null) {
+			_controller.getConsistencyCheckWindow(false).setVisible(false);
 		}
 	}
 

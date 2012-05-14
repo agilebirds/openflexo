@@ -175,7 +175,7 @@ public class WindowMenu extends FlexoMenu {
 			preferencesWindowItem.setState(getController().getPreferencesWindow().isVisible());
 		}
 		if (checkConsistencyWindowItem != null) {
-			if (getController().getConsistencyCheckWindow() != null) {
+			if (getController().getConsistencyCheckWindow(false) != null) {
 				checkConsistencyWindowItem.setState(getController().getConsistencyCheckWindow().isVisible());
 			} else {
 				checkConsistencyWindowItem.setEnabled(false);
