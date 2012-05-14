@@ -1,5 +1,5 @@
 #French
-#Thu May 10 17:37:43 CEST 2012
+#Mon May 14 12:13:07 CEST 2012
 ARITHMETIC_FLOAT=[FLOTTANT]
 ARITHMETIC_INTEGER=[ENTIER]
 BOOLEAN=BOOLEEN
@@ -38,7 +38,9 @@ delete_calc_drawing_shema=Supprimer le dessin
 display_file=Voir le fichier
 division=division
 doc_generator=G\u00E9n\u00E9rateur de documentation
+doc_resource_manager=Gestionnaire de resources de documentation
 edit=Edition
+english=Anglais
 equals_operator=Operator '\u00E9gal'
 euler_number_raised_to_power=nombre de Euler \u00E9lev\u00E9 \u00E0 la puissance
 example_drawing=example_drawing

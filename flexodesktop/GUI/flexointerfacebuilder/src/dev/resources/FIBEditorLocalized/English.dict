@@ -1,5 +1,5 @@
 #English
-#Thu May 10 17:37:43 CEST 2012
+#Mon May 14 12:13:07 CEST 2012
 ARITHMETIC_FLOAT=[FLOAT]
 ARITHMETIC_INTEGER=[INTEGER]
 BOOLEAN=BOOLEAN
@@ -38,7 +38,9 @@ delete_calc_drawing_shema=Delete drawing
 display_file=Display file
 division=division
 doc_generator=Documentation generator
+doc_resource_manager=DocumentationResourceManager
 edit=Edit
+english=English
 equals_operator=Equals operator
 euler_number_raised_to_power=euler number raised to power
 example_drawing=example_drawing
