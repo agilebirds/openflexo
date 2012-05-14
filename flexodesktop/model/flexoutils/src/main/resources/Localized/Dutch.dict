@@ -1,5 +1,5 @@
 #Dutch
-#Thu May 10 14:46:09 CEST 2012
+#Mon May 14 12:47:04 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -146,8 +146,8 @@ CVSStatus_RemotelyModified=This file was remotely modified
 CVSStatus_RemotelyRemoved=This file was remotely removed
 CVSStatus_Removed=This file has been removed
 CVSStatus_UpToDate=This file is up-to-date
-Calc=Calc
-Calc\ Library=Calc Library
+Calc=ViewPoint
+Calc\ Library=ViewPoints library
 Cancel=Cancel
 Cancel\ handler=Cancel handler
 Cancel\ thrower=Cancel thrower
@@ -1166,13 +1166,13 @@ button_widget=Button widget
 buttons=buttons
 by_editing_the_article_workfloweditor_improvement_request=by editing the article 'WorkflowEditor Improvement Request'
 bypass_logical_work_flow=Bypass logical work flow
-calc=Calc
-calc_drawing_connector=Calc drawing connecteur
-calc_drawing_shape=Calc drawing shape
-calc_drawing_shema=Calc drawing schema
-calc_icon=Calc Icon
-calc_library=Calc library
-calc_palette=Calc palette
+calc=ViewPoint
+calc_drawing_connector=Connector
+calc_drawing_shape=Shape
+calc_drawing_shema=Example diagram
+calc_icon=ViewPoint Icon
+calc_library=ViewPoints library
+calc_palette=Palette
 calcs=Calcs
 calculated_label=Calculated label
 call_signature=Signature

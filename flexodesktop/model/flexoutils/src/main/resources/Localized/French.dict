@@ -1,5 +1,5 @@
 #French
-#Thu May 10 14:46:09 CEST 2012
+#Mon May 14 12:47:04 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -146,8 +146,8 @@ CVSStatus_RemotelyModified=Fichier distant modifi\u00E9
 CVSStatus_RemotelyRemoved=Fichier distant supprim\u00E9
 CVSStatus_Removed=Fichier supprim\u00E9
 CVSStatus_UpToDate=Fichier \u00E0 jour
-Calc=Calc
-Calc\ Library=Biblioth\u00E8que de calques
+Calc=Point de vue
+Calc\ Library=Biblioth\u00E8que de points de vues
 Cancel=Annuler
 Cancel\ handler=Receveur d'annulation
 Cancel\ thrower=Emetteur d'annulation
@@ -1166,13 +1166,13 @@ button_widget=Bouton
 buttons=boutons
 by_editing_the_article_workfloweditor_improvement_request=en editant l'article 'WorkFlow Editor Improvement Request'
 bypass_logical_work_flow=Ne pas suivre le flux logique
-calc=Calque
-calc_drawing_connector=calc_drawing_connector
-calc_drawing_shape=calc_drawing_shape
-calc_drawing_shema=calc_drawing_shema
-calc_icon=Ic\u00F4ne du calculateur
-calc_library=Biblioth\u00E8que de calques
-calc_palette=calc_palette
+calc=Point de vue
+calc_drawing_connector=Connecteur
+calc_drawing_shape=Forme
+calc_drawing_shema=Diagramme d'exemple
+calc_icon=ViewPoint Icon
+calc_library=Biblioth\u00E8que de points de vues
+calc_palette=Palette
 calcs=Calques
 calculated_label=Label calcul\u00E9
 call_signature=Signature

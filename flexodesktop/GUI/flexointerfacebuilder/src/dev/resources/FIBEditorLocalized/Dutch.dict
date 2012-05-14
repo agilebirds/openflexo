@@ -1,5 +1,5 @@
 #Dutch
-#Mon May 14 12:13:07 CEST 2012
+#Mon May 14 18:30:38 CEST 2012
 ARITHMETIC_FLOAT=[FLOAT]
 ARITHMETIC_INTEGER=[INTEGER]
 BOOLEAN=BOOLEAN
@@ -16,10 +16,12 @@ RECTANGLE=RECTANGLE
 STRING=[STRING]
 actions=Actions
 add_connector=add connector
+add_new_edition_pattern=Add new edition pattern
 add_new_shape=Add new shape
 addition=addition
 bold=Bold
 bold_italic=Bold italic
+calc_drawing_connector=Connector
 calc_drawing_shape=Calc drawing shape
 calc_drawing_shema=Calc drawing schema
 calc_library=Calc library
@@ -31,6 +33,8 @@ code_generator=Code Generator
 component_localization=Component localization
 component_validation=Component validation
 connector=connector
+create_example_drawing=Create example drawing
+create_new_palette=Create new palette
 data_model_editor=Data Model Editor
 declare_in_edition_pattern=Declare in edition pattern
 delete=Delete
@@ -109,6 +113,7 @@ trigonometric_tangent=Tangent
 unary_minus=Unary minus
 undo=Undo
 unexpected_exception_occured=OpenFlexo has detected an internal error. OpenFlexo will continue to work but it is highly recommended to restart it.
+unnamed=Unnamed
 validate_component=Validate component
 ve_module_name=View Editor
 view_object=view_object

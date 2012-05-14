@@ -1,5 +1,5 @@
 #French
-#Mon May 14 12:13:07 CEST 2012
+#Mon May 14 18:30:38 CEST 2012
 ARITHMETIC_FLOAT=[FLOTTANT]
 ARITHMETIC_INTEGER=[ENTIER]
 BOOLEAN=BOOLEEN
@@ -16,10 +16,12 @@ RECTANGLE=RECTANGLE
 STRING=[CHAINE DE CARACTERES]
 actions=Actions
 add_connector=ajouter un connecteur
+add_new_edition_pattern=Ajouter un nouvel EditionPattern
 add_new_shape=ajouter une forme
 addition=ajout
 bold=Gras
 bold_italic=Gras italique
+calc_drawing_connector=Connecteur
 calc_drawing_shape=calc_drawing_shape
 calc_drawing_shema=calc_drawing_shema
 calc_library=Biblioth\u00E8que de calques
@@ -31,6 +33,8 @@ code_generator=G\u00E9n\u00E9rateur de code
 component_localization=Localisation du composant
 component_validation=Validation du composant
 connector=connector
+create_example_drawing=Cr\u00E9er un exemple de dessin
+create_new_palette=Cr\u00E9er une nouvelle palette
 data_model_editor=Editeur de mod\u00E8les de donn\u00E9es
 declare_in_edition_pattern=D\u00E9clarer dans un Edition Pattern
 delete=Supprimer
@@ -109,6 +113,7 @@ trigonometric_tangent=Tangente
 unary_minus=unary minus
 undo=D\u00E9faire
 unexpected_exception_occured=OpenFlexo a d\u00E9tect\u00E9 une erreur interne. OpenFlexo continuera de fonctionner mais il est cependant recommand\u00E9 de le red\u00E9marrer.
+unnamed=Sans nom
 validate_component=Valider le composant
 ve_module_name=Editeur de vues
 view_object=view_object
