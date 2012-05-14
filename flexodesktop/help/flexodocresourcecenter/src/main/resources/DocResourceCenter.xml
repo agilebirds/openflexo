@@ -13241,6 +13241,13 @@ forward to the next nodes.</description>
           <EmbeddingChildDocItem idref="cg-control-panel" />
           <EmbeddingChildDocItem idref="cg-right-view" />
           <title key="ENGLISH">Code Generator</title>
+          <DocItemVersion id="cg_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
+          <DocItemAction id="SUBMITTED_ON_cg_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:59:15 14/05/2012" actionType="SUBMITTED">
+            <DocItemVersion idref="cg_1.0.0ENGLISH" />
+          </DocItemAction>
+          <DocItemAction id="APPROVED_ON_cg_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:59:17 14/05/2012" actionType="APPROVED">
+            <DocItemVersion idref="cg_1.0.0ENGLISH" />
+          </DocItemAction>
         </DocItem>
       </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdg" primaryDocItemId="dg" identifier="dg">
@@ -13350,6 +13357,13 @@ forward to the next nodes.</description>
           <EmbeddingChildDocItem idref="dg-left-view" />
           <EmbeddingChildDocItem idref="dg-right-view" />
           <title key="ENGLISH">Document Generator</title>
+          <DocItemVersion id="dg_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
+          <DocItemAction id="SUBMITTED_ON_dg_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,12:00:29 14/05/2012" actionType="SUBMITTED">
+            <DocItemVersion idref="dg_1.0.0ENGLISH" />
+          </DocItemAction>
+          <DocItemAction id="APPROVED_ON_dg_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,12:00:32 14/05/2012" actionType="APPROVED">
+            <DocItemVersion idref="dg_1.0.0ENGLISH" />
+          </DocItemAction>
         </DocItem>
       </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdm" primaryDocItemId="dm" identifier="dm">
@@ -13563,6 +13577,13 @@ forward to the next nodes.</description>
           <EmbeddingChildDocItem idref="dm-control-panel" />
           <EmbeddingChildDocItem idref="dm-right-view" />
           <title key="ENGLISH">Data Model Editor</title>
+          <DocItemVersion id="dm_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
+          <DocItemAction id="SUBMITTED_ON_dm_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:58:16 14/05/2012" actionType="SUBMITTED">
+            <DocItemVersion idref="dm_1.0.0ENGLISH" />
+          </DocItemAction>
+          <DocItemAction id="APPROVED_ON_dm_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:58:20 14/05/2012" actionType="APPROVED">
+            <DocItemVersion idref="dm_1.0.0ENGLISH" />
+          </DocItemAction>
         </DocItem>
       </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdre" primaryDocItemId="dre" identifier="dre">
@@ -13744,6 +13765,13 @@ forward to the next nodes.</description>
           <EmbeddingChildDocItem idref="fps-left-view" />
           <EmbeddingChildDocItem idref="fps-right-view" />
           <title key="ENGLISH">Project Sharing</title>
+          <DocItemVersion id="fps_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
+          <DocItemAction id="SUBMITTED_ON_fps_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:57:43 14/05/2012" actionType="SUBMITTED">
+            <DocItemVersion idref="fps_1.0.0ENGLISH" />
+          </DocItemAction>
+          <DocItemAction id="APPROVED_ON_fps_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:57:45 14/05/2012" actionType="APPROVED">
+            <DocItemVersion idref="fps_1.0.0ENGLISH" />
+          </DocItemAction>
         </DocItem>
       </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetgeneral module" primaryDocItemId="general module" identifier="general module">
@@ -14887,11 +14915,12 @@ forward to the next nodes.</description>
                   <RelatedToDocItem idref="calc_perspective" />
                   <RelatedToDocItem idref="calc_perspective" />
                 </RelatedToDocItem>
-                <RelatedToDocItem idref="CalcLibraryView" />
                 <RelatedToDocItem id="OntologyView" identifier="OntologyView" embedded="false" hidden="true">
                   <description>No description</description>
                   <RelatedToDocItem idref="calc_perspective" />
+                  <RelatedToDocItem idref="calc_perspective" />
                 </RelatedToDocItem>
+                <RelatedToDocItem idref="CalcLibraryView" />
               </RelatedToDocItem>
             </InheritanceChildDocItem>
             <EmbeddingChildDocItem idref="shema_perspective" />
@@ -14935,22 +14964,53 @@ forward to the next nodes.</description>
             </EmbeddingChildDocItem>
           </InheritanceChildDocItem>
           <InheritanceChildDocItem id="ve" identifier="ve" embedded="false" hidden="true">
-            <description>No description</description>
+            <description>ViewEditor module description</description>
             <EmbeddingChildDocItem idref="ve-main-pane" />
             <EmbeddingChildDocItem idref="ve-control-panel" />
             <EmbeddingChildDocItem idref="ve-left-view" />
             <EmbeddingChildDocItem id="ve-right-view" identifier="ve-right-view" embedded="false" hidden="true">
               <description>No description</description>
             </EmbeddingChildDocItem>
+            <title key="ENGLISH">View Editor</title>
+            <DocItemVersion id="ve_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
+            <DocItemVersion id="ve_1.0.1ENGLISH" languageId="ENGLISH" version="1.0.1" />
+            <DocItemAction id="SUBMITTED_ON_ve_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:56:28 14/05/2012" actionType="SUBMITTED">
+              <DocItemVersion idref="ve_1.0.0ENGLISH" />
+            </DocItemAction>
+            <DocItemAction id="REVIEWED_ON_ve_1.0.1ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:56:47 14/05/2012" actionType="REVIEWED">
+              <DocItemVersion idref="ve_1.0.1ENGLISH" />
+            </DocItemAction>
+            <DocItemAction id="APPROVED_ON_ve_1.0.1ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:56:49 14/05/2012" actionType="APPROVED">
+              <DocItemVersion idref="ve_1.0.1ENGLISH" />
+            </DocItemAction>
           </InheritanceChildDocItem>
           <InheritanceChildDocItem id="vpm" identifier="vpm" embedded="false" hidden="true">
-            <description>No description</description>
+            <description>Description of VPM module</description>
             <EmbeddingChildDocItem idref="vpm-left-view" />
             <EmbeddingChildDocItem id="vpm-right-view" identifier="vpm-right-view" embedded="false" hidden="true">
               <description>No description</description>
             </EmbeddingChildDocItem>
             <EmbeddingChildDocItem idref="vpm-main-pane" />
             <EmbeddingChildDocItem idref="vpm-control-panel" />
+            <title key="ENGLISH">ViewPoint Modeller</title>
+            <DocItemVersion id="vpm_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
+            <DocItemVersion id="vpm_1.0.1ENGLISH" languageId="ENGLISH" version="1.0.1" />
+            <DocItemVersion id="vpm_1.0.2ENGLISH" languageId="ENGLISH" version="1.0.2" />
+            <DocItemAction id="SUBMITTED_ON_vpm_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:44:48 14/05/2012" actionType="SUBMITTED">
+              <DocItemVersion idref="vpm_1.0.0ENGLISH" />
+            </DocItemAction>
+            <DocItemAction id="APPROVED_ON_vpm_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:44:55 14/05/2012" actionType="APPROVED">
+              <DocItemVersion idref="vpm_1.0.0ENGLISH" />
+            </DocItemAction>
+            <DocItemAction id="REVIEWED_ON_vpm_1.0.1ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:49:40 14/05/2012" actionType="REVIEWED">
+              <DocItemVersion idref="vpm_1.0.1ENGLISH" />
+            </DocItemAction>
+            <DocItemAction id="REVIEWED_ON_vpm_1.0.2ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:50:01 14/05/2012" actionType="REVIEWED">
+              <DocItemVersion idref="vpm_1.0.2ENGLISH" />
+            </DocItemAction>
+            <DocItemAction id="APPROVED_ON_vpm_1.0.2ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,11:50:44 14/05/2012" actionType="APPROVED">
+              <DocItemVersion idref="vpm_1.0.2ENGLISH" />
+            </DocItemAction>
           </InheritanceChildDocItem>
           <EmbeddingChildDocItem idref="general main pane" />
           <EmbeddingChildDocItem idref="general control panel" />
@@ -15441,6 +15501,13 @@ forward to the next nodes.</description>
           <EmbeddingChildDocItem idref="wse-control-panel" />
           <EmbeddingChildDocItem idref="wse-right-view" />
           <title key="ENGLISH">API Editor</title>
+          <DocItemVersion id="wse_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
+          <DocItemAction id="SUBMITTED_ON_wse_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,12:02:38 14/05/2012" actionType="SUBMITTED">
+            <DocItemVersion idref="wse_1.0.0ENGLISH" />
+          </DocItemAction>
+          <DocItemAction id="APPROVED_ON_wse_1.0.0ENGLISH" authorId="sylvain" actionDate="HH:mm:ss dd/MM/yyyy,12:02:40 14/05/2012" actionType="APPROVED">
+            <DocItemVersion idref="wse_1.0.0ENGLISH" />
+          </DocItemAction>
         </DocItem>
       </DocItemFolder>
       <DocItem id="FlexoToolSet" identifier="FlexoToolSet" embedded="false" hidden="false">
