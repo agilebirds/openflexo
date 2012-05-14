@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ResourceLocator;
@@ -74,6 +75,9 @@ public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> 
 
 	@After
 	public void tearDown() {
+		if (main instanceof FlexoExternalMainWithProject) {
+			ProjectLoader.instance().closeCurrentProject();
+		}
 		if (projectFile != null) {
 			FileUtils.deleteDir(projectFile.getParentFile());
 		}
