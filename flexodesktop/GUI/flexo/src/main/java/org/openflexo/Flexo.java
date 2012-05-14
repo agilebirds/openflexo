@@ -224,7 +224,7 @@ public class Flexo {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Heap memory is about: " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "Mb");
 		}
-		getModuleLoader().setAllowsDocSubmission(FlexoProperties.instance().getAllowsDocSubmission());
+		getModuleLoader().setAllowsDocSubmission(isDev || FlexoProperties.instance().getAllowsDocSubmission());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching FLEXO Application Suite version " + FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + "...");
 		}
