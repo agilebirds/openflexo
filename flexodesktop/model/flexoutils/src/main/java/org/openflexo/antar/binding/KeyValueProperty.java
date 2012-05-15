@@ -40,7 +40,7 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	protected String name;
 
 	/** Stores related object'class */
-	protected Class declaringClass;
+	protected Class<?> declaringClass;
 
 	/** Stores related object'type */
 	protected Type declaringType;

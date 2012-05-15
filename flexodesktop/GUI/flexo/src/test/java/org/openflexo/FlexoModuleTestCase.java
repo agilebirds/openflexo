@@ -44,6 +44,7 @@ public abstract class FlexoModuleTestCase extends FlexoTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 	}
 
 	public static void assertNoObservers(FlexoObservable observable) {

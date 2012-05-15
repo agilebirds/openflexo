@@ -15,6 +15,7 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ZipUtils;
+import org.openflexo.velocity.FlexoVelocity;
 
 public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> {
 
@@ -78,6 +79,7 @@ public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> 
 		if (main instanceof FlexoExternalMainWithProject) {
 			ProjectLoader.instance().closeCurrentProject();
 		}
+		FlexoVelocity.clearCaches();
 		if (projectFile != null) {
 			FileUtils.deleteDir(projectFile.getParentFile());
 		}

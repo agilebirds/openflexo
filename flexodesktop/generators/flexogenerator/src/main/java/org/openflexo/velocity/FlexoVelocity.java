@@ -33,6 +33,7 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.util.introspection.Uberspect;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.logging.FlexoLogger;
@@ -128,7 +129,21 @@ public class FlexoVelocity {
 		FlexoVelocity.resourceCache = resourceCache;
 	}
 
+	public static void clearResourceCache() {
+		if (resourceCache != null) {
+			resourceCache.clearCache();
+		}
+	}
+
 	public static void mergeTemplate(String templateName, String encoding, VelocityContext context, StringWriter writer) {
 		Velocity.mergeTemplate(templateName, encoding, context, writer);
+	}
+
+	public static void clearCaches() {
+		clearResourceCache();
+		Uberspect introspector = RuntimeSingleton.getRuntimeServices().getUberspect();
+		if (introspector instanceof FlexoVelocityIntrospector) {
+			((FlexoVelocityIntrospector) introspector).clearCache();
+		}
 	}
 }
