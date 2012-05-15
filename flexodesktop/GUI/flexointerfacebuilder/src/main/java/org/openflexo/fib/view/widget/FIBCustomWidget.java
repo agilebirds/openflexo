@@ -144,18 +144,16 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		/*if (getWidget().getComponentClass().getName().endsWith("FIBForegroundStyleSelector")) {
-			logger.info("SET updateModelFromWidget() with " + getValue() + " for " + customComponent);
-		}*/
+		return updateModelFromWidget(false);
+	}
 
-		if (notEquals(getValue(), customComponent.getEditedObject())) {
+	public synchronized boolean updateModelFromWidget(boolean forceUpdate) {
+		if (forceUpdate || notEquals(getValue(), customComponent.getEditedObject())) {
 			setValue(customComponent.getEditedObject());
+			if (getWidget().getValueChangedAction().isValid()) {
+				getWidget().getValueChangedAction().execute(getController());
+			}
 			return true;
-		}
-		// Notify anyway (in case CustomWidget modify the same object, no change
-		// will be detected and this notification is required)
-		if (getWidget().getValueChangedAction().isValid()) {
-			getWidget().getValueChangedAction().execute(getController());
 		}
 		return false;
 	}
@@ -224,7 +222,8 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 	@Override
 	public void fireApplyPerformed() {
 		// logger.info("fireApplyPerformed() in FIBCustomWidget, value="+customComponent.getEditedObject());
-		updateModelFromWidget();
+		// In this case, we force model updating
+		updateModelFromWidget(true);
 	}
 
 	@Override
@@ -311,4 +310,5 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 		}
 
 	}
+
 }
