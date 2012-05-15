@@ -39,7 +39,7 @@ public class LocalizedDelegateGUIImpl extends LocalizedDelegateImpl {
 
 	public void showLocalizedEditor(Window parentFrame) {
 		FIBComponent localizedEditorComponent = FIBLibrary.instance().retrieveFIBComponent(LOCALIZED_EDITOR_FIB);
-		FIBDialog dialog = FIBDialog.instanciateComponent(localizedEditorComponent, this, parentFrame, true,
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(localizedEditorComponent, this, parentFrame, true,
 				FlexoLocalization.getMainLocalizer());
 	}
 

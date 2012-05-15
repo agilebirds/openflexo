@@ -518,7 +518,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 	private boolean _retrieveParameters2(final EditionSchemeAction<?> action) {
 
 		FIBComponent component = makeFIB(action);
-		FIBDialog dialog = FIBDialog.instanciateComponent(component, action, null, true, FlexoLocalization.getMainLocalizer());
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(component, action, null, true, FlexoLocalization.getMainLocalizer());
 		return (dialog.getStatus() == Status.VALIDATED);
 	}
 

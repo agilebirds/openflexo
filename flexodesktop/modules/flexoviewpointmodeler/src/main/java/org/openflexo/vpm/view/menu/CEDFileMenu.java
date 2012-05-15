@@ -83,7 +83,7 @@ public class CEDFileMenu extends FileMenu {
 	@Override
 	public void quit() {
 		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true,
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true,
 				FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			getCEDController().saveModified();
@@ -101,7 +101,7 @@ public class CEDFileMenu extends FileMenu {
 
 	public void closeModule() {
 		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true,
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true,
 				FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			getCEDController().saveModified();
@@ -110,7 +110,7 @@ public class CEDFileMenu extends FileMenu {
 
 	public void askAndSave() {
 		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.SAVE_VPM_DIALOG_FIB, getCEDController(), null, true,
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.SAVE_VPM_DIALOG_FIB, getCEDController(), null, true,
 				FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			getCEDController().saveModified();

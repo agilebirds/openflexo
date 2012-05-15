@@ -54,7 +54,7 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateObjectProperty>() {
 			@Override
 			public boolean run(ActionEvent e, CreateObjectProperty action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

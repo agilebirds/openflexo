@@ -60,7 +60,7 @@ public class DeclareConnectorInEditionPatternInitializer extends ActionInitializ
 			@Override
 			public boolean run(ActionEvent e, DeclareConnectorInEditionPattern action) {
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB, action, null,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB, action, null,
 						true, FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

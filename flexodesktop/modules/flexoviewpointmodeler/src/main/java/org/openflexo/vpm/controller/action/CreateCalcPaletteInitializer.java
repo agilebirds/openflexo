@@ -63,7 +63,7 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 
 				action.graphicalRepresentation = makePaletteGraphicalRepresentation();
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_PALETTE_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_PALETTE_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

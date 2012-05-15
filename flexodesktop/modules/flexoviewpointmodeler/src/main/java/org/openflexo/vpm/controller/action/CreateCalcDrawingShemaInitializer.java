@@ -60,7 +60,7 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateExampleDrawing action) {
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_EXAMPLE_DRAWING_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_EXAMPLE_DRAWING_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

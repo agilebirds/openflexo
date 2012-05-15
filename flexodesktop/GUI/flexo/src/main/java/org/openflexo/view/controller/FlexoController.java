@@ -1792,7 +1792,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL())) {
 			WebServiceURLDialog data = new WebServiceURLDialog();
 			data.setClientParameter(params);
-			FIBDialog dialog = FIBDialog.instanciateComponent(WebServiceURLDialog.FIB_FILE, data, getFlexoFrame(), true,
+			FIBDialog dialog = FIBDialog.instanciateAndShowDialog(WebServiceURLDialog.FIB_FILE, data, getFlexoFrame(), true,
 					FlexoLocalization.getMainLocalizer());
 			if (dialog.getStatus() == Status.VALIDATED) {
 				if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {

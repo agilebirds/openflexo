@@ -59,7 +59,7 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 		FIBComponent loggingViewerComponent = FIBLibrary.instance().retrieveFIBComponent(LOGGING_VIEWER_FIB);
 		if (instance == null || dialog == null) {
 			instance = new FlexoLoggingViewer(loggingManager);
-			dialog = FIBDialog.instanciateComponent(loggingViewerComponent, instance, parent, false, FlexoLocalization.getMainLocalizer());
+			dialog = FIBDialog.instanciateAndShowDialog(loggingViewerComponent, instance, parent, false, FlexoLocalization.getMainLocalizer());
 		} else {
 			dialog.showDialog();
 		}

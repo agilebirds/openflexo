@@ -54,7 +54,7 @@ public class CreateOntologyIndividualInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateOntologyIndividual>() {
 			@Override
 			public boolean run(ActionEvent e, CreateOntologyIndividual action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

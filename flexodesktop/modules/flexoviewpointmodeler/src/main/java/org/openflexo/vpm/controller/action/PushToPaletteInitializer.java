@@ -81,7 +81,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				if (dialog.getStatus() == Status.VALIDATED) {
 					return true;

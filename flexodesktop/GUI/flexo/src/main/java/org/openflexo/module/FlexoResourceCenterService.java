@@ -78,7 +78,7 @@ public class FlexoResourceCenterService {
 				if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 					AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
 					data.setLocalResourceDirectory(FlexoProject.getResourceCenterFile());
-					FIBDialog<AskLocalResourceCenterDirectory> dialog = FIBDialog.instanciateComponent(
+					FIBDialog<AskLocalResourceCenterDirectory> dialog = FIBDialog.instanciateAndShowDialog(
 							AskLocalResourceCenterDirectory.FIB_FILE, data, null, true, FlexoLocalization.getMainLocalizer());
 					switch (dialog.getStatus()) {
 					case VALIDATED:

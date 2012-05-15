@@ -54,7 +54,7 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateViewPoint>() {
 			@Override
 			public boolean run(ActionEvent e, CreateViewPoint action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_VIEW_POINT_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_VIEW_POINT_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
