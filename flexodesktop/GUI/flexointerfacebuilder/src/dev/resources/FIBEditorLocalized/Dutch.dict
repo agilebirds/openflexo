@@ -1,5 +1,6 @@
 #Dutch
-#Mon May 14 18:30:38 CEST 2012
+#Tue May 15 13:50:50 CEST 2012
+<unloaded>=<unloaded>
 ARITHMETIC_FLOAT=[FLOAT]
 ARITHMETIC_INTEGER=[INTEGER]
 BOOLEAN=BOOLEAN
@@ -43,6 +44,7 @@ display_file=Display file
 division=division
 doc_generator=Documentation generator
 doc_resource_manager=DocumentationResourceManager
+drop_palette_element=drop_palette_element
 edit=Edit
 english=English
 equals_operator=Equals operator
@@ -79,10 +81,12 @@ new_interface=New component
 no=No
 no_documentation=No documentation
 no_selection=No selection
+no_type=No type
 not_equals_operator='not equals' operator
 oe_shape=OEShape
 ok=OK
 ontology_calc=Ontologic calc
+ontology_library=Ontology library
 open_interface=Open component
 open_recent=Open recent..
 palette=Palette

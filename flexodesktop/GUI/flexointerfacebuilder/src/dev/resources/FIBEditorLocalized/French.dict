@@ -1,5 +1,6 @@
 #French
-#Mon May 14 18:30:38 CEST 2012
+#Tue May 15 13:50:50 CEST 2012
+<unloaded>=<unloaded>
 ARITHMETIC_FLOAT=[FLOTTANT]
 ARITHMETIC_INTEGER=[ENTIER]
 BOOLEAN=BOOLEEN
@@ -43,6 +44,7 @@ display_file=Voir le fichier
 division=division
 doc_generator=G\u00E9n\u00E9rateur de documentation
 doc_resource_manager=Gestionnaire de resources de documentation
+drop_palette_element=drop_palette_element
 edit=Edition
 english=Anglais
 equals_operator=Operator '\u00E9gal'
@@ -79,10 +81,12 @@ new_interface=Nouveau composant
 no=Non
 no_documentation=Pas de documentation
 no_selection=Pas de s\u00E9lection
+no_type=Pas de type
 not_equals_operator=Op\u00E9rateur 'diff\u00E9rent de'
 oe_shape=Forme oe
 ok=OK
 ontology_calc=Calque ontologique
+ontology_library=Biblioth\u00E8que d'ontologies
 open_interface=Ouvrir un composant
 open_recent=Ouvrir un composant r\u00E9cent...
 palette=Palette
