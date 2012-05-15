@@ -76,6 +76,7 @@ import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.ListValueForListParameterPathElement;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.StringUtils;
 
 public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
@@ -110,7 +111,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			setName(parameter.getName() + "URIPanel");
 			setLayout(Layout.gridbag);
 			tf = new FIBTextField();
-			uriLabel = new FIBLabel("http://prout.owl");
+			uriLabel = new FIBLabel("http://xxxxxx.owl");
 			Font f = uriLabel.retrieveValidFont();
 			uriLabel.setFont(f.deriveFont(10f));
 			/*uriLabel.setData(new DataBinding('"' + action.getProject().getProjectOntology().getURI() + "#" + '"' + "+parameters."
@@ -428,24 +429,28 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		Font f = returned.retrieveValidFont();
 		returned.setFont(f.deriveFont(11f));
 
-		FIBLabel infoLabel = new FIBLabel();
-		infoLabel.setFont(infoLabel.retrieveValidFont().deriveFont(Font.BOLD, 13f));
-		infoLabel.setAlign(Align.center);
-		infoLabel.setLabel(editionScheme.getLabel());
-		returned.addToSubComponents(infoLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, 0));
+		FIBLabel titleLabel = new FIBLabel();
+		titleLabel.setFont(titleLabel.retrieveValidFont().deriveFont(Font.BOLD, 13f));
+		titleLabel.setAlign(Align.center);
+		titleLabel.setLabel(editionScheme.getLabel());
+		returned.addToSubComponents(titleLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, 0));
 
-		FIBPanel descriptionPanel = new FIBPanel();
-		descriptionPanel.setLayout(Layout.twocols);
-		descriptionPanel.setBorder(Border.rounded3d);
-		descriptionPanel.setLayout(Layout.border);
-		descriptionPanel.setBorderTop(10);
-		descriptionPanel.setBorderBottom(10);
+		if (StringUtils.isNotEmpty(editionScheme.getDescription())) {
+			FIBPanel descriptionPanel = new FIBPanel();
+			descriptionPanel.setLayout(Layout.twocols);
+			descriptionPanel.setBorder(Border.rounded3d);
+			descriptionPanel.setLayout(Layout.border);
+			descriptionPanel.setBorderTop(10);
+			descriptionPanel.setBorderBottom(10);
 
-		FIBLabel descriptionLabel = new FIBLabel();
-		descriptionLabel.setAlign(Align.center);
-		descriptionLabel.setLabel("<html><i>" + editionScheme.getDescription() + "</i></html>");
-		descriptionPanel.addToSubComponents(descriptionLabel, new BorderLayoutConstraints(BorderLayoutLocation.center));
-		returned.addToSubComponents(descriptionPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, 0));
+			FIBLabel descriptionLabel = new FIBLabel();
+			descriptionLabel.setAlign(Align.center);
+			descriptionLabel.setLabel("<html><i>" + editionScheme.getDescription() + "</i></html>");
+			descriptionPanel.addToSubComponents(descriptionLabel, new BorderLayoutConstraints(BorderLayoutLocation.center));
+			returned.addToSubComponents(descriptionPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, 0));
+		} else {
+			((TwoColsLayoutConstraints) titleLabel.getConstraints()).setInsetsBottom(10);
+		}
 
 		int index = 1;
 		Hashtable<EditionSchemeParameter, FIBComponent> widgets = new Hashtable<EditionSchemeParameter, FIBComponent>();
