@@ -133,6 +133,9 @@ public class FIBLibrary {
 	public FIBComponent retrieveFIBComponent(File fibFile, boolean useCache) {
 		if (!useCache || _fibDefinitions.get(fibFile.getAbsolutePath()) == null) {
 
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Load " + fibFile.getAbsolutePath());
+			}
 			RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(fibFile.getParentFile());
 			Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 			StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
@@ -142,6 +145,7 @@ public class FIBLibrary {
 				inputStream = new FileInputStream(fibFile);
 				return retrieveFIBComponent(fibFile.getAbsolutePath(), inputStream, useCache);
 			} catch (FileNotFoundException e) {
+				logger.warning("Not found: " + fibFile.getAbsolutePath());
 				return null;
 			} finally {
 				IOUtils.closeQuietly(inputStream);
