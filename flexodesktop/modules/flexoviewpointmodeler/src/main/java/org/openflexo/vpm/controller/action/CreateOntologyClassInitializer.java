@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CreateOntologyClassInitializer extends ActionInitializer {
 
@@ -66,7 +66,7 @@ public class CreateOntologyClassInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateOntologyClass>() {
 			@Override
 			public boolean run(ActionEvent e, CreateOntologyClass action) {
-				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewClass());
+				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewClass());
 				return true;
 			}
 		};

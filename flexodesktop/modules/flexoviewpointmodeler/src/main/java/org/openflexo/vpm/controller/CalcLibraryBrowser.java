@@ -25,8 +25,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 
-class CalcLibraryBrowser extends CEDBrowser {
-	protected CalcLibraryBrowser(CEDController controller) {
+class CalcLibraryBrowser extends VPMBrowser {
+	protected CalcLibraryBrowser(VPMController controller) {
 		super(controller);
 	}
 

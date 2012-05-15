@@ -42,19 +42,19 @@ import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CalcDrawingShemaController extends SelectionManagingDrawingController<CalcDrawingShemaRepresentation> implements
 		GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaController.class.getPackage().getName());
 
-	private CEDController _controller;
+	private VPMController _controller;
 	private CommonPalette _commonPalette;
 	private CalcDrawingShemaModuleView _moduleView;
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
-	public CalcDrawingShemaController(CEDController controller, ExampleDrawingShema shema, boolean readOnly) {
+	public CalcDrawingShemaController(VPMController controller, ExampleDrawingShema shema, boolean readOnly) {
 		super(new CalcDrawingShemaRepresentation(shema, readOnly), controller.getSelectionManager());
 
 		_controller = controller;
@@ -119,7 +119,7 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 		return new CalcDrawingShemaView(drawing, this);
 	}
 
-	public CEDController getCEDController() {
+	public VPMController getCEDController() {
 		return _controller;
 	}
 

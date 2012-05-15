@@ -19,33 +19,30 @@
  */
 package org.openflexo.vpm.controller;
 
-import java.awt.Component;
-import java.awt.event.MouseEvent;
-
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.selection.ContextualMenuManager;
+import org.openflexo.selection.SelectionManager;
+import org.openflexo.view.listener.SelectionManagingKeyEventListener;
 
 /**
- * 
- * Contextual menu manager for this module
+ * Key events listener used in the context of this module
  * 
  * @author yourname
  */
-public class CEDContextualMenuManager extends ContextualMenuManager {
+public class VPMKeyEventListener extends SelectionManagingKeyEventListener {
 
-	private CEDController _controller;
+	private static VPMKeyEventListener _current;
 
-	public CEDContextualMenuManager(CEDSelectionManager selectionManager, FlexoEditor editor, CEDController controller) {
-		super(selectionManager, editor);
-		_controller = controller;
+	public VPMKeyEventListener(VPMController controller) {
+		super(controller);
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
-		// put some code here to detect focused object
-		// finally calls super's implementation
-		return super.getFocusedObject(focusedComponent, e);
+	protected SelectionManager getSelectionManager() {
+		return ((VPMController) getController()).getSelectionManager();
 	}
 
+	@Override
+	public FlexoEditor getEditor() {
+		return getController().getEditor();
+	}
 }

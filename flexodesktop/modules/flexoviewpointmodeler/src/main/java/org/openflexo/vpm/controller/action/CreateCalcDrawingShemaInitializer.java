@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 
@@ -50,8 +50,8 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 	}
 
 	@Override
-	public CEDController getController() {
-		return (CEDController) super.getController();
+	public VPMController getController() {
+		return (VPMController) super.getController();
 	}
 
 	@Override

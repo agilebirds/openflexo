@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CreateOntologyCalcInitializer extends ActionInitializer {
 
@@ -66,7 +66,7 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateViewPoint>() {
 			@Override
 			public boolean run(ActionEvent e, CreateViewPoint action) {
-				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
+				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
 				return true;
 			}
 		};

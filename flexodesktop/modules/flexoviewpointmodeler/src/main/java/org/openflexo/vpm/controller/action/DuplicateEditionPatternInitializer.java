@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class DuplicateEditionPatternInitializer extends ActionInitializer<DuplicateEditionPattern, EditionPattern, ViewPointObject> {
 
@@ -64,7 +64,7 @@ public class DuplicateEditionPatternInitializer extends ActionInitializer<Duplic
 		return new FlexoActionFinalizer<DuplicateEditionPattern>() {
 			@Override
 			public boolean run(ActionEvent e, DuplicateEditionPattern action) {
-				((CEDController) getController()).selectAndFocusObject(action.newEditionPattern);
+				((VPMController) getController()).selectAndFocusObject(action.newEditionPattern);
 				return true;
 			}
 		};

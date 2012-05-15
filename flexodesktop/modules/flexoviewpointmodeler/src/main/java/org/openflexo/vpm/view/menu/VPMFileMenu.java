@@ -41,36 +41,36 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 /**
  * 'File' menu for this Module
  * 
  * @author yourname
  */
-public class CEDFileMenu extends FileMenu {
+public class VPMFileMenu extends FileMenu {
 
-	private static final Logger logger = Logger.getLogger(CEDFileMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VPMFileMenu.class.getPackage().getName());
 
 	// ==========================================================================
 	// ============================= Instance Variables
 	// =========================
 	// ==========================================================================
 
-	protected CEDController _cedController;
+	protected VPMController _cedController;
 
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public CEDFileMenu(CEDController controller) {
+	public VPMFileMenu(VPMController controller) {
 		super(controller, false);
 		_cedController = controller;
 		// Put your actions here
 	}
 
-	public CEDController getCEDController() {
+	public VPMController getCEDController() {
 		return _cedController;
 	}
 

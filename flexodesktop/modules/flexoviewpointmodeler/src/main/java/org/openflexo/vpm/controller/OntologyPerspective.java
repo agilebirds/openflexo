@@ -40,7 +40,7 @@ import org.openflexo.vpm.view.OntologyView;
 
 public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
 
-	private final CEDController _controller;
+	private final VPMController _controller;
 
 	/*private OntologyLibraryBrowser _browser;
 	private OntologyBrowser ontologyBrowser;
@@ -60,7 +60,7 @@ public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
 	 *            TODO
 	 * @param name
 	 */
-	public OntologyPerspective(CEDController controller) {
+	public OntologyPerspective(VPMController controller) {
 		super("ontology_perspective");
 		_controller = controller;
 		_ontologyPerspectiveBrowserView = new OntologyPerspectiveBrowserView(controller);
@@ -131,7 +131,7 @@ public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof FlexoOntology) {
 			((FlexoOntology) object).loadWhenUnloaded();
-			return new OntologyView((FlexoOntology) object, (CEDController) controller, this);
+			return new OntologyView((FlexoOntology) object, (VPMController) controller, this);
 		}
 		return new EmptyPanel<FlexoModelObject>(controller, this, object);
 	}

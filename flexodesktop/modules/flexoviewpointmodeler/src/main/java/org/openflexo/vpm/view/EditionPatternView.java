@@ -22,7 +22,7 @@ package org.openflexo.vpm.view;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.view.FIBModuleView;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
 /**
@@ -33,7 +33,7 @@ import org.openflexo.vpm.controller.ViewPointPerspective;
  */
 public class EditionPatternView extends FIBModuleView<EditionPattern> {
 
-	public EditionPatternView(EditionPattern editionPattern, CEDController controller) {
+	public EditionPatternView(EditionPattern editionPattern, VPMController controller) {
 		super(editionPattern, controller, CEDCst.EDITION_PATTERN_VIEW_FIB);
 
 		controller.manageResource(editionPattern.getViewPoint());
@@ -41,8 +41,8 @@ public class EditionPatternView extends FIBModuleView<EditionPattern> {
 	}
 
 	@Override
-	public CEDController getFlexoController() {
-		return (CEDController) super.getFlexoController();
+	public VPMController getFlexoController() {
+		return (VPMController) super.getFlexoController();
 	}
 
 	@Override

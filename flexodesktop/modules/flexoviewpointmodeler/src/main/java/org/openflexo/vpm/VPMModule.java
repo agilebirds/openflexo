@@ -43,7 +43,7 @@ import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
 import org.openflexo.vpm.palette.CalcPaletteController;
 
@@ -64,7 +64,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 	public VPMModule() throws Exception {
 		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
-		setFlexoController(new CEDController(this));
+		setFlexoController(new VPMController(this));
 		getCEDController().loadRelativeWindows();
 		CEDPreferences.init(getCEDController());
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
@@ -81,8 +81,8 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 		return inspectorGroups;
 	}
 
-	public CEDController getCEDController() {
-		return (CEDController) getFlexoController();
+	public VPMController getCEDController() {
+		return (VPMController) getFlexoController();
 	}
 
 	@Override

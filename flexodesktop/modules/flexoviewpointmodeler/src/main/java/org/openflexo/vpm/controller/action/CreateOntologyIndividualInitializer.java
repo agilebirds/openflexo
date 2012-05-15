@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CreateOntologyIndividualInitializer extends ActionInitializer {
 
@@ -66,7 +66,7 @@ public class CreateOntologyIndividualInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateOntologyIndividual>() {
 			@Override
 			public boolean run(ActionEvent e, CreateOntologyIndividual action) {
-				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewIndividual());
+				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewIndividual());
 				return true;
 			}
 		};

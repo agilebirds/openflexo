@@ -24,25 +24,25 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.vpm.view.menu.CEDMenuBar;
+import org.openflexo.vpm.view.menu.VPMMenuBar;
 
 /**
  * Selection manager dedicated to this module
  */
-public class CEDSelectionManager extends SelectionManager {
+public class VPMSelectionManager extends SelectionManager {
 
-	protected static final Logger logger = Logger.getLogger(CEDSelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(VPMSelectionManager.class.getPackage().getName());
 
-	public CEDSelectionManager(CEDController controller) {
+	public VPMSelectionManager(VPMController controller) {
 		super(controller);
-		CEDMenuBar menuBar = controller.getEditorMenuBar();
-		_clipboard = new CEDClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+		VPMMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new VPMClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new CEDContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new VPMContextualMenuManager(this, controller.getEditor(), controller);
 	}
 
-	public CEDController getCEDController() {
-		return (CEDController) getController();
+	public VPMController getCEDController() {
+		return (VPMController) getController();
 	}
 
 	@Override
