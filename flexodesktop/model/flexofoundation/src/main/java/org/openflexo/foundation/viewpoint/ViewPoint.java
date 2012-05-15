@@ -338,6 +338,11 @@ public class ViewPoint extends ViewPointObject {
 
 	}
 
+	@Override
+	public String getFullyQualifiedName() {
+		return getURI();
+	}
+
 	public File getViewPointDirectory() {
 		return viewPointDirectory;
 	}

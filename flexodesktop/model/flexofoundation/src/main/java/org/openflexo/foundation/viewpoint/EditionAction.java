@@ -34,7 +34,7 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
  * @author sylvain
  * 
  */
-public abstract class EditionAction extends ViewPointObject {
+public abstract class EditionAction extends EditionPatternObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
@@ -123,6 +123,7 @@ public abstract class EditionAction extends ViewPointObject {
 		return true;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		if (getScheme() == null) {
 			return null;
@@ -171,4 +172,5 @@ public abstract class EditionAction extends ViewPointObject {
 	public String toString() {
 		return getStringRepresentation();
 	}
+
 }

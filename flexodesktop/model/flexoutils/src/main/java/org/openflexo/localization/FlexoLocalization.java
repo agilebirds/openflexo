@@ -35,8 +35,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.TableColumn;
 
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.KeyValueDecoder;
+import org.openflexo.antar.binding.BindingEvaluator;
+import org.openflexo.antar.binding.InvalidKeyValuePropertyException;
 
 /**
  * This utility class implement localization support <br>
@@ -480,13 +480,17 @@ public class FlexoLocalization {
 	private static String valueForKeyAndObject(String key, Object object) {
 
 		try {
-			Object objectForKey = KeyValueDecoder.valueForKey(object, key);
+			Object objectForKey = BindingEvaluator.evaluateBinding(key, object);
+			// Object objectForKey = KeyValueDecoder.valueForKey(object, key);
 			if (objectForKey != null) {
 				return objectForKey.toString();
 			} else {
 				return "";
 			}
-		} catch (InvalidObjectSpecificationException e) {
+		} /*catch (InvalidObjectSpecificationException e) {
+			logger.warning(e.getMessage());
+			return key;
+			}*/catch (InvalidKeyValuePropertyException e) {
 			logger.warning(e.getMessage());
 			return key;
 		}

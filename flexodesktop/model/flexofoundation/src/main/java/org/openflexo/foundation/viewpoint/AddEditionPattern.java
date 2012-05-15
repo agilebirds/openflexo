@@ -194,7 +194,7 @@ public class AddEditionPattern extends AssignableAction {
 		}
 	}
 
-	public static class AddEditionPatternParameter extends ViewPointObject implements Bindable {
+	public static class AddEditionPatternParameter extends EditionPatternObject implements Bindable {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
@@ -214,6 +214,14 @@ public class AddEditionPattern extends AssignableAction {
 		public AddEditionPatternParameter(EditionSchemeParameter param) {
 			this.param = param;
 			BD = new BindingDefinition(param.getName(), param.getType(), BindingDefinitionType.GET, true);
+		}
+
+		@Override
+		public EditionPattern getEditionPattern() {
+			if (param != null) {
+				return param.getEditionPattern();
+			}
+			return null;
 		}
 
 		public ViewPointDataBinding getValue() {

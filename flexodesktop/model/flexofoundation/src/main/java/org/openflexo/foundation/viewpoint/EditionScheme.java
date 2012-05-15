@@ -30,7 +30,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionScheme extends ViewPointObject implements ActionContainer {
+public abstract class EditionScheme extends EditionPatternObject implements ActionContainer {
 
 	protected BindingModel _bindingModel;
 
@@ -92,6 +92,7 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 		this.label = label;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return _editionPattern;
 	}

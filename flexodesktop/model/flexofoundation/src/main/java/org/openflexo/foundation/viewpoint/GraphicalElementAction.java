@@ -26,7 +26,7 @@ import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme.ActionSchemeBindingAttribute;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class GraphicalElementAction extends ViewPointObject {
+public class GraphicalElementAction extends EditionPatternObject {
 
 	private ActionMask actionMask = ActionMask.DoubleClick;
 	private AbstractActionScheme abstractActionScheme;
@@ -76,6 +76,7 @@ public class GraphicalElementAction extends ViewPointObject {
 		return true;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return getGraphicalElementPatternRole().getEditionPattern();
 	}

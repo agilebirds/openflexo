@@ -26,6 +26,10 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
@@ -198,6 +202,46 @@ public class GraphicalAction extends EditionAction {
 		super.notifyBindingChanged(binding);
 		if (binding == getSubject()) {
 			availableFeatures = null;
+		}
+	}
+
+	public static class GraphicalActionMustHaveASubject extends ValidationRule<GraphicalActionMustHaveASubject, GraphicalAction> {
+		public GraphicalActionMustHaveASubject() {
+			super(GraphicalAction.class, "graphical_action_must_have_a_subject");
+		}
+
+		@Override
+		public ValidationIssue<GraphicalActionMustHaveASubject, GraphicalAction> applyValidation(GraphicalAction graphicalAction) {
+			Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>> v = new Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>>();
+			for (ShapePatternRole pr : graphicalAction.getEditionPattern().getShapePatternRoles()) {
+				v.add(new SetsPatternRoleForSubject(pr));
+			}
+			for (ConnectorPatternRole pr : graphicalAction.getEditionPattern().getConnectorPatternRoles()) {
+				v.add(new SetsPatternRoleForSubject(pr));
+			}
+			return new ValidationError<GraphicalActionMustHaveASubject, GraphicalAction>(this, graphicalAction,
+					"graphical_action_for_pattern_($object.name)_has_no_subject", v);
+		}
+
+		protected static class SetsPatternRoleForSubject extends FixProposal<GraphicalActionMustHaveASubject, GraphicalAction> {
+
+			private GraphicalElementPatternRole patternRole;
+
+			public SetsPatternRoleForSubject(GraphicalElementPatternRole patternRole) {
+				super("set_subject_to_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public GraphicalElementPatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				GraphicalAction graphicalAction = getObject();
+				graphicalAction.setSubject(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
 		}
 	}
 

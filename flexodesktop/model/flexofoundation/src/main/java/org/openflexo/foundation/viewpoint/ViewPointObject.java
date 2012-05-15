@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Vector;
+
 import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
@@ -26,6 +28,12 @@ import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
+/**
+ * Represents an object which is part of the model of a ViewPoint
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class ViewPointObject extends ViewPointLibraryObject implements Bindable {
 
 	public abstract ViewPoint getViewPoint();
@@ -73,6 +81,26 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	@Deprecated
 	public ViewPoint getCalc() {
 		return getViewPoint();
+	}
+
+	@Override
+	public String getInspectorName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Return a vector of all embedded objects on which the validation will be performed
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	/*@Override
+	public Vector<Validable> getAllEmbeddedValidableObjects() {
+		return new Vector<Validable>(getAllEmbeddedViewPointObjects());
+	}*/
+
+	public final Vector<ViewPointObject> getAllEmbeddedViewPointObjects() {
+		return null;
 	}
 
 }

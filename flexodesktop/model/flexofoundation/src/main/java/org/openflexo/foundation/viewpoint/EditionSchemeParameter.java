@@ -33,7 +33,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeParameter extends ViewPointObject implements InspectorBindingAttribute {
+public abstract class EditionSchemeParameter extends EditionPatternObject implements InspectorBindingAttribute {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
@@ -180,6 +180,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 		this.conditional = conditional;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return getScheme().getEditionPattern();
 	}

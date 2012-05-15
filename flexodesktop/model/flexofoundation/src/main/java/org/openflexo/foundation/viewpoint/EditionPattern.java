@@ -42,7 +42,7 @@ import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 
-public class EditionPattern extends ViewPointObject implements StringConvertable<EditionPattern>, CustomType {
+public class EditionPattern extends EditionPatternObject implements StringConvertable<EditionPattern>, CustomType {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
 
@@ -69,6 +69,11 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	public EditionPattern() {
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
+	}
+
+	@Override
+	public EditionPattern getEditionPattern() {
+		return this;
 	}
 
 	@Override

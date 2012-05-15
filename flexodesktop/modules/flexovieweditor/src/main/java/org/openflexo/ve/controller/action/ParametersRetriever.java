@@ -19,6 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.util.Hashtable;
@@ -518,7 +519,9 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 	private boolean _retrieveParameters2(final EditionSchemeAction<?> action) {
 
 		FIBComponent component = makeFIB(action);
-		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(component, action, null, true, FlexoLocalization.getMainLocalizer());
+		FIBDialog dialog = FIBDialog.instanciateDialog(component, action, null, true, FlexoLocalization.getMainLocalizer());
+		dialog.setMinimumSize(new Dimension(500, 50));
+		dialog.showDialog();
 		return (dialog.getStatus() == Status.VALIDATED);
 	}
 

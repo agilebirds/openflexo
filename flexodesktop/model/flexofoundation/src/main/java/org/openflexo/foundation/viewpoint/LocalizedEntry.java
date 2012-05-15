@@ -44,6 +44,7 @@ public class LocalizedEntry extends ViewPointObject {
 		_dictionary = dict;
 	}
 
+	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
 		return _dictionary;
 	}

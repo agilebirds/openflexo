@@ -26,8 +26,8 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -37,7 +37,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class InspectorEntry extends ViewPointObject implements Bindable {
+public abstract class InspectorEntry extends EditionPatternObject implements Bindable {
 
 	static final Logger logger = Logger.getLogger(InspectorEntry.class.getPackage().getName());
 
@@ -97,6 +97,7 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 		return null;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		if (getInspector() != null) {
 			return getInspector().getEditionPattern();

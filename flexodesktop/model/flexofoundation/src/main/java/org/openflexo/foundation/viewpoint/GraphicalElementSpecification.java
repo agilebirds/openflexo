@@ -17,7 +17,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
  * @author sylvain
  * 
  */
-public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation<?>> extends ViewPointObject implements Bindable {
+public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation<?>> extends EditionPatternObject implements Bindable {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
@@ -102,6 +102,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 		return patternRole;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return getPatternRole().getEditionPattern();
 	}

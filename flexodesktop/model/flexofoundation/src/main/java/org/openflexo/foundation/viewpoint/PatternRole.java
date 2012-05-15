@@ -28,7 +28,7 @@ import org.openflexo.foundation.Inspectors;
  * @author sylvain
  * 
  */
-public abstract class PatternRole extends ViewPointObject {
+public abstract class PatternRole extends EditionPatternObject {
 
 	public static enum PatternRoleType {
 		Shape,
@@ -58,6 +58,7 @@ public abstract class PatternRole extends ViewPointObject {
 		_pattern = pattern;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return _pattern;
 	}
