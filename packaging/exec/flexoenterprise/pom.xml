@@ -28,6 +28,7 @@
 			<groupId>org.openflexo.packaging</groupId>
 			<artifactId>flexobusinessplus</artifactId>
 			<scope>runtime</scope>
+			<type>pom</type>
 			<exclusions>
 				<exclusion>
 					<groupId>org.openflexo</groupId>
@@ -62,42 +63,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexosourcegeneratormodule</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>hibernatetechnologymodule</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>javatechnologymodule</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>springtechnologymodule</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>postgrestechnologymodule</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>maventechnologymodule</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>bpslibtechnologymodule</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openflexo</groupId>
 			<artifactId>flexocodegeneratormodule</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
@@ -123,12 +88,6 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoviewpointmodeler</artifactId>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexosourcegeneratormodule</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
