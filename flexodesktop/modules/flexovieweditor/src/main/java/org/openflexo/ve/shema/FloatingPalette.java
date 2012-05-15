@@ -356,8 +356,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		JPopupMenu popup = new JPopupMenu();
 		for (final DropAndLinkScheme dropAndLinkScheme : shapeGR.getOEShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP)) {
 			JMenuItem menuItem = new JMenuItem(
-					FlexoLocalization.localizedForKey(dropAndLinkScheme.dropScheme.getLabel() != null ? dropAndLinkScheme.dropScheme
-							.getLabel() : dropAndLinkScheme.dropScheme.getName()));
+					FlexoLocalization.localizedForKey(dropAndLinkScheme.linkScheme.getLabel() != null ? dropAndLinkScheme.linkScheme
+							.getLabel() : dropAndLinkScheme.linkScheme.getName()));
 			final ViewObject finalContainer = container;
 			menuItem.addActionListener(new ActionListener() {
 				@Override
