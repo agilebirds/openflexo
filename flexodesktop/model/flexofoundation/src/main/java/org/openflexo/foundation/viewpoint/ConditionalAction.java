@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -39,10 +38,10 @@ public class ConditionalAction extends ControlStructureAction {
 		return EditionActionType.Conditional;
 	}
 
-	@Override
+	/*@Override
 	public List<PatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles();
-	}
+	}*/
 
 	public boolean evaluateConditional(EditionSchemeAction action) {
 		return (Boolean) getCondition().getBindingValue(action);

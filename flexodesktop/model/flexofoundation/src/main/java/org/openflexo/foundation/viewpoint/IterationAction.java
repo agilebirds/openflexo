@@ -41,10 +41,10 @@ public class IterationAction extends ControlStructureAction {
 		return EditionActionType.Iteration;
 	}
 
-	@Override
+	/*@Override
 	public List<PatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles();
-	}
+	}*/
 
 	public List evaluateIteration(EditionSchemeAction action) {
 		return (List) getIteration().getBindingValue(action);

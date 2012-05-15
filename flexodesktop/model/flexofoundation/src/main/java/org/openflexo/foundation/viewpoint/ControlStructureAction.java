@@ -19,11 +19,12 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-public abstract class ControlStructureAction extends EditionAction<PatternRole> implements ActionContainer {
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+
+public abstract class ControlStructureAction extends EditionAction implements ActionContainer {
 
 	private static final Logger logger = Logger.getLogger(ControlStructureAction.class.getPackage().getName());
 
@@ -33,10 +34,10 @@ public abstract class ControlStructureAction extends EditionAction<PatternRole> 
 		actions = new Vector<EditionAction>();
 	}
 
-	@Override
+	/*@Override
 	public List<PatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles();
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
@@ -113,7 +114,9 @@ public abstract class ControlStructureAction extends EditionAction<PatternRole> 
 	@Override
 	public AddShape createAddShapeAction() {
 		AddShape newAction = new AddShape();
-		newAction.setPatternRole(getEditionPattern().getDefaultShapePatternRole());
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
 		addToActions(newAction);
 		return newAction;
 	}
@@ -163,7 +166,9 @@ public abstract class ControlStructureAction extends EditionAction<PatternRole> 
 	@Override
 	public AddConnector createAddConnectorAction() {
 		AddConnector newAction = new AddConnector();
-		newAction.setPatternRole(getEditionPattern().getDefaultConnectorPatternRole());
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
 		addToActions(newAction);
 		return newAction;
 	}

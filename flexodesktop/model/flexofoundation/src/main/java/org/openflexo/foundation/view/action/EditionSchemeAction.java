@@ -188,67 +188,71 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		for (EditionAction action : getEditionScheme().getActions()) {
 			if (action.evaluateCondition(this)) {
 				if (action instanceof org.openflexo.foundation.viewpoint.AddShape) {
-					logger.info("Add shape with patternRole=" + action.getPatternRole());
+					logger.info("Add shape " + action);
 					ViewShape newShape = performAddShape((org.openflexo.foundation.viewpoint.AddShape) action);
 					if (newShape != null) {
-						getEditionPatternInstance().setObjectForPatternRole(newShape, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(newShape,
+								((org.openflexo.foundation.viewpoint.AddShape) action).getPatternRole());
 						performedActions.put(action, newShape);
 					}
 				} else if (action instanceof org.openflexo.foundation.viewpoint.AddConnector) {
-					logger.info("Add connector with patternRole=" + action.getPatternRole());
+					logger.info("Add connector " + action);
 					ViewConnector newConnector = performAddConnector((org.openflexo.foundation.viewpoint.AddConnector) action);
 					if (newConnector != null) {
-						getEditionPatternInstance().setObjectForPatternRole(newConnector, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(newConnector,
+								((org.openflexo.foundation.viewpoint.AddConnector) action).getPatternRole());
 						performedActions.put(action, newConnector);
 					}
 				} else if (action instanceof AddIndividual) {
-					logger.info("Add individual with patternRole=" + action.getPatternRole());
+					logger.info("Add individual " + action);
 					OntologyIndividual newIndividual = performAddIndividual((AddIndividual) action);
 					if (newIndividual != null) {
-						getEditionPatternInstance().setObjectForPatternRole(newIndividual, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(newIndividual, ((AddIndividual) action).getPatternRole());
 						performedActions.put(action, newIndividual);
 					}
 				} else if (action instanceof AddClass) {
-					logger.info("Add class with patternRole=" + action.getPatternRole());
+					logger.info("Add class " + action);
 					OntologyClass newClass = performAddClass((AddClass) action);
 					if (newClass != null) {
-						getEditionPatternInstance().setObjectForPatternRole(newClass, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(newClass, ((AddClass) action).getPatternRole());
 						performedActions.put(action, newClass);
 					}
 				} else if (action instanceof AddObjectPropertyStatement) {
-					logger.info("Add object property with patternRole=" + action.getPatternRole());
+					logger.info("Add object property " + action);
 					ObjectPropertyStatement statement = performAddObjectPropertyStatement((org.openflexo.foundation.viewpoint.AddObjectPropertyStatement) action);
 					if (statement != null) {
-						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(statement,
+								((AddObjectPropertyStatement) action).getPatternRole());
 						performedActions.put(action, statement);
 					} else {
-						logger.warning("Could not perform AddObjectPropertyStatement for role " + action.getPatternRole());
+						logger.warning("Could not perform AddObjectPropertyStatement for action " + action);
 					}
 				} else if (action instanceof AddDataPropertyStatement) {
-					logger.info("Add data property with patternRole=" + action.getPatternRole());
+					logger.info("Add data property " + action);
 					DataPropertyStatement statement = performAddDataPropertyStatement((org.openflexo.foundation.viewpoint.AddDataPropertyStatement) action);
 					if (statement != null) {
-						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
+						getEditionPatternInstance()
+								.setObjectForPatternRole(statement, ((AddDataPropertyStatement) action).getPatternRole());
 						performedActions.put(action, statement);
 					} else {
-						logger.warning("Could not perform AddDataPropertyStatement for role " + action.getPatternRole());
+						logger.warning("Could not perform AddDataPropertyStatement for action " + action);
 					}
 				} else if (action instanceof AddIsAStatement) {
-					logger.info("Add isA property with patternRole=" + action.getPatternRole());
+					logger.info("Add isA property " + action);
 					SubClassStatement statement = performAddIsAProperty((AddIsAStatement) action);
 					if (statement != null) {
-						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(statement, ((AddIsAStatement) action).getPatternRole());
 						performedActions.put(action, statement);
 					}
 				} else if (action instanceof AddRestrictionStatement) {
-					logger.info("Add restriction with patternRole=" + action.getPatternRole());
+					logger.info("Add restriction " + action);
 					RestrictionStatement statement = performAddRestriction((AddRestrictionStatement) action);
 					if (statement != null) {
-						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(statement, ((AddRestrictionStatement) action).getPatternRole());
 						performedActions.put(action, statement);
 					}
 				} else if (action instanceof DeclarePatternRole) {
-					logger.info("Declare object with patternRole=" + action.getPatternRole());
+					logger.info("Declare object " + action);
 					FlexoModelObject declaredObject = null;
 					try {
 						declaredObject = performDeclarePatternRole((DeclarePatternRole) action);
@@ -257,21 +261,22 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 					}
 					logger.info("Found declared object: " + declaredObject);
 					if (declaredObject != null) {
-						getEditionPatternInstance().setObjectForPatternRole(declaredObject, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(declaredObject, ((DeclarePatternRole) action).getPatternRole());
 						performedActions.put(action, declaredObject);
 					}
 				} else if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
-					logger.info("Add shema with patternRole=" + action.getPatternRole());
+					logger.info("Add shema " + action);
 					View newShema = performAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action);
 					if (newShema != null) {
-						getEditionPatternInstance().setObjectForPatternRole(newShema, action.getPatternRole());
+						getEditionPatternInstance().setObjectForPatternRole(newShema,
+								((org.openflexo.foundation.viewpoint.AddDiagram) action).getPatternRole());
 						performedActions.put(action, newShema);
 					}
 				} else if (action instanceof org.openflexo.foundation.viewpoint.AddEditionPattern) {
-					logger.info("Add EditionPattern with patternRole=" + action.getPatternRole() + " EP="
+					logger.info("Add EditionPattern " + action + " EP="
 							+ ((org.openflexo.foundation.viewpoint.AddEditionPattern) action).getEditionPatternType());
 					EditionPatternInstance newEP = performAddEditionPattern((org.openflexo.foundation.viewpoint.AddEditionPattern) action);
-					if (newEP != null && action.getPatternRole() != null) {
+					if (newEP != null && ((org.openflexo.foundation.viewpoint.AddEditionPattern) action).getPatternRole() != null) {
 						logger.warning("EditionPatternInstance not declared as FlexoModelObject !!!");
 						// getEditionPatternInstance().setObjectForPatternRole(newEP, action.getPatternRole());
 						// performedActions.put(action, newEP);
@@ -290,7 +295,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 				finalizePerformAddObjectPropertyStatement((AddObjectPropertyStatement) action,
 						(ObjectPropertyStatement) performedActions.get(action));
 			} else if (action instanceof AddDataPropertyStatement) {
-				finalizePerformAddDataPropertyStatement((AddDataPropertyStatement) action, (DataPropertyStatement) performedActions.get(action));
+				finalizePerformAddDataPropertyStatement((AddDataPropertyStatement) action,
+						(DataPropertyStatement) performedActions.get(action));
 			} else if (action instanceof AddIsAStatement) {
 				finalizePerformAddIsAProperty((AddIsAStatement) action, (SubClassStatement) performedActions.get(action));
 			} else if (action instanceof AddRestrictionStatement) {
@@ -298,7 +304,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			} else if (action instanceof DeclarePatternRole) {
 				FlexoModelObject declaredObject = performDeclarePatternRole((DeclarePatternRole) action);
 				if (declaredObject != null) {
-					getEditionPatternInstance().setObjectForPatternRole(declaredObject, action.getPatternRole());
+					getEditionPatternInstance().setObjectForPatternRole(declaredObject, ((DeclarePatternRole) action).getPatternRole());
 					performedActions.put(action, declaredObject);
 				}
 				finalizePerformDeclarePatternRole((DeclarePatternRole) action);
@@ -667,10 +673,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 
 	protected void performGraphicalAction(org.openflexo.foundation.viewpoint.GraphicalAction action) {
 		logger.info("Perform graphical action " + action);
-		ViewElement graphicalElement = (ViewElement) getEditionPatternInstance().getPatternActor(action.getPatternRole());
-		logger.fine("Element is " + graphicalElement);
-		logger.fine("Feature is " + action.getGraphicalFeature());
-		logger.fine("Value is " + action.getValue().getBindingValue(this));
+		ViewElement graphicalElement = action.getSubject(this);
+		logger.info("Element is " + graphicalElement);
+		logger.info("Feature is " + action.getGraphicalFeature());
+		logger.info("Value is " + action.getValue().getBindingValue(this));
 		action.getGraphicalFeature().applyToGraphicalRepresentation(
 				(GraphicalRepresentation<?>) graphicalElement.getGraphicalRepresentation(), action.getValue().getBindingValue(this));
 	}

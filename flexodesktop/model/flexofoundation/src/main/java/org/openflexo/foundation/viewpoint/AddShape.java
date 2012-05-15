@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -27,10 +27,11 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddShape extends AddShemaElementAction<ShapePatternRole> {
+public class AddShape extends AddShemaElementAction {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
@@ -42,13 +43,13 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 		return EditionActionType.AddShape;
 	}
 
-	@Override
+	/*@Override
 	public List<ShapePatternRole> getAvailablePatternRoles() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getPatternRoles(ShapePatternRole.class);
 		} else
 			return null;
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
@@ -56,15 +57,27 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 	}
 
 	public ViewObject getContainer(EditionSchemeAction action) {
-		if (getPatternRole().getParentShapeAsDefinedInAction()) {
-			return (ViewObject) getContainer().getBindingValue(action);
-		} else {
+		if (getPatternRole() != null && !getPatternRole().getParentShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
 			return (ViewObject) action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
+		} else {
+			return (ViewObject) getContainer().getBindingValue(action);
 		}
 	}
 
 	@Override
+	public ShapePatternRole getPatternRole() {
+		PatternRole superPatternRole = super.getPatternRole();
+		if (superPatternRole instanceof ShapePatternRole) {
+			return (ShapePatternRole) superPatternRole;
+		} else if (superPatternRole != null) {
+			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+			return null;
+		}
+		return null;
+	}
+
+	/*@Override
 	public ShapePatternRole getPatternRole() {
 		try {
 			return super.getPatternRole();
@@ -73,14 +86,14 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 			setPatternRole(null);
 			return null;
 		}
-	}
+	}*/
 
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
-	@Override
+	/*@Override
 	public void setPatternRole(ShapePatternRole patternRole) {
 		super.setPatternRole(patternRole);
-	}
+	}*/
 
 	private ViewPointDataBinding container;
 
@@ -102,6 +115,11 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 		container.setBindingAttribute(EditionActionBindingAttribute.container);
 		container.setBindingDefinition(getContainerBindingDefinition());
 		this.container = container;
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return ViewShape.class;
 	}
 
 }

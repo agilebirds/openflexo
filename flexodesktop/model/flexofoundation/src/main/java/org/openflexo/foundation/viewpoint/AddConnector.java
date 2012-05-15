@@ -19,19 +19,20 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
+public class AddConnector extends AddShemaElementAction {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
@@ -43,34 +44,46 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 		return EditionActionType.AddConnector;
 	}
 
-	@Override
+	/*@Override
 	public List<ConnectorPatternRole> getAvailablePatternRoles() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getPatternRoles(ConnectorPatternRole.class);
 		}
 		return null;
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
 		return Inspectors.VPM.ADD_CONNECTOR_INSPECTOR;
 	}
 
+	@Override
+	public ConnectorPatternRole getPatternRole() {
+		PatternRole superPatternRole = super.getPatternRole();
+		if (superPatternRole instanceof ConnectorPatternRole) {
+			return (ConnectorPatternRole) superPatternRole;
+		} else if (superPatternRole != null) {
+			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+			return null;
+		}
+		return null;
+	}
+
 	public ViewShape getFromShape(EditionSchemeAction action) {
-		if (getPatternRole().getStartShapeAsDefinedInAction()) {
-			return (ViewShape) getFromShape().getBindingValue(action);
-		} else {
+		if (getPatternRole() != null && !getPatternRole().getStartShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
 			return (ViewShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
+		} else {
+			return (ViewShape) getFromShape().getBindingValue(action);
 		}
 	}
 
 	public ViewShape getToShape(EditionSchemeAction action) {
-		if (getPatternRole().getEndShapeAsDefinedInAction()) {
-			return (ViewShape) getToShape().getBindingValue(action);
-		} else {
+		if (getPatternRole() != null && !getPatternRole().getEndShapeAsDefinedInAction()) {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
 			return (ViewShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
+		} else {
+			return (ViewShape) getToShape().getBindingValue(action);
 		}
 	}
 
@@ -79,7 +92,7 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 		return "AddConnector " + Integer.toHexString(hashCode()) + " patternRole=" + getPatternRole();
 	}
 
-	@Override
+	/*@Override
 	public ConnectorPatternRole getPatternRole() {
 		try {
 			return super.getPatternRole();
@@ -88,14 +101,14 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 			setPatternRole(null);
 			return null;
 		}
-	}
+	}*/
 
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
-	@Override
+	/*@Override
 	public void setPatternRole(ConnectorPatternRole patternRole) {
 		super.setPatternRole(patternRole);
-	}
+	}*/
 
 	private ViewPointDataBinding fromShape;
 	private ViewPointDataBinding toShape;
@@ -138,6 +151,11 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 		toShape.setBindingAttribute(EditionActionBindingAttribute.toShape);
 		toShape.setBindingDefinition(getToShapeBindingDefinition());
 		this.toShape = toShape;
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return ViewConnector.class;
 	}
 
 }

@@ -27,7 +27,7 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public abstract class AddStatement<R extends OntologicObjectPatternRole> extends EditionAction<R> {
+public abstract class AddStatement extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
@@ -38,7 +38,7 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 		return (OntologyObject) getSubject().getBindingValue(action);
 	}
 
-	@Override
+	/*@Override
 	public R getPatternRole() {
 		try {
 			return super.getPatternRole();
@@ -47,14 +47,14 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 			setPatternRole(null);
 			return null;
 		}
-	}
+	}*/
 
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
-	@Override
+	/*@Override
 	public void setPatternRole(R patternRole) {
 		super.setPatternRole(patternRole);
-	}
+	}*/
 
 	private ViewPointDataBinding subject;
 
@@ -72,9 +72,11 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 	}
 
 	public void setSubject(ViewPointDataBinding subject) {
-		subject.setOwner(this);
-		subject.setBindingAttribute(EditionActionBindingAttribute.subject);
-		subject.setBindingDefinition(getSubjectBindingDefinition());
+		if (subject != null) {
+			subject.setOwner(this);
+			subject.setBindingAttribute(EditionActionBindingAttribute.subject);
+			subject.setBindingDefinition(getSubjectBindingDefinition());
+		}
 		this.subject = subject;
 	}
 

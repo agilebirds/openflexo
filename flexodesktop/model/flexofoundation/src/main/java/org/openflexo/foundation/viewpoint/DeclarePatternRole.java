@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -27,7 +27,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class DeclarePatternRole extends EditionAction<PatternRole> {
+public class DeclarePatternRole extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
 
@@ -39,10 +39,10 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 		return EditionActionType.DeclarePatternRole;
 	}
 
-	@Override
+	/*@Override
 	public List<PatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles();
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
@@ -74,6 +74,11 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 		object.setBindingAttribute(EditionActionBindingAttribute.object);
 		object.setBindingDefinition(getObjectBindingDefinition());
 		this.object = object;
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return Object.class;
 	}
 
 }

@@ -26,6 +26,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -109,14 +110,14 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 		this.description = description;
 	}
 
-	public EditionAction getAction(PatternRole role) {
+	/*public EditionAction getAction(PatternRole role) {
 		for (EditionAction a : getActions()) {
 			if (a.getPatternRole() == role) {
 				return a;
 			}
 		}
 		return null;
-	}
+	}*/
 
 	@Override
 	public Vector<EditionAction> getActions() {
@@ -262,7 +263,9 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 	@Override
 	public AddShape createAddShapeAction() {
 		AddShape newAction = new AddShape();
-		newAction.setPatternRole(getEditionPattern().getDefaultShapePatternRole());
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
 		addToActions(newAction);
 		return newAction;
 	}
@@ -312,7 +315,9 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 	@Override
 	public AddConnector createAddConnectorAction() {
 		AddConnector newAction = new AddConnector();
-		newAction.setPatternRole(getEditionPattern().getDefaultConnectorPatternRole());
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
 		addToActions(newAction);
 		return newAction;
 	}
@@ -469,11 +474,11 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 	}
 
 	public void finalizeEditionSchemeDeserialization() {
-		for (EditionAction a : getActions()) {
+		/*for (EditionAction a : getActions()) {
 			if (a.getPatternRole() != null) {
 				a.updatePatternRoleType();
 			}
-		}
+		}*/
 		updateBindingModels();
 	}
 

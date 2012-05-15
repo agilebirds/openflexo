@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -31,13 +30,13 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddIndividual extends AddConcept<IndividualPatternRole> {
+public class AddIndividual extends AddConcept {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
 
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
-	private String ontologyClassURI;
+	private String ontologyClassURI = null;
 
 	public AddIndividual() {
 		super();
@@ -50,35 +49,52 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 		return EditionActionType.AddIndividual;
 	}
 
-	@Override
+	/*@Override
 	public List<IndividualPatternRole> getAvailablePatternRoles() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getPatternRoles(IndividualPatternRole.class);
+		}
+		return null;
+	}*/
+
+	@Override
+	public IndividualPatternRole getPatternRole() {
+		PatternRole superPatternRole = super.getPatternRole();
+		if (superPatternRole instanceof IndividualPatternRole) {
+			return (IndividualPatternRole) superPatternRole;
+		} else if (superPatternRole != null) {
+			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+			return null;
 		}
 		return null;
 	}
 
 	@Override
 	public OntologyClass getOntologyClass() {
+		// System.out.println("On me redemande la classe, ontologyClassURI=" + ontologyClassURI);
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
 			if (getOntologyLibrary() != null) {
+				// System.out.println("Je reponds avec " + ontologyClassURI);
 				return getOntologyLibrary().getClass(ontologyClassURI);
 			}
 		} else {
 			if (getPatternRole() != null) {
+				// System.out.println("Je reponds avec le pattern role " + getPatternRole());
 				return getPatternRole().getOntologicType();
 			}
 		}
+		// System.out.println("Je reponds null");
 		return null;
 	}
 
 	@Override
 	public void setOntologyClass(OntologyClass ontologyClass) {
+		// System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
 		if (ontologyClass != null) {
-			if (getPatternRole() != null) {
+			if (getPatternRole() instanceof IndividualPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
 					ontologyClassURI = ontologyClass.getURI();
 				} else {
@@ -94,7 +110,7 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	public String _getOntologyClassURI() {
 		if (getOntologyClass() != null) {
-			if (getPatternRole() != null && getPatternRole().getOntologicType() == getOntologyClass()) {
+			if (getPatternRole() instanceof IndividualPatternRole && getPatternRole().getOntologicType() == getOntologyClass()) {
 				// No need to store an overriding type, just use default provided by pattern role
 				return null;
 			}

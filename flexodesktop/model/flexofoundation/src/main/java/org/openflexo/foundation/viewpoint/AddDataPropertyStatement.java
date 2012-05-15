@@ -19,20 +19,24 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.toolbox.StringUtils;
 
-public class AddDataPropertyStatement extends AddStatement<DataPropertyStatementPatternRole> {
+public class AddDataPropertyStatement extends AddStatement {
 
 	private static final Logger logger = Logger.getLogger(AddDataPropertyStatement.class.getPackage().getName());
+
+	private String dataPropertyURI = null;
 
 	public AddDataPropertyStatement() {
 	}
@@ -42,22 +46,68 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		return EditionActionType.AddDataPropertyStatement;
 	}
 
-	@Override
+	/*@Override
 	public List<DataPropertyStatementPatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles(DataPropertyStatementPatternRole.class);
-	}
+	}*/
 
-	public OntologyProperty getDataProperty() {
-		if (getPatternRole() != null) {
-			return getPatternRole().getDataProperty();
+	@Override
+	public DataPropertyStatementPatternRole getPatternRole() {
+		PatternRole superPatternRole = super.getPatternRole();
+		if (superPatternRole instanceof DataPropertyStatementPatternRole) {
+			return (DataPropertyStatementPatternRole) superPatternRole;
+		} else if (superPatternRole != null) {
+			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+			return null;
 		}
 		return null;
 	}
 
-	public void setDataProperty(OntologyProperty p) {
-		if (getPatternRole() != null) {
-			getPatternRole().setDataProperty(p);
+	public OntologyProperty getDataProperty() {
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
 		}
+		if (StringUtils.isNotEmpty(dataPropertyURI)) {
+			if (getOntologyLibrary() != null) {
+				return getOntologyLibrary().getDataProperty(dataPropertyURI);
+			}
+		} else {
+			if (getPatternRole() != null) {
+				return getPatternRole().getDataProperty();
+			}
+		}
+		return null;
+	}
+
+	public void setDataProperty(OntologyProperty ontologyProperty) {
+		if (ontologyProperty != null) {
+			if (getPatternRole() != null) {
+				if (getPatternRole().getDataProperty().isSuperConceptOf(ontologyProperty)) {
+					dataPropertyURI = ontologyProperty.getURI();
+				} else {
+					getPatternRole().setDataProperty(ontologyProperty);
+				}
+			} else {
+				dataPropertyURI = ontologyProperty.getURI();
+			}
+		} else {
+			dataPropertyURI = null;
+		}
+	}
+
+	public String _getDataPropertyURI() {
+		if (getDataProperty() != null) {
+			if (getPatternRole() != null && getPatternRole().getDataProperty() == getDataProperty()) {
+				// No need to store an overriding type, just use default provided by pattern role
+				return null;
+			}
+			return getDataProperty().getURI();
+		}
+		return dataPropertyURI;
+	}
+
+	public void _setDataPropertyURI(String dataPropertyURI) {
+		this.dataPropertyURI = dataPropertyURI;
 	}
 
 	public Object getValue(EditionSchemeAction action) {
@@ -97,6 +147,11 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		value.setBindingAttribute(EditionActionBindingAttribute.value);
 		value.setBindingDefinition(getValueBindingDefinition());
 		this.value = value;
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return DataPropertyStatement.class;
 	}
 
 }

@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -31,7 +31,7 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> {
+public class AddEditionPattern extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());
 
@@ -47,10 +47,10 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 		return EditionActionType.AddEditionPattern;
 	}
 
-	@Override
+	/*@Override
 	public List<EditionPatternPatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles(EditionPatternPatternRole.class);
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
@@ -61,7 +61,7 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 		return (View) getView().getBindingValue(action);
 	}
 
-	@Override
+	/*@Override
 	public EditionPatternPatternRole getPatternRole() {
 		try {
 			return super.getPatternRole();
@@ -70,14 +70,14 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 			setPatternRole(null);
 			return null;
 		}
-	}
+	}*/
 
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddEditionPattern)
 	// Need to be fixed in KeyValueProperty.java
-	@Override
+	/*@Override
 	public void setPatternRole(EditionPatternPatternRole patternRole) {
 		super.setPatternRole(patternRole);
-	}
+	}*/
 
 	private ViewPointDataBinding view;
 
@@ -131,8 +131,8 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 	}
 
 	public CreationScheme getCreationScheme() {
-		if (getPatternRole() != null) {
-			return getPatternRole().getCreationScheme();
+		if (getPatternRole() instanceof EditionPatternPatternRole) {
+			return ((EditionPatternPatternRole) getPatternRole()).getCreationScheme();
 		}
 		if (creationScheme == null && _creationSchemeURI != null && getViewPointLibrary() != null) {
 			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(_creationSchemeURI);
@@ -300,6 +300,11 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 			this.paramName = param;
 		}
 
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return getEditionPatternType();
 	}
 
 }
