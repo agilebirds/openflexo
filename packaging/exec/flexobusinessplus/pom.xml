@@ -28,6 +28,7 @@
             <groupId>org.openflexo.packaging</groupId>
             <artifactId>flexobusiness</artifactId>
             <scope>runtime</scope>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.openflexo</groupId>

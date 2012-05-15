@@ -22,6 +22,7 @@ package org.openflexo.module;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -29,9 +30,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
+import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.ch.FCH;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
@@ -64,6 +67,7 @@ import org.openflexo.view.ModuleBar;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.WindowMenu;
+import org.openflexo.xmlcode.KeyValueCoder;
 
 public final class ProjectLoader {
 
@@ -178,6 +182,22 @@ public final class ProjectLoader {
 	}
 
 	public void closeCurrentProject() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					@Override
+					public void run() {
+						closeCurrentProject();
+					}
+				});
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+
 		FlexoProject currentProject = ModuleLoader.instance().getProject();
 
 		if (currentProject != null) {
@@ -192,6 +212,8 @@ public final class ProjectLoader {
 			FlexoModule mod = e.nextElement();
 			mod.closeWithoutConfirmation(false);
 		}
+		KeyValueCoder.clearClassCache();
+		KeyValueLibrary.clearCache();
 		FCH.clearComponentsHashtable();
 		FlexoHelp.instance.deleteObservers();
 		FlexoLocalization.clearStoredLocalizedForComponents();

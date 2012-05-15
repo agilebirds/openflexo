@@ -45,6 +45,8 @@ public interface PaletteElement extends Serializable {
 	public DrawingPalette getPalette();
 
 	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentation<PaletteElement> {
+		private ShapeGraphicalRepresentation<?> originalGR;
+
 		public PaletteElementGraphicalRepresentation(ShapeType shapeType, PaletteElement paletteElement, PaletteDrawing paletteDrawing) {
 			super(shapeType, paletteElement, paletteDrawing);
 			// setValidated(true);
@@ -55,7 +57,16 @@ public interface PaletteElement extends Serializable {
 			this(shapeGR.getShapeType(), paletteElement, paletteDrawing);
 			// Copy parameters...
 			setsWith(shapeGR);
+			this.originalGR = shapeGR;
 			// setValidated(true);
+		}
+
+		@Override
+		public void delete() {
+			if (originalGR != null) {
+				originalGR.delete();
+			}
+			super.delete();
 		}
 
 		@Override

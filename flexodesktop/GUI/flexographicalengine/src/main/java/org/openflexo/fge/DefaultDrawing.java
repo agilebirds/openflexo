@@ -663,6 +663,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 					dtn.delete();
 				}
 			}
+			if (getDrawingGraphicalRepresentation() != null) {
+				getDrawingGraphicalRepresentation().delete();
+			}
 			_hashMap.clear();
 		}
 		model = null;

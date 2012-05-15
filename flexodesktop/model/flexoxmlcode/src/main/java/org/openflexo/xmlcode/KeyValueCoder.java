@@ -107,6 +107,10 @@ public class KeyValueCoder {
 
 	private static final Map<Class<?>, Map<String, KeyValueProperty>> classCache = new Hashtable<Class<?>, Map<String, KeyValueProperty>>();
 
+	public static void clearClassCache() {
+		classCache.clear();
+	}
+
 	/**
 	 * <p>
 	 * Sets value <code>textValue</code> for keyValueProperty <code>keyValueProperty </code> for object <code>object</code> asserting that

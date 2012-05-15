@@ -429,9 +429,9 @@ public class FileMenu extends FlexoMenu {
 					ValidationReport report = project.getImportedObjectValidationModel().validate(project.getWorkflow());
 					if (report.getErrorNb() != 0 || report.getWarningNb() != 0) {
 						if (getController() instanceof ConsistencyCheckingController) {
-							getController().getConsistencyCheckWindow().setValidationReport(report);
-							getController().getConsistencyCheckWindow().setModal(true);
-							getController().getConsistencyCheckWindow().setVisible(true);
+							getController().getConsistencyCheckWindow(true).setValidationReport(report);
+							getController().getConsistencyCheckWindow(true).setModal(true);
+							getController().getConsistencyCheckWindow(true).setVisible(true);
 						} else {
 							FlexoController.notify(report.errorAsString() + report.warningAsString());
 						}

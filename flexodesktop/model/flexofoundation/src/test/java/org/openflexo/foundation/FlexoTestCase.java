@@ -33,6 +33,7 @@ import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
+import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -100,6 +101,7 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.xmlcode.KeyValueCoder;
 
 /**
  * @author gpolet
@@ -818,4 +820,10 @@ public abstract class FlexoTestCase extends TestCase {
 		assertTrue(deleteAction.doAction().hasActionExecutionSucceeded());
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		KeyValueCoder.clearClassCache();
+		KeyValueLibrary.clearCache();
+		super.tearDown();
+	}
 }

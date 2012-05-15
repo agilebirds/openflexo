@@ -728,7 +728,11 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	// ==========================================================================
 
 	public ConsistencyCheckDialog getConsistencyCheckWindow() {
-		if (this instanceof ConsistencyCheckingController) {
+		return getConsistencyCheckWindow(true);
+	}
+
+	public ConsistencyCheckDialog getConsistencyCheckWindow(boolean create) {
+		if (create & this instanceof ConsistencyCheckingController) {
 			if (_consistencyCheckWindow == null || _consistencyCheckWindow.isDisposed()) {
 				_consistencyCheckWindow = new ConsistencyCheckDialog((ConsistencyCheckingController) this);
 			}
@@ -739,8 +743,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	public void consistencyCheck(Validable objectToValidate) {
 		if (this instanceof ConsistencyCheckingController) {
 			initializeValidationModel();
-			getConsistencyCheckWindow().setVisible(true);
-			getConsistencyCheckWindow().consistencyCheck(objectToValidate);
+			getConsistencyCheckWindow(true).setVisible(true);
+			getConsistencyCheckWindow(true).consistencyCheck(objectToValidate);
 		}
 	}
 
@@ -1716,6 +1720,9 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					((SelectionManagingController) this).getSelectionManager().deleteObserver(getDocInspectorController());
 				}
 			}
+		}
+		if (_consistencyCheckWindow != null && !_consistencyCheckWindow.isDisposed()) {
+			_consistencyCheckWindow.dispose();
 		}
 		if (useOldInspectorScheme()) {
 			getSharedInspectorController().getInspectorWindow().dispose();

@@ -8,27 +8,69 @@
 		<version>1.4.4-SNAPSHOT</version>
 	</parent>
 	<properties>
-        <userType>developer_release</userType>
-        <vm.args>-Xmx1G -XX:MaxPermSize=256M</vm.args>
-    </properties>
+		<userType>developer_release</userType>
+		<vm.args>-Xmx1G -XX:MaxPermSize=256M</vm.args>
+	</properties>
 	<artifactId>flexomaintainer</artifactId>
 	<dependencies>
 		<dependency>
-            <groupId>org.openflexo.packaging</groupId>
-            <artifactId>flexoenterprise</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+			<groupId>org.openflexo.packaging</groupId>
+			<artifactId>flexoenterprise</artifactId>
+			<scope>runtime</scope>
+			<type>pom</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexosourcegeneratormodule</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>hibernatetechnologymodule</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>javatechnologymodule</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>springtechnologymodule</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>postgrestechnologymodule</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>maventechnologymodule</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>bpslibtechnologymodule</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexosourcegeneratormodule</artifactId>
+			<classifier>resources</classifier>
+			<type>zip</type>
+		</dependency>
+
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexodocresourceeditor</artifactId>
-			<version>${project.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexodocresourceeditor</artifactId>
-			<version>${project.version}</version>
-            <scope>runtime</scope>
+			<scope>runtime</scope>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>

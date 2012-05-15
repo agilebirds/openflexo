@@ -19,11 +19,13 @@
  */
 package org.openflexo.velocity;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.velocity.util.introspection.Info;
+import org.apache.velocity.util.introspection.IntrospectorCache;
 import org.apache.velocity.util.introspection.SecureUberspector;
 import org.apache.velocity.util.introspection.VelMethod;
 import org.apache.velocity.util.introspection.VelPropertyGet;
@@ -124,5 +126,30 @@ public class FlexoVelocityIntrospector extends SecureUberspector {
 			}
 		}
 		return null;
+	}
+
+	public void clearCache() {
+		try {
+			Method method = introspector.getClass().getMethod("getIntrospectorCache", null);
+			IntrospectorCache cache = (IntrospectorCache) method.invoke(introspector, null);
+			cache.clear();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassCastException e) {
+			e.printStackTrace();
+		}
 	}
 }

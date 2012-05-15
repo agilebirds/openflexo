@@ -25,6 +25,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,15 +34,23 @@ public class KeyValueLibrary {
 
 	private static final Logger logger = Logger.getLogger(KeyValueLibrary.class.getPackage().getName());
 
-	private static Hashtable<Type, Hashtable<String, KeyValueProperty>> properties = new Hashtable<Type, Hashtable<String, KeyValueProperty>>();
+	private static final Map<Type, Hashtable<String, KeyValueProperty>> properties = new Hashtable<Type, Hashtable<String, KeyValueProperty>>();
 
-	private static Hashtable<Type, Vector<KeyValueProperty>> declaredKeyValueProperties = new Hashtable<Type, Vector<KeyValueProperty>>();
+	private static final Map<Type, Vector<KeyValueProperty>> declaredKeyValueProperties = new Hashtable<Type, Vector<KeyValueProperty>>();
 
-	private static Hashtable<Type, Vector<MethodDefinition>> declaredMethods = new Hashtable<Type, Vector<MethodDefinition>>();
+	private static final Map<Type, Vector<MethodDefinition>> declaredMethods = new Hashtable<Type, Vector<MethodDefinition>>();
 
-	private static Hashtable<Type, Vector<KeyValueProperty>> accessibleKeyValueProperties = new Hashtable<Type, Vector<KeyValueProperty>>();
+	private static final Map<Type, Vector<KeyValueProperty>> accessibleKeyValueProperties = new Hashtable<Type, Vector<KeyValueProperty>>();
 
-	private static Hashtable<Type, Vector<MethodDefinition>> accessibleMethods = new Hashtable<Type, Vector<MethodDefinition>>();
+	private static final Map<Type, Vector<MethodDefinition>> accessibleMethods = new Hashtable<Type, Vector<MethodDefinition>>();
+
+	public static void clearCache() {
+		properties.clear();
+		declaredKeyValueProperties.clear();
+		declaredMethods.clear();
+		accessibleKeyValueProperties.clear();
+		accessibleMethods.clear();
+	}
 
 	public static KeyValueProperty getKeyValueProperty(Type declaringType, String propertyName) {
 		Hashtable<String, KeyValueProperty> cacheForType = properties.get(declaringType);
@@ -236,8 +245,8 @@ public class KeyValueLibrary {
 		Type returnType = method.getGenericReturnType();
 		Type[] parameters = method.getGenericParameterTypes();
 
-		if ((returnType != Void.TYPE) && (Modifier.isPublic(method.getModifiers())) && (!Modifier.isStatic(method.getModifiers()))
-				&& (parameters.length == 0)) {
+		if (returnType != Void.TYPE && Modifier.isPublic(method.getModifiers()) && !Modifier.isStatic(method.getModifiers())
+				&& parameters.length == 0) {
 			// This signature matches a GET property, lets continue !
 
 			// Look for name
@@ -250,10 +259,10 @@ public class KeyValueLibrary {
 
 			// Beautify property name
 
-			if ((propertyName.length() > 3) && (propertyName.substring(0, 3).equalsIgnoreCase("get"))) {
+			if (propertyName.length() > 3 && propertyName.substring(0, 3).equalsIgnoreCase("get")) {
 				propertyName = propertyName.substring(3);
 			}
-			if ((propertyName.length() > 1) && (propertyName.substring(0, 1).equals("_"))) {
+			if (propertyName.length() > 1 && propertyName.substring(0, 1).equals("_")) {
 				propertyName = propertyName.substring(1);
 			}
 
@@ -262,8 +271,8 @@ public class KeyValueLibrary {
 
 			// Is there a SET method ?
 			Method setMethod = searchMatchingSetMethod(declaringType, propertyName, returnType);
-			boolean isSettable = (setMethod != null);
-			if ((setMethod != null) && (excludedSignatures != null)) {
+			boolean isSettable = setMethod != null;
+			if (setMethod != null && excludedSignatures != null) {
 				excludedSignatures.add(MethodDefinition.getMethodDefinition(declaringType, setMethod).getSignature());
 			}
 
@@ -284,7 +293,7 @@ public class KeyValueLibrary {
 	 */
 	private static KeyValueProperty makeProperty(Type declaringType, Field field) {
 		Type fieldType = field.getGenericType();
-		if ((fieldType != Void.TYPE) && (Modifier.isPublic(field.getModifiers())) && (!Modifier.isStatic(field.getModifiers()))) {
+		if (fieldType != Void.TYPE && Modifier.isPublic(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())) {
 			// This signature matches a GET property, lets continue !
 
 			// Look for name
