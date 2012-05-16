@@ -23,12 +23,21 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.viewpoint.ActionScheme;
-import org.openflexo.foundation.viewpoint.ClassPatternRole;
-import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
+import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.foundation.viewpoint.AddClass;
+import org.openflexo.foundation.viewpoint.AddConnector;
+import org.openflexo.foundation.viewpoint.AddDiagram;
+import org.openflexo.foundation.viewpoint.AddEditionPattern;
+import org.openflexo.foundation.viewpoint.AddIndividual;
+import org.openflexo.foundation.viewpoint.AddShape;
+import org.openflexo.foundation.viewpoint.AddStatement;
+import org.openflexo.foundation.viewpoint.ClassPatternRole;
+import org.openflexo.foundation.viewpoint.ConditionalAction;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.viewpoint.DropScheme;
@@ -40,7 +49,9 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
+import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
@@ -103,6 +114,8 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource EXAMPLE_DIAGRAM_ICON = new ImageIconResource("Icons/Model/VPM/ExampleDiagram.png");
 	public static final ImageIconResource CALC_SHAPE_ICON = new ImageIconResource("Icons/Model/VPM/ShapeIcon.png");
 	public static final ImageIconResource CALC_CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
+	public static final ImageIconResource DECLARE_PATTERN_ROLE_ICON = new ImageIconResource("Icons/Model/VPM/DeclarePatternRoleIcon.png");
+	public static final ImageIconResource GRAPHICAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/GraphicalActionIcon.png");
 
 	public static ImageIcon iconForObject(ViewPointLibraryObject object) {
 		if (object instanceof ViewPointFolder) {
@@ -124,6 +137,29 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof ExampleDrawingShema) {
 			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionAction) {
+			if (object instanceof AddClass) {
+				return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+			} else if (object instanceof AddIndividual) {
+				return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
+			} else if (object instanceof AddDiagram) {
+				return EXAMPLE_DIAGRAM_ICON;
+			} else if (object instanceof AddEditionPattern) {
+				return EDITION_PATTERN_ICON;
+			} else if (object instanceof AddShape) {
+				return CALC_SHAPE_ICON;
+			} else if (object instanceof AddConnector) {
+				return CALC_CONNECTOR_ICON;
+			} else if (object instanceof AddStatement) {
+				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
+			} else if (object instanceof DeclarePatternRole) {
+				return DECLARE_PATTERN_ROLE_ICON;
+			} else if (object instanceof ConditionalAction) {
+				return SEIconLibrary.CONDITIONAL_ICON;
+			} else if (object instanceof IterationAction) {
+				return SEIconLibrary.REPETITION_ICON;
+			} else if (object instanceof GraphicalAction) {
+				return GRAPHICAL_ACTION_ICON;
+			}
 			return EDITION_PATTERN_ACTION_ICON;
 		} else if (object instanceof EditionPattern) {
 			return EDITION_PATTERN_ICON;
