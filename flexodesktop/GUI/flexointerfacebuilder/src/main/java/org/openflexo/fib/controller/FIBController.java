@@ -174,6 +174,14 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		return views.get(component);
 	}
 
+	public FIBView<?, ?> viewForComponent(String componentName) {
+		FIBComponent c = getRootComponent().getComponentNamed(componentName);
+		if (c != null) {
+			return views.get(c);
+		}
+		return null;
+	}
+
 	public Enumeration<FIBView<?, ?>> getViews() {
 		return views.elements();
 	}
