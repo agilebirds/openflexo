@@ -63,6 +63,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.vpm.controller.action.CEDControllerActionInitializer;
 import org.openflexo.vpm.view.CEDFrame;
 import org.openflexo.vpm.view.CEDMainPane;
+import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.menu.VPMMenuBar;
 
 /**
@@ -244,8 +245,7 @@ public class VPMController extends FlexoController implements SelectionManagingC
 				if (cl.getViewPoints().size() > 0) {
 					getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
 				}
-			}
-			if (object instanceof ImportedOntology) {
+			} else if (object instanceof ImportedOntology) {
 				ImportedOntology ontology = (ImportedOntology) object;
 				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
 				if (ontology.getClasses().size() > 0) {
@@ -253,21 +253,22 @@ public class VPMController extends FlexoController implements SelectionManagingC
 				}
 			} else if (object instanceof ExampleDrawingShema) {
 				VIEW_POINT_PERSPECTIVE.focusOnShema((ExampleDrawingShema) object);
-			}
-			if (object instanceof ViewPointPalette) {
+			} else if (object instanceof ViewPointPalette) {
 				VIEW_POINT_PERSPECTIVE.focusOnPalette((ViewPointPalette) object);
-			}
-			if (object instanceof ViewPoint) {
-				ViewPoint calc = (ViewPoint) object;
-				VIEW_POINT_PERSPECTIVE.focusOnCalc(calc);
-				if (calc.getEditionPatterns().size() > 0) {
-					getSelectionManager().setSelectedObject(calc.getEditionPatterns().firstElement());
+			} else if (object instanceof ViewPoint) {
+				ViewPoint viewPoint = (ViewPoint) object;
+				VIEW_POINT_PERSPECTIVE.focusOnViewPoint(viewPoint);
+				if (viewPoint.getEditionPatterns().size() > 0) {
+					getSelectionManager().setSelectedObject(viewPoint.getEditionPatterns().firstElement());
 				}
-			}
-			if (object instanceof EditionPattern) {
+			} else if (object instanceof EditionPattern) {
 				EditionPattern pattern = (EditionPattern) object;
 				if (pattern.getEditionSchemes().size() > 0) {
 					getSelectionManager().setSelectedObject(pattern.getEditionSchemes().firstElement());
+				}
+			} else if (object instanceof EditionPatternObject) {
+				if (getCurrentModuleView() instanceof EditionPatternView) {
+					((EditionPatternView) getCurrentModuleView()).tryToSelect((EditionPatternObject) object);
 				}
 			}
 		}

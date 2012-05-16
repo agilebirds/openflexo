@@ -103,7 +103,7 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof ViewPoint) {
-					focusOnCalc((ViewPoint) object);
+					focusOnViewPoint((ViewPoint) object);
 					// System.out.println(((OntologyCalc)object).getXMLRepresentation());
 				}
 			}
@@ -152,10 +152,10 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
 
-	public void focusOnCalc(ViewPoint calc) {
+	public void focusOnViewPoint(ViewPoint viewPoint) {
 		splitPane2.setBottomComponent(null);
 		calcBrowser.deleteBrowserListener(_browserView);
-		calcBrowser.setRepresentedObject(calc);
+		calcBrowser.setRepresentedObject(viewPoint);
 		calcBrowser.update();
 		calcBrowser.addBrowserListener(_browserView);
 	}
