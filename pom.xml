@@ -141,6 +141,9 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.7.1</version>
+					<configuration>
+					   <argLine>-Xmx512M -XX:MaxPermSize=128M</argLine>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -271,6 +274,12 @@
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexointerfacebuilder</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexointerfacebuilder</artifactId>
+				<version>${project.version}</version>
+				<classifier>tests</classifier>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
@@ -748,7 +757,7 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>3.8.2</version>
+				<version>4.10</version>
 			</dependency>
 			<dependency>
 				<groupId>org.javassist</groupId>
