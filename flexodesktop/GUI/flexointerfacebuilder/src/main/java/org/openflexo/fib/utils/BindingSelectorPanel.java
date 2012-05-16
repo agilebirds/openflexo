@@ -990,6 +990,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		}
 		if (binding != null) {
 			_bindingSelector.getTextField().setForeground(binding.isBindingValid() ? Color.BLACK : Color.RED);
+			_bindingSelector.getTextField().setSelectedTextColor(binding.isBindingValid() ? Color.BLACK : Color.RED);
 		}
 
 		if (_bindingSelector.areStaticValuesAllowed() && staticBindingPanel != null) {
