@@ -26,6 +26,10 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
@@ -198,7 +202,7 @@ public class AddIndividual extends AddConcept {
 
 	private ViewPointDataBinding individualName;
 
-	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, false);
+	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getIndividualNameBindingDefinition() {
 		return INDIVIDUAL_NAME;
@@ -217,6 +221,64 @@ public class AddIndividual extends AddConcept {
 		individualName.setBindingAttribute(EditionActionBindingAttribute.individualName);
 		individualName.setBindingDefinition(getIndividualNameBindingDefinition());
 		this.individualName = individualName;
+	}
+
+	public static class AddIndividualActionMustDefineAnOntologyClass extends
+			ValidationRule<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> {
+		public AddIndividualActionMustDefineAnOntologyClass() {
+			super(AddIndividual.class, "add_individual_action_must_define_an_ontology_class");
+		}
+
+		@Override
+		public ValidationIssue<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> applyValidation(AddIndividual action) {
+			if (action.getOntologyClass() == null) {
+				Vector<FixProposal<AddIndividualActionMustDefineAnOntologyClass, AddIndividual>> v = new Vector<FixProposal<AddIndividualActionMustDefineAnOntologyClass, AddIndividual>>();
+				for (IndividualPatternRole pr : action.getEditionPattern().getIndividualPatternRoles()) {
+					v.add(new SetsPatternRole(pr));
+				}
+				return new ValidationError<AddIndividualActionMustDefineAnOntologyClass, AddIndividual>(this, action,
+						"add_individual_action_does_not_define_any_ontology_class", v);
+			}
+			return null;
+		}
+
+		protected static class SetsPatternRole extends FixProposal<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> {
+
+			private IndividualPatternRole patternRole;
+
+			public SetsPatternRole(IndividualPatternRole patternRole) {
+				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public IndividualPatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddIndividual action = getObject();
+				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+	}
+
+	public static class URIBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddIndividual> {
+		public URIBindingIsRequiredAndMustBeValid() {
+			super("'uri'_binding_is_required_and_must_be_valid", AddIndividual.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AddIndividual object) {
+			return object.getIndividualName();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AddIndividual object) {
+			return object.getIndividualNameBindingDefinition();
+		}
+
 	}
 
 }

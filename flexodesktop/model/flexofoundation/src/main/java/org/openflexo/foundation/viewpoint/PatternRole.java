@@ -21,6 +21,10 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * A PatternRole is an element of an EditionPattern, which play a role in this edition pattern
@@ -134,4 +138,17 @@ public abstract class PatternRole extends EditionPatternObject {
 
 	public abstract void setIsPrimaryRole(boolean isPrimary);
 
+	public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
+		public PatternRoleMustHaveAName() {
+			super(PatternRole.class, "pattern_role_must_have_a_name");
+		}
+
+		@Override
+		public ValidationIssue<PatternRoleMustHaveAName, PatternRole> applyValidation(PatternRole patternRole) {
+			if (StringUtils.isEmpty(patternRole.getPatternRoleName())) {
+				return new ValidationError<PatternRoleMustHaveAName, PatternRole>(this, patternRole, "pattern_role_has_no_name");
+			}
+			return null;
+		}
+	}
 }

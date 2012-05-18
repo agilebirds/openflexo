@@ -19,12 +19,17 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -123,7 +128,7 @@ public class AddClass extends AddConcept {
 
 	private ViewPointDataBinding className;
 
-	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getClassNameBindingDefinition() {
 		return CLASS_NAME;
@@ -141,6 +146,63 @@ public class AddClass extends AddConcept {
 		className.setBindingAttribute(EditionActionBindingAttribute.className);
 		className.setBindingDefinition(getClassNameBindingDefinition());
 		this.className = className;
+	}
+
+	public static class AddClassActionMustDefineAnOntologyClass extends ValidationRule<AddClassActionMustDefineAnOntologyClass, AddClass> {
+		public AddClassActionMustDefineAnOntologyClass() {
+			super(AddClass.class, "add_individual_action_must_define_an_ontology_class");
+		}
+
+		@Override
+		public ValidationIssue<AddClassActionMustDefineAnOntologyClass, AddClass> applyValidation(AddClass action) {
+			if (action.getOntologyClass() == null) {
+				Vector<FixProposal<AddClassActionMustDefineAnOntologyClass, AddClass>> v = new Vector<FixProposal<AddClassActionMustDefineAnOntologyClass, AddClass>>();
+				for (ClassPatternRole pr : action.getEditionPattern().getClassPatternRoles()) {
+					v.add(new SetsPatternRole(pr));
+				}
+				return new ValidationError<AddClassActionMustDefineAnOntologyClass, AddClass>(this, action,
+						"add_individual_action_does_not_define_any_ontology_class", v);
+			}
+			return null;
+		}
+
+		protected static class SetsPatternRole extends FixProposal<AddClassActionMustDefineAnOntologyClass, AddClass> {
+
+			private ClassPatternRole patternRole;
+
+			public SetsPatternRole(ClassPatternRole patternRole) {
+				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public ClassPatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddClass action = getObject();
+				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+	}
+
+	public static class URIBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddClass> {
+		public URIBindingIsRequiredAndMustBeValid() {
+			super("'uri'_binding_is_required_and_must_be_valid", AddClass.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AddClass object) {
+			return object.getClassName();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AddClass object) {
+			return object.getClassNameBindingDefinition();
+		}
+
 	}
 
 }

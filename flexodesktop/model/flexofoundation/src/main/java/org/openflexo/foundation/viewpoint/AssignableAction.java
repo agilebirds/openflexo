@@ -44,9 +44,18 @@ public abstract class AssignableAction extends EditionAction {
 		public java.lang.reflect.Type getType() {
 			return getAssignableType();
 		};
+
+		@Override
+		public boolean getIsMandatory() {
+			return isAssignationRequired();
+		};
 	};
 
 	public AssignableAction() {
+	}
+
+	public boolean isAssignationRequired() {
+		return false;
 	}
 
 	@Override
@@ -72,6 +81,7 @@ public abstract class AssignableAction extends EditionAction {
 			assignation.setBindingDefinition(getAssignationBindingDefinition());
 		}
 		this.assignation = assignation;
+		notifyBindingChanged(this.assignation);
 	}
 
 	public PatternRole getPatternRole() {
@@ -95,6 +105,23 @@ public abstract class AssignableAction extends EditionAction {
 	@Deprecated
 	public void _setPatternRoleName(String patternRole) {
 		getAssignation().setUnparsedBinding(patternRole);
+	}
+
+	public static class AssignationBindingMustBeValid extends BindingMustBeValid<AssignableAction> {
+		public AssignationBindingMustBeValid() {
+			super("'assign'_binding_is_not_valid", AssignableAction.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AssignableAction object) {
+			return object.getAssignation();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AssignableAction object) {
+			return object.getAssignationBindingDefinition();
+		}
+
 	}
 
 }

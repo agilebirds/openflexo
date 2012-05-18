@@ -376,6 +376,7 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.GraphicalAction"
 		xmlTag="GraphicalAction">
+		<property name="patternRoleName" xmlTag="patternRole" attribute="YES" />
 		<property name="value" xmlTag="value" attribute="YES" />
 		<property name="graphicalFeatureName" xmlTag="feature" attribute="YES" />
 	</entity>

@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -28,6 +29,10 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
@@ -39,6 +44,7 @@ public class AddDataPropertyStatement extends AddStatement {
 	private String dataPropertyURI = null;
 
 	public AddDataPropertyStatement() {
+		super();
 	}
 
 	@Override
@@ -121,7 +127,7 @@ public class AddDataPropertyStatement extends AddStatement {
 
 	private ViewPointDataBinding value;
 
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, true) {
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getDataProperty() != null) {
@@ -152,6 +158,74 @@ public class AddDataPropertyStatement extends AddStatement {
 	@Override
 	public Type getAssignableType() {
 		return DataPropertyStatement.class;
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		if (getSubject() == null || getDataProperty() == null || getValue() == null) {
+			return "Add DataPropertyStatement";
+		}
+		return getSubject() + " " + (getDataProperty() != null ? getDataProperty().getName() : "null") + " " + getValue();
+	}
+
+	public static class AddDataPropertyStatementActionMustDefineADataProperty extends
+			ValidationRule<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement> {
+		public AddDataPropertyStatementActionMustDefineADataProperty() {
+			super(AddDataPropertyStatement.class, "add_data_property_statement_action_must_define_a_data_property");
+		}
+
+		@Override
+		public ValidationIssue<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement> applyValidation(
+				AddDataPropertyStatement action) {
+			if (action.getDataProperty() == null) {
+				Vector<FixProposal<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement>> v = new Vector<FixProposal<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement>>();
+				for (DataPropertyStatementPatternRole pr : action.getEditionPattern().getDataPropertyStatementPatternRoles()) {
+					v.add(new SetsPatternRole(pr));
+				}
+				return new ValidationError<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement>(this, action,
+						"add_data_property_statement_action_does_not_define_an_data_property", v);
+			}
+			return null;
+		}
+
+		protected static class SetsPatternRole extends
+				FixProposal<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement> {
+
+			private DataPropertyStatementPatternRole patternRole;
+
+			public SetsPatternRole(DataPropertyStatementPatternRole patternRole) {
+				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public DataPropertyStatementPatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddDataPropertyStatement action = getObject();
+				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+	}
+
+	public static class ValueIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddDataPropertyStatement> {
+		public ValueIsRequiredAndMustBeValid() {
+			super("'value'_binding_is_required_and_must_be_valid", AddDataPropertyStatement.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AddDataPropertyStatement object) {
+			return object.getValue();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AddDataPropertyStatement object) {
+			return object.getValueBindingDefinition();
+		}
+
 	}
 
 }

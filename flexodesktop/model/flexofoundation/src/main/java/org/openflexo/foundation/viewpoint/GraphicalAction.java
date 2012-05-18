@@ -43,7 +43,7 @@ public class GraphicalAction extends EditionAction {
 
 	private GraphicalFeature<?, ?> graphicalFeature = null;
 	private ViewPointDataBinding value;
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, true) {
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getGraphicalFeature() != null) {
@@ -171,7 +171,7 @@ public class GraphicalAction extends EditionAction {
 
 	private ViewPointDataBinding subject;
 
-	private BindingDefinition SUBJECT = new BindingDefinition("subject", ViewElement.class, BindingDefinitionType.GET, false);
+	private BindingDefinition SUBJECT = new BindingDefinition("subject", ViewElement.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getSubjectBindingDefinition() {
 		return SUBJECT;
@@ -197,12 +197,27 @@ public class GraphicalAction extends EditionAction {
 		return (ViewElement) getSubject().getBindingValue(action);
 	}
 
+	@Deprecated
+	public String _getPatternRoleName() {
+		return getSubject().toString();
+	}
+
+	@Deprecated
+	public void _setPatternRoleName(String patternRole) {
+		getSubject().setUnparsedBinding(patternRole);
+	}
+
 	@Override
 	public void notifyBindingChanged(ViewPointDataBinding binding) {
 		super.notifyBindingChanged(binding);
 		if (binding == getSubject()) {
 			availableFeatures = null;
 		}
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		return getClass().getSimpleName() + " (" + getSubject() + "." + _getGraphicalFeatureName() + "=" + getValue() + ")";
 	}
 
 	public static class GraphicalActionMustHaveASubject extends ValidationRule<GraphicalActionMustHaveASubject, GraphicalAction> {
@@ -212,15 +227,19 @@ public class GraphicalAction extends EditionAction {
 
 		@Override
 		public ValidationIssue<GraphicalActionMustHaveASubject, GraphicalAction> applyValidation(GraphicalAction graphicalAction) {
-			Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>> v = new Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>>();
-			for (ShapePatternRole pr : graphicalAction.getEditionPattern().getShapePatternRoles()) {
-				v.add(new SetsPatternRoleForSubject(pr));
+			if (graphicalAction.getSubject().isSet() && graphicalAction.getSubject().isValid()) {
+				return null;
+			} else {
+				Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>> v = new Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>>();
+				for (ShapePatternRole pr : graphicalAction.getEditionPattern().getShapePatternRoles()) {
+					v.add(new SetsPatternRoleForSubject(pr));
+				}
+				for (ConnectorPatternRole pr : graphicalAction.getEditionPattern().getConnectorPatternRoles()) {
+					v.add(new SetsPatternRoleForSubject(pr));
+				}
+				return new ValidationError<GraphicalActionMustHaveASubject, GraphicalAction>(this, graphicalAction,
+						"graphical_action_has_no_valid_subject", v);
 			}
-			for (ConnectorPatternRole pr : graphicalAction.getEditionPattern().getConnectorPatternRoles()) {
-				v.add(new SetsPatternRoleForSubject(pr));
-			}
-			return new ValidationError<GraphicalActionMustHaveASubject, GraphicalAction>(this, graphicalAction,
-					"graphical_action_for_pattern_($object.name)_has_no_subject", v);
 		}
 
 		protected static class SetsPatternRoleForSubject extends FixProposal<GraphicalActionMustHaveASubject, GraphicalAction> {
@@ -243,6 +262,23 @@ public class GraphicalAction extends EditionAction {
 			}
 
 		}
+	}
+
+	public static class GraphicalActionMustDefineAValue extends BindingIsRequiredAndMustBeValid<GraphicalAction> {
+		public GraphicalActionMustDefineAValue() {
+			super("'value'_binding_is_not_valid", GraphicalAction.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(GraphicalAction object) {
+			return object.getValue();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(GraphicalAction object) {
+			return object.getValueBindingDefinition();
+		}
+
 	}
 
 }

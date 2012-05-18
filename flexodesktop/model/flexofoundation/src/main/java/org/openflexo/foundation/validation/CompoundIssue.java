@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.validation;
 
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -39,6 +40,13 @@ public class CompoundIssue<R extends ValidationRule<R, V>, V extends Validable> 
 	public CompoundIssue(V anObject) {
 		super(anObject, null);
 		_containedIssues = new Vector<ValidationIssue<R, V>>();
+	}
+
+	public CompoundIssue(V anObject, List<ValidationIssue<R, V>> issues) {
+		this(anObject);
+		for (ValidationIssue<R, V> issue : issues) {
+			addToContainedIssues(issue);
+		}
 	}
 
 	public Vector<ValidationIssue<R, V>> getContainedIssues() {

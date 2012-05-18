@@ -33,7 +33,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeParameter extends EditionPatternObject implements InspectorBindingAttribute {
+public abstract class EditionSchemeParameter extends EditionSchemeObject implements InspectorBindingAttribute {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
@@ -71,6 +71,13 @@ public abstract class EditionSchemeParameter extends EditionPatternObject implem
 	public EditionSchemeParameter() {
 	}
 
+	@Override
+	public String getFullyQualifiedName() {
+		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "."
+				+ (getEditionScheme() != null ? getEditionScheme().getName() : "null") + "." + getName();
+	}
+
 	public abstract Type getType();
 
 	public abstract WidgetType getWidget();
@@ -95,8 +102,13 @@ public abstract class EditionSchemeParameter extends EditionPatternObject implem
 		_scheme = scheme;
 	}
 
-	public EditionScheme getScheme() {
+	@Override
+	public EditionScheme getEditionScheme() {
 		return _scheme;
+	}
+
+	public EditionScheme getScheme() {
+		return getEditionScheme();
 	}
 
 	@Override

@@ -59,6 +59,7 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 	@Override
 	public void addToActions(EditionAction action) {
 		action.setScheme(getEditionScheme());
+		action.setActionContainer(this);
 		actions.add(action);
 		setChanged();
 		notifyObservers();
@@ -68,9 +69,23 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 	@Override
 	public void removeFromActions(EditionAction action) {
 		action.setScheme(null);
+		action.setActionContainer(null);
 		actions.remove(action);
 		setChanged();
 		notifyObservers();
+	}
+
+	@Override
+	public int getIndex(EditionAction action) {
+		return actions.indexOf(action);
+	}
+
+	@Override
+	public void insertActionAtIndex(EditionAction action, int index) {
+		actions.insertElementAt(action, index);
+		setChanged();
+		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override

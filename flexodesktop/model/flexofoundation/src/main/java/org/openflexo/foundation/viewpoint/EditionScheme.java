@@ -30,7 +30,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionScheme extends EditionPatternObject implements ActionContainer {
+public abstract class EditionScheme extends EditionSchemeObject implements ActionContainer {
 
 	protected BindingModel _bindingModel;
 
@@ -65,8 +65,18 @@ public abstract class EditionScheme extends EditionPatternObject implements Acti
 	}
 
 	@Override
+	public String getFullyQualifiedName() {
+		return (getEditionPattern() != null ? getEditionPattern().getFullyQualifiedName() : "null") + "." + getName();
+	}
+
+	@Override
 	public String getURI() {
-		return getEditionPattern().getURI() + "#" + getName();
+		return getEditionPattern().getURI() + "." + getName();
+	}
+
+	@Override
+	public EditionScheme getEditionScheme() {
+		return this;
 	}
 
 	public abstract EditionSchemeType getEditionSchemeType();
@@ -135,6 +145,7 @@ public abstract class EditionScheme extends EditionPatternObject implements Acti
 	@Override
 	public void addToActions(EditionAction action) {
 		action.setScheme(this);
+		action.setActionContainer(this);
 		actions.add(action);
 		setChanged();
 		notifyObservers();
@@ -144,9 +155,25 @@ public abstract class EditionScheme extends EditionPatternObject implements Acti
 	@Override
 	public void removeFromActions(EditionAction action) {
 		action.setScheme(null);
+		action.setActionContainer(null);
 		actions.remove(action);
 		setChanged();
 		notifyObservers();
+	}
+
+	@Override
+	public int getIndex(EditionAction action) {
+		return actions.indexOf(action);
+	}
+
+	@Override
+	public void insertActionAtIndex(EditionAction action, int index) {
+		action.setScheme(this);
+		action.setActionContainer(this);
+		actions.insertElementAt(action, index);
+		setChanged();
+		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override

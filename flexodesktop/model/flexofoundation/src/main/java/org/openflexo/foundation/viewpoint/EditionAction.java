@@ -34,7 +34,7 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
  * @author sylvain
  * 
  */
-public abstract class EditionAction extends EditionPatternObject {
+public abstract class EditionAction extends EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
@@ -85,6 +85,8 @@ public abstract class EditionAction extends EditionPatternObject {
 
 	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
 
+	private ActionContainer actionContainer;
+
 	public EditionAction() {
 	}
 
@@ -132,16 +134,23 @@ public abstract class EditionAction extends EditionPatternObject {
 	}
 
 	public int getIndex() {
-		return getScheme().getActions().indexOf(this);
+		if (getScheme() != null && getScheme().getActions() != null) {
+			return getScheme().getActions().indexOf(this);
+		}
+		return -1;
 	}
 
+	@Override
 	public EditionScheme getEditionScheme() {
 		return _scheme;
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getEditionScheme().getBindingModel();
+		if (getEditionScheme() != null) {
+			return getEditionScheme().getBindingModel();
+		}
+		return null;
 	}
 
 	public BindingDefinition getConditionalBindingDefinition() {
@@ -162,6 +171,7 @@ public abstract class EditionAction extends EditionPatternObject {
 			conditional.setBindingDefinition(getConditionalBindingDefinition());
 		}
 		this.conditional = conditional;
+		notifyBindingChanged(this.conditional);
 	}
 
 	public String getStringRepresentation() {
@@ -171,6 +181,125 @@ public abstract class EditionAction extends EditionPatternObject {
 	@Override
 	public String toString() {
 		return getStringRepresentation();
+	}
+
+	public ActionContainer getActionContainer() {
+		return actionContainer;
+	}
+
+	public void setActionContainer(ActionContainer actionContainer) {
+		this.actionContainer = actionContainer;
+	}
+
+	private void insertActionAtCurrentIndex(EditionAction editionAction) {
+		getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
+	}
+
+	public AddShape createAddShapeAction() {
+		AddShape newAction = new AddShape();
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddClass createAddClassAction() {
+		AddClass newAction = new AddClass();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddIndividual createAddIndividualAction() {
+		AddIndividual newAction = new AddIndividual();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddObjectPropertyStatement createAddObjectPropertyStatementAction() {
+		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddDataPropertyStatement createAddDataPropertyStatementAction() {
+		AddDataPropertyStatement newAction = new AddDataPropertyStatement();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddIsAStatement createAddIsAPropertyAction() {
+		AddIsAStatement newAction = new AddIsAStatement();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddRestrictionStatement createAddRestrictionAction() {
+		AddRestrictionStatement newAction = new AddRestrictionStatement();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddConnector createAddConnectorAction() {
+		AddConnector newAction = new AddConnector();
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public DeclarePatternRole createDeclarePatternRoleAction() {
+		DeclarePatternRole newAction = new DeclarePatternRole();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public GraphicalAction createGraphicalAction() {
+		GraphicalAction newAction = new GraphicalAction();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddDiagram createAddDiagramAction() {
+		AddDiagram newAction = new AddDiagram();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public AddEditionPattern createAddEditionPatternAction() {
+		AddEditionPattern newAction = new AddEditionPattern();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public ConditionalAction createConditionalAction() {
+		ConditionalAction newAction = new ConditionalAction();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public IterationAction createIterationAction() {
+		IterationAction newAction = new IterationAction();
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public static class ConditionalBindingMustBeValid extends BindingMustBeValid<EditionAction> {
+		public ConditionalBindingMustBeValid() {
+			super("'conditional'_binding_is_not_valid", EditionAction.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(EditionAction object) {
+			return object.getConditional();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(EditionAction object) {
+			return object.getConditionalBindingDefinition();
+		}
+
 	}
 
 }

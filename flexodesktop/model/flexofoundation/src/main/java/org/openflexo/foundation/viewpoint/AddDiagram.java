@@ -22,11 +22,10 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import javax.swing.text.View;
-
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 

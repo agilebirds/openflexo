@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -50,7 +51,7 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 
 	public BindingDefinition getDataBindingDefinition() {
 		if (DATA == null) {
-			DATA = new BindingDefinition("data", getDefaultDataClass(), BindingDefinitionType.GET_SET, false) {
+			DATA = new BindingDefinition("data", getType(), BindingDefinitionType.GET_SET, true) {
 				@Override
 				public BindingDefinitionType getBindingDefinitionType() {
 					if (getIsReadOnly()) {
@@ -58,6 +59,11 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 					} else {
 						return BindingDefinitionType.GET_SET;
 					}
+				}
+
+				@Override
+				public Type getType() {
+					return InspectorEntry.this.getType();
 				}
 			};
 		}
@@ -78,6 +84,10 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 
 	public InspectorEntry() {
 		super();
+	}
+
+	public Type getType() {
+		return getDefaultDataClass();
 	}
 
 	public abstract Class getDefaultDataClass();
@@ -157,10 +167,13 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	}
 
 	public void setData(ViewPointDataBinding data) {
-		data.setOwner(this);
-		data.setBindingAttribute(InspectorEntryBindingAttribute.data);
-		data.setBindingDefinition(getDataBindingDefinition());
+		if (data != null) {
+			data.setOwner(this);
+			data.setBindingAttribute(InspectorEntryBindingAttribute.data);
+			data.setBindingDefinition(getDataBindingDefinition());
+		}
 		this.data = data;
+		notifyBindingChanged(this.data);
 	}
 
 	public ViewPointDataBinding getConditional() {
@@ -180,6 +193,23 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	@Override
 	public BindingModel getBindingModel() {
 		return getInspector().getBindingModel();
+	}
+
+	public static class DataBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<InspectorEntry> {
+		public DataBindingIsRequiredAndMustBeValid() {
+			super("'data'_binding_is_not_valid", InspectorEntry.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(InspectorEntry object) {
+			return object.getData();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(InspectorEntry object) {
+			return object.getDataBindingDefinition();
+		}
+
 	}
 
 }

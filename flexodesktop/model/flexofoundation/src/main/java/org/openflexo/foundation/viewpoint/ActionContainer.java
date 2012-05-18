@@ -31,6 +31,10 @@ public interface ActionContainer {
 
 	public void removeFromActions(EditionAction action);
 
+	public int getIndex(EditionAction action);
+
+	public void insertActionAtIndex(EditionAction action, int index);
+
 	public void actionFirst(EditionAction a);
 
 	public void actionUp(EditionAction a);
@@ -68,4 +72,5 @@ public interface ActionContainer {
 	public IterationAction createIterationAction();
 
 	public EditionAction deleteAction(EditionAction anAction);
+
 }

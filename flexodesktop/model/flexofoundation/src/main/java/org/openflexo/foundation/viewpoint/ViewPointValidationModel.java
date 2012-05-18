@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 
 /**
  * Please comment this class
@@ -33,7 +34,50 @@ public class ViewPointValidationModel extends ValidationModel {
 	public ViewPointValidationModel() {
 		super(null, null);
 
+		registerRule(new EditionPattern.EditionPatternShouldHaveRoles());
+		registerRule(new EditionPattern.EditionPatternShouldHaveEditionSchemes());
+
+		registerRule(new PatternRole.PatternRoleMustHaveAName());
+		registerRule(new ClassPatternRole.ClassPatternRoleMustDefineAValidConceptClass());
+		registerRule(new IndividualPatternRole.IndividualPatternRoleMustDefineAValidConceptClass());
+		registerRule(new DataPropertyStatementPatternRole.DataPropertyStatementPatternRoleMustDefineAValidProperty());
+		registerRule(new ObjectPropertyStatementPatternRole.ObjectPropertyStatementPatternRoleMustDefineAValidProperty());
+
+		registerRule(new InspectorEntry.DataBindingIsRequiredAndMustBeValid());
+
+		registerRule(new URIParameter.BaseURIBindingIsRequiredAndMustBeValid());
+
+		registerRule(new EditionAction.ConditionalBindingMustBeValid());
+		registerRule(new AssignableAction.AssignationBindingMustBeValid());
+
+		registerRule(new AddIndividual.AddIndividualActionMustDefineAnOntologyClass());
+		registerRule(new AddIndividual.URIBindingIsRequiredAndMustBeValid());
+
+		registerRule(new AddClass.AddClassActionMustDefineAnOntologyClass());
+		registerRule(new AddClass.URIBindingIsRequiredAndMustBeValid());
+
+		registerRule(new AddStatement.SubjectIsRequiredAndMustBeValid());
+		registerRule(new AddObjectPropertyStatement.AddObjectPropertyStatementActionMustDefineAnObjectProperty());
+		registerRule(new AddObjectPropertyStatement.ObjectIsRequiredAndMustBeValid());
+		registerRule(new AddDataPropertyStatement.AddDataPropertyStatementActionMustDefineADataProperty());
+		registerRule(new AddDataPropertyStatement.ValueIsRequiredAndMustBeValid());
+
+		registerRule(new AddShape.AddShapeActionMustAdressAValidShapePatternRole());
+		registerRule(new AddShape.AddShapeActionMustHaveAValidContainer());
+
+		registerRule(new AddConnector.AddConnectorActionMustAdressAValidConnectorPatternRole());
+		registerRule(new AddConnector.AddConnectorActionMustHaveAValidStartingShape());
+		registerRule(new AddConnector.AddConnectorActionMustHaveAValidEndingShape());
+
+		registerRule(new DeclarePatternRole.AssignationBindingIsRequiredAndMustBeValid());
+		registerRule(new DeclarePatternRole.ObjectBindingIsRequiredAndMustBeValid());
+
 		registerRule(new GraphicalAction.GraphicalActionMustHaveASubject());
+		registerRule(new GraphicalAction.GraphicalActionMustDefineAValue());
+
+		registerRule(new AddEditionPattern.ViewBindingIsRequiredAndMustBeValid());
+		registerRule(new AddEditionPattern.AddEditionPatternMustAddressACreationScheme());
+		registerRule(new AddEditionPattern.AddEditionPatternParametersMustBeValid());
 
 		// Notify that the validation model is complete and that inheritance
 		// computation could be performed

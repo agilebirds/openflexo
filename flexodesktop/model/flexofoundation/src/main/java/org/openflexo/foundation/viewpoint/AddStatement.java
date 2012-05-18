@@ -58,7 +58,7 @@ public abstract class AddStatement extends AssignableAction {
 
 	private ViewPointDataBinding subject;
 
-	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, false);
+	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getSubjectBindingDefinition() {
 		return SUBJECT;
@@ -78,6 +78,23 @@ public abstract class AddStatement extends AssignableAction {
 			subject.setBindingDefinition(getSubjectBindingDefinition());
 		}
 		this.subject = subject;
+	}
+
+	public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddStatement> {
+		public SubjectIsRequiredAndMustBeValid() {
+			super("'subject'_binding_is_required_and_must_be_valid", AddStatement.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AddStatement object) {
+			return object.getSubject();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AddStatement object) {
+			return object.getSubjectBindingDefinition();
+		}
+
 	}
 
 }

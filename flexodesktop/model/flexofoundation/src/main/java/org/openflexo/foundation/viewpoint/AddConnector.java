@@ -20,12 +20,17 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -113,7 +118,7 @@ public class AddConnector extends AddShemaElementAction {
 	private ViewPointDataBinding fromShape;
 	private ViewPointDataBinding toShape;
 
-	private BindingDefinition FROM_SHAPE = new BindingDefinition("fromShape", ViewShape.class, BindingDefinitionType.GET, false);
+	private BindingDefinition FROM_SHAPE = new BindingDefinition("fromShape", ViewShape.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getFromShapeBindingDefinition() {
 		return FROM_SHAPE;
@@ -127,13 +132,16 @@ public class AddConnector extends AddShemaElementAction {
 	}
 
 	public void setFromShape(ViewPointDataBinding fromShape) {
-		fromShape.setOwner(this);
-		fromShape.setBindingAttribute(EditionActionBindingAttribute.fromShape);
-		fromShape.setBindingDefinition(getFromShapeBindingDefinition());
+		if (fromShape != null) {
+			fromShape.setOwner(this);
+			fromShape.setBindingAttribute(EditionActionBindingAttribute.fromShape);
+			fromShape.setBindingDefinition(getFromShapeBindingDefinition());
+		}
 		this.fromShape = fromShape;
+		notifyBindingChanged(this.fromShape);
 	}
 
-	private BindingDefinition TO_SHAPE = new BindingDefinition("toShape", ViewShape.class, BindingDefinitionType.GET, false);
+	private BindingDefinition TO_SHAPE = new BindingDefinition("toShape", ViewShape.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getToShapeBindingDefinition() {
 		return TO_SHAPE;
@@ -147,15 +155,218 @@ public class AddConnector extends AddShemaElementAction {
 	}
 
 	public void setToShape(ViewPointDataBinding toShape) {
-		toShape.setOwner(this);
-		toShape.setBindingAttribute(EditionActionBindingAttribute.toShape);
-		toShape.setBindingDefinition(getToShapeBindingDefinition());
+		if (toShape != null) {
+			toShape.setOwner(this);
+			toShape.setBindingAttribute(EditionActionBindingAttribute.toShape);
+			toShape.setBindingDefinition(getToShapeBindingDefinition());
+		}
 		this.toShape = toShape;
+		notifyBindingChanged(this.toShape);
 	}
 
 	@Override
 	public Type getAssignableType() {
 		return ViewConnector.class;
+	}
+
+	@Override
+	public boolean isAssignationRequired() {
+		return true;
+	}
+
+	public static class AddConnectorActionMustAdressAValidConnectorPatternRole extends
+			ValidationRule<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> {
+		public AddConnectorActionMustAdressAValidConnectorPatternRole() {
+			super(AddConnector.class, "add_connector_action_must_address_a_valid_connector_pattern_role");
+		}
+
+		@Override
+		public ValidationIssue<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> applyValidation(AddConnector action) {
+			if (action.getPatternRole() == null) {
+				Vector<FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>>();
+				for (ConnectorPatternRole pr : action.getEditionPattern().getConnectorPatternRoles()) {
+					v.add(new SetsPatternRole(pr));
+				}
+				return new ValidationError<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>(this, action,
+						"add_connector_action_does_not_address_a_valid_connector_pattern_role", v);
+			}
+			return null;
+		}
+
+		protected static class SetsPatternRole extends FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> {
+
+			private ConnectorPatternRole patternRole;
+
+			public SetsPatternRole(ConnectorPatternRole patternRole) {
+				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public ConnectorPatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddConnector action = getObject();
+				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+	}
+
+	public static class AddConnectorActionMustHaveAValidStartingShape extends
+			ValidationRule<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
+		public AddConnectorActionMustHaveAValidStartingShape() {
+			super(AddConnector.class, "add_connector_action_must_have_a_valid_starting_shape");
+		}
+
+		@Override
+		public ValidationIssue<AddConnectorActionMustHaveAValidStartingShape, AddConnector> applyValidation(AddConnector action) {
+			if (action.getPatternRole() != null && action.getPatternRole().getStartShapeAsDefinedInAction()
+					&& !(action.getFromShape().isSet() && action.getFromShape().isValid())) {
+				Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>>();
+				if (action.getEditionScheme() instanceof LinkScheme) {
+					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getFromTargetEditionPattern();
+					if (targetEditionPattern != null) {
+						for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
+							v.add(new SetsStartingShapeToStartTargetShape(targetEditionPattern, pr));
+						}
+					}
+				}
+				for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
+					v.add(new SetsStartingShapeToShape(pr));
+				}
+				return new ValidationError<AddConnectorActionMustHaveAValidStartingShape, AddConnector>(this, action,
+						"add_connector_action_does_not_have_a_valid_starting_shape", v);
+			}
+			return null;
+		}
+
+		protected static class SetsStartingShapeToShape extends FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
+
+			private ShapePatternRole patternRole;
+
+			public SetsStartingShapeToShape(ShapePatternRole patternRole) {
+				super("sets_starting_shape_to_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public ShapePatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddConnector action = getObject();
+				action.setFromShape(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+		}
+
+		protected static class SetsStartingShapeToStartTargetShape extends
+				FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
+
+			private EditionPattern target;
+			private ShapePatternRole patternRole;
+
+			public SetsStartingShapeToStartTargetShape(EditionPattern target, ShapePatternRole patternRole) {
+				super("sets_starting_shape_to_fromTarget.($patternRole.patternRoleName)");
+				this.target = target;
+				this.patternRole = patternRole;
+			}
+
+			public ShapePatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			public EditionPattern getTarget() {
+				return target;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddConnector action = getObject();
+				action.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "." + patternRole.getPatternRoleName()));
+			}
+		}
+
+	}
+
+	public static class AddConnectorActionMustHaveAValidEndingShape extends
+			ValidationRule<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
+		public AddConnectorActionMustHaveAValidEndingShape() {
+			super(AddConnector.class, "add_connector_action_must_have_a_valid_ending_shape");
+		}
+
+		@Override
+		public ValidationIssue<AddConnectorActionMustHaveAValidEndingShape, AddConnector> applyValidation(AddConnector action) {
+			if (action.getPatternRole() != null && action.getPatternRole().getEndShapeAsDefinedInAction()
+					&& !(action.getToShape().isSet() && action.getToShape().isValid())) {
+				Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>>();
+				if (action.getEditionScheme() instanceof LinkScheme) {
+					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getToTargetEditionPattern();
+					if (targetEditionPattern != null) {
+						for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
+							v.add(new SetsEndingShapeToToTargetShape(targetEditionPattern, pr));
+						}
+					}
+				}
+				for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
+					v.add(new SetsEndingShapeToShape(pr));
+				}
+				return new ValidationError<AddConnectorActionMustHaveAValidEndingShape, AddConnector>(this, action,
+						"add_connector_action_does_not_have_a_valid_ending_shape", v);
+			}
+			return null;
+		}
+
+		protected static class SetsEndingShapeToShape extends FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
+
+			private ShapePatternRole patternRole;
+
+			public SetsEndingShapeToShape(ShapePatternRole patternRole) {
+				super("sets_ending_shape_to_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public ShapePatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddConnector action = getObject();
+				action.setToShape(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+		}
+
+		protected static class SetsEndingShapeToToTargetShape extends
+				FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
+
+			private EditionPattern target;
+			private ShapePatternRole patternRole;
+
+			public SetsEndingShapeToToTargetShape(EditionPattern target, ShapePatternRole patternRole) {
+				super("sets_ending_shape_to_toTarget.($patternRole.patternRoleName)");
+				this.target = target;
+				this.patternRole = patternRole;
+			}
+
+			public ShapePatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			public EditionPattern getTarget() {
+				return target;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddConnector action = getObject();
+				action.setToShape(new ViewPointDataBinding(EditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
+			}
+		}
+
 	}
 
 }

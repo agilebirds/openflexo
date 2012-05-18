@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -28,6 +29,10 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
@@ -39,6 +44,7 @@ public class AddObjectPropertyStatement extends AddStatement {
 	private String objectPropertyURI = null;
 
 	public AddObjectPropertyStatement() {
+		super();
 	}
 
 	@Override
@@ -129,7 +135,7 @@ public class AddObjectPropertyStatement extends AddStatement {
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, false);
+	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;
@@ -152,6 +158,74 @@ public class AddObjectPropertyStatement extends AddStatement {
 	@Override
 	public Type getAssignableType() {
 		return ObjectPropertyStatement.class;
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		if (getSubject() == null || getObjectProperty() == null || getObject() == null) {
+			return "Add ObjectPropertyStatement";
+		}
+		return getSubject() + " " + (getObjectProperty() != null ? getObjectProperty().getName() : "null") + " " + getObject();
+	}
+
+	public static class AddObjectPropertyStatementActionMustDefineAnObjectProperty extends
+			ValidationRule<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement> {
+		public AddObjectPropertyStatementActionMustDefineAnObjectProperty() {
+			super(AddObjectPropertyStatement.class, "add_object_property_statement_action_must_define_an_object_property");
+		}
+
+		@Override
+		public ValidationIssue<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement> applyValidation(
+				AddObjectPropertyStatement action) {
+			if (action.getObjectProperty() == null) {
+				Vector<FixProposal<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement>> v = new Vector<FixProposal<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement>>();
+				for (ObjectPropertyStatementPatternRole pr : action.getEditionPattern().getObjectPropertyStatementPatternRoles()) {
+					v.add(new SetsPatternRole(pr));
+				}
+				return new ValidationError<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement>(this,
+						action, "add_object_property_statement_action_does_not_define_an_object_property", v);
+			}
+			return null;
+		}
+
+		protected static class SetsPatternRole extends
+				FixProposal<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement> {
+
+			private ObjectPropertyStatementPatternRole patternRole;
+
+			public SetsPatternRole(ObjectPropertyStatementPatternRole patternRole) {
+				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public ObjectPropertyStatementPatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddObjectPropertyStatement action = getObject();
+				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+	}
+
+	public static class ObjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddObjectPropertyStatement> {
+		public ObjectIsRequiredAndMustBeValid() {
+			super("'object'_binding_is_required_and_must_be_valid", AddObjectPropertyStatement.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AddObjectPropertyStatement object) {
+			return object.getObject();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AddObjectPropertyStatement object) {
+			return object.getObjectBindingDefinition();
+		}
+
 	}
 
 }

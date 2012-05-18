@@ -50,13 +50,18 @@ public class DeclarePatternRole extends AssignableAction {
 		return null;
 	}
 
+	@Override
+	public boolean isAssignationRequired() {
+		return true;
+	}
+
 	public Object getDeclaredObject(EditionSchemeAction action) {
 		return getObject().getBindingValue(action);
 	}
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, false);
+	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;
@@ -79,6 +84,40 @@ public class DeclarePatternRole extends AssignableAction {
 	@Override
 	public Type getAssignableType() {
 		return Object.class;
+	}
+
+	public static class AssignationBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeclarePatternRole> {
+		public AssignationBindingIsRequiredAndMustBeValid() {
+			super("'assign'_binding_is_not_valid", DeclarePatternRole.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+			return object.getAssignation();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
+			return object.getAssignationBindingDefinition();
+		}
+
+	}
+
+	public static class ObjectBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeclarePatternRole> {
+		public ObjectBindingIsRequiredAndMustBeValid() {
+			super("'object'_binding_is_not_valid", DeclarePatternRole.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+			return object.getAssignation();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
+			return object.getAssignationBindingDefinition();
+		}
+
 	}
 
 }

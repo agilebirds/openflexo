@@ -19,15 +19,21 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+/**
+ * Represents an object which is part of the model of an EditionScheme
+ * 
+ * @author sylvain
+ * 
+ */
+public abstract class EditionSchemeObject extends EditionPatternObject {
 
-public abstract class AddShemaElementAction extends AssignableAction {
+	public abstract EditionScheme getEditionScheme();
 
-	public AddShemaElementAction() {
+	@Override
+	public String getFullyQualifiedName() {
+		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "."
+				+ (getEditionScheme() != null ? getEditionScheme().getName() : "null") + "." + getClass().getSimpleName();
 	}
-
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-	}*/
 
 }

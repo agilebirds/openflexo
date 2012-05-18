@@ -30,6 +30,9 @@ import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
@@ -83,6 +86,11 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		}
 		super.delete();
 		deleteObservers();
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#" + getName();
 	}
 
 	@Override
@@ -181,6 +189,22 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 			}
 		}
 		return returned;
+	}
+
+	public List<IndividualPatternRole> getIndividualPatternRoles() {
+		return getPatternRoles(IndividualPatternRole.class);
+	}
+
+	public List<ClassPatternRole> getClassPatternRoles() {
+		return getPatternRoles(ClassPatternRole.class);
+	}
+
+	public List<ObjectPropertyStatementPatternRole> getObjectPropertyStatementPatternRoles() {
+		return getPatternRoles(ObjectPropertyStatementPatternRole.class);
+	}
+
+	public List<DataPropertyStatementPatternRole> getDataPropertyStatementPatternRoles() {
+		return getPatternRoles(DataPropertyStatementPatternRole.class);
 	}
 
 	public List<ShapePatternRole> getShapePatternRoles() {
@@ -805,6 +829,37 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 			return isAssignableFrom(editionPattern.getParentEditionPattern());
 		}
 		return false;
+	}
+
+	public static class EditionPatternShouldHaveRoles extends ValidationRule<EditionPatternShouldHaveRoles, EditionPattern> {
+		public EditionPatternShouldHaveRoles() {
+			super(EditionPattern.class, "edition_pattern_should_have_roles");
+		}
+
+		@Override
+		public ValidationIssue<EditionPatternShouldHaveRoles, EditionPattern> applyValidation(EditionPattern editionPattern) {
+			if (editionPattern.getPatternRoles().size() == 0) {
+				return new ValidationWarning<EditionPatternShouldHaveRoles, EditionPattern>(this, editionPattern,
+						"edition_pattern_role_has_no_role");
+			}
+			return null;
+		}
+	}
+
+	public static class EditionPatternShouldHaveEditionSchemes extends
+			ValidationRule<EditionPatternShouldHaveEditionSchemes, EditionPattern> {
+		public EditionPatternShouldHaveEditionSchemes() {
+			super(EditionPattern.class, "edition_pattern_should_have_edition_scheme");
+		}
+
+		@Override
+		public ValidationIssue<EditionPatternShouldHaveEditionSchemes, EditionPattern> applyValidation(EditionPattern editionPattern) {
+			if (editionPattern.getEditionSchemes().size() == 0) {
+				return new ValidationWarning<EditionPatternShouldHaveEditionSchemes, EditionPattern>(this, editionPattern,
+						"edition_pattern_role_has_no_edition_scheme");
+			}
+			return null;
+		}
 	}
 
 }
