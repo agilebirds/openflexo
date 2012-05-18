@@ -116,6 +116,8 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource CALC_CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
 	public static final ImageIconResource DECLARE_PATTERN_ROLE_ICON = new ImageIconResource("Icons/Model/VPM/DeclarePatternRoleIcon.png");
 	public static final ImageIconResource GRAPHICAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/GraphicalActionIcon.png");
+	public static final ImageIconResource CONDITIONAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ConditionalActionIcon.png");
+	public static final ImageIconResource ITERATION_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/IterationActionIcon.png");
 
 	public static ImageIcon iconForObject(ViewPointLibraryObject object) {
 		if (object instanceof ViewPointFolder) {
@@ -154,9 +156,9 @@ public class VPMIconLibrary extends IconLibrary {
 			} else if (object instanceof DeclarePatternRole) {
 				return DECLARE_PATTERN_ROLE_ICON;
 			} else if (object instanceof ConditionalAction) {
-				return SEIconLibrary.CONDITIONAL_ICON;
+				return CONDITIONAL_ACTION_ICON;
 			} else if (object instanceof IterationAction) {
-				return SEIconLibrary.REPETITION_ICON;
+				return ITERATION_ACTION_ICON;
 			} else if (object instanceof GraphicalAction) {
 				return GRAPHICAL_ACTION_ICON;
 			}
