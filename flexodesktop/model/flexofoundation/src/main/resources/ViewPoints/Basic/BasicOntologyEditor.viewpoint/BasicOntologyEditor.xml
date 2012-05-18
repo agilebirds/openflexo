@@ -10,8 +10,8 @@
       <URIParameter id="5" base="parameters.conceptName" name="conceptURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) name used in Ontology</description>
       </URIParameter>
-      <AddClass id="6" newClassName="parameters.conceptURI" patternRole="concept" assignation="concept" />
-      <AddShape id="7" container="topLevel" patternRole="shape" assignation="shape" />
+      <AddClass id="6" newClassName="parameters.conceptURI" assignation="concept" />
+      <AddShape id="7" container="topLevel" assignation="shape" />
     </DropScheme>
     <ContainedClassPatternRole id="8" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#Concept" patternRole="concept" />
     <ContainedShapePatternRole id="9" exampleLabel="label" patternRole="shape">
@@ -34,8 +34,8 @@
   <EditionPattern id="20" name="IsARelationship">
     <description>Allows to define 'isA' link between two concepts</description>
     <LinkScheme id="21" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" isAvailableWithFloatingPalette="true" name="LinkTwoConceptByIsARelationShip" label="LinkTwoConceptByIsARelationShip" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <AddIsAPropertyStatement id="22" father="toTarget.concept" patternRole="isA" assignation="isA" subject="fromTarget.concept" />
-      <AddConnector id="23" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" assignation="connector" />
+      <AddIsAPropertyStatement id="22" father="toTarget.concept" assignation="isA" subject="fromTarget.concept" />
+      <AddConnector id="23" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
     </LinkScheme>
     <ContainedIsAStatementPatternRole id="24" patternRole="isA" />
     <ContainedConnectorPatternRole id="25" exampleLabel="label" patternRole="connector">
@@ -78,8 +78,8 @@
       <IntegerParameter id="50" name="cardinality" label="cardinality" defaultValue="1" usePaletteLabelAsDefaultValue="false" conditional="(((parameters.restrictionType = &quot;Exact&quot;) | (parameters.restrictionType = &quot;Min&quot;)) | (parameters.restrictionType = &quot;Max&quot;))" isRequired="false">
         <description>Cardinality for restriction</description>
       </IntegerParameter>
-      <AddRestrictionStatement id="51" object="toTarget.concept" propertyURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#has" cardinality="parameters.cardinality" patternRole="has" assignation="has" subject="fromTarget.concept" />
-      <AddConnector id="52" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" assignation="connector" />
+      <AddRestrictionStatement id="51" object="toTarget.concept" propertyURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#has" cardinality="parameters.cardinality" assignation="has" subject="fromTarget.concept" />
+      <AddConnector id="52" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
     </LinkScheme>
     <ContainedRestrictionStatementPatternRole id="53" patternRole="has" />
     <ContainedConnectorPatternRole id="54" exampleLabel="label" patternRole="connector">

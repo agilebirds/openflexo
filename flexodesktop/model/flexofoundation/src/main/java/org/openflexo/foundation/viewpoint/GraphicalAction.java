@@ -197,7 +197,7 @@ public class GraphicalAction extends EditionAction {
 		return (ViewElement) getSubject().getBindingValue(action);
 	}
 
-	@Deprecated
+	/*@Deprecated
 	public String _getPatternRoleName() {
 		return getSubject().toString();
 	}
@@ -205,7 +205,7 @@ public class GraphicalAction extends EditionAction {
 	@Deprecated
 	public void _setPatternRoleName(String patternRole) {
 		getSubject().setUnparsedBinding(patternRole);
-	}
+	}*/
 
 	@Override
 	public void notifyBindingChanged(ViewPointDataBinding binding) {

@@ -11,11 +11,11 @@ Package specializes TemplateableElement and PackageableElement specializes Param
       <description>Drop a package at top level</description>
       <TextFieldParameter id="4" name="name" label="package_name" defaultValue="&quot;Package&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <URIParameter id="5" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="6" individualName="parameters.uri" patternRole="package" assignation="package">
+      <AddIndividual id="6" individualName="parameters.uri" assignation="package">
         <DataPropertyAssertion id="7" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="parameters.name" />
         <description>Individual of type Package is added to ontology</description>
       </AddIndividual>
-      <AddShape id="8" container="topLevel" patternRole="shape" assignation="shape">
+      <AddShape id="8" container="topLevel" assignation="shape">
         <description>Add the shape</description>
       </AddShape>
     </DropScheme>
@@ -44,13 +44,13 @@ A package import is a relationship that allows the use of unqualified names to r
 One package depends on another if changes in the other could possibly force changes in the first.</description>
     <LinkScheme id="23" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl#Package" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl#Package" isAvailableWithFloatingPalette="true" name="ImportPackage" label="ImportPackage" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <URIParameter id="24" base="&quot;PackageImport&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <DeclarePatternRole id="25" object="fromTarget.package" patternRole="package" assignation="package" />
-      <DeclarePatternRole id="26" object="toTarget.package" patternRole="importedPackage" assignation="importedPackage" />
-      <AddIndividual id="27" individualName="parameters.uri" patternRole="packageImport" assignation="packageImport">
+      <DeclarePatternRole id="25" object="fromTarget.package" assignation="package" />
+      <DeclarePatternRole id="26" object="toTarget.package" assignation="importedPackage" />
+      <AddIndividual id="27" individualName="parameters.uri" assignation="packageImport">
         <ObjectPropertyAssertion id="28" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#importedPackage" object="importedPackage" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="29" object="packageImport" patternRole="import" assignation="import" subject="package" />
-      <AddConnector id="30" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" assignation="connector" />
+      <AddObjectPropertyStatement id="29" object="packageImport" assignation="import" subject="package" />
+      <AddConnector id="30" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
     </LinkScheme>
     <ContainedIndividualPatternRole id="31" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="package" />
     <ContainedIndividualPatternRole id="32" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="importedPackage" />

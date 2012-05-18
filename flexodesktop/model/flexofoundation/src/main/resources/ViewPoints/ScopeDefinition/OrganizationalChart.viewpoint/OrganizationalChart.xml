@@ -7,15 +7,15 @@
       <TextFieldParameter id="5" name="lastName" label="Last name" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <URIParameter id="6" base="(parameters.firstName + parameters.lastName)" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
       <IndividualParameter id="7" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" name="position" label="position" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <AddIndividual id="8" individualName="parameters.uri" patternRole="actor" assignation="actor">
+      <AddIndividual id="8" individualName="parameters.uri" assignation="actor">
         <DataPropertyAssertion id="9" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#firstName" value="parameters.firstName" />
         <DataPropertyAssertion id="10" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#lastName" value="parameters.lastName" />
         <ObjectPropertyAssertion id="11" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasPosition" object="parameters.position" />
       </AddIndividual>
-      <AddShape id="12" container="topLevel" patternRole="shape" assignation="shape" />
-      <AddShape id="13" container="topLevel" patternRole="positionLabel" assignation="positionLabel" />
-      <AddShape id="14" patternRole="nameLabel" assignation="nameLabel" />
-      <AddShape id="15" patternRole="icon" assignation="icon" />
+      <AddShape id="12" container="topLevel" assignation="shape" />
+      <AddShape id="13" container="topLevel" assignation="positionLabel" />
+      <AddShape id="14" assignation="nameLabel" />
+      <AddShape id="15" assignation="icon" />
     </DropScheme>
     <NavigationScheme id="16" targetObject="ownedProcess" conditional="(ownedProcess != null)" name="OpenOwnedProcess" label="OpenOwnedProcess" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
     <ContainedIndividualPatternRole id="17" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" patternRole="actor" />
@@ -78,9 +78,9 @@
   </EditionPattern>
   <EditionPattern id="59" name="CollaboratorLink">
     <LinkScheme id="60" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalChart.owl#Actor" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalChart.owl#Actor" isAvailableWithFloatingPalette="true" name="linkActorToActor" label="linkActorToActor" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <AddConnector id="61" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" assignation="connector" />
-      <AddObjectPropertyStatement id="62" object="toTarget.actor" patternRole="hasCollaboratorStatement" assignation="hasCollaboratorStatement" subject="fromTarget.actor" />
-      <AddObjectPropertyStatement id="63" object="fromTarget.actor" patternRole="hasManagerStatement" assignation="hasManagerStatement" subject="toTarget.actor" />
+      <AddConnector id="61" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
+      <AddObjectPropertyStatement id="62" object="toTarget.actor" assignation="hasCollaboratorStatement" subject="fromTarget.actor" />
+      <AddObjectPropertyStatement id="63" object="fromTarget.actor" assignation="hasManagerStatement" subject="toTarget.actor" />
     </LinkScheme>
     <ContainedObjectPropertyStatementPatternRole id="64" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasCollaborator" patternRole="hasCollaboratorStatement" />
     <ContainedConnectorPatternRole id="65" exampleLabel="" patternRole="connector">

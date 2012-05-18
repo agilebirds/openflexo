@@ -10,20 +10,20 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
       <TextFieldParameter id="4" name="name" label="name" defaultValue="&quot;Actor&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <URIParameter id="5" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
       <IndividualParameter id="6" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" name="packageParameter" label="package" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <DeclarePatternRole id="7" object="parameters.packageParameter" patternRole="package" assignation="package" />
-      <AddIndividual id="8" individualName="parameters.uri" patternRole="actor" assignation="actor">
+      <DeclarePatternRole id="7" object="parameters.packageParameter" assignation="package" />
+      <AddIndividual id="8" individualName="parameters.uri" assignation="actor">
         <DataPropertyAssertion id="9" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="parameters.name" />
         <description>Actor individual being created and put in ontology</description>
       </AddIndividual>
-      <AddObjectPropertyStatement id="10" object="actor" patternRole="packagedElement" assignation="packagedElement" subject="package" />
-      <AddShape id="11" container="topLevel" patternRole="shape" assignation="shape">
+      <AddObjectPropertyStatement id="10" object="actor" assignation="packagedElement" subject="package" />
+      <AddShape id="11" container="topLevel" assignation="shape">
         <description>Add the shape</description>
       </AddShape>
     </DropScheme>
     <ContainedShapePatternRole id="12" exampleLabel="label" patternRole="shape">
       <ShapeGraphicalRepresentation id="13" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="139.0" y="38.0" width="68.0" height="43.06896551724138" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="27.0" absoluteTextY="-8.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="14" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="15" imageFile="Actor.gif" scaleX="2.75" scaleY="1.2765957446808511" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="15" imageFile="Actor.gif" scaleX="1.8888888888888888" scaleY="0.9163609684519443" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
         <Border id="16" top="5" bottom="5" left="5" right="5" />
         <RectangleShape id="17" isRounded="false" arcSize="30.0" />
         <ShadowStyle id="18" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
@@ -47,12 +47,12 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
       <TextFieldParameter id="29" name="name" label="name" defaultValue="&quot;Use Case&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <URIParameter id="30" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
       <IndividualParameter id="31" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" name="packageParameter" label="packageParameter" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <DeclarePatternRole id="32" object="parameters.packageParameter" patternRole="package" assignation="package" />
-      <AddIndividual id="33" individualName="parameters.uri" patternRole="useCase" assignation="useCase">
+      <DeclarePatternRole id="32" object="parameters.packageParameter" assignation="package" />
+      <AddIndividual id="33" individualName="parameters.uri" assignation="useCase">
         <DataPropertyAssertion id="34" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="parameters.name" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="35" object="useCase" patternRole="packagedElement" assignation="packagedElement" subject="package" />
-      <AddShape id="36" container="topLevel" patternRole="shape" assignation="shape" />
+      <AddObjectPropertyStatement id="35" object="useCase" assignation="packagedElement" subject="package" />
+      <AddShape id="36" container="topLevel" assignation="shape" />
     </DropScheme>
     <ContainedShapePatternRole id="37" exampleLabel="label" patternRole="shape">
       <ShapeGraphicalRepresentation id="38" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="130.0" y="34.0" width="139.85915492957744" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
@@ -82,22 +82,22 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
       <URIParameter id="55" base="&quot;association&quot;" name="associationURI" label="association_uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
       <URIParameter id="56" base="&quot;actorProperty&quot;" name="actorPropertyURI" label="actor_property_uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
       <URIParameter id="57" base="&quot;useCaseProperty&quot;" name="useCasePropertyURI" label="use_case_property_uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <DeclarePatternRole id="58" object="fromTarget.actor" patternRole="actor" assignation="actor" />
-      <DeclarePatternRole id="59" object="toTarget.useCase" patternRole="useCase" assignation="useCase" />
-      <DeclarePatternRole id="60" object="parameters.packageParameter" patternRole="package" assignation="package" />
-      <AddIndividual id="61" individualName="parameters.associationURI" patternRole="association" assignation="association" />
-      <AddObjectPropertyStatement id="62" object="association" patternRole="packagedElement" assignation="packagedElement" subject="package" />
-      <AddIndividual id="63" individualName="parameters.actorPropertyURI" patternRole="actorProperty" assignation="actorProperty">
+      <DeclarePatternRole id="58" object="fromTarget.actor" assignation="actor" />
+      <DeclarePatternRole id="59" object="toTarget.useCase" assignation="useCase" />
+      <DeclarePatternRole id="60" object="parameters.packageParameter" assignation="package" />
+      <AddIndividual id="61" individualName="parameters.associationURI" assignation="association" />
+      <AddObjectPropertyStatement id="62" object="association" assignation="packagedElement" subject="package" />
+      <AddIndividual id="63" individualName="parameters.actorPropertyURI" assignation="actorProperty">
         <ObjectPropertyAssertion id="64" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#association" object="association" />
         <ObjectPropertyAssertion id="65" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#type" object="actor" />
       </AddIndividual>
-      <AddIndividual id="66" individualName="parameters.useCasePropertyURI" patternRole="useCaseProperty" assignation="useCaseProperty">
+      <AddIndividual id="66" individualName="parameters.useCasePropertyURI" assignation="useCaseProperty">
         <ObjectPropertyAssertion id="67" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#association" object="association" />
         <ObjectPropertyAssertion id="68" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#type" object="useCase" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="69" object="actorProperty" patternRole="ownedEndForActor" assignation="ownedEndForActor" subject="association" />
-      <AddObjectPropertyStatement id="70" object="useCaseProperty" patternRole="ownedEndForUseCase" assignation="ownedEndForUseCase" subject="association" />
-      <AddConnector id="71" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" assignation="connector" />
+      <AddObjectPropertyStatement id="69" object="actorProperty" assignation="ownedEndForActor" subject="association" />
+      <AddObjectPropertyStatement id="70" object="useCaseProperty" assignation="ownedEndForUseCase" subject="association" />
+      <AddConnector id="71" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
     </LinkScheme>
     <ContainedConnectorPatternRole id="72" exampleLabel="label" patternRole="connector">
       <ConnectorGraphicalRepresentation id="73" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">

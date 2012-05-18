@@ -97,7 +97,7 @@ public abstract class AssignableAction extends EditionAction {
 				+ (StringUtils.isNotEmpty(getAssignation().toString()) ? " (" + getAssignation().toString() + ")" : "");
 	}
 
-	@Deprecated
+	/*@Deprecated
 	public String _getPatternRoleName() {
 		return getAssignation().toString();
 	}
@@ -105,7 +105,7 @@ public abstract class AssignableAction extends EditionAction {
 	@Deprecated
 	public void _setPatternRoleName(String patternRole) {
 		getAssignation().setUnparsedBinding(patternRole);
-	}
+	}*/
 
 	public static class AssignationBindingMustBeValid extends BindingMustBeValid<AssignableAction> {
 		public AssignationBindingMustBeValid() {

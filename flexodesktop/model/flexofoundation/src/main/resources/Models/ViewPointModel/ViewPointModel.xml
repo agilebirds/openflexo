@@ -332,7 +332,7 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AssignableAction" abstract="yes">
-		<property name="patternRoleName" xmlTag="patternRole" attribute="YES" />
+		<!--  <property name="patternRoleName" xmlTag="patternRole" attribute="YES" /> -->
 		<property name="assignation" xmlTag="assignation" attribute="YES" />
 	</entity>
 
@@ -376,7 +376,8 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.GraphicalAction"
 		xmlTag="GraphicalAction">
-		<property name="patternRoleName" xmlTag="patternRole" attribute="YES" />
+	    <!--  <property name="patternRoleName" xmlTag="patternRole" attribute="YES" /> -->
+		<property name="subject" xmlTag="subject" attribute="YES" />
 		<property name="value" xmlTag="value" attribute="YES" />
 		<property name="graphicalFeatureName" xmlTag="feature" attribute="YES" />
 	</entity>
