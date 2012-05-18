@@ -21,6 +21,10 @@ package org.openflexo.fib.editor.test;
 
 import java.util.Vector;
 
+import javax.swing.Icon;
+
+import org.openflexo.icon.UtilsIconLibrary;
+
 public class Family {
 
 	public Person father;
@@ -102,6 +106,10 @@ public class Family {
 		@Override
 		public String toString() {
 			return firstName + " " + lastName + " aged " + age + " (" + gender + ")";
+		}
+
+		public Icon getIcon() {
+			return UtilsIconLibrary.OK_ICON;
 		}
 	}
 
