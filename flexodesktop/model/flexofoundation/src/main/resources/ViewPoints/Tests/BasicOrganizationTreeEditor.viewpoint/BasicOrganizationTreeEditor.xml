@@ -6,21 +6,21 @@
  A BOTCompany is the top container for the whole organization.
  Related dropping scheme automatically perform creation and recording of a new individual of
  BOTCompany type, with a Shape connected to it.</description>
-    <DropScheme id="3" target="top" name="DropBOTCompanyAtTopLevel" label="DropBOTCompanyAtTopLevel" skipConfirmationPanel="false">
-      <TextFieldParameter id="4" name="companyName" label="company_name" defaultValue="&quot;My Company&quot;" usePaletteLabelAsDefaultValue="false">
+    <DropScheme id="3" target="top" name="DropBOTCompanyAtTopLevel" label="DropBOTCompanyAtTopLevel" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="4" name="companyName" label="company_name" defaultValue="&quot;My Company&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter company name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="5" base="parameters.companyName" name="companyURI" label="uri" usePaletteLabelAsDefaultValue="false">
+      <URIParameter id="5" base="parameters.companyName" name="companyURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <AddIndividual id="6" individualName="parameters.companyURI" patternRole="company">
+      <AddIndividual id="6" individualName="parameters.companyURI" patternRole="company" assignation="company">
         <DataPropertyAssertion id="7" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#companyName" value="parameters.companyName" />
       </AddIndividual>
-      <AddShape id="8" container="topLevel" patternRole="shape" />
+      <AddShape id="8" container="topLevel" patternRole="shape" assignation="shape" />
     </DropScheme>
     <ContainedIndividualPatternRole id="9" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany" patternRole="company" />
     <ContainedShapePatternRole id="10" exampleLabel="label" patternRole="shape">
-      <ShapeGraphicalRepresentation id="11" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="123.0" y="9.0" width="224.79787851510477" height="90.9883344883345" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="115.0" absoluteTextY="13.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ShapeGraphicalRepresentation id="11" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="123.0" y="9.0" width="224.79787851510477" height="90.9883344883345" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="115.0" absoluteTextY="13.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="12" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorGradientBackgroundStyle id="13" color1="255,255,102" color2="255,204,204" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.5" />
         <Border id="14" top="5" bottom="5" left="5" right="5" />
@@ -42,29 +42,29 @@
 A BOTDepartment is top container for BOTCompany
 Related dropping scheme automatically perform creation and recording of a new individual of
 BOTDepartment type, with a Shape connected to it.</description>
-    <DropScheme id="23" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany" name="DropBOTDepartmentInBOTCompany" label="DropBOTDepartmentInBOTCompany" skipConfirmationPanel="false">
+    <DropScheme id="23" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany" name="DropBOTDepartmentInBOTCompany" label="DropBOTDepartmentInBOTCompany" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <description>Creates new BOTDepartment inside a BOTCompany</description>
-      <TextFieldParameter id="24" name="departmentName" label="department_name" defaultValue="&quot;My Department&quot;" usePaletteLabelAsDefaultValue="false">
+      <TextFieldParameter id="24" name="departmentName" label="department_name" defaultValue="&quot;My Department&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter department name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="25" base="parameters.departmentName" name="departmentURI" label="uri" usePaletteLabelAsDefaultValue="false">
+      <URIParameter id="25" base="parameters.departmentName" name="departmentURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <AddIndividual id="26" individualName="parameters.departmentURI" patternRole="department">
+      <AddIndividual id="26" individualName="parameters.departmentURI" patternRole="department" assignation="department">
         <DataPropertyAssertion id="27" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name" value="parameters.departmentName" />
         <ObjectPropertyAssertion id="28" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn" object="target.company" />
       </AddIndividual>
-      <AddShape id="29" container="target.shape" patternRole="shape" />
+      <AddShape id="29" container="target.shape" patternRole="shape" assignation="shape" />
     </DropScheme>
-    <ActionScheme id="30" conditional="(detailedShema = null)" name="DefineInNewShema" label="DefineInNewShema" skipConfirmationPanel="true">
+    <ActionScheme id="30" conditional="(detailedShema = null)" name="DefineInNewShema" label="DefineInNewShema" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
       <description>Define details for this BOTDepartment in a new shema</description>
     </ActionScheme>
-    <ActionScheme id="31" conditional="(detailedShema != null)" name="ShowDetails" label="ShowDetails" skipConfirmationPanel="true">
+    <ActionScheme id="31" conditional="(detailedShema != null)" name="ShowDetails" label="ShowDetails" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
       <description>Switch to shema where details of this BOTDepartment are defined</description>
     </ActionScheme>
     <ContainedIndividualPatternRole id="32" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" patternRole="department" />
     <ContainedShapePatternRole id="33" exampleLabel="label" patternRole="shape">
-      <ShapeGraphicalRepresentation id="34" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="163.0" y="27.0" width="176.0" height="58.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="89.0" absoluteTextY="16.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ShapeGraphicalRepresentation id="34" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="163.0" y="27.0" width="176.0" height="58.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="89.0" absoluteTextY="16.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="35" noStroke="false" color="0,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorGradientBackgroundStyle id="36" color1="0,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
         <Border id="37" top="5" bottom="5" left="5" right="5" />
@@ -87,22 +87,22 @@ BOTDepartment type, with a Shape connected to it.</description>
 A BOTSubDepartment is contained in a BOTDepartment
 Related dropping scheme automatically perform creation and recording of a new individual of
 BOTSubDepartment type, with a Shape connected to it.</description>
-    <DropScheme id="47" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropBOTSubDepartmentInBOTDepartment" label="DropBOTSubDepartmentInBOTDepartment" skipConfirmationPanel="false">
-      <TextFieldParameter id="48" name="subDepartmentName" label="sub_department_name" defaultValue="&quot;My sub-department&quot;" usePaletteLabelAsDefaultValue="false">
+    <DropScheme id="47" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropBOTSubDepartmentInBOTDepartment" label="DropBOTSubDepartmentInBOTDepartment" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="48" name="subDepartmentName" label="sub_department_name" defaultValue="&quot;My sub-department&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter sub-department name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="49" base="parameters.subDepartmentName" name="subDepartmentURI" label="uri" usePaletteLabelAsDefaultValue="false">
+      <URIParameter id="49" base="parameters.subDepartmentName" name="subDepartmentURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <AddIndividual id="50" individualName="parameters.subDepartmentURI" patternRole="subDepartment">
+      <AddIndividual id="50" individualName="parameters.subDepartmentURI" patternRole="subDepartment" assignation="subDepartment">
         <DataPropertyAssertion id="51" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name" value="parameters.subDepartmentName" />
         <ObjectPropertyAssertion id="52" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn" object="target.department" />
       </AddIndividual>
-      <AddShape id="53" container="target.shape" patternRole="shape" />
+      <AddShape id="53" container="target.shape" patternRole="shape" assignation="shape" />
     </DropScheme>
     <ContainedIndividualPatternRole id="54" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTSubDepartment" patternRole="subDepartment" />
     <ContainedShapePatternRole id="55" exampleLabel="label" patternRole="shape">
-      <ShapeGraphicalRepresentation id="56" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="147.0" y="28.0" width="176.0" height="58.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="87.0" absoluteTextY="15.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ShapeGraphicalRepresentation id="56" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="147.0" y="28.0" width="176.0" height="58.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="87.0" absoluteTextY="15.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="57" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorGradientBackgroundStyle id="58" color1="255,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
         <Border id="59" top="5" bottom="5" left="5" right="5" />
@@ -122,56 +122,56 @@ BOTSubDepartment type, with a Shape connected to it.</description>
   </EditionPattern>
   <EditionPattern id="67" name="Employee">
     <description>Allows to define concept of employee in a context of basic organization tree</description>
-    <DropScheme id="68" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropEmployeeInOrganization" label="DropEmployeeInOrganization" skipConfirmationPanel="false">
-      <TextFieldParameter id="69" name="roleName" label="role_name" usePaletteLabelAsDefaultValue="true">
+    <DropScheme id="68" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropEmployeeInOrganization" label="DropEmployeeInOrganization" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="69" name="roleName" label="role_name" usePaletteLabelAsDefaultValue="true" isRequired="false">
         <description>Allow to enter role name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="70" base="parameters.roleName" name="employeeURI" label="employee_uri" usePaletteLabelAsDefaultValue="false">
+      <URIParameter id="70" base="parameters.roleName" name="employeeURI" label="employee_uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <CheckBoxParameter id="71" name="isManager" label="is_manager" defaultValue="false" usePaletteLabelAsDefaultValue="false">
+      <CheckBoxParameter id="71" name="isManager" label="is_manager" defaultValue="false" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>When set to true, indicates that created employee concept will address a manager</description>
       </CheckBoxParameter>
-      <CheckBoxParameter id="72" name="isHeadOfOrganization" label="is_head_of_organization" defaultValue="false" usePaletteLabelAsDefaultValue="false" conditional="(parameters.isManager = true)">
+      <CheckBoxParameter id="72" name="isHeadOfOrganization" label="is_head_of_organization" defaultValue="false" usePaletteLabelAsDefaultValue="false" conditional="(parameters.isManager = true)" isRequired="false">
         <description>When set to true, indicates that created employee is at the head of current organization cell</description>
       </CheckBoxParameter>
-      <CheckBoxParameter id="73" name="assignPerson" label="assign_employee" defaultValue="false" usePaletteLabelAsDefaultValue="false">
+      <CheckBoxParameter id="73" name="assignPerson" label="assign_employee" defaultValue="false" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>When set to true, indicates that created employee concept will be assigned to a given person</description>
       </CheckBoxParameter>
-      <TextFieldParameter id="74" name="employeeFirstName" label="employee_first_name" usePaletteLabelAsDefaultValue="false" conditional="(parameters.assignPerson = true)">
+      <TextFieldParameter id="74" name="employeeFirstName" label="employee_first_name" usePaletteLabelAsDefaultValue="false" conditional="(parameters.assignPerson = true)" isRequired="false">
         <description>Employee first name</description>
       </TextFieldParameter>
-      <TextFieldParameter id="75" name="employeeLastName" label="employee_last_name" usePaletteLabelAsDefaultValue="false" conditional="(parameters.assignPerson = true)">
+      <TextFieldParameter id="75" name="employeeLastName" label="employee_last_name" usePaletteLabelAsDefaultValue="false" conditional="(parameters.assignPerson = true)" isRequired="false">
         <description>Employee last name</description>
       </TextFieldParameter>
-      <URIParameter id="76" base="(parameters.employeeFirstName + parameters.employeeLastName)" name="personURI" label="person_uri" usePaletteLabelAsDefaultValue="false" conditional="(parameters.assignPerson = true)">
+      <URIParameter id="76" base="(parameters.employeeFirstName + parameters.employeeLastName)" name="personURI" label="person_uri" usePaletteLabelAsDefaultValue="false" conditional="(parameters.assignPerson = true)" isRequired="true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <AddIndividual id="77" individualName="parameters.employeeURI" patternRole="employeeAsManager" conditional="(parameters.isManager = true)">
+      <AddIndividual id="77" individualName="parameters.employeeURI" conditional="(parameters.isManager = true)" patternRole="employeeAsManager" assignation="employeeAsManager">
         <DataPropertyAssertion id="78" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#roleName" value="parameters.roleName" />
         <ObjectPropertyAssertion id="79" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksIn" object="target.department" />
         <ObjectPropertyAssertion id="80" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isHeadOf" object="target.department" conditional="(parameters.isHeadOfOrganization = true)" />
         <ObjectPropertyAssertion id="81" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#jobPerformedBy" object="person" conditional="(parameters.assignPerson = true)" />
       </AddIndividual>
-      <AddIndividual id="82" individualName="parameters.employeeURI" patternRole="employeeAsWorker" conditional="(parameters.isManager = false)">
+      <AddIndividual id="82" individualName="parameters.employeeURI" conditional="(parameters.isManager = false)" patternRole="employeeAsWorker" assignation="employeeAsWorker">
         <DataPropertyAssertion id="83" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#roleName" value="parameters.roleName" />
         <ObjectPropertyAssertion id="84" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksIn" object="target.department" />
         <ObjectPropertyAssertion id="85" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#jobPerformedBy" object="person" conditional="(parameters.assignPerson = true)" />
       </AddIndividual>
-      <AddIndividual id="86" individualName="personURI" patternRole="person" conditional="(assignPerson = true)">
+      <AddIndividual id="86" individualName="parameters.personURI" conditional="(parameters.assignPerson = true)" patternRole="person" assignation="person">
         <DataPropertyAssertion id="87" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personFirstName" value="parameters.employeeFirstName" />
         <DataPropertyAssertion id="88" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personName" value="parameters.employeeLastName" />
         <ObjectPropertyAssertion id="89" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksAs" object="employeeAsManager" conditional="(parameters.isManager = true)" />
         <ObjectPropertyAssertion id="90" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksAs" object="employeeAsWorker" conditional="(parameters.isManager = false)" />
       </AddIndividual>
-      <AddShape id="91" container="target.shape" patternRole="managerAsShape" conditional="(parameters.isManager = true)" />
-      <AddShape id="92" container="target.shape" patternRole="workerAsShape" conditional="(parameters.isManager = false)" />
+      <AddShape id="91" container="target.shape" conditional="(parameters.isManager = true)" patternRole="managerAsShape" assignation="managerAsShape" />
+      <AddShape id="92" container="target.shape" conditional="(parameters.isManager = false)" patternRole="workerAsShape" assignation="workerAsShape" />
     </DropScheme>
     <ContainedIndividualPatternRole id="93" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTManager" patternRole="employeeAsManager" />
     <ContainedIndividualPatternRole id="94" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTWorker" patternRole="employeeAsWorker" />
     <ContainedIndividualPatternRole id="95" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTPerson" patternRole="person" />
     <ContainedShapePatternRole id="96" exampleLabel="label" patternRole="managerAsShape">
-      <ShapeGraphicalRepresentation id="97" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="227.0" y="42.03462386947115" width="173.0" height="38.96537613052885" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ShapeGraphicalRepresentation id="97" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="227.0" y="42.03462386947115" width="173.0" height="38.96537613052885" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="23.0" absoluteTextY="36.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="98" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ImageBackgroundStyle id="99" imageFile="WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
         <Border id="100" top="5" bottom="5" left="5" right="5" />
@@ -185,7 +185,7 @@ BOTSubDepartment type, with a Shape connected to it.</description>
       <GRSpec id="107" featureName="width" value="3.141592654" readOnly="true" />
     </ContainedShapePatternRole>
     <ContainedShapePatternRole id="108" exampleLabel="label" patternRole="workerAsShape">
-      <ShapeGraphicalRepresentation id="109" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="136.0" y="41.03462386947115" width="165.0" height="38.96537613052885" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ShapeGraphicalRepresentation id="109" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="136.0" y="41.03462386947115" width="165.0" height="38.96537613052885" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="23.0" absoluteTextY="36.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="110" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ImageBackgroundStyle id="111" imageFile="WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
         <Border id="112" top="5" bottom="5" left="5" right="5" />
@@ -201,23 +201,23 @@ BOTSubDepartment type, with a Shape connected to it.</description>
   </EditionPattern>
   <EditionPattern id="117" name="EmployeeHierarchicalRelationship">
     <description>Allows to define hierarchical relationship between two employees</description>
-    <LinkScheme id="118" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#Employee" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#Employee" isAvailableWithFloatingPalette="true" name="LinkTwoEmployeesByHierarchicalRelationship" label="LinkTwoEmployeesByHierarchicalRelationship" skipConfirmationPanel="false">
-      <CheckBoxParameter id="119" name="makeInverseRelationship" label="make_inverse_relationship" usePaletteLabelAsDefaultValue="false">
+    <LinkScheme id="118" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#Employee" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#Employee" isAvailableWithFloatingPalette="true" name="LinkTwoEmployeesByHierarchicalRelationship" label="LinkTwoEmployeesByHierarchicalRelationship" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <CheckBoxParameter id="119" name="makeInverseRelationship" label="make_inverse_relationship" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
       </CheckBoxParameter>
-      <AddObjectPropertyStatement id="120" object="toTarget.employeeAsWorker" patternRole="isResponsibleOf" subject="fromTarget.employeeAsManager" />
-      <AddObjectPropertyStatement id="121" object="fromTarget.employeeAsManager" patternRole="isUnderResponsabilityOf" conditional="(parameters.makeInverseRelationship = true)" subject="toTarget.employeeAsWorker" />
-      <AddConnector id="122" fromShape="fromTarget.managerAsShape" toShape="toTarget.workerAsShape" patternRole="connector" />
+      <AddObjectPropertyStatement id="120" object="toTarget.employeeAsWorker" patternRole="isResponsibleOf" assignation="isResponsibleOf" subject="fromTarget.employeeAsManager" />
+      <AddObjectPropertyStatement id="121" object="fromTarget.employeeAsManager" conditional="(parameters.makeInverseRelationship = true)" patternRole="isUnderResponsabilityOf" assignation="isUnderResponsabilityOf" subject="toTarget.employeeAsWorker" />
+      <AddConnector id="122" fromShape="fromTarget.managerAsShape" toShape="toTarget.workerAsShape" patternRole="connector" assignation="connector" />
     </LinkScheme>
     <ContainedObjectPropertyStatementPatternRole id="123" objectProperty="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf" patternRole="isResponsibleOf" />
     <ContainedObjectPropertyStatementPatternRole id="124" objectProperty="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isUnderResponsabilityOf" patternRole="isUnderResponsabilityOf" />
     <ContainedConnectorPatternRole id="125" exampleLabel="label" patternRole="connector">
-      <ConnectorGraphicalRepresentation id="126" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-2.0" absoluteTextY="-14.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ConnectorGraphicalRepresentation id="126" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="-2.0" absoluteTextY="-14.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="127" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <LineConnector id="128" lineConnectorType="MINIMAL_LENGTH" />
         <TextStyle id="129" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation id="130" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="89.0" y="43.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ArtifactFromShapeGraphicalRepresentation id="130" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="89.0" y="43.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="131" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorBackgroundStyle id="132" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
         <Border id="133" top="5" bottom="5" left="5" right="5" />
@@ -225,7 +225,7 @@ BOTSubDepartment type, with a Shape connected to it.</description>
         <ShadowStyle id="135" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
         <TextStyle id="136" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ArtifactFromShapeGraphicalRepresentation>
-      <ArtifactToShapeGraphicalRepresentation id="137" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="359.0" y="43.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ArtifactToShapeGraphicalRepresentation id="137" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="359.0" y="43.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="138" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorBackgroundStyle id="139" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
         <Border id="140" top="5" bottom="5" left="5" right="5" />
