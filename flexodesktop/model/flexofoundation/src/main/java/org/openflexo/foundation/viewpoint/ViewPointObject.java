@@ -63,15 +63,25 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	}
 
 	public void notifyBindingChanged(ViewPointDataBinding binding) {
-		getPropertyChangeSupport().firePropertyChange(binding.getBindingAttribute().toString(), null, binding);
+		if (getPropertyChangeSupport() != null) {
+			if (binding != null && binding.getBindingAttribute() != null) {
+				getPropertyChangeSupport().firePropertyChange(binding.getBindingAttribute().toString(), null, binding);
+			}
+		}
 	}
 
 	public void notifyChange(String propertyName, Object oldValue, Object newValue) {
-		getPropertyChangeSupport().firePropertyChange(propertyName, oldValue, newValue);
+		if (getPropertyChangeSupport() != null) {
+			getPropertyChangeSupport().firePropertyChange(propertyName, oldValue, newValue);
+		}
 	}
 
 	public void notifyChange(InspectorBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding newValue) {
-		getPropertyChangeSupport().firePropertyChange(bindingAttribute.toString(), oldValue, newValue);
+		if (getPropertyChangeSupport() != null) {
+			if (bindingAttribute != null) {
+				getPropertyChangeSupport().firePropertyChange(bindingAttribute.toString(), oldValue, newValue);
+			}
+		}
 	}
 
 	@Override

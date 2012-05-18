@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -58,7 +59,16 @@ public abstract class AddStatement extends AssignableAction {
 
 	private ViewPointDataBinding subject;
 
-	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, true);
+	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, true) {
+		@Override
+		public Type getType() {
+			return getSubjectType();
+		}
+	};
+
+	public Type getSubjectType() {
+		return OntologyObject.class;
+	}
 
 	public BindingDefinition getSubjectBindingDefinition() {
 		return SUBJECT;

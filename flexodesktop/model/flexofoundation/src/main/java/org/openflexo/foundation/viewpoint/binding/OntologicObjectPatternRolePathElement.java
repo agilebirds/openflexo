@@ -260,6 +260,15 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					public void setBindingValue(OntologyIndividual value, Object target, BindingEvaluationContext context) {
 						// not relevant because not settable
 					}
+
+					@Override
+					public Type getType() {
+						if (((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty() != null
+								&& ((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty().getDomain() instanceof OntologyClass) {
+							return (OntologyClass) ((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty().getDomain();
+						}
+						return super.getType();
+					}
 				};
 			} else if (aPatternRole instanceof ObjectPropertyStatementPatternRole
 					&& ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty() != null
@@ -278,6 +287,15 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					@Override
 					public void setBindingValue(OntologyIndividual value, Object target, BindingEvaluationContext context) {
 						// not relevant because not settable
+					}
+
+					@Override
+					public Type getType() {
+						if (((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty() != null
+								&& ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getDomain() instanceof OntologyClass) {
+							return (OntologyClass) ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getDomain();
+						}
+						return super.getType();
 					}
 				};
 			} else {
@@ -376,9 +394,24 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				public void setBindingValue(OntologyIndividual value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
+
+				@Override
+				public Type getType() {
+					if (((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty() != null
+							&& ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getRange() instanceof OntologyClass) {
+						return (OntologyClass) ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getRange();
+					}
+					return super.getType();
+				}
 			};
 			allProperties.add(predicate);
 			allProperties.add(object);
+		}
+
+		@Override
+		public Type getType() {
+			// TODO Auto-generated method stub
+			return super.getType();
 		}
 
 	}

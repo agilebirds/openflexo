@@ -27,6 +27,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.validation.FixProposal;
@@ -62,6 +63,14 @@ public class AddObjectPropertyStatement extends AddStatement {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddObjectPropertyStatement;
+	}
+
+	@Override
+	public Type getSubjectType() {
+		if (getObjectProperty() != null && getObjectProperty().getDomain() instanceof OntologyClass) {
+			return (OntologyClass) getObjectProperty().getDomain();
+		}
+		return super.getSubjectType();
 	}
 
 	/*@Override
@@ -135,7 +144,15 @@ public class AddObjectPropertyStatement extends AddStatement {
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, true);
+	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, true) {
+		@Override
+		public Type getType() {
+			if (getObjectProperty() != null && getObjectProperty().getRange() instanceof OntologyClass) {
+				return (OntologyClass) getObjectProperty().getRange();
+			}
+			return OntologyObject.class;
+		}
+	};
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;

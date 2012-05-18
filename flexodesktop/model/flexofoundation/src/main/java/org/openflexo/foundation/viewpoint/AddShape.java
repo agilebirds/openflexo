@@ -192,10 +192,9 @@ public class AddShape extends AddShemaElementAction {
 						for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
 							v.add(new SetsContainerToTargetShape(targetEditionPattern, pr));
 						}
-					} else {
-						v.add(new SetsContainerToTopLevel());
 					}
 				}
+				v.add(new SetsContainerToTopLevel());
 				for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
 					v.add(new SetsContainerToShape(pr));
 				}

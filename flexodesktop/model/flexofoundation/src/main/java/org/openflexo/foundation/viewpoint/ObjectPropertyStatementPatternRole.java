@@ -60,8 +60,8 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole {
 		public ValidationIssue<ObjectPropertyStatementPatternRoleMustDefineAValidProperty, ObjectPropertyStatementPatternRole> applyValidation(
 				ObjectPropertyStatementPatternRole patternRole) {
 			if (patternRole.getObjectProperty() == null) {
-				return new ValidationError<ObjectPropertyStatementPatternRoleMustDefineAValidProperty, ObjectPropertyStatementPatternRole>(this,
-						patternRole, "pattern_role_does_not_define_any_valid_object_property");
+				return new ValidationError<ObjectPropertyStatementPatternRoleMustDefineAValidProperty, ObjectPropertyStatementPatternRole>(
+						this, patternRole, "pattern_role_does_not_define_any_valid_object_property");
 			}
 			return null;
 		}
