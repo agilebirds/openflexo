@@ -806,7 +806,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	}
 
-	public Class getDataClass() {
+	public Class<?> getDataClass() {
 		return dataClass;
 	}
 
@@ -1104,7 +1104,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		// Little hask to recover previously created fib
 		if (p.name.equals("controllerClassName")) {
 			try {
-				Class myControllerClass = Class.forName(p.value);
+				Class<?> myControllerClass = Class.forName(p.value);
 				setControllerClass(myControllerClass);
 			} catch (ClassNotFoundException e) {
 				logger.warning("Could not find class " + p.value);

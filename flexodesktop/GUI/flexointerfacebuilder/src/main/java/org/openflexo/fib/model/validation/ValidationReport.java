@@ -19,7 +19,8 @@
  */
 package org.openflexo.fib.model.validation;
 
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -34,19 +35,19 @@ import org.openflexo.localization.FlexoLocalization;
  */
 public class ValidationReport {
 
-	private class ValidationIssueVector extends Vector<ValidationIssue> {
+	private class ValidationIssueVector extends Vector<ValidationIssue<?, ?>> {
 
-		Vector<InformationIssue> infoIssue;
-		Vector<ValidationError> errors;
-		Vector<ValidationWarning> warnings;
+		Vector<InformationIssue<?, ?>> infoIssue;
+		Vector<ValidationError<?, ?>> errors;
+		Vector<ValidationWarning<?, ?>> warnings;
 
 		/**
          * 
          */
 		public ValidationIssueVector() {
-			infoIssue = new Vector<InformationIssue>();
-			errors = new Vector<ValidationError>();
-			warnings = new Vector<ValidationWarning>();
+			infoIssue = new Vector<InformationIssue<?, ?>>();
+			errors = new Vector<ValidationError<?, ?>>();
+			warnings = new Vector<ValidationWarning<?, ?>>();
 		}
 
 		/**
@@ -55,13 +56,13 @@ public class ValidationReport {
 		 * @see java.util.Vector#add(java.lang.Object)
 		 */
 		@Override
-		public synchronized boolean add(ValidationIssue o) {
+		public synchronized boolean add(ValidationIssue<?, ?> o) {
 			if (o instanceof InformationIssue) {
-				infoIssue.add((InformationIssue) o);
+				infoIssue.add((InformationIssue<?, ?>) o);
 			} else if (o instanceof ValidationError) {
-				errors.add((ValidationError) o);
+				errors.add((ValidationError<?, ?>) o);
 			} else if (o instanceof ValidationWarning) {
-				warnings.add((ValidationWarning) o);
+				warnings.add((ValidationWarning<?, ?>) o);
 			}
 			return super.add(o);
 		}
@@ -106,7 +107,7 @@ public class ValidationReport {
 	}
 
 	public boolean hasCustomLocalizedTitle() {
-		return (_localizedTitle != null);
+		return _localizedTitle != null;
 	}
 
 	public String getLocalizedTitle() {
@@ -127,8 +128,8 @@ public class ValidationReport {
 	}
 
 	public String getLocalizedSubTitle() {
-		return ("" + getErrorNb() + " " + FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, "errors") + ", "
-				+ getWarningNb() + " " + FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, "warnings"));
+		return "" + getErrorNb() + " " + FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, "errors") + ", "
+				+ getWarningNb() + " " + FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, "warnings");
 	}
 
 	public int getInfosNb() {
@@ -143,23 +144,23 @@ public class ValidationReport {
 		return _errorNb;
 	}
 
-	public Vector<ValidationIssue> getValidationIssues() {
+	public Vector<ValidationIssue<?, ?>> getValidationIssues() {
 		return _validationIssues;
 	}
 
-	public Vector<ValidationError> getErrors() {
+	public Vector<ValidationError<?, ?>> getErrors() {
 		return _validationIssues.errors;
 	}
 
-	public Vector<ValidationWarning> getWarnings() {
+	public Vector<ValidationWarning<?, ?>> getWarnings() {
 		return _validationIssues.warnings;
 	}
 
-	public Vector<InformationIssue> getInformationIssues() {
+	public Vector<InformationIssue<?, ?>> getInformationIssues() {
 		return _validationIssues.infoIssue;
 	}
 
-	public void addToValidationIssues(ValidationIssue issue) {
+	public void addToValidationIssues(ValidationIssue<?, ?> issue) {
 		if (issue instanceof InformationIssue) {
 			_infosNb++;
 		}
@@ -173,7 +174,7 @@ public class ValidationReport {
 		issue.setValidationReport(this);
 	}
 
-	public void removeFromValidationIssues(ValidationIssue issue) {
+	public void removeFromValidationIssues(ValidationIssue<?, ?> issue) {
 		if (_validationIssues.contains(issue)) {
 			if (issue instanceof InformationIssue) {
 				_infosNb--;
@@ -188,9 +189,8 @@ public class ValidationReport {
 		}
 	}
 
-	public void removeFromValidationIssues(Vector issues) {
-		for (Enumeration e = issues.elements(); e.hasMoreElements();) {
-			ValidationIssue issue = (ValidationIssue) e.nextElement();
+	public void removeFromValidationIssues(List<ValidationIssue<?, ?>> issues) {
+		for (ValidationIssue<?, ?> issue : issues) {
 			removeFromValidationIssues(issue);
 		}
 	}
@@ -199,10 +199,9 @@ public class ValidationReport {
 		return _rootObject;
 	}
 
-	public Vector<ValidationIssue> issuesRegarding(FIBModelObject object) {
-		Vector<ValidationIssue> returned = new Vector<ValidationIssue>();
-		for (Enumeration e = _validationIssues.elements(); e.hasMoreElements();) {
-			ValidationIssue issue = (ValidationIssue) e.nextElement();
+	public Vector<ValidationIssue<?, ?>> issuesRegarding(FIBModelObject object) {
+		Vector<ValidationIssue<?, ?>> returned = new Vector<ValidationIssue<?, ?>>();
+		for (ValidationIssue<?, ?> issue : _validationIssues) {
 			if (issue.getObject() == object) {
 				returned.add(issue);
 			}
@@ -211,16 +210,16 @@ public class ValidationReport {
 	}
 
 	public String reportAsString() {
-		StringBuffer sb = new StringBuffer();
-		for (ValidationIssue issue : _validationIssues) {
+		StringBuilder sb = new StringBuilder();
+		for (ValidationIssue<?, ?> issue : _validationIssues) {
 			sb.append(issue.toString() + "\n");
 		}
 		return sb.toString();
 	}
 
 	public String errorAsString() {
-		StringBuffer sb = new StringBuffer();
-		for (ValidationIssue issue : _validationIssues) {
+		StringBuilder sb = new StringBuilder();
+		for (ValidationIssue<?, ?> issue : _validationIssues) {
 			if (issue instanceof ValidationError) {
 				sb.append(issue.toString() + "\n");
 			}
@@ -229,8 +228,8 @@ public class ValidationReport {
 	}
 
 	public String warningAsString() {
-		StringBuffer sb = new StringBuffer();
-		for (ValidationIssue issue : _validationIssues) {
+		StringBuilder sb = new StringBuilder();
+		for (ValidationIssue<?, ?> issue : _validationIssues) {
 			if (issue instanceof ValidationWarning) {
 				sb.append(issue.toString() + "\n");
 			}
@@ -239,9 +238,8 @@ public class ValidationReport {
 	}
 
 	public void delete() {
-		Enumeration<ValidationIssue> en = ((ValidationIssueVector) _validationIssues.clone()).elements();
-		while (en.hasMoreElements()) {
-			en.nextElement().delete();
+		for (ValidationIssue<?, ?> issue : new ArrayList<ValidationIssue<?, ?>>(_validationIssues)) {
+			issue.delete();
 		}
 
 	}

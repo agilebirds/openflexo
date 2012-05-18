@@ -375,7 +375,6 @@ public abstract class FlexoExternalMain implements Runnable {
 		} finally {
 			timeout.interrupt();
 		}
-		System.exit(UNKNOWN_EXIT);
 	}
 
 	/**

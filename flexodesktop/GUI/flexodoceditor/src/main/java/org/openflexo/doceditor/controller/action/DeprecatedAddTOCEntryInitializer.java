@@ -31,7 +31,7 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.action.InvalidLevelException;
 import org.openflexo.foundation.dm.ERDiagram;
-import org.openflexo.foundation.param.DMEOEntityParameter;
+import org.openflexo.foundation.param.DMEntityParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.EnumDropDownParameter;
 import org.openflexo.foundation.param.OperationComponentParameter;
@@ -42,9 +42,7 @@ import org.openflexo.foundation.param.RoleParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.param.ViewParameter;
 import org.openflexo.foundation.toc.PredefinedSection;
-import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.ProcessSection;
-import org.openflexo.foundation.toc.ProcessSection.ProcessDocSectionSubType;
 import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -146,7 +144,7 @@ public class DeprecatedAddTOCEntryInitializer extends ActionInitializer {
 				def[4].setDepends("sectionType");
 				def[4].setConditional("sectionType=\"" + SectionTypeList.ROLE + "\"");
 
-				def[5] = new DMEOEntityParameter("entity", "entity", null);
+				def[5] = new DMEntityParameter("entity", "entity", null);
 				def[5].setDepends("sectionType");
 				def[5].setConditional("sectionType=\"" + SectionTypeList.ENTITY + "\"");
 				def[6] = new OperationComponentParameter("operationComponent", "operationComponent", null);
@@ -213,11 +211,11 @@ public class DeprecatedAddTOCEntryInitializer extends ActionInitializer {
 							return false;
 						}
 
-						action.setSubType(def[7].getValue().equals(SectionSubType.Doc) ? ProcessSection.ProcessDocSectionSubType.Doc : (def[7].getValue()
-								.equals(SectionSubType.RaciMatrix) ? ProcessSection.ProcessDocSectionSubType.RaciMatrix : (def[7].getValue().equals(
-								SectionSubType.SipocLevel2) ? ProcessSection.ProcessDocSectionSubType.SIPOCLevel2 : (def[7].getValue().equals(
-								SectionSubType.SipocLevel3) ? ProcessSection.ProcessDocSectionSubType.SIPOCLevel3
-								: ProcessSection.ProcessDocSectionSubType.OperationTable))));
+						action.setSubType(def[7].getValue().equals(SectionSubType.Doc) ? ProcessSection.ProcessDocSectionSubType.Doc
+								: def[7].getValue().equals(SectionSubType.RaciMatrix) ? ProcessSection.ProcessDocSectionSubType.RaciMatrix
+										: def[7].getValue().equals(SectionSubType.SipocLevel2) ? ProcessSection.ProcessDocSectionSubType.SIPOCLevel2
+												: def[7].getValue().equals(SectionSubType.SipocLevel3) ? ProcessSection.ProcessDocSectionSubType.SIPOCLevel3
+														: ProcessSection.ProcessDocSectionSubType.OperationTable);
 						return true;
 					}
 					if (def[1].getValue() == SectionTypeList.VIEW) {

@@ -106,6 +106,17 @@
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
+		<dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>flexointerfacebuilder</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>
 
