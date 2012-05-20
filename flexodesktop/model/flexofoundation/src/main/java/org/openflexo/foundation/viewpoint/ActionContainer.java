@@ -21,7 +21,15 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.Vector;
 
+import org.openflexo.antar.binding.BindingModel;
+
 public interface ActionContainer {
+
+	public EditionScheme getEditionScheme();
+
+	public BindingModel getBindingModel();
+
+	public BindingModel getInferedBindingModel();
 
 	public Vector<EditionAction> getActions();
 

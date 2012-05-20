@@ -58,6 +58,7 @@ import org.openflexo.fib.model.GridBagLayoutConstraints.FillType;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
@@ -78,6 +79,7 @@ import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPath
 import org.openflexo.foundation.viewpoint.binding.ListValueForListParameterPathElement;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.FlexoFIBController;
 
 public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
@@ -218,12 +220,16 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				}
 			});
 			if (listParameter.getListType() == ListType.Property) {
+				cbList.setIteratorClass(OntologyProperty.class);
 				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
+				cbList.setShowIcon(true);
+				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
+				cbList.setVGap(-2);
 			}
-			cbList.setUseScrollBar(true);
+			/*cbList.setUseScrollBar(true);
 			cbList.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			cbList.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
-			cbList.setHeight(300);
+			cbList.setHeight(300);*/
 			panel.addToSubComponents(cbList, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return cbList;
 		} else if (parameter instanceof FlexoObjectParameter) {
@@ -421,10 +427,11 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		returned.setBorderBottom(5);
 		returned.setBorderRight(10);
 		returned.setBorderLeft(10);
+		returned.setControllerClass(FlexoFIBController.class);
 
 		if (editionScheme.getDefinePopupDefaultSize()) {
-			returned.setWidth(editionScheme.getWidth());
-			returned.setHeight(editionScheme.getHeight());
+			returned.setMinWidth(editionScheme.getWidth());
+			returned.setMinHeight(editionScheme.getHeight());
 		}
 
 		Font f = returned.retrieveValidFont();
@@ -520,7 +527,9 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
 		FIBComponent component = makeFIB(action);
 		FIBDialog dialog = FIBDialog.instanciateDialog(component, action, null, true, FlexoLocalization.getMainLocalizer());
-		dialog.setMinimumSize(new Dimension(500, 50));
+		if (!action.getEditionScheme().getDefinePopupDefaultSize()) {
+			dialog.setMinimumSize(new Dimension(500, 50));
+		}
 		dialog.showDialog();
 		return (dialog.getStatus() == Status.VALIDATED);
 	}

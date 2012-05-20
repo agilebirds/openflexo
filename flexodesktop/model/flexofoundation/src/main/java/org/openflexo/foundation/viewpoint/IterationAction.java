@@ -19,11 +19,16 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
@@ -31,7 +36,7 @@ public class IterationAction extends ControlStructureAction {
 
 	private static final Logger logger = Logger.getLogger(IterationAction.class.getPackage().getName());
 
-	private String iteratorName;
+	private String iteratorName = "item";
 
 	public IterationAction() {
 	}
@@ -52,7 +57,7 @@ public class IterationAction extends ControlStructureAction {
 
 	private ViewPointDataBinding iteration;
 
-	private BindingDefinition ITERATION = new BindingDefinition("iteration", List.class, BindingDefinitionType.GET, false);
+	private BindingDefinition ITERATION = new BindingDefinition("iteration", List.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getIterationBindingDefinition() {
 		return ITERATION;
@@ -72,6 +77,15 @@ public class IterationAction extends ControlStructureAction {
 			iteration.setBindingDefinition(getIterationBindingDefinition());
 		}
 		this.iteration = iteration;
+		rebuildInferedBindingModel();
+	}
+
+	@Override
+	public void notifyBindingChanged(ViewPointDataBinding binding) {
+		super.notifyBindingChanged(binding);
+		if (binding == iteration) {
+			rebuildInferedBindingModel();
+		}
 	}
 
 	public String getIteratorName() {
@@ -80,6 +94,60 @@ public class IterationAction extends ControlStructureAction {
 
 	public void setIteratorName(String iteratorName) {
 		this.iteratorName = iteratorName;
+		rebuildInferedBindingModel();
+	}
+
+	public Type getItemType() {
+		if (getIteration() != null && getIteration().hasBinding()) {
+			Type accessedType = getIteration().getBinding().getAccessedType();
+			if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
+				return ((ParameterizedType) accessedType).getActualTypeArguments()[0];
+			}
+		}
+		return Object.class;
+	}
+
+	@Override
+	protected BindingModel buildInferedBindingModel() {
+		BindingModel returned = super.buildInferedBindingModel();
+		returned.addToBindingVariables(new BindingVariableImpl(this, getIteratorName(), getItemType()) {
+			@Override
+			public Object getBindingValue(Object target, BindingEvaluationContext context) {
+				logger.info("What should i return for " + getIteratorName() + " ? target " + target + " context=" + context);
+				return super.getBindingValue(target, context);
+			}
+
+			@Override
+			public Type getType() {
+				return getItemType();
+			}
+		});
+		return returned;
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		if (getIteration().isSet() && getIteration().isValid()) {
+			return getIteratorName() + " : " + getIteration();
+		}
+		return super.getStringRepresentation();
+	}
+
+	public static class IterationBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<IterationAction> {
+		public IterationBindingIsRequiredAndMustBeValid() {
+			super("'iteration'_binding_is_not_valid", IterationAction.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(IterationAction object) {
+			return object.getIteration();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(IterationAction object) {
+			return object.getIterationBindingDefinition();
+		}
+
 	}
 
 }

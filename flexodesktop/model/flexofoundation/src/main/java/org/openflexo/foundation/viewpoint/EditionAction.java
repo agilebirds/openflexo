@@ -77,7 +77,7 @@ public abstract class EditionAction extends EditionSchemeObject {
 		iteration
 	}
 
-	private EditionScheme _scheme;
+	// private EditionScheme _scheme;
 	private String description;
 	// private String patternRole;
 
@@ -87,17 +87,25 @@ public abstract class EditionAction extends EditionSchemeObject {
 
 	private ActionContainer actionContainer;
 
+	private BindingModel inferedBindingModel = null;
+
 	public EditionAction() {
 	}
 
 	public abstract EditionActionType getEditionActionType();
 
-	public void setScheme(EditionScheme scheme) {
-		_scheme = scheme;
+	@Override
+	public EditionScheme getEditionScheme() {
+		return getScheme();
 	}
 
 	public EditionScheme getScheme() {
-		return _scheme;
+		if (actionContainer instanceof EditionScheme) {
+			return (EditionScheme) actionContainer;
+		} else if (actionContainer != null) {
+			return actionContainer.getEditionScheme();
+		}
+		return null;
 	}
 
 	@Override
@@ -141,16 +149,32 @@ public abstract class EditionAction extends EditionSchemeObject {
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
-		return _scheme;
-	}
-
-	@Override
 	public BindingModel getBindingModel() {
-		if (getEditionScheme() != null) {
-			return getEditionScheme().getBindingModel();
+		if (getActionContainer() != null) {
+			return getActionContainer().getInferedBindingModel();
 		}
 		return null;
+	}
+
+	public BindingModel getInferedBindingModel() {
+		if (inferedBindingModel == null) {
+			rebuildInferedBindingModel();
+		}
+		return inferedBindingModel;
+	}
+
+	protected void rebuildInferedBindingModel() {
+		inferedBindingModel = buildInferedBindingModel();
+	}
+
+	protected BindingModel buildInferedBindingModel() {
+		BindingModel returned;
+		if (getActionContainer() == null) {
+			returned = new BindingModel();
+		} else {
+			returned = new BindingModel(getActionContainer().getInferedBindingModel());
+		}
+		return returned;
 	}
 
 	public BindingDefinition getConditionalBindingDefinition() {
@@ -189,6 +213,7 @@ public abstract class EditionAction extends EditionSchemeObject {
 
 	public void setActionContainer(ActionContainer actionContainer) {
 		this.actionContainer = actionContainer;
+		rebuildInferedBindingModel();
 	}
 
 	private void insertActionAtCurrentIndex(EditionAction editionAction) {

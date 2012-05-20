@@ -51,7 +51,8 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		OBJECT_PROPERTY,
 		DATA_PROPERTY,
 		FLEXO_OBJECT,
-		LIST;
+		LIST,
+		EDITION_PATTERN;
 	}
 
 	private String name;

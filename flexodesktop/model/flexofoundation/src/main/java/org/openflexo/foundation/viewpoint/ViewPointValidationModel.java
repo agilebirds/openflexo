@@ -79,6 +79,9 @@ public class ViewPointValidationModel extends ValidationModel {
 		registerRule(new AddEditionPattern.AddEditionPatternMustAddressACreationScheme());
 		registerRule(new AddEditionPattern.AddEditionPatternParametersMustBeValid());
 
+		registerRule(new ConditionalAction.ConditionBindingIsRequiredAndMustBeValid());
+		registerRule(new IterationAction.IterationBindingIsRequiredAndMustBeValid());
+
 		// Notify that the validation model is complete and that inheritance
 		// computation could be performed
 		update();

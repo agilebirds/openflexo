@@ -144,7 +144,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	@Override
 	public void addToActions(EditionAction action) {
-		action.setScheme(this);
+		// action.setScheme(this);
 		action.setActionContainer(this);
 		actions.add(action);
 		setChanged();
@@ -154,7 +154,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	@Override
 	public void removeFromActions(EditionAction action) {
-		action.setScheme(null);
+		// action.setScheme(null);
 		action.setActionContainer(null);
 		actions.remove(action);
 		setChanged();
@@ -168,7 +168,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	@Override
 	public void insertActionAtIndex(EditionAction action, int index) {
-		action.setScheme(this);
+		// action.setScheme(this);
 		action.setActionContainer(this);
 		actions.insertElementAt(action, index);
 		setChanged();
@@ -495,6 +495,14 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		return newParameter;
 	}
 
+	public EditionSchemeParameter createEditionPatternParameter() {
+		EditionSchemeParameter newParameter = new EditionPatternParameter();
+		newParameter.setName("editionPattern");
+		// newParameter.setLabel("label");
+		addToParameters(newParameter);
+		return newParameter;
+	}
+
 	public EditionSchemeParameter deleteParameter(EditionSchemeParameter aParameter) {
 		removeFromParameters(aParameter);
 		aParameter.delete();
@@ -524,6 +532,11 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			createBindingModel();
 		}
 		return _bindingModel;
+	}
+
+	@Override
+	public BindingModel getInferedBindingModel() {
+		return getBindingModel();
 	}
 
 	public void updateBindingModels() {

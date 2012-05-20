@@ -40,6 +40,14 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 	}*/
 
 	@Override
+	protected void rebuildInferedBindingModel() {
+		super.rebuildInferedBindingModel();
+		for (EditionAction action : getActions()) {
+			action.rebuildInferedBindingModel();
+		}
+	}
+
+	@Override
 	public String getInspectorName() {
 		return null;
 	}
@@ -58,7 +66,7 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 
 	@Override
 	public void addToActions(EditionAction action) {
-		action.setScheme(getEditionScheme());
+		// action.setScheme(getEditionScheme());
 		action.setActionContainer(this);
 		actions.add(action);
 		setChanged();
@@ -68,7 +76,7 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 
 	@Override
 	public void removeFromActions(EditionAction action) {
-		action.setScheme(null);
+		// action.setScheme(null);
 		action.setActionContainer(null);
 		actions.remove(action);
 		setChanged();
@@ -82,6 +90,8 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 
 	@Override
 	public void insertActionAtIndex(EditionAction action, int index) {
+		// action.setScheme(getEditionScheme());
+		action.setActionContainer(this);
 		actions.insertElementAt(action, index);
 		setChanged();
 		notifyObservers();

@@ -326,6 +326,12 @@
 		<property name="list" xmlTag="list" attribute="YES" />
 	</entity>
 
+	<entity
+		name="org.openflexo.foundation.viewpoint.EditionPatternParameter" xmlTag="EditionPatternParameter">
+		<property name="editionPatternTypeURI" xmlTag="editionPatternTypeURI" attribute="YES" />
+	</entity>
+
+
 	<entity name="org.openflexo.foundation.viewpoint.EditionAction" abstract="yes">
 		<property name="description" xmlTag="description" />
 		<property name="conditional" xmlTag="conditional" attribute="YES" />
