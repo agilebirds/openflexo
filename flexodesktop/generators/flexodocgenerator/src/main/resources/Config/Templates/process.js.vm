@@ -209,7 +209,7 @@
             
             divDescriptionElement.appendChild(pMailElement);
         #end
-        #if(${node.getMetricsValues()} && !${node.getMetricsValues().isEmpty()})
+        #if($generator.isInstance($node,"org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner") && !${node.getMetricsValues().isEmpty()})
             var divMetricsElement = document.createElement('div');
             divMetricsElement.className = 'htmlDocMetrics';
             
@@ -408,7 +408,10 @@
 #end
 
 #macro(getCreateContentFunction $node)
-    #if(${node.getLevel()} == "PROCESS" || (${node.getLevel()} == "ACTIVITY" && (${node.getOperationPetriGraph()} || ${node.getExecutionPetriGraph()})) || ${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
+    #if(${node.getLevel()} == "PROCESS" 
+        || (${generator.isInstance($node,"org.openflexo.foundation.wkf.node.AbstractActivityNode")} && ${node.getOperationPetriGraph()})
+        || (${generator.isInstance($node,"org.openflexo.foundation.wkf.node.SelfExecutableActivityNode")} && ${node.getExecutionPetriGraph()}) 
+        || ${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
         function(fatherDiv, flexoNode)
         {
             #set($screenShot = "")
