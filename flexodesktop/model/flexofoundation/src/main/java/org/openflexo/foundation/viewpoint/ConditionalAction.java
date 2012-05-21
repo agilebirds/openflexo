@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -39,10 +38,10 @@ public class ConditionalAction extends ControlStructureAction {
 		return EditionActionType.Conditional;
 	}
 
-	@Override
+	/*@Override
 	public List<PatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles();
-	}
+	}*/
 
 	public boolean evaluateConditional(EditionSchemeAction action) {
 		return (Boolean) getCondition().getBindingValue(action);
@@ -50,7 +49,7 @@ public class ConditionalAction extends ControlStructureAction {
 
 	private ViewPointDataBinding condition;
 
-	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, false);
+	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getConditionBindingDefinition() {
 		return CONDITION;
@@ -70,6 +69,31 @@ public class ConditionalAction extends ControlStructureAction {
 			condition.setBindingDefinition(getConditionalBindingDefinition());
 		}
 		this.condition = condition;
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		if (getCondition().isSet() && getCondition().isValid()) {
+			return getCondition() + " ?";
+		}
+		return super.getStringRepresentation();
+	}
+
+	public static class ConditionBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ConditionalAction> {
+		public ConditionBindingIsRequiredAndMustBeValid() {
+			super("'condition'_binding_is_not_valid", ConditionalAction.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(ConditionalAction object) {
+			return object.getCondition();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(ConditionalAction object) {
+			return object.getConditionBindingDefinition();
+		}
+
 	}
 
 }

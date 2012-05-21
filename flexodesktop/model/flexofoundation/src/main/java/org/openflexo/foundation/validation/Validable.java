@@ -92,4 +92,10 @@ public interface Validable {
 	 */
 	public String getFullyQualifiedName();
 
+	/**
+	 * Return a flag indicating if this object was deleted
+	 * 
+	 * @return
+	 */
+	public boolean isDeleted();
 }

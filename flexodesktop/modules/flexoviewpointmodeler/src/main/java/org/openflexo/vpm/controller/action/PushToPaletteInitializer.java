@@ -40,7 +40,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
 import org.openflexo.vpm.drawingshema.CalcDrawingShemaModuleView;
 
@@ -58,8 +58,8 @@ public class PushToPaletteInitializer extends ActionInitializer {
 	}
 
 	@Override
-	public CEDController getController() {
-		return (CEDController) super.getController();
+	public VPMController getController() {
+		return (VPMController) super.getController();
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				if (dialog.getStatus() == Status.VALIDATED) {
 					return true;

@@ -19,17 +19,18 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.IsAStatement;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
+public class AddIsAStatement extends AddStatement {
 
 	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
 
@@ -41,10 +42,10 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 		return EditionActionType.AddIsAStatement;
 	}
 
-	@Override
+	/*@Override
 	public List<IsAStatementPatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles(IsAStatementPatternRole.class);
-	}
+	}*/
 
 	public OntologyObject getPropertyFather(EditionSchemeAction action) {
 		return (OntologyObject) getFather().getBindingValue(action);
@@ -75,6 +76,11 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 		father.setBindingAttribute(EditionActionBindingAttribute.father);
 		father.setBindingDefinition(getFatherBindingDefinition());
 		this.father = father;
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return IsAStatement.class;
 	}
 
 }

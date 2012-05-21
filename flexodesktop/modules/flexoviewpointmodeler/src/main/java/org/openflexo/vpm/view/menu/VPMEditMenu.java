@@ -27,37 +27,40 @@ package org.openflexo.vpm.view.menu;
  */
 import java.util.logging.Logger;
 
-import org.openflexo.view.menu.ToolsMenu;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.view.menu.EditMenu;
+import org.openflexo.vpm.controller.VPMController;
 
 /**
- * 'Tools' menu for this Module
+ * 'Edit' menu for this module
  * 
  * @author yourname
  */
-public class CEDToolsMenu extends ToolsMenu {
+public class VPMEditMenu extends EditMenu {
 
-	private static final Logger logger = Logger.getLogger(CEDToolsMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VPMEditMenu.class.getPackage().getName());
 
 	// ==========================================================================
 	// ============================= Instance Variables
 	// =========================
 	// ==========================================================================
 
-	protected CEDController _xxxController;
+	protected VPMController _xxxController;
 
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public CEDToolsMenu(CEDController controller) {
+	public VPMEditMenu(VPMController controller) {
 		super(controller);
 		_xxxController = controller;
-		// Put your actions here
+		addSeparator();
+		// Add actions here
+		// add(deleteItem = new FlexoMenuItem(XXXDelete.actionType, getController()));
+		// add(cutItem = new FlexoMenuItem(XXXCut.actionType, getController()));
+		// add(copyItem = new FlexoMenuItem(XXXCopy.actionType, getController()));
+		// add(pasteItem = new FlexoMenuItem(XXXPaste.actionType, getController()));
+		// add(selectAllItem = new FlexoMenuItem(XXXSelectAll.actionType, getController()));
 	}
 
-	public CEDController getXXXController() {
-		return _xxxController;
-	}
 }

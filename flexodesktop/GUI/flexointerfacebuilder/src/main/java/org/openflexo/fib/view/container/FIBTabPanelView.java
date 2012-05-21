@@ -138,4 +138,8 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 			index++;
 		}
 	}
+
+	public void setSelectedIndex(int index) {
+		getJComponent().setSelectedIndex(index);
+	}
 }

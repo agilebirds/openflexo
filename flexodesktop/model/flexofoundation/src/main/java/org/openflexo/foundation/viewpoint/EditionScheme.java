@@ -26,10 +26,11 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionScheme extends ViewPointObject implements ActionContainer {
+public abstract class EditionScheme extends EditionSchemeObject implements ActionContainer {
 
 	protected BindingModel _bindingModel;
 
@@ -64,8 +65,18 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 	}
 
 	@Override
+	public String getFullyQualifiedName() {
+		return (getEditionPattern() != null ? getEditionPattern().getFullyQualifiedName() : "null") + "." + getName();
+	}
+
+	@Override
 	public String getURI() {
-		return getEditionPattern().getURI() + "#" + getName();
+		return getEditionPattern().getURI() + "." + getName();
+	}
+
+	@Override
+	public EditionScheme getEditionScheme() {
+		return this;
 	}
 
 	public abstract EditionSchemeType getEditionSchemeType();
@@ -91,6 +102,7 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 		this.label = label;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return _editionPattern;
 	}
@@ -109,14 +121,14 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 		this.description = description;
 	}
 
-	public EditionAction getAction(PatternRole role) {
+	/*public EditionAction getAction(PatternRole role) {
 		for (EditionAction a : getActions()) {
 			if (a.getPatternRole() == role) {
 				return a;
 			}
 		}
 		return null;
-	}
+	}*/
 
 	@Override
 	public Vector<EditionAction> getActions() {
@@ -132,7 +144,8 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 
 	@Override
 	public void addToActions(EditionAction action) {
-		action.setScheme(this);
+		// action.setScheme(this);
+		action.setActionContainer(this);
 		actions.add(action);
 		setChanged();
 		notifyObservers();
@@ -141,10 +154,26 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 
 	@Override
 	public void removeFromActions(EditionAction action) {
-		action.setScheme(null);
+		// action.setScheme(null);
+		action.setActionContainer(null);
 		actions.remove(action);
 		setChanged();
 		notifyObservers();
+	}
+
+	@Override
+	public int getIndex(EditionAction action) {
+		return actions.indexOf(action);
+	}
+
+	@Override
+	public void insertActionAtIndex(EditionAction action, int index) {
+		// action.setScheme(this);
+		action.setActionContainer(this);
+		actions.insertElementAt(action, index);
+		setChanged();
+		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override
@@ -262,7 +291,9 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 	@Override
 	public AddShape createAddShapeAction() {
 		AddShape newAction = new AddShape();
-		newAction.setPatternRole(getEditionPattern().getDefaultShapePatternRole());
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
 		addToActions(newAction);
 		return newAction;
 	}
@@ -312,7 +343,9 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 	@Override
 	public AddConnector createAddConnectorAction() {
 		AddConnector newAction = new AddConnector();
-		newAction.setPatternRole(getEditionPattern().getDefaultConnectorPatternRole());
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
 		addToActions(newAction);
 		return newAction;
 	}
@@ -462,6 +495,14 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 		return newParameter;
 	}
 
+	public EditionSchemeParameter createEditionPatternParameter() {
+		EditionSchemeParameter newParameter = new EditionPatternParameter();
+		newParameter.setName("editionPattern");
+		// newParameter.setLabel("label");
+		addToParameters(newParameter);
+		return newParameter;
+	}
+
 	public EditionSchemeParameter deleteParameter(EditionSchemeParameter aParameter) {
 		removeFromParameters(aParameter);
 		aParameter.delete();
@@ -469,11 +510,11 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 	}
 
 	public void finalizeEditionSchemeDeserialization() {
-		for (EditionAction a : getActions()) {
+		/*for (EditionAction a : getActions()) {
 			if (a.getPatternRole() != null) {
 				a.updatePatternRoleType();
 			}
-		}
+		}*/
 		updateBindingModels();
 	}
 
@@ -491,6 +532,11 @@ public abstract class EditionScheme extends ViewPointObject implements ActionCon
 			createBindingModel();
 		}
 		return _bindingModel;
+	}
+
+	@Override
+	public BindingModel getInferedBindingModel() {
+		return getBindingModel();
 	}
 
 	public void updateBindingModels() {

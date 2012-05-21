@@ -29,7 +29,7 @@ import org.openflexo.foundation.viewpoint.action.DeleteViewPointPalette;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class DeleteCalcPaletteInitializer extends ActionInitializer {
 
@@ -50,8 +50,8 @@ public class DeleteCalcPaletteInitializer extends ActionInitializer {
 	}
 
 	@Override
-	public CEDController getController() {
-		return (CEDController) super.getController();
+	public VPMController getController() {
+		return (VPMController) super.getController();
 	}
 
 	@Override

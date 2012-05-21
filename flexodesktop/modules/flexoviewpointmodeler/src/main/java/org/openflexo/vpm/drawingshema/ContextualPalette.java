@@ -167,7 +167,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 
 				for (EditionAction action : dropScheme.getActions()) {
 					if (action instanceof AddShape) {
-						ShapePatternRole role = (ShapePatternRole) action.getPatternRole();
+						ShapePatternRole role = ((AddShape) action).getPatternRole();
 						ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) viewPointPaletteElement
 								.getOverridingGraphicalRepresentation(role);
 						if (shapeGR == null) {

@@ -134,7 +134,9 @@ public abstract class ValidationModel extends FlexoListModel {
 				notifyObservers(new ValidationProgressNotification(object, next));
 			}
 
-			addedIssues += performValidation(next, report);
+			if (!next.isDeleted()) {
+				addedIssues += performValidation(next, report);
+			}
 
 			/*ValidationRuleSet rules = getValidationRulesForObjectType(next.getClass());
 			if (logger.isLoggable(Level.FINE))
@@ -200,7 +202,14 @@ public abstract class ValidationModel extends FlexoListModel {
 	}
 
 	private <R extends ValidationRule<R, V>, V extends Validable> boolean performRuleValidation(R rule, V next, ValidationReport report) {
-		ValidationIssue<R, V> issue = rule.getIsEnabled() ? rule.applyValidation(next) : null;
+		ValidationIssue<R, V> issue = null;
+		try {
+			issue = rule.getIsEnabled() ? rule.applyValidation(next) : null;
+		} catch (Exception e) {
+			logger.warning("Exception occured during validation: " + e.getMessage() + " object was " + next + " deleted="
+					+ next.isDeleted());
+			e.printStackTrace();
+		}
 		if (issue != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Adding issue " + issue);

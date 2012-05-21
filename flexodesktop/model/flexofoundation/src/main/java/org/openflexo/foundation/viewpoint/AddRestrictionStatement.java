@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -27,11 +27,12 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.RestrictionStatement;
 import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddRestrictionStatement extends AddStatement<RestrictionStatementPatternRole> {
+public class AddRestrictionStatement extends AddStatement {
 
 	private static final Logger logger = Logger.getLogger(AddRestrictionStatement.class.getPackage().getName());
 
@@ -45,10 +46,10 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 		return EditionActionType.AddRestrictionStatement;
 	}
 
-	@Override
+	/*@Override
 	public List<RestrictionStatementPatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles(RestrictionStatementPatternRole.class);
-	}
+	}*/
 
 	public String _getPropertyURI() {
 		return propertyURI;
@@ -162,6 +163,11 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 
 	public int getCardinality(EditionSchemeAction action) {
 		return ((Number) getCardinality().getBindingValue(action)).intValue();
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return RestrictionStatement.class;
 	}
 
 }

@@ -76,6 +76,7 @@ import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.swing.SwingUtils;
 import org.openflexo.swing.TextFieldCustomPopup;
@@ -727,6 +728,18 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
+		if (getBindingDefinition() != null && getBindingDefinition().getIsMandatory() && getEditedObject() == null) {
+			getLabel().setVisible(true);
+			getLabel().setIcon(UtilsIconLibrary.WARNING_ICON);
+		} else if (getEditedObject() != null && !getEditedObject().isBindingValid()) {
+			getLabel().setVisible(true);
+			getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
+		} else if (getEditedObject() != null && getEditedObject().isBindingValid()) {
+			getLabel().setVisible(true);
+			getLabel().setIcon(UtilsIconLibrary.OK_ICON);
+		} else {
+			getLabel().setVisible(false);
+		}
 	}
 
 	public void resetMethodCallPanel() {
@@ -866,6 +879,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				_selectorPanel.fireBindingDefinitionChanged();
 			}
 			registerListenerForBindingDefinition();
+			updateCustomPanel(getEditedObject());
 		}
 	}
 

@@ -210,7 +210,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public void save() {
-		logger.info("Saving calc to " + xmlFile.getAbsolutePath() + "...");
+		logger.info("Saving ViewPoint to " + xmlFile.getAbsolutePath() + "...");
 
 		// Following was used to debug (display purpose only)
 		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
@@ -336,6 +336,11 @@ public class ViewPoint extends ViewPointObject {
 			System.out.println("Found: " + clazz);
 		}*/
 
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getURI();
 	}
 
 	public File getViewPointDirectory() {

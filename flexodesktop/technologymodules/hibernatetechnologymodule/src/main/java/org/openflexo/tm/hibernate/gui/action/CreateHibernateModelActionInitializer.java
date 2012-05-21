@@ -55,7 +55,7 @@ public class CreateHibernateModelActionInitializer extends
 		return new FlexoActionInitializer<CreateHibernateModelAction>() {
 			@Override
 			public boolean run(ActionEvent e, CreateHibernateModelAction action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

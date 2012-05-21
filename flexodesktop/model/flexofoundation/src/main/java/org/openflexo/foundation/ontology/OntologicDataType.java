@@ -56,10 +56,26 @@ public enum OntologicDataType {
 			return literal.getInt();
 		}
 	},
-	Short {
+	Int {
 		@Override
 		public Class<?> getAccessedType() {
 			return Integer.class;
+		}
+
+		@Override
+		public java.lang.String getURI() {
+			return "http://www.w3.org/2001/XMLSchema#int";
+		}
+
+		@Override
+		public Object valueFromLiteral(Literal literal) {
+			return literal.getInt();
+		}
+	},
+	Short {
+		@Override
+		public Class<?> getAccessedType() {
+			return Short.class;
 		}
 
 		@Override
@@ -75,7 +91,7 @@ public enum OntologicDataType {
 	Long {
 		@Override
 		public Class<?> getAccessedType() {
-			return Integer.class;
+			return Long.class;
 		}
 
 		@Override
@@ -91,7 +107,7 @@ public enum OntologicDataType {
 	Byte {
 		@Override
 		public Class<?> getAccessedType() {
-			return Integer.class;
+			return Byte.class;
 		}
 
 		@Override
@@ -107,7 +123,7 @@ public enum OntologicDataType {
 	Float {
 		@Override
 		public Class<?> getAccessedType() {
-			return Integer.class;
+			return Float.class;
 		}
 
 		@Override
@@ -123,7 +139,7 @@ public enum OntologicDataType {
 	Double {
 		@Override
 		public Class<?> getAccessedType() {
-			return Integer.class;
+			return Double.class;
 		}
 
 		@Override
@@ -139,7 +155,7 @@ public enum OntologicDataType {
 	Boolean {
 		@Override
 		public Class<?> getAccessedType() {
-			return Integer.class;
+			return Boolean.class;
 		}
 
 		@Override

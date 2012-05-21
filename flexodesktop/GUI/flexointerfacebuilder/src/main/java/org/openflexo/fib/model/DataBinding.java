@@ -240,7 +240,11 @@ public class DataBinding implements StringConvertable<DataBinding> {
 			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
 		}
 
-		if (!binding.isBindingValid()) {
+		if (binding == null) {
+			logger.warning("Unexpected null binding for [" + getUnparsedBinding() + "]");
+		}
+
+		if (binding != null && !binding.isBindingValid()) {
 			if (!silentMode) {
 				logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
 						+ (getOwner() != null ? getOwner().getRootComponent() : null));

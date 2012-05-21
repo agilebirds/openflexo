@@ -61,7 +61,7 @@ public class CreateImplementationModelInitializer extends ActionInitializer {
 				if (action.skipDialog) {
 					return true;
 				}
-				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

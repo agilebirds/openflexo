@@ -24,7 +24,7 @@ import java.io.File;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.VPMModule;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 
 public class ReviewUnsavedViewPointModelerDialogEDITOR {
@@ -35,7 +35,7 @@ public class ReviewUnsavedViewPointModelerDialogEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			public Object[] getData() 
 			{
-				CEDController controller = null;
+				VPMController controller = null;
 				try {
 					VPMModule module = new VPMModule();
 					controller = module.getCEDController();

@@ -25,16 +25,25 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewElement;
+import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class GraphicalAction extends EditionAction<GraphicalElementPatternRole> {
+public class GraphicalAction extends EditionAction {
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
 
 	private GraphicalFeature<?, ?> graphicalFeature = null;
 	private ViewPointDataBinding value;
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, true) {
 		@Override
 		public java.lang.reflect.Type getType() {
 			if (getGraphicalFeature() != null) {
@@ -52,10 +61,10 @@ public class GraphicalAction extends EditionAction<GraphicalElementPatternRole> 
 		return EditionActionType.GraphicalAction;
 	}
 
-	@Override
+	/*@Override
 	public List<GraphicalElementPatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles(GraphicalElementPatternRole.class);
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
@@ -104,7 +113,7 @@ public class GraphicalAction extends EditionAction<GraphicalElementPatternRole> 
 
 	private List<GraphicalFeature<?, ?>> availableFeatures = null;
 
-	@Override
+	/*@Override
 	public GraphicalElementPatternRole getPatternRole() {
 		try {
 			return super.getPatternRole();
@@ -120,23 +129,26 @@ public class GraphicalAction extends EditionAction<GraphicalElementPatternRole> 
 		System.out.println("set pattern role with " + patternRole);
 		super.setPatternRole(patternRole);
 		availableFeatures = null;
-	}
+	}*/
 
 	public List<GraphicalFeature<?, ?>> getAvailableGraphicalFeatures() {
 		if (availableFeatures == null) {
 			availableFeatures = new Vector<GraphicalFeature<?, ?>>();
-			if (getPatternRole() instanceof GraphicalElementPatternRole) {
-				for (GraphicalFeature<?, ?> GF : GraphicalElementPatternRole.AVAILABLE_FEATURES) {
-					availableFeatures.add(GF);
-				}
-				if (getPatternRole() instanceof ShapePatternRole) {
-					for (GraphicalFeature<?, ?> GF : ShapePatternRole.AVAILABLE_FEATURES) {
+			if (getSubject().isSet() && getSubject().isValid()) {
+				Class accessedClass = TypeUtils.getBaseClass(getSubject().getBinding().getAccessedType());
+				if (ViewObject.class.isAssignableFrom(accessedClass)) {
+					for (GraphicalFeature<?, ?> GF : GraphicalElementPatternRole.AVAILABLE_FEATURES) {
 						availableFeatures.add(GF);
 					}
-				}
-				if (getPatternRole() instanceof ConnectorPatternRole) {
-					for (GraphicalFeature<?, ?> GF : ConnectorPatternRole.AVAILABLE_FEATURES) {
-						availableFeatures.add(GF);
+					if (ViewShape.class.isAssignableFrom(accessedClass)) {
+						for (GraphicalFeature<?, ?> GF : ShapePatternRole.AVAILABLE_FEATURES) {
+							availableFeatures.add(GF);
+						}
+					}
+					if (ViewConnector.class.isAssignableFrom(accessedClass)) {
+						for (GraphicalFeature<?, ?> GF : ConnectorPatternRole.AVAILABLE_FEATURES) {
+							availableFeatures.add(GF);
+						}
 					}
 				}
 			}
@@ -155,6 +167,118 @@ public class GraphicalAction extends EditionAction<GraphicalElementPatternRole> 
 
 	public void _setGraphicalFeatureName(String featureName) {
 		_graphicalFeatureName = featureName;
+	}
+
+	private ViewPointDataBinding subject;
+
+	private BindingDefinition SUBJECT = new BindingDefinition("subject", ViewElement.class, BindingDefinitionType.GET, true);
+
+	public BindingDefinition getSubjectBindingDefinition() {
+		return SUBJECT;
+	}
+
+	public ViewPointDataBinding getSubject() {
+		if (subject == null) {
+			subject = new ViewPointDataBinding(this, EditionActionBindingAttribute.subject, getSubjectBindingDefinition());
+		}
+		return subject;
+	}
+
+	public void setSubject(ViewPointDataBinding subject) {
+		if (subject != null) {
+			subject.setOwner(this);
+			subject.setBindingAttribute(EditionActionBindingAttribute.subject);
+			subject.setBindingDefinition(getSubjectBindingDefinition());
+		}
+		this.subject = subject;
+	}
+
+	public ViewElement getSubject(EditionSchemeAction action) {
+		return (ViewElement) getSubject().getBindingValue(action);
+	}
+
+	/*@Deprecated
+	public String _getPatternRoleName() {
+		return getSubject().toString();
+	}
+
+	@Deprecated
+	public void _setPatternRoleName(String patternRole) {
+		getSubject().setUnparsedBinding(patternRole);
+	}*/
+
+	@Override
+	public void notifyBindingChanged(ViewPointDataBinding binding) {
+		super.notifyBindingChanged(binding);
+		if (binding == getSubject()) {
+			availableFeatures = null;
+		}
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		return getClass().getSimpleName() + " (" + getSubject() + "." + _getGraphicalFeatureName() + "=" + getValue() + ")";
+	}
+
+	public static class GraphicalActionMustHaveASubject extends ValidationRule<GraphicalActionMustHaveASubject, GraphicalAction> {
+		public GraphicalActionMustHaveASubject() {
+			super(GraphicalAction.class, "graphical_action_must_have_a_subject");
+		}
+
+		@Override
+		public ValidationIssue<GraphicalActionMustHaveASubject, GraphicalAction> applyValidation(GraphicalAction graphicalAction) {
+			if (graphicalAction.getSubject().isSet() && graphicalAction.getSubject().isValid()) {
+				return null;
+			} else {
+				Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>> v = new Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>>();
+				for (ShapePatternRole pr : graphicalAction.getEditionPattern().getShapePatternRoles()) {
+					v.add(new SetsPatternRoleForSubject(pr));
+				}
+				for (ConnectorPatternRole pr : graphicalAction.getEditionPattern().getConnectorPatternRoles()) {
+					v.add(new SetsPatternRoleForSubject(pr));
+				}
+				return new ValidationError<GraphicalActionMustHaveASubject, GraphicalAction>(this, graphicalAction,
+						"graphical_action_has_no_valid_subject", v);
+			}
+		}
+
+		protected static class SetsPatternRoleForSubject extends FixProposal<GraphicalActionMustHaveASubject, GraphicalAction> {
+
+			private GraphicalElementPatternRole patternRole;
+
+			public SetsPatternRoleForSubject(GraphicalElementPatternRole patternRole) {
+				super("set_subject_to_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public GraphicalElementPatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				GraphicalAction graphicalAction = getObject();
+				graphicalAction.setSubject(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+	}
+
+	public static class GraphicalActionMustDefineAValue extends BindingIsRequiredAndMustBeValid<GraphicalAction> {
+		public GraphicalActionMustDefineAValue() {
+			super("'value'_binding_is_not_valid", GraphicalAction.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(GraphicalAction object) {
+			return object.getValue();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(GraphicalAction object) {
+			return object.getValueBindingDefinition();
+		}
+
 	}
 
 }

@@ -32,7 +32,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class AddEditionPatternInitializer extends ActionInitializer {
 
@@ -64,7 +64,7 @@ public class AddEditionPatternInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddEditionPattern>() {
 			@Override
 			public boolean run(ActionEvent e, AddEditionPattern action) {
-				((CEDController) getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
+				((VPMController) getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
 				return true;
 			}
 		};

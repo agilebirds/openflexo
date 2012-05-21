@@ -26,10 +26,10 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
@@ -41,7 +41,7 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class EditionPatternInspector extends ViewPointObject implements Bindable {
+public class EditionPatternInspector extends EditionPatternObject implements Bindable {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternInspector.class.getPackage().toString());
 
@@ -63,6 +63,7 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 		entries = new Vector<InspectorEntry>();
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return _editionPattern;
 	}

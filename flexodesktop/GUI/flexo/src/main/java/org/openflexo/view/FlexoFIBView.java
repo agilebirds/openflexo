@@ -52,6 +52,7 @@ public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements 
 	private O representedObject;
 	private FlexoController controller;
 	private FIBView fibView;
+	private FlexoFIBController<O> fibController;
 
 	public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
 		this(representedObject, controller, fibFile, false, progress);
@@ -77,7 +78,7 @@ public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements 
 		this.controller = controller;
 		representedObject.addObserver(this);
 
-		FlexoFIBController<O> fibController = createFibController(fibComponent, controller);
+		fibController = createFibController(fibComponent, controller);
 
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("build_view"));
@@ -124,7 +125,7 @@ public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements 
 		} else if (fibComponent.getControllerClass() != null) {
 			logger.warning("Controller for component " + fibComponent + " is not an instanceof FlexoFIBController");
 		}
-		return new FlexoFIBController<O>(fibComponent, controller);
+		return fibController = new FlexoFIBController<O>(fibComponent, controller);
 	}
 
 	public FlexoController getFlexoController() {
@@ -151,6 +152,14 @@ public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements 
 
 	public FIBView getFIBView() {
 		return fibView;
+	}
+
+	public FlexoFIBController<O> getFIBController() {
+		return fibController;
+	}
+
+	public FIBView getFIBView(String componentName) {
+		return fibController.viewForComponent(componentName);
 	}
 
 	public void deleteView() {

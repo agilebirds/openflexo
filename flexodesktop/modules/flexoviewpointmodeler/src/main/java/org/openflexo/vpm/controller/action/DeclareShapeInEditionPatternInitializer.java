@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 
@@ -50,8 +50,8 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 	}
 
 	@Override
-	public CEDController getController() {
-		return (CEDController) super.getController();
+	public VPMController getController() {
+		return (VPMController) super.getController();
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DeclareShapeInEditionPattern action) {
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

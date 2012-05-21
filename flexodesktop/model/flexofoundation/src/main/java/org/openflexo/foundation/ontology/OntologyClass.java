@@ -386,6 +386,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 
 	@Override
 	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+		// System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
 		if (aType instanceof OntologyClass) {
 			return isSuperConceptOf((OntologyClass) aType);
 		}

@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CreateObjectPropertyInitializer extends ActionInitializer {
 
@@ -54,7 +54,7 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateObjectProperty>() {
 			@Override
 			public boolean run(ActionEvent e, CreateObjectProperty action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
@@ -66,7 +66,7 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateObjectProperty>() {
 			@Override
 			public boolean run(ActionEvent e, CreateObjectProperty action) {
-				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
+				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
 				return true;
 			}
 		};

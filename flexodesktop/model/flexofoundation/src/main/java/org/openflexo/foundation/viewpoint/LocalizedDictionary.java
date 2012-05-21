@@ -330,4 +330,5 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	public LocalizedDelegate getParent() {
 		return FlexoLocalization.getMainLocalizer();
 	}
+
 }

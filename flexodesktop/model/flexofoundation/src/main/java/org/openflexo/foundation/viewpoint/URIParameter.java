@@ -37,7 +37,7 @@ public class URIParameter extends EditionSchemeParameter {
 
 	private ViewPointDataBinding baseURI;
 
-	private BindingDefinition BASE_URI = new BindingDefinition("baseURI", String.class, BindingDefinitionType.GET, false);
+	private BindingDefinition BASE_URI = new BindingDefinition("baseURI", String.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getBaseURIBindingDefinition() {
 		return BASE_URI;
@@ -147,6 +147,23 @@ public class URIParameter extends EditionSchemeParameter {
 		} else {
 			return null;
 		}
+	}
+
+	public static class BaseURIBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<URIParameter> {
+		public BaseURIBindingIsRequiredAndMustBeValid() {
+			super("'base_uri'_binding_is_required", URIParameter.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(URIParameter object) {
+			return object.getBaseURI();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(URIParameter object) {
+			return object.getBaseURIBindingDefinition();
+		}
+
 	}
 
 }

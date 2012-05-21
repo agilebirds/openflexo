@@ -19,6 +19,6 @@
     <Localized key="uri" lang="French">URI</Localized>
     <Localized key="uri" lang="Dutch">URI</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Ontology calc" />
+  <Parameter name="title" value="View Point" />
 </Panel>
 

@@ -26,7 +26,7 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public abstract class AbstractAssertion extends ViewPointObject {
+public abstract class AbstractAssertion extends EditionSchemeObject {
 
 	private AddIndividual _action;
 
@@ -42,6 +42,7 @@ public abstract class AbstractAssertion extends ViewPointObject {
 		return getAction().getScheme();
 	}
 
+	@Override
 	public EditionScheme getEditionScheme() {
 		return getScheme();
 	}
@@ -61,6 +62,7 @@ public abstract class AbstractAssertion extends ViewPointObject {
 		return true;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return getScheme().getEditionPattern();
 	}

@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.vpm.controller.CEDBrowser;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMBrowser;
+import org.openflexo.vpm.controller.VPMController;
 
 /**
  * Represents the view for the browser of this module
@@ -41,14 +41,14 @@ public class CEDBrowserView extends BrowserView {
 	// ==================================
 	// ==========================================================================
 
-	protected CEDController _controller;
+	protected VPMController _controller;
 
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public CEDBrowserView(CEDBrowser browser, CEDController controller, SelectionPolicy selectionPolicy) {
+	public CEDBrowserView(VPMBrowser browser, VPMController controller, SelectionPolicy selectionPolicy) {
 		super(browser, controller.getKeyEventListener(), controller.getEditor(), selectionPolicy);
 		_controller = controller;
 	}

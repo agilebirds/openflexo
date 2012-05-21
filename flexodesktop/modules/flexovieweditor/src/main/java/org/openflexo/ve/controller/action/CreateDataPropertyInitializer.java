@@ -54,7 +54,7 @@ public class CreateDataPropertyInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateDataProperty>() {
 			@Override
 			public boolean run(ActionEvent e, CreateDataProperty action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.CREATE_DATA_PROPERTY_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.CREATE_DATA_PROPERTY_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

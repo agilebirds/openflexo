@@ -212,4 +212,5 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	public BindingModel getBindingModel() {
 		return getViewPoint().getBindingModel();
 	}
+
 }

@@ -55,7 +55,7 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<DeleteViewElements>() {
 			@Override
 			public boolean run(ActionEvent e, DeleteViewElements action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

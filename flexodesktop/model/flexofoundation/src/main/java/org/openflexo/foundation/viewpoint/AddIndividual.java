@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -27,17 +26,21 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.validation.FixProposal;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddIndividual extends AddConcept<IndividualPatternRole> {
+public class AddIndividual extends AddConcept {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
 
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
-	private String ontologyClassURI;
+	private String ontologyClassURI = null;
 
 	public AddIndividual() {
 		super();
@@ -50,35 +53,52 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 		return EditionActionType.AddIndividual;
 	}
 
-	@Override
+	/*@Override
 	public List<IndividualPatternRole> getAvailablePatternRoles() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getPatternRoles(IndividualPatternRole.class);
+		}
+		return null;
+	}*/
+
+	@Override
+	public IndividualPatternRole getPatternRole() {
+		PatternRole superPatternRole = super.getPatternRole();
+		if (superPatternRole instanceof IndividualPatternRole) {
+			return (IndividualPatternRole) superPatternRole;
+		} else if (superPatternRole != null) {
+			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+			return null;
 		}
 		return null;
 	}
 
 	@Override
 	public OntologyClass getOntologyClass() {
+		// System.out.println("On me redemande la classe, ontologyClassURI=" + ontologyClassURI);
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
 			if (getOntologyLibrary() != null) {
+				// System.out.println("Je reponds avec " + ontologyClassURI);
 				return getOntologyLibrary().getClass(ontologyClassURI);
 			}
 		} else {
 			if (getPatternRole() != null) {
+				// System.out.println("Je reponds avec le pattern role " + getPatternRole());
 				return getPatternRole().getOntologicType();
 			}
 		}
+		// System.out.println("Je reponds null");
 		return null;
 	}
 
 	@Override
 	public void setOntologyClass(OntologyClass ontologyClass) {
+		// System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
 		if (ontologyClass != null) {
-			if (getPatternRole() != null) {
+			if (getPatternRole() instanceof IndividualPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
 					ontologyClassURI = ontologyClass.getURI();
 				} else {
@@ -94,7 +114,7 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	public String _getOntologyClassURI() {
 		if (getOntologyClass() != null) {
-			if (getPatternRole() != null && getPatternRole().getOntologicType() == getOntologyClass()) {
+			if (getPatternRole() instanceof IndividualPatternRole && getPatternRole().getOntologicType() == getOntologyClass()) {
 				// No need to store an overriding type, just use default provided by pattern role
 				return null;
 			}
@@ -182,7 +202,7 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	private ViewPointDataBinding individualName;
 
-	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, false);
+	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getIndividualNameBindingDefinition() {
 		return INDIVIDUAL_NAME;
@@ -201,6 +221,64 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 		individualName.setBindingAttribute(EditionActionBindingAttribute.individualName);
 		individualName.setBindingDefinition(getIndividualNameBindingDefinition());
 		this.individualName = individualName;
+	}
+
+	public static class AddIndividualActionMustDefineAnOntologyClass extends
+			ValidationRule<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> {
+		public AddIndividualActionMustDefineAnOntologyClass() {
+			super(AddIndividual.class, "add_individual_action_must_define_an_ontology_class");
+		}
+
+		@Override
+		public ValidationIssue<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> applyValidation(AddIndividual action) {
+			if (action.getOntologyClass() == null) {
+				Vector<FixProposal<AddIndividualActionMustDefineAnOntologyClass, AddIndividual>> v = new Vector<FixProposal<AddIndividualActionMustDefineAnOntologyClass, AddIndividual>>();
+				for (IndividualPatternRole pr : action.getEditionPattern().getIndividualPatternRoles()) {
+					v.add(new SetsPatternRole(pr));
+				}
+				return new ValidationError<AddIndividualActionMustDefineAnOntologyClass, AddIndividual>(this, action,
+						"add_individual_action_does_not_define_any_ontology_class", v);
+			}
+			return null;
+		}
+
+		protected static class SetsPatternRole extends FixProposal<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> {
+
+			private IndividualPatternRole patternRole;
+
+			public SetsPatternRole(IndividualPatternRole patternRole) {
+				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
+				this.patternRole = patternRole;
+			}
+
+			public IndividualPatternRole getPatternRole() {
+				return patternRole;
+			}
+
+			@Override
+			protected void fixAction() {
+				AddIndividual action = getObject();
+				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+	}
+
+	public static class URIBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddIndividual> {
+		public URIBindingIsRequiredAndMustBeValid() {
+			super("'uri'_binding_is_required_and_must_be_valid", AddIndividual.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AddIndividual object) {
+			return object.getIndividualName();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AddIndividual object) {
+			return object.getIndividualNameBindingDefinition();
+		}
+
 	}
 
 }

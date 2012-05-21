@@ -280,14 +280,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						// Declare pattern role
 						for (IndividualPatternRole r : otherRoles) {
 							DeclarePatternRole action = new DeclarePatternRole();
-							action.setPatternRole(r);
+							action.setAssignation(new ViewPointDataBinding(r.getPatternRoleName()));
 							action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
 							newDropScheme.addToActions(action);
 						}
 
 						// Add individual action
 						AddIndividual newAddIndividual = new AddIndividual();
-						newAddIndividual.setPatternRole(individualPatternRole);
+						newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
 						newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
 						for (PropertyEntry e : propertyEntries) {
 							if (e.selectEntry) {
@@ -316,7 +316,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						if (graphicalElementPatternRole instanceof ShapePatternRole) {
 							// Add shape action
 							AddShape newAddShape = new AddShape();
-							newAddShape.setPatternRole((ShapePatternRole) graphicalElementPatternRole);
+							newAddShape.setAssignation(new ViewPointDataBinding(graphicalElementPatternRole.getPatternRoleName()));
 							if (mainPatternRole) {
 								if (isTopLevel) {
 									newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));

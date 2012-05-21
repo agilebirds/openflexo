@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.view.widget;
 
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.fib.controller.FIBController;
@@ -38,6 +40,7 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 	static final Logger logger = Logger.getLogger(FIBCheckboxListWidget.class.getPackage().getName());
 
 	private JCheckBox[] checkboxesArray;
+	private JLabel[] labelsArray;
 
 	private JPanel panel;
 
@@ -68,13 +71,29 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 		((GridLayout) panel.getLayout()).setHgap(getWidget().getHGap());
 		((GridLayout) panel.getLayout()).setVgap(getWidget().getVGap());
 		checkboxesArray = new JCheckBox[getListModel().getSize()];
+		labelsArray = new JLabel[getListModel().getSize()];
 		for (int i = 0; i < getListModel().getSize(); i++) {
 			Object object = getListModel().getElementAt(i);
-			JCheckBox rb = new JCheckBox(getStringRepresentation(object), containsObject(object));
-			rb.setOpaque(false);
-			rb.addActionListener(new CheckboxListener(rb, object, i));
-			checkboxesArray[i] = rb;
-			panel.add(rb);
+			if (getWidget().getShowIcon() && getWidget().getIcon().isSet() && getWidget().getIcon().isValid()) {
+				JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 2, 0));
+				itemPanel.setOpaque(false);
+				JCheckBox rb = new JCheckBox("", containsObject(object));
+				rb.setOpaque(false);
+				rb.addActionListener(new CheckboxListener(rb, object, i));
+				checkboxesArray[i] = rb;
+				itemPanel.add(rb);
+				itemPanel.add(new JLabel(getIconRepresentation(object)));
+				JLabel label = new JLabel(getStringRepresentation(object));
+				labelsArray[i] = label;
+				itemPanel.add(label);
+				panel.add(itemPanel);
+			} else {
+				JCheckBox rb = new JCheckBox(getStringRepresentation(object), containsObject(object));
+				rb.setOpaque(false);
+				rb.addActionListener(new CheckboxListener(rb, object, i));
+				checkboxesArray[i] = rb;
+				panel.add(rb);
+			}
 			// buttonGroup.add(rb);
 		}
 		updateFont();
@@ -169,6 +188,12 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 		super.updateFont();
 		for (JCheckBox cb : checkboxesArray) {
 			cb.setFont(getFont());
+		}
+		if (getWidget().getShowIcon() && getWidget().getIcon().isSet() && getWidget().getIcon().isValid()) {
+			for (JLabel l : labelsArray) {
+				if (l != null)
+					l.setFont(getFont());
+			}
 		}
 	}
 

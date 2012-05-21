@@ -267,14 +267,14 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 					// Declare pattern role
 					for (IndividualPatternRole r : otherRoles) {
 						DeclarePatternRole action = new DeclarePatternRole();
-						action.setPatternRole(r);
+						action.setAssignation(new ViewPointDataBinding(r.getPatternRoleName()));
 						action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
 						newLinkScheme.addToActions(action);
 					}
 
 					// Add individual action
 					AddIndividual newAddIndividual = new AddIndividual();
-					newAddIndividual.setPatternRole(individualPatternRole);
+					newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
 					newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
 					for (PropertyEntry e : propertyEntries) {
 						if (e.selectEntry) {
@@ -299,7 +299,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 				// Add connector action
 				AddConnector newAddConnector = new AddConnector();
-				newAddConnector.setPatternRole(newConnectorPatternRole);
+				newAddConnector.setAssignation(new ViewPointDataBinding(newConnectorPatternRole.getPatternRoleName()));
 				newAddConnector.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "."
 						+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
 				newAddConnector.setToShape(new ViewPointDataBinding(EditionScheme.TO_TARGET + "."

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -27,7 +28,7 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public abstract class AddStatement<R extends OntologicObjectPatternRole> extends EditionAction<R> {
+public abstract class AddStatement extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
@@ -38,7 +39,7 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 		return (OntologyObject) getSubject().getBindingValue(action);
 	}
 
-	@Override
+	/*@Override
 	public R getPatternRole() {
 		try {
 			return super.getPatternRole();
@@ -47,18 +48,27 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 			setPatternRole(null);
 			return null;
 		}
-	}
+	}*/
 
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
-	@Override
+	/*@Override
 	public void setPatternRole(R patternRole) {
 		super.setPatternRole(patternRole);
-	}
+	}*/
 
 	private ViewPointDataBinding subject;
 
-	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, false);
+	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, true) {
+		@Override
+		public Type getType() {
+			return getSubjectType();
+		}
+	};
+
+	public Type getSubjectType() {
+		return OntologyObject.class;
+	}
 
 	public BindingDefinition getSubjectBindingDefinition() {
 		return SUBJECT;
@@ -72,10 +82,29 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 	}
 
 	public void setSubject(ViewPointDataBinding subject) {
-		subject.setOwner(this);
-		subject.setBindingAttribute(EditionActionBindingAttribute.subject);
-		subject.setBindingDefinition(getSubjectBindingDefinition());
+		if (subject != null) {
+			subject.setOwner(this);
+			subject.setBindingAttribute(EditionActionBindingAttribute.subject);
+			subject.setBindingDefinition(getSubjectBindingDefinition());
+		}
 		this.subject = subject;
+	}
+
+	public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddStatement> {
+		public SubjectIsRequiredAndMustBeValid() {
+			super("'subject'_binding_is_required_and_must_be_valid", AddStatement.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AddStatement object) {
+			return object.getSubject();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AddStatement object) {
+			return object.getSubjectBindingDefinition();
+		}
+
 	}
 
 }

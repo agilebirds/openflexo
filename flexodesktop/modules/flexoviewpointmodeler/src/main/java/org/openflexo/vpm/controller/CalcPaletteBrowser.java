@@ -23,10 +23,10 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 
-class CalcPaletteBrowser extends CEDBrowser {
+class CalcPaletteBrowser extends VPMBrowser {
 	private ViewPointPalette representedPalette = null;
 
-	protected CalcPaletteBrowser(CEDController controller) {
+	protected CalcPaletteBrowser(VPMController controller) {
 		super(controller);
 	}
 

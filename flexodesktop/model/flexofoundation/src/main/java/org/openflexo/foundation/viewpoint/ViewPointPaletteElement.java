@@ -385,6 +385,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
+
 	}
 
 	public static class ConnectorOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
@@ -409,6 +410,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		public void setGraphicalRepresentation(ConnectorGraphicalRepresentation graphicalRepresentation) {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
+
 	}
 
 	public boolean getBoundLabelToElementName() {

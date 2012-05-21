@@ -29,36 +29,36 @@ import java.util.logging.Logger;
 
 import org.openflexo.module.Module;
 import org.openflexo.view.menu.WindowMenu;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 /**
  * 'Window' menu for this Module
  * 
  * @author yourname
  */
-public class CEDWindowMenu extends WindowMenu {
+public class VPMWindowMenu extends WindowMenu {
 
-	private static final Logger logger = Logger.getLogger(CEDWindowMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VPMWindowMenu.class.getPackage().getName());
 
 	// ==========================================================================
 	// ============================= Instance Variables
 	// =========================
 	// ==========================================================================
 
-	protected CEDController _xxxController;
+	protected VPMController _xxxController;
 
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public CEDWindowMenu(CEDController controller) {
+	public VPMWindowMenu(VPMController controller) {
 		super(controller, Module.XXX_MODULE);
 		_xxxController = controller;
 		// Put your actions here
 	}
 
-	public CEDController getXXXController() {
+	public VPMController getXXXController() {
 		return _xxxController;
 	}
 }

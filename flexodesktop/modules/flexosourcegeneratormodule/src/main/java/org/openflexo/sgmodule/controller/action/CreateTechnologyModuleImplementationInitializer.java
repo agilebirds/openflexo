@@ -57,7 +57,7 @@ public class CreateTechnologyModuleImplementationInitializer extends ActionIniti
 		return new FlexoActionInitializer<CreateTechnologyModuleImplementation>() {
 			@Override
 			public boolean run(ActionEvent e, CreateTechnologyModuleImplementation action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action, null,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action, null,
 						true, FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

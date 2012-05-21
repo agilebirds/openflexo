@@ -182,6 +182,9 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 
 		@Override
 		public Type getType() {
+			if (ontologyType != null) {
+				return ontologyType;
+			}
 			return OntologyIndividual.class;
 		}
 

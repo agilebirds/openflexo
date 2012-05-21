@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 /**
  * Contains preferences for this module
@@ -44,9 +44,9 @@ public final class CEDPreferences extends ModulePreferences {
 
 	protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
 
-	private static CEDController _controller;
+	private static VPMController _controller;
 
-	public static void init(CEDController controller) {
+	public static void init(VPMController controller) {
 		_controller = controller;
 		preferences(CED_PREFERENCES);
 	}

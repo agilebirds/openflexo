@@ -43,7 +43,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.OntologyBrowser;
 import org.openflexo.vpm.controller.OntologyLibraryBrowser;
 
@@ -56,7 +56,7 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 	private JSplitPane splitPane;
 	private int dividerLocation;
 
-	public OntologyPerspectiveBrowserView(final CEDController controller) {
+	public OntologyPerspectiveBrowserView(final VPMController controller) {
 		super(new BorderLayout());
 		mainBrowser = new OntologyLibraryBrowser(controller);
 		mainBrowserView = new OntologyLibraryBrowserView(mainBrowser, controller, SelectionPolicy.ParticipateToSelection);
@@ -86,7 +86,7 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 
 	public class OntologyLibraryBrowserView extends CEDBrowserView {
 
-		public OntologyLibraryBrowserView(OntologyLibraryBrowser browser, final CEDController controller, SelectionPolicy selectionPolicy) {
+		public OntologyLibraryBrowserView(OntologyLibraryBrowser browser, final VPMController controller, SelectionPolicy selectionPolicy) {
 			super(browser, controller, selectionPolicy);
 
 			treeView.setCellRenderer(new BrowserViewCellRenderer() {

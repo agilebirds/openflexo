@@ -17,32 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.controller;
-
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.selection.SelectionManager;
-import org.openflexo.view.listener.SelectionManagingKeyEventListener;
+package org.openflexo.foundation.viewpoint;
 
 /**
- * Key events listener used in the context of this module
+ * Represents an object which is part of the model of an EditionPattern
  * 
- * @author yourname
+ * @author sylvain
+ * 
  */
-public class CEDKeyEventListener extends SelectionManagingKeyEventListener {
+public abstract class EditionPatternObject extends ViewPointObject {
 
-	private static CEDKeyEventListener _current;
-
-	public CEDKeyEventListener(CEDController controller) {
-		super(controller);
-	}
+	public abstract EditionPattern getEditionPattern();
 
 	@Override
-	protected SelectionManager getSelectionManager() {
-		return ((CEDController) getController()).getSelectionManager();
+	public String getFullyQualifiedName() {
+		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "." + getClass().getSimpleName();
 	}
 
-	@Override
-	public FlexoEditor getEditor() {
-		return getController().getEditor();
-	}
 }

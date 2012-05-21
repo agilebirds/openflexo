@@ -258,7 +258,11 @@ public class TypeUtils {
 	public static boolean isTypeAssignableFrom(Type aType, Type anOtherType, boolean permissive) {
 		// Test if anOtherType instanceof aType
 
-		// logger.info("Called "+aType+" isAssignableFrom("+anOtherType+")");
+		/*if (aType instanceof CustomType || anOtherType instanceof CustomType) {
+			logger.info("Called " + aType + " isAssignableFrom(" + anOtherType + ")");
+			logger.info("En gros je me demande si " + anOtherType + " est bien une instance de " + aType + " anOtherType est un "
+					+ anOtherType.getClass().getSimpleName());
+		}*/
 
 		// If supplied type is null return false
 		if ((aType == null) || (anOtherType == null)) {

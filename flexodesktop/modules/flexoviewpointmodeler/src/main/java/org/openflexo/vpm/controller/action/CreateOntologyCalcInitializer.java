@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CreateOntologyCalcInitializer extends ActionInitializer {
 
@@ -54,7 +54,7 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateViewPoint>() {
 			@Override
 			public boolean run(ActionEvent e, CreateViewPoint action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_VIEW_POINT_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_VIEW_POINT_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
@@ -66,7 +66,7 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateViewPoint>() {
 			@Override
 			public boolean run(ActionEvent e, CreateViewPoint action) {
-				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
+				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
 				return true;
 			}
 		};

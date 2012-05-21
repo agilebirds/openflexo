@@ -47,7 +47,7 @@ public class ValidationWarning<R extends ValidationRule<R, V>, V extends Validab
 
 	@Override
 	public String toString() {
-		return "VALIDATION / WARNING: " + getLocalizedMessage();
+		return "VALIDATION / WARNING: " + getMessage();
 	}
 
 }

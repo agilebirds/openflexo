@@ -23,10 +23,10 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 
-class CalcDrawingShemaBrowser extends CEDBrowser {
+class CalcDrawingShemaBrowser extends VPMBrowser {
 	private ExampleDrawingShema representedShema = null;
 
-	protected CalcDrawingShemaBrowser(CEDController controller) {
+	protected CalcDrawingShemaBrowser(VPMController controller) {
 		super(controller);
 	}
 

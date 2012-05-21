@@ -32,6 +32,7 @@ import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBCheckboxList;
 import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
 import org.openflexo.logging.FlexoLogger;
@@ -80,7 +81,8 @@ public class FIBEditableCheckboxListWidget extends FIBCheckboxListWidget impleme
 			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
 			if (n.getAttribute() == FIBWidget.Parameters.format || n.getAttribute() == FIBWidget.Parameters.localize
 					|| n.getAttribute() == FIBCheckboxList.Parameters.columns || n.getAttribute() == FIBCheckboxList.Parameters.hGap
-					|| n.getAttribute() == FIBCheckboxList.Parameters.vGap) {
+					|| n.getAttribute() == FIBCheckboxList.Parameters.vGap || n.getAttribute() == FIBWidget.Parameters.icon
+					|| n.getAttribute() == FIBMultipleValues.Parameters.showIcon) {
 				rebuildCheckboxes();
 			}
 		}

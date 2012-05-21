@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -27,11 +27,15 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.validation.CompoundIssue;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> {
+public class AddEditionPattern extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());
 
@@ -47,10 +51,10 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 		return EditionActionType.AddEditionPattern;
 	}
 
-	@Override
+	/*@Override
 	public List<EditionPatternPatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles(EditionPatternPatternRole.class);
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
@@ -61,7 +65,7 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 		return (View) getView().getBindingValue(action);
 	}
 
-	@Override
+	/*@Override
 	public EditionPatternPatternRole getPatternRole() {
 		try {
 			return super.getPatternRole();
@@ -70,18 +74,18 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 			setPatternRole(null);
 			return null;
 		}
-	}
+	}*/
 
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddEditionPattern)
 	// Need to be fixed in KeyValueProperty.java
-	@Override
+	/*@Override
 	public void setPatternRole(EditionPatternPatternRole patternRole) {
 		super.setPatternRole(patternRole);
-	}
+	}*/
 
 	private ViewPointDataBinding view;
 
-	private BindingDefinition VIEW = new BindingDefinition("view", View.class, BindingDefinitionType.GET, false);
+	private BindingDefinition VIEW = new BindingDefinition("view", View.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getViewBindingDefinition() {
 		return VIEW;
@@ -131,8 +135,8 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 	}
 
 	public CreationScheme getCreationScheme() {
-		if (getPatternRole() != null) {
-			return getPatternRole().getCreationScheme();
+		if (getPatternRole() instanceof EditionPatternPatternRole) {
+			return ((EditionPatternPatternRole) getPatternRole()).getCreationScheme();
 		}
 		if (creationScheme == null && _creationSchemeURI != null && getViewPointLibrary() != null) {
 			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(_creationSchemeURI);
@@ -194,7 +198,7 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 		}
 	}
 
-	public static class AddEditionPatternParameter extends ViewPointObject implements Bindable {
+	public static class AddEditionPatternParameter extends EditionSchemeObject implements Bindable {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
@@ -214,6 +218,22 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 		public AddEditionPatternParameter(EditionSchemeParameter param) {
 			this.param = param;
 			BD = new BindingDefinition(param.getName(), param.getType(), BindingDefinitionType.GET, true);
+		}
+
+		@Override
+		public EditionPattern getEditionPattern() {
+			if (param != null) {
+				return param.getEditionPattern();
+			}
+			return null;
+		}
+
+		@Override
+		public EditionScheme getEditionScheme() {
+			if (param != null) {
+				return param.getEditionScheme();
+			}
+			return null;
 		}
 
 		public ViewPointDataBinding getValue() {
@@ -298,6 +318,81 @@ public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> 
 
 		public void _setParamName(String param) {
 			this.paramName = param;
+		}
+
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return getEditionPatternType();
+	}
+
+	public static class AddEditionPatternMustAddressACreationScheme extends
+			ValidationRule<AddEditionPatternMustAddressACreationScheme, AddEditionPattern> {
+		public AddEditionPatternMustAddressACreationScheme() {
+			super(AddEditionPattern.class, "add_edition_pattern_action_must_address_a_valid_creation_scheme");
+		}
+
+		@Override
+		public ValidationIssue<AddEditionPatternMustAddressACreationScheme, AddEditionPattern> applyValidation(AddEditionPattern action) {
+			if (action.getCreationScheme() == null) {
+				if (action.getEditionPatternType() == null) {
+					return new ValidationError<AddEditionPatternMustAddressACreationScheme, AddEditionPattern>(this, action,
+							"add_edition_pattern_action_doesn't_define_any_edition_pattern");
+				} else {
+					return new ValidationError<AddEditionPatternMustAddressACreationScheme, AddEditionPattern>(this, action,
+							"add_edition_pattern_action_doesn't_define_any_creation_scheme");
+				}
+			}
+			return null;
+		}
+	}
+
+	public static class AddEditionPatternParametersMustBeValid extends
+			ValidationRule<AddEditionPatternParametersMustBeValid, AddEditionPattern> {
+		public AddEditionPatternParametersMustBeValid() {
+			super(AddEditionPattern.class, "add_edition_pattern_parameters_must_be_valid");
+		}
+
+		@Override
+		public ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern> applyValidation(AddEditionPattern action) {
+			if (action.getCreationScheme() != null) {
+				Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern>> issues = new Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern>>();
+				for (AddEditionPatternParameter p : action.getParameters()) {
+					if (p.getValue() == null || !p.getValue().isSet()) {
+						issues.add(new ValidationError(this, action, "parameter_s_value_is_not_defined"));
+					} else if (!(p.getValue().isValid())) {
+						logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
+								+ p.action.getFullyQualifiedName() + ". Reason follows.");
+						p.getValue().getBinding().debugIsBindingValid();
+						issues.add(new ValidationError(this, action, "parameter_s_value_is_not_valid"));
+					}
+				}
+				if (issues.size() == 0) {
+					return null;
+				} else if (issues.size() == 1) {
+					return issues.firstElement();
+				} else {
+					return new CompoundIssue<AddEditionPattern.AddEditionPatternParametersMustBeValid, AddEditionPattern>(action, issues);
+				}
+			}
+			return null;
+		}
+	}
+
+	public static class ViewBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddEditionPattern> {
+		public ViewBindingIsRequiredAndMustBeValid() {
+			super("'view'_binding_is_not_valid", AddEditionPattern.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(AddEditionPattern object) {
+			return object.getView();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(AddEditionPattern object) {
+			return object.getViewBindingDefinition();
 		}
 
 	}

@@ -50,7 +50,7 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddTOCEntry action) {
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(DECst.CREATE_TOC_ENTRY_DIALOG_FIB, action, null, true,
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(DECst.CREATE_TOC_ENTRY_DIALOG_FIB, action, null, true,
 						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}

@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
@@ -39,6 +41,14 @@ public class IndividualInspectorEntry extends InspectorEntry {
 	private ViewPointDataBinding conceptValue;
 
 	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
+
+	@Override
+	public Type getType() {
+		if (getConcept() != null) {
+			return getConcept();
+		}
+		return super.getType();
+	}
 
 	@Override
 	public Class getDefaultDataClass() {
@@ -62,7 +72,10 @@ public class IndividualInspectorEntry extends InspectorEntry {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		return getOntologyLibrary().getClass(_getConceptURI());
+		if (getOntologyLibrary() != null) {
+			return getOntologyLibrary().getClass(_getConceptURI());
+		}
+		return null;
 	}
 
 	public void setConcept(OntologyClass c) {

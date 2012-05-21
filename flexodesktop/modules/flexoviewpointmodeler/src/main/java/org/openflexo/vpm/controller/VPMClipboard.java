@@ -38,23 +38,23 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author yourname
  */
-public class CEDClipboard extends FlexoClipboard {
+public class VPMClipboard extends FlexoClipboard {
 
-	private static final Logger logger = Logger.getLogger(CEDClipboard.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VPMClipboard.class.getPackage().getName());
 
-	protected CEDSelectionManager _xxxSelectionManager;
+	protected VPMSelectionManager _xxxSelectionManager;
 
-	public CEDClipboard(CEDSelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem) {
+	public VPMClipboard(VPMSelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem) {
 		super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
 		_xxxSelectionManager = aSelectionManager;
 		resetClipboard();
 	}
 
-	public CEDSelectionManager getSelectionManager() {
+	public VPMSelectionManager getSelectionManager() {
 		return _xxxSelectionManager;
 	}
 
-	public CEDController getCEDController() {
+	public VPMController getCEDController() {
 		return getSelectionManager().getCEDController();
 	}
 

@@ -31,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.FileResource;
@@ -75,6 +76,11 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		StringEncoder.getDefaultInstance()._addConverter(ViewPointDataBinding.CONVERTER);
 		StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
 
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "ViewPointLibrary";
 	}
 
 	public FlexoResourceCenter getResourceCenter() {
@@ -270,15 +276,31 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 	}
 
 	public EditionScheme getEditionScheme(String editionSchemeURI) {
-		if (editionSchemeURI.lastIndexOf("#") > -1) {
-			String editionPatternURI = editionSchemeURI.substring(0, editionSchemeURI.lastIndexOf("#"));
+		if (editionSchemeURI.lastIndexOf(".") > -1) {
+			String editionPatternURI = editionSchemeURI.substring(0, editionSchemeURI.lastIndexOf("."));
 			EditionPattern ep = getEditionPattern(editionPatternURI);
 			if (ep != null) {
-				return ep.getEditionScheme(editionSchemeURI.substring(editionSchemeURI.lastIndexOf("#") + 1));
+				return ep.getEditionScheme(editionSchemeURI.substring(editionSchemeURI.lastIndexOf(".") + 1));
 			}
 		}
 		logger.warning("Cannot find edition scheme:" + editionSchemeURI);
 		return null;
+	}
+
+	/**
+	 * Return a vector of all embedded objects on which the validation will be performed
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	@Override
+	public Vector<Validable> getAllEmbeddedValidableObjects() {
+		Vector<Validable> returned = new Vector<Validable>();
+		returned.add(this);
+		for (ViewPoint v : getViewPoints()) {
+			returned.addAll(v.getAllEmbeddedValidableObjects());
+		}
+
+		return returned;
 	}
 
 }

@@ -38,6 +38,9 @@ public class IndividualParameter extends EditionSchemeParameter {
 
 	@Override
 	public Type getType() {
+		if (getConcept() != null) {
+			return getConcept();
+		}
 		return OntologyIndividual.class;
 	};
 

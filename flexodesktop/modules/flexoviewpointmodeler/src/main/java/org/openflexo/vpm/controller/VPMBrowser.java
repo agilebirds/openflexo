@@ -32,21 +32,21 @@ import org.openflexo.foundation.FlexoModelObject;
  * @author yourname
  * 
  */
-public abstract class CEDBrowser extends ProjectBrowser {
+public abstract class VPMBrowser extends ProjectBrowser {
 
-	protected static final Logger logger = Logger.getLogger(CEDBrowser.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(VPMBrowser.class.getPackage().getName());
 
 	// ================================================
 	// ================= Variables ===================
 	// ================================================
 
-	protected CEDController _controller;
+	protected VPMController _controller;
 
 	// ================================================
 	// ================ Constructor ===================
 	// ================================================
 
-	public CEDBrowser(CEDController controller) {
+	public VPMBrowser(VPMController controller) {
 		super(controller.getEditor(), controller.getSelectionManager() /* Remove this parameter if you don't want browser synchronized with selection */);
 		_controller = controller;
 		update();

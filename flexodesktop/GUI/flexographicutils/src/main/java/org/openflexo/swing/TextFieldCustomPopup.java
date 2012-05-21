@@ -19,11 +19,17 @@
  */
 package org.openflexo.swing;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 /**
  * Abstract widget allowing to edit a complex object with a popup
@@ -33,7 +39,9 @@ import javax.swing.SwingUtilities;
  */
 public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 
+	JPanel _frontComponent;
 	JTextField _textField;
+	JLabel _label;
 	private int requestedColNumber = -1;
 
 	public TextFieldCustomPopup(T editedObject) {
@@ -58,11 +66,20 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 
 	@Override
 	protected JComponent buildFrontComponent() {
+		_frontComponent = new JPanel(new BorderLayout());
+		_frontComponent.setOpaque(false);
 		_textField = new JTextField();
 		_textField.setEditable(false);
 		_textField.addActionListener(this);
 		_textField.setMinimumSize(new Dimension(50, 25));
-		return _textField;
+		_label = new JLabel();
+		Insets labelInsets = _textField.getBorder().getBorderInsets(_textField);
+		labelInsets.left = 0;
+		_label.setBorder(new EmptyBorder(labelInsets));
+		_frontComponent.add(_textField, BorderLayout.CENTER);
+		_frontComponent.add(_label, BorderLayout.EAST);
+		_label.setVisible(false);
+		return _frontComponent;
 	}
 
 	@Override
@@ -108,12 +125,27 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 	public abstract void updateCustomPanel(T editedObject);
 
 	public JTextField getTextField() {
-		return getFrontComponent();
+		return _textField;
+	}
+
+	public JLabel getLabel() {
+		return _label;
 	}
 
 	@Override
-	public JTextField getFrontComponent() {
-		return (JTextField) super.getFrontComponent();
+	public JPanel getFrontComponent() {
+		return (JPanel) super.getFrontComponent();
+	}
+
+	@Override
+	public void setFont(Font aFont) {
+		super.setFont(aFont);
+		if (_textField != null) {
+			_textField.setFont(aFont);
+		}
+		if (_label != null) {
+			_label.setFont(aFont);
+		}
 	}
 
 }

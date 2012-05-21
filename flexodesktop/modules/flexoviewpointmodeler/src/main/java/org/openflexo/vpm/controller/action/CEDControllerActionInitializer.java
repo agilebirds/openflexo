@@ -22,8 +22,8 @@ package org.openflexo.vpm.controller.action;
 import java.util.logging.Logger;
 
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.controller.CEDController;
-import org.openflexo.vpm.controller.CEDSelectionManager;
+import org.openflexo.vpm.controller.VPMController;
+import org.openflexo.vpm.controller.VPMSelectionManager;
 
 /**
  * 
@@ -35,18 +35,18 @@ public class CEDControllerActionInitializer extends ControllerActionInitializer 
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	private CEDController _cedController;
+	private VPMController _cedController;
 
-	public CEDControllerActionInitializer(CEDController controller) {
+	public CEDControllerActionInitializer(VPMController controller) {
 		super(controller);
 		_cedController = controller;
 	}
 
-	protected CEDController getCEDController() {
+	protected VPMController getCEDController() {
 		return _cedController;
 	}
 
-	protected CEDSelectionManager getCEDSelectionManager() {
+	protected VPMSelectionManager getCEDSelectionManager() {
 		return getCEDController().getCEDSelectionManager();
 	}
 

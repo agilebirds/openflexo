@@ -480,6 +480,7 @@ public class FlexoLocalization {
 	private static String valueForKeyAndObject(String key, Object object) {
 
 		try {
+			// Object objectForKey = BindingEvaluator.evaluateBinding(key, object);
 			Object objectForKey = KeyValueDecoder.valueForKey(object, key);
 			if (objectForKey != null) {
 				return objectForKey.toString();
@@ -489,6 +490,9 @@ public class FlexoLocalization {
 		} catch (InvalidObjectSpecificationException e) {
 			logger.warning(e.getMessage());
 			return key;
+			/*}catch (InvalidKeyValuePropertyException e) {
+			logger.warning(e.getMessage());
+			return key;*/
 		}
 	}
 

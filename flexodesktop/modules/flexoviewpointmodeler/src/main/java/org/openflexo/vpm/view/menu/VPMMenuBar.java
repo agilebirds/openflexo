@@ -31,74 +31,75 @@ import org.openflexo.view.menu.EditMenu;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 /**
- * Class representing menus related to WorkflowEditor window
+ * Class representing menus related to ViewPointModeller window
  * 
- * @author benoit, yourname
+ * @author sylvain
  */
-public class CEDMenuBar extends FlexoMenuBar {
+public class VPMMenuBar extends FlexoMenuBar {
 
-	private CEDFileMenu _fileMenu;
-	private CEDEditMenu _editMenu;
-	private CEDToolsMenu _toolsMenu;
+	private VPMFileMenu _fileMenu;
+	private VPMEditMenu _editMenu;
+	private VPMToolsMenu _toolsMenu;
 
-	public CEDMenuBar(CEDController controller) {
-		super(controller, Module.XXX_MODULE);
+	public VPMMenuBar(VPMController controller) {
+		super(controller, Module.VPM_MODULE);
 	}
 
 	/**
-	 * Build if required and return WKF 'File' menu. This method overrides the default one defined on superclass
+	 * Build if required and return VPM 'File' menu. This method overrides the default one defined on superclass
 	 * 
 	 * @param controller
-	 * @return a XXXFileMenu instance
+	 * @return a FileMenu instance
 	 */
 	@Override
-	public CEDFileMenu getFileMenu(FlexoController controller) {
+	public VPMFileMenu getFileMenu(FlexoController controller) {
 		if (_fileMenu == null) {
-			_fileMenu = new CEDFileMenu((CEDController) controller);
+			_fileMenu = new VPMFileMenu((VPMController) controller);
 		}
 		return _fileMenu;
 	}
 
 	/**
-	 * Build if required and return WKF 'Edit' menu. This method overrides the default one defined on superclass
+	 * Build if required and return VPM 'Edit' menu. This method overrides the default one defined on superclass
 	 * 
 	 * @param controller
-	 * @return a XXXEditMenu instance
+	 * @return a EditMenu instance
 	 */
 	@Override
 	public EditMenu getEditMenu(FlexoController controller) {
 		if (_editMenu == null) {
-			_editMenu = new CEDEditMenu((CEDController) controller);
+			_editMenu = new VPMEditMenu((VPMController) controller);
 		}
 		return _editMenu;
 	}
 
 	/**
-	 * Build if required and return WKF 'Window' menu. This method overrides the default one defined on superclass
+	 * Build if required and return VPM 'Window' menu. This method overrides the default one defined on superclass
 	 * 
 	 * @param controller
-	 * @return a XXXWindowMenu instance
+	 * @return a WindowMenu instance
 	 */
 	@Override
 	public WindowMenu getWindowMenu(FlexoController controller, Module module) {
 		if (_windowMenu == null) {
-			_windowMenu = new CEDWindowMenu((CEDController) controller);
+			_windowMenu = new VPMWindowMenu((VPMController) controller);
 		}
 		return _windowMenu;
 	}
 
 	/**
-	 * Build if required and return WKF 'Tools' menu. This method overrides the default one defined on superclass
+	 * Build if required and return VPM 'Tools' menu. This method overrides the default one defined on superclass
 	 * 
 	 * @param controller
-	 * @return a XXXToolsMenu instance
+	 * @return a ToolsMenu instance
 	 */
-	public ToolsMenu getToolsMenu(FlexoController controller, Module module) {
+	@Override
+	public ToolsMenu getToolsMenu(FlexoController controller) {
 		if (_toolsMenu == null) {
-			_toolsMenu = new CEDToolsMenu((CEDController) controller);
+			_toolsMenu = new VPMToolsMenu((VPMController) controller);
 		}
 		return _toolsMenu;
 	}

@@ -19,6 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.util.Hashtable;
@@ -57,6 +58,7 @@ import org.openflexo.fib.model.GridBagLayoutConstraints.FillType;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
@@ -76,6 +78,8 @@ import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.ListValueForListParameterPathElement;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.FlexoFIBController;
 
 public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
@@ -110,7 +114,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			setName(parameter.getName() + "URIPanel");
 			setLayout(Layout.gridbag);
 			tf = new FIBTextField();
-			uriLabel = new FIBLabel("http://prout.owl");
+			uriLabel = new FIBLabel("http://xxxxxx.owl");
 			Font f = uriLabel.retrieveValidFont();
 			uriLabel.setFont(f.deriveFont(10f));
 			/*uriLabel.setData(new DataBinding('"' + action.getProject().getProjectOntology().getURI() + "#" + '"' + "+parameters."
@@ -216,12 +220,16 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				}
 			});
 			if (listParameter.getListType() == ListType.Property) {
+				cbList.setIteratorClass(OntologyProperty.class);
 				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
+				cbList.setShowIcon(true);
+				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
+				cbList.setVGap(-2);
 			}
-			cbList.setUseScrollBar(true);
+			/*cbList.setUseScrollBar(true);
 			cbList.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			cbList.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
-			cbList.setHeight(300);
+			cbList.setHeight(300);*/
 			panel.addToSubComponents(cbList, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return cbList;
 		} else if (parameter instanceof FlexoObjectParameter) {
@@ -419,33 +427,38 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		returned.setBorderBottom(5);
 		returned.setBorderRight(10);
 		returned.setBorderLeft(10);
+		returned.setControllerClass(FlexoFIBController.class);
 
 		if (editionScheme.getDefinePopupDefaultSize()) {
-			returned.setWidth(editionScheme.getWidth());
-			returned.setHeight(editionScheme.getHeight());
+			returned.setMinWidth(editionScheme.getWidth());
+			returned.setMinHeight(editionScheme.getHeight());
 		}
 
 		Font f = returned.retrieveValidFont();
 		returned.setFont(f.deriveFont(11f));
 
-		FIBLabel infoLabel = new FIBLabel();
-		infoLabel.setFont(infoLabel.retrieveValidFont().deriveFont(Font.BOLD, 13f));
-		infoLabel.setAlign(Align.center);
-		infoLabel.setLabel(editionScheme.getLabel());
-		returned.addToSubComponents(infoLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, 0));
+		FIBLabel titleLabel = new FIBLabel();
+		titleLabel.setFont(titleLabel.retrieveValidFont().deriveFont(Font.BOLD, 13f));
+		titleLabel.setAlign(Align.center);
+		titleLabel.setLabel(editionScheme.getLabel());
+		returned.addToSubComponents(titleLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, 0));
 
-		FIBPanel descriptionPanel = new FIBPanel();
-		descriptionPanel.setLayout(Layout.twocols);
-		descriptionPanel.setBorder(Border.rounded3d);
-		descriptionPanel.setLayout(Layout.border);
-		descriptionPanel.setBorderTop(10);
-		descriptionPanel.setBorderBottom(10);
+		if (StringUtils.isNotEmpty(editionScheme.getDescription())) {
+			FIBPanel descriptionPanel = new FIBPanel();
+			descriptionPanel.setLayout(Layout.twocols);
+			descriptionPanel.setBorder(Border.rounded3d);
+			descriptionPanel.setLayout(Layout.border);
+			descriptionPanel.setBorderTop(10);
+			descriptionPanel.setBorderBottom(10);
 
-		FIBLabel descriptionLabel = new FIBLabel();
-		descriptionLabel.setAlign(Align.center);
-		descriptionLabel.setLabel("<html><i>" + editionScheme.getDescription() + "</i></html>");
-		descriptionPanel.addToSubComponents(descriptionLabel, new BorderLayoutConstraints(BorderLayoutLocation.center));
-		returned.addToSubComponents(descriptionPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, 0));
+			FIBLabel descriptionLabel = new FIBLabel();
+			descriptionLabel.setAlign(Align.center);
+			descriptionLabel.setLabel("<html><i>" + editionScheme.getDescription() + "</i></html>");
+			descriptionPanel.addToSubComponents(descriptionLabel, new BorderLayoutConstraints(BorderLayoutLocation.center));
+			returned.addToSubComponents(descriptionPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, 0));
+		} else {
+			((TwoColsLayoutConstraints) titleLabel.getConstraints()).setInsetsBottom(10);
+		}
 
 		int index = 1;
 		Hashtable<EditionSchemeParameter, FIBComponent> widgets = new Hashtable<EditionSchemeParameter, FIBComponent>();
@@ -513,7 +526,11 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 	private boolean _retrieveParameters2(final EditionSchemeAction<?> action) {
 
 		FIBComponent component = makeFIB(action);
-		FIBDialog dialog = FIBDialog.instanciateComponent(component, action, null, true, FlexoLocalization.getMainLocalizer());
+		FIBDialog dialog = FIBDialog.instanciateDialog(component, action, null, true, FlexoLocalization.getMainLocalizer());
+		if (!action.getEditionScheme().getDefinePopupDefaultSize()) {
+			dialog.setMinimumSize(new Dimension(500, 50));
+		}
+		dialog.showDialog();
 		return (dialog.getStatus() == Status.VALIDATED);
 	}
 

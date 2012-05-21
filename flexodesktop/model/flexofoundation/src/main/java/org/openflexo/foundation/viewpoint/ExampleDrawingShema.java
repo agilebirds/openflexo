@@ -315,4 +315,5 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 	}
 
 	private boolean screenshotModified = false;
+
 }

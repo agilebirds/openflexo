@@ -61,7 +61,7 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	protected static final Logger logger = Logger.getLogger(ViewPointPerspective.class.getPackage().getName());
 
-	private final CEDController _controller;
+	private final VPMController _controller;
 
 	private final CalcLibraryBrowser _browser;
 	private final CalcBrowser calcBrowser;
@@ -91,7 +91,7 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 	 *            TODO
 	 * @param name
 	 */
-	public ViewPointPerspective(CEDController controller) {
+	public ViewPointPerspective(VPMController controller) {
 		super("calc_perspective");
 		_controller = controller;
 		_paletteControllers = new Hashtable<ViewPointPalette, CalcPaletteController>();
@@ -103,7 +103,7 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof ViewPoint) {
-					focusOnCalc((ViewPoint) object);
+					focusOnViewPoint((ViewPoint) object);
 					// System.out.println(((OntologyCalc)object).getXMLRepresentation());
 				}
 			}
@@ -152,10 +152,10 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
 
-	public void focusOnCalc(ViewPoint calc) {
+	public void focusOnViewPoint(ViewPoint viewPoint) {
 		splitPane2.setBottomComponent(null);
 		calcBrowser.deleteBrowserListener(_browserView);
-		calcBrowser.setRepresentedObject(calc);
+		calcBrowser.setRepresentedObject(viewPoint);
 		calcBrowser.update();
 		calcBrowser.addBrowserListener(_browserView);
 	}
@@ -225,19 +225,19 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 	@Override
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof ViewPointLibrary) {
-			return new CalcLibraryView((ViewPointLibrary) object, (CEDController) controller);
+			return new CalcLibraryView((ViewPointLibrary) object, (VPMController) controller);
 		}
 		if (object instanceof ImportedOntology) {
 			((ImportedOntology) object).loadWhenUnloaded();
-			return new OntologyView((ImportedOntology) object, (CEDController) controller, this);
+			return new OntologyView((ImportedOntology) object, (VPMController) controller, this);
 		}
 		if (object instanceof ViewPoint) {
 			((ViewPoint) object).loadWhenUnloaded();
-			return new CalcView((ViewPoint) object, (CEDController) controller);
+			return new CalcView((ViewPoint) object, (VPMController) controller);
 		}
 		if (object instanceof EditionPattern) {
 			((EditionPattern) object).getViewPoint().loadWhenUnloaded();
-			return new EditionPatternView((EditionPattern) object, (CEDController) controller);
+			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
 		}
 		if (object instanceof ViewPointPalette) {
 			return getControllerForPalette((ViewPointPalette) object).getModuleView();
@@ -336,7 +336,7 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 			return ((ViewPointPalette) object).getName() + " (" + FlexoLocalization.localizedForKey("palette") + ")";
 		}
 		if (object instanceof ExampleDrawingShema) {
-			return ((ExampleDrawingShema) object).getName() + " (" + FlexoLocalization.localizedForKey("example_drawing") + ")";
+			return ((ExampleDrawingShema) object).getName() + " (" + FlexoLocalization.localizedForKey("example_diagram") + ")";
 		}
 		if (object instanceof ViewPoint) {
 			return ((ViewPoint) object).getName();
