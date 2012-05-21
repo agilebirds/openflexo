@@ -19,13 +19,15 @@
  */
 package org.openflexo.velocity;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.RuntimeServices;
+import org.apache.velocity.runtime.log.Log;
 import org.apache.velocity.util.introspection.Info;
-import org.apache.velocity.util.introspection.IntrospectorCache;
+import org.apache.velocity.util.introspection.SecureIntrospectorImpl;
 import org.apache.velocity.util.introspection.SecureUberspector;
 import org.apache.velocity.util.introspection.VelMethod;
 import org.apache.velocity.util.introspection.VelPropertyGet;
@@ -38,6 +40,31 @@ import org.openflexo.logging.FlexoLogger;
 public class FlexoVelocityIntrospector extends SecureUberspector {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoVelocityIntrospector.class.getPackage().getName());
+
+	private static class FlexoSecureIntrospectorImpl extends SecureIntrospectorImpl {
+
+		public FlexoSecureIntrospectorImpl(String[] badClasses, String[] badPackages, Log log) {
+			super(badClasses, badPackages, log);
+		}
+
+		public void clearCache() {
+			getIntrospectorCache().clear();
+		}
+	}
+
+	private RuntimeServices runtimeServices;
+
+	@Override
+	public void init() {
+		String[] badPackages = runtimeServices.getConfiguration().getStringArray(RuntimeConstants.INTROSPECTOR_RESTRICT_PACKAGES);
+		String[] badClasses = runtimeServices.getConfiguration().getStringArray(RuntimeConstants.INTROSPECTOR_RESTRICT_CLASSES);
+
+		introspector = new FlexoSecureIntrospectorImpl(badClasses, badPackages, log);
+	}
+
+	private FlexoSecureIntrospectorImpl getIntrospector() {
+		return (FlexoSecureIntrospectorImpl) introspector;
+	}
 
 	@Override
 	public VelMethod getMethod(Object obj, String methodName, Object[] args, Info i) throws Exception {
@@ -129,27 +156,13 @@ public class FlexoVelocityIntrospector extends SecureUberspector {
 	}
 
 	public void clearCache() {
-		try {
-			Method method = introspector.getClass().getMethod("getIntrospectorCache", null);
-			IntrospectorCache cache = (IntrospectorCache) method.invoke(introspector, null);
-			cache.clear();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassCastException e) {
-			e.printStackTrace();
-		}
+		getIntrospector().clearCache();
 	}
+
+	@Override
+	public void setRuntimeServices(RuntimeServices rs) {
+		super.setRuntimeServices(rs);
+		this.runtimeServices = rs;
+	}
+
 }
