@@ -53,6 +53,15 @@ import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 
+/**
+ * Represents the controller of a FIBComponent in Openflexo graphical context (at this time, Swing)<br>
+ * Extends FIBController by supporting FlexoController and icon management for Openflexo objects
+ * 
+ * 
+ * @author sylvain
+ * 
+ * @param <T>
+ */
 public class FlexoFIBController<T> extends FIBController<T> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(FlexoFIBController.class.getPackage().getName());
