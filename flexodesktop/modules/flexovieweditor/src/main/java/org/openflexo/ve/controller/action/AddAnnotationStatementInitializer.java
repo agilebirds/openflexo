@@ -44,13 +44,13 @@ public class AddAnnotationStatementInitializer extends ActionInitializer {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddAnnotationStatementInitializer(OEControllerActionInitializer actionInitializer) {
+	AddAnnotationStatementInitializer(VEControllerActionInitializer actionInitializer) {
 		super(AddAnnotationStatement.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

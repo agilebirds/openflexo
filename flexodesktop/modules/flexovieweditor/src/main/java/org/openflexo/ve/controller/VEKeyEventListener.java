@@ -28,17 +28,17 @@ import org.openflexo.view.listener.SelectionManagingKeyEventListener;
  * 
  * @author yourname
  */
-public class OEKeyEventListener extends SelectionManagingKeyEventListener {
+public class VEKeyEventListener extends SelectionManagingKeyEventListener {
 
-	private static OEKeyEventListener _current;
+	private static VEKeyEventListener _current;
 
-	public OEKeyEventListener(OEController controller) {
+	public VEKeyEventListener(VEController controller) {
 		super(controller);
 	}
 
 	@Override
 	protected SelectionManager getSelectionManager() {
-		return ((OEController) getController()).getOESelectionManager();
+		return ((VEController) getController()).getOESelectionManager();
 	}
 
 	@Override

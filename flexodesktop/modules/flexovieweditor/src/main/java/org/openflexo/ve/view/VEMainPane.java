@@ -27,7 +27,7 @@ package org.openflexo.ve.view;
  */
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 
@@ -36,9 +36,9 @@ import org.openflexo.view.ModuleView;
  * 
  * @author yourname
  */
-public class OEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class VEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public OEMainPane(ModuleView moduleView, OEFrame mainFrame, OEController controller) {
+	public VEMainPane(ModuleView moduleView, VEFrame mainFrame, VEController controller) {
 		super(moduleView, mainFrame, controller);
 		// setLeftView(new OEBrowserView(controller));
 	}

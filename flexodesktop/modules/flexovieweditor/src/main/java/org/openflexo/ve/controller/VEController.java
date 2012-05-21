@@ -34,9 +34,9 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.ve.controller.action.OEControllerActionInitializer;
-import org.openflexo.ve.view.OEFrame;
-import org.openflexo.ve.view.OEMainPane;
+import org.openflexo.ve.controller.action.VEControllerActionInitializer;
+import org.openflexo.ve.view.VEFrame;
+import org.openflexo.ve.view.VEMainPane;
 import org.openflexo.ve.view.menu.OEMenuBar;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -50,18 +50,18 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author yourname
  */
-public class OEController extends FlexoController implements SelectionManagingController {
+public class VEController extends FlexoController implements SelectionManagingController {
 
-	private static final Logger logger = Logger.getLogger(OEController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VEController.class.getPackage().getName());
 
 	// ================================================
 	// ============= Instance variables ===============
 	// ================================================
 
 	protected OEMenuBar _oeMenuBar;
-	protected OEFrame _frame;
-	protected OEKeyEventListener _oeKeyEventListener;
-	private OESelectionManager _selectionManager;
+	protected VEFrame _frame;
+	protected VEKeyEventListener _oeKeyEventListener;
+	private VESelectionManager _selectionManager;
 
 	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
 	public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
@@ -83,15 +83,15 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	/**
 	 * Default constructor
 	 */
-	public OEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
+	public VEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
 		super(projectEditor, module);
 		_oeMenuBar = (OEMenuBar) createAndRegisterNewMenuBar();
-		_oeKeyEventListener = new OEKeyEventListener(this);
-		_frame = new OEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _oeKeyEventListener, _oeMenuBar);
+		_oeKeyEventListener = new VEKeyEventListener(this);
+		_frame = new VEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _oeKeyEventListener, _oeMenuBar);
 		init(_frame, _oeKeyEventListener, _oeMenuBar);
 
 		// At this point the InspectorController is not yet loaded
-		_selectionManager = new OESelectionManager(this);
+		_selectionManager = new VESelectionManager(this);
 
 		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
@@ -110,7 +110,7 @@ public class OEController extends FlexoController implements SelectionManagingCo
 
 	@Override
 	public ControllerActionInitializer createControllerActionInitializer() {
-		return new OEControllerActionInitializer(this);
+		return new VEControllerActionInitializer(this);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	// ============== Instance method =================
 	// ================================================
 
-	public OEFrame getMainFrame() {
+	public VEFrame getMainFrame() {
 		return _frame;
 	}
 
@@ -160,22 +160,22 @@ public class OEController extends FlexoController implements SelectionManagingCo
 
 	public void showBrowser() {
 		if (getMainPane() != null) {
-			((OEMainPane) getMainPane()).showBrowser();
+			((VEMainPane) getMainPane()).showBrowser();
 		}
 	}
 
 	public void hideBrowser() {
 		if (getMainPane() != null) {
-			((OEMainPane) getMainPane()).hideBrowser();
+			((VEMainPane) getMainPane()).hideBrowser();
 		}
 	}
 
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new OEMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new VEMainPane(getEmptyPanel(), getMainFrame(), this);
 	}
 
-	public OEKeyEventListener getKeyEventListener() {
+	public VEKeyEventListener getKeyEventListener() {
 		return _oeKeyEventListener;
 	}
 
@@ -188,7 +188,7 @@ public class OEController extends FlexoController implements SelectionManagingCo
 		return getOESelectionManager();
 	}
 
-	public OESelectionManager getOESelectionManager() {
+	public VESelectionManager getOESelectionManager() {
 		return _selectionManager;
 	}
 

@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
-import org.openflexo.ve.controller.OEController;
-import org.openflexo.ve.controller.OESelectionManager;
+import org.openflexo.ve.controller.VEController;
+import org.openflexo.ve.controller.VESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
 /**
@@ -33,22 +33,22 @@ import org.openflexo.view.controller.ControllerActionInitializer;
  * 
  * @author yourname
  */
-public class OEControllerActionInitializer extends ControllerActionInitializer {
+public class VEControllerActionInitializer extends ControllerActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	private OEController _oeController;
+	private VEController _oeController;
 
-	public OEControllerActionInitializer(OEController controller) {
+	public VEControllerActionInitializer(VEController controller) {
 		super(controller);
 		_oeController = controller;
 	}
 
-	protected OEController getOEController() {
+	protected VEController getOEController() {
 		return _oeController;
 	}
 
-	protected OESelectionManager getOESelectionManager() {
+	protected VESelectionManager getOESelectionManager() {
 		return getOEController().getOESelectionManager();
 	}
 
@@ -56,7 +56,7 @@ public class OEControllerActionInitializer extends ControllerActionInitializer {
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new OESetPropertyInitializer(this)).init();
+		(new VESetPropertyInitializer(this)).init();
 
 		// Shema library perspective
 		(new AddViewInitializer(this)).init();

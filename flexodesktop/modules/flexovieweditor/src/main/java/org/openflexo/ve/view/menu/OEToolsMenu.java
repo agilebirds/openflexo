@@ -27,7 +27,7 @@ package org.openflexo.ve.view.menu;
  */
 import java.util.logging.Logger;
 
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.menu.ToolsMenu;
 
 /**
@@ -44,20 +44,20 @@ public class OEToolsMenu extends ToolsMenu {
 	// =========================
 	// ==========================================================================
 
-	protected OEController _xxxController;
+	protected VEController _xxxController;
 
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public OEToolsMenu(OEController controller) {
+	public OEToolsMenu(VEController controller) {
 		super(controller);
 		_xxxController = controller;
 		// Put your actions here
 	}
 
-	public OEController getXXXController() {
+	public VEController getXXXController() {
 		return _xxxController;
 	}
 }

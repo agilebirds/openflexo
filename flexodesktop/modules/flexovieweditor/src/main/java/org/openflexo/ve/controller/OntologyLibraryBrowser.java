@@ -23,8 +23,8 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.rm.FlexoProject;
 
-public class OntologyLibraryBrowser extends OEBrowser {
-	public OntologyLibraryBrowser(OEController controller) {
+public class OntologyLibraryBrowser extends VEBrowser {
+	public OntologyLibraryBrowser(VEController controller) {
 		super(controller);
 	}
 

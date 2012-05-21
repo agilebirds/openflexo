@@ -41,7 +41,7 @@ import org.openflexo.view.controller.FlexoController;
 
 public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 
-	private final OEController _controller;
+	private final VEController _controller;
 
 	private final OntologyPerspectiveBrowserView _ontologyPerspectiveBrowserView;
 
@@ -54,7 +54,7 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 	 *            TODO
 	 * @param name
 	 */
-	public OntologyPerspective(OEController controller) {
+	public OntologyPerspective(VEController controller) {
 		super("ontology_perspective");
 		_controller = controller;
 		_ontologyPerspectiveBrowserView = new OntologyPerspectiveBrowserView(controller);
@@ -100,7 +100,7 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 	public ModuleView<? extends OntologyObject> createModuleViewForObject(OntologyObject object, FlexoController controller) {
 		if (object instanceof FlexoOntology) {
 			((FlexoOntology) object).loadWhenUnloaded();
-			return new OntologyView((FlexoOntology) object, (OEController) controller, this);
+			return new OntologyView((FlexoOntology) object, (VEController) controller, this);
 		}
 		return new EmptyPanel<OntologyObject>(controller, this, object);
 	}

@@ -27,7 +27,7 @@ package org.openflexo.ve.view.menu;
  */
 import java.util.logging.Logger;
 
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.menu.EditMenu;
 
 /**
@@ -44,14 +44,14 @@ public class OEEditMenu extends EditMenu {
 	// =========================
 	// ==========================================================================
 
-	protected OEController _xxxController;
+	protected VEController _xxxController;
 
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public OEEditMenu(OEController controller) {
+	public OEEditMenu(VEController controller) {
 		super(controller);
 		_xxxController = controller;
 		addSeparator();

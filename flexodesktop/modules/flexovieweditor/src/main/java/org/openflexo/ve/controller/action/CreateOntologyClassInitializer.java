@@ -32,7 +32,7 @@ import org.openflexo.foundation.ontology.action.CreateOntologyClass;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -40,13 +40,13 @@ public class CreateOntologyClassInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateOntologyClassInitializer(OEControllerActionInitializer actionInitializer) {
+	CreateOntologyClassInitializer(VEControllerActionInitializer actionInitializer) {
 		super(CreateOntologyClass.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class CreateOntologyClassInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateOntologyClass>() {
 			@Override
 			public boolean run(ActionEvent e, CreateOntologyClass action) {
-				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewClass());
+				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewClass());
 				return true;
 			}
 		};

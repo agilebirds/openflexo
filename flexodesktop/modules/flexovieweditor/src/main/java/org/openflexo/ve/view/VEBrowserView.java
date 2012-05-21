@@ -37,8 +37,8 @@ import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.action.MoveView;
 import org.openflexo.foundation.view.action.MoveViewFolder;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.controller.OEBrowser;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEBrowser;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -47,23 +47,23 @@ import org.openflexo.view.controller.FlexoController;
  * @author yourname
  * 
  */
-public class OEBrowserView extends BrowserView {
+public class VEBrowserView extends BrowserView {
 
-	private static final Logger logger = Logger.getLogger(OEBrowserView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VEBrowserView.class.getPackage().getName());
 
 	// ==========================================================================
 	// ============================= Variables
 	// ==================================
 	// ==========================================================================
 
-	protected OEController _controller;
+	protected VEController _controller;
 
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public OEBrowserView(OEBrowser browser, OEController controller, SelectionPolicy selectionPolicy) {
+	public VEBrowserView(VEBrowser browser, VEController controller, SelectionPolicy selectionPolicy) {
 		super(browser, controller.getKeyEventListener(), controller.getEditor(), selectionPolicy);
 		_controller = controller;
 	}

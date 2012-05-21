@@ -42,7 +42,7 @@ import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.ve.VECst;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
-import org.openflexo.ve.view.OEBrowserView;
+import org.openflexo.ve.view.VEBrowserView;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
@@ -50,12 +50,12 @@ import org.openflexo.view.controller.FlexoController;
 
 public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 
-	private final OEController _controller;
+	private final VEController _controller;
 
 	private final ShemaLibraryBrowser _browser;
 	private final ShemaBrowser shemaBrowser;
-	private final OEBrowserView _browserView;
-	private final OEBrowserView shemaBrowserView;
+	private final VEBrowserView _browserView;
+	private final VEBrowserView shemaBrowserView;
 
 	private final Hashtable<View, VEShemaController> _controllers;
 	private final Hashtable<VEShemaController, JSplitPane> _splitPaneForProcess;
@@ -71,13 +71,13 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	 *            TODO
 	 * @param name
 	 */
-	public DiagramPerspective(OEController controller) {
+	public DiagramPerspective(VEController controller) {
 		super("diagram_perspective");
 		_controller = controller;
 		_controllers = new Hashtable<View, VEShemaController>();
 		_splitPaneForProcess = new Hashtable<VEShemaController, JSplitPane>();
 		_browser = new ShemaLibraryBrowser(controller);
-		_browserView = new OEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
+		_browserView = new VEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
 			@Override
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
@@ -98,7 +98,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 			  }			*/
 		};
 		shemaBrowser = new ShemaBrowser(controller);
-		shemaBrowserView = new OEBrowserView(shemaBrowser, controller, SelectionPolicy.ForceSelection);
+		shemaBrowserView = new VEBrowserView(shemaBrowser, controller, SelectionPolicy.ForceSelection);
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, shemaBrowserView);
 		splitPane.setDividerLocation(0.7);
 		splitPane.setResizeWeight(0.7);

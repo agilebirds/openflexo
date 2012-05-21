@@ -32,11 +32,11 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class OESetPropertyInitializer extends ActionInitializer {
+public class VESetPropertyInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public OESetPropertyInitializer(ControllerActionInitializer actionInitializer) {
+	public VESetPropertyInitializer(ControllerActionInitializer actionInitializer) {
 		super(SetPropertyAction.actionType, actionInitializer);
 	}
 
