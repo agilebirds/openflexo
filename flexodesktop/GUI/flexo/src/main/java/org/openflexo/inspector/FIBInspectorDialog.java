@@ -20,11 +20,18 @@
 package org.openflexo.inspector;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Logger;
 
 import javax.swing.JDialog;
 import javax.swing.WindowConstants;
 
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
 import org.openflexo.swing.WindowSynchronizer;
 
 /**
@@ -33,9 +40,11 @@ import org.openflexo.swing.WindowSynchronizer;
  * @author sylvain
  * 
  */
-public class FIBInspectorDialog extends JDialog {
+public class FIBInspectorDialog extends JDialog implements Observer {
 
 	static final Logger logger = Logger.getLogger(FIBInspectorDialog.class.getPackage().getName());
+
+	private static final String INSPECTOR_TITLE = "Inspector";
 
 	private final FIBInspectorPanel inspectorPanel;
 
@@ -44,12 +53,14 @@ public class FIBInspectorDialog extends JDialog {
 	private static final WindowSynchronizer inspectorSync = new WindowSynchronizer();
 
 	public FIBInspectorDialog(ModuleInspectorController inspectorController) {
-		super(inspectorController.getFlexoController().getFlexoFrame(), "Inspector", false);
+		super(inspectorController.getFlexoController().getFlexoFrame(), INSPECTOR_TITLE, false);
 
 		this.inspectorController = inspectorController;
 
 		inspectorSync.addToSynchronizedWindows(this);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+
+		inspectorController.addObserver(this);
 
 		inspectorPanel = new FIBInspectorPanel(inspectorController);
 		getContentPane().setLayout(new BorderLayout());
@@ -57,8 +68,13 @@ public class FIBInspectorDialog extends JDialog {
 
 		setResizable(true);
 		setLocation(1210, 360);
+		setPreferredSize(new Dimension(400, 400));
 		pack();
 		setVisible(true);
+	}
+
+	public void delete() {
+		inspectorController.deleteObserver(this);
 	}
 
 	/*public void inspectObject(Object object) {
@@ -74,6 +90,26 @@ public class FIBInspectorDialog extends JDialog {
 			}
 		}
 	}*/
+
+	@Override
+	public void update(Observable o, Object notification) {
+		/*if (notification instanceof EmptySelectionActivated) {
+			setTitle(INSPECTOR_TITLE);
+		} else if (notification instanceof MultipleSelectionActivated) {
+			setTitle(INSPECTOR_TITLE);
+		} else*/if (notification instanceof InspectedObjectChanged) {
+			Object object = ((InspectedObjectChanged) notification).getInspectedObject();
+			if (object instanceof FlexoModelObject && (object instanceof ViewShape || object instanceof ViewConnector)
+					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
+				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
+						.getInspector().getInspectorTitle();
+				setTitle(newTitle);
+			} else {
+				FIBInspector newInspector = inspectorController.inspectorForObject(object);
+				setTitle(newInspector.getParameter("title"));
+			}
+		}
+	}
 
 	public FIBInspectorPanel getInspectorPanel() {
 		return inspectorPanel;

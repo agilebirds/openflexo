@@ -642,7 +642,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void moveToTop(GraphicalRepresentation<?> gr) {
 		// TODO: something to do here
-		logger.info("moveToTop temporarily desactivated");
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("moveToTop temporarily desactivated");
+		}
 		/*if (!gr.isValidated()) {
 			logger.warning("GR " + gr + " is not validated");
 		}

@@ -20,7 +20,6 @@
 package org.openflexo.inspector;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Observable;
@@ -28,6 +27,7 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -68,6 +68,8 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	public FIBInspectorPanel(ModuleInspectorController inspectorController) {
 
 		super(new BorderLayout());
+		setBorder(BorderFactory.createEmptyBorder());
+		// setOpaque(false);
 
 		this.inspectorController = inspectorController;
 
@@ -78,10 +80,8 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		rebuildViews();
 
 		EMPTY_CONTENT = new JPanel(new BorderLayout());
-		EMPTY_CONTENT.setPreferredSize(new Dimension(400, 400));
 		EMPTY_CONTENT.add(new JLabel("No selection", SwingConstants.CENTER), BorderLayout.CENTER);
 		MULTIPLE_SELECTION_CONTENT = new JPanel(new BorderLayout());
-		MULTIPLE_SELECTION_CONTENT.setPreferredSize(new Dimension(400, 400));
 		MULTIPLE_SELECTION_CONTENT.add(new JLabel("Multiple selection", SwingConstants.CENTER), BorderLayout.CENTER);
 
 		switchToEmptyContent();
@@ -89,8 +89,6 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	}
 
 	private void rebuildViews() {
-
-		logger.info("Rebuid views !!!");
 
 		if (inspectorViews != null) {
 			inspectorViews.clear();
