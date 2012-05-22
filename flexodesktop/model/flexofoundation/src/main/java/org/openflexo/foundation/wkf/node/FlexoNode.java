@@ -191,15 +191,15 @@ public abstract class FlexoNode extends PetriGraphNode implements ExecutableWork
 	}
 
 	public boolean isBeginNode() {
-		return (getNodeType() == NodeType.BEGIN);
+		return getNodeType() == NodeType.BEGIN;
 	}
 
 	public boolean isEndNode() {
-		return (getNodeType() == NodeType.END);
+		return getNodeType() == NodeType.END;
 	}
 
 	public boolean isNormalNode() {
-		return (getNodeType() == NodeType.NORMAL);
+		return getNodeType() == NodeType.NORMAL;
 	}
 
 	@Override
@@ -220,11 +220,10 @@ public abstract class FlexoNode extends PetriGraphNode implements ExecutableWork
 			return true;
 		}
 		int accessNumber = getIncomingPostConditions().size();
-		for (Enumeration e = getPreConditions().elements(); e.hasMoreElements();) {
-			FlexoPreCondition pre = (FlexoPreCondition) e.nextElement();
+		for (FlexoPreCondition pre : getPreConditions()) {
 			accessNumber += pre.getIncomingPostConditions().size();
 		}
-		return (accessNumber > 0) || super.isAccessible();
+		return accessNumber > 0 || super.isAccessible();
 	}
 
 	public abstract boolean isInteractive();
