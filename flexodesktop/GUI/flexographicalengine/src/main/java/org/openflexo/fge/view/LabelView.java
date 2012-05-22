@@ -317,7 +317,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	public void paint(Graphics g) {
 		boolean skipPaint = getPaintManager().isPaintingCacheEnabled() && getPaintManager().getDrawingView().isBuffering()
 				&& (getPaintManager().isTemporaryObject(getGraphicalRepresentation()) || isEditing);
-		if (skipPaint) {
+		if (skipPaint || !getGraphicalRepresentation().hasText()) {
 			return;
 		}
 		super.paint(g);
@@ -409,7 +409,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		}
 		if (!bounds.equals(getBounds())) {
 			setBounds(bounds);
-			validate();
+			revalidate();
 			if (repeat) {
 				updateBoundsLater();
 			}
@@ -420,7 +420,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				updateBounds(true);
+				updateBounds(false);
 			}
 		});
 	}
@@ -530,6 +530,19 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		if (isEditing()) {
+			int availableLabelWidth = getGraphicalRepresentation().getAvailableLabelWidth(getScale());
+			if (availableLabelWidth > width) {
+				System.err.println("Changin from " + width + " to " + availableLabelWidth);
+				width += textComponent.getFontMetrics(textComponent.getFont()).charWidth('M');
+			}
+
+		}
+		super.setBounds(x, y, width, height);
+	}
+
+	@Override
 	public void setDoubleBuffered(boolean aFlag) {
 		super.setDoubleBuffered(aFlag && ToolBox.getPLATFORM() == ToolBox.MACOS);
 		if (textComponent != null) {
@@ -609,6 +622,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (!getGraphicalRepresentation().getContinuousTextEditing()) {
 			getGraphicalRepresentation().setText(textComponent.getText());
 		}
+		updateBounds(false);
 		isEditing = false;
 		unregisterTextListener();
 		if (logger.isLoggable(Level.INFO)) {
