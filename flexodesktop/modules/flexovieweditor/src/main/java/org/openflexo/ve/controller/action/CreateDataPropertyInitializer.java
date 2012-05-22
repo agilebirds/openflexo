@@ -32,7 +32,7 @@ import org.openflexo.foundation.ontology.action.CreateDataProperty;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -40,13 +40,13 @@ public class CreateDataPropertyInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDataPropertyInitializer(OEControllerActionInitializer actionInitializer) {
+	CreateDataPropertyInitializer(VEControllerActionInitializer actionInitializer) {
 		super(CreateDataProperty.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class CreateDataPropertyInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateDataProperty>() {
 			@Override
 			public boolean run(ActionEvent e, CreateDataProperty action) {
-				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
+				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
 				return true;
 			}
 		};

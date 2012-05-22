@@ -43,8 +43,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.controller.OEBrowser;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEBrowser;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.controller.OntologyBrowser;
 import org.openflexo.ve.controller.OntologyLibraryBrowser;
 
@@ -53,16 +53,16 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 	private OntologyLibraryBrowser mainBrowser;
 	private OntologyBrowser ontologyBrowser;
 	private OntologyLibraryBrowserView mainBrowserView;
-	private OEBrowserView ontologyBrowserView;
+	private VEBrowserView ontologyBrowserView;
 	private JSplitPane splitPane;
 	private int dividerLocation;
 
-	public OntologyPerspectiveBrowserView(final OEController controller) {
+	public OntologyPerspectiveBrowserView(final VEController controller) {
 		super(new BorderLayout());
 		mainBrowser = new OntologyLibraryBrowser(controller);
 		mainBrowserView = new OntologyLibraryBrowserView(mainBrowser, controller, SelectionPolicy.ParticipateToSelection);
 		ontologyBrowser = new OntologyBrowser(controller);
-		ontologyBrowserView = new OEBrowserView(ontologyBrowser, controller, SelectionPolicy.ForceSelection);
+		ontologyBrowserView = new VEBrowserView(ontologyBrowser, controller, SelectionPolicy.ForceSelection);
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainBrowserView, ontologyBrowserView);
 		splitPane.setDividerLocation(0.5);
 		splitPane.setResizeWeight(0.5);
@@ -85,9 +85,9 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 		ontologyBrowser.addBrowserListener(mainBrowserView);
 	}
 
-	public class OntologyLibraryBrowserView extends OEBrowserView {
+	public class OntologyLibraryBrowserView extends VEBrowserView {
 
-		public OntologyLibraryBrowserView(OEBrowser browser, final OEController controller, SelectionPolicy selectionPolicy) {
+		public OntologyLibraryBrowserView(VEBrowser browser, final VEController controller, SelectionPolicy selectionPolicy) {
 			super(browser, controller, selectionPolicy);
 
 			treeView.setCellRenderer(new BrowserViewCellRenderer() {

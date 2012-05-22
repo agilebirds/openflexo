@@ -40,6 +40,8 @@ public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyPr
 	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
 	private OntologyLibrary ontologyLibrary;
+	private OntologyClass domainClass;
+	private OntologyClass rangeClass;
 
 	public OntologyPropertySelector(OntologyProperty object) {
 		super(null, object, OntologyProperty.class);
@@ -165,14 +167,27 @@ public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyPr
 	}
 
 	public OntologyClass getDomainClass() {
-		if (getRootObject() instanceof OntologyClass) {
+		/*if (getRootObject() instanceof OntologyClass) {
 			return (OntologyClass) getRootObject();
-		}
-		return null;
+		}*/
+		return domainClass;
 	}
 
 	public void setDomainClass(OntologyClass aClass) {
-		super.setRootObject(aClass);
+		this.domainClass = aClass;
+		// super.setRootObject(aClass);
+	}
+
+	public OntologyClass getRangeClass() {
+		/*if (getRootObject() instanceof OntologyClass) {
+			return (OntologyClass) getRootObject();
+		}*/
+		return rangeClass;
+	}
+
+	public void setRangeClass(OntologyClass aClass) {
+		this.rangeClass = aClass;
+		// super.setRootObject(aClass);
 	}
 
 	public String getDomainClassURI() {
@@ -191,4 +206,22 @@ public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyPr
 		}
 	}
 
+	@Override
+	public boolean isSelectable(FlexoModelObject object) {
+		if (super.isSelectable(object)) {
+			OntologyProperty property = (OntologyProperty) object;
+			if (getDomainClass() != null && property.getDomain() != null) {
+				return property.getDomain().isSuperConceptOf(getDomainClass());
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void openPopup() {
+		super.openPopup();
+		if (domainClass != null) {
+			getSelectorPanel().getBrowser().expand(domainClass, true);
+		}
+	}
 }

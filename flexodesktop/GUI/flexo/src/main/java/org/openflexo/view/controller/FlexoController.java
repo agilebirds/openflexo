@@ -105,7 +105,7 @@ import org.openflexo.inspector.InspectorExceptionHandler;
 import org.openflexo.inspector.InspectorNotFoundHandler;
 import org.openflexo.inspector.InspectorSinglePanel;
 import org.openflexo.inspector.InspectorWindow;
-import org.openflexo.inspector.MainInspectorController;
+import org.openflexo.inspector.ModuleInspectorController;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
@@ -281,7 +281,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	private FlexoSharedInspectorController inspectorController;
 
-	private MainInspectorController mainInspectorController;
+	private ModuleInspectorController mainInspectorController;
 
 	/**
 	 *
@@ -300,7 +300,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (useNewInspectorScheme()) {
 			loadInspectorGroup(getModule().getShortName().toUpperCase());
 			if (this instanceof SelectionManagingController) {
-				((SelectionManagingController) this).getSelectionManager().addObserver(getMainInspectorController());
+				((SelectionManagingController) this).getSelectionManager().addObserver(getModuleInspectorController());
 			}
 		}
 		_docInspectorController = new FlexoDocInspectorController(this);
@@ -309,16 +309,16 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		}
 	}
 
-	protected MainInspectorController getMainInspectorController() {
+	public ModuleInspectorController getModuleInspectorController() {
 		if (mainInspectorController == null) {
-			mainInspectorController = new MainInspectorController(this);
+			mainInspectorController = new ModuleInspectorController(this);
 		}
 		return mainInspectorController;
 	}
 
 	protected void loadInspectorGroup(String inspectorGroup) {
 		File inspectorsDir = new FileResource("Inspectors/" + inspectorGroup);
-		getMainInspectorController().loadDirectory(inspectorsDir);
+		getModuleInspectorController().loadDirectory(inspectorsDir);
 	}
 
 	public FlexoDocInspectorController getDocInspectorController() {
@@ -535,7 +535,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		}
 
 		if (useNewInspectorScheme()) {
-			getMainInspectorController().setVisible(true);
+			getModuleInspectorController().getInspectorDialog().setVisible(true);
 		}
 
 	}
@@ -545,7 +545,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (useOldInspectorScheme()) {
 			getInspectorWindow().newSelection(new EmptySelection());
 		} else {
-			getMainInspectorController().resetInspector();
+			getModuleInspectorController().resetInspector();
 		}
 	}
 

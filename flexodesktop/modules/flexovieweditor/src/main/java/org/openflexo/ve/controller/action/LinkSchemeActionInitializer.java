@@ -32,7 +32,7 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -41,13 +41,13 @@ public class LinkSchemeActionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	LinkSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
+	LinkSchemeActionInitializer(VEControllerActionInitializer actionInitializer) {
 		super(LinkSchemeAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class LinkSchemeActionInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<LinkSchemeAction>() {
 			@Override
 			public boolean run(ActionEvent e, LinkSchemeAction action) {
-				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewConnector());
+				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewConnector());
 				return true;
 			}
 		};

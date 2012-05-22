@@ -40,13 +40,13 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ActionSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
+	ActionSchemeActionInitializer(VEControllerActionInitializer actionInitializer) {
 		super(null, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

@@ -32,11 +32,11 @@ import org.openflexo.selection.ContextualMenuManager;
  * 
  * @author yourname
  */
-public class OEContextualMenuManager extends ContextualMenuManager {
+public class VEContextualMenuManager extends ContextualMenuManager {
 
-	private OEController _controller;
+	private VEController _controller;
 
-	public OEContextualMenuManager(OESelectionManager selectionManager, FlexoEditor editor, OEController controller) {
+	public VEContextualMenuManager(VESelectionManager selectionManager, FlexoEditor editor, VEController controller) {
 		super(selectionManager, editor);
 		_controller = controller;
 	}

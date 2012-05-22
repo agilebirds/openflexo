@@ -19,12 +19,15 @@
  */
 package org.openflexo.ve.controller;
 
+import java.awt.Dimension;
 import java.util.Hashtable;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.openflexo.FlexoCst;
@@ -37,12 +40,13 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.icon.VEIconLibrary;
+import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.ve.VECst;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
-import org.openflexo.ve.view.OEBrowserView;
+import org.openflexo.ve.view.VEBrowserView;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
@@ -50,15 +54,15 @@ import org.openflexo.view.controller.FlexoController;
 
 public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 
-	private final OEController _controller;
+	private final VEController _controller;
 
 	private final ShemaLibraryBrowser _browser;
 	private final ShemaBrowser shemaBrowser;
-	private final OEBrowserView _browserView;
-	private final OEBrowserView shemaBrowserView;
+	private final VEBrowserView _browserView;
+	private final VEBrowserView shemaBrowserView;
 
 	private final Hashtable<View, VEShemaController> _controllers;
-	private final Hashtable<VEShemaController, JSplitPane> _splitPaneForProcess;
+	private final Hashtable<VEShemaController, JSplitPane> _rightPanels;
 
 	private final JSplitPane splitPane;
 
@@ -66,18 +70,21 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 
 	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
+	private static FIBInspectorPanel inspectorPanel;
+
 	/**
 	 * @param controller
 	 *            TODO
 	 * @param name
 	 */
-	public DiagramPerspective(OEController controller) {
+	public DiagramPerspective(VEController controller) {
 		super("diagram_perspective");
+		EMPTY_RIGHT_VIEW.setPreferredSize(new Dimension(300, 300));
 		_controller = controller;
 		_controllers = new Hashtable<View, VEShemaController>();
-		_splitPaneForProcess = new Hashtable<VEShemaController, JSplitPane>();
+		_rightPanels = new Hashtable<VEShemaController, JSplitPane>();
 		_browser = new ShemaLibraryBrowser(controller);
-		_browserView = new OEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
+		_browserView = new VEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
 			@Override
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
@@ -98,12 +105,15 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 			  }			*/
 		};
 		shemaBrowser = new ShemaBrowser(controller);
-		shemaBrowserView = new OEBrowserView(shemaBrowser, controller, SelectionPolicy.ForceSelection);
+		shemaBrowserView = new VEBrowserView(shemaBrowser, controller, SelectionPolicy.ForceSelection);
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, shemaBrowserView);
 		splitPane.setDividerLocation(0.7);
 		splitPane.setResizeWeight(0.7);
 		infoLabel = new JLabel("Diagram perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
+
+		// Initialized inspector panel
+		inspectorPanel = new FIBInspectorPanel(controller.getModuleInspectorController());
 	}
 
 	public void focusOnShema(View shema) {
@@ -206,7 +216,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 
 	public void removeFromControllers(VEShemaController shemaController) {
 		_controllers.remove(shemaController.getDrawing().getShema());
-		_splitPaneForProcess.remove(shemaController);
+		_rightPanels.remove(shemaController);
 	}
 
 	@Override
@@ -246,7 +256,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 		if (getCurrentShemaModuleView() == null) {
 			return EMPTY_RIGHT_VIEW;
 		}
-		return getSplitPaneWithPalettesAndDocInspectorPanel();
+		return getRightPanel();
 	}
 
 	/**
@@ -254,20 +264,33 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	 * 
 	 * @return
 	 */
-	protected JSplitPane getSplitPaneWithPalettesAndDocInspectorPanel() {
-		JSplitPane splitPaneWithPalettesAndDocInspectorPanel = _splitPaneForProcess.get(getCurrentShemaModuleView().getController());
-		if (splitPaneWithPalettesAndDocInspectorPanel == null) {
-			splitPaneWithPalettesAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, getCurrentShemaModuleView()
-					.getController().getPaletteView(), _controller.getDisconnectedDocInspectorPanel());
-			splitPaneWithPalettesAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithPalettesAndDocInspectorPanel.setDividerLocation(VECst.PALETTE_DOC_SPLIT_LOCATION);
-			_splitPaneForProcess.put(getCurrentShemaModuleView().getController(), splitPaneWithPalettesAndDocInspectorPanel);
+	protected JSplitPane getRightPanel() {
+		JSplitPane returned = _rightPanels.get(getCurrentShemaModuleView().getController());
+		if (returned == null) {
+			Dimension paletteViewPreferredSize = getCurrentShemaModuleView().getController().getPaletteView().getPreferredSize();
+			Dimension inspectorPanelPreferredSize = inspectorPanel.getPreferredSize();
+			// System.out.println("inspectorPanel=" + inspectorPanel.getPreferredSize());
+			// System.out.println("paletteViewPreferredSize=" + paletteViewPreferredSize);
+			inspectorPanel.setPreferredSize(new Dimension(paletteViewPreferredSize.width, inspectorPanelPreferredSize.height));
+			JScrollPane inspectorPanelSP = new JScrollPane(inspectorPanel);
+			// System.out.println("inspectorPanelSP=" + inspectorPanelSP.getPreferredSize());
+			inspectorPanelSP.setOpaque(false);
+			inspectorPanelSP.setBorder(BorderFactory.createEmptyBorder());
+			// inspectorPanelSP.setPreferredSize(new Dimension(300, 300));
+			returned = new JSplitPane(JSplitPane.VERTICAL_SPLIT, getCurrentShemaModuleView().getController().getPaletteView(),
+					inspectorPanelSP /*_controller.getDisconnectedDocInspectorPanel()*/);
+			returned.setOpaque(false);
+			returned.setBorder(BorderFactory.createEmptyBorder());
+			returned.setResizeWeight(0);
+			returned.setDividerLocation(VECst.PALETTE_DOC_SPLIT_LOCATION);
+			// returned.setPreferredSize(new Dimension(300, 300));
+			_rightPanels.put(getCurrentShemaModuleView().getController(), returned);
 		}
-		if (splitPaneWithPalettesAndDocInspectorPanel.getBottomComponent() == null) {
-			splitPaneWithPalettesAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
+		if (returned.getBottomComponent() == null) {
+			// returned.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
+			returned.setBottomComponent(inspectorPanel);
 		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithPalettesAndDocInspectorPanel, "OEPaletteAndDocInspectorPanel");
-		return splitPaneWithPalettesAndDocInspectorPanel;
+		new FlexoSplitPaneLocationSaver(returned, "VE_DIAGRAM_PERSPECTIVE_RIGHT_PANE");
+		return returned;
 	}
-
 }

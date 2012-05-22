@@ -32,7 +32,7 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -41,13 +41,13 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DropSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
+	DropSchemeActionInitializer(VEControllerActionInitializer actionInitializer) {
 		super(DropSchemeAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 						logger.info("Shape has been relocated");
 					}*/
 
-				((OEController) getController()).getSelectionManager().setSelectedObject(action.getPrimaryShape());
+				((VEController) getController()).getSelectionManager().setSelectedObject(action.getPrimaryShape());
 				return true;
 			}
 		};

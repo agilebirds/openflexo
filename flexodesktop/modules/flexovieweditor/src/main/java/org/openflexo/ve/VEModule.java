@@ -38,7 +38,7 @@ import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.external.ExternalOEModule;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -59,7 +59,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 
 	public VEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
-		setFlexoController(new OEController(projectEditor, this));
+		setFlexoController(new VEController(projectEditor, this));
 		getOEController().loadRelativeWindows();
 		VEPreferences.init(getOEController());
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
@@ -79,8 +79,8 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 		return inspectorGroups;
 	}
 
-	public OEController getOEController() {
-		return (OEController) getFlexoController();
+	public VEController getOEController() {
+		return (VEController) getFlexoController();
 	}
 
 	@Override
