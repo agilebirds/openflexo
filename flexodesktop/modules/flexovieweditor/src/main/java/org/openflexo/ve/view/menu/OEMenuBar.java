@@ -26,7 +26,7 @@ package org.openflexo.ve.view.menu;
  * (c) Denali 2003-2006
  */
 import org.openflexo.module.Module;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.EditMenu;
 import org.openflexo.view.menu.FileMenu;
@@ -45,7 +45,7 @@ public class OEMenuBar extends FlexoMenuBar {
 	private OEEditMenu _editMenu;
 	private OEToolsMenu _toolsMenu;
 
-	public OEMenuBar(OEController controller) {
+	public OEMenuBar(VEController controller) {
 		super(controller, Module.XXX_MODULE);
 	}
 
@@ -58,7 +58,7 @@ public class OEMenuBar extends FlexoMenuBar {
 	@Override
 	public FileMenu getFileMenu(FlexoController controller) {
 		if (_fileMenu == null) {
-			_fileMenu = new OEFileMenu((OEController) controller);
+			_fileMenu = new OEFileMenu((VEController) controller);
 		}
 		return _fileMenu;
 	}
@@ -72,7 +72,7 @@ public class OEMenuBar extends FlexoMenuBar {
 	@Override
 	public EditMenu getEditMenu(FlexoController controller) {
 		if (_editMenu == null) {
-			_editMenu = new OEEditMenu((OEController) controller);
+			_editMenu = new OEEditMenu((VEController) controller);
 		}
 		return _editMenu;
 	}
@@ -86,7 +86,7 @@ public class OEMenuBar extends FlexoMenuBar {
 	@Override
 	public WindowMenu getWindowMenu(FlexoController controller, Module module) {
 		if (_windowMenu == null) {
-			_windowMenu = new OEWindowMenu((OEController) controller);
+			_windowMenu = new OEWindowMenu((VEController) controller);
 		}
 		return _windowMenu;
 	}
@@ -99,7 +99,7 @@ public class OEMenuBar extends FlexoMenuBar {
 	 */
 	public ToolsMenu getToolsMenu(FlexoController controller, Module module) {
 		if (_toolsMenu == null) {
-			_toolsMenu = new OEToolsMenu((OEController) controller);
+			_toolsMenu = new OEToolsMenu((VEController) controller);
 		}
 		return _toolsMenu;
 	}

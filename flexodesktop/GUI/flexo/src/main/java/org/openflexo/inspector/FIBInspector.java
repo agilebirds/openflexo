@@ -63,6 +63,12 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 
+/**
+ * Represent a FIBComponent used as an inspector for a particular class instance
+ * 
+ * @author sylvain
+ * 
+ */
 public class FIBInspector extends FIBPanel {
 
 	static final Logger logger = Logger.getLogger(FIBInspector.class.getPackage().getName());
@@ -71,18 +77,21 @@ public class FIBInspector extends FIBPanel {
 
 	private FIBInspector superInspector;
 
+	private Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
+	private Hashtable<EditionPattern, FIBTab> tabsForEP = new Hashtable<EditionPattern, FIBTab>();
+
 	public FIBInspector getSuperInspector() {
 		return superInspector;
 	}
 
-	protected void appendSuperInspectors(MainInspectorController controller) {
+	protected void appendSuperInspectors(ModuleInspectorController inspectorController) {
 		if (getDataType() == null) {
 			return;
 		}
 		if (getDataType() instanceof Class) {
-			FIBInspector superInspector = controller.inspectorForClass(((Class) getDataType()).getSuperclass());
+			FIBInspector superInspector = inspectorController.inspectorForClass(((Class) getDataType()).getSuperclass());
 			if (superInspector != null) {
-				superInspector.appendSuperInspectors(controller);
+				superInspector.appendSuperInspectors(inspectorController);
 				this.superInspector = superInspector;
 				appendSuperInspector(superInspector);
 			}
@@ -424,6 +433,4 @@ public class FIBInspector extends FIBPanel {
 		return newTab;
 	}
 
-	private Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
-	private Hashtable<EditionPattern, FIBTab> tabsForEP = new Hashtable<EditionPattern, FIBTab>();
 }

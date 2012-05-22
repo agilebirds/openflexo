@@ -32,8 +32,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.ve.VECst;
-import org.openflexo.ve.controller.OEController;
-import org.openflexo.ve.controller.OEKeyEventListener;
+import org.openflexo.ve.controller.VEController;
+import org.openflexo.ve.controller.VEKeyEventListener;
 import org.openflexo.ve.view.menu.OEMenuBar;
 import org.openflexo.view.FlexoFrame;
 
@@ -42,20 +42,20 @@ import org.openflexo.view.FlexoFrame;
  * 
  * @author yourname
  */
-public class OEFrame extends FlexoFrame {
+public class VEFrame extends FlexoFrame {
 
-	private static final Logger logger = Logger.getLogger(OEFrame.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(VEFrame.class.getPackage().getName());
 
 	// ==========================================================================
 	// ============================= Instance variables
 	// =========================
 	// ==========================================================================
 
-	protected OEController _oeController;
+	protected VEController _oeController;
 
 	protected OEMenuBar _oeMenuBar;
 
-	protected OEKeyEventListener _oeKeyEventListener;
+	protected VEKeyEventListener _oeKeyEventListener;
 
 	// ================================================
 	// ================ Constructor ===================
@@ -64,7 +64,7 @@ public class OEFrame extends FlexoFrame {
 	/**
 	 * Constructor for XXXFrame
 	 */
-	public OEFrame(String title, OEController controller, OEKeyEventListener wkfKeyEventListener, OEMenuBar menuBar)
+	public VEFrame(String title, VEController controller, VEKeyEventListener wkfKeyEventListener, OEMenuBar menuBar)
 			throws HeadlessException {
 		super(title, controller, wkfKeyEventListener, menuBar);
 		_oeController = controller;
@@ -84,7 +84,7 @@ public class OEFrame extends FlexoFrame {
 	/**
 	 * @return Returns the controller.
 	 */
-	public OEController getOEController() {
+	public VEController getOEController() {
 		return _oeController;
 	}
 

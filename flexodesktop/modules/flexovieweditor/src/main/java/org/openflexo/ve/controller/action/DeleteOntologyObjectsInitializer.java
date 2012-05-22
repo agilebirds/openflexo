@@ -39,13 +39,13 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteOntologyObjectsInitializer(OEControllerActionInitializer actionInitializer) {
+	DeleteOntologyObjectsInitializer(VEControllerActionInitializer actionInitializer) {
 		super(DeleteOntologyObjects.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

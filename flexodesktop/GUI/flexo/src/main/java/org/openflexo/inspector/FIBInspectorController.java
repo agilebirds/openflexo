@@ -39,6 +39,12 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
+/**
+ * Represents the controller of a FIBInspector (FIBComponent) in the context of Swing graphical inspection
+ * 
+ * @author sylvain
+ * 
+ */
 public class FIBInspectorController extends FlexoFIBController {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBInspectorController.class.getPackage().getName());

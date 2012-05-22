@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 
 /**
  * Contains preferences for this module
@@ -44,9 +44,9 @@ public final class VEPreferences extends ModulePreferences {
 
 	protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
 
-	private static OEController _controller;
+	private static VEController _controller;
 
-	public static void init(OEController controller) {
+	public static void init(VEController controller) {
 		_controller = controller;
 		preferences(OE_PREFERENCES);
 	}

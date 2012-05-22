@@ -19,12 +19,6 @@
  */
 package org.openflexo.view;
 
-/*
- * Created on <date> by <yourname>
- *
- * Flexo Application Suite
- * (c) Denali 2003-2006
- */
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -53,7 +47,6 @@ import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.ColorCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.ch.FCH;
 import org.openflexo.foundation.DataModification;
@@ -130,14 +123,25 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		_splitPane.setLeftComponent(new JPanel());
 		_splitPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 3, 3));
 		if (rightPaneIsSplitPane) {
-			_rightPanel = new JSplitPane((!_verticalOrientation ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT));
+			_rightPanel = new JSplitPane((!_verticalOrientation ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT)) /* {
+																															@Override
+																															public void setDividerLocation(int location) {
+																															logger.info("********************* setDividerLocation with " + location + " total width=" + getSize().width);
+																															super.setDividerLocation(location);
+																															}
+
+																															@Override
+																															public void setRightComponent(Component comp) {
+																															logger.info("********************* setRightComponent with size " + comp.getPreferredSize());
+																															super.setRightComponent(comp);
+																															}
+																															} */;
 			_rightPanel.setBorder(BorderFactory.createEmptyBorder());
-			new FlexoSplitPaneLocationSaver(_splitPane, controller.getModule().getShortName() + "RightSplitPane");
-			_rightPanel.setBackground(ColorCst.GUI_BACK_COLOR);
+			new FlexoSplitPaneLocationSaver((JSplitPane) _rightPanel, controller.getModule().getShortName() + "RightSplitPane");
 			((JSplitPane) _rightPanel).setResizeWeight(1.0);
 		} else {
 			_rightPanel = new JPanel();
-			_rightPanel.setBackground(ColorCst.GUI_BACK_COLOR);
+			// _rightPanel.setBackground(ColorCst.GUI_BACK_COLOR);
 			_rightPanel.setLayout(new BorderLayout());
 		}
 		/* _rightPanel. */add(_controlPanel = new ControlPanel(), BorderLayout.NORTH);
@@ -246,6 +250,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				splitPane.revalidate();
 				splitPane.repaint();*/
 				splitPane.setDividerLocation(dl);
+				// logger.info("splitPane.setDividerLocation with " + dl);
 			} else {
 				_rightPanel.add(_centerView, BorderLayout.CENTER);
 			}
@@ -802,6 +807,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			_rightView = rightView;
 			if (_rightPaneIsSplitPane) {
 				((JSplitPane) _rightPanel).setRightComponent(_rightView);
+				validate();
 			} else {
 				_rightPanel.add(_rightView, BorderLayout.EAST);
 			}

@@ -19,27 +19,21 @@
  */
 package org.openflexo.ve.view;
 
-/*
- * Created on <date> by <yourname>
- *
- * Flexo Application Suite
- * (c) Denali 2003-2006
- */
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 
 /**
- * Represents the main pane for this module
+ * Represents the main pane for ViewEditor module
  * 
- * @author yourname
+ * @author sylvain
  */
-public class OEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class VEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public OEMainPane(ModuleView moduleView, OEFrame mainFrame, OEController controller) {
-		super(moduleView, mainFrame, controller);
+	public VEMainPane(ModuleView moduleView, VEFrame mainFrame, VEController controller) {
+		super(moduleView, mainFrame, controller, true, true);
 		// setLeftView(new OEBrowserView(controller));
 	}
 

@@ -24,10 +24,10 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 
-public class OntologyBrowser extends OEBrowser {
+public class OntologyBrowser extends VEBrowser {
 	private FlexoOntology representedOntology = null;
 
-	public OntologyBrowser(OEController controller) {
+	public OntologyBrowser(VEController controller) {
 		super(controller);
 	}
 

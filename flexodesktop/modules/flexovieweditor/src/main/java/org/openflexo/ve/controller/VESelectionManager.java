@@ -31,20 +31,20 @@ import org.openflexo.ve.view.menu.OEMenuBar;
  * 
  * @author yourname
  */
-public class OESelectionManager extends SelectionManager {
+public class VESelectionManager extends SelectionManager {
 
-	protected static final Logger logger = Logger.getLogger(OESelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(VESelectionManager.class.getPackage().getName());
 
-	public OESelectionManager(OEController controller) {
+	public VESelectionManager(VEController controller) {
 		super(controller);
 		OEMenuBar menuBar = controller.getEditorMenuBar();
-		_clipboard = new OEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+		_clipboard = new VEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new OEContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new VEContextualMenuManager(this, controller.getEditor(), controller);
 	}
 
-	public OEController getXXXController() {
-		return (OEController) getController();
+	public VEController getXXXController() {
+		return (VEController) getController();
 	}
 
 	@Override

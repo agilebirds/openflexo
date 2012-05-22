@@ -98,6 +98,13 @@ import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
+/**
+ * Represent the controller of an instanciation of a FIBComponent in a particular Window Toolkit context (eg Swing)
+ * 
+ * @author sylvain
+ * 
+ * @param <T>
+ */
 public class FIBController<T> extends Observable implements BindingEvaluationContext, Observer {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
