@@ -80,7 +80,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 
 	// private JSplitPane _middlePane;
 
-	protected ModuleView _moduleView;
+	protected ModuleView<?> _moduleView;
 
 	private ControlPanel _controlPanel;
 
@@ -103,11 +103,11 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 	final private boolean _rightPaneIsSplitPane;
 	final private boolean _verticalOrientation;
 
-	public FlexoMainPane(ModuleView moduleView, FlexoFrame mainFrame, FlexoController controller) {
+	public FlexoMainPane(ModuleView<?> moduleView, FlexoFrame mainFrame, FlexoController controller) {
 		this(moduleView, mainFrame, controller, false, true);
 	}
 
-	public FlexoMainPane(ModuleView moduleView, FlexoFrame mainFrame, FlexoController controller, boolean rightPaneIsSplitPane,
+	public FlexoMainPane(ModuleView<?> moduleView, FlexoFrame mainFrame, FlexoController controller, boolean rightPaneIsSplitPane,
 			boolean verticalOrientation) {
 		super(new BorderLayout());
 		_rightPaneIsSplitPane = rightPaneIsSplitPane;
@@ -123,7 +123,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		_splitPane.setLeftComponent(new JPanel());
 		_splitPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 3, 3));
 		if (rightPaneIsSplitPane) {
-			_rightPanel = new JSplitPane((!_verticalOrientation ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT)) /* {
+			_rightPanel = new JSplitPane(!_verticalOrientation ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT) /* {
 																															@Override
 																															public void setDividerLocation(int location) {
 																															logger.info("********************* setDividerLocation with " + location + " total width=" + getSize().width);
@@ -158,7 +158,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 	private JComponent _footer;
 	private JComponent _header;
 
-	public void setModuleView(ModuleView moduleView) {
+	public void setModuleView(ModuleView<?> moduleView) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setModuleView() with " + moduleView + " perspective " + moduleView.getPerspective());
 		}
@@ -178,13 +178,13 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		}
 
 		if (_controller instanceof SelectionManagingController) {
-			if ((_moduleView != null) && (_moduleView instanceof SelectionSynchronizedModuleView)) {
+			if (_moduleView != null && _moduleView instanceof SelectionSynchronizedModuleView) {
 				((SelectionManagingController) _controller).getSelectionManager().removeFromSelectionListeners(
-						((SelectionSynchronizedModuleView) _moduleView).getSelectionListeners());
+						((SelectionSynchronizedModuleView<?>) _moduleView).getSelectionListeners());
 			}
-			if ((moduleView != null) && (moduleView instanceof SelectionSynchronizedModuleView)) {
+			if (moduleView != null && moduleView instanceof SelectionSynchronizedModuleView) {
 				((SelectionManagingController) _controller).getSelectionManager().addToSelectionListeners(
-						((SelectionSynchronizedModuleView) moduleView).getSelectionListeners());
+						((SelectionSynchronizedModuleView<?>) moduleView).getSelectionListeners());
 			}
 		}
 
@@ -197,7 +197,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				}
 				if (!isGoingForward && !isGoingBackward) {
 					// _history.add(moduleView.getRepresentedObject());
-					if ((currentLocation == null) || (currentLocation.getObject() != moduleView.getRepresentedObject())) {
+					if (currentLocation == null || currentLocation.getObject() != moduleView.getRepresentedObject()) {
 						if (currentLocation != null) {
 							previousHistory.push(currentLocation);
 						}
@@ -331,7 +331,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		repaint();
 	}
 
-	public ModuleView getModuleView() {
+	public ModuleView<?> getModuleView() {
 		return _moduleView;
 	}
 
@@ -442,7 +442,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				@Override
 				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 					JLabel returned = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-					if ((value != null) && (!((FlexoModelObject) value).isDeleted())) {
+					if (value != null && !((FlexoModelObject) value).isDeleted()) {
 						String title = _controller.getWindowTitleforObject((FlexoModelObject) value);
 						if (title == null) {
 							logger.warning("Unexpected object " + value + " asked for controller " + _controller + " perspective="
@@ -471,8 +471,8 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
-					if ((_moduleView != null) && (_moduleView.getRepresentedObject() != null)) {
-						ModuleView previous = _moduleView;
+					if (_moduleView != null && _moduleView.getRepresentedObject() != null) {
+						ModuleView<?> previous = _moduleView;
 						updateControlsForObjectRemovedFromHistory(previous.getRepresentedObject());
 						previous.deleteModuleView();
 					}
@@ -797,7 +797,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 	public void setRightView(JComponent rightView) {
 		if (_rightView != rightView) {
 
-			if ((rightView.getParent() != null) && (rightView.getParent() != _rightPanel)) {
+			if (rightView.getParent() != null && rightView.getParent() != _rightPanel) {
 				rightView.getParent().remove(rightView);
 			}
 			FCH.setHelpItem(rightView, FCH.getRightViewItemFor(_controller.getModule()));
@@ -849,7 +849,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		if (_rightView != null) {
 			_rightView.setVisible(true);
 			_controlPanel.updateToggleHideShowRightPanelButton(true);
-			if (_rightPaneIsSplitPane && (defaultDL > -1)) {
+			if (_rightPaneIsSplitPane && defaultDL > -1) {
 				JSplitPane splitPane = (JSplitPane) _rightPanel;
 				splitPane.setDividerLocation(defaultDL);
 				// logger.info("Sets dividerLocation to "+defaultDL);
@@ -953,7 +953,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		}
 	}
 
-	protected void switchToPerspective(FlexoPerspective perspective) {
+	protected void switchToPerspective(FlexoPerspective<?> perspective) {
 		_controller.switchToPerspective(perspective);
 	}
 
@@ -961,7 +961,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		_controller.setCurrentEditedObjectAsModuleView(object);
 	}
 
-	protected void switchToModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
+	protected void switchToModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective<?> perspective) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Switch to object " + object + " and perspective " + perspective);
 		}
@@ -980,16 +980,16 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		return _controller.getCurrentDisplayedObjectAsModuleView();
 	}
 
-	protected ModuleView getModuleViewForObject(FlexoModelObject object) {
+	protected ModuleView<?> getModuleViewForObject(FlexoModelObject object) {
 		return _controller.moduleViewForObject(object);
 	}
 
 	public class HistoryLocation {
 		private final FlexoModelObject _object;
 
-		private final FlexoPerspective _perspective;
+		private final FlexoPerspective<?> _perspective;
 
-		protected HistoryLocation(FlexoModelObject object, FlexoPerspective perspective) {
+		protected HistoryLocation(FlexoModelObject object, FlexoPerspective<?> perspective) {
 			super();
 			_object = object;
 			_perspective = perspective;
@@ -999,7 +999,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			return _object;
 		}
 
-		public FlexoPerspective getPerspective() {
+		public FlexoPerspective<?> getPerspective() {
 			return _perspective;
 		}
 	}
