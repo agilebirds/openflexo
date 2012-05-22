@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.wkf.node;
 
+import java.awt.Color;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -1137,14 +1138,14 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		}
 	}
 
-	protected FlexoColor componentTextColor = FlexoColor.GRAY_COLOR;
+	protected Color componentTextColor = FlexoColor.GRAY_COLOR;
 
-	public FlexoColor getComponentTextColor() {
+	public Color getComponentTextColor() {
 		return componentTextColor;
 	}
 
-	public void setComponentTextColor(FlexoColor ctc) {
-		FlexoColor old = componentTextColor;
+	public void setComponentTextColor(Color ctc) {
+		Color old = componentTextColor;
 		this.componentTextColor = ctc;
 		setChanged();
 		notifyObservers(new ComponentTextColorChanged(old, componentTextColor));

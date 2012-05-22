@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation;
 
+import java.awt.Color;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.util.Map;
@@ -36,6 +37,8 @@ import org.openflexo.foundation.wkf.dm.ObjectSizeChanged;
 import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.xmlcode.PropertiesKeyValueProperty;
+import org.openflexo.xmlcode.PropertiesKeyValueProperty.UndecodableProperty;
+import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
@@ -160,14 +163,16 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 		return (Boolean) returned;
 	}
 
-	public FlexoColor _colorGraphicalPropertyForKey(String key, FlexoColor defaultValue) {
+	public Color _colorGraphicalPropertyForKey(String key, Color defaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
 		if (returned == null && defaultValue != null) {
 			// logger.warning("Cannot retrieve value. Using default.");
 			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
+		} else if (returned instanceof UndecodableProperty) {
+			returned = StringEncoder.getDefaultInstance()._decodeObject(((UndecodableProperty) returned).value, Color.class);
 		}
-		return (FlexoColor) returned;
+		return (Color) returned;
 	}
 
 	public FlexoFont _fontGraphicalPropertyForKey(String key, FlexoFont defaultValue) {
@@ -448,39 +453,39 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 		return LABEL_POSY + "_" + context;
 	}
 
-	public FlexoColor getBgColor(String context) {
+	public Color getBgColor(String context) {
 		return _colorGraphicalPropertyForKey(BG_COLOR + "_" + context, FlexoColor.WHITE_COLOR);
 	}
 
-	public FlexoColor getBgColor(String context, FlexoColor defaultValue) {
+	public Color getBgColor(String context, Color defaultValue) {
 		return _colorGraphicalPropertyForKey(BG_COLOR + "_" + context, defaultValue);
 	}
 
-	public void setBgColor(FlexoColor bgColor, String context) {
+	public void setBgColor(Color bgColor, String context) {
 		_setGraphicalPropertyForKey(bgColor, BG_COLOR + "_" + context);
 	}
 
-	public FlexoColor getFgColor(String context) {
+	public Color getFgColor(String context) {
 		return _colorGraphicalPropertyForKey(FG_COLOR + "_" + context, FlexoColor.BLACK_COLOR);
 	}
 
-	public FlexoColor getFgColor(String context, FlexoColor defaultValue) {
+	public Color getFgColor(String context, Color defaultValue) {
 		return _colorGraphicalPropertyForKey(FG_COLOR + "_" + context, defaultValue);
 	}
 
-	public void setFgColor(FlexoColor fgColor, String context) {
+	public void setFgColor(Color fgColor, String context) {
 		_setGraphicalPropertyForKey(fgColor, FG_COLOR + "_" + context);
 	}
 
-	public FlexoColor getTextColor(String context) {
+	public Color getTextColor(String context) {
 		return _colorGraphicalPropertyForKey(TEXT_COLOR + "_" + context, FlexoColor.BLACK_COLOR);
 	}
 
-	public FlexoColor getTextColor(String context, FlexoColor defaultValue) {
+	public Color getTextColor(String context, Color defaultValue) {
 		return _colorGraphicalPropertyForKey(TEXT_COLOR + "_" + context, defaultValue);
 	}
 
-	public void setTextColor(FlexoColor textColor, String context) {
+	public void setTextColor(Color textColor, String context) {
 		_setGraphicalPropertyForKey(textColor, TEXT_COLOR + "_" + context);
 	}
 

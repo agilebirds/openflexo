@@ -19,11 +19,11 @@
  */
 package org.openflexo.foundation.wkf;
 
+import java.awt.Color;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DeletableObject;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.wkf.dm.GroupUpdated;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.wkf.node.AbstractNode;
@@ -107,15 +107,15 @@ public abstract class WKFGroup extends WKFObject implements DeletableObject {
 		setIsVisible(isExpanded);
 	}
 
-	public static final FlexoColor DEFAULT_GROUP_COLOR = new FlexoColor(157, 162, 132);
+	public static final Color DEFAULT_GROUP_COLOR = new Color(157, 162, 132);
 
-	public FlexoColor getColor() {
+	public Color getColor() {
 		return getBgColor(DEFAULT, DEFAULT_GROUP_COLOR);
 	}
 
-	public void setColor(FlexoColor aColor) {
+	public void setColor(Color aColor) {
 		if (requireChange(getColor(), aColor)) {
-			FlexoColor oldColor = getColor();
+			Color oldColor = getColor();
 			setBgColor(aColor, DEFAULT);
 			setChanged();
 			notifyObservers(new WKFAttributeDataModification("color", oldColor, aColor));

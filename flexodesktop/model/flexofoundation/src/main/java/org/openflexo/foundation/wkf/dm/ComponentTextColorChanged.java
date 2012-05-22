@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.wkf.dm;
 
-import org.openflexo.foundation.utils.FlexoColor;
+import java.awt.Color;
 
 /**
  * @author gpolet
@@ -29,7 +29,7 @@ public class ComponentTextColorChanged extends WKFDataModification {
 	/**
      * 
      */
-	public ComponentTextColorChanged(FlexoColor oldColor, FlexoColor newColor) {
+	public ComponentTextColorChanged(Color oldColor, Color newColor) {
 		super("componentTextColor", oldColor, newColor);
 	}
 }

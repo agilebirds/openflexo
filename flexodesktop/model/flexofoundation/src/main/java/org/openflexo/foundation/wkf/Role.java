@@ -38,7 +38,6 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
 import org.openflexo.foundation.validation.FixProposal;
@@ -171,9 +170,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 
 	@Override
 	public void setName(String aName) throws DuplicateRoleException {
-		if ((roleName == null && aName != null) || (roleName != null && aName == null)
-				|| (roleName != null && aName != null && !roleName.equals(aName))) {
-			if ((getRoleList() != null) && (getRoleList().roleWithName(aName) != null)) {
+		if (roleName == null && aName != null || roleName != null && aName == null || roleName != null && aName != null
+				&& !roleName.equals(aName)) {
+			if (getRoleList() != null && getRoleList().roleWithName(aName) != null) {
 				if (isDeserializing()) {
 					setName(aName + "-1");
 				}
@@ -198,16 +197,16 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	 * public void setDescription(String aDescription) { roleDescription =
 	 * aDescription; }
 	 */
-	public FlexoColor getColor() {
+	public Color getColor() {
 		return getBgColor(DEFAULT);
 	}
 
 	@Override
-	public FlexoColor getBgColor(String context) {
+	public Color getBgColor(String context) {
 		return super.getBgColor(context, null);
 	}
 
-	public void setColor(FlexoColor aColor) {
+	public void setColor(Color aColor) {
 		setBgColor(aColor, DEFAULT);
 		setChanged();
 		notifyObservers(new RoleColorChange());
@@ -224,7 +223,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	 * Bridging Color<->FlexoColor: used by dynamic invokation in inspector
 	 */
 	public void setAwtColor(Color aColor) {
-		setColor(new FlexoColor(aColor));
+		setColor(aColor);
 	}
 
 	/**
@@ -341,7 +340,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 			e.printStackTrace();
 		}
 		if (object.getRgb() != null) {
-			setColor(new FlexoColor(object.getRed(), object.getGreen(), object.getBlue()));
+			setColor(new Color(object.getRed(), object.getGreen(), object.getBlue()));
 		} else {
 			setColor(null);
 		}
@@ -365,7 +364,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		if (!super.isEquivalentTo(object)) {
 			return false;
 		}
-		if ((getColor() != null && object.getRgb() == null) || (getColor() == null && object.getRgb() != null)) {
+		if (getColor() != null && object.getRgb() == null || getColor() == null && object.getRgb() != null) {
 			return false;
 		}
 		if (getColor() != null && object.getRgb() != null) {
@@ -609,7 +608,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	 * @return
 	 */
 	public boolean mightSpecializeRole(Role aRole) {
-		return (!aRole.isTransitivelySpecializingRole(this));
+		return !aRole.isTransitivelySpecializingRole(this);
 	}
 
 	public boolean isSpecializingRole(Role aRole) {

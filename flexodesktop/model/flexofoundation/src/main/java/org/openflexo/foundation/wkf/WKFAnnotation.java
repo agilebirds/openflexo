@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.wkf;
 
+import java.awt.Color;
+
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.utils.FlexoColor;
@@ -98,26 +100,26 @@ public class WKFAnnotation extends WKFArtefact implements InspectableObject, Del
 		}
 	}
 
-	public FlexoColor getBackgroundColor() {
+	public Color getBackgroundColor() {
 		return getBgColor(DEFAULT, FlexoColor.WHITE_COLOR);
 	}
 
-	public void setBackgroundColor(FlexoColor aColor) {
+	public void setBackgroundColor(Color aColor) {
 		if (requireChange(getBackgroundColor(), aColor)) {
-			FlexoColor oldColor = getBackgroundColor();
+			Color oldColor = getBackgroundColor();
 			setBgColor(aColor, DEFAULT);
 			setChanged();
 			notifyObservers(new WKFAttributeDataModification(BACKGROUND_COLOR, oldColor, aColor));
 		}
 	}
 
-	public FlexoColor getBorderColor() {
+	public Color getBorderColor() {
 		return getFgColor(DEFAULT, FlexoColor.BLACK_COLOR);
 	}
 
-	public void setBorderColor(FlexoColor aColor) {
+	public void setBorderColor(Color aColor) {
 		if (requireChange(getBorderColor(), aColor)) {
-			FlexoColor oldColor = getBorderColor();
+			Color oldColor = getBorderColor();
 			setFgColor(aColor, DEFAULT);
 			setChanged();
 			notifyObservers(new WKFAttributeDataModification(BORDER_COLOR, oldColor, aColor));

@@ -19,12 +19,13 @@
  */
 package org.openflexo.foundation.param;
 
-import org.openflexo.foundation.utils.FlexoColor;
+import java.awt.Color;
+
 import org.openflexo.inspector.widget.DenaliWidget;
 
-public class ColorParameter extends ParameterDefinition<FlexoColor> {
+public class ColorParameter extends ParameterDefinition<Color> {
 
-	public ColorParameter(String name, String label, FlexoColor defaultValue) {
+	public ColorParameter(String name, String label, Color defaultValue) {
 		super(name, label, defaultValue);
 		setValue(defaultValue);
 	}
