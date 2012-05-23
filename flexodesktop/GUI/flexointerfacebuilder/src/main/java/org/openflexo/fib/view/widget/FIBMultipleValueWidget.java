@@ -119,7 +119,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			if (getWidget().getList() != null && getWidget().getList().isSet() && getDataObject() != null) {
 
 				Object accessedList = getWidget().getList().getBindingValue(getController());
-				return (accessedList != null && !accessedList.equals(list));
+				return accessedList != null && !accessedList.equals(list);
 
 			}
 
@@ -132,7 +132,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			else if (getWidget().getData() != null && getWidget().getData().getBinding() != null && getDataObject() != null) {
 				Type type = getWidget().getData().getBinding().getAccessedType();
-				if (type instanceof Class && ((Class) type).isEnum()) {
+				if (type instanceof Class && ((Class<?>) type).isEnum()) {
 					return false;
 				}
 			}
