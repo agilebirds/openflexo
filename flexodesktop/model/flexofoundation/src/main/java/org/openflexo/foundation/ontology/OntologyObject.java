@@ -737,12 +737,22 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	}
 
 	// TODO implement a nice and documented API here !
-	public Vector<OntologyProperty> getDataPropertiesTakingMySelfAsDomain(Object range) {
-		return getPropertiesTakingMyselfAsDomain(true, false, false, false, null, null, getOntology());
+	public Vector<OntologyDataProperty> getDataPropertiesTakingMySelfAsDomain(Object range) {
+		Vector<OntologyDataProperty> returned = new Vector<OntologyDataProperty>();
+		Vector<OntologyProperty> allProperties = getPropertiesTakingMyselfAsDomain(true, false, false, false, null, null, getOntology());
+		for (OntologyProperty p : allProperties) {
+			returned.add((OntologyDataProperty) p);
+		}
+		return returned;
 	}
 
-	public Vector<OntologyProperty> getObjectPropertiesTakingMySelfAsDomain(OntologyObject<?> range) {
-		return getPropertiesTakingMySelfAsDomain();
+	public Vector<OntologyObjectProperty> getObjectPropertiesTakingMySelfAsDomain(OntologyObject<?> range) {
+		Vector<OntologyObjectProperty> returned = new Vector<OntologyObjectProperty>();
+		Vector<OntologyProperty> allProperties = getPropertiesTakingMyselfAsDomain(false, true, false, false, null, null, getOntology());
+		for (OntologyProperty p : allProperties) {
+			returned.add((OntologyObjectProperty) p);
+		}
+		return returned;
 	}
 
 	private Vector<OntologyProperty> getPropertiesTakingMyselfAsDomain(boolean includeDataProperties, boolean includeObjectProperties,

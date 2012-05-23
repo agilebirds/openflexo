@@ -213,6 +213,7 @@ public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyPr
 			if (getDomainClass() != null && property.getDomain() != null) {
 				return property.getDomain().isSuperConceptOf(getDomainClass());
 			}
+			return true;
 		}
 		return false;
 	}

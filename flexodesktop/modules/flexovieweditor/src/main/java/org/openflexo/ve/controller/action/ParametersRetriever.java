@@ -58,7 +58,8 @@ import org.openflexo.fib.model.GridBagLayoutConstraints.FillType;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
@@ -219,8 +220,14 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 					return parameter.getBindingFactory();
 				}
 			});
-			if (listParameter.getListType() == ListType.Property) {
-				cbList.setIteratorClass(OntologyProperty.class);
+			if (listParameter.getListType() == ListType.ObjectProperty) {
+				cbList.setIteratorClass(OntologyObjectProperty.class);
+				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
+				cbList.setShowIcon(true);
+				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
+				cbList.setVGap(-2);
+			} else if (listParameter.getListType() == ListType.DataProperty) {
+				cbList.setIteratorClass(OntologyDataProperty.class);
 				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
 				cbList.setShowIcon(true);
 				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
