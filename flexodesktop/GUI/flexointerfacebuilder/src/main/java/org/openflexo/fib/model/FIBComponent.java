@@ -806,7 +806,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	}
 
-	public Class<?> getDataClass() {
+	// IMPORTANT do NOT use generics here, as Class<?> getDataClass() will not be recognized as getter of setDataClass(Class)
+	@SuppressWarnings("rawtypes")
+	public Class/*<?>*/getDataClass() {
 		return dataClass;
 	}
 
