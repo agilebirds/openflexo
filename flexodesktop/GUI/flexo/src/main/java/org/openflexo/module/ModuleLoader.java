@@ -80,7 +80,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
-	private static ModuleLoader _instance = null;
+	private static volatile ModuleLoader _instance = null;
 
 	private boolean allowsDocSubmission;
 
@@ -377,7 +377,6 @@ public final class ModuleLoader implements IModuleLoader {
 	private FlexoModule doInternalLoadModule(Module module, FlexoProject project) throws Exception {
 		ModuleLoaderCallable loader = new ModuleLoaderCallable(module, project);
 		return FlexoSwingUtils.syncRunInEDT(loader);
-
 	}
 
 	public boolean isAvailable(Module module) {
