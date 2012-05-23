@@ -69,6 +69,7 @@ import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.URIParameter;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
@@ -693,7 +694,12 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			}
 		} else if (variable instanceof PatternRolePathElement) {
 			return getEditionPatternInstance().getPatternActor(((PatternRolePathElement) variable).getPatternRole());
+		} else if (variable instanceof EditionPatternPathElement) {
+			if (variable.getVariableName().equals(EditionScheme.THIS)) {
+				return getEditionPatternInstance();
+			}
 		}
+
 		logger.warning("Unexpected variable requested in EditionSchemeAction " + variable);
 		return null;
 	}

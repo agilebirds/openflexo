@@ -41,6 +41,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	public static final String TARGET = "target";
 	public static final String FROM_TARGET = "fromTarget";
 	public static final String TO_TARGET = "toTarget";
+	public static final String THIS = "this";
 
 	public static enum EditionSchemeType {
 		CreationScheme, DropScheme, LinkScheme, ActionScheme, NavigationScheme, DeletionScheme
@@ -515,6 +516,9 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 				a.updatePatternRoleType();
 			}
 		}*/
+		if (getName().equals("displayAttribute")) {
+			System.out.println("finalizeEditionSchemeDeserialization() for " + this);
+		}
 		updateBindingModels();
 	}
 
@@ -543,6 +547,13 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		logger.fine("updateBindingModels()");
 		_bindingModel = null;
 		createBindingModel();
+		rebuildActionsBindingModel();
+	}
+
+	protected void rebuildActionsBindingModel() {
+		for (EditionAction action : getActions()) {
+			action.rebuildInferedBindingModel();
+		}
 	}
 
 	private final void createBindingModel() {
