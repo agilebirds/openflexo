@@ -173,7 +173,7 @@
 
 	<target name="windowsPackaging">
 		<exec executable="makensis" failonerror="true">
-			<arg value="/V2"/>
+			<arg value="-V2"/>
 			<arg value="${flexobuild.work.dir}/flexoinstaller.nsi" />
 		</exec>
 	</target>
@@ -193,7 +193,7 @@
 			</filterset>
 		</copy>
 		<exec executable="makensis" failonerror="true">
-			<arg value="/V2"/>
+			<arg value="-V2"/>
 			<arg value="${flexobuild.work.dir}/flexolauncher.nsi" />
 		</exec>
 	</target>
