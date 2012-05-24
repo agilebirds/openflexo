@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -17,29 +18,29 @@ public class EditionPatternInstancePathElement<E extends Bindable> implements Bi
 
 	private EditionPattern editionPattern;
 	private int index;
-	private Hashtable<PatternRole, PatternRolePathElement> patternRoleElements;
-	private Vector<PatternRolePathElement> allPatternRoleElements;
+	private Hashtable<PatternRole, BindingPathElement> elements;
+	private Vector<BindingPathElement> allElements;
 	private Class<E> declaringClass;
 
 	public EditionPatternInstancePathElement(EditionPattern anEditionPattern, int index, Class<E> declaringClass) {
 		this.editionPattern = anEditionPattern;
 		this.declaringClass = declaringClass;
 		this.index = index;
-		patternRoleElements = new Hashtable<PatternRole, PatternRolePathElement>();
-		allPatternRoleElements = new Vector<PatternRolePathElement>();
+		elements = new Hashtable<PatternRole, BindingPathElement>();
+		allElements = new Vector<BindingPathElement>();
 		for (PatternRole pr : editionPattern.getPatternRoles()) {
-			PatternRolePathElement newPathElement = null;
-			newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, (EditionPatternInstance) null);
-			patternRoleElements.put(pr, newPathElement);
+			BindingPathElement<?> newPathElement = null;
+			newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, anEditionPattern);
+			elements.put(pr, newPathElement);
 		}
 	}
 
-	public Vector<PatternRolePathElement> getAllPatternRoleElements() {
-		return allPatternRoleElements;
+	public Vector<BindingPathElement> getAllElements() {
+		return allElements;
 	}
 
-	public PatternRolePathElement getPatternRolePathElement(PatternRole pr) {
-		return patternRoleElements.get(pr);
+	public BindingPathElement getPathElement(PatternRole pr) {
+		return elements.get(pr);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
@@ -562,7 +563,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		appendContextualBindingVariables(_bindingModel);
 		if (getEditionPattern() != null) {
 			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				PatternRolePathElement newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, this);
+				BindingVariable<?> newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, this);
 				_bindingModel.addToBindingVariables(newPathElement);
 			}
 		}

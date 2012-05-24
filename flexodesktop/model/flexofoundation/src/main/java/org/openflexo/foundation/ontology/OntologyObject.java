@@ -196,7 +196,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	}
 
 	public String simpleRepresentation() {
-		return getName();
+		return getClass().getSimpleName() + ":" + getName();
 	}
 
 	public String fullQualifiedRepresentation() {

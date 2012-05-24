@@ -220,6 +220,10 @@ public class AddEditionPattern extends AssignableAction {
 			BD = new BindingDefinition(param.getName(), param.getType(), BindingDefinitionType.GET, true);
 		}
 
+		public EditionSchemeParameter getParameter() {
+			return param;
+		}
+
 		@Override
 		public EditionPattern getEditionPattern() {
 			if (param != null) {
@@ -359,13 +363,20 @@ public class AddEditionPattern extends AssignableAction {
 			if (action.getCreationScheme() != null) {
 				Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern>> issues = new Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPattern>>();
 				for (AddEditionPatternParameter p : action.getParameters()) {
-					if (p.getValue() == null || !p.getValue().isSet()) {
-						issues.add(new ValidationError(this, action, "parameter_s_value_is_not_defined"));
-					} else if (!(p.getValue().isValid())) {
-						logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
-								+ p.action.getFullyQualifiedName() + ". Reason follows.");
-						p.getValue().getBinding().debugIsBindingValid();
-						issues.add(new ValidationError(this, action, "parameter_s_value_is_not_valid"));
+					if (p.getParam().getIsRequired()) {
+						if (p.getValue() == null || !p.getValue().isSet()) {
+							if (p.getParam() instanceof URIParameter && ((URIParameter) p.getParam()).getBaseURI().isSet()
+									&& ((URIParameter) p.getParam()).getBaseURI().isValid()) {
+								// Special case, we will find a way to manage this
+							} else {
+								issues.add(new ValidationError(this, action, "parameter_s_value_is_not_defined: " + p.getParam().getName()));
+							}
+						} else if (!(p.getValue().isValid())) {
+							logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
+									+ p.action.getFullyQualifiedName() + ". Reason follows.");
+							p.getValue().getBinding().debugIsBindingValid();
+							issues.add(new ValidationError(this, action, "parameter_s_value_is_not_valid: " + p.getParam().getName()));
+						}
 					}
 				}
 				if (issues.size() == 0) {

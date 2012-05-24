@@ -69,14 +69,12 @@ public abstract class AbstractActionScheme extends EditionScheme {
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 		super.appendContextualBindingVariables(bindingModel);
-		logger.info(">>>>>>>>>>>>> AbstractActionScheme " + getName() + " Append BindingVariable this with " + getEditionPattern());
 		bindingModel.addToBindingVariables(new EditionPatternPathElement<AbstractActionScheme>(EditionScheme.THIS, getEditionPattern(),
 				this));
 	}
 
 	@Override
 	public void setEditionPattern(EditionPattern editionPattern) {
-		logger.info(">>>>>>>>>>>>> AbstractActionScheme " + getName() + " setEditionPattern with " + editionPattern);
 		super.setEditionPattern(editionPattern);
 		updateBindingModels();
 	}

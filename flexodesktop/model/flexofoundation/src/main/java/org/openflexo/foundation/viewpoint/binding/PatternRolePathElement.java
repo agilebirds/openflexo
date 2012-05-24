@@ -16,6 +16,7 @@ import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole;
+import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IsAStatementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
@@ -40,7 +41,7 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
-	public static PatternRolePathElement<?> makePatternRolePathElement(PatternRole pr, Bindable container) {
+	public static BindingVariable<?> makePatternRolePathElement(PatternRole pr, Bindable container) {
 		if (pr instanceof OntologicObjectPatternRole) {
 			if (pr instanceof ClassPatternRole) {
 				return new OntologicClassPatternRolePathElement((ClassPatternRole) pr, container);
@@ -73,6 +74,9 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 			return new ShapePatternRolePathElement((ShapePatternRole) pr, container);
 		} else if (pr instanceof ConnectorPatternRole) {
 			return new ConnectorPatternRolePathElement((ConnectorPatternRole) pr, container);
+		} else if (pr instanceof EditionPatternPatternRole) {
+			return new EditionPatternPathElement(pr.getPatternRoleName(), ((EditionPatternPatternRole) pr).getEditionPatternType(),
+					container);
 		} else {
 			return new PatternRolePathElement(pr, container);
 		}
@@ -88,7 +92,10 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 
 	@Override
 	public Class<?> getDeclaringClass() {
-		return container.getClass();
+		if (container != null) {
+			return container.getClass();
+		} else
+			return Object.class;
 	}
 
 	@Override

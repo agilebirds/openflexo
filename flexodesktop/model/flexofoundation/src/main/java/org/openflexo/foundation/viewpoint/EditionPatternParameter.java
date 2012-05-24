@@ -51,14 +51,22 @@ public class EditionPatternParameter extends EditionSchemeParameter {
 	}
 
 	public EditionPattern getEditionPatternType() {
-		if (editionPatternType == null && editionPatternTypeURI != null) {
+		if (editionPatternType == null && editionPatternTypeURI != null && getViewPointLibrary() != null) {
 			editionPatternType = getViewPointLibrary().getEditionPattern(editionPatternTypeURI);
+			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
+				s.updateBindingModels();
+			}
 		}
 		return editionPatternType;
 	}
 
-	public void setEditionPatternType(EditionPattern ep) {
-		editionPatternType = ep;
+	public void setEditionPatternType(EditionPattern editionPatternType) {
+		if (editionPatternType != this.editionPatternType) {
+			this.editionPatternType = editionPatternType;
+			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
+				s.updateBindingModels();
+			}
+		}
 	}
 
 }

@@ -737,7 +737,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 	@Override
 	public String simpleRepresentation() {
-		return FlexoLocalization.localizedForKey(getLocalizedDictionary(), getName());
+		return "EditionPattern:" + FlexoLocalization.localizedForKey(getLocalizedDictionary(), getName());
 	}
 
 	@Override

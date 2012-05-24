@@ -965,8 +965,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				updateMethodCallPanel();
 			}
 
-			currentTypeLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"));
-			currentTypeLabel.setToolTipText(null);
+			// currentTypeLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"));
+			// currentTypeLabel.setToolTipText(null);
 
 		}
 
