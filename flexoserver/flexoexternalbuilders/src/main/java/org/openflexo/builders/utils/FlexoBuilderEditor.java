@@ -115,8 +115,6 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 				protected void done() {
 					if (!action.isEmbedded()) {
 						doNextTodo(action);
-					} else {
-						System.err.println("Skipping");
 					}
 				}
 			};
