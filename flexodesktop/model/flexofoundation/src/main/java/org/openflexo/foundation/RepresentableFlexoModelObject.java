@@ -37,8 +37,6 @@ import org.openflexo.foundation.wkf.dm.ObjectSizeChanged;
 import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.xmlcode.PropertiesKeyValueProperty;
-import org.openflexo.xmlcode.PropertiesKeyValueProperty.UndecodableProperty;
-import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
@@ -107,6 +105,9 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 				logger.warning("Class named '" + className + "' not found");
 				return returned;
 			}
+			if (objectType == FlexoColor.class) {
+				objectType = Color.class;
+			}
 			Converter<?> converter = getProject().getStringEncoder()._converterForClass(objectType);
 			if (converter == null) {
 				// Is it an enum ???
@@ -169,8 +170,6 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 			// logger.warning("Cannot retrieve value. Using default.");
 			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
-		} else if (returned instanceof UndecodableProperty) {
-			returned = StringEncoder.getDefaultInstance()._decodeObject(((UndecodableProperty) returned).value, Color.class);
 		}
 		return (Color) returned;
 	}
