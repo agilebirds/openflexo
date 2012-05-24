@@ -147,33 +147,21 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 
 	@Override
 	public boolean hasGenerationErrors() {
-		if (getGeneratedCodeRepository() != null) {
-			getGeneratedCodeRepository().ensureStructureIsUpToDate();
-		}
 		return hasGenerationErrors;
 	}
 
 	@Override
 	public boolean needsRegeneration() {
-		if (getGeneratedCodeRepository() != null) {
-			getGeneratedCodeRepository().ensureStructureIsUpToDate();
-		}
 		return needsRegeneration;
 	}
 
 	@Override
 	public boolean needsModelReinjection() {
-		if (getGeneratedCodeRepository() != null) {
-			getGeneratedCodeRepository().ensureStructureIsUpToDate();
-		}
 		return needsModelReinjection;
 	}
 
 	@Override
 	public GenerationStatus getGenerationStatus() {
-		if (getGeneratedCodeRepository() != null) {
-			getGeneratedCodeRepository().ensureStructureIsUpToDate();
-		}
 		return generationStatus;
 	}
 
@@ -235,7 +223,7 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 	}
 
 	protected void addToStructure(CGFile file) {
-		if ((file.getResource() == null) && (!file.isDeleted())) {
+		if (file.getResource() == null && !file.isDeleted()) {
 			logger.warning("file: " + file + " : resource is null for a non-deleted object");
 			return;
 		}
@@ -259,7 +247,7 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 			StringTokenizer st = new StringTokenizer(relativePath, "/");
 			CGPathElement parent = this;
 			String dirName;
-			while (st.hasMoreTokens() && ((dirName = st.nextToken()) != null) && (st.hasMoreTokens())) {
+			while (st.hasMoreTokens() && (dirName = st.nextToken()) != null && st.hasMoreTokens()) {
 				if (parent.getDirectoryNamed(dirName) == null) {
 					parent.getSubFolders().add(new CGFolder(getGeneratedCodeRepository(), dirName, parent));
 				}
@@ -323,11 +311,11 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 	@Override
 	public boolean isContainedIn(CGObject obj) {
 		if (obj instanceof GeneratedOutput) {
-			return (obj == getGeneratedCode());
+			return obj == getGeneratedCode();
 		} else if (obj instanceof GenerationRepository) {
-			return (obj == getGeneratedCodeRepository());
+			return obj == getGeneratedCodeRepository();
 		} else if (obj instanceof CGSymbolicDirectory) {
-			return (obj == this);
+			return obj == this;
 		}
 		return false;
 	}

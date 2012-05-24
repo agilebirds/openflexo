@@ -36,7 +36,6 @@ public class GeneratedCodeRepositoryElement extends GCBrowserElement {
 	@Override
 	protected void buildChildrenVector() {
 		if (getRepository().isEnabled()) {
-			getRepository().ensureStructureIsUpToDate();
 			for (CGSymbolicDirectory dir : getRepository().getSymbolicDirectories().values()) {
 				addToChilds(dir);
 			}

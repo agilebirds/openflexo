@@ -375,7 +375,6 @@ public abstract class GenerationRepository extends CGObject {
 
 	public void setFiles(Vector<CGFile> files) {
 		_files = files;
-		structureNeedsToBeRecomputed = true;
 		setChanged();
 		notifyObservers(new CGDataModification("files", null, files));
 	}
@@ -386,7 +385,6 @@ public abstract class GenerationRepository extends CGObject {
 		} else {
 			aFile.setRepository(this);
 			_files.add(aFile);
-			structureNeedsToBeRecomputed = true;
 			setChanged();
 			notifyObservers(new CGFileCreated(aFile));
 		}
@@ -395,48 +393,35 @@ public abstract class GenerationRepository extends CGObject {
 	public void removeFromFiles(CGFile aFile) {
 		aFile.setRepository(null);
 		_files.remove(aFile);
-		structureNeedsToBeRecomputed = true;
 		setChanged();
 		notifyObservers(new CGFileDeleted(aFile));
 	}
 
-	private boolean structureNeedsToBeRecomputed = true;
-
 	@Override
 	public boolean hasGenerationErrors() {
-		ensureStructureIsUpToDate();
 		return hasGenerationErrors;
 	}
 
 	@Override
 	public boolean needsRegeneration() {
-		ensureStructureIsUpToDate();
 		return needsRegeneration;
 	}
 
 	@Override
 	public boolean needsModelReinjection() {
-		ensureStructureIsUpToDate();
 		return needsModelReinjection;
 	}
 
 	@Override
 	public GenerationStatus getGenerationStatus() {
-		ensureStructureIsUpToDate();
 		return generationStatus;
-	}
-
-	public void ensureStructureIsUpToDate() {
-		if (structureNeedsToBeRecomputed) {
-			rebuildStructure();
-		}
 	}
 
 	public void refresh() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("refresh()");
 		}
-		structureNeedsToBeRecomputed = true;
+		rebuildStructure();
 		setChanged(false);
 		notifyObservers(new CGStructureRefreshed());
 	}
@@ -447,20 +432,16 @@ public abstract class GenerationRepository extends CGObject {
 	private int needsMemoryGenerationCount;
 	private int needsModelReinjectionCount;
 	private int errorsCount;
-	private boolean isRebuildingStructure = false;
+	private volatile boolean isRebuildingStructure = false;
 
 	private synchronized void rebuildStructure() {
+		if (isRebuildingStructure) {
+			return;
+		}
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Re-compute structure for repository " + getName());
 		}
-		if (isRebuildingStructure) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("Trying to rebuild structure while already rebuilding. This would result in duplicate elements within the built vectors, returning now! You MUST find the cause of this problem.");
-			}
-			return;
-		}
 		isRebuildingStructure = true;
-		structureNeedsToBeRecomputed = false;
 		hasGenerationErrors = false;
 		needsRegeneration = false;
 		needsModelReinjection = false;

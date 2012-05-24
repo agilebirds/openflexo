@@ -37,8 +37,6 @@ public class GeneratedDocRepositoryElement extends DGBrowserElement {
 	@Override
 	protected void buildChildrenVector() {
 		if (getRepository().isEnabled()) {
-			getRepository().ensureStructureIsUpToDate();
-
 			String[] keys = getRepository().getSymbolicDirectories().keySet().toArray(new String[] {});
 			Arrays.sort(keys);
 			for (String key : keys) {
