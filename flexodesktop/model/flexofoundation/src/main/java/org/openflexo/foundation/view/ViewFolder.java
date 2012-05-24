@@ -49,7 +49,6 @@ import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -455,16 +454,19 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 	@Override
 	public void setName(String name) throws DuplicateFolderNameException, InvalidNameException {
-		if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null) {
-			throw new DuplicateFolderNameException(this, name);
-		}
-		if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
+		if (requireChange(_name, name)) {
+			if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null) {
+				throw new DuplicateFolderNameException(this, name);
+			}
+			// There is no reason to dismiss accents
+			/*if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
 			throw new InvalidNameException(name);
+			}*/
+			String old = _name;
+			_name = name;
+			setChanged();
+			notifyObservers(new OEDataModification("name", old, name));
 		}
-		String old = _name;
-		_name = name;
-		setChanged();
-		notifyObservers(new OEDataModification("name", old, name));
 	}
 
 	public ViewFolder getFatherFolder() {
