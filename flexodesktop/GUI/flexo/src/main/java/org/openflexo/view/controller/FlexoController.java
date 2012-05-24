@@ -1727,6 +1727,9 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (useOldInspectorScheme()) {
 			getSharedInspectorController().getInspectorWindow().dispose();
 		}
+		if (mainInspectorController != null) {
+			mainInspectorController.delete();
+		}
 		_loadedViews.clear();
 		_perspectives.clear();
 		_keyStrokeActionTable.clear();

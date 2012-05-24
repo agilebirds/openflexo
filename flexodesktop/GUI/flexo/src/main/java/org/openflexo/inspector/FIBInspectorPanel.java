@@ -91,6 +91,9 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	private void rebuildViews() {
 
 		if (inspectorViews != null) {
+			for (FIBView<?, ?> v : inspectorViews.values()) {
+				FlexoLocalization.removeFromLocalizationListeners(v);
+			}
 			inspectorViews.clear();
 		}
 
@@ -111,7 +114,13 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		inspectorController.deleteObserver(this);
 		for (FIBView<?, ?> v : inspectorViews.values()) {
 			v.getController().delete();
+			FlexoLocalization.removeFromLocalizationListeners(v);
 		}
+		if (tabPanelView != null) {
+			tabPanelView.getController().delete();
+		}
+		inspectorViews.clear();
+		tabPanelView = null;
 	}
 
 	private FIBView<?, ?> currentInspectorView = null;

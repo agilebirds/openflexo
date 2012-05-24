@@ -501,6 +501,7 @@ public class FlexoLocalization {
 		_storedLocalizedForBorders.clear();
 		_storedAdditionalStrings.clear();
 		_storedLocalizedForTableColumn.clear();
+		localizationListeners.clear();
 	}
 
 	public static void addToLocalizationListeners(LocalizationListener l) {

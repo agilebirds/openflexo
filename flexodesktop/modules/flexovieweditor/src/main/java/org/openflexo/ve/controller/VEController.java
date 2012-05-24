@@ -34,6 +34,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.ve.VEPreferences;
 import org.openflexo.ve.controller.action.VEControllerActionInitializer;
 import org.openflexo.ve.view.VEFrame;
 import org.openflexo.ve.view.VEMainPane;
@@ -106,6 +107,12 @@ public class VEController extends FlexoController implements SelectionManagingCo
 			}
 		});
 
+	}
+
+	@Override
+	public void dispose() {
+		VEPreferences.reset(this);
+		super.dispose();
 	}
 
 	@Override

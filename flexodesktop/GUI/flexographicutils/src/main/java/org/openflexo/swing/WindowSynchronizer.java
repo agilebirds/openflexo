@@ -52,6 +52,7 @@ public class WindowSynchronizer implements ComponentListener, WindowListener {
 
 	@Override
 	public void windowClosed(WindowEvent e) {
+		resetIfNeeded(e);
 	}
 
 	@Override
@@ -81,8 +82,12 @@ public class WindowSynchronizer implements ComponentListener, WindowListener {
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
+		resetIfNeeded(e);
+	}
+
+	protected void resetIfNeeded(WindowEvent e) {
 		if (e.getWindow() == activeWindow) {
-			activeWindow = e.getWindow();
+			activeWindow = null;
 		}
 	}
 

@@ -187,14 +187,4 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 		return null;// getProject().getFlexoComponentLibrary();
 	}
 
-	/**
-	 * Overrides moduleWillClose
-	 * 
-	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
-	 */
-	@Override
-	public void moduleWillClose() {
-		super.moduleWillClose();
-		IEPreferences.reset();
-	}
 }

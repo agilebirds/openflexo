@@ -47,7 +47,7 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 
 	private final JLabel infoLabel;
 
-	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
+	private final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	/**
 	 * @param controller
@@ -93,7 +93,7 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoOntology);
+		return object instanceof FlexoOntology;
 	}
 
 	@Override

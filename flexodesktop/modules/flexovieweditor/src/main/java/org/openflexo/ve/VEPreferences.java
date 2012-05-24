@@ -51,6 +51,12 @@ public final class VEPreferences extends ModulePreferences {
 		preferences(OE_PREFERENCES);
 	}
 
+	public static void reset(VEController controller) {
+		if (_controller == controller) {
+			_controller = null;
+		}
+	}
+
 	public VEPreferences() {
 		super(Module.VE_MODULE);
 	}

@@ -957,6 +957,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (getGeneratedDocResource(false) != null && getGeneratedDocResource(false).isLoaded()) {
 			getGeneratedDoc().setFactory(null);
 		}
+		getDataModel().close();
+		_resource = null;
+		resources = null;
+		resourceCenter = null;
 		deleteObservers();
 		allRegisteredObjects.clear();
 		globalStatus.clear();
@@ -1648,7 +1652,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public JarClassLoader getJarClassLoader() {
 		if (jarClassLoader == null) {
-			jarClassLoader = new JarClassLoader();
+			jarClassLoader = new JarClassLoader(Arrays.asList(new FlexoProjectFile(this, ProjectRestructuration.DATA_MODEL_DIR).getFile()));
 		}
 		return jarClassLoader;
 	}
@@ -4073,16 +4077,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					+ "I will try to find one.");
 			new Exception("Attempt to set a null resource center on project " + getProjectName()).printStackTrace();
 		}
-	}
-
-	private Role testRole;
-
-	public Role getTestRole() {
-		return testRole;
-	}
-
-	public void setTestRole(Role testRole) {
-		this.testRole = testRole;
 	}
 
 	public boolean isComputeDiff() {

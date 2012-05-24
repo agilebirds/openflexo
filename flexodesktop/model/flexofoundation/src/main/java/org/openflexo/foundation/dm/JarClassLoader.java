@@ -1,108 +1,45 @@
 package org.openflexo.foundation.dm;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 
+import org.apache.commons.io.FileUtils;
+
 public class JarClassLoader extends ClassLoader {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(JarClassLoader.class.getPackage()
 			.getName());
 
-	private Map<String, Class<?>> classForClassName = new Hashtable<String, Class<?>>();
+	private Map<String, Class<?>> classForClassName;
 
-	private List<JarFile> loadingJars = new ArrayList<JarFile>();
+	private List<File> jarDirectories;
 
-	public JarClassLoader() {
+	public JarClassLoader(List<File> jarDirectories) {
 		super();
+		this.jarDirectories = jarDirectories;
+		classForClassName = Collections.synchronizedMap(new HashMap<String, Class<?>>());
 	}
 
-	public Class<?> findClass(JarFile jarFile, JarEntry entry) {
-		String className = entry.getName();
-		if (isClassFile(className)) {
-			return findClass(className, jarFile, entry);
-		}
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("This JarEntry does not match a class definition");
-		}
-		return null;
+	@Override
+	protected void finalize() throws Throwable {
+		System.err.println("Finalizing Jar Class Loader");
 	}
 
-	private Class<?> findClass(String className, JarFile jarFile, JarEntry entry) {
-		className = parseClassName(className);
-		if (className != null && className.indexOf("WORPCProvider") > -1) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Skipping load of class " + className
-						+ " because it can lead to System.exit(1) if invoked within a WOApplication");
-			}
-			// We don't try to load this class because it contains a static block that tries to load an additional class which is not
-			// automatically on the classpath.
-			// If the load of that second class fails, then, if we are within a wo_application, the static block will perform
-			// System.exit(1) causing the application to stop
-			return null;
-		}
-		boolean addJarFile = !loadingJars.contains(jarFile);
-		if (addJarFile) {
-			loadingJars.add(jarFile);
-		}
-		try {
-			Class<?> tryToLookup = lookupClass(className);
-			if (tryToLookup != null) {
-				return tryToLookup;
-			} else {
-				try {
-					InputStream is = jarFile.getInputStream(entry);
-					BufferedInputStream bis = new BufferedInputStream(is);
-					byte[] content = new byte[(int) entry.getSize()];
-					bis.read(content, 0, (int) entry.getSize());
-					Class<?> returned = defineClass(className, content, 0, content.length);
-					classForClassName.put(className, returned);
-					return returned;
-				} catch (ClassFormatError err) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Error: " + err + " : class not loaded: " + className);
-					}
-				} catch (NoClassDefFoundError err) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Error: " + err + " : class not loaded: " + className);
-					}
-				} catch (IllegalAccessError err) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Error: " + err + " : class not loaded: " + className);
-					}
-				} catch (IOException err) {
-					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Exception raised: " + err.getClass().getName() + ". See console for details.");
-					}
-					err.printStackTrace();
-				} catch (LinkageError err) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Error: " + err + " : class not loaded: " + className);
-					}
-				}
-			}
-			return null;
-		} finally {
-			if (addJarFile) {
-				loadingJars.remove(jarFile);
-			}
-		}
+	private boolean isClassFile(String jarentryname) {
+		return !jarentryname.startsWith("WebServerResources/");
 	}
 
-	boolean isClassFile(String jarentryname) {
-		return jarentryname.endsWith(".class") && !jarentryname.startsWith("WebServerResources/");
-	}
-
-	String parseClassName(String jarentryname) {
+	private String parseClassName(String jarentryname) {
 		String classname;
 		int index = jarentryname.lastIndexOf(".class");
 		if (index - 1 > 0) {
@@ -117,30 +54,42 @@ public class JarClassLoader extends ClassLoader {
 	@Override
 	public Class<?> findClass(String className) {
 		className = parseClassName(className);
-		Class<?> tryToLookup = lookupClass(className);
+		if (!isClassFile(className)) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Class " + className + " is not a valid class");
+			}
+			return null;
+		}
+		if (className != null && className.indexOf("WORPCProvider") > -1) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Skipping load of class " + className
+						+ " because it can lead to System.exit(1) if invoked within a WOApplication");
+			}
+			// We don't try to load this class because it contains a static block that tries to load an additional class which is not
+			// automatically on the classpath.
+			// If the load of that second class fails, then, if we are within a wo_application, the static block will perform
+			// System.exit(1) causing the application to stop
+			return null;
+		}
+		Class<?> tryToLookup = lookupClass(className, null, null);
 		if (tryToLookup != null) {
 			return tryToLookup;
-		} else {
-			Class<?> klass = classForClassName.get(className);
-			if (klass != null) {
-				return klass;
-			} else if (loadingJars.size() > 0) {
-				String entryName = className.replace('.', '/') + ".class";
-				for (JarFile file : loadingJars) {
-					JarEntry entry = (JarEntry) file.getEntry(entryName);
-					if (entry != null) {
-						return findClass(className, file, entry);
-					}
-				}
-			}
 		}
 		return null;
 	}
 
-	private Class<?> lookupClass(String className) {
+	private Class<?> lookupClass(String className, JarFile jarFile, JarEntry entry) {
+		return lookupClass(className, jarFile, entry, false);
+	}
+
+	private Class<?> lookupClass(String className, JarFile jarFile, JarEntry entry, boolean useClassForNameOnly) {
 		// Put the class name in right format
 		className = parseClassName(className);
-
+		// Look in this class loader
+		Class<?> class1 = getClassForClassName().get(className);
+		if (class1 != null) {
+			return class1;
+		}
 		// Look in the application class loader
 		try {
 			Class<?> forName = Class.forName(className);
@@ -153,13 +102,83 @@ public class JarClassLoader extends ClassLoader {
 		} catch (ExceptionInInitializerError e) {
 		} catch (LinkageError e) {
 		}
-
-		// Look in this class loader
-		if (getClassForClassName().get(className) != null) {
-			return getClassForClassName().get(className);
+		if (useClassForNameOnly) {
+			return null;
 		}
 
-		// Nowhere, sorry...
+		if (jarFile != null && entry != null) {
+			return loadClass(jarFile, entry, className);
+		}
+		class1 = findInJars(className);
+		if (class1 != null) {
+			return class1;
+		}
+		if (className.indexOf('.') == -1) {
+			class1 = lookupClass("java.lang." + className, null, null, true);
+		}
+		classForClassName.put(className, class1);
+		if (class1 == null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Looked everywhere but I could not find " + className);
+			}
+		}
+		return null;
+	}
+
+	private Class<?> findInJars(String className) {
+		List<File> jarFiles = new ArrayList<File>();
+		for (File jarDir : jarDirectories) {
+			jarFiles.addAll(FileUtils.listFiles(jarDir, new String[] { "jar" }, false));
+		}
+		String jarEntryName = className.replace('.', '/') + ".class";
+		for (File file : jarFiles) {
+			try {
+				JarFile jarFile = new JarFile(file);
+				JarEntry e = jarFile.getJarEntry(jarEntryName);
+				if (e != null) {
+					Class<?> klass = loadClass(jarFile, e, className);
+					if (klass != null) {
+						return klass;
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	private Class<?> loadClass(JarFile jarFile, JarEntry entry, String className) {
+		try {
+			InputStream is = jarFile.getInputStream(entry);
+			BufferedInputStream bis = new BufferedInputStream(is);
+			byte[] content = new byte[(int) entry.getSize()];
+			bis.read(content, 0, (int) entry.getSize());
+			Class<?> returned = defineClass(className, content, 0, content.length);
+			classForClassName.put(className, returned);
+			return returned;
+		} catch (ClassFormatError err) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Error: " + err + " : class not loaded: " + className);
+			}
+		} catch (NoClassDefFoundError err) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Error: " + err + " : class not loaded: " + className);
+			}
+		} catch (IllegalAccessError err) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Error: " + err + " : class not loaded: " + className);
+			}
+		} catch (IOException err) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + err.getClass().getName() + ". See console for details.");
+			}
+		} catch (LinkageError err) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Error: " + err + " : class not loaded: " + className);
+			}
+		}
 		return null;
 	}
 
@@ -188,5 +207,9 @@ public class JarClassLoader extends ClassLoader {
 				logger.warning("Could not find class " + klass.getName());
 			}
 		}
+	}
+
+	public Class<?> findClass(JarFile jarFile, JarEntry entry) {
+		return lookupClass(parseClassName(entry.getName()), jarFile, entry);
 	}
 }

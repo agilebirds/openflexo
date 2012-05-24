@@ -68,9 +68,9 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 
 	private final JLabel infoLabel;
 
-	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
+	private final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
-	private static FIBInspectorPanel inspectorPanel;
+	private final FIBInspectorPanel inspectorPanel;
 
 	/**
 	 * @param controller

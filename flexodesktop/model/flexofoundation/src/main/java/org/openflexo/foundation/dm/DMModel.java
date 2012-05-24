@@ -1382,9 +1382,50 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	public DMClassLibrary getClassLibrary() {
 		if (_classLibrary == null) {
 			_classLibrary = new DMClassLibrary(this);
-			_classLibrary.addClassLoader(getProject().getJarClassLoader());
 		}
 		return _classLibrary;
+	}
+
+	public void close() {
+		if (_classLibrary != null) {
+			_classLibrary.close();
+		}
+		// Hack to clear all references and avoid too big memory leaks.
+		jdkRepository = null;
+		componentRepository = null;
+		processInstanceRepository = null;
+		processBusinessDataRepository = null;
+		woRepository = null;
+		eoPrototypeRepository = null;
+		executionModelRepository = null;
+		projectRepositories = null;
+		projectDatabaseRepositories = null;
+		externalRepositories = null;
+		denaliFoundationRepositories = null;
+		externalDatabaseRepositories = null;
+		thesaurusRepositories = null;
+		thesaurusDatabaseRepositories = null;
+		rationalRoseRepositories = null;
+		wsdlRepositories = null;
+		xmlSchemaRepositories = null;
+		entities = null;
+		repositories = null;
+		_project = null;
+		_resource = null;
+		_modelGroup = null;
+		_internalRepositoryFolder = null;
+		_persistantDataRepositoryFolder = null;
+		_nonPersistantDataRepositoryFolder = null;
+		_libraryRepositoryFolder = null;
+		_globalDefaultConnectionString = null;
+		_globalDefaultUsername = null;
+		_globalDefaultPassword = null;
+		statistics = null;
+		dmTypeConverter = null;
+		cachedEntitiesForTypes = null;
+		_declaredTranstypers = null;
+		diagrams = null;
+		_classLibrary = null;
 	}
 
 	// ==========================================================================
