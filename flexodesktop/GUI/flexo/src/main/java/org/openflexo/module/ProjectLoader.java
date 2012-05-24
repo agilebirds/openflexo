@@ -24,7 +24,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -200,17 +199,14 @@ public final class ProjectLoader {
 
 		FlexoProject currentProject = ModuleLoader.instance().getProject();
 
-		if (currentProject != null) {
-			currentProject.close();
-		}
 		getAutoSaveService().stopAutoSaveThread();
 		if (_rmWindow != null) {
 			_rmWindow.dispose();
 			_rmWindow = null;
 		}
-		for (Enumeration<FlexoModule> e = ModuleLoader.instance().loadedModules(); e.hasMoreElements();) {
-			FlexoModule mod = e.nextElement();
-			mod.closeWithoutConfirmation(false);
+		ModuleLoader.instance().closeAllModulesWithoutConfirmation();
+		if (currentProject != null) {
+			currentProject.close();
 		}
 		KeyValueCoder.clearClassCache();
 		KeyValueLibrary.clearCache();
