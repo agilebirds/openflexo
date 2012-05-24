@@ -274,7 +274,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 				case DOCX:
 					GenerateDocx docxAction = GenerateDocx.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
 					docxAction.setSaveBeforeGenerating(false);
-					docxAction.doAction();
+					actions.add(docxAction);
 					generateArtefact = docxAction;
 					break;
 				default:
