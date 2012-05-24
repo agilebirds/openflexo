@@ -71,7 +71,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	// private transient FlexoComponentLibrary _componentLibrary;
 	private Vector<ViewFolder> _subFolders;
 
-	private Vector<ViewDefinition> _shemas;
+	private Vector<ViewDefinition> _views;
 
 	private ViewFolder _fatherFolder;
 
@@ -85,7 +85,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	public ViewFolder(ViewLibrary viewLibrary) {
 		super(viewLibrary);
 		_subFolders = new Vector<ViewFolder>();
-		_shemas = new Vector<ViewDefinition>();
+		_views = new Vector<ViewDefinition>();
 	}
 
 	@Override
@@ -306,15 +306,30 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		return getShemaLibrary().getProject();
 	}
 
+	@Deprecated
 	public Vector<ViewDefinition> getShemas() {
-		return _shemas;
+		return getViews();
 	}
 
-	public void setShemas(Vector<ViewDefinition> value) {
-		_shemas = value;
+	@Deprecated
+	public void setShemas(Vector<ViewDefinition> views) {
+		setViews(views);
 	}
 
+	@Deprecated
 	public Vector<ViewDefinition> getAllShemas() {
+		return getAllViews();
+	}
+
+	public Vector<ViewDefinition> getViews() {
+		return _views;
+	}
+
+	public void setViews(Vector<ViewDefinition> value) {
+		_views = value;
+	}
+
+	public Vector<ViewDefinition> getAllViews() {
 		Vector<ViewDefinition> v = new Vector<ViewDefinition>();
 		Enumeration<ViewFolder> en = getSortedSubFolders();
 		while (en.hasMoreElements()) {
@@ -343,7 +358,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			}
 			shema.getFolder().removeFromShemas(shema);
 		}
-		_shemas.add(shema);
+		_views.add(shema);
 		shema.setFolder(this);
 		if (!isDeserializing()) {
 			int i = 0;
@@ -365,7 +380,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	}
 
 	public void removeFromShemas(ViewDefinition sub) {
-		_shemas.remove(sub);
+		_views.remove(sub);
 		sub.setFolder(null);
 		FlexoIndexManager.reIndexObjectOfArray(getShemas().toArray(new ViewDefinition[0]));
 		setChanged();

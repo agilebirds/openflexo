@@ -357,10 +357,20 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		return getShemaResource(false) != null;
 	}
 
+	public View getView() {
+		return getShema();
+	}
+
+	public View getView(FlexoProgress progress) {
+		return getShema(progress);
+	}
+
+	@Deprecated
 	public View getShema() {
 		return getShema(null);
 	}
 
+	@Deprecated
 	public View getShema(FlexoProgress progress) {
 		return getShemaResource().getResourceData(progress);
 	}
