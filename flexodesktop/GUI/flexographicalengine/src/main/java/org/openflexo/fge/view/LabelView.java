@@ -317,7 +317,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	public void paint(Graphics g) {
 		boolean skipPaint = getPaintManager().isPaintingCacheEnabled() && getPaintManager().getDrawingView().isBuffering()
 				&& (getPaintManager().isTemporaryObject(getGraphicalRepresentation()) || isEditing);
-		if (skipPaint) {
+		if (skipPaint || isDeleted()) {
 			return;
 		}
 		super.paint(g);
