@@ -17,6 +17,7 @@ import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ProjectLoader;
 
 public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
@@ -30,6 +31,15 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	protected FlexoProject project;
 
 	public FlexoExternalMainWithProject() {
+	}
+
+	/**
+	 * This is only code by test classes to dereference project from everywhere.
+	 */
+	public void close() {
+		ProjectLoader.instance().closeCurrentProject();
+		editor = null;
+		project = null;
 	}
 
 	@Override
