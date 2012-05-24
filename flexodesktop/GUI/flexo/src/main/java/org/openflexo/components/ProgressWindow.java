@@ -278,7 +278,17 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	}
 
 	@Override
-	public void setProgress(String stepName) {
+	public void setProgress(final String stepName) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					setProgress(stepName);
+				}
+			});
+			return;
+		}
 		// logger.info("Progress "+mainProgress+"/"+mainProgressBar.getMaximum());
 		if (!isVisible()) {
 			setVisible(true);
@@ -292,17 +302,25 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		isSecondaryProgressIndeterminate = true;
 		secondaryProgressBar.setIndeterminate(true);
 		secondaryProgressBarLabel.setText("");
-		// paintImmediately(flexoLogo);
 		paintImmediately(label);
 		paintImmediately(mainProgressBarLabel);
 		paintImmediately(mainProgressBar);
 		paintImmediately(secondaryProgressBarLabel);
 		paintImmediately(secondaryProgressBar);
-		// toFront();
 	}
 
 	@Override
-	public void resetSecondaryProgress(int steps) {
+	public void resetSecondaryProgress(final int steps) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					resetSecondaryProgress(steps);
+				}
+			});
+			return;
+		}
 		isSecondaryProgressIndeterminate = false;
 		secondaryProgressBar.setIndeterminate(false);
 		secondaryProgressBar.setMinimum(0);
@@ -315,7 +333,17 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	}
 
 	@Override
-	public void setSecondaryProgress(String stepName) {
+	public void setSecondaryProgress(final String stepName) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					setSecondaryProgress(stepName);
+				}
+			});
+			return;
+		}
 		secondaryProgress++;
 		secondaryProgressBar.setValue(secondaryProgress);
 		secondaryProgressBarLabel.setText(stepName);
