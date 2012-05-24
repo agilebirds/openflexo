@@ -341,75 +341,76 @@
     </DropScheme>
     <ContainedIndividualPatternRole id="245" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Task" patternRole="task" />
     <ContainedObjectPropertyStatementPatternRole id="246" objectProperty="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#hasTask" patternRole="hasTask" />
-    <ContainedConnectorPatternRole id="247" exampleLabel="has task" patternRole="hasTaskConnector">
+    <ContainedConnectorPatternRole id="247" exampleLabel="" patternRole="hasTaskConnector">
       <ConnectorGraphicalRepresentation id="248" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="3.0" absoluteTextY="7.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="249" noStroke="false" color="153,153,153" lineWidth="1.6000000014901161" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <RectPolylinConnector id="250" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
-        <TextStyle id="251" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <StartShapeGraphicalRepresentation id="250" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="78.0" y="25.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="251" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="252" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="253" top="5" bottom="5" left="5" right="5" />
+          <CircleShape id="254" />
+          <ShadowStyle id="255" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="256" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="257" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="179.0" y="53.0" width="214.92890995260663" height="29.34426229508197" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" text="Task" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="258" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="259" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="260" top="5" bottom="5" left="5" right="5" />
+          <RectangleShape id="261" isRounded="true" arcSize="15.0" />
+          <ShadowStyle id="262" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="263" font="Microsoft Sans Serif,0,10" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <RectPolylinConnector id="264" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="265" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation id="252" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="78.0" y="25.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="253" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="254" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="255" top="5" bottom="5" left="5" right="5" />
-        <CircleShape id="256" />
-        <ShadowStyle id="257" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="258" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactFromShapeGraphicalRepresentation>
-      <ArtifactToShapeGraphicalRepresentation id="259" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="268.0" y="62.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="260" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="261" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="262" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="256" />
-        <ShadowStyle id="263" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="264" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ArtifactFromShapeGraphicalRepresentation idref="250" />
+      <ArtifactToShapeGraphicalRepresentation id="266" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="268.0" y="62.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" lineWrap="false" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="267" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="268" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="269" top="20" bottom="20" left="20" right="20" />
+        <CircleShape idref="254" />
+        <ShadowStyle id="270" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="271" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ArtifactToShapeGraphicalRepresentation>
-      <ToShapePatternRole id="265" exampleLabel="Task" patternRole="shape">
-        <ShapeGraphicalRepresentation id="266" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="154.0" y="53.0" width="214.92890995260663" height="29.34426229508197" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-          <ForegroundStyle id="267" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="268" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="269" top="5" bottom="5" left="5" right="5" />
-          <RectangleShape id="270" isRounded="true" arcSize="15.0" />
-          <ShadowStyle id="271" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <TextStyle id="272" font="Microsoft Sans Serif,0,10" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </ShapeGraphicalRepresentation>
+      <ToShapePatternRole id="272" exampleLabel="Task" patternRole="shape">
+        <ShapeGraphicalRepresentation idref="257" />
         <GRSpec id="273" featureName="label" value="task.taskName" readOnly="false" />
       </ToShapePatternRole>
-      <GRSpec id="274" featureName="label" value="&quot;has task&quot;" readOnly="true" />
     </ContainedConnectorPatternRole>
-    <ContainedShapePatternRole idref="265" />
+    <ContainedShapePatternRole idref="272" />
     <PrimaryConceptIndividualPatternRole idref="245" />
     <PrimaryRepresentationConnectorPatternRole idref="247" />
-    <Inspector id="275" inspectorTitle="Position task">
-      <TextField id="276" label="uri" name="textfield" readOnly="false" data="task.uriName" />
-      <TextField id="277" label="position" name="textfield" readOnly="true" data="hasTask.subject.uriName" />
-      <TextField id="278" label="task" name="textfield" readOnly="false" data="task.taskName" />
-      <TextArea id="279" label="description" name="textarea" readOnly="false" data="task.taskDescription" />
+    <Inspector id="274" inspectorTitle="Position task">
+      <TextField id="275" label="uri" name="textfield" readOnly="false" data="task.uriName" />
+      <TextField id="276" label="position" name="textfield" readOnly="true" data="hasTask.subject.uriName" />
+      <TextField id="277" label="task" name="textfield" readOnly="false" data="task.taskName" />
+      <TextArea id="278" label="description" name="textarea" readOnly="false" data="task.taskDescription" />
     </Inspector>
   </EditionPattern>
-  <LocalizedDictionary id="280">
-    <Localized id="281" key="position" lang="en">Position</Localized>
-    <Localized id="282" key="Position" lang="en">Position</Localized>
-    <Localized id="283" key="objective" lang="en">Objective</Localized>
-    <Localized id="284" key="Objective" lang="en">Objective</Localized>
-    <Localized id="285" key="mission" lang="en">Mission</Localized>
-    <Localized id="286" key="Mission" lang="en">Mission</Localized>
-    <Localized id="287" key="task" lang="en">Task</Localized>
-    <Localized id="288" key="Task" lang="en">Task</Localized>
-    <Localized id="289" key="organization_unit_name" lang="en">Organization unit name</Localized>
-    <Localized id="290" key="organization_unit_description" lang="en">Organization unit description</Localized>
-    <Localized id="291" key="mission" lang="en">Mission</Localized>
-    <Localized id="292" key="mission_description" lang="en">Mission description</Localized>
-    <Localized id="293" key="objective_description" lang="en">Objective description</Localized>
-    <Localized id="294" key="position_description" lang="en">Objective description</Localized>
-    <Localized id="295" key="task_description" lang="en">Task description</Localized>
-    <Localized id="296" key="RootOrganizationalUnit" lang="en">Top-level organization unit</Localized>
-    <Localized id="297" key="OrganizationalUnit" lang="en">Organization unit</Localized>
-    <Localized id="298" key="DropRootOrganizationalUnitAtTopLevel" lang="en">Create new top-level organization unit</Localized>
-    <Localized id="299" key="DrawRootOrganizationalUnitAtTopLevel" lang="en">Draw existing top-level organization unit</Localized>
-    <Localized id="300" key="create_root_organization_unit" lang="en">Create root organization unit</Localized>
-    <Localized id="301" key="choose_and_draw_root_organization_unit" lang="en">Choose and draw root organization unit</Localized>
-    <Localized id="302" key="uri" lang="English">URI</Localized>
-    <Localized id="303" key="concept_scheme" lang="English">concept_scheme</Localized>
+  <LocalizedDictionary id="279">
+    <Localized id="280" key="position" lang="en">Position</Localized>
+    <Localized id="281" key="Position" lang="en">Position</Localized>
+    <Localized id="282" key="objective" lang="en">Objective</Localized>
+    <Localized id="283" key="Objective" lang="en">Objective</Localized>
+    <Localized id="284" key="mission" lang="en">Mission</Localized>
+    <Localized id="285" key="Mission" lang="en">Mission</Localized>
+    <Localized id="286" key="task" lang="en">Task</Localized>
+    <Localized id="287" key="Task" lang="en">Task</Localized>
+    <Localized id="288" key="organization_unit_name" lang="en">Organization unit name</Localized>
+    <Localized id="289" key="organization_unit_description" lang="en">Organization unit description</Localized>
+    <Localized id="290" key="mission" lang="en">Mission</Localized>
+    <Localized id="291" key="mission_description" lang="en">Mission description</Localized>
+    <Localized id="292" key="objective_description" lang="en">Objective description</Localized>
+    <Localized id="293" key="position_description" lang="en">Objective description</Localized>
+    <Localized id="294" key="task_description" lang="en">Task description</Localized>
+    <Localized id="295" key="RootOrganizationalUnit" lang="en">Top-level organization unit</Localized>
+    <Localized id="296" key="OrganizationalUnit" lang="en">Organization unit</Localized>
+    <Localized id="297" key="DropRootOrganizationalUnitAtTopLevel" lang="en">Create new top-level organization unit</Localized>
+    <Localized id="298" key="DrawRootOrganizationalUnitAtTopLevel" lang="en">Draw existing top-level organization unit</Localized>
+    <Localized id="299" key="create_root_organization_unit" lang="en">Create root organization unit</Localized>
+    <Localized id="300" key="choose_and_draw_root_organization_unit" lang="en">Choose and draw root organization unit</Localized>
+    <Localized id="301" key="uri" lang="English">URI</Localized>
+    <Localized id="302" key="concept_scheme" lang="English">concept_scheme</Localized>
   </LocalizedDictionary>
 </ViewPoint>
 

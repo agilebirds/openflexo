@@ -37,6 +37,7 @@ import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.ViewLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
 public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibraryObject> {
@@ -78,6 +79,7 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 
 	public boolean useViewPoint = true;
 	public String newViewName;
+	public String newViewTitle;
 	public ViewPoint viewpoint;
 
 	public boolean skipChoosePopup = false;
@@ -91,19 +93,32 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 			DuplicateShemaNameException {
 		logger.info("Add shema");
 
+		if (StringUtils.isNotEmpty(newViewTitle) && StringUtils.isEmpty(newViewName)) {
+			newViewName = JavaUtils.getClassName(newViewTitle);
+		}
+
+		if (StringUtils.isNotEmpty(newViewName) && StringUtils.isEmpty(newViewTitle)) {
+			newViewTitle = newViewName;
+		}
+
 		if (getFolder() == null) {
 			throw new InvalidParameterException("folder is undefined");
 		}
 		if (StringUtils.isEmpty(newViewName)) {
 			throw new InvalidParameterException("shema name is undefined");
 		}
-		if (getProject().getShemaLibrary().getShemaNamed(newViewName) != null) {
-			throw new DuplicateShemaNameException(newViewName);
+
+		int index = 1;
+		String baseName = newViewName;
+		while (getProject().getShemaLibrary().getShemaNamed(newViewName) != null) {
+			newViewName = baseName + index;
+			index++;
 		}
 
 		_newShema = new ViewDefinition(newViewName, getFolder().getShemaLibrary(), getFolder(), getProject(), true);
+		_newShema.setTitle(newViewTitle);
 		if (useViewPoint) {
-			_newShema.setCalc(viewpoint);
+			_newShema.setViewPoint(viewpoint);
 		}
 		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
 		// Creates the resource here
@@ -156,11 +171,17 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 			errorMessage = FlexoLocalization.localizedForKey("no_view_point_selected");
 			return false;
 		}
-		if (StringUtils.isEmpty(newViewName)) {
-			errorMessage = FlexoLocalization.localizedForKey("no_view_name_defined");
+		if (StringUtils.isEmpty(newViewTitle)) {
+			errorMessage = FlexoLocalization.localizedForKey("no_view_title_defined");
 			return false;
 		}
-		if (getProject().getShemaLibrary().getShemaNamed(newViewName) != null) {
+
+		String viewName = newViewName;
+		if (StringUtils.isNotEmpty(newViewTitle) && StringUtils.isEmpty(newViewName)) {
+			viewName = JavaUtils.getClassName(newViewTitle);
+		}
+
+		if (getProject().getShemaLibrary().getShemaNamed(viewName) != null) {
 			errorMessage = FlexoLocalization.localizedForKey("a_view_with_that_name_already_exists");
 			return false;
 		}

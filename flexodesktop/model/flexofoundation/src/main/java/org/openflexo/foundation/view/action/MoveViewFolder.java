@@ -65,15 +65,19 @@ public class MoveViewFolder extends FlexoAction<MoveViewFolder, ViewFolder, View
 			return;
 		}
 		for (ViewFolder v : getGlobalSelection()) {
-			moveToFolder(v, folder);
+			if (isFolderMovableTo(v, folder)) {
+				moveToFolder(v, folder);
+			}
 		}
 	}
 
 	private void moveToFolder(ViewFolder folderToMove, ViewFolder newFatherFolder) {
-		ViewFolder oldFolder = folderToMove.getFatherFolder();
-		// Hack: we have first to load the view, to prevent a null value returned by FlexoOEShemaResource.getSchemaDefinition()
-		oldFolder.removeFromSubFolders(folderToMove);
-		newFatherFolder.addToSubFolders(folderToMove);
+		if (isFolderMovableTo(folderToMove, newFatherFolder)) {
+			ViewFolder oldFolder = folderToMove.getFatherFolder();
+			// Hack: we have first to load the view, to prevent a null value returned by FlexoOEShemaResource.getSchemaDefinition()
+			oldFolder.removeFromSubFolders(folderToMove);
+			newFatherFolder.addToSubFolders(folderToMove);
+		}
 	}
 
 	public ViewFolder getFolder() {
@@ -85,6 +89,6 @@ public class MoveViewFolder extends FlexoAction<MoveViewFolder, ViewFolder, View
 	}
 
 	public static boolean isFolderMovableTo(ViewFolder folderToMove, ViewFolder newLocation) {
-		return !folderToMove.isFatherOf(newLocation);
+		return folderToMove != newLocation && !folderToMove.isFatherOf(newLocation);
 	}
 }

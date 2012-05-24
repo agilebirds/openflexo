@@ -62,6 +62,7 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		(new AddViewInitializer(this)).init();
 		(new AddViewFolderInitializer(this)).init();
 		(new DeleteViewInitializer(this)).init();
+		(new DeleteViewFolderInitializer(this)).init();
 
 		// Diagram perspective
 		(new AddShapeInitializer(this)).init();

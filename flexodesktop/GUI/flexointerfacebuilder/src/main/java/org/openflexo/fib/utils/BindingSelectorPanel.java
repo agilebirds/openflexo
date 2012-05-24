@@ -32,7 +32,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Observable;
@@ -641,7 +641,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 	protected JList makeNewJList() {
 		FilteredJList newList = new FilteredJList();
 
-		newList.addMouseMotionListener(new TypeResolver(newList));
+		TypeResolver typeResolver = new TypeResolver(newList);
+
+		newList.addMouseMotionListener(typeResolver);
+		newList.addMouseListener(typeResolver);
 
 		_lists.add(newList);
 		if (logger.isLoggable(Level.FINE)) {
@@ -962,8 +965,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				updateMethodCallPanel();
 			}
 
-			currentTypeLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"));
-			currentTypeLabel.setToolTipText(null);
+			// currentTypeLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"));
+			// currentTypeLabel.setToolTipText(null);
 
 		}
 
@@ -1634,7 +1637,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	}
 
-	protected class TypeResolver extends MouseMotionAdapter {
+	protected class TypeResolver extends MouseAdapter implements MouseMotionListener {
 
 		private JList list;
 
@@ -1645,6 +1648,15 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			displayLabel(e);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			displayLabel(e);
+		}
+
+		private void displayLabel(MouseEvent e) {
 
 			// Get item index
 			int index = list.locationToIndex(e.getPoint());
@@ -1660,6 +1672,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				currentTypeLabel.setText(currentFocused.getTypeStringRepresentation());
 			}
 		}
+
 	}
 
 	protected class BindingSelectorCellRenderer extends DefaultListCellRenderer {
@@ -1907,6 +1920,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		list.removeListSelectionListener(this);
 		list.setSelectedIndex(newSelectedIndex);
 		list.addListSelectionListener(this);
+
 	}
 
 	private boolean hasBindingPathForm(String textValue) {

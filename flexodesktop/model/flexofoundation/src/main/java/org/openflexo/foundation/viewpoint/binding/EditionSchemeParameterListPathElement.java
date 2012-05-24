@@ -9,6 +9,7 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.EditionPatternParameter;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ListParameter;
@@ -28,9 +29,13 @@ public class EditionSchemeParameterListPathElement implements SimplePathElement<
 		this.editionScheme = editionScheme;
 		allProperties = new Vector<BindingPathElement>();
 		for (EditionSchemeParameter p : editionScheme.getParameters()) {
-			allProperties.add(new EditionSchemeParameterPathElement(this, p));
-			if (p instanceof ListParameter) {
-				allProperties.add(new ListValueForListParameterPathElement(this, (ListParameter) p));
+			if (p instanceof EditionPatternParameter) {
+				allProperties.add(new EditionPatternPathElement(p.getName(), ((EditionPatternParameter) p).getEditionPatternType(), p));
+			} else {
+				allProperties.add(new EditionSchemeParameterPathElement(this, p));
+				if (p instanceof ListParameter) {
+					allProperties.add(new ListValueForListParameterPathElement(this, (ListParameter) p));
+				}
 			}
 		}
 	}

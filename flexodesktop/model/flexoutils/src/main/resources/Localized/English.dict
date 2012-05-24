@@ -1,5 +1,5 @@
 #English
-#Fri May 18 11:29:31 CEST 2012
+#Thu May 24 12:17:22 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -41,10 +41,14 @@
 'assign'_binding_is_not_valid_description='assign' binding is not valid
 'base_uri'_binding_is_required='base uri' binding is required
 'base_uri'_binding_is_required_description='base uri' binding is required
+'condition'_binding_is_not_valid='condition'_binding_is_not_valid
+'condition'_binding_is_not_valid_description='condition'_binding_is_not_valid_description
 'conditional'_binding_is_not_valid='conditional' binding is not valid
 'conditional'_binding_is_not_valid_description='conditional' binding is not valid
 'data'_binding_is_not_valid='data' binding is not valid
 'data'_binding_is_not_valid_description='data' binding is not valid
+'iteration'_binding_is_not_valid='iteration'_binding_is_not_valid
+'iteration'_binding_is_not_valid_description='iteration'_binding_is_not_valid_description
 'object'_binding_is_not_valid='object' binding is not valid
 'object'_binding_is_not_valid_description='object' binding is not valid
 'object'_binding_is_required_and_must_be_valid='object' binding is required and must be valid
@@ -1813,6 +1817,7 @@ delete_this_pre_condition=Delete this pre-condition
 delete_this_sub_process_node=Delete this sub-process node
 delete_this_widget=Delete this widget
 delete_view=Delete view
+delete_view_folder=Delete folder
 delete_webservice=Delete service
 deleted=deleted
 deleting=deleting
@@ -3378,6 +3383,7 @@ move_tab_right=Move tab right
 move_toc_entry=Move TOC entry
 move_up=Move up
 move_upper_level=Move to upper level
+move_view=move_view
 moving_process=Moving process
 multimedia_widget=Multimedia widget
 multiple_lines=Multiple lines
@@ -4111,6 +4117,7 @@ reader_not_configured=Reader not configured
 reader_repository=Reader repository
 readers_guide=Reader guide
 really_delete_this_view_?=Really delete this view ?
+really_delete_this_view_folder_and_all_its_contents_?=Really delete this view folder and all its contents ?
 really_quit=Do you really want to quit ?
 reason_permission_denied=Reason\: permission denied
 rebuild_dependancies=Rebuild dependancies

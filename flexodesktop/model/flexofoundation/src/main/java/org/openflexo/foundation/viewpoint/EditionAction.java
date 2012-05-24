@@ -149,14 +149,14 @@ public abstract class EditionAction extends EditionSchemeObject {
 	}
 
 	@Override
-	public BindingModel getBindingModel() {
+	public final BindingModel getBindingModel() {
 		if (getActionContainer() != null) {
 			return getActionContainer().getInferedBindingModel();
 		}
 		return null;
 	}
 
-	public BindingModel getInferedBindingModel() {
+	public final BindingModel getInferedBindingModel() {
 		if (inferedBindingModel == null) {
 			rebuildInferedBindingModel();
 		}

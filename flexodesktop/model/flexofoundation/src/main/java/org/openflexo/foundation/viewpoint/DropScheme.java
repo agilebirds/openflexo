@@ -132,9 +132,17 @@ public class DropScheme extends AbstractCreationScheme {
 	@Override
 	public BindingModel getBindingModel() {
 		if (bindingModelNeedToBeRecomputed) {
+			bindingModelNeedToBeRecomputed = false;
 			updateBindingModels();
 		}
 		return super.getBindingModel();
+	}
+
+	@Override
+	protected void rebuildActionsBindingModel() {
+		if (!bindingModelNeedToBeRecomputed) {
+			super.rebuildActionsBindingModel();
+		}
 	}
 
 	@Override

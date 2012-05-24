@@ -258,4 +258,43 @@ public class OntologyIndividual extends OntologyObject<Individual> implements Co
 		}
 	}
 
+	@Override
+	public String getDescription() {
+		return (String) getPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI));
+	}
+
+	@Override
+	public void setDescription(String aDescription) {
+		setPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI), aDescription);
+	}
+
+	@Override
+	public String getTechnicalDescription() {
+		return (String) getPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI));
+	}
+
+	@Override
+	public void setTechnicalDescription(String technicalDescription) {
+		setPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI), technicalDescription);
+	};
+
+	@Override
+	public String getBusinessDescription() {
+		return (String) getPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI));
+	}
+
+	@Override
+	public void setBusinessDescription(String businessDescription) {
+		setPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI), businessDescription);
+	}
+
+	@Override
+	public String getUserManualDescription() {
+		return (String) getPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI));
+	}
+
+	@Override
+	public void setUserManualDescription(String userManualDescription) {
+		setPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI), userManualDescription);
+	}
 }

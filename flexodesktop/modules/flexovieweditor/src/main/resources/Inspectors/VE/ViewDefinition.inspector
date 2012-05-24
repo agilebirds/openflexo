@@ -3,10 +3,12 @@
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="viewpoint" localize="true" name="ViewpointnameLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.calc.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+      <Label label="title" localize="true" name="TitleLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" validateOnReturn="true" passwd="false" localize="true" name="Title" data="data.title" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" readOnly="true" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+      <Label label="viewpoint" localize="true" name="ViewpointnameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.calc.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

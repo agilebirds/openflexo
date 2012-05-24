@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
@@ -41,6 +42,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	public static final String TARGET = "target";
 	public static final String FROM_TARGET = "fromTarget";
 	public static final String TO_TARGET = "toTarget";
+	public static final String THIS = "this";
 
 	public static enum EditionSchemeType {
 		CreationScheme, DropScheme, LinkScheme, ActionScheme, NavigationScheme, DeletionScheme
@@ -515,6 +517,9 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 				a.updatePatternRoleType();
 			}
 		}*/
+		if (getName().equals("displayAttribute")) {
+			System.out.println("finalizeEditionSchemeDeserialization() for " + this);
+		}
 		updateBindingModels();
 	}
 
@@ -543,6 +548,13 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		logger.fine("updateBindingModels()");
 		_bindingModel = null;
 		createBindingModel();
+		rebuildActionsBindingModel();
+	}
+
+	protected void rebuildActionsBindingModel() {
+		for (EditionAction action : getActions()) {
+			action.rebuildInferedBindingModel();
+		}
 	}
 
 	private final void createBindingModel() {
@@ -551,7 +563,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		appendContextualBindingVariables(_bindingModel);
 		if (getEditionPattern() != null) {
 			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				PatternRolePathElement newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, this);
+				BindingVariable<?> newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, this);
 				_bindingModel.addToBindingVariables(newPathElement);
 			}
 		}

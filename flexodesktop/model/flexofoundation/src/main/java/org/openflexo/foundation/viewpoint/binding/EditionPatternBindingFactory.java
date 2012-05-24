@@ -22,7 +22,7 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory {
 			EditionPattern ep = ((EditionPatternInstancePathElement) father).getEditionPattern();
 			PatternRole pr = ep.getPatternRole(propertyName);
 			if (pr != null) {
-				return ((EditionPatternInstancePathElement) father).getPatternRolePathElement(pr);
+				return ((EditionPatternInstancePathElement) father).getPathElement(pr);
 			} else {
 				logger.warning("Not found pattern role: " + propertyName);
 			}
@@ -30,7 +30,7 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory {
 			EditionPattern ep = ((EditionPatternPathElement) father).getEditionPattern();
 			PatternRole pr = ep.getPatternRole(propertyName);
 			if (pr != null) {
-				return ((EditionPatternPathElement) father).getPatternRolePathElement(pr);
+				return ((EditionPatternPathElement) father).getPathElement(pr);
 			} else {
 				logger.warning("Not found pattern role: " + propertyName);
 			}
@@ -76,9 +76,9 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory {
 	@Override
 	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father) {
 		if (father instanceof EditionPatternInstancePathElement) {
-			return ((EditionPatternInstancePathElement) father).getAllPatternRoleElements();
+			return ((EditionPatternInstancePathElement) father).getAllElements();
 		} else if (father instanceof EditionPatternPathElement) {
-			return ((EditionPatternPathElement) father).getAllPatternRoleElements();
+			return ((EditionPatternPathElement) father).getAllElements();
 		} else if (father instanceof PatternRolePathElement) {
 			return ((PatternRolePathElement) father).getAllProperties();
 		} else if (father instanceof StatementPathElement) {

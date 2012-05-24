@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
@@ -221,7 +222,9 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 	@Override
 	public void fireApplyPerformed() {
-		// logger.info("fireApplyPerformed() in FIBCustomWidget, value="+customComponent.getEditedObject());
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("fireApplyPerformed() in FIBCustomWidget, value=" + customComponent.getEditedObject());
+		}
 		// In this case, we force model updating
 		updateModelFromWidget(true);
 	}

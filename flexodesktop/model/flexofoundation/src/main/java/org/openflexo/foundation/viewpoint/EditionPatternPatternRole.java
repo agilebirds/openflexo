@@ -44,9 +44,14 @@ public class EditionPatternPatternRole extends PatternRole {
 	}
 
 	public void setEditionPatternType(EditionPattern editionPatternType) {
-		this.editionPatternType = editionPatternType;
-		if (getCreationScheme() != null && getCreationScheme().getEditionPattern() != editionPatternType) {
-			setCreationScheme(null);
+		if (editionPatternType != this.editionPatternType) {
+			this.editionPatternType = editionPatternType;
+			if (getCreationScheme() != null && getCreationScheme().getEditionPattern() != editionPatternType) {
+				setCreationScheme(null);
+			}
+			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
+				s.updateBindingModels();
+			}
 		}
 	}
 
@@ -59,6 +64,9 @@ public class EditionPatternPatternRole extends PatternRole {
 	public void _setCreationSchemeURI(String uri) {
 		if (getViewPointLibrary() != null) {
 			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(uri);
+			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
+				s.updateBindingModels();
+			}
 		}
 		_creationSchemeURI = uri;
 	}

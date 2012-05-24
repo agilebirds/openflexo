@@ -21,7 +21,9 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
@@ -62,6 +64,19 @@ public abstract class AbstractActionScheme extends EditionScheme {
 			return (Boolean) getConditional().getBindingValue(editionPatternReference);
 		}
 		return true;
+	}
+
+	@Override
+	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		super.appendContextualBindingVariables(bindingModel);
+		bindingModel.addToBindingVariables(new EditionPatternPathElement<AbstractActionScheme>(EditionScheme.THIS, getEditionPattern(),
+				this));
+	}
+
+	@Override
+	public void setEditionPattern(EditionPattern editionPattern) {
+		super.setEditionPattern(editionPattern);
+		updateBindingModels();
 	}
 
 }

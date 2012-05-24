@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -73,9 +74,11 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 	}
 
 	public synchronized void buttonClicked() {
-		logger.info("Button " + getWidget() + " has clicked");
-		logger.info("Action: " + getWidget().getAction() + " valid=" + getWidget().getAction().isValid());
-		logger.info("Data: " + getController().getDataObject());
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Button " + getWidget() + " has clicked");
+			logger.fine("Action: " + getWidget().getAction() + " valid=" + getWidget().getAction().isValid());
+			logger.fine("Data: " + getController().getDataObject());
+		}
 		Object data = getController().getDataObject();
 		if (getWidget().getAction().isValid()) {
 			getWidget().getAction().execute(getController());
