@@ -46,7 +46,7 @@ public class ViewElement extends BrowserElement {
 
 	@Override
 	public String getName() {
-		return getView().getName();
+		return getView().getTitle();
 	}
 
 	public View getView() {

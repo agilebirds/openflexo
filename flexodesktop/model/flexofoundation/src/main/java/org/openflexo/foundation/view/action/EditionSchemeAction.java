@@ -606,7 +606,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	protected View performAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action) {
 		View initialShema = retrieveOEShema();
 		AddView addDiagramAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
-		addDiagramAction.newViewName = action.getDiagramName(this);
+		addDiagramAction.newViewTitle = action.getDiagramName(this);
 		addDiagramAction.viewpoint = action.getPatternRole().getViewpoint();
 		addDiagramAction.setFolder(initialShema.getShemaDefinition().getFolder());
 		addDiagramAction.skipChoosePopup = true;

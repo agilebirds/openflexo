@@ -49,6 +49,7 @@
   <entity name="org.openflexo.foundation.view.ViewDefinition" xmlTag="Shema">
     <description>TODO</description>
  	<property name="name" xmlTag="name" attribute="YES" description="TODO"/>
+ 	<property name="title" xmlTag="title" attribute="YES" description="TODO"/>
     <property name="calcURI" xmlTag="calcURI" attribute="YES"/>
  	<property name="index" xmlTag = "docIndex" attribute="yes"/>	
   </entity>

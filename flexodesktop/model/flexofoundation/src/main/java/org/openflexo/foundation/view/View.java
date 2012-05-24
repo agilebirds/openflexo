@@ -173,10 +173,24 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return null;
 	}
 
+	// TODO: big issue with renaming, don't call this !!!
 	@Override
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
 		if (getShemaDefinition() != null) {
 			getShemaDefinition().setName(name);
+		}
+	}
+
+	public String getTitle() {
+		if (getShemaDefinition() != null) {
+			return getShemaDefinition().getTitle();
+		}
+		return null;
+	}
+
+	public void setTitle(String title) throws DuplicateResourceException, InvalidNameException {
+		if (getShemaDefinition() != null) {
+			getShemaDefinition().setTitle(title);
 		}
 	}
 

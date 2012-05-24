@@ -45,7 +45,7 @@ public class ViewDefinitionElement extends BrowserElement {
 
 	@Override
 	public String getName() {
-		return getViewDefinition().getName();
+		return getViewDefinition().getTitle();
 	}
 
 	public ViewDefinition getViewDefinition() {

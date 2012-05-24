@@ -51,6 +51,7 @@ import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.ReservedKeyword;
 
 public class ViewDefinition extends ViewLibraryObject implements Sortable {
@@ -64,6 +65,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	private ViewPointLibrary _calcLibrary;
 	private boolean lookupDone = false;
 	private String viewPointURI;
+	private String title;
 
 	public ViewDefinition(VEShemaLibraryBuilder builder) throws DuplicateResourceException {
 		this(null, builder.shemaLibrary, null, builder.getProject(), false);
@@ -104,12 +106,14 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		return _shemaName;
 	}
 
+	// TODO: big issue with renaming, don't call this !!!
 	@Override
 	public void setName(String aName) throws DuplicateResourceException, InvalidNameException {
-		setShemaName(aName);
+		String viewName = JavaUtils.getClassName(aName);
+		setViewName(viewName);
 	}
 
-	private void setShemaName(String name) throws DuplicateResourceException, InvalidNameException {
+	private void setViewName(String name) throws DuplicateResourceException, InvalidNameException {
 		if (_shemaName != null && !_shemaName.equals(name) && name != null && !isDeserializing()) {
 			if (!name.matches(IERegExp.JAVA_CLASS_NAME_REGEXP)) {
 				throw new InvalidNameException();
@@ -416,4 +420,19 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		viewPointURI = ontologyCalcUri;
 	}
 
+	public String getTitle() {
+		if (title == null) {
+			return getName();
+		}
+		return title;
+	}
+
+	public void setTitle(String viewTitle) {
+		if (requireChange(this.title, viewTitle)) {
+			String oldValue = this.title;
+			this.title = viewTitle;
+			setChanged();
+			notifyModification("", oldValue, viewTitle);
+		}
+	}
 }
