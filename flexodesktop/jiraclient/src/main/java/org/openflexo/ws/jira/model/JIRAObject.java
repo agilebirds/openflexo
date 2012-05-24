@@ -73,7 +73,7 @@ public class JIRAObject<J extends JIRAObject<J>> extends HashMap<String, Object>
 
 	@Override
 	public boolean equals(Object o) {
-		return o == this;
+		return o == this || o != null && o.getClass() == getClass() && ((JIRAObject<?>) o).id != null && ((JIRAObject<?>) o).id.equals(id);
 	}
 
 	@Override

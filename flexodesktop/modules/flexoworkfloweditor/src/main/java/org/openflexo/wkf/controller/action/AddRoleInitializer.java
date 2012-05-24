@@ -19,6 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
@@ -39,7 +40,6 @@ import org.openflexo.foundation.param.ColorParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
@@ -91,7 +91,7 @@ public class AddRoleInitializer extends ActionInitializer {
 						return false;
 					}
 					action.setNewRoleName(newRoleName);
-					action.setNewColor((FlexoColor) dialog.parameterValueWithName("color"));
+					action.setNewColor((Color) dialog.parameterValueWithName("color"));
 					action.setNewDescription((String) dialog.parameterValueWithName("description"));
 					return true;
 				} else {
@@ -107,7 +107,7 @@ public class AddRoleInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddRole action) {
 				Role newRole = action.getNewRole();
-				if ((e != null) && (e.getSource() instanceof BrowserActionSource)) {
+				if (e != null && e.getSource() instanceof BrowserActionSource) {
 					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
 					if (!browser.activateBrowsingFor(newRole)) {
 						if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_desactivate_role_filtering"))) {

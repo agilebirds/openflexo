@@ -161,8 +161,11 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 				return false;
 			}
 			widgetUpdating = true;
-			textArea.setText(getValue());
-			widgetUpdating = false;
+			try {
+				textArea.setText(getValue());
+			} finally {
+				widgetUpdating = false;
+			}
 			return true;
 		}
 		return false;
@@ -174,12 +177,15 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	@Override
 	public synchronized boolean updateModelFromWidget() {
 		if (notEquals(getValue(), textArea.getText())) {
-			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget() in TextAreaWidget");
 			}
-			setValue(textArea.getText());
-			modelUpdating = false;
+			modelUpdating = true;
+			try {
+				setValue(textArea.getText());
+			} finally {
+				modelUpdating = false;
+			}
 			return true;
 		}
 		return false;

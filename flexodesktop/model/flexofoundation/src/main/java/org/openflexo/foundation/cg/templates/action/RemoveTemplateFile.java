@@ -46,12 +46,12 @@ public class RemoveTemplateFile extends FlexoAction<RemoveTemplateFile, CGTempla
 
 		@Override
 		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection) {
-			return ((object != null) && (object.isCustomTemplate()));
+			return object != null && object.isCustomTemplate();
 		}
 
 		@Override
 		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection) {
-			return ((object != null) && (object.isCustomTemplate()));
+			return object != null && object.isCustomTemplate();
 		}
 
 	};
@@ -71,9 +71,9 @@ public class RemoveTemplateFile extends FlexoAction<RemoveTemplateFile, CGTempla
 		logger.info("Remove CustomTemplateFile " + getFocusedObject());
 		deleteTemplate(getFocusedObject());
 		if (getGlobalSelection() != null) {
-			for (CGTemplateFile file : getGlobalSelection()) {
-				if (file != null) {
-					deleteTemplate(file);
+			for (FlexoModelObject file : getGlobalSelection()) {
+				if (file instanceof CGTemplateFile) {
+					deleteTemplate((CGTemplateFile) file);
 				}
 			}
 		}

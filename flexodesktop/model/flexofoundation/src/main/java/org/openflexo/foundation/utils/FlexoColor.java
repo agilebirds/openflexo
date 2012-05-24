@@ -20,13 +20,11 @@
 package org.openflexo.foundation.utils;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 import java.util.logging.Logger;
-
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * Please comment this class
@@ -34,26 +32,12 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public class FlexoColor extends Color implements StringConvertable {
+public class FlexoColor {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoColor.class.getPackage().getName());
 
-	public static final StringEncoder.Converter<FlexoColor> flexoColorConverter = new Converter<FlexoColor>(FlexoColor.class) {
-
-		@Override
-		public FlexoColor convertFromString(String value) {
-			return stringToColor(value);
-		}
-
-		@Override
-		public String convertToString(FlexoColor value) {
-			return value.toString();
-		}
-
-	};
-
-	private static final Vector<FlexoColor> COLOR_SET;
+	private static final Vector<Color> COLOR_SET;
 
 	public static final int RAW_COLOR_VALUES[] = { 255, 255, 255, 204, 255, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204,
 			255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 255, 204, 255, 255, 204, 204, 255, 204, 204,
@@ -87,81 +71,30 @@ public class FlexoColor extends Color implements StringConvertable {
 			0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 0, 51, 0, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 51, 51, 51 };
 
 	static {
-		COLOR_SET = new Vector<FlexoColor>();
+		COLOR_SET = new Vector<Color>();
 		int i = RAW_COLOR_VALUES.length / 3;
 		for (int j = 0; j < i; j++) {
-			COLOR_SET.add(new FlexoColor(RAW_COLOR_VALUES[j * 3], RAW_COLOR_VALUES[j * 3 + 1], RAW_COLOR_VALUES[j * 3 + 2]));
+			COLOR_SET.add(new Color(RAW_COLOR_VALUES[j * 3], RAW_COLOR_VALUES[j * 3 + 1], RAW_COLOR_VALUES[j * 3 + 2]));
 		}
 	}
 
-	public static final FlexoColor BLACK_COLOR = new FlexoColor(Color.BLACK);
+	public static final Color BLACK_COLOR = Color.BLACK;
 
-	public static final FlexoColor GRAY_COLOR = new FlexoColor(Color.GRAY);
+	public static final Color GRAY_COLOR = Color.GRAY;
 
-	public static final FlexoColor WHITE_COLOR = new FlexoColor(Color.WHITE);
+	public static final Color WHITE_COLOR = Color.WHITE;
 
-	public static final FlexoColor LIGHT_GRAY_COLOR = new FlexoColor(new Color(230, 230, 230));
+	public static final Color LIGHT_GRAY_COLOR = new Color(230, 230, 230);
 
-	public FlexoColor(String s) {
-		super(redFromString(s), greenFromString(s), blueFromString(s));
-	}
-
-	public FlexoColor(int r, int g, int b) {
-		super(r, g, b);
-	}
-
-	public FlexoColor(Color aColor) {
-		super(aColor.getRed(), aColor.getGreen(), aColor.getBlue());
-	}
-
-	public int sum() {
-		return getRed() + getGreen() + getBlue();
-	}
-
-	@Override
-	public String toString() {
-		return getRed() + "," + getGreen() + "," + getBlue();
-	}
-
-	@Override
-	public StringEncoder.Converter getConverter() {
-		return flexoColorConverter;
-	}
-
-	public static FlexoColor stringToColor(String s) {
-		return new FlexoColor(s);
-	}
-
-	public static FlexoColor getRandomColor(Vector<Color> excludedColors) {
-		Vector<FlexoColor> colors = (Vector<FlexoColor>) COLOR_SET.clone();
+	public static Color getRandomColor(List<Color> excludedColors) {
+		List<Color> colors = new ArrayList<Color>(COLOR_SET);
 		colors.removeAll(excludedColors);
 		int i = new Random().nextInt(colors.size());
 		return colors.get(i);
 	}
 
-	public static FlexoColor getColor(int index) {
-		Vector<FlexoColor> colors = (Vector<FlexoColor>) COLOR_SET.clone();
-		return colors.get(index);
+	public static Color getColor(int index) {
+		return COLOR_SET.get(index);
 	}
 
-	private static int redFromString(String s) {
-		return Integer.parseInt(s.substring(0, s.indexOf(",")));
-	}
-
-	private static int greenFromString(String s) {
-		return Integer.parseInt(s.substring(s.indexOf(",") + 1, s.lastIndexOf(",")));
-	}
-
-	private static int blueFromString(String s) {
-		return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Color) {
-			Color o1 = (Color) obj;
-			return o1.getBlue() == getBlue() && o1.getRed() == getRed() && o1.getGreen() == getGreen();
-		}
-		return super.equals(obj);
-	}
 }

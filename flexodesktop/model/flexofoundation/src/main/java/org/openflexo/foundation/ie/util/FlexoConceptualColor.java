@@ -19,9 +19,8 @@
  */
 package org.openflexo.foundation.ie.util;
 
+import java.awt.Color;
 import java.io.Serializable;
-
-import org.openflexo.foundation.utils.FlexoColor;
 
 /**
  * Represents a color
@@ -58,14 +57,14 @@ public abstract class FlexoConceptualColor implements Serializable {
 
 	public static class CustomColor extends FlexoConceptualColor {
 
-		protected FlexoColor _color;
+		protected Color _color;
 
-		public CustomColor(FlexoColor aColor) {
+		public CustomColor(Color aColor) {
 			super();
 			_color = aColor;
 		}
 
-		public FlexoColor getColor() {
+		public Color getColor() {
 			return _color;
 		}
 	}

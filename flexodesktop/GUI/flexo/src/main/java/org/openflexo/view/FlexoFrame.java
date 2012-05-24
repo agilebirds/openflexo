@@ -459,8 +459,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	private int showRelativeWindows() {
 		int returned = 0;
 		if (_displayedRelativeWindows != null) {
-			for (Enumeration e = _displayedRelativeWindows.elements(); e.hasMoreElements();) {
-				FlexoRelativeWindow next = (FlexoRelativeWindow) e.nextElement();
+			for (FlexoRelativeWindow next : _displayedRelativeWindows) {
 				if (!next.isShowing()) {
 					next.setVisibleNoParentFrameNotification(true);
 					returned++;
@@ -472,8 +471,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 	private void hideRelativeWindows() {
 		if (_displayedRelativeWindows != null) {
-			for (Enumeration e = _displayedRelativeWindows.elements(); e.hasMoreElements();) {
-				FlexoRelativeWindow next = (FlexoRelativeWindow) e.nextElement();
+			for (FlexoRelativeWindow next : _displayedRelativeWindows) {
 				if (next.isShowing()) {
 					next.setVisibleNoParentFrameNotification(false);
 				}
@@ -566,7 +564,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	}
 
 	@Override
-	public Vector getGlobalSelection() {
+	public Vector<FlexoModelObject> getGlobalSelection() {
 		if (getController() instanceof SelectionManagingController) {
 			return ((SelectionManagingController) getController()).getSelectionManager().getSelection();
 		}

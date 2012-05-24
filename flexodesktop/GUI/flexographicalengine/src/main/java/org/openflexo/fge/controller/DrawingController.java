@@ -518,7 +518,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	public void setFocusedObjects(List<? extends GraphicalRepresentation<?>> someFocusedObjects) {
 		if (someFocusedObjects == null) {
-			setFocusedObjects(new ArrayList<GraphicalRepresentation<?>>());
+			setFocusedObjects(Collections.<GraphicalRepresentation<?>> emptyList());
 			return;
 		}
 
@@ -535,9 +535,8 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			clearFocusSelection();
 			return;
 		}
-		List<GraphicalRepresentation<?>> singleton = new ArrayList<GraphicalRepresentation<?>>();
-		singleton.add(aGraphicalRepresentation);
-		setFocusedObjects(singleton);
+
+		setFocusedObjects(Collections.singletonList(aGraphicalRepresentation));
 	}
 
 	public void addToFocusedObjects(GraphicalRepresentation<?> aGraphicalRepresentation) {

@@ -1,5 +1,6 @@
 package org.openflexo.wkf.controller.action;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -13,7 +14,6 @@ import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.action.AddRole;
@@ -89,7 +89,7 @@ public abstract class AddToXRoleInitializer<A extends AddToXRole<A>> extends
 							return false;
 						}
 						addRole.setNewRoleName(newRoleName);
-						addRole.setNewColor((FlexoColor) dialog.parameterValueWithName("color"));
+						addRole.setNewColor((Color) dialog.parameterValueWithName("color"));
 						addRole.setNewDescription((String) dialog.parameterValueWithName("description"));
 						addRole.setRoleAutomaticallyCreated(true);
 						addRole.doAction();

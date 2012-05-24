@@ -43,7 +43,6 @@ import org.openflexo.foundation.ie.util.TextFieldFormatType;
 import org.openflexo.foundation.ie.util.TextFieldType;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.utils.FlexoCSS;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -89,7 +88,6 @@ public abstract class FlexoObject extends KVCObject {
 		encoder._addConverter(NodeType.nodeTypeConverter);
 		encoder._addConverter(ActionType.actionTypeConverter);
 		encoder._addConverter(LoopType.loopTypeConverter);
-		encoder._addConverter(FlexoColor.flexoColorConverter);
 		encoder._addConverter(FlexoFont.flexoFontConverter);
 		encoder._addConverter(FlexoCSS.flexoCSSConverter);
 		encoder._addConverter(DropDownType.dropdownTypeConverter);

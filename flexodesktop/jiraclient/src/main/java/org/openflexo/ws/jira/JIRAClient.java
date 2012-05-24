@@ -50,11 +50,14 @@ public class JIRAClient {
 	private String username;
 	private String password;
 
+	private int timeout;
+
 	public JIRAClient(String jiraBaseURL, String username, String password) throws MalformedURLException {
 		super();
 		if (!jiraBaseURL.toLowerCase().startsWith("http://") && !jiraBaseURL.toLowerCase().startsWith("https://")) {
 			throw new MalformedURLException("The JIRA Client only supports http or https protocols");
 		}
+		this.timeout = 30 * 1000;
 		this.jiraBaseURL = new URL(jiraBaseURL);
 		this.username = username;
 		this.password = password;
@@ -68,6 +71,8 @@ public class JIRAClient {
 		URL url = new URL(jiraBaseURL, REST_API_ROOT + SUBMIT_ISSUE_REST_API);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setChunkedStreamingMode(4096);
+		connection.setConnectTimeout(timeout);
+		connection.setReadTimeout(timeout);
 		connection.setDoOutput(true);
 		connection.setRequestMethod(method.name());
 		connection.addRequestProperty(BASIC_AUTH_HEADER, "Basic " + getBase64EncodedAuthentication());
@@ -122,6 +127,7 @@ public class JIRAClient {
 		URL url = new URL(jiraBaseURL, REST_API_ROOT + SUBMIT_ISSUE_REST_API + "/" + idOrKey + SUBMIT_ISSUE_ATTACHMENT_REST_API);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setChunkedStreamingMode(4096);
+		connection.setConnectTimeout(timeout);
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
 		connection.setRequestMethod(Method.POST.name());
@@ -213,26 +219,26 @@ public class JIRAClient {
 		return Base64.encodeBase64String((username + ":" + password).getBytes("ISO-8859-1"));
 	}
 
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int connectionTimeout) {
+		this.timeout = connectionTimeout;
+	}
+
 	public static class UTF8OutputStream extends OutputStream {
 
 		private OutputStream os;
 
-		// private long count;
-
 		protected UTF8OutputStream(OutputStream os) {
 			super();
 			this.os = os;
-			// this.count = 0;
 		}
-
-		/*public long getCount() {
-			return count;
-		}*/
 
 		@Override
 		public void write(int b) throws IOException {
 			os.write(b);
-			// count++;
 		}
 
 		public UTF8OutputStream write(String string) throws UnsupportedEncodingException, IOException {

@@ -176,12 +176,15 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 				return false;
 			}
 			widgetUpdating = true;
-			int caret = textField.getCaretPosition();
-			textField.setText(getValue());
-			if (caret > -1 && caret < textField.getDocument().getLength()) {
-				textField.setCaretPosition(caret);
+			try {
+				int caret = textField.getCaretPosition();
+				textField.setText(getValue());
+				if (caret > -1 && caret < textField.getDocument().getLength()) {
+					textField.setCaretPosition(caret);
+				}
+			} finally {
+				widgetUpdating = false;
 			}
-			widgetUpdating = false;
 			return true;
 		}
 		return false;
@@ -193,13 +196,15 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 	@Override
 	public synchronized boolean updateModelFromWidget() {
 		if (notEquals(getValue(), textField.getText())) {
-			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget() in TextFieldWidget");
 			}
-			// logger.info("setValue with "+_textField.getText());
-			setValue(textField.getText());
-			modelUpdating = false;
+			modelUpdating = true;
+			try {
+				setValue(textField.getText());
+			} finally {
+				modelUpdating = false;
+			}
 			return true;
 		}
 		return false;
