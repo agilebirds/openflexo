@@ -45,6 +45,8 @@ public class ProjectRestructuration {
 
 	public static final String XML_EXTENSION = ".xml";
 
+	public static final String WOXML_EXTENSION = ".woxml";
+
 	public static final String LINKS_EXTENSION = ".links";
 
 	public static final String MENU_EXTENSION = ".menu";
@@ -67,9 +69,9 @@ public class ProjectRestructuration {
 
 	public static final String SHEMA_EXTENSION = ".shema";
 
-	public static final String[] DOT_FILE_EXTENSIONS = { WKF_EXTENSION, WOLIB_EXTENSION, CG_EXTENSION, DG_EXTENSION, SG_EXTENSION,
-			TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
-			OELIB_EXTENSION, RM_EXTENSION, TS_EXTENSION };
+	public static final String[] DOT_FILE_EXTENSIONS = { WKF_EXTENSION, WOLIB_EXTENSION, WOXML_EXTENSION, CG_EXTENSION, DG_EXTENSION,
+			SG_EXTENSION, TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION,
+			OWL_EXTENSION, OELIB_EXTENSION, RM_EXTENSION, TS_EXTENSION };
 
 	public static final String[] FILE_EXTENSIONS;
 
@@ -290,6 +292,10 @@ public class ProjectRestructuration {
 
 	public static File getExpectedProcessFile(FlexoProject project, String processName) {
 		return new File(getExpectedWorkflowDirectory(project.getProjectDirectory()), processName + XML_EXTENSION);
+	}
+
+	public static File getExpectedComponentFile(FlexoProject project, String componentName) {
+		return new File(getExpectedComponentsDirectory(project.getProjectDirectory()), componentName + WOXML_EXTENSION);
 	}
 
 	public static File getExpectedDataModelFile(FlexoProject project, String dataModelName) {
