@@ -20,7 +20,7 @@
 package org.openflexo.inspector;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -33,6 +33,7 @@ import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
 import org.openflexo.swing.WindowSynchronizer;
+import org.openflexo.utils.WindowBoundsSaver;
 
 /**
  * Represent a JDialog showing inspector for the selection managed by an instance of ModuleInspectorController
@@ -46,35 +47,32 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 
 	private static final String INSPECTOR_TITLE = "Inspector";
 
-	private final FIBInspectorPanel inspectorPanel;
-
-	private final ModuleInspectorController inspectorController;
-
 	private static final WindowSynchronizer inspectorSync = new WindowSynchronizer();
+
+	private FIBInspectorPanel inspectorPanel;
+
+	private ModuleInspectorController inspectorController;
 
 	public FIBInspectorDialog(ModuleInspectorController inspectorController) {
 		super(inspectorController.getFlexoController().getFlexoFrame(), INSPECTOR_TITLE, false);
-
 		this.inspectorController = inspectorController;
-
 		inspectorSync.addToSynchronizedWindows(this);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-
 		inspectorController.addObserver(this);
-
 		inspectorPanel = new FIBInspectorPanel(inspectorController);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(inspectorPanel, BorderLayout.CENTER);
-
 		setResizable(true);
-		setLocation(1210, 360);
-		setPreferredSize(new Dimension(400, 400));
-		pack();
+		new WindowBoundsSaver(this, "FIBInspector", new Rectangle(800, 400, 400, 400));
 		setVisible(true);
 	}
 
 	public void delete() {
+		dispose();
 		inspectorController.deleteObserver(this);
+		inspectorSync.removeFromSynchronizedWindows(this);
+		inspectorController = null;
+		inspectorPanel = null;
 	}
 
 	/*public void inspectObject(Object object) {

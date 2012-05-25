@@ -110,7 +110,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 
 	@Override
 	protected boolean isLoadable() {
-		return super.isLoadable() && getShemaDefinition().getCalc() != null;
+		return super.isLoadable() && getShemaDefinition() != null && getShemaDefinition().getCalc() != null;
 	}
 
 	@Override

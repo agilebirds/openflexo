@@ -75,6 +75,12 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	}
 
 	@Override
+	public boolean close() {
+		// TODO Auto-generated method stub
+		return super.close();
+	}
+
+	@Override
 	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}

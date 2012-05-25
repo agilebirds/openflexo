@@ -60,20 +60,22 @@ ${tmp.substring($start)}~@end#end
 		#set($fieldName = "selectionOf#capNameForWidget($filterWidget)")
 	#elseif(${filterWidget.getClass().getName()} == "org.openflexo.foundation.ie.widget.IETextFieldWidget" || ${filterWidget.getClass().getName()} == "org.openflexo.foundation.ie.widget.IETextAreaWidget")
 		#set($fieldName = "get#capNameForWidget($filterWidget)()")
+	#else
+        #set($fieldName = $falseValue)
 	#end
 	
 	#if($fieldName)
     	#if(${filterWidget.isText()})
-    		#set($operator = "caseinsensitivelike")
+    		#set($_operator = "caseinsensitivelike")
     		if (${fieldName} != null && !${fieldName}.trim().equals("")) {
     			 String filter = ${fieldName};
     			 if (${fieldName}.indexOf("*") == -1) filter = "*" + ${fieldName} + "*";
     				#set($fieldName = "filter")
     	#else
     		#if(${filterWidget.getOperator()})
-    			#set($operator = ${filterWidget.getOperator().getSign()})
+    			#set($_operator = ${filterWidget.getOperator().getSign()})
     		#else
-    			#set($operator = "=")
+    			#set($_operator = "=")
 			#end
 			#if($isFilterBoolean)
 				if ($fieldName == true){
@@ -83,15 +85,15 @@ ${tmp.substring($start)}~@end#end
     	#end
     		
     	#if(${filterWidget.getBindingKeypath().isBindingValid()})
-    		array.addObject(EOQualifier.qualifierWithQualifierFormat("#keypath(${filterWidget.getBindingKeypath().getWodStringRepresentation()}) $operator %@", new NSArray($fieldName)));
+    		array.addObject(EOQualifier.qualifierWithQualifierFormat("#keypath(${filterWidget.getBindingKeypath().getWodStringRepresentation()}) $_operator %@", new NSArray($fieldName)));
     	#else
     		#set($generatedFilterKey = ${filterWidget.getProcessInstanceDictionaryKey()})
 			#if(${inferredListProcess})
         		if(WorkflowProcess.${inferredListProcess.getProcessDictionaryKey()}.getBusinessDataClass().getProcessBusinessDataKeyTypes().containsKey("$generatedFilterKey")) {
-        			array.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $operator %@", new NSArray($fieldName)));
+        			array.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $_operator %@", new NSArray($fieldName)));
         		}
 			#elseif(${generatedFilterKey.toLowerCase()} != "searchfor")
-				array.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $operator %@", new NSArray($fieldName)));
+				array.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $_operator %@", new NSArray($fieldName)));
 			#end
     		#if(${filterWidget.isText()} && (${inferredListProcess} || ${generatedFilterKey.toLowerCase()} == "searchfor"))
 				#if(${inferredListProcess})
@@ -110,7 +112,7 @@ ${tmp.substring($start)}~@end#end
 									if(WorkflowProcess.${inferredListProcess.getProcessDictionaryKey()}.getBusinessDataClass().getProcessBusinessDataKeyTypes().containsKey("$generatedFilterKey"))
 								#end
 							#end
-							arrayOr.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $operator %@", new NSArray($fieldName)));
+							arrayOr.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $_operator %@", new NSArray($fieldName)));
 						#end
 					#end
 				#end
@@ -138,6 +140,7 @@ ${tmp.substring($start)}~@end#end
 #if($list) ## We have a display group
     private WDLDisplayGroup ${list.getDisplayGroupName()};
     public int ${list.getIndexName()};
+	#set($inferredListProcess =  $falseValue)
 	#if(${generator.isPrototype()})
 		#set($inferredListProcess =  ${operator.getInferredListProcess()})
 	#end

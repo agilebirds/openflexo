@@ -21,7 +21,7 @@ package org.openflexo.foundation.dm;
 
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import com.thoughtworks.qdox.model.ClassLibrary;
@@ -36,7 +36,7 @@ public class DMClassLibrary extends ClassLibrary {
 	private Hashtable<String, JavaClass> _javaClassCache;
 	private HashSet<Type> _unresolvedTypes;
 
-	private final DMModel dataModel;
+	private DMModel dataModel;
 
 	public DMClassLibrary(DMModel dataModel) {
 		super(null);
@@ -57,6 +57,11 @@ public class DMClassLibrary extends ClassLibrary {
 		_cachedTypes = new Hashtable<JavaClassParent, Hashtable<String, Hashtable<Integer, Type>>>();
 		_unresolvedTypes = new HashSet<Type>();
 		_unresolvedClassName = new HashSet<String>();
+	}
+
+	public void close() {
+		clearLibrary();
+		dataModel = null;
 	}
 
 	@Override
@@ -135,17 +140,13 @@ public class DMClassLibrary extends ClassLibrary {
 		}
 	}
 
-	private boolean potentiallyModifyingCL = false;
-	private Vector<ClassLoader> _classLoaderBeingAddedDuringClassResolution = new Vector<ClassLoader>();
-
-	private HashSet<String> _unresolvedClassName;
+	private Set<String> _unresolvedClassName;
 
 	@Override
 	public synchronized Class<?> getClass(String className) {
 		if (_unresolvedClassName.contains(className)) {
 			return null;
 		}
-		potentiallyModifyingCL = true;
 		Class<?> returned = super.getClass(className);
 		if (returned == null) {
 			returned = dataModel.getProject().getJarClassLoader().findClass(className);
@@ -155,29 +156,7 @@ public class DMClassLibrary extends ClassLibrary {
 		} else {
 			_unresolvedClassName.add(className);
 		}
-		potentiallyModifyingCL = false;
-		if (_classLoaderBeingAddedDuringClassResolution.size() > 0) {
-			for (ClassLoader cl : _classLoaderBeingAddedDuringClassResolution) {
-				addClassLoader(cl);
-			}
-			_classLoaderBeingAddedDuringClassResolution.clear();
-		}
 		return returned;
 	}
 
-	@Override
-	public synchronized boolean contains(String className) {
-		return super.contains(className);
-	}
-
-	@Override
-	public synchronized void addClassLoader(ClassLoader classLoader) {
-		if (potentiallyModifyingCL) {
-			_classLoaderBeingAddedDuringClassResolution.add(classLoader);
-		} else {
-			super.addClassLoader(classLoader);
-			// Some unresolved classes may become resolved !
-			_unresolvedClassName.clear();
-		}
-	}
 }

@@ -274,4 +274,10 @@ public class ModuleInspectorController extends Observable implements Observer {
 		}
 	}
 
+	public void delete() {
+		inspectorDialog.delete();
+		currentInspectedObject = null;
+		currentInspector = null;
+	}
+
 }

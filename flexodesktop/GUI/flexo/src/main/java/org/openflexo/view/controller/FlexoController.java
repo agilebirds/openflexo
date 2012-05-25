@@ -41,6 +41,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -1726,6 +1727,14 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		}
 		if (useOldInspectorScheme()) {
 			getSharedInspectorController().getInspectorWindow().dispose();
+		}
+		if (mainInspectorController != null) {
+			mainInspectorController.delete();
+		}
+		for (Hashtable<FlexoModelObject, ModuleView> viewsPerPerspective : _loadedViews.values()) {
+			for (ModuleView view : new ArrayList<ModuleView>(viewsPerPerspective.values())) {
+				view.deleteModuleView();
+			}
 		}
 		_loadedViews.clear();
 		_perspectives.clear();

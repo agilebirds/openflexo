@@ -472,6 +472,9 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 
 	@Override
 	public synchronized void paint(Graphics g) {
+		if (isDeleted()) {
+			return;
+		}
 		long startTime = System.currentTimeMillis();
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (isBuffering) {

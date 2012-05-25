@@ -427,7 +427,6 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	@Override
 	public void moduleWillClose() {
 		super.moduleWillClose();
-		WKFPreferences.reset();
 		for (DrawingController<? extends Drawing<? extends FlexoModelObject>> drawingController : drawingControllers.values()) {
 			drawingController.delete();
 		}

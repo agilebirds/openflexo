@@ -649,4 +649,10 @@ public final class ModuleLoader implements IModuleLoader {
 		return isLoaded(Module.WKF_MODULE);
 	}
 
+	public void closeAllModulesWithoutConfirmation() {
+		for (FlexoModule module : new ArrayList<FlexoModule>(_modules.values())) {
+			module.closeWithoutConfirmation(false);
+		}
+	}
+
 }

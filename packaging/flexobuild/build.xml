@@ -173,6 +173,7 @@
 
 	<target name="windowsPackaging">
 		<exec executable="makensis" failonerror="true">
+			<arg value="-V2"/>
 			<arg value="${flexobuild.work.dir}/flexoinstaller.nsi" />
 		</exec>
 	</target>
@@ -192,6 +193,7 @@
 			</filterset>
 		</copy>
 		<exec executable="makensis" failonerror="true">
+			<arg value="-V2"/>
 			<arg value="${flexobuild.work.dir}/flexolauncher.nsi" />
 		</exec>
 	</target>
@@ -228,6 +230,7 @@
 	<target name="osx-packaging">
 		<exec executable="genisoimage" >
 			<arg value="-D" />
+			<arg value="-quiet" />
 			<arg value="-V"/>
 			<arg value="${qualified_and_versioned_app_name}"/>
 			<arg value="-A" />

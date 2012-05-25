@@ -43,7 +43,7 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 
 	private static final char fileSeparator = File.separator.charAt(0);
 
-	private static final char alternateFileSeparator = (fileSeparator == '\\' ? '/' : '\\');
+	private static final char alternateFileSeparator = fileSeparator == '\\' ? '/' : '\\';
 
 	public static String transformIntoValidPath(String aRelativePath) {
 		return aRelativePath.replace(alternateFileSeparator, fileSeparator);
@@ -71,7 +71,7 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 		super();
 		File temp = absoluteFile;
 		relativePath = null;
-		while ((!temp.equals(aProjectDirectory)) && (temp.getParentFile() != null)) {
+		while (!temp.equals(aProjectDirectory) && temp.getParentFile() != null) {
 			if (relativePath == null) {
 				relativePath = temp.getName();
 			} else {
@@ -121,7 +121,7 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 		if (_externalRep != null) {
 			return _externalRep;
 		}
-		if ((getProject() != null) && (repositoryName != null)) {
+		if (getProject() != null && repositoryName != null) {
 			return _externalRep = getProject().getExternalRepositoryWithKey(repositoryName);
 		}
 		return null;
@@ -129,6 +129,7 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 
 	public void setExternalRepository(ProjectExternalRepository repository) {
 		this.repositoryName = repository.getIdentifier();
+		clearCachedFile();
 	}
 
 	public FlexoProject getProject() {
@@ -137,6 +138,7 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 
 	public void setProject(FlexoProject aProject) {
 		project = aProject;
+		clearCachedFile();
 	}
 
 	private File _cachedFile;
@@ -182,7 +184,7 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 			}
 			File temp = aFile;
 			String newRelativePath = null;
-			while ((!temp.equals(target)) && (temp.getParentFile() != null)) {
+			while (!temp.equals(target) && temp.getParentFile() != null) {
 				if (newRelativePath == null) {
 					newRelativePath = temp.getName();
 				} else {

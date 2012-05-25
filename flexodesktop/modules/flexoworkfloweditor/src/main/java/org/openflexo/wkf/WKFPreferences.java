@@ -179,8 +179,10 @@ public final class WKFPreferences extends ModulePreferences {
 		 */
 	}
 
-	public static void reset() {
-		_controller = null;
+	public static void reset(WKFController controller) {
+		if (_controller == controller) {
+			_controller = null;
+		}
 	}
 
 	public WKFPreferences() {

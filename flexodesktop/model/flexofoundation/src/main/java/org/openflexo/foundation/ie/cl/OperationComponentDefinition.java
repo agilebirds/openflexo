@@ -75,7 +75,7 @@ public final class OperationComponentDefinition extends ComponentDefinition impl
 		super(aComponentName, componentLibrary, aFolder, project);
 		if (checkUnicity) {
 			String resourceIdentifier = FlexoOperationComponentResource.resourceIdentifierForName(aComponentName);
-			if ((project != null) && (project.isRegistered(resourceIdentifier))) {
+			if (project != null && project.isRegistered(resourceIdentifier)) {
 				if (aFolder != null) {
 					aFolder.removeFromComponents(this);
 				}
@@ -105,8 +105,7 @@ public final class OperationComponentDefinition extends ComponentDefinition impl
 				// FlexoProcessResource processRes =
 				// getProject().getFlexoProcessResource(getProcess().getName());
 				FlexoComponentLibraryResource libRes = getProject().getFlexoComponentLibraryResource();
-				File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
-						this), _componentName + ".woxml");
+				File componentFile = ProjectRestructuration.getExpectedComponentFile(getProject(), _componentName);
 				FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
 				FlexoOperationComponentResource compRes = null;
 				try {
@@ -116,7 +115,8 @@ public final class OperationComponentDefinition extends ComponentDefinition impl
 					for (int i = 0; i < 100 && !ok; i++) {
 						try {
 							componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject()
-									.getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + i + ".woxml");
+									.getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + i
+									+ ProjectRestructuration.WOXML_EXTENSION);
 							resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
 							compRes = new FlexoOperationComponentResource(getProject(), _componentName, libRes, resourceComponentFile);
 							ok = true;

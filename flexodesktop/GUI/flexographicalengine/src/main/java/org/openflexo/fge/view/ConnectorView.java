@@ -253,6 +253,9 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 	@Override
 	public void paint(Graphics g) {
+		if (isDeleted()) {
+			return;
+		}
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (getDrawingView().isBuffering()) {
 				// Buffering painting

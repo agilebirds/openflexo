@@ -274,6 +274,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 			getWKFSelectionManager().deleteObserver(getDocInspectorController());
 			_selectionManager = null;
 		}
+		WKFPreferences.reset(this);
 		super.dispose();
 	}
 
