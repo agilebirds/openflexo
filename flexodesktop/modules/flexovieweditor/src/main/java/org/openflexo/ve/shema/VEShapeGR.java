@@ -41,6 +41,7 @@ import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
@@ -209,10 +210,37 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 			controlAreas.addElementList(super.getControlAreas());
 			if (getOEShape().providesSupportAsPrimaryRole() && getOEShape().getAvailableLinkSchemeFromThisShape() != null
 					&& getOEShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.EAST));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.WEST));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.NORTH));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.SOUTH));
+				boolean northDirectionSupported = false;
+				boolean eastDirectionSupported = false;
+				boolean southDirectionSupported = false;
+				boolean westDirectionSupported = false;
+				for (LinkScheme ls : getOEShape().getAvailableLinkSchemeFromThisShape()) {
+					if (ls.getNorthDirectionSupported()) {
+						northDirectionSupported = true;
+					}
+					if (ls.getEastDirectionSupported()) {
+						eastDirectionSupported = true;
+					}
+					if (ls.getSouthDirectionSupported()) {
+						southDirectionSupported = true;
+					}
+					if (ls.getWestDirectionSupported()) {
+						westDirectionSupported = true;
+					}
+				}
+
+				if (northDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.NORTH));
+				}
+				if (eastDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.EAST));
+				}
+				if (southDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.SOUTH));
+				}
+				if (westDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.WEST));
+				}
 			}
 		}
 		return controlAreas;

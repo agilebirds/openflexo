@@ -226,6 +226,10 @@
 		<property name="fromTarget" xmlTag="fromTarget" attribute="YES" />
 		<property name="toTarget" xmlTag="toTarget" attribute="YES" />
 		<property name="isAvailableWithFloatingPalette" xmlTag="isAvailableWithFloatingPalette" attribute="YES" />
+		<property name="northDirectionSupported" xmlTag="northDirectionSupported" attribute="YES" />
+		<property name="eastDirectionSupported" xmlTag="eastDirectionSupported" attribute="YES" />
+		<property name="southDirectionSupported" xmlTag="southDirectionSupported" attribute="YES" />
+		<property name="westDirectionSupported" xmlTag="westDirectionSupported" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AbstractActionScheme" abstract="YES" contexts="Executed">

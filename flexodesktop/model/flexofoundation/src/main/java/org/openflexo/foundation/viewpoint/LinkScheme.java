@@ -30,6 +30,11 @@ public class LinkScheme extends AbstractCreationScheme {
 	private String fromTarget;
 	private String toTarget;
 
+	private boolean northDirectionSupported = true;
+	private boolean eastDirectionSupported = true;
+	private boolean southDirectionSupported = true;
+	private boolean westDirectionSupported = true;
+
 	private boolean isAvailableWithFloatingPalette = true;
 
 	public LinkScheme() {
@@ -159,6 +164,38 @@ public class LinkScheme extends AbstractCreationScheme {
 
 	public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette) {
 		this.isAvailableWithFloatingPalette = isAvailableWithFloatingPalette;
+	}
+
+	public boolean getNorthDirectionSupported() {
+		return northDirectionSupported;
+	}
+
+	public void setNorthDirectionSupported(boolean northDirectionSupported) {
+		this.northDirectionSupported = northDirectionSupported;
+	}
+
+	public boolean getEastDirectionSupported() {
+		return eastDirectionSupported;
+	}
+
+	public void setEastDirectionSupported(boolean eastDirectionSupported) {
+		this.eastDirectionSupported = eastDirectionSupported;
+	}
+
+	public boolean getSouthDirectionSupported() {
+		return southDirectionSupported;
+	}
+
+	public void setSouthDirectionSupported(boolean southDirectionSupported) {
+		this.southDirectionSupported = southDirectionSupported;
+	}
+
+	public boolean getWestDirectionSupported() {
+		return westDirectionSupported;
+	}
+
+	public void setWestDirectionSupported(boolean westDirectionSupported) {
+		this.westDirectionSupported = westDirectionSupported;
 	}
 
 }
