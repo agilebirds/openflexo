@@ -144,7 +144,8 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 		if (target instanceof EditionPatternInstance) {
 			return (T) ((EditionPatternInstance) target).getPatternActor(patternRole);
 		} else {
-			logger.warning("What to return with a " + target + " ?");
+			logger.warning("What to return with a " + target + " ? "
+					+ (target != null ? "(" + target.getClass().getSimpleName() + ")" : ""));
 		}
 		return null;
 	}

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view.action;
 
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -32,6 +33,8 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.ListParameter;
 
 public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeAction> {
 
@@ -75,8 +78,9 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Create EditionPatternInstance using CreationScheme");
-
 		logger.info("getEditionPattern()=" + getEditionPattern());
+
+		retrieveMissingDefaultParameters();
 
 		getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
@@ -84,6 +88,30 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 
 		applyEditionActions();
 
+	}
+
+	public boolean retrieveMissingDefaultParameters() {
+		boolean returned = true;
+		EditionScheme editionScheme = getEditionScheme();
+		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
+			if (getParameterValue(parameter) == null) {
+				logger.warning("Found not initialized parameter " + parameter);
+				Object defaultValue = parameter.getDefaultValue(this);
+				if (defaultValue != null) {
+					logger.warning("Du coup je lui donne la valeur " + defaultValue);
+					parameterValues.put(parameter, defaultValue);
+					if (!parameter.isValid(this, defaultValue)) {
+						logger.info("Parameter " + parameter + " is not valid for value " + defaultValue);
+						returned = false;
+					}
+				}
+			}
+			if (parameter instanceof ListParameter) {
+				List list = (List) ((ListParameter) parameter).getList(this);
+				parameterListValues.put((ListParameter) parameter, list);
+			}
+		}
+		return returned;
 	}
 
 	public View getView() {

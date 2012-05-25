@@ -260,10 +260,23 @@ public class AddEditionPattern extends AssignableAction {
 		}
 
 		public Object evaluateParameterValue(EditionSchemeAction action) {
-			if (getValue().isValid()) {
+			if (getValue() == null || getValue().isUnset()) {
+				/*logger.info("Le binding for " + param.getName() + " is not set");
+				if (param instanceof URIParameter) {
+					logger.info("C'est une URI, de base " + ((URIParameter) param).getBaseURI());
+					logger.info("Je retourne " + ((URIParameter) param).getBaseURI().getBinding().getBindingValue(action));
+					return ((URIParameter) param).getBaseURI().getBinding().getBindingValue(action);
+				} else if (param.getDefaultValue() != null && param.getDefaultValue().isSet() && param.getDefaultValue().isValid()) {
+					return param.getDefaultValue().getBinding().getBindingValue(action);
+				}
+				if (param.getIsRequired()) {
+					logger.warning("Required parameter missing: " + param + ", some strange behaviour may happen from now...");
+				}*/
+				return null;
+			} else if (getValue().isValid()) {
 				return getValue().getBindingValue(action);
 			} else {
-				System.out.println("C'est pas bon");
+				logger.warning("Invalid binding: " + getValue());
 				getValue().getBinding().debugIsBindingValid();
 			}
 			return null;

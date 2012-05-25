@@ -30,7 +30,7 @@ public class EditionSchemeParameterListPathElement implements SimplePathElement<
 		allProperties = new Vector<BindingPathElement>();
 		for (EditionSchemeParameter p : editionScheme.getParameters()) {
 			if (p instanceof EditionPatternParameter) {
-				allProperties.add(new EditionPatternPathElement(p.getName(), ((EditionPatternParameter) p).getEditionPatternType(), p));
+				allProperties.add(new EditionPatternParameterPathElement(p.getName(), ((EditionPatternParameter) p), p));
 			} else {
 				allProperties.add(new EditionSchemeParameterPathElement(this, p));
 				if (p instanceof ListParameter) {

@@ -51,10 +51,6 @@ public class IterationAction extends ControlStructureAction {
 		return getEditionPattern().getPatternRoles();
 	}*/
 
-	public List evaluateIteration(EditionSchemeAction action) {
-		return (List) getIteration().getBindingValue(action);
-	}
-
 	private ViewPointDataBinding iteration;
 
 	private BindingDefinition ITERATION = new BindingDefinition("iteration", List.class, BindingDefinitionType.GET, true);
@@ -123,6 +119,13 @@ public class IterationAction extends ControlStructureAction {
 			}
 		});
 		return returned;
+	}
+
+	public List<?> evaluateIteration(EditionSchemeAction action) {
+		if (getIteration().isValid()) {
+			return (List<?>) getIteration().getBindingValue(action);
+		}
+		return null;
 	}
 
 	@Override

@@ -72,6 +72,14 @@ public class ConditionalAction extends ControlStructureAction {
 	}
 
 	@Override
+	public boolean evaluateCondition(EditionSchemeAction action) {
+		if (getCondition().isValid()) {
+			return (Boolean) getCondition().getBindingValue(action);
+		}
+		return true;
+	}
+
+	@Override
 	public String getStringRepresentation() {
 		if (getCondition().isSet() && getCondition().isValid()) {
 			return getCondition() + " ?";

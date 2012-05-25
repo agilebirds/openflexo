@@ -59,6 +59,7 @@ import org.openflexo.foundation.viewpoint.AddIsAStatement;
 import org.openflexo.foundation.viewpoint.AddObjectPropertyStatement;
 import org.openflexo.foundation.viewpoint.AddRestrictionStatement;
 import org.openflexo.foundation.viewpoint.AssignableAction;
+import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -67,6 +68,7 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.URIParameter;
@@ -82,6 +84,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
+	protected Hashtable<String, Object> variables;
 	protected Hashtable<EditionSchemeParameter, Object> parameterValues;
 	protected Hashtable<ListParameter, List> parameterListValues;
 
@@ -90,6 +93,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	public EditionSchemeAction(FlexoActionType<A, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject focusedObject,
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+		variables = new Hashtable<String, Object>();
 		parameterValues = new Hashtable<EditionSchemeParameter, Object>();
 		parameterListValues = new Hashtable<ListParameter, List>();
 	}
@@ -194,27 +198,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			// Otherwise, we just ignore the action
 		}
 
-		// Finalization are not performed anymore
-		/*for (EditionAction action : performedActions.keySet()) {
-			if (action instanceof AddIndividual) {
-				finalizePerformAddIndividual((AddIndividual) action, (OntologyIndividual) performedActions.get(action));
-			} else if (action instanceof AddClass) {
-				finalizePerformAddClass((AddClass) action, (OntologyClass) performedActions.get(action));
-			} else if (action instanceof AddObjectPropertyStatement) {
-				finalizePerformAddObjectPropertyStatement((AddObjectPropertyStatement) action,
-						(ObjectPropertyStatement) performedActions.get(action));
-			} else if (action instanceof AddDataPropertyStatement) {
-				finalizePerformAddDataPropertyStatement((AddDataPropertyStatement) action,
-						(DataPropertyStatement) performedActions.get(action));
-			} else if (action instanceof AddIsAStatement) {
-				finalizePerformAddIsAProperty((AddIsAStatement) action, (SubClassStatement) performedActions.get(action));
-			} else if (action instanceof AddRestrictionStatement) {
-				finalizePerformAddRestriction((AddRestrictionStatement) action, (RestrictionStatement) performedActions.get(action));
-			} else if (action instanceof DeclarePatternRole) {
-				finalizePerformDeclarePatternRole((DeclarePatternRole) action);
-			}
-		}*/
-
 		// Finalize shape creation at the end to be sure labels are now correctely bound
 		for (EditionAction action : performedActions.keySet()) {
 			if (action instanceof org.openflexo.foundation.viewpoint.AddShape) {
@@ -228,15 +211,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 				finalizePerformAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action, (View) performedActions.get(action));
 			}
 		}
-
-		// Now perform "normal actions"
-		/*for (EditionAction action : getEditionScheme().getActions()) {
-			if (action.evaluateCondition(this)) {
-				if (action instanceof GraphicalAction) {
-					performGraphicalAction((GraphicalAction) action);
-				}
-			}
-		}*/
 
 	}
 
@@ -289,6 +263,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			assignedObject = newEP;
 		} else if (action instanceof GraphicalAction) {
 			performGraphicalAction((GraphicalAction) action);
+		} else if (action instanceof ConditionalAction) {
+			performConditionalAction((ConditionalAction) action, performedActions);
+		} else if (action instanceof IterationAction) {
+			performIterationAction((IterationAction) action, performedActions);
 		}
 
 		if (assignedObject != null) {
@@ -310,6 +288,31 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		}
 
 		return assignedObject;
+	}
+
+	protected void performConditionalAction(ConditionalAction conditionalAction, Hashtable<EditionAction, Object> performedActions) {
+		if (conditionalAction.evaluateCondition(this)) {
+			for (EditionAction action : conditionalAction.getActions()) {
+				if (action.evaluateCondition(this)) {
+					performAction(action, performedActions);
+				}
+			}
+		}
+	}
+
+	protected void performIterationAction(IterationAction iterationAction, Hashtable<EditionAction, Object> performedActions) {
+		List<?> items = iterationAction.evaluateIteration(this);
+		if (items != null) {
+			for (Object item : items) {
+				variables.put(iterationAction.getIteratorName(), item);
+				for (EditionAction action : iterationAction.getActions()) {
+					if (action.evaluateCondition(this)) {
+						performAction(action, performedActions);
+					}
+				}
+			}
+		}
+		variables.remove(iterationAction.getIteratorName());
 	}
 
 	protected ViewShape performAddShape(org.openflexo.foundation.viewpoint.AddShape action) {
@@ -713,6 +716,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			if (variable.getVariableName().equals(EditionScheme.THIS)) {
 				return getEditionPatternInstance();
 			}
+		}
+
+		if (variables.get(variable.getVariableName()) != null) {
+			return variables.get(variable.getVariableName());
 		}
 
 		logger.warning("Unexpected variable requested in EditionSchemeAction " + variable);
