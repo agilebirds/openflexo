@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -26,6 +27,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -146,6 +148,11 @@ public class AddClass extends AddConcept {
 		className.setBindingAttribute(EditionActionBindingAttribute.className);
 		className.setBindingDefinition(getClassNameBindingDefinition());
 		this.className = className;
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return SubClassOfClass.getSubClassOfClass(getOntologyClass());
 	}
 
 	public static class AddClassActionMustDefineAnOntologyClass extends ValidationRule<AddClassActionMustDefineAnOntologyClass, AddClass> {

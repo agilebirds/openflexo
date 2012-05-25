@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -39,7 +40,7 @@ public class IndividualParameter extends EditionSchemeParameter {
 	@Override
 	public Type getType() {
 		if (getConcept() != null) {
-			return getConcept();
+			return IndividualOfClass.getIndividualOfClass(getConcept());
 		}
 		return OntologyIndividual.class;
 	};

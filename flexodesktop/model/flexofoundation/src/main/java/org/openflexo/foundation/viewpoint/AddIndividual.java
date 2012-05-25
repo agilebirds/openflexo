@@ -19,12 +19,14 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
@@ -221,6 +223,11 @@ public class AddIndividual extends AddConcept {
 		individualName.setBindingAttribute(EditionActionBindingAttribute.individualName);
 		individualName.setBindingDefinition(getIndividualNameBindingDefinition());
 		this.individualName = individualName;
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return IndividualOfClass.getIndividualOfClass(getOntologyClass());
 	}
 
 	public static class AddIndividualActionMustDefineAnOntologyClass extends

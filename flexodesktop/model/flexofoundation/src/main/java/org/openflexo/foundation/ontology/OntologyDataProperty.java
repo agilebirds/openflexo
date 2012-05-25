@@ -95,9 +95,4 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 		return true;
 	}
 
-	@Override
-	public Class getBaseClass() {
-		return OntologyDataProperty.class;
-	}
-
 }

@@ -12,6 +12,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
@@ -183,7 +184,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 		@Override
 		public Type getType() {
 			if (ontologyType != null) {
-				return ontologyType;
+				return IndividualOfClass.getIndividualOfClass(ontologyType);
 			}
 			return OntologyIndividual.class;
 		}

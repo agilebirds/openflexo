@@ -27,6 +27,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.DataPropertyStatement;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
@@ -56,7 +57,7 @@ public class AddDataPropertyStatement extends AddStatement {
 	@Override
 	public Type getSubjectType() {
 		if (getDataProperty() != null && getDataProperty().getDomain() instanceof OntologyClass) {
-			return (OntologyClass) getDataProperty().getDomain();
+			return IndividualOfClass.getIndividualOfClass((OntologyClass) getDataProperty().getDomain());
 		}
 		return super.getSubjectType();
 	}

@@ -248,6 +248,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 			if (!silentMode) {
 				logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
 						+ (getOwner() != null ? getOwner().getRootComponent() : null));
+				binding.debugIsBindingValid();
 				// Dev note: Uncomment following to get more informations
 				// logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
 				// + (getOwner() != null ? (getOwner()).getRootComponent() : null));

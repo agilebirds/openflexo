@@ -7,6 +7,7 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
@@ -146,7 +147,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		@Override
 		public Type getType() {
 			if (getOntologyProperty().getRange() instanceof OntologyClass) {
-				return (OntologyClass) getOntologyProperty().getRange();
+				return IndividualOfClass.getIndividualOfClass((OntologyClass) getOntologyProperty().getRange());
 			}
 			return OntologyIndividual.class;
 		}

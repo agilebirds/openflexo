@@ -274,9 +274,13 @@ public class TypeUtils {
 			return true;
 		}
 
-		// Special case fo Custom types
+		// Special case for Custom types
 		if (aType instanceof CustomType) {
 			return ((CustomType) aType).isTypeAssignableFrom(anOtherType, permissive);
+		}
+
+		if (anOtherType instanceof CustomType && isTypeAssignableFrom(aType, ((CustomType) anOtherType).getBaseClass())) {
+			return true;
 		}
 
 		if (isVoid(aType)) {

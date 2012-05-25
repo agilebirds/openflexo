@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
@@ -68,7 +69,7 @@ public class AddObjectPropertyStatement extends AddStatement {
 	@Override
 	public Type getSubjectType() {
 		if (getObjectProperty() != null && getObjectProperty().getDomain() instanceof OntologyClass) {
-			return (OntologyClass) getObjectProperty().getDomain();
+			return IndividualOfClass.getIndividualOfClass((OntologyClass) getObjectProperty().getDomain());
 		}
 		return super.getSubjectType();
 	}
@@ -148,7 +149,7 @@ public class AddObjectPropertyStatement extends AddStatement {
 		@Override
 		public Type getType() {
 			if (getObjectProperty() != null && getObjectProperty().getRange() instanceof OntologyClass) {
-				return (OntologyClass) getObjectProperty().getRange();
+				return IndividualOfClass.getIndividualOfClass((OntologyClass) getObjectProperty().getRange());
 			}
 			return OntologyObject.class;
 		}
