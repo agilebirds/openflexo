@@ -12,6 +12,7 @@ import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.DataRestrictionStatement;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IsAStatement;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.ObjectRestrictionStatement;
@@ -25,7 +26,10 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.RestrictionStatement;
 import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
+import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubClassStatement;
+import org.openflexo.foundation.ontology.SubPropertyOfProperty.SubDataPropertyOfProperty;
+import org.openflexo.foundation.ontology.SubPropertyOfProperty.SubObjectPropertyOfProperty;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
@@ -121,7 +125,10 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 		@Override
 		public Type getType() {
-			return ((ClassPatternRole) getPatternRole()).getOntologicType();
+			if (((ClassPatternRole) getPatternRole()).getOntologicType() != null) {
+				return SubClassOfClass.getSubClassOfClass(((ClassPatternRole) getPatternRole()).getOntologicType());
+			}
+			return null;
 		}
 	}
 
@@ -173,7 +180,10 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 		@Override
 		public Type getType() {
-			return ((IndividualPatternRole) getPatternRole()).getOntologicType();
+			if (((IndividualPatternRole) getPatternRole()).getOntologicType() != null) {
+				return IndividualOfClass.getIndividualOfClass(((IndividualPatternRole) getPatternRole()).getOntologicType());
+			}
+			return null;
 		}
 
 	}
@@ -193,7 +203,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		@Override
 		public Type getType() {
 			if (((DataPropertyPatternRole) getPatternRole()).getParentProperty() != null) {
-				return ((DataPropertyPatternRole) getPatternRole()).getParentProperty();
+				return SubDataPropertyOfProperty.getSubPropertyOfProperty(((DataPropertyPatternRole) getPatternRole()).getParentProperty());
 			} else {
 				return getPatternRole().getAccessedClass();
 			}
@@ -209,7 +219,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		@Override
 		public Type getType() {
 			if (((ObjectPropertyPatternRole) getPatternRole()).getParentProperty() != null) {
-				return ((ObjectPropertyPatternRole) getPatternRole()).getParentProperty();
+				return SubObjectPropertyOfProperty.getSubPropertyOfProperty(((ObjectPropertyPatternRole) getPatternRole())
+						.getParentProperty());
 			} else {
 				return getPatternRole().getAccessedClass();
 			}
@@ -265,7 +276,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					public Type getType() {
 						if (((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty() != null
 								&& ((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty().getDomain() instanceof OntologyClass) {
-							return (OntologyClass) ((DataPropertyStatementPatternRole) getPatternRole()).getDataProperty().getDomain();
+							return IndividualOfClass
+									.getIndividualOfClass((OntologyClass) ((DataPropertyStatementPatternRole) getPatternRole())
+											.getDataProperty().getDomain());
 						}
 						return super.getType();
 					}
@@ -293,7 +306,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					public Type getType() {
 						if (((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty() != null
 								&& ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getDomain() instanceof OntologyClass) {
-							return (OntologyClass) ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getDomain();
+							return IndividualOfClass
+									.getIndividualOfClass((OntologyClass) ((ObjectPropertyStatementPatternRole) getPatternRole())
+											.getObjectProperty().getDomain());
 						}
 						return super.getType();
 					}
@@ -399,7 +414,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				public Type getType() {
 					if (((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty() != null
 							&& ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getRange() instanceof OntologyClass) {
-						return (OntologyClass) ((ObjectPropertyStatementPatternRole) getPatternRole()).getObjectProperty().getRange();
+						return IndividualOfClass
+								.getIndividualOfClass((OntologyClass) ((ObjectPropertyStatementPatternRole) getPatternRole())
+										.getObjectProperty().getRange());
 					}
 					return super.getType();
 				}

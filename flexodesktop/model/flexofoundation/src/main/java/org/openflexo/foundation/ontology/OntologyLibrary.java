@@ -109,6 +109,10 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	private OntologyObjectConverter ontologyObjectConverter;
 
+	protected Hashtable<OntologyClass, IndividualOfClass> individualsOfClass = new Hashtable<OntologyClass, IndividualOfClass>();
+	protected Hashtable<OntologyClass, SubClassOfClass> subclassesOfClass = new Hashtable<OntologyClass, SubClassOfClass>();
+	protected Hashtable<OntologyProperty, SubPropertyOfProperty> subpropertiesOfProperty = new Hashtable<OntologyProperty, SubPropertyOfProperty>();
+
 	public OntologyLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary parentOntologyLibrary) {
 		super();
 		this.resourceCenter = resourceCenter;

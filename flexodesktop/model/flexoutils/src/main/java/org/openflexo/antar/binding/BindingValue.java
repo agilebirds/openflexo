@@ -910,7 +910,11 @@ public class BindingValue extends AbstractBinding {
 
 	@Override
 	public boolean isSettable() {
-		return getBindingPath().lastElement().isSettable();
+		if (getBindingPath().size() == 0) {
+			return _bindingVariable.isSettable();
+		} else {
+			return getBindingPath().lastElement().isSettable();
+		}
 
 		/*	if (getBindingPath().lastElement() instanceof KeyValueProperty) {
 				return ((KeyValueProperty)getBindingPath().lastElement()).isSettable();
