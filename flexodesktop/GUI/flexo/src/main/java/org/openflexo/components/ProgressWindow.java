@@ -291,6 +291,10 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 		// logger.info("Progress "+mainProgress+"/"+mainProgressBar.getMaximum());
 		if (!isVisible()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("@@@@@@@@@@@@@ Trying to set stepName " + stepName
+						+ " but progress window is not visible. Eventually, this behaviour will be removed.");
+			}
 			setVisible(true);
 		}
 		if (logger.isLoggable(Level.FINE)) {
