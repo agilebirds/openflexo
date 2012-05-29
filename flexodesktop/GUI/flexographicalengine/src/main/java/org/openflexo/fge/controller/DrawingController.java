@@ -463,7 +463,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	public void setSelectedObject(GraphicalRepresentation<?> aGraphicalRepresentation) {
 		stopEditionOfEditedLabelIfAny();
 		setSelectedObjects(Collections.singletonList(aGraphicalRepresentation));
-		getToolbox().update();
+		if (getToolbox() != null) {
+			getToolbox().update();
+		}
 	}
 
 	public void addToSelectedObjects(GraphicalRepresentation<?> aGraphicalRepresentation) {
