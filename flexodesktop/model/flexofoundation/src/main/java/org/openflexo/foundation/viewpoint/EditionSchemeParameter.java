@@ -124,7 +124,10 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	@Override
 	public ViewPoint getViewPoint() {
-		return getScheme().getViewPoint();
+		if (getScheme() != null) {
+			return getScheme().getViewPoint();
+		}
+		return null;
 	}
 
 	@Override
