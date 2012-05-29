@@ -152,6 +152,9 @@ public class AddClass extends AddConcept {
 
 	@Override
 	public Type getAssignableType() {
+		if (getOntologyClass() == null) {
+			return OntologyClass.class;
+		}
 		return SubClassOfClass.getSubClassOfClass(getOntologyClass());
 	}
 

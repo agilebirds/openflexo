@@ -62,13 +62,6 @@ public abstract class AddConcept extends AssignableAction {
 	}*/
 
 	@Override
-	public Type getAssignableType() {
-		return OntologyClass.class;
-		/*if (getOntologyClass() != null) {
-			return getOntologyClass();
-		} else {
-			return OntologyClass.class;
-		}*/
-	}
+	public abstract Type getAssignableType();
 
 }

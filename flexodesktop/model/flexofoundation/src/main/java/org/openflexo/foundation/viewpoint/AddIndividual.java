@@ -28,6 +28,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -227,6 +228,9 @@ public class AddIndividual extends AddConcept {
 
 	@Override
 	public Type getAssignableType() {
+		if (getOntologyClass() == null) {
+			return OntologyIndividual.class;
+		}
 		return IndividualOfClass.getIndividualOfClass(getOntologyClass());
 	}
 
