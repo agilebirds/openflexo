@@ -140,6 +140,7 @@ public class IconLibrary {
 	public static final IconMarker ERROR2 = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Error2.gif"), 0, 9);
 	public static final IconMarker QUESTION = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Question.gif"), 12, 9);
 	public static final IconMarker MERGE_OK = new IconMarker(new ImageIconResource("Icons/Utils/Markers/OK.gif"), 12, 1);
+	public static final IconMarker DELETE = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Delete.png"), 8, 8);
 	public static final ImageIcon QUESTION_ICON = new ImageIconResource("Icons/Utils/Question.gif");
 
 	// Cursors

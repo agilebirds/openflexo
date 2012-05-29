@@ -80,6 +80,13 @@ public class DeleteAction extends EditionAction {
 		return "Delete " + getObject();
 	}
 
+	public PatternRole getPatternRole() {
+		if (getEditionPattern() == null) {
+			return null;
+		}
+		return getEditionPattern().getPatternRole(getObject().toString());
+	}
+
 	public static class ObjectToDeleteBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeleteAction> {
 		public ObjectToDeleteBindingIsRequiredAndMustBeValid() {
 			super("'object_to_delete'_binding_is_not_valid", DeleteAction.class);

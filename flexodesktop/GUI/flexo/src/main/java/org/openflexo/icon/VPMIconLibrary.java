@@ -59,6 +59,7 @@ import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.StatementPatternRole;
@@ -161,6 +162,11 @@ public class VPMIconLibrary extends IconLibrary {
 			} else if (object instanceof IterationAction) {
 				return ITERATION_ACTION_ICON;
 			} else if (object instanceof DeleteAction) {
+				PatternRole pr = ((DeleteAction) object).getPatternRole();
+				if (pr != null) {
+					ImageIcon baseIcon = iconForObject(pr);
+					return IconFactory.getImageIcon(baseIcon, DELETE);
+				}
 				return DELETE_ICON;
 			} else if (object instanceof GraphicalAction) {
 				return GRAPHICAL_ACTION_ICON;
