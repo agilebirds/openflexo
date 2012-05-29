@@ -1174,6 +1174,7 @@ public class XMLCoder {
 			}
 			return returned;
 		} catch (InvalidModelException e) {
+			e.printStackTrace();
 			if (aProperty != null) {
 				String textValue = null;
 				if (stringEncoder._isEncodable(anObject.getClass())) {
