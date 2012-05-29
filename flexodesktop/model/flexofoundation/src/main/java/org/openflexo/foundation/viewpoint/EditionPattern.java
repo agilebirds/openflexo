@@ -211,6 +211,10 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return getPatternRoles(DataPropertyStatementPatternRole.class);
 	}
 
+	public List<GraphicalElementPatternRole> getGraphicalElementPatternRoles() {
+		return getPatternRoles(GraphicalElementPatternRole.class);
+	}
+
 	public List<ShapePatternRole> getShapePatternRoles() {
 		return getPatternRoles(ShapePatternRole.class);
 	}

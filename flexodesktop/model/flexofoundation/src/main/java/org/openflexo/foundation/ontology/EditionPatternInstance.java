@@ -302,9 +302,10 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	}
 
 	public String getDisplayableName() {
-		GraphicalElementPatternRole pr = getPattern().getPrimaryRepresentationRole();
-		if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
-			return (String) pr.getLabel().getBindingValue(this);
+		for (GraphicalElementPatternRole pr : getPattern().getGraphicalElementPatternRoles()) {
+			if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
+				return (String) pr.getLabel().getBindingValue(this);
+			}
 		}
 		return getPattern().getName();
 	}
