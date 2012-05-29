@@ -38,6 +38,7 @@ import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
+import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.viewpoint.DropScheme;
@@ -159,6 +160,8 @@ public class VPMIconLibrary extends IconLibrary {
 				return CONDITIONAL_ACTION_ICON;
 			} else if (object instanceof IterationAction) {
 				return ITERATION_ACTION_ICON;
+			} else if (object instanceof DeleteAction) {
+				return DELETE_ICON;
 			} else if (object instanceof GraphicalAction) {
 				return GRAPHICAL_ACTION_ICON;
 			}
