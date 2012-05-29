@@ -50,6 +50,7 @@ public abstract class EditionAction extends EditionSchemeObject {
 		AddDiagram,
 		AddEditionPattern,
 		DeclarePatternRole,
+		DeleteAction,
 		GraphicalAction,
 		GoToObject,
 		Iteration,

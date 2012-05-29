@@ -62,6 +62,7 @@ import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
+import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
@@ -261,6 +262,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 					+ ((org.openflexo.foundation.viewpoint.AddEditionPattern) action).getEditionPatternType());
 			EditionPatternInstance newEP = performAddEditionPattern((org.openflexo.foundation.viewpoint.AddEditionPattern) action);
 			assignedObject = newEP;
+		} else if (action instanceof org.openflexo.foundation.viewpoint.DeleteAction) {
+			logger.info("Try to delete with action " + action);
+			FlexoModelObject deletedObject = performDeleteAction((org.openflexo.foundation.viewpoint.DeleteAction) action);
+			logger.info("Deleted object " + deletedObject);
 		} else if (action instanceof GraphicalAction) {
 			performGraphicalAction((GraphicalAction) action);
 		} else if (action instanceof ConditionalAction) {
@@ -693,11 +698,25 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	protected void performGraphicalAction(org.openflexo.foundation.viewpoint.GraphicalAction action) {
 		logger.info("Perform graphical action " + action);
 		ViewElement graphicalElement = action.getSubject(this);
-		logger.fine("Element is " + graphicalElement);
-		logger.fine("Feature is " + action.getGraphicalFeature());
-		logger.fine("Value is " + action.getValue().getBindingValue(this));
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Element is " + graphicalElement);
+			logger.fine("Feature is " + action.getGraphicalFeature());
+			logger.fine("Value is " + action.getValue().getBindingValue(this));
+		}
 		action.getGraphicalFeature().applyToGraphicalRepresentation(
 				(GraphicalRepresentation<?>) graphicalElement.getGraphicalRepresentation(), action.getValue().getBindingValue(this));
+	}
+
+	protected FlexoModelObject performDeleteAction(DeleteAction action) {
+		FlexoModelObject objectToDelete = (FlexoModelObject) action.getObject().getBindingValue(this);
+		try {
+			logger.info("Delete object " + objectToDelete + " for object " + action.getObject() + " this=" + this);
+			objectToDelete.delete();
+		} catch (Exception e) {
+			logger.warning("Unexpected exception occured during deletion: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return objectToDelete;
 	}
 
 	@Override

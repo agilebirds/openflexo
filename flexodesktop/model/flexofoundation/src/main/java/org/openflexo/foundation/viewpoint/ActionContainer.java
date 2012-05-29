@@ -79,6 +79,8 @@ public interface ActionContainer {
 
 	public IterationAction createIterationAction();
 
+	public DeleteAction createDeleteAction();
+
 	public EditionAction deleteAction(EditionAction anAction);
 
 }

@@ -395,6 +395,13 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
+	public DeleteAction createDeleteAction() {
+		DeleteAction newAction = new DeleteAction();
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
 	public EditionAction deleteAction(EditionAction anAction) {
 		removeFromActions(anAction);
 		anAction.delete();

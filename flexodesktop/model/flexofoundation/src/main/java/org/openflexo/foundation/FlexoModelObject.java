@@ -388,6 +388,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
+	public String getDisplayableDescription() {
+		return getDisplayableName();
+	}
+
 	/**
 	 * @return
 	 */

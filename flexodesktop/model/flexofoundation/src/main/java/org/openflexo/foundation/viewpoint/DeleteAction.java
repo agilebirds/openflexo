@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -27,16 +26,16 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class DeclarePatternRole extends AssignableAction {
+public class DeleteAction extends EditionAction {
 
-	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DeleteAction.class.getPackage().getName());
 
-	public DeclarePatternRole() {
+	public DeleteAction() {
 	}
 
 	@Override
 	public EditionActionType getEditionActionType() {
-		return EditionActionType.DeclarePatternRole;
+		return EditionActionType.DeleteAction;
 	}
 
 	/*@Override
@@ -48,11 +47,6 @@ public class DeclarePatternRole extends AssignableAction {
 	public String getInspectorName() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean isAssignationRequired() {
-		return true;
 	}
 
 	public Object getDeclaredObject(EditionSchemeAction action) {
@@ -82,39 +76,22 @@ public class DeclarePatternRole extends AssignableAction {
 	}
 
 	@Override
-	public Type getAssignableType() {
-		return Object.class;
+	public String getStringRepresentation() {
+		return "Delete " + getObject();
 	}
 
-	public static class AssignationBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeclarePatternRole> {
-		public AssignationBindingIsRequiredAndMustBeValid() {
-			super("'assign'_binding_is_not_valid", DeclarePatternRole.class);
+	public static class ObjectToDeleteBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeleteAction> {
+		public ObjectToDeleteBindingIsRequiredAndMustBeValid() {
+			super("'object_to_delete'_binding_is_not_valid", DeleteAction.class);
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
-			return object.getAssignation();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
-			return object.getAssignationBindingDefinition();
-		}
-
-	}
-
-	public static class ObjectBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeclarePatternRole> {
-		public ObjectBindingIsRequiredAndMustBeValid() {
-			super("'object'_binding_is_not_valid", DeclarePatternRole.class);
-		}
-
-		@Override
-		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+		public ViewPointDataBinding getBinding(DeleteAction object) {
 			return object.getObject();
 		}
 
 		@Override
-		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
+		public BindingDefinition getBindingDefinition(DeleteAction object) {
 			return object.getObjectBindingDefinition();
 		}
 

@@ -103,7 +103,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 	@Override
 	public void delete() {
-		logger.warning("TODO: implements EditionPatternReference deletion !");
+		if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
+			getEditionPatternInstance().delete();
+		}
 		super.delete();
 	}
 
