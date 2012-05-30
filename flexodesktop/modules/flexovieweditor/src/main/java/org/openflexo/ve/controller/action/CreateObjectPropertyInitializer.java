@@ -33,6 +33,7 @@ import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
 import org.openflexo.ve.controller.VEController;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -54,9 +55,9 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateObjectProperty>() {
 			@Override
 			public boolean run(ActionEvent e, CreateObjectProperty action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}

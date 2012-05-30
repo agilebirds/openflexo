@@ -37,6 +37,7 @@ import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -62,9 +63,9 @@ public class AddViewInitializer extends ActionInitializer {
 				if (action.skipChoosePopup) {
 					return true;
 				} else {
-					FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.ADD_VIEW_DIALOG_FIB, action, null, true,
-							FlexoLocalization.getMainLocalizer());
-					return (dialog.getStatus() == Status.VALIDATED);
+					FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.ADD_VIEW_DIALOG_FIB, action, FlexoFrame.getActiveFrame(),
+							true, FlexoLocalization.getMainLocalizer());
+					return dialog.getStatus() == Status.VALIDATED;
 				}
 
 			}

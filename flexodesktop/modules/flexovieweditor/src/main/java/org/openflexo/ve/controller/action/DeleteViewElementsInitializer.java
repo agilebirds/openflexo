@@ -34,6 +34,7 @@ import org.openflexo.foundation.view.action.DeleteViewElements;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -55,9 +56,9 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<DeleteViewElements>() {
 			@Override
 			public boolean run(ActionEvent e, DeleteViewElements action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}

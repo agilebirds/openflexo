@@ -36,6 +36,7 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition.Dupli
 import org.openflexo.icon.SGIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGCst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -61,9 +62,9 @@ public class CreateImplementationModelInitializer extends ActionInitializer {
 				if (action.skipDialog) {
 					return true;
 				}
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}

@@ -37,6 +37,7 @@ import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.viewpoint.action.PushToPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
@@ -81,8 +82,8 @@ public class PushToPaletteInitializer extends ActionInitializer {
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				if (dialog.getStatus() == Status.VALIDATED) {
 					return true;
 				}
