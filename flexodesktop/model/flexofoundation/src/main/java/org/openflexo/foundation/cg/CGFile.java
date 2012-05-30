@@ -586,7 +586,7 @@ public class CGFile extends CGObject implements CGPathElement {
 
 	public static FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject> showTemplateActionizer;
 	public static FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject> editCustomTemplateActionizer;
-	public static FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject> redefineTemplateActionizer;
+	public static FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplate> redefineTemplateActionizer;
 
 	public boolean isShowable(CGTemplate template) {
 		return true;
