@@ -34,7 +34,7 @@ public class NormalSection extends TOCEntry {
 
 	@Override
 	public boolean getRenderContent() {
-		return false;
+		return true;
 	}
 
 }
