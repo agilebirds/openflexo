@@ -53,6 +53,9 @@ public enum OpenXmlTag {
 	r_id,
 	r_embed,
 	w_abstractNumId,
+	w_tbl,
+	w_tr,
+	w_tc,
 	OTHER;
 
 	public static OpenXmlTag getOpenXmlTag(Element element) {

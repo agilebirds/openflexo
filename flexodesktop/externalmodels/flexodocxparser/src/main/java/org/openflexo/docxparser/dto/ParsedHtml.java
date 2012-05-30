@@ -55,14 +55,20 @@ public class ParsedHtml implements IParsedHtml {
 		return neededResources;
 	}
 
-	public void appendHtml(String html) {
+	public ParsedHtml append(String html) {
 		this.html.append(html);
+		return this;
 	}
 
-	public void append(ParsedHtml parsedHtml) {
+	public ParsedHtml appendHtml(String html) {
+		return append(html);
+	}
+
+	public ParsedHtml append(ParsedHtml parsedHtml) {
 		this.appendHtml(parsedHtml.getHtml());
 		for (IParsedHtmlResource resource : parsedHtml.getNeededResources()) {
 			this.neededResources.add(resource);
 		}
+		return this;
 	}
 }

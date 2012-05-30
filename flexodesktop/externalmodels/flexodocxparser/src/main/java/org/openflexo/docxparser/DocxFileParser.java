@@ -130,7 +130,6 @@ public class DocxFileParser {
 			String tagValue = element.attributeValue(DocxQName.getQName(OpenXmlTag.w_val));
 			Element sdtElement = element.getParent().getParent(); // On w:sdt
 			Element sdtContentElement = sdtElement.element(DocxQName.getQName(OpenXmlTag.w_sdtContent));
-
 			try {
 				if (tagValue.startsWith(FlexoDescriptionTag.FLEXODESCRIPTIONTAG)) {
 					FlexoDescriptionTag descTag = new FlexoDescriptionTag(tagValue);
