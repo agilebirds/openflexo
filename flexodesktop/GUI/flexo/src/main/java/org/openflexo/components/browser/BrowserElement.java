@@ -126,7 +126,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		return null;
 	}
 
-	private boolean isDeleted = false;
+	private volatile boolean isDeleted = false;
 
 	public boolean isDeleted() {
 		return isDeleted;
@@ -364,14 +364,14 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 			logger.fine(getClass().getName() + " receive DataModification " + dataModification.getClass().getName());
 		}
 		if (_browser != null) {
-			if (((dataModification instanceof WKFDataModification) || (dataModification instanceof IEDataModification)
-					|| (dataModification instanceof DKVDataModification) || (dataModification instanceof DMDataModification)
-					|| (dataModification instanceof WSDataModification) || (dataModification instanceof OEDataModification)
-					|| (dataModification instanceof CGDataModification) || (dataModification instanceof SGDataModification)
-					|| (dataModification instanceof ObjectDeleted) || (dataModification instanceof TOCModification) || (dataModification instanceof NameChanged))
-					&& (!(dataModification instanceof ObjectLocationChanged))
-					&& (!(dataModification instanceof ObjectSizeChanged))
-					&& (!(dataModification instanceof ObjectNeedsRefresh))) {
+			if ((dataModification instanceof WKFDataModification || dataModification instanceof IEDataModification
+					|| dataModification instanceof DKVDataModification || dataModification instanceof DMDataModification
+					|| dataModification instanceof WSDataModification || dataModification instanceof OEDataModification
+					|| dataModification instanceof CGDataModification || dataModification instanceof SGDataModification
+					|| dataModification instanceof ObjectDeleted || dataModification instanceof TOCModification || dataModification instanceof NameChanged)
+					&& !(dataModification instanceof ObjectLocationChanged)
+					&& !(dataModification instanceof ObjectSizeChanged)
+					&& !(dataModification instanceof ObjectNeedsRefresh)) {
 				refreshWhenPossible();
 			}
 		}
@@ -388,7 +388,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 				repaintRequested = true;
 			}
 		}
-		if (SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure()) {
+		if (!SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -423,7 +423,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	public void refreshWhenPossible() {
 		synchronized (this) {
-			if (isDeleted || _browser.isHoldingStructure() || refreshRequested || (_parent != null && _parent.refreshRequested)) {
+			if (isDeleted || _browser.isHoldingStructure() || refreshRequested || _parent != null && _parent.refreshRequested) {
 				return;
 			}
 			refreshRequested = true;
@@ -619,7 +619,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 				return _parent;
 			}
 		}
-		return (_parent.findNearestAncestor(types));
+		return _parent.findNearestAncestor(types);
 	}
 
 }
