@@ -89,11 +89,11 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	@Override
 	public OntologyLibrary retrieveBaseOntologyLibrary() {
 		if (baseOntologyLibrary == null) {
-			logger.fine("Instanciating BaseOntologyLibrary");
+			logger.fine("Instantiating BaseOntologyLibrary");
 			baseOntologyLibrary = new OntologyLibrary(this, null);
 			findOntologies(new File(localDirectory, "Ontologies"), FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
 			// baseOntologyLibrary.init();
-			logger.fine("Instanciating BaseOntologyLibrary Done. Loading some ontologies...");
+			logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
 			// baseOntologyLibrary.debug();
 			baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getRDFOntology().loadWhenUnloaded();
