@@ -93,11 +93,13 @@ public class AddCustomTemplateRepositoryInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddCustomTemplateRepository>() {
 			@Override
 			public boolean run(ActionEvent e, AddCustomTemplateRepository action) {
-				if (action.getNewCustomTemplatesRepository() != null
+				if (action.isAssociateTemplateRepository() && action.getNewCustomTemplatesRepository() != null
 						&& getProject().getGeneratedDoc().getGeneratedRepositories().size() > 0) {
 					Vector<DGRepository> repositories = new Vector<DGRepository>();
 					for (GenerationRepository r : getProject().getGeneratedDoc().getGeneratedRepositories()) {
-						repositories.add((DGRepository) r);
+						if (r.getPreferredTemplateRepository() == null) {
+							repositories.add((DGRepository) r);
+						}
 					}
 					Vector<DGRepository> selected = (Vector<DGRepository>) repositories.clone();
 					Iterator<DGRepository> i = selected.iterator();

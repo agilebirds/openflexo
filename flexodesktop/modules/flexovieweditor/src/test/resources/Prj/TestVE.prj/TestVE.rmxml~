@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project id="SYL_413" name="TestVE" projectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558" cssSheet="Contento" lastUniqueID="933" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 000" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
+<Project id="SYL_413" name="TestVE" projectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558" cssSheet="Contento" lastUniqueID="960" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 000" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
   <resourcesCount>47</resourcesCount>
   No description
   <ComponentLibrary id="SYL_COMPONENT_LIBRARY.TestVE" userID="SYL" version="2.4" file="TestVE.wolib">

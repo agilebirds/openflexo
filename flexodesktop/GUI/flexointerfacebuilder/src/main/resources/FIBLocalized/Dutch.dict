@@ -1,5 +1,5 @@
 #Dutch
-#Thu May 10 18:57:29 CEST 2012
+#Tue May 29 14:24:47 CEST 2012
 apply=Apply
 arithmetic=Arithmetic
 boolean=Boolean
@@ -30,6 +30,7 @@ reset=Reset
 scientific=Scientific
 select=Select
 select_a_value=Select
+select_directory=Select a directory
 show_evaluation=Show evaluation
 show_more_operators=Show more operators
 specify_basic_binding=Specify basic binding
