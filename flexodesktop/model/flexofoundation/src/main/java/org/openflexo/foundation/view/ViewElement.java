@@ -72,7 +72,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	@Override
 	public void delete() {
-		if (getEditionPatternInstance() != null) {
+		if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
 			getEditionPatternInstance().delete();
 		}
 		for (TargetObject o : dependingObjects) {
@@ -126,6 +126,16 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	 */
 	public boolean isBoundInsideEditionPattern() {
 		return getPatternRole() != null;
+	}
+
+	/**
+	 * Return a flag indicating if current graphical element is bound inside an edition pattern, and if this element plays a role as primary
+	 * representation,
+	 * 
+	 * @return
+	 */
+	public boolean playsPrimaryRole() {
+		return getPatternRole() != null && getPatternRole().getIsPrimaryRepresentationRole();
 	}
 
 	/*public String getLabelValue() {

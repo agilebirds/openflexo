@@ -36,6 +36,7 @@ public class ViewPointValidationModel extends ValidationModel {
 
 		registerRule(new EditionPattern.EditionPatternShouldHaveRoles());
 		registerRule(new EditionPattern.EditionPatternShouldHaveEditionSchemes());
+		registerRule(new EditionPattern.EditionPatternShouldHaveDeletionScheme());
 
 		registerRule(new PatternRole.PatternRoleMustHaveAName());
 		registerRule(new ClassPatternRole.ClassPatternRoleMustDefineAValidConceptClass());
@@ -71,6 +72,8 @@ public class ViewPointValidationModel extends ValidationModel {
 
 		registerRule(new DeclarePatternRole.AssignationBindingIsRequiredAndMustBeValid());
 		registerRule(new DeclarePatternRole.ObjectBindingIsRequiredAndMustBeValid());
+
+		registerRule(new DeleteAction.ObjectToDeleteBindingIsRequiredAndMustBeValid());
 
 		registerRule(new GraphicalAction.GraphicalActionMustHaveASubject());
 		registerRule(new GraphicalAction.GraphicalActionMustDefineAValue());

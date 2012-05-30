@@ -21,6 +21,8 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -30,10 +32,12 @@ import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
@@ -205,6 +209,10 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 	public List<DataPropertyStatementPatternRole> getDataPropertyStatementPatternRoles() {
 		return getPatternRoles(DataPropertyStatementPatternRole.class);
+	}
+
+	public List<GraphicalElementPatternRole> getGraphicalElementPatternRoles() {
+		return getPatternRoles(GraphicalElementPatternRole.class);
 	}
 
 	public List<ShapePatternRole> getShapePatternRoles() {
@@ -489,13 +497,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newCreationScheme;
 	}
 
-	public DeletionScheme createDeletionScheme() {
-		DeletionScheme newDeletionScheme = new DeletionScheme();
-		newDeletionScheme.setName("deletion");
-		addToEditionSchemes(newDeletionScheme);
-		return newDeletionScheme;
-	}
-
 	public DropScheme createDropScheme() {
 		DropScheme newDropScheme = new DropScheme();
 		newDropScheme.setName("drop");
@@ -524,10 +525,65 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newNavigationScheme;
 	}
 
+	public DeletionScheme createDeletionScheme() {
+		DeletionScheme newDeletionScheme = generateDefaultDeletionScheme();
+		return newDeletionScheme;
+	}
+
 	public EditionScheme deleteEditionScheme(EditionScheme editionScheme) {
 		removeFromEditionSchemes(editionScheme);
 		editionScheme.delete();
 		return editionScheme;
+	}
+
+	public DeletionScheme getDefaultDeletionScheme() {
+		if (getDeletionSchemes().size() > 0) {
+			return getDeletionSchemes().firstElement();
+		}
+		return null;
+	}
+
+	public DeletionScheme generateDefaultDeletionScheme() {
+		DeletionScheme newDeletionScheme = new DeletionScheme();
+		newDeletionScheme.setName("deletion");
+		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
+		for (PatternRole pr : getPatternRoles()) {
+			if ((pr instanceof GraphicalElementPatternRole) || (pr instanceof IndividualPatternRole)
+					|| (pr instanceof StatementPatternRole)) {
+				rolesToDelete.add(pr);
+			}
+		}
+		Collections.sort(rolesToDelete, new Comparator<PatternRole>() {
+			@Override
+			public int compare(PatternRole o1, PatternRole o2) {
+				if ((o1 instanceof ShapePatternRole) && (o2 instanceof ConnectorPatternRole)) {
+					return 1;
+				} else if ((o1 instanceof ConnectorPatternRole) && (o2 instanceof ShapePatternRole)) {
+					return -1;
+				}
+
+				if (o1 instanceof ShapePatternRole) {
+					if (o2 instanceof ShapePatternRole) {
+						if (((ShapePatternRole) o1).isEmbeddedIn((ShapePatternRole) o2)) {
+							return -1;
+						}
+						if (((ShapePatternRole) o2).isEmbeddedIn((ShapePatternRole) o1)) {
+							return 1;
+						}
+						return 0;
+					}
+				}
+				return 0;
+			}
+
+		});
+		for (PatternRole pr : rolesToDelete) {
+			DeleteAction a = new DeleteAction();
+			a.setObject(new ViewPointDataBinding(pr.getPatternRoleName()));
+			newDeletionScheme.addToActions(a);
+		}
+		addToEditionSchemes(newDeletionScheme);
+		return newDeletionScheme;
 	}
 
 	public EditionPatternInspector getInspector() {
@@ -856,10 +912,55 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		public ValidationIssue<EditionPatternShouldHaveEditionSchemes, EditionPattern> applyValidation(EditionPattern editionPattern) {
 			if (editionPattern.getEditionSchemes().size() == 0) {
 				return new ValidationWarning<EditionPatternShouldHaveEditionSchemes, EditionPattern>(this, editionPattern,
-						"edition_pattern_role_has_no_edition_scheme");
+						"edition_pattern_has_no_edition_scheme");
 			}
 			return null;
 		}
+	}
+
+	public static class EditionPatternShouldHaveDeletionScheme extends
+			ValidationRule<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
+		public EditionPatternShouldHaveDeletionScheme() {
+			super(EditionPattern.class, "edition_pattern_should_have_deletion_scheme");
+		}
+
+		@Override
+		public ValidationIssue<EditionPatternShouldHaveDeletionScheme, EditionPattern> applyValidation(EditionPattern editionPattern) {
+			if (editionPattern.getDeletionSchemes().size() == 0) {
+				CreateDefaultDeletionScheme fixProposal = new CreateDefaultDeletionScheme(editionPattern);
+				return new ValidationWarning<EditionPatternShouldHaveDeletionScheme, EditionPattern>(this, editionPattern,
+						"edition_pattern_has_no_deletion_scheme", fixProposal);
+			}
+			return null;
+		}
+
+		protected static class CreateDefaultDeletionScheme extends FixProposal<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
+
+			private EditionPattern editionPattern;
+			private DeletionScheme newDefaultDeletionScheme;
+
+			public CreateDefaultDeletionScheme(EditionPattern anEditionPattern) {
+				super("create_default_deletion_scheme");
+				this.editionPattern = anEditionPattern;
+			}
+
+			public EditionPattern getEditionPattern() {
+				return editionPattern;
+			}
+
+			public DeletionScheme getDeletionScheme() {
+				return newDefaultDeletionScheme;
+			}
+
+			@Override
+			protected void fixAction() {
+				newDefaultDeletionScheme = editionPattern.createDeletionScheme();
+				// AddIndividual action = getObject();
+				// action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+
 	}
 
 }

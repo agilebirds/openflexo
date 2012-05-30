@@ -102,7 +102,7 @@ public class DropScheme extends AbstractCreationScheme {
 	}
 
 	public boolean isValidTarget(EditionPattern aTarget, PatternRole contextRole) {
-		if (getTargetEditionPattern().isAssignableFrom(aTarget)) {
+		if (getTargetEditionPattern() != null && getTargetEditionPattern().isAssignableFrom(aTarget)) {
 			if (targetHasMultipleRoles()) {
 				// TODO make proper implementation when role inheritance will be in use !!!
 				return getTargetPatternRole() == null

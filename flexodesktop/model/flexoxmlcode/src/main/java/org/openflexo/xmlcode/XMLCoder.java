@@ -1174,6 +1174,9 @@ public class XMLCoder {
 			}
 			return returned;
 		} catch (InvalidModelException e) {
+			// Remove stack trace because tests failed because of out of memory
+			// TODO: investigate this: we should not come into this section !!!!!
+			// e.printStackTrace();
 			if (aProperty != null) {
 				String textValue = null;
 				if (stringEncoder._isEncodable(anObject.getClass())) {

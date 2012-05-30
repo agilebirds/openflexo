@@ -100,6 +100,17 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 		}
 	}
 
+	public boolean isEmbeddedIn(ShapePatternRole aPR) {
+		if (getParentShapePatternRole() != null) {
+			if (getParentShapePatternRole() == aPR) {
+				return true;
+			} else {
+				return getParentShapePatternRole().isEmbeddedIn(aPR);
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public boolean isIncludedInPrimaryRepresentationRole() {
 		if (getParentShapePatternRole() != null) {

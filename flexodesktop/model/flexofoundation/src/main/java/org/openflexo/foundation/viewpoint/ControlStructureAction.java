@@ -241,6 +241,13 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 	}
 
 	@Override
+	public DeleteAction createDeleteAction() {
+		DeleteAction newAction = new DeleteAction();
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
 	public EditionAction deleteAction(EditionAction anAction) {
 		removeFromActions(anAction);
 		anAction.delete();
