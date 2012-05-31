@@ -462,7 +462,21 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
+	private BindingModel bindingModel = null;
+
 	@Override
+	public BindingModel getBindingModel() {
+		if (bindingModel == null) {
+			bindingModel = buildBindingModel();
+		}
+		return bindingModel;
+	}
+
+	@Override
+	public BindingModel getInferedBindingModel() {
+		return getBindingModel();
+	}
+
 	protected BindingModel buildBindingModel() {
 		BindingModel returned = new BindingModel();
 		returned.addToBindingVariables(new BindingVariableImpl(this, "project", FlexoProject.class) {

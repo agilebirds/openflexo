@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.xmlcode.StringConvertable;
@@ -55,13 +56,13 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 		return CONVERTER;
 	}
 
-	private TOCEntry owner;
+	private Bindable owner;
 	private TOCBindingAttribute bindingAttribute;
 	private String unparsedBinding;
 	private BindingDefinition bindingDefinition;
 	private AbstractBinding binding;
 
-	public TOCDataBinding(TOCEntry owner, TOCBindingAttribute attribute, BindingDefinition df) {
+	public TOCDataBinding(Bindable owner, TOCBindingAttribute attribute, BindingDefinition df) {
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
@@ -123,10 +124,12 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
 				updateDependancies();
-				if (bindingAttribute != null) {
-					owner.notifyChange(bindingAttribute, oldValue, value);
+				if (bindingAttribute != null && owner instanceof TOCEntry) {
+					((TOCEntry) owner).notifyChange(bindingAttribute, oldValue, value);
 				}
-				owner.notifyBindingChanged(this);
+				if (owner instanceof TOCEntry) {
+					((TOCEntry) owner).notifyBindingChanged(this);
+				}
 				return;
 			}
 		} else {
@@ -137,10 +140,12 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
 				logger.info("Binding takes now value " + value);
 				updateDependancies();
-				if (bindingAttribute != null) {
-					owner.notifyChange(bindingAttribute, oldValue, value);
+				if (bindingAttribute != null && owner instanceof TOCEntry) {
+					((TOCEntry) owner).notifyChange(bindingAttribute, oldValue, value);
 				}
-				owner.notifyBindingChanged(this);
+				if (owner instanceof TOCEntry) {
+					((TOCEntry) owner).notifyBindingChanged(this);
+				}
 				return;
 			}
 		}
@@ -170,11 +175,11 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 		this.unparsedBinding = unparsedBinding;
 	}
 
-	public TOCEntry getOwner() {
+	public Bindable getOwner() {
 		return owner;
 	}
 
-	public void setOwner(TOCEntry owner) {
+	public void setOwner(Bindable owner) {
 		this.owner = owner;
 	}
 
@@ -193,7 +198,7 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
 		}
 
-		if (!binding.isBindingValid()) {
+		if (binding != null && !binding.isBindingValid()) {
 			logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context=" + getOwner());
 			/*logger.info("BindingModel="+getOwner().getBindingModel());
 			BindingExpression.logger.setLevel(Level.FINE);

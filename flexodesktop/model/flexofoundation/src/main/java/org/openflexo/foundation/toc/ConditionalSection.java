@@ -2,6 +2,7 @@ package org.openflexo.foundation.toc;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
 public class ConditionalSection extends ControlSection {
@@ -42,6 +43,13 @@ public class ConditionalSection extends ControlSection {
 			condition.setBindingDefinition(getConditionBindingDefinition());
 			this.condition = condition;
 		}
+	}
+
+	@Override
+	protected BindingModel buildInferedBindingModel() {
+		BindingModel returned = super.buildInferedBindingModel();
+		getCondition().finalizeDeserialization();
+		return returned;
 	}
 
 	@Override

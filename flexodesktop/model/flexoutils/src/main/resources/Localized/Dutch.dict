@@ -1,5 +1,5 @@
 #Dutch
-#Thu May 24 12:17:22 CEST 2012
+#Thu May 31 16:09:36 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -53,6 +53,8 @@
 'object'_binding_is_not_valid_description='object' binding is not valid
 'object'_binding_is_required_and_must_be_valid='object' binding is required and must be valid
 'object'_binding_is_required_and_must_be_valid_description='object' binding is required and must be valid
+'object_to_delete'_binding_is_not_valid='object_to_delete'_binding_is_not_valid
+'object_to_delete'_binding_is_not_valid_description='object_to_delete'_binding_is_not_valid_description
 'subject'_binding_is_required_and_must_be_valid='subject' binding is required and must be valid
 'subject'_binding_is_required_and_must_be_valid_description='subject' binding is required and must be valid
 'uri'_binding_is_required_and_must_be_valid='uri' binding is required and must be valid
@@ -2150,6 +2152,8 @@ edition_pattern=edition_pattern
 edition_pattern\ =edition_pattern 
 edition_pattern_id=edition_pattern_id
 edition_pattern_name=edition_pattern_name
+edition_pattern_should_have_deletion_scheme=edition_pattern_should_have_deletion_scheme
+edition_pattern_should_have_deletion_scheme_description=edition_pattern_should_have_deletion_scheme_description
 edition_pattern_should_have_edition_scheme=edition_pattern_should_have_edition_scheme
 edition_pattern_should_have_edition_scheme_description=edition_pattern_should_have_edition_scheme_description
 edition_pattern_should_have_roles=edition_pattern_should_have_roles
@@ -4115,6 +4119,7 @@ readers_guide=Reader guide
 really_delete_this_view_?=Really delete this view ?
 really_delete_this_view_folder_and_all_its_contents_?=Really delete this view folder and all its contents ?
 really_quit=Do you really want to quit ?
+really_reset_all_graphical_representations_for_this_view_?=Really reset all graphical representations for this view ?
 reason_permission_denied=Reason\: permission denied
 rebuild_dependancies=Rebuild dependancies
 rebuild_dependancies_description=rebuild dependancies description
@@ -4269,6 +4274,7 @@ requires_following_templates=Currently uses following templates \:
 reset=Reset
 reset_($object.name)_sub_process_reference=Reset ($object.name) sub-process reference
 reset_eo_attribute_source_code=Reset EOAttributes source code
+reset_graphical_representations=Reset graphical representations
 reset_source_code=Reset source code
 reset_to_default_implementation=Reset to default implementation
 reset_value=Reset value
