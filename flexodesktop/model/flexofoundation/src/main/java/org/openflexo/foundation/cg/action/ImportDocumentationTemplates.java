@@ -159,8 +159,21 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 		if (templatesDir.exists() && templatesDir.isDirectory()) {
 			AddCustomTemplateRepository custom = AddCustomTemplateRepository.actionType.makeNewEmbeddedAction(getProject()
 					.getGeneratedDoc().getTemplates(), null, this);
-			custom.setNewCustomTemplatesRepositoryName(name + " " + FlexoLocalization.localizedForKey("templates"));
-			custom.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(getProject(), name + "Templates"));
+			String templateName = name + " " + FlexoLocalization.localizedForKey("templates");
+			int i = 0;
+			String attempt = templateName;
+			while (getProject().getGeneratedDoc().getTemplates().getCustomCGTemplateRepositoryForName(attempt) != null) {
+				attempt = templateName + "-" + i++;
+			}
+			templateName = attempt;
+			i = 0;
+			String templateDirName = name + "Templates";
+			FlexoProjectFile attemptFile = new FlexoProjectFile(getProject(), templateDirName);
+			while (getProject().resourceForFileName(attemptFile) != null) {
+				attemptFile = new FlexoProjectFile(getProject(), templateDirName + "-" + i++);
+			}
+			custom.setNewCustomTemplatesRepositoryName(templateName);
+			custom.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(getProject(), templateDirName));
 			custom.setRepositoryType(TemplateRepositoryType.Documentation);
 			custom.setAssociateTemplateRepository(false);
 			custom.doAction();
@@ -178,7 +191,7 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 			}
 		}
 		if (imagesDir.exists() && imagesDir.isDirectory()) {
-			for (File image : imagesDir.listFiles(new java.io.FileFilter() {
+			java.io.FileFilter filter = new java.io.FileFilter() {
 
 				@Override
 				public boolean accept(File pathname) {
@@ -188,7 +201,8 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 					}
 					return false;
 				}
-			})) {
+			};
+			for (File image : imagesDir.listFiles(filter)) {
 				ImportImage importImage = ImportImage.actionType.makeNewEmbeddedAction(getProject(), null, this);
 				importImage.setFileToImport(image);
 				importImage.doAction();
