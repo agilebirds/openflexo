@@ -51,7 +51,6 @@ import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.ReservedKeyword;
 
 public class ViewDefinition extends ViewLibraryObject implements Sortable {
@@ -109,8 +108,9 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	// TODO: big issue with renaming, don't call this !!!
 	@Override
 	public void setName(String aName) throws DuplicateResourceException, InvalidNameException {
-		String viewName = JavaUtils.getClassName(aName);
-		setViewName(viewName);
+		// String viewName = JavaUtils.getClassName(aName);
+		// setViewName(viewName);
+		setViewName(aName);
 	}
 
 	private void setViewName(String name) throws DuplicateResourceException, InvalidNameException {
