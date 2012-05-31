@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -642,6 +643,10 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	public TreeMap<Object, Object> getNewTreeMap() {
 		return new TreeMap<Object, Object>();
+	}
+
+	public LinkedHashMap<Object, Object> getNewLinkedHashMap() {
+		return new LinkedHashMap<Object, Object>();
 	}
 
 	public Properties getNewProperties() {
