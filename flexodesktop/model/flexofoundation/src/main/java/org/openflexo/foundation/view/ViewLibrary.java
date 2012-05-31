@@ -217,17 +217,17 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 		return temp.size();
 	}
 
-	private void addFolders(Vector<ViewFolder> temp, ViewFolder folder) {
+	private void addFolders(List<ViewFolder> temp, ViewFolder folder) {
 		temp.add(folder);
-		for (Enumeration e = folder.getSubFolders().elements(); e.hasMoreElements();) {
-			ViewFolder currentFolder = (ViewFolder) e.nextElement();
+		for (Enumeration<ViewFolder> e = folder.getSubFolders().elements(); e.hasMoreElements();) {
+			ViewFolder currentFolder = e.nextElement();
 			addFolders(temp, currentFolder);
 		}
 	}
 
 	public ViewFolder getFolderWithName(String folderName) {
-		for (Enumeration e = allFolders(); e.hasMoreElements();) {
-			ViewFolder folder = (ViewFolder) e.nextElement();
+		for (Enumeration<ViewFolder> e = allFolders(); e.hasMoreElements();) {
+			ViewFolder folder = e.nextElement();
 
 			if (folder.getName().equals(folderName)) {
 				return folder;
@@ -269,6 +269,19 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	// =============================================================
 	// ===================== Accessors =============================
 	// =============================================================
+
+	public List<ViewFolder> getAllFolderList() {
+		List<ViewFolder> answer = new ArrayList<ViewFolder>();
+		addFolder(answer, getRootFolder());
+		return answer;
+	}
+
+	private void addFolder(List<ViewFolder> answer, ViewFolder rootFolder) {
+		answer.add(rootFolder);
+		for (Enumeration<ViewFolder> en = rootFolder.getSortedSubFolders(); en.hasMoreElements();) {
+			addFolder(answer, en.nextElement());
+		}
+	}
 
 	public Vector<ViewDefinition> getAllShemaList() {
 		Vector<ViewDefinition> answer = new Vector<ViewDefinition>();
