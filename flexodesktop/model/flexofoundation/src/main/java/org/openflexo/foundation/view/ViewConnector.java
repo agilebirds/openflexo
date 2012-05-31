@@ -22,6 +22,7 @@ package org.openflexo.foundation.view;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
 public class ViewConnector extends ViewElement {
@@ -133,6 +134,11 @@ public class ViewConnector extends ViewElement {
 	@Override
 	public String getDisplayableDescription() {
 		return "Connector" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
+	}
+
+	@Override
+	public ConnectorPatternRole getPatternRole() {
+		return (ConnectorPatternRole) super.getPatternRole();
 	}
 
 }

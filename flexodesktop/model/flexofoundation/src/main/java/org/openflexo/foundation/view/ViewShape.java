@@ -26,6 +26,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
@@ -238,4 +239,8 @@ public class ViewShape extends ViewElement {
 		return availableLinkSchemeFromThisShape;
 	}
 
+	@Override
+	public ShapePatternRole getPatternRole() {
+		return (ShapePatternRole) super.getPatternRole();
+	}
 }
