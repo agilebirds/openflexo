@@ -478,6 +478,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getPaintManager().repaint(this);
 					}*/
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
 					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
@@ -489,9 +490,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 					if (getParent() != null && getLabelView() != null) {
 						getParent().moveToFront(getLabelView());
 					}
-					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 					getPaintManager().repaint(this);
-
 					requestFocusInWindow();
 					// requestFocus();
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {

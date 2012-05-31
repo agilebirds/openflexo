@@ -149,7 +149,9 @@ public class FGEPaintManager {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("addToTemporaryObjects() " + gr);
 		}
-		_temporaryObjects.add(gr);
+		if (!_temporaryObjects.contains(gr)) {
+			_temporaryObjects.add(gr);
+		}
 	}
 
 	public void removeFromTemporaryObjects(GraphicalRepresentation<?> gr) {
