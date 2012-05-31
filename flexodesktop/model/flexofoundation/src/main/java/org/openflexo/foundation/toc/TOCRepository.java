@@ -83,7 +83,7 @@ public class TOCRepository extends TOCEntry {
 			builder.tocData = data;
 			builder.isCloner = true;
 			TOCRepository tocRepositories = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile),
-					TOC_TEMPLATE_MODEL, builder);
+					TOC_TEMPLATE_MODEL, builder, data.getProject().getStringEncoder());
 			return tocRepositories;
 		} catch (Exception e) {
 			e.printStackTrace();
