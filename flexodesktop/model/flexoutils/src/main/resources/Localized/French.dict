@@ -1,5 +1,5 @@
 #French
-#Thu May 24 12:17:22 CEST 2012
+#Thu May 31 16:09:36 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -53,6 +53,8 @@
 'object'_binding_is_not_valid_description=Le lien 'objet' n'est pas valide
 'object'_binding_is_required_and_must_be_valid=\ Le lien 'objet' est requis et doit \u00EAtre valide
 'object'_binding_is_required_and_must_be_valid_description=\ Le lien 'objet' est requis et doit \u00EAtre valide
+'object_to_delete'_binding_is_not_valid='object_to_delete'_binding_is_not_valid
+'object_to_delete'_binding_is_not_valid_description='object_to_delete'_binding_is_not_valid_description
 'subject'_binding_is_required_and_must_be_valid=\ Le lien 'sujet' est requis et doit \u00EAtre valide
 'subject'_binding_is_required_and_must_be_valid_description=\ Le lien 'sujet' est requis et doit \u00EAtre valide
 'uri'_binding_is_required_and_must_be_valid=\ Le lien 'uri' est requis et doit \u00EAtre valide
@@ -2150,6 +2152,8 @@ edition_pattern=edition_pattern
 edition_pattern\ =edition_pattern 
 edition_pattern_id=edition_pattern_id
 edition_pattern_name=edition_pattern_name
+edition_pattern_should_have_deletion_scheme=edition_pattern_should_have_deletion_scheme
+edition_pattern_should_have_deletion_scheme_description=edition_pattern_should_have_deletion_scheme_description
 edition_pattern_should_have_edition_scheme=edition_pattern_should_have_edition_scheme
 edition_pattern_should_have_edition_scheme_description=edition_pattern_should_have_edition_scheme_description
 edition_pattern_should_have_roles=edition_pattern_should_have_roles
@@ -4116,6 +4120,7 @@ readers_guide=Guide de lecture
 really_delete_this_view_?=Voulez vous supprimer cette vue ?
 really_delete_this_view_folder_and_all_its_contents_?=Voulez vous supprimer ce r\u00E9pertoire et tout ce qu'il contient  ?
 really_quit=Voulez vous reellement quitter OpenFlexo ?
+really_reset_all_graphical_representations_for_this_view_?=Voulez vraiment restaurer les repr\u00E9sentations graphiques par d\u00E9faut pour toute cette vue ?
 reason_permission_denied=Probleme\: pas de droits en ecriture
 rebuild_dependancies=Reconstruction des d\u00E9pendances
 rebuild_dependancies_description=Reconstruction de d\u00E9pendances de descriptions
@@ -4270,6 +4275,7 @@ requires_following_templates=Utilise les templates suivants \:
 reset=RAZ
 reset_($object.name)_sub_process_reference=R\u00E9initialiser la r\u00E9f\u00E9rence du sous-processus de l'activit\u00E9 '($object.name)'
 reset_eo_attribute_source_code=R\u00E9initialiser le code source des EOAttributes
+reset_graphical_representations=Restaurer les repr\u00E9sentations graphiques
 reset_source_code=Restaurer le code \u00E0 son impl\u00E9mentation par d\u00E9faut
 reset_to_default_implementation=R\u00E9initialiser \u00E0 l'impl\u00E9mentation par d\u00E9faut
 reset_value=Remise \u00E0 z\u00E9ro
