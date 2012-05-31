@@ -29,7 +29,6 @@ import java.util.zip.ZipException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom.JDOMException;
-import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -146,27 +145,13 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 	private void importTemplatesFromDir(File tocfile) throws InvalidXMLDataException, InvalidObjectSpecificationException,
 			InvalidModelException, AccessorInvocationException, FileNotFoundException, IOException, SAXException,
 			ParserConfigurationException, JDOMException, FlexoException {
-		TOCRepository toc = TOCRepository.createRepositoryFromTemplate(tocfile);
-		String docTypeName = toc.getDocTypeAsString();
-		DocType docType = getProject().getDocTypeNamed(docTypeName);
-		if (docType == null) {
-			AddDocType addDocType = AddDocType.actionType.makeNewEmbeddedAction(getProject(), null, this);
-			addDocType.setNewName(docTypeName);
-			addDocType.doAction();
-			if (!addDocType.hasActionExecutionSucceeded()) {
-				throw new FlexoException(FlexoLocalization.localizedForKey("could_not_add_doc_type"));
-			}
-			docType = addDocType.getNewDocType();
-		}
 		AddTOCRepository addToc = AddTOCRepository.actionType.makeNewEmbeddedAction(getProject().getTOCData(), null, this);
-		addToc.setTocTemplate(toc);
-		addToc.setDocType(docType);
-		addToc.setRepositoryName(toc.getTitle());
+		addToc.setTocTemplate(tocfile);
 		addToc.doAction();
 		if (!addToc.hasActionExecutionSucceeded()) {
 			throw new FlexoException(FlexoLocalization.localizedForKey("could_not_create_toc"));
 		}
-		toc = addToc.getNewRepository();
+		TOCRepository toc = addToc.getNewRepository();
 		String name = tocfile.getParentFile().getName();
 		File templatesDir = new File(tocfile.getParentFile(), "Templates");
 		File imagesDir = new File(tocfile.getParentFile(), "Images");
@@ -179,7 +164,7 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 			custom.setRepositoryType(TemplateRepositoryType.Documentation);
 			custom.setAssociateTemplateRepository(false);
 			custom.doAction();
-			if (!custom.hasActionExecutionSucceeded()) {
+			if (!custom.hasActionExecutionSucceeded() || custom.getThrownException() != null) {
 				throw new FlexoException(FlexoLocalization.localizedForKey("could_not_add_templates"));
 			}
 			templateRepository = custom.getNewCustomTemplatesRepository();
@@ -216,7 +201,7 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 		add.setNewGeneratedCodeRepositoryName(name);
 		add.setTocRepository(toc);
 		add.setNewGeneratedCodeRepositoryDirectory(documentationRepository);
-		add.setNewDocType(docType);
+		add.setNewDocType(toc.getDocType());
 		add.setFormat(Format.DOCX);
 		add.doAction();
 		if (!add.hasActionExecutionSucceeded()) {

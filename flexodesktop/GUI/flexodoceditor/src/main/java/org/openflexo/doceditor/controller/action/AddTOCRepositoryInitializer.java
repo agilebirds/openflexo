@@ -36,7 +36,6 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -56,7 +55,7 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 
 			@Override
 			public boolean run(ActionEvent event, AddTOCRepository action) {
-				if (action.getRepositoryName() != null && action.getDocType() != null) {
+				if (action.getRepositoryName() != null && action.getDocType() != null || action.getTocTemplate() != null) {
 					return true;
 				}
 				ParameterDefinition[] def = new ParameterDefinition[3];
@@ -114,7 +113,7 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 						String tocTemplateFileName = def[2].getValue() + ".toc.xml";
 						File tocTemplateFile = new FileResource("Config/TOCTemplates/" + tocTemplateFileName);
 						try {
-							action.setTocTemplate(TOCRepository.createRepositoryFromTemplate(tocTemplateFile));
+							action.setTocTemplate(tocTemplateFile);
 						} catch (Exception e) {
 							e.printStackTrace();
 							FlexoController.showError(e.getMessage());

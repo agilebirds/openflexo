@@ -19,15 +19,17 @@
  */
 package org.openflexo.foundation.toc.action;
 
+import java.io.File;
 import java.util.Vector;
 
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.cg.action.AddDocType;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -60,13 +62,13 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 	private DocType docType;
 
 	private TOCRepository newRepository;
-	private TOCRepository tocTemplate;
+	private File tocTemplate;
 
-	public TOCRepository getTocTemplate() {
+	public File getTocTemplate() {
 		return tocTemplate;
 	}
 
-	public void setTocTemplate(TOCRepository tocTemplate) {
+	public void setTocTemplate(File tocTemplate) {
 		this.tocTemplate = tocTemplate;
 	}
 
@@ -77,21 +79,43 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getRepositoryName() == null || getRepositoryName().trim().length() == 0) {
-			throw new InvalidArgumentException(FlexoLocalization.localizedForKey("name_cannot_be_empty"), "name_cannot_be_empty");
+
+		newRepository = TOCRepository.createTOCRepositoryFromTemplate(getData(), tocTemplate);
+		if (getDocType() != null) {
+			newRepository.setDocType(getDocType());
 		}
-		String attempt = getRepositoryName();
+		String attempt = newRepository.getTitle();
 		int i = 1;
+		boolean updateTitle = false;
 		while (getData().getRepositoryWithTitle(attempt) != null) {
-			attempt = getRepositoryName() + "-" + i++;
+			updateTitle = true;
+			attempt = newRepository.getTitle() + "-" + i++;
 		}
-		newRepository = new TOCRepository(getData(), getDocType(), getTocTemplate());
-		newRepository.setTitle(attempt);
+		if (updateTitle) {
+			newRepository.setTitle(attempt);
+		}
+		if (docType == null) {
+			String docTypeName = newRepository.getDocTypeAsString();
+			DocType docType = getProject().getDocTypeNamed(docTypeName);
+			if (docType == null) {
+				AddDocType addDocType = AddDocType.actionType.makeNewEmbeddedAction(getProject(), null, this);
+				addDocType.setNewName(docTypeName);
+				addDocType.doAction();
+				if (!addDocType.hasActionExecutionSucceeded()) {
+					throw new FlexoException(FlexoLocalization.localizedForKey("could_not_add_doc_type"));
+				}
+				docType = addDocType.getNewDocType();
+			}
+		}
 		getData().addToRepositories(newRepository);
 	}
 
 	private TOCData getData() {
-		return getFocusedObject().getProject().getTOCData();
+		return getProject().getTOCData();
+	}
+
+	private FlexoProject getProject() {
+		return getFocusedObject().getProject();
 	}
 
 	public String getRepositoryName() {
