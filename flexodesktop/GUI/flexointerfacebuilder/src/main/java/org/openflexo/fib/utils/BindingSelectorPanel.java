@@ -2072,7 +2072,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					if (endCommonPathIndex < matchingElements.firstElement().getLabel().length()) {
 						char c = matchingElements.firstElement().getLabel().charAt(endCommonPathIndex);
 						for (int i = 1; i < matchingElements.size(); i++) {
-							if (matchingElements.elementAt(i).getLabel().charAt(endCommonPathIndex) != c) {
+							String label = matchingElements.elementAt(i).getLabel();
+							if (endCommonPathIndex < label.length() && label.charAt(endCommonPathIndex) != c) {
 								foundDiff = true;
 							}
 						}
@@ -2122,13 +2123,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		}
 
 		FilteredJList list = listAtIndex(index);
-
-		int currentSelected = list.getSelectedIndex();
-		if (currentSelected > -1) {
-			valueChanged(new ListSelectionEvent(list, currentSelected, currentSelected, false));
-			// list.setSelectedIndex(currentSelected);
-			update();
-			completionInfo = null;
+		if (list != null) {
+			int currentSelected = list.getSelectedIndex();
+			if (currentSelected > -1) {
+				valueChanged(new ListSelectionEvent(list, currentSelected, currentSelected, false));
+				// list.setSelectedIndex(currentSelected);
+				update();
+				completionInfo = null;
+			}
 		}
 
 		if (_bindingSelector.getEditedObject() != null && _bindingSelector.getEditedObject().isBindingValid()) {
