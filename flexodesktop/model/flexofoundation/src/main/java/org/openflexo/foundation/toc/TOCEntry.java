@@ -369,8 +369,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", null, entry));
-			rebuildBindingModel();
-			entry.rebuildBindingModel();
+			rebuildInferedBindingModel();
 		}
 	}
 
@@ -387,8 +386,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", entry, null));
-			rebuildBindingModel();
-			entry.rebuildBindingModel();
+			rebuildInferedBindingModel();
 		}
 	}
 
@@ -949,15 +947,47 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	public void notifyBindingChanged(TOCDataBinding binding) {
 		setChanged();
-		rebuildBindingModel();
+		rebuildInferedBindingModel();
 	}
 
 	public void notifyChange(TOCBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) {
 	}
 
-	private BindingModel bindingModel = null;
-
 	@Override
+	public BindingModel getBindingModel() {
+		if (getParent() != null) {
+			return getParent().getInferedBindingModel();
+		}
+		return null;
+	}
+
+	public BindingModel getInferedBindingModel() {
+		if (inferedBindingModel == null) {
+			rebuildInferedBindingModel();
+		}
+		return inferedBindingModel;
+	}
+
+	protected void rebuildInferedBindingModel() {
+		inferedBindingModel = buildInferedBindingModel();
+		for (TOCEntry entry : getTocEntries()) {
+			entry.rebuildInferedBindingModel();
+		}
+	}
+
+	protected BindingModel buildInferedBindingModel() {
+		BindingModel returned;
+		if (getParent() == null) {
+			returned = new BindingModel();
+		} else {
+			returned = new BindingModel(getParent().getInferedBindingModel());
+		}
+		return returned;
+	}
+
+	private BindingModel inferedBindingModel = null;
+
+	/*@Override
 	public BindingModel getBindingModel() {
 		if (bindingModel == null) {
 			rebuildBindingModel();
@@ -980,7 +1010,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			returned = new BindingModel(getParent().getBindingModel());
 		}
 		return returned;
-	}
+	}*/
 
 	@Override
 	public BindingFactory getBindingFactory() {
