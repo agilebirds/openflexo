@@ -22,7 +22,7 @@
         <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
           <Label label="read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
           <CheckBox selected="false" localize="true" name="IsReadOnly" data="GRTab.data.isReadOnly" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
-          <Label label="is_selectable" localize="true" name="IsSelectableLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+          <!--  <Label label="is_selectable" localize="true" name="IsSelectableLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
           <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)">
             <CheckBox selected="false" localize="true" name="IsSelectable" data="GRTab.data.isSelectable" constraints="flow(location=right;index=0;expandVertically=false;expandHorizontally=false)" />
             <Label label="is_selected" localize="true" name="IsSelectedLabel" constraints="flow(location=left;index=1;expandVertically=false;expandHorizontally=false)" />
@@ -33,7 +33,7 @@
             <CheckBox selected="false" localize="true" name="IsFocusable" data="GRTab.data.isFocusable" constraints="flow(location=right;index=0;expandVertically=false;expandHorizontally=false)" />
             <Label label="is_focused" localize="true" name="IsFocusedLabel" constraints="flow(location=left;index=1;expandVertically=false;expandHorizontally=false)" />
             <CheckBox selected="false" readOnly="true" localize="true" name="IsFocused" data="GRTab.data.isFocused" constraints="flow(location=right;index=2;expandVertically=false;expandHorizontally=false)" />
-          </Panel>
+          </Panel>-->
           <TabPanel name="ControlsTab" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=true)">
             <Tab index="0" title="mouse_click_controls" layout="border" font="SansSerif,0,11" name="MouseClickControlTab">
               <Table iteratorClassName="org.openflexo.fge.controller.MouseClickControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="GRTab.data.mouseClickControls" constraints="border(location=center;index=0)" name="MouseClickControls" localize="true" manageDynamicModel="true">

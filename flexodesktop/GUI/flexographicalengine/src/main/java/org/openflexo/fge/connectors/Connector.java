@@ -126,7 +126,22 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	public abstract double distanceToConnector(FGEPoint aPoint, double scale);
 
 	public void setPaintAttributes(FGEConnectorGraphics g) {
-		g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+
+		// Foreground
+		if (getGraphicalRepresentation().getIsSelected()) {
+			if (getGraphicalRepresentation().getHasSelectedForeground()) {
+				g.setDefaultForeground(getGraphicalRepresentation().getSelectedForeground());
+			} else if (getGraphicalRepresentation().getHasFocusedForeground()) {
+				g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+			} else {
+				g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+			}
+		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedForeground()) {
+			g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+		} else {
+			g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+		}
+
 		g.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
 	}
 

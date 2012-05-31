@@ -631,14 +631,27 @@
 
   <entity name="org.openflexo.fge.GraphicalRepresentation" xmlTag="GraphicalRepresentation" abstract="YES" finalizer="finalizeDeserialization">
      <description>Abstract graphical representation</description>
+  	 <property name="identifier" xmlTag="identifier" attribute="YES"/>
+  	 <property name="layer" xmlTag="layer" attribute="YES"/>
+  	 <property name="hasText" xmlTag="hasText" attribute="YES"/>
   	 <property name="text" xmlTag="text" attribute="YES"/>
   	 <property name="isMultilineAllowed" xmlTag="isMultilineAllowed" attribute="YES"/>
-  	 <property name="isReadOnly" xmlTag="isReadOnly" attribute="YES"/>
-  	 <property name="isSelectable" xmlTag="isSelectable" attribute="YES"/>
-  	 <property name="isFocusable" xmlTag="isFocusable" attribute="YES"/>
+  	 <property name="continuousTextEditing" xmlTag="continuousTextEditing" attribute="YES"/>
  	 <property name="textStyle" xmlTag="TextStyle"/>
   	 <property name="absoluteTextX" xmlTag="absoluteTextX" attribute="YES"/>
   	 <property name="absoluteTextY" xmlTag="absoluteTextY" attribute="YES"/>
+  	 <property name="paragraphAlignment" xmlTag="paragraphAlignment" attribute="YES"/>
+  	 <property name="horizontalTextAlignment" xmlTag="horizontalTextAlignment" attribute="YES"/>
+  	 <property name="verticalTextAlignment" xmlTag="verticalTextAlignment" attribute="YES"/>
+  	 <property name="isSelectable" xmlTag="isSelectable" attribute="YES"/>
+  	 <property name="isFocusable" xmlTag="isFocusable" attribute="YES"/>
+  	 <property name="drawControlPointsWhenFocused" xmlTag="drawControlPointsWhenFocused" attribute="YES"/>
+  	 <property name="drawControlPointsWhenSelected" xmlTag="drawControlPointsWhenSelected" attribute="YES"/>
+  	 <property name="isReadOnly" xmlTag="isReadOnly" attribute="YES"/>
+  	 <property name="isLabelEditable" xmlTag="isLabelEditable" attribute="YES"/>
+ 	 <property name="isVisible" xmlTag="isVisible" attribute="YES"/>
+  	 <property name="toolTipText" xmlTag="toolTipText" attribute="YES"/>
+     <property name="variables" type="vector" contains="org.openflexo.fge.GRVariable" primary="yes"/>
   </entity>
 	
    <entity name="org.openflexo.fge.DrawingGraphicalRepresentation" xmlTag="DrawingGraphicalRepresentation" abstract="YES">

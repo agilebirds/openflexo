@@ -109,8 +109,38 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 	// *******************************************************************************
 
 	public void setPaintAttributes(FGEShapeGraphics g) {
-		g.setDefaultBackground(getGraphicalRepresentation().getBackground());
-		g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+
+		// Background
+		if (getGraphicalRepresentation().getIsSelected()) {
+			if (getGraphicalRepresentation().getHasSelectedBackground()) {
+				g.setDefaultBackground(getGraphicalRepresentation().getSelectedBackground());
+			} else if (getGraphicalRepresentation().getHasFocusedBackground()) {
+				g.setDefaultBackground(getGraphicalRepresentation().getFocusedBackground());
+			} else {
+				g.setDefaultBackground(getGraphicalRepresentation().getBackground());
+			}
+		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedBackground()) {
+			g.setDefaultBackground(getGraphicalRepresentation().getFocusedBackground());
+		} else {
+			g.setDefaultBackground(getGraphicalRepresentation().getBackground());
+		}
+
+		// Foreground
+		if (getGraphicalRepresentation().getIsSelected()) {
+			if (getGraphicalRepresentation().getHasSelectedForeground()) {
+				g.setDefaultForeground(getGraphicalRepresentation().getSelectedForeground());
+			} else if (getGraphicalRepresentation().getHasFocusedForeground()) {
+				g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+			} else {
+				g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+			}
+		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedForeground()) {
+			g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+		} else {
+			g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+		}
+
+		// Text
 		g.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
 	}
 

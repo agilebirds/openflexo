@@ -105,6 +105,14 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		adjustMaximalHeightToLabelHeight,
 		foreground,
 		background,
+		selectedForeground,
+		selectedBackground,
+		focusedForeground,
+		focusedBackground,
+		hasSelectedForeground,
+		hasSelectedBackground,
+		hasFocusedForeground,
+		hasFocusedBackground,
 		border,
 		shapeType,
 		shape,
@@ -144,6 +152,16 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
+
+	private ForegroundStyle selectedForeground = null;
+	private BackgroundStyle selectedBackground = null;
+	private ForegroundStyle focusedForeground = null;
+	private BackgroundStyle focusedBackground = null;
+
+	private boolean hasSelectedForeground = false;
+	private boolean hasSelectedBackground = false;
+	private boolean hasFocusedForeground = false;
+	private boolean hasFocusedBackground = false;
 
 	private ShapeBorder border = new ShapeBorder();
 
@@ -345,6 +363,18 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 		if (foreground != null) {
 			foreground.deleteObserver(this);
+		}
+		if (selectedBackground != null) {
+			selectedBackground.deleteObserver(this);
+		}
+		if (selectedForeground != null) {
+			selectedForeground.deleteObserver(this);
+		}
+		if (focusedBackground != null) {
+			focusedBackground.deleteObserver(this);
+		}
+		if (focusedForeground != null) {
+			focusedForeground.deleteObserver(this);
 		}
 		if (shadowStyle != null) {
 			shadowStyle.deleteObserver(this);
@@ -1563,6 +1593,64 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	public ForegroundStyle getSelectedForeground() {
+		if (selectedForeground == null) {
+			selectedForeground = foreground.clone();
+		}
+		return selectedForeground;
+	}
+
+	public void setSelectedForeground(ForegroundStyle aForeground) {
+		FGENotification notification = requireChange(Parameters.selectedForeground, aForeground, false);
+		if (notification != null) {
+			if (selectedForeground != null) {
+				selectedForeground.deleteObserver(this);
+			}
+			selectedForeground = aForeground;
+			if (aForeground != null) {
+				aForeground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasSelectedForeground() {
+		return hasSelectedForeground;
+	}
+
+	public void setHasSelectedForeground(boolean aFlag) {
+		hasSelectedForeground = aFlag;
+	}
+
+	public ForegroundStyle getFocusedForeground() {
+		if (focusedForeground == null) {
+			focusedForeground = foreground.clone();
+		}
+		return focusedForeground;
+	}
+
+	public void setFocusedForeground(ForegroundStyle aForeground) {
+		FGENotification notification = requireChange(Parameters.focusedForeground, aForeground, false);
+		if (notification != null) {
+			if (focusedForeground != null) {
+				focusedForeground.deleteObserver(this);
+			}
+			focusedForeground = aForeground;
+			if (aForeground != null) {
+				aForeground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasFocusedForeground() {
+		return hasFocusedForeground;
+	}
+
+	public void setHasFocusedForeground(boolean aFlag) {
+		hasFocusedForeground = aFlag;
+	}
+
 	public boolean getNoStroke() {
 		return foreground.getNoStroke();
 	}
@@ -1599,6 +1687,68 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		if (backgroundType != getBackgroundType()) {
 			setBackground(BackgroundStyle.makeBackground(backgroundType));
 		}
+	}
+
+	public BackgroundStyle getSelectedBackground() {
+		if (selectedBackground == null) {
+			selectedBackground = background.clone();
+		}
+		return selectedBackground;
+	}
+
+	public void setSelectedBackground(BackgroundStyle aBackground) {
+		FGENotification notification = requireChange(Parameters.selectedBackground, aBackground, false);
+		if (notification != null) {
+			// background = aBackground.clone();
+			if (selectedBackground != null) {
+				selectedBackground.deleteObserver(this);
+			}
+			selectedBackground = aBackground;
+			// background.setGraphicalRepresentation(this);
+			if (aBackground != null) {
+				aBackground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasSelectedBackground() {
+		return hasSelectedBackground;
+	}
+
+	public void setHasSelectedBackground(boolean aFlag) {
+		hasSelectedBackground = aFlag;
+	}
+
+	public BackgroundStyle getFocusedBackground() {
+		if (focusedBackground == null) {
+			focusedBackground = background.clone();
+		}
+		return focusedBackground;
+	}
+
+	public void setFocusedBackground(BackgroundStyle aBackground) {
+		FGENotification notification = requireChange(Parameters.focusedBackground, aBackground, false);
+		if (notification != null) {
+			// background = aBackground.clone();
+			if (focusedBackground != null) {
+				focusedBackground.deleteObserver(this);
+			}
+			focusedBackground = aBackground;
+			// background.setGraphicalRepresentation(this);
+			if (aBackground != null) {
+				aBackground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasFocusedBackground() {
+		return hasFocusedBackground;
+	}
+
+	public void setHasFocusedBackground(boolean aFlag) {
+		hasFocusedBackground = aFlag;
 	}
 
 	public ShapeBorder getBorder() {
