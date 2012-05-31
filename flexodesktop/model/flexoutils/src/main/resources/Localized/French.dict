@@ -1,5 +1,5 @@
 #French
-#Thu May 31 16:09:36 CEST 2012
+#Fri Jun 01 00:59:09 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -2830,6 +2830,7 @@ import_declaration=D\u00E9claration d'importation
 import_declarations=D\u00E9clarations d'importation
 import_denali_library=Importation de la bibliotheque Denali
 import_doc_submission_report=Importer un rapport de soumission de documentation
+import_documentation_templates=Import de templates de documentation
 import_eomodel=Importer un mod\u00E8le de base de donn\u00E9es
 import_external_database=Importation de la bases de donn\u00E9es externes
 import_external_ws=Importer un service externe
