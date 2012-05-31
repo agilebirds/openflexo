@@ -33,33 +33,31 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.templates.CGDirectoryTemplateSet;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
-import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.toolbox.FileUtils;
 
-public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject> {
+public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTemplateFile, CGTemplate, CGTemplate> {
 
 	private static final Logger logger = Logger.getLogger(RedefineCustomTemplateFile.class.getPackage().getName());
 
-	public static FlexoActionType<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject> actionType = new FlexoActionType<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>(
+	public static FlexoActionType<RedefineCustomTemplateFile, CGTemplate, CGTemplate> actionType = new FlexoActionType<RedefineCustomTemplateFile, CGTemplate, CGTemplate>(
 			"redefine_template", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public RedefineCustomTemplateFile makeNewAction(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection,
-				FlexoEditor editor) {
+		public RedefineCustomTemplateFile makeNewAction(CGTemplate focusedObject, Vector<CGTemplate> globalSelection, FlexoEditor editor) {
 			return new RedefineCustomTemplateFile(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
+		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplate> globalSelection) {
 			return object != null && object.isApplicationTemplate();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
+		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplate> globalSelection) {
 			return object != null && object.isApplicationTemplate();
 		}
 
@@ -73,7 +71,7 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 	private TargetType _target;
 	private CGTemplateFile _newTemplateFile;
 
-	RedefineCustomTemplateFile(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+	RedefineCustomTemplateFile(CGTemplate focusedObject, Vector<CGTemplate> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -81,26 +79,37 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 	protected void doAction(Object context) throws IOFlexoException {
 		logger.info("Redefine CustomTemplateFile " + getFocusedObject());
 		if (getFocusedObject() != null && _repository != null) {
-			File createdFile;
-			CGDirectoryTemplateSet set;
-			if (getTarget() == null) {
-				logger.info("Ici1");
-				set = _repository.getCommonTemplates();
-			} else {
-				logger.info("Ici2");
-				set = _repository.getTemplateSetForTarget(getTarget(), true);
-			}
-			String relativePath = getFocusedObject().getRelativePathWithoutSetPrefix();
-			createdFile = new File(set.getDirectory(), relativePath);
-			logger.info("CreatedFile=" + createdFile.getAbsolutePath());
-			try {
-				FileUtils.saveToFile(createdFile, getFocusedObject().getContent());
-			} catch (IOException e) {
-				throw new IOFlexoException(e);
-			}
-			_repository.refresh();
-			_newTemplateFile = set.getTemplate(relativePath);
+			_newTemplateFile = redefineTemplate(getFocusedObject());
 		}
+		if (getGlobalSelection() != null) {
+			for (CGTemplate t : getGlobalSelection()) {
+				if (t != getFocusedObject()) {
+					redefineTemplate(t);
+				}
+			}
+		}
+		_repository.refresh();
+	}
+
+	protected CGTemplateFile redefineTemplate(CGTemplate template) throws IOFlexoException {
+		File createdFile;
+		CGDirectoryTemplateSet set;
+		if (getTarget() == null) {
+			logger.info("Ici1");
+			set = _repository.getCommonTemplates();
+		} else {
+			logger.info("Ici2");
+			set = _repository.getTemplateSetForTarget(getTarget(), true);
+		}
+		String relativePath = template.getRelativePathWithoutSetPrefix();
+		createdFile = new File(set.getDirectory(), relativePath);
+		logger.info("CreatedFile=" + createdFile.getAbsolutePath());
+		try {
+			FileUtils.saveToFile(createdFile, template.getContent());
+		} catch (IOException e) {
+			throw new IOFlexoException(e);
+		}
+		return set.getTemplate(relativePath);
 	}
 
 	public CustomCGTemplateRepository getRepository() {

@@ -66,8 +66,8 @@ public class ExportTOCAsTemplateInitializer extends ActionInitializer {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					if (isValidProjectName(chooser.getSelectedFile().getName())) {
 						dest = chooser.getSelectedFile();
-						if (!(dest.getName().toLowerCase().endsWith(".xml"))) {
-							dest = new File(dest.getAbsolutePath() + ".xml");
+						if (!dest.getName().toLowerCase().endsWith(".toc.xml")) {
+							dest = new File(dest.getAbsolutePath() + ".toc.xml");
 						}
 					} else {
 						if (logger.isLoggable(Level.WARNING)) {

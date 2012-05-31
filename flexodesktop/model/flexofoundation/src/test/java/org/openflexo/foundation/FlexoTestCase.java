@@ -113,7 +113,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	static {
 		try {
-			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
+			FlexoLoggingManager.initialize(-1, true, null, Level.WARNING, null);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -40,5 +40,5 @@ public interface InspectorDelegate {
 
 	public boolean handlesObjectOfClass(Class c);
 
-	public void performAction(ActionEvent e, String actionName, Object object);
+	public boolean performAction(ActionEvent e, String actionName, Object object);
 }

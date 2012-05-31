@@ -1683,7 +1683,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		 * @see org.openflexo.inspector.InspectorDelegate#performAction(java.lang.String, java.lang.Object)
 		 */
 		@Override
-		public void performAction(ActionEvent e, String actionName, Object object) {
+		public boolean performAction(ActionEvent e, String actionName, Object object) {
 			if (object instanceof FlexoModelObject) {
 				FlexoModelObject m = (FlexoModelObject) object;
 				for (FlexoActionType actionType : m.getActionList()) {
@@ -1691,12 +1691,14 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 						FlexoAction action = actionType.makeNewAction(m, new Vector<FlexoModelObject>(), getEditor());
 						try {
 							action.doAction(e);
+							return action.hasActionExecutionSucceeded();
 						} catch (FlexoException e1) {
 							e1.printStackTrace();
 						}
 					}
 				}
 			}
+			return false;
 		}
 
 		/**

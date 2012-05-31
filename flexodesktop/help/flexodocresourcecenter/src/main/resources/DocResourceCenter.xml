@@ -12979,6 +12979,9 @@ forward to the next nodes.</description>
                     <EmbeddingChildDocItem id="DGFileModuleView-mark_as_merged" identifier="DGFileModuleView-mark_as_merged" embedded="false" hidden="false" />
                     <EmbeddingChildDocItem id="DGFileModuleView-force_regenerate_doc" identifier="DGFileModuleView-force_regenerate_doc" embedded="false" hidden="false" />
                     <EmbeddingChildDocItem id="DGFileModuleView-generate_doc_if_required" identifier="DGFileModuleView-generate_doc_if_required" embedded="false" hidden="false" />
+                    <EmbeddingChildDocItem id="DGFileModuleView-cancel_overriding" identifier="DGFileModuleView-cancel_overriding" embedded="false" hidden="true">
+                      <description />
+                    </EmbeddingChildDocItem>
                     <RelatedToDocItem idref="code_generation" />
                     <RelatedToDocItem idref="code_generation" />
                   </RelatedToDocItem>
@@ -13023,6 +13026,7 @@ forward to the next nodes.</description>
               <description>Documentation on that view</description>
               <DocItem idref="DGFileModuleView" />
               <DocItem idref="DGFileModuleView-accept_disk_version" />
+              <DocItem idref="DGFileModuleView-cancel_overriding" />
               <DocItem idref="DGFileModuleView-dismiss_unchanged_files" />
               <DocItem idref="DGFileModuleView-edit_file" />
               <DocItem idref="DGFileModuleView-force_regenerate_code" />

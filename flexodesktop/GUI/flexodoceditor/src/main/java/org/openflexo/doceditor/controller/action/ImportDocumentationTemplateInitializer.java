@@ -17,65 +17,49 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.controller.action;
+package org.openflexo.doceditor.controller.action;
 
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-import javax.swing.Icon;
-
+import org.openflexo.doceditor.DECst;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.CreateDataProperty;
-import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.foundation.cg.action.ImportDocumentationTemplates;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.VPMController;
 
-public class CreateDataPropertyInitializer extends ActionInitializer {
+public class ImportDocumentationTemplateInitializer extends ActionInitializer {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDataPropertyInitializer(CEDControllerActionInitializer actionInitializer) {
-		super(CreateDataProperty.actionType, actionInitializer);
+	public ImportDocumentationTemplateInitializer(DEControllerActionInitializer actionInitializer) {
+		super(ImportDocumentationTemplates.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected DEControllerActionInitializer getControllerActionInitializer() {
+		return (DEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateDataProperty> getDefaultInitializer() {
-		return new FlexoActionInitializer<CreateDataProperty>() {
+	protected FlexoActionInitializer<ImportDocumentationTemplates> getDefaultInitializer() {
+		return new FlexoActionInitializer<ImportDocumentationTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDataProperty action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_DATA_PROPERTY_DIALOG_FIB, action,
+			public boolean run(ActionEvent e, ImportDocumentationTemplates action) {
+				FIBDialog dialog = FIBDialog.instanciateDialog(DECst.IMPORT_DOCUMENTATION_TEMPLATES_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				dialog.setTitle(FlexoLocalization.localizedForKey("import_documentation_templates"));
+				dialog.center();
+				dialog.setVisible(true);
 				return dialog.getStatus() == Status.VALIDATED;
 			}
-		};
-	}
 
-	@Override
-	protected FlexoActionFinalizer<CreateDataProperty> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<CreateDataProperty>() {
-			@Override
-			public boolean run(ActionEvent e, CreateDataProperty action) {
-				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
-				return true;
-			}
 		};
-	}
-
-	@Override
-	protected Icon getEnabledIcon() {
-		return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
 	}
 
 }

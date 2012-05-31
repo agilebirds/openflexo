@@ -35,6 +35,7 @@ import org.openflexo.foundation.sg.CreateSourceRepository;
 import org.openflexo.icon.SGIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGCst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -58,9 +59,9 @@ public class CreateSourceRepositoryInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateSourceRepository action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 
 		};

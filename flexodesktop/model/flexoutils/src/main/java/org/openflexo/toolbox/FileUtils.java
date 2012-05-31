@@ -918,4 +918,17 @@ public class FileUtils {
 		return fileContent;
 	}
 
+	public static File getDocumentFolder() {
+		File defaultFolder = new File(System.getProperty("user.home"), "Documents");
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			String folder = WinRegistryAccess.getRegistryValue(
+					"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", "Personal",
+					WinRegistryAccess.REG_SZ_TOKEN);
+			if (folder != null) {
+				return new File(folder);
+			}
+		}
+		return defaultFolder;
+	}
+
 }

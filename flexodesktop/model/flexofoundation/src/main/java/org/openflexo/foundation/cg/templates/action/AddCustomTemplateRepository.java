@@ -60,7 +60,7 @@ public class AddCustomTemplateRepository extends FlexoAction<AddCustomTemplateRe
 
 		@Override
 		protected boolean isEnabledForSelection(CGTemplates object, Vector<CGTemplateObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};
@@ -68,6 +68,8 @@ public class AddCustomTemplateRepository extends FlexoAction<AddCustomTemplateRe
 	static {
 		FlexoModelObject.addActionForClass(AddCustomTemplateRepository.actionType, CGTemplates.class);
 	}
+
+	private boolean associateTemplateRepository = true;
 
 	private CustomCGTemplateRepository _newCustomTemplatesRepository;
 
@@ -128,6 +130,14 @@ public class AddCustomTemplateRepository extends FlexoAction<AddCustomTemplateRe
 
 	public void setRepositoryType(TemplateRepositoryType repositoryType) {
 		this.repositoryType = repositoryType;
+	}
+
+	public boolean isAssociateTemplateRepository() {
+		return associateTemplateRepository;
+	}
+
+	public void setAssociateTemplateRepository(boolean associateTemplateRepository) {
+		this.associateTemplateRepository = associateTemplateRepository;
 	}
 
 }

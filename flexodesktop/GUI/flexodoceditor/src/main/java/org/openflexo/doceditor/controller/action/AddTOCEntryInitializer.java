@@ -32,6 +32,7 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.action.InvalidLevelException;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -50,9 +51,9 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddTOCEntry action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(DECst.CREATE_TOC_ENTRY_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(DECst.CREATE_TOC_ENTRY_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}

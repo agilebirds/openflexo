@@ -21,12 +21,17 @@ package org.openflexo.foundation.toc;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.jdom.JDOMException;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
@@ -49,9 +54,24 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.xmlcode.AccessorInvocationException;
+import org.openflexo.xmlcode.InvalidModelException;
+import org.openflexo.xmlcode.InvalidObjectSpecificationException;
+import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.XMLDecoder;
+import org.xml.sax.SAXException;
 
 public class TOCRepository extends TOCEntry {
+
+	private static final File TOC_TEMPLATE_MODEL = new FileResource("Models/TOCModel/toc_template_0.1.xml");
+
+	public static TOCRepository createRepositoryFromTemplate(File tocTemplateFile) throws InvalidXMLDataException,
+			InvalidObjectSpecificationException, InvalidModelException, AccessorInvocationException, FileNotFoundException, IOException,
+			SAXException, ParserConfigurationException, JDOMException {
+		TOCRepository tocTemplate = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile),
+				TOC_TEMPLATE_MODEL, new FlexoTOCBuilder(null));
+		return tocTemplate;
+	}
 
 	private DocType docType;
 
@@ -92,7 +112,7 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	private TOCRepository loadTOCTemplate(String templateName) {
-		String tocTemplateFileName = templateName + ".xml";
+		String tocTemplateFileName = templateName + ".toc.xml";
 		File tocTemplateFile = new FileResource("Config/TOCTemplates/" + tocTemplateFileName);
 		try {
 			TOCRepository tocTemplate = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile),
@@ -151,14 +171,16 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	public DocType getDocType() {
-		if (docType == null && getProject().getDocTypes().size() > 0) {
-			docType = getProject().getDocTypes().get(0);
-		}
-		if (docTypeAsString != null) {
-			DocType dt = getProject().getDocTypeNamed(docTypeAsString);
-			if (dt != null) {
-				docType = dt;
-				docTypeAsString = null;
+		if (getProject() != null) {
+			if (docType == null && getProject().getDocTypes().size() > 0) {
+				docType = getProject().getDocTypes().get(0);
+			}
+			if (docTypeAsString != null) {
+				DocType dt = getProject().getDocTypeNamed(docTypeAsString);
+				if (dt != null) {
+					docType = dt;
+					docTypeAsString = null;
+				}
 			}
 		}
 		return docType;
@@ -173,6 +195,9 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	public String getDocTypeAsString() {
+		if (getProject() == null) {
+			return docTypeAsString;
+		}
 		if (getDocType() != null) {
 			return getDocType().getName();
 		} else {

@@ -54,6 +54,9 @@ public class AddDocTypeInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddDocType>() {
 			@Override
 			public boolean run(ActionEvent e, AddDocType action) {
+				if (action.getNewName() != null) {
+					return true;
+				}
 				ParameterDefinition pd[] = new ParameterDefinition[1];
 				pd[0] = new TextFieldParameter("name", "name", "");
 				AskParametersDialog d = AskParametersDialog.createAskParametersDialog(null, null,
