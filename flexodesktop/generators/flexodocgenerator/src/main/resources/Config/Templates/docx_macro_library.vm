@@ -805,8 +805,10 @@ if there is an associated screen make a hyperlink to the screen.
     #if($templateName)
     	#if(${_entry.getRenderSectionTitle()})
         	#set($newEntryLevel = $_entry.getLevel() + 1)
+        #else
+            #set($newEntryLevel = $_entry.getLevel())
         #end
-        #set($passedObject = $generator.getAccessedModelObject($_entry)))
+        #set($passedObject = $generator.getAccessedModelObject($_entry))
     	${generator.log($templateName, $passedObject)}
         #render($passedObject $newEntryLevel $templateName $_entry)
         ##render($generator.getCondition($_entry) $newEntryLevel $templateName $_entry)
