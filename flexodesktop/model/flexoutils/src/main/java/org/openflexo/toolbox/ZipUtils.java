@@ -34,6 +34,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ZipUtils {
@@ -82,16 +83,23 @@ public class ZipUtils {
 				// Assume directories are stored parents first then
 				// children.
 				// This is not robust, just for demonstration purposes.
-				(new File(outputDir, entry.getName().replace('\\', '/'))).mkdirs();
+				new File(outputDir, entry.getName().replace('\\', '/')).mkdirs();
 				continue;
 			}
 			File outputFile = new File(outputDir, entry.getName().replace('\\', '/'));
 			FileUtils.createNewFile(outputFile);
+			InputStream zipStream = null;
+			FileOutputStream fos = null;
 			try {
-				copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(outputFile)));
+				zipStream = zipFile.getInputStream(entry);
+				fos = new FileOutputStream(outputFile);
+				copyInputStream(zipStream, new BufferedOutputStream(fos));
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.err.println("Could not extract: " + outputFile.getAbsolutePath() + " maybe some files contains invalid characters.");
+			} finally {
+				IOUtils.closeQuietly(zipStream);
+				IOUtils.closeQuietly(fos);
 			}
 		}
 		zipFile.close();
@@ -228,7 +236,7 @@ public class ZipUtils {
 		String[] dirList = dirToZip.list();
 		for (int i = 0; i < dirList.length; i++) {
 			File f = new File(dirToZip, dirList[i]);
-			if (filter == null || (f != null && filter.accept(f))) {
+			if (filter == null || f != null && filter.accept(f)) {
 				if (f.isDirectory()) {
 					zipDir(pathPrefixSize, f, zos, progress, filter);
 				} else {
