@@ -254,6 +254,16 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 	@Override
 	public void handlesResourcesUpdate(final List<FlexoFileResource<? extends FlexoResourceData>> updatedResources) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					handlesResourcesUpdate(updatedResources);
+				}
+			});
+			return;
+		}
 		String[] options = new String[2];
 		options[0] = FlexoLocalization.localizedForKey("batch_decision");
 		options[1] = FlexoLocalization.localizedForKey("one_by_one_decidions");
@@ -415,7 +425,16 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 	}
 
 	@Override
-	protected void handleException(String unlocalizedMessage, FlexoException exception) {
+	protected void handleException(final String unlocalizedMessage, final FlexoException exception) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					handleException(unlocalizedMessage, exception);
+				}
+			});
+			return;
+		}
 		exception.printStackTrace();
 		FlexoController.showError(FlexoLocalization.localizedForKey(unlocalizedMessage));
 	}

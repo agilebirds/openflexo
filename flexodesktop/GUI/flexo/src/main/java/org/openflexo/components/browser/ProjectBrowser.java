@@ -286,6 +286,15 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * notified (for example filter status modification)
 	 */
 	public void update() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update();
+				}
+			});
+			return;
+		}
 		Vector<FlexoModelObject> selectionBeforeUpdate = null;
 		if (getSelectedObjects() != null) {
 			selectionBeforeUpdate = new Vector<FlexoModelObject>(getSelectedObjects());
