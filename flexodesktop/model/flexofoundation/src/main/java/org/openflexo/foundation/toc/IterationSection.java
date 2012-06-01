@@ -65,9 +65,11 @@ public class IterationSection extends ControlSection {
 	}
 
 	public void setIteration(TOCDataBinding iteration) {
-		iteration.setOwner(this);
-		iteration.setBindingAttribute(ControlSectionBindingAttribute.iteration);
-		iteration.setBindingDefinition(getIterationBindingDefinition());
+		if (iteration != null) {
+			iteration.setOwner(this);
+			iteration.setBindingAttribute(ControlSectionBindingAttribute.iteration);
+			iteration.setBindingDefinition(getIterationBindingDefinition());
+		}
 		this.iteration = iteration;
 		rebuildInferedBindingModel();
 	}
@@ -92,8 +94,8 @@ public class IterationSection extends ControlSection {
 			condition.setOwner(conditionalOwner);
 			condition.setBindingAttribute(ControlSectionBindingAttribute.condition);
 			condition.setBindingDefinition(getConditionBindingDefinition());
-			this.condition = condition;
 		}
+		this.condition = condition;
 	}
 
 	public String getIteratorName() {
