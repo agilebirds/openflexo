@@ -259,7 +259,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			      }
 			  }*/
 			if (_filterDeepBrowsing.get(elementType) != null) {
-				newBrowserFilter.setDeepBrowsing((_filterDeepBrowsing.get(elementType)).booleanValue());
+				newBrowserFilter.setDeepBrowsing(_filterDeepBrowsing.get(elementType).booleanValue());
 			}
 			_filters.put(elementType, newBrowserFilter);
 			notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter));
@@ -559,7 +559,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public boolean isExpansionSynchronizedElement(BrowserElement element) {
-		return ((element instanceof ExpansionSynchronizedElement) && (_expansionSynchronizedElements.contains(element)));
+		return element instanceof ExpansionSynchronizedElement && _expansionSynchronizedElements.contains(element);
 	}
 
 	/**
@@ -612,7 +612,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 */
 	protected BrowserElement[] elementForObject(FlexoModelObject object) {
 		Vector<BrowserElement> builtVector = new Vector<BrowserElement>();
-		Object found = (object != null ? _elements.get(object) : null);
+		Object found = object != null ? _elements.get(object) : null;
 		if (found instanceof BrowserElement) {
 			BrowserElement element = (BrowserElement) found;
 			builtVector.add(element);
@@ -820,7 +820,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			for (Enumeration<ExpansionSynchronizedElement> e = _expansionSynchronizedElements.elements(); e.hasMoreElements();) {
 				ExpansionSynchronizedElement element = e.nextElement();
 				TreePath path = element.getTreePath();
-				if ((element).isExpanded()) {
+				if (element.isExpanded()) {
 					_pathsToExpand.add(path);
 				} else {
 					_pathsToCollapse.add(path);
@@ -1030,8 +1030,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		Vector<ElementTypeBrowserFilter> returned = new Vector<ElementTypeBrowserFilter>();
 		for (BrowserElementType t : _filters.keySet()) {
 			ElementTypeBrowserFilter f = _filters.get(t);
-			if ((f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)
-					|| (f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
+			if (f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN
+					|| f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN) {
 				returned.add(f);
 			}
 		}
@@ -1126,9 +1126,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	@Override
 	public boolean mayRepresents(FlexoModelObject anObject) {
 		if (anObject instanceof IEWOComponent) {
-			return (_elements.get(anObject) != null) || mayRepresents(((IEWOComponent) anObject).getComponentDefinition());
+			return _elements.get(anObject) != null || mayRepresents(((IEWOComponent) anObject).getComponentDefinition());
 		}
-		return ((_elements != null) && (anObject != null) && (_elements.get(anObject) != null));
+		return _elements != null && anObject != null && _elements.get(anObject) != null;
 	}
 
 	public Vector<CustomBrowserFilter> getCustomFilters() {
@@ -1230,6 +1230,14 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		public String getLocalizedName() {
 			return FlexoLocalization.localizedForKey(name().toLowerCase());
 		}
+	}
+
+	@Override
+	public void reload(TreeNode node) {
+		if (node instanceof BrowserElement && ((BrowserElement) node).isDeleted()) {
+			return;
+		}
+		super.reload(node);
 	}
 
 	// TODO: should NOT be handled at this level
