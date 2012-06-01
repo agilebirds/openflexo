@@ -37,6 +37,7 @@ import org.openflexo.foundation.ImportException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.GeneratedDoc;
+import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.templates.action.AddCustomTemplateRepository;
 import org.openflexo.foundation.cg.templates.action.ImportTemplates;
@@ -145,51 +146,42 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 	private void importTemplatesFromDir(File tocfile) throws InvalidXMLDataException, InvalidObjectSpecificationException,
 			InvalidModelException, AccessorInvocationException, FileNotFoundException, IOException, SAXException,
 			ParserConfigurationException, JDOMException, FlexoException {
-		AddTOCRepository addToc = AddTOCRepository.actionType.makeNewEmbeddedAction(getProject().getTOCData(), null, this);
-		addToc.setTocTemplate(tocfile);
-		addToc.doAction();
-		if (!addToc.hasActionExecutionSucceeded()) {
-			throw new FlexoException(FlexoLocalization.localizedForKey("could_not_create_toc"));
-		}
-		TOCRepository toc = addToc.getNewRepository();
-		String name = tocfile.getParentFile().getName();
+		final String name = tocfile.getParentFile().getName();
 		File templatesDir = new File(tocfile.getParentFile(), "Templates");
 		File imagesDir = new File(tocfile.getParentFile(), "Images");
-		CustomCGTemplateRepository templateRepository = null;
-		if (templatesDir.exists() && templatesDir.isDirectory()) {
-			AddCustomTemplateRepository custom = AddCustomTemplateRepository.actionType.makeNewEmbeddedAction(getProject()
-					.getGeneratedDoc().getTemplates(), null, this);
-			String templateName = name + " " + FlexoLocalization.localizedForKey("templates");
-			int i = 0;
-			String attempt = templateName;
-			while (getProject().getGeneratedDoc().getTemplates().getCustomCGTemplateRepositoryForName(attempt) != null) {
-				attempt = templateName + "-" + i++;
-			}
-			templateName = attempt;
-			i = 0;
-			String templateDirName = name + "Templates";
-			FlexoProjectFile attemptFile = new FlexoProjectFile(getProject(), templateDirName);
-			while (getProject().resourceForFileName(attemptFile) != null) {
-				attemptFile = new FlexoProjectFile(getProject(), templateDirName + "-" + i++);
-			}
-			custom.setNewCustomTemplatesRepositoryName(templateName);
-			custom.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(getProject(), templateDirName));
-			custom.setRepositoryType(TemplateRepositoryType.Documentation);
-			custom.setAssociateTemplateRepository(false);
-			custom.doAction();
-			if (!custom.hasActionExecutionSucceeded() || custom.getThrownException() != null) {
-				throw new FlexoException(FlexoLocalization.localizedForKey("could_not_add_templates"));
-			}
-			templateRepository = custom.getNewCustomTemplatesRepository();
-			ImportTemplates importTemplates = ImportTemplates.actionType.makeNewEmbeddedAction(getProject().getGeneratedDoc()
-					.getTemplates().getApplicationRepository(), null, this);
-			importTemplates.setExternalTemplateDirectory(templatesDir);
-			importTemplates.setRepository(custom.getNewCustomTemplatesRepository());
-			importTemplates.doAction();
-			if (!importTemplates.hasActionExecutionSucceeded()) {
-				throw new FlexoException(FlexoLocalization.localizedForKey("could_not_import_templates"));
-			}
+		TOCRepository toc = importTOC(tocfile);
+		CustomCGTemplateRepository templateRepository = importTemplates(name, templatesDir);
+		importImages(imagesDir);
+		GenerationRepository newGeneratedCodeRepository = createGeneratedDocRepository(name, toc);
+		newGeneratedCodeRepository.setPreferredTemplateRepository(templateRepository);
+
+	}
+
+	private GenerationRepository createGeneratedDocRepository(final String name, TOCRepository toc) throws FlexoException {
+		File documentationRepository = new File(documentationGenerationDirectory, name);
+		documentationRepository.mkdirs();
+		String attempt = name;
+		int i = 0;
+		while (getProject().getGeneratedDoc().getRepositoryNamed(attempt) != null) {
+			attempt = name + "-" + i++;
 		}
+		AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewEmbeddedAction(getProject().getGeneratedDoc(), null,
+				this);
+		add.setNewGeneratedCodeRepositoryName(attempt);
+		add.setTocRepository(toc);
+		add.setNewGeneratedCodeRepositoryDirectory(documentationRepository);
+		add.setNewDocType(toc.getDocType());
+		add.setFormat(Format.DOCX);
+		add.doAction();
+
+		if (!add.hasActionExecutionSucceeded()) {
+			throw new FlexoException(FlexoLocalization.localizedForKey("could_not_create_repository"));
+		}
+		GenerationRepository newGeneratedCodeRepository = add.getNewGeneratedCodeRepository();
+		return newGeneratedCodeRepository;
+	}
+
+	private void importImages(File imagesDir) {
 		if (imagesDir.exists() && imagesDir.isDirectory()) {
 			java.io.FileFilter filter = new java.io.FileFilter() {
 
@@ -208,21 +200,63 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 				importImage.doAction();
 			}
 		}
-		File documentationRepository = new File(documentationGenerationDirectory, name);
-		documentationRepository.mkdirs();
-		AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewEmbeddedAction(getProject().getGeneratedDoc(), null,
-				this);
-		add.setNewGeneratedCodeRepositoryName(name);
-		add.setTocRepository(toc);
-		add.setNewGeneratedCodeRepositoryDirectory(documentationRepository);
-		add.setNewDocType(toc.getDocType());
-		add.setFormat(Format.DOCX);
-		add.doAction();
-		if (!add.hasActionExecutionSucceeded()) {
-			throw new FlexoException(FlexoLocalization.localizedForKey("could_not_create_repository"));
-		}
-		add.getNewGeneratedCodeRepository().setPreferredTemplateRepository(templateRepository);
+	}
 
+	private CustomCGTemplateRepository importTemplates(final String name, File templatesDir) throws FlexoException {
+		CustomCGTemplateRepository templateRepository = null;
+		if (templatesDir.exists() && templatesDir.isDirectory()) {
+			AddCustomTemplateRepository custom = AddCustomTemplateRepository.actionType.makeNewEmbeddedAction(getProject()
+					.getGeneratedDoc().getTemplates(), null, this);
+			String localizedForKey = FlexoLocalization.localizedForKey("templates");
+			String templateName = null;
+			if (name.toLowerCase().contains(localizedForKey)) {
+				templateName = name;
+			} else {
+				templateName = name + " " + localizedForKey;
+			}
+			int i = 0;
+			String attempt = templateName;
+			while (getProject().getGeneratedDoc().getTemplates().getCustomCGTemplateRepositoryForName(attempt) != null) {
+				attempt = templateName + "-" + i++;
+			}
+			templateName = attempt;
+			i = 0;
+			String templateDirName = name + "Templates";
+			FlexoProjectFile attemptFile = new FlexoProjectFile(getProject(), templateDirName);
+			while (getProject().resourceForFileName(attemptFile) != null) {
+				attemptFile = new FlexoProjectFile(getProject(), templateDirName + "-" + i++);
+			}
+			templateDirName = attemptFile.getRelativePath();
+			custom.setNewCustomTemplatesRepositoryName(templateName);
+			custom.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(getProject(), templateDirName));
+			custom.setRepositoryType(TemplateRepositoryType.Documentation);
+			custom.setAssociateTemplateRepository(false);
+			custom.doAction();
+			if (!custom.hasActionExecutionSucceeded() || custom.getThrownException() != null) {
+				throw new FlexoException(FlexoLocalization.localizedForKey("could_not_add_templates"));
+			}
+			templateRepository = custom.getNewCustomTemplatesRepository();
+			ImportTemplates importTemplates = ImportTemplates.actionType.makeNewEmbeddedAction(getProject().getGeneratedDoc()
+					.getTemplates().getApplicationRepository(), null, this);
+			importTemplates.setExternalTemplateDirectory(templatesDir);
+			importTemplates.setRepository(custom.getNewCustomTemplatesRepository());
+			importTemplates.doAction();
+			if (!importTemplates.hasActionExecutionSucceeded()) {
+				throw new FlexoException(FlexoLocalization.localizedForKey("could_not_import_templates"));
+			}
+		}
+		return templateRepository;
+	}
+
+	private TOCRepository importTOC(File tocfile) throws FlexoException {
+		AddTOCRepository addToc = AddTOCRepository.actionType.makeNewEmbeddedAction(getProject().getTOCData(), null, this);
+		addToc.setTocTemplate(tocfile);
+		addToc.doAction();
+		if (!addToc.hasActionExecutionSucceeded()) {
+			throw new FlexoException(FlexoLocalization.localizedForKey("could_not_create_toc"));
+		}
+		TOCRepository toc = addToc.getNewRepository();
+		return toc;
 	}
 
 	protected FlexoProject getProject() {

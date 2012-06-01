@@ -25,12 +25,16 @@ import java.util.logging.Logger;
 import org.openflexo.doceditor.DECst;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.action.ImportDocumentationTemplates;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ImportDocumentationTemplateInitializer extends ActionInitializer {
 
@@ -44,6 +48,18 @@ public class ImportDocumentationTemplateInitializer extends ActionInitializer {
 	@Override
 	protected DEControllerActionInitializer getControllerActionInitializer() {
 		return (DEControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoExceptionHandler getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler() {
+			@Override
+			public boolean handleException(FlexoException exception, FlexoAction action) {
+				FlexoController.notify(exception.getMessage());
+				return false;
+			}
+
+		};
 	}
 
 	@Override
