@@ -636,6 +636,42 @@ public class XMLDecoder {
 	}
 
 	/**
+	 * Decode and returns a newly created object from input stream with a builder <code>xmlStream</code> according to mapping defined in
+	 * model file <code>modelFile</code>.
+	 * 
+	 * @param modelFile
+	 *            a <code>File</code> value
+	 * @param xmlStream
+	 *            a <code>InputStream</code> value
+	 * @param stringEncoder
+	 *            a <code>StringEncoder</code> value
+	 * @return an <code>XMLSerializable</code> value
+	 * @exception InvalidXMLDataException
+	 *                if an error occurs
+	 * @exception InvalidObjectSpecificationException
+	 *                if an error occurs
+	 * @exception IOException
+	 *                if an error occurs
+	 * @exception SAXException
+	 *                if an error occurs
+	 * @exception ParserConfigurationException
+	 *                if an error occurs
+	 * @exception InvalidModelException
+	 *                if an error occurs
+	 * @exception AccessorInvocationException
+	 *                if an error occurs during accessor invocation
+	 * @throws JDOMException
+	 */
+	public static XMLSerializable decodeObjectWithMappingFile(InputStream xmlStream, File modelFile, Object builder, StringEncoder encoder)
+			throws InvalidXMLDataException, InvalidObjectSpecificationException, IOException, SAXException, ParserConfigurationException,
+			InvalidModelException, AccessorInvocationException, JDOMException {
+
+		XMLDecoder decoder = new XMLDecoder(modelFile, builder, encoder);
+		return decoder.decodeObject(xmlStream);
+
+	}
+
+	/**
 	 * Decode and returns a newly created object from string <code>xmlString</code> according to mapping defined in this
 	 * <code>XMLDecoder</code> object.
 	 * 

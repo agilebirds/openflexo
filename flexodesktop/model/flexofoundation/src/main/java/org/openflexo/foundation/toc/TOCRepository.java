@@ -79,8 +79,11 @@ public class TOCRepository extends TOCEntry {
 
 	public static TOCRepository createTOCRepositoryFromTemplate(TOCData data, File tocTemplateFile) {
 		try {
+			FlexoTOCBuilder builder = new FlexoTOCBuilder(data.getFlexoResource());
+			builder.tocData = data;
+			builder.isCloner = true;
 			TOCRepository tocRepositories = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile),
-					TOC_TEMPLATE_MODEL, new FlexoTOCBuilder(data.getFlexoResource()));
+					TOC_TEMPLATE_MODEL, builder, data.getProject().getStringEncoder());
 			return tocRepositories;
 		} catch (Exception e) {
 			e.printStackTrace();

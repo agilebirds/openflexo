@@ -108,6 +108,14 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		}
 	}
 
+	public int getDepth() {
+		if (getFatherFolder() != null) {
+			return getFatherFolder().getDepth() + 1;
+		} else {
+			return 0;
+		}
+	}
+
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
@@ -120,9 +128,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		Vector<ViewFolder> v = new Vector<ViewFolder>();
 		if (folder != null) {
 			v.add(folder);
-			Enumeration en = folder.getSubFolders().elements();
+			Enumeration<ViewFolder> en = folder.getSubFolders().elements();
 			while (en.hasMoreElements()) {
-				ViewFolder f = (ViewFolder) en.nextElement();
+				ViewFolder f = en.nextElement();
 				v.addAll(getAllSubFoldersForFolder(f));
 			}
 		}
@@ -162,9 +170,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		}
 		if (getSubFolders().size() > 0) {
 			boolean answer = false;
-			Enumeration en = getSubFolders().elements();
+			Enumeration<ViewFolder> en = getSubFolders().elements();
 			while (en.hasMoreElements() && !answer) {
-				answer = ((ViewFolder) en.nextElement()).containsShemas();
+				answer = en.nextElement().containsShemas();
 			}
 			return answer;
 		}
@@ -244,9 +252,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			return true;
 		} else {
 
-			Enumeration en = getSubFolders().elements();
+			Enumeration<ViewFolder> en = getSubFolders().elements();
 			while (en.hasMoreElements()) {
-				boolean isDeleted = ((ViewFolder) en.nextElement()).delete(def);
+				boolean isDeleted = en.nextElement().delete(def);
 				if (isDeleted) {
 					return true;
 				}
@@ -269,18 +277,18 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 		String searchedName = value;
 
-		Enumeration en = getShemas().elements();
+		Enumeration<ViewDefinition> en = getShemas().elements();
 		ViewDefinition temp = null;
 		while (en.hasMoreElements()) {
-			temp = (ViewDefinition) en.nextElement();
+			temp = en.nextElement();
 			if (searchedName.toLowerCase().equals(temp.getName().toLowerCase())) {
 				return temp;
 			}
 		}
 		ViewDefinition cur = null;
-		en = getSubFolders().elements();
-		while (en.hasMoreElements() && cur == null) {
-			cur = ((ViewFolder) en.nextElement()).getShemaNamed(searchedName);
+		Enumeration<ViewFolder> en1 = getSubFolders().elements();
+		while (en1.hasMoreElements() && cur == null) {
+			cur = en1.nextElement().getShemaNamed(searchedName);
 		}
 
 		if (cur != null && cur.getName().toLowerCase().equals(searchedName.toLowerCase())) {
@@ -350,7 +358,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	}
 
 	public void addToShemas(ViewDefinition shema) {
-		if ((shema.getFolder() != null) && (shema.getFolder() != this)) {
+		if (shema.getFolder() != null && shema.getFolder() != this) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("UNEXPECTEDELY Move shema " + shema + " from folder " + shema.getFolder().getName() + " to folder "
 						+ getName());
@@ -532,7 +540,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		 */
 		@Override
 		public int compare(ViewFolder o1, ViewFolder o2) {
-			return (o1).getName().compareTo((o2).getName());
+			return o1.getName().compareTo(o2.getName());
 		}
 	}
 

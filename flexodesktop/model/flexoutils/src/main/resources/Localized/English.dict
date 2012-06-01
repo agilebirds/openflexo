@@ -1,5 +1,5 @@
 #English
-#Thu May 31 16:09:36 CEST 2012
+#Fri Jun 01 00:59:09 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -2832,6 +2832,7 @@ import_declaration=Import declaration
 import_declarations=Import declarations
 import_denali_library=Import Denali library
 import_doc_submission_report=Import documentation submission report
+import_documentation_templates=Import documentation template
 import_eomodel=Import DataBase model
 import_external_database=Import external database
 import_external_ws=Import external service
