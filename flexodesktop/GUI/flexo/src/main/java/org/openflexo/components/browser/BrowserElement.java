@@ -312,8 +312,8 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 					elementHasBeenAdded = true;
 				} else if (_browser.requiresDeepBrowsing(newElement)) {
 					Vector<BrowserElement> childrenToRemove = new Vector<BrowserElement>();
-					for (Enumeration e = newElement.children(); e.hasMoreElements();) {
-						BrowserElement newElement2 = (BrowserElement) e.nextElement();
+					for (Enumeration<BrowserElement> e = newElement.children(); e.hasMoreElements();) {
+						BrowserElement newElement2 = e.nextElement();
 						childrenToRemove.add(newElement2);
 						newElement2._parent = this;
 						_childs.add(newElement2);
@@ -471,8 +471,8 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 			Enumeration<FlexoModelObject> en1 = expanded.elements();
 			while (en1.hasMoreElements()) {
-				Object o = en1.nextElement();
-				_browser.expand((FlexoModelObject) o, false);
+				FlexoModelObject o = en1.nextElement();
+				_browser.expand(o, false);
 			}
 		} finally {
 			_browser.resetIsRebuildingStructure();
@@ -514,7 +514,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	@Override
-	public Enumeration children() {
+	public Enumeration<BrowserElement> children() {
 		return _childs.elements();
 	}
 
@@ -530,8 +530,8 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	@Override
 	public int getIndex(TreeNode node) {
 		int returned = 0;
-		for (Enumeration e = children(); e.hasMoreElements(); returned++) {
-			if (node == (TreeNode) e.nextElement()) {
+		for (Enumeration<BrowserElement> e = children(); e.hasMoreElements(); returned++) {
+			if (node == e.nextElement()) {
 				return returned;
 			}
 		}
