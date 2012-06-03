@@ -125,7 +125,6 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
 		screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
-		screenshot.getPaintManager().disablePaintingCache();
 		screenshot.validate();
 		Dimension d = screenshot.getComputedMinimumSize();
 		d.height += 20;

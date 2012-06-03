@@ -101,7 +101,6 @@ public class DrawEdgeControl extends MouseDragControl {
 					((ProcessView) controller.getDrawingView()).setDrawEdgeAction(null);
 					DrawingView drawingView = controller.getDrawingView();
 					FGEPaintManager paintManager = drawingView.getPaintManager();
-					paintManager.invalidate(drawingView.getDrawingGraphicalRepresentation());
 					paintManager.repaint(drawingView.getDrawingGraphicalRepresentation());
 				}
 				return true;

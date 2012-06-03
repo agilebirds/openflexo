@@ -67,7 +67,7 @@ public class PrintableSwimimingLaneView extends SwimmingLaneView implements Flex
 	}
 
 	@Override
-	public void paint(Graphics graphics) {
+	public void doPaint(Graphics graphics) {
 		// logger.info("graphics="+graphics);
 		FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D) graphics);
 		super.paint(graphics);

@@ -20,6 +20,7 @@
 package org.openflexo.fge;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
 import org.openflexo.fge.geom.FGEGeometricObject;
@@ -27,6 +28,8 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.toolbox.ColorUtils;
 
 public class FGEUtils {
+
+	public static final Rectangle EMPTY_RECTANGLE = new Rectangle();
 
 	public static final double PHI = (Math.sqrt(5) + 1) / 2;
 

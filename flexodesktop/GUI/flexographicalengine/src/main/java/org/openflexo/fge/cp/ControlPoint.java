@@ -24,6 +24,7 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEGraphics;
@@ -49,7 +50,7 @@ public abstract class ControlPoint extends ControlArea<FGEPoint> {
 	public Rectangle paint(FGEGraphics graphics) {
 		if (getGraphicalRepresentation() == null) {
 			logger.warning("Unexpected null GraphicalRepresentation");
-			return null;
+			return FGEUtils.EMPTY_RECTANGLE;
 		}
 		// logger.info("paintControlPoint " + getPoint() + "style=" + graphics.getDefaultForeground() + " for " +
 		// getGraphicalRepresentation());
