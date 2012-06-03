@@ -270,7 +270,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		private void startDragging() {
-			graphicalRepresentation.notifyLabelWillMove();
+			graphicalRepresentation.markLabelMoving(true);
 		}
 
 		private void moveTo(Point newLocationInDrawingView) {
@@ -295,11 +295,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		private void stopDragging() {
-			if (getPaintManager().isPaintingCacheEnabled()) {
-				getPaintManager().removeFromTemporaryObjects(graphicalRepresentation);
-				getPaintManager().invalidate(graphicalRepresentation);
-				getPaintManager().repaint(view.getDrawingView());
-			}
+			graphicalRepresentation.markLabelMoving(true);
 		}
 	}
 

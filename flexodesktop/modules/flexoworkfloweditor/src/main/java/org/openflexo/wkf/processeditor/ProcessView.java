@@ -78,7 +78,6 @@ public class ProcessView extends DrawingView<ProcessRepresentation> implements M
 	@Override
 	public void willHide() {
 		getController().getDrawing().disableGraphicalHierarchy();
-		getPaintManager().clearPaintBuffer();
 	}
 
 	@Override
@@ -109,13 +108,12 @@ public class ProcessView extends DrawingView<ProcessRepresentation> implements M
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		boolean isBuffering = isBuffering();
-		super.paint(g);
-		if (_drawEdgeAction != null && !isBuffering) {
+	public void doUnbufferedPaint(Graphics g) {
+		super.doUnbufferedPaint(g);
+		if (_drawEdgeAction != null) {
 			_drawEdgeAction.paint(g, getController());
 		}
-		if (draggedNodePalette != null && !isBuffering) {
+		if (draggedNodePalette != null) {
 			draggedNodePalette.paint(g, getController());
 		}
 	}

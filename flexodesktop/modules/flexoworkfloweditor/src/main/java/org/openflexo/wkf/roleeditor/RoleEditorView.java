@@ -65,7 +65,6 @@ public class RoleEditorView extends DrawingView<RoleListRepresentation> implemen
 
 	@Override
 	public void willHide() {
-		getPaintManager().clearPaintBuffer();
 	}
 
 	@Override
@@ -95,13 +94,12 @@ public class RoleEditorView extends DrawingView<RoleListRepresentation> implemen
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		boolean isBuffering = isBuffering();
-		super.paint(g);
-		if (_drawRoleSpecializationAction != null && !isBuffering) {
+	public void doUnbufferedPaint(Graphics g) {
+		super.doUnbufferedPaint(g);
+		if (_drawRoleSpecializationAction != null) {
 			_drawRoleSpecializationAction.paint(g, getController());
 		}
-		if (floatingPalette != null && !isBuffering) {
+		if (floatingPalette != null) {
 			floatingPalette.paint(g, getController());
 		}
 	}

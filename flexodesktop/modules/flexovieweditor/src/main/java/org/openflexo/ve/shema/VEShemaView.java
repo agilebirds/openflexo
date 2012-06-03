@@ -62,13 +62,12 @@ public class VEShemaView extends DrawingView<VEShemaRepresentation> {
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		boolean isBuffering = isBuffering();
-		super.paint(g);
-		if (_drawEdgeAction != null && !isBuffering) {
+	public void doUnbufferedPaint(Graphics g) {
+		super.doUnbufferedPaint(g);
+		if (_drawEdgeAction != null) {
 			_drawEdgeAction.paint(g, getController());
 		}
-		if (floatingPalette != null && !isBuffering) {
+		if (floatingPalette != null) {
 			floatingPalette.paint(g, getController());
 		}
 	}

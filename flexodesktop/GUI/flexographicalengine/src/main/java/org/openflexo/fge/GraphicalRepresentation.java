@@ -624,6 +624,18 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	private List<GraphicalRepresentation<?>> orderedContainedGR = null;
 
+	private boolean labelEditing;
+
+	private boolean labelMoving;
+
+	public boolean isLabelEditing() {
+		return labelEditing;
+	}
+
+	public boolean isLabelMoving() {
+		return labelMoving;
+	}
+
 	private List<GraphicalRepresentation<?>> getOrderedContainedGR() {
 		if (!isValidated()) {
 			logger.warning("GR " + this + " is not validated");
@@ -1784,22 +1796,46 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
-	public void notifyLabelWillBeEdited() {
+	public void markLabelEditing(boolean editing) {
+		if (editing == labelEditing) {
+			return;
+		}
+		labelEditing = editing;
+		if (editing) {
+			notifyLabelWillBeEdited();
+		} else {
+			notifyLabelHasBeenEdited();
+		}
+	}
+
+	public void markLabelMoving(boolean moving) {
+		if (moving == labelMoving) {
+			return;
+		}
+		labelMoving = moving;
+		if (moving) {
+			notifyLabelWillMove();
+		} else {
+			notifyLabelHasMoved();
+		}
+	}
+
+	private void notifyLabelWillBeEdited() {
 		setChanged();
 		notifyObservers(new LabelWillEdit());
 	}
 
-	public void notifyLabelHasBeenEdited() {
+	private void notifyLabelHasBeenEdited() {
 		setChanged();
 		notifyObservers(new LabelHasEdited());
 	}
 
-	public void notifyLabelWillMove() {
+	private void notifyLabelWillMove() {
 		setChanged();
 		notifyObservers(new LabelWillMove());
 	}
 
-	public void notifyLabelHasMoved() {
+	private void notifyLabelHasMoved() {
 		setChanged();
 		notifyObservers(new LabelHasMoved());
 	}

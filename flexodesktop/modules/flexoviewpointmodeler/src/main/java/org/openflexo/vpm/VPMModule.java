@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.controller.DrawingController;
@@ -36,12 +35,8 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalCEDModule;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
@@ -129,7 +124,6 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
 		screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
-		screenshot.getPaintManager().disablePaintingCache();
 		screenshot.validate();
 		Dimension d = screenshot.getComputedMinimumSize();
 		d.height += 20;
@@ -161,7 +155,6 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
 		screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
-		screenshot.getPaintManager().disablePaintingCache();
 		screenshot.validate();
 		Dimension d = new Dimension((int) screenshot.getDrawingGraphicalRepresentation().getWidth(), (int) screenshot
 				.getDrawingGraphicalRepresentation().getHeight());

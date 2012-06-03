@@ -108,7 +108,6 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		// and freezed application in SUN's code (everything's ok with 1000 value for example)
 		// I was disgusted and stopped further investigation, but i strongly recommand not to use cache
 		// in the context of GeomEdit application
-		getPaintManager().disablePaintingCache();
 
 		treeModel = new DefaultTreeModel(aDrawing.getModel());
 		tree = new JTree(treeModel);

@@ -67,7 +67,6 @@ public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> im
 	@Override
 	public void willHide() {
 		getController().getDrawing().disableGraphicalHierarchy();
-		getPaintManager().clearPaintBuffer();
 	}
 
 	@Override
@@ -100,22 +99,12 @@ public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> im
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		boolean isBuffering = isBuffering();
-		super.paint(g);
-		/*boolean paintRoleConstraints = !isBuffering && (_swlDrawEdgeAction!=null || draggedNodePalette!=null);
-		if (paintRoleConstraints) {
-			FGEDrawingGraphics graphics = getDrawingGraphicalRepresentation().getGraphics();
-			Graphics2D g2 = (Graphics2D)g;
-			graphics.createGraphics(g2,getController());
-			for(RoleContainerGR roleGR:getController().getDrawing().getAllVisibleRoleContainers()) {
-				paintControlArea(roleGR.getLanesArea(), graphics);
-			}
-		}*/
-		if (_swlDrawEdgeAction != null && !isBuffering) {
+	public void doUnbufferedPaint(Graphics g) {
+		super.doUnbufferedPaint(g);
+		if (_swlDrawEdgeAction != null) {
 			_swlDrawEdgeAction.paint(g, getController());
 		}
-		if (draggedNodePalette != null && !isBuffering) {
+		if (draggedNodePalette != null) {
 			draggedNodePalette.paint(g, getController());
 		}
 	}

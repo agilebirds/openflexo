@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -74,27 +75,27 @@ public class SWLContainerControls extends ControlArea<FGERectangle> implements S
 
 		AffineTransform at = AffineTransform.getScaleInstance(1 / containerGR.getWidth(), 1 / containerGR.getHeight());
 
-		upDownIconsRect = (FGERectangle) (new FGERectangle(SWIMMING_LANE_BORDER - 5, containerGR.getHeight() - 31, WKFIconLibrary.MINUS
-				.getImage().getWidth(null), 29 + WKFIconLibrary.MINUS.getImage().getHeight(null), Filling.FILLED)).transform(at);
-		otherIconsRect = (FGERoundRectangle) (new FGERoundRectangle(SWIMMING_LANE_BORDER + 7, containerGR.getHeight() - 31, 37, 37, 20, 20,
-				Filling.FILLED)).transform(at);
+		upDownIconsRect = (FGERectangle) new FGERectangle(SWIMMING_LANE_BORDER - 5, containerGR.getHeight() - 31, WKFIconLibrary.MINUS
+				.getImage().getWidth(null), 29 + WKFIconLibrary.MINUS.getImage().getHeight(null), Filling.FILLED).transform(at);
+		otherIconsRect = (FGERoundRectangle) new FGERoundRectangle(SWIMMING_LANE_BORDER + 7, containerGR.getHeight() - 31, 37, 37, 20, 20,
+				Filling.FILLED).transform(at);
 		;
 
-		upIconRect = (FGERectangle) (new FGERectangle(SWIMMING_LANE_BORDER + 18, _containerGR.getHeight() - 30, WKFIconLibrary.TRIANGLE_UP
-				.getImage().getWidth(null), WKFIconLibrary.TRIANGLE_UP.getImage().getHeight(null), Filling.FILLED)).transform(at);
-		downIconRect = (FGERectangle) (new FGERectangle(SWIMMING_LANE_BORDER + 18, _containerGR.getHeight() - 10,
+		upIconRect = (FGERectangle) new FGERectangle(SWIMMING_LANE_BORDER + 18, _containerGR.getHeight() - 30, WKFIconLibrary.TRIANGLE_UP
+				.getImage().getWidth(null), WKFIconLibrary.TRIANGLE_UP.getImage().getHeight(null), Filling.FILLED).transform(at);
+		downIconRect = (FGERectangle) new FGERectangle(SWIMMING_LANE_BORDER + 18, _containerGR.getHeight() - 10,
 				WKFIconLibrary.TRIANGLE_DOWN.getImage().getWidth(null), WKFIconLibrary.TRIANGLE_DOWN.getImage().getHeight(null),
-				Filling.FILLED)).transform(at);
-		leftIconRect = (FGERectangle) (new FGERectangle(SWIMMING_LANE_BORDER + 8, _containerGR.getHeight() - 20,
+				Filling.FILLED).transform(at);
+		leftIconRect = (FGERectangle) new FGERectangle(SWIMMING_LANE_BORDER + 8, _containerGR.getHeight() - 20,
 				WKFIconLibrary.TRIANGLE_LEFT.getImage().getWidth(null), WKFIconLibrary.TRIANGLE_UP.getImage().getHeight(null),
-				Filling.FILLED)).transform(at);
-		rightIconRect = (FGERectangle) (new FGERectangle(SWIMMING_LANE_BORDER + 29, _containerGR.getHeight() - 20,
+				Filling.FILLED).transform(at);
+		rightIconRect = (FGERectangle) new FGERectangle(SWIMMING_LANE_BORDER + 29, _containerGR.getHeight() - 20,
 				WKFIconLibrary.TRIANGLE_RIGHT.getImage().getWidth(null), WKFIconLibrary.TRIANGLE_DOWN.getImage().getHeight(null),
-				Filling.FILLED)).transform(at);
-		minusIconRect = (FGERectangle) (new FGERectangle(SWIMMING_LANE_BORDER - 5, _containerGR.getHeight() - 31, WKFIconLibrary.MINUS
-				.getImage().getWidth(null), WKFIconLibrary.MINUS.getImage().getHeight(null), Filling.FILLED)).transform(at);
-		plusIconRect = (FGERectangle) (new FGERectangle(SWIMMING_LANE_BORDER - 5, _containerGR.getHeight() - 2, WKFIconLibrary.PLUS
-				.getImage().getWidth(null), WKFIconLibrary.PLUS.getImage().getHeight(null), Filling.FILLED)).transform(at);
+				Filling.FILLED).transform(at);
+		minusIconRect = (FGERectangle) new FGERectangle(SWIMMING_LANE_BORDER - 5, _containerGR.getHeight() - 31, WKFIconLibrary.MINUS
+				.getImage().getWidth(null), WKFIconLibrary.MINUS.getImage().getHeight(null), Filling.FILLED).transform(at);
+		plusIconRect = (FGERectangle) new FGERectangle(SWIMMING_LANE_BORDER - 5, _containerGR.getHeight() - 2, WKFIconLibrary.PLUS
+				.getImage().getWidth(null), WKFIconLibrary.PLUS.getImage().getHeight(null), Filling.FILLED).transform(at);
 
 	}
 
@@ -136,7 +137,7 @@ public class SWLContainerControls extends ControlArea<FGERectangle> implements S
 		getArea().transform(at).paint(drawingGraphics);*/
 
 		drawingGraphics.releaseClonedGraphics(oldGraphics);
-		return null;
+		return FGEUtils.EMPTY_RECTANGLE;
 
 	}
 

@@ -19,7 +19,6 @@
  */
 package org.openflexo.dm.view.erdiagram;
 
-import java.awt.Graphics;
 import java.util.logging.Logger;
 
 import org.openflexo.dm.view.controller.DiagramPerspective;
@@ -87,14 +86,5 @@ public class DiagramView extends DrawingView<ERDiagramRepresentation> implements
 		_drawRoleSpecializationAction = null;
 		repaint();
 	}*/
-
-	@Override
-	public void paint(Graphics g) {
-		// boolean isBuffering = isBuffering();
-		super.paint(g);
-		/*	if (_drawRoleSpecializationAction != null && !isBuffering) {
-				_drawRoleSpecializationAction.paint(g,getController());
-			}*/
-	}
 
 }

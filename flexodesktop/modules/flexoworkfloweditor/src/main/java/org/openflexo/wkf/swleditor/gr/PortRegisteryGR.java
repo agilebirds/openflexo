@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import static org.openflexo.wkf.swleditor.gr.ContainerGR.logger;
+import static org.openflexo.wkf.swleditor.gr.ContainerGR.*;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -35,6 +35,7 @@ import java.util.Vector;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
@@ -406,7 +407,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 						drawingGraphics.getGraphicalRepresentation());
 				getArea().transform(at).paint(drawingGraphics);
 				drawingGraphics.releaseClonedGraphics(oldGraphics);
-				return null;
+				return FGEUtils.EMPTY_RECTANGLE;
 			}
 		};
 		controlsArea = new SWLContainerControls(this);

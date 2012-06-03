@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
@@ -57,10 +58,6 @@ public abstract class RectPolylinAdjustableSegment extends ControlArea<FGESegmen
 	@Override
 	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
-		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-			controller.getPaintManager().invalidate(getGraphicalRepresentation());
-		}
 		initialPolylin = getPolylin().clone();
 		getConnector().setWasManuallyAdjusted(true);
 	}
@@ -68,11 +65,6 @@ public abstract class RectPolylinAdjustableSegment extends ControlArea<FGESegmen
 	@Override
 	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		super.stopDragging(controller, focusedGR);
-		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-			controller.getPaintManager().invalidate(getGraphicalRepresentation());
-			controller.getPaintManager().repaint(controller.getDrawingView());
-		}
 		getConnector().setWasManuallyAdjusted(true);
 	}
 
@@ -98,7 +90,7 @@ public abstract class RectPolylinAdjustableSegment extends ControlArea<FGESegmen
 	@SuppressWarnings("unchecked")
 	@Override
 	public Rectangle paint(FGEGraphics graphics) {
-		return null;
+		return FGEUtils.EMPTY_RECTANGLE;
 		/*if (true) return null;
 		Point p1 = drawingView.getGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(getArea().getP1(), getGraphicalRepresentation(), drawingView.getScale());
 		Point p2 = drawingView.getGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(getArea().getP2(), getGraphicalRepresentation(), drawingView.getScale());

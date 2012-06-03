@@ -503,7 +503,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 						drawingGraphics.getGraphicalRepresentation());
 				getArea().transform(at).paint(drawingGraphics);
 				drawingGraphics.releaseClonedGraphics(oldGraphics);
-				return null;
+				return FGEUtils.EMPTY_RECTANGLE;
 			}
 		};
 		controlsArea = new SWLContainerControls(this);

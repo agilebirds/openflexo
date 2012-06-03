@@ -399,27 +399,17 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 				return;
 			} else {
 				focusedFloatingLabel = aFocusedlabel;
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					// Just repaint connector
-					drawingView.getPaintManager().repaint(focusedFloatingLabel);
-				} else {
-					// @brutal mode
-					drawingView.getPaintManager().repaint(drawingView);
-				}
+				// Just repaint connector
+				drawingView.getPaintManager().repaint(focusedFloatingLabel);
 			}
 		} else {
 			GraphicalRepresentation<?> oldFocusedFloatingLabel = focusedFloatingLabel;
 			focusedFloatingLabel = aFocusedlabel;
 			if (aFocusedlabel == null || focusedFloatingLabel != aFocusedlabel) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					// Just repaint old and eventual new connector
-					drawingView.getPaintManager().repaint(oldFocusedFloatingLabel);
-					if (aFocusedlabel != null) {
-						drawingView.getPaintManager().repaint(focusedFloatingLabel);
-					}
-				} else {
-					// @brutal mode
-					drawingView.getPaintManager().repaint(drawingView);
+				// Just repaint old and eventual new connector
+				drawingView.getPaintManager().repaint(oldFocusedFloatingLabel);
+				if (aFocusedlabel != null) {
+					drawingView.getPaintManager().repaint(focusedFloatingLabel);
 				}
 			}
 			/*
@@ -489,6 +479,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		}
 		if (selectedObjects.contains(aGraphicalRepresentation)) {
 			selectedObjects.remove(aGraphicalRepresentation);
+			drawingView.clearSelectedRectangled(aGraphicalRepresentation);
 		}
 		aGraphicalRepresentation.setIsSelected(false);
 		getToolbox().update();
@@ -510,6 +501,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		stopEditionOfEditedLabelIfAny();
 		for (GraphicalRepresentation<?> gr : selectedObjects) {
 			gr.setIsSelected(false);
+			drawingView.clearSelectedRectangled(gr);
 		}
 		selectedObjects.clear();
 	}
@@ -559,6 +551,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		}
 		if (focusedObjects.contains(aGraphicalRepresentation)) {
 			focusedObjects.remove(aGraphicalRepresentation);
+			drawingView.clearFocusedRectangled(aGraphicalRepresentation);
 		}
 		aGraphicalRepresentation.setIsFocused(false);
 	}
@@ -575,6 +568,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		// stopEditionOfEditedLabelIfAny();
 		for (GraphicalRepresentation<?> gr : focusedObjects) {
 			gr.setIsFocused(false);
+			drawingView.clearFocusedRectangled(gr);
 		}
 		focusedObjects.clear();
 	}
@@ -683,14 +677,6 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			return getDrawingView().getPaintManager();
 		}
 		return null;
-	}
-
-	public void enablePaintingCache() {
-		getPaintManager().enablePaintingCache();
-	}
-
-	public void disablePaintingCache() {
-		getPaintManager().disablePaintingCache();
 	}
 
 	public String getToolTipText() {

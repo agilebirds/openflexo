@@ -20,6 +20,7 @@
 package org.openflexo.fge.view;
 
 import java.awt.Component;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -29,9 +30,43 @@ import javax.swing.JLayeredPane;
 public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<O> {
 
 	private static final Logger logger = Logger.getLogger(FGELayeredView.class.getPackage().getName());
+	private BufferedViewHelper paintDelegate;
 
 	@Override
 	public abstract DrawingView<?> getDrawingView();
+
+	public FGELayeredView() {
+		this.paintDelegate = new BufferedViewHelper(this);
+	}
+
+	@Override
+	public void delete() {
+		if (paintDelegate != null) {
+			paintDelegate.delete();
+		}
+		paintDelegate = null;
+	}
+
+	@Override
+	public final void paint(Graphics g) {
+		paintDelegate.paint(g);
+	}
+
+	@Override
+	public void superPaint(Graphics g) {
+		super.paint(g);
+	}
+
+	@Override
+	public void doUnbufferedPaint(Graphics g) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public BufferedViewHelper getPaintDelegate() {
+		return paintDelegate;
+	}
 
 	/**
 	 * Sets the layer attribute on the specified component, making it the bottommost component in that layer. Should be called before adding

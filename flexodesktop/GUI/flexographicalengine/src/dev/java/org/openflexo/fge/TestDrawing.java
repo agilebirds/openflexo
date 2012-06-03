@@ -149,7 +149,6 @@ public class TestDrawing {
 
 		final MyDrawing d = makeDrawing();
 		final DrawingController<MyDrawing> dc = new TestDrawingController(d);
-		dc.disablePaintingCache();
 		dc.getDrawingView().setName("[NO_CACHE]");
 		panel.add(new JScrollPane(dc.getDrawingView()), BorderLayout.CENTER);
 		panel.add(dc.getScalePanel(), BorderLayout.NORTH);
@@ -183,7 +182,7 @@ public class TestDrawing {
 		screenshotButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final BufferedImage screenshot = dc.getPaintManager().getScreenshot(dc.getDrawingGraphicalRepresentation());
+				final BufferedImage screenshot = dc.getDrawingView().getPaintDelegate().getBuffer();
 				JDialog screenshotDialog = new JDialog((Frame) null, false);
 				screenshotDialog.getContentPane().add(new JPanel() {
 					@Override
@@ -224,7 +223,6 @@ public class TestDrawing {
 		dialog2.pack();
 		dialog2.setVisible(true);
 		dc2.getDrawingView().setName("[CACHE]");
-		dc2.enablePaintingCache();
 
 		dc.addObserver(inspector);
 		inspector.getWindow().setVisible(true);
