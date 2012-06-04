@@ -24,8 +24,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +43,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -47,6 +51,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.DataBinding;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
@@ -311,6 +316,18 @@ public class TestDrawingEditor {
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
 
+		JMenuItem deleteItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "delete"));
+		deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		deleteItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				deleteSelection();
+			}
+		});
+
+		editMenu.add(deleteItem);
+
 		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "inspect"));
 		inspectItem.addActionListener(new ActionListener() {
 			@Override
@@ -352,6 +369,15 @@ public class TestDrawingEditor {
 
 		frame.setVisible(true);
 
+	}
+
+	protected void deleteSelection() {
+		if (currentDrawing != null) {
+			List<GraphicalRepresentation<?>> grs = currentDrawing.getEditedDrawing().getController().getSelectedObjects();
+			for (GraphicalRepresentation<?> gr : new ArrayList<GraphicalRepresentation<?>>(grs)) {
+				((MyDrawingElement<?, ?>) gr.getDrawable()).delete();
+			}
+		}
 	}
 
 	public void quit() {

@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.drawingeditor;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -31,11 +32,22 @@ public abstract class MyDrawingElement<M extends MyDrawingElement<M, G>, G exten
 
 	private MyDrawing _drawing;
 	private Vector<MyDrawingElement<?, ?>> childs;
+	private MyDrawingElement<?, ?> parent;
 	private G graphicalRepresentation;
 
 	public MyDrawingElement(MyDrawing drawing) {
 		childs = new Vector<MyDrawingElement<?, ?>>();
 		_drawing = drawing;
+	}
+
+	public void delete() {
+		for (MyDrawingElement<?, ?> child : new ArrayList<MyDrawingElement<?, ?>>(childs)) {
+			child.delete();
+		}
+		if (this.parent != null) {
+			this.parent.removeFromChilds(this);
+		}
+		graphicalRepresentation.delete();
 	}
 
 	public Vector<MyDrawingElement<?, ?>> getChilds() {
@@ -47,7 +59,15 @@ public abstract class MyDrawingElement<M extends MyDrawingElement<M, G>, G exten
 	}
 
 	public void addToChilds(MyDrawingElement<?, ?> aChild) {
+		if (aChild.parent == this) {
+			return;
+		}
+		if (aChild.parent != null) {
+			aChild.parent.removeFromChilds(this);
+		}
+		aChild.parent = this;
 		childs.add(aChild);
+
 		// System.out.println("Add "+aChild+" isDeserializing="+isDeserializing());
 		if (!isDeserializing()) {
 			getDrawing().getEditedDrawing().addDrawable(aChild, this);
@@ -55,7 +75,27 @@ public abstract class MyDrawingElement<M extends MyDrawingElement<M, G>, G exten
 	}
 
 	public void removeFromChilds(MyDrawingElement<?, ?> aChild) {
+		aChild.parent = null;
 		childs.remove(aChild);
+		getDrawing().getEditedDrawing().removeDrawable(aChild, this);
+	}
+
+	public MyDrawingElement<?, ?> getParent() {
+		return parent;
+	}
+
+	public void setParent(MyDrawingElement<?, ?> parent) {
+		if (this.parent == parent) {
+			return;
+		}
+		if (this.parent != null) {
+			this.parent.removeFromChilds(this);
+		}
+		if (parent != null) {
+			parent.addToChilds(this);
+		} else {
+			this.parent = null;
+		}
 	}
 
 	public MyDrawing getDrawing() {
