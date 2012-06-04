@@ -312,6 +312,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				((RoleEditorView) controller.getDrawingView()).resetFloatingPalette();
 				DrawingView<?> drawingView = controller.getDrawingView();
 				FGEPaintManager paintManager = drawingView.getPaintManager();
+				paintManager.invalidate(drawingView.getDrawingGraphicalRepresentation());
 				paintManager.repaint(drawingView.getDrawingGraphicalRepresentation());
 			}
 		} else {
@@ -392,10 +393,10 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	public Rectangle paint(FGEGraphics drawingGraphics) {
 		// System.out.println("Focused:"+nodeGR.getIsFocused());
 		if (roleGR.getIsSelected() && !roleGR.getIsFocused()) {
-			return FGEUtils.EMPTY_RECTANGLE;
+			return null;
 		}
 		if (/*nodeGR.getIsSelected() ||*/roleGR.isResizing() || roleGR.isMoving()) {
-			return FGEUtils.EMPTY_RECTANGLE;
+			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(roleGR, drawingGraphics.getGraphicalRepresentation());
 

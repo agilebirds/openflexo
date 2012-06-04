@@ -395,6 +395,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 				((SwimmingLaneView) controller.getDrawingView()).resetDraggedNodePalette();
 				DrawingView<?> drawingView = controller.getDrawingView();
 				FGEPaintManager paintManager = drawingView.getPaintManager();
+				paintManager.invalidate(drawingView.getDrawingGraphicalRepresentation());
 				paintManager.repaint(drawingView.getDrawingGraphicalRepresentation());
 			}
 		} else {
@@ -467,7 +468,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	@Override
 	public Rectangle paint(FGEGraphics drawingGraphics) {
 		if (!nodeGR.getIsSelected() || nodeGR.isResizing() || nodeGR.isMoving()) {
-			return FGEUtils.EMPTY_RECTANGLE;
+			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(nodeGR, drawingGraphics.getGraphicalRepresentation());
 

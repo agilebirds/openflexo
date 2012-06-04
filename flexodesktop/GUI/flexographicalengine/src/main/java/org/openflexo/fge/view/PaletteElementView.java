@@ -12,6 +12,7 @@ import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,6 +75,10 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 
 	public DrawingPalette getPalette() {
 		return getPaletteElement().getPalette();
+	}
+
+	public BufferedImage getBuffer() {
+		return getDrawingView().getPaintManager().getScreenshot(getGraphicalRepresentation());
 	}
 
 	// ===============================================================

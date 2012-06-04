@@ -51,6 +51,10 @@ public class ConnectorAdjustingControlPoint extends ControlPoint {
 	@Override
 	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
+		if (controller.getPaintManager().isPaintingCacheEnabled()) {
+			controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+		}
 	}
 
 	@Override
@@ -62,5 +66,10 @@ public class ConnectorAdjustingControlPoint extends ControlPoint {
 	@Override
 	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		super.stopDragging(controller, focusedGR);
+		if (controller.getPaintManager().isPaintingCacheEnabled()) {
+			controller.getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+			controller.getPaintManager().repaint(controller.getDrawingView());
+		}
 	}
 }

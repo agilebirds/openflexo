@@ -28,7 +28,6 @@ import java.util.Hashtable;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEIconLibrary;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
@@ -91,6 +90,10 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	@Override
 	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
+		if (controller.getPaintManager().isPaintingCacheEnabled()) {
+			controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+		}
 		initialPolylin = getPolylin().clone();
 		// getConnector().setWasManuallyAdjusted(true);
 
@@ -99,6 +102,12 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	@Override
 	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		super.stopDragging(controller, focusedGR);
+		if (controller.getPaintManager().isPaintingCacheEnabled()) {
+			controller.getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+			controller.getPaintManager().repaint(controller.getDrawingView());
+		}
+		// getConnector().setWasManuallyAdjusted(true);
 	}
 
 	@Override
@@ -126,9 +135,8 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 			p.y -= (int) (150.0d / 196.0d * pinSize);
 			graphics.drawImage(PIN, new FGEPoint(p.x, p.y));
 			// g.drawImage(FGEConstants.PIN_ICON.getImage(), ), , d, d, null);
-			return new Rectangle(p.x, p.y, pinSize, pinSize);
 		}
-		return FGEUtils.EMPTY_RECTANGLE;
+		return null;
 	}
 
 	public Image getPinForPinSize(int pinSize) {

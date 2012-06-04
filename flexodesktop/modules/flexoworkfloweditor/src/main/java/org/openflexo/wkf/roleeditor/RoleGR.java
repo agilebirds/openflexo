@@ -276,24 +276,31 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		}
 	}
 
+	private boolean isEditingLabel = false;
 	private String editingText;
 
 	// private Color textColor;
 
 	@Override
-	public void markLabelEditing(boolean editing) {
-		super.markLabelEditing(editing);
-		if (editing) {
-			editingText = getText();
-		} else {
-			editingText = null;
-			setTextNoNotification(editingText);
-		}
+	public void notifyLabelWillBeEdited() {
+		editingText = getText();
+		// textColor = getTextStyle().getColor();
+		isEditingLabel = true;
+		super.notifyLabelWillBeEdited();
+	}
+
+	@Override
+	public void notifyLabelHasBeenEdited() {
+		isEditingLabel = false;
+		setTextNoNotification(editingText);
+		editingText = null;
+		// textColor = null;
+		super.notifyLabelHasBeenEdited();
 	}
 
 	@Override
 	public String getText() {
-		if (isLabelEditing()) {
+		if (isEditingLabel) {
 			return editingText;
 		} else {
 			return getRole().getName();
@@ -302,7 +309,7 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	@Override
 	public void setTextNoNotification(String text) {
-		if (isLabelEditing()) {
+		if (isEditingLabel) {
 			editingText = text;
 			/*Role roleWithName = getRole().getRoleList().roleWithName(text); GPO: I abandon this possibility because notifications are not taken into account by textComponent during edition
 			if (roleWithName!=null && roleWithName!=getRole()) {

@@ -50,9 +50,11 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
 import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
 import org.openflexo.fge.notifications.GraphicalRepresentationRemoved;
+import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectMove;
 import org.openflexo.fge.notifications.ObjectResized;
+import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.view.listener.ShapeViewMouseListener;
@@ -63,7 +65,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	private ShapeGraphicalRepresentation<O> graphicalRepresentation;
 	private ShapeViewMouseListener mouseListener;
-	private DrawingController<?> _controller;
+	private DrawingController _controller;
 
 	private LabelView<O> _labelView;
 
@@ -141,11 +143,12 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	public synchronized void delete() {
 		logger.fine("Delete ShapeView " + Integer.toHexString(hashCode()) + " for " + getGraphicalRepresentation());
 		if (getParentView() != null) {
-			FGELayeredView<?> parentView = getParentView();
+			FGELayeredView parentView = getParentView();
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
 			parentView.revalidate();
 			if (getPaintManager() != null) {
+				getPaintManager().invalidate(getGraphicalRepresentation());
 				getPaintManager().repaint(parentView);
 			}
 		}
@@ -183,11 +186,11 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public FGELayeredView<?> getParent() {
-		return (FGELayeredView<?>) super.getParent();
+	public FGELayeredView getParent() {
+		return (FGELayeredView) super.getParent();
 	}
 
-	public FGELayeredView<?> getParentView() {
+	public FGELayeredView getParentView() {
 		return getParent();
 	}
 
@@ -266,7 +269,6 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			_labelView = new LabelView<O>(getGraphicalRepresentation(), getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView(), getLayer(), -1);
-				getParentView().revalidate();
 			}
 		}
 	}
@@ -276,16 +278,61 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public void doPaint(Graphics g) {
-		getGraphicalRepresentation().paint(g, getController());
+	public void paint(Graphics g) {
+		if (isDeleted()) {
+			return;
+		}
+		if (getPaintManager().isPaintingCacheEnabled()) {
+			if (getDrawingView().isBuffering()) {
+				// Buffering painting
+				if (getPaintManager().isTemporaryObject(getGraphicalRepresentation())) {
+					// This object is declared to be a temporary object, to be redrawn
+					// continuously, so we need to ignore it: do nothing
+					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
+						FGEPaintManager.paintPrimitiveLogger.fine("ShapeView: buffering paint, ignore: " + getGraphicalRepresentation());
+					}
+				} else {
+					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
+						FGEPaintManager.paintPrimitiveLogger.fine("ShapeView: buffering paint, draw: " + getGraphicalRepresentation()
+								+ " clip=" + g.getClip());
+					}
+					doPaint(g);
+				}
+			} else {
+				if (!getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), getGraphicalRepresentation(), getScale())) {
+					doPaint(g);
+				}
+
+				/*
+				// Use buffer
+				Image buffer = getPaintManager().getPaintBuffer();
+				Rectangle localViewBounds = g.getClipBounds();
+				Rectangle viewBoundsInDrawingView = GraphicalRepresentation.convertRectangle(getGraphicalRepresentation(), localViewBounds, getDrawingGraphicalRepresentation(), getScale());
+				//System.out.println("SHAPEVIEW  Paint buffer "+g.getClipBounds());
+				Point dp1 = localViewBounds.getLocation();
+				Point dp2 = new Point(localViewBounds.x+localViewBounds.width,localViewBounds.y+localViewBounds.height);
+				Point sp1 = viewBoundsInDrawingView.getLocation();
+				Point sp2 = new Point(viewBoundsInDrawingView.x+viewBoundsInDrawingView.width,viewBoundsInDrawingView.y+viewBoundsInDrawingView.height);
+				if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
+					FGEPaintManager.paintPrimitiveLogger.fine("ShapeView: use image buffer, copy area from "+sp1+"x"+sp2+" to "+dp1+"x"+dp2);
+				g.drawImage(buffer,
+						dp1.x,dp1.y,dp2.x,dp2.y,
+						sp1.x,sp1.y,sp2.x,sp2.y,
+						null);
+				 */
+			}
+		} else {
+			// Normal painting
+			doPaint(g);
+		}
+
+		// getGraphicalRepresentation().paint(g,getController());
+		// super.paint(g);
 	}
 
-	@Override
-	public boolean useBuffer() {
-		if (getGraphicalRepresentation().isResizing()) {
-			return false;
-		}
-		return true;
+	private void doPaint(Graphics g) {
+		getGraphicalRepresentation().paint(g, getController());
+		super.paint(g);
 	}
 
 	protected ShapeViewMouseListener makeShapeViewMouseListener() {
@@ -324,6 +371,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						add(shapeGR.makeShapeView(getController()));
 						revalidate();
 						getPaintManager().repaint(this);
+						shapeGR.notifyShapeNeedsToBeRedrawn();
 					} else if (newGR instanceof ConnectorGraphicalRepresentation) {
 						ConnectorGraphicalRepresentation<?> connectorGR = (ConnectorGraphicalRepresentation<?>) newGR;
 						add(connectorGR.makeConnectorView(getController()));
@@ -342,7 +390,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						if (view != null) {
 							remove(view);
 							revalidate();
-							getPaintDelegate().invalidateBuffer();
+							getPaintManager().invalidate(getGraphicalRepresentation());
 							getPaintManager().repaint(this);
 						} else {
 							logger.warning("Cannot find view for " + removedGR);
@@ -352,7 +400,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						if (view != null) {
 							remove(view);
 							revalidate();
-							getPaintDelegate().invalidateBuffer();
+							getPaintManager().invalidate(getGraphicalRepresentation());
 							getPaintManager().repaint(this);
 						} else {
 							logger.warning("Cannot find view for " + removedGR);
@@ -377,13 +425,27 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getController().removeFromSelectedObjects(getGraphicalRepresentation());
 					}
 					delete();
+				} else if (notification instanceof ObjectWillMove) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
 				} else if (notification instanceof ObjectMove) {
 					relocateView();
 					if (getParentView() != null) {
 						getPaintManager().repaint(this);
 					}
+				} else if (notification instanceof ObjectHasMoved) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());
+					}
 				} else if (notification instanceof ObjectWillResize) {
-					getPaintDelegate().invalidateBuffer();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
 				} else if (notification instanceof ObjectResized) {
 					resizeView();
 					if (getParentView() != null) {
@@ -392,19 +454,31 @@ public class ShapeView<O> extends FGELayeredView<O> {
 					}
 				} else if (notification instanceof ObjectHasResized) {
 					resizeView();
-					getPaintDelegate().invalidateBuffer();
-					getPaintManager().repaint(getParentView());
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());
+					}
 				} else if (notification instanceof ShapeNeedsToBeRedrawn) {
-					getPaintDelegate().invalidateBuffer();
-					getPaintManager().repaint(this);
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						/*getPaintManager().resetTemporaryObjects();
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());*/
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().repaint(this);
+					}
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
 					updateLayer();
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
 					getPaintManager().repaint(this);
 					/*if (getParentView() != null) {
 						getParentView().revalidate();
 						getPaintManager().repaint(this);
 					}*/
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
 					updateLabelView();
@@ -415,15 +489,34 @@ public class ShapeView<O> extends FGELayeredView<O> {
 					if (getParent() != null && getLabelView() != null) {
 						getParent().moveToFront(getLabelView());
 					}
+					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 					getPaintManager().repaint(this);
 
 					requestFocusInWindow();
 					// requestFocus();
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
 					updateVisibility();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+							getPaintManager().invalidate(getGraphicalRepresentation());
+						}
+					}
 					getPaintManager().repaint(this);
 
+				} else {
+					// revalidate();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+							getPaintManager().invalidate(getGraphicalRepresentation());
+						}
+					}
+					getPaintManager().repaint(this);
+					// revalidate();
+					// getPaintManager().repaint(this);
 				}
+			} else {
+				revalidate();
+				getPaintManager().repaint(this);
 			}
 		}
 	}
@@ -461,28 +554,33 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	private void captureScreenshot() {
 		JComponent lbl = this;
-		Rectangle bounds = new Rectangle(getBounds());
-		if (getLabelView() != null) {
-			bounds = bounds.union(getLabelView().getBounds());
-		}
-		screenshot = new BufferedImage(bounds.width, bounds.height, java.awt.image.BufferedImage.TYPE_INT_ARGB_PRE);// buffered image
-																													// reference passing
-																													// the label's ht
-																													// and width
-		Graphics2D graphics = screenshot.createGraphics();// creating the graphics for buffered image
-		graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)); // Sets the Composite for the Graphics2D
-																							// context
-		lbl.print(graphics); // painting the graphics to label
-		/*if (this.getGraphicalRepresentation().getBackground() instanceof BackgroundImage) {
-			graphics.drawImage(((BackgroundImage)this.getGraphicalRepresentation().getBackground()).getImage(),0,0,null);
-		}*/
-		if (getLabelView() != null) {
-			Rectangle r = getLabelView().getBounds();
-			getLabelView().print(graphics.create(r.x - bounds.x, r.y - bounds.y, r.width, r.height));
-		}
-		graphics.dispose();
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Captured image on " + this);
+		getController().disablePaintingCache();
+		try {
+			Rectangle bounds = new Rectangle(getBounds());
+			if (getLabelView() != null) {
+				bounds = bounds.union(getLabelView().getBounds());
+			}
+			screenshot = new BufferedImage(bounds.width, bounds.height, java.awt.image.BufferedImage.TYPE_INT_ARGB_PRE);// buffered image
+																														// reference passing
+																														// the label's ht
+																														// and width
+			Graphics2D graphics = screenshot.createGraphics();// creating the graphics for buffered image
+			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)); // Sets the Composite for the Graphics2D
+																								// context
+			lbl.print(graphics); // painting the graphics to label
+			/*if (this.getGraphicalRepresentation().getBackground() instanceof BackgroundImage) {
+				graphics.drawImage(((BackgroundImage)this.getGraphicalRepresentation().getBackground()).getImage(),0,0,null);
+			}*/
+			if (getLabelView() != null) {
+				Rectangle r = getLabelView().getBounds();
+				getLabelView().print(graphics.create(r.x - bounds.x, r.y - bounds.y, r.width, r.height));
+			}
+			graphics.dispose();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Captured image on " + this);
+			}
+		} finally {
+			getController().enablePaintingCache();
 		}
 	}
 

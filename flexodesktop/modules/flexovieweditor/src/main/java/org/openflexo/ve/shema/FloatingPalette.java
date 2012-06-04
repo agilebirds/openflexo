@@ -320,6 +320,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				((VEShemaView) controller.getDrawingView()).resetFloatingPalette();
 				DrawingView<?> drawingView = controller.getDrawingView();
 				FGEPaintManager paintManager = drawingView.getPaintManager();
+				paintManager.invalidate(drawingView.getDrawingGraphicalRepresentation());
 				paintManager.repaint(drawingView.getDrawingGraphicalRepresentation());
 			}
 		} else {
@@ -382,7 +383,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		}
 
 		if (availableConnectors.size() == 1) {
-			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getOEController()
+			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller).getOEController()
 					.getEditor());
 			action.setLinkScheme(availableConnectors.firstElement());
 			action.setFromShape(from);
@@ -400,7 +401,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
-						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller
+						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller)
 								.getOEController().getEditor());
 						action.setLinkScheme(linkScheme);
 						action.setFromShape(from);
@@ -428,7 +429,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			popup.show((Component) controller.getDrawingView().viewForObject(controller.getGraphicalRepresentation(target)),
 					(int) dropLocation.x, (int) dropLocation.y);
 		} else {
-			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, controller.getOEController()
+			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, (controller).getOEController()
 					.getEditor());
 			action.setToShape(to);
 			action.setAutomaticallyCreateConnector(true);
@@ -542,10 +543,10 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	public Rectangle paint(FGEGraphics drawingGraphics) {
 		// System.out.println("Focused:"+nodeGR.getIsFocused());
 		if (shapeGR.getIsSelected() && !shapeGR.getIsFocused()) {
-			return FGEUtils.EMPTY_RECTANGLE;
+			return null;
 		}
 		if (/*nodeGR.getIsSelected() ||*/shapeGR.isResizing() || shapeGR.isMoving()) {
-			return FGEUtils.EMPTY_RECTANGLE;
+			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(shapeGR, drawingGraphics.getGraphicalRepresentation());
 

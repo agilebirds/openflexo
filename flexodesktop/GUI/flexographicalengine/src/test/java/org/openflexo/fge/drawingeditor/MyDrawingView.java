@@ -46,9 +46,10 @@ public class MyDrawingView extends DrawingView<EditedDrawing> {
 	}
 
 	@Override
-	public void doUnbufferedPaint(Graphics g) {
-		super.doUnbufferedPaint(g);
-		if (_drawEdgeAction != null) {
+	public void paint(Graphics g) {
+		boolean isBuffering = isBuffering();
+		super.paint(g);
+		if (_drawEdgeAction != null && !isBuffering) {
 			_drawEdgeAction.paint(g, getController());
 		}
 	}

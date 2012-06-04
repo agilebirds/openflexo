@@ -42,7 +42,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -301,7 +300,7 @@ public abstract class FGEGraphics {
 
 	public Rectangle drawControlPoint(double x, double y, int size) {
 		if (currentForeground.getNoStroke()) {
-			return FGEUtils.EMPTY_RECTANGLE;
+			return null;
 		}
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 		p.x -= size;

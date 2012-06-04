@@ -57,6 +57,12 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.LabelHasMoved;
+import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.fge.notifications.ObjectHasMoved;
+import org.openflexo.fge.notifications.ObjectHasResized;
+import org.openflexo.fge.notifications.ObjectWillMove;
+import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.LabelViewMouseListener;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -153,10 +159,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 	private boolean initialized = false;
 
-	private BufferedViewHelper paintDelegate;
-
 	public LabelView(GraphicalRepresentation<O> graphicalRepresentation, DrawingController<?> controller, FGEView<?> delegateView) {
-		this.paintDelegate = new BufferedViewHelper(this);
 		this.controller = controller;
 		this.graphicalRepresentation = graphicalRepresentation;
 		this.delegateView = delegateView;
@@ -311,45 +314,13 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
-	public boolean useBuffer() {
-		if (isDeleted()) {
-			return false;
-		}
-		if (isEditing) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	public void paint(Graphics g) {
-		paintDelegate.paint(g);
-	}
-
-	@Override
-	public void doPaint(Graphics g) {
-		if (isDeleted()) {
-			return;
-		}
-		if (!getGraphicalRepresentation().hasText()) {
+		boolean skipPaint = getPaintManager().isPaintingCacheEnabled() && getPaintManager().getDrawingView().isBuffering()
+				&& (getPaintManager().isTemporaryObject(getGraphicalRepresentation()) || isEditing);
+		if (skipPaint || isDeleted() || !getGraphicalRepresentation().hasText()) {
 			return;
 		}
 		super.paint(g);
-	}
-
-	@Override
-	public void superPaint(Graphics g) {
-
-	}
-
-	@Override
-	public void doUnbufferedPaint(Graphics g) {
-		// Nothing to do
-	}
-
-	@Override
-	public BufferedViewHelper getPaintDelegate() {
-		return paintDelegate;
 	}
 
 	@Override
@@ -396,6 +367,19 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel) {
 					updateBounds();
 					getPaintManager().repaint(this);
+				} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
+						|| notification instanceof LabelWillMove) {
+					setDoubleBuffered(false);
+					if (notification instanceof LabelWillMove) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+				} else if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
+						|| notification instanceof LabelHasMoved) {
+					setDoubleBuffered(true);
+					if (notification instanceof LabelHasMoved) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+					}
 				}
 			}
 		}
@@ -571,7 +555,6 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		} else {
 			textComponent.setText("");
 		}
-		getPaintDelegate().invalidateBuffer();
 		updateBounds();
 	}
 
@@ -611,8 +594,9 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (getController() != null) {
 			getController().setEditedLabel(LabelView.this);
 		}
-		getGraphicalRepresentation().markLabelEditing(true);
-		getPaintDelegate().invalidateBuffer();
+		getGraphicalRepresentation().notifyLabelWillBeEdited();
+		getPaintManager().invalidate(getGraphicalRepresentation());
+		getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 		repaint();
 	}
 
@@ -641,8 +625,9 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (getGraphicalRepresentation() == null || getGraphicalRepresentation().isDeleted()) {
 			return;
 		}
-		getGraphicalRepresentation().markLabelEditing(false);
-		getPaintDelegate().invalidateBuffer();
+		getGraphicalRepresentation().notifyLabelHasBeenEdited();
+		getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+		getPaintManager().invalidate(getGraphicalRepresentation());
 		getPaintManager().repaint(this);
 	}
 

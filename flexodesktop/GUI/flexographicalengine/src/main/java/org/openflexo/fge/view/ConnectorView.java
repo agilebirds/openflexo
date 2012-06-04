@@ -21,6 +21,7 @@ package org.openflexo.fge.view;
 
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
@@ -28,14 +29,13 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.notifications.ConnectorModified;
@@ -49,7 +49,7 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.ConnectorViewMouseListener;
 
-public class ConnectorView<O> extends JComponent implements FGEView<O> {
+public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 	private static final Logger logger = Logger.getLogger(ConnectorView.class.getPackage().getName());
 
@@ -59,11 +59,8 @@ public class ConnectorView<O> extends JComponent implements FGEView<O> {
 
 	private LabelView<O> _labelView;
 
-	private BufferedViewHelper paintDelegate;
-
 	public ConnectorView(ConnectorGraphicalRepresentation<O> aGraphicalRepresentation, DrawingController<?> controller) {
 		super();
-		this.paintDelegate = new BufferedViewHelper(this);
 		_controller = controller;
 		graphicalRepresentation = aGraphicalRepresentation;
 		updateLabelView();
@@ -105,6 +102,7 @@ public class ConnectorView<O> extends JComponent implements FGEView<O> {
 			parentView.remove(this);
 			parentView.revalidate();
 			if (getPaintManager() != null) {
+				getPaintManager().invalidate(getGraphicalRepresentation());
 				getPaintManager().repaint(parentView);
 			}
 		}
@@ -198,6 +196,14 @@ public class ConnectorView<O> extends JComponent implements FGEView<O> {
 		newHeight = getGraphicalRepresentation().getViewHeight(getScale());
 		if (newWidth != getWidth() || newHeight != getHeight()) {
 			setSize(newWidth, newHeight);
+			if (getDrawingView().isBuffering()) {
+				/* Something very bad happened here:
+				 * the view is resizing while drawing view is beeing buffered:
+				 * all the things we were buffering may be wrong now, we have to
+				 * start buffering again
+				 */
+				getDrawingView().startBufferingAgain();
+			}
 		}
 	}
 
@@ -247,40 +253,55 @@ public class ConnectorView<O> extends JComponent implements FGEView<O> {
 
 	@Override
 	public void paint(Graphics g) {
-		paintDelegate.paint(g);
-	}
-
-	@Override
-	public boolean useBuffer() {
-		ShapeGraphicalRepresentation<?> startGR = getGraphicalRepresentation().getStartObject();
-		if (startGR.isResizing()) {
-			return false;
+		if (isDeleted()) {
+			return;
 		}
-		ShapeGraphicalRepresentation<?> endGR = getGraphicalRepresentation().getEndObject();
-		if (endGR.isResizing()) {
-			return false;
+		if (getPaintManager().isPaintingCacheEnabled()) {
+			if (getDrawingView().isBuffering()) {
+				// Buffering painting
+				if (getPaintManager().isTemporaryObject(getGraphicalRepresentation())) {
+					// This object is declared to be a temporary object, to be redrawn
+					// continuously, so we need to ignore it: do nothing
+					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
+						FGEPaintManager.paintPrimitiveLogger
+								.fine("ConnectorView: buffering paint, ignore: " + getGraphicalRepresentation());
+					}
+				} else {
+					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
+						FGEPaintManager.paintPrimitiveLogger.fine("ConnectorView: buffering paint, draw: " + getGraphicalRepresentation()
+								+ " clip=" + g.getClip());
+					}
+					getGraphicalRepresentation().paint(g, getController());
+					super.paint(g);
+				}
+			} else {
+				getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), getGraphicalRepresentation(), getScale());
+
+				/*
+				// Use buffer
+				Image buffer = getPaintManager().getPaintBuffer();
+				Rectangle localViewBounds = g.getClipBounds();
+				Rectangle viewBoundsInDrawingView = GraphicalRepresentation.convertRectangle(getGraphicalRepresentation(), localViewBounds, getDrawingGraphicalRepresentation(), getScale());
+				Point dp1 = localViewBounds.getLocation();
+				Point dp2 = new Point(localViewBounds.x+localViewBounds.width-1,localViewBounds.y+localViewBounds.height-1);
+				Point sp1 = viewBoundsInDrawingView.getLocation();
+				Point sp2 = new Point(viewBoundsInDrawingView.x+viewBoundsInDrawingView.width-1,viewBoundsInDrawingView.y+viewBoundsInDrawingView.height-1);
+				if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
+					FGEPaintManager.paintPrimitiveLogger.fine("ConnectorView: use image buffer, copy area from "+sp1+"x"+sp2+" to "+dp1+"x"+dp2);
+				g.drawImage(buffer,
+						dp1.x,dp1.y,dp2.x,dp2.y,
+						sp1.x,sp1.y,sp2.x,sp2.y,
+						null);
+				 */
+			}
+		} else {
+			// Normal painting
+			getGraphicalRepresentation().paint(g, getController());
+			super.paint(g);
 		}
-		return endGR.isMoving() == startGR.isMoving();
-	}
 
-	@Override
-	public void doUnbufferedPaint(Graphics g) {
-		// Nothing to do here
-	}
-
-	@Override
-	public void doPaint(Graphics g) {
-		getGraphicalRepresentation().paint(g, getController());
-	}
-
-	@Override
-	public void superPaint(Graphics g) {
-
-	}
-
-	@Override
-	public BufferedViewHelper getPaintDelegate() {
-		return paintDelegate;
+		// super.paint(g);
+		// getGraphicalRepresentation().paint(g,getController());
 	}
 
 	protected ConnectorViewMouseListener makeConnectorViewMouseListener() {
@@ -312,8 +333,11 @@ public class ConnectorView<O> extends JComponent implements FGEView<O> {
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
 				if (notification instanceof ConnectorModified) {
-					getPaintDelegate().invalidateBuffer();
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
 					relocateAndResizeView();
+					revalidate();
 					getPaintManager().repaint(this);
 				} else if (notification instanceof GraphicalRepresentationDeleted) {
 					GraphicalRepresentation<?> deletedGR = ((GraphicalRepresentationDeleted) notification)
@@ -332,21 +356,37 @@ public class ConnectorView<O> extends JComponent implements FGEView<O> {
 					delete();
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
 					updateLayer();
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
 					getPaintManager().repaint(this);
+					/*if (getParentView() != null) {
+						getParentView().revalidate();
+						getPaintManager().repaint(this);
+					}*/
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
+					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
 					updateLabelView();
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
 					updateVisibility();
-					getPaintDelegate().invalidateBuffer();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+							getPaintManager().invalidate(getGraphicalRepresentation());
+						}
+					}
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == ConnectorGraphicalRepresentation.Parameters.applyForegroundToSymbols) {
 					getPaintManager().repaint(this);
 				} else if (notification instanceof ObjectWillMove) {
-					getPaintDelegate().invalidateBuffer();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
 				} else if (notification instanceof ObjectMove) {
 					relocateView();
 					if (getParentView() != null) {
@@ -354,19 +394,38 @@ public class ConnectorView<O> extends JComponent implements FGEView<O> {
 						getPaintManager().repaint(this);
 					}
 				} else if (notification instanceof ObjectHasMoved) {
-					getPaintDelegate().invalidateBuffer();
-					getPaintManager().repaint(getParentView());
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());
+					}
 				} else if (notification instanceof ObjectWillResize) {
-					getPaintDelegate().invalidateBuffer();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
 				} else if (notification instanceof ObjectResized) {
 					relocateView();
 					if (getParentView() != null) {
+						// getParentView().revalidate();
 						getPaintManager().repaint(this);
 					}
 				} else if (notification instanceof ObjectHasResized) {
-					getPaintDelegate().invalidateBuffer();
-					getPaintManager().repaint(getParentView());
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());
+					}
+				} else {
+					// revalidate();
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+					getPaintManager().repaint(this);
 				}
+			} else {
+				revalidate();
+				getPaintManager().repaint(this);
 			}
 		}
 	}

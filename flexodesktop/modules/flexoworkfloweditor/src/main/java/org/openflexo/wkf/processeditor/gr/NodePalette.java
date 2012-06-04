@@ -380,6 +380,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 				((ProcessView) controller.getDrawingView()).resetDraggedNodePalette();
 				DrawingView<?> drawingView = controller.getDrawingView();
 				FGEPaintManager paintManager = drawingView.getPaintManager();
+				paintManager.invalidate(drawingView.getDrawingGraphicalRepresentation());
 				paintManager.repaint(drawingView.getDrawingGraphicalRepresentation());
 			}
 		} else {
@@ -452,10 +453,10 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	public Rectangle paint(FGEGraphics drawingGraphics) {
 		// System.out.println("Focused:"+nodeGR.getIsFocused());
 		if (nodeGR.getIsSelected() && !nodeGR.getIsFocused()) {
-			return FGEUtils.EMPTY_RECTANGLE;
+			return null;
 		}
 		if (/*nodeGR.getIsSelected() ||*/nodeGR.isResizing() || nodeGR.isMoving()) {
-			return FGEUtils.EMPTY_RECTANGLE;
+			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(nodeGR, drawingGraphics.getGraphicalRepresentation());
 

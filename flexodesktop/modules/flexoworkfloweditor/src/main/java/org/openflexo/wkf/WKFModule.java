@@ -330,6 +330,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 			if (screenshot instanceof ProcessView) {
 				((ProcessView) screenshot).getDrawingGraphicalRepresentation().setShowGrid(false);
 			}
+			screenshot.getPaintManager().disablePaintingCache();
 			screenshot.validate();
 			Dimension d = screenshot.getComputedMinimumSize();
 			d.height += 20;

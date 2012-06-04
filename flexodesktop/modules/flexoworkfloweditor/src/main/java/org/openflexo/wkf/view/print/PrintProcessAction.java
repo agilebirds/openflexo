@@ -56,12 +56,12 @@ public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, Flexo
 
 		@Override
 		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return object != null && !object.isImported();
+			return (object != null) && !object.isImported();
 		}
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return object != null;
+			return (object != null);
 		}
 
 	};
@@ -83,7 +83,7 @@ public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, Flexo
 				if (anAction.getFocusedObject() == null) {
 					anAction.setFocusedObject(controller.getCurrentFlexoProcess());
 				}
-				return anAction.getFocusedObject() != null;
+				return (anAction.getFocusedObject() != null);
 			}
 		}, controller.getModule());
 
@@ -100,6 +100,7 @@ public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, Flexo
 							return new PrintableSwimimingLaneView(drawing, this, getWKFController());
 						}
 					};
+					printController.getDrawingView().getPaintManager().disablePaintingCache();
 					printController.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
 					printableView = (FlexoPrintableComponent) printController.getDrawingView();
 				} else {
@@ -110,11 +111,12 @@ public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, Flexo
 							return new PrintableProcessView(drawing, this, getWKFController());
 						}
 					};
+					printController.getDrawingView().getPaintManager().disablePaintingCache();
 					printController.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
 					printableView = (FlexoPrintableComponent) printController.getDrawingView();
 				}
 				PrintProcessPreviewDialog dialog = new PrintProcessPreviewDialog(controller, printableView);
-				return dialog.getStatus() == PrintProcessPreviewDialog.ReturnedStatus.CONTINUE_PRINTING;
+				return (dialog.getStatus() == PrintProcessPreviewDialog.ReturnedStatus.CONTINUE_PRINTING);
 			}
 		}, controller.getModule());
 

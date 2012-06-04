@@ -67,10 +67,10 @@ public class PrintableProcessView extends ProcessView implements FlexoPrintableC
 	}
 
 	@Override
-	public void doPaint(Graphics graphics) {
+	public void paint(Graphics graphics) {
 		// logger.info("graphics="+graphics);
 		FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D) graphics);
-		super.doPaint(graphics);
+		super.paint(graphics);
 		_printableDelegate.paintPostlude((Graphics2D) graphics, params);
 	}
 
