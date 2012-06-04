@@ -365,9 +365,11 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 						getPaintManager().repaint(this);
 					}*/
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
 					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
+					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
 					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
