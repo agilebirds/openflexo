@@ -813,12 +813,7 @@
 			<dependency>
 				<groupId>com.hp.hpl.jena</groupId>
 				<artifactId>jena</artifactId>
-				<version>2.5.6</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hp.hpl.jena</groupId>
-				<artifactId>arq</artifactId>
-				<version>2.4</version>
+				<version>2.6.4</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.velocity</groupId>
