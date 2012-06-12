@@ -219,8 +219,8 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 				FlexoResourceCenter resourceCenter = FlexoResourceCenterService.instance().getFlexoResourceCenter();
 				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
 				FlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
-						"http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
-				// "http://www.cpmf.org/ontologies/cpmfInstance");
+				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
+						"http://www.cpmf.org/ontologies/cpmfInstance");
 				o.loadWhenUnloaded();
 				FIBOntologyBrowser selector = new FIBOntologyBrowser(o);
 				selector.setOntology(o);
