@@ -19,8 +19,10 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -399,6 +401,25 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		for (OntologyStatement statement : getStatements()) {
 			if (statement instanceof DataPropertyStatement) {
 				DataPropertyStatement s = (DataPropertyStatement) statement;
+				if (s.getProperty() == property) {
+					returned.add(s);
+				}
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return all restriction statements related to supplied property
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public List<RestrictionStatement> getRestrictionStatements(OntologyProperty property) {
+		List<RestrictionStatement> returned = new ArrayList<RestrictionStatement>();
+		for (OntologyStatement statement : getStatements()) {
+			if (statement instanceof RestrictionStatement) {
+				RestrictionStatement s = (RestrictionStatement) statement;
 				if (s.getProperty() == property) {
 					returned.add(s);
 				}

@@ -45,9 +45,11 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 
 	private boolean superDomainStatementWereAppened = false;
 	private boolean superRangeStatementWereAppened = false;
+	private boolean storageLocationsAreUpToDate = false;
 
 	private final Vector<OntologyProperty> superProperties;
 	private final Vector<OntologyProperty> subProperties;
+	private final ArrayList<OntologyClass> storageLocations;
 
 	private final boolean isAnnotationProperty;
 
@@ -56,6 +58,7 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 		ontProperty = anOntProperty;
 		superProperties = new Vector<OntologyProperty>();
 		subProperties = new Vector<OntologyProperty>();
+		storageLocations = new ArrayList<OntologyClass>();
 		isAnnotationProperty = anOntProperty.isAnnotationProperty();
 		domainStatementList = new ArrayList<DomainStatement>();
 		rangeStatementList = new ArrayList<RangeStatement>();
@@ -221,8 +224,10 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 		super.updateOntologyStatements(anOntResource);
 		superDomainStatementWereAppened = false;
 		superRangeStatementWereAppened = false;
+		storageLocationsAreUpToDate = false;
 		domainStatementList.clear();
 		rangeStatementList.clear();
+		storageLocations.clear();
 		domainList = null;
 		rangeList = null;
 		for (OntologyStatement s : getSemanticStatements()) {
@@ -325,6 +330,28 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 			return null;
 		}
 		return getRangeStatement().getRange();
+	}
+
+	/**
+	 * Return list of OntologyClass where this property is used in a restriction, those storage location are convenient places where to
+	 * represent a property while browsing an ontology
+	 * 
+	 * @return
+	 */
+	public List<OntologyClass> getStorageLocations() {
+		if (!storageLocationsAreUpToDate) {
+			for (FlexoOntology o : getOntology().getAllImportedOntologies()) {
+				for (OntologyClass c : o.getClasses()) {
+					if (c.getRestrictionStatements(this).size() > 0) {
+						if (!storageLocations.contains(c)) {
+							storageLocations.add(c);
+						}
+					}
+				}
+			}
+			storageLocationsAreUpToDate = true;
+		}
+		return storageLocations;
 	}
 
 	/**

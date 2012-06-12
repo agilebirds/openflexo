@@ -100,6 +100,7 @@ public class UtilsIconLibrary {
 	public static final ImageIcon CLOCK_ICON = new ImageIconResource("Icons/Clock.gif");
 	public static final ImageIcon SEPARATOR_ICON = new ImageIconResource("Icons/Utils/Separator.gif");
 	public static final ImageIcon SEARCH_ICON = new ImageIconResource("Icons/Utils/Search.png");
+	public static final ImageIcon CANCEL_ICON = new ImageIconResource("Icons/Utils/Cancel.png");
 
 	// Flags
 	public static final ImageIcon UK_FLAG = new ImageIconResource("Icons/Lang/uk-flag.gif");

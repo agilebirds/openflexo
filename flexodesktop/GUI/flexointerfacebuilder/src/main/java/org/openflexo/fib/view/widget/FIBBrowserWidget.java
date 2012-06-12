@@ -68,6 +68,9 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	public FIBBrowserWidget(FIBBrowser fibBrowser, FIBController controller) {
 		super(fibBrowser, controller);
+
+		logger.info("%%%%%%%% new FIBBrowserWidget for controller=" + controller);
+
 		_fibBrowser = fibBrowser;
 
 		_dynamicComponent = new JPanel();

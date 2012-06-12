@@ -291,6 +291,10 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		return returned;
 	}
 
+	public Multimap<Object, BrowserCell> getContents() {
+		return contents;
+	}
+
 	public Iterator<Object> retrieveContents() {
 		return contents.keys().iterator();
 	}

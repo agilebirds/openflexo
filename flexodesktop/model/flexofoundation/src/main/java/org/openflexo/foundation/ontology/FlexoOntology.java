@@ -261,7 +261,65 @@ public abstract class FlexoOntology extends OntologyObject {
 		return alternativeLocalFile;
 	}
 
+	/**
+	 * Return a vector of all imported ontologies in the context of this ontology. This method is recursive. Ontologies are imported only
+	 * once. This ontology is also appened to returned list.
+	 * 
+	 * @return
+	 */
+	public Vector<FlexoOntology> getAllImportedOntologies() {
+		Vector<FlexoOntology> returned = new Vector<FlexoOntology>();
+		appendToAllImportedOntologies(this, returned);
+		return returned;
+	}
+
+	private static void appendToAllImportedOntologies(FlexoOntology o, Vector<FlexoOntology> v) {
+		if (!v.contains(o)) {
+			v.add(o);
+			for (FlexoOntology importedOntology : o.getImportedOntologies()) {
+				appendToAllImportedOntologies(importedOntology, v);
+			}
+		}
+	}
+
+	/**
+	 * Return a vector of imported ontologies in the context of this ontology
+	 * 
+	 * @return
+	 */
 	public Vector<FlexoOntology> getImportedOntologies() {
+		if (getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI)) {
+			// OWL ontology should at least import RDF and RDFS ontologies
+			if (!importedOntologies.contains(getOntologyLibrary().getRDFOntology())) {
+				importedOntologies.add(getOntologyLibrary().getRDFOntology());
+			}
+			if (!importedOntologies.contains(getOntologyLibrary().getRDFSOntology())) {
+				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
+			}
+		} else if (getURI().equals(OntologyLibrary.RDF_ONTOLOGY_URI)) {
+			// RDF ontology should at least import RDFS ontology
+			/*if (!importedOntologies.contains(getOntologyLibrary().getRDFSOntology())) {
+				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
+			}*/
+		} else if (getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+			// RDFS ontology has no requirement
+		} else {
+			// All other ontologies should at least import OWL ontology
+			if (!importedOntologies.contains(getOntologyLibrary().getOWLOntology())) {
+				importedOntologies.add(getOntologyLibrary().getOWLOntology());
+			}
+		}
+
+		/*if (importedOntologies.size() == 0) {
+			if (getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI)) {
+				importedOntologies.add(getOntologyLibrary().getRDFOntology());
+				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
+			} else if (getURI().equals(OntologyLibrary.RDF_ONTOLOGY_URI)) {
+				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
+			} else if (!getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+				importedOntologies.add(getOntologyLibrary().getOWLOntology());
+			}
+		}*/
 		return importedOntologies;
 	}
 
