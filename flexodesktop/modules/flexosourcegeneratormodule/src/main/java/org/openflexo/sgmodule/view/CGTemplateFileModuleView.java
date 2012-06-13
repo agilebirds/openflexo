@@ -266,7 +266,7 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.CODE_GENERATION_PERSPECTIVE;
 	}
 

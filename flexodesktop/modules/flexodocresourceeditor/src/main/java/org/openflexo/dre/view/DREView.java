@@ -75,7 +75,7 @@ public abstract class DREView<O extends DRMObject> extends CompoundTabularView<O
 	}
 
 	@Override
-	public FlexoPerspective<DRMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getDREController().DRE_PERSPECTIVE;
 	}
 

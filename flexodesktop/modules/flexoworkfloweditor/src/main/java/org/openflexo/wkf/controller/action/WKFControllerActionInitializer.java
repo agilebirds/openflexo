@@ -19,15 +19,8 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-import javax.help.BadIDException;
-
-import org.openflexo.action.HelpAction;
-import org.openflexo.drm.DocItem;
-import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -67,12 +60,8 @@ import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
-import org.openflexo.help.FlexoHelp;
-import org.openflexo.inspector.InspectableObject;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.controller.WKFController;
@@ -84,8 +73,8 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 
 	protected WKFController _wkfController;
 
-	public WKFControllerActionInitializer(WKFController controller) {
-		super(controller);
+	public WKFControllerActionInitializer(InteractiveFlexoEditor editor, WKFController controller) {
+		super(editor, controller);
 		_wkfController = controller;
 	}
 
@@ -101,87 +90,85 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 	public void initializeActions() {
 		super.initializeActions();
 
-		new WKFSetPropertyInitializer(this).init();
+		new WKFSetPropertyInitializer(this);
 
 		// Disabled copy/paste
 		if (WKFCst.CUT_COPY_PASTE_ENABLED) {
-			new WKFCopyInitializer(this).init();
-			new WKFCutInitializer(this).init();
-			new WKFPasteInitializer(this).init();
+			new WKFCopyInitializer(this);
+			new WKFCutInitializer(this);
+			new WKFPasteInitializer(this);
 		}
-		new WKFDeleteInitializer(this).init();
-		new WKFSelectAllInitializer(this).init();
-		new WKFMoveInitializer(this).init();
-		new AddSubProcessInitializer(this).init();
-		new OpenEmbeddedProcessInitializer(this).init();
-		new OpenOperationComponentInitializer(this).init();
-		new SetAndOpenOperationComponentInitializer(this).init();
-		new OpenOperationLevelInitializer(this).init();
-		new OpenActionLevelInitializer(this).init();
-		new OpenExecutionPetriGraphInitializer(this).init();
-		new OpenLoopedPetriGraphInitializer(this).init();
-		new OpenPortRegisteryInitializer(this).init();
-		new ShowHidePortmapRegisteryInitializer(this).init();
-		new ShowHidePortmapInitializer(this).init();
-		new AddRoleInitializer(this).init();
-		new AddRoleSpecializationInitializer(this).init();
-		new DeleteRoleInitializer(this).init();
-		new DeleteRoleSpecializationInitializer(this).init();
-		new AddStatusInitializer(this).init();
-		new AddPortInitializer(this).init();
+		new WKFDeleteInitializer(this);
+		new WKFSelectAllInitializer(this);
+		new WKFMoveInitializer(this);
+		new AddSubProcessInitializer(this);
+		new OpenEmbeddedProcessInitializer(this);
+		new OpenOperationComponentInitializer(this);
+		new SetAndOpenOperationComponentInitializer(this);
+		new OpenOperationLevelInitializer(this);
+		new OpenActionLevelInitializer(this);
+		new OpenExecutionPetriGraphInitializer(this);
+		new OpenLoopedPetriGraphInitializer(this);
+		new OpenPortRegisteryInitializer(this);
+		new ShowHidePortmapRegisteryInitializer(this);
+		new ShowHidePortmapInitializer(this);
+		new AddRoleInitializer(this);
+		new AddRoleSpecializationInitializer(this);
+		new DeleteRoleInitializer(this);
+		new DeleteRoleSpecializationInitializer(this);
+		new AddStatusInitializer(this);
+		new AddPortInitializer(this);
 
-		new ImportRolesInitializer(this).init();
-		new ImportProcessesInitializer(this).init();
-		new ConvertIntoLocalRoleInitializer(this).init();
-		new ConvertIntoLocalProcessInitializer(this).init();
+		new ImportRolesInitializer(this);
+		new ImportProcessesInitializer(this);
+		new ConvertIntoLocalRoleInitializer(this);
+		new ConvertIntoLocalProcessInitializer(this);
 
 		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			new AddServiceInterfaceInitializer(this).init();
-			new AddServiceOperationInitializer(this).init();
+			new AddServiceInterfaceInitializer(this);
+			new AddServiceOperationInitializer(this);
+			new ShowExecutionControlGraphsInitializer(this);
 		}
 
-		new MakeActivityGroupInitializer(this).init();
-		new UngroupActivitiesInitializer(this).init();
+		new MakeActivityGroupInitializer(this);
+		new UngroupActivitiesInitializer(this);
 
-		new BindButtonsToActionNodeInitializer(this).init();
-		new ViewNextOperationsInitializer(this).init();
-		new PrintProcessInitializer(this).init();
-		new DropWKFElementInitializer(this).init();
-		new CreateNodeInitializer(this).init();
-		new CreatePreconditionInitializer(this).init();
-		new CreateEdgeInitializer(this).init();
-		new CreateAssociationInitializer(this).init();
-		new MakeFlexoProcessContextFreeInitializer(this).init();
-		new MoveFlexoProcessInitializer(this).init();
-		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			new ShowExecutionControlGraphsInitializer(this).init();
-		}
-		new ShowRolesInitializer(this).init();
-		new HideRoleInitializer(this).init();
-		new AddProcessMetricsDefinitionInitializer(this).init();
-		new AddProcessMetricsInitializer(this).init();
-		new AddActivityMetricsDefinitionInitializer(this).init();
-		new AddActivityMetricsInitializer(this).init();
-		new AddOperationMetricsDefinitionInitializer(this).init();
-		new AddOperationMetricsInitializer(this).init();
-		new AddEdgeMetricsDefinitionInitializer(this).init();
-		new AddEdgeMetricsInitializer(this).init();
-		new AddArtefactMetricsDefinitionInitializer(this).init();
-		new AddArtefactMetricsInitializer(this).init();
-		new DeleteMetricsDefinitionInitializer(this).init();
-		new DeleteMetricsInitializer(this).init();
+		new BindButtonsToActionNodeInitializer(this);
+		new ViewNextOperationsInitializer(this);
+		new PrintProcessInitializer(this);
+		new DropWKFElementInitializer(this);
+		new CreateNodeInitializer(this);
+		new CreatePreconditionInitializer(this);
+		new CreateEdgeInitializer(this);
+		new CreateAssociationInitializer(this);
+		new MakeFlexoProcessContextFreeInitializer(this);
+		new MoveFlexoProcessInitializer(this);
+		new ShowRolesInitializer(this);
+		new HideRoleInitializer(this);
+		new AddProcessMetricsDefinitionInitializer(this);
+		new AddProcessMetricsInitializer(this);
+		new AddActivityMetricsDefinitionInitializer(this);
+		new AddActivityMetricsInitializer(this);
+		new AddOperationMetricsDefinitionInitializer(this);
+		new AddOperationMetricsInitializer(this);
+		new AddEdgeMetricsDefinitionInitializer(this);
+		new AddEdgeMetricsInitializer(this);
+		new AddArtefactMetricsDefinitionInitializer(this);
+		new AddArtefactMetricsInitializer(this);
+		new DeleteMetricsDefinitionInitializer(this);
+		new DeleteMetricsInitializer(this);
 
-		new AddToProcessFolderInitializer(this).init();
-		new RemoveFromProcessFolderInitializer(this).init();
-		new CreateProcessFolderInitializer(this).init();
-		new DeleteProcessFolderInitializer(this).init();
-		new MoveProcessFolderInitializer(this).init();
-		new OpenProcessInNewWindowInitializer(this).init();
+		new AddToProcessFolderInitializer(this);
+		new RemoveFromProcessFolderInitializer(this);
+		new CreateProcessFolderInitializer(this);
+		new DeleteProcessFolderInitializer(this);
+		new MoveProcessFolderInitializer(this);
+		new OpenProcessInNewWindowInitializer(this);
 
-		new AddToResponsibleRoleInitializer(this).init();
-		new AddToAccountableRoleInitializer(this).init();
-		new AddToConsultedRoleInitializer(this).init();
-		new AddToInformedRoleInitializer(this).init();
+		new AddToResponsibleRoleInitializer(this);
+		new AddToAccountableRoleInitializer(this);
+		new AddToConsultedRoleInitializer(this);
+		new AddToInformedRoleInitializer(this);
 
 		registerAction(RemoveFromResponsibleRole.actionType);
 		registerAction(RemoveFromAccountableRole.actionType);
@@ -253,47 +240,6 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		AbstractActivityNode.removeFromInformedRoleActionizer = new FlexoActionizer<RemoveFromInformedRole, Role, AbstractActivityNode>(
 				RemoveFromInformedRole.actionType, getEditor());
 
-	}
-
-	private InteractiveFlexoEditor getEditor() {
-		return getWKFController().getEditor();
-	}
-
-	@Override
-	protected void initializeHelpAction() {
-		super.initializeHelpAction();
-		getController().getEditor().registerFinalizerFor(HelpAction.actionType, new FlexoActionFinalizer<HelpAction>() {
-			@Override
-			public boolean run(ActionEvent e, HelpAction action) {
-				if (!(action.getFocusedObject() instanceof InspectableObject)) {
-					return false;
-				}
-				// Hack for WKFInvaders
-				if (action.getFocusedObject() instanceof AbstractActivityNode) {
-					if (((AbstractActivityNode) action.getFocusedObject()).getName().equals(WKFCst.WKFInvaders)) {
-						System.out.println("Switching to WKFInvaders...");
-						getWKFController().switchToPerspective(getWKFController().WKF_INVADERS);
-						return false;
-					}
-				}
-				if (action.getFocusedObject() instanceof InspectableObject) {
-					DocItem item = DocResourceManager.instance().getDocItemFor((InspectableObject) action.getFocusedObject());
-					if (item != null) {
-						try {
-							logger.info("Trying to display help for " + item.getIdentifier());
-							FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
-							FlexoHelp.getHelpBroker().setDisplayed(true);
-						} catch (BadIDException exception) {
-							FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_help_available_for") + " "
-									+ item.getIdentifier());
-							return false;
-						}
-						return true;
-					}
-				}
-				return true;
-			}
-		}, getController().getModule());
 	}
 
 }

@@ -31,7 +31,7 @@ import org.openflexo.foundation.FlexoModelObject;
  * 
  * @author sguerin
  */
-public abstract class FlexoGUIAction<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> extends
+public abstract class FlexoGUIAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> extends
 		FlexoAction<A, T1, T2> {
 
 	protected FlexoGUIAction(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {

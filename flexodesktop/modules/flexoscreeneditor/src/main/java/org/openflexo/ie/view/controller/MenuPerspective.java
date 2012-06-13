@@ -33,7 +33,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class MenuPerspective extends FlexoPerspective<FlexoItemMenu> {
+class MenuPerspective extends FlexoPerspective {
 
 	private final IEController _controller;
 	private MenuEditorBrowserView _menuEditorBrowserView;

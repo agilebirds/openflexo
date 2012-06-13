@@ -40,7 +40,7 @@ public class AvailablePerspectives extends JPanel {
 
 	protected final FlexoController controller;
 
-	private Hashtable<FlexoPerspective<?>, FlexoPerspectiveView> views;
+	private Hashtable<FlexoPerspective, FlexoPerspectiveView> views;
 
 	/**
      *
@@ -48,11 +48,11 @@ public class AvailablePerspectives extends JPanel {
 	public AvailablePerspectives(FlexoController controller) {
 		super(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		this.controller = controller;
-		views = new Hashtable<FlexoPerspective<?>, FlexoPerspectiveView>();
+		views = new Hashtable<FlexoPerspective, FlexoPerspectiveView>();
 
-		Enumeration<FlexoPerspective<?>> en = controller.getPerspectives().elements();
+		Enumeration<FlexoPerspective> en = controller.getPerspectives().elements();
 		while (en.hasMoreElements()) {
-			FlexoPerspective<?> p = en.nextElement();
+			FlexoPerspective p = en.nextElement();
 			FlexoPerspectiveView view = new FlexoPerspectiveView(controller, this, p);
 			add(view);
 			views.put(p, view);
@@ -64,12 +64,12 @@ public class AvailablePerspectives extends JPanel {
 	}
 
 	public void refresh() {
-		Vector<FlexoPerspective<?>> displayedPerspective = new Vector<FlexoPerspective<?>>();
+		Vector<FlexoPerspective> displayedPerspective = new Vector<FlexoPerspective>();
 		removeAll();
 		add(new JLabel(IconLibrary.NAVIGATION_CLOSE_LEFT));
-		Enumeration<FlexoPerspective<?>> en = controller.getPerspectives().elements();
+		Enumeration<FlexoPerspective> en = controller.getPerspectives().elements();
 		while (en.hasMoreElements()) {
-			FlexoPerspective<?> p = en.nextElement();
+			FlexoPerspective p = en.nextElement();
 			FlexoPerspectiveView v = views.get(p);
 			if (v == null) {
 				views.put(p, v = new FlexoPerspectiveView(controller, this, p));

@@ -10,7 +10,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public abstract class FPSPerspective extends FlexoPerspective<CVSFile> {
+public abstract class FPSPerspective extends FlexoPerspective {
 	/**
 	 * 
 	 */

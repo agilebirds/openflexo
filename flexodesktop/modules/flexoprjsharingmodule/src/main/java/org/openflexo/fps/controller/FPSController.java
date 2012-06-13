@@ -460,7 +460,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	public FlexoPerspective<CVSFile> getCurrentPerspective() {
+	public FlexoPerspective getCurrentPerspective() {
 		return (FPSPerspective) super.getCurrentPerspective();
 	}
 

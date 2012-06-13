@@ -21,7 +21,6 @@ package org.openflexo.rm;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -43,8 +42,6 @@ import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
 
 /**
  * Table model representing ResourceManager model
@@ -115,29 +112,6 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 
 	public abstract int getPreferedColumnSize(int col);
 
-	protected String modulesRetainingResource(FlexoResource<? extends FlexoResourceData> resource) {
-		String returned = null;
-		Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
-		while (en.hasMoreElements()) {
-			FlexoModule module = en.nextElement();
-			if (module.isRetaining(resource)) {
-				if (returned == null) {
-					returned = module.getModule().getShortName();
-				} else {
-					returned += "," + module.getModule().getShortName();
-				}
-			}
-		}
-		if (returned == null) {
-			returned = "";
-		}
-		return returned;
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
 	/**
 	 * Implements
 	 * 
@@ -168,7 +142,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 
 		@Override
 		public int getColumnCount() {
-			return 12;
+			return 11;
 		}
 
 		public FlexoStorageResource storageResourceAt(int rowIndex) {
@@ -188,18 +162,16 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 4) {
 				return FlexoLocalization.localizedForKey("is_modified");
 			} else if (columnIndex == 5) {
-				return FlexoLocalization.localizedForKey("retain_by_modules");
-			} else if (columnIndex == 6) {
 				return FlexoLocalization.localizedForKey("last_memory_update");
-			} else if (columnIndex == 7) {
+			} else if (columnIndex == 6) {
 				return FlexoLocalization.localizedForKey("file_name");
-			} else if (columnIndex == 8) {
+			} else if (columnIndex == 7) {
 				return FlexoLocalization.localizedForKey("file_format");
-			} else if (columnIndex == 9) {
+			} else if (columnIndex == 8) {
 				return FlexoLocalization.localizedForKey("last_saved_on");
-			} else if (columnIndex == 10) {
+			} else if (columnIndex == 9) {
 				return FlexoLocalization.localizedForKey("version");
-			} else if (columnIndex == 11) {
+			} else if (columnIndex == 10) {
 				return FlexoLocalization.localizedForKey("active");
 			}
 			return "???";
@@ -219,18 +191,16 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			case 4:
 				return 80; // is_modified
 			case 5:
-				return 150; // retain_by_modules
-			case 6:
 				return 120; // last_memory_update
-			case 7:
+			case 6:
 				return 130; // file_name
-			case 8:
+			case 7:
 				return 80; // file_format
-			case 9:
+			case 8:
 				return 120; // last_saved_on
-			case 10:
+			case 9:
 				return 50; // version
-			case 11:
+			case 10:
 				return 50; // active
 			default:
 				return 50;
@@ -260,8 +230,6 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 9) {
 				return String.class;
 			} else if (columnIndex == 10) {
-				return String.class;
-			} else if (columnIndex == 11) {
 				return Boolean.class;
 			}
 			return String.class;
@@ -283,8 +251,6 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 4) {
 				return new Boolean(storageResourceAt(rowIndex).isModified());
 			} else if (columnIndex == 5) {
-				return modulesRetainingResource(resourceAt(rowIndex));
-			} else if (columnIndex == 6) {
 				Date date = storageResourceAt(rowIndex).lastMemoryUpdate();
 				if (date != null) {
 					if (date.getTime() == 0) {
@@ -294,15 +260,15 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 7) {
+			} else if (columnIndex == 6) {
 				if (resourceAt(rowIndex) instanceof FlexoFileResource) {
 					return ((FlexoFileResource) resourceAt(rowIndex)).getResourceFile().getRelativePath();
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 8) {
+			} else if (columnIndex == 7) {
 				return resourceAt(rowIndex).getResourceFormat().getIdentifier();
-			} else if (columnIndex == 9) {
+			} else if (columnIndex == 8) {
 				if (resourceAt(rowIndex) instanceof FlexoFileResource) {
 					Date date = ((FlexoFileResource) resourceAt(rowIndex)).getDiskLastModifiedDate();
 					if (date != null) {
@@ -316,13 +282,13 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 10) {
+			} else if (columnIndex == 9) {
 				if (resourceAt(rowIndex) instanceof FlexoXMLStorageResource) {
 					return ((FlexoXMLStorageResource) resourceAt(rowIndex)).getXmlVersion().toString();
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 11) {
+			} else if (columnIndex == 10) {
 				return new Boolean(storageResourceAt(rowIndex).isActive());
 			}
 			return null;
@@ -365,16 +331,14 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 3) {
 				return FlexoLocalization.localizedForKey("is_loaded");
 			} else if (columnIndex == 4) {
-				return FlexoLocalization.localizedForKey("retain_by_modules");
-			} else if (columnIndex == 5) {
 				return FlexoLocalization.localizedForKey("last_import_date");
-			} else if (columnIndex == 6) {
+			} else if (columnIndex == 5) {
 				return FlexoLocalization.localizedForKey("file_name");
-			} else if (columnIndex == 7) {
+			} else if (columnIndex == 6) {
 				return FlexoLocalization.localizedForKey("file_format");
-			} else if (columnIndex == 8) {
+			} else if (columnIndex == 7) {
 				return FlexoLocalization.localizedForKey("disk_update");
-			} else if (columnIndex == 9) {
+			} else if (columnIndex == 8) {
 				return FlexoLocalization.localizedForKey("active");
 			}
 			return "???";
@@ -392,16 +356,14 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			case 3:
 				return 80; // is_loaded
 			case 4:
-				return 150; // retain_by_modules
-			case 5:
 				return 120; // last_import_date
-			case 6:
+			case 5:
 				return 130; // file_name
-			case 7:
+			case 6:
 				return 80; // file_format
-			case 8:
+			case 7:
 				return 120; // disk_upate
-			case 9:
+			case 8:
 				return 50; // active
 			default:
 				return 50;
@@ -427,8 +389,6 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 7) {
 				return String.class;
 			} else if (columnIndex == 8) {
-				return String.class;
-			} else if (columnIndex == 9) {
 				return Boolean.class;
 			}
 			return String.class;
@@ -449,8 +409,6 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 3) {
 				return new Boolean(importedResourceAt(rowIndex).isLoaded());
 			} else if (columnIndex == 4) {
-				return modulesRetainingResource(resourceAt(rowIndex));
-			} else if (columnIndex == 5) {
 				Date date = importedResourceAt(rowIndex).getLastImportDate();
 				if (date != null) {
 					if (date.getTime() == 0) {
@@ -460,15 +418,15 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 6) {
+			} else if (columnIndex == 5) {
 				if (resourceAt(rowIndex) instanceof FlexoFileResource) {
 					return ((FlexoFileResource) resourceAt(rowIndex)).getResourceFile().getRelativePath();
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 7) {
+			} else if (columnIndex == 6) {
 				return resourceAt(rowIndex).getResourceFormat().getIdentifier();
-			} else if (columnIndex == 8) {
+			} else if (columnIndex == 7) {
 				if (resourceAt(rowIndex) instanceof FlexoFileResource) {
 					Date date = ((FlexoFileResource) resourceAt(rowIndex)).getDiskLastModifiedDate();
 					if (date != null) {
@@ -482,8 +440,8 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 9) {
-				return new Boolean(importedResourceAt(rowIndex).isActive());
+			} else if (columnIndex == 8) {
+				return Boolean.valueOf(importedResourceAt(rowIndex).isActive());
 			}
 			return null;
 		}
@@ -527,16 +485,14 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 4) {
 				return FlexoLocalization.localizedForKey("is_generated");
 			} else if (columnIndex == 5) {
-				return FlexoLocalization.localizedForKey("retain_by_modules");
-			} else if (columnIndex == 6) {
 				return FlexoLocalization.localizedForKey("last_generated_date");
-			} else if (columnIndex == 7) {
+			} else if (columnIndex == 6) {
 				return FlexoLocalization.localizedForKey("file_name");
-			} else if (columnIndex == 8) {
+			} else if (columnIndex == 7) {
 				return FlexoLocalization.localizedForKey("file_format");
-			} else if (columnIndex == 9) {
+			} else if (columnIndex == 8) {
 				return FlexoLocalization.localizedForKey("disk_update");
-			} else if (columnIndex == 10) {
+			} else if (columnIndex == 9) {
 				return FlexoLocalization.localizedForKey("active");
 			}
 			return "???";
@@ -556,16 +512,14 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			case 4:
 				return 80; // is_generated
 			case 5:
-				return 150; // retain_by_modules
-			case 6:
 				return 120; // last_generation_update
-			case 7:
+			case 6:
 				return 130; // file_name
-			case 8:
+			case 7:
 				return 80; // file_format
-			case 9:
+			case 8:
 				return 120; // disk_update
-			case 10:
+			case 9:
 				return 50; // active
 			default:
 				return 50;
@@ -593,8 +547,6 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 8) {
 				return String.class;
 			} else if (columnIndex == 9) {
-				return String.class;
-			} else if (columnIndex == 10) {
 				return Boolean.class;
 			}
 			return String.class;
@@ -617,8 +569,6 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			} else if (columnIndex == 4) {
 				return new Boolean(generatedResourceAt(rowIndex).isLoaded());
 			} else if (columnIndex == 5) {
-				return modulesRetainingResource(resourceAt(rowIndex));
-			} else if (columnIndex == 6) {
 				Date date = generatedResourceAt(rowIndex).getLastGenerationDate();
 				if (date != null) {
 					if (date.getTime() == 0) {
@@ -628,15 +578,15 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 7) {
+			} else if (columnIndex == 6) {
 				if (resourceAt(rowIndex) instanceof FlexoFileResource) {
 					return ((FlexoFileResource) resourceAt(rowIndex)).getResourceFile().getRelativePath();
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 8) {
+			} else if (columnIndex == 7) {
 				return resourceAt(rowIndex).getResourceFormat().getIdentifier();
-			} else if (columnIndex == 9) {
+			} else if (columnIndex == 8) {
 				if (resourceAt(rowIndex) instanceof FlexoFileResource) {
 					Date date = ((FlexoFileResource) resourceAt(rowIndex)).getDiskLastModifiedDate();
 					if (date != null) {
@@ -650,7 +600,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 				} else {
 					return "-";
 				}
-			} else if (columnIndex == 10) {
+			} else if (columnIndex == 9) {
 				return new Boolean(generatedResourceAt(rowIndex).isActive());
 			}
 			return null;

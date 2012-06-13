@@ -37,7 +37,6 @@ import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * Represents the controller of a FIBInspector (FIBComponent) in the context of Swing graphical inspection
@@ -49,28 +48,17 @@ public class FIBInspectorController extends FlexoFIBController {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBInspectorController.class.getPackage().getName());
 
-	private InteractiveFlexoEditor editor;
-
 	public FIBInspectorController(FIBComponent component) {
 		super(component);
 	}
 
-	public boolean displayInspectorTabForContext(String context) {
-		if (getEditor() != null && getEditor().getActiveModule() != null && getEditor().getActiveModule().getFlexoController() != null) {
-			return getEditor().getActiveModule().getFlexoController().displayInspectorTabForContext(context);
-		}
-		logger.warning("No controller defined here !");
-		return false;
-	}
-
-	@Override
-	public InteractiveFlexoEditor getEditor() {
-		return editor;
-	}
-
-	public void setEditor(InteractiveFlexoEditor editor) {
-		this.editor = editor;
-	}
+	// public boolean displayInspectorTabForContext(String context) {
+	// if (getEditor() != null && getEditor().getActiveModule() != null && getEditor().getActiveModule().getFlexoController() != null) {
+	// return getEditor().getActiveModule().getFlexoController().displayInspectorTabForContext(context);
+	// }
+	// logger.warning("No controller defined here !");
+	// return false;
+	// }
 
 	@Override
 	public Object getValue(BindingVariable variable) {

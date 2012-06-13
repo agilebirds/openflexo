@@ -19,7 +19,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class DREPerspective extends FlexoPerspective<DRMObject> {
+class DREPerspective extends FlexoPerspective {
 
 	/**
 	 * 

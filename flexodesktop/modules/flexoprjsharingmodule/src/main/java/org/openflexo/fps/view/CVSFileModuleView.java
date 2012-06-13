@@ -462,7 +462,7 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 	}
 
 	@Override
-	public FlexoPerspective<CVSFile> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.getCurrentPerspective();
 	}
 

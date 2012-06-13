@@ -457,7 +457,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	@Override
-	public FlexoPerspective<ComponentInstance> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getIEController().COMPONENT_EDITOR_PERSPECTIVE;
 	}
 

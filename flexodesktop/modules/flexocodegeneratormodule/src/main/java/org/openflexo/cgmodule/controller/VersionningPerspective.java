@@ -24,7 +24,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class VersionningPerspective extends FlexoPerspective<FlexoModelObject> {
+class VersionningPerspective extends FlexoPerspective {
 
 	/**
 	 * 

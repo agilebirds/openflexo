@@ -20,7 +20,6 @@
 package org.openflexo.foundation.action;
 
 import java.awt.event.ActionEvent;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -38,21 +37,13 @@ import org.openflexo.foundation.rm.StorageResourceData;
  * 
  * @author sguerin
  */
-public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject>
+public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject>
 		extends FlexoAction<A, T1, T2> {
-	private WeakHashMap<FlexoStorageResource, Object> _modifiedResources;
+	private WeakHashMap<FlexoStorageResource<?>, Object> _modifiedResources;
 
 	public FlexoUndoableAction(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		_modifiedResources = new WeakHashMap<FlexoStorageResource, Object>();
-	}
-
-	public final void undoAction() throws UndoException {
-		try {
-			undoAction(null);
-		} catch (FlexoException e) {
-			throw new UndoException(e);
-		}
+		_modifiedResources = new WeakHashMap<FlexoStorageResource<?>, Object>();
 	}
 
 	protected FlexoProject getProject() {
@@ -68,7 +59,7 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public final A doAction(ActionEvent e) throws FlexoException {
+	public final A doActionWithContext() throws FlexoException {
 		// Let's keep in memory the modified resources
 		_modifiedResources.clear();
 		if (getProject() != null) {
@@ -80,7 +71,7 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 		}
 		A action;
 		try {
-			action = super.doAction(e);
+			action = super.doActionWithContext();
 		} catch (FlexoException e1) {
 			_modifiedResources.clear();
 			throw e1;
@@ -96,56 +87,10 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 			}
 		}
 
-		// Finally, we remove the modified storage resources that have been modified by the embedded undoable actions
-		if (getProject() != null) {
-			Enumeration<FlexoAction<?, ?, ?>> en = getEmbbededActionsExecutedDuringCore().elements();
-			while (en.hasMoreElements()) {
-				FlexoAction<?, ?, ?> action2 = en.nextElement();
-				if (action2 instanceof FlexoUndoableAction) {
-					Iterator<FlexoStorageResource> i = ((FlexoUndoableAction) action2)._modifiedResources.keySet().iterator();
-					while (i.hasNext()) {
-						FlexoStorageResource r = i.next();
-						if (_modifiedResources.get(r) != null) {
-							i.remove();
-						}
-					}
-				}
-			}
-
-			en = getEmbbededActionsExecutedDuringInitializer().elements();
-			while (en.hasMoreElements()) {
-				FlexoAction<?, ?, ?> action2 = en.nextElement();
-				if (action2 instanceof FlexoUndoableAction) {
-					Iterator<FlexoStorageResource> i = ((FlexoUndoableAction) action2)._modifiedResources.keySet().iterator();
-					// while (en.hasMoreElements()) {
-					while (i.hasNext()) {
-						FlexoStorageResource r = i.next();
-						if (_modifiedResources.get(r) != null) {
-							i.remove();
-						}
-					}
-				}
-			}
-
-			en = getEmbbededActionsExecutedDuringFinalizer().elements();
-			while (en.hasMoreElements()) {
-				FlexoAction<?, ?, ?> action2 = en.nextElement();
-				if (action2 instanceof FlexoUndoableAction) {
-					Iterator<FlexoStorageResource> i = ((FlexoUndoableAction) action2)._modifiedResources.keySet().iterator();
-					// while (en.hasMoreElements()) {
-					while (i.hasNext()) {
-						FlexoStorageResource r = i.next();
-						if (_modifiedResources.get(r) != null) {
-							i.remove();
-						}
-					}
-				}
-			}
-		}
 		return action;
 	}
 
-	public final void undoAction(ActionEvent e) throws FlexoException {
+	public final void undoAction() throws FlexoException {
 		if (getUndoInitializer() != null) {
 			executionStatus = ExecutionStatus.EXECUTING_UNDO_INITIALIZER;
 			getUndoInitializer().run(e, (A) this);

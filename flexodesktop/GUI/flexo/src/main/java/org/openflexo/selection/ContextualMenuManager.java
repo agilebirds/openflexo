@@ -23,10 +23,12 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +43,7 @@ import javax.swing.tree.TreePath;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.FlexoCst;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.components.tabular.TabularView;
@@ -58,6 +61,8 @@ import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.action.EditionAction;
 
 public abstract class ContextualMenuManager {
 
@@ -72,7 +77,6 @@ public abstract class ContextualMenuManager {
 	};
 
 	private final SelectionManager _selectionManager;
-	private final FlexoEditor _editor;
 
 	private boolean _isPopupMenuDisplayed = false;
 
@@ -80,15 +84,21 @@ public abstract class ContextualMenuManager {
 
 	private Component _invoker = null;
 
-	public ContextualMenuManager(SelectionManager selectionManager, FlexoEditor editor) {
+	private final FlexoController controller;
+
+	public ContextualMenuManager(SelectionManager selectionManager, FlexoController controller) {
 		super();
 		_selectionManager = selectionManager;
-		_editor = editor;
+		this.controller = controller;
+	}
+
+	public FlexoEditor getEditor() {
+		return controller.getEditor();
 	}
 
 	public void processMousePressed(MouseEvent e) {
 		resetContextualMenuTriggering();
-		_isPopupTriggering = e.isPopupTrigger() || (e.getButton() == MouseEvent.BUTTON3);
+		_isPopupTriggering = e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3;
 
 		if (e.getSource() instanceof Component) {
 			_invoker = (Component) e.getSource();
@@ -121,7 +131,7 @@ public abstract class ContextualMenuManager {
 					// pomme+ctrl+click sur file1 ou file2 pour avoir le menu contextuel avec l'item "compare with each other"
 
 					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-						isCtrlDown = ((e.getButton() == MouseEvent.BUTTON1) && e.isMetaDown());
+						isCtrlDown = e.getButton() == MouseEvent.BUTTON1 && e.isMetaDown();
 					}
 					// fin du mega hack
 
@@ -139,7 +149,7 @@ public abstract class ContextualMenuManager {
 		_isPopupTriggering = _isPopupTriggering || e.isPopupTrigger();
 
 		if (_isPopupTriggering) {
-			if ((e.getSource() == _invoker) /* && (hasSelection()) */) {
+			if (e.getSource() == _invoker /* && (hasSelection()) */) {
 				displayPopupMenu((Component) e.getSource(), e);
 				e.consume();
 				resetContextualMenuTriggering();
@@ -175,44 +185,51 @@ public abstract class ContextualMenuManager {
 	// ============================= Filters ===================================
 	// ==========================================================================
 
-	public boolean acceptAction(FlexoActionType action) {
+	public boolean acceptAction(FlexoActionType<?, ?, ?> action) {
 		// override this method to exclude some actions.
 		return true;
 	}
 
-	public Vector<FlexoActionType> getActionTypesWithDeleteType(FlexoModelObject focusedObject, Vector globalSelection) {
-		Vector<FlexoActionType> returned = new Vector<FlexoActionType>();
-		for (Enumeration<FlexoActionType> en = focusedObject.getActionList().elements(); en.hasMoreElements();) {
-			FlexoActionType next = en.nextElement();
-			if (next.getActionCategory() == FlexoActionType.DELETE_ACTION_TYPE) {
-				if (next.isVisible(focusedObject, globalSelection, _editor)) {
-					if (next.isEnabled(focusedObject, globalSelection, _editor)) {
-						if (acceptAction(next)) {
-							returned.add(next);
+	@SuppressWarnings("unchecked")
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithAddType(
+			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
+		for (FlexoActionType<?, ?, ?> actionType : focusedObject.getActionList()) {
+			if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
+					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
+				FlexoActionType<A, T1, T2> cast = (FlexoActionType<A, T1, T2>) actionType;
+				if (cast.getActionCategory() == FlexoActionType.ADD_ACTION_TYPE) {
+					if (getEditor().isActionVisible(cast, (T1) focusedObject, (Vector<T2>) globalSelection)) {
+						if (getEditor().isActionEnabled(cast, (T1) focusedObject, (Vector<T2>) globalSelection)) {
+							returned.add(cast);
 						}
 					}
 				}
 			}
 		}
 		return returned;
-
 	}
 
-	public Vector<FlexoActionType> getActionTypesWithAddType(FlexoModelObject focusedObject) {
-		Vector<FlexoActionType> returned = new Vector<FlexoActionType>();
-		for (Enumeration<FlexoActionType> en = focusedObject.getActionList().elements(); en.hasMoreElements();) {
-			FlexoActionType next = en.nextElement();
-			if (next.getActionCategory() == FlexoActionType.ADD_ACTION_TYPE) {
-				if (next.isVisible(focusedObject, null, _editor)) {
-					if (next.isEnabled(focusedObject, null, _editor)) {
-						if (acceptAction(next)) {
-							returned.add(next);
+	@SuppressWarnings("unchecked")
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
+			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
+		for (FlexoActionType<?, ?, ?> actionType : focusedObject.getActionList()) {
+			if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
+					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
+				@SuppressWarnings("unchecked")
+				FlexoActionType<A, T1, T2> cast = (FlexoActionType<A, T1, T2>) actionType;
+				if (cast.getActionCategory() == FlexoActionType.DELETE_ACTION_TYPE) {
+					if (getEditor().isActionVisible(cast, (T1) focusedObject, (Vector<T2>) globalSelection)) {
+						if (getEditor().isActionEnabled(cast, (T1) focusedObject, (Vector<T2>) globalSelection)) {
+							returned.add(cast);
 						}
 					}
 				}
 			}
 		}
 		return returned;
+
 	}
 
 	// ==========================================================================
@@ -254,10 +271,10 @@ public abstract class ContextualMenuManager {
 	public JPopupMenu makePopupMenu(FlexoModelObject focusedObject, MenuFilter filter) {
 		if (focusedObject != null) {
 			ContextualMenu contextualMenu = new ContextualMenu();
-			for (Enumeration<FlexoActionType> en = focusedObject.getActionList().elements(); en.hasMoreElements();) {
-				FlexoActionType next = en.nextElement();
+			for (FlexoActionType next : focusedObject.getActionList()) {
 				if (filter.acceptActionType(next)
-						&& next.isVisible(focusedObject, (_selectionManager != null ? _selectionManager.getSelection() : null), _editor)) {
+						&& getEditor().isActionVisible(next, focusedObject,
+								_selectionManager != null ? _selectionManager.getSelection() : null)) {
 					contextualMenu.putAction(next);
 				}
 			}
@@ -448,7 +465,7 @@ public abstract class ContextualMenuManager {
 		public boolean acceptActionType(FlexoActionType<?, ?, ?> actionType);
 	}
 
-	private <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> JMenuItem makeMenuItem(
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> JMenuItem makeMenuItem(
 			FlexoActionType<A, T1, T2> actionType, FlexoModelObject focusedObject, JPopupMenu menu) {
 		try {
 			Vector<T2> globalSelection = new Vector<T2>();
@@ -462,17 +479,16 @@ public abstract class ContextualMenuManager {
 					}
 				}
 			}
-			FlexoAction action = actionType.makeNewAction((T1) focusedObject, globalSelection, _editor);
-			action.setInvoker(_invoker);
+			EditionAction<A, T1, T2> action = new EditionAction<A, T1, T2>(actionType, (T1) focusedObject, globalSelection, getEditor());
 			JMenuItem item = menu.add(action);
-			if (actionType.getKeyStroke() != null) {
-				item.setAccelerator(actionType.getKeyStroke());
+			if (getEditor().getKeyStrokeFor(actionType) != null) {
+				item.setAccelerator(getEditor().getKeyStrokeFor(actionType));
 			}
-			if (_editor.getEnabledIconFor(actionType) != null) {
-				item.setIcon(_editor.getEnabledIconFor(actionType));
+			if (getEditor().getEnabledIconFor(actionType) != null) {
+				item.setIcon(getEditor().getEnabledIconFor(actionType));
 			}
-			if (_editor.getDisabledIconFor(actionType) != null) {
-				item.setDisabledIcon(_editor.getDisabledIconFor(actionType));
+			if (getEditor().getDisabledIconFor(actionType) != null) {
+				item.setDisabledIcon(getEditor().getDisabledIconFor(actionType));
 			}
 			return item;
 		} catch (ClassCastException exception) {
@@ -482,21 +498,20 @@ public abstract class ContextualMenuManager {
 		}
 	}
 
-	<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> JMenuItem makeMenuItem(
-			FlexoActionType<A, T1, T2> actionType, FlexoModelObject focusedObject, JMenu menu) {
+	<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> JMenuItem makeMenuItem(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, JMenu menu) {
 		try {
-			FlexoAction action = actionType.makeNewAction((T1) focusedObject,
-					(_selectionManager != null ? (Vector<T2>) _selectionManager.getSelection() : null), _editor);
-			action.setInvoker(_invoker);
+			EditionAction<A, T1, T2> action = new EditionAction<A, T1, T2>(actionType, focusedObject,
+					_selectionManager != null ? (Vector<T2>) _selectionManager.getSelection() : null, getEditor());
 			JMenuItem item = menu.add(action);
-			if (actionType.getKeyStroke() != null) {
-				item.setAccelerator(actionType.getKeyStroke());
+			if (getEditor().getKeyStrokeFor(actionType) != null) {
+				item.setAccelerator(getEditor().getKeyStrokeFor(actionType));
 			}
-			if (_editor.getEnabledIconFor(actionType) != null) {
-				item.setIcon(_editor.getEnabledIconFor(actionType));
+			if (getEditor().getEnabledIconFor(actionType) != null) {
+				item.setIcon(getEditor().getEnabledIconFor(actionType));
 			}
-			if (_editor.getDisabledIconFor(actionType) != null) {
-				item.setDisabledIcon(_editor.getDisabledIconFor(actionType));
+			if (getEditor().getDisabledIconFor(actionType) != null) {
+				item.setDisabledIcon(getEditor().getDisabledIconFor(actionType));
 			}
 			return item;
 		} catch (ClassCastException exception) {
@@ -516,20 +531,20 @@ public abstract class ContextualMenuManager {
 		// Try to handle TabularBrowserView
 		if (e.getSource() instanceof JTreeTable) {
 			Component c = (Component) e.getSource();
-			while ((c != null) && (!(c instanceof TabularBrowserView))) {
+			while (c != null && !(c instanceof TabularBrowserView)) {
 				c = c.getParent();
 			}
-			if ((c != null) && (c instanceof TabularBrowserView)) {
+			if (c != null && c instanceof TabularBrowserView) {
 				return ((TabularBrowserView) c).getFocusedObject();
 			}
 		}
 		// Try to handle TabularView
 		if (e.getSource() instanceof JTable) {
 			Component c = (Component) e.getSource();
-			while ((c != null) && (!(c instanceof TabularView))) {
+			while (c != null && !(c instanceof TabularView)) {
 				c = c.getParent();
 			}
-			if ((c != null) && (c instanceof TabularView)) {
+			if (c != null && c instanceof TabularView) {
 				return ((TabularView) c).getFocusedObject();
 			}
 
@@ -537,10 +552,10 @@ public abstract class ContextualMenuManager {
 		// Finally handle browsers
 		if (e.getSource() instanceof JTree) {
 			Component c = (Component) e.getSource();
-			while ((c != null) && (!(c instanceof BrowserView))) {
+			while (c != null && !(c instanceof BrowserView)) {
 				c = c.getParent();
 			}
-			if ((c != null) && (c instanceof BrowserView)) {
+			if (c != null && c instanceof BrowserView) {
 				TreePath path = ((BrowserView) c).getTreeView().getClosestPathForLocation(e.getX(), e.getY());
 				if (path != null) {
 					return ((BrowserElement) path.getLastPathComponent()).getObject();

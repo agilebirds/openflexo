@@ -45,7 +45,7 @@ public class RoleEditorView extends DrawingView<RoleListRepresentation> implemen
 	}
 
 	@Override
-	public FlexoPerspective<RoleList> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getController().getWKFController().ROLE_EDITOR_PERSPECTIVE;
 	}
 

@@ -24,7 +24,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -58,7 +57,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -73,17 +71,20 @@ import javax.swing.tree.TreeNode;
 import javax.xml.rpc.ServiceException;
 
 import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.dm.DMObject;
@@ -114,9 +115,12 @@ import org.openflexo.model.factory.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.prefs.PreferencesController;
+import org.openflexo.prefs.PreferencesHaveChanged;
 import org.openflexo.prefs.PreferencesWindow;
+import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
@@ -140,7 +144,7 @@ import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
  * 
  * @author benoit, sylvain
  */
-public abstract class FlexoController implements InspectorNotFoundHandler, InspectorExceptionHandler {
+public abstract class FlexoController implements FlexoObserver, InspectorNotFoundHandler, InspectorExceptionHandler {
 
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
@@ -165,7 +169,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	// ================= Instance variables =================
 	// ======================================================
 
-	private transient InteractiveFlexoEditor _editor;
+	private transient FlexoEditor _editor;
 
 	protected FlexoModule _module;
 
@@ -181,9 +185,11 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	protected PreferencesController _preferencesController;
 
-	private final Vector<FlexoPerspective<?>> _perspectives;
+	private final Vector<FlexoPerspective> _perspectives;
 
-	private final Hashtable<FlexoPerspective<?>, FlexoModelObject> lastEditedObjectsForPerspective;
+	private final Hashtable<FlexoPerspective, FlexoModelObject> lastEditedObjectsForPerspective;
+
+	private ResourceManagerWindow rmWindow;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -193,16 +199,28 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	/**
 	 * Constructor
 	 */
-	protected FlexoController(InteractiveFlexoEditor projectEditor, FlexoModule module) {
+	protected FlexoController(FlexoModule module) {
 		super();
-		_loadedViews = new Hashtable<FlexoPerspective<?>, Hashtable<FlexoModelObject, ModuleView>>();
+		_loadedViews = new Hashtable<FlexoPerspective, Hashtable<FlexoModelObject, ModuleView<?>>>();
 		_keyStrokeActionTable = new Hashtable<KeyStroke, AbstractAction>();
-		_perspectives = new Vector<FlexoPerspective<?>>();
-		lastEditedObjectsForPerspective = new Hashtable<FlexoPerspective<?>, FlexoModelObject>();
-		setProjectEditor(projectEditor);
+		_perspectives = new Vector<FlexoPerspective>();
+		lastEditedObjectsForPerspective = new Hashtable<FlexoPerspective, FlexoModelObject>();
 		setModule(module);
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("init_module_controller"));
-		createControllerActionInitializer().initializeActions();
+		initInspectors();
+		GeneralPreferences.getPreferences().addObserver(this);
+	}
+
+	public final ApplicationContext getApplicationContext() {
+		return getModule().getApplicationContext();
+	}
+
+	public final ProjectLoader getProjectLoader() {
+		return getApplicationContext().getProjectLoader();
+	}
+
+	public final ModuleLoader getModuleLoader() {
+		return getApplicationContext().getModuleLoader();
 	}
 
 	/**
@@ -227,8 +245,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * 
 	 * @return
 	 */
-	public ControllerActionInitializer createControllerActionInitializer() {
-		return new ControllerActionInitializer(this);
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new ControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -247,8 +265,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		FlexoMenuBar returned = createNewMenuBar();
 		registeredMenuBar.add(returned);
 		if (getFlexoFrame() != null) {
-			for (Enumeration en = getFlexoFrame().getRelativeWindows().elements(); en.hasMoreElements();) {
-				FlexoRelativeWindow next = (FlexoRelativeWindow) en.nextElement();
+			for (Enumeration<FlexoRelativeWindow> en = getFlexoFrame().getRelativeWindows().elements(); en.hasMoreElements();) {
+				FlexoRelativeWindow next = en.nextElement();
 				returned.getWindowMenu().addFlexoRelativeWindowMenu(next);
 			}
 		}
@@ -357,8 +375,12 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		_module = module;
 	}
 
-	public InteractiveFlexoEditor getEditor() {
+	public FlexoEditor getEditor() {
 		return _editor;
+	}
+
+	public void setEditor(FlexoEditor projectEditor) {
+		_editor = projectEditor;
 	}
 
 	public FlexoProject getProject() {
@@ -370,10 +392,6 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	public File getProjectDirectory() {
 		return getProject().getProjectDirectory();
-	}
-
-	public void setProjectEditor(InteractiveFlexoEditor projectEditor) {
-		_editor = projectEditor;
 	}
 
 	public FlexoSharedInspectorController getSharedInspectorController() {
@@ -394,29 +412,6 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			_inspectorMenuBar = createAndRegisterNewMenuBar();
 		}
 		return _inspectorMenuBar;
-	}
-
-	// ==========================================================================
-	// ============================= Static methods ===========================
-	// ==========================================================================
-
-	public static JFrame getActiveFrame() {
-		if (FlexoModule.getActiveModule() != null) {
-			return FlexoModule.getActiveModule().getFlexoFrame();
-		} else {
-			Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
-			while (en.hasMoreElements()) {
-				FlexoModule module = en.nextElement();
-				if (module.getFlexoFrame() != null && module.getFlexoFrame().isActive()) {
-					return module.getFlexoFrame();
-				}
-			}
-		}
-		return null;
-	}
-
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
 	}
 
 	public static void showError(String msg) throws HeadlessException {
@@ -474,21 +469,17 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	public static boolean confirmWithWarning(String msg) throws HeadlessException {
-		return showOptionDialog(getActiveFrame(), msg, FlexoLocalization.localizedForKey("information"), JOptionPane.YES_NO_OPTION,
-				JOptionPane.WARNING_MESSAGE, null,
-				new Object[] { FlexoLocalization.localizedForKey("yes"), FlexoLocalization.localizedForKey("no") },
-				FlexoLocalization.localizedForKey("no")) == JOptionPane.YES_OPTION;
+		return showOptionDialog(FlexoFrame.getActiveFrame(), msg, FlexoLocalization.localizedForKey("information"),
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] { FlexoLocalization.localizedForKey("yes"),
+						FlexoLocalization.localizedForKey("no") }, FlexoLocalization.localizedForKey("no")) == JOptionPane.YES_OPTION;
 	}
 
 	public static boolean confirm(String msg) throws HeadlessException {
-		if (FlexoModule.isRunningTest()) {
-			return true;
-		}
 		return ask(msg) == JOptionPane.YES_OPTION;
 	}
 
 	public static int confirmYesNoCancel(String localizedMessage) {
-		return showOptionDialog(getActiveFrame(), localizedMessage, localizedMessage, JOptionPane.YES_NO_CANCEL_OPTION,
+		return showOptionDialog(FlexoFrame.getActiveFrame(), localizedMessage, localizedMessage, JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.QUESTION_MESSAGE, null, null, null);
 	}
 
@@ -510,13 +501,13 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	public static int selectOption(String msg, String[] options, String initialOption) {
-		return showOptionDialog(getActiveFrame(), msg, FlexoLocalization.localizedForKey("confirmation"), JOptionPane.DEFAULT_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, options, initialOption);
+		return showOptionDialog(FlexoFrame.getActiveFrame(), msg, FlexoLocalization.localizedForKey("confirmation"),
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, initialOption);
 	}
 
 	public static int selectOption(String msg, String initialOption, String... options) {
-		return showOptionDialog(getActiveFrame(), msg, FlexoLocalization.localizedForKey("confirmation"), JOptionPane.DEFAULT_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, options, initialOption);
+		return showOptionDialog(FlexoFrame.getActiveFrame(), msg, FlexoLocalization.localizedForKey("confirmation"),
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, initialOption);
 	}
 
 	// ==========================================================================
@@ -753,8 +744,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (this instanceof ConsistencyCheckingController) {
 			ValidationModel validationModel = ((ConsistencyCheckingController) this).getDefaultValidationModel();
 			for (int i = 0; i < validationModel.getSize(); i++) {
-				ValidationRuleSet ruleSet = (ValidationRuleSet) validationModel.getElementAt(i);
-				for (ValidationRule rule : ruleSet.getRules()) {
+				ValidationRuleSet ruleSet = validationModel.getElementAt(i);
+				for (ValidationRule<?, ?> rule : ruleSet.getRules()) {
 					rule.setIsEnabled(GeneralPreferences.isValidationRuleEnabled(rule));
 				}
 			}
@@ -765,8 +756,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (this instanceof ConsistencyCheckingController) {
 			ValidationModel validationModel = ((ConsistencyCheckingController) this).getDefaultValidationModel();
 			for (int i = 0; i < validationModel.getSize(); i++) {
-				ValidationRuleSet ruleSet = (ValidationRuleSet) validationModel.getElementAt(i);
-				for (ValidationRule rule : ruleSet.getRules()) {
+				ValidationRuleSet ruleSet = validationModel.getElementAt(i);
+				for (ValidationRule<?, ?> rule : ruleSet.getRules()) {
 					rule.setIsEnabled(true);
 				}
 			}
@@ -867,7 +858,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			pane.setInitialValue(initialValue);
 		}
 
-		pane.setComponentOrientation((parentComponent == null ? getRootFrame() : parentComponent).getComponentOrientation());
+		pane.setComponentOrientation((parentComponent == null ? FlexoFrame.getActiveFrame() : parentComponent).getComponentOrientation());
 
 		pane.setMessageType(messageType);
 		final JDialog dialog = pane.createDialog(parentComponent, title);
@@ -998,23 +989,12 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		return availableWidth / pane.getFontMetrics(UIManager.getFont("Label.font")).charWidth('W');
 	}
 
-	private static Frame getRootFrame() {
-		if (getActiveFrame() != null) {
-			return getActiveFrame();
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not find active frame, using default root frame");
-			}
-			return JOptionPane.getRootFrame();
-		}
-	}
-
 	private static void showMessageDialog(Object message, String title, int messageType) throws HeadlessException {
 		showMessageDialog(message, title, messageType, null);
 	}
 
 	private static void showMessageDialog(Object message, String title, int messageType, Icon icon) throws HeadlessException {
-		showOptionDialog(getActiveFrame(), message, title, JOptionPane.DEFAULT_OPTION, messageType, icon, null, null);
+		showOptionDialog(FlexoFrame.getActiveFrame(), message, title, JOptionPane.DEFAULT_OPTION, messageType, icon, null, null);
 	}
 
 	private static int showConfirmDialog(Object message, String title, int optionType, int messageType) throws HeadlessException {
@@ -1022,11 +1002,11 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	private static int showConfirmDialog(Object message, String title, int optionType, int messageType, Icon icon) throws HeadlessException {
-		return showOptionDialog(getActiveFrame(), message, title, optionType, messageType, icon, null, null);
+		return showOptionDialog(FlexoFrame.getActiveFrame(), message, title, optionType, messageType, icon, null, null);
 	}
 
 	private static String showInputDialog(Object message, String title, int messageType) throws HeadlessException {
-		return (String) showInputDialog(getActiveFrame(), message, title, messageType, null, null, null);
+		return (String) showInputDialog(FlexoFrame.getActiveFrame(), message, title, messageType, null, null, null);
 	}
 
 	private static String showInputDialog(Component parentComponent, Object message, String title, int messageType)
@@ -1047,7 +1027,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		pane.setWantsInput(true);
 		pane.setSelectionValues(selectionValues);
 		pane.setInitialSelectionValue(initialSelectionValue);
-		pane.setComponentOrientation((parentComponent == null ? getRootFrame() : parentComponent).getComponentOrientation());
+		pane.setComponentOrientation((parentComponent == null ? FlexoFrame.getActiveFrame() : parentComponent).getComponentOrientation());
 		pane.setMessageType(messageType);
 		JDialog dialog = pane.createDialog(parentComponent, title);
 		pane.selectInitialValue();
@@ -1085,39 +1065,39 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	// =============================================================
 
 	// private ModuleView _currentModuleView;
-	private final Hashtable<FlexoPerspective<?>, Hashtable<FlexoModelObject, ModuleView>> _loadedViews;
+	private final Hashtable<FlexoPerspective, Hashtable<FlexoModelObject, ModuleView<?>>> _loadedViews;
 
 	private FlexoMainPane _mainPane;
 
-	private FlexoPerspective<? extends FlexoModelObject> _currentPerspective = null;
+	private FlexoPerspective _currentPerspective = null;
 
-	private FlexoPerspective<? extends FlexoModelObject> defaultPespective;
+	private FlexoPerspective defaultPespective;
 
-	public FlexoPerspective<? extends FlexoModelObject> getCurrentPerspective() {
+	public FlexoPerspective getCurrentPerspective() {
 		return _currentPerspective;
 	}
 
-	private Hashtable<FlexoModelObject, ModuleView> getLoadedViewsForCurrentPerspective() {
+	private Hashtable<FlexoModelObject, ModuleView<?>> getLoadedViewsForCurrentPerspective() {
 		return getLoadedViewsForPerspective(_currentPerspective);
 	}
 
-	public void addToPerspectives(FlexoPerspective<? extends FlexoModelObject> perspective) {
+	public void addToPerspectives(FlexoPerspective perspective) {
 		if (_perspectives.size() == 0) {
 			defaultPespective = perspective;
 			setCurrentPerspective(perspective);
 		}
 		_perspectives.add(perspective);
-		_loadedViews.put(perspective, new Hashtable<FlexoModelObject, ModuleView>());
+		_loadedViews.put(perspective, new Hashtable<FlexoModelObject, ModuleView<?>>());
 	}
 
-	public void removeFromPerspectives(FlexoPerspective<? extends FlexoModelObject> perspective) {
+	public void removeFromPerspectives(FlexoPerspective perspective) {
 		_perspectives.remove(perspective);
-		Hashtable<FlexoModelObject, ModuleView> hash = _loadedViews.get(perspective);
+		Hashtable<FlexoModelObject, ModuleView<?>> hash = _loadedViews.get(perspective);
 		_loadedViews.remove(perspective);
 		if (hash != null) {
-			Iterator<ModuleView> i = hash.values().iterator();
+			Iterator<ModuleView<?>> i = hash.values().iterator();
 			while (i.hasNext()) {
-				ModuleView view = i.next();
+				ModuleView<?> view = i.next();
 				i.remove();
 				view.deleteModuleView();
 			}
@@ -1208,11 +1188,11 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * 
 	 * @param perspective
 	 */
-	protected void setCurrentPerspective(FlexoPerspective<?> perspective) {
+	protected void setCurrentPerspective(FlexoPerspective perspective) {
 		_currentPerspective = perspective;
 	}
 
-	public Vector<FlexoPerspective<?>> getPerspectives() {
+	public Vector<FlexoPerspective> getPerspectives() {
 		return _perspectives;
 	}
 
@@ -1243,15 +1223,14 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * @return an initialized ModuleView instance
 	 */
 	@SuppressWarnings("unchecked")
-	public <O extends FlexoModelObject> ModuleView<? extends O> moduleViewForObject(O object, boolean recalculateViewIfRequired) {
+	public ModuleView<?> moduleViewForObject(FlexoModelObject object, boolean recalculateViewIfRequired) {
 		try {
 			if (object == null) {
-				return (ModuleView<O>) getEmptyPanel();
+				return getEmptyPanel();
 			}
 			if (getLoadedViewsForCurrentPerspective().get(object) == null) {
 				if (recalculateViewIfRequired) {
-					ModuleView<? extends O> view = createModuleViewForObjectAndPerspective(object,
-							(FlexoPerspective<O>) _currentPerspective);
+					ModuleView<?> view = createModuleViewForObjectAndPerspective(object, _currentPerspective);
 					if (view != null) {
 						getLoadedViewsForCurrentPerspective().put(object, view);
 					}
@@ -1271,7 +1250,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * @param object
 	 * @return an initialized ModuleView instance
 	 */
-	public <O extends FlexoModelObject> ModuleView<? extends O> moduleViewForObject(O object) {
+	public ModuleView<?> moduleViewForObject(FlexoModelObject object) {
 		return moduleViewForObject(object, true);
 	}
 
@@ -1283,8 +1262,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 *            TODO
 	 * @return a newly created and initialized ModuleView instance
 	 */
-	public final <O extends FlexoModelObject> ModuleView<? extends O> createModuleViewForObjectAndPerspective(O object,
-			FlexoPerspective<O> perspective) {
+	public final ModuleView<?> createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
 		try {
 			if (perspective == null) {
 				perspective = getDefaultPespective();
@@ -1301,13 +1279,12 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	@SuppressWarnings("unchecked")
-	public final <O extends FlexoModelObject> boolean hasViewForObjectAndPerspective(FlexoModelObject object,
-			FlexoPerspective<O> perspective) {
+	public final boolean hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
 		if (object == null) {
 			return false;
 		}
 		try {
-			return _hasViewForObjectAndPerspective((O) object, perspective);
+			return _hasViewForObjectAndPerspective(object, perspective);
 		} catch (ClassCastException e) {
 			// Don't worry here
 			// This class cast exception is expected here, this test was intented for this goal
@@ -1319,7 +1296,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		}
 	}
 
-	public final <O extends FlexoModelObject> boolean _hasViewForObjectAndPerspective(O object, FlexoPerspective<O> perspective) {
+	public final boolean _hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
 		return perspective.hasModuleViewForObject(object);
 	}
 
@@ -1329,7 +1306,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * @param aView
 	 *            the view to remove
 	 */
-	public void removeModuleView(ModuleView aView) {
+	public void removeModuleView(ModuleView<?> aView) {
 		if (aView.getRepresentedObject() != null) {
 			if (getLoadedViewsForCurrentPerspective().get(aView.getRepresentedObject()) == aView) {// Let's make sure we remove the proper
 																									// view!
@@ -1349,7 +1326,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * @param object
 	 * @return an initialized ModuleView instance
 	 */
-	public final ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
+	public final ModuleView<?> setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
 		// logger.info("************** setCurrentEditedObjectAsModuleView "+object);
 		if (getCurrentDisplayedObjectAsModuleView() != object && getMainPane() != null) {
 			// Little block to change the currentPerspective if the
@@ -1365,7 +1342,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					}
 				}
 			}
-			ModuleView returned = moduleViewForObject(object);
+			ModuleView<?> returned = moduleViewForObject(object);
 
 			if (returned != null) {
 				if (this instanceof SelectionManagingController) {
@@ -1409,7 +1386,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * @param object
 	 * @return an initialized ModuleView instance
 	 */
-	public ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
+	public ModuleView<?> setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
 		if (_currentPerspective != perspective) {
 			_currentPerspective = perspective;
 			if (_currentPerspective == null) {
@@ -1431,9 +1408,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * 
 	 * @return
 	 */
-	public ModuleView getCurrentModuleView() {
-		/* ICI */
-		// return _currentModuleView;
+	public ModuleView<?> getCurrentModuleView() {
 		if (_mainPane != null) {
 			return _mainPane.getModuleView();
 		}
@@ -1489,11 +1464,11 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * 
 	 * @return an Hashtable instance
 	 */
-	protected Hashtable<FlexoModelObject, ModuleView> getLoadedViews() {
+	protected Hashtable<FlexoModelObject, ModuleView<?>> getLoadedViews() {
 		return getLoadedViewsForCurrentPerspective();
 	}
 
-	protected Hashtable<FlexoModelObject, ModuleView> getLoadedViewsForPerspective(FlexoPerspective p) {
+	protected Hashtable<FlexoModelObject, ModuleView<?>> getLoadedViewsForPerspective(FlexoPerspective p) {
 		if (_perspectives.size() == 0) {
 			if (p != null && logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unregistered perspective " + p.getName());
@@ -1653,7 +1628,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		 * @see org.openflexo.inspector.InspectorDelegate#handlesObjectOfClass(java.lang.Class)
 		 */
 		@Override
-		public boolean handlesObjectOfClass(Class c) {
+		public boolean handlesObjectOfClass(Class<?> c) {
 			return KeyValueCoding.class.isAssignableFrom(c);
 		}
 
@@ -1686,15 +1661,10 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		public boolean performAction(ActionEvent e, String actionName, Object object) {
 			if (object instanceof FlexoModelObject) {
 				FlexoModelObject m = (FlexoModelObject) object;
-				for (FlexoActionType actionType : m.getActionList()) {
+				for (FlexoActionType<?, ?, ?> actionType : m.getActionList()) {
 					if (actionType.getUnlocalizedName().equals(actionName)) {
-						FlexoAction action = actionType.makeNewAction(m, new Vector<FlexoModelObject>(), getEditor());
-						try {
-							action.doAction(e);
-							return action.hasActionExecutionSucceeded();
-						} catch (FlexoException e1) {
-							e1.printStackTrace();
-						}
+						return getEditor().performActionType((FlexoActionType<?, FlexoModelObject, FlexoModelObject>) actionType, m,
+								(Vector<FlexoModelObject>) null, e).hasActionExecutionSucceeded();
 					}
 				}
 			}
@@ -1724,6 +1694,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				}
 			}
 		}
+		GeneralPreferences.getPreferences().deleteObserver(this);
 		if (_consistencyCheckWindow != null && !_consistencyCheckWindow.isDisposed()) {
 			_consistencyCheckWindow.dispose();
 		}
@@ -1733,10 +1704,14 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (mainInspectorController != null) {
 			mainInspectorController.delete();
 		}
-		for (Hashtable<FlexoModelObject, ModuleView> viewsPerPerspective : _loadedViews.values()) {
-			for (ModuleView view : new ArrayList<ModuleView>(viewsPerPerspective.values())) {
+		for (Hashtable<FlexoModelObject, ModuleView<?>> viewsPerPerspective : _loadedViews.values()) {
+			for (ModuleView<?> view : new ArrayList<ModuleView<?>>(viewsPerPerspective.values())) {
 				view.deleteModuleView();
 			}
+		}
+		if (rmWindow != null) {
+			rmWindow.dispose();
+			rmWindow = null;
 		}
 		_loadedViews.clear();
 		_perspectives.clear();
@@ -1810,8 +1785,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL())) {
 			WebServiceURLDialog data = new WebServiceURLDialog();
 			data.setClientParameter(params);
-			FIBDialog dialog = FIBDialog.instanciateAndShowDialog(WebServiceURLDialog.FIB_FILE, data, getFlexoFrame(), true,
-					FlexoLocalization.getMainLocalizer());
+			FIBDialog<WebServiceURLDialog> dialog = FIBDialog.instanciateAndShowDialog(WebServiceURLDialog.FIB_FILE, data, getFlexoFrame(),
+					true, FlexoLocalization.getMainLocalizer());
 			if (dialog.getStatus() == Status.VALIDATED) {
 				if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
 					params.setWSURL(params.getWSInstance().getWSURL());
@@ -1973,6 +1948,32 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			return progress;
 		}
 		return null;
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == GeneralPreferences.getPreferences()) {
+			if (dataModification instanceof PreferencesHaveChanged) {
+				String key = ((PreferencesHaveChanged) dataModification).propertyName();
+				if (GeneralPreferences.LANGUAGE_KEY.equals(key)) {
+					getFlexoFrame().updateTitle();
+				} else if (GeneralPreferences.LAST_OPENED_PROJECTS_1.equals(key) || GeneralPreferences.LAST_OPENED_PROJECTS_2.equals(key)
+						|| GeneralPreferences.LAST_OPENED_PROJECTS_3.equals(key) || GeneralPreferences.LAST_OPENED_PROJECTS_4.equals(key)
+						|| GeneralPreferences.LAST_OPENED_PROJECTS_5.equals(key)) {
+					updateRecentProjectMenu();
+				}
+			}
+		}
+	}
+
+	public ResourceManagerWindow getRMWindow(FlexoProject project) {
+		if (rmWindow != null) {
+			if (rmWindow.getProject() == project) {
+				return rmWindow;
+			}
+			rmWindow.dispose();
+		}
+		return rmWindow = new ResourceManagerWindow(project);
 	}
 
 }

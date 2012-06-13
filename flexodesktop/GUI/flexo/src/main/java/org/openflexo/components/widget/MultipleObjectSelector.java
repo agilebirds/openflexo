@@ -27,9 +27,9 @@ import org.openflexo.components.browser.DefaultBrowserConfiguration.ObjectVisibi
 import org.openflexo.components.tabular.model.AbstractColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.components.widget.SelectionTabularBrowserModel.SelectionTabularBrowserModelSelectionListener;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.view.controller.FlexoController;
 
 public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularBrowserView implements
 		SelectionTabularBrowserModelSelectionListener {
@@ -38,22 +38,17 @@ public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularB
 		public boolean isSelectable(O object);
 	}
 
-	public MultipleObjectSelector(FlexoModelObject rootObject, ObjectVisibilityDelegate visibilityDelegate,
-			ObjectSelectabilityDelegate<E> selectabilityDelegate, FlexoEditor editor) {
-		super(null, new SelectionTabularBrowserModel<E>(new DefaultBrowserConfiguration(rootObject, visibilityDelegate),
-				selectabilityDelegate), editor);
+	public MultipleObjectSelector(FlexoModelObject rootObject, FlexoController controller, ObjectVisibilityDelegate visibilityDelegate,
+			ObjectSelectabilityDelegate<E> selectabilityDelegate) {
+		super(controller, new SelectionTabularBrowserModel<E>(new DefaultBrowserConfiguration(rootObject, visibilityDelegate),
+				selectabilityDelegate));
 		getModel().addToSelectionListeners(this);
 	}
 
-	public MultipleObjectSelector(BrowserConfiguration browserConfiguration, ObjectSelectabilityDelegate<E> selectabilityDelegate,
-			FlexoEditor editor) {
-		super(null, new SelectionTabularBrowserModel<E>(browserConfiguration, selectabilityDelegate), editor);
+	public MultipleObjectSelector(BrowserConfiguration browserConfiguration, FlexoController controller,
+			ObjectSelectabilityDelegate<E> selectabilityDelegate) {
+		super(controller, new SelectionTabularBrowserModel<E>(browserConfiguration, selectabilityDelegate));
 		getModel().addToSelectionListeners(this);
-	}
-
-	@Override
-	public Vector<E> getSelectedObjects() {
-		return getModel().getSelectionColumn().getSelectedObjects();
 	}
 
 	/**
@@ -61,7 +56,7 @@ public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularB
 	 */
 	@Override
 	public SelectionTabularBrowserModel<E> getModel() {
-		return ((SelectionTabularBrowserModel<E>) super.getModel());
+		return (SelectionTabularBrowserModel<E>) super.getModel();
 	}
 
 	@Override

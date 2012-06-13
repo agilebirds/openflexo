@@ -26,8 +26,9 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.Modules;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileResource;
@@ -168,18 +169,21 @@ public class JIRAIssueReportDialog {
 
 	private File attachFile;
 
-	public static void newBugReport(Module module) {
-		newBugReport(null, module);
+	private FlexoProject flexoProject;
+
+	public static void newBugReport(FlexoModule module, FlexoProject project) {
+		newBugReport(null, module, project);
 	}
 
-	public static void newBugReport(Exception e, Module module) {
+	public static void newBugReport(Exception e, FlexoModule module, FlexoProject project) {
 		try {
 			JIRAIssueReportDialog report = new JIRAIssueReportDialog(e);
+			report.setFlexoProject(project);
 			if (module != null) {
 				if (report.getIssue().getIssuetype().getComponentField() != null
 						&& report.getIssue().getIssuetype().getComponentField().getAllowedValues() != null) {
 					for (JIRAComponent comp : report.getIssue().getIssuetype().getComponentField().getAllowedValues()) {
-						if (comp.getId().equals(module.getJiraComponentID())) {
+						if (comp.getId().equals(module.getModule().getJiraComponentID())) {
 							report.getIssue().setComponent(comp);
 							break;
 						}
@@ -228,6 +232,10 @@ public class JIRAIssueReportDialog {
 			e1.printStackTrace();
 			FlexoController.showError(FlexoLocalization.localizedForKey("cannot_read_JIRA_project_file"));
 		}
+	}
+
+	private void setFlexoProject(FlexoProject flexoProject) {
+		this.flexoProject = flexoProject;
 	}
 
 	public JIRAIssueReportDialog() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
@@ -422,7 +430,6 @@ public class JIRAIssueReportDialog {
 						}
 					}
 					if (sendProject) {
-						FlexoProject flexoProject = ModuleLoader.instance().getProject();
 						if (flexoProject != null) {
 							File projectDirectory = flexoProject.getProjectDirectory();
 							String directoryName = projectDirectory.getName();
@@ -525,7 +532,7 @@ public class JIRAIssueReportDialog {
 			return EMPTY_LIST;
 		}
 		List<JIRAComponent> availableModules = new ArrayList<JIRAComponent>();
-		for (Module module : ModuleLoader.instance().availableModules()) {
+		for (Module module : Modules.getInstance().getAvailableModules()) {
 			for (JIRAComponent component : getIssue().getIssuetype().getComponentField().getAllowedValues()) {
 				if (module.getJiraComponentID().equals(component.getId())) {
 					availableModules.add(component);

@@ -57,7 +57,7 @@ import org.openflexo.vpm.view.CalcView;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.OntologyView;
 
-public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
+public class ViewPointPerspective extends FlexoPerspective {
 
 	protected static final Logger logger = Logger.getLogger(ViewPointPerspective.class.getPackage().getName());
 

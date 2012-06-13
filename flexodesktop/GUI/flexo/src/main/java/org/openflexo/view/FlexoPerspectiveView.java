@@ -34,13 +34,13 @@ import org.openflexo.view.controller.FlexoController;
  * 
  */
 public class FlexoPerspectiveView extends JLabel {
-	private FlexoPerspective<?> perspective;
+	private FlexoPerspective perspective;
 
 	protected FlexoController controller;
 
 	protected AvailablePerspectives parent;
 
-	public FlexoPerspectiveView(final FlexoController controller, final AvailablePerspectives parent, FlexoPerspective<?> p) {
+	public FlexoPerspectiveView(final FlexoController controller, final AvailablePerspectives parent, FlexoPerspective p) {
 		this.controller = controller;
 		this.perspective = p;
 		this.parent = parent;
@@ -62,7 +62,7 @@ public class FlexoPerspectiveView extends JLabel {
 		FCH.setHelpItem(this, p.getName());
 	}
 
-	public FlexoPerspective<?> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return perspective;
 	}
 

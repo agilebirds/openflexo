@@ -52,7 +52,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
+public class DiagramPerspective extends FlexoPerspective {
 
 	private final VEController _controller;
 

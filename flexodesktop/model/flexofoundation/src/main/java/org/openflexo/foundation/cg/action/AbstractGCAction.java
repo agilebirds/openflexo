@@ -34,7 +34,7 @@ import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.version.AbstractCGFileVersion;
 
-public abstract class AbstractGCAction<A extends FlexoAction<?, T1, CGObject>, T1 extends CGObject> extends FlexoAction<A, T1, CGObject> {
+public abstract class AbstractGCAction<A extends FlexoAction<A, T1, CGObject>, T1 extends CGObject> extends FlexoAction<A, T1, CGObject> {
 
 	public static final ActionGroup ROUND_TRIP_MENU_GROUP = new ActionGroup("round_trip_menu", 4);
 	public static final ActionGroup ROUND_TRIP_GROUP = new ActionGroup("round_trip", 5);
@@ -80,7 +80,7 @@ public abstract class AbstractGCAction<A extends FlexoAction<?, T1, CGObject>, T
 		GenerationRepository returned = repositoryForObject(focusedObject);
 		if (globalSelection != null && returned != null) {
 			Enumeration<CGObject> en = globalSelection.elements();
-			while ((returned == null) && (en.hasMoreElements())) {
+			while (returned == null && en.hasMoreElements()) {
 				returned = repositoryForObject(en.nextElement());
 			}
 		}

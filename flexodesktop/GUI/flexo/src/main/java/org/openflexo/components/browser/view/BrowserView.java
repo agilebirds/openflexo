@@ -75,6 +75,7 @@ import org.openflexo.selection.ContextualMenuManager;
 import org.openflexo.selection.DefaultContextualMenuManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.FlexoAutoScroll;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Abstract view related to a ProjectBrowser
@@ -110,11 +111,11 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	private DefaultContextualMenuManager defaultContextualMenuManager;
 
-	protected FlexoEditor _editor;
-
 	protected static BufferedImage capturedDraggedNodeImage;
 
 	private SelectionPolicy _selectionPolicy;
+
+	private final FlexoController controller;
 
 	public static enum SelectionPolicy {
 		/**
@@ -137,14 +138,14 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	// ================================
 	// ==========================================================================
 
-	public BrowserView(ProjectBrowser browser, KeyListener kl, FlexoEditor editor) {
-		this(browser, kl, editor, SelectionPolicy.ParticipateToSelection);
+	public BrowserView(ProjectBrowser browser, FlexoController controller, KeyListener kl) {
+		this(browser, controller, kl, SelectionPolicy.ParticipateToSelection);
 	}
 
-	public BrowserView(ProjectBrowser browser, KeyListener kl, FlexoEditor editor, SelectionPolicy selectionPolicy) {
+	public BrowserView(ProjectBrowser browser, FlexoController controller, KeyListener kl, SelectionPolicy selectionPolicy) {
 		super();
-		_editor = editor;
 		_browser = browser;
+		this.controller = controller;
 		_selectionPolicy = selectionPolicy;
 		_browser.setLeadingView(this);
 		setLayout(new BorderLayout());
@@ -249,6 +250,10 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		validate();
 	}
 
+	public FlexoController getController() {
+		return controller;
+	}
+
 	protected ContextualMenuManager getContextualMenuManager() {
 		if (!_browser.handlesControlPanel()) {
 			return null;
@@ -257,7 +262,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			return _browser.getSelectionManager().getContextualMenuManager();
 		}
 		if (defaultContextualMenuManager == null) {
-			defaultContextualMenuManager = new DefaultContextualMenuManager();
+			defaultContextualMenuManager = new DefaultContextualMenuManager(getController());
 		}
 		return defaultContextualMenuManager;
 	}
@@ -858,10 +863,6 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			getGraphics().drawImage(capturedDraggedNodeImage, (int) pt.getX(), (int) pt.getY(), this);
 		}
 
-		public FlexoEditor getEditor() {
-			return _editor;
-		}
-
 		public final void clearDraggedNode() {
 			paintImmediately(rect2D.getBounds());
 			capturedDraggedNodeImage = null;
@@ -878,7 +879,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	@Override
 	public FlexoEditor getEditor() {
-		return _editor;
+		return getController().getEditor();
 	}
 
 	@Override

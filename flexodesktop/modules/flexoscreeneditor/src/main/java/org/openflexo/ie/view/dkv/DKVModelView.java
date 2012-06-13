@@ -262,7 +262,7 @@ public class DKVModelView extends CompoundTabularView<DKVModel> implements Selec
 	}
 
 	@Override
-	public FlexoPerspective<DKVModel> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getIEController().DKV_EDITOR_PERSPECTIVE;
 	}
 

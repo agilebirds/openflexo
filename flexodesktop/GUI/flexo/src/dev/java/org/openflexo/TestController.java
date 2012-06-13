@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -225,7 +226,7 @@ public class TestController extends FlexoController implements SelectionManaging
 	        return getController().getSelectionManager();
 	    }
 
-		public InteractiveFlexoEditor getEditor() 
+		public FlexoEditor getEditor() 
 		{
 			return getController().getEditor();
 		}

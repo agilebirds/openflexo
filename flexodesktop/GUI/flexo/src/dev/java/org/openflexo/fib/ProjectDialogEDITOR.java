@@ -19,23 +19,17 @@
  */
 package org.openflexo.fib;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 
 public class ProjectDialogEDITOR {
 
@@ -58,12 +52,8 @@ public class ProjectDialogEDITOR {
 		return editor;
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
 	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
+		return FlexoResourceCenterService.getInstance();
 	}
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
@@ -78,25 +68,6 @@ public class ProjectDialogEDITOR {
 			super(project);
 		}
 
-		@Override
-		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
-				FlexoActionType<A, T1, T2> actionType) {
-			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
-
-				@Override
-				public boolean run(ActionEvent event, A action) {
-					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
-							FlexoTestEditor.this);
-					if (!reply) {
-						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
-								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
-					}
-					return reply;
-				}
-
-			};
-			return init;
-		}
 	}
 
 }

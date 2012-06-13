@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.UnexpectedException;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
@@ -56,9 +57,17 @@ import org.openflexo.view.controller.FlexoController;
 public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHandler {
 
 	protected static final Logger logger = Logger.getLogger(InteractiveFlexoResourceUpdateHandler.class.getPackage().getName());
+	private final ApplicationContext applicationContext;
+	private final FlexoProject project;
 
-	public InteractiveFlexoResourceUpdateHandler() {
+	public InteractiveFlexoResourceUpdateHandler(ApplicationContext applicationContext, FlexoProject project) {
 		super();
+		this.applicationContext = applicationContext;
+		this.project = project;
+	}
+
+	private ProjectLoader getProjectLoader() {
+		return applicationContext.getProjectLoader();
 	}
 
 	@Override
@@ -349,7 +358,6 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 				}
 			} else if (choice == OptionWhenStorageResourceFoundAsModifiedOnDisk.OverwriteDiskChange) {
-				FlexoProject project = getModuleLoader().getProject();
 				DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 				// Pessimistic dependancy scheme is cheaper and is not intended for this situation
 				project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
@@ -382,8 +390,6 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 				}
 			} else if (choice == OptionWhenStorageResourceFoundAsConflicting.OverwriteDiskChange) {
 				try {
-					FlexoProject project = getModuleLoader().getProject();
-					;
 					DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 					// Pessimistic dependancy scheme is cheaper and is not intended for this situation
 					project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
@@ -406,22 +412,14 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		for (FlexoStorageResource<? extends StorageResourceData> flexoStorageResource : updatedStorageResource) {
 			flexoStorageResource.getResourceData().clearIsModified(true);
 		}
-		getModuleLoader().reloadProject();
+		getProjectLoader().reloadProject(project);
 	}
 
 	@Override
 	public void reloadProject(FlexoStorageResource fileResource) throws ProjectLoadingCancelledException, ModuleLoadingException,
 			ProjectInitializerException {
 		fileResource.getResourceData().clearIsModified(true);
-		getModuleLoader().reloadProject();
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private ProjectLoader getProjectLoader() {
-		return ProjectLoader.instance();
+		getProjectLoader().reloadProject(project);
 	}
 
 	@Override

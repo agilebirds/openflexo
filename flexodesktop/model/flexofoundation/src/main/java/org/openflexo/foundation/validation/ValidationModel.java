@@ -437,7 +437,7 @@ public abstract class ValidationModel extends FlexoListModel {
 	 * @see javax.swing.ListModel#getElementAt(int)
 	 */
 	@Override
-	public Object getElementAt(int index) {
+	public ValidationRuleSet getElementAt(int index) {
 		return _inheritedRules.get(_keys.elementAt(index));
 	}
 

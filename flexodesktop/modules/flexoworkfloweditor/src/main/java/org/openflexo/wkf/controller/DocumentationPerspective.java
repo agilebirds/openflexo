@@ -31,7 +31,7 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.view.doc.WKFDocumentationView;
 
-public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
+public class DocumentationPerspective extends FlexoPerspective {
 
 	/**
 	 * 

@@ -27,7 +27,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.ws.client.PPMWebService.PPMWebService_PortType;
 
-public abstract class RefreshImportedObjectAction<A extends RefreshImportedObjectAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject>
+public abstract class RefreshImportedObjectAction<A extends RefreshImportedObjectAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject>
 		extends FlexoAction<A, T1, T2> {
 
 	private PPMWebService_PortType webService;

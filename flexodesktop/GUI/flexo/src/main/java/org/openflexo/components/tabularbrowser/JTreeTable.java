@@ -118,14 +118,14 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	private JTreeTableMouseAdapter _mouseAdapter;
 	protected ListSelectionModel _listSelectionModel;
 
-	protected Vector _selectedObjects;
+	protected Vector<FlexoModelObject> _selectedObjects;
 	protected boolean _selectedObjectsNeedsRecomputing = true;
 
 	public JTreeTable(TabularBrowserModel treeTableModel) {
 		super();
 
 		_treeTableModel = treeTableModel;
-		_selectedObjects = new Vector();
+		_selectedObjects = new Vector<FlexoModelObject>();
 		// Create the tree. It will be used as a renderer and editor.
 		tree = new TreeTableCellRenderer(this, treeTableModel);
 
@@ -212,7 +212,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	  */
 	@Override
 	public int getEditingRow() {
-		return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1 : editingRow;
+		return getColumnClass(editingColumn) == TreeTableModel.class ? -1 : editingRow;
 	}
 
 	//
@@ -242,7 +242,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		return null;
 	}
 
-	public Vector getSelectedObjects() {
+	public Vector<FlexoModelObject> getSelectedObjects() {
 		if (_selectedObjectsNeedsRecomputing) {
 			_selectedObjects.clear();
 			for (int i = 0; i < getRowCount(); i++) {

@@ -21,7 +21,6 @@ package org.openflexo.wkf;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -98,11 +97,6 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		WKFPreferences.init(getWKFController());
 		// getWKFController().loadWorkflow(project.getWorkflowFile(false));
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
-		retain(getProject().getFlexoWorkflow());
-		for (Enumeration<FlexoProcess> e = getProject().getFlexoWorkflow().getAllLocalFlexoProcesses().elements(); e.hasMoreElements();) {
-			retain(e.nextElement());
-		}
-		getWKFController().setCurrentFlexoProcess(getFlexoWorkflow().getRootFlexoProcess());
 	}
 
 	@Override

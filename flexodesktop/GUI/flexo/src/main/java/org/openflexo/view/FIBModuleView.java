@@ -95,7 +95,7 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 	}
 
 	@Override
-	public abstract FlexoPerspective<? super O> getPerspective();
+	public abstract FlexoPerspective getPerspective();
 
 	@Override
 	public void willHide() {

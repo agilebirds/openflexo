@@ -318,13 +318,13 @@ public class DMController extends FlexoController implements SelectionManagingCo
 	}
 
 	@Override
-	public FlexoPerspective<DMObject> getDefaultPespective() {
+	public FlexoPerspective getDefaultPespective() {
 		return getCurrentPerspective();
 	}
 
 	@Override
-	public FlexoPerspective<DMObject> getCurrentPerspective() {
-		return (FlexoPerspective<DMObject>) super.getCurrentPerspective();
+	public FlexoPerspective getCurrentPerspective() {
+		return (FlexoPerspective) super.getCurrentPerspective();
 	}
 
 	@Override

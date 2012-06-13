@@ -370,7 +370,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	 * @see org.openflexo.view.ModuleView#getPerspective()
 	 */
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 

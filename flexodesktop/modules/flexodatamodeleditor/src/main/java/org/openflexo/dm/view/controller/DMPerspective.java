@@ -30,7 +30,7 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoPerspective;
 
-public abstract class DMPerspective<O extends FlexoModelObject> extends FlexoPerspective<O> {
+public abstract class DMPerspective<O extends FlexoModelObject> extends FlexoPerspective {
 
 	protected JPanel searchPanel;
 	private DMEntity searchedEntity = null;

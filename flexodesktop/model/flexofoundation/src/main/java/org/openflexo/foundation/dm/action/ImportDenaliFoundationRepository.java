@@ -32,7 +32,7 @@ import org.openflexo.foundation.dm.DMObject;
  * 
  */
 @Deprecated
-public class ImportDenaliFoundationRepository extends CreateDMRepository {
+public class ImportDenaliFoundationRepository extends CreateDMRepository<ImportDenaliFoundationRepository> {
 
 	static final Logger logger = Logger.getLogger(ImportDenaliFoundationRepository.class.getPackage().getName());
 

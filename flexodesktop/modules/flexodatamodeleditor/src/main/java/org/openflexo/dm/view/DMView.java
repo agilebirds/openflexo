@@ -121,7 +121,7 @@ public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> 
 	}
 
 	@Override
-	public FlexoPerspective<DMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getDMController().getDefaultPespective();
 	}
 

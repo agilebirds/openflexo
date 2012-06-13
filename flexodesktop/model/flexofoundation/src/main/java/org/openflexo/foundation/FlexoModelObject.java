@@ -21,9 +21,10 @@ package org.openflexo.foundation;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -51,7 +52,6 @@ import org.openflexo.inspector.model.TabModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.toolbox.HTMLUtils;
 import org.openflexo.ws.client.PPMWebService.PPMObject;
 import org.openflexo.xmlcode.StringEncoder;
@@ -457,7 +457,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return userIdentifier + ID_SEPARATOR + flexoId;
 	}
 
-	private static final Hashtable<Class, Vector<FlexoActionType>> _actionListForClass = new Hashtable<Class, Vector<FlexoActionType>>();
+	private static final Hashtable<Class<?>, List<FlexoActionType<?, ?, ?>>> _actionListForClass = new Hashtable<Class<?>, List<FlexoActionType<?, ?, ?>>>();
 
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = new Vector<FlexoActionType>();
@@ -465,49 +465,47 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return returned;
 	}
 
-	public Vector<FlexoActionType> getActionList() {
+	public List<FlexoActionType<?, ?, ?>> getActionList() {
 		return getActionList(this);
 	}
 
-	private static Vector<FlexoActionType> getActionList(FlexoModelObject object) {
-		Class aClass = object.getClass();
+	private static List<FlexoActionType<?, ?, ?>> getActionList(FlexoModelObject object) {
+		Class<?> aClass = object.getClass();
 		if (_actionListForClass.get(aClass) == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("COMPUTE ACTION_LIST FOR " + aClass.getName());
 			}
-			Vector<FlexoActionType> returned = updateActionListFor(object);
+			List<FlexoActionType<?, ?, ?>> returned = updateActionListFor(object);
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("DONE. COMPUTE ACTION_LIST FOR " + aClass.getName() + ": " + returned.size() + " action(s) :");
-				for (Enumeration en = returned.elements(); en.hasMoreElements();) {
-					FlexoActionType next = (FlexoActionType) en.nextElement();
-					logger.fine(" " + next.getLocalizedName());
+				for (FlexoActionType<?, ?, ?> actionType : returned) {
+					logger.fine(" " + actionType.getLocalizedName());
 				}
 				logger.fine(".");
 			}
 			return returned;
 		}
-		Vector<FlexoActionType> returned = _actionListForClass.get(aClass);
+		List<FlexoActionType<?, ?, ?>> returned = _actionListForClass.get(aClass);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("RETURN (NO COMPUTING) ACTION_LIST FOR " + aClass.getName() + ": " + returned.size() + " action(s) :");
-			for (Enumeration en = returned.elements(); en.hasMoreElements();) {
-				FlexoActionType next = (FlexoActionType) en.nextElement();
-				logger.fine(" " + next.getLocalizedName());
+			for (FlexoActionType<?, ?, ?> actionType : returned) {
+				logger.fine(" " + actionType.getLocalizedName());
 			}
 			logger.fine(".");
 		}
 		return returned;
 	}
 
-	private static final Hashtable<Class, Vector<FlexoActionType>> _declaredActionsForClass = new Hashtable<Class, Vector<FlexoActionType>>();
+	private static final Hashtable<Class<?>, List<FlexoActionType<?, ?, ?>>> _declaredActionsForClass = new Hashtable<Class<?>, List<FlexoActionType<?, ?, ?>>>();
 
 	public static <T1 extends FlexoModelObject, T extends T1> void addActionForClass(FlexoActionType<?, T1, ?> actionType,
 			Class<T> objectClass) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("addActionForClass: " + actionType + " for " + objectClass);
 		}
-		Vector<FlexoActionType> actions = _declaredActionsForClass.get(objectClass);
+		List<FlexoActionType<?, ?, ?>> actions = _declaredActionsForClass.get(objectClass);
 		if (actions == null) {
-			actions = new Vector<FlexoActionType>();
+			actions = new ArrayList<FlexoActionType<?, ?, ?>>();
 			_declaredActionsForClass.put(objectClass, actions);
 		}
 		if (actionType != null) {
@@ -533,21 +531,21 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	}
 
-	private static Vector<FlexoActionType> updateActionListFor(FlexoModelObject object) {
+	private static List<FlexoActionType<?, ?, ?>> updateActionListFor(FlexoModelObject object) {
 		if (object == null) {
-			return EmptyVector.EMPTY_VECTOR(FlexoActionType.class);
+			return Collections.emptyList();
 		}
-		Vector<FlexoActionType> newActionList = new Vector<FlexoActionType>();
-		for (Class aClass : _declaredActionsForClass.keySet()) {
-			if (aClass.isAssignableFrom(object.getClass())) {
-				newActionList.addAll(_declaredActionsForClass.get(aClass));
+		List<FlexoActionType<?, ?, ?>> newActionList = new ArrayList<FlexoActionType<?, ?, ?>>();
+		for (Map.Entry<Class<?>, List<FlexoActionType<?, ?, ?>>> e : _declaredActionsForClass.entrySet()) {
+			if (e.getKey().isAssignableFrom(object.getClass())) {
+				newActionList.addAll(e.getValue());
 			}
 		}
-		newActionList.addAll(object.getSpecificActionListForThatClass());
+		newActionList.addAll((Collection<? extends FlexoActionType<?, ?, ?>>) object.getSpecificActionListForThatClass());
 		_actionListForClass.put(object.getClass(), newActionList);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateActionListFor() object: " + object);
-			for (FlexoActionType a : newActionList) {
+			for (FlexoActionType<?, ?, ?> a : newActionList) {
 				logger.finer(" > " + a);
 			}
 		}
@@ -560,8 +558,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	@Override
-	public FlexoActionType getActionTypeAt(int index) {
-		return getActionList().elementAt(index);
+	public FlexoActionType<?, ?, ?> getActionTypeAt(int index) {
+		return getActionList().get(index);
 	}
 
 	public void delete() {

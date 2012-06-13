@@ -60,7 +60,7 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 				if (action.getFilesToOverride().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if (action.getFilesToOverride().size() > 1 || (!(action.getFocusedObject() instanceof CGFile))) {
+				} else if (action.getFilesToOverride().size() > 1 || !(action.getFocusedObject() instanceof CGFile)) {
 
 					SelectFilesPopup popup = new SelectFilesPopup(action.getActionType().getLocalizedName(), action.getActionType()
 							.getLocalizedDescription(), "override_files_on_disk", action.getFilesToOverride(), action.getFocusedObject()
@@ -88,7 +88,7 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 
 					};
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
 						action.setDoItNow((Boolean) popup.getParam("DO_IT_NOW"));
 						action.setFilesToOverride(popup.getFileSet().getSelectedFiles());
 					} else {

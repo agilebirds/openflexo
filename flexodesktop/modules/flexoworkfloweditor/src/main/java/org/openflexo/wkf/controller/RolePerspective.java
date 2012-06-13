@@ -35,7 +35,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.roleeditor.RoleEditorController;
 
-public class RolePerspective extends FlexoPerspective<RoleList> {
+public class RolePerspective extends FlexoPerspective {
 
 	private final WKFController _controller;
 	private RoleEditorController _roleEditorController;

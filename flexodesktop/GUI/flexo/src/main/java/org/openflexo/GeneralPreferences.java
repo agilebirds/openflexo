@@ -36,9 +36,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.module.AutoSaveService;
-import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
@@ -58,49 +55,49 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	private static final Class GENERAL_PREFERENCES = GeneralPreferences.class;
 
-	protected static final String LANGUAGE_KEY = "language";
+	public static final String LANGUAGE_KEY = "language";
 
-	protected static final String SMTP_SERVER_KEY = "smtpServer";
+	public static final String SMTP_SERVER_KEY = "smtpServer";
 
-	protected static final String FAVORITE_MODULE_KEY = "favoriteModule";
+	public static final String FAVORITE_MODULE_KEY = "favoriteModule";
 
-	protected static final String BUG_REPORT_URL_KEY = "secureBugReportDirectActionUrl";
+	public static final String BUG_REPORT_URL_KEY = "secureBugReportDirectActionUrl";
 
-	protected static final String DEFAULT_DOC_FORMAT = "defaultDocFormat";
+	public static final String DEFAULT_DOC_FORMAT = "defaultDocFormat";
 
-	protected static final String USER_IDENTIFIER_KEY = "userIdentifier";
+	public static final String USER_IDENTIFIER_KEY = "userIdentifier";
 
-	protected static final String LAST_OPENED_PROJECTS_1 = "lastProjects_1";
+	public static final String LAST_OPENED_PROJECTS_1 = "lastProjects_1";
 
-	protected static final String LAST_OPENED_PROJECTS_2 = "lastProjects_2";
+	public static final String LAST_OPENED_PROJECTS_2 = "lastProjects_2";
 
-	protected static final String LAST_OPENED_PROJECTS_3 = "lastProjects_3";
+	public static final String LAST_OPENED_PROJECTS_3 = "lastProjects_3";
 
-	protected static final String LAST_OPENED_PROJECTS_4 = "lastProjects_4";
+	public static final String LAST_OPENED_PROJECTS_4 = "lastProjects_4";
 
-	protected static final String LAST_OPENED_PROJECTS_5 = "lastProjects_5";
+	public static final String LAST_OPENED_PROJECTS_5 = "lastProjects_5";
 
-	protected static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
+	public static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
 
-	protected static final String INSPECTOR_ON_TOP = "inspector_always_on_top";
+	public static final String INSPECTOR_ON_TOP = "inspector_always_on_top";
 
-	protected static final String CLOSE_POPUP_ON_CLICK_OUT = "close_popup_on_click_out";
+	public static final String CLOSE_POPUP_ON_CLICK_OUT = "close_popup_on_click_out";
 
-	protected static final String NOTIFY_VALID_PROJECT = "notify_valid_project";
+	public static final String NOTIFY_VALID_PROJECT = "notify_valid_project";
 
-	protected static final String BOUNDS_FOR_FRAME = "BoundsForFrame_";
+	public static final String BOUNDS_FOR_FRAME = "BoundsForFrame_";
 
-	protected static final String SHOW_LEFT_VIEW = "showBrowserIn";
+	public static final String SHOW_LEFT_VIEW = "showBrowserIn";
 
-	protected static final String SHOW_RIGHT_VIEW = "showPaletteIn";
+	public static final String SHOW_RIGHT_VIEW = "showPaletteIn";
 
-	protected static final String STATE_FOR_FRAME = "StateForFrame_";
+	public static final String STATE_FOR_FRAME = "StateForFrame_";
 
-	protected static final String AUTO_SAVE_ENABLED = "AutoSaveEnabled";
+	public static final String AUTO_SAVE_ENABLED = "AutoSaveEnabled";
 
-	protected static final String AUTO_SAVE_INTERVAL = "AutoSaveInterval";
+	public static final String AUTO_SAVE_INTERVAL = "AutoSaveInterval";
 
-	protected static final String AUTO_SAVE_LIMIT = "AutoSaveLimit";
+	public static final String AUTO_SAVE_LIMIT = "AutoSaveLimit";
 
 	private static final String LAST_IMAGE_DIRECTORY = "LAST_IMAGE_DIRECTORY";
 
@@ -164,18 +161,10 @@ public final class GeneralPreferences extends ContextPreferences {
 			Locale.setDefault(Locale.US);
 		}
 		FlexoLocalization.setCurrentLanguage(language);
-		updateModuleFrameTitles();
 		FlexoLocalization.updateGUILocalized();
 		if (language != null && UserType.getCurrentUserType() != null) {
 			FlexoHelp.configure(language.getIdentifier(), UserType.getCurrentUserType().getIdentifier());
 			FlexoHelp.reloadHelpSet();
-		}
-	}
-
-	public static void updateModuleFrameTitles() {
-		Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
-		while (en.hasMoreElements()) {
-			en.nextElement().getFlexoFrame().updateTitle();
 		}
 	}
 
@@ -319,19 +308,6 @@ public final class GeneralPreferences extends ContextPreferences {
 		if (files.size() > 4) {
 			setLastOpenedProject5(files.get(4).getAbsolutePath());
 		}
-		Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
-		while (en.hasMoreElements()) {
-			FlexoModule module = en.nextElement();
-			module.getFlexoController().updateRecentProjectMenu();
-		}
-	}
-
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static AutoSaveService getAutoSaveService() {
-		return AutoSaveService.instance();
 	}
 
 	public static void addToLastOpenedProjects(File project) {
@@ -464,14 +440,6 @@ public final class GeneralPreferences extends ContextPreferences {
 		getPreferences().setIntegerProperty(STATE_FOR_FRAME + id, extendedState);
 	}
 
-	public static String getAutoSaveDirectory() {
-		if (getAutoSaveService().getAutoSaveDirectory() != null) {
-			return getAutoSaveService().getAutoSaveDirectory().getAbsolutePath();
-		} else {
-			return FlexoLocalization.localizedForKey("time_traveling_is_disabled");
-		}
-	}
-
 	public static boolean getAutoSaveEnabled() {
 		Boolean autoSaveEnabled = getPreferences().getBooleanProperty(AUTO_SAVE_ENABLED);
 		if (autoSaveEnabled == null) {
@@ -497,11 +465,6 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	public static void setAutoSaveEnabled(boolean enabled) {
 		getPreferences().setBooleanProperty(AUTO_SAVE_ENABLED, enabled);
-		if (enabled) {
-			getAutoSaveService().startAutoSaveThread();
-		} else {
-			getAutoSaveService().stopAutoSaveThread();
-		}
 	}
 
 	/**
@@ -520,7 +483,6 @@ public final class GeneralPreferences extends ContextPreferences {
 	public static void setAutoSaveInterval(int interval) {
 		if (interval > 0) {
 			getPreferences().setIntegerProperty(AUTO_SAVE_INTERVAL, interval);
-			getAutoSaveService().setAutoSaveSleepTime(interval);
 		}
 	}
 
@@ -539,7 +501,6 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	public static void setAutoSaveLimit(int limit) {
 		getPreferences().setIntegerProperty(AUTO_SAVE_LIMIT, limit);
-		getAutoSaveService().setAutoSaveLimit(limit);
 	}
 
 	public static File getLastImageDirectory() {

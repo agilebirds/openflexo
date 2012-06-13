@@ -33,9 +33,9 @@ import org.openflexo.vpm.controller.VPMController;
  */
 public class OntologyView extends FIBModuleView<FlexoOntology> {
 
-	private FlexoPerspective<? super FlexoOntology> declaredPerspective;
+	private FlexoPerspective declaredPerspective;
 
-	public OntologyView(FlexoOntology ontology, VPMController controller, FlexoPerspective<? super FlexoOntology> perspective) {
+	public OntologyView(FlexoOntology ontology, VPMController controller, FlexoPerspective perspective) {
 		super(ontology, controller, CEDCst.ONTOLOGY_VIEW_FIB);
 		declaredPerspective = perspective;
 		controller.manageResource(ontology);
@@ -47,7 +47,7 @@ public class OntologyView extends FIBModuleView<FlexoOntology> {
 	}
 
 	@Override
-	public FlexoPerspective<? super FlexoOntology> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
 }

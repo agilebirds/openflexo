@@ -29,7 +29,6 @@ import javax.swing.JButton;
 import org.openflexo.ch.FCH;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
@@ -39,11 +38,11 @@ public class FlexoActionButton extends JButton {
 	private final FlexoActionSource actionSource;
 	private final FlexoEditor _editor;
 
-	public FlexoActionButton(FlexoActionType actionType, FlexoActionSource source, FlexoEditor editor) {
+	public FlexoActionButton(FlexoActionType<?, ?, ?> actionType, FlexoActionSource source, FlexoEditor editor) {
 		this(actionType, null, source, editor);
 	}
 
-	public FlexoActionButton(FlexoActionType actionType, String unlocalizedActionName, FlexoActionSource source, FlexoEditor editor) {
+	public FlexoActionButton(FlexoActionType<?, ?, ?> actionType, String unlocalizedActionName, FlexoActionSource source, FlexoEditor editor) {
 		super();
 		_editor = editor;
 		actionSource = source;
@@ -64,7 +63,7 @@ public class FlexoActionButton extends JButton {
 		setEnabled(action.isEnabled());
 	}
 
-	protected Vector getGlobalSelection() {
+	protected Vector<FlexoModelObject> getGlobalSelection() {
 		return actionSource.getGlobalSelection();
 	}
 
@@ -74,31 +73,31 @@ public class FlexoActionButton extends JButton {
 
 	public class ButtonAction implements ActionListener {
 
-		private final FlexoActionType _actionType;
+		private final FlexoActionType<?, ?, ?> _actionType;
 		private String _unlocalizedName = null;
 
-		public ButtonAction(FlexoActionType actionType) {
+		public ButtonAction(FlexoActionType<?, ?, ?> actionType) {
 			super();
 			_actionType = actionType;
 		}
 
-		public ButtonAction(FlexoActionType actionType, String actionName) {
+		public ButtonAction(FlexoActionType<?, ?, ?> actionType, String actionName) {
 			this(actionType);
 			_unlocalizedName = actionName;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			FlexoAction action = _actionType.makeNewAction(getFocusedObject(), getGlobalSelection(), _editor);
-			action.setInvoker(actionSource);
-			action.actionPerformed(event);
+			_editor.performActionType((FlexoActionType<?, FlexoModelObject, FlexoModelObject>) _actionType, getFocusedObject(),
+					getGlobalSelection(), event);
 		}
 
 		public boolean isEnabled() {
-			return _actionType.isEnabled(getFocusedObject(), getGlobalSelection(), _editor);
+			return _editor.isActionEnabled((FlexoActionType<?, FlexoModelObject, FlexoModelObject>) _actionType, getFocusedObject(),
+					getGlobalSelection());
 		}
 
-		public FlexoActionType getActionType() {
+		public FlexoActionType<?, ?, ?> getActionType() {
 			return _actionType;
 		}
 

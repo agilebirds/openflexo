@@ -50,8 +50,8 @@ import org.openflexo.inspector.widget.LabelWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.AskParametersController;
-import org.openflexo.view.controller.FlexoController;
 
 /**
  * Dialog allowing to automatically ask and edit parameters
@@ -87,8 +87,8 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		if (owner != null) {
 			return new AskParametersDialog(owner, project, windowTitle, title, parameters);
 		}
-		if (FlexoController.getActiveFrame() != null) {
-			return new AskParametersDialog(FlexoController.getActiveFrame(), project, windowTitle, title, parameters);
+		if (FlexoFrame.getActiveFrame() != null) {
+			return new AskParametersDialog(FlexoFrame.getActiveFrame(), project, windowTitle, title, parameters);
 		} else if (ProgressWindow.hasInstance()) {
 			return new AskParametersDialog(ProgressWindow.instance().initOwner, project, windowTitle, title, parameters);
 		}

@@ -24,8 +24,8 @@ import java.awt.Dimension;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.components.widget.AbstractSelectorPanel.AbstractSelectorPanelOwner;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * View related to a ProjectBrowser, allowing to select an object with a browsing perspective
@@ -36,8 +36,8 @@ public abstract class BrowserChooserView extends BrowserView {
 
 	private AbstractSelectorPanelOwner<?> _owner;
 
-	public BrowserChooserView(ProjectBrowser browser, AbstractSelectorPanelOwner<?> owner, FlexoEditor editor) {
-		super(browser, null, editor);
+	public BrowserChooserView(ProjectBrowser browser, FlexoController controller, AbstractSelectorPanelOwner<?> owner) {
+		super(browser, controller, null);
 		_owner = owner;
 		setMinimumSize(getDefaultSize());
 		validate();

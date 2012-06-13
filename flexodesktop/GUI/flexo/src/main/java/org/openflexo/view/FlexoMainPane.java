@@ -423,7 +423,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 
 		public ControlPanel() {
 			super();
-			moduleBar = new ModuleBar();
+			moduleBar = new ModuleBar(getController().getModuleLoader());
 			setLayout(new BorderLayout());
 
 			centerPanel = new JPanel(new BorderLayout());
@@ -953,7 +953,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		}
 	}
 
-	protected void switchToPerspective(FlexoPerspective<?> perspective) {
+	protected void switchToPerspective(FlexoPerspective perspective) {
 		_controller.switchToPerspective(perspective);
 	}
 
@@ -961,7 +961,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		_controller.setCurrentEditedObjectAsModuleView(object);
 	}
 
-	protected void switchToModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective<?> perspective) {
+	protected void switchToModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Switch to object " + object + " and perspective " + perspective);
 		}
@@ -987,9 +987,9 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 	public class HistoryLocation {
 		private final FlexoModelObject _object;
 
-		private final FlexoPerspective<?> _perspective;
+		private final FlexoPerspective _perspective;
 
-		protected HistoryLocation(FlexoModelObject object, FlexoPerspective<?> perspective) {
+		protected HistoryLocation(FlexoModelObject object, FlexoPerspective perspective) {
 			super();
 			_object = object;
 			_perspective = perspective;
@@ -999,7 +999,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			return _object;
 		}
 
-		public FlexoPerspective<?> getPerspective() {
+		public FlexoPerspective getPerspective() {
 			return _perspective;
 		}
 	}

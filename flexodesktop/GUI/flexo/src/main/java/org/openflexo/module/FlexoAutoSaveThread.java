@@ -19,13 +19,6 @@
  */
 package org.openflexo.module;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -40,27 +33,13 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.ColorCst;
-import org.openflexo.components.AskParametersPanel;
-import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.PropertyListParameter;
-import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.foundation.utils.ProjectInitializerException;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorObserver;
 import org.openflexo.inspector.model.TabModel;
@@ -68,7 +47,6 @@ import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -118,7 +96,7 @@ public class FlexoAutoSaveThread extends Thread {
 	 */
 	private File tempDirectory;
 
-	private boolean run = true;
+	private volatile boolean run = true;
 
 	/**
 	 *
@@ -240,6 +218,7 @@ public class FlexoAutoSaveThread extends Thread {
 	@Override
 	public void run() {
 		while (run) {
+			pauseIfNeeded();
 			try {
 				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
@@ -248,6 +227,7 @@ public class FlexoAutoSaveThread extends Thread {
 				}
 				continue;
 			}
+			pauseIfNeeded();
 			boolean needsSave = false;
 			if (projects.size() == 0) {
 				needsSave = true;
@@ -295,49 +275,15 @@ public class FlexoAutoSaveThread extends Thread {
 		}
 	}
 
-	public void restoreAutoSaveProject(FlexoAutoSaveFile autoSaveFile, FlexoProgress progress) throws IOException {
-		File projectDirectory = project.getProjectDirectory();
-		File dest = null;
-		int attempt = 0;
-		while (dest == null || dest.exists()) {
-			dest = new File(projectDirectory.getParentFile(), projectDirectory.getName() + ".restore" + (attempt == 0 ? "" : "." + attempt));
-			attempt++;
+	private void pauseIfNeeded() {
+		while (pause) {
+			synchronized (this) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+				}
+			}
 		}
-		if (progress != null) {
-			progress.setProgress(FlexoLocalization.localizedForKey("creating_restore_project_at") + " " + dest.getAbsolutePath());
-		}
-		FileUtils.copyContentDirToDir(projectDirectory, dest);
-		if (progress != null) {
-			progress.setProgress(FlexoLocalization.localizedForKey("closing_project"));
-		}
-		ProjectLoader.instance().closeCurrentProject();
-		if (progress != null) {
-			progress.setProgress(FlexoLocalization.localizedForKey("deleting_project"));
-		}
-		FileUtils.deleteDir(projectDirectory);
-		if (progress != null) {
-			progress.setProgress(FlexoLocalization.localizedForKey("restoring_project"));
-		}
-		FileUtils.copyContentDirToDir(autoSaveFile.getDirectory(), projectDirectory);
-		if (progress != null) {
-			progress.hideWindow();
-		}
-		try {
-			getModuleLoader().openProject(projectDirectory, null);
-		} catch (ModuleLoadingException e) {
-			logger.severe("This shouldn't append since module is already loaded." + e.getMessage());
-			e.printStackTrace();
-			FlexoController.notify("This shouldn't append since module is already loaded." + e.getMessage());
-		} catch (ProjectLoadingCancelledException e) {
-			return;
-		} catch (ProjectInitializerException e) {
-			e.printStackTrace();
-			return;
-		}
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
 	}
 
 	public FlexoProject getProject() {
@@ -372,6 +318,8 @@ public class FlexoAutoSaveThread extends Thread {
 	}
 
 	private boolean autoSaveFailedNotified = false;
+
+	private volatile boolean pause = false;
 
 	private class AutoSaveActionFailed implements Runnable {
 		/**
@@ -515,110 +463,21 @@ public class FlexoAutoSaveThread extends Thread {
 		this.run = run;
 	}
 
-	private AutoSaveService getAutoSaveService() {
-		return AutoSaveService.instance();
+	public void pause() {
+		pause = true;
 	}
 
-	public void showTimeTravelerDialog() {
-		getAutoSaveService().stopAutoSaveThread();
-		final FlexoDialog dialog = new FlexoDialog(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame()
-				: null, true);
-		final ParameterDefinition[] parameters = new ParameterDefinition[2];
-		parameters[0] = new ReadOnlyTextFieldParameter("directory", "save_directory", tempDirectory.getAbsolutePath());
-		parameters[1] = new PropertyListParameter<FlexoAutoSaveFile>("backUps", FlexoLocalization.localizedForKey("back-ups"), projects,
-				20, 12);
-		((PropertyListParameter) parameters[1]).addReadOnlyTextFieldColumn("creationDateAsAString", "creation_date", 100, true);
-		((PropertyListParameter) parameters[1]).addReadOnlyTextFieldColumn("offset", "offset", 100, true);
-		((PropertyListParameter) parameters[1]).addReadOnlyTextFieldColumn("path", "path", 450, true);
-		/*parameters[1] = new CheckboxParameter("autoSaveEnabled", FlexoLocalization.localizedForKey("enable_auto_save"),GeneralPreferences.getAutoSaveEnabled());
-		parameters[2] = new IntegerParameter("autoSaveInterval", FlexoLocalization.localizedForKey("auto_save_interval (minutes)"),GeneralPreferences.getAutoSaveInterval());
-		parameters[2].setDepends("autoSaveEnabled");
-		parameters[2].setConditional("autoSaveEnabled=true");
-		parameters[3] = new IntegerParameter("autoSaveLimit", FlexoLocalization.localizedForKey("limit (0=no_limit)"),GeneralPreferences.getAutoSaveLimit());
-		parameters[3].setDepends("autoSaveEnabled");
-		parameters[3].setConditional("autoSaveEnabled=true");*/
-		JPanel north = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		north.setBackground(Color.WHITE);
-		JLabel label = new JLabel("<html>" + FlexoLocalization.localizedForKey("time_travel_info") + "</html>",
-				IconLibrary.TIME_TRAVEL_ICON, SwingConstants.LEFT);
-		north.add(label);
-		AskParametersPanel panel = new AskParametersPanel(project, parameters);
-		JPanel south = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		south.setBackground(ColorCst.GUI_BACK_COLOR);
-		JButton cancel = new JButton(FlexoLocalization.localizedForKey("cancel"));
-		cancel.addActionListener(new ActionListener() {
-			/**
-			 * Overrides actionPerformed
-			 * 
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dialog.dispose();
-				getAutoSaveService().startAutoSaveThread();
-			}
-		});
-		JButton ok = new JButton(FlexoLocalization.localizedForKey("restore"));
-		ok.addActionListener(new ActionListener() {
-			/**
-			 * Overrides actionPerformed
-			 * 
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dialog.dispose();
-				FlexoAutoSaveFile autoSaveFile = (FlexoAutoSaveFile) ((PropertyListParameter) parameters[1]).getSelectedObject();
-				if (autoSaveFile != null) {
-					if (FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_that_you_want_to_revert_to_that_version?"))) {
-						try {
-							ProgressWindow.showProgressWindow(null, FlexoLocalization.localizedForKey("project_restoration"), 4);
-							if (FlexoModule.getActiveModule() != null) {
-								ProgressWindow.instance().center();
-							}
-							restoreAutoSaveProject(autoSaveFile, ProgressWindow.instance());
-						} catch (IOException e1) {
-							e1.printStackTrace();
-							FlexoController.showError(FlexoLocalization
-									.localizedForKey("an_error_occured_while_trying_to_restore_your_project")
-									+ "\n"
-									+ project.getProjectDirectory().getAbsolutePath());
-						}
-					} else {
-						getAutoSaveService().startAutoSaveThread();
-					}
-				} else {
-					getAutoSaveService().startAutoSaveThread();
-				}
-
-			}
-		});
-		dialog.addWindowListener(new WindowAdapter() {
-			/**
-			 * Overrides windowClosing
-			 * 
-			 * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
-			 */
-			@Override
-			public void windowClosing(WindowEvent e) {
-				getAutoSaveService().startAutoSaveThread();
-				super.windowClosing(e);
-			}
-		});
-		south.add(ok);
-		south.add(cancel);
-		dialog.getContentPane().setLayout(new BorderLayout());
-		dialog.getContentPane().add(panel);
-		dialog.getContentPane().add(north, BorderLayout.NORTH);
-		dialog.getContentPane().add(south, BorderLayout.SOUTH);
-		dialog.setTitle(FlexoLocalization.localizedForKey("time_traveler"));
-		dialog.validate();
-		dialog.pack();
-		dialog.show();
+	public void unpause() {
+		pause = false;
+		notify();
 	}
 
 	public File getTempDirectory() {
 		return tempDirectory;
+	}
+
+	public LinkedList<FlexoAutoSaveFile> getProjects() {
+		return projects;
 	}
 
 }

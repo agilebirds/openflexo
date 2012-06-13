@@ -40,7 +40,7 @@ import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
 
-public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
+public class SwimmingLanePerspective extends FlexoPerspective {
 
 	private final WKFController _controller;
 

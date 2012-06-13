@@ -22,6 +22,9 @@ package org.openflexo.localization;
 import java.awt.Component;
 import java.awt.Frame;
 import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
@@ -59,7 +62,7 @@ public class FlexoLocalization {
 
 	private static Language _currentLanguage;
 
-	private static Vector<LocalizationListener> localizationListeners = new Vector<LocalizationListener>();
+	private static List<WeakReference<LocalizationListener>> localizationListeners = new Vector<WeakReference<LocalizationListener>>();
 
 	private static final WeakHashMap<Component, String> _storedLocalizedForComponents = new WeakHashMap<Component, String>();
 
@@ -371,8 +374,14 @@ public class FlexoLocalization {
 
 	public static void setCurrentLanguage(Language language) {
 		_currentLanguage = language;
-		for (LocalizationListener l : localizationListeners) {
-			l.languageChanged(language);
+		Iterator<WeakReference<LocalizationListener>> i = localizationListeners.iterator();
+		while (i.hasNext()) {
+			LocalizationListener l = i.next().get();
+			if (l == null) {
+				i.remove();
+			} else {
+				l.languageChanged(language);
+			}
 		}
 	}
 
@@ -505,10 +514,16 @@ public class FlexoLocalization {
 	}
 
 	public static void addToLocalizationListeners(LocalizationListener l) {
-		localizationListeners.add(l);
+		localizationListeners.add(new WeakReference<LocalizationListener>(l));
 	}
 
 	public static void removeFromLocalizationListeners(LocalizationListener l) {
-		localizationListeners.remove(l);
+		Iterator<WeakReference<LocalizationListener>> i = localizationListeners.iterator();
+		while (i.hasNext()) {
+			LocalizationListener l1 = i.next().get();
+			if (l1 == null || l1 == l) {
+				i.remove();
+			}
+		}
 	}
 }

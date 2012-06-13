@@ -36,10 +36,10 @@ import org.openflexo.view.controller.FlexoFIBController;
 public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumContainer> {
 	public static String HIBERNATE_ENUM_CONTAINER_VIEW_FIB_RESOURCE_PATH = "/Hibernate/Fib/EnumContainerView.fib";
 
-	private FlexoPerspective<? super HibernateEnumContainer> declaredPerspective;
+	private FlexoPerspective declaredPerspective;
 
 	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller,
-			FlexoPerspective<? super HibernateEnumContainer> perspective) {
+			FlexoPerspective perspective) {
 		super(hibernateEnumContainer, controller, HIBERNATE_ENUM_CONTAINER_VIEW_FIB_RESOURCE_PATH);
 		declaredPerspective = perspective;
 	}
@@ -50,7 +50,7 @@ public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumConta
 	}
 
 	@Override
-	public FlexoPerspective<? super HibernateEnumContainer> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
 

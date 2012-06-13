@@ -40,6 +40,17 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 
 	private static final Logger logger = Logger.getLogger(FlexoApplicationAdapter.class.getPackage().getName());
 
+	private final ModuleLoader moduleLoader;
+
+	protected FlexoApplicationAdapter(ModuleLoader moduleLoader) {
+		super();
+		this.moduleLoader = moduleLoader;
+	}
+
+	public ModuleLoader getModuleLoader() {
+		return moduleLoader;
+	}
+
 	public void handleAbout(ApplicationEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handleAbout");
@@ -69,10 +80,6 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 
 	public void handleOpenFile(ApplicationEvent arg0) {
 		Flexo.setFileNameToOpen(arg0.getFilename());
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
 	}
 
 }

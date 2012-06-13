@@ -29,7 +29,6 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
 
@@ -37,19 +36,12 @@ public class FlexoResourceCenterService {
 
 	private static final Logger logger = Logger.getLogger(FlexoResourceCenterService.class.getPackage().getName());
 
-	private static FlexoResourceCenterService flexoResourceCenterService;
+	private static class Holder {
+		private static FlexoResourceCenterService flexoResourceCenterService = new FlexoResourceCenterService();
+	}
 
-	private static final Object monitor = new Object();
-
-	public static FlexoResourceCenterService instance() {
-		if (flexoResourceCenterService == null) {
-			synchronized (monitor) {
-				if (flexoResourceCenterService == null) {
-					flexoResourceCenterService = new FlexoResourceCenterService();
-				}
-			}
-		}
-		return flexoResourceCenterService;
+	public static FlexoResourceCenterService getInstance() {
+		return Holder.flexoResourceCenterService;
 	}
 
 	private FlexoResourceCenter flexoResourceCenter;
@@ -60,10 +52,6 @@ public class FlexoResourceCenterService {
 
 	public FlexoResourceCenter getFlexoResourceCenter() {
 		return getFlexoResourceCenter(true);
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
 	}
 
 	public FlexoResourceCenter createAndSetFlexoResourceCenter(File dir) {
@@ -97,12 +85,6 @@ public class FlexoResourceCenterService {
 						break;
 					case CANCELED:
 						// I think that this should not be allowed.
-						break;
-					case QUIT:
-						try {
-							getModuleLoader().quit(true);
-						} catch (ProjectExitingCancelledException e) {
-						}
 						break;
 					default:
 						break;

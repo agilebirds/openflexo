@@ -38,12 +38,12 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.action.EditionAction;
 
 /**
  * Give a shortcut to the item and register the action near the FlexoMainController
@@ -56,7 +56,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 
 	private final FlexoController _controller;
 
-	protected AbstractAction _action;
+	private FlexoActionType actionType;
 
 	public FlexoMenuItem(FlexoController controller, String unlocalizedMenuName) {
 		super();
@@ -68,7 +68,6 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 			boolean localizeActionName) {
 		super(action);
 		_controller = controller;
-		_action = action;
 		if (accelerator != null) {
 			setAccelerator(accelerator);
 			_controller.registerActionForKeyStroke(action, accelerator);
@@ -91,12 +90,11 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 	}
 
 	public FlexoMenuItem(FlexoActionType actionType, FlexoController controller) {
-		super(actionType);
+		super();
+		this.actionType = actionType;
+		setAction(new EditionAction(actionType, this));
 		_controller = controller;
-		_action = actionType;
-		if (actionType.getKeyStroke() != null) {
-			setAccelerator(actionType.getKeyStroke());
-		}
+		setAccelerator(controller.getEditor().getKeyStrokeFor(actionType));
 		if (controller.getEditor().getEnabledIconFor(actionType) != null) {
 			setIcon(controller.getEditor().getEnabledIconFor(actionType));
 		}
@@ -109,7 +107,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 	@Override
 	public FlexoModelObject getFocusedObject() {
 		if (_controller instanceof SelectionManagingController) {
-			return (((SelectionManagingController) _controller).getSelectionManager().getLastSelectedObject());
+			return ((SelectionManagingController) _controller).getSelectionManager().getLastSelectedObject();
 		}
 		return null;
 	}
@@ -117,7 +115,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 	@Override
 	public Vector<FlexoModelObject> getGlobalSelection() {
 		if (_controller instanceof SelectionManagingController) {
-			return (((SelectionManagingController) _controller).getSelectionManager().getSelection());
+			return ((SelectionManagingController) _controller).getSelectionManager().getSelection();
 		}
 		return null;
 	}
@@ -138,13 +136,9 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
      * 
      */
 	public void itemWillShow() {
-		if (_action instanceof FlexoGUIAction) {
-			setEnabled(true);
-			return;
-		}
-		if ((_action instanceof FlexoActionType) && (getSelectionManager() != null)) {
-			if (((getFocusedObject() == null) || (getFocusedObject().getActionList().indexOf((_action)) > -1))) {
-				setEnabled(((FlexoActionType) _action).isEnabled(getFocusedObject(), getGlobalSelection(), _controller.getEditor()));
+		if (actionType instanceof FlexoActionType && getSelectionManager() != null) {
+			if (getFocusedObject() == null || getFocusedObject().getActionList().indexOf(actionType) > -1) {
+				setEnabled(actionType.isEnabled(getFocusedObject(), getGlobalSelection(), _controller.getEditor()));
 			} else {
 				setEnabled(false);
 			}

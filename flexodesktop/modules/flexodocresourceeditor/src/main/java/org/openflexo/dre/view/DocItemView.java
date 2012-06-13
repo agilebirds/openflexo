@@ -42,7 +42,7 @@ public class DocItemView extends AbstractDocItemView {
 	}
 
 	@Override
-	public FlexoPerspective<DRMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getDREController().DRE_PERSPECTIVE;
 	}
 

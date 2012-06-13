@@ -127,7 +127,7 @@ public class MultipleObjectInspectorWidget<E extends FlexoModelObject> extends C
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		setObjectValue(_selector.getSelectedObjects());
+		setObjectValue((Vector<E>) _selector.getSelectedObjects());
 		super.updateModelFromWidget();
 	}
 

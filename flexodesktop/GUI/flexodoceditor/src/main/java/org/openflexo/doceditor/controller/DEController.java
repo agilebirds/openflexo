@@ -41,14 +41,12 @@ import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 
@@ -61,7 +59,7 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 
 	protected static final Logger logger = Logger.getLogger(DEController.class.getPackage().getName());
 
-	public final FlexoPerspective<TOCObject> DOCEDITOR_PERSPECTIVE = new DocEditorPerspective();
+	public final FlexoPerspective DOCEDITOR_PERSPECTIVE = new DocEditorPerspective();
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -95,8 +93,8 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public DEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
+	public DEController(FlexoModule module) throws Exception {
+		super(module);
 
 		addToPerspectives(DOCEDITOR_PERSPECTIVE);
 		_generatorMenuBar = (DEMenuBar) createAndRegisterNewMenuBar();

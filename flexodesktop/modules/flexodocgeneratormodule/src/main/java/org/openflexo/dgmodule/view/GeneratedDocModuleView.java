@@ -90,7 +90,7 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 

@@ -41,7 +41,7 @@ import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessView;
 
-public class ProcessPerspective extends FlexoPerspective<FlexoProcess> {
+public class ProcessPerspective extends FlexoPerspective {
 	static final Logger logger = Logger.getLogger(ProcessPerspective.class.getPackage().getName());
 
 	private final WKFController _controller;

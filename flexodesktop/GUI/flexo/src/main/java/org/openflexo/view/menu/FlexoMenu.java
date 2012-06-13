@@ -30,6 +30,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.ModuleLoader;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -56,6 +57,10 @@ public abstract class FlexoMenu extends JMenu implements MouseListener, MenuList
 		addMenuListener(this);
 	}
 
+	public void dispose() {
+
+	}
+
 	// ==========================================================================
 	// ============================= Accessors
 	// ==================================
@@ -63,6 +68,10 @@ public abstract class FlexoMenu extends JMenu implements MouseListener, MenuList
 
 	public FlexoController getController() {
 		return _controller;
+	}
+
+	protected ModuleLoader getModuleLoader() {
+		return getController().getModuleLoader();
 	}
 
 	protected void setController(FlexoController controller) {

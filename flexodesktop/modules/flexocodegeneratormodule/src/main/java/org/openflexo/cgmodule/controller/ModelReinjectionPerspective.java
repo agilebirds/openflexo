@@ -24,7 +24,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class ModelReinjectionPerspective extends FlexoPerspective<FlexoModelObject> {
+class ModelReinjectionPerspective extends FlexoPerspective {
 
 	/**
 	 * 

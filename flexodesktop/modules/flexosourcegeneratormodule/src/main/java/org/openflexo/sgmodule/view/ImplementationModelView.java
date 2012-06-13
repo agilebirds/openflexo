@@ -36,10 +36,10 @@ import org.openflexo.view.controller.FlexoFIBController;
  */
 public class ImplementationModelView extends FIBModuleView<ImplementationModel> {
 
-	private FlexoPerspective<? super ImplementationModel> declaredPerspective;
+	private FlexoPerspective declaredPerspective;
 
 	public ImplementationModelView(ImplementationModel implementationModel, SGController controller,
-			FlexoPerspective<? super ImplementationModel> perspective) {
+			FlexoPerspective perspective) {
 		super(implementationModel, controller, SGCst.IMPLEMENTATION_MODEL_VIEW_FIB, true);
 		declaredPerspective = perspective;
 	}
@@ -50,7 +50,7 @@ public class ImplementationModelView extends FIBModuleView<ImplementationModel> 
 	}
 
 	@Override
-	public FlexoPerspective<? super ImplementationModel> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
 

@@ -171,6 +171,7 @@ import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -196,7 +197,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author sguerin
  */
-public final class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
+public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>> {
 
 	private static final String FRAMEWORKS_DIRECTORY = "Frameworks";
@@ -306,6 +307,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	private FlexoIECustomWidgetPalette customWidgetPalette;
 	private FlexoIECustomImagePalette customImagePalette;
 	private FlexoIEBIRTPalette birtPalette;
+
+	private IModuleLoader moduleLoader;
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -4141,5 +4144,13 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 				_retrievePendingEditionPatternReferences(oo);
 			}
 		}
+	}
+
+	public IModuleLoader getModuleLoader() {
+		return moduleLoader;
+	}
+
+	public void setModuleLoader(IModuleLoader moduleLoader) {
+		this.moduleLoader = moduleLoader;
 	}
 }

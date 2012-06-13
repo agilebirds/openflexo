@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
@@ -35,6 +36,8 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
+import org.openflexo.components.NewProjectComponent;
+import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.foundation.action.ValidateProject;
 import org.openflexo.foundation.imported.action.RefreshImportedProcessAction;
 import org.openflexo.foundation.imported.action.RefreshImportedRoleAction;
@@ -42,15 +45,13 @@ import org.openflexo.foundation.imported.action.UploadPrjAction;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.toolbox.ToolBox;
@@ -210,22 +211,12 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try {
-				getModuleLoader().newProject(null, null);
-			} catch (ProjectLoadingCancelledException e) {
-			} catch (ModuleLoadingException e) {
-				e.printStackTrace();
-				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+			File projectDirectory = NewProjectComponent.getProjectDirectory();
+			if (projectDirectory != null) {
+				getController().getProjectLoader().newProject(projectDirectory);
+
 			}
 		}
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private ProjectLoader getProjectLoader() {
-		return ProjectLoader.instance();
 	}
 
 	// ==========================================================================
@@ -247,15 +238,16 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try {
-				getModuleLoader().openProject(null, null);
-			} catch (ProjectLoadingCancelledException e) {
-			} catch (ModuleLoadingException e) {
-				e.printStackTrace();
-				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
-			} catch (ProjectInitializerException e) {
-				e.printStackTrace();
-
+			File projectDirectory = OpenProjectComponent.getProjectDirectory();
+			if (projectDirectory != null) {
+				try {
+					getProjectLoader().loadProject(projectDirectory);
+				} catch (ProjectLoadingCancelledException e) {
+				} catch (ProjectInitializerException e) {
+					e.printStackTrace();
+					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+							+ projectDirectory.getAbsolutePath());
+				}
 			}
 		}
 	}
@@ -282,11 +274,8 @@ public class FileMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				getModuleLoader().openProject(projectDirectory, null);
+				getProjectLoader().loadProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e) {
-			} catch (ModuleLoadingException e) {
-				e.printStackTrace();
-				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
 			} catch (ProjectInitializerException e) {
 				e.printStackTrace();
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
@@ -320,7 +309,13 @@ public class FileMenu extends FlexoMenu {
 		public void actionPerformed(ActionEvent arg0) {
 			Cursor c = FileMenu.this._controller.getFlexoFrame().getCursor();
 			FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
-			getProjectLoader().saveProject(getModuleLoader().getProject(), false);
+			try {
+				getProjectLoader().saveProjects(Arrays.asList(getController().getProject()));
+			} catch (SaveResourceExceptionList e) {
+				e.printStackTrace();
+				FlexoController.showError(FlexoLocalization.localizedForKey("errors_during_saving"),
+						FlexoLocalization.localizedForKey("errors_during_saving"));
+			}
 			FileMenu.this._controller.getFlexoFrame().setCursor(c);
 		}
 
@@ -346,7 +341,7 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			getProjectLoader().saveAsProject(getModuleLoader().getProject());
+			getProjectLoader().saveAsProject(getController().getProject());
 		}
 
 	}
@@ -495,6 +490,10 @@ public class FileMenu extends FlexoMenu {
 		return true;
 	}
 
+	protected ProjectLoader getProjectLoader() {
+		return getController().getProjectLoader();
+	}
+
 	public class SaveProjectForServerAction extends AbstractAction {
 		public SaveProjectForServerAction() {
 			super();
@@ -504,7 +503,7 @@ public class FileMenu extends FlexoMenu {
 		public void actionPerformed(ActionEvent arg0) {
 			boolean isOperationConfirmed = saveForServerPreprocessing();
 			if (isOperationConfirmed) {
-				getProjectLoader().saveProjectForServer(getModuleLoader().getProject());
+				getProjectLoader().saveProjectForServer(getController().getProject());
 			}
 		}
 
@@ -530,11 +529,9 @@ public class FileMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				getModuleLoader().reloadProject();
+				getProjectLoader().reloadProject(getController().getProject());
 			} catch (ProjectLoadingCancelledException e) {
-			} catch (ModuleLoadingException e) {
-				e.printStackTrace();
-				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+
 			} catch (ProjectInitializerException e) {
 				e.printStackTrace();
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
@@ -567,7 +564,7 @@ public class FileMenu extends FlexoMenu {
 		public void actionPerformed(ActionEvent arg0) {
 			// FlexoModule.getActiveModule().getFlexoController().showInspector();
 			// FlexoModule.getActiveModule().getFlexoController().setCurrentInspectedObject(FlexoModule.getActiveModule().getFlexoController().getProject());
-			FlexoController controller = FlexoModule.getActiveModule().getFlexoController();
+			FlexoController controller = getController();
 			if (controller instanceof SelectionManagingController) {
 				((SelectionManagingController) controller).getSelectionManager().setSelectedObject(controller.getProject());
 			}

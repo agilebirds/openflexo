@@ -25,10 +25,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.UndoException;
 import org.openflexo.foundation.wkf.FlexoFolderContainerNode;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
@@ -73,7 +73,7 @@ public class MoveProcessFolder extends FlexoAction<MoveProcessFolder, ProcessFol
 	private FlexoFolderContainerNode destination;
 
 	@Override
-	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
+	protected void doAction(Object context) throws FlexoException {
 		if (getDestination() == null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Destination is null! Returning now");

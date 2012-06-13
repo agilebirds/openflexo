@@ -71,7 +71,7 @@ public class DREViewExample extends JPanel implements ModuleView<DRMObject>, Gra
 	}
 
 	@Override
-	public FlexoPerspective<DRMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getDREController().DRE_PERSPECTIVE;
 	}
 

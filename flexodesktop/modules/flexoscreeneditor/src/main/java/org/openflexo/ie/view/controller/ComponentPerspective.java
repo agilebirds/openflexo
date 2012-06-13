@@ -42,7 +42,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class ComponentPerspective extends FlexoPerspective<ComponentInstance> {
+class ComponentPerspective extends FlexoPerspective {
 
 	private final IEController _controller;
 	private final IEPalette iePalette;

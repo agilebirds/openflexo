@@ -100,7 +100,7 @@ public class WKFDocumentationView extends JPanel implements SelectionSynchronize
 	}
 
 	@Override
-	public FlexoPerspective<FlexoProcess> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.DOCUMENTATION_PERSPECTIVE;
 	}
 

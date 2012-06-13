@@ -23,11 +23,12 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.ProjectRepository;
 
-public class CreateProjectRepository extends CreateDMRepository {
+public class CreateProjectRepository extends CreateDMRepository<CreateProjectRepository> {
 
 	static final Logger logger = Logger.getLogger(CreateProjectRepository.class.getPackage().getName());
 
@@ -56,6 +57,11 @@ public class CreateProjectRepository extends CreateDMRepository {
 
 	CreateProjectRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		_newRepository = ProjectRepository.createNewProjectRepository(getNewRepositoryName(), getProject().getDataModel());
 	}
 
 	@Override

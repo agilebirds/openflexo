@@ -19,12 +19,17 @@
  */
 package org.openflexo.view.controller;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.AbstractButton;
 import javax.swing.JMenuItem;
 
 import org.openflexo.AdvancedPrefs;
@@ -34,26 +39,42 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-public class UndoManager {
+public class UndoManager implements HasPropertyChangeSupport, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(UndoManager.class.getPackage().getName());
 
-	private Vector<FlexoAction> _actionHistory;
+	private List<FlexoAction> _actionHistory;
 	private int _lastDoneIndex = -1;
-	private Vector<AbstractButton> _undoControls;
-	private Vector<AbstractButton> _redoControls;
+
+	private PropertyChangeSupport propertyChangeSupport;
+
+	private boolean enabled;
+	private int undoLevel;
 
 	public UndoManager() {
-		_actionHistory = new Vector<FlexoAction>();
-		_undoControls = new Vector<AbstractButton>();
-		_redoControls = new Vector<AbstractButton>();
-		// logger.setLevel(Level.FINE);
+		this.propertyChangeSupport = new PropertyChangeSupport(this);
+		_actionHistory = new LinkedList<FlexoAction>();
+		enabled = AdvancedPrefs.getEnableUndoManager();
+		undoLevel = AdvancedPrefs.getUndoLevels();
+		AdvancedPrefs.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(AdvancedPrefs.ENABLE_UNDO_MANAGER, this);
+		AdvancedPrefs.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(AdvancedPrefs.UNDO_LEVELS, this);
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
 	}
 
 	public void registerDoneAction(FlexoAction action) {
 
-		if (!ENABLED) {
+		if (!enabled) {
 			return;
 		}
 
@@ -70,12 +91,12 @@ public class UndoManager {
 			refreshControls();
 		}
 
-		if (_actionHistory.size() > UNDO_LEVELS) {
+		if (_actionHistory.size() > undoLevel) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Removing " + _actionHistory.firstElement());
+				logger.fine("Removing " + _actionHistory.get(0));
 			}
-			(_actionHistory.firstElement()).delete();
-			_actionHistory.removeElementAt(0);
+			_actionHistory.get(0).delete();
+			_actionHistory.remove(0);
 			_lastDoneIndex--;
 		}
 
@@ -101,7 +122,7 @@ public class UndoManager {
 	public void undo() {
 		if (isUndoActive()) {
 			try {
-				((FlexoUndoableAction) (_actionHistory.get(_lastDoneIndex))).undoAction();
+				((FlexoUndoableAction) _actionHistory.get(_lastDoneIndex)).undoAction();
 				_lastDoneIndex--;
 				refreshControls();
 			} catch (FlexoException e) {
@@ -118,7 +139,7 @@ public class UndoManager {
 	public void redo() {
 		if (isRedoActive()) {
 			try {
-				((FlexoUndoableAction) (_actionHistory.get(_lastDoneIndex + 1))).redoAction();
+				((FlexoUndoableAction) _actionHistory.get(_lastDoneIndex + 1)).redoAction();
 				_lastDoneIndex++;
 				refreshControls();
 			} catch (FlexoException e) {
@@ -133,11 +154,11 @@ public class UndoManager {
 	}
 
 	private boolean isUndoActive() {
-		return ((_actionHistory.size() > 0) && (_lastDoneIndex > -1) && (_lastDoneIndex < _actionHistory.size()));
+		return _actionHistory.size() > 0 && _lastDoneIndex > -1 && _lastDoneIndex < _actionHistory.size();
 	}
 
 	private boolean isRedoActive() {
-		return ((_actionHistory.size() > 0) && (_lastDoneIndex < _actionHistory.size() - 1) && (_lastDoneIndex >= -1));
+		return _actionHistory.size() > 0 && _lastDoneIndex < _actionHistory.size() - 1 && _lastDoneIndex >= -1;
 	}
 
 	private void refreshControls() {
@@ -162,37 +183,14 @@ public class UndoManager {
 		}
 	}
 
-	public void registerUndoControl(AbstractButton item) {
-		_undoControls.add(item);
-		refreshControls();
-	}
-
-	public void registerRedoControl(AbstractButton item) {
-		_redoControls.add(item);
-		refreshControls();
-	}
-
-	private static void buildActionsToNotify(Vector<FlexoAction> allActionsToNotify, FlexoAction<?, ?, ?> action) {
-		allActionsToNotify.add(action);
-		for (FlexoAction a : action.getEmbbededActionsExecutedDuringInitializer()) {
-			buildActionsToNotify(allActionsToNotify, a);
-		}
-		for (FlexoAction a : action.getEmbbededActionsExecutedDuringCore()) {
-			buildActionsToNotify(allActionsToNotify, a);
-		}
-		for (FlexoAction a : action.getEmbbededActionsExecutedDuringFinalizer()) {
-			buildActionsToNotify(allActionsToNotify, a);
-		}
-	}
-
 	public void actionWillBePerformed(FlexoAction action) {
-		Vector<FlexoAction> allActionsToTakeUnderAccount = new Vector<FlexoAction>();
-		buildActionsToNotify(allActionsToTakeUnderAccount, action);
+		List<FlexoAction> allActionsToTakeIntoAccount = new Vector<FlexoAction>();
+		allActionsToTakeIntoAccount.add(action);
 		for (int i = 0; i < _actionHistory.size(); i++) {
-			FlexoAction actionToTakeUnderAccount = _actionHistory.get(i);
-			buildActionsToNotify(allActionsToTakeUnderAccount, actionToTakeUnderAccount);
+			FlexoAction actionToTakeIntoAccount = _actionHistory.get(i);
+			allActionsToTakeIntoAccount.add(actionToTakeIntoAccount);
 		}
-		action.getExecutionContext().saveExecutionContext(allActionsToTakeUnderAccount);
+		action.getExecutionContext().saveExecutionContext(allActionsToTakeIntoAccount);
 	}
 
 	public void actionHasBeenPerformed(FlexoAction action, boolean success) {
@@ -207,12 +205,12 @@ public class UndoManager {
 	}
 
 	public void actionHasBeenUndone(FlexoAction action, boolean success) {
-		Vector<FlexoAction> allActionsToNotify = new Vector<FlexoAction>();
-		buildActionsToNotify(allActionsToNotify, action);
+		List<FlexoAction> allActionsToNotify = new Vector<FlexoAction>();
+		allActionsToNotify.add(action);
 		int indexOfActionCurrentlyUndone = _actionHistory.indexOf(action);
 		for (int i = indexOfActionCurrentlyUndone + 1; i < _actionHistory.size(); i++) {
 			FlexoAction actionToNotify = _actionHistory.get(i);
-			buildActionsToNotify(allActionsToNotify, actionToNotify);
+			allActionsToNotify.add(actionToNotify);
 		}
 
 		if (logger.isLoggable(Level.FINE)) {
@@ -240,41 +238,37 @@ public class UndoManager {
 	}
 
 	public void actionHasBeenRedone(FlexoAction action, boolean success) {
-		Vector<FlexoAction> allActionsToNotify = new Vector<FlexoAction>();
-		buildActionsToNotify(allActionsToNotify, action);
+		List<FlexoAction> allActionsToNotify = new Vector<FlexoAction>();
+		allActionsToNotify.add(action);
 		int indexOfActionCurrentlyUndone = _actionHistory.indexOf(action);
 		for (int i = indexOfActionCurrentlyUndone + 1; i < _actionHistory.size(); i++) {
 			FlexoAction actionToNotify = _actionHistory.get(i);
-			buildActionsToNotify(allActionsToNotify, actionToNotify);
+			allActionsToNotify.add(actionToNotify);
 		}
 
-		for (String key : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().keySet()) {
+		for (Map.Entry<String, FlexoModelObject> e : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().entrySet()) {
 			// Actions creating object are normally recreated those while redoing
-			FlexoModelObject createdObject = action.getExecutionContext().getObjectsCreatedWhileExecutingAction().get(key);
+			FlexoModelObject createdObject = e.getValue();
 			for (FlexoAction a : allActionsToNotify) {
-				a.getExecutionContext().notifyExternalObjectCreatedByAction(createdObject, action, key, true);
+				a.getExecutionContext().notifyExternalObjectCreatedByAction(createdObject, action, e.getKey(), true);
 			}
 		}
 
-		for (String key : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().keySet()) {
+		for (Map.Entry<String, FlexoModelObject> e : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().entrySet()) {
 			// Actions deleting object are normally redeleted those while redoing
-			FlexoModelObject deletedObject = action.getExecutionContext().getObjectsDeletedWhileExecutingAction().get(key);
+			FlexoModelObject deletedObject = e.getValue();
 			for (FlexoAction a : allActionsToNotify) {
-				a.getExecutionContext().notifyExternalObjectDeletedByAction(deletedObject, action, key, true);
+				a.getExecutionContext().notifyExternalObjectDeletedByAction(deletedObject, action, e.getKey(), true);
 			}
 		}
 	}
 
-	private static int UNDO_LEVELS = AdvancedPrefs.getUndoLevels();
-
-	private static boolean ENABLED = AdvancedPrefs.getEnableUndoManager();
-
-	public static void setUndoLevels(int undoLevels) {
-		UNDO_LEVELS = undoLevels;
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(AdvancedPrefs.ENABLE_UNDO_MANAGER)) {
+			enabled = AdvancedPrefs.getEnableUndoManager();
+		} else if (evt.getPropertyName().equals(AdvancedPrefs.UNDO_LEVELS)) {
+			undoLevel = AdvancedPrefs.getUndoLevels();
+		}
 	}
-
-	public static void setEnable(boolean enableUndoManager) {
-		ENABLED = enableUndoManager;
-	}
-
 }

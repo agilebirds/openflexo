@@ -26,6 +26,7 @@ import org.openflexo.fps.action.FlexoUnknownHostException;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.fps.controller.FPSSelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * 
@@ -39,8 +40,8 @@ public class FPSControllerActionInitializer extends ControllerActionInitializer 
 
 	private FPSController _fpsController;
 
-	public FPSControllerActionInitializer(FPSController controller) {
-		super(controller);
+	public FPSControllerActionInitializer(InteractiveFlexoEditor editor, FPSController controller) {
+		super(editor, controller);
 		_fpsController = controller;
 	}
 
@@ -56,36 +57,36 @@ public class FPSControllerActionInitializer extends ControllerActionInitializer 
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new FPSSetPropertyInitializer(this)).init();
+		new FPSSetPropertyInitializer(this).init();
 
 		// CVS repositories actions
-		(new AddCVSRepositoryInitializer(this)).init();
-		(new RemoveCVSRepositoryInitializer(this)).init();
+		new AddCVSRepositoryInitializer(this).init();
+		new RemoveCVSRepositoryInitializer(this).init();
 
 		// Refreshing
-		(new CVSRefreshInitializer(this)).init();
+		new CVSRefreshInitializer(this).init();
 
 		// Obtaining projects
-		(new CheckoutProjectInitializer(this)).init();
-		(new OpenSharedProjectInitializer(this)).init();
-		(new ShareProjectInitializer(this)).init();
+		new CheckoutProjectInitializer(this).init();
+		new OpenSharedProjectInitializer(this).init();
+		new ShareProjectInitializer(this).init();
 
 		// CVS operations
-		(new SynchronizeWithRepositoryInitializer(this)).init();
-		(new RefreshProjectInitializer(this)).init();
-		(new CommitFilesInitializer(this)).init();
-		(new UpdateFilesInitializer(this)).init();
-		(new MarkAsMergedFilesInitializer(this)).init();
-		(new OverrideAndUpdateFilesInitializer(this)).init();
-		(new OverrideAndCommitFilesInitializer(this)).init();
+		new SynchronizeWithRepositoryInitializer(this).init();
+		new RefreshProjectInitializer(this).init();
+		new CommitFilesInitializer(this).init();
+		new UpdateFilesInitializer(this).init();
+		new MarkAsMergedFilesInitializer(this).init();
+		new OverrideAndUpdateFilesInitializer(this).init();
+		new OverrideAndCommitFilesInitializer(this).init();
 
 		// Edit operations
-		(new EditCVSFileInitializer(this)).init();
-		(new SaveCVSFileInitializer(this)).init();
-		(new RevertToSavedCVSFileInitializer(this)).init();
+		new EditCVSFileInitializer(this).init();
+		new SaveCVSFileInitializer(this).init();
+		new RevertToSavedCVSFileInitializer(this).init();
 
 		// CVSHistory
-		(new RetrieveCVSHistoryInitializer(this)).init();
+		new RetrieveCVSHistoryInitializer(this).init();
 
 	}
 

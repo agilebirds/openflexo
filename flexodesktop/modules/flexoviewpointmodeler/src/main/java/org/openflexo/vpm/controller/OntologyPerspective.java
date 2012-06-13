@@ -38,7 +38,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.view.OntologyPerspectiveBrowserView;
 import org.openflexo.vpm.view.OntologyView;
 
-public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
+public class OntologyPerspective extends FlexoPerspective {
 
 	private final VPMController _controller;
 

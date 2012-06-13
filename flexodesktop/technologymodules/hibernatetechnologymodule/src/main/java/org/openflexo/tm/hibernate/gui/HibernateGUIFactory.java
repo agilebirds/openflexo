@@ -134,7 +134,7 @@ public class HibernateGUIFactory implements TechnologyModuleGUIFactory {
 	 */
 	@Override
 	public void initializeActions(SGControllerActionInitializer actionInitializer) {
-		new CreateHibernateModelActionInitializer(actionInitializer).init();
+		new CreateHibernateModelActionInitializer(actionInitializer);
 	}
 
 }

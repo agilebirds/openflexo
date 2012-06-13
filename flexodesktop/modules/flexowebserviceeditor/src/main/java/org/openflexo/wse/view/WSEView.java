@@ -164,7 +164,7 @@ public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabula
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getWSEController().WSE_PERSPECTIVE;
 	}
 

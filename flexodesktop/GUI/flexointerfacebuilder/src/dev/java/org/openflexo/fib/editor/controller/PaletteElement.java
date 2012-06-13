@@ -36,6 +36,7 @@ import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -115,6 +116,9 @@ public class PaletteElement {
 	}
 
 	private void recursivelyAddDGR(JComponent c) {
+		for (MouseListener ml : c.getMouseListeners()) {
+			c.removeMouseListener(ml);
+		}
 		DragGestureRecognizer newDGR = dragSource.createDefaultDragGestureRecognizer(c, dragAction, dgListener);
 		dgr.put(c, newDGR);
 
@@ -167,11 +171,13 @@ public class PaletteElement {
 				FIBComponent targetComponent = target.getFIBComponent();
 				FIBContainer containerComponent = targetComponent.getParent();
 
-				if (containerComponent == null)
+				if (containerComponent == null) {
 					return false;
+				}
 
-				if (targetComponent instanceof FIBTab && !(newComponent instanceof FIBPanel))
+				if (targetComponent instanceof FIBTab && !(newComponent instanceof FIBPanel)) {
 					return false;
+				}
 
 				if (targetComponent.getParent() instanceof FIBTabPanel && newComponent instanceof FIBPanel) {
 					// Special case where a new tab is added to a FIBTabPanel
@@ -217,11 +223,12 @@ public class PaletteElement {
 
 			// if the action is ok we go ahead
 			// otherwise we punt
-			if ((e.getDragAction() & dragAction) == 0)
+			if ((e.getDragAction() & dragAction) == 0) {
 				return;
-			// get the label's text and put it inside a Transferable
-			// Transferable transferable = new StringSelection(
-			// DragLabel.this.getText() );
+				// get the label's text and put it inside a Transferable
+				// Transferable transferable = new StringSelection(
+				// DragLabel.this.getText() );
+			}
 
 			PaletteElementDrag transferable = new PaletteElementDrag(PaletteElement.this, e.getDragOrigin());
 
@@ -253,13 +260,15 @@ public class PaletteElement {
 		 */
 		@Override
 		public void dragDropEnd(DragSourceDropEvent e) {
-			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag)
+			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag) {
 				((PaletteElementDrag) e.getDragSourceContext().getTransferable()).reset();
+			}
 
 			// getDrawingView().resetCapturedNode();
 			if (e.getDropSuccess() == false) {
-				if (FIBEditorPalette.logger.isLoggable(Level.INFO))
+				if (FIBEditorPalette.logger.isLoggable(Level.INFO)) {
 					FIBEditorPalette.logger.info("Dropping was not successful");
+				}
 				return;
 			}
 			/*
@@ -267,8 +276,9 @@ public class PaletteElement {
 			 * acceptDrop
 			 */
 			// this is the action selected by the drop target
-			if (e.getDropAction() == DnDConstants.ACTION_MOVE)
+			if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
 				PaletteElement.this._palette.setName("");
+			}
 
 		}
 
@@ -311,8 +321,9 @@ public class PaletteElement {
 			DragSourceContext context = e.getDragSourceContext();
 			// System.out.println("dragExit() with "+context+" component="+e.getSource());
 			// interface
-			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag)
+			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag) {
 				((PaletteElementDrag) e.getDragSourceContext().getTransferable()).reset();
+			}
 		}
 
 		/**
@@ -342,8 +353,9 @@ public class PaletteElement {
 		}
 
 		public void reset() {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Resetting drag");
+			}
 			int end = focusedComponentPath.size();
 			for (int i = 0; i < end; i++) {
 				FIBComponent c2 = focusedComponentPath.remove(focusedComponentPath.size() - 1);
@@ -356,16 +368,19 @@ public class PaletteElement {
 		}
 
 		public FIBComponent getCurrentlyFocusedComponent() {
-			if (focusedComponentPath.size() > 0)
+			if (focusedComponentPath.size() > 0) {
 				return focusedComponentPath.lastElement();
+			}
 			return null;
 		}
 
 		public void enterComponent(FIBComponent c, PlaceHolder ph, Point location) {
-			if (getController() == null)
+			if (getController() == null) {
 				return;
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Drag enter in component " + c + " ph=" + ph);
+			}
 			Vector<FIBComponent> appendingPath = new Vector<FIBComponent>();
 			FIBComponent current = c;
 			while (current != null && !focusedComponentPath.contains(current)) {
@@ -398,25 +413,28 @@ public class PaletteElement {
 				}
 			}
 
-			if (ph != null)
+			if (ph != null) {
 				ph.setFocused(true);
-			else {
+			} else {
 				FIBView v = getController().viewForComponent(c);
 				if (v instanceof FIBEditableView) {
 					((FIBEditableView) v).getDelegate().setFocused(true);
 				}
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("focusedComponentPath=" + focusedComponentPath);
+			}
 		}
 
 		private boolean temporaryDisable = false;
 
 		public void exitComponent(FIBComponent c, PlaceHolder ph) {
-			if (getController() == null)
+			if (getController() == null) {
 				return;
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Drag exit from component " + c + " ph=" + ph);
+			}
 			if (temporaryDisable) {
 				temporaryDisable = false;
 				return;
@@ -435,16 +453,17 @@ public class PaletteElement {
 			} else {
 				// Weird....
 			}
-			if (ph != null)
+			if (ph != null) {
 				ph.setFocused(false);
-			else {
+			} else {
 				FIBView v = getController().viewForComponent(c);
 				if (v instanceof FIBEditableView) {
 					((FIBEditableView) v).getDelegate().setFocused(false);
 				}
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("focusedComponentPath=" + focusedComponentPath);
+			}
 		}
 
 		@Override

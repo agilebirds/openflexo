@@ -49,17 +49,18 @@ import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.ssl.DenaliSecurityProvider;
@@ -70,6 +71,7 @@ import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -136,11 +138,12 @@ public class Flexo {
 				@Override
 				public void handle(Signal arg0) {
 					FlexoFrame activeFrame = FlexoFrame.getActiveFrame(false);
-					if (activeFrame != null && activeFrame.getModule() != null) {
-						if (ProjectLoader.someResourcesNeedsSaving(activeFrame.getModule().getProject())) {
-							if (activeFrame.getModule().showSaveDialogAndClose()) {
-								System.exit(0);
-							}
+					if (activeFrame != null) {
+						try {
+							activeFrame.getController().getModuleLoader()
+									.quit(activeFrame.getController().getProjectLoader().someProjectsAreModified());
+						} catch (ProjectExitingCancelledException e) {
+							e.printStackTrace();
 						}
 					}
 				}
@@ -159,13 +162,21 @@ public class Flexo {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				initFlexo(args);
+			}
+		});
+	}
+
+	protected static void initFlexo(String[] args) {
 		String userTypeName = null;
 		boolean noSplash = false;
 		if (args.length > 0) {
 			// ATTENTION: Argument cannot start with "-D", nor start with "-X", nor start with "-agentlib" since they are reserved keywords
 			// for JVM
-			// See also WinFlexoLauncher classes.
 			for (int i = 0; i < args.length; i++) {
 				if (args[i].equals("-userType")) {
 					userTypeName = args[i + 1];
@@ -202,8 +213,21 @@ public class Flexo {
 		UserType.setCurrentUserType(userTypeNamed);
 		FlexoProperties.load();
 		initializeLoggingManager();
-		FlexoApplication.initialize();
 		initUILAF();
+		final ApplicationContext applicationContext = new ApplicationContext() {
+
+			@Override
+			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				return new InteractiveFlexoEditor(this, project);
+			}
+
+			@Override
+			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		FlexoApplication.initialize(applicationContext.getModuleLoader());
 		if (ToolBox.getFrame(null) != null) {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
@@ -224,69 +248,44 @@ public class Flexo {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Heap memory is about: " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "Mb");
 		}
-		getModuleLoader().setAllowsDocSubmission(isDev || FlexoProperties.instance().getAllowsDocSubmission());
+		applicationContext.setAllowsDocSubmission(isDev || FlexoProperties.instance().getAllowsDocSubmission());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching FLEXO Application Suite version " + FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + "...");
 		}
-		getFlexoResourceCenterService().getFlexoResourceCenter();
+		FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
 		final SplashWindow splashWindow2 = splashWindow;
 		if (!isDev) {
 			registerShutdownHook();
 		}
-		SwingUtilities.invokeLater(new Runnable() {
-			/**
-			 * Overrides run
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				if (fileNameToOpen == null) {
-					WelcomeDialog welcomeDialog = new WelcomeDialog();
-					if (splashWindow2 != null) {
-						splashWindow2.setVisible(false);
-						splashWindow2.dispose();
-					}
-					welcomeDialog.showDialog();
-				} else {
-					try {
-						File projectDirectory = new File(fileNameToOpen);
-						if (splashWindow2 != null) {
-							splashWindow2.setVisible(false);
-							splashWindow2.dispose();
-						}
-						getModuleLoader().openProject(projectDirectory, null);
-					} catch (ProjectLoadingCancelledException e) {
-						// project need a conversion, but user cancelled the conversion.
-						WelcomeDialog welcomeDialog = new WelcomeDialog();
-						welcomeDialog.showDialog();
-					} catch (ModuleLoadingException e) {
-						e.printStackTrace();
-						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
-						WelcomeDialog welcomeDialog = new WelcomeDialog();
-						welcomeDialog.showDialog();
-					} catch (ProjectInitializerException e) {
-						e.printStackTrace();
-						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
-								+ e.getProjectDirectory().getAbsolutePath());
-						WelcomeDialog welcomeDialog = new WelcomeDialog();
-						welcomeDialog.showDialog();
-					}
-				}
+
+		if (fileNameToOpen == null) {
+			WelcomeDialog welcomeDialog = new WelcomeDialog(applicationContext);
+			if (splashWindow2 != null) {
+				splashWindow2.setVisible(false);
+				splashWindow2.dispose();
 			}
-		});
-	}
+			welcomeDialog.showDialog();
+		} else {
+			try {
+				File projectDirectory = new File(fileNameToOpen);
+				if (splashWindow2 != null) {
+					splashWindow2.setVisible(false);
+					splashWindow2.dispose();
+				}
 
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
-
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static ProjectLoader getProjectLoader() {
-		return ProjectLoader.instance();
+				applicationContext.getProjectLoader().loadProject(projectDirectory);
+			} catch (ProjectLoadingCancelledException e) {
+				// project need a conversion, but user cancelled the conversion.
+				WelcomeDialog welcomeDialog = new WelcomeDialog(applicationContext);
+				welcomeDialog.showDialog();
+			} catch (ProjectInitializerException e) {
+				e.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+						+ e.getProjectDirectory().getAbsolutePath());
+				WelcomeDialog welcomeDialog = new WelcomeDialog(applicationContext);
+				welcomeDialog.showDialog();
+			}
+		}
 	}
 
 	private static void initUILAF() {

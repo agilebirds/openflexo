@@ -101,9 +101,9 @@ public class GeneratorController extends FlexoController implements SelectionMan
 
 	protected static final Logger logger = Logger.getLogger(GeneratorController.class.getPackage().getName());
 
-	public final FlexoPerspective<FlexoModelObject> CODE_GENERATOR_PERSPECTIVE = new CodeGeneratorPerspective(this);
-	public final FlexoPerspective<FlexoModelObject> VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
-	public final FlexoPerspective<FlexoModelObject> MODEL_REINJECTION_PERSPECTIVE = new ModelReinjectionPerspective(this);
+	public final FlexoPerspective CODE_GENERATOR_PERSPECTIVE = new CodeGeneratorPerspective(this);
+	public final FlexoPerspective VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
+	public final FlexoPerspective MODEL_REINJECTION_PERSPECTIVE = new ModelReinjectionPerspective(this);
 
 	// ==========================================================================
 	// ============================= Instance variables

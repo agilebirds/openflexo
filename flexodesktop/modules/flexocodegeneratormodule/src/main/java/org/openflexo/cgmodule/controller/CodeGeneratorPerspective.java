@@ -23,7 +23,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class CodeGeneratorPerspective extends FlexoPerspective<FlexoModelObject> {
+public class CodeGeneratorPerspective extends FlexoPerspective {
 
 	/**
 	 * 

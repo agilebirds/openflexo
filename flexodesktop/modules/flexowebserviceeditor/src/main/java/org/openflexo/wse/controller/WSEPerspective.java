@@ -38,7 +38,7 @@ import org.openflexo.wse.view.WSERepositoryFolderView;
 import org.openflexo.wse.view.WSEServiceOperationView;
 import org.openflexo.wse.view.WSEServiceView;
 
-public class WSEPerspective extends FlexoPerspective<FlexoModelObject> {
+public class WSEPerspective extends FlexoPerspective {
 
 	/**
 	 * @param name

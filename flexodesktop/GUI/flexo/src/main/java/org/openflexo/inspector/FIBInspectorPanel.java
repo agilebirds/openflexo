@@ -100,7 +100,6 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		for (Class<?> c : inspectorController.getInspectors().keySet()) {
 			FIBInspector inspector = inspectorController.getInspectors().get(c);
 			FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
-			((FIBInspectorController) inspectorView.getController()).setEditor(inspectorController.getFlexoController().getEditor());
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			if (logger.isLoggable(Level.INFO)) {

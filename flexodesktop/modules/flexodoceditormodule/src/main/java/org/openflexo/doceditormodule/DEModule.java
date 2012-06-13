@@ -27,7 +27,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * Documentation generator module
@@ -39,7 +38,7 @@ public class DEModule extends FlexoModule {
 	private static final Logger logger = Logger.getLogger(DEModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DE };
 
-	public DEModule(InteractiveFlexoEditor projectEditor) throws Exception {
+	public DEModule() throws Exception {
 		super(projectEditor);
 		setFlexoController(new DEController(projectEditor, this));
 		DEPreferences.init(getDEController());

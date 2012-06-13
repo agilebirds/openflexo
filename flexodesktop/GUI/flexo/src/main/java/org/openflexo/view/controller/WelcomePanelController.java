@@ -2,6 +2,7 @@ package org.openflexo.view.controller;
 
 import java.io.File;
 
+import org.openflexo.ApplicationData;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.fib.model.FIBComponent;
@@ -12,11 +13,20 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
 
-public class WelcomePanelController extends FlexoFIBController {
+public class WelcomePanelController extends FlexoFIBController<ApplicationData> {
 
 	public WelcomePanelController(FIBComponent component) {
 		super(component);
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return getDataObject().getApplicationContext().getModuleLoader();
+	}
+
+	private ProjectLoader getProjectLoader() {
+		return getDataObject().getApplicationContext().getProjectLoader();
 	}
 
 	public void exit() {
@@ -29,7 +39,7 @@ public class WelcomePanelController extends FlexoFIBController {
 	public void openModule(Module module) {
 		hide();
 		try {
-			getModuleLoader().switchToModule(module, null);
+			getModuleLoader().activateModule(getModuleLoader().getModuleInstance(module));
 			validateAndDispose();
 		} catch (ModuleLoadingException e) {
 			e.printStackTrace();
@@ -40,15 +50,15 @@ public class WelcomePanelController extends FlexoFIBController {
 
 	public void openProject(File projectDirectory, Module module) {
 		if (projectDirectory == null) {
-			try {
-				projectDirectory = OpenProjectComponent.getProjectDirectory();
-			} catch (ProjectLoadingCancelledException e1) {
+			projectDirectory = OpenProjectComponent.getProjectDirectory();
+			if (projectDirectory == null) {
 				return;
 			}
 		}
 		hide();
 		try {
-			getModuleLoader().openProject(projectDirectory, module);
+			getModuleLoader().activateModule(getModuleLoader().getModuleInstance(module));
+			getProjectLoader().loadProject(projectDirectory);
 			validateAndDispose();
 		} catch (ProjectLoadingCancelledException e) {
 			show();
@@ -65,27 +75,21 @@ public class WelcomePanelController extends FlexoFIBController {
 	}
 
 	public void newProject(Module module) {
-		File project;
-		try {
-			project = NewProjectComponent.getProjectDirectory();
-		} catch (ProjectLoadingCancelledException e1) {
+		File projectDirectory;
+		projectDirectory = NewProjectComponent.getProjectDirectory();
+		if (projectDirectory == null) {
 			return;
 		}
 		hide();
 		try {
-			getModuleLoader().newProject(project, module);
+			getModuleLoader().activateModule(getModuleLoader().getModuleInstance(module));
+			getProjectLoader().newProject(projectDirectory);
 			validateAndDispose();
-		} catch (ProjectLoadingCancelledException e) {
-			show();
 		} catch (ModuleLoadingException e) {
 			e.printStackTrace();
 			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
 			show();
 		}
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
 	}
 
 }

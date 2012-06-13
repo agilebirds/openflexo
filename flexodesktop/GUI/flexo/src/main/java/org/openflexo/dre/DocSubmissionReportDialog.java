@@ -47,7 +47,7 @@ import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocSubmissionReport;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.FlexoFrame;
 
 /**
  * Dialog allowing to show and select doc submission items
@@ -80,7 +80,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 	 *            : a vector of FlexoStorageResource
 	 */
 	public DocSubmissionReportDialog(DocSubmissionReport report) {
-		super(FlexoController.getActiveFrame(), true);
+		super(FlexoFrame.getActiveFrame(), true);
 		returned = CANCEL;
 		setTitle(FlexoLocalization.localizedForKey("import_doc_submission_report"));
 		getContentPane().setLayout(new BorderLayout());
@@ -232,7 +232,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 
 		protected void update() {
 			DocItemAction action = _docSubmissionReportModel.getActionAt(reviewTable.getSelectedRow());
-			if ((action != null) && (action.getVersion() != null)) {
+			if (action != null && action.getVersion() != null) {
 				shortHTMLDescriptionLabel.setText("<html>" + action.getVersion().getShortHTMLDescription() + "</html>");
 				fullHTMLDescriptionLabel.setText("<html>" + action.getVersion().getFullHTMLDescription() + "</html>");
 			} else {
@@ -344,7 +344,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return (columnIndex == 0 ? true : false);
+			return columnIndex == 0 ? true : false;
 		}
 
 		@Override
@@ -397,7 +397,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 			Vector<DocItemAction> returned = new Vector<DocItemAction>();
 
 			for (int i = 0; i < _shouldImport.size(); i++) {
-				if ((_shouldImport.elementAt(i)).booleanValue()) {
+				if (_shouldImport.elementAt(i).booleanValue()) {
 					returned.add(getActionAt(i));
 				}
 			}

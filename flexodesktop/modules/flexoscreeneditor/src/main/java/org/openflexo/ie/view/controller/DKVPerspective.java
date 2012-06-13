@@ -33,7 +33,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class DKVPerspective extends FlexoPerspective<DKVModel> {
+class DKVPerspective extends FlexoPerspective {
 
 	private final IEController _controller;
 	private DKVEditorBrowserView _dkvEditorBrowserView;

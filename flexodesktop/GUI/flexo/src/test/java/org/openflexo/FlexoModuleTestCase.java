@@ -22,6 +22,7 @@ package org.openflexo;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoTestCase;
@@ -70,7 +71,7 @@ public abstract class FlexoModuleTestCase extends FlexoTestCase {
 
 	protected static final FlexoEditorFactory INTERACTIVE_EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
-		public InteractiveFlexoEditor makeFlexoEditor(FlexoProject project) {
+		public FlexoEditor makeFlexoEditor(FlexoProject project) {
 			return new InteractiveFlexoTestEditor(project);
 		}
 	};

@@ -23,10 +23,13 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
+import org.openflexo.foundation.dm.ExternalRepository;
+import org.openflexo.localization.FlexoLocalization;
 
-public class ImportJARFileRepository extends CreateDMRepository {
+public class ImportJARFileRepository extends CreateDMRepository<ImportJARFileRepository> {
 
 	static final Logger logger = Logger.getLogger(ImportJARFileRepository.class.getPackage().getName());
 
@@ -55,6 +58,18 @@ public class ImportJARFileRepository extends CreateDMRepository {
 
 	ImportJARFileRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		if (getJarFile() != null) {
+			makeFlexoProgress(FlexoLocalization.localizedForKey("importing") + " " + getJarFile().getName(), 5);
+			setProgress(FlexoLocalization.localizedForKey("importing") + " " + getJarFile().getName());
+			_newRepository = ExternalRepository.createNewExternalRepository(getProject().getDataModel(), getJarFile(),
+					getImportedClassSet(), getFlexoProgress());
+			((ExternalRepository) _newRepository).setIsImportedByUser(true);
+			hideFlexoProgress();
+		}
 	}
 
 	@Override

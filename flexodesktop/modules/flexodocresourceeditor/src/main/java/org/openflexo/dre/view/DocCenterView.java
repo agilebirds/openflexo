@@ -99,7 +99,7 @@ public class DocCenterView extends JPanel implements SelectionSynchronizedModule
 	}
 
 	@Override
-	public FlexoPerspective<DRMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.DRE_PERSPECTIVE;
 	}
 

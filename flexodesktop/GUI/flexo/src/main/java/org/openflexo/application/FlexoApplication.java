@@ -53,11 +53,12 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.module.FlexoModule;
+import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -95,7 +96,7 @@ public class FlexoApplication {
 		eventProcessor.flushPendingEvents(blockUserEvents);
 	}
 
-	public static void initialize() {
+	public static void initialize(ModuleLoader moduleLoader) {
 		if (isInitialized) {
 			return;
 		}
@@ -118,7 +119,7 @@ public class FlexoApplication {
 				// ((com.apple.eawt.Application)application).setDockIconImage(ModuleLoader.getUserType().getIconImage().getImage());
 				Method setDockIconImage = application.getClass().getMethod("setDockIconImage", new Class[] { Image.class });
 				setDockIconImage.invoke(application, new Object[] { IconLibrary.OPENFLEXO_NOTEXT_128.getImage() });
-				applicationAdapter = new FlexoApplicationAdapter();
+				applicationAdapter = new FlexoApplicationAdapter(moduleLoader);
 
 				Method addApplicationListener = application.getClass().getMethod("addApplicationListener",
 						new Class[] { Class.forName("com.apple.eawt.ApplicationListener") });
@@ -157,9 +158,9 @@ public class FlexoApplication {
 	public static class EventProcessor extends java.awt.EventQueue {
 		private EventPreprocessor _preprocessor = null;
 
-		private static boolean isReportingBug = false;
+		private boolean isReportingBug = false;
 
-		private static Vector<String> exceptions = new Vector<String>();
+		private Vector<String> exceptions = new Vector<String>();
 
 		public EventPreprocessor getPreprocessor() {
 			return _preprocessor;
@@ -173,7 +174,7 @@ public class FlexoApplication {
 			Toolkit.getDefaultToolkit().getSystemEventQueue().push(this);
 		}
 
-		private static synchronized boolean testAndSetIsReportingBug() {
+		private synchronized boolean testAndSetIsReportingBug() {
 			if (isReportingBug) {
 				return true;
 			} else {
@@ -182,7 +183,7 @@ public class FlexoApplication {
 			}
 		}
 
-		private static synchronized void resetIsReportingBug() {
+		private synchronized void resetIsReportingBug() {
 			isReportingBug = false;
 		}
 
@@ -269,8 +270,9 @@ public class FlexoApplication {
 						if (!testAndSetIsReportingBug()) {
 							try {
 								if (FlexoController.confirm(message)) {
-									JIRAIssueReportDialog.newBugReport((Exception) exception,
-											FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
+									FlexoFrame frame = FlexoFrame.getActiveFrame(false);
+									JIRAIssueReportDialog.newBugReport((Exception) exception, frame != null ? frame.getModule() : null,
+											frame != null ? frame.getController().getProject() : null);
 								}
 							} catch (HeadlessException e1) {
 								e1.printStackTrace();

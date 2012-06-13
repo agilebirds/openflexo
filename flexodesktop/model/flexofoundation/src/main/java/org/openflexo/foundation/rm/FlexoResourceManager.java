@@ -53,7 +53,7 @@ public class FlexoResourceManager {
 
 	protected Thread _clockThread;
 
-	protected boolean _stop;
+	protected volatile boolean _stop;
 
 	protected ResourceUpdateHandler _resourceUpdateHandler;
 
@@ -181,12 +181,12 @@ public class FlexoResourceManager {
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
 			FlexoResourceCenter resourceCenter) throws ProjectInitializerException, ProjectLoadingCancelledException {
-		return initializeExistingProject(aProjectDirectory, null, null, editorFactory, new DefaultProjectLoadingHandler(), resourceCenter);
+		return initializeExistingProject(aProjectDirectory, null, editorFactory, new DefaultProjectLoadingHandler(), resourceCenter);
 	}
 
-	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoProgress progress,
-			ResourceUpdateHandler resourceUpdateHandler, FlexoEditorFactory editorFactory, ProjectLoadingHandler loadingHandler,
-			FlexoResourceCenter resourceCenter) throws ProjectInitializerException, ProjectLoadingCancelledException {
+	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
+			ProjectLoadingHandler loadingHandler, FlexoResourceCenter resourceCenter) throws ProjectInitializerException,
+			ProjectLoadingCancelledException {
 		FlexoProject project = null;
 		if (!aProjectDirectory.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -217,7 +217,7 @@ public class FlexoResourceManager {
 
 		}
 		FlexoEditor returned = editorFactory.makeFlexoEditor(project);
-		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, resourceUpdateHandler);
+		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, returned.getResourceUpdateHandler());
 		resourceManager.startResourcePeriodicChecking();
 		resourceManager.isLoadingAProject = false;
 		project.setResourceManagerInstance(resourceManager);
@@ -242,15 +242,15 @@ public class FlexoResourceManager {
 		}
 	}
 
-	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoProgress progress,
-			ResourceUpdateHandler resourceUpdateHandler, FlexoEditorFactory editorFactory, FlexoResourceCenter resourceCenter) {
+	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
+			FlexoResourceCenter resourceCenter) {
 		if (!aProjectDirectory.exists()) {
 			aProjectDirectory.mkdirs();
 		}
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
 		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, resourceCenter);
 		FlexoProject project = returned.getProject();
-		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, resourceUpdateHandler);
+		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, returned.getResourceUpdateHandler());
 		resourceManager.startResourcePeriodicChecking();
 		resourceManager.isLoadingAProject = false;
 		project.setResourceManagerInstance(resourceManager);
@@ -260,7 +260,7 @@ public class FlexoResourceManager {
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
 			FlexoResourceCenter resourceCenter) {
-		return initializeNewProject(aProjectDirectory, null, null, editorFactory, resourceCenter);
+		return initializeNewProject(aProjectDirectory, null, editorFactory, resourceCenter);
 	}
 
 	public FlexoEditor getEditor() {

@@ -163,7 +163,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 				return _owner.isSelectable(o);
 			}
 		});
-		_browserView = new BrowserChooserView(_browser, _owner, _owner.getEditor()) {
+		_browserView = new BrowserChooserView(_browser, ,_owner) {
 			@Override
 			public void objectWasSelected(FlexoModelObject object) {
 				_owner.setEditedObject((T) object);
@@ -278,7 +278,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		update();
 	}
 
-	// return true if an object was correctely selected, false otherwise
+	// return true if an object was correctly selected, false otherwise
 	protected boolean processEnterPressed() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on ENTER");

@@ -63,7 +63,7 @@ public class GeneratorBrowserView extends BrowserView {
 	 * @param kl
 	 */
 	public GeneratorBrowserView(GeneratorController controller, ProjectBrowser browser) {
-		super(browser, controller.getKeyEventListener(), controller.getEditor());
+		super(browser, controller, controller.getKeyEventListener());
 		this.controller = controller;
 
 		FlowLayout flowLayout = new FlowLayout();

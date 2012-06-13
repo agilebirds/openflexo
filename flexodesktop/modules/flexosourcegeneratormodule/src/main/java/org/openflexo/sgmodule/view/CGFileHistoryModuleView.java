@@ -263,7 +263,7 @@ public class CGFileHistoryModuleView extends JPanel implements ModuleView<CGFile
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.CODE_GENERATION_PERSPECTIVE;
 	}
 

@@ -23,8 +23,6 @@ import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.dataimporter.DataImporter;
-import org.openflexo.dataimporter.DataImporterLoader;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoAction;
@@ -32,15 +30,9 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.DMSet;
-import org.openflexo.foundation.dm.ExternalDatabaseRepository;
-import org.openflexo.foundation.dm.ExternalRepository;
-import org.openflexo.foundation.dm.ProjectDatabaseRepository;
-import org.openflexo.foundation.dm.ProjectRepository;
-import org.openflexo.foundation.dm.RationalRoseRepository;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.localization.FlexoLocalization;
 
-public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject, DMObject> {
+public class CreateDMRepository<A extends CreateDMRepository<A>> extends FlexoAction<A, DMObject, DMObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateDMRepository.class.getPackage().getName());
 
@@ -53,38 +45,12 @@ public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject
 	public static final String THESAURUS_REPOSITORY = "THESAURUS_REPOSITORY";
 	public static final String THESAURUS_DATABASE_REPOSITORY = "THESAURUS_DATABASE_REPOSITORY";
 
-	public static FlexoActionType<CreateDMRepository, DMObject, DMObject> actionType = new FlexoActionType<CreateDMRepository, DMObject, DMObject>(
-			"add_repository...", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
-
-		/**
-		 * Factory method
-		 */
-		@Override
-		public CreateDMRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
-			return new CreateDMRepository(focusedObject, globalSelection, editor);
-		}
-
-		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
-			return true;
-		}
-
-		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
-			return true;
-		}
-
-	};
-
-	CreateDMRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+	CreateDMRepository(FlexoActionType<A, DMObject, DMObject> actionType, DMObject focusedObject, Vector<DMObject> globalSelection,
+			FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	protected CreateDMRepository(FlexoActionType anActionType, DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
-		super(anActionType, focusedObject, globalSelection, editor);
-	}
-
-	private DMRepository _newRepository = null;
+	protected DMRepository _newRepository = null;
 	private String _repositoryType;
 	private String _newRepositoryName;
 	private File _jarFile;
@@ -184,86 +150,15 @@ public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject
 		}
 
 		if (getRepositoryType().equals(CreateDMRepository.PROJECT_REPOSITORY)) {
-			_newRepository = ProjectRepository.createNewProjectRepository(getNewRepositoryName(), getProject().getDataModel());
-		} else if (getRepositoryType().equals(CreateDMRepository.PROJECT_DATABASE_REPOSITORY)) {
-			_newRepository = ProjectDatabaseRepository.createNewProjectDatabaseRepository(getProject().getDataModel(),
-					getNewRepositoryName());
-		} else if (getRepositoryType().equals(CreateDMRepository.EXTERNAL_REPOSITORY)) {
-			if (getJarFile() != null) {
-				makeFlexoProgress(FlexoLocalization.localizedForKey("importing") + " " + getJarFile().getName(), 5);
-				setProgress(FlexoLocalization.localizedForKey("importing") + " " + getJarFile().getName());
-				_newRepository = ExternalRepository.createNewExternalRepository(getProject().getDataModel(), getJarFile(),
-						getImportedClassSet(), getFlexoProgress());
-				((ExternalRepository) _newRepository).setIsImportedByUser(true);
-				hideFlexoProgress();
-			}
-		}
-		/*else if (_repositoryType.equals(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY)) {
-		            if (getDenaliFoundationRepositoryFile() != null) {
-		        if (!getNewRepositoryName()
-		                .equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME)) {
-		            if (_project.getDataModel().getDenaliFoundationRepository() == null) {*/
-		/*FlexoController
-		        .notify(FlexoLocalization
-		                .localizedForKey("dependant_repository_denali_foundation_must_also_be_imported"));*//*
-																											makeFlexoProgress(FlexoLocalization
-																											.localizedForKey("importing_denali_foundation"), 6);
-																											setProgress(FlexoLocalization
-																											.localizedForKey("importing")
-																											+ " " + getDenaliFoundationRepositoryFile().getName());
-																											_newRepository = DenaliFoundationRepository
-																											.createDenaliFoundationRepository(_project.getDataModel(),getFlexoProgress());
-																											hideFlexoProgress();
-																											}
-																											}
-																											if ((!getNewRepositoryName()
-																											.equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME))
-																											&& (!getNewRepositoryName()
-																											.equals(DenaliFoundationRepository.DENALI_FLEXO_REPOSITORY_NAME))) {
-																											if (getProject().getDataModel().getDenaliFlexoRepository() == null) {*/
-		/*FlexoController
-		        .notify(FlexoLocalization
-		                .localizedForKey("dependant_repository_denali_flexo_must_also_be_imported"));*//*
-																										makeFlexoProgress(FlexoLocalization
-																										.localizedForKey("importing_denali_flexo"), 6);
-																										setProgress(FlexoLocalization
-																										.localizedForKey("importing")
-																										+ " " + getDenaliFoundationRepositoryFile().getName());
-																										_newRepository = DenaliFoundationRepository.createDenaliFlexoRepository(
-																										_project.getDataModel(), getFlexoProgress());
-																										hideFlexoProgress();
-																										}
-																										}
 
-																										makeFlexoProgress(FlexoLocalization
-																										.localizedForKey("importing")
-																										+ " " + getDenaliFoundationRepositoryFile().getName(), 6);
-																										setProgress(FlexoLocalization
-																										.localizedForKey("importing")
-																										+ " " + getDenaliFoundationRepositoryFile().getName());
-																										_newRepository = DenaliFoundationRepository.createNewDenaliFoundationRepository(
-																										_project.getDataModel(), getDenaliFoundationRepositoryFile(), getFlexoProgress());
-																										hideFlexoProgress();
-																										}
-																										} */
-		else if (getRepositoryType().equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
-			logger.info("Importing from RationalRose...");
-			DataImporter rationalRoseImporter = DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.getImporter();
-			if (rationalRoseImporter != null) {
-				Object[] params = new Object[3];
-				params[0] = getNewRepositoryName();
-				params[1] = getRationalRosePackageName();
-				params[2] = this;
-				makeFlexoProgress(FlexoLocalization.localizedForKey("importing") + " " + getRationalRoseFile().getName(), 4);
-				_newRepository = (RationalRoseRepository) rationalRoseImporter.importInProject(getProject(), getRationalRoseFile(), params);
-				hideFlexoProgress();
-			} else {
-				logger.warning("Sorry, data importer " + DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER + " not found ");
-			}
-			logger.info("Importing from RationalRose... DONE.");
+		} else if (getRepositoryType().equals(CreateDMRepository.PROJECT_DATABASE_REPOSITORY)) {
+
+		} else if (getRepositoryType().equals(CreateDMRepository.EXTERNAL_REPOSITORY)) {
+
+		} else if (getRepositoryType().equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
+
 		} else if (getRepositoryType().equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY)) {
-			_newRepository = ExternalDatabaseRepository
-					.createNewExternalDatabaseRepository(_project.getDataModel(), getNewRepositoryName());
+
 		} else if (getRepositoryType().equals(CreateDMRepository.THESAURUS_REPOSITORY)) {
 		} else if (getRepositoryType().equals(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY)) {
 		}

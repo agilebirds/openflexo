@@ -26,7 +26,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 
-public abstract class FlexoPerspective<O extends FlexoModelObject> {
+public abstract class FlexoPerspective {
 
 	private String _name;
 
@@ -106,11 +106,11 @@ public abstract class FlexoPerspective<O extends FlexoModelObject> {
 		return null;
 	}
 
-	public abstract ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
+	public abstract <O extends FlexoModelObject> ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
 
 	public abstract boolean hasModuleViewForObject(FlexoModelObject object);
 
-	public abstract O getDefaultObject(FlexoModelObject proposedObject);
+	public abstract FlexoModelObject getDefaultObject(FlexoModelObject proposedObject);
 
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 

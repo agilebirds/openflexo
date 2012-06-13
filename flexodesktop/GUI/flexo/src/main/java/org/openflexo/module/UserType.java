@@ -199,10 +199,6 @@ public abstract class UserType extends FlexoObject {
 		return documentationFolders;
 	}
 
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
 	protected void addModelItems(InspectorGroup inspectorGroup) {
 		DocItemFolder inspectorGroupFolder;
 		DocItemFolder modelFolder = DocResourceManager.instance().getDocResourceCenter().getModelFolder();

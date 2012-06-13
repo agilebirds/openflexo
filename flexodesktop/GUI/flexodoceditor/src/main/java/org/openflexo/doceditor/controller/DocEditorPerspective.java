@@ -20,7 +20,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class DocEditorPerspective extends FlexoPerspective<TOCObject> {
+public class DocEditorPerspective extends FlexoPerspective {
 
 	/**
 	 * @param name

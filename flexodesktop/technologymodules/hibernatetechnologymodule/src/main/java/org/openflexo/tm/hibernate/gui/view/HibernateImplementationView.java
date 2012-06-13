@@ -37,10 +37,10 @@ import org.openflexo.view.controller.FlexoFIBController;
 public class HibernateImplementationView extends FIBModuleView<HibernateImplementation> {
 	public static String HIBERNATE_IMPLEMENTATION_VIEW_FIB_RESOURCE_PATH = "/Hibernate/Fib/ImplementationView.fib";
 
-	private FlexoPerspective<? super HibernateImplementation> declaredPerspective;
+	private FlexoPerspective declaredPerspective;
 
 	public HibernateImplementationView(HibernateImplementation hibernateImplementation, SGController controller,
-			FlexoPerspective<? super HibernateImplementation> perspective) {
+			FlexoPerspective perspective) {
 		super(hibernateImplementation, controller, HIBERNATE_IMPLEMENTATION_VIEW_FIB_RESOURCE_PATH);
 		declaredPerspective = perspective;
 	}
@@ -51,7 +51,7 @@ public class HibernateImplementationView extends FIBModuleView<HibernateImplemen
 	}
 
 	@Override
-	public FlexoPerspective<? super HibernateImplementation> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
 

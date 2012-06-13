@@ -99,7 +99,7 @@ import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * Represent the controller of an instanciation of a FIBComponent in a particular Window Toolkit context (eg Swing)
+ * Represent the controller of an instantiation of a FIBComponent in a particular Window Toolkit context (eg Swing)
  * 
  * @author sylvain
  * 

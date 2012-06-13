@@ -176,7 +176,7 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 	}
 
 	@Override
-	public FlexoPerspective<FlexoItemMenu> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return controller.MENU_EDITOR_PERSPECTIVE;
 	}
 

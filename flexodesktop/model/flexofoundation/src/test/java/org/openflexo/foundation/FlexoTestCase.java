@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -35,9 +34,6 @@ import junit.framework.TestCase;
 
 import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.ComponentDMEntity;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMProperty;
@@ -133,25 +129,6 @@ public abstract class FlexoTestCase extends TestCase {
 			super(project);
 		}
 
-		@Override
-		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
-				FlexoActionType<A, T1, T2> actionType) {
-			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
-
-				@Override
-				public boolean run(ActionEvent event, A action) {
-					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
-							FlexoTestEditor.this);
-					if (!reply) {
-						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
-								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
-					}
-					return reply;
-				}
-
-			};
-			return init;
-		}
 	}
 
 	public FlexoTestCase() {

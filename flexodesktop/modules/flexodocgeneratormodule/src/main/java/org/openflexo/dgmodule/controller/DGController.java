@@ -101,9 +101,9 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	protected static final Logger logger = Logger.getLogger(DGController.class.getPackage().getName());
 
-	public final FlexoPerspective<FlexoModelObject> CODE_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
+	public final FlexoPerspective CODE_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
 
-	public final FlexoPerspective<FlexoModelObject> VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
+	public final FlexoPerspective VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
 
 	@Override
 	public boolean useNewInspectorScheme() {

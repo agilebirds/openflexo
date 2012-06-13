@@ -39,7 +39,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
+public class OntologyPerspective extends FlexoPerspective {
 
 	private final VEController _controller;
 

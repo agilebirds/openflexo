@@ -19,100 +19,73 @@
  */
 package org.openflexo.foundation;
 
+import java.util.EventObject;
+import java.util.Vector;
+
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
 import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionEnableCondition;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoActionRedoFinalizer;
-import org.openflexo.foundation.action.FlexoActionRedoInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
-import org.openflexo.foundation.action.FlexoActionUndoInitializer;
-import org.openflexo.foundation.action.FlexoActionVisibleCondition;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 
 public interface FlexoEditor {
 
+	public static interface FlexoEditorFactory {
+		public FlexoEditor makeFlexoEditor(FlexoProject project);
+	}
+
 	public FlexoProject getProject();
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(A action)
-			throws FlexoException;
+	public FlexoProgressFactory getFlexoProgressFactory();
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBePerformed(
-			FlexoAction<A, T1, T2> action);
+	public ResourceUpdateHandler getResourceUpdateHandler();
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenPerformed(
-			FlexoAction<A, T1, T2> action, boolean success);
+	public boolean isInteractive();
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBeUndone(
-			FlexoAction<A, T1, T2> action);
+	public boolean performResourceScanning();
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenUndone(
-			FlexoAction<A, T1, T2> action, boolean success);
+	public void focusOn(FlexoModelObject object);
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBeRedone(
-			FlexoAction<A, T1, T2> action);
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performActionType(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e);
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenRedone(
-			FlexoAction<A, T1, T2> action, boolean success);
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoActionType(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e);
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionVisible(
-			FlexoActionType<A, T1, T2> actionType);
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoActionType(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e);
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionEnabled(
-			FlexoActionType<A, T1, T2> actionType);
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(A action,
+			EventObject e);
+
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoAction(A action,
+			EventObject e);
+
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoAction(A action,
+			EventObject e);
+
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionEnabled(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection);
+
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionVisible(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection);
+
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getEnabledIconFor(
+			FlexoActionType<A, T1, T2> action);
+
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getDisabledIconFor(
+			FlexoActionType<A, T1, T2> action);
+
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> KeyStroke getKeyStrokeFor(
+			FlexoActionType<A, T1, T2> action);
 
 	public void notifyObjectCreated(FlexoModelObject object);
 
 	public void notifyObjectDeleted(FlexoModelObject object);
 
 	public void notifyObjectChanged(FlexoModelObject object);
-
-	public boolean performResourceScanning();
-
-	public FlexoProgressFactory getFlexoProgressFactory();
-
-	public static interface FlexoEditorFactory {
-		public FlexoEditor makeFlexoEditor(FlexoProject project);
-	}
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionFinalizer<? super A> getFinalizerFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionUndoFinalizer<? super A> getUndoFinalizerFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionUndoInitializer<? super A> getUndoInitializerFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionRedoFinalizer<? super A> getRedoFinalizerFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionRedoInitializer<? super A> getRedoInitializerFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionEnableCondition<? super A, T1, T2> getEnableConditionFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionVisibleCondition<? super A, T1, T2> getVisibleConditionFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoExceptionHandler<? super A> getExceptionHandlerFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public void focusOn(FlexoModelObject object);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getEnabledIconFor(
-			FlexoActionType<A, T1, T2> actionType);
-
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getDisabledIconFor(
-			FlexoActionType<A, T1, T2> actionType);
 
 }

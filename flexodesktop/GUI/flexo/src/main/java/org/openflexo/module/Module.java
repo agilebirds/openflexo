@@ -375,23 +375,6 @@ public abstract class Module implements IModule {
 		return FlexoLocalization.localizedForKey(getDescription());
 	}
 
-	@Override
-	public boolean isLoaded() {
-		return getModuleLoader().isLoaded(this);
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	public boolean isActive() {
-		return getModuleLoader().isActive(this);
-	}
-
-	public boolean isAvailable() {
-		return getModuleLoader().isAvailable(this);
-	}
-
 	private boolean notFoundNotified = false;
 
 	private Class<?> searchModuleClass(String fullQualifiedModuleName) {

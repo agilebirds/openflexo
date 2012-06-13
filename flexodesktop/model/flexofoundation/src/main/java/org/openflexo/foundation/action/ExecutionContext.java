@@ -20,6 +20,7 @@
 package org.openflexo.foundation.action;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +67,7 @@ public class ExecutionContext {
 		protected FlexoAction _actionWhereThisValueWasInstanciated;
 		protected String _keyOfActionWhereThisValueWasInstanciated;
 
-		protected SingleProperty(String propertyKey, Vector<FlexoAction> previouslyExecutedActions) {
+		protected SingleProperty(String propertyKey, List<FlexoAction> previouslyExecutedActions) {
 			_propertyKey = propertyKey;
 			_value = (T) _action.objectForKey(propertyKey);
 			_originalValue = _value;
@@ -135,7 +136,7 @@ public class ExecutionContext {
 			protected T _originalValue;
 		}
 
-		protected VectorProperty(String propertyKey, Vector<FlexoAction> previouslyExecutedActions) {
+		protected VectorProperty(String propertyKey, List<FlexoAction> previouslyExecutedActions) {
 			_propertyKey = propertyKey;
 			_values = (Vector<T>) _action.objectForKey(propertyKey);
 
@@ -229,7 +230,7 @@ public class ExecutionContext {
 	private Vector<SingleProperty> _singleProperties;
 	private Vector<VectorProperty> _vectorProperties;
 
-	public void saveExecutionContext(Vector<FlexoAction> previouslyExecutedActions) {
+	public void saveExecutionContext(List<FlexoAction> previouslyExecutedActions) {
 		Vector<String> allProperties = new Vector<String>();
 		allProperties.add("focusedObject");
 		allProperties.add("globalSelection");
@@ -275,11 +276,11 @@ public class ExecutionContext {
 		}
 	}
 
-	private <T> SingleProperty<T> createNewSingleProperty(String key, Class<T> type, Vector<FlexoAction> previouslyExecutedActions) {
+	private <T> SingleProperty<T> createNewSingleProperty(String key, Class<T> type, List<FlexoAction> previouslyExecutedActions) {
 		return new SingleProperty<T>(key, previouslyExecutedActions);
 	}
 
-	private <T> VectorProperty<T> createNewVectorProperty(String key, Class<T> type, Vector<FlexoAction> previouslyExecutedActions) {
+	private <T> VectorProperty<T> createNewVectorProperty(String key, Class<T> type, List<FlexoAction> previouslyExecutedActions) {
 		return new VectorProperty<T>(key, previouslyExecutedActions);
 	}
 

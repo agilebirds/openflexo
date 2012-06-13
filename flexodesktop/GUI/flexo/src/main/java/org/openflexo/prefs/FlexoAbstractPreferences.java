@@ -19,6 +19,7 @@
  */
 package org.openflexo.prefs;
 
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -32,6 +33,7 @@ import org.apache.axis.encoding.Base64;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.FlexoProperties;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -39,15 +41,29 @@ import org.openflexo.toolbox.StringUtils;
  * 
  * @author sguerin
  */
-public abstract class FlexoAbstractPreferences extends FlexoObservable implements InspectableObject {
+public abstract class FlexoAbstractPreferences extends FlexoObservable implements InspectableObject, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
 
 	private static final String CHEESE = "l@iUh%gvwe@#{8ç]74562";
 
+	private PropertyChangeSupport propertyChangeSupport;
+
 	protected FlexoAbstractPreferences() {
 		super();
 		_preferences = new FlexoProperties();
+		this.propertyChangeSupport = new PropertyChangeSupport(this);
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	protected FlexoAbstractPreferences(Properties properties) {
@@ -112,10 +128,12 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 		}
 		setChanged();
 		notifyObservers(modif);
+		propertyChangeSupport.firePropertyChange(key, oldValue, value);
 		if (!key.equals(notificationKey)) {
 			modif = new PreferencesHaveChanged(notificationKey, oldValue, value);
 			setChanged();
 			notifyObservers(modif);
+			propertyChangeSupport.firePropertyChange(notificationKey, oldValue, value);
 		}
 	}
 

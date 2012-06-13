@@ -226,7 +226,7 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 	 * @see org.openflexo.view.ModuleView#getPerspective()
 	 */
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return controller.CODE_GENERATION_PERSPECTIVE;
 	}
 

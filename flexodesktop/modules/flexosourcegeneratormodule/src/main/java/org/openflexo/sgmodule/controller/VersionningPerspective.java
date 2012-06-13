@@ -38,7 +38,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class VersionningPerspective extends FlexoPerspective<FlexoModelObject> {
+public class VersionningPerspective extends FlexoPerspective {
 
 	private final SGController _controller;
 

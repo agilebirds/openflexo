@@ -22,103 +22,69 @@ package org.openflexo.view;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Enumeration;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.utils.ProjectInitializerException;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.ProjectLoader;
+import org.openflexo.module.Modules;
 import org.openflexo.view.controller.FlexoController;
 
 /**
  * @author gpolet
  * 
  */
-public class ModuleBar extends JPanel {
+public class ModuleBar extends JPanel implements PropertyChangeListener {
 	protected static Logger logger = FlexoLogger.getLogger(ModuleBar.class.getPackage().getName());
 
-	private static Vector<ModuleBar> moduleBars = new Vector<ModuleBar>();
-
-	public static void notifyStaticallyModuleHasBeenLoaded(Module m) {
-		Enumeration<ModuleBar> en = moduleBars.elements();
-		while (en.hasMoreElements()) {
-			ModuleBar bar = en.nextElement();
-			bar.notifyModuleHasBeenLoaded(m);
-		}
-	}
-
-	public static void notifyStaticallyModuleHasBeenUnLoaded(Module m) {
-		Enumeration<ModuleBar> en = moduleBars.elements();
-		while (en.hasMoreElements()) {
-			ModuleBar bar = en.nextElement();
-			bar.notifyModuleHasBeenUnLoaded(m);
-		}
-	}
-
-	public static void notifyStaticallySwitchToModule(Module m) {
-		Enumeration en = moduleBars.elements();
-		while (en.hasMoreElements()) {
-			ModuleBar bar = (ModuleBar) en.nextElement();
-			bar.notifySwitchToModule(m);
-		}
-	}
-
-	public void notifyModuleHasBeenLoaded(Module m) {
-		refresh();
-		repaint();
-	}
-
-	public void notifyModuleHasBeenUnLoaded(Module m) {
-		refresh();
-		repaint();
-	}
-
-	public void notifySwitchToModule(Module m) {
-		refresh();
-		if (moduleButtons.get(m) != null) {
-			moduleButtons.get(m).setAsActive();
-		}
-	}
-
 	private Hashtable<Module, ModuleButton> moduleButtons;
+	private final ModuleLoader moduleLoader;
 
 	/**
      *
      */
-	public ModuleBar() {
+	public ModuleBar(ModuleLoader moduleLoader) {
+		this.moduleLoader = moduleLoader;
 		moduleButtons = new Hashtable<Module, ModuleButton>();
-		moduleBars.add(this);
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		for (Module m : getModuleLoader().availableModules()) {
+		for (Module m : Modules.getInstance().getAvailableModules()) {
 			ModuleButton mb = new ModuleButton(m);
 			moduleButtons.put(m, mb);
 			add(mb);
 		}
+		moduleLoader.getPropertyChangeSupport().addPropertyChangeListener(ModuleLoader.MODULE_LOADED, this);
+		moduleLoader.getPropertyChangeSupport().addPropertyChangeListener(ModuleLoader.MODULE_UNLOADED, this);
+		moduleLoader.getPropertyChangeSupport().addPropertyChangeListener(ModuleLoader.MODULE_ACTIVATED, this);
 		validate();
 		repaint();
 	}
 
 	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
+		return moduleLoader;
 	}
 
 	private void refresh() {
-		Enumeration<ModuleButton> en = moduleButtons.elements();
-		while (en.hasMoreElements()) {
-			ModuleButton mb = en.nextElement();
+		for (ModuleButton mb : moduleButtons.values()) {
 			mb.refresh();
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ModuleLoader.MODULE_LOADED)) {
+			refresh();
+		} else if (evt.getPropertyName().equals(ModuleLoader.MODULE_UNLOADED)) {
+			refresh();
+		} else if (evt.getPropertyName().equals(ModuleLoader.MODULE_ACTIVATED)) {
+			refresh();
 		}
 	}
 
@@ -135,27 +101,11 @@ public class ModuleBar extends JPanel {
 				 */
 				@Override
 				public void mouseClicked(MouseEvent event) {
-					FlexoProject currentProject = getModuleLoader().getProject();
-					if (currentProject == null && module.requireProject()) {
-						try {
-							ModuleLoader.instance().openProject(null, module);
-						} catch (ProjectLoadingCancelledException e) {
-							e.printStackTrace();
-						} catch (ModuleLoadingException e) {
-							e.printStackTrace();
-							FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
-						} catch (ProjectInitializerException e) {
-							e.printStackTrace();
-							FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
-									+ e.getProjectDirectory().getAbsolutePath());
-						}
-					} else {
-						try {
-							getModuleLoader().switchToModule(module, currentProject);
-						} catch (ModuleLoadingException e) {
-							FlexoController.notify("Cannot load module." + e.getMessage());
-							return;
-						}
+					try {
+						getModuleLoader().switchToModule(module);
+					} catch (ModuleLoadingException e) {
+						FlexoController.notify("Cannot load module." + e.getMessage());
+						return;
 					}
 
 				}
@@ -185,20 +135,12 @@ public class ModuleBar extends JPanel {
 			refresh();
 		}
 
-		private ModuleLoader getModuleLoader() {
-			return ModuleLoader.instance();
-		}
-
-		private ProjectLoader getProjectLoader() {
-			return ProjectLoader.instance();
-		}
-
 		protected void setAsActive() {
 			setIcon(module.getMediumIconWithHover());
 		}
 
 		protected void refresh() {
-			if (module.isActive()) {
+			if (getModuleLoader().getActiveModule() != null && getModuleLoader().getActiveModule().getModule() == module) {
 				setIcon(module.getMediumIconWithHover());
 			} else {
 				setIcon(module.getMediumIcon());
@@ -206,7 +148,4 @@ public class ModuleBar extends JPanel {
 		}
 	}
 
-	public static void reset() {
-		moduleBars.clear();
-	}
 }

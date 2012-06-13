@@ -84,7 +84,7 @@ public class DREController extends FlexoController implements SelectionManagingC
 
 	// private DREMainPane _mainPane;
 
-	public final FlexoPerspective<DRMObject> DRE_PERSPECTIVE = new DREPerspective(this);
+	public final FlexoPerspective DRE_PERSPECTIVE = new DREPerspective(this);
 
 	protected DREMenuBar _DREMenuBar;
 
@@ -180,8 +180,8 @@ public class DREController extends FlexoController implements SelectionManagingC
 	protected AbstractDocItemView docItemView;
 
 	@Override
-	public ModuleView moduleViewForObject(FlexoModelObject object, boolean recalculateViewIfRequired) {
-		ModuleView returned = super.moduleViewForObject(object, recalculateViewIfRequired);
+	public ModuleView<?> moduleViewForObject(FlexoModelObject object, boolean recalculateViewIfRequired) {
+		ModuleView<?> returned = super.moduleViewForObject(object, recalculateViewIfRequired);
 		if (returned instanceof AbstractDocItemView) {
 			((AbstractDocItemView) returned).setDocItem((DocItem) object);
 		}

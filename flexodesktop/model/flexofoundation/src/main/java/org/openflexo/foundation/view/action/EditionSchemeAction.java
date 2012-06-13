@@ -80,7 +80,7 @@ import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.Vi
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> extends FlexoAction<A, FlexoModelObject, FlexoModelObject>
+public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> extends FlexoAction<A, FlexoModelObject, FlexoModelObject>
 		implements BindingEvaluationContext /*, BindingPathElement<Object>*/{
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
@@ -158,8 +158,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		/*System.out.println("On me demande la valeur du parametre " + parameter.getName() + " a priori c'est "
 				+ parameterValues.get(parameter));*/
 		if (parameter instanceof URIParameter) {
-			if (parameterValues.get(parameter) == null
-					|| (parameterValues.get(parameter) instanceof String && StringUtils.isEmpty((String) parameterValues.get(parameter)))) {
+			if (parameterValues.get(parameter) == null || parameterValues.get(parameter) instanceof String
+					&& StringUtils.isEmpty((String) parameterValues.get(parameter))) {
 				return ((URIParameter) parameter).getDefaultValue(this);
 			}
 		}

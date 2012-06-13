@@ -142,8 +142,8 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.7.1</version>
 					<configuration>
-					   <forkMode>always</forkMode>
-					   <argLine>-Xmx512M -XX:MaxPermSize=128M</argLine>
+						<forkMode>always</forkMode>
+						<argLine>-Xmx512M -XX:MaxPermSize=128M</argLine>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -948,15 +948,19 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>11.0.2</version>
+				<version>12.0</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
 				<version>1.6</version>
 			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.9.0</version>
+			</dependency>
 		</dependencies>
-
 	</dependencyManagement>
 </project>
 

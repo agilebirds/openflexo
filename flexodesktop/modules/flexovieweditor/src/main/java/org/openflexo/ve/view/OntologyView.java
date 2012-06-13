@@ -33,9 +33,9 @@ import org.openflexo.view.FlexoPerspective;
  */
 public class OntologyView extends FIBModuleView<FlexoOntology> {
 
-	private FlexoPerspective<? super FlexoOntology> declaredPerspective;
+	private FlexoPerspective declaredPerspective;
 
-	public OntologyView(FlexoOntology ontology, VEController controller, FlexoPerspective<? super FlexoOntology> perspective) {
+	public OntologyView(FlexoOntology ontology, VEController controller, FlexoPerspective perspective) {
 		super(ontology, controller, VECst.ONTOLOGY_VIEW_FIB);
 		declaredPerspective = perspective;
 	}
@@ -46,7 +46,7 @@ public class OntologyView extends FIBModuleView<FlexoOntology> {
 	}
 
 	@Override
-	public FlexoPerspective<? super FlexoOntology> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
 }

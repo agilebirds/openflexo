@@ -61,6 +61,7 @@ import org.openflexo.foundation.rm.ResourceStatusModification;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.ToolBox;
@@ -96,15 +97,13 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 		private void activateModuleIfPossible(WindowEvent e) {
 			if (!(e.getOppositeWindow() instanceof ProgressWindow) && getModuleLoader().isLoaded(_module.getModule())) {
-				getModuleLoader().activateModule(_module.getModule());
+				switchToModule();
 			}
 		}
 
 		@Override
 		public void windowClosing(WindowEvent event) {
-			if (getModule().close()) {
-				dispose();
-			}
+			close();
 		}
 	}
 
@@ -133,8 +132,22 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	}
 
 	public static FlexoFrame getActiveFrame(boolean createDefaultIfNull) {
-		return FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame()
-				: createDefaultIfNull ? getDefaultFrame() : null;
+		for (Frame frame : getFrames()) {
+			if (frame.isActive()) {
+				if (frame instanceof FlexoFrame) {
+					return (FlexoFrame) frame;
+				} else if (frame instanceof FlexoRelativeWindow) {
+					((FlexoRelativeWindow) frame).getParentFrame();
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Found active frame " + frame.getTitle() + " which is not a FlexoFrame nor a Relative Window.");
+					}
+				}
+				// We break since there won't be any other active frame.
+				break;
+			}
+		}
+		return createDefaultIfNull ? getDefaultFrame() : null;
 	}
 
 	public static Frame getOwner(Frame owner) {
@@ -225,12 +238,22 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (getModuleLoader().isLoaded(_module.getModule())) {
-					getModuleLoader().activateModule(_module.getModule());
-				}
+				switchToModule();
 			}
 
 		});
+	}
+
+	protected void switchToModule() {
+		try {
+			getModuleLoader().switchToModule(_module.getModule());
+		} catch (ModuleLoadingException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return getController().getModuleLoader();
 	}
 
 	/**
@@ -368,7 +391,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	@Override
 	public void focusGained(FocusEvent event) {
 		if (getModule() != null) {
-			getModule().notifyFocusGained();
+			getModule().activateModule();
 		}
 	}
 
@@ -410,11 +433,6 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			if (mainFrameIsVisible && getModule() != null && getModule().isActive() || !mainFrameIsVisible) {
 				setRelativeVisible(mainFrameIsVisible);
 				super.setVisible(mainFrameIsVisible);
-				if (mainFrameIsVisible) {
-					if (getModule() != null) {
-						getModule().notifyFocusOn();
-					}
-				}
 			}
 			if (windowResizeListener == null) {
 				windowResizeListener = new ComponentAdapter() {
@@ -429,23 +447,12 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 						saveBoundsInPreferenceWhenPossible();
 					}
 
-					@Override
-					public void componentShown(ComponentEvent e) {
-						if (getModuleLoader().isLoaded(_module.getModule())) {
-							getModuleLoader().activateModule(_module.getModule());
-						}
-					}
-
 				};
 				addComponentListener(windowResizeListener);
 			}
 		} else {
 			super.setVisible(mainFrameIsVisible);
 		}
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
 	}
 
 	public void setRelativeVisible(boolean relativeWindowsAreVisible) {
@@ -569,6 +576,12 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			return ((SelectionManagingController) getController()).getSelectionManager().getSelection();
 		}
 		return null;
+	}
+
+	public void close() {
+		if (getModule().close()) {
+			dispose();
+		}
 	}
 
 }

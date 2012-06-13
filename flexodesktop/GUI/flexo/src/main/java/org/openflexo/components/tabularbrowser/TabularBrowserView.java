@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,19 +73,16 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	private TabularBrowserFooter _footer;
 
-	private FlexoEditor _editor;
-
 	private boolean _synchronizeWithSelectionManager = false;
 
-	public TabularBrowserView(FlexoController controller, TabularBrowserModel model, int visibleRowCount, FlexoEditor editor) {
-		this(controller, model, editor);
+	public TabularBrowserView(FlexoController controller, TabularBrowserModel model, int visibleRowCount) {
+		this(controller, model);
 		setVisibleRowCount(visibleRowCount);
 	}
 
-	public TabularBrowserView(FlexoController controller, TabularBrowserModel model, FlexoEditor editor) {
+	public TabularBrowserView(FlexoController controller, TabularBrowserModel model) {
 		super();
 		_model = model;
-		_editor = editor;
 		_controller = controller;
 		if (_controller instanceof SelectionManagingController) {
 			_selectionManager = ((SelectionManagingController) _controller).getSelectionManager();
@@ -145,6 +141,17 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	}
 
+	public FlexoController getController() {
+		return _controller;
+	}
+
+	public FlexoEditor getEditor() {
+		if (getController() != null) {
+			return getController().getEditor();
+		}
+		return null;
+	}
+
 	/**
 	 * !!!!!!!!!! IMPORTANT !!!!!!!!
 	 * 
@@ -192,11 +199,11 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	private DefaultContextualMenuManager defaultContextualMenuManager;
 
 	protected ContextualMenuManager getContextualMenuManager() {
-		if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
+		if (_selectionManager != null && _synchronizeWithSelectionManager) {
 			return _selectionManager.getContextualMenuManager();
 		}
 		if (defaultContextualMenuManager == null) {
-			defaultContextualMenuManager = new DefaultContextualMenuManager();
+			defaultContextualMenuManager = new DefaultContextualMenuManager(getController());
 		}
 		return defaultContextualMenuManager;
 	}
@@ -225,11 +232,11 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		return _treeTable.isSelected(object);
 	}
 
-	public Vector getObjects() {
+	public Vector<FlexoModelObject> getObjects() {
 		return getSelectedObjects();
 	}
 
-	public Vector getSelectedObjects() {
+	public Vector<FlexoModelObject> getSelectedObjects() {
 		return _treeTable.getSelectedObjects();
 	}
 
@@ -299,7 +306,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		return getRootObject();
 	}
 
-	public boolean isSelected(Vector objectList) {
+	public boolean isSelected(Vector<? extends FlexoModelObject> objectList) {
 		return getSelectedObjects().containsAll(objectList);
 	}
 
@@ -368,8 +375,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 			getSelectionManager().addToSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
-			for (Enumeration en = objects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+			for (FlexoModelObject next : objects) {
 				fireObjectSelected(next);
 			}
 			fireEndMultipleSelection();
@@ -382,8 +388,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 			getSelectionManager().removeFromSelected(objects);
 		} else {
 			fireBeginMultipleSelection();
-			for (Enumeration en = objects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+			for (FlexoModelObject next : objects) {
 				fireObjectDeselected(next);
 			}
 			fireEndMultipleSelection();
@@ -488,7 +493,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 			return;
 		}
 
-		if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
+		if (_selectionManager != null && _synchronizeWithSelectionManager) {
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("valueChanged() ListSelectionEvent=" + e + " ListSelectionModel=" + getSelectionModel().toString());
@@ -498,8 +503,8 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 			int beginIndex = e.getFirstIndex();
 			int endIndex = e.getLastIndex();
 
-			Vector toBeRemovedFromSelection = new Vector();
-			Vector toBeAddedToSelection = new Vector();
+			Vector<FlexoModelObject> toBeRemovedFromSelection = new Vector<FlexoModelObject>();
+			Vector<FlexoModelObject> toBeAddedToSelection = new Vector<FlexoModelObject>();
 
 			for (int i = beginIndex; i <= endIndex; i++) {
 				FlexoModelObject object = _treeTable.getObjectAt(i);
@@ -515,13 +520,11 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 				}
 			}
 
-			for (Enumeration en = toBeAddedToSelection.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+			for (FlexoModelObject next : toBeAddedToSelection) {
 				getSelectionManager().addToSelected(next);
 			}
 
-			for (Enumeration en = toBeRemovedFromSelection.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+			for (FlexoModelObject next : toBeRemovedFromSelection) {
 				getSelectionManager().removeFromSelected(next);
 			}
 
@@ -533,7 +536,4 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	}
 
-	public FlexoEditor getEditor() {
-		return _editor;
-	}
 }

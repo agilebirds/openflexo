@@ -60,7 +60,7 @@ public class WSEController extends FlexoController implements SelectionManagingC
 
 	static final Logger logger = Logger.getLogger(WSEController.class.getPackage().getName());
 
-	public final FlexoPerspective<FlexoModelObject> WSE_PERSPECTIVE = new WSEPerspective();
+	public final FlexoPerspective WSE_PERSPECTIVE = new WSEPerspective();
 
 	protected WSEMenuBar _WSEMenuBar;
 

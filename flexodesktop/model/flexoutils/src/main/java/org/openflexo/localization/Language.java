@@ -193,8 +193,8 @@ public abstract class Language extends KVCObject implements StringConvertable, C
 		if (languageAsString == null) {
 			return ENGLISH;
 		}
-		for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
-			Language next = (Language) e.nextElement();
+		for (Enumeration<Language> e = getAvailableLanguages().elements(); e.hasMoreElements();) {
+			Language next = e.nextElement();
 			if (next.getName().equalsIgnoreCase(languageAsString)) {
 				return next;
 			}

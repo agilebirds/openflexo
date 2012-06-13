@@ -256,10 +256,4 @@ public class WKFDeleteInitializer extends ActionInitializer {
 		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
 	}
 
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(WKFDelete.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
-	}
-
 }

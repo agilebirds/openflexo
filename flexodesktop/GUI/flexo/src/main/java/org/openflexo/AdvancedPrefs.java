@@ -29,8 +29,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openflexo.foundation.utils.FlexoFont;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.AutoSaveService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
@@ -39,7 +37,6 @@ import org.openflexo.swing.LookAndFeel;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ProxyUtils;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.controller.UndoManager;
 
 public class AdvancedPrefs extends ContextPreferences {
 
@@ -47,36 +44,36 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	private static final Class<AdvancedPrefs> ADVANCED_PREFERENCES = AdvancedPrefs.class;
 
-	protected static final String LAST_VISITED_DIRECTORY_KEY = "lastVisitedDirectory";
+	public static final String LAST_VISITED_DIRECTORY_KEY = "lastVisitedDirectory";
 
-	protected static final String ECLIPSE_WORKSPACE_DIRECTORY_KEY = "eclipseWorkspaceDirectory";
+	public static final String ECLIPSE_WORKSPACE_DIRECTORY_KEY = "eclipseWorkspaceDirectory";
 
-	protected static final String BROWSERFONT_KEY = "browser_font";
+	public static final String BROWSERFONT_KEY = "browser_font";
 
-	protected static final String BUG_REPORT_URL_KEY = "bug_report_url";
-	protected static final String BUG_REPORT_USER = "bug_report_user";
-	protected static final String BUG_REPORT_PASWORD = "bug_report_password";
+	public static final String BUG_REPORT_URL_KEY = "bug_report_url";
+	public static final String BUG_REPORT_USER = "bug_report_user";
+	public static final String BUG_REPORT_PASWORD = "bug_report_password";
 
-	protected static final String WEB_SERVICE_INSTANCE = "webServiceInstance";
-	protected static final String WEB_SERVICE_URL_KEY = "webServiceUrl";
-	protected static final String WEB_SERVICE_LOGIN_KEY = "webServiceLogin";
-	protected static final String WEB_SERVICE_PWD_KEY = "webServicePwd";
-	protected static final String WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY = "rememberAndDontAskWebServiceParamsAnymore";
-	protected static final String FLEXO_SERVER_INSTANCE_URL = "flexoserver_instance_url";
+	public static final String WEB_SERVICE_INSTANCE = "webServiceInstance";
+	public static final String WEB_SERVICE_URL_KEY = "webServiceUrl";
+	public static final String WEB_SERVICE_LOGIN_KEY = "webServiceLogin";
+	public static final String WEB_SERVICE_PWD_KEY = "webServicePwd";
+	public static final String WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY = "rememberAndDontAskWebServiceParamsAnymore";
+	public static final String FLEXO_SERVER_INSTANCE_URL = "flexoserver_instance_url";
 
-	protected static final String ENABLE_UNDO_MANAGER = "enableUndoManager";
+	public static final String ENABLE_UNDO_MANAGER = "enableUndoManager";
 
-	protected static final String UNDO_LEVELS = "undoLevels";
+	public static final String UNDO_LEVELS = "undoLevels";
 
-	protected static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
+	public static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
 
-	protected static final String HIGHLIGHT_UNCOMMENTED_ITEMS = "hightlightUncommentedItem";
+	public static final String HIGHLIGHT_UNCOMMENTED_ITEMS = "hightlightUncommentedItem";
 
-	protected static final String CLOSE_POPUP_ON_MOUSE_OUT = "close_popup_on_mouse_out";
+	public static final String CLOSE_POPUP_ON_MOUSE_OUT = "close_popup_on_mouse_out";
 
-	protected static final String LOOK_AND_FEEL = "look_and_feel";
+	public static final String LOOK_AND_FEEL = "look_and_feel";
 
-	protected static final String HIDE_FILTERED_OBJECTS = "hideFilteredObjects";
+	public static final String HIDE_FILTERED_OBJECTS = "hideFilteredObjects";
 
 	private static final String USE_DEFAULT_PROXY_SETTINGS = "UseDefaultProxySettings";
 	private static final String NO_PROXY = "NoProxy";
@@ -211,7 +208,6 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static void setEnableUndoManager(boolean enableUndoManager) {
 		getPreferences().setProperty(ENABLE_UNDO_MANAGER, String.valueOf(enableUndoManager));
-		UndoManager.setEnable(enableUndoManager);
 	}
 
 	public static boolean getHightlightUncommentedItem() {
@@ -238,7 +234,6 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static void setUndoLevels(Integer undoLevels) {
 		getPreferences().setProperty(UNDO_LEVELS, String.valueOf(undoLevels.intValue()));
-		UndoManager.setUndoLevels(undoLevels);
 	}
 
 	public static LookAndFeel getLookAndFeel() {
@@ -273,22 +268,6 @@ public class AdvancedPrefs extends ContextPreferences {
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static String getAutoSaveDirectory() {
-		if (getAutoSaveService().getAutoSaveDirectory() != null) {
-			return getAutoSaveService().getAutoSaveDirectory().getAbsolutePath();
-		} else {
-			return FlexoLocalization.localizedForKey("time_traveling_is_disabled");
-		}
-	}
-
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static AutoSaveService getAutoSaveService() {
-		return AutoSaveService.instance();
 	}
 
 	public static void save() {

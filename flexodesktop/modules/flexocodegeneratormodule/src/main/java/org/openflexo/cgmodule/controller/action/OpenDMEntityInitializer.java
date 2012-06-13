@@ -20,24 +20,17 @@
 package org.openflexo.cgmodule.controller.action;
 
 import java.awt.event.ActionEvent;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.action.OpenDMEntity;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.external.ExternalDMModule;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
 
-public class OpenDMEntityInitializer extends ActionInitializer {
+public class OpenDMEntityInitializer extends ActionInitializer<OpenDMEntity, CGFile, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -65,46 +58,10 @@ public class OpenDMEntityInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<OpenDMEntity>() {
 			@Override
 			public boolean run(ActionEvent e, OpenDMEntity action) {
-				ExternalDMModule dmModule = null;
-				try {
-					dmModule = getModuleLoader().getDMModule(getProject());
-				} catch (ModuleLoadingException e1) {
-					e1.printStackTrace();
-					;
-					FlexoController.notify("Cannot load DM editor." + e1.getMessage());
-				}
-				if (dmModule == null) {
-					return false;
-				}
-				dmModule.focusOn();
-				dmModule.showDMEntity(action.getModelEntity());
-				if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-					SwingUtilities.invokeLater(new SwitchToDMJob());
-				}
+				getEditor().focusOn(action.getModelEntity());
 				return true;
 			}
 		};
 	}
 
-	private class SwitchToDMJob implements Runnable {
-
-		SwitchToDMJob() {
-		}
-
-		@Override
-		public void run() {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Switching to DM");
-			}
-			try {
-				getModuleLoader().switchToModule(Module.DM_MODULE, getController().getProject());
-			} catch (ModuleLoadingException e) {
-				e.printStackTrace();
-				FlexoController.notify("Cannot load DM Editor." + e.getMessage());
-			}
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Switched to DM done!");
-			}
-		}
-	}
 }

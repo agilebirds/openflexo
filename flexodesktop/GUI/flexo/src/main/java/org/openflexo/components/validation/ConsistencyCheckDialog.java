@@ -28,9 +28,9 @@ import javax.swing.JTabbedPane;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.module.UserType;
 import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 
 /**
@@ -57,7 +57,7 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 	}
 
 	public ConsistencyCheckDialog(ConsistencyCheckingController controller, ValidationReport validationReport, String title) {
-		super(controller != null ? controller.getFlexoFrame() : FlexoModule.getActiveModule().getFlexoFrame(), false);
+		super(controller != null ? controller.getFlexoFrame() : FlexoFrame.getActiveFrame(), false);
 		setController(controller);
 		// setIconImage(IconLibrary.FLEXO_ICON.getImage());
 		setTitle(title);
