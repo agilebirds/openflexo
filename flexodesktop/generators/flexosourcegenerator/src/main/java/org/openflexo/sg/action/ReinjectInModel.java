@@ -55,8 +55,8 @@ public class ReinjectInModel extends MultipleFileGCAction<ReinjectInModel> {
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null && file instanceof ModelReinjectableFile && ((ModelReinjectableFile) file)
-					.needsModelReinjection());
+			return file.getResource() != null && file instanceof ModelReinjectableFile
+					&& ((ModelReinjectableFile) file).needsModelReinjection();
 		}
 
 	};
@@ -70,7 +70,7 @@ public class ReinjectInModel extends MultipleFileGCAction<ReinjectInModel> {
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Reinject in model");
 
 		ProjectGenerator pg = (ProjectGenerator) getProjectGenerator();

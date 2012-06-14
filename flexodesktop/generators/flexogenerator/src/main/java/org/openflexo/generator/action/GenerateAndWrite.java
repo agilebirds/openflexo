@@ -73,7 +73,7 @@ public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite> {
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Generating and writing " + getRepository().getName());
 		}
