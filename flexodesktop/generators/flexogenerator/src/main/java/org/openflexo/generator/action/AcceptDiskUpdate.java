@@ -51,7 +51,7 @@ public class AcceptDiskUpdate extends MultipleFileGCAction<AcceptDiskUpdate> {
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null && file.getGenerationStatus().isDiskModified());
+			return file.getResource() != null && file.getGenerationStatus().isDiskModified();
 		}
 
 	};
@@ -65,7 +65,7 @@ public class AcceptDiskUpdate extends MultipleFileGCAction<AcceptDiskUpdate> {
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Accepting disk update");
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();

@@ -40,6 +40,8 @@ import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
 import org.openflexo.foundation.cg.dm.CGStructureRefreshed;
 import org.openflexo.foundation.cg.dm.CustomTemplateRepositoryChanged;
+import org.openflexo.foundation.cg.dm.LongOperationStarted;
+import org.openflexo.foundation.cg.dm.LongOperationStopped;
 import org.openflexo.foundation.cg.dm.LogAdded;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.version.CGRelease;
@@ -543,6 +545,16 @@ public abstract class GenerationRepository extends CGObject {
 	public void notifyLogAdded() {
 		setChanged();
 		notifyObservers(new LogAdded());
+	}
+
+	public void notifyLongOperationStarted() {
+		setChanged();
+		notifyObservers(new LongOperationStarted(this));
+	}
+
+	public void notifyLongOperationStopped() {
+		setChanged();
+		notifyObservers(new LongOperationStopped(this));
 	}
 
 	// ==========================================================================

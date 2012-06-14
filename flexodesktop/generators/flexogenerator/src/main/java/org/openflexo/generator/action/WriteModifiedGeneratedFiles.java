@@ -73,7 +73,7 @@ public class WriteModifiedGeneratedFiles extends MultipleFileGCAction<WriteModif
 	private MultipleGenerationException exception;
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Write modified files");
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();

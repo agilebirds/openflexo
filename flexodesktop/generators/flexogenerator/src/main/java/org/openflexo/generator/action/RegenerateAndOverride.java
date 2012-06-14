@@ -48,7 +48,7 @@ public class RegenerateAndOverride extends MultipleFileGCAction<RegenerateAndOve
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null);
+			return file.getResource() != null;
 		}
 
 	};
@@ -62,7 +62,7 @@ public class RegenerateAndOverride extends MultipleFileGCAction<RegenerateAndOve
 	}
 
 	@Override
-	protected void doAction(Object context) throws SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws SaveResourceException, FlexoException {
 		logger.info("Regenerate and override");
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
 		pg.setAction(this);
