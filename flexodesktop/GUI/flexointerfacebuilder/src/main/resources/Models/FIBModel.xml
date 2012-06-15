@@ -251,6 +251,7 @@
     <property name="filtered" xmlTag="filtered" attribute="YES"/> 
     <property name="defaultVisible" xmlTag="defaultVisible" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
+    <property name="dynamicFont" xmlTag="dynamicFont" attribute="YES"/> 
     <property name="children" type="vector" contains="org.openflexo.fib.model.FIBBrowserElement$FIBBrowserElementChildren"/> 
     <property name="actions" type="vector" contains="org.openflexo.fib.model.FIBBrowserAction"/> 
   </entity>

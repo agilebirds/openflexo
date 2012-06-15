@@ -337,10 +337,15 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return browserElementDefinition;
 	}
 
-	public Font getFont() {
+	public Font getFont(final Object object) {
+		if (browserElementDefinition.getDynamicFont().isSet()) {
+			iteratorObject = object;
+			return (Font) browserElementDefinition.getDynamicFont().getBindingValue(this);
+		}
 		if (getBrowserElement() != null) {
 			return getBrowserElement().retrieveValidFont();
 		}
+
 		return null;
 	}
 
