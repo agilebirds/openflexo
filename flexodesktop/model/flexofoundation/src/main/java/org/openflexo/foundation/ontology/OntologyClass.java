@@ -20,8 +20,10 @@
 package org.openflexo.foundation.ontology;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -100,7 +102,9 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 	private void updateSuperClasses(OntClass anOntClass) {
 		// superClasses.clear();
 
-		OntologyClass owlClass = getOntologyLibrary().getClass(OntologyLibrary.OWL_CLASS_URI);
+		logger.info("updateSuperClasses for " + getURI());
+
+		OntologyClass owlClass = getOntology().getClass(OntologyLibrary.OWL_CLASS_URI);
 		/*if (owlClass != null) {
 			superClasses.remove(owlClass);
 			owlClass.subClasses.remove(this);
@@ -109,7 +113,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 		Iterator it = anOntClass.listSuperClasses(true);
 		while (it.hasNext()) {
 			OntClass father = (OntClass) it.next();
-			OntologyClass fatherClass = getOntologyLibrary().getClass(father.getURI());
+			OntologyClass fatherClass = getOntology().retrieveOntologyClass(father);// getOntologyLibrary().getClass(father.getURI());
 			if (fatherClass != null) {
 				if (!superClasses.contains(fatherClass)) {
 					superClasses.add(fatherClass);
@@ -132,6 +136,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 				&& getFlexoOntology() != getOntologyLibrary().getOWLOntology()) {
 			if (owlClass != null) {
 				if (superClasses.size() == 0) {
+					logger.info("Add Class as super class for " + getURI());
 					if (!superClasses.contains(owlClass)) {
 						superClasses.add(owlClass);
 					}
@@ -142,6 +147,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 						owlClass.subClasses.add(this);
 					}
 				} else {
+					logger.info("Remove Class as super class for " + getURI());
 					if (superClasses.contains(owlClass) && (superClasses.size() > 1)) {
 						superClasses.remove(owlClass);
 						owlClass.subClasses.remove(this);
@@ -155,6 +161,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 			// and if a declared class has no parent, then the only one parent is the owl Thing class
 			if ((superClasses.size() > 0) && (getOntologyLibrary().THING != null)) {
 				if (superClasses.contains(getOntologyLibrary().THING) && (superClasses.size() > 1)) {
+					logger.info("Remove Thing as super class for " + getURI());
 					superClasses.remove(getOntologyLibrary().THING);
 					getOntologyLibrary().THING.subClasses.remove(this);
 				}
@@ -164,6 +171,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 			}
 			if ((superClasses.size() == 0) && (getOntologyLibrary() != null) && (getOntologyLibrary().THING != null)
 					&& (getOntologyLibrary().THING != this)) {
+				logger.info("Add Thing as super class for " + getURI());
 				superClasses.add(getOntologyLibrary().THING);
 				if (!getOntologyLibrary().THING.subClasses.contains(this)) {
 					getOntologyLibrary().THING.subClasses.add(this);
@@ -178,7 +186,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 		Iterator it = anOntClass.listSubClasses(true);
 		while (it.hasNext()) {
 			OntClass child = (OntClass) it.next();
-			OntologyClass childClass = getOntologyLibrary().getClass(child.getURI());
+			OntologyClass childClass = getOntology().retrieveOntologyClass(child);// getOntologyLibrary().getClass(child.getURI());
 			if (childClass != null) {
 				if (!subClasses.contains(childClass)) {
 					subClasses.add(childClass);
@@ -192,12 +200,12 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 
 	@Override
 	public String getClassNameKey() {
-		return "ontology_concept";
+		return "ontology_class";
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "OntologyConcept:" + getURI();
+		return "OntologyClass:" + getURI();
 	}
 
 	public static final Comparator<OntologyClass> COMPARATOR = new Comparator<OntologyClass>() {
@@ -334,13 +342,14 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 
 	@Override
 	public String getDisplayableDescription() {
-		String extendsLabel = " extends ";
+		/*String extendsLabel = " extends ";
 		boolean isFirst = true;
 		for (OntologyClass s : superClasses) {
 			extendsLabel += (isFirst ? "" : ",") + s.getName();
 			isFirst = false;
 		}
-		return "Class " + getName() + extendsLabel;
+		return "Class " + getName() + extendsLabel;*/
+		return getName();
 	}
 
 	@Override
@@ -375,5 +384,38 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
 			_appendRangeAndDomains(superSuperClass, alreadyComputed);
 		}
+	}
+
+	/**
+	 * Return all restrictions related to supplied property
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public List<OntologyRestrictionClass> getRestrictions(OntologyProperty property) {
+		List<OntologyRestrictionClass> returned = new ArrayList<OntologyRestrictionClass>();
+		for (OntologyClass c : getSuperClasses()) {
+			if (c instanceof OntologyRestrictionClass) {
+				OntologyRestrictionClass r = (OntologyRestrictionClass) c;
+				if (r.getProperty() == property) {
+					returned.add(r);
+				}
+			}
+		}
+		return returned;
+	}
+
+	@Override
+	public String getHTMLDescription() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<html>");
+		sb.append("Class <b>" + getName() + "</b><br>");
+		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Superclasses:</b>");
+		for (OntologyClass c : getSuperClasses()) {
+			sb.append(" " + c.getDisplayableDescription());
+		}
+		sb.append("</html>");
+		return sb.toString();
 	}
 }

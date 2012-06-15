@@ -21,33 +21,38 @@ package org.openflexo.foundation.ontology;
 
 import java.util.logging.Logger;
 
-import com.hp.hpl.jena.ontology.Restriction;
-import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.ontology.UnionClass;
 
-public abstract class RestrictionStatement extends OntologyStatement {
+public class OntologyUnionClass extends OntologyOperatorClass {
 
-	private static final Logger logger = Logger.getLogger(RestrictionStatement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OntologyUnionClass.class.getPackage().getName());
 
-	public static final String SUB_CLASS_URI = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+	private final UnionClass ontClass;
 
-	protected Restriction restriction;
-
-	public RestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
-		super(subject, s);
-		restriction = r;
+	protected OntologyUnionClass(UnionClass anOntClass, FlexoOntology ontology) {
+		super(anOntClass, ontology);
+		this.ontClass = anOntClass;
+		init();
 	}
-
-	public abstract OntologyProperty getProperty();
 
 	@Override
-	public abstract String getName();
-
-	public static enum RestrictionType {
-		Some, Only, Min, Max, Exact;
+	public String getClassNameKey() {
+		return "ontology_union_class";
 	}
 
-	public abstract RestrictionType getRestrictionType();
+	@Override
+	public String getFullyQualifiedName() {
+		return "OntologyUnionClass:" + ontClass.getURI();
+	}
 
-	public abstract int getCardinality();
+	@Override
+	public UnionClass getOntResource() {
+		return ontClass;
+	}
+
+	@Override
+	public String getDisplayableDescription() {
+		return "Union" + getOperandListDisplayableDescription();
+	}
 
 }

@@ -113,19 +113,24 @@ public class OntologyIndividual extends OntologyObject<Individual> implements Co
 
 	private void updateSuperClasses(Individual anIndividual) {
 		// superClasses.clear();
-		Iterator it = anIndividual.listOntClasses(true);
+		Iterator<OntClass> it = anIndividual.listOntClasses(true);
 		while (it.hasNext()) {
-			OntClass father = (OntClass) it.next();
-			OntologyClass fatherClass = getOntologyLibrary().getClass(father.getURI());
-			if (fatherClass != null) {
-				if (!superClasses.contains(fatherClass)) {
-					superClasses.add(fatherClass);
+			try {
+				OntClass father = it.next();
+				OntologyClass fatherClass = getOntology().retrieveOntologyClass(father);// getOntologyLibrary().getClass(father.getURI());
+				if (fatherClass != null) {
+					if (!superClasses.contains(fatherClass)) {
+						superClasses.add(fatherClass);
+					}
+					// System.out.println("Add "+fatherClass.getName()+" as a super class of "+getName());
+					if (!fatherClass.individuals.contains(this)) {
+						// System.out.println("Add "+getName()+" as an individual of "+fatherClass.getName());
+						fatherClass.individuals.add(this);
+					}
 				}
-				// System.out.println("Add "+fatherClass.getName()+" as a super class of "+getName());
-				if (!fatherClass.individuals.contains(this)) {
-					// System.out.println("Add "+getName()+" as an individual of "+fatherClass.getName());
-					fatherClass.individuals.add(this);
-				}
+			} catch (Exception e) {
+				logger.warning("Exception thrown while processing updateSuperClasses() for " + getURI());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -260,41 +265,41 @@ public class OntologyIndividual extends OntologyObject<Individual> implements Co
 
 	@Override
 	public String getDescription() {
-		return (String) getPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI));
+		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI));
 	}
 
 	@Override
 	public void setDescription(String aDescription) {
-		setPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI), aDescription);
+		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI), aDescription);
 	}
 
 	@Override
 	public String getTechnicalDescription() {
-		return (String) getPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI));
+		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI));
 	}
 
 	@Override
 	public void setTechnicalDescription(String technicalDescription) {
-		setPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI), technicalDescription);
+		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI), technicalDescription);
 	};
 
 	@Override
 	public String getBusinessDescription() {
-		return (String) getPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI));
+		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI));
 	}
 
 	@Override
 	public void setBusinessDescription(String businessDescription) {
-		setPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI), businessDescription);
+		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI), businessDescription);
 	}
 
 	@Override
 	public String getUserManualDescription() {
-		return (String) getPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI));
+		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI));
 	}
 
 	@Override
 	public void setUserManualDescription(String userManualDescription) {
-		setPropertyValue(getOntologyLibrary().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI), userManualDescription);
+		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI), userManualDescription);
 	}
 }

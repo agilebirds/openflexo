@@ -11,11 +11,9 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.DataPropertyStatement;
-import org.openflexo.foundation.ontology.DataRestrictionStatement;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IsAStatement;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
-import org.openflexo.foundation.ontology.ObjectRestrictionStatement;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
@@ -23,9 +21,8 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.OntologyRestrictionClass.RestrictionType;
 import org.openflexo.foundation.ontology.OntologyStatement;
-import org.openflexo.foundation.ontology.RestrictionStatement;
-import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty.SubDataPropertyOfProperty;
@@ -481,7 +478,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 	}
 
-	public static class RestrictionStatementPatternRolePathElement extends OntologicStatementPatternRolePathElement<RestrictionStatement> {
+	public static class RestrictionStatementPatternRolePathElement extends OntologicStatementPatternRolePathElement<SubClassStatement> {
 		private OntologyPropertyPathElement property;
 		private OntologyClassPathElement object;
 		private SimpleBindingPathElementImpl<RestrictionType> restrictionType;
@@ -513,18 +510,20 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			property = new OntologyPropertyPathElement("property", this) {
 				@Override
 				public OntologyProperty getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof RestrictionStatement) {
+					/*if (target instanceof RestrictionStatement) {
 						return ((RestrictionStatement) target).getProperty();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
-					}
+					}*/
+					logger.warning("Not implemented: " + target);
+					return null;
 				}
 			};
 			object = new OntologyClassPathElement("object", this) {
 				@Override
 				public OntologyClass getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof ObjectRestrictionStatement) {
+					/*if (target instanceof ObjectRestrictionStatement) {
 						return ((ObjectRestrictionStatement) target).getObject();
 					} else if (target instanceof DataRestrictionStatement) {
 						logger.warning("object unavailable for DataPropertyStatement: " + target);
@@ -532,7 +531,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
-					}
+					}*/
+					logger.warning("Not implemented: " + target);
+					return null;
 				}
 
 				@Override
@@ -540,7 +541,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					// not relevant because not settable
 				}
 			};
-			restrictionType = new SimpleBindingPathElementImpl<RestrictionStatement.RestrictionType>("restrictionType",
+			/*restrictionType = new SimpleBindingPathElementImpl<RestrictionStatement.RestrictionType>("restrictionType",
 					RestrictionStatement.class, RestrictionType.class, true, "restriction_type") {
 				@Override
 				public RestrictionType getBindingValue(Object target, BindingEvaluationContext context) {
@@ -556,17 +557,19 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				public void setBindingValue(RestrictionType value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
-			};
-			cardinality = new SimpleBindingPathElementImpl<Integer>("cardinality", RestrictionStatement.class, Integer.class, true,
+			};*/
+			cardinality = new SimpleBindingPathElementImpl<Integer>("cardinality", SubClassStatement.class, Integer.class, true,
 					"cardinality_of_restriction") {
 				@Override
 				public Integer getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof RestrictionStatement) {
+					/*if (target instanceof RestrictionStatement) {
 						return ((RestrictionStatement) target).getCardinality();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
-					}
+					}*/
+					logger.warning("Not implemented: " + target);
+					return null;
 				}
 
 				@Override
@@ -574,11 +577,11 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					// not relevant because not settable
 				}
 			};
-			dataRange = new SimpleBindingPathElementImpl<OntologicDataType>("dataRange", RestrictionStatement.class,
-					OntologicDataType.class, true, "data_range_of_restriction") {
+			dataRange = new SimpleBindingPathElementImpl<OntologicDataType>("dataRange", SubClassStatement.class, OntologicDataType.class,
+					true, "data_range_of_restriction") {
 				@Override
 				public OntologicDataType getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof ObjectRestrictionStatement) {
+					/*if (target instanceof ObjectRestrictionStatement) {
 						logger.warning("dataRange unavailable for ObjectRestrictionStatement: " + target);
 						return null;
 					} else if (target instanceof DataRestrictionStatement) {
@@ -586,7 +589,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
-					}
+					}*/
+					logger.warning("Not implemented: " + target);
+					return null;
 				}
 
 				@Override

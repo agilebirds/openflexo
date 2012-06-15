@@ -89,7 +89,19 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 	}
 
 	public boolean isLiteralRange() {
-		return (getRange() == getOntologyLibrary().getOntologyObject(OntologyLibrary.RDFS_LITERAL_URI));
+		return (getRange() == getOntology().getOntologyObject(OntologyLibrary.RDFS_LITERAL_URI));
+	}
+
+	@Override
+	public String getHTMLDescription() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<html>");
+		sb.append("Object property <b>" + getName() + "</b><br>");
+		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Domain:</b> " + (getDomain() != null ? getDomain().getURI() : "?") + "<br>");
+		sb.append("<b>Range:</b> " + (getRange() != null ? getRange().getURI() : "?") + "<br>");
+		sb.append("</html>");
+		return sb.toString();
 	}
 
 }

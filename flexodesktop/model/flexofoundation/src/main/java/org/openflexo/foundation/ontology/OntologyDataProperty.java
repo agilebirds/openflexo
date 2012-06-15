@@ -91,6 +91,18 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 	}
 
 	@Override
+	public String getHTMLDescription() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<html>");
+		sb.append("Datatype property <b>" + getName() + "</b><br>");
+		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Domain:</b> " + (getDomain() != null ? getDomain().getURI() : "?") + "<br>");
+		sb.append("<b>Datatype:</b> " + (getDataType() != null ? getDataType().toString() : "?") + "<br>");
+		sb.append("</html>");
+		return sb.toString();
+	}
+
+	@Override
 	public boolean isOntologyDataProperty() {
 		return true;
 	}

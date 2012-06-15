@@ -19,6 +19,7 @@
  */
 package org.openflexo.components.widget;
 
+import java.awt.Font;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -48,6 +49,8 @@ public class OntologyBrowserModel {
 	private boolean hierarchicalMode = true;
 	private boolean strictMode = false;
 	private OntologyClass rootClass;
+	private boolean displayPropertiesInClasses = true;
+
 	private boolean showObjectProperties = true;
 	private boolean showDataProperties = true;
 	private boolean showAnnotationProperties = true;
@@ -117,6 +120,14 @@ public class OntologyBrowserModel {
 		this.strictMode = strictMode;
 	}
 
+	public boolean getDisplayPropertiesInClasses() {
+		return displayPropertiesInClasses;
+	}
+
+	public void setDisplayPropertiesInClasses(boolean displayPropertiesInClasses) {
+		this.displayPropertiesInClasses = displayPropertiesInClasses;
+	}
+
 	public boolean getShowObjectProperties() {
 		return showObjectProperties;
 	}
@@ -182,6 +193,54 @@ public class OntologyBrowserModel {
 		return true;
 	}
 
+	private void appendOntologyContents(FlexoOntology o, OntologyObject<?> parent) {
+		List<OntologyProperty> properties = new Vector<OntologyProperty>();
+		Hashtable<OntologyProperty, OntologyClass> storedProperties = new Hashtable<OntologyProperty, OntologyClass>();
+		List<OntologyProperty> unstoredProperties = new Vector<OntologyProperty>();
+		List<OntologyClass> storageClasses = new Vector<OntologyClass>();
+		properties = retrieveDisplayableProperties(o);
+
+		if (getDisplayPropertiesInClasses()) {
+			for (OntologyProperty p : properties) {
+				OntologyClass preferredLocation = getPreferredStorageLocation(p);
+				if (preferredLocation != null) {
+					storedProperties.put(p, preferredLocation);
+					if (!storageClasses.contains(preferredLocation)) {
+						storageClasses.add(preferredLocation);
+					}
+				} else {
+					unstoredProperties.add(p);
+				}
+			}
+		}
+
+		if (parent != null) {
+			addChildren(parent, o);
+		}
+
+		if (showClasses) {
+			List<OntologyClass> classes = retrieveDisplayableClasses(o);
+			if (classes.size() > 0) {
+				addClassesAsHierarchy(parent == null ? null : o, classes);
+			}
+		} else if (getDisplayPropertiesInClasses()) {
+			addClassesAsHierarchy(parent == null ? null : o, storageClasses);
+		}
+
+		if (getDisplayPropertiesInClasses()) {
+			for (OntologyProperty p : storedProperties.keySet()) {
+				OntologyClass preferredLocation = storedProperties.get(p);
+				addChildren(preferredLocation, p);
+			}
+
+			addPropertiesAsHierarchy(parent == null ? null : o, unstoredProperties);
+		}
+
+		else {
+			addPropertiesAsHierarchy(parent == null ? null : o, properties);
+		}
+	}
+
 	private void computeNonHierarchicalStructure() {
 		if (roots != null) {
 			roots.clear();
@@ -194,24 +253,51 @@ public class OntologyBrowserModel {
 			structure = new Hashtable<OntologyObject<?>, Vector<OntologyObject<?>>>();
 		}
 		if (strictMode) {
+
+			/*List<OntologyProperty> properties = new Vector<OntologyProperty>();
+			Hashtable<OntologyProperty, OntologyClass> storedProperties = new Hashtable<OntologyProperty, OntologyClass>();
+			List<OntologyProperty> unstoredProperties = new Vector<OntologyProperty>();
+			List<OntologyClass> storageClasses = new Vector<OntologyClass>();
+			properties = retrieveDisplayableProperties(getContext());
+
+			for (OntologyProperty p : properties) {
+				OntologyClass preferredLocation = getPreferredStorageLocation(p);
+				if (preferredLocation != null) {
+					storedProperties.put(p, preferredLocation);
+					if (!storageClasses.contains(preferredLocation)) {
+						storageClasses.add(preferredLocation);
+					}
+				} else {
+					unstoredProperties.add(p);
+				}
+			}
+
+			roots.add(getContext());
+
 			if (showClasses) {
 				List<OntologyClass> classes = retrieveDisplayableClasses(getContext());
 				if (classes.size() > 0) {
-					roots.add(getContext());
 					addClassesAsHierarchy(getContext(), classes);
 				}
+			} else {
+				addClassesAsHierarchy(getContext(), storageClasses);
 			}
-			List<OntologyProperty> properties = retrieveDisplayableProperties(getContext());
-			if (properties.size() > 0) {
-				roots.add(getContext());
-				addPropertiesAsHierarchy(getContext(), properties);
+
+			for (OntologyProperty p : storedProperties.keySet()) {
+				OntologyClass preferredLocation = storedProperties.get(p);
+				addChildren(preferredLocation, p);
 			}
+
+			addPropertiesAsHierarchy(null, unstoredProperties);*/
+
+			appendOntologyContents(getContext(), null);
+
 		} else {
-			for (FlexoOntology o : getContext().getAllImportedOntologies()) {
+			/*for (FlexoOntology o : getContext().getAllImportedOntologies()) {
 				if (showClasses) {
 					List<OntologyClass> classes = retrieveDisplayableClasses(o);
 					if (classes.size() > 0) {
-						roots.add(getContext());
+						roots.add(o);
 						addClassesAsHierarchy(o, classes);
 					}
 				}
@@ -220,6 +306,10 @@ public class OntologyBrowserModel {
 					roots.add(o);
 					addPropertiesAsHierarchy(o, properties);
 				}
+			}*/
+			roots.add(getContext());
+			for (FlexoOntology o : getContext().getAllImportedOntologies()) {
+				appendOntologyContents(o, getContext());
 			}
 		}
 	}
@@ -270,6 +360,9 @@ public class OntologyBrowserModel {
 	}
 
 	private void computeHierarchicalStructure() {
+
+		logger.info("computeHierarchicalStructure()");
+
 		if (roots != null) {
 			roots.clear();
 		} else {
@@ -280,6 +373,7 @@ public class OntologyBrowserModel {
 		} else {
 			structure = new Hashtable<OntologyObject<?>, Vector<OntologyObject<?>>>();
 		}
+
 		List<OntologyProperty> properties = new Vector<OntologyProperty>();
 		Hashtable<OntologyProperty, OntologyClass> storedProperties = new Hashtable<OntologyProperty, OntologyClass>();
 		List<OntologyProperty> unstoredProperties = new Vector<OntologyProperty>();
@@ -291,6 +385,7 @@ public class OntologyBrowserModel {
 				properties.addAll(retrieveDisplayableProperties(o));
 			}
 		}
+
 		for (OntologyProperty p : properties) {
 			OntologyClass preferredLocation = getPreferredStorageLocation(p);
 			if (preferredLocation != null) {
@@ -303,7 +398,19 @@ public class OntologyBrowserModel {
 			}
 		}
 
-		addClassesAsHierarchy(null, storageClasses);
+		if (getShowClasses()) {
+			List<OntologyClass> classes = new Vector<OntologyClass>();
+			if (strictMode) {
+				classes = retrieveDisplayableClasses(getContext());
+			} else {
+				for (FlexoOntology o : getContext().getAllImportedOntologies()) {
+					classes.addAll(retrieveDisplayableClasses(o));
+				}
+			}
+			addClassesAsHierarchy(null, classes);
+		} else {
+			addClassesAsHierarchy(null, storageClasses);
+		}
 
 		for (OntologyProperty p : storedProperties.keySet()) {
 			OntologyClass preferredLocation = storedProperties.get(p);
@@ -416,6 +523,13 @@ public class OntologyBrowserModel {
 			}
 		}
 		return returned;
+	}
+
+	public Font getFont(OntologyObject object, Font baseFont) {
+		if (object.getOntology() != getContext()) {
+			return baseFont.deriveFont(Font.ITALIC);
+		}
+		return baseFont;
 	}
 
 }

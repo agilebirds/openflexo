@@ -71,6 +71,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	private boolean hierarchicalMode = true;
 	private boolean strictMode = false;
 	private OntologyClass rootClass;
+	private boolean displayPropertiesInClasses = true;
 
 	private boolean showObjectProperties = true;
 	private boolean showDataProperties = true;
@@ -101,6 +102,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "ontology", type = CustomComponentParameter.Type.MANDATORY)
 	public void setOntology(FlexoOntology context) {
 		this.ontology = context;
+		ontology.loadWhenUnloaded();
 		update();
 	}
 
@@ -111,6 +113,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "strictMode", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setStrictMode(boolean strictMode) {
 		this.strictMode = strictMode;
+		update();
 	}
 
 	public boolean getHierarchicalMode() {
@@ -120,6 +123,16 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "hierarchicalMode", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setHierarchicalMode(boolean hierarchicalMode) {
 		this.hierarchicalMode = hierarchicalMode;
+		update();
+	}
+
+	public boolean getDisplayPropertiesInClasses() {
+		return displayPropertiesInClasses;
+	}
+
+	public void setDisplayPropertiesInClasses(boolean displayPropertiesInClasses) {
+		this.displayPropertiesInClasses = displayPropertiesInClasses;
+		update();
 	}
 
 	public OntologyClass getRootClass() {
@@ -129,6 +142,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "rootClass", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setRootClass(OntologyClass rootClass) {
 		this.rootClass = rootClass;
+		update();
 	}
 
 	public boolean getAllowsSearch() {
@@ -147,6 +161,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "showObjectProperties", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setShowObjectProperties(boolean showObjectProperties) {
 		this.showObjectProperties = showObjectProperties;
+		update();
 	}
 
 	public boolean getShowDataProperties() {
@@ -156,6 +171,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "showDataProperties", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setShowDataProperties(boolean showDataProperties) {
 		this.showDataProperties = showDataProperties;
+		update();
 	}
 
 	public boolean getShowAnnotationProperties() {
@@ -165,6 +181,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "showAnnotationProperties", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setShowAnnotationProperties(boolean showAnnotationProperties) {
 		this.showAnnotationProperties = showAnnotationProperties;
+		update();
 	}
 
 	public boolean getShowClasses() {
@@ -174,6 +191,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "showClasses", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setShowClasses(boolean showClasses) {
 		this.showClasses = showClasses;
+		update();
 	}
 
 	public boolean getShowIndividuals() {
@@ -183,13 +201,15 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "showIndividuals", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setShowIndividuals(boolean showIndividuals) {
 		this.showIndividuals = showIndividuals;
+		update();
 	}
 
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
 			model = new OntologyBrowserModel(getOntology());
-			model.setHierarchicalMode(getHierarchicalMode());
 			model.setStrictMode(getStrictMode());
+			model.setHierarchicalMode(getHierarchicalMode());
+			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());
 			model.setRootClass(getRootClass());
 			model.setShowClasses(getShowClasses());
 			model.setShowIndividuals(getShowIndividuals());
@@ -205,8 +225,9 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		if (model != null) {
 			model.delete();
 			model = null;
+			setEditedObject(this);
+			getPropertyChangeSupport().firePropertyChange("model", null, getModel());
 		}
-		setEditedObject(this);
 	}
 
 	// Please uncomment this for a live test
@@ -220,7 +241,10 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
 				FlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
 				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
-						"http://www.cpmf.org/ontologies/cpmfInstance");
+				// "http://www.cpmf.org/ontologies/cpmfInstance");
+						"http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
+				// "http://www.w3.org/2002/07/owl");
+				// "http://www.w3.org/2000/01/rdf-schema");
 				o.loadWhenUnloaded();
 				FIBOntologyBrowser selector = new FIBOntologyBrowser(o);
 				selector.setOntology(o);
@@ -255,7 +279,8 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		FlexoResourceCenter resourceCenter = FlexoResourceCenterService.instance().getFlexoResourceCenter();
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
 		FlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
-				"http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
+		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
+				"http://www.w3.org/2002/07/owl");
 		// "http://www.cpmf.org/ontologies/cpmfInstance");
 		o.loadWhenUnloaded();
 		System.out.println("ontology: " + o);
@@ -354,6 +379,16 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			}
 		}
 		return returned;
+	}
+
+	public FIBBrowser getFIBBrowser() {
+		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
+		for (FIBComponent c : listComponent) {
+			if (c instanceof FIBBrowser) {
+				return (FIBBrowser) c;
+			}
+		}
+		return null;
 	}
 
 	private FIBBrowserWidget retrieveFIBBrowserWidget() {

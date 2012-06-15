@@ -35,7 +35,7 @@ public class DomainStatement extends OntologyStatement {
 	public DomainStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			domain = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			domain = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {
 			logger.warning("DomainStatement: object is not a Resource !");
 		}

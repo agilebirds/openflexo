@@ -98,9 +98,10 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getRDFOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getOWLOntology().loadWhenUnloaded();
-			baseOntologyLibrary.THING = baseOntologyLibrary.getClass(OntologyLibrary.OWL_THING_URI);
+			baseOntologyLibrary.THING = baseOntologyLibrary.getOWLOntology().getClass(OntologyLibrary.OWL_THING_URI);
 			baseOntologyLibrary.getRDFSOntology().updateConceptsAndProperties();
 			baseOntologyLibrary.getRDFOntology().updateConceptsAndProperties();
+			baseOntologyLibrary.getOWLOntology().updateConceptsAndProperties();
 			baseOntologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
 			// baseOntologyLibrary.debug();
 		}

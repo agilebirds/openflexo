@@ -24,10 +24,8 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.ProjectBrowser.OEViewMode;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -46,7 +44,7 @@ public class OntologyLibraryElement extends BrowserElement {
 	protected void buildChildrenVector() {
 		if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
 			addToChilds(getOntologyLibrary().getRootClass());
-			for (OntologyObjectProperty property : getOntologyLibrary().getRootObjectProperties()) {
+			/*for (OntologyObjectProperty property : getOntologyLibrary().getRootObjectProperties()) {
 				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
 					addToChilds(property);
 				}
@@ -55,7 +53,7 @@ public class OntologyLibraryElement extends BrowserElement {
 				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
 					addToChilds(property);
 				}
-			}
+			}*/
 		}
 
 		if (getProjectBrowser().getOEViewMode() == OEViewMode.NoHierarchy

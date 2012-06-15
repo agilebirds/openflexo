@@ -24,42 +24,43 @@ import java.util.logging.Logger;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
-public class SubClassStatement extends OntologyStatement {
+public class EquivalentClassStatement extends OntologyStatement {
 
-	private static final Logger logger = Logger.getLogger(SubClassStatement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(EquivalentClassStatement.class.getPackage().getName());
 
-	public static final String SUB_CLASS_URI = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+	public static final String EQUIVALENT_CLASS_URI = "http://www.w3.org/2002/07/owl#equivalentClass";
 
-	private OntologyObject<?> parent;
+	private OntologyObject<?> equivalentObject;
 
-	public SubClassStatement(OntologyObject<?> subject, Statement s) {
+	public EquivalentClassStatement(OntologyObject<?> subject, Statement s) {
 		super(subject, s);
-		// System.out.println("s.getObject() is a " + s.getObject().getClass().getName() + " : " + s.getObject());
 		if (s.getObject() instanceof Resource) {
-			parent = getOntology().retrieveOntologyObject((Resource) s.getObject());
+			equivalentObject = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {
-			logger.warning("SubClassStatement: object is not a Resource !");
+			logger.warning("EquivalentClassStatement: object is not a Resource !");
 		}
 	}
 
 	@Override
 	public String getClassNameKey() {
-		return "sub_class_statement";
+		return "equivalent_class_statement";
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "SubClassStatement: " + getStatement();
+		return "EquivalentClassStatement: " + getStatement();
 	}
 
-	public OntologyObject<?> getParent() {
-		return parent;
+	public OntologyObject<?> getEquivalentObject() {
+		return equivalentObject;
 	}
 
 	@Override
 	public String toString() {
-		return getSubject().getName() + " is a subclass of "
-				+ (getParent() != null ? getParent().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
+		return getSubject().getName()
+				+ " is equivalent to "
+				+ (getEquivalentObject() != null ? getEquivalentObject().getDisplayableDescription() : "<NOT_FOUND:"
+						+ getStatement().getObject() + ">");
 	}
 
 }

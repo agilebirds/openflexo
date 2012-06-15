@@ -35,7 +35,7 @@ public class SubPropertyStatement extends OntologyStatement {
 	public SubPropertyStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			superProperty = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			superProperty = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {
 			logger.warning("SubPropertyStatement: object is not a Resource !");
 		}

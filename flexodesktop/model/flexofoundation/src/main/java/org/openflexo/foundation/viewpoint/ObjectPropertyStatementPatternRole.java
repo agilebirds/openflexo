@@ -40,8 +40,8 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());
+		if (getViewPoint().getViewpointOntology() != null) {
+			return getViewPoint().getViewpointOntology().getObjectProperty(_getObjectPropertyURI());
 		}
 		return null;
 	}

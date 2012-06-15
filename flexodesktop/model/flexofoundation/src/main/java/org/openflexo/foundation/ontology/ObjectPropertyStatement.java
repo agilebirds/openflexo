@@ -35,9 +35,9 @@ public class ObjectPropertyStatement extends PropertyStatement {
 
 	public ObjectPropertyStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
-		property = getOntologyLibrary().getObjectProperty(s.getPredicate().getURI());
+		property = getOntology().getObjectProperty(s.getPredicate().getURI());
 		if (s.getObject() instanceof Resource) {
-			statementObject = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			statementObject = getOntology().retrieveOntologyObject((Resource) s.getObject());
 			/*if (statementObject instanceof FlexoOntology) {
 				System.out.println("OK, i have my ontology with resource "+s.getObject().getClass().getName());
 				System.out.println("resource: "+s.getObject());

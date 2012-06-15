@@ -84,8 +84,8 @@ public class AddObjectPropertyStatement extends AddStatement {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(objectPropertyURI)) {
-			if (getOntologyLibrary() != null) {
-				return getOntologyLibrary().getObjectProperty(objectPropertyURI);
+			if (getViewPoint().getViewpointOntology() != null) {
+				return getViewPoint().getViewpointOntology().getObjectProperty(objectPropertyURI);
 			}
 		} else {
 			if (getPatternRole() != null) {
