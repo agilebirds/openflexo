@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ public class DeleteProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteProcessFolder action) {
+			public boolean run(EventObject e, DeleteProcessFolder action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
 			}
 		};
@@ -62,7 +62,7 @@ public class DeleteProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteProcessFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteProcessFolder action) {
+			public boolean run(EventObject e, DeleteProcessFolder action) {
 				return true;
 			}
 		};

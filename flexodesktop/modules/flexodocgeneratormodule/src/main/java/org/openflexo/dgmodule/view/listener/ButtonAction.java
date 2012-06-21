@@ -29,28 +29,30 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoController;
 
 public abstract class ButtonAction implements ActionListener {
 
 	private FlexoActionType _actionType;
 	private String _unlocalizedName = null;
 	private FlexoEditor _editor;
+	private FlexoController controller;
 
-	public ButtonAction(FlexoActionType actionType, FlexoEditor editor) {
+	public ButtonAction(FlexoActionType actionType, FlexoController controller) {
 		super();
 		_actionType = actionType;
-		_editor = editor;
+		this.controller = controller;
 	}
 
-	public ButtonAction(FlexoActionType actionType, String actionName, FlexoEditor editor) {
-		this(actionType, editor);
+	public ButtonAction(FlexoActionType actionType, String actionName, FlexoController controller) {
+		this(actionType, controller);
 		_unlocalizedName = actionName;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		FlexoAction action = _actionType.makeNewAction(getFocusedObject(), getGlobalSelection(), _editor);
-		action.actionPerformed(event);
+		controller.getEditor().performAction(action, event);
 	}
 
 	protected abstract Vector getGlobalSelection();

@@ -60,12 +60,12 @@ public class GeneratePDF extends GenerateArtefact<GeneratePDF, DGRepository> imp
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
 			return repository.getFormat() == Format.LATEX;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
 			if (repository.getFormat() != Format.LATEX) {
 				return false;
 			}

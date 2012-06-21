@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.awt.event.KeyEvent;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public class AcceptDiskUpdateInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AcceptDiskUpdate> getDefaultInitializer() {
 		return new FlexoActionInitializer<AcceptDiskUpdate>() {
 			@Override
-			public boolean run(ActionEvent e, AcceptDiskUpdate action) {
+			public boolean run(EventObject e, AcceptDiskUpdate action) {
 				if (action.getFilesToAccept().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
@@ -86,7 +86,7 @@ public class AcceptDiskUpdateInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AcceptDiskUpdate> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AcceptDiskUpdate>() {
 			@Override
-			public boolean run(ActionEvent e, AcceptDiskUpdate action) {
+			public boolean run(EventObject e, AcceptDiskUpdate action) {
 				return true;
 			}
 		};

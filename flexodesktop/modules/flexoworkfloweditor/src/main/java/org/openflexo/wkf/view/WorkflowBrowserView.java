@@ -25,16 +25,10 @@ import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.external.ExternalIEModule;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.controller.WKFTreeDropTarget;
 import org.openflexo.wkf.controller.WorkflowBrowser;
@@ -49,25 +43,12 @@ public class WorkflowBrowserView extends BrowserView {
 
 	private static final Logger logger = Logger.getLogger(WorkflowBrowserView.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected WKFController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
-	public WorkflowBrowserView(WorkflowBrowser browser, FlexoKeyEventListener listener, FlexoEditor editor) {
-		super(browser, listener, editor);
+	public WorkflowBrowserView(WorkflowBrowser browser, WKFController controller) {
+		super(browser, controller);
 	}
 
 	public WorkflowBrowserView(WKFController controller) {
-		this(controller.getWorkflowBrowser(), controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		this(controller.getWorkflowBrowser(), controller);
 		FCH.setHelpItem(this, "workflow-browser");
 	}
 
@@ -85,28 +66,13 @@ public class WorkflowBrowserView extends BrowserView {
 	public void treeDoubleClick(FlexoModelObject object) {
 		if (object instanceof WKFObject) {
 			FlexoProcess objectProcess = ((WKFObject) object).getProcess();
-			_controller.setCurrentFlexoProcess(objectProcess);
+			getController().selectAndFocusObject(objectProcess);
 
 			treeSingleClick(object);
 		} else if (object instanceof ComponentDefinition) {
-			ExternalIEModule ieModule = null;
-			try {
-				ieModule = getModuleLoader().getIEModule(object.getProject());
-			} catch (ModuleLoadingException e) {
-				FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
-				e.printStackTrace();
-			}
-			if (ieModule == null) {
-				return;
-			}
-			ieModule.focusOn();
-			ieModule.showScreenInterface(((ComponentDefinition) object).getDummyComponentInstance());
+			getEditor().focusOn(((ComponentDefinition) object).getDummyComponentInstance());
 		} else {
-			// System.out.println ("Pas d'idee de truc a faire non plus !");
 		}
 	}
 
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
 }

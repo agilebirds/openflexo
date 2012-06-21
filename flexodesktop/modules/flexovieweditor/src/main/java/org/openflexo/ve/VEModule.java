@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -33,6 +34,7 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.localization.FlexoLocalization;
@@ -40,7 +42,6 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.external.ExternalOEModule;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.shema.VEShemaController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * Ontology Editor module
@@ -57,8 +58,8 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	private boolean drawWorkingArea;
 	private FlexoModelObject screenshotObject;
 
-	public VEModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
+	public VEModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
 		setFlexoController(new VEController(projectEditor, this));
 		getOEController().loadRelativeWindows();
 		VEPreferences.init(getOEController());
@@ -90,7 +91,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
 		return getOEController().getProject().getShemaLibrary();
 	}
 

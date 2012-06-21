@@ -22,10 +22,8 @@ package org.openflexo.wse.controller;
 /*
  * Created in March 06 by Denis VANVYVE Flexo Application Suite (c) Denali 2003-2006
  */
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.validation.ValidationModel;
@@ -44,9 +42,9 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wse.controller.action.WSEControllerActionInitializer;
-import org.openflexo.wse.view.WSEFrame;
 import org.openflexo.wse.view.WSEMainPane;
 import org.openflexo.wse.view.listener.WSEKeyEventListener;
 import org.openflexo.wse.view.menu.WSEMenuBar;
@@ -62,12 +60,6 @@ public class WSEController extends FlexoController implements SelectionManagingC
 
 	public final FlexoPerspective WSE_PERSPECTIVE = new WSEPerspective();
 
-	protected WSEMenuBar _WSEMenuBar;
-
-	protected WSEFrame _frame;
-
-	protected WSEKeyEventListener _WSEKeyEventListener;
-
 	private WSESelectionManager _selectionManager;
 
 	private WSEBrowser _browser;
@@ -79,14 +71,10 @@ public class WSEController extends FlexoController implements SelectionManagingC
 	/**
 	 * Default constructor
 	 */
-	public WSEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
+	public WSEController(FlexoModule module) {
+		super(module);
 		addToPerspectives(WSE_PERSPECTIVE);
 		setDefaultPespective(WSE_PERSPECTIVE);
-		_WSEMenuBar = (WSEMenuBar) createAndRegisterNewMenuBar();
-		_WSEKeyEventListener = new WSEKeyEventListener(this);
-		_frame = new WSEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _WSEKeyEventListener, _WSEMenuBar);
-		init(_frame, _WSEKeyEventListener, _WSEMenuBar);
 
 		// At this point the InspectorController is not yet loaded
 		_selectionManager = new WSESelectionManager(this);
@@ -95,8 +83,13 @@ public class WSEController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer() {
-		return new WSEControllerActionInitializer(this);
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new WSEKeyEventListener(this);
+	}
+
+	@Override
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new WSEControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -118,25 +111,9 @@ public class WSEController extends FlexoController implements SelectionManagingC
 		_selectionManager.addObserver(getSharedInspectorController());
 	}
 
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
 	public ValidationModel getDefaultValidationModel() {
 		// If there is a ValidationModel associated to this module, put it here
 		return null;
-	}
-
-	public WSEFrame getMainFrame() {
-		return _frame;
-	}
-
-	public WSEMenuBar getEditorMenuBar() {
-		return _WSEMenuBar;
 	}
 
 	public void showBrowser() {
@@ -153,15 +130,11 @@ public class WSEController extends FlexoController implements SelectionManagingC
 
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new WSEMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new WSEMainPane(this);
 	}
 
 	public WSEBrowser getWSEBrowser() {
 		return _browser;
-	}
-
-	public WSEKeyEventListener getKeyEventListener() {
-		return _WSEKeyEventListener;
 	}
 
 	// ================================================
@@ -177,19 +150,6 @@ public class WSEController extends FlexoController implements SelectionManagingC
 		return _selectionManager;
 	}
 
-	/**
-	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
-	 * is not the current displayed view
-	 * 
-	 * @param object
-	 *            : the object to focus on
-	 */
-	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
-		// TODO: Implements this
-		setCurrentEditedObjectAsModuleView(object);
-	}
-
 	// ================================================
 	// ============ Exception management ==============
 	// ================================================
@@ -198,12 +158,6 @@ public class WSEController extends FlexoController implements SelectionManagingC
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
 		// TODO: Handles here exceptions that may be thrown through the inspector
 		return super.handleException(inspectable, propertyName, value, exception);
-	}
-
-	// VIEWS
-	@Override
-	public Hashtable getLoadedViews() {
-		return super.getLoadedViews();
 	}
 
 	@Override

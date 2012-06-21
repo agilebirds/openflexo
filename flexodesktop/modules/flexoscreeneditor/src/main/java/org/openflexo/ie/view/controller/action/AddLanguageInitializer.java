@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class AddLanguageInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddLanguageAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddLanguageAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddLanguageAction action) {
+			public boolean run(EventObject e, AddLanguageAction action) {
 				DKVModel model = (action.getFocusedObject()).getDkvModel();
 				boolean ok = false;
 				while (!ok) {
@@ -85,7 +85,7 @@ public class AddLanguageInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddLanguageAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddLanguageAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddLanguageAction action) {
+			public boolean run(EventObject e, AddLanguageAction action) {
 				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewLanguage());
 				// getController().setCurrentEditedObjectAsModuleView(((AddLanguageAction)
 				// action).getNewLanguage());

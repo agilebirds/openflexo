@@ -72,12 +72,12 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return object != null;
 		}
 

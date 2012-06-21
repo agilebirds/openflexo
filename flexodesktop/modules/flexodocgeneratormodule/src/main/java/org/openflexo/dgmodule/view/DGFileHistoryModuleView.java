@@ -154,12 +154,12 @@ public class DGFileHistoryModuleView extends JPanel implements ModuleView<CGFile
 			controlPanel = new JPanel(new FlowLayout());
 
 			FlexoActionButton revertToVersionAction = new FlexoActionButton(RevertToHistoryVersion.actionType, "revert_to_version",
-					DGFileHistoryModuleView.this, _controller.getEditor());
+					DGFileHistoryModuleView.this, _controller);
 			actionButtons.add(revertToVersionAction);
 			controlPanel.add(revertToVersionAction);
 
 			FlexoActionButton showDifferencesAction = new FlexoActionButton(ShowDifferences.actionType, "show_differences",
-					DGFileHistoryModuleView.this, _controller.getEditor());
+					DGFileHistoryModuleView.this, _controller);
 			actionButtons.add(showDifferencesAction);
 			controlPanel.add(showDifferencesAction);
 
@@ -171,8 +171,8 @@ public class DGFileHistoryModuleView extends JPanel implements ModuleView<CGFile
 
 		private String subTitleForFile() {
 			String returned = _contentSource.getStringRepresentation();
-			if ((_contentSource.getType() == ContentSourceType.HistoryVersion)
-					&& (_cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+			if (_contentSource.getType() == ContentSourceType.HistoryVersion
+					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 				AbstractCGFileVersion fileVersion = ((AbstractGeneratedFile) _cgFile.getResource().getGeneratedResourceData()).getHistory()
 						.versionWithId(_contentSource.getVersion());
 				if (fileVersion != null) {
@@ -321,7 +321,7 @@ public class DGFileHistoryModuleView extends JPanel implements ModuleView<CGFile
 			add(stackTraceTA);
 
 			// Cause stack trace
-			if ((exception.getTargetException() != null) && (exception.getTargetException().getCause() != null)) {
+			if (exception.getTargetException() != null && exception.getTargetException().getCause() != null) {
 				JLabel causeSTLabel = new JLabel(FlexoLocalization.localizedForKey("cause_stacktrace"), SwingConstants.LEFT);
 				causeSTLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 				String causeStackTrace = null;
@@ -381,7 +381,7 @@ public class DGFileHistoryModuleView extends JPanel implements ModuleView<CGFile
 			_displayedObject = _cgFile;
 			updateView(false);
 		}
-		if ((object instanceof AbstractCGFileVersion) && (!(object instanceof BeforeFirstRelease))) {
+		if (object instanceof AbstractCGFileVersion && !(object instanceof BeforeFirstRelease)) {
 			if (((AbstractCGFileVersion) object).getCGFile() == _cgFile) {
 				_contentSource = ContentSource.getContentSource(ContentSourceType.HistoryVersion,
 						((AbstractCGFileVersion) object).getVersionId());

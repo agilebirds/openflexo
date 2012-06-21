@@ -24,8 +24,6 @@ import org.openflexo.dgmodule.controller.browser.DGBrowser;
 import org.openflexo.doceditor.view.DEMainPane;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.view.FlexoFrame;
-import org.openflexo.view.ModuleView;
 
 /**
  * @author gpolet
@@ -40,8 +38,8 @@ public class DGMainPane extends DEMainPane {
 	 * @param mainFrame
 	 * @param controller
 	 */
-	public DGMainPane(DGController controller, ModuleView moduleView, FlexoFrame mainFrame) {
-		super(controller, moduleView, mainFrame);
+	public DGMainPane(DGController controller) {
+		super(controller);
 		dgBrowserView = new DGBrowserView(controller, new DGBrowser(controller));
 		setLeftView(dgBrowserView);
 		if (deBrowserView.getParent() != null) {

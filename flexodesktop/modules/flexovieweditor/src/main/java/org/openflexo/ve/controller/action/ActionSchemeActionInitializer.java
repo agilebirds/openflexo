@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ActionSchemeAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<ActionSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, ActionSchemeAction action) {
+			public boolean run(EventObject e, ActionSchemeAction action) {
 				return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
 			}
 		};
@@ -63,7 +63,7 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ActionSchemeAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ActionSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, ActionSchemeAction action) {
+			public boolean run(EventObject e, ActionSchemeAction action) {
 				return true;
 			}
 		};

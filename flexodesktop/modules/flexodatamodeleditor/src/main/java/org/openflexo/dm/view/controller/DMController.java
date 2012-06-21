@@ -20,15 +20,14 @@
 package org.openflexo.dm.view.controller;
 
 import java.awt.Dimension;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.FlexoCst;
-import org.openflexo.dm.DMFrame;
 import org.openflexo.dm.view.DMEOEntityView;
 import org.openflexo.dm.view.DMEOModelView;
 import org.openflexo.dm.view.DMEORepositoryView;
@@ -66,6 +65,7 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -81,15 +81,7 @@ public class DMController extends FlexoController implements SelectionManagingCo
 	public final RepositoryPerspective REPOSITORY_PERSPECTIVE;
 	public final PackagePerspective PACKAGE_PERSPECTIVE;
 	public final HierarchyPerspective HIERARCHY_PERSPECTIVE;
-	public/*final*/DiagramPerspective DIAGRAM_PERSPECTIVE;
-
-	protected DMMenuBar _dmMenuBar;
-
-	protected DMFrame _dmFrame;
-
-	protected DMKeyEventListener _dmKeyEventListener;
-
-	// private DMBrowser _dmBrowser;
+	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
 
 	private final DMSelectionManager _selectionManager;
 
@@ -99,20 +91,13 @@ public class DMController extends FlexoController implements SelectionManagingCo
 	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public DMController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
-		_dmMenuBar = (DMMenuBar) createAndRegisterNewMenuBar();
-		_dmKeyEventListener = new DMKeyEventListener(this);
-		_dmFrame = new DMFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _dmKeyEventListener, _dmMenuBar);
-		init(_dmFrame, _dmKeyEventListener, _dmMenuBar);
-
+	public DMController(FlexoModule module) {
+		super(module);
 		_selectionManager = new DMSelectionManager(this);
-
 		addToPerspectives(REPOSITORY_PERSPECTIVE = new RepositoryPerspective(this));
 		addToPerspectives(PACKAGE_PERSPECTIVE = new PackagePerspective(this));
 		addToPerspectives(HIERARCHY_PERSPECTIVE = new HierarchyPerspective(this));
 		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
-
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -122,8 +107,13 @@ public class DMController extends FlexoController implements SelectionManagingCo
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer() {
-		return new DMControllerActionInitializer(this);
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new DMKeyEventListener(this);
+	}
+
+	@Override
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new DMControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -162,18 +152,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 		return getProject().getDMValidationModel();
 	}
 
-	public DMKeyEventListener getKeyEventListener() {
-		return _dmKeyEventListener;
-	}
-
-	public DMFrame getMainFrame() {
-		return _dmFrame;
-	}
-
-	public DMMenuBar getEditorMenuBar() {
-		return _dmMenuBar;
-	}
-
 	public void showDataModelBrowser() {
 		if (getMainPane() != null) {
 			getMainPane().showDataModelBrowser();
@@ -210,7 +188,7 @@ public class DMController extends FlexoController implements SelectionManagingCo
 
 	@Override
 	protected DMMainPane createMainPane() {
-		return new DMMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new DMMainPane(this);
 	}
 
 	@Override
@@ -249,19 +227,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 		}
 	}
 
-	// ==========================================================================
-	// ============================= Browsers ==================================
-	// ==========================================================================
-
-	/*public DMBrowser getDMBrowser()
-	{
-	    return _dmBrowser;
-	}*/
-
-	// =========================================================
-	// ================ Selection management ===================
-	// =========================================================
-
 	@Override
 	public SelectionManager getSelectionManager() {
 		return getDMSelectionManager();
@@ -280,8 +245,7 @@ public class DMController extends FlexoController implements SelectionManagingCo
 	 */
 	@Override
 	public void selectAndFocusObject(FlexoModelObject object) {
-		// TODO: implements view switching
-		logger.warning("Implement view switching here");
+		super.selectAndFocusObject(object);
 		getSelectionManager().setSelectedObject(object);
 	}
 
@@ -324,17 +288,14 @@ public class DMController extends FlexoController implements SelectionManagingCo
 
 	@Override
 	public FlexoPerspective getCurrentPerspective() {
-		return (FlexoPerspective) super.getCurrentPerspective();
+		return super.getCurrentPerspective();
 	}
 
 	@Override
 	public void switchToPerspective(FlexoPerspective perspective) {
-		// logger.info("Selection="+getSelectionManager().getSelection());
-		Vector<FlexoModelObject> selection = (Vector<FlexoModelObject>) getSelectionManager().getSelection().clone();
+		List<FlexoModelObject> selection = new ArrayList<FlexoModelObject>(getSelectionManager().getSelection());
 		super.switchToPerspective(perspective);
-		// getMainPane().switchToPerspective(perspective);
 		getSelectionManager().setSelectedObjects(selection);
-		// logger.info("Selection="+getSelectionManager().getSelection());
 	}
 
 	@Override

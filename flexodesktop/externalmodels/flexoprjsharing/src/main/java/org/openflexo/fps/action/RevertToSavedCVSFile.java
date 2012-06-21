@@ -44,12 +44,12 @@ public class RevertToSavedCVSFile extends CVSAction<RevertToSavedCVSFile, CVSFil
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+		public boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
 			return (object != null && object.getSharedProject() != null);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+		public boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
 			return ((object != null) && (object.isEdited()));
 		}
 

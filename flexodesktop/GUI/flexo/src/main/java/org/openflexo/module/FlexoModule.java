@@ -30,9 +30,11 @@ import javax.swing.SwingUtilities;
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.InspectorGroup;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.module.external.IModule;
 import org.openflexo.view.FlexoFrame;
@@ -107,21 +109,6 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 		return isActive;
 	}
 
-	boolean ignoreFocusGainedNotifications = false;
-
-	public void focusOff() {
-		isActive = false;
-		ignoreFocusGainedNotifications = true;
-		getFlexoFrame().setRelativeVisible(false);
-		if (controller.getConsistencyCheckWindow(false) != null) {
-			controller.getConsistencyCheckWindow(false).setVisible(false);
-		}
-	}
-
-	private FlexoModule activatingModule;
-
-	private FlexoModule desactivatingModule;
-
 	public void activateModule() {
 		try {
 			getModuleLoader().switchToModule(getModule());
@@ -131,7 +118,15 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 	}
 
 	void setAsInactive() {
+		isActive = false;
+		getFlexoFrame().setRelativeVisible(false);
+		if (controller.getConsistencyCheckWindow(false) != null) {
+			controller.getConsistencyCheckWindow(false).setVisible(false);
+		}
+	}
 
+	private FlexoEditor getEditor() {
+		return getController().getEditor();
 	}
 
 	void setAsActiveModule() {
@@ -146,28 +141,29 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 				getFlexoFrame().toFront();
 			}
 		});
-		boolean selectDefaultObject = false;
-		if (getDefaultObjectToSelect() != null
-				&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
-						.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
-			if (getFlexoController() instanceof SelectionManagingController) {
-				if (((SelectionManagingController) getFlexoController()).getSelectionManager().getFocusedObject() == null) {
+		if (getEditor() != null) {
+			boolean selectDefaultObject = false;
+			if (getDefaultObjectToSelect(getEditor().getProject()) != null
+					&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
+							.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect(getEditor().getProject()))) {
+				if (getFlexoController() instanceof SelectionManagingController) {
+					if (((SelectionManagingController) getFlexoController()).getSelectionManager().getFocusedObject() == null) {
+						selectDefaultObject = true;
+					}
+				} else {
 					selectDefaultObject = true;
 				}
-			} else {
-				selectDefaultObject = true;
 			}
-		}
-		if (selectDefaultObject) {
-			getFlexoController().setCurrentEditedObjectAsModuleView(getDefaultObjectToSelect());
-		} else if (getFlexoController() instanceof SelectionManagingController) {
-			((SelectionManagingController) getFlexoController()).getSelectionManager()
-					.setSelectedObjects(
-							new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
-									.getSelection()));
-		}
-		if (getFlexoController() instanceof SelectionManagingController) {
-			((SelectionManagingController) getFlexoController()).getSelectionManager().fireUpdateSelection();
+			if (selectDefaultObject) {
+				getFlexoController().setCurrentEditedObjectAsModuleView(getDefaultObjectToSelect(getEditor().getProject()));
+			} else if (getFlexoController() instanceof SelectionManagingController) {
+				((SelectionManagingController) getFlexoController()).getSelectionManager().setSelectedObjects(
+						new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
+								.getSelection()));
+			}
+			if (getFlexoController() instanceof SelectionManagingController) {
+				((SelectionManagingController) getFlexoController()).getSelectionManager().fireUpdateSelection();
+			}
 		}
 	}
 
@@ -210,7 +206,7 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 			logger.info("Closing module " + getName());
 		}
 		moduleWillClose();
-		focusOff();
+		setAsInactive();
 		if (controller != null) {
 			controller.dispose();
 		} else if (logger.isLoggable(Level.WARNING)) {
@@ -226,7 +222,7 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 			try {
 				getModuleLoader().switchToModule(leftModules.nextElement().getModule());
 			} catch (ModuleLoadingException e) {
-				logger.severe("Module is loaded and so this exception CANNOT occurs. Please investigate and FIX.");
+				logger.severe("Module is loaded and so this exception CANNOT occur. Please investigate and FIX.");
 				e.printStackTrace();
 			}
 		} else {
@@ -248,6 +244,6 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 
 	}
 
-	public abstract FlexoModelObject getDefaultObjectToSelect();
+	public abstract FlexoModelObject getDefaultObjectToSelect(FlexoProject project);
 
 }

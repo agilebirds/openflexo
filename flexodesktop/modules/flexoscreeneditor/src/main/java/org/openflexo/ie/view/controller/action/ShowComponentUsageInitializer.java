@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -56,7 +56,7 @@ public class ShowComponentUsageInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShowComponentUsage> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowComponentUsage>() {
 			@Override
-			public boolean run(ActionEvent e, ShowComponentUsage action) {
+			public boolean run(EventObject e, ShowComponentUsage action) {
 				StringBuilder sb = new StringBuilder();
 				ComponentDefinition cd = action.getComponentDefinition();
 				Vector<ComponentInstance> cis = action.getComponentDefinition().getComponentInstances();

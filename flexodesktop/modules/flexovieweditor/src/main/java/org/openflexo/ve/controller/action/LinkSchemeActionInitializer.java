@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class LinkSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<LinkSchemeAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<LinkSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, LinkSchemeAction action) {
+			public boolean run(EventObject e, LinkSchemeAction action) {
 				return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
 			}
 		};
@@ -64,7 +64,7 @@ public class LinkSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<LinkSchemeAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<LinkSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, LinkSchemeAction action) {
+			public boolean run(EventObject e, LinkSchemeAction action) {
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewConnector());
 				return true;
 			}

@@ -48,12 +48,12 @@ public class ShowReleaseHistory extends FlexoGUIAction<ShowReleaseHistory, Gener
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
 			return (object != null);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
 			return ((object != null) && (object.getManageHistory()));
 		}
 

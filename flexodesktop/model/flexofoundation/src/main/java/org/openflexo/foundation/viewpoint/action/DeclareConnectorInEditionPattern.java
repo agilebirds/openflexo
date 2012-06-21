@@ -80,12 +80,12 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isEnabledForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
 			return connector != null && connector.getViewPoint().getEditionPatterns().size() > 0;
 		}
 

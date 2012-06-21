@@ -43,13 +43,13 @@ public class GenerateZip extends GenerateArtefact<GenerateZip, GenerationReposit
 			"generate_zip", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
 			AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(object);
 			return isVisibleForSelection(object, globalSelection) && pg != null && pg.hasBeenInitialized();
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
 			return object instanceof DGRepository && ((DGRepository) object).getFormat() == Format.HTML;
 		}
 

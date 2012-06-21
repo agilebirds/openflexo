@@ -13,7 +13,6 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexosourcegeneratormodule</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

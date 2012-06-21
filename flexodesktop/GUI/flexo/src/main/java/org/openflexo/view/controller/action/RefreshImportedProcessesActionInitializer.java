@@ -19,7 +19,7 @@
  */
 package org.openflexo.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -50,7 +50,7 @@ public class RefreshImportedProcessesActionInitializer extends ActionInitializer
 	protected FlexoActionInitializer<RefreshImportedProcessAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshImportedProcessAction>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshImportedProcessAction action) {
+			public boolean run(EventObject e, RefreshImportedProcessAction action) {
 
 				PPMWebServiceClient client = getController().getWSClient();
 				if (client != null) {
@@ -73,7 +73,7 @@ public class RefreshImportedProcessesActionInitializer extends ActionInitializer
 	protected FlexoActionFinalizer<RefreshImportedProcessAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshImportedProcessAction>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshImportedProcessAction action) {
+			public boolean run(EventObject e, RefreshImportedProcessAction action) {
 				if (!action.isAutomaticAction()) {
 					FlexoController.notify(action.getReport());
 				}

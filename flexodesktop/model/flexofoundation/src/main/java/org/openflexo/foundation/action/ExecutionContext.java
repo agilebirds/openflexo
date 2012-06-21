@@ -32,16 +32,16 @@ public class ExecutionContext {
 
 	static final Logger logger = FlexoLogger.getLogger(FlexoAction.class.getPackage().getName());
 
-	FlexoAction _action;
+	FlexoAction<?, ?, ?> _action;
 	private Hashtable<String, FlexoModelObject> _objectsCreatedWhileExecutingAction;
 	private Hashtable<String, FlexoModelObject> _objectsDeletedWhileExecutingAction;
 
-	public ExecutionContext(FlexoAction action) {
+	public ExecutionContext(FlexoAction<?, ?, ?> action) {
 		_action = action;
 		_objectsCreatedWhileExecutingAction = new Hashtable<String, FlexoModelObject>();
 		_objectsDeletedWhileExecutingAction = new Hashtable<String, FlexoModelObject>();
-		_singleProperties = new Vector<SingleProperty>();
-		_vectorProperties = new Vector<VectorProperty>();
+		_singleProperties = new Vector<SingleProperty<?>>();
+		_vectorProperties = new Vector<VectorProperty<?>>();
 	}
 
 	public void objectCreated(String key, FlexoModelObject object) {
@@ -64,14 +64,14 @@ public class ExecutionContext {
 		protected String _propertyKey;
 		protected T _originalValue;
 		protected T _value;
-		protected FlexoAction _actionWhereThisValueWasInstanciated;
+		protected FlexoAction<?, ?, ?> _actionWhereThisValueWasInstanciated;
 		protected String _keyOfActionWhereThisValueWasInstanciated;
 
-		protected SingleProperty(String propertyKey, List<FlexoAction> previouslyExecutedActions) {
+		protected SingleProperty(String propertyKey, List<FlexoAction<?, ?, ?>> previouslyExecutedActions) {
 			_propertyKey = propertyKey;
 			_value = (T) _action.objectForKey(propertyKey);
 			_originalValue = _value;
-			for (FlexoAction a : previouslyExecutedActions) {
+			for (FlexoAction<?, ?, ?> a : previouslyExecutedActions) {
 				Hashtable<String, FlexoModelObject> objectsCreatedByAction = a.getExecutionContext()
 						.getObjectsCreatedWhileExecutingAction();
 				for (String k : objectsCreatedByAction.keySet()) {
@@ -96,7 +96,7 @@ public class ExecutionContext {
 			_value = newValue;
 		}
 
-		public void notifyExternalObjectCreatedByAction(T object, FlexoAction action, String key, boolean considerAsOriginal) {
+		public void notifyExternalObjectCreatedByAction(T object, FlexoAction<?, ?, ?> action, String key, boolean considerAsOriginal) {
 			if (action == _actionWhereThisValueWasInstanciated && key.equals(_keyOfActionWhereThisValueWasInstanciated)) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Object " + object + " was created with key " + key + " and this object is also referenced in " + _action
@@ -109,7 +109,7 @@ public class ExecutionContext {
 			}
 		}
 
-		public void notifyExternalObjectDeletedByAction(T object, FlexoAction action, String key, boolean considerAsOriginal) {
+		public void notifyExternalObjectDeletedByAction(T object, FlexoAction<?, ?, ?> action, String key, boolean considerAsOriginal) {
 			if (action == _actionWhereThisValueWasInstanciated && key.equals(_keyOfActionWhereThisValueWasInstanciated)) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Object " + object + " was deleted with key " + key + " and this object is also referenced in " + _action
@@ -130,13 +130,13 @@ public class ExecutionContext {
 
 		protected class PersistentValue {
 			protected T _value;
-			protected FlexoAction _actionWhereThisValueWasInstanciated;
+			protected FlexoAction<?, ?, ?> _actionWhereThisValueWasInstanciated;
 			protected String _keyOfActionWhereThisValueWasInstanciated;
 			protected int index;
 			protected T _originalValue;
 		}
 
-		protected VectorProperty(String propertyKey, List<FlexoAction> previouslyExecutedActions) {
+		protected VectorProperty(String propertyKey, List<FlexoAction<?, ?, ?>> previouslyExecutedActions) {
 			_propertyKey = propertyKey;
 			_values = (Vector<T>) _action.objectForKey(propertyKey);
 
@@ -149,7 +149,7 @@ public class ExecutionContext {
 
 			int index = 0;
 			for (T value : _values) {
-				for (FlexoAction a : previouslyExecutedActions) {
+				for (FlexoAction<?, ?, ?> a : previouslyExecutedActions) {
 					Hashtable<String, FlexoModelObject> objectsCreatedByAction = a.getExecutionContext()
 							.getObjectsCreatedWhileExecutingAction();
 					for (String k : objectsCreatedByAction.keySet()) {
@@ -190,7 +190,7 @@ public class ExecutionContext {
 			}
 		}
 
-		public void notifyExternalObjectCreatedByAction(T object, FlexoAction action, String key, boolean considerAsOriginal) {
+		public void notifyExternalObjectCreatedByAction(T object, FlexoAction<?, ?, ?> action, String key, boolean considerAsOriginal) {
 			for (PersistentValue persistentValue : _persistentValues) {
 				if (logger.isLoggable(Level.FINEST)) {
 					logger.finest("persistentValue action=" + persistentValue._actionWhereThisValueWasInstanciated + " key="
@@ -211,7 +211,7 @@ public class ExecutionContext {
 			}
 		}
 
-		public void notifyExternalObjectDeletedByAction(T object, FlexoAction action, String key, boolean considerAsOriginal) {
+		public void notifyExternalObjectDeletedByAction(T object, FlexoAction<?, ?, ?> action, String key, boolean considerAsOriginal) {
 			for (PersistentValue persistentValue : _persistentValues) {
 				if (action == persistentValue._actionWhereThisValueWasInstanciated
 						&& key.equals(persistentValue._keyOfActionWhereThisValueWasInstanciated)) {
@@ -227,10 +227,10 @@ public class ExecutionContext {
 		}
 	}
 
-	private Vector<SingleProperty> _singleProperties;
-	private Vector<VectorProperty> _vectorProperties;
+	private Vector<SingleProperty<?>> _singleProperties;
+	private Vector<VectorProperty<?>> _vectorProperties;
 
-	public void saveExecutionContext(List<FlexoAction> previouslyExecutedActions) {
+	public void saveExecutionContext(List<FlexoAction<?, ?, ?>> previouslyExecutedActions) {
 		Vector<String> allProperties = new Vector<String>();
 		allProperties.add("focusedObject");
 		allProperties.add("globalSelection");
@@ -246,19 +246,20 @@ public class ExecutionContext {
 			}
 		}
 
-		for (SingleProperty sp : _singleProperties) {
+		for (SingleProperty<?> sp : _singleProperties) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created SingleProperty " + sp._propertyKey + " value: " + sp.getValue());
 			}
 		}
-		for (VectorProperty sp : _vectorProperties) {
+		for (VectorProperty<?> sp : _vectorProperties) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created VectorProperty " + sp._propertyKey + " value: " + sp.getValues());
 			}
 		}
 	}
 
-	public void notifyExternalObjectCreatedByAction(FlexoModelObject object, FlexoAction action, String key, boolean considerAsOriginal) {
+	public void notifyExternalObjectCreatedByAction(FlexoModelObject object, FlexoAction<?, ?, ?> action, String key,
+			boolean considerAsOriginal) {
 		for (SingleProperty sp : _singleProperties) {
 			sp.notifyExternalObjectCreatedByAction(object, action, key, considerAsOriginal);
 		}
@@ -267,7 +268,8 @@ public class ExecutionContext {
 		}
 	}
 
-	public void notifyExternalObjectDeletedByAction(FlexoModelObject object, FlexoAction action, String key, boolean considerAsOriginal) {
+	public void notifyExternalObjectDeletedByAction(FlexoModelObject object, FlexoAction<?, ?, ?> action, String key,
+			boolean considerAsOriginal) {
 		for (SingleProperty sp : _singleProperties) {
 			sp.notifyExternalObjectDeletedByAction(object, action, key, considerAsOriginal);
 		}
@@ -276,11 +278,11 @@ public class ExecutionContext {
 		}
 	}
 
-	private <T> SingleProperty<T> createNewSingleProperty(String key, Class<T> type, List<FlexoAction> previouslyExecutedActions) {
+	private <T> SingleProperty<T> createNewSingleProperty(String key, Class<T> type, List<FlexoAction<?, ?, ?>> previouslyExecutedActions) {
 		return new SingleProperty<T>(key, previouslyExecutedActions);
 	}
 
-	private <T> VectorProperty<T> createNewVectorProperty(String key, Class<T> type, List<FlexoAction> previouslyExecutedActions) {
+	private <T> VectorProperty<T> createNewVectorProperty(String key, Class<T> type, List<FlexoAction<?, ?, ?>> previouslyExecutedActions) {
 		return new VectorProperty<T>(key, previouslyExecutedActions);
 	}
 

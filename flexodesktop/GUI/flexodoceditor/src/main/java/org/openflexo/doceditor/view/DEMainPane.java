@@ -23,9 +23,7 @@ import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.controller.browser.DEBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 
 /**
  * @author gpolet
@@ -41,8 +39,8 @@ public class DEMainPane extends FlexoMainPane {
 	 * @param mainFrame
 	 * @param controller
 	 */
-	public DEMainPane(DEController controller, ModuleView moduleView, FlexoFrame mainFrame) {
-		super(moduleView, mainFrame, controller);
+	public DEMainPane(DEController controller) {
+		super(controller);
 		deBrowserView = new DEBrowserView(controller, new DEBrowser(controller));
 		_controller = controller;
 		setLeftView(deBrowserView);

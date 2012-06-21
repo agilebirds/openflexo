@@ -54,12 +54,12 @@ public class ImportTemplates extends FlexoAction<ImportTemplates, CGTemplateRepo
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isVisibleForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
 			return object != null && !(object instanceof CustomCGTemplateRepository);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isEnabledForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
 			return object != null && !(object instanceof CustomCGTemplateRepository);
 		}
 

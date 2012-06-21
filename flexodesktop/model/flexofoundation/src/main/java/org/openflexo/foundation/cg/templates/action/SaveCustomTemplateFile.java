@@ -51,12 +51,12 @@ public class SaveCustomTemplateFile extends FlexoAction<SaveCustomTemplateFile, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
 			return ((object != null) && (object.isCustomTemplate()));
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
 			return ((object != null) && (object.isCustomTemplate()) && (object.isEdited()));
 		}
 

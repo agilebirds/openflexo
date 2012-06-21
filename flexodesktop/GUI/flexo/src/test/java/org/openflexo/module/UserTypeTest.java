@@ -19,10 +19,7 @@
  */
 package org.openflexo.module;
 
-import java.lang.reflect.Field;
-
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 public class UserTypeTest extends AbstractGuiTest {
 

@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.openflexo.inspector.AbstractController;
-import org.openflexo.inspector.InspectorCst;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.swing.JRadioButtonWithIcon;
@@ -104,7 +103,7 @@ public class RadioButtonListWidget extends MultipleValuesWidget {
 		_panel.removeAll();
 		_buttonGroup = new ButtonGroup();
 
-		int r = (listModel.getSize() / columns) + (listModel.getSize() % columns >= 1 ? 1 : 0);
+		int r = listModel.getSize() / columns + (listModel.getSize() % columns >= 1 ? 1 : 0);
 		int col = columns;
 		// logger.info("Grid: "+r+"x"+col);
 		_panel.setLayout(new GridLayout(r, col));
@@ -131,7 +130,6 @@ public class RadioButtonListWidget extends MultipleValuesWidget {
 			JPanel _subPanel = new JPanel(new BorderLayout());
 			_subPanel.add(rb, BorderLayout.WEST);
 			_subPanel.add(Box.createGlue(), BorderLayout.CENTER);
-			_subPanel.setBackground(InspectorCst.BACK_COLOR);
 			_panel.add(_subPanel);
 			_radioButtonArray[i] = rb;
 			_buttonGroup.add(rb);
@@ -160,7 +158,7 @@ public class RadioButtonListWidget extends MultipleValuesWidget {
 	}
 
 	public File getIconFile(Object object) {
-		if ((object instanceof KeyValueCoding)) {
+		if (object instanceof KeyValueCoding) {
 			// return _propertyModel.getFormattedObject((KeyValueCoding) object);
 			// //GET FORMATTED OBJECT
 			if (getPropertyModel().hasValueForParameter("icon")) {
@@ -176,7 +174,7 @@ public class RadioButtonListWidget extends MultipleValuesWidget {
 							logger.fine("Get icon file for object" + object + " with icon accessor "
 									+ getPropertyModel().getValueForParameter("icon") + " returns " + currentObject);
 						}
-						return ((File) currentObject);
+						return (File) currentObject;
 					} else {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Property " + getPropertyModel().name + ": succeeded acces to " + listAccessor

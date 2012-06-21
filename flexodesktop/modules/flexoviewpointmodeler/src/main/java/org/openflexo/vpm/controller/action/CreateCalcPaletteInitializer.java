@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -60,7 +60,7 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateViewPointPalette> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateViewPointPalette>() {
 			@Override
-			public boolean run(ActionEvent e, CreateViewPointPalette action) {
+			public boolean run(EventObject e, CreateViewPointPalette action) {
 
 				action.graphicalRepresentation = makePaletteGraphicalRepresentation();
 
@@ -75,7 +75,7 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateViewPointPalette> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateViewPointPalette>() {
 			@Override
-			public boolean run(ActionEvent e, CreateViewPointPalette action) {
+			public boolean run(EventObject e, CreateViewPointPalette action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewPalette(), getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}

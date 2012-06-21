@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class CreateOntologyIndividualInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateOntologyIndividual> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateOntologyIndividual>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyIndividual action) {
+			public boolean run(EventObject e, CreateOntologyIndividual action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
@@ -66,7 +66,7 @@ public class CreateOntologyIndividualInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateOntologyIndividual> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateOntologyIndividual>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyIndividual action) {
+			public boolean run(EventObject e, CreateOntologyIndividual action) {
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewIndividual());
 				return true;
 			}

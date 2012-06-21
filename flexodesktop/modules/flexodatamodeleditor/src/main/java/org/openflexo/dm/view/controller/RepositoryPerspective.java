@@ -98,7 +98,7 @@ class RepositoryPerspective extends DMPerspective<DMObject> {
 
 	@Override
 	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
-		if ((proposedObject instanceof DMObject) && hasModuleViewForObject(proposedObject)) {
+		if (proposedObject instanceof DMObject && hasModuleViewForObject(proposedObject)) {
 			return (DMObject) proposedObject;
 		}
 		return null;
@@ -111,8 +111,12 @@ class RepositoryPerspective extends DMPerspective<DMObject> {
 	}
 
 	@Override
-	public ModuleView<? extends DMObject> createModuleViewForObject(DMObject object, FlexoController controller) {
-		return _controller.createDMView(object);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof DMObject) {
+			return _controller.createDMView((DMObject) object);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class NavigationSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<NavigationSchemeAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<NavigationSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, NavigationSchemeAction action) {
+			public boolean run(EventObject e, NavigationSchemeAction action) {
 				if (!action.evaluateCondition()) {
 					return false;
 				}
@@ -76,7 +76,7 @@ public class NavigationSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<NavigationSchemeAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<NavigationSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, NavigationSchemeAction action) {
+			public boolean run(EventObject e, NavigationSchemeAction action) {
 				if (action.getTargetObject() != null) {
 					// Editor will handle switch to right module and perspective, and select target object
 					getEditor().focusOn(action.getTargetObject());

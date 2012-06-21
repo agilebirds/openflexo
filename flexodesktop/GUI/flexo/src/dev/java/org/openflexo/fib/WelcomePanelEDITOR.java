@@ -21,24 +21,38 @@ package org.openflexo.fib;
 
 import java.io.File;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationData;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class WelcomePanelEDITOR {
 
-
-	public static void main(String[] args)
-	{
-		//ModuleLoader.initializeModules(UserType.MAINTAINER, false);
+	public static void main(String[] args) {
+		// ModuleLoader.initializeModules(UserType.MAINTAINER, false);
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
-			public Object[] getData()
-			{
-				ApplicationData applicationData = new ApplicationData();
+			public Object[] getData() {
+				ApplicationData applicationData = new ApplicationData(new ApplicationContext() {
+
+					@Override
+					public FlexoEditor makeFlexoEditor(FlexoProject project) {
+						return new InteractiveFlexoEditor(this, project);
+					}
+
+					@Override
+					public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+						return new DefaultProjectLoadingHandler();
+					}
+				});
 				return FIBAbstractEditor.makeArray(applicationData);
 			}
+
 			@Override
 			public File getFIBFile() {
 				return WelcomeDialog.FIB_FILE;

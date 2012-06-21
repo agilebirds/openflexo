@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -56,7 +56,7 @@ public class RepairTocEntryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RepairTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<RepairTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, RepairTOCEntry action) {
+			public boolean run(EventObject e, RepairTOCEntry action) {
 				ParameterDefinition pd[] = new ParameterDefinition[4];
 				pd[0] = new RadioButtonListParameter<RepairTOCEntry.FixProposal>("choice", "choose", FixProposal.DELETE,
 						FixProposal.values());
@@ -121,7 +121,7 @@ public class RepairTocEntryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RepairTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RepairTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, RepairTOCEntry action) {
+			public boolean run(EventObject e, RepairTOCEntry action) {
 				return true;
 			}
 		};

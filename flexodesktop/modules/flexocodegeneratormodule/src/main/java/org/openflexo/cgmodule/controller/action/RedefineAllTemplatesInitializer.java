@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -60,7 +60,7 @@ public class RedefineAllTemplatesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RedefineAllTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<RedefineAllTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, RedefineAllTemplates action) {
+			public boolean run(EventObject e, RedefineAllTemplates action) {
 				CGTemplates templates = action.getFocusedObject().getTemplates();
 
 				String CREATE_NEW_REPOSITORY = FlexoLocalization.localizedForKey("create_new_repository");

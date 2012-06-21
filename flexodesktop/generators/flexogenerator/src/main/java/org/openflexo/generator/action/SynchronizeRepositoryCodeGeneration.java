@@ -55,7 +55,7 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
 			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
 			for (CGObject obj : topLevelObjects) {
 				if (obj instanceof GeneratedOutput) {
@@ -66,7 +66,7 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(focusedObject, globalSelection);
 			if (repository == null) {
 				return false;

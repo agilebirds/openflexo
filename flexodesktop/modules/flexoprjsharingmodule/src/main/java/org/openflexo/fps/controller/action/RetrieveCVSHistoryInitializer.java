@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class RetrieveCVSHistoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RetrieveCVSHistory> getDefaultInitializer() {
 		return new FlexoActionInitializer<RetrieveCVSHistory>() {
 			@Override
-			public boolean run(ActionEvent e, RetrieveCVSHistory action) {
+			public boolean run(EventObject e, RetrieveCVSHistory action) {
 				return true;
 			}
 		};
@@ -55,7 +55,7 @@ public class RetrieveCVSHistoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RetrieveCVSHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RetrieveCVSHistory>() {
 			@Override
-			public boolean run(ActionEvent e, RetrieveCVSHistory action) {
+			public boolean run(EventObject e, RetrieveCVSHistory action) {
 				getControllerActionInitializer().getFPSController().getSelectionManager().setSelectedObject(action.getFocusedObject());
 				getControllerActionInitializer().getFPSController().showInspector();
 				if (getControllerActionInitializer().getFPSController().getInspectorWindow().getContent().currentTabPanel != null) {

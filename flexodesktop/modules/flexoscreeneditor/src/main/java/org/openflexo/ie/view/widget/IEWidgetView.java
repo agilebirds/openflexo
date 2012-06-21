@@ -47,7 +47,6 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
-import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.dm.DisplayNeedsRefresh;
 import org.openflexo.foundation.ie.util.FlexoConceptualColor;
 import org.openflexo.foundation.ie.widget.IEWidget;
@@ -368,10 +367,6 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	@Override
 	public String toString() {
 		return getClass().getName() + "/" + hashCode() + " view for model " + getModel();
-	}
-
-	public FlexoComponentLibrary getFlexoComponentLibrary() {
-		return getIEController().getProject().getFlexoComponentLibrary();
 	}
 
 	public void updateConstraints() {

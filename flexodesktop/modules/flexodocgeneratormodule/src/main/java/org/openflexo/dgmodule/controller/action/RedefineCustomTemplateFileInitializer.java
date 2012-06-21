@@ -20,7 +20,7 @@
 package org.openflexo.dgmodule.controller.action;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -69,7 +69,7 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RedefineCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<RedefineCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, RedefineCustomTemplateFile action) {
+			public boolean run(EventObject e, RedefineCustomTemplateFile action) {
 				CGTemplates templates = action.getFocusedObject().getTemplates();
 
 				String CREATE_NEW_REPOSITORY = FlexoLocalization.localizedForKey("create_new_repository");
@@ -148,7 +148,7 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RedefineCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RedefineCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, RedefineCustomTemplateFile action) {
+			public boolean run(EventObject e, RedefineCustomTemplateFile action) {
 				if (action.getNewTemplateFile() != null) {
 					if (action.getInvoker() != null && action.getInvoker() instanceof DGTemplateFileModuleView
 							&& ((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {

@@ -96,7 +96,7 @@ import org.openflexo.view.listener.FlexoKeyEventListener;
  * 
  * @author sguerin
  */
-public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoActionSource<FlexoModelObject, FlexoModelObject> {
+public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoActionSource {
 
 	protected static final Logger logger = Logger.getLogger(IEPanel.class.getPackage().getName());
 

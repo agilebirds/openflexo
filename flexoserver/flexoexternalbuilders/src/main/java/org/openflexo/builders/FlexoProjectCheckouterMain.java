@@ -35,7 +35,7 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 
 	public static final String LOCAL_NAME_ARGUMENT_PREFIX = "-LocalName=";
 
-	private FlexoEditor EDITOR = new DefaultFlexoEditor() {
+	private FlexoEditor EDITOR = new DefaultFlexoEditor(null) {
 		@Override
 		public boolean performResourceScanning() {
 			return false;

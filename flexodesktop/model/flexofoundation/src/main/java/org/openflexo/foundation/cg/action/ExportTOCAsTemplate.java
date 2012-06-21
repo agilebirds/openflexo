@@ -39,12 +39,12 @@ public class ExportTOCAsTemplate extends FlexoAction<ExportTOCAsTemplate, FlexoM
 			"export_toc_as_template") {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object instanceof TOCRepository;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object instanceof TOCRepository;
 		}
 

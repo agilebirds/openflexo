@@ -46,12 +46,12 @@ public class AddRoleSpecialization extends FlexoAction<AddRoleSpecialization, Ro
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
+		public boolean isVisibleForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
 			return role != null && !role.isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
+		public boolean isEnabledForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
 			return (role != null && !role.isDefaultRole() && !role.isImported() && role.getAvailableRolesForSpecialization().size() > 0);
 		}
 

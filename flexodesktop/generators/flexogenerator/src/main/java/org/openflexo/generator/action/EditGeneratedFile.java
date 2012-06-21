@@ -46,13 +46,13 @@ public class EditGeneratedFile extends GCAction<EditGeneratedFile, CGFile> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return (object instanceof AbstractCGFile);
+		public boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return object instanceof AbstractCGFile;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return ((object != null) && (object.hasVersionOnDisk()) && (!object.isEdited()));
+		public boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return object != null && object.hasVersionOnDisk() && !object.isEdited();
 		}
 
 	};
@@ -70,7 +70,7 @@ public class EditGeneratedFile extends GCAction<EditGeneratedFile, CGFile> {
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Edit file " + getFocusedObject().getFileName());
-		if ((getFocusedObject() != null) && (fileContentEditor != null)) {
+		if (getFocusedObject() != null && fileContentEditor != null) {
 			getFocusedObject().edit(fileContentEditor);
 		}
 	}

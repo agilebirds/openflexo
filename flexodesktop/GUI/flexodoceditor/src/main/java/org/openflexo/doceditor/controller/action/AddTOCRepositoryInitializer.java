@@ -19,9 +19,9 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileFilter;
+import java.util.EventObject;
 import java.util.Vector;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddTOCRepository>() {
 
 			@Override
-			public boolean run(ActionEvent event, AddTOCRepository action) {
+			public boolean run(EventObject event, AddTOCRepository action) {
 				if (action.getRepositoryName() != null && action.getDocType() != null || action.getTocTemplate() != null) {
 					return true;
 				}
@@ -138,7 +138,7 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddTOCRepository>() {
 
 			@Override
-			public boolean run(ActionEvent event, AddTOCRepository action) {
+			public boolean run(EventObject event, AddTOCRepository action) {
 				if (action.getNewRepository() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getNewRepository());
 				}

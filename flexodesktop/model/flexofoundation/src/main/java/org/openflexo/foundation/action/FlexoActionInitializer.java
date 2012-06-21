@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 
 public abstract class FlexoActionInitializer<A extends FlexoAction> extends FlexoActionRunnable<A> {
 
 	@Override
-	public abstract boolean run(ActionEvent event, A action);
+	public abstract boolean run(EventObject event, A action);
 }

@@ -19,22 +19,14 @@
  */
 package org.openflexo.cgmodule.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.openflexo.FlexoCst;
@@ -63,14 +55,8 @@ public class GeneratorBrowserView extends BrowserView {
 	 * @param kl
 	 */
 	public GeneratorBrowserView(GeneratorController controller, ProjectBrowser browser) {
-		super(browser, controller, controller.getKeyEventListener());
+		super(browser, controller);
 		this.controller = controller;
-
-		FlowLayout flowLayout = new FlowLayout();
-		JPanel viewModePanels = new JPanel(flowLayout);
-		viewModePanels.setBorder(BorderFactory.createEmptyBorder());
-		flowLayout.setHgap(2);
-		// logger.info("hGap="+flowLayout.getHgap()+" vGap="+flowLayout.getVgap());
 
 		ViewModeButton interestingFilesViewModeButton = new ViewModeButton(GeneratorIconLibrary.INTERESTING_FILES_VIEW_MODE_ICON,
 				"interesting_files_mode") {
@@ -163,12 +149,12 @@ public class GeneratorBrowserView extends BrowserView {
 			}
 		};
 
-		viewModePanels.add(interestingFilesViewModeButton);
-		viewModePanels.add(generationModifiedViewModeButton);
-		viewModePanels.add(diskModifiedViewModeButton);
-		viewModePanels.add(conflictingFilesViewModeButton);
-		viewModePanels.add(needsReinjectingViewModeButton);
-		viewModePanels.add(generationErrorViewModeButton);
+		addHeaderComponent(interestingFilesViewModeButton);
+		addHeaderComponent(generationModifiedViewModeButton);
+		addHeaderComponent(diskModifiedViewModeButton);
+		addHeaderComponent(conflictingFilesViewModeButton);
+		addHeaderComponent(needsReinjectingViewModeButton);
+		addHeaderComponent(generationErrorViewModeButton);
 
 		String htmlText = "<html><u>" + FlexoLocalization.localizedForKey("all_files") + "</u>" + "</html>";
 		final JLabel seeAllLabels = new JLabel(htmlText, SwingConstants.RIGHT);
@@ -204,55 +190,8 @@ public class GeneratorBrowserView extends BrowserView {
 			}
 		});
 
-		JPanel viewModeSelector = new JPanel(new BorderLayout());
-		viewModeSelector.add(viewModePanels, BorderLayout.WEST);
-		viewModeSelector.add(seeAllLabels, BorderLayout.EAST);
-
-		add(viewModeSelector, BorderLayout.NORTH);
-
+		addHeaderComponent(seeAllLabels);
 		setMinimumSize(new Dimension(GeneratorCst.MINIMUM_BROWSER_VIEW_WIDTH, GeneratorCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-		setPreferredSize(new Dimension(GeneratorCst.PREFERRED_BROWSER_VIEW_WIDTH, GeneratorCst.PREFERRED_BROWSER_VIEW_HEIGHT));
-
-	}
-
-	protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener {
-		protected ViewModeButton(ImageIcon icon, String unlocalizedDescription) {
-			super(icon);
-			setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
-			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-			addMouseListener(this);
-			addActionListener(this);
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			setBorder(BorderFactory.createEtchedBorder());
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			setFilters();
-			getBrowser().update();
-		}
-
-		public abstract void setFilters();
 	}
 
 	@Override

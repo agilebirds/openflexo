@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -57,7 +57,7 @@ public class AddKeyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddKeyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddKeyAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddKeyAction action) {
+			public boolean run(EventObject e, AddKeyAction action) {
 				Domain d = null;
 				if (action.getFocusedObject() instanceof Domain) {
 					d = ((Domain) action.getFocusedObject());
@@ -132,7 +132,7 @@ public class AddKeyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddKeyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddKeyAction>() {
 			@Override
-			public boolean run(ActionEvent e, final AddKeyAction action) {
+			public boolean run(EventObject e, final AddKeyAction action) {
 				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewKey());
 				// getController().setCurrentEditedObjectAsModuleView(((AddKeyAction)
 				// action).getNewKey());

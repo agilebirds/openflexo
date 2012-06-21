@@ -22,7 +22,6 @@ package org.openflexo.prefs;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -49,10 +48,26 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 
 	private PropertyChangeSupport propertyChangeSupport;
 
-	protected FlexoAbstractPreferences() {
-		super();
-		_preferences = new FlexoProperties();
+	/**
+	 * Object where are stored the preferences
+	 */
+	private FlexoProperties _preferences;
+
+	private FlexoAbstractPreferences(FlexoProperties properties) {
+		this._preferences = properties;
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
+	}
+
+	protected FlexoProperties getPreferencesProperties() {
+		return _preferences;
+	}
+
+	protected FlexoAbstractPreferences(FlexoAbstractPreferences delegate) {
+		this(delegate._preferences);
+	}
+
+	protected FlexoAbstractPreferences(File preferencesFile) {
+		this(loadFromFile(preferencesFile));
 	}
 
 	@Override
@@ -66,19 +81,6 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 		return null;
 	}
 
-	protected FlexoAbstractPreferences(Properties properties) {
-		super();
-		_preferences = new FlexoProperties(properties);
-	}
-
-	protected FlexoAbstractPreferences(File preferencesFile) {
-		super();
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Constructor of FlexoAbstractPreferences with " + preferencesFile.getAbsolutePath());
-		}
-		_preferences = loadFromFile(preferencesFile);
-	}
-
 	protected void reloadFromFile(File preferencesFile) {
 		Properties reloadedProperties = loadFromFile(preferencesFile);
 		for (Enumeration e = reloadedProperties.keys(); e.hasMoreElements();) {
@@ -90,8 +92,8 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 		}
 	}
 
-	private static Properties loadFromFile(File preferencesFile) {
-		Properties returned = new FlexoProperties();
+	private static FlexoProperties loadFromFile(File preferencesFile) {
+		FlexoProperties returned = new FlexoProperties();
 		try {
 			File parentDir = preferencesFile.getParentFile();
 			if (logger.isLoggable(Level.FINE)) {
@@ -172,30 +174,6 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 			}
 		}
 		setProperty(key, value);
-	}
-
-	public abstract File getPreferencesFile();
-
-	protected void saveToFile(boolean warning) {
-		try {
-			File preferenceFile = getPreferencesFile();
-			if (!preferenceFile.exists()) {
-				preferenceFile.createNewFile();
-			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Saving preferences to file: " + preferenceFile.getAbsolutePath());
-			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.finer("properties:" + _preferences);
-			}
-			_preferences.store(new FileOutputStream(preferenceFile), "Flexo Preferences");
-		} catch (Exception e) {
-			if (warning) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Unable to save preferences");
-				}
-			}
-		}
 	}
 
 	// INSPECTABLE OBJECT
@@ -336,10 +314,5 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 			return false;
 		}
 	}
-
-	/**
-	 * Object where are stored the preferences
-	 */
-	private Properties _preferences;
 
 }

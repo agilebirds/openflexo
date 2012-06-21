@@ -489,29 +489,6 @@ public class IEDTListener implements DropTargetListener {
 	}
 
 	/**
-	 * @deprecated DO IT WITH FLEXO ACTION
-	 * @param droppedWidget
-	 * @param parent
-	 * @return
-	 */
-	@Deprecated
-	public IEWidget createModelFromDroppedWidget(IEDSWidget droppedWidget, IEObject parent) {
-		droppedWidget.setProject(_ieController.getProject());
-		IEWidget returned = droppedWidget.getPaletteWidget();
-		droppedWidget.setProject(null);
-		if (parent instanceof IEWOComponent) {
-			returned.setWOComponent((IEWOComponent) parent);
-		} else if (parent instanceof IEWidget) {
-			returned.setWOComponent(((IEWidget) parent).getWOComponent());
-		}
-		returned.setParent(parent);
-		if (logger.isLoggable(Level.FINE)) {
-			logger.finest("returned.setParent(an instance of " + parent.getClass() + ")");
-		}
-		return returned;
-	}
-
-	/**
 	 * 
 	 * @deprecated DO IT WITH FLEXO ACTION
 	 * @param movedWidget

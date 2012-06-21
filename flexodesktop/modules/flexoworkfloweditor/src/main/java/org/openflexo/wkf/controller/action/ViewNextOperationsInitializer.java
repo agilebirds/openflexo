@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class ViewNextOperationsInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ViewNextOperations> getDefaultInitializer() {
 		return new FlexoActionInitializer<ViewNextOperations>() {
 			@Override
-			public boolean run(ActionEvent e, ViewNextOperations action) {
+			public boolean run(EventObject e, ViewNextOperations action) {
 				return action.getFocusedObject() instanceof ActionNode;
 			}
 		};
@@ -57,7 +57,7 @@ public class ViewNextOperationsInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ViewNextOperations> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ViewNextOperations>() {
 			@Override
-			public boolean run(ActionEvent e, ViewNextOperations action) {
+			public boolean run(EventObject e, ViewNextOperations action) {
 				new ViewNextOperationPopup(getControllerActionInitializer().getWKFController().getMainFrame(),
 						getControllerActionInitializer().getWKFController(), (ActionNode) action.getFocusedObject());
 				return true;

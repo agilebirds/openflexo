@@ -19,8 +19,8 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ public class DMCopyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DMCopy> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMCopy>() {
 			@Override
-			public boolean run(ActionEvent e, DMCopy action) {
+			public boolean run(EventObject e, DMCopy action) {
 				return true;
 			}
 		};
@@ -62,7 +62,7 @@ public class DMCopyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DMCopy> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMCopy>() {
 			@Override
-			public boolean run(ActionEvent e, DMCopy action) {
+			public boolean run(EventObject e, DMCopy action) {
 				getControllerActionInitializer().getDMSelectionManager().performSelectionCopy();
 				return true;
 			}

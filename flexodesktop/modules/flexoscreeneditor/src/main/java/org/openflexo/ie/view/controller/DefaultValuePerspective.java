@@ -83,8 +83,12 @@ class DefaultValuePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<ComponentInstance> createModuleViewForObject(ComponentInstance object, FlexoController controller) {
-		return new IEExampleValuesView((IEController) controller, object);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof ComponentInstance) {
+			return new IEExampleValuesView((IEController) controller, (ComponentInstance) object);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

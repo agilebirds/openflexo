@@ -32,7 +32,7 @@ import org.openflexo.dm.view.controller.DMSelectionManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMRepository;
-import org.openflexo.foundation.dm.action.CreateDMRepository;
+import org.openflexo.foundation.dm.action.CreateAnyDMRepository;
 import org.openflexo.foundation.dm.action.DMDelete;
 import org.openflexo.foundation.dm.action.UpdateDMRepository;
 
@@ -53,7 +53,7 @@ public class DMModelView extends DMView<DMModel> {
 	public DMModelView(DMModel model, DMController controller) {
 		super(model, controller, "data_model");
 
-		addAction(new TabularViewAction(CreateDMRepository.actionType, "add_repository", controller.getEditor()) {
+		addAction(new TabularViewAction(CreateAnyDMRepository.actionType, "add_repository", controller.getEditor()) {
 			@Override
 			protected Vector getGlobalSelection() {
 				return getViewSelection();
@@ -107,7 +107,7 @@ public class DMModelView extends DMView<DMModel> {
 	public DMRepository getSelectedDMRepository() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMRepository) {
 			return (DMRepository) selection.firstElement();
 		}
 		return null;

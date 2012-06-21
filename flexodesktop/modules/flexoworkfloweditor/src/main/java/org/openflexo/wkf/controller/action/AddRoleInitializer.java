@@ -20,7 +20,7 @@
 package org.openflexo.wkf.controller.action;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -69,7 +69,7 @@ public class AddRoleInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddRole> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddRole>() {
 			@Override
-			public boolean run(ActionEvent e, AddRole action) {
+			public boolean run(EventObject e, AddRole action) {
 				if (action.getContext() instanceof DuplicateRoleException) {
 					return true;
 				}
@@ -105,7 +105,7 @@ public class AddRoleInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddRole> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddRole>() {
 			@Override
-			public boolean run(ActionEvent e, AddRole action) {
+			public boolean run(EventObject e, AddRole action) {
 				Role newRole = action.getNewRole();
 				if (e != null && e.getSource() instanceof BrowserActionSource) {
 					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();

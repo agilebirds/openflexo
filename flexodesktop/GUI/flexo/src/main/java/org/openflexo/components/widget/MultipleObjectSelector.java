@@ -70,7 +70,7 @@ public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularB
 
 		public int getExtraColumnCount();
 
-		public AbstractColumn getExtraColumnAt(int index);
+		public AbstractColumn<?, ?> getExtraColumnAt(int index);
 
 		public boolean isSelectable(FlexoModelObject obj);
 	}

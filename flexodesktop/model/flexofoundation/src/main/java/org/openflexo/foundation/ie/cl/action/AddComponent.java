@@ -63,12 +63,12 @@ public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
+		public boolean isVisibleForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
+		public boolean isEnabledForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
 			return (object instanceof FlexoComponentFolder || object instanceof ComponentDefinition || object instanceof FlexoComponentLibrary);
 		}
 

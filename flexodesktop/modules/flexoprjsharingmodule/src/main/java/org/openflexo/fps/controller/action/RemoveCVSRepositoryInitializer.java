@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ public class RemoveCVSRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveCVSRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveCVSRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveCVSRepository action) {
+			public boolean run(EventObject e, RemoveCVSRepository action) {
 				return FlexoController.confirm(FlexoLocalization
 						.localizedForKey("would_you_really_like_to_delete_this_CVS_repository_location"));
 			}
@@ -63,7 +63,7 @@ public class RemoveCVSRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RemoveCVSRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveCVSRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveCVSRepository action) {
+			public boolean run(EventObject e, RemoveCVSRepository action) {
 				return true;
 			}
 		};

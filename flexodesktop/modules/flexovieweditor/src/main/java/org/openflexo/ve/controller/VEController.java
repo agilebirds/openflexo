@@ -84,8 +84,8 @@ public class VEController extends FlexoController implements SelectionManagingCo
 	/**
 	 * Default constructor
 	 */
-	public VEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
+	public VEController(FlexoModule module) throws Exception {
+		super(module);
 		_oeMenuBar = (OEMenuBar) createAndRegisterNewMenuBar();
 		_oeKeyEventListener = new VEKeyEventListener(this);
 		_frame = new VEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _oeKeyEventListener, _oeMenuBar);
@@ -116,7 +116,7 @@ public class VEController extends FlexoController implements SelectionManagingCo
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer() {
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
 		return new VEControllerActionInitializer(this);
 	}
 

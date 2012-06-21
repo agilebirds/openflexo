@@ -51,12 +51,12 @@ public class GenerateWAR extends GenerateArtefact<GenerateWAR, CGRepository> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGRepository repository, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGRepository repository, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGRepository repository, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGRepository repository, Vector<CGObject> globalSelection) {
 			ProjectGenerator pg = (ProjectGenerator) getProjectGenerator(repository);
 			return pg != null && pg.hasBeenInitialized() && repository.getWarDirectory() != null
 					&& repository.getWarRepository().isConnected() && repository.getWarRepository().getDirectory().exists();

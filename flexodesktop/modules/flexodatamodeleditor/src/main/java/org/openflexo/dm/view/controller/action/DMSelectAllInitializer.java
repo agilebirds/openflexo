@@ -19,8 +19,8 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
@@ -50,7 +50,7 @@ public class DMSelectAllInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DMSelectAll> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMSelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, DMSelectAll action) {
+			public boolean run(EventObject e, DMSelectAll action) {
 				return true;
 			}
 		};
@@ -60,7 +60,7 @@ public class DMSelectAllInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DMSelectAll> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMSelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, DMSelectAll action) {
+			public boolean run(EventObject e, DMSelectAll action) {
 				getControllerActionInitializer().getDMSelectionManager().performSelectionSelectAll();
 				return true;
 			}

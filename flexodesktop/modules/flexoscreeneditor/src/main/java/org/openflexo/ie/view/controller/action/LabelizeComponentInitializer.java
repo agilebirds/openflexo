@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class LabelizeComponentInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<LabelizeComponentAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<LabelizeComponentAction>() {
 			@Override
-			public boolean run(ActionEvent e, LabelizeComponentAction action) {
+			public boolean run(EventObject e, LabelizeComponentAction action) {
 				action.setComponent(action.getFocusedObject().getWOComponent());
 				return true;
 			}
@@ -56,7 +56,7 @@ public class LabelizeComponentInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<LabelizeComponentAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<LabelizeComponentAction>() {
 			@Override
-			public boolean run(ActionEvent e, LabelizeComponentAction action) {
+			public boolean run(EventObject e, LabelizeComponentAction action) {
 				return true;
 			}
 		};

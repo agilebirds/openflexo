@@ -32,7 +32,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
@@ -71,6 +70,7 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wkf.WKFPreferences;
@@ -175,7 +175,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	 * Default constructor
 	 */
 	@Inject
-	public WKFController(@Named("WKF") FlexoModule module) throws Exception {
+	public WKFController(FlexoModule module) throws Exception {
 		super(module);
 		_wkfMenuBar = (WKFMenuBar) createAndRegisterNewMenuBar();
 		_wkfKeyEventListener = new WKFKeyEventListener(this);
@@ -223,7 +223,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer() {
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
 		return new WKFControllerActionInitializer(this);
 	}
 

@@ -19,7 +19,7 @@
  */
 package org.openflexo.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -53,7 +53,7 @@ public class CompareTemplatesInNewWindowInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CompareTemplatesInNewWindow>() {
 
 			@Override
-			public boolean run(ActionEvent event, CompareTemplatesInNewWindow action) {
+			public boolean run(EventObject event, CompareTemplatesInNewWindow action) {
 				return true;
 			}
 
@@ -65,7 +65,7 @@ public class CompareTemplatesInNewWindowInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CompareTemplatesInNewWindow>() {
 
 			@Override
-			public boolean run(ActionEvent event, CompareTemplatesInNewWindow action) {
+			public boolean run(EventObject event, CompareTemplatesInNewWindow action) {
 				FileDiffEditorPopup popup = new FileDiffEditorPopup(action.getTemplates().get(0).getNiceQualifiedName(), action
 						.getTemplates().get(1).getNiceQualifiedName(), action.getTemplates().get(0).getContent(), action.getTemplates()
 						.get(1).getContent(), getController());

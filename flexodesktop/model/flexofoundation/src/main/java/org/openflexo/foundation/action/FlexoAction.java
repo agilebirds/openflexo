@@ -73,70 +73,26 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 
 	public enum ExecutionStatus {
 		NEVER_EXECUTED,
-		EXECUTING_INITIALIZER,
 		EXECUTING_CORE,
-		EXECUTING_FINALIZER,
 		HAS_SUCCESSFULLY_EXECUTED,
 		FAILED_EXECUTION,
-		EXECUTING_UNDO_INITIALIZER,
 		EXECUTING_UNDO_CORE,
-		EXECUTING_UNDO_FINALIZER,
 		HAS_SUCCESSFULLY_UNDONE,
 		FAILED_UNDO_EXECUTION,
-		EXECUTING_REDO_INITIALIZER,
 		EXECUTING_REDO_CORE,
-		EXECUTING_REDO_FINALIZER,
 		HAS_SUCCESSFULLY_REDONE,
 		FAILED_REDO_EXECUTION;
 
-		public boolean isExecuting() {
-			return this == EXECUTING_INITIALIZER || this == EXECUTING_CORE || this == EXECUTING_FINALIZER;
-		}
-
-		public boolean isExecutingUndo() {
-			return this == EXECUTING_UNDO_INITIALIZER || this == EXECUTING_UNDO_CORE || this == EXECUTING_UNDO_FINALIZER;
-		}
-
-		public boolean isExecutingRedo() {
-			return this == EXECUTING_REDO_INITIALIZER || this == EXECUTING_REDO_CORE || this == EXECUTING_REDO_FINALIZER;
-		}
-
 		public boolean hasActionExecutionSucceeded() {
-			if (this == NEVER_EXECUTED) {
-				return false;
-			} else if (isExecuting()) {
-				return false;
-			} else if (this == FAILED_EXECUTION) {
-				return false;
-			} else {
-				return true;
-			}
+			return this == ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
 		}
 
 		public boolean hasActionUndoExecutionSucceeded() {
-			if (!hasActionExecutionSucceeded()) {
-				return false;
-			} else if (isExecutingUndo()) {
-				return false;
-			} else if (this == FAILED_UNDO_EXECUTION) {
-				return false;
-			} else {
-				return true;
-			}
+			return this == HAS_SUCCESSFULLY_UNDONE;
 		}
 
 		public boolean hasActionRedoExecutionSucceeded() {
-			if (!hasActionExecutionSucceeded()) {
-				return false;
-			} else if (!hasActionUndoExecutionSucceeded()) {
-				return false;
-			} else if (isExecutingRedo()) {
-				return false;
-			} else if (this == FAILED_REDO_EXECUTION) {
-				return false;
-			} else {
-				return true;
-			}
+			return this == HAS_SUCCESSFULLY_REDONE;
 		}
 
 	}
@@ -216,7 +172,7 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 			_editor.performAction((A) this, null);
 		} else {
 			try {
-				doActionWithContext();
+				doActionInContext();
 			} catch (FlexoException e) {
 				e.printStackTrace();
 			}
@@ -240,8 +196,16 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		return false;
 	}
 
-	public A doActionWithContext() throws FlexoException {
-		doAction(getContext());
+	public A doActionInContext() throws FlexoException {
+		try {
+			executionStatus = ExecutionStatus.EXECUTING_CORE;
+			doAction(getContext());
+			executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
+		} catch (FlexoException e) {
+			executionStatus = ExecutionStatus.FAILED_EXECUTION;
+			thrownException = e;
+			throw e;
+		}
 		return (A) this;
 	}
 
@@ -538,7 +502,7 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	// Retrieving type
 
 	@Override
-	public Class getTypeForKey(String key) {
+	public Class<?> getTypeForKey(String key) {
 		return KeyValueDecoder.getTypeForKey(this, key);
 	}
 

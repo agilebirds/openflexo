@@ -41,13 +41,13 @@ public class UnwrapConditional extends FlexoAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return (object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence && ((IESequence) ((IEWidget) object)
 					.getParent()).isConditional()) || (object instanceof IESequence && ((IESequence) object).isConditional());
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 

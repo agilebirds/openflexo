@@ -86,12 +86,12 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			"reinject_docx", FlexoActionType.importMenu, FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 

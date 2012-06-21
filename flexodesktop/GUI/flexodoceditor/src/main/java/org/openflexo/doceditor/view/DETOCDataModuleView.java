@@ -71,7 +71,7 @@ public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, 
 			panel.remove(component);
 		}
 		if (_gc.getRepositories().size() == 0) {
-			panel.add(component = new FlexoActionButton(AddTOCRepository.actionType, this, _controller.getEditor()));
+			panel.add(component = new FlexoActionButton(AddTOCRepository.actionType, this, _controller));
 		} else {
 			panel.add(component = new JLabel(FlexoLocalization.localizedForKey("please_select_a_repository"), SwingConstants.CENTER));
 		}

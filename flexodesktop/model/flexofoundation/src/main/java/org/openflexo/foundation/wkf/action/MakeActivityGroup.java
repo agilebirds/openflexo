@@ -50,14 +50,14 @@ public class MakeActivityGroup extends FlexoAction<MakeActivityGroup, WKFObject,
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return false/* ((object != null)
 						&& object instanceof AbstractNode
 						&& ((AbstractNode)object).getLevel() == FlexoLevel.ACTIVITY)*/;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return false /*getAllActivityLevelNodes(object, globalSelection).size() > 0*/;
 		}
 

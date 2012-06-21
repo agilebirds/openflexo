@@ -158,9 +158,9 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 	}
 
 	private void updateView(boolean forceRebuild) {
-		if ((forceRebuild) || (generationStatus == GenerationStatus.Unknown) || (generationStatus != _cgFile.getGenerationStatus())
-				|| (generationStatus == GenerationStatus.GenerationError) || (isEdited != _cgFile.isEdited())
-				|| (needsMemoryGeneration != _cgFile.needsMemoryGeneration())) {
+		if (forceRebuild || generationStatus == GenerationStatus.Unknown || generationStatus != _cgFile.getGenerationStatus()
+				|| generationStatus == GenerationStatus.GenerationError || isEdited != _cgFile.isEdited()
+				|| needsMemoryGeneration != _cgFile.needsMemoryGeneration()) {
 			logger.fine("CGFileModuleView :" + _cgFile.getFileName() + " rebuild view for new status " + _cgFile.getGenerationStatus());
 			rebuildView();
 			repaint();
@@ -224,58 +224,58 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 
 			if (isEdited) {
 				FlexoActionButton saveAction = new FlexoActionButton(SaveGeneratedFile.actionType, "save", DGFileModuleView.this,
-						_controller.getEditor());
+						_controller);
 				FlexoActionButton revertToSavedAction = new FlexoActionButton(RevertToSavedGeneratedFile.actionType, "revert_to_saved",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				actionButtons.add(saveAction);
 				actionButtons.add(revertToSavedAction);
 				controlPanel.add(saveAction);
 				controlPanel.add(revertToSavedAction);
 			} else {
 				FlexoActionButton editFileAction = new FlexoActionButton(EditGeneratedFile.actionType, "edit", DGFileModuleView.this,
-						_controller.getEditor());
+						_controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(editFileAction);
 				}
 
 				FlexoActionButton generateAction = new FlexoActionButton(GenerateSourceCode.actionType, "regenerate",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(generateAction);
 				}
 
 				FlexoActionButton writeFileAction = new FlexoActionButton(WriteModifiedGeneratedFiles.actionType, "write_file",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(writeFileAction);
 				}
 
 				FlexoActionButton dismissUnchangedFileAction = new FlexoActionButton(DismissUnchangedGeneratedFiles.actionType,
-						"dismiss_as_unchanged", DGFileModuleView.this, _controller.getEditor());
+						"dismiss_as_unchanged", DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(dismissUnchangedFileAction);
 				}
 
 				FlexoActionButton forceRegenerateAction = new FlexoActionButton(ForceRegenerateSourceCode.actionType, "force_regenerate",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(forceRegenerateAction);
 				}
 
 				FlexoActionButton acceptDiskVersionAction = new FlexoActionButton(AcceptDiskUpdate.actionType, "accept_disk_version",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(acceptDiskVersionAction);
 				}
 
 				FlexoActionButton markAsMergedAction = new FlexoActionButton(MarkAsMerged.actionType, "mark_as_merged",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(markAsMergedAction);
 				}
 
 				FlexoActionButton cancelOverridingAction = new FlexoActionButton(CancelOverrideWithVersion.actionType, "cancel_override",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(cancelOverridingAction);
 				}
@@ -286,32 +286,32 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 					}
 				}
 
-				if ((_cgFile.getGenerationStatus() == GenerationStatus.UpToDate) || (_cgFile.getGenerationStatus().isGenerationModified())
-						|| (_cgFile.getGenerationStatus().isDiskModified())
-						|| (_cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged)) {
+				if (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate || _cgFile.getGenerationStatus().isGenerationModified()
+						|| _cgFile.getGenerationStatus().isDiskModified()
+						|| _cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged) {
 					if (!_cgFile.getMarkedAsDoNotGenerate()) {
 						controlPanel.add(editFileAction);
 					}
 				}
 
-				if ((_cgFile.getGenerationStatus().isGenerationModified()) || (_cgFile.getGenerationStatus().isConflicting())
-						|| (_cgFile.getGenerationStatus() == GenerationStatus.GenerationError)) {
+				if (_cgFile.getGenerationStatus().isGenerationModified() || _cgFile.getGenerationStatus().isConflicting()
+						|| _cgFile.getGenerationStatus() == GenerationStatus.GenerationError) {
 					if (!_cgFile.getMarkedAsDoNotGenerate()) {
 						controlPanel.add(generateAction);
 					}
 				}
 
-				if ((_cgFile.getGenerationStatus().isGenerationModified())
-						|| (_cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged)) {
+				if (_cgFile.getGenerationStatus().isGenerationModified()
+						|| _cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged) {
 					if (!_cgFile.getMarkedAsDoNotGenerate()) {
 						controlPanel.add(writeFileAction);
 					}
 				}
 
 				if (_cgFile.getResource().doesGenerationKeepFileUnchanged()) {
-					if ((_cgFile.getGenerationStatus().isGenerationModified())
-							|| (_cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged)
-							|| (_cgFile.getGenerationStatus() == GenerationStatus.OverrideScheduled)) {
+					if (_cgFile.getGenerationStatus().isGenerationModified()
+							|| _cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged
+							|| _cgFile.getGenerationStatus() == GenerationStatus.OverrideScheduled) {
 						controlPanel.add(dismissUnchangedFileAction);
 					}
 				}
@@ -399,7 +399,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 				returned = FlexoLocalization.localizedForKey("edition_of_file_on_disk");
 			} else {
 				returned = generationStatus.getLocalizedStringRepresentation();
-				if (!generationStatus.isAbnormal() && (generationStatus != GenerationStatus.CodeGenerationNotSynchronized)) {
+				if (!generationStatus.isAbnormal() && generationStatus != GenerationStatus.CodeGenerationNotSynchronized) {
 					if (_cgFile.needsMemoryGeneration()) {
 						returned += ", " + FlexoLocalization.localizedForKey("generation_required");
 					} else {
@@ -443,7 +443,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 			add(new JLabel(FlexoLocalization.localizedForKey("file_marked_as_do_not_generate"), SwingConstants.CENTER), BorderLayout.CENTER);
 			validate();
 			return;
-		} else if (isEdited && (_cgFile.getResource() instanceof GenerationAvailableFileResource)) {
+		} else if (isEdited && _cgFile.getResource() instanceof GenerationAvailableFileResource) {
 			_codeDisplayer = new DocEditor((GenerationAvailableFileResource) _cgFile.getResource(), _controller);
 			_codeDisplayer.getComponent().validate();
 			add(_codeDisplayer.getComponent());
@@ -473,7 +473,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 							public FlexoEditor getEditor() {
 								return _controller.getEditor();
 							}
-						}, _controller.getEditor());
+						}, _controller);
 				JPanel panel = new JPanel(new VerticalLayout());
 				panel.add(new JLabel(FlexoLocalization.localizedForKey("please_synchronize_code_generation"), SwingConstants.CENTER));
 				JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -507,21 +507,21 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 					}
 				}
 
-				else if ((_cgFile.getGenerationStatus() == GenerationStatus.UpToDate)) {
+				else if (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate) {
 					_codeDisplayer = new DocDisplayer(resource, _controller);
 					if (_codeDisplayer.getComponent() != null) {
 						add(_codeDisplayer.getComponent());
 					}
 				}
 
-				else if ((_cgFile.getGenerationStatus().isConflicting()) && (_cgFile.isOverrideScheduled())) {
+				else if (_cgFile.getGenerationStatus().isConflicting() && _cgFile.isOverrideScheduled()) {
 					_codeDisplayer = new DiffCodeDisplayer(resource, _controller);
 					if (_codeDisplayer.getComponent() != null) {
 						add(_codeDisplayer.getComponent());
 					}
 				}
 
-				else if ((_cgFile.getGenerationStatus().isConflicting())) {
+				else if (_cgFile.getGenerationStatus().isConflicting()) {
 					_codeDisplayer = new MergeDocDisplayer(resource, _controller);
 					if (_codeDisplayer.getComponent() != null) {
 						_codeDisplayer.getComponent().revalidate();
@@ -539,7 +539,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 					_screenshotDisplayer = new ScreenshotDisplayer(_cgFile);
 					add(_screenshotDisplayer);
 					validate();
-				} else if ((_cgFile instanceof CGPackagedResourceFile)
+				} else if (_cgFile instanceof CGPackagedResourceFile
 						&& ((CGPackagedResourceFile) _cgFile).getResource().getResourceFormat().isImage()) {
 					_screenshotDisplayer = new ScreenshotDisplayer(_cgFile);
 					add(_screenshotDisplayer);
@@ -551,7 +551,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 				}
 			}
 		}
-		if ((previousDisplayContext != null) && (_codeDisplayer != null)) {
+		if (previousDisplayContext != null && _codeDisplayer != null) {
 			_codeDisplayer.setDisplayContext(previousDisplayContext);
 		}
 	}
@@ -645,7 +645,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 			add(stackTraceTA);
 
 			// Cause stack trace
-			if ((exception.getTargetException() != null) && (exception.getTargetException().getCause() != null)) {
+			if (exception.getTargetException() != null && exception.getTargetException().getCause() != null) {
 				JLabel causeSTLabel = new JLabel(FlexoLocalization.localizedForKey("cause_stacktrace"), SwingConstants.LEFT);
 				causeSTLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 				String causeStackTrace = null;
@@ -675,7 +675,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 	public boolean isAutoscrolled() {
 		// Only exception panel requires Flexo scroll scheme
 		// Other panels are autonomous
-		return (_cgFile.getGenerationStatus() != GenerationStatus.GenerationError) && !(_cgFile instanceof DGScreenshotFile);
+		return _cgFile.getGenerationStatus() != GenerationStatus.GenerationError && !(_cgFile instanceof DGScreenshotFile);
 	}
 
 	@Override

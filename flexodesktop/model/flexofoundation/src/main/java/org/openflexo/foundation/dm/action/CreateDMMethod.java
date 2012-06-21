@@ -46,12 +46,12 @@ public class CreateDMMethod extends FlexoAction<CreateDMMethod, DMEntity, DMObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEntity entity, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEntity entity, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEntity entity, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMEntity entity, Vector<DMObject> globalSelection) {
 			return ((entity != null) && (!entity.getIsReadOnly()));
 		}
 

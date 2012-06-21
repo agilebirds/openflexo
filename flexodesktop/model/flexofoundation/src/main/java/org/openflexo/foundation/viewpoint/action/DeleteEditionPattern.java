@@ -48,12 +48,12 @@ public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern, Edit
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 

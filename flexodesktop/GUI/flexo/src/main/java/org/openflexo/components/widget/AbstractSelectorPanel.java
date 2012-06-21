@@ -163,7 +163,8 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 				return _owner.isSelectable(o);
 			}
 		});
-		_browserView = new BrowserChooserView(_browser, ,_owner) {
+		// TODO: grab a hand on the FlexoController here.
+		_browserView = new BrowserChooserView(_browser, null, _owner) {
 			@Override
 			public void objectWasSelected(FlexoModelObject object) {
 				_owner.setEditedObject((T) object);

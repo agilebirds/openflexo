@@ -19,26 +19,22 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.action.CompareTemplatesInNewWindowInitializer;
 import org.openflexo.cgmodule.controller.GeneratorController;
-import org.openflexo.cgmodule.controller.GeneratorSelectionManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.action.OpenFileInExplorer;
 import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.CGRepository;
-import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.cg.templates.action.EditCustomTemplateFile;
 import org.openflexo.foundation.cg.templates.action.OpenTemplateFileInNewWindow;
 import org.openflexo.foundation.cg.templates.action.RedefineCustomTemplateFile;
-import org.openflexo.generator.AbstractProjectGenerator;
-import org.openflexo.generator.action.GCAction;
+import org.openflexo.generator.action.OverrideWithVersion;
+import org.openflexo.generator.action.ShowFileVersion;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -49,7 +45,6 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 	static {
 		FlexoModelObject.addActionForClass(OpenFileInExplorer.actionType, CGFile.class);
 	}
-
 	private GeneratorController _generatorController;
 
 	public GeneratorControllerActionInitializer(InteractiveFlexoEditor editor, GeneratorController controller) {
@@ -61,27 +56,9 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 		return _generatorController;
 	}
 
-	protected GeneratorSelectionManager getGeneratorSelectionManager() {
-		return getGeneratorController().getGeneratorSelectionManager();
-	}
-
 	@Override
 	public void initializeActions() {
 		super.initializeActions();
-		getGeneratorController().getProject().getGeneratedCode().setFactory(new GCAction.ProjectGeneratorFactory() {
-			@Override
-			public AbstractProjectGenerator<? extends GenerationRepository> generatorForRepository(GenerationRepository repository) {
-				if (repository instanceof CGRepository) {
-					return getGeneratorController().getProjectGenerator((CGRepository) repository);
-				} else {
-					if (logger.isLoggable(Level.SEVERE)) {
-						logger.severe("Cannot create project generator for " + repository);
-					}
-				}
-				return null;
-			}
-		});
-
 		new CGSetPropertyInitializer(this);
 		new OpenFileInExplorerInitializer(this);
 		new CompareTemplatesInNewWindowInitializer(this);
@@ -112,8 +89,12 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 		new MarkAsMergedInitializer(this);
 		new MarkAsUnmergedInitializer(this);
 		new MarkAsMergedAllTrivialMergableFilesInitializer(this);
-		new OverrideWithVersionInitializer(this);
 		new CancelOverrideWithVersionInitializer(this);
+
+		new OverrideWithVersionInitializer(OverrideWithVersion.overrideWithPureGeneration, this);
+		new OverrideWithVersionInitializer(OverrideWithVersion.overrideWithGeneratedMerge, this);
+		new OverrideWithVersionInitializer(OverrideWithVersion.overrideWithLastGenerated, this);
+		new OverrideWithVersionInitializer(OverrideWithVersion.overrideWithLastAccepted, this);
 
 		// Accept disk version
 		new AcceptDiskUpdateInitializer(this);
@@ -147,7 +128,13 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 		new DisconnectCGRepositoryInitializer(this);
 
 		// Show/view
-		new ShowFileVersionInitializer(this);
+		new ShowFileVersionInitializer(ShowFileVersion.showPureGeneration, this);
+		new ShowFileVersionInitializer(ShowFileVersion.showGeneratedMerge, this);
+		new ShowFileVersionInitializer(ShowFileVersion.showContentOnDisk, this);
+		new ShowFileVersionInitializer(ShowFileVersion.showResultFileMerge, this);
+		new ShowFileVersionInitializer(ShowFileVersion.showLastGenerated, this);
+		new ShowFileVersionInitializer(ShowFileVersion.showLastAccepted, this);
+		new ShowFileVersionInitializer(ShowFileVersion.showHistoryVersion, this);
 		new OpenDiffEditorInitializer(this);
 		new GoToCorrespondingJavaInitializer(this);
 		new GoToCorrespondingWOInitializer(this);

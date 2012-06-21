@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class DuplicateEditionPatternInitializer extends ActionInitializer<Duplic
 	protected FlexoActionInitializer<DuplicateEditionPattern> getDefaultInitializer() {
 		return new FlexoActionInitializer<DuplicateEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DuplicateEditionPattern action) {
+			public boolean run(EventObject e, DuplicateEditionPattern action) {
 				String s = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_new_name"));
 				if (s == null) {
 					return false;
@@ -63,7 +63,7 @@ public class DuplicateEditionPatternInitializer extends ActionInitializer<Duplic
 	protected FlexoActionFinalizer<DuplicateEditionPattern> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DuplicateEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DuplicateEditionPattern action) {
+			public boolean run(EventObject e, DuplicateEditionPattern action) {
 				((VPMController) getController()).selectAndFocusObject(action.newEditionPattern);
 				return true;
 			}

@@ -51,12 +51,12 @@ public class TopComponentDown extends FlexoAction<TopComponentDown, IEWidget, IE
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+		public boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+		public boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return (object != null) && object.isTopComponent();
 		}
 

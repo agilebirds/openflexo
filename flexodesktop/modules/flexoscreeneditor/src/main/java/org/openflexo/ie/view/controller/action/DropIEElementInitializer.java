@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -63,7 +63,7 @@ public class DropIEElementInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DropIEElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<DropIEElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropIEElement action) {
+			public boolean run(EventObject e, DropIEElement action) {
 				return true;
 			}
 		};
@@ -73,7 +73,7 @@ public class DropIEElementInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DropIEElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DropIEElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropIEElement action) {
+			public boolean run(EventObject e, DropIEElement action) {
 				if (action.getDroppedWidget() instanceof IEButtonWidget) {
 					if (((IEButtonWidget) action.getDroppedWidget()).getImageName() != null) {
 						if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("calendar") > -1) {

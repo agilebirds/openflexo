@@ -75,12 +75,12 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
+		public boolean isVisibleForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
+		public boolean isEnabledForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
 			return true;
 		}
 

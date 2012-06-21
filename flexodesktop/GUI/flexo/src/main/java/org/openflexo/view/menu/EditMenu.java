@@ -27,12 +27,15 @@ package org.openflexo.view.menu;
  */
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.foundation.action.UndoManager;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoController;
 
@@ -75,9 +78,37 @@ public class EditMenu extends FlexoMenu {
 		public UndoItem() {
 			super(new UndoAction(), "undo", KeyStroke.getKeyStroke(KeyEvent.VK_Z, FlexoCst.META_MASK), IconLibrary.UNDO_ICON,
 					getController());
-			_controller.getEditor().getUndoManager().registerUndoControl(this);
+			if (_controller.getEditor().getUndoManager() != null) {
+				_controller.getEditor().getUndoManager().getPropertyChangeSupport()
+						.addPropertyChangeListener(UndoManager.ACTION_HISTORY, this);
+				_controller.getEditor().getUndoManager().getPropertyChangeSupport().addPropertyChangeListener(UndoManager.ENABLED, this);
+				updateWithUndoManagerState();
+			}
 		}
 
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(UndoManager.ACTION_HISTORY) || evt.getPropertyName().equals(UndoManager.ENABLED)) {
+				updateWithUndoManagerState();
+			}
+		}
+
+		private void updateWithUndoManagerState() {
+			if (_controller.getEditor().getUndoManager() != null) {
+				setEnabled(_controller.getEditor().getUndoManager().isUndoActive());
+				if (_controller.getEditor().getUndoManager().isUndoActive()) {
+					setText(FlexoLocalization.localizedForKey("undo") + " ("
+							+ _controller.getEditor().getUndoManager().getNextUndoAction().getLocalizedName() + ")");
+				} else {
+					setText(FlexoLocalization.localizedForKey("undo"));
+				}
+			}
+		}
+
+		@Override
+		public void itemWillShow() {
+
+		}
 	}
 
 	public class UndoAction extends AbstractAction {
@@ -101,7 +132,31 @@ public class EditMenu extends FlexoMenu {
 		public RedoItem() {
 			super(new RedoAction(), "redo", KeyStroke.getKeyStroke(KeyEvent.VK_Y, FlexoCst.META_MASK), IconLibrary.REDO_ICON,
 					getController());
-			_controller.getEditor().getUndoManager().registerRedoControl(this);
+			if (_controller.getEditor().getUndoManager() != null) {
+				_controller.getEditor().getUndoManager().getPropertyChangeSupport()
+						.addPropertyChangeListener(UndoManager.ACTION_HISTORY, this);
+				_controller.getEditor().getUndoManager().getPropertyChangeSupport().addPropertyChangeListener(UndoManager.ENABLED, this);
+				updateWithUndoManagerState();
+			}
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(UndoManager.ACTION_HISTORY) || evt.getPropertyName().equals(UndoManager.ENABLED)) {
+				updateWithUndoManagerState();
+			}
+		}
+
+		private void updateWithUndoManagerState() {
+			if (_controller.getEditor().getUndoManager() != null) {
+				setEnabled(_controller.getEditor().getUndoManager().isRedoActive());
+				if (_controller.getEditor().getUndoManager().isRedoActive()) {
+					setText(FlexoLocalization.localizedForKey("redo") + " ("
+							+ _controller.getEditor().getUndoManager().getNextRedoAction().getLocalizedName() + ")");
+				} else {
+					setText(FlexoLocalization.localizedForKey("redo"));
+				}
+			}
 		}
 
 	}

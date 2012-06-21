@@ -50,12 +50,12 @@ public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObj
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
+		public boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OntologyObject focusedObject, Vector<OntologyObject> globalSelection) {
+		public boolean isEnabledForSelection(OntologyObject focusedObject, Vector<OntologyObject> globalSelection) {
 			Vector<OntologyObject> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
 			if (objectsToDelete.size() == 0) {
 				return false;

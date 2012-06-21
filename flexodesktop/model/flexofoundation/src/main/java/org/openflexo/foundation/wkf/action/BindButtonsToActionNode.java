@@ -56,12 +56,12 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
 			return !(object instanceof SelfExecutableNode);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
 			return ((object != null) && (object).getComponentInstance() != null);
 		}
 

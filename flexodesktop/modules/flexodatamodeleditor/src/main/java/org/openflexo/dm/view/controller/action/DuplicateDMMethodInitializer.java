@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,7 +50,7 @@ public class DuplicateDMMethodInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DuplicateDMMethod> getDefaultInitializer() {
 		return new FlexoActionInitializer<DuplicateDMMethod>() {
 			@Override
-			public boolean run(ActionEvent e, DuplicateDMMethod action) {
+			public boolean run(EventObject e, DuplicateDMMethod action) {
 				return true;
 			}
 		};
@@ -60,7 +60,7 @@ public class DuplicateDMMethodInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DuplicateDMMethod> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DuplicateDMMethod>() {
 			@Override
-			public boolean run(ActionEvent e, DuplicateDMMethod action) {
+			public boolean run(EventObject e, DuplicateDMMethod action) {
 				if (action.getMethodToDuplicate().getEntity() instanceof DMEOEntity
 						&& getControllerActionInitializer().getDMController().getCurrentEditedObject() == ((DMEOEntity) action
 								.getMethodToDuplicate().getEntity()).getDMEOModel()) {

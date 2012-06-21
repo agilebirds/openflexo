@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 
 import javax.swing.Icon;
 
@@ -62,7 +62,7 @@ public class AddTabInitializer extends ActionInitializer<AddTab, IEWidget, IEWid
 	protected FlexoActionInitializer<AddTab> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddTab>() {
 			@Override
-			public boolean run(ActionEvent e, AddTab action) {
+			public boolean run(EventObject e, AddTab action) {
 				IESequenceTab tabContainer = null;
 				if (action.getFocusedObject() instanceof IESequenceTab) {
 					tabContainer = (IESequenceTab) action.getFocusedObject();

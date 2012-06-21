@@ -36,11 +36,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
-import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.widget.MultipleObjectSelector;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
@@ -88,12 +86,12 @@ public class MultipleObjectSelectorPopup extends FlexoDialog {
 	private String _unlocalizedValidateButtonLabel;
 
 	public MultipleObjectSelectorPopup(String title, String label, String description, BrowserConfiguration browserConfiguration,
-			FlexoProject project, Frame owner, FlexoEditor editor) {
-		this(title, label, description, "validate", browserConfiguration, project, owner, editor);
+			FlexoProject project, Frame owner) {
+		this(title, label, description, "validate", browserConfiguration, project, owner);
 	}
 
 	public MultipleObjectSelectorPopup(String title, String label, String description, String unlocalizedValidateButtonLabel,
-			BrowserConfiguration browserConfiguration, FlexoProject project, Frame owner, FlexoEditor editor) {
+			BrowserConfiguration browserConfiguration, FlexoProject project, Frame owner) {
 		super(owner);
 
 		_browserConfiguration = browserConfiguration;
@@ -103,8 +101,6 @@ public class MultipleObjectSelectorPopup extends FlexoDialog {
 
 		setTitle(getPopupTitle());
 		getContentPane().setLayout(new BorderLayout());
-
-		setBackground(ColorCst.GUI_BACK_COLOR);
 
 		JPanel topPanel = new JPanel();
 
@@ -126,14 +122,14 @@ public class MultipleObjectSelectorPopup extends FlexoDialog {
 
 		topPanel.add(_descriptionTA, BorderLayout.CENTER);
 
-		choicePanel = new MultipleObjectSelector<FlexoModelObject>(browserConfiguration,
+		choicePanel = new MultipleObjectSelector<FlexoModelObject>(browserConfiguration, null,
 				new MultipleObjectSelector.ObjectSelectabilityDelegate<FlexoModelObject>() {
 					@Override
 					public boolean isSelectable(FlexoModelObject object) {
 						// TODO: type this !!!
 						return true;
 					}
-				}, editor);
+				});
 		choicePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
 		JPanel controlPanel = new JPanel();

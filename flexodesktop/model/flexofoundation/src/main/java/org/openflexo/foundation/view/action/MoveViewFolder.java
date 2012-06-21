@@ -36,12 +36,12 @@ public class MoveViewFolder extends FlexoAction<MoveViewFolder, ViewFolder, View
 			"move_view_folder") {
 
 		@Override
-		protected boolean isEnabledForSelection(ViewFolder object, Vector<ViewFolder> globalSelection) {
+		public boolean isEnabledForSelection(ViewFolder object, Vector<ViewFolder> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewFolder object, Vector<ViewFolder> globalSelection) {
+		public boolean isVisibleForSelection(ViewFolder object, Vector<ViewFolder> globalSelection) {
 			return false;
 		}
 

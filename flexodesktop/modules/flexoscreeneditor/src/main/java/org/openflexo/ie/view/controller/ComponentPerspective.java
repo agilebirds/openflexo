@@ -93,32 +93,35 @@ class ComponentPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<ComponentInstance> createModuleViewForObject(ComponentInstance object, FlexoController controller) {
-		ComponentDefinition component = object.getComponentDefinition();
-		if (component != null) {
-			if (IEController.logger.isLoggable(Level.INFO)) {
-				IEController.logger.info("Building EditZone for " + component.getName() + " (" + component.getClass() + ")");
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof ComponentInstance) {
+			ComponentInstance ci = (ComponentInstance) object;
+			ComponentDefinition component = ci.getComponentDefinition();
+			if (component != null) {
+				if (IEController.logger.isLoggable(Level.INFO)) {
+					IEController.logger.info("Building EditZone for " + component.getName() + " (" + component.getClass() + ")");
+				}
+				if (IEController.logger.isLoggable(Level.INFO)) {
+					IEController.logger.info("Load component...");
+				}
+				/*FlexoComponentResource componentResource = component.getComponentResource();
+				if (IEController.logger.isLoggable(Level.INFO))
+					IEController.logger.info("Accessed to resource: " + componentResource.getResourceIdentifier());*/
+				if (!component.isLoaded()) {
+					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_component ") + component.getName(), 1);
+					_controller.getSelectionManager().setSelectedObject(component.getWOComponent(ProgressWindow.instance()));
+					ProgressWindow.hideProgressWindow();
+				}
+				IEWOComponentView returned = null;
+				if (object instanceof PartialComponentInstance) {
+					returned = new IEReusableWidgetComponentView((IEController) controller, (PartialComponentInstance) object);
+				} else {
+					returned = new IEWOComponentView((IEController) controller, ci);
+				}
+				returned.doLayout();
+				// componentResource.setResourceData(returned.getModel());
+				return returned;
 			}
-			if (IEController.logger.isLoggable(Level.INFO)) {
-				IEController.logger.info("Load component...");
-			}
-			/*FlexoComponentResource componentResource = component.getComponentResource();
-			if (IEController.logger.isLoggable(Level.INFO))
-				IEController.logger.info("Accessed to resource: " + componentResource.getResourceIdentifier());*/
-			if (!component.isLoaded()) {
-				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_component ") + component.getName(), 1);
-				_controller.getSelectionManager().setSelectedObject(component.getWOComponent(ProgressWindow.instance()));
-				ProgressWindow.hideProgressWindow();
-			}
-			IEWOComponentView returned = null;
-			if (object instanceof PartialComponentInstance) {
-				returned = new IEReusableWidgetComponentView((IEController) controller, (PartialComponentInstance) object);
-			} else {
-				returned = new IEWOComponentView((IEController) controller, object);
-			}
-			returned.doLayout();
-			// componentResource.setResourceData(returned.getModel());
-			return returned;
 		}
 		return null;
 	}

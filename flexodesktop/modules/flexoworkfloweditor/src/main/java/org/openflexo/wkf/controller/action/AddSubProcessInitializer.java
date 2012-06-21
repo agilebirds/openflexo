@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -64,7 +64,7 @@ public class AddSubProcessInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddSubProcess> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddSubProcess>() {
 			@Override
-			public boolean run(ActionEvent e, AddSubProcess action) {
+			public boolean run(EventObject e, AddSubProcess action) {
 				FlexoProcess process = null;
 				if (action.getFocusedObject() instanceof FlexoProcess) {
 					process = (FlexoProcess) action.getFocusedObject();
@@ -120,7 +120,7 @@ public class AddSubProcessInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddSubProcess> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddSubProcess>() {
 			@Override
-			public boolean run(ActionEvent e, AddSubProcess action) {
+			public boolean run(EventObject e, AddSubProcess action) {
 				boolean res = true;
 				if (action.getNewProcess() != null
 						&& action.getFocusedObject() instanceof ProcessFolder

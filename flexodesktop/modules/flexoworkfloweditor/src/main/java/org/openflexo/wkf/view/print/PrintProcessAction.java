@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.view.print;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -55,12 +55,12 @@ public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, Flexo
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
 			return (object != null) && !object.isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
 			return (object != null);
 		}
 
@@ -79,7 +79,7 @@ public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, Flexo
 	public static void initWithController(final WKFController controller) {
 		controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<PrintProcessAction>() {
 			@Override
-			public boolean run(ActionEvent e, PrintProcessAction anAction) {
+			public boolean run(EventObject e, PrintProcessAction anAction) {
 				if (anAction.getFocusedObject() == null) {
 					anAction.setFocusedObject(controller.getCurrentFlexoProcess());
 				}
@@ -89,7 +89,7 @@ public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, Flexo
 
 		controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<PrintProcessAction>() {
 			@Override
-			public boolean run(ActionEvent e, final PrintProcessAction anAction) {
+			public boolean run(EventObject e, final PrintProcessAction anAction) {
 				anAction.processToPrint = anAction.getFocusedObject();
 
 				FlexoPrintableComponent printableView = null;

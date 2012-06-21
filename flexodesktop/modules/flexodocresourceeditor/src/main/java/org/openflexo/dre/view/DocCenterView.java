@@ -31,7 +31,6 @@ import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.dre.DREBrowser;
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
@@ -179,10 +178,9 @@ public class DocCenterView extends JPanel implements SelectionSynchronizedModule
 		}
 
 		public DRETabularBrowserView(DREController controller, TabularBrowserModel model) {
-			super(controller, model, controller.getEditor());
+			super(controller, model);
 			setSynchronizeWithSelectionManager(true);
 		}
-
 	}
 
 	/**

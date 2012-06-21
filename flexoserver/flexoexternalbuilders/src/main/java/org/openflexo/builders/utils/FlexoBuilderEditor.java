@@ -1,6 +1,6 @@
 package org.openflexo.builders.utils;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,14 +14,11 @@ import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
 import org.openflexo.dg.html.ProjectDocHTMLGenerator;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
+import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionEnableCondition;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.action.ValidateProject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
@@ -30,9 +27,7 @@ import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.action.GCAction.ProjectGeneratorFactory;
-import org.openflexo.generator.action.ValidateProject;
 import org.openflexo.generator.exception.GenerationException;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * This class extends the DefaultFlexoEditor for the Flexo server application. So far the implementation is just a simple extension of the
@@ -41,7 +36,7 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
  * @author gpolet
  * 
  */
-public class FlexoBuilderEditor extends InteractiveFlexoEditor implements ProjectGeneratorFactory {
+public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGeneratorFactory {
 
 	protected static final Logger logger = Logger.getLogger(FlexoBuilderEditor.class.getPackage().getName());
 
@@ -99,15 +94,25 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 
 	private Runnable whenDone;
 
+	protected Exception exception;
+
 	@Override
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(final A action)
-			throws FlexoException {
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(final A action,
+			EventObject event) {
+		if (action.getActionType() == ValidateProject.actionType) {
+			return action;
+		}
 		if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
 			ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				@Override
 				protected Void doInBackground() throws Exception {
-					action.execute();
+					try {
+						action.doActionInContext();
+					} catch (Exception e) {
+						e.printStackTrace();
+						FlexoBuilderEditor.this.exception = e;
+					}
 					return null;
 				}
 
@@ -120,13 +125,17 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 			};
 			worker.execute();
 		} else {
-			action.execute();
+			try {
+				action.doActionInContext();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+				FlexoBuilderEditor.this.exception = e;
+			}
 			if (!action.isEmbedded()) {
 				doNextTodo(action);
-			} else {
-				System.err.println("Skipping");
 			}
 		}
+		return action;
 	}
 
 	public void chainActions(List<FlexoAction<?, ?, ?>> actions, Runnable whenDone) {
@@ -136,7 +145,7 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 	}
 
 	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void doNextTodo(final A action) {
-		if (action != null && !action.hasActionExecutionSucceeded()) {
+		if (action != null && (!action.hasActionExecutionSucceeded() || exception != null)) {
 			externalMainWithProject.handleActionFailed(action);
 		} else {
 			if (todos == null && whenDone == null) {
@@ -168,42 +177,6 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 
 	@Override
 	public boolean performResourceScanning() {
-		return false;
-	}
-
-	@Override
-	public FlexoActionEnableCondition getEnableConditionFor(FlexoActionType actionType) {
-		return null;
-	}
-
-	@Override
-	public FlexoActionInitializer getInitializerFor(FlexoActionType actionType) {
-		FlexoActionType _localActionType = actionType;
-		if (_localActionType.equals(ValidateProject.actionType)) {
-			return new FlexoActionInitializer<FlexoAction>() {
-
-				@Override
-				public boolean run(ActionEvent event, FlexoAction action) {
-					return false;
-				}
-
-			};
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoActionFinalizer getFinalizerFor(FlexoActionType actionType) {
-		return null;
-	}
-
-	@Override
-	public FlexoExceptionHandler getExceptionHandlerFor(FlexoActionType actionType) {
-		return null;
-	}
-
-	@Override
-	public boolean isAutoSaveEnabledByDefault() {
 		return false;
 	}
 

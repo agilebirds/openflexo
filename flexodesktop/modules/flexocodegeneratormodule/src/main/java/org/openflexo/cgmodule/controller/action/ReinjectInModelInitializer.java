@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -68,7 +68,7 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ReinjectInModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<ReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectInModel action) {
+			public boolean run(EventObject e, ReinjectInModel action) {
 				if (action.getFilesToReinjectInModel().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
@@ -151,7 +151,7 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ReinjectInModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectInModel action) {
+			public boolean run(EventObject e, ReinjectInModel action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

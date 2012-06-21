@@ -22,6 +22,7 @@ package org.openflexo.cgmodule.controller.action;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -34,6 +35,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.generator.action.OverrideWithVersion;
+import org.openflexo.generator.action.OverrideWithVersion.OverrideWithVersionActionType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -43,8 +45,8 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OverrideWithVersionInitializer(GeneratorControllerActionInitializer actionInitializer) {
-		super(null, actionInitializer);
+	OverrideWithVersionInitializer(OverrideWithVersionActionType actionType, GeneratorControllerActionInitializer actionInitializer) {
+		super(actionType, actionInitializer);
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OverrideWithVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<OverrideWithVersion>() {
 			@Override
-			public boolean run(ActionEvent e, OverrideWithVersion action) {
+			public boolean run(EventObject e, OverrideWithVersion action) {
 				if (action.getFilesToOverride().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
@@ -122,22 +124,10 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OverrideWithVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OverrideWithVersion>() {
 			@Override
-			public boolean run(ActionEvent e, OverrideWithVersion action) {
+			public boolean run(EventObject e, OverrideWithVersion action) {
 				return true;
 			}
 		};
-	}
-
-	@Override
-	public void init() {
-		initActionType(OverrideWithVersion.overrideWithPureGeneration, getDefaultInitializer(), getDefaultFinalizer(),
-				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(OverrideWithVersion.overrideWithGeneratedMerge, getDefaultInitializer(), getDefaultFinalizer(),
-				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(OverrideWithVersion.overrideWithLastGenerated, getDefaultInitializer(), getDefaultFinalizer(),
-				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(OverrideWithVersion.overrideWithLastAccepted, getDefaultInitializer(), getDefaultFinalizer(),
-				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
 	}
 
 }

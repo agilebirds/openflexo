@@ -22,6 +22,7 @@ package org.openflexo.wse.controller.action;
 import java.util.logging.Logger;
 
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wse.controller.WSEController;
 import org.openflexo.wse.controller.WSESelectionManager;
 
@@ -37,8 +38,8 @@ public class WSEControllerActionInitializer extends ControllerActionInitializer 
 
 	private WSEController _wseController;
 
-	public WSEControllerActionInitializer(WSEController controller) {
-		super(controller);
+	public WSEControllerActionInitializer(InteractiveFlexoEditor editor, WSEController controller) {
+		super(editor, controller);
 		_wseController = controller;
 	}
 
@@ -54,11 +55,11 @@ public class WSEControllerActionInitializer extends ControllerActionInitializer 
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new WSESetPropertyInitializer(this)).init();
+		new WSESetPropertyInitializer(this);
 
-		(new WSDeleteInitializer(this)).init();
-		(new ImportWsdlInitializer(this)).init();
-		(new CreateNewWebServiceInitializer(this)).init();
+		new WSDeleteInitializer(this);
+		new ImportWsdlInitializer(this);
+		new CreateNewWebServiceInitializer(this);
 
 	}
 

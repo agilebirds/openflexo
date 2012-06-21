@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.awt.event.KeyEvent;
 import java.util.logging.Logger;
 
@@ -57,7 +57,7 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 	protected FlexoActionInitializer<SynchronizeRepositoryCodeGeneration> getDefaultInitializer() {
 		return new FlexoActionInitializer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
-			public boolean run(ActionEvent e, SynchronizeRepositoryCodeGeneration action) {
+			public boolean run(EventObject e, SynchronizeRepositoryCodeGeneration action) {
 				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
@@ -73,7 +73,7 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 	protected FlexoActionFinalizer<SynchronizeRepositoryCodeGeneration> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
-			public boolean run(ActionEvent e, SynchronizeRepositoryCodeGeneration action) {
+			public boolean run(EventObject e, SynchronizeRepositoryCodeGeneration action) {
 				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
 				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
 				if (DGPreferences.getAutomaticallyDismissUnchangedFiles()) {

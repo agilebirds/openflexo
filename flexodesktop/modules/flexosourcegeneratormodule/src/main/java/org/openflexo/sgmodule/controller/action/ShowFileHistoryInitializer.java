@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class ShowFileHistoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShowFileHistory> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowFileHistory>() {
 			@Override
-			public boolean run(ActionEvent e, ShowFileHistory action) {
+			public boolean run(EventObject e, ShowFileHistory action) {
 				return true;
 			}
 		};
@@ -55,7 +55,7 @@ public class ShowFileHistoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowFileHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowFileHistory>() {
 			@Override
-			public boolean run(ActionEvent e, ShowFileHistory action) {
+			public boolean run(EventObject e, ShowFileHistory action) {
 				getControllerActionInitializer().getSGController().switchToPerspective(
 						getControllerActionInitializer().getSGController().VERSIONNING_PERSPECTIVE);
 				getControllerActionInitializer().getSGController().selectAndFocusObject(action.getFocusedObject());

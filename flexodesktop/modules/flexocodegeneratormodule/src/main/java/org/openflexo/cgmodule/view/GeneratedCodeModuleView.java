@@ -31,7 +31,6 @@ import javax.swing.SwingConstants;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.action.FlexoActionSource;
@@ -68,8 +67,7 @@ public class GeneratedCodeModuleView extends JPanel implements ModuleView<Genera
 			panel.remove(component);
 		}
 		if (_gc.getGeneratedRepositories().size() == 0) {
-			panel.add(component = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller.getEditor()),
-					BorderLayout.CENTER);
+			panel.add(component = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller), BorderLayout.CENTER);
 		} else {
 			panel.add(component = new JLabel(FlexoLocalization.localizedForKey("please_select_a_repository"), SwingConstants.CENTER),
 					BorderLayout.CENTER);

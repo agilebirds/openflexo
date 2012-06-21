@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.io.File;
 import java.util.logging.Logger;
 
@@ -54,7 +54,7 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ConnectCGRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<ConnectCGRepository>() {
 			@Override
-			public boolean run(ActionEvent e, ConnectCGRepository action) {
+			public boolean run(EventObject e, ConnectCGRepository action) {
 				if (!(action.getFocusedObject() instanceof CGRepository)) {
 					return false;
 				}
@@ -125,7 +125,7 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ConnectCGRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ConnectCGRepository>() {
 			@Override
-			public boolean run(ActionEvent e, ConnectCGRepository action) {
+			public boolean run(EventObject e, ConnectCGRepository action) {
 				return true;
 			}
 		};

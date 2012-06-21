@@ -52,7 +52,7 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 		setLocationRelativeTo(frame);
 		// setFocusable(true);
 		// addFocusListener(this);
-		addKeyListener(frame.getKeyEventListener());
+		addKeyListener(frame.getController().getKeyEventListener());
 		isDisplayedWhenModuleIsActive = false;
 		_parentFrame.addToRelativeWindows(this);
 		getController().notifyNewFlexoRelativeWindow(this);
@@ -72,6 +72,7 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 		super.dispose();
 		if (_parentFrame != null) {
 			_parentFrame.removeFromRelativeWindows(this);
+			removeKeyListener(_parentFrame.getController().getKeyEventListener());
 		}
 		getController().notifyRemoveFlexoRelativeWindow(this);
 		removeAll();

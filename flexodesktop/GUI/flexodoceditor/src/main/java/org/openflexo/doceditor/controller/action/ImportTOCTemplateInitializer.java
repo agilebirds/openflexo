@@ -19,8 +19,8 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
@@ -49,7 +49,7 @@ public class ImportTOCTemplateInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportTOCTemplate> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportTOCTemplate>() {
 			@Override
-			public boolean run(ActionEvent e, ImportTOCTemplate action) {
+			public boolean run(EventObject e, ImportTOCTemplate action) {
 
 				JFileChooser chooser = new JFileChooser();
 				chooser.setDialogType(JFileChooser.OPEN_DIALOG);

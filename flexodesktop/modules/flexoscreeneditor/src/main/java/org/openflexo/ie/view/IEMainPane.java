@@ -32,9 +32,8 @@ import org.openflexo.view.ModuleView;
  */
 public class IEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public IEMainPane(ModuleView moduleView, IEFrame mainFrame, IEController controller) {
-		super(moduleView, mainFrame, controller);
-
+	public IEMainPane(IEController controller) {
+		super(controller);
 	}
 
 	public void showBrowser() {
@@ -51,7 +50,7 @@ public class IEMainPane extends FlexoMainPane implements GraphicalFlexoObserver 
 	}
 
 	@Override
-	public void setModuleView(ModuleView moduleView) {
+	public void setModuleView(ModuleView<?> moduleView) {
 		super.setModuleView(moduleView);
 		if (moduleView == null) {
 			return;

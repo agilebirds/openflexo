@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -50,7 +50,7 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<EditCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
+			public boolean run(EventObject e, EditCustomTemplateFile action) {
 				CGTemplateFileModuleView editor;
 				if ((action.getInvoker() != null) && (action.getInvoker() instanceof CGTemplateFileModuleView)
 						&& (((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
@@ -72,7 +72,7 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<EditCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
+			public boolean run(EventObject e, EditCustomTemplateFile action) {
 				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof CGTemplateFileModuleView)
 						|| !(((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
 					getControllerActionInitializer().getSGController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());

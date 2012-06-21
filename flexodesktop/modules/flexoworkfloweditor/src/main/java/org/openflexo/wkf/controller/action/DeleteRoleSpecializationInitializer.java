@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -52,7 +52,7 @@ public class DeleteRoleSpecializationInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteRoleSpecialization> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteRoleSpecialization>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteRoleSpecialization action) {
+			public boolean run(EventObject e, DeleteRoleSpecialization action) {
 				boolean doIt;
 				Vector<RoleSpecialization> roleSpecializationToDelete = action.getRoleSpecializationToDelete();
 				if (roleSpecializationToDelete.size() == 0) {
@@ -73,7 +73,7 @@ public class DeleteRoleSpecializationInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteRoleSpecialization> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteRoleSpecialization>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteRoleSpecialization action) {
+			public boolean run(EventObject e, DeleteRoleSpecialization action) {
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
 						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();

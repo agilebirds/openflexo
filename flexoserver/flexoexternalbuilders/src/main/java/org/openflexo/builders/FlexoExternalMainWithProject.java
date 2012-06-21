@@ -2,12 +2,12 @@ package org.openflexo.builders;
 
 import java.io.File;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderEditor;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -16,8 +16,7 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ProjectLoader;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
 
 public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
@@ -29,15 +28,36 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	protected FlexoBuilderEditor editor;
 
 	protected FlexoProject project;
+	private ApplicationContext applicationContext;
 
 	public FlexoExternalMainWithProject() {
+		applicationContext = new ApplicationContext() {
+
+			@Override
+			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
+				builderEditor.setFactory(new FlexoProgressFactory() {
+					@Override
+					public FlexoProgress makeFlexoProgress(String title, int steps) {
+						return new FlexoBuilderProgress(title, steps);
+					}
+				});
+				return builderEditor;
+			}
+
+			@Override
+			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				return null;
+			}
+		};
 	}
 
 	/**
 	 * This is only code by test classes to dereference project from everywhere.
 	 */
 	public void close() {
-		ProjectLoader.instance().closeCurrentProject();
+		applicationContext.getProjectLoader().closeProject(project);
+		applicationContext.getModuleLoader().closeAllModulesWithoutConfirmation();
 		editor = null;
 		project = null;
 	}
@@ -81,11 +101,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		project = editor.getProject();
 		project.getGeneratedCode().setFactory(editor);
 		project.getGeneratedDoc().setFactory(editor);
-		/*************************** MEGA-WARNING ***************************/
-		/** ##### DO NOT UNDER ANY (AND I HIGHLY INSIST ON THE "ANY") ##### */
-		/** ########### CIRCUMSTANCES REMOVE THE NEXT LINE ################ */
-		/********************************************************************/
-		ModuleLoader.instance(); // <-- DO NOT REMOVE!!!!!!!!!!!!!!!!!!!!!!!
+
 	}
 
 	@Override
@@ -160,22 +176,8 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	}
 
 	public FlexoBuilderEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
-		return (FlexoBuilderEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, new FlexoEditorFactory() {
-
-			@Override
-			public FlexoEditor makeFlexoEditor(FlexoProject project) {
-
-				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
-				builderEditor.setFactory(new FlexoProgressFactory() {
-					@Override
-					public FlexoProgress makeFlexoProgress(String title, int steps) {
-						return new FlexoBuilderProgress(title, steps);
-					}
-				});
-				return builderEditor;
-			}
-
-		}, getResourceCenter());
+		return (FlexoBuilderEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, applicationContext,
+				getResourceCenter());
 	}
 
 }

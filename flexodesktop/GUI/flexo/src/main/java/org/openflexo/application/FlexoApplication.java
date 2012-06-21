@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import org.openflexo.AdvancedPrefs;
-import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.br.view.JIRAIssueReportDialog;
@@ -48,7 +47,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.inspector.InspectorCst;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -147,7 +145,6 @@ public class FlexoApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		InspectorCst.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
 		FlexoModelObject.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
 		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs
 		FlexoModelObject.setHelpRetriever(new DefaultHelpRetriever(DocResourceManager.instance()));

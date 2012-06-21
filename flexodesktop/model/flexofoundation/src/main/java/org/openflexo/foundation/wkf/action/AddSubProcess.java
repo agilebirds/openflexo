@@ -49,14 +49,14 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return (object instanceof FlexoProcess && !((FlexoProcess) object).isImported())
 					|| (object instanceof ProcessFolder && !((ProcessFolder) object).getProcessNode().isImported())
 					|| object instanceof FlexoWorkflow;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

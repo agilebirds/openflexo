@@ -29,27 +29,20 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IEPageComponent;
 import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.ie.widget.IETabWidget;
+import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IETreeDropTarget;
 
 public class ComponentBrowserView extends BrowserView {
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected IEController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public ComponentBrowserView(IEController controller) {
-		super(controller.getComponentBrowser(), controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(controller.getComponentBrowser(), controller);
 		FCH.setHelpItem(this, "component-browser");
+	}
+
+	@Override
+	public IEController getController() {
+		return (IEController) super.getController();
 	}
 
 	@Override
@@ -60,12 +53,12 @@ public class ComponentBrowserView extends BrowserView {
 	@Override
 	public void treeSingleClick(FlexoModelObject object) {
 		if (object instanceof IETabWidget) {
-			if (_controller.getCurrentEditedComponent() != null) {
-				if ((_controller.getCurrentEditedComponent()).getComponentDefinition().getWOComponent() instanceof IEPageComponent) {
-					Enumeration en = ((IEPageComponent) (_controller.getCurrentEditedComponent()).getComponentDefinition().getWOComponent())
-							.topComponents();
+			if (getController().getCurrentEditedComponent() != null) {
+				if (getController().getCurrentEditedComponent().getComponentDefinition().getWOComponent() instanceof IEPageComponent) {
+					Enumeration<IEWidget> en = ((IEPageComponent) getController().getCurrentEditedComponent().getComponentDefinition()
+							.getWOComponent()).topComponents();
 					while (en.hasMoreElements()) {
-						Object obj = en.nextElement();
+						IEWidget obj = en.nextElement();
 						if (obj instanceof IESequenceTab) {
 							((IESequenceTab) obj).setSelectedTab((IETabWidget) object);
 						}

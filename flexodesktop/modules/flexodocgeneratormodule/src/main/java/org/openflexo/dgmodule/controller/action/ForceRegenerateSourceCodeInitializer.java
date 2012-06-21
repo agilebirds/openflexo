@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.logging.Logger;
@@ -59,7 +59,7 @@ public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ForceRegenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<ForceRegenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ForceRegenerateSourceCode action) {
+			public boolean run(EventObject e, ForceRegenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -74,7 +74,7 @@ public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ForceRegenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ForceRegenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ForceRegenerateSourceCode action) {
+			public boolean run(EventObject e, ForceRegenerateSourceCode action) {
 				DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 						action.getEditor()).doAction();
 				getControllerActionInitializer().getDGController().disposeProgressWindow();

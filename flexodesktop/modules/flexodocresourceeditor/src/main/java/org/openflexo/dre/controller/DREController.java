@@ -33,11 +33,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.DREBrowser;
 import org.openflexo.dre.controller.action.DREControllerActionInitializer;
-import org.openflexo.dre.view.DREFrame;
 import org.openflexo.dre.view.DREMainPane;
 import org.openflexo.dre.view.listener.DREKeyEventListener;
 import org.openflexo.dre.view.menu.DREMenuBar;
@@ -55,7 +53,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.validation.ValidationModel;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
@@ -65,8 +62,11 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.action.EditionAction;
 import org.openflexo.view.listener.FlexoActionButton;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -74,23 +74,12 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author yourname
  */
-public class DREController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController, FlexoActionSource {
+
+public class DREController extends FlexoController implements SelectionManagingController, FlexoActionSource, ConsistencyCheckingController {
 
 	static final Logger logger = Logger.getLogger(DREController.class.getPackage().getName());
 
-	// ================================================
-	// ============= Instance variables ===============
-	// ================================================
-
-	// private DREMainPane _mainPane;
-
 	public final FlexoPerspective DRE_PERSPECTIVE = new DREPerspective(this);
-
-	protected DREMenuBar _DREMenuBar;
-
-	protected DREFrame _frame;
-
-	protected DREKeyEventListener _DREKeyEventListener;
 
 	private DRESelectionManager _selectionManager;
 
@@ -103,26 +92,18 @@ public class DREController extends FlexoController implements SelectionManagingC
 	/**
 	 * Default constructor
 	 */
-	public DREController(FlexoModule module) throws Exception {
-		super(module.getEditor(), module);
+	public DREController(FlexoModule module) {
+		super(module);
 		addToPerspectives(DRE_PERSPECTIVE);
 		setDefaultPespective(DRE_PERSPECTIVE);
-		_DREMenuBar = (DREMenuBar) createAndRegisterNewMenuBar();
-		_DREKeyEventListener = new DREKeyEventListener(this);
-		_frame = new DREFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _DREKeyEventListener, _DREMenuBar);
-		init(_frame, _DREKeyEventListener, _DREMenuBar);
-
 		// At this point the InspectorController is not yet loaded
 		_selectionManager = new DRESelectionManager(this);
-
 		_browser = new DREBrowser(this);
-
-		DocResourceManager.instance().setEditor(getEditor());
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer() {
-		return new DREControllerActionInitializer(this);
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new DREControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -135,6 +116,16 @@ public class DREController extends FlexoController implements SelectionManagingC
 		return new DREMenuBar(this);
 	}
 
+	@Override
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new DREKeyEventListener(this);
+	}
+
+	@Override
+	protected FlexoMainPane createMainPane() {
+		return new DREMainPane(this);
+	}
+
 	/**
 	 * Init inspectors
 	 */
@@ -142,22 +133,6 @@ public class DREController extends FlexoController implements SelectionManagingC
 	public void initInspectors() {
 		super.initInspectors();
 		_selectionManager.addObserver(getSharedInspectorController());
-	}
-
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
-	public DREFrame getMainFrame() {
-		return _frame;
-	}
-
-	public DREMenuBar getEditorMenuBar() {
-		return _DREMenuBar;
 	}
 
 	public void showBrowser() {
@@ -170,11 +145,6 @@ public class DREController extends FlexoController implements SelectionManagingC
 		if (getMainPane() != null) {
 			((DREMainPane) getMainPane()).hideBrowser();
 		}
-	}
-
-	@Override
-	protected FlexoMainPane createMainPane() {
-		return new DREMainPane(getEmptyPanel(), getMainFrame(), this);
 	}
 
 	protected AbstractDocItemView docItemView;
@@ -196,10 +166,6 @@ public class DREController extends FlexoController implements SelectionManagingC
 		return _browser;
 	}
 
-	public DREKeyEventListener getKeyEventListener() {
-		return _DREKeyEventListener;
-	}
-
 	private JButton _saveDocumentationCenterButton;
 	private JButton _generateHelpSetButton;
 	private JPanel _customActionPanel;
@@ -212,7 +178,7 @@ public class DREController extends FlexoController implements SelectionManagingC
 	public JComponent getAdditionalActionPanel() {
 		if (_customActionPanel == null) {
 			_customActionPanel = new JPanel(new FlowLayout());
-			_generateHelpSetButton = new FlexoActionButton(GenerateHelpSet.actionType, this, getEditor());
+			_generateHelpSetButton = new FlexoActionButton(GenerateHelpSet.actionType, this, this);
 			_generateHelpSetButton.setText(FlexoLocalization.localizedForKey("generate", _generateHelpSetButton));
 			_customActionPanel.add(_generateHelpSetButton);
 			_customActionPanel.add(getSaveDocumentationCenterButton());
@@ -223,7 +189,8 @@ public class DREController extends FlexoController implements SelectionManagingC
 	protected class SaveButton extends JButton implements GraphicalFlexoObserver {
 		protected SaveButton() {
 			super();
-			setAction(SaveDocumentationCenter.actionType);
+			setAction(new EditionAction<SaveDocumentationCenter, DRMObject, DRMObject>(SaveDocumentationCenter.actionType,
+					DREController.this));
 			setText(FlexoLocalization.localizedForKey("save", this));
 			getDocResourceManager().getDocResourceCenter().addObserver(this);
 		}
@@ -263,19 +230,6 @@ public class DREController extends FlexoController implements SelectionManagingC
 		return _selectionManager;
 	}
 
-	/**
-	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
-	 * is not the current displayed view
-	 * 
-	 * @param object
-	 *            : the object to focus on
-	 */
-	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
-		// TODO: Implements this
-		setCurrentEditedObjectAsModuleView(object);
-	}
-
 	@Override
 	public String getWindowTitleforObject(FlexoModelObject object) {
 		// Overriden to improve performance !!!!
@@ -288,16 +242,6 @@ public class DREController extends FlexoController implements SelectionManagingC
 			return ((DocItemFolder) object).getIdentifier();
 		}
 		return null;
-	}
-
-	// ================================================
-	// ============ Exception management ==============
-	// ================================================
-
-	@Override
-	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
-		// TODO: Handles here exceptions that may be thrown through the inspector
-		return super.handleException(inspectable, propertyName, value, exception);
 	}
 
 	// ================================================

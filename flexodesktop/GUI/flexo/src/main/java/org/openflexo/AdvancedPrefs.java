@@ -296,7 +296,7 @@ public class AdvancedPrefs extends ContextPreferences {
 		return answer;
 	}
 
-	public static FlexoPreferences getPreferences() {
+	public static AdvancedPrefs getPreferences() {
 		return preferences(ADVANCED_PREFERENCES);
 	}
 

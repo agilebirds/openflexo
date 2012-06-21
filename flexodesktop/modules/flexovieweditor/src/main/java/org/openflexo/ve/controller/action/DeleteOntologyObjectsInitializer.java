@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteOntologyObjects> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteOntologyObjects>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
+			public boolean run(EventObject e, DeleteOntologyObjects action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
@@ -65,7 +65,7 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteOntologyObjects> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteOntologyObjects>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
+			public boolean run(EventObject e, DeleteOntologyObjects action) {
 				if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject() != null
 						&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();

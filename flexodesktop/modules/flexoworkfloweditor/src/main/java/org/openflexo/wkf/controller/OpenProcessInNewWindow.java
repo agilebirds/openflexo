@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -49,12 +49,12 @@ public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindo
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
 			return !object.isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
 			return (object != null);
 		}
 
@@ -71,7 +71,7 @@ public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindo
 	public static void initWithController(final WKFController controller) {
 		controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<OpenProcessInNewWindow>() {
 			@Override
-			public boolean run(ActionEvent e, OpenProcessInNewWindow anAction) {
+			public boolean run(EventObject e, OpenProcessInNewWindow anAction) {
 				if (anAction.getFocusedObject() == null) {
 					anAction.setFocusedObject(controller.getCurrentFlexoProcess());
 				}
@@ -81,7 +81,7 @@ public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindo
 
 		controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<OpenProcessInNewWindow>() {
 			@Override
-			public boolean run(ActionEvent e, final OpenProcessInNewWindow anAction) {
+			public boolean run(EventObject e, final OpenProcessInNewWindow anAction) {
 				ExternalProcessViewWindow window = new ExternalProcessViewWindow(controller, anAction.getFocusedObject());
 				window.setVisible(true);
 				return true;

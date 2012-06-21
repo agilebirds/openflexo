@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,7 +51,7 @@ public class AddEditionPatternInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddEditionPattern> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, AddEditionPattern action) {
+			public boolean run(EventObject e, AddEditionPattern action) {
 				action.setNewEditionPatternName(FlexoController.askForString(FlexoLocalization
 						.localizedForKey("name_for_new_edition_pattern")));
 				return (action.getNewEditionPatternName() != null);
@@ -63,7 +63,7 @@ public class AddEditionPatternInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddEditionPattern> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, AddEditionPattern action) {
+			public boolean run(EventObject e, AddEditionPattern action) {
 				((VPMController) getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
 				return true;
 			}

@@ -30,13 +30,14 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Enumeration;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,6 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.ch.FCH;
@@ -67,8 +67,6 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
-import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Abstract main frame used in the context of an application module
@@ -76,7 +74,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * @author sguerin
  */
 
-public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserver, FocusListener, FlexoActionSource {
+public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, FocusListener, FlexoActionSource, PropertyChangeListener {
 
 	private final class FlexoModuleWindowListener extends WindowAdapter {
 
@@ -96,7 +94,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 		}
 
 		private void activateModuleIfPossible(WindowEvent e) {
-			if (!(e.getOppositeWindow() instanceof ProgressWindow) && getModuleLoader().isLoaded(_module.getModule())) {
+			if (!(e.getOppositeWindow() instanceof ProgressWindow) && getModuleLoader().isLoaded(getModule().getModule())) {
 				switchToModule();
 			}
 		}
@@ -109,17 +107,11 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 	static final Logger logger = Logger.getLogger(FlexoFrame.class.getPackage().getName());
 
-	protected FlexoModule _module;
-
 	private FlexoController _controller;
 
-	private FlexoMenuBar _menuBar;
+	private List<FlexoRelativeWindow> _relativeWindows;
 
-	private FlexoKeyEventListener _keyEventListener;
-
-	private Vector<FlexoRelativeWindow> _relativeWindows;
-
-	private Vector<FlexoRelativeWindow> _displayedRelativeWindows;
+	private List<FlexoRelativeWindow> _displayedRelativeWindows;
 
 	private ComponentListener windowResizeListener;
 
@@ -158,9 +150,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 	private static FlexoFrame getDefaultFrame() {
 		if (defaultFrame == null) {
-			defaultFrame = new FlexoFrame() {
-
-			};
+			defaultFrame = new FlexoFrame();
 			defaultFrame.setUndecorated(true);
 			defaultFrame.pack();
 			defaultFrame.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
@@ -200,13 +190,14 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 		setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
 	}
 
-	public FlexoFrame(String title, FlexoController controller, FlexoKeyEventListener keyEventListener, FlexoMenuBar menuBar) {
-		super(title);
+	public FlexoFrame(FlexoController controller) {
+		super();
+		_controller = controller;
+		_relativeWindows = new Vector<FlexoRelativeWindow>();
+		_displayedRelativeWindows = new Vector<FlexoRelativeWindow>();
+		_controller.getPropertyChangeSupport().addPropertyChangeListener(FlexoController.EDITOR, this);
 		if (defaultFrame != null) {
 			disposeDefaultFrameWhenPossible();
-		}
-		if (controller.getProject() != null) {
-			controller.getProject().addObserver(this);
 		}
 		if (ToolBox.getPLATFORM() != ToolBox.WINDOWS) {
 			setIconImage(controller.getModule().getModule().getBigIcon().getImage());
@@ -214,26 +205,15 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
 		}
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		setBackground(ColorCst.GUI_BACK_COLOR);
-		_controller = controller;
-		_keyEventListener = keyEventListener;
-		_menuBar = menuBar;
-		setJMenuBar(_menuBar);
 		setResizable(true);
 		setFocusable(true);
-		_relativeWindows = new Vector<FlexoRelativeWindow>();
-		_displayedRelativeWindows = new Vector<FlexoRelativeWindow>();
-
-		if (controller.getProject() != null) {
-			getRootPane().putClientProperty(WINDOW_MODIFIED, ProjectLoader.someResourcesNeedsSaving(getController().getProject()));
-		}
 
 		/**
 		 * Listeners
 		 */
 		addFocusListener(this);
-		addKeyListener(keyEventListener);
 		addWindowListener(windowListener = new FlexoModuleWindowListener());
+		/*
 		addMouseListener(mouseListener = new MouseAdapter() {
 
 			@Override
@@ -242,11 +222,16 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			}
 
 		});
+		*/
+	}
+
+	public FlexoModule getModule() {
+		return getController().getModule();
 	}
 
 	protected void switchToModule() {
 		try {
-			getModuleLoader().switchToModule(_module.getModule());
+			getModuleLoader().switchToModule(getModule().getModule());
 		} catch (ModuleLoadingException e1) {
 			e1.printStackTrace();
 		}
@@ -261,18 +246,6 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	 */
 	public FlexoController getController() {
 		return _controller;
-	}
-
-	public FlexoModule getModule() {
-		return _module;
-	}
-
-	public void setModule(FlexoModule module) {
-		_module = module;
-	}
-
-	public FlexoKeyEventListener getKeyEventListener() {
-		return _keyEventListener;
 	}
 
 	public String getLocalizedName() {
@@ -298,22 +271,19 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	}
 
 	public void disposeAll() {
-		for (Enumeration<FlexoRelativeWindow> e = new Vector<FlexoRelativeWindow>(_relativeWindows).elements(); e.hasMoreElements();) {
-			FlexoRelativeWindow next = e.nextElement();
+		for (FlexoRelativeWindow next : new ArrayList<FlexoRelativeWindow>(_relativeWindows)) {
 			next.dispose();
 		}
 		_relativeWindows.clear();
 		if (_controller != null) {
-			if (_controller.getProject() != null) {
-				_controller.getProject().deleteObserver(this);
+			if (_controller.getKeyEventListener() != null) {
+				removeKeyListener(_controller.getKeyEventListener());
 			}
 			_controller = null;
 		}
-		if (_keyEventListener != null) {
-			removeKeyListener(_keyEventListener);
-		}
 		if (windowListener != null) {
 			removeWindowListener(windowListener);
+			windowListener = null;
 		}
 		if (mouseListener != null) {
 			removeMouseListener(mouseListener);
@@ -330,10 +300,6 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			ProgressWindow.hideProgressWindow();
 		}
 		dispose();
-		_keyEventListener = null;
-		windowListener = null;
-		_menuBar = null;
-		_module = null;
 	}
 
 	public void addToDisplayedRelativeWindows(FlexoRelativeWindow aRelativeWindow) {
@@ -362,6 +328,9 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			observable.deleteObserver(this);
 			return;
 		}
+		if (getController().getProject() == null) {
+			return;
+		}
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -376,15 +345,22 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 		} else if ("projectDirectory".equals(dataModification.propertyName())) {
 			updateTitle();
 		}
-		if (getController().getProject() == null) {
-			return;
-		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Update in " + getClass().getName() + " getController().getProject().getUnsavedStorageResources().size()="
-					+ getController().getProject().getUnsavedStorageResources(false).size());
-		}
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS && dataModification instanceof ResourceStatusModification) {
 			getRootPane().putClientProperty(WINDOW_MODIFIED, ProjectLoader.someResourcesNeedsSaving(getController().getProject()));
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(FlexoController.EDITOR)) {
+			FlexoEditor old = (FlexoEditor) evt.getOldValue();
+			FlexoEditor newValue = (FlexoEditor) evt.getNewValue();
+			if (old != null && old.getProject() != null) {
+				old.getProject().deleteObserver(this);
+			}
+			if (newValue != null && newValue.getProject() != null) {
+				newValue.getProject().addObserver(this);
+			}
 		}
 	}
 
@@ -504,7 +480,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 		return getController().getWindowTitleforObject(getController().getCurrentModuleView().getRepresentedObject());
 	}
 
-	public Vector<FlexoRelativeWindow> getRelativeWindows() {
+	public List<FlexoRelativeWindow> getRelativeWindows() {
 		return _relativeWindows;
 	}
 

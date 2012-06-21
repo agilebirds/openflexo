@@ -22,14 +22,17 @@ package org.openflexo.components.browser.view;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.dnd.Autoscroll;
 import java.awt.dnd.DnDConstants;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -41,8 +44,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -87,6 +91,46 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	static final Logger logger = Logger.getLogger(BrowserView.class.getPackage().getName());
 
 	protected static final Point noOffset = new Point(0, 0);
+
+	protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener {
+		protected ViewModeButton(ImageIcon icon, String unlocalizedDescription) {
+			super(icon);
+			setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+			addMouseListener(this);
+			addActionListener(this);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			setBorder(BorderFactory.createEtchedBorder());
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setFilters();
+			getBrowser().update();
+		}
+
+		public abstract void setFilters();
+	}
 
 	// ==========================================================================
 	// ============================= Variables
@@ -133,16 +177,13 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		ForceSelection
 	}
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+	private JPanel northPanel;
 
-	public BrowserView(ProjectBrowser browser, FlexoController controller, KeyListener kl) {
-		this(browser, controller, kl, SelectionPolicy.ParticipateToSelection);
+	public BrowserView(ProjectBrowser browser, FlexoController controller) {
+		this(browser, controller, SelectionPolicy.ParticipateToSelection);
 	}
 
-	public BrowserView(ProjectBrowser browser, FlexoController controller, KeyListener kl, SelectionPolicy selectionPolicy) {
+	public BrowserView(ProjectBrowser browser, FlexoController controller, SelectionPolicy selectionPolicy) {
 		super();
 		_browser = browser;
 		this.controller = controller;
@@ -150,6 +191,12 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		_browser.setLeadingView(this);
 		setLayout(new BorderLayout());
 		setBackground(Color.WHITE);
+		northPanel = new JPanel();
+		FlowLayout flowLayout = new FlowLayout();
+		northPanel.setBorder(BorderFactory.createEmptyBorder());
+		flowLayout.setHgap(2);
+		add(northPanel, BorderLayout.NORTH);
+
 		treeView = createTreeView(browser);
 
 		ds = new TreeDragSource(treeView, DnDConstants.ACTION_COPY_OR_MOVE);
@@ -228,8 +275,6 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		treeScrollPane.setAutoscrolls(true);
 		treeScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		treeScrollPane.getVerticalScrollBar().setBlockIncrement(50);
-		JLabel noSelection = new JLabel();
-		noSelection.setText(FlexoLocalization.localizedForKey("no_selection", noSelection));
 
 		controlPanel = new BrowserFooter(this);
 
@@ -239,8 +284,8 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		}
 		browser.addBrowserListener(this);
 
-		if (kl != null) {
-			treeView.addKeyListener(kl);
+		if (controller.getKeyEventListener() != null) {
+			treeView.addKeyListener(controller.getKeyEventListener());
 		}
 
 		setMinimumSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH, FlexoCst.MINIMUM_BROWSER_VIEW_HEIGHT));
@@ -248,6 +293,10 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		setBorder(BorderFactory.createEmptyBorder());
 
 		validate();
+	}
+
+	protected void addHeaderComponent(Component component) {
+		northPanel.add(component);
 	}
 
 	public FlexoController getController() {
@@ -879,7 +928,10 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	@Override
 	public FlexoEditor getEditor() {
-		return getController().getEditor();
+		if (getController() != null) {
+			return getController().getEditor();
+		}
+		return null;
 	}
 
 	@Override

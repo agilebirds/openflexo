@@ -46,12 +46,12 @@ public class GenerateComponentScreenshot extends FlexoAction<GenerateComponentSc
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
+		public boolean isVisibleForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
+		public boolean isEnabledForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
 			return object != null;
 		}
 

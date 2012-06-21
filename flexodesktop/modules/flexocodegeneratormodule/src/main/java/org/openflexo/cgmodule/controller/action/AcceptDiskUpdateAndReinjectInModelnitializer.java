@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -55,7 +55,7 @@ public class AcceptDiskUpdateAndReinjectInModelnitializer extends ActionInitiali
 	protected FlexoActionInitializer<AcceptDiskUpdateAndReinjectInModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<AcceptDiskUpdateAndReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, AcceptDiskUpdateAndReinjectInModel action) {
+			public boolean run(EventObject e, AcceptDiskUpdateAndReinjectInModel action) {
 				if (action.getFilesToAccept().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
@@ -85,7 +85,7 @@ public class AcceptDiskUpdateAndReinjectInModelnitializer extends ActionInitiali
 	protected FlexoActionFinalizer<AcceptDiskUpdateAndReinjectInModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AcceptDiskUpdateAndReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, AcceptDiskUpdateAndReinjectInModel action) {
+			public boolean run(EventObject e, AcceptDiskUpdateAndReinjectInModel action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

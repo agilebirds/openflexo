@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -61,7 +61,7 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SetPropertyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action) {
+			public boolean run(EventObject e, SetPropertyAction action) {
 				if (action.getFocusedObject() == null) {
 					return false;
 				}
@@ -124,7 +124,7 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SetPropertyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action) {
+			public boolean run(EventObject e, SetPropertyAction action) {
 				if (action.getFocusedObject() instanceof FlexoProcess && action.getKey().equals("parentProcess")) {
 					FlexoProcess movedProcess = (FlexoProcess) action.getFocusedObject();
 					((WKFController) getController()).getWorkflowBrowser().focusOn(movedProcess);

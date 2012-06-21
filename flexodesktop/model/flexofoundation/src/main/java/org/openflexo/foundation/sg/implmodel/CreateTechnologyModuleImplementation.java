@@ -53,12 +53,12 @@ public class CreateTechnologyModuleImplementation extends
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ImplementationModel object, Vector<ImplementationModel> globalSelection) {
+		public boolean isVisibleForSelection(ImplementationModel object, Vector<ImplementationModel> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ImplementationModel object, Vector<ImplementationModel> globalSelection) {
+		public boolean isEnabledForSelection(ImplementationModel object, Vector<ImplementationModel> globalSelection) {
 			return object != null;
 		}
 

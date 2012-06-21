@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -56,7 +56,7 @@ public class RefuseVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RefuseVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefuseVersion>() {
 			@Override
-			public boolean run(ActionEvent e, final RefuseVersion action) {
+			public boolean run(EventObject e, final RefuseVersion action) {
 				Vector<DocItemVersion> availableVersions = action.getVersionsThatCanBeApproved();
 
 				if (availableVersions.size() == 0) {
@@ -106,7 +106,7 @@ public class RefuseVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RefuseVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefuseVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RefuseVersion action) {
+			public boolean run(EventObject e, RefuseVersion action) {
 				if (getControllerActionInitializer().getDREController().getCurrentDisplayedObjectAsModuleView() == action.getDocItem()) {
 					AbstractDocItemView docItemView = (AbstractDocItemView) getControllerActionInitializer().getDREController()
 							.getCurrentModuleView();

@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.apache.tools.ant.BuildEvent;
@@ -132,7 +132,7 @@ public class GenerateWARInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<GenerateWAR> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateWAR>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateWAR action) {
+			public boolean run(EventObject e, GenerateWAR action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -184,7 +184,7 @@ public class GenerateWARInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GenerateWAR> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateWAR>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateWAR action) {
+			public boolean run(EventObject e, GenerateWAR action) {
 				listener.report();
 				action.getProjectGenerator().removeBuildListener(listener);
 				action.getProjectGenerator().stopHandleLogs();

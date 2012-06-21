@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class DisconnectCGRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DisconnectCGRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<DisconnectCGRepository>() {
 			@Override
-			public boolean run(ActionEvent e, DisconnectCGRepository action) {
+			public boolean run(EventObject e, DisconnectCGRepository action) {
 				return true;
 			}
 		};
@@ -55,7 +55,7 @@ public class DisconnectCGRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DisconnectCGRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DisconnectCGRepository>() {
 			@Override
-			public boolean run(ActionEvent e, DisconnectCGRepository action) {
+			public boolean run(EventObject e, DisconnectCGRepository action) {
 				return true;
 			}
 		};

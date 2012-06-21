@@ -19,8 +19,8 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class WKFCutInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WKFCut> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFCut>() {
 			@Override
-			public boolean run(ActionEvent e, WKFCut action) {
+			public boolean run(EventObject e, WKFCut action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
 			}
 		};
@@ -63,7 +63,7 @@ public class WKFCutInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WKFCut> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFCut>() {
 			@Override
-			public boolean run(ActionEvent e, WKFCut action) {
+			public boolean run(EventObject e, WKFCut action) {
 				getControllerActionInitializer().getWKFSelectionManager().performSelectionCut();
 				return true;
 			}

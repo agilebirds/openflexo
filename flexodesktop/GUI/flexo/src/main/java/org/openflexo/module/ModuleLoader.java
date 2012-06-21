@@ -277,6 +277,9 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
 	public void activateModule(FlexoModule m) {
 		if (activeModule != m) {
+			if (activeModule != null) {
+				activeModule.setAsInactive();
+			}
 			_modules.get(m).setAsActiveModule();
 			activeModule = m;
 		}

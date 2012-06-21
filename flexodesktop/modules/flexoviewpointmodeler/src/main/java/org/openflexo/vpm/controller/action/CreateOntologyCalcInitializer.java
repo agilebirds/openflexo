@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateViewPoint> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateViewPoint>() {
 			@Override
-			public boolean run(ActionEvent e, CreateViewPoint action) {
+			public boolean run(EventObject e, CreateViewPoint action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_VIEW_POINT_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
@@ -66,7 +66,7 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateViewPoint> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateViewPoint>() {
 			@Override
-			public boolean run(ActionEvent e, CreateViewPoint action) {
+			public boolean run(EventObject e, CreateViewPoint action) {
 				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
 				return true;
 			}

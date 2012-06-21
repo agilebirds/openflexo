@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
@@ -44,7 +44,7 @@ public class CEDSetPropertyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SetPropertyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action) {
+			public boolean run(EventObject e, SetPropertyAction action) {
 				return action.getFocusedObject() != null;
 			}
 		};
@@ -54,7 +54,7 @@ public class CEDSetPropertyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SetPropertyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action) {
+			public boolean run(EventObject e, SetPropertyAction action) {
 				return true;
 			}
 		};

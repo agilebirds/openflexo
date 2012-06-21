@@ -47,14 +47,14 @@ public class ImportJDKEntity extends FlexoAction<ImportJDKEntity, DMObject, DMOb
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return object != null
 					&& (object instanceof JDKRepository || object instanceof DMPackage
 							&& ((DMPackage) object).getRepository() instanceof JDKRepository);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

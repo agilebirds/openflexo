@@ -57,7 +57,7 @@ public class SelectFilesPopup extends MultipleObjectSelectorPopup {
 	public SelectFilesPopup(String label, String description, String unlocalizedValidateButtonLabel, Vector<AbstractCGFile> files,
 			FlexoProject project, GeneratorController controller) {
 		super(FlexoLocalization.localizedForKey("file_selection"), label, description, unlocalizedValidateButtonLabel,
-				new SelectFilesPopupBrowserConfiguration(files, project), project, controller.getFlexoFrame(), controller.getEditor());
+				new SelectFilesPopupBrowserConfiguration(files, project), project, controller.getFlexoFrame());
 		choicePanel.setSelectedObjects(getFileSet()._allObjects);
 	}
 
@@ -123,8 +123,7 @@ public class SelectFilesPopup extends MultipleObjectSelectorPopup {
 		}
 
 		private String getRelativePathFrom(CGSymbolicDirectory symbDir, FlexoProjectFile aFile) {
-			if ((aFile.getExternalRepository() == symbDir.getDirectory().getExternalRepository())
-					&& (aFile.getExternalRepository() != null)) {
+			if (aFile.getExternalRepository() == symbDir.getDirectory().getExternalRepository() && aFile.getExternalRepository() != null) {
 				String symbDirPath = symbDir.getDirectory().getRelativePath();
 				String searchedPath = aFile.getRelativePath();
 				if (searchedPath.indexOf(symbDirPath) > -1) {
@@ -150,7 +149,7 @@ public class SelectFilesPopup extends MultipleObjectSelectorPopup {
 					StringTokenizer st = new StringTokenizer(relativePath, "/");
 					CGPathElement parent = symbDirFolder;
 					String dirName;
-					while (st.hasMoreTokens() && ((dirName = st.nextToken()) != null) && (st.hasMoreTokens())) {
+					while (st.hasMoreTokens() && (dirName = st.nextToken()) != null && st.hasMoreTokens()) {
 						if (parent.getDirectoryNamed(dirName) == null) {
 							CGFolder newFolder = new CGFolder(file.getRepository(), dirName, parent);
 							parent.getSubFolders().add(newFolder);

@@ -46,12 +46,12 @@ public class CreateAssociation extends FlexoUndoableAction<CreateAssociation, WK
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFNode object, Vector<WKFNode> globalSelection) {
+		public boolean isVisibleForSelection(WKFNode object, Vector<WKFNode> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFNode object, Vector<WKFNode> globalSelection) {
+		public boolean isEnabledForSelection(WKFNode object, Vector<WKFNode> globalSelection) {
 			return true;
 		}
 

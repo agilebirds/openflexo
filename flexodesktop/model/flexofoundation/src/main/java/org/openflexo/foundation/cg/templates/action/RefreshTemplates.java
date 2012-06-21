@@ -45,12 +45,12 @@ public class RefreshTemplates extends FlexoAction<RefreshTemplates, CGTemplateOb
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateObject object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isVisibleForSelection(CGTemplateObject object, Vector<CGTemplateObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateObject object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isEnabledForSelection(CGTemplateObject object, Vector<CGTemplateObject> globalSelection) {
 			return true;
 		}
 

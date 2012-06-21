@@ -62,7 +62,6 @@ public class IECellPositionWidget extends CustomInspectorWidget<String> {
 	public IECellPositionWidget(PropertyModel model, AbstractController controller) {
 		super(model, controller);
 		component = new JPanel(new BorderLayout());
-		component.setBackground(ColorCst.GUI_BACK_COLOR);
 		component.add(radioPanel = new RadioButtonMatrixPanel(), BorderLayout.WEST);
 		JPanel p = new JPanel();
 		p.setOpaque(false);
@@ -139,7 +138,6 @@ public class IECellPositionWidget extends CustomInspectorWidget<String> {
          */
 		protected RadioButtonMatrixPanel() {
 			super(new VerticalLayout(0, 0, 0));
-			setBackground(ColorCst.GUI_BACK_COLOR);
 			init();
 		}
 

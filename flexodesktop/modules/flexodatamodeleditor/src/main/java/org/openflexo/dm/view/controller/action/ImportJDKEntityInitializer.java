@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -53,7 +53,7 @@ public class ImportJDKEntityInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportJDKEntity> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportJDKEntity>() {
 			@Override
-			public boolean run(ActionEvent e, ImportJDKEntity action) {
+			public boolean run(EventObject e, ImportJDKEntity action) {
 				ParameterDefinition[] parameters = new ParameterDefinition[4];
 				String defaultPackageName = "";
 				if (action.getFocusedObject() instanceof DMPackage) {
@@ -91,7 +91,7 @@ public class ImportJDKEntityInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportJDKEntity> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportJDKEntity>() {
 			@Override
-			public boolean run(ActionEvent e, ImportJDKEntity action) {
+			public boolean run(EventObject e, ImportJDKEntity action) {
 				if (action.getNewEntity() == null) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("class_not_created"));
 				} else {

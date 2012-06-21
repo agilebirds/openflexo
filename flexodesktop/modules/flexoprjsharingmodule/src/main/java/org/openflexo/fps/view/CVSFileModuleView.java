@@ -92,7 +92,7 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 	}
 
 	private void updateView(boolean forceRebuild) {
-		if ((forceRebuild) || (cvsStatus == CVSStatus.Unknown) || (cvsStatus != _cvsFile.getStatus()) || (isEdited != _cvsFile.isEdited())) {
+		if (forceRebuild || cvsStatus == CVSStatus.Unknown || cvsStatus != _cvsFile.getStatus() || isEdited != _cvsFile.isEdited()) {
 			logger.fine("CVSFileModuleView :" + _cvsFile.getFileName() + " rebuild view for new status " + _cvsFile.getStatus());
 			rebuildView();
 			_header.update();
@@ -180,36 +180,36 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 
 			if (isEdited) {
 				FlexoActionButton saveAction = new FlexoActionButton(SaveCVSFile.actionType, "save", CVSFileModuleView.this,
-						_controller.getEditor());
+						getController());
 				FlexoActionButton revertToSavedAction = new FlexoActionButton(RevertToSavedCVSFile.actionType, "revert_to_saved",
-						CVSFileModuleView.this, _controller.getEditor());
+						CVSFileModuleView.this, getController());
 				actionButtons.add(saveAction);
 				actionButtons.add(revertToSavedAction);
 				controlPanel.add(saveAction);
 				controlPanel.add(revertToSavedAction);
 			} else {
 				FlexoActionButton editFileAction = new FlexoActionButton(EditCVSFile.actionType, "edit", CVSFileModuleView.this,
-						_controller.getEditor());
+						getController());
 				actionButtons.add(editFileAction);
 				controlPanel.add(editFileAction);
 
 				if (_cvsFile.getStatus().isConflicting()) {
 					FlexoActionButton markAsMergedFileAction = new FlexoActionButton(MarkAsMergedFiles.actionType, "mark_as_merged",
-							CVSFileModuleView.this, _controller.getEditor());
+							CVSFileModuleView.this, getController());
 					actionButtons.add(markAsMergedFileAction);
 					controlPanel.add(markAsMergedFileAction);
 				}
 
 				if (_cvsFile.getStatus().isLocallyModified() && !_cvsFile.getStatus().isConflicting()) {
 					FlexoActionButton commitFileAction = new FlexoActionButton(CommitFiles.actionType, "commit", CVSFileModuleView.this,
-							_controller.getEditor());
+							getController());
 					actionButtons.add(commitFileAction);
 					controlPanel.add(commitFileAction);
 				}
 
 				if (_cvsFile.getStatus().isRemotelyModified() && !_cvsFile.getStatus().isConflicting()) {
 					FlexoActionButton updateFileAction = new FlexoActionButton(UpdateFiles.actionType, "update", CVSFileModuleView.this,
-							_controller.getEditor());
+							getController());
 					actionButtons.add(updateFileAction);
 					controlPanel.add(updateFileAction);
 				}

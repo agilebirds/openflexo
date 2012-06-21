@@ -35,7 +35,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.openflexo.ColorCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersPanel;
 import org.openflexo.components.ProgressWindow;
@@ -166,7 +165,6 @@ public class AutoSaveService implements FlexoObserver {
 		north.add(label);
 		AskParametersPanel panel = new AskParametersPanel(project, parameters);
 		JPanel south = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		south.setBackground(ColorCst.GUI_BACK_COLOR);
 		JButton cancel = new JButton(FlexoLocalization.localizedForKey("cancel"));
 		cancel.addActionListener(new ActionListener() {
 			/**

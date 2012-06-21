@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
 import org.openflexo.fge.Drawing;
@@ -37,6 +38,7 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.ActivityGroup;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -61,7 +63,6 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.controller.WorkflowBrowser;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
@@ -89,9 +90,9 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 
 	private static final Logger logger = FlexoLogger.getLogger(WKFModule.class.getPackage().getName());
 
-	public WKFModule(InteractiveFlexoEditor projectEditor) throws Exception {
+	public WKFModule(ApplicationContext applicationContext) throws Exception {
 		// super(project, new WKFController(project));
-		super(projectEditor);
+		super(applicationContext);
 		setFlexoController(new WKFController(projectEditor, this));
 		getWKFController().loadRelativeWindows();
 		WKFPreferences.init(getWKFController());
@@ -406,10 +407,10 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	/**
 	 * Overrides getDefaultObjectToSelect
 	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
+	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
 	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
 		return getProject().getFlexoWorkflow().getRootProcess();
 	}
 

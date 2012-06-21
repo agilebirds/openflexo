@@ -45,7 +45,7 @@ public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> ex
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(MultipleFileGCAction.class.getPackage().getName());
 
-	public static abstract class MultipleFileGCActionType<A extends MultipleFileGCAction<?>> extends FlexoActionType<A, CGObject, CGObject> {
+	public static abstract class MultipleFileGCActionType<A extends MultipleFileGCAction<A>> extends FlexoActionType<A, CGObject, CGObject> {
 		protected MultipleFileGCActionType(String actionName, ActionMenu actionMenu, ActionGroup actionGroup, int actionCategory) {
 			super(actionName, actionMenu, actionGroup, actionCategory);
 		}
@@ -55,7 +55,7 @@ public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> ex
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			if (focusedObject instanceof AbstractCGFileVersion) {
 				return false;
 			}
@@ -69,7 +69,7 @@ public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> ex
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(focusedObject, globalSelection);
 			if (repository == null) {
 				return false;

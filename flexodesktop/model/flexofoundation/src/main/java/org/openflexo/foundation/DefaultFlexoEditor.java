@@ -23,25 +23,31 @@ import java.util.EventObject;
 import java.util.Vector;
 
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.action.FlexoUndoableAction;
+import org.openflexo.foundation.action.UndoManager;
 import org.openflexo.foundation.rm.DefaultFlexoResourceUpdateHandler;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 
 public class DefaultFlexoEditor implements FlexoEditor {
-	private FlexoProject _project;
+	private final FlexoProject _project;
 	private DefaultFlexoResourceUpdateHandler resourceUpdateHandler;
 
 	public DefaultFlexoEditor(FlexoProject project) {
 		_project = project;
+		if (_project != null) {
+			_project.addToEditors(this);
+		}
 		resourceUpdateHandler = new DefaultFlexoResourceUpdateHandler();
 	}
 
 	@Override
-	public FlexoProject getProject() {
+	public final FlexoProject getProject() {
 		return _project;
 	}
 
@@ -75,7 +81,6 @@ public class DefaultFlexoEditor implements FlexoEditor {
 
 	@Override
 	public boolean isInteractive() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -85,69 +90,92 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
+	public UndoManager getUndoManager() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
-		// TODO Auto-generated method stub
-		return null;
+		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
+		return performAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoActionType(
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
-		// TODO Auto-generated method stub
-		return null;
+		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
+		return performUndoAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoActionType(
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
-		// TODO Auto-generated method stub
-		return null;
+		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
+		return performRedoAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(A action) {
-		// TODO Auto-generated method stub
-		return null;
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(A action,
+			EventObject e) {
+		try {
+			return action.doActionInContext();
+		} catch (FlexoException e1) {
+			e1.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoAction(A action) {
-		// TODO Auto-generated method stub
-		return null;
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoAction(
+			A action, EventObject e) {
+		try {
+			return action.undoActionInContext();
+		} catch (FlexoException e1) {
+			e1.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoAction(A action) {
-		// TODO Auto-generated method stub
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoAction(
+			A action, EventObject e) {
+		try {
+			return action.redoActionInContext();
+		} catch (FlexoException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> KeyStroke getKeyStrokeFor(
+			FlexoActionType<A, T1, T2> action) {
 		return null;
 	}
 
 	@Override
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionEnabled(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionVisible(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getEnabledIconFor(
 			FlexoActionType<A, T1, T2> action) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getDisabledIconFor(
 			FlexoActionType<A, T1, T2> action) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

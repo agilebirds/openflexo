@@ -50,12 +50,12 @@ public class NavigationSchemeActionType extends FlexoActionType<NavigationScheme
 	}
 
 	@Override
-	protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+	public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 		return navigationScheme.evaluateCondition(editionPatternReference);
 	}
 
 	@Override
-	protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+	public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 		return true;
 	}
 

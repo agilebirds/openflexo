@@ -90,6 +90,7 @@ import org.openflexo.components.browser.ProjectBrowser.ObjectAddedToSelectionEve
 import org.openflexo.components.browser.ProjectBrowser.ObjectRemovedFromSelectionEvent;
 import org.openflexo.components.browser.ProjectBrowser.SelectionClearedEvent;
 import org.openflexo.components.browser.ProjectBrowserListener;
+import org.openflexo.components.tabular.model.AbstractColumn;
 import org.openflexo.components.tabular.model.HeightAdjustableColumn;
 import org.openflexo.components.tabular.model.RowHeightListener;
 import org.openflexo.foundation.FlexoModelObject;
@@ -155,7 +156,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 				col.setMaxWidth(treeTableModel.getDefaultColumnSize(i));
 				col.setResizable(false);
 			}
-			treeTableModel.columnAt(i).setModel(_modelAdapter);
+			((AbstractColumn<FlexoModelObject, FlexoModelObject>) treeTableModel.columnAt(i)).setModel(_modelAdapter);
 			if (treeTableModel.columnAt(i) instanceof TabularBrowserModel.TreeColumn) {
 				col.setCellRenderer(tree);
 				col.setCellEditor(new TreeTableCellEditor());

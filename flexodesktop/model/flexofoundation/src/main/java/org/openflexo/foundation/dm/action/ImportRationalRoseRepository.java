@@ -47,12 +47,12 @@ public class ImportRationalRoseRepository extends CreateDMRepository<ImportRatio
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 

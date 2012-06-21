@@ -24,7 +24,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
@@ -120,10 +119,6 @@ public abstract class FlexoExternalMain implements Runnable {
 			logger.info("Launching " + getName() + "...");
 		}
 		GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
 	}
 
 	@Override

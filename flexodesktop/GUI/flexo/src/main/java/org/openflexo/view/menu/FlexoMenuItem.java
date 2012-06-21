@@ -26,6 +26,8 @@ package org.openflexo.view.menu;
  * Created by benoit on Mar 12, 2004
  */
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -50,7 +52,7 @@ import org.openflexo.view.controller.action.EditionAction;
  * 
  * @author benoit
  */
-public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
+public class FlexoMenuItem extends JMenuItem implements FlexoActionSource, PropertyChangeListener {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoMenuItem.class.getPackage().getName());
 
@@ -145,4 +147,8 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 		}
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// Nothing is done by default
+	}
 }

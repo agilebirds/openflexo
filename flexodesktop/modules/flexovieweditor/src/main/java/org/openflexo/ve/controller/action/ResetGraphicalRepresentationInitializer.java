@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class ResetGraphicalRepresentationInitializer extends
 	protected FlexoActionInitializer<ResetGraphicalRepresentations> getDefaultInitializer() {
 		return new FlexoActionInitializer<ResetGraphicalRepresentations>() {
 			@Override
-			public boolean run(ActionEvent e, ResetGraphicalRepresentations action) {
+			public boolean run(EventObject e, ResetGraphicalRepresentations action) {
 				return FlexoController.confirm(FlexoLocalization
 						.localizedForKey("really_reset_all_graphical_representations_for_this_view_?"));
 			}
@@ -64,7 +64,7 @@ public class ResetGraphicalRepresentationInitializer extends
 	protected FlexoActionFinalizer<ResetGraphicalRepresentations> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ResetGraphicalRepresentations>() {
 			@Override
-			public boolean run(ActionEvent e, ResetGraphicalRepresentations action) {
+			public boolean run(EventObject e, ResetGraphicalRepresentations action) {
 				return true;
 			}
 		};

@@ -30,7 +30,7 @@ import org.openflexo.dm.view.controller.DMSelectionManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.DMRepositoryFolder;
-import org.openflexo.foundation.dm.action.CreateDMRepository;
+import org.openflexo.foundation.dm.action.CreateAnyDMRepository;
 import org.openflexo.foundation.dm.action.DMDelete;
 import org.openflexo.foundation.dm.action.UpdateDMRepository;
 
@@ -48,7 +48,7 @@ public class DMRepositoryFolderView extends DMView<DMRepositoryFolder> {
 	public DMRepositoryFolderView(DMRepositoryFolder repositoryFolder, DMController controller) {
 		super(repositoryFolder, controller, "folders_($localizedName)");
 
-		addAction(new TabularViewAction(CreateDMRepository.actionType, "add_repository", controller.getEditor()) {
+		addAction(new TabularViewAction(CreateAnyDMRepository.actionType, "add_repository", controller.getEditor()) {
 			@Override
 			protected Vector getGlobalSelection() {
 				return getViewSelection();
@@ -99,7 +99,7 @@ public class DMRepositoryFolderView extends DMView<DMRepositoryFolder> {
 	public DMRepository getSelectedDMRepository() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMRepository) {
 			return (DMRepository) selection.firstElement();
 		}
 		return null;

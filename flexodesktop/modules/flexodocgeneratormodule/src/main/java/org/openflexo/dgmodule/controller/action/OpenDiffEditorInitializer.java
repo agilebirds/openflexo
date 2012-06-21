@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -57,7 +57,7 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OpenDiffEditor> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenDiffEditor>() {
 			@Override
-			public boolean run(ActionEvent e, final OpenDiffEditor action) {
+			public boolean run(EventObject e, final OpenDiffEditor action) {
 				EnumDropDownParameter<ContentSourceType> leftSourceParam = new EnumDropDownParameter<ContentSourceType>("leftSource",
 						"left_source", null, ContentSourceType.values()) {
 					@Override
@@ -111,7 +111,7 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenDiffEditor> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenDiffEditor>() {
 			@Override
-			public boolean run(ActionEvent e, OpenDiffEditor action) {
+			public boolean run(EventObject e, OpenDiffEditor action) {
 				DGFileDiffEditorPopup popup = new DGFileDiffEditorPopup(action.getFocusedObject(), action.getLeftSource(),
 						action.getRightSource(), getControllerActionInitializer().getDGController());
 				popup.setVisible(true);

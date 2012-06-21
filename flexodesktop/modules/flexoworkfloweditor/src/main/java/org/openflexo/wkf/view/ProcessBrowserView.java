@@ -26,10 +26,6 @@ import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.external.ExternalIEModule;
-import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.controller.ProcessBrowser;
 import org.openflexo.wkf.controller.WKFController;
 
@@ -43,40 +39,13 @@ public class ProcessBrowserView extends BrowserView {
 
 	private static final Logger logger = Logger.getLogger(ProcessBrowserView.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected WKFController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public ProcessBrowserView(ProcessBrowser processBrowser, WKFController controller) {
-		super(processBrowser, controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(processBrowser, controller);
 		FCH.setHelpItem(this, "process-browser");
 	}
 
 	@Override
 	public void treeSingleClick(FlexoModelObject object) {
-		/*
-		 * FlexoProcess currentProcess = _controller.getCurrentFlexoProcess(); FlexoProcessView currentProcessView =
-		 * _controller.getCurrentFlexoProcessView();
-		 * 
-		 * if (object instanceof WKFObject) { FlexoProcess objectProcess = ((WKFObject)object).getProcess(); if (objectProcess ==
-		 * currentProcess) { // This is the current displayed process // I may select the view (if this view exists) if
-		 * (_controller.setSelectedObject((WKFObject)object)) { // I have selected the view, the inspector has already been set // I return.
-		 * return; } } else { // This is not the current displayed process, i continue } }
-		 */
-
-		// If this object is inspectable, inspect it.
-		/*
-		 * if (object instanceof InspectableObject) { _controller.setCurrentInspectedObject((InspectableObject) object); }
-		 */
 
 	}
 
@@ -85,23 +54,8 @@ public class ProcessBrowserView extends BrowserView {
 		if (object instanceof WKFObject) {
 			treeSingleClick(object);
 		} else if (object instanceof ComponentDefinition) {
-			ExternalIEModule ieModule = null;
-			try {
-				ieModule = getModuleLoader().getIEModule(object.getProject());
-			} catch (ModuleLoadingException e) {
-				FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
-				e.printStackTrace();
-			}
-			if (ieModule == null) {
-				return;
-			}
-			ieModule.focusOn();
-			ieModule.showScreenInterface(((ComponentDefinition) object).getDummyComponentInstance());
+			getEditor().focusOn(((ComponentDefinition) object).getDummyComponentInstance());
 		}
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
 	}
 
 }

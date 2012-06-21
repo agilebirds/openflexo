@@ -1,7 +1,7 @@
 package org.openflexo.wkf.controller.action;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -43,7 +43,7 @@ public abstract class AddToXRoleInitializer<A extends AddToXRole<A>> extends
 		return new FlexoActionInitializer<A>() {
 
 			@Override
-			public boolean run(ActionEvent e, A action) {
+			public boolean run(EventObject e, A action) {
 				String EXISTING = FlexoLocalization.localizedForKey("existing_role");
 				String NEW = FlexoLocalization.localizedForKey("new_role");
 

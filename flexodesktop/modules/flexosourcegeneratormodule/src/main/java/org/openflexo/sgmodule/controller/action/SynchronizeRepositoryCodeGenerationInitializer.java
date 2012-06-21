@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.awt.event.KeyEvent;
 import java.util.logging.Logger;
 
@@ -60,7 +60,7 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 	protected FlexoActionInitializer<SynchronizeRepositoryCodeGeneration> getDefaultInitializer() {
 		return new FlexoActionInitializer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
-			public boolean run(ActionEvent e, SynchronizeRepositoryCodeGeneration action) {
+			public boolean run(EventObject e, SynchronizeRepositoryCodeGeneration action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -93,7 +93,7 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 	protected FlexoActionFinalizer<SynchronizeRepositoryCodeGeneration> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
-			public boolean run(ActionEvent e, SynchronizeRepositoryCodeGeneration action) {
+			public boolean run(EventObject e, SynchronizeRepositoryCodeGeneration action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 

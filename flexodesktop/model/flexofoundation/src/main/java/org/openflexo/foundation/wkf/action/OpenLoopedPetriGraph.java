@@ -49,12 +49,12 @@ public class OpenLoopedPetriGraph extends FlexoUndoableAction<OpenLoopedPetriGra
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

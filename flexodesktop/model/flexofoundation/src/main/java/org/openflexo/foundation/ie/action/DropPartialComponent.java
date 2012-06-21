@@ -63,12 +63,12 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return (object != null);
 		}
 

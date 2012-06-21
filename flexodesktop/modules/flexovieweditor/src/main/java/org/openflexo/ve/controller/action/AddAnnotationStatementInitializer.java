@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -57,7 +57,7 @@ public class AddAnnotationStatementInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddAnnotationStatement> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddAnnotationStatement>() {
 			@Override
-			public boolean run(ActionEvent e, final AddAnnotationStatement action) {
+			public boolean run(EventObject e, final AddAnnotationStatement action) {
 				TextFieldParameter nameParam = new TextFieldParameter("test", "name", "coucou");
 				OntologyObjectParameter ooParam = new OntologyObjectParameter("on", "on", action.getFocusedObject());
 				OntologyClassParameter classParam = new OntologyClassParameter("class", "class", null);
@@ -105,7 +105,7 @@ public class AddAnnotationStatementInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddAnnotationStatement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddAnnotationStatement>() {
 			@Override
-			public boolean run(ActionEvent e, AddAnnotationStatement action) {
+			public boolean run(EventObject e, AddAnnotationStatement action) {
 				// ((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewStatement());
 				return true;
 			}

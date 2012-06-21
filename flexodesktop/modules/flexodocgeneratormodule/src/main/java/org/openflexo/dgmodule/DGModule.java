@@ -21,16 +21,15 @@ package org.openflexo.dgmodule;
 
 import java.util.logging.Logger;
 
-import org.openflexo.application.FlexoApplication;
+import org.openflexo.ApplicationContext;
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Documentation generator module
@@ -43,10 +42,10 @@ public class DGModule extends FlexoModule {
 
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.DE, Inspectors.DG };
 
-	public DGModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
-		setFlexoController(new DGController(projectEditor, this));
-		DGPreferences.init(getDGController());
+	public DGModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		DGPreferences.init();
+		/*
 		if (getProject().getGeneratedDoc().getGeneratedRepositories().size() == 0) {
 			getDGController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedDoc());
 			getDGController().selectAndFocusObject(getProject().getGeneratedDoc());
@@ -54,6 +53,12 @@ public class DGModule extends FlexoModule {
 			getDGController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedDoc().getGeneratedRepositories().firstElement());
 			getDGController().selectAndFocusObject(getProject().getGeneratedDoc().getGeneratedRepositories().firstElement());
 		}
+		*/
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new DGController(this);
 	}
 
 	@Override
@@ -65,25 +70,19 @@ public class DGModule extends FlexoModule {
 		return (DGController) getFlexoController();
 	}
 
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
-	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return getProject().getGeneratedDoc();
+	public Module getModule() {
+		return Module.DG_MODULE;
 	}
 
 	/**
-	 * Overrides moduleWillClose
+	 * Overrides getDefaultObjectToSelect
 	 * 
-	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
+	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
 	 */
 	@Override
-	public void moduleWillClose() {
-		super.moduleWillClose();
-		getProject().getGeneratedDoc().setFactory(null);
-		DGPreferences.reset();
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getGeneratedDoc();
 	}
+
 }

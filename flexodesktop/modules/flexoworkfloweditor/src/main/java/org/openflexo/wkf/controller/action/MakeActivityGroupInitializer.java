@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -48,7 +48,7 @@ public class MakeActivityGroupInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MakeActivityGroup> getDefaultInitializer() {
 		return new FlexoActionInitializer<MakeActivityGroup>() {
 			@Override
-			public boolean run(ActionEvent e, MakeActivityGroup action) {
+			public boolean run(EventObject e, MakeActivityGroup action) {
 				action.setNewGroupName(FlexoLocalization.localizedForKey("activity_group"));
 				TextFieldParameter newGroupNameParam = new TextFieldParameter("newGroupNameParam", "group_name", action.getNewGroupName());
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
@@ -67,7 +67,7 @@ public class MakeActivityGroupInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MakeActivityGroup> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MakeActivityGroup>() {
 			@Override
-			public boolean run(ActionEvent e, MakeActivityGroup action) {
+			public boolean run(EventObject e, MakeActivityGroup action) {
 				if (getControllerActionInitializer().getWKFController().getSelectionManager() != null) {
 					getControllerActionInitializer().getWKFController().getSelectionManager()
 							.setSelectedObject(action.getNewActivityGroup());

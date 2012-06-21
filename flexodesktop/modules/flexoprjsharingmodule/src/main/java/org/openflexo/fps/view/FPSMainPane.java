@@ -31,7 +31,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 
 /**
  * Represents the main pane for this module
@@ -40,8 +39,8 @@ import org.openflexo.view.ModuleView;
  */
 public class FPSMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public FPSMainPane(ModuleView moduleView, FPSFrame mainFrame, FPSController controller) {
-		super(moduleView, mainFrame, controller, true, false);
+	public FPSMainPane(FPSController controller) {
+		super(controller, true, false);
 
 		setLeftView(new JSplitPane(JSplitPane.VERTICAL_SPLIT, new CVSRepositoryBrowserView(controller), new SharedProjectBrowserView(
 				controller)));

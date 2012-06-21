@@ -164,7 +164,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 			}
 		});
 		northPanel.add(chooseFileButton);
-		generateButton = new FlexoActionButton(SynchronizeRepositoryCodeGeneration.actionType, this, controller.getEditor());
+		generateButton = new FlexoActionButton(SynchronizeRepositoryCodeGeneration.actionType, this, controller);
 		generateButton.setIcon(DGIconLibrary.GENERATE_DOC_BUTTON);
 		generateButton.setDisabledIcon(null);
 		generateButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -181,7 +181,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		// }
 		// });
 		northPanel.add(generateButton);
-		generateAndWriteButton = new FlexoActionButton(GenerateAndWrite.actionType, this, controller.getEditor());
+		generateAndWriteButton = new FlexoActionButton(GenerateAndWrite.actionType, this, controller);
 		generateAndWriteButton.setIcon(DGIconLibrary.GENERATE_DOC_AND_WRITE_BUTTON);
 		generateAndWriteButton.setDisabledIcon(null);
 		generateAndWriteButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -223,25 +223,25 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		buttonPanel.add(chooseWarLocationButton);
 		switch (repository.getFormat()) {
 		case LATEX:
-			postBuildButton = new FlexoActionButton(GeneratePDF.actionType, this, controller.getEditor());
+			postBuildButton = new FlexoActionButton(GeneratePDF.actionType, this, controller);
 			postBuildButton.setIcon(DGIconLibrary.GENERATE_PDF);
 			postBuildButton.setText(FlexoLocalization.localizedForKey("generate_PDF", postBuildButton));
 			postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_PDF", postBuildButton));
 			break;
 		case DOCX:
-			postBuildButton = new FlexoActionButton(GenerateDocx.actionType, this, controller.getEditor());
+			postBuildButton = new FlexoActionButton(GenerateDocx.actionType, this, controller);
 			postBuildButton.setIcon(DGIconLibrary.GENERATE_DOCX);
 			postBuildButton.setText(FlexoLocalization.localizedForKey("generate_docx", postBuildButton));
 			postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_docx", postBuildButton));
 
-			postBuildButton2 = new FlexoActionButton(ReinjectDocx.actionType, this, controller.getEditor());
+			postBuildButton2 = new FlexoActionButton(ReinjectDocx.actionType, this, controller);
 			postBuildButton2.setIcon(DGIconLibrary.REINJECT_DOCX);
 			postBuildButton2.setText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
 			postBuildButton2.setToolTipText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
 
 			break;
 		case HTML:
-			postBuildButton = new FlexoActionButton(GenerateZip.actionType, this, controller.getEditor());
+			postBuildButton = new FlexoActionButton(GenerateZip.actionType, this, controller);
 			postBuildButton.setIcon(DGIconLibrary.GENERATE_ZIP);
 			postBuildButton.setText(FlexoLocalization.localizedForKey("generate_zip", postBuildButton));
 			postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_zip", postBuildButton));

@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,7 +57,7 @@ public class CreateDMEOModelInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDMEOModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEOModel>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMEOModel action) {
+			public boolean run(EventObject e, CreateDMEOModel action) {
 				return (CreatesNewEOModelDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
 						getControllerActionInitializer().getDMController().getFlexoFrame()) == CreatesNewEOModelDialog.VALIDATE);
 			}
@@ -68,7 +68,7 @@ public class CreateDMEOModelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDMEOModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMEOModel>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMEOModel action) {
+			public boolean run(EventObject e, CreateDMEOModel action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEOModel in DMEORepository");

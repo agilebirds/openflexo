@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DropSchemeAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<DropSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, DropSchemeAction action) {
+			public boolean run(EventObject e, DropSchemeAction action) {
 				return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
 
 			}
@@ -65,7 +65,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DropSchemeAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DropSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, DropSchemeAction action) {
+			public boolean run(EventObject e, DropSchemeAction action) {
 				/*	ViewShape shape = action.getPrimaryShape();
 					logger.info("border5 = " + ((ShapeGraphicalRepresentation<?>) shape.getGraphicalRepresentation()).getBorder());
 					if (shape.getParent() != action.getParent()) {

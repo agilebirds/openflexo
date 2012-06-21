@@ -29,7 +29,6 @@ import org.openflexo.components.browser.ontology.ViewDefinitionElement;
 import org.openflexo.components.browser.ontology.ViewFolderElement;
 import org.openflexo.components.browser.ontology.ViewLibraryElement;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
@@ -51,21 +50,8 @@ public class VEBrowserView extends BrowserView {
 
 	private static final Logger logger = Logger.getLogger(VEBrowserView.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected VEController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public VEBrowserView(VEBrowser browser, VEController controller, SelectionPolicy selectionPolicy) {
-		super(browser, controller.getKeyEventListener(), controller.getEditor(), selectionPolicy);
-		_controller = controller;
+		super(browser, controller, selectionPolicy);
 	}
 
 	@Override
@@ -79,19 +65,16 @@ public class VEBrowserView extends BrowserView {
 
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
-		if (_controller.getCurrentPerspective().hasModuleViewForObject(object)) {
+		if (getController().getCurrentPerspective().hasModuleViewForObject(object)) {
 			// Try to display object in view
-			_controller.selectAndFocusObject(object);
+			getController().selectAndFocusObject(object);
 		}
 	}
 
 	public class OETreeDropTarget extends TreeDropTarget {
 
-		private FlexoEditor editor;
-
 		public OETreeDropTarget(FlexoJTree tree, ProjectBrowser browser) {
 			super(tree, browser);
-			editor = tree.getEditor();
 		}
 
 		@Override
@@ -103,13 +86,13 @@ public class VEBrowserView extends BrowserView {
 					if (over == null || dragged == null) {
 						return false;
 					}
-					return (dragged.getFolder() != over);
+					return dragged.getFolder() != over;
 				} else if (targ instanceof ViewLibraryElement) {
 					ViewLibrary over = ((ViewLibraryElement) targ).getViewLibrary();
 					if (over == null || dragged == null) {
 						return false;
 					}
-					return (dragged.getFolder() != over.getRootFolder());
+					return dragged.getFolder() != over.getRootFolder();
 				}
 			} else if (source instanceof ViewFolderElement) {
 				ViewFolder dragged = ((ViewFolderElement) source).getFolder();
@@ -146,7 +129,7 @@ public class VEBrowserView extends BrowserView {
 					}
 					Vector<ViewDefinition> v = new Vector<ViewDefinition>();
 					v.add(dragged);
-					MoveView move = MoveView.actionType.makeNewAction(dragged, v, editor);
+					MoveView move = MoveView.actionType.makeNewAction(dragged, v, getEditor());
 					move.setFolder(folder);
 					move.doAction();
 					return move.hasActionExecutionSucceeded();
@@ -167,7 +150,7 @@ public class VEBrowserView extends BrowserView {
 					}
 					Vector<ViewFolder> v = new Vector<ViewFolder>();
 					v.add(dragged);
-					MoveViewFolder move = MoveViewFolder.actionType.makeNewAction(dragged, v, editor);
+					MoveViewFolder move = MoveViewFolder.actionType.makeNewAction(dragged, v, getEditor());
 					move.setFolder(folder);
 					move.doAction();
 					return move.hasActionExecutionSucceeded();

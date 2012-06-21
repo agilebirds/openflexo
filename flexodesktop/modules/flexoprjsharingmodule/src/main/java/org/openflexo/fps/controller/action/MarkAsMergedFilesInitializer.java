@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class MarkAsMergedFilesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MarkAsMergedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsMergedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsMergedFiles action) {
+			public boolean run(EventObject e, MarkAsMergedFiles action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class MarkAsMergedFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MarkAsMergedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MarkAsMergedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsMergedFiles action) {
+			public boolean run(EventObject e, MarkAsMergedFiles action) {
 				return true;
 			}
 		};

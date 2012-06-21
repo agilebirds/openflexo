@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -52,7 +52,7 @@ public class CreateNodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateNode> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateNode>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNode action) {
+			public boolean run(EventObject e, CreateNode action) {
 				if (!action.isNewNodeNameInitialized()) {
 					TextFieldParameter newNodeNameParam = new TextFieldParameter("newBeginNodeName", "new_node_name",
 							action.getNewNodeName());
@@ -75,7 +75,7 @@ public class CreateNodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateNode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateNode>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNode action) {
+			public boolean run(EventObject e, CreateNode action) {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getNewNode());
 				return true;
 			}
@@ -86,7 +86,7 @@ public class CreateNodeInitializer extends ActionInitializer {
 	protected FlexoActionRedoFinalizer<CreateNode> getDefaultRedoFinalizer() {
 		return new FlexoActionRedoFinalizer<CreateNode>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNode action) {
+			public boolean run(EventObject e, CreateNode action) {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getNewNode());
 				return true;
 			}

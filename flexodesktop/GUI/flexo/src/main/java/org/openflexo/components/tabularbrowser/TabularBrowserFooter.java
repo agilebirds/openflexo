@@ -40,7 +40,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
@@ -66,17 +65,14 @@ public class TabularBrowserFooter extends JPanel {
 		super();
 		_tabularBrowserView = tabularBrowserView;
 		setBorder(BorderFactory.createEmptyBorder());
-		setBackground(ColorCst.GUI_BACK_COLOR);
 		setLayout(new BorderLayout());
 		// setPreferredSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH,FlexoCst.MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT));
 		setPreferredSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH, 20));
 
 		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		plusMinusPanel.setBackground(ColorCst.GUI_BACK_COLOR);
 		plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
 
 		plusButton = new JButton(IconLibrary.BROWSER_PLUS_ICON);
-		plusButton.setBackground(ColorCst.GUI_BACK_COLOR);
 		plusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -115,7 +111,6 @@ public class TabularBrowserFooter extends JPanel {
 		// FCH.setHelpItem(plusButton,"plus");
 
 		minusButton = new JButton(IconLibrary.BROWSER_MINUS_ICON);
-		minusButton.setBackground(ColorCst.GUI_BACK_COLOR);
 		minusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -322,7 +317,11 @@ public class TabularBrowserFooter extends JPanel {
 		}
 		FlexoActionType<A, T1, T2> actionType = this.<A, T1, T2> getActionTypesWithAddType(getFocusedObject(),
 				(Vector<FlexoModelObject>) null).get(0);
-		getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) getGlobalSelection(), e);
+		if (getEditor() != null) {
+			getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) getGlobalSelection(), e);
+		} else if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("No editor available. Ignoring action " + actionType);
+		}
 	}
 
 	protected boolean hasMultiplePlusActions() {
@@ -362,9 +361,14 @@ public class TabularBrowserFooter extends JPanel {
 			logger.fine("Pressed on minus");
 		}
 		Vector globalSelection = buildGlobalSelection();
+
 		FlexoActionType<?, FlexoModelObject, FlexoModelObject> actionType = (FlexoActionType<?, FlexoModelObject, FlexoModelObject>) getActionTypesWithDeleteType(
 				getFocusedObject(), globalSelection).get(0);
-		getEditor().performActionType(actionType, getFocusedObject(), globalSelection, e);
+		if (getEditor() != null) {
+			getEditor().performActionType(actionType, getFocusedObject(), globalSelection, e);
+		} else if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("No editor available. Ignoring action " + actionType);
+		}
 	}
 
 	/*private boolean hasMultipleMinusActions()

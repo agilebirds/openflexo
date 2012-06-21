@@ -26,13 +26,11 @@ package org.openflexo.ie.view.palette;
  * Preferences - Java - Code Generation - Code and Comments
  */
 
-import java.awt.HeadlessException;
 import java.util.logging.Logger;
 
-import org.openflexo.ColorCst;
 import org.openflexo.ie.IECst;
-import org.openflexo.ie.view.IEFrame;
 import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.palette.FlexoPalette;
 import org.openflexo.view.palette.FlexoPaletteWindow;
@@ -52,13 +50,12 @@ public class IEPaletteWindow extends FlexoPaletteWindow {
 	 * @param mainFrame
 	 * @throws java.awt.HeadlessException
 	 */
-	public IEPaletteWindow(IEFrame mainFrame) throws HeadlessException {
+	public IEPaletteWindow(FlexoFrame mainFrame) {
 		super(mainFrame);
 
 		setLocation(IECst.IE_WINDOW_WIDTH + 2, 0);
 		setSize(IECst.DEFAULT_PALETTE_WIDTH + 50, IECst.DEFAULT_PALETTE_HEIGHT + 50);
 		setTitle(getLocalizedName());
-		setBackground(ColorCst.GUI_BACK_COLOR);
 	}
 
 	@Override
@@ -72,7 +69,7 @@ public class IEPaletteWindow extends FlexoPaletteWindow {
 	}
 
 	public void setCurrentCSSStyle(String css) {
-		(getPalette()).setCurrentCSSStyle(css);
+		getPalette().setCurrentCSSStyle(css);
 	}
 
 	@Override

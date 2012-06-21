@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -46,7 +46,7 @@ public class OpenFileInExplorerInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OpenFileInExplorer> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenFileInExplorer>() {
 			@Override
-			public boolean run(ActionEvent e, OpenFileInExplorer action) {
+			public boolean run(EventObject e, OpenFileInExplorer action) {
 				if (action.getFocusedObject() instanceof CGFile && ((CGFile) action.getFocusedObject()).getResource() != null) {
 					action.setFileToOpen(((CGFile) action.getFocusedObject()).getResource().getFile());
 					return true;
@@ -61,7 +61,7 @@ public class OpenFileInExplorerInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenFileInExplorer> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenFileInExplorer>() {
 			@Override
-			public boolean run(ActionEvent e, OpenFileInExplorer action) {
+			public boolean run(EventObject e, OpenFileInExplorer action) {
 				return true;
 			}
 		};

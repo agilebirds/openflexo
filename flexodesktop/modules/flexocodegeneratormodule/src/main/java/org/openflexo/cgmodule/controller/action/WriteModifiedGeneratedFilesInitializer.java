@@ -19,8 +19,8 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -42,7 +42,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 
 public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 
@@ -66,18 +65,18 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WriteModifiedGeneratedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<WriteModifiedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action) {
+			public boolean run(EventObject e, WriteModifiedGeneratedFiles action) {
 				if (action.getFilesToWrite().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if ((action.getFilesToWrite().size() > 1 || (!(action.getFocusedObject() instanceof CGFile)))
-						&& !(e != null && e.getActionCommand() != null && e.getActionCommand().equals(FlexoKeyEventListener.KEY_PRESSED))) {
+				} else if ((action.getFilesToWrite().size() > 1 || !(action.getFocusedObject() instanceof CGFile))
+						&& !(e instanceof KeyEvent)) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("write_modified_files_to_disk"),
 							FlexoLocalization.localizedForKey("write_modified_files_to_disk_description"), "write_to_disk",
 							action.getFilesToWrite(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getGeneratorController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
 						action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
 					} else {
 						return false;
@@ -97,7 +96,7 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WriteModifiedGeneratedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WriteModifiedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action) {
+			public boolean run(EventObject e, WriteModifiedGeneratedFiles action) {
 				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
 				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();

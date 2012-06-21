@@ -57,36 +57,36 @@ public class FPSControllerActionInitializer extends ControllerActionInitializer 
 	public void initializeActions() {
 		super.initializeActions();
 
-		new FPSSetPropertyInitializer(this).init();
+		new FPSSetPropertyInitializer(this);
 
 		// CVS repositories actions
-		new AddCVSRepositoryInitializer(this).init();
-		new RemoveCVSRepositoryInitializer(this).init();
+		new AddCVSRepositoryInitializer(this);
+		new RemoveCVSRepositoryInitializer(this);
 
 		// Refreshing
-		new CVSRefreshInitializer(this).init();
+		new CVSRefreshInitializer(this);
 
 		// Obtaining projects
-		new CheckoutProjectInitializer(this).init();
-		new OpenSharedProjectInitializer(this).init();
-		new ShareProjectInitializer(this).init();
+		new CheckoutProjectInitializer(this);
+		new OpenSharedProjectInitializer(this);
+		new ShareProjectInitializer(this);
 
 		// CVS operations
-		new SynchronizeWithRepositoryInitializer(this).init();
-		new RefreshProjectInitializer(this).init();
-		new CommitFilesInitializer(this).init();
-		new UpdateFilesInitializer(this).init();
-		new MarkAsMergedFilesInitializer(this).init();
-		new OverrideAndUpdateFilesInitializer(this).init();
-		new OverrideAndCommitFilesInitializer(this).init();
+		new SynchronizeWithRepositoryInitializer(this);
+		new RefreshProjectInitializer(this);
+		new CommitFilesInitializer(this);
+		new UpdateFilesInitializer(this);
+		new MarkAsMergedFilesInitializer(this);
+		new OverrideAndUpdateFilesInitializer(this);
+		new OverrideAndCommitFilesInitializer(this);
 
 		// Edit operations
-		new EditCVSFileInitializer(this).init();
-		new SaveCVSFileInitializer(this).init();
-		new RevertToSavedCVSFileInitializer(this).init();
+		new EditCVSFileInitializer(this);
+		new SaveCVSFileInitializer(this);
+		new RevertToSavedCVSFileInitializer(this);
 
 		// CVSHistory
-		new RetrieveCVSHistoryInitializer(this).init();
+		new RetrieveCVSHistoryInitializer(this);
 
 	}
 

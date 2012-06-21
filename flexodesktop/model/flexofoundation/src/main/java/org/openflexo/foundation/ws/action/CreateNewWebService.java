@@ -67,12 +67,12 @@ public class CreateNewWebService extends FlexoAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return KnownDataImporter.WSDL_IMPORTER.isAvailable();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 

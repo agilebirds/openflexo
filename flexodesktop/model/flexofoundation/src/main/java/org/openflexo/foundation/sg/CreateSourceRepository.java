@@ -52,12 +52,12 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return ((object != null) && (object.getGeneratedCode() instanceof GeneratedSources));
 		}
 

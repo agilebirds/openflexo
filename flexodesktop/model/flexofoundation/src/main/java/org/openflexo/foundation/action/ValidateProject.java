@@ -56,12 +56,12 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
@@ -117,7 +117,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 	private ValidationReport dmValidationReport = null;
 
 	public boolean isProjectValid() {
-		return (getErrorsNb() == 0);
+		return getErrorsNb() == 0;
 	}
 
 	public int getErrorsNb() {

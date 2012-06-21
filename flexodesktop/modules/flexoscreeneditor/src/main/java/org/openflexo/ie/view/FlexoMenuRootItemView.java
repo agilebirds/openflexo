@@ -43,7 +43,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import org.openflexo.components.widget.ImageFileSelector;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.ie.action.ImportImage;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
@@ -174,13 +174,9 @@ public class FlexoMenuRootItemView extends FlexoMenuItemView {
 
 				@Override
 				public void importImage(ActionEvent e) {
-					ImportImage importImage = ImportImage.actionType.makeNewAction(_model.getProject(), null,
-							FlexoMenuRootItemView.this.controller.getEditor());
-					try {
-						importImage.doAction(e);
-					} catch (FlexoException e1) {
-						e1.printStackTrace();
-					}
+					FlexoEditor editor = FlexoMenuRootItemView.this.controller.getEditor();
+					ImportImage importImage = ImportImage.actionType.makeNewAction(_model.getProject(), null, editor);
+					editor.performAction(importImage, e);
 				}
 
 			}, logo, true) {
@@ -202,7 +198,7 @@ public class FlexoMenuRootItemView extends FlexoMenuItemView {
 				public void actionPerformed(ActionEvent e) {
 
 					String s = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_new_button_name"));
-					if ((s == null) || s.trim().equals("")) {
+					if (s == null || s.trim().equals("")) {
 						return;
 					} else {
 						Object[] possibilities = new String[FlexoMenuRootItemView.this._model.getProject().getFlexoComponentLibrary()
@@ -223,14 +219,14 @@ public class FlexoMenuRootItemView extends FlexoMenuItemView {
 							da = " ";
 						}
 						String b = _model.getNavigationMenu().getButtons();
-						if ((b == null) || b.trim().equals("")) {
+						if (b == null || b.trim().equals("")) {
 							b = s;
 						} else {
 							b += ";" + s;
 						}
 						_model.getNavigationMenu().setButtons(b);
 						b = _model.getNavigationMenu().getActions();
-						if ((b == null) || b.trim().equals("")) {
+						if (b == null || b.trim().equals("")) {
 							b = da;
 						} else {
 							b += ";" + da;
@@ -302,7 +298,7 @@ public class FlexoMenuRootItemView extends FlexoMenuItemView {
 		 */
 		protected ImageFile updateLogo() {
 			ImageFile logo = _model.getNavigationMenu().getLogo();
-			if ((logo == null) || (logo.getImageFile() == null)) {
+			if (logo == null || logo.getImageFile() == null) {
 				image.setIcon(SEIconLibrary.NO_IMAGE);
 			} else {
 				ImageIcon icon = new ImageIcon(logo.getImageFile().getAbsolutePath());

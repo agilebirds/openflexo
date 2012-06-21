@@ -54,12 +54,12 @@ public class SuroundWithConditional extends IEOperatorAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
 			return isSelectionValid(sel(object, globalSelection));
 		}
 

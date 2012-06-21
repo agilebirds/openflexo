@@ -33,12 +33,12 @@ public class ShowRoles extends FlexoGUIAction<ShowRoles, FlexoProcess, FlexoProc
 			"show_roles", FlexoActionType.defaultGroup) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
 			return true;
 		}
 

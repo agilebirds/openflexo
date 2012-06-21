@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -58,7 +58,7 @@ public class CreateImplementationModelInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateImplementationModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateImplementationModel>() {
 			@Override
-			public boolean run(ActionEvent e, CreateImplementationModel action) {
+			public boolean run(EventObject e, CreateImplementationModel action) {
 				if (action.skipDialog) {
 					return true;
 				}
@@ -73,7 +73,7 @@ public class CreateImplementationModelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateImplementationModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateImplementationModel>() {
 			@Override
-			public boolean run(ActionEvent e, CreateImplementationModel action) {
+			public boolean run(EventObject e, CreateImplementationModel action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewImplementationModelDefinition());
 				return true;
 			}

@@ -25,7 +25,7 @@ import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public enum ActionType implements XMLSerializable, StringConvertable {
+public enum ActionType implements XMLSerializable, StringConvertable<ActionType> {
 
 	SUBMITTED("SUBMITTED"), APPROVED("APPROVED"), REFUSED("REFUSED"), REVIEWED("REVIEWED");
 
@@ -44,12 +44,12 @@ public enum ActionType implements XMLSerializable, StringConvertable {
 	}
 
 	@Override
-	public Converter getConverter() {
+	public Converter<ActionType> getConverter() {
 		return actionTypeConverter;
 	}
 
-	public static StringEncoder.EnumerationConverter actionTypeConverter = new StringEncoder.EnumerationConverter(ActionType.class,
-			"getName");
+	public static final StringEncoder.EnumerationConverter<ActionType> actionTypeConverter = new StringEncoder.EnumerationConverter<ActionType>(
+			ActionType.class, "getName");
 
 	/*
 	

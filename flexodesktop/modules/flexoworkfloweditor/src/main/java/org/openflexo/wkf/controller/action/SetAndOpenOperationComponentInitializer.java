@@ -19,11 +19,8 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
-import java.util.logging.Level;
+import java.util.EventObject;
 import java.util.logging.Logger;
-
-import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -35,11 +32,6 @@ import org.openflexo.foundation.wkf.action.SetAndOpenOperationComponent;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSuccessfully;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.external.ExternalIEModule;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -63,7 +55,7 @@ public class SetAndOpenOperationComponentInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SetAndOpenOperationComponent> getDefaultInitializer() {
 		return new FlexoActionInitializer<SetAndOpenOperationComponent>() {
 			@Override
-			public boolean run(ActionEvent e, SetAndOpenOperationComponent action) {
+			public boolean run(EventObject e, SetAndOpenOperationComponent action) {
 				if (action.getNewComponentName() != null) {
 					return true;
 				}
@@ -120,27 +112,13 @@ public class SetAndOpenOperationComponentInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SetAndOpenOperationComponent> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SetAndOpenOperationComponent>() {
 			@Override
-			public boolean run(ActionEvent e, SetAndOpenOperationComponent action) {
+			public boolean run(EventObject e, SetAndOpenOperationComponent action) {
 				OperationNode operationNode = action.getFocusedObject();
 				if (operationNode.getComponentInstance() == null) {
 					return false;
 				}
 				if (operationNode.getComponentInstance().getComponentDefinition() != null && action.hasCreatedComponent()) {
-					ExternalIEModule ieModule = null;
-					try {
-						ieModule = getModuleLoader().getIEModule(getProject());
-					} catch (ModuleLoadingException e1) {
-						FlexoController.notify("Cannot load Screen Editor. Exception : " + e1.getMessage());
-						e1.printStackTrace();
-					}
-					if (ieModule == null) {
-						return false;
-					}
-					ieModule.focusOn();
-					ieModule.showScreenInterface(operationNode.getComponentInstance());
-					if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-						SwingUtilities.invokeLater(new SwitchToIEJob());
-					}
+					getEditor().focusOn(operationNode.getComponentInstance());
 				}
 				return true;
 			}
@@ -165,27 +143,5 @@ public class SetAndOpenOperationComponentInitializer extends ActionInitializer {
 				return false;
 			}
 		};
-	}
-
-	private class SwitchToIEJob implements Runnable {
-
-		SwitchToIEJob() {
-		}
-
-		@Override
-		public void run() {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Switching to IE");
-			}
-			try {
-				getModuleLoader().switchToModule(Module.IE_MODULE, getController().getProject());
-			} catch (ModuleLoadingException e) {
-				FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
-				e.printStackTrace();
-			}
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Switched to IE done!");
-			}
-		}
 	}
 }

@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class SaveGeneratedFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SaveGeneratedFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<SaveGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveGeneratedFile action) {
+			public boolean run(EventObject e, SaveGeneratedFile action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class SaveGeneratedFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SaveGeneratedFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SaveGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveGeneratedFile action) {
+			public boolean run(EventObject e, SaveGeneratedFile action) {
 				getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getFocusedObject());
 				return true;
 			}

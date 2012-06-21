@@ -29,7 +29,6 @@ import org.openflexo.dre.controller.DREController;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 
 /**
  * Represents the main pane for this module
@@ -38,8 +37,8 @@ import org.openflexo.view.ModuleView;
  */
 public class DREMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public DREMainPane(ModuleView moduleView, DREFrame mainFrame, DREController controller) {
-		super(moduleView, mainFrame, controller);
+	public DREMainPane(DREController controller) {
+		super(controller);
 		setLeftView(new DREBrowserView(controller));
 	}
 

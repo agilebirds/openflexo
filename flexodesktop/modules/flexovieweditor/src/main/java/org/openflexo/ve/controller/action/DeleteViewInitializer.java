@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -50,7 +50,7 @@ public class DeleteViewInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteView> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteView>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteView action) {
+			public boolean run(EventObject e, DeleteView action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("really_delete_this_view_?"));
 			}
 		};
@@ -60,7 +60,7 @@ public class DeleteViewInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteView> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteView>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteView action) {
+			public boolean run(EventObject e, DeleteView action) {
 				return true;
 			}
 		};

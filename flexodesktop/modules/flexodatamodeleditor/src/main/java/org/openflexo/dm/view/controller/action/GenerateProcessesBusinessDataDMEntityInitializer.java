@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class GenerateProcessesBusinessDataDMEntityInitializer extends ActionInit
 	protected FlexoActionFinalizer<GenerateProcessesBusinessDataDMEntity> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateProcessesBusinessDataDMEntity>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateProcessesBusinessDataDMEntity action) {
+			public boolean run(EventObject e, GenerateProcessesBusinessDataDMEntity action) {
 				FlexoController.notify(FlexoLocalization.localizedForKey("generate_processes_business_data_succeed"));
 				return true;
 			}

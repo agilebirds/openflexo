@@ -47,12 +47,12 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
 			return shape != null;
 		}
 

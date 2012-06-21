@@ -40,7 +40,7 @@ import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.action.CreateDMEOEntity;
 import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.action.CreateDMProperty;
-import org.openflexo.foundation.dm.action.CreateDMRepository;
+import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
 import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOModel;
@@ -494,8 +494,8 @@ public abstract class FlexoTestCase extends TestCase {
 		if (repName == null) {
 			repName = "MyNewRepository";
 		}
-		CreateDMRepository rep = CreateDMRepository.actionType.makeNewAction(editor.getProject().getDataModel(), null, editor);
-		rep.setRepositoryType(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
+		CreateProjectDatabaseRepository rep = CreateProjectDatabaseRepository.actionType.makeNewAction(editor.getProject().getDataModel(),
+				null, editor);
 		rep.setNewRepositoryName(repName);
 		rep.doAction();
 		if (!rep.hasActionExecutionSucceeded()) {

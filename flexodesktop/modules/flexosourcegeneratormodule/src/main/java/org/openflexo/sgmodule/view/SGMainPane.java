@@ -23,7 +23,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 
 /**
  * Represents the main pane for this module
@@ -32,8 +31,8 @@ import org.openflexo.view.ModuleView;
  */
 public class SGMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public SGMainPane(ModuleView moduleView, SGFrame mainFrame, SGController controller) {
-		super(moduleView, mainFrame, controller);
+	public SGMainPane(SGController controller) {
+		super(controller);
 	}
 
 	public void showBrowser() {

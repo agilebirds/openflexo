@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.dgmodule.view.DGMainPane;
@@ -50,7 +50,7 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RegenerateAndOverride> getDefaultInitializer() {
 		return new FlexoActionInitializer<RegenerateAndOverride>() {
 			@Override
-			public boolean run(ActionEvent e, RegenerateAndOverride action) {
+			public boolean run(EventObject e, RegenerateAndOverride action) {
 				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
@@ -65,7 +65,7 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RegenerateAndOverride> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RegenerateAndOverride>() {
 			@Override
-			public boolean run(ActionEvent e, RegenerateAndOverride action) {
+			public boolean run(EventObject e, RegenerateAndOverride action) {
 				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
 				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
 				return true;

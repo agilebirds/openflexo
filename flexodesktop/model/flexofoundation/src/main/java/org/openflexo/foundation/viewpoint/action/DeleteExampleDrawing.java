@@ -46,12 +46,12 @@ public class DeleteExampleDrawing extends FlexoAction<DeleteExampleDrawing, Exam
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingShema object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDrawingShema object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingShema object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(ExampleDrawingShema object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 

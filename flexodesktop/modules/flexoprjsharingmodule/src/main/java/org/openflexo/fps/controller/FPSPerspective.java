@@ -34,8 +34,12 @@ public abstract class FPSPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<CVSFile> createModuleViewForObject(CVSFile file, FlexoController controller) {
-		return new CVSFileModuleView(file, (FPSController) controller);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject file, FlexoController controller) {
+		if (file instanceof CVSFile) {
+			return new CVSFileModuleView((CVSFile) file, (FPSController) controller);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

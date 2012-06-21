@@ -46,12 +46,12 @@ public class IECut extends FlexoUndoableAction<IECut, IEObject, IEObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return globalSelection != null && globalSelection.size() == 1
 					&& !(globalSelection.firstElement() instanceof ComponentDefinition)
 					&& !(globalSelection.firstElement() instanceof IEWOComponent)

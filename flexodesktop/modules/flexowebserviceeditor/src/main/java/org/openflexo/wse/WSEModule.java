@@ -19,19 +19,17 @@
  */
 package org.openflexo.wse;
 
-import org.openflexo.application.FlexoApplication;
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalWSEModule;
-import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wse.controller.WSEController;
 
 /**
@@ -42,28 +40,20 @@ import org.openflexo.wse.controller.WSEController;
 public class WSEModule extends FlexoModule implements ExternalWSEModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.WSE };
 
-	public WSEModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
-		setFlexoController(new WSEController(projectEditor, this));
-		getWSEController().loadRelativeWindows();
-		WSEPreferences.init(getWSEController());
+	public WSEModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		WSEPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
-
-		// Put here a code to display default view
-
-		// Retain here all necessary resources
-		// retain(<the_required_resource_data>);
 	}
 
-	/**
-	 * Overrides moduleWillClose
-	 * 
-	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
-	 */
 	@Override
-	public void moduleWillClose() {
-		super.moduleWillClose();
-		WSEPreferences.reset();
+	public Module getModule() {
+		return Module.WSE_MODULE;
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new WSEController(this);
 	}
 
 	@Override
@@ -78,11 +68,11 @@ public class WSEModule extends FlexoModule implements ExternalWSEModule {
 	/**
 	 * Overrides getDefaultObjectToSelect
 	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
+	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
 	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return getProject();
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project;
 	}
 
 }

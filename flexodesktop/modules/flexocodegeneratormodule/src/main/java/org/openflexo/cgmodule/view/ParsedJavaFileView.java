@@ -121,9 +121,8 @@ public class ParsedJavaFileView extends JSplitPane implements FileContentEditor 
 	public class JavaParserBrowserView extends BrowserView {
 
 		public JavaParserBrowserView(JavaParserBrowser browser) {
-			super(browser, _controller.getKeyEventListener(), _controller.getEditor());
+			super(browser, _controller);
 			setMinimumSize(new Dimension(GeneratorCst.MINIMUM_BROWSER_VIEW_WIDTH, GeneratorCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-			setPreferredSize(new Dimension(GeneratorCst.PREFERRED_BROWSER_VIEW_WIDTH, GeneratorCst.PREFERRED_BROWSER_VIEW_HEIGHT));
 			validate();
 		}
 
@@ -138,12 +137,12 @@ public class ParsedJavaFileView extends JSplitPane implements FileContentEditor 
 				int lastLine = firstLine + ((FJPJavaEntity) object).getLinesCount();
 				_currentHighlight = new LinesHighlight(firstLine - 1, lastLine - 2, HIGHLIGHT_BG_COLOR, HIGHLIGHT_FG_COLOR);
 				_codePanel.getPainter().addCustomHighlight(_currentHighlight);
-				_codePanel.setFirstLine((firstLine > 5 ? firstLine - 5 : firstLine));
+				_codePanel.setFirstLine(firstLine > 5 ? firstLine - 5 : firstLine);
 			} else if (object instanceof FJPJavaParseException) {
 				int firstLine = ((FJPJavaParseException) object).getLine();
 				_currentHighlight = new LinesHighlight(firstLine - 1, firstLine - 1, new Color(255, 214, 214), Color.RED);
 				_codePanel.getPainter().addCustomHighlight(_currentHighlight);
-				_codePanel.setFirstLine((firstLine > 5 ? firstLine - 5 : firstLine));
+				_codePanel.setFirstLine(firstLine > 5 ? firstLine - 5 : firstLine);
 			}
 		}
 

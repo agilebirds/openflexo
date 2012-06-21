@@ -34,11 +34,8 @@ import org.openflexo.foundation.dm.DMObject;
  */
 public class DMBrowserView extends BrowserView {
 
-	protected DMController _controller;
-
 	public DMBrowserView(DMBrowser dmBrowser, DMController controller) {
-		super(dmBrowser, controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(dmBrowser, controller);
 		FCH.setHelpItem(this, "dm-browser");
 	}
 
@@ -49,7 +46,7 @@ public class DMBrowserView extends BrowserView {
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
 		if (object instanceof DMObject) {
-			_controller.setCurrentEditedObject((DMObject) object);
+			getController().selectAndFocusObject(object);
 		}
 	}
 

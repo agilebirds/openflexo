@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.drm.action.RemoveInheritanceChildItem;
@@ -46,7 +46,7 @@ public class RemoveInheritanceChildItemInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveInheritanceChildItem> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveInheritanceChildItem>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveInheritanceChildItem action) {
+			public boolean run(EventObject e, RemoveInheritanceChildItem action) {
 				return true;
 			}
 		};
@@ -56,7 +56,7 @@ public class RemoveInheritanceChildItemInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RemoveInheritanceChildItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveInheritanceChildItem>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveInheritanceChildItem action) {
+			public boolean run(EventObject e, RemoveInheritanceChildItem action) {
 				return true;
 			}
 		};

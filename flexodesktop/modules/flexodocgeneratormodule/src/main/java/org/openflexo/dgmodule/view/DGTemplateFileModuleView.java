@@ -181,13 +181,13 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 			controlPanel = new JPanel(new FlowLayout());
 			if (_CGTemplate.isCustomTemplate()) {
 				final FlexoActionButton editAction = new FlexoActionButton(EditCustomTemplateFile.actionType, "edit",
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				FlexoActionButton saveAction = new FlexoActionButton(SaveCustomTemplateFile.actionType, "save",
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				FlexoActionButton cancelAction = new FlexoActionButton(CancelEditionOfCustomTemplateFile.actionType, "cancel",
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				FlexoActionButton refreshAction = new FlexoActionButton(RefreshTemplates.actionType, "reload",
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				actionButtons.add(editAction);
 				actionButtons.add(saveAction);
 				actionButtons.add(cancelAction);
@@ -199,7 +199,7 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 				controlPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 			} else {
 				FlexoActionButton redefineAction = new FlexoActionButton(RedefineCustomTemplateFile.actionType,
-						DGTemplateFileModuleView.this, _controller.getEditor());
+						DGTemplateFileModuleView.this, _controller);
 				actionButtons.add(redefineAction);
 				controlPanel.add(redefineAction);
 			}

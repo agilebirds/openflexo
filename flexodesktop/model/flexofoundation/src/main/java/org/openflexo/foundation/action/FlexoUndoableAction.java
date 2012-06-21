@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -59,7 +58,7 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T
 	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public final A doActionWithContext() throws FlexoException {
+	public final A doActionInContext() throws FlexoException {
 		// Let's keep in memory the modified resources
 		_modifiedResources.clear();
 		if (getProject() != null) {
@@ -71,7 +70,7 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T
 		}
 		A action;
 		try {
-			action = super.doActionWithContext();
+			action = super.doActionInContext();
 		} catch (FlexoException e1) {
 			_modifiedResources.clear();
 			throw e1;
@@ -90,108 +89,87 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T
 		return action;
 	}
 
-	public final void undoAction() throws FlexoException {
-		if (getUndoInitializer() != null) {
-			executionStatus = ExecutionStatus.EXECUTING_UNDO_INITIALIZER;
-			getUndoInitializer().run(e, (A) this);
-		}
-		if (getEditor() != null) {
-			getEditor().actionWillBeUndone(this);
-		}
-		try {
-			executionStatus = ExecutionStatus.EXECUTING_UNDO_CORE;
-			undoAction(getContext());
-			executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_UNDONE;
-			if (getEditor() != null) {
-				getEditor().actionHasBeenUndone(this, true);
-			}
-		} catch (FlexoException exception) {
-			executionStatus = ExecutionStatus.FAILED_UNDO_EXECUTION;
-			if (getEditor() != null) {
-				getEditor().actionHasBeenUndone(this, false);
-			}
-			if (getExceptionHandler() != null) {
-				if (getExceptionHandler().handleException(exception, (A) this)) {
-					return;
-				} else {
-					throw exception;
+	public final A undoActionInContext() throws FlexoException {
+		// Let's keep in memory the modified resources
+		executionStatus = ExecutionStatus.EXECUTING_UNDO_CORE;
+		_modifiedResources.clear();
+		if (getProject() != null) {
+			for (FlexoStorageResource<? extends StorageResourceData> r : getProject().getStorageResources()) {
+				if (!r.isModified()) {
+					_modifiedResources.put(r, null);
 				}
 			}
 		}
-		if (getUndoFinalizer() != null && executionStatus == ExecutionStatus.HAS_SUCCESSFULLY_UNDONE) {
-			executionStatus = ExecutionStatus.EXECUTING_UNDO_FINALIZER;
-			executionStatus = getUndoFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_UNDONE
-					: ExecutionStatus.FAILED_UNDO_EXECUTION;
+		try {
+			undoAction(getContext());
+			executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_UNDONE;
+		} catch (FlexoException e1) {
+			executionStatus = ExecutionStatus.FAILED_UNDO_EXECUTION;
+			_modifiedResources.clear();
+			throw e1;
 		}
-		Iterator<FlexoStorageResource> i = _modifiedResources.keySet().iterator();
+
+		// Now we remove all the resources that are still not modified. The left delta are the resources that have been directly modified by
+		// this action (and the embedded ones)
+		if (getProject() != null) {
+			for (FlexoStorageResource<? extends StorageResourceData> r : getProject().getStorageResources()) {
+				if (!r.isModified()) {
+					_modifiedResources.remove(r);
+				}
+			}
+		}
+
+		Iterator<FlexoStorageResource<?>> i = _modifiedResources.keySet().iterator();
 		while (i.hasNext()) {
-			FlexoStorageResource r = i.next();
+			FlexoStorageResource<?> r = i.next();
 			r.getResourceData().clearIsModified(true);
 		}
+		return (A) this;
+	}
+
+	public final A undoAction() {
+		if (getEditor() != null) {
+			getEditor().performUndoAction((A) this, null);
+		} else {
+			try {
+				undoActionInContext();
+			} catch (FlexoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return (A) this;
 	}
 
 	protected abstract void undoAction(Object context) throws FlexoException;
 
-	public FlexoActionUndoFinalizer<? super A> getUndoFinalizer() {
-		return getActionType().getUndoFinalizerForEditor(getEditor());
-	}
-
-	public FlexoActionUndoInitializer<? super A> getUndoInitializer() {
-		return getActionType().getUndoInitializerForEditor(getEditor());
-	}
-
-	public final void redoAction() throws RedoException {
-		try {
-			redoAction(null);
-		} catch (FlexoException e) {
-			throw new RedoException(e);
-		}
-	}
-
-	public final void redoAction(ActionEvent e) throws FlexoException {
-		if (getRedoInitializer() != null) {
-			executionStatus = ExecutionStatus.EXECUTING_REDO_INITIALIZER;
-			getRedoInitializer().run(e, (A) this);
-		}
-		if (getEditor() != null) {
-			getEditor().actionWillBeRedone(this);
-		}
+	public final A redoActionInContext() throws RedoException {
 		try {
 			executionStatus = ExecutionStatus.EXECUTING_REDO_CORE;
 			redoAction(getContext());
 			executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_REDONE;
-			if (getEditor() != null) {
-				getEditor().actionHasBeenRedone(this, true);
-			}
-		} catch (FlexoException exception) {
+		} catch (FlexoException e) {
 			executionStatus = ExecutionStatus.FAILED_REDO_EXECUTION;
-			if (getEditor() != null) {
-				getEditor().actionHasBeenRedone(this, false);
-			}
-			if (getExceptionHandler() != null) {
-				if (getExceptionHandler().handleException(exception, (A) this)) {
-					return;
-				} else {
-					throw exception;
-				}
+			throw new RedoException(e);
+		}
+		return (A) this;
+	}
+
+	public final A redoAction() {
+		if (getEditor() != null) {
+			getEditor().performRedoAction((A) this, null);
+		} else {
+			try {
+				redoActionInContext();
+			} catch (FlexoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		if (getRedoFinalizer() != null && executionStatus == ExecutionStatus.HAS_SUCCESSFULLY_REDONE) {
-			executionStatus = ExecutionStatus.EXECUTING_REDO_FINALIZER;
-			executionStatus = getRedoFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_REDONE
-					: ExecutionStatus.FAILED_REDO_EXECUTION;
-		}
+		return (A) this;
 	}
 
 	protected abstract void redoAction(Object context) throws FlexoException;
-
-	public FlexoActionRedoFinalizer<? super A> getRedoFinalizer() {
-		return getActionType().getRedoFinalizerForEditor(getEditor());
-	}
-
-	public FlexoActionRedoInitializer<? super A> getRedoInitializer() {
-		return getActionType().getRedoInitializerForEditor(getEditor());
-	}
 
 	@Override
 	public void delete() {

@@ -67,7 +67,7 @@ class DREPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<? extends DRMObject> createModuleViewForObject(DRMObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof DocItemFolder) {
 			if (((DocItemFolder) object).isRootFolder()) {
 				return new DocCenterView((DocItemFolder) object, (DREController) controller);
@@ -83,7 +83,7 @@ class DREPerspective extends FlexoPerspective {
 			}
 			return this.dreController.docItemView;
 		} else {
-			return new EmptyPanel<DRMObject>(controller, this, object);
+			return new EmptyPanel<FlexoModelObject>(controller, this, object);
 		}
 	}
 

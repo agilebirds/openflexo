@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,7 +54,7 @@ public class CreateDMPropertyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDMProperty> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMProperty action) {
+			public boolean run(EventObject e, CreateDMProperty action) {
 				return true;
 			}
 		};
@@ -64,7 +64,7 @@ public class CreateDMPropertyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDMProperty> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMProperty action) {
+			public boolean run(EventObject e, CreateDMProperty action) {
 				if (action.getEntity() instanceof DMEOEntity) {
 					if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == ((DMEOEntity) action.getEntity())
 							.getDMEOModel()) {

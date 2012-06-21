@@ -19,8 +19,8 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -67,7 +67,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<PushToPalette> getDefaultInitializer() {
 		return new FlexoActionInitializer<PushToPalette>() {
 			@Override
-			public boolean run(ActionEvent e, PushToPalette action) {
+			public boolean run(EventObject e, PushToPalette action) {
 				if (getController().getCurrentModuleView() instanceof CalcDrawingShemaModuleView
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 					CalcDrawingShemaController c = ((CalcDrawingShemaModuleView) getController().getCurrentModuleView()).getController();
@@ -96,7 +96,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<PushToPalette> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<PushToPalette>() {
 			@Override
-			public boolean run(ActionEvent e, PushToPalette action) {
+			public boolean run(EventObject e, PushToPalette action) {
 				getController().setCurrentEditedObjectAsModuleView(action.palette, getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getNewPaletteElement());
 				return true;

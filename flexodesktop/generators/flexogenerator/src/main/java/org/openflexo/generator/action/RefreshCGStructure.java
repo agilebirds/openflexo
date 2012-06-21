@@ -49,18 +49,18 @@ public class RefreshCGStructure extends GCAction<RefreshCGStructure, CGObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			if (focusedObject instanceof AbstractCGFileVersion) {
 				return false;
 			}
-			return (focusedObject instanceof AbstractCGFile);
+			return focusedObject instanceof AbstractCGFile;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(focusedObject, globalSelection);
 			AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(repository);
-			return ((pg != null) && (pg.hasBeenInitialized()));
+			return pg != null && pg.hasBeenInitialized();
 		}
 
 	};

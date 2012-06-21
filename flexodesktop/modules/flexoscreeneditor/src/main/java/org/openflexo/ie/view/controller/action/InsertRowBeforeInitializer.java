@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class InsertRowBeforeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<InsertRowBefore> getDefaultInitializer() {
 		return new FlexoActionInitializer<InsertRowBefore>() {
 			@Override
-			public boolean run(ActionEvent e, InsertRowBefore action) {
+			public boolean run(EventObject e, InsertRowBefore action) {
 				return true;
 			}
 		};
@@ -55,7 +55,7 @@ public class InsertRowBeforeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<InsertRowBefore> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<InsertRowBefore>() {
 			@Override
-			public boolean run(ActionEvent e, InsertRowBefore action) {
+			public boolean run(EventObject e, InsertRowBefore action) {
 				return true;
 			}
 		};

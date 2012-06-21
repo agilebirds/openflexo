@@ -19,12 +19,11 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ie.action.MakePartialComponent;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
@@ -50,30 +49,17 @@ public class MakePartialComponentInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MakePartialComponent> getDefaultInitializer() {
 		return new FlexoActionInitializer<MakePartialComponent>() {
 			@Override
-			public boolean run(ActionEvent e, MakePartialComponent action) {
+			public boolean run(EventObject e, MakePartialComponent action) {
 				String compName = JOptionPane.showInputDialog(null, FlexoLocalization.localizedForKey("component_name?"));
 				Object[] nameAndFolder = new Object[] { compName,
 						getProject().getFlexoComponentLibrary().getRootFolder().getFolderTyped(FolderType.PARTIAL_COMPONENT_FOLDER) };
 				if (nameAndFolder[0] != null && ((String) nameAndFolder[0]).trim().length() > 0 && nameAndFolder[1] != null
 						&& getProject().getFlexoComponentLibrary().getComponentNamed((String) nameAndFolder[0]) == null) {
-					(action).setNewComponentName((String) nameAndFolder[0]);
-					(action).setNewComponentFolder((FlexoComponentFolder) nameAndFolder[1]);
+					action.setNewComponentName((String) nameAndFolder[0]);
+					action.setNewComponentFolder((FlexoComponentFolder) nameAndFolder[1]);
 					return true;
 				}
 				return false;
-			}
-		};
-	}
-
-	@Override
-	protected FlexoActionFinalizer<MakePartialComponent> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<MakePartialComponent>() {
-			@Override
-			public boolean run(ActionEvent e, MakePartialComponent action) {
-				if ((action).getNewComponentResource() != null) {
-					getModule().retainResource((action).getNewComponentResource());
-				}
-				return true;
 			}
 		};
 	}

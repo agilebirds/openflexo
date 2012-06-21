@@ -165,8 +165,12 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	}
 
 	@Override
-	public ModuleView<ERDiagram> createModuleViewForObject(ERDiagram diagram, FlexoController controller) {
-		return getControllerForDiagram(diagram).getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject diagram, FlexoController controller) {
+		if (diagram instanceof ERDiagram) {
+			return getControllerForDiagram((ERDiagram) diagram).getDrawingView();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -204,7 +208,7 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	}*/
 
 	public DiagramView getCurrentDiagramView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof DiagramView)) {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof DiagramView) {
 			return (DiagramView) _controller.getCurrentModuleView();
 		}
 		return null;

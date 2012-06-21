@@ -20,7 +20,7 @@
 package org.openflexo.ve.controller.action;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -56,7 +56,7 @@ public class AddViewFolderInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddViewFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddViewFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddViewFolder action) {
+			public boolean run(EventObject e, AddViewFolder action) {
 				ViewFolder parentFolder = null;
 				if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof ViewDefinition)) {
 					parentFolder = ((ViewDefinition) action.getFocusedObject()).getFolder();
@@ -99,7 +99,7 @@ public class AddViewFolderInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddViewFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddViewFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddViewFolder action) {
+			public boolean run(EventObject e, AddViewFolder action) {
 				// Update ProjectBrowser (normally it should be done with a
 				// notification)
 				// TODO: do it properly with a notification

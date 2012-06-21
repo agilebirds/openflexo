@@ -931,4 +931,20 @@ public class FileUtils {
 		return defaultFolder;
 	}
 
+	public static File getApplicationDataDirectory() {
+		File dir = new File(System.getProperty("user.home"), ".openflexo");
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			String appData = System.getenv("APPDATA");
+			if (appData != null) {
+				File f = new File(appData);
+				if (f.isDirectory() && f.canWrite()) {
+					dir = new File(f, "OpenFlexo");
+				}
+			}
+		} else if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			dir = new File(new File(System.getProperty("user.home")), "Library/OpenFlexo");
+		}
+		return dir;
+	}
+
 }

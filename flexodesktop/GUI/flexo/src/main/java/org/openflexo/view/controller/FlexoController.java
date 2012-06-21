@@ -32,6 +32,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -41,9 +42,9 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,12 +117,12 @@ import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.prefs.PreferencesController;
 import org.openflexo.prefs.PreferencesHaveChanged;
 import org.openflexo.prefs.PreferencesWindow;
 import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
@@ -135,7 +136,6 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.WebServiceURLDialog.PPMWSClientParameter;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
-import org.openflexo.view.palette.FlexoPalette;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
@@ -144,12 +144,18 @@ import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
  * 
  * @author benoit, sylvain
  */
-public abstract class FlexoController implements FlexoObserver, InspectorNotFoundHandler, InspectorExceptionHandler {
+public abstract class FlexoController implements FlexoObserver, InspectorNotFoundHandler, InspectorExceptionHandler,
+		HasPropertyChangeSupport {
 
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
 	public static boolean USE_NEW_INSPECTOR_SCHEME = false;
 	public static boolean USE_OLD_INSPECTOR_SCHEME = true;
+
+	private static final String DELETED = "deleted";
+
+	public static final String CURRENT_PERPSECTIVE = "currentPerspective";
+	public static final String EDITOR = "editor";
 
 	public boolean useNewInspectorScheme() {
 		return USE_NEW_INSPECTOR_SCHEME;
@@ -159,15 +165,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return USE_OLD_INSPECTOR_SCHEME;
 	}
 
-	// ======================================================
-	// ================== Static variables ==================
-	// ======================================================
-
 	private ConsistencyCheckDialog _consistencyCheckWindow;
-
-	// ======================================================
-	// ================= Instance variables =================
-	// ======================================================
 
 	private transient FlexoEditor _editor;
 
@@ -181,34 +179,66 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	protected FlexoFrame _flexoFrame;
 
-	// protected FlexoInspectorController _inspectorController;
-
-	protected PreferencesController _preferencesController;
-
-	private final Vector<FlexoPerspective> _perspectives;
+	private final List<FlexoPerspective> _perspectives;
 
 	private final Hashtable<FlexoPerspective, FlexoModelObject> lastEditedObjectsForPerspective;
 
 	private ResourceManagerWindow rmWindow;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+	private FlexoKeyEventListener keyEventListener;
+
+	private PropertyChangeSupport propertyChangeSupport;
 
 	/**
 	 * Constructor
 	 */
 	protected FlexoController(FlexoModule module) {
 		super();
+		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("init_module_controller"));
+		propertyChangeSupport = new PropertyChangeSupport(this);
 		_loadedViews = new Hashtable<FlexoPerspective, Hashtable<FlexoModelObject, ModuleView<?>>>();
 		_keyStrokeActionTable = new Hashtable<KeyStroke, AbstractAction>();
 		_perspectives = new Vector<FlexoPerspective>();
 		lastEditedObjectsForPerspective = new Hashtable<FlexoPerspective, FlexoModelObject>();
-		setModule(module);
-		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("init_module_controller"));
+		_module = module;
+		_menuBar = createAndRegisterNewMenuBar();
+		keyEventListener = createKeyEventListener();
+		_flexoFrame = createFrame();
+		_flexoFrame.setJMenuBar(_menuBar);
+		_flexoFrame.addKeyListener(keyEventListener);
 		initInspectors();
 		GeneralPreferences.getPreferences().addObserver(this);
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return DELETED;
+	}
+
+	protected abstract FlexoKeyEventListener createKeyEventListener();
+
+	/**
+	 * Creates a new instance of MenuBar for the module this controller refers to
+	 * 
+	 * @return
+	 */
+	protected abstract FlexoMenuBar createNewMenuBar();
+
+	protected FlexoFrame createFrame() {
+		return new FlexoFrame(this);
+	}
+
+	public FlexoKeyEventListener getKeyEventListener() {
+		return keyEventListener;
+	}
+
+	public FlexoMenuBar getMenuBar() {
+		return _menuBar;
 	}
 
 	public final ApplicationContext getApplicationContext() {
@@ -224,23 +254,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	/**
-	 * Must be called just after constructor call
-	 */
-	protected void init(FlexoFrame frame, FlexoKeyEventListener keyEventListener, FlexoMenuBar menuBar) throws Exception {
-		_flexoFrame = frame;
-		_keyEventListener = keyEventListener;
-		_menuBar = menuBar;
-		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("load_preferences"));
-		if (!PreferencesController.hasInstance()) {
-			_preferencesController = PreferencesController.createInstance(FlexoPreferences.instance(), createNewMenuBar());
-		} else {
-			_preferencesController = PreferencesController.instance();
-		}
-		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("load_module"));
-
-	}
-
-	/**
 	 * Creates a new instance of MenuBar for the module this controller refers to
 	 * 
 	 * @return
@@ -250,23 +263,15 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	/**
-	 * Creates a new instance of MenuBar for the module this controller refers to
-	 * 
-	 * @return
-	 */
-	protected abstract FlexoMenuBar createNewMenuBar();
-
-	/**
 	 * Creates and register a new instance of MenuBar for the module this controller refers to
 	 * 
 	 * @return
 	 */
-	public FlexoMenuBar createAndRegisterNewMenuBar() {
+	public final FlexoMenuBar createAndRegisterNewMenuBar() {
 		FlexoMenuBar returned = createNewMenuBar();
 		registeredMenuBar.add(returned);
 		if (getFlexoFrame() != null) {
-			for (Enumeration<FlexoRelativeWindow> en = getFlexoFrame().getRelativeWindows().elements(); en.hasMoreElements();) {
-				FlexoRelativeWindow next = en.nextElement();
+			for (FlexoRelativeWindow next : getFlexoFrame().getRelativeWindows()) {
 				returned.getWindowMenu().addFlexoRelativeWindowMenu(next);
 			}
 		}
@@ -274,27 +279,24 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void notifyNewFlexoRelativeWindow(FlexoRelativeWindow w) {
-		for (Enumeration<FlexoMenuBar> en = registeredMenuBar.elements(); en.hasMoreElements();) {
-			FlexoMenuBar next = en.nextElement();
+		for (FlexoMenuBar next : registeredMenuBar) {
 			next.getWindowMenu().addFlexoRelativeWindowMenu(w);
 		}
 	}
 
 	public void notifyRemoveFlexoRelativeWindow(FlexoRelativeWindow w) {
-		for (Enumeration<FlexoMenuBar> en = registeredMenuBar.elements(); en.hasMoreElements();) {
-			FlexoMenuBar next = en.nextElement();
+		for (FlexoMenuBar next : registeredMenuBar) {
 			next.getWindowMenu().removeFlexoRelativeWindowMenu(w);
 		}
 	}
 
 	public void notifyRenameFlexoRelativeWindow(FlexoRelativeWindow w, String title) {
-		for (Enumeration<FlexoMenuBar> en = registeredMenuBar.elements(); en.hasMoreElements();) {
-			FlexoMenuBar next = en.nextElement();
+		for (FlexoMenuBar next : registeredMenuBar) {
 			next.getWindowMenu().renameFlexoRelativeWindowMenu(w, title);
 		}
 	}
 
-	private final Vector<FlexoMenuBar> registeredMenuBar = new Vector<FlexoMenuBar>();
+	private final List<FlexoMenuBar> registeredMenuBar = new Vector<FlexoMenuBar>();
 
 	private FlexoDocInspectorController _docInspectorController = null;
 
@@ -371,16 +373,14 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return _module;
 	}
 
-	public void setModule(FlexoModule module) {
-		_module = module;
-	}
-
 	public FlexoEditor getEditor() {
 		return _editor;
 	}
 
 	public void setEditor(FlexoEditor projectEditor) {
+		FlexoEditor old = _editor;
 		_editor = projectEditor;
+		getPropertyChangeSupport().firePropertyChange(EDITOR, old, projectEditor);
 	}
 
 	public FlexoProject getProject() {
@@ -542,11 +542,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public PreferencesWindow getPreferencesWindow() {
-		return _preferencesController.getPreferencesWindow();
+		return PreferencesController.instance().getPreferencesWindow();
 	}
 
 	public void showPreferences() {
-		_preferencesController.showPreferences();
+		PreferencesController.instance().showPreferences();
 	}
 
 	public void registerActionForKeyStroke(AbstractAction action, KeyStroke accelerator) {
@@ -1105,7 +1105,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 		if (defaultPespective == perspective) {
 			if (_perspectives.size() > 0) {
-				defaultPespective = _perspectives.firstElement();
+				defaultPespective = _perspectives.get(0);
 			} else {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No more perspective!!!");
@@ -1190,9 +1190,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 */
 	protected void setCurrentPerspective(FlexoPerspective perspective) {
 		_currentPerspective = perspective;
+		getPropertyChangeSupport().firePropertyChange(CURRENT_PERPSECTIVE, null, perspective);
 	}
 
-	public Vector<FlexoPerspective> getPerspectives() {
+	public List<FlexoPerspective> getPerspectives() {
 		return _perspectives;
 	}
 
@@ -1718,17 +1719,16 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		_keyStrokeActionTable.clear();
 		registeredMenuBar.clear();
 		lastEditedObjectsForPerspective.clear();
-		if (_preferencesController != null) {
-			_preferencesController.getPreferencesWindow().dispose();
+		if (PreferencesController.hasInstance()) {
+			PreferencesController.instance().getPreferencesWindow().dispose();
 		}
 		if (_flexoFrame != null) {
 			_flexoFrame.disposeAll();
 		}
-		_editor = null;
+		setEditor(null);
 		_inspectorMenuBar = null;
 		defaultPespective = null;
 		_currentPerspective = null;
-		_preferencesController = null;
 		_docInspectorController = null;
 		_consistencyCheckWindow = null;
 		_keyEventListener = null;
@@ -1737,6 +1737,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		_menuBar = null;
 		_module = null;
 		_palette = null;
+		getPropertyChangeSupport().firePropertyChange(DELETED, false, true);
 	}
 
 	@Override
@@ -1745,16 +1746,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			logger.info("Finalizing controller " + getClass().getSimpleName());
 		}
 		super.finalize();
-	}
-
-	private FlexoPalette _palette;
-
-	public void setPalette(FlexoPalette flexoPalette) {
-		_palette = flexoPalette;
-	}
-
-	public FlexoPalette getPalette() {
-		return _palette;
 	}
 
 	public PPMWebServiceClient getWSClient() {
@@ -1974,6 +1965,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			rmWindow.dispose();
 		}
 		return rmWindow = new ResourceManagerWindow(project);
+	}
+
+	public void selectAndFocusObject(FlexoModelObject object) {
+		setCurrentEditedObjectAsModuleView(object);
 	}
 
 }

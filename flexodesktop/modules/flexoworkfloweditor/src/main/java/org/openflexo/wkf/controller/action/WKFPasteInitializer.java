@@ -19,8 +19,8 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public class WKFPasteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WKFPaste> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFPaste>() {
 			@Override
-			public boolean run(ActionEvent e, WKFPaste action) {
+			public boolean run(EventObject e, WKFPaste action) {
 				return true;
 			}
 		};
@@ -68,7 +68,7 @@ public class WKFPasteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WKFPaste> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFPaste>() {
 			@Override
-			public boolean run(ActionEvent e, WKFPaste action) {
+			public boolean run(EventObject e, WKFPaste action) {
 				getControllerActionInitializer().getWKFSelectionManager().performSelectionPaste();
 				return true;
 			}

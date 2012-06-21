@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class CreateOntologyClassInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateOntologyClass> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateOntologyClass>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyClass action) {
+			public boolean run(EventObject e, CreateOntologyClass action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_ONTOLOGY_CLASS_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
@@ -66,7 +66,7 @@ public class CreateOntologyClassInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateOntologyClass> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateOntologyClass>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyClass action) {
+			public boolean run(EventObject e, CreateOntologyClass action) {
 				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewClass());
 				return true;
 			}

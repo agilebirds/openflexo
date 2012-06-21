@@ -55,12 +55,12 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
 			return focusedObject.isConnected();
 		}
 

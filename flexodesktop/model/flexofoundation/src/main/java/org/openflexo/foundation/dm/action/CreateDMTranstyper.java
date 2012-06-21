@@ -48,12 +48,12 @@ public class CreateDMTranstyper extends FlexoAction<CreateDMTranstyper, DMEntity
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
 			return object != null && object.getRepository() != null && !object.getRepository().isReadOnly();
 		}
 

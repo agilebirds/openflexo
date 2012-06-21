@@ -47,12 +47,12 @@ public class OpenTemplateFileInNewWindow extends FlexoGUIAction<OpenTemplateFile
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
 			return (object != null);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
 			return ((object != null) && (!(object instanceof CGTemplateFile) || !((CGTemplateFile) object).isEdited()));
 		}
 

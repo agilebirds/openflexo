@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -62,7 +62,7 @@ public class GeneratePDFInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<GeneratePDF> getDefaultInitializer() {
 		return new FlexoActionInitializer<GeneratePDF>() {
 			@Override
-			public boolean run(ActionEvent e, GeneratePDF action) {
+			public boolean run(EventObject e, GeneratePDF action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -167,7 +167,7 @@ public class GeneratePDFInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GeneratePDF> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GeneratePDF>() {
 			@Override
-			public boolean run(ActionEvent e, GeneratePDF action) {
+			public boolean run(EventObject e, GeneratePDF action) {
 				if (action.getGeneratedPDF() != null && DGPreferences.getOpenPDF()) {
 					ToolBox.openFile(action.getGeneratedPDF());
 				}

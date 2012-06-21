@@ -407,7 +407,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		if (isDeleted) {
 			return;
 		}
-		_browser.reload(this);
+		_browser.nodeChanged(this);
 		repaintRequested = false;
 	}
 

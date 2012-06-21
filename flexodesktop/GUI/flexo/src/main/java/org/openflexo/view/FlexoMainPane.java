@@ -103,12 +103,11 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 	final private boolean _rightPaneIsSplitPane;
 	final private boolean _verticalOrientation;
 
-	public FlexoMainPane(ModuleView<?> moduleView, FlexoFrame mainFrame, FlexoController controller) {
-		this(moduleView, mainFrame, controller, false, true);
+	public FlexoMainPane(FlexoController controller) {
+		this(controller, false, true);
 	}
 
-	public FlexoMainPane(ModuleView<?> moduleView, FlexoFrame mainFrame, FlexoController controller, boolean rightPaneIsSplitPane,
-			boolean verticalOrientation) {
+	public FlexoMainPane(FlexoController controller, boolean rightPaneIsSplitPane, boolean verticalOrientation) {
 		super(new BorderLayout());
 		_rightPaneIsSplitPane = rightPaneIsSplitPane;
 		_verticalOrientation = verticalOrientation;
@@ -147,7 +146,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		/* _rightPanel. */add(_controlPanel = new ControlPanel(), BorderLayout.NORTH);
 		_splitPane.setRightComponent(_rightPanel);
 		add(_splitPane, BorderLayout.CENTER);
-		setModuleView(moduleView);
 	}
 
 	public void resetModuleView() {
@@ -922,8 +920,9 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			if (canGoBackward()) {
 				goBackward();
 			} else {
-				if (_controller.getModule().getDefaultObjectToSelect() != removedObject) {
-					_controller.setCurrentEditedObjectAsModuleView(_controller.getModule().getDefaultObjectToSelect());
+				if (_controller.getModule().getDefaultObjectToSelect(_controller.getProject()) != removedObject) {
+					_controller.setCurrentEditedObjectAsModuleView(_controller.getModule().getDefaultObjectToSelect(
+							_controller.getProject()));
 				} else {
 					resetModuleView();
 				}

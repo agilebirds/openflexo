@@ -20,8 +20,8 @@
 package org.openflexo.view;
 
 import java.awt.FlowLayout;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -40,7 +40,7 @@ public class AvailablePerspectives extends JPanel {
 
 	protected final FlexoController controller;
 
-	private Hashtable<FlexoPerspective, FlexoPerspectiveView> views;
+	private Map<FlexoPerspective, FlexoPerspectiveView> views;
 
 	/**
      *
@@ -50,9 +50,7 @@ public class AvailablePerspectives extends JPanel {
 		this.controller = controller;
 		views = new Hashtable<FlexoPerspective, FlexoPerspectiveView>();
 
-		Enumeration<FlexoPerspective> en = controller.getPerspectives().elements();
-		while (en.hasMoreElements()) {
-			FlexoPerspective p = en.nextElement();
+		for (FlexoPerspective p : controller.getPerspectives()) {
 			FlexoPerspectiveView view = new FlexoPerspectiveView(controller, this, p);
 			add(view);
 			views.put(p, view);
@@ -67,9 +65,7 @@ public class AvailablePerspectives extends JPanel {
 		Vector<FlexoPerspective> displayedPerspective = new Vector<FlexoPerspective>();
 		removeAll();
 		add(new JLabel(IconLibrary.NAVIGATION_CLOSE_LEFT));
-		Enumeration<FlexoPerspective> en = controller.getPerspectives().elements();
-		while (en.hasMoreElements()) {
-			FlexoPerspective p = en.nextElement();
+		for (FlexoPerspective p : controller.getPerspectives()) {
 			FlexoPerspectiveView v = views.get(p);
 			if (v == null) {
 				views.put(p, v = new FlexoPerspectiveView(controller, this, p));

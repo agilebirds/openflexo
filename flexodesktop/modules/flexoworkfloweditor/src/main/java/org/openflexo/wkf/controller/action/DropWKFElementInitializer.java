@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,7 +70,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DropWKFElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<DropWKFElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropWKFElement action) {
+			public boolean run(EventObject e, DropWKFElement action) {
 				if (action.getPetriGraph() == null) {
 					return false;
 				}
@@ -128,7 +128,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DropWKFElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DropWKFElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropWKFElement action) {
+			public boolean run(EventObject e, DropWKFElement action) {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getObject());
 
 				if (action.getObject() instanceof SubProcessNode && !action.leaveSubProcessNodeUnchanged()) {

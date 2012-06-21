@@ -20,8 +20,8 @@
 package org.openflexo.wkf.controller.action;
 
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -71,7 +71,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WKFDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFDelete>() {
 			@Override
-			public boolean run(ActionEvent e, WKFDelete action) {
+			public boolean run(EventObject e, WKFDelete action) {
 				logger.info("Delete in WKF");
 
 				if (!getModule().isActive()) {
@@ -221,7 +221,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WKFDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFDelete>() {
 			@Override
-			public boolean run(ActionEvent e, WKFDelete action) {
+			public boolean run(EventObject e, WKFDelete action) {
 				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess())) {
 					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(getProject().getRootFlexoProcess());
 				}

@@ -28,7 +28,6 @@ package org.openflexo.vpm.view;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.VPMController;
 
 /**
@@ -38,8 +37,8 @@ import org.openflexo.vpm.controller.VPMController;
  */
 public class CEDMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public CEDMainPane(ModuleView moduleView, CEDFrame mainFrame, VPMController controller) {
-		super(moduleView, mainFrame, controller);
+	public CEDMainPane(VPMController controller) {
+		super(controller);
 	}
 
 	public void showBrowser() {

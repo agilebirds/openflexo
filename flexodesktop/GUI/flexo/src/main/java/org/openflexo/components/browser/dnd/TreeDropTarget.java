@@ -39,6 +39,7 @@ import javax.swing.tree.TreePath;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -70,6 +71,10 @@ public class TreeDropTarget implements DropTargetListener {
 		targetTree = tree;
 		target = new DropTarget(targetTree, this);
 		_browser = browser;
+	}
+
+	protected FlexoEditor getEditor() {
+		return targetTree.getBrowserView().getEditor();
 	}
 
 	/*

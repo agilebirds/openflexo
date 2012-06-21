@@ -48,12 +48,12 @@ public class RemoveGeneratedCodeRepository extends AbstractGCAction<RemoveGenera
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
 			return (object != null);
 		}
 

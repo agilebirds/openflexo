@@ -53,12 +53,12 @@ public class UpdateLoadableDMEntity extends FlexoAction<UpdateLoadableDMEntity, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return getAllLoadableDMEntities(object, globalSelection).size() > 0;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

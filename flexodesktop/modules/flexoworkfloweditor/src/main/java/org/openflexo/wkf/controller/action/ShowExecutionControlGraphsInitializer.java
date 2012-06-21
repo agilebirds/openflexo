@@ -19,8 +19,8 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.lang.reflect.Method;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -74,7 +74,7 @@ public class ShowExecutionControlGraphsInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShowExecutionControlGraphs> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowExecutionControlGraphs>() {
 			@Override
-			public boolean run(ActionEvent e, ShowExecutionControlGraphs action) {
+			public boolean run(EventObject e, ShowExecutionControlGraphs action) {
 				// try{
 				// if(action.getFocusedObject() instanceof AbstractActivityNode &&
 				// ((AbstractActivityNode)action.getFocusedObject()).isBeginNode()){
@@ -92,7 +92,7 @@ public class ShowExecutionControlGraphsInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowExecutionControlGraphs> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowExecutionControlGraphs>() {
 			@Override
-			public boolean run(ActionEvent e, ShowExecutionControlGraphs action) {
+			public boolean run(EventObject e, ShowExecutionControlGraphs action) {
 				/*
 				 * if (action.getFocusedObject() instanceof OperationNode) { OperationNode operationNode = action.getFocusedObject(); if
 				 * (operationNode.getComponentInstance().getComponentDefinition() != null) { if (Module.IE_MODULE.isAvailable()) {

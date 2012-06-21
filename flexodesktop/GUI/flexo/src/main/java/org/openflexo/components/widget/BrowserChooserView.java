@@ -37,7 +37,7 @@ public abstract class BrowserChooserView extends BrowserView {
 	private AbstractSelectorPanelOwner<?> _owner;
 
 	public BrowserChooserView(ProjectBrowser browser, FlexoController controller, AbstractSelectorPanelOwner<?> owner) {
-		super(browser, controller, null);
+		super(browser, controller);
 		_owner = owner;
 		setMinimumSize(getDefaultSize());
 		validate();

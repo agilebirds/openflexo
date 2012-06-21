@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -57,7 +57,7 @@ public class CreateSourceRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateSourceRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateSourceRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateSourceRepository action) {
+			public boolean run(EventObject e, CreateSourceRepository action) {
 
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
@@ -71,7 +71,7 @@ public class CreateSourceRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateSourceRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateSourceRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateSourceRepository action) {
+			public boolean run(EventObject e, CreateSourceRepository action) {
 				if (action.getNewSourceRepository() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getNewSourceRepository());
 				}

@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class OpenDMEntityInitializer extends ActionInitializer<OpenDMEntity, CGF
 	protected FlexoActionInitializer<OpenDMEntity> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenDMEntity>() {
 			@Override
-			public boolean run(ActionEvent e, OpenDMEntity action) {
+			public boolean run(EventObject e, OpenDMEntity action) {
 				return true;
 			}
 		};
@@ -57,7 +57,7 @@ public class OpenDMEntityInitializer extends ActionInitializer<OpenDMEntity, CGF
 	protected FlexoActionFinalizer<OpenDMEntity> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenDMEntity>() {
 			@Override
-			public boolean run(ActionEvent e, OpenDMEntity action) {
+			public boolean run(EventObject e, OpenDMEntity action) {
 				getEditor().focusOn(action.getModelEntity());
 				return true;
 			}

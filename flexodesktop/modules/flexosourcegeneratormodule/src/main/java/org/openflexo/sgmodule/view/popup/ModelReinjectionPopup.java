@@ -61,7 +61,7 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 	public ModelReinjectionPopup(String title, String label, Vector<SGJavaFile> javaFiles, FlexoProject project, SGController controller)
 			throws FJPParseException {
 		super(title, label, FlexoLocalization.localizedForKey("model_reinjection_description"), "update_model",
-				new ModelReinjectionBrowserConfiguration(javaFiles, project), project, controller.getFlexoFrame(), controller.getEditor());
+				new ModelReinjectionBrowserConfiguration(javaFiles, project), project, controller.getFlexoFrame());
 		Hashtable<FJPJavaClass, Vector<String>> ignoredProperties = new Hashtable<FJPJavaClass, Vector<String>>();
 		Hashtable<FJPJavaClass, Vector<String>> ignoredMethods = new Hashtable<FJPJavaClass, Vector<String>>();
 		for (SGJavaFile javaFile : javaFiles) {
@@ -233,7 +233,7 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 
 				@Override
 				public boolean mustBeHighlighted() {
-					return (((PropertyReference) getObject()).isNewlyDiscovered() && ((PropertyReference) getObject()).isResolvable());
+					return ((PropertyReference) getObject()).isNewlyDiscovered() && ((PropertyReference) getObject()).isResolvable();
 				}
 
 				@Override
@@ -272,7 +272,7 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 
 				@Override
 				public boolean mustBeHighlighted() {
-					return (((MethodReference) getObject()).isNewlyDiscovered() && ((MethodReference) getObject()).isResolvable());
+					return ((MethodReference) getObject()).isNewlyDiscovered() && ((MethodReference) getObject()).isResolvable();
 				}
 
 				@Override

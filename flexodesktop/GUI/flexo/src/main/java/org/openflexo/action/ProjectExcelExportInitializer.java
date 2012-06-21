@@ -19,9 +19,9 @@
  */
 package org.openflexo.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.EventObject;
 
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
@@ -60,7 +60,7 @@ public class ProjectExcelExportInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<ProjectExcelExportAction>() {
 
 			@Override
-			public boolean run(ActionEvent event, ProjectExcelExportAction action) {
+			public boolean run(EventObject event, ProjectExcelExportAction action) {
 				JFileChooser chooser = new JFileChooser();
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				chooser.setSelectedFile(new File(System.getProperty("user.home"), action.getFocusedObject().getProjectName() + ".csv"));

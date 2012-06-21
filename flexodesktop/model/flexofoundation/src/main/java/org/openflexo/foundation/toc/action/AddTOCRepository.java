@@ -41,12 +41,12 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 			"add_toc", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 

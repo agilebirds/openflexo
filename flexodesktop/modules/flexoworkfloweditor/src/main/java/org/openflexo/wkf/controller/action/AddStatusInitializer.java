@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -62,7 +62,7 @@ public class AddStatusInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddStatus> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddStatus>() {
 			@Override
-			public boolean run(ActionEvent e, AddStatus action) {
+			public boolean run(EventObject e, AddStatus action) {
 				if (action.getContext() instanceof DuplicateStatusException) {
 					return true;
 				}
@@ -96,7 +96,7 @@ public class AddStatusInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddStatus> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddStatus>() {
 			@Override
-			public boolean run(ActionEvent e, AddStatus action) {
+			public boolean run(EventObject e, AddStatus action) {
 				Status newStatus = action.getNewStatus();
 				if (e != null && e.getSource() instanceof BrowserActionSource) {
 					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();

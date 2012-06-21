@@ -62,14 +62,38 @@ public abstract class FlexoResourceUpdateHandler implements ResourceUpdateHandle
 	protected abstract void handleException(String unlocalizedMessage, FlexoException exception);
 
 	protected void generatedResourceModified(FlexoGeneratedResource generatedResource) {
-		if (generatedResource instanceof CGRepositoryFileResource) {
-			((CGRepositoryFileResource) generatedResource).notifyResourceChangedOnDisk();
+		if (_generatedResourceModifiedHook == null) {
+			if (generatedResource instanceof CGRepositoryFileResource) {
+				((CGRepositoryFileResource) generatedResource).notifyResourceChangedOnDisk();
+			}
+		} else {
+			_generatedResourceModifiedHook.handleGeneratedResourceModified(generatedResource);
 		}
 	}
 
 	protected void generatedResourcesModified(List<FlexoGeneratedResource<? extends GeneratedResourceData>> generatedResource) {
-		for (FlexoGeneratedResource<? extends GeneratedResourceData> resource : generatedResource) {
-			generatedResourceModified(resource);
+		if (_generatedResourceModifiedHook == null) {
+			for (FlexoGeneratedResource<? extends GeneratedResourceData> resource : generatedResource) {
+				generatedResourceModified(resource);
+			}
+		} else {
+			for (FlexoGeneratedResource<? extends GeneratedResourceData> resource : generatedResource) {
+
+				_generatedResourceModifiedHook.handleGeneratedResourceModified(resource);
+			}
 		}
 	}
+
+	private GeneratedResourceModifiedHook _generatedResourceModifiedHook = null;
+
+	@Override
+	public GeneratedResourceModifiedHook getGeneratedResourceModifiedHook() {
+		return _generatedResourceModifiedHook;
+	}
+
+	@Override
+	public void setGeneratedResourceModifiedHook(GeneratedResourceModifiedHook generatedResourceModifiedHook) {
+		_generatedResourceModifiedHook = generatedResourceModifiedHook;
+	}
+
 }

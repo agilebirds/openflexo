@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,7 +53,7 @@ public class MoveProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MoveProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, MoveProcessFolder action) {
+			public boolean run(EventObject e, MoveProcessFolder action) {
 				return /* FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_move_all_contained_processes?"));*/true;
 			}
 		};
@@ -63,7 +63,7 @@ public class MoveProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MoveProcessFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, MoveProcessFolder action) {
+			public boolean run(EventObject e, MoveProcessFolder action) {
 				return true;
 			}
 		};

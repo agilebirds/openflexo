@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class ConvertIntoLocalRoleInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ConvertIntoLocalRole> getDefaultInitializer() {
 		return new FlexoActionInitializer<ConvertIntoLocalRole>() {
 			@Override
-			public boolean run(ActionEvent e, ConvertIntoLocalRole action) {
+			public boolean run(EventObject e, ConvertIntoLocalRole action) {
 				return true;
 			}
 		};
@@ -62,7 +62,7 @@ public class ConvertIntoLocalRoleInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ConvertIntoLocalRole> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ConvertIntoLocalRole>() {
 			@Override
-			public boolean run(ActionEvent e, ConvertIntoLocalRole action) {
+			public boolean run(EventObject e, ConvertIntoLocalRole action) {
 				return true;
 			}
 		};

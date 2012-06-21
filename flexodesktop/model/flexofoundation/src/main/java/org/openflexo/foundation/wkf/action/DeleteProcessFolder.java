@@ -47,12 +47,12 @@ public class DeleteProcessFolder extends FlexoAction<DeleteProcessFolder, Proces
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection) {
+		public boolean isVisibleForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection) {
+		public boolean isEnabledForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection) {
 			return object != null;
 		}
 

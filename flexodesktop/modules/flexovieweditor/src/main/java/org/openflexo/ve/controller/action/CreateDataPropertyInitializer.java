@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class CreateDataPropertyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDataProperty> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDataProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDataProperty action) {
+			public boolean run(EventObject e, CreateDataProperty action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.CREATE_DATA_PROPERTY_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
@@ -66,7 +66,7 @@ public class CreateDataPropertyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDataProperty> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDataProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDataProperty action) {
+			public boolean run(EventObject e, CreateDataProperty action) {
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
 				return true;
 			}

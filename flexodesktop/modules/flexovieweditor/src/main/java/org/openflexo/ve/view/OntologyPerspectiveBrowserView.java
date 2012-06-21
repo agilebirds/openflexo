@@ -21,15 +21,8 @@ package org.openflexo.ve.view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
@@ -42,11 +35,10 @@ import org.openflexo.components.browser.view.BrowserViewCellRenderer;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.controller.VEBrowser;
-import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.controller.OntologyBrowser;
 import org.openflexo.ve.controller.OntologyLibraryBrowser;
+import org.openflexo.ve.controller.VEBrowser;
+import org.openflexo.ve.controller.VEController;
 
 public class OntologyPerspectiveBrowserView extends JPanel {
 
@@ -100,22 +92,12 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 				@Override
 				public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 						int row, boolean hasFocus) {
-					super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-					if (_controller.getCurrentModuleView() != null
-							&& (((BrowserElement) value).getObject() == _controller.getCurrentModuleView().getRepresentedObject())) {
-						setBackground(getBackgroundSelectionColor());
-						setForeground(getTextSelectionColor());
-						selected = true;
-					}
-					return this;
+					sel |= getController().getCurrentModuleView() != null
+							&& ((BrowserElement) value).getObject() == getController().getCurrentModuleView().getRepresentedObject();
+					return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 				}
 			});
 
-			FlowLayout flowLayout = new FlowLayout();
-			JPanel viewModePanels = new JPanel(flowLayout);
-			viewModePanels.setBorder(BorderFactory.createEmptyBorder());
-			flowLayout.setHgap(2);
 			// logger.info("hGap="+flowLayout.getHgap()+" vGap="+flowLayout.getVgap());
 
 			ViewModeButton noHierarchyViewModeButton = new ViewModeButton(VPMIconLibrary.NO_HIERARCHY_MODE_ICON, "no_hierarchy_mode") {
@@ -126,6 +108,12 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 					mainBrowser.switchToNoHierarchyMode(controller.getProject());
 					ontologyBrowser.setOEViewMode(OEViewMode.NoHierarchy);
 					// elementTypeFilterChanged();
+				}
+
+				@Override
+				public void setFilters() {
+					// TODO Auto-generated method stub
+
 				}
 			};
 			ViewModeButton partialHierarchyViewModeButton = new ViewModeButton(VPMIconLibrary.PARTIAL_HIERARCHY_MODE_ICON,
@@ -138,6 +126,12 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 					ontologyBrowser.setOEViewMode(OEViewMode.PartialHierarchy);
 					// elementTypeFilterChanged();
 				}
+
+				@Override
+				public void setFilters() {
+					// TODO Auto-generated method stub
+
+				}
 			};
 			ViewModeButton fullHierarchyViewModeButton = new ViewModeButton(VPMIconLibrary.FULL_HIERARCHY_MODE_ICON, "full_hierarchy_mode") {
 				@Override
@@ -148,45 +142,17 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 					ontologyBrowser.setOEViewMode(OEViewMode.FullHierarchy);
 					// elementTypeFilterChanged();
 				}
+
+				@Override
+				public void setFilters() {
+					// TODO Auto-generated method stub
+
+				}
 			};
 
-			viewModePanels.add(noHierarchyViewModeButton);
-			viewModePanels.add(partialHierarchyViewModeButton);
-			viewModePanels.add(fullHierarchyViewModeButton);
-
-			add(viewModePanels, BorderLayout.NORTH);
-		}
-
-		protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener {
-			protected ViewModeButton(ImageIcon icon, String unlocalizedDescription) {
-				super(icon);
-				setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
-				setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-				addMouseListener(this);
-				addActionListener(this);
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				setBorder(BorderFactory.createEtchedBorder());
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
+			addHeaderComponent(noHierarchyViewModeButton);
+			addHeaderComponent(partialHierarchyViewModeButton);
+			addHeaderComponent(fullHierarchyViewModeButton);
 
 		}
 

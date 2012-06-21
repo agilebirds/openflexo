@@ -37,7 +37,6 @@ import org.openflexo.foundation.ws.WSObject;
 import org.openflexo.foundation.ws.WSPortType;
 import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 import org.openflexo.wse.controller.WSEController;
 
 /**
@@ -47,8 +46,8 @@ import org.openflexo.wse.controller.WSEController;
  */
 public class WSEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public WSEMainPane(ModuleView moduleView, WSEFrame mainFrame, WSEController controller) {
-		super(moduleView, mainFrame, controller);
+	public WSEMainPane(WSEController controller) {
+		super(controller);
 		setLeftView(new WSEBrowserView(controller));
 	}
 

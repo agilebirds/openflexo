@@ -64,12 +64,12 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractViewObject view, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(AbstractViewObject view, Vector<ViewObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractViewObject view, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(AbstractViewObject view, Vector<ViewObject> globalSelection) {
 			return view instanceof View || view instanceof ViewDefinition;
 		}
 

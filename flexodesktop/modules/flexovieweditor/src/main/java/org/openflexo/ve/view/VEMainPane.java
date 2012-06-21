@@ -23,7 +23,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 
 /**
  * Represents the main pane for ViewEditor module
@@ -32,9 +31,8 @@ import org.openflexo.view.ModuleView;
  */
 public class VEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public VEMainPane(ModuleView moduleView, VEFrame mainFrame, VEController controller) {
-		super(moduleView, mainFrame, controller, true, true);
-		// setLeftView(new OEBrowserView(controller));
+	public VEMainPane(VEController controller) {
+		super(controller, true, true);
 	}
 
 	public void showBrowser() {

@@ -46,12 +46,12 @@ public class DeletePaletteElement extends FlexoAction<DeletePaletteElement, View
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewPointPaletteElement object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewPointPaletteElement object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewPointPaletteElement object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewPointPaletteElement object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 

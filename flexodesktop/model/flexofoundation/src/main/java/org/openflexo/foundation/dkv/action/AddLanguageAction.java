@@ -52,12 +52,12 @@ public class AddLanguageAction extends FlexoUndoableAction<AddLanguageAction, DK
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
 			return object instanceof DKVModel.LanguageList || object instanceof DKVModel;
 		}
 

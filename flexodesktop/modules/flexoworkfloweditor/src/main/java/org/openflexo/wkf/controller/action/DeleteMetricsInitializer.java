@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -52,7 +52,7 @@ public class DeleteMetricsInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteMetricsValue> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteMetricsValue>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteMetricsValue action) {
+			public boolean run(EventObject e, DeleteMetricsValue action) {
 				boolean doIt;
 				Vector<MetricsValue> metricsValueToDelete = action.getMetricsValueToDelete();
 				if (metricsValueToDelete.size() == 0) {
@@ -72,7 +72,7 @@ public class DeleteMetricsInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteMetricsValue> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteMetricsValue>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteMetricsValue action) {
+			public boolean run(EventObject e, DeleteMetricsValue action) {
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
 						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();

@@ -22,9 +22,9 @@ package org.openflexo.dm.view.controller;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.dm.view.menu.DMMenuBar;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to Data Model Editor module
@@ -37,10 +37,10 @@ public class DMSelectionManager extends SelectionManager {
 
 	public DMSelectionManager(DMController controller) {
 		super(controller);
-		DMMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new DMClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new DMContextualMenuManager(this, controller.getEditor());
+		_contextualMenuManager = new DMContextualMenuManager(this, controller);
 	}
 
 	public DMController getDMController() {

@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateObjectProperty> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateObjectProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateObjectProperty action) {
+			public boolean run(EventObject e, CreateObjectProperty action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;
@@ -66,7 +66,7 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateObjectProperty> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateObjectProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateObjectProperty action) {
+			public boolean run(EventObject e, CreateObjectProperty action) {
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
 				return true;
 			}

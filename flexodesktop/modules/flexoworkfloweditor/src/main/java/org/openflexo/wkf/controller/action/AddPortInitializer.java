@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -61,7 +61,7 @@ public class AddPortInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddPort> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddPort>() {
 			@Override
-			public boolean run(ActionEvent e, final AddPort action) {
+			public boolean run(EventObject e, final AddPort action) {
 				if (!action.hasBeenLocated()) {
 					WKFController controller = (WKFController) getController();
 					FGEPoint lastClickedPoint = controller.getLastClickedPoint();
@@ -113,7 +113,7 @@ public class AddPortInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddPort> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddPort>() {
 			@Override
-			public boolean run(ActionEvent e, AddPort action) {
+			public boolean run(EventObject e, AddPort action) {
 				FlexoPort newFlexoPort = action.getNewPort();
 				if (newFlexoPort == null) {
 					return false;

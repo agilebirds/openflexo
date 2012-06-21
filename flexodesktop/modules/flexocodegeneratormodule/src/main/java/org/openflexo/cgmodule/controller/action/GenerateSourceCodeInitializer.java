@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.awt.event.KeyEvent;
 import java.util.logging.Logger;
 
@@ -65,7 +65,7 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<GenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action) {
+			public boolean run(EventObject e, GenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -92,7 +92,7 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action) {
+			public boolean run(EventObject e, GenerateSourceCode action) {
 				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
 				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();

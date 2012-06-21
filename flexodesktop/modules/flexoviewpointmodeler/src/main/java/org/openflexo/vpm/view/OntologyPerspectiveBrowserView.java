@@ -43,9 +43,9 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.OntologyBrowser;
 import org.openflexo.vpm.controller.OntologyLibraryBrowser;
+import org.openflexo.vpm.controller.VPMController;
 
 public class OntologyPerspectiveBrowserView extends JPanel {
 
@@ -101,8 +101,8 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 						int row, boolean hasFocus) {
 					super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-					if (_controller.getCurrentModuleView() != null
-							&& (((BrowserElement) value).getObject() == _controller.getCurrentModuleView().getRepresentedObject())) {
+					if (getController().getCurrentModuleView() != null
+							&& ((BrowserElement) value).getObject() == getController().getCurrentModuleView().getRepresentedObject()) {
 						setBackground(getBackgroundSelectionColor());
 						setForeground(getTextSelectionColor());
 						selected = true;

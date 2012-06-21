@@ -21,16 +21,12 @@ package org.openflexo.doceditor.controller;
 
 import java.util.logging.Logger;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
 import org.openflexo.doceditor.menu.DEMenuBar;
-import org.openflexo.doceditor.view.DEFrame;
 import org.openflexo.doceditor.view.DEMainPane;
 import org.openflexo.doceditor.view.listener.DEKeyEventListener;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.DGRepository;
@@ -47,7 +43,9 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -71,40 +69,23 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 		return true;
 	}
 
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	protected DEMenuBar _generatorMenuBar;
-
-	protected DEFrame _generatorFrame;
-
-	protected DEKeyEventListener _generatorKeyEventListener;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	/**
 	 * Default constructor
 	 * 
 	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public DEController(FlexoModule module) throws Exception {
+	public DEController(FlexoModule module) {
 		super(module);
-
 		addToPerspectives(DOCEDITOR_PERSPECTIVE);
-		_generatorMenuBar = (DEMenuBar) createAndRegisterNewMenuBar();
-		_generatorKeyEventListener = new DEKeyEventListener(this);
-		_generatorFrame = new DEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _generatorKeyEventListener, _generatorMenuBar);
-		init(_generatorFrame, _generatorKeyEventListener, _generatorMenuBar);
 		if (_selectionManager == null) {
 			_selectionManager = createSelectionManager();
 		}
+	}
 
+	@Override
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new DEKeyEventListener(this);
 	}
 
 	protected DESelectionManager createSelectionManager() {
@@ -112,12 +93,12 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	}
 
 	protected DEClipboard createClipboard(DESelectionManager selectionManager) {
-		return new DEClipboard(selectionManager, getEditorMenuBar().getEditMenu(this).copyItem,
-				getEditorMenuBar().getEditMenu(this).pasteItem, getEditorMenuBar().getEditMenu(this).cutItem);
+		return new DEClipboard(selectionManager, getMenuBar().getEditMenu(this).copyItem, getMenuBar().getEditMenu(this).pasteItem,
+				getMenuBar().getEditMenu(this).cutItem);
 	}
 
 	protected DEContextualMenuManager createContextualMenuManager(DESelectionManager selectionManager) {
-		return new DEContextualMenuManager(selectionManager, getEditor(), this);
+		return new DEContextualMenuManager(selectionManager, this);
 	}
 
 	/**
@@ -130,30 +111,14 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 		return new DEMenuBar(this);
 	}
 
-	public DEMenuBar getEditorMenuBar() {
-		return _generatorMenuBar;
-	}
-
-	/*
-	 * public ModuleView getCurrentModuleView() { return null; }
-	 */
-
-	public DEKeyEventListener getGeneratorKeyEventListener() {
-		return _generatorKeyEventListener;
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new DEMainPane(this, getEmptyPanel(), getFlexoFrame());
+		return new DEMainPane(this);
 	}
 
 	@Override
-	public DEControllerActionInitializer createControllerActionInitializer() {
-		return new DEControllerActionInitializer(this);
-	}
-
-	public DEKeyEventListener getKeyEventListener() {
-		return _generatorKeyEventListener;
+	public DEControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new DEControllerActionInitializer(editor, this);
 	}
 
 	public void initProgressWindow(String msg, int steps) {
@@ -170,10 +135,6 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 
 	public void disposeProgressWindow() {
 		ProgressWindow.hideProgressWindow();
-	}
-
-	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
 	}
 
 	/**

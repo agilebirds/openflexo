@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
@@ -68,7 +68,7 @@ public class IEDeleteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<IEDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<IEDelete>() {
 			@Override
-			public boolean run(ActionEvent e, IEDelete action) {
+			public boolean run(EventObject e, IEDelete action) {
 				boolean doIt = false;
 				if (action.getFocusedObject() == null) {
 					return false;
@@ -117,7 +117,7 @@ public class IEDeleteInitializer extends ActionInitializer {
 						} else {
 							String deleteAnyway = FlexoLocalization.localizedForKey("delete_anymay");
 							String cancel = FlexoLocalization.localizedForKey("cancel");
-							doIt = (FlexoController.selectOption(warnings, new String[] { deleteAnyway, cancel }, cancel) == 0);
+							doIt = FlexoController.selectOption(warnings, new String[] { deleteAnyway, cancel }, cancel) == 0;
 						}
 					}
 				} else if (folders.size() > 0) {
@@ -223,7 +223,7 @@ public class IEDeleteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<IEDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IEDelete>() {
 			@Override
-			public boolean run(ActionEvent e, IEDelete action) {
+			public boolean run(EventObject e, IEDelete action) {
 				return true;
 			}
 		};
@@ -237,12 +237,6 @@ public class IEDeleteInitializer extends ActionInitializer {
 	@Override
 	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(IEDelete.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
 	}
 
 }

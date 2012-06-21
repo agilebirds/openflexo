@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -59,7 +59,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DKVDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<DKVDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DKVDelete action) {
+			public boolean run(EventObject e, DKVDelete action) {
 				if (!FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"))) {
 					return false;
 				}
@@ -107,7 +107,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DKVDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DKVDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DKVDelete action) {
+			public boolean run(EventObject e, DKVDelete action) {
 				Domain domainToSelect = null;
 				if (action.getFocusedObject() instanceof Key) {
 					if (((Key) action.getFocusedObject()).getDomain() != null && ((Key) action.getFocusedObject()).getDomain() != null) {

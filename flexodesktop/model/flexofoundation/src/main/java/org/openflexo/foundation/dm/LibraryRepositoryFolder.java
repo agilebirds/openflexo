@@ -23,8 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.dm.action.ImportJARFileRepository;
-import org.openflexo.foundation.dm.action.ImportThesaurusDatabaseRepository;
-import org.openflexo.foundation.dm.action.ImportThesaurusRepository;
 
 public class LibraryRepositoryFolder extends DMRepositoryFolder {
 
@@ -49,7 +47,7 @@ public class LibraryRepositoryFolder extends DMRepositoryFolder {
 
 	@Override
 	public DMRepository getRepositoryAtIndex(int index) {
-		if ((index >= 0) && (index < getRepositoriesCount())) {
+		if (index >= 0 && index < getRepositoriesCount()) {
 			int existingRepositories = 0;
 			if (index - existingRepositories < getDMModel().getExternalRepositories().size()) {
 				return getDMModel().getExternalRepositories().elementAt(index - existingRepositories);
@@ -106,8 +104,6 @@ public class LibraryRepositoryFolder extends DMRepositoryFolder {
 		returned.add(ImportJARFileRepository.actionType);
 		// returned.add(ImportRationalRoseRepository.actionType);
 		// returned.add(ImportDenaliFoundationRepository.actionType);
-		returned.add(ImportThesaurusRepository.actionType);
-		returned.add(ImportThesaurusDatabaseRepository.actionType);
 		return returned;
 	}
 

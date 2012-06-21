@@ -53,12 +53,12 @@ public class OpenExecutionPetriGraph extends FlexoUndoableAction<OpenExecutionPe
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
 			return (object instanceof SelfExecutableNode);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

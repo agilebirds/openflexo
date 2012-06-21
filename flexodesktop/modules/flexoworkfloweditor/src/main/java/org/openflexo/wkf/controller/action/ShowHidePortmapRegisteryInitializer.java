@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -44,7 +44,7 @@ public class ShowHidePortmapRegisteryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowHidePortmapRegistery> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowHidePortmapRegistery>() {
 			@Override
-			public boolean run(ActionEvent e, ShowHidePortmapRegistery action) {
+			public boolean run(EventObject e, ShowHidePortmapRegistery action) {
 				return true;
 			}
 		};

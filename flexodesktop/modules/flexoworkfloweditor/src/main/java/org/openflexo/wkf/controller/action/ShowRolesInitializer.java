@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -64,7 +64,7 @@ public class ShowRolesInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<ShowRoles>() {
 
 			@Override
-			public boolean run(ActionEvent event, ShowRoles action) {
+			public boolean run(EventObject event, ShowRoles action) {
 				if (action.getProcess() != null) {
 					String context = SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(action.getProcess());
 					Vector<Role> roles = new Vector<Role>();
@@ -128,7 +128,7 @@ public class ShowRolesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowRoles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowRoles>() {
 			@Override
-			public boolean run(ActionEvent e, ShowRoles action) {
+			public boolean run(EventObject e, ShowRoles action) {
 				return true;
 			}
 		};

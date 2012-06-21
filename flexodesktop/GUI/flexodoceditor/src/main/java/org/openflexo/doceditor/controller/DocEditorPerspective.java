@@ -56,7 +56,7 @@ public class DocEditorPerspective extends FlexoPerspective {
 
 	@Override
 	public TOCObject getDefaultObject(FlexoModelObject proposedObject) {
-		if ((proposedObject instanceof TOCObject) && hasModuleViewForObject(proposedObject)) {
+		if (proposedObject instanceof TOCObject && hasModuleViewForObject(proposedObject)) {
 			return (TOCObject) proposedObject;
 		}
 
@@ -65,11 +65,11 @@ public class DocEditorPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof TOCEntry) || (object instanceof TOCRepository) || (object instanceof TOCData));
+		return object instanceof TOCEntry || object instanceof TOCRepository || object instanceof TOCData;
 	}
 
 	@Override
-	public ModuleView<? extends TOCObject> createModuleViewForObject(TOCObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof TOCRepository) {
 			return new DERepositoryModuleView((TOCRepository) object, (DEController) controller, this);
 		} else if (object instanceof TOCData) {

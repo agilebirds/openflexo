@@ -19,8 +19,8 @@
  */
 package org.openflexo.wse.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,7 +72,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateNewWebService> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateNewWebService>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNewWebService action) {
+			public boolean run(EventObject e, CreateNewWebService action) {
 				final ParameterDefinition[] params = new ParameterDefinition[9];
 
 				RadioButtonMode EXTERNAL_WS = new RadioButtonMode(new FileResource("Resources/WS/SmallWSIcon.gif"),
@@ -207,7 +207,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateNewWebService> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateNewWebService>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNewWebService action) {
+			public boolean run(EventObject e, CreateNewWebService action) {
 				if (action.getNewWebService() == null) {
 					return false;
 				}

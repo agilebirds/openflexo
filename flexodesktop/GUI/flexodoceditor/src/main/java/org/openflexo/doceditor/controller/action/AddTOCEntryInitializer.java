@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.doceditor.DECst;
@@ -49,7 +49,7 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, AddTOCEntry action) {
+			public boolean run(EventObject e, AddTOCEntry action) {
 
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(DECst.CREATE_TOC_ENTRY_DIALOG_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
@@ -62,7 +62,7 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, AddTOCEntry action) {
+			public boolean run(EventObject e, AddTOCEntry action) {
 				return true;
 			}
 		};

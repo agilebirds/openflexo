@@ -47,12 +47,12 @@ public class CreateDMEOAttribute extends FlexoAction<CreateDMEOAttribute, DMEOEn
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
 			return object != null && !object.getIsReadOnly();
 		}
 

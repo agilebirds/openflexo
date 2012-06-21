@@ -85,11 +85,15 @@ class DKVPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<DKVModel> createModuleViewForObject(DKVModel object, FlexoController controller) {
-		if (dkvModelView == null) {
-			dkvModelView = new DKVModelView(object, (IEController) controller);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof DKVModel) {
+			if (dkvModelView == null) {
+				dkvModelView = new DKVModelView((DKVModel) object, (IEController) controller);
+			}
+			return dkvModelView;
+		} else {
+			return null;
 		}
-		return dkvModelView;
 	}
 
 	@Override

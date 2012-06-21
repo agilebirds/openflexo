@@ -49,12 +49,12 @@ public class CreateOntologyClass extends FlexoAction<CreateOntologyClass, Ontolo
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
+		public boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
+		public boolean isEnabledForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
 			return object != null && !object.getIsReadOnly();
 		}
 

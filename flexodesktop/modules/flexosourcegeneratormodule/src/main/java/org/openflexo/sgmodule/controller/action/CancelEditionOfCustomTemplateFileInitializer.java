@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class CancelEditionOfCustomTemplateFileInitializer extends ActionInitiali
 	protected FlexoActionInitializer<CancelEditionOfCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<CancelEditionOfCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, CancelEditionOfCustomTemplateFile action) {
+			public boolean run(EventObject e, CancelEditionOfCustomTemplateFile action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class CancelEditionOfCustomTemplateFileInitializer extends ActionInitiali
 	protected FlexoActionFinalizer<CancelEditionOfCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CancelEditionOfCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, CancelEditionOfCustomTemplateFile action) {
+			public boolean run(EventObject e, CancelEditionOfCustomTemplateFile action) {
 				return true;
 			}
 		};

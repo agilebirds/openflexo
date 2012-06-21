@@ -371,7 +371,6 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		getRootPane().setDefaultButton(confirmButton);
 		setModal(true);
-		validate();
 		pack();
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);

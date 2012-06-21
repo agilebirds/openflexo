@@ -19,7 +19,7 @@
  */
 package org.openflexo.tm.hibernate.gui.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 
 import javax.swing.Icon;
 
@@ -55,7 +55,7 @@ public class CreateHibernateModelActionInitializer extends
 	protected FlexoActionInitializer<CreateHibernateModelAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateHibernateModelAction>() {
 			@Override
-			public boolean run(ActionEvent e, CreateHibernateModelAction action) {
+			public boolean run(EventObject e, CreateHibernateModelAction action) {
 				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				return dialog.getStatus() == Status.VALIDATED;

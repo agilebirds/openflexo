@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.application.FlexoApplication;
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.controller.DrawingController;
@@ -33,16 +33,12 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalCEDModule;
-import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
 import org.openflexo.vpm.palette.CalcPaletteController;
@@ -62,8 +58,8 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	private boolean drawWorkingArea;
 	private FlexoModelObject screenshotObject;
 
-	public VPMModule() throws Exception {
-		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
+	public VPMModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
 		setFlexoController(new VPMController(this));
 		getCEDController().loadRelativeWindows();
 		CEDPreferences.init(getCEDController());
@@ -86,7 +82,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
 		return getCEDController().getCalcLibrary();
 	}
 

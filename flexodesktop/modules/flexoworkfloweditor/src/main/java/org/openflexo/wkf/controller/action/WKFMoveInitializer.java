@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class WKFMoveInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WKFMove> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFMove>() {
 			@Override
-			public boolean run(ActionEvent e, WKFMove action) {
+			public boolean run(EventObject e, WKFMove action) {
 				return true;
 			}
 		};
@@ -57,7 +57,7 @@ public class WKFMoveInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WKFMove> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFMove>() {
 			@Override
-			public boolean run(ActionEvent e, WKFMove action) {
+			public boolean run(EventObject e, WKFMove action) {
 				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
 				return true;
 			}
@@ -68,7 +68,7 @@ public class WKFMoveInitializer extends ActionInitializer {
 	protected FlexoActionUndoFinalizer<WKFMove> getDefaultUndoFinalizer() {
 		return new FlexoActionUndoFinalizer<WKFMove>() {
 			@Override
-			public boolean run(ActionEvent e, WKFMove action) {
+			public boolean run(EventObject e, WKFMove action) {
 				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
 				return true;
 			}
@@ -79,7 +79,7 @@ public class WKFMoveInitializer extends ActionInitializer {
 	protected FlexoActionRedoFinalizer<WKFMove> getDefaultRedoFinalizer() {
 		return new FlexoActionRedoFinalizer<WKFMove>() {
 			@Override
-			public boolean run(ActionEvent e, WKFMove action) {
+			public boolean run(EventObject e, WKFMove action) {
 				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
 				return true;
 			}

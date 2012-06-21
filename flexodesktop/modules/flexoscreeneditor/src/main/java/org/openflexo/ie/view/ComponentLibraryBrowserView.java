@@ -43,21 +43,8 @@ import org.openflexo.ie.view.controller.dnd.IECLTreeDropTarget;
  */
 public class ComponentLibraryBrowserView extends BrowserView {
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected IEController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public ComponentLibraryBrowserView(IEController controller) {
-		super(controller.getComponentLibraryBrowser(), controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(controller.getComponentLibraryBrowser(), controller);
 		treeView.setCellRenderer(new BrowserViewCellRenderer() {
 			/**
 			 * Overrides getTreeCellRendererComponent
@@ -69,11 +56,10 @@ public class ComponentLibraryBrowserView extends BrowserView {
 			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row,
 					boolean hasFocus) {
 				super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-				if (_controller.getCurrentModuleView() != null
-						&& (((BrowserElement) value).getObject() == _controller.getCurrentModuleView().getRepresentedObject() || (_controller
-								.getCurrentModuleView().getRepresentedObject() instanceof ComponentInstance && ((ComponentInstance) _controller
-								.getCurrentModuleView().getRepresentedObject()).getComponentDefinition() == (((BrowserElement) value)
-								.getObject())))) {
+				Object currentObject = getController().getCurrentModuleView().getRepresentedObject();
+				if (getController().getCurrentModuleView() != null
+						&& (((BrowserElement) value).getObject() == currentObject || currentObject instanceof ComponentInstance
+								&& ((ComponentInstance) currentObject).getComponentDefinition() == ((BrowserElement) value).getObject())) {
 					setBackground(getBackgroundSelectionColor());
 					setForeground(getTextSelectionColor());
 					selected = true;
@@ -96,10 +82,10 @@ public class ComponentLibraryBrowserView extends BrowserView {
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
 		if (object instanceof ReusableComponentDefinition) {
-			_controller.setSelectedComponent(((ReusableComponentDefinition) object).getDummyComponentInstance());
+			getController().setCurrentEditedObjectAsModuleView(((ReusableComponentDefinition) object).getDummyComponentInstance());
 		}
 		if (object instanceof ComponentDefinition && !(object instanceof ReusableComponentDefinition)) {
-			_controller.setSelectedComponent(((ComponentDefinition) object).getDummyComponentInstance());
+			getController().setCurrentEditedObjectAsModuleView(((ComponentDefinition) object).getDummyComponentInstance());
 		}/*
 			    * else if (object instanceof FlexoComponentFolder){ if
 			    * (_controller.getCurrentPerspective()==_controller.EXAMPLE_VALUE_PERSPECTIVE)

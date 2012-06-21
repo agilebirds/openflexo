@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -40,7 +40,7 @@ public class MoveTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MoveTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, MoveTOCEntry action) {
+			public boolean run(EventObject e, MoveTOCEntry action) {
 				return true;
 			}
 		};
@@ -50,7 +50,7 @@ public class MoveTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MoveTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, MoveTOCEntry action) {
+			public boolean run(EventObject e, MoveTOCEntry action) {
 				return true;
 			}
 		};

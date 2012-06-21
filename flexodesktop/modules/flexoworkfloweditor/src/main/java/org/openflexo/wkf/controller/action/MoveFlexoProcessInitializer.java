@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -51,7 +51,7 @@ public class MoveFlexoProcessInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MoveFlexoProcess> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveFlexoProcess>() {
 			@Override
-			public boolean run(ActionEvent e, final MoveFlexoProcess action) {
+			public boolean run(EventObject e, final MoveFlexoProcess action) {
 				if (action.getFocusedObject() == null) {
 					return false;
 				}
@@ -116,7 +116,7 @@ public class MoveFlexoProcessInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MoveFlexoProcess> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveFlexoProcess>() {
 			@Override
-			public boolean run(ActionEvent e, MoveFlexoProcess action) {
+			public boolean run(EventObject e, MoveFlexoProcess action) {
 				return true;
 			}
 		};

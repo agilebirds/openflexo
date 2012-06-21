@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junit.framework.AssertionFailedError;
@@ -35,11 +36,9 @@ import org.openflexo.diff.merge.MergeChange.MergeChangeSource;
 import org.openflexo.diff.merge.MergeChange.MergeChangeType;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.Format;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.DGRepository;
@@ -787,7 +786,8 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		directory.mkdirs();
 		CGRepository reply = null;
 		prj.setTargetType(targetType);
-		AddGeneratedCodeRepository addCGRepository = AddGeneratedCodeRepository.actionType.makeNewAction(prj.getGeneratedCode(), null);
+		AddGeneratedCodeRepository addCGRepository = AddGeneratedCodeRepository.actionType.makeNewAction(prj.getGeneratedCode(), null,
+				_editor);
 		addCGRepository.setNewGeneratedCodeRepositoryName(repositoryName);
 		addCGRepository.setNewGeneratedCodeRepositoryDirectory(directory);
 		addCGRepository.doAction();
@@ -799,43 +799,33 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 	public void synchronizeCodeGeneration(CGRepository codeRep) {
 		// Synchronize code generation
 		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
-				codeRep, null);
+				codeRep, null, _editor);
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 
 		// Write generated files to disk
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRep, null);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRep, null, _editor);
 		writeToDisk.doAction();
 		saveProject();
 	}
 
 	public void assertProjectIsValid(CGRepository codeRep) {
+		validateProject(codeRep, true);
+	}
 
-		_editor.registerExceptionHandlerFor(ValidateProject.actionType, new FlexoExceptionHandler<ValidateProject>() {
-			@Override
-			public boolean handleException(FlexoException exception, ValidateProject action) {
-				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from IE:\n" + action.getIeValidationReport().reportAsString());
-				}
-				if (action.getWkfValidationReport() != null && action.getWkfValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from WKF:\n" + action.getWkfValidationReport().reportAsString());
-				}
-				if (action.getDkvValidationReport() != null && action.getDkvValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DKV:\n" + action.getDkvValidationReport().reportAsString());
-				}
-				if (action.getDmValidationReport() != null && action.getDmValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DM:\n" + action.getDmValidationReport().reportAsString());
-				}
-				return true;
-			}
-		});
+	public void validateProject(CGRepository codeRep, boolean assertValid) {
 
-		ValidateProject validateProject = ValidateProject.actionType.makeNewAction(codeRep, null);
+		ValidateProject validateProject = ValidateProject.actionType.makeNewAction(codeRep, null, _editor);
 		validateProject.doAction();
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info(validateProject.readableValidationErrors());
+		}
 
-		// First project is not valid
-		assertFalse(validateProject.isProjectValid());
+		if (assertValid) {
+			// First project is not valid
+			assertFalse(validateProject.isProjectValid());
+		}
 
 		// First project is not valid
 		/*try {
@@ -852,11 +842,16 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		_project.getFlexoNavigationMenu().getRootMenu().setOperation(_operationNode);
 
 		// Project should be without errors now
-		validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null);
+		validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
 		validateProject.doAction();
-		assertTrue(validateProject.isProjectValid());
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info(validateProject.readableValidationErrors());
+		}
 
-		saveProject();
+		if (assertValid) {
+			assertTrue(validateProject.isProjectValid());
+			saveProject();
+		}
 
 	}
 

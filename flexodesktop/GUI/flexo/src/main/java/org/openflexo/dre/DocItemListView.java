@@ -40,7 +40,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
-import org.openflexo.ColorCst;
 import org.openflexo.drm.DocItem;
 import org.openflexo.icon.DREIconLibrary;
 import org.openflexo.icon.IconLibrary;
@@ -128,11 +127,9 @@ public class DocItemListView extends JPanel {
 		protected DocItemListViewFooter() {
 			super(new BorderLayout());
 			JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-			plusMinusPanel.setBackground(ColorCst.GUI_BACK_COLOR);
 			plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
 
 			plusButton = new JButton(IconLibrary.BROWSER_PLUS_ICON);
-			plusButton.setBackground(ColorCst.GUI_BACK_COLOR);
 			plusButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -160,7 +157,6 @@ public class DocItemListView extends JPanel {
 			});
 
 			minusButton = new JButton(IconLibrary.BROWSER_MINUS_ICON);
-			minusButton.setBackground(ColorCst.GUI_BACK_COLOR);
 			minusButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.doceditor.DECst;
@@ -66,7 +66,7 @@ public class ImportDocumentationTemplateInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportDocumentationTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportDocumentationTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, ImportDocumentationTemplates action) {
+			public boolean run(EventObject e, ImportDocumentationTemplates action) {
 				FIBDialog dialog = FIBDialog.instanciateDialog(DECst.IMPORT_DOCUMENTATION_TEMPLATES_FIB, action,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				dialog.setTitle(FlexoLocalization.localizedForKey("import_documentation_templates"));

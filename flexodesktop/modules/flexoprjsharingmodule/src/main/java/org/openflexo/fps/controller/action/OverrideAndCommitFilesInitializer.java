@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -49,7 +49,7 @@ public class OverrideAndCommitFilesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OverrideAndCommitFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<OverrideAndCommitFiles>() {
 			@Override
-			public boolean run(ActionEvent e, OverrideAndCommitFiles action) {
+			public boolean run(EventObject e, OverrideAndCommitFiles action) {
 				if (!FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_override_and_commit_those_files"))) {
 					return false;
 				}
@@ -73,7 +73,7 @@ public class OverrideAndCommitFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OverrideAndCommitFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OverrideAndCommitFiles>() {
 			@Override
-			public boolean run(ActionEvent e, OverrideAndCommitFiles action) {
+			public boolean run(EventObject e, OverrideAndCommitFiles action) {
 				return true;
 			}
 		};

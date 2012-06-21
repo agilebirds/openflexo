@@ -42,7 +42,7 @@ public class SelectDMEntitiesPopup extends MultipleObjectSelectorPopup {
 					public BrowserFilterStatus getVisibility(BrowserElementType elementType) {
 						return BrowserFilterStatus.SHOW;
 					}
-				}), project, controller.getFlexoFrame(), controller.getEditor());
+				}), project, controller.getFlexoFrame());
 		if (selectedEntities != null) {
 			choicePanel.setSelectedObjects(selectedEntities);
 		}

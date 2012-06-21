@@ -19,8 +19,8 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -73,7 +73,7 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDMEORelationship> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEORelationship>() {
 			@Override
-			public boolean run(ActionEvent e, final CreateDMEORelationship action) {
+			public boolean run(EventObject e, final CreateDMEORelationship action) {
 				final String NORMAL_RELATIONSHIP = FlexoLocalization.localizedForKey("create_normal_relationship");
 				final String FLATTEN_RELATIONSHIP = FlexoLocalization.localizedForKey("create_flatten_relationship");
 				String[] relationshipTypeChoices = { NORMAL_RELATIONSHIP, FLATTEN_RELATIONSHIP };
@@ -233,7 +233,7 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDMEORelationship> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMEORelationship>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMEORelationship action) {
+			public boolean run(EventObject e, CreateDMEORelationship action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getDMEOModel()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEORelationship in DMEOModelView");

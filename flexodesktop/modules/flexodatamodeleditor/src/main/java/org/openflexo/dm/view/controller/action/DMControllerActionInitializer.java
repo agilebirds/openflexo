@@ -19,10 +19,23 @@
  */
 package org.openflexo.dm.view.controller.action;
 
+import java.util.EventObject;
 import java.util.logging.Logger;
+
+import javax.swing.Icon;
 
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.dm.view.controller.DMSelectionManager;
+import org.openflexo.dm.view.popups.AskNewRepositoryDialog;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.dm.action.CreateAnyDMRepository;
+import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
+import org.openflexo.foundation.dm.action.CreateProjectRepository;
+import org.openflexo.foundation.dm.action.ImportExternalDatabaseRepository;
+import org.openflexo.foundation.dm.action.ImportJARFileRepository;
+import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -56,7 +69,121 @@ public class DMControllerActionInitializer extends ControllerActionInitializer {
 		new DMPasteInitializer(this);
 		new DMDeleteInitializer(this);
 		new DMSelectAllInitializer(this);
-		new CreateDMRepositoryInitializer(this);
+		new CreateDMRepositoryInitializer<CreateAnyDMRepository>(CreateAnyDMRepository.actionType, this) {
+
+			@Override
+			protected Icon getEnabledIcon() {
+				return DMEIconLibrary.DM_REPOSITORY_ICON;
+			}
+
+			@Override
+			protected FlexoActionInitializer<CreateAnyDMRepository> getDefaultInitializer() {
+				return new FlexoActionInitializer<CreateAnyDMRepository>() {
+					@Override
+					public boolean run(EventObject e, CreateAnyDMRepository action) {
+						return AskNewRepositoryDialog.displayDialog(action,
+								getControllerActionInitializer().getDMController().getProject(), getControllerActionInitializer()
+										.getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE;
+					}
+				};
+			}
+		};
+		new CreateDMRepositoryInitializer<CreateProjectDatabaseRepository>(CreateProjectDatabaseRepository.actionType, this) {
+
+			@Override
+			protected Icon getEnabledIcon() {
+				return DMEIconLibrary.DM_EOREPOSITORY_ICON;
+			}
+
+			@Override
+			protected FlexoActionInitializer<CreateProjectDatabaseRepository> getDefaultInitializer() {
+				return new FlexoActionInitializer<CreateProjectDatabaseRepository>() {
+					@Override
+					public boolean run(EventObject e, CreateProjectDatabaseRepository action) {
+						return AskNewRepositoryDialog.displayDialog(action,
+								getControllerActionInitializer().getDMController().getProject(), getControllerActionInitializer()
+										.getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE;
+					}
+				};
+			}
+		};
+		new CreateDMRepositoryInitializer<CreateProjectRepository>(CreateProjectRepository.actionType, this) {
+
+			@Override
+			protected Icon getEnabledIcon() {
+				return DMEIconLibrary.DM_REPOSITORY_ICON;
+			}
+
+			@Override
+			protected FlexoActionInitializer<CreateProjectRepository> getDefaultInitializer() {
+				return new FlexoActionInitializer<CreateProjectRepository>() {
+					@Override
+					public boolean run(EventObject e, CreateProjectRepository action) {
+						return AskNewRepositoryDialog.displayDialog(action,
+								getControllerActionInitializer().getDMController().getProject(), getControllerActionInitializer()
+										.getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE;
+					}
+				};
+			}
+		};
+		new CreateDMRepositoryInitializer<ImportExternalDatabaseRepository>(ImportExternalDatabaseRepository.actionType, this) {
+
+			@Override
+			protected Icon getEnabledIcon() {
+				return DMEIconLibrary.DM_EOREPOSITORY_ICON;
+			}
+
+			@Override
+			protected FlexoActionInitializer<ImportExternalDatabaseRepository> getDefaultInitializer() {
+				return new FlexoActionInitializer<ImportExternalDatabaseRepository>() {
+					@Override
+					public boolean run(EventObject e, ImportExternalDatabaseRepository action) {
+						return AskNewRepositoryDialog.displayDialog(action,
+								getControllerActionInitializer().getDMController().getProject(), getControllerActionInitializer()
+										.getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE;
+					}
+				};
+			}
+		};
+		new CreateDMRepositoryInitializer<ImportRationalRoseRepository>(ImportRationalRoseRepository.actionType, this) {
+
+			@Override
+			protected Icon getEnabledIcon() {
+				return DMEIconLibrary.DM_REPOSITORY_ICON;
+			}
+
+			@Override
+			protected FlexoActionInitializer<ImportRationalRoseRepository> getDefaultInitializer() {
+				return new FlexoActionInitializer<ImportRationalRoseRepository>() {
+					@Override
+					public boolean run(EventObject e, ImportRationalRoseRepository action) {
+						return AskNewRepositoryDialog.displayDialog(action,
+								getControllerActionInitializer().getDMController().getProject(), getControllerActionInitializer()
+										.getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE;
+					}
+				};
+			}
+		};
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
+			new CreateDMRepositoryInitializer<ImportJARFileRepository>(ImportJARFileRepository.actionType, this) {
+
+				@Override
+				protected Icon getEnabledIcon() {
+					return DMEIconLibrary.DM_JAR_REPOSITORY_ICON;
+				}
+
+				@Override
+				protected FlexoActionInitializer<ImportJARFileRepository> getDefaultInitializer() {
+					return new FlexoActionInitializer<ImportJARFileRepository>() {
+						@Override
+						public boolean run(EventObject e, ImportJARFileRepository action) {
+							return AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController()
+									.getProject(), getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE;
+						}
+					};
+				}
+			};
+		}
 		new CreateDMPackageInitializer(this);
 		new CreateDMEntityInitializer(this);
 		new CreateDMPropertyInitializer(this);
@@ -78,5 +205,4 @@ public class DMControllerActionInitializer extends ControllerActionInitializer {
 		new GenerateProcessesBusinessDataDMEntityInitializer(this);
 		new UpdateAutoGeneratedBusinessDataDMEntityInitializer(this);
 	}
-
 }

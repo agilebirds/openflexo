@@ -54,12 +54,12 @@ public class AddKeyAction extends FlexoUndoableAction<AddKeyAction, DKVObject, D
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
 			return object instanceof Domain || object instanceof Domain.KeyList;
 		}
 

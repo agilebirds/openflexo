@@ -35,7 +35,7 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 	private CGFile _cgFile;
 
 	public FileHistoryBrowserView(DGController controller, CGFile cgFile, int visibleRowCount) {
-		super(controller, makeTabularBrowserModel(cgFile), visibleRowCount, controller.getEditor());
+		super(controller, makeTabularBrowserModel(cgFile), visibleRowCount);
 		_cgFile = cgFile;
 		setVisibleRowCount(visibleRowCount);
 		setSynchronizeWithSelectionManager(true);
@@ -82,10 +82,10 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 	@Override
 	public boolean mayRepresents(FlexoModelObject anObject) {
 		if (anObject instanceof CGFile) {
-			return (anObject == _cgFile);
+			return anObject == _cgFile;
 		}
 		if (anObject instanceof AbstractCGFileVersion) {
-			return (((AbstractCGFileVersion) anObject).getCGFile() == _cgFile);
+			return ((AbstractCGFileVersion) anObject).getCGFile() == _cgFile;
 		}
 		return false;
 	}

@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -52,7 +52,7 @@ public class ExportTOCAsTemplateInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ExportTOCAsTemplate> getDefaultInitializer() {
 		return new FlexoActionInitializer<ExportTOCAsTemplate>() {
 			@Override
-			public boolean run(ActionEvent e, ExportTOCAsTemplate action) {
+			public boolean run(EventObject e, ExportTOCAsTemplate action) {
 
 				JFileChooser chooser = new JFileChooser();
 				chooser.setDialogType(JFileChooser.SAVE_DIALOG);

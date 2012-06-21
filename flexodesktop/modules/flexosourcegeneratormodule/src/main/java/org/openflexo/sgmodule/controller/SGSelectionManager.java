@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.sgmodule.view.menu.SGMenuBar;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to this module
@@ -37,10 +37,10 @@ public class SGSelectionManager extends SelectionManager {
 
 	public SGSelectionManager(SGController controller) {
 		super(controller);
-		SGMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new SGClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new SGContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new SGContextualMenuManager(this, controller);
 	}
 
 	public SGController getSGController() {

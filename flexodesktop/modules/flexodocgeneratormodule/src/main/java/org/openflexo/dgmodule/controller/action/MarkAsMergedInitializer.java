@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class MarkAsMergedInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MarkAsMerged> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsMerged>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsMerged action) {
+			public boolean run(EventObject e, MarkAsMerged action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class MarkAsMergedInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MarkAsMerged> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MarkAsMerged>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsMerged action) {
+			public boolean run(EventObject e, MarkAsMerged action) {
 				return true;
 			}
 		};

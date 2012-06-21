@@ -22,26 +22,18 @@ package org.openflexo.cgmodule.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
 public class GeneratorContextualMenuManager extends ContextualMenuManager {
 
-	private GeneratorController _controller;
-
-	public GeneratorContextualMenuManager(GeneratorSelectionManager selectionManager, FlexoEditor editor, GeneratorController controller) {
-		super(selectionManager, editor);
-		_controller = controller;
+	public GeneratorContextualMenuManager(GeneratorSelectionManager selectionManager, GeneratorController controller) {
+		super(selectionManager, controller);
 	}
 
 	@Override
 	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		return super.getFocusedObject(focusedComponent, e);
-	}
-
-	public GeneratorController getController() {
-		return _controller;
 	}
 
 }

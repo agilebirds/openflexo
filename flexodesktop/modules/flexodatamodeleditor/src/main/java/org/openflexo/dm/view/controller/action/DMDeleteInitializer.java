@@ -19,8 +19,8 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -73,7 +73,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DMDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DMDelete action) {
+			public boolean run(EventObject e, DMDelete action) {
 				// Selection is empty, nothing to delete, forget it
 				if (action.getObjectsToDelete().size() == 0) {
 					return false;
@@ -225,7 +225,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DMDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DMDelete action) {
+			public boolean run(EventObject e, DMDelete action) {
 				getControllerActionInitializer().getDMSelectionManager().resetSelection();
 				// getDMSelectionManager().processDeletionOfSelected();
 				ModuleView<?> view = getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
@@ -248,12 +248,6 @@ public class DMDeleteInitializer extends ActionInitializer {
 	@Override
 	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(DMDelete.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
 	}
 
 }

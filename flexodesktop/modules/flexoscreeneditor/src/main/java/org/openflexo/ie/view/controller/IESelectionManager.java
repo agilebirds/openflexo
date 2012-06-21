@@ -35,14 +35,13 @@ import org.openflexo.foundation.ie.widget.IESequenceTR;
 import org.openflexo.foundation.ie.widget.IESequenceWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.ie.menu.IEMenuBar;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.listener.DoubleClickResponder;
 import org.openflexo.ie.view.widget.ButtonPanel;
 import org.openflexo.ie.view.widget.DropTabZone;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.selection.MouseSelectionManager;
-import org.openflexo.selection.SelectionListener;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to Interface Editor module
@@ -55,16 +54,10 @@ public class IESelectionManager extends MouseSelectionManager {
 
 	public IESelectionManager(IEController controller) {
 		super(controller);
-		IEMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new IEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new IEContextualMenuManager(this, controller.getEditor());
-	}
-
-	@Override
-	public void addToSelectionListeners(SelectionListener listener) {
-		// TODO Auto-generated method stub
-		super.addToSelectionListeners(listener);
+		_contextualMenuManager = new IEContextualMenuManager(this, controller);
 	}
 
 	public IEController getIEController() {
@@ -95,7 +88,7 @@ public class IESelectionManager extends MouseSelectionManager {
 				processSelection(((ButtonPanel) clickedContainer).getContainerModel(), isShiftDown);
 			}
 
-		} else if ((clickCount == 2) && (clickedContainer instanceof DoubleClickResponder)) {
+		} else if (clickCount == 2 && clickedContainer instanceof DoubleClickResponder) {
 			((DoubleClickResponder) clickedContainer).performDoubleClick(clickedContainer, clickedPoint, isShiftDown);
 		}
 	}

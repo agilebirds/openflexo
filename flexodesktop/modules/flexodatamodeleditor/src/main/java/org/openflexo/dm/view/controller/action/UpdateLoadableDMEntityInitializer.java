@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ public class UpdateLoadableDMEntityInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<UpdateLoadableDMEntity> getDefaultInitializer() {
 		return new FlexoActionInitializer<UpdateLoadableDMEntity>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateLoadableDMEntity action) {
+			public boolean run(EventObject e, UpdateLoadableDMEntity action) {
 				action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
 				UpdateClassesPopup popup = new UpdateClassesPopup(action.getUpdatedEntities(), getProject(),
 						getControllerActionInitializer().getDMController(), action.getFlexoProgress());
@@ -72,7 +72,7 @@ public class UpdateLoadableDMEntityInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<UpdateLoadableDMEntity> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UpdateLoadableDMEntity>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateLoadableDMEntity action) {
+			public boolean run(EventObject e, UpdateLoadableDMEntity action) {
 				getControllerActionInitializer().getDMController().getSelectionManager().setSelectedObjects(action.getUpdatedEntities());
 				return true;
 			}

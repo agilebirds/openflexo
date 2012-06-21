@@ -437,38 +437,4 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		FlexoController.showError(FlexoLocalization.localizedForKey(unlocalizedMessage));
 	}
 
-	@Override
-	protected void generatedResourceModified(FlexoGeneratedResource generatedResource) {
-		if (_generatedResourceModifiedHook == null) {
-			super.generatedResourceModified(generatedResource);
-		} else {
-			_generatedResourceModifiedHook.handleGeneratedResourceModified(generatedResource);
-		}
-	}
-
-	@Override
-	protected void generatedResourcesModified(List<FlexoGeneratedResource<? extends GeneratedResourceData>> generatedResource) {
-		if (_generatedResourceModifiedHook == null) {
-			super.generatedResourcesModified(generatedResource);
-		} else {
-			for (FlexoGeneratedResource<? extends GeneratedResourceData> resource : generatedResource) {
-
-				_generatedResourceModifiedHook.handleGeneratedResourceModified(resource);
-			}
-		}
-	}
-
-	public interface GeneratedResourceModifiedHook {
-		public void handleGeneratedResourceModified(FlexoGeneratedResource generatedResource);
-	}
-
-	private GeneratedResourceModifiedHook _generatedResourceModifiedHook = null;
-
-	public GeneratedResourceModifiedHook getGeneratedResourceModifiedHook() {
-		return _generatedResourceModifiedHook;
-	}
-
-	public void setGeneratedResourceModifiedHook(GeneratedResourceModifiedHook generatedResourceModifiedHook) {
-		_generatedResourceModifiedHook = generatedResourceModifiedHook;
-	}
 }

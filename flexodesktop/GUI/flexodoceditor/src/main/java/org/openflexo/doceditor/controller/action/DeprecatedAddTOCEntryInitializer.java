@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -64,7 +64,7 @@ public class DeprecatedAddTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeprecatedAddTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeprecatedAddTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, DeprecatedAddTOCEntry action) {
+			public boolean run(EventObject e, DeprecatedAddTOCEntry action) {
 				final Vector<PredefinedSection.PredefinedSectionType> staticSections = new Vector<PredefinedSection.PredefinedSectionType>();
 				for (PredefinedSection.PredefinedSectionType docSection : PredefinedSection.PredefinedSectionType.values()) {
 					if (action.getRepository().getTOCEntryWithID(docSection) == null) {
@@ -274,7 +274,7 @@ public class DeprecatedAddTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeprecatedAddTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeprecatedAddTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, DeprecatedAddTOCEntry action) {
+			public boolean run(EventObject e, DeprecatedAddTOCEntry action) {
 				return true;
 			}
 		};

@@ -20,8 +20,8 @@
 package org.openflexo.action;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -61,7 +61,7 @@ public class ImportImageInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportImage> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportImage>() {
 			@Override
-			public boolean run(ActionEvent e, ImportImage action) {
+			public boolean run(EventObject e, ImportImage action) {
 				if (action.getFileToImport() != null) {
 					return true;
 				}
@@ -157,7 +157,7 @@ public class ImportImageInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportImage> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportImage>() {
 			@Override
-			public boolean run(ActionEvent e, ImportImage action) {
+			public boolean run(EventObject e, ImportImage action) {
 				return true;
 			}
 		};

@@ -51,12 +51,12 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return !(object instanceof FlexoPetriGraph);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			if (globalSelection == null || (object == null && globalSelection.size() == 0)) {
 				return false;
 			}

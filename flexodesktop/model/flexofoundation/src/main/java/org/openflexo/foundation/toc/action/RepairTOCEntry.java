@@ -50,12 +50,12 @@ public class RepairTOCEntry extends FlexoAction<RepairTOCEntry, TOCEntry, TOCObj
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(TOCEntry object, Vector<TOCObject> globalSelection) {
+		public boolean isVisibleForSelection(TOCEntry object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(TOCEntry object, Vector<TOCObject> globalSelection) {
+		public boolean isEnabledForSelection(TOCEntry object, Vector<TOCObject> globalSelection) {
 			return object.isReadOnly() && object.getIdentifier() == null && object.getObject(true) == null;
 		}
 

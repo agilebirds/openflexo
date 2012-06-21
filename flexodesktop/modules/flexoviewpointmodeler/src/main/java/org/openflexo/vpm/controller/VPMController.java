@@ -58,6 +58,7 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.vpm.controller.action.CEDControllerActionInitializer;
@@ -110,7 +111,7 @@ public class VPMController extends FlexoController implements SelectionManagingC
 	 * Default constructor
 	 */
 	public VPMController(FlexoModule module) throws Exception {
-		super(module.getEditor(), module);
+		super(module);
 
 		resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
@@ -145,7 +146,7 @@ public class VPMController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer() {
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
 		return new CEDControllerActionInitializer(this);
 	}
 

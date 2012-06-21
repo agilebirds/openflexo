@@ -49,12 +49,12 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isEnabledForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
 			return (object instanceof ExampleDrawingShema || object instanceof ExampleDrawingShape);
 		}
 

@@ -61,7 +61,6 @@ import org.openflexo.fps.controller.action.FPSControllerActionInitializer;
 import org.openflexo.fps.controller.browser.CVSRepositoriesBrowser;
 import org.openflexo.fps.controller.browser.SharedProjectBrowser;
 import org.openflexo.fps.view.ConsoleView;
-import org.openflexo.fps.view.FPSFrame;
 import org.openflexo.fps.view.FPSMainPane;
 import org.openflexo.fps.view.listener.FPSKeyEventListener;
 import org.openflexo.fps.view.menu.FPSMenuBar;
@@ -72,13 +71,15 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.jedit.JEditTextArea.CursorPositionListener;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -99,9 +100,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 	// ============= Instance variables ===============
 	// ================================================
 
-	protected FPSMenuBar _fpsMenuBar;
-	protected FPSFrame _frame;
-	protected FPSKeyEventListener _fpsKeyEventListener;
 	private final FPSSelectionManager _selectionManager;
 	private final CVSRepositoriesBrowser _repositoriesBrowser;
 	private final SharedProjectBrowser _sharedProjectBrowser;
@@ -126,8 +124,8 @@ public class FPSController extends FlexoController implements SelectionManagingC
 	/**
 	 * Default constructor
 	 */
-	public FPSController(FlexoModule module) throws Exception {
-		super(module.getEditor(), module);
+	public FPSController(FlexoModule module) {
+		super(module);
 
 		_instance = this;
 		logger.info("Create CVSRepositoryList");
@@ -141,11 +139,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		addToPerspectives(REMOTELY_MODIFIED_PERSPECTIVE);
 		addToPerspectives(CONFLICTING_FILES_PERSPECTIVE);
 
-		_fpsMenuBar = (FPSMenuBar) createAndRegisterNewMenuBar();
-		_fpsKeyEventListener = new FPSKeyEventListener(this);
-		_frame = new FPSFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _fpsKeyEventListener, _fpsMenuBar);
-		init(_frame, _fpsKeyEventListener, _fpsMenuBar);
-
 		// At this point the InspectorController is not yet loaded
 		_selectionManager = new FPSSelectionManager(this);
 
@@ -154,7 +147,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 
 		_consoleView = new ConsoleView();
 
-		_repositories.loadStoredRepositoryLocation(FlexoPreferences.getApplicationDataDirectory());
+		_repositories.loadStoredRepositoryLocation(FileUtils.getApplicationDataDirectory());
 
 		_footer.refresh();
 
@@ -162,12 +155,24 @@ public class FPSController extends FlexoController implements SelectionManagingC
 			((FPSPerspective) getCurrentPerspective()).setFilters();
 			getSharedProjectBrowser().update();
 		}
-
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer() {
-		return new FPSControllerActionInitializer(this);
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new FPSKeyEventListener(this);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (_instance == this) {
+			_instance = null;
+		}
+	}
+
+	@Override
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new FPSControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -189,25 +194,9 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		_selectionManager.addObserver(getSharedInspectorController());
 	}
 
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
 	public ValidationModel getDefaultValidationModel() {
 		// If there is a ValidationModel associated to this module, put it here
 		return null;
-	}
-
-	public FPSFrame getMainFrame() {
-		return _frame;
-	}
-
-	public FPSMenuBar getEditorMenuBar() {
-		return _fpsMenuBar;
 	}
 
 	public void showBrowser() {
@@ -224,7 +213,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new FPSMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new FPSMainPane(this);
 	}
 
 	public CVSRepositoriesBrowser getCVSRepositoriesBrowser() {
@@ -233,10 +222,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 
 	public SharedProjectBrowser getSharedProjectBrowser() {
 		return _sharedProjectBrowser;
-	}
-
-	public FPSKeyEventListener getKeyEventListener() {
-		return _fpsKeyEventListener;
 	}
 
 	// ================================================
@@ -288,7 +273,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		}
 		_sharedProject = project;
 		_sharedProjectBrowser.update();
-		_frame.updateTitle();
 		_footer.refresh();
 	}
 
@@ -409,7 +393,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		public void focusGained(FocusEvent e) {
 			if (e.getComponent() instanceof JEditTextArea) {
 				((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
-				_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
+				_activeGenericCodeDisplayer = (JEditTextArea) e.getComponent();
 				refresh();
 			}
 		}
@@ -439,8 +423,8 @@ public class FPSController extends FlexoController implements SelectionManagingC
 				editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
 			} else {
 				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
-				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
-						: FlexoLocalization.localizedForKey("read_only")));
+				editorStatusLabel.setText(_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+						: FlexoLocalization.localizedForKey("read_only"));
 			}
 		}
 
@@ -461,7 +445,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 
 	@Override
 	public FlexoPerspective getCurrentPerspective() {
-		return (FPSPerspective) super.getCurrentPerspective();
+		return super.getCurrentPerspective();
 	}
 
 	@Override
@@ -478,10 +462,10 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		if (repository.isEnabled()) {
 			return true;
 		}
-		ReadOnlyTextFieldParameter userName = new ReadOnlyTextFieldParameter("userName", "user_name",
-				(repository.getUserName() == null ? "" : repository.getUserName()), 20);
-		TextFieldParameter passwd = new TextFieldParameter("passwd", "password", (repository.getPassword() == null ? ""
-				: repository.getPassword()));
+		ReadOnlyTextFieldParameter userName = new ReadOnlyTextFieldParameter("userName", "user_name", repository.getUserName() == null ? ""
+				: repository.getUserName(), 20);
+		TextFieldParameter passwd = new TextFieldParameter("passwd", "password", repository.getPassword() == null ? ""
+				: repository.getPassword());
 		passwd.setIsPassword(true);
 		CheckboxParameter storePasswd = new CheckboxParameter("storePasswd", "store_password", repository.getStorePassword());
 
@@ -504,7 +488,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		if (repository.isEnabled()) {
 			return true;
 		}
-		TextFieldParameter host = new TextFieldParameter("host", "host", (repository.getHostName() == null ? "" : repository.getHostName()));
+		TextFieldParameter host = new TextFieldParameter("host", "host", repository.getHostName() == null ? "" : repository.getHostName());
 
 		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, repository.getName() + " : "
 				+ FlexoLocalization.localizedForKey("unknown_host"), FlexoLocalization.localizedForKey("reenter_host"), host);

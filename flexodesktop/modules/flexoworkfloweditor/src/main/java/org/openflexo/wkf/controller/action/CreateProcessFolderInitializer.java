@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -56,7 +56,7 @@ public class CreateProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, CreateProcessFolder action) {
+			public boolean run(EventObject e, CreateProcessFolder action) {
 				ParameterDefinition[] parameters = new ParameterDefinition[2];
 				final TextFieldParameter name = new TextFieldParameter("name", "name", action.getName());
 				parameters[0] = name;
@@ -96,7 +96,7 @@ public class CreateProcessFolderInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateProcessFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateProcessFolder>() {
 			@Override
-			public boolean run(ActionEvent e, CreateProcessFolder action) {
+			public boolean run(EventObject e, CreateProcessFolder action) {
 				return true;
 			}
 		};

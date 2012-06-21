@@ -49,12 +49,12 @@ public class ShowDifferences extends FlexoGUIAction<ShowDifferences, CGObject, C
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return ((object != null) && ((object instanceof CGFile) || (object instanceof AbstractCGFileVersion)));
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			if (object == null) {
 				return false;
 			}

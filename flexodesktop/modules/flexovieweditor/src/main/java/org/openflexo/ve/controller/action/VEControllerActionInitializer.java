@@ -26,6 +26,7 @@ import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.controller.VESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * 
@@ -37,15 +38,12 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	private VEController _oeController;
-
-	public VEControllerActionInitializer(VEController controller) {
-		super(controller);
-		_oeController = controller;
+	public VEControllerActionInitializer(InteractiveFlexoEditor editor, VEController controller) {
+		super(editor, controller);
 	}
 
 	protected VEController getOEController() {
-		return _oeController;
+		return (VEController) getController();
 	}
 
 	protected VESelectionManager getOESelectionManager() {
@@ -56,31 +54,31 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new VESetPropertyInitializer(this)).init();
+		new VESetPropertyInitializer(this);
 
 		// Shema library perspective
-		(new AddViewInitializer(this)).init();
-		(new AddViewFolderInitializer(this)).init();
-		(new DeleteViewInitializer(this)).init();
-		(new DeleteViewFolderInitializer(this)).init();
-		(new ResetGraphicalRepresentationInitializer(this)).init();
+		new AddViewInitializer(this);
+		new AddViewFolderInitializer(this);
+		new DeleteViewInitializer(this);
+		new DeleteViewFolderInitializer(this);
+		new ResetGraphicalRepresentationInitializer(this);
 
 		// Diagram perspective
-		(new AddShapeInitializer(this)).init();
-		(new AddConnectorInitializer(this)).init();
-		(new DeleteViewElementsInitializer(this)).init();
-		(new DropSchemeActionInitializer(this)).init();
-		(new LinkSchemeActionInitializer(this)).init();
-		(new ActionSchemeActionInitializer(this)).initForClass(ActionSchemeActionType.class);
-		(new NavigationSchemeActionInitializer(this)).initForClass(NavigationSchemeActionType.class);
+		new AddShapeInitializer(this);
+		new AddConnectorInitializer(this);
+		new DeleteViewElementsInitializer(this);
+		new DropSchemeActionInitializer(this);
+		new LinkSchemeActionInitializer(this);
+		new ActionSchemeActionInitializer(this).initForClass(ActionSchemeActionType.class);
+		new NavigationSchemeActionInitializer(this).initForClass(NavigationSchemeActionType.class);
 
 		// Ontology perspective
-		(new CreateOntologyClassInitializer(this)).init();
-		(new CreateOntologyIndividualInitializer(this)).init();
-		(new CreateObjectPropertyInitializer(this)).init();
-		(new CreateDataPropertyInitializer(this)).init();
-		(new DeleteOntologyObjectsInitializer(this)).init();
-		(new AddAnnotationStatementInitializer(this)).init();
+		new CreateOntologyClassInitializer(this);
+		new CreateOntologyIndividualInitializer(this);
+		new CreateObjectPropertyInitializer(this);
+		new CreateDataPropertyInitializer(this);
+		new DeleteOntologyObjectsInitializer(this);
+		new AddAnnotationStatementInitializer(this);
 	}
 
 }

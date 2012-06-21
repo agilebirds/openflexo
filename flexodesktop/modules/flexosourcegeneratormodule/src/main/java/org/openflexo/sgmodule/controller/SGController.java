@@ -25,9 +25,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
@@ -38,6 +38,7 @@ import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
+import org.openflexo.foundation.rm.ResourceUpdateHandler;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.foundation.sg.GeneratedSources;
@@ -46,13 +47,14 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.action.AcceptDiskUpdate;
+import org.openflexo.generator.action.GCAction.ProjectGeneratorFactory;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
-import org.openflexo.module.InteractiveFlexoResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.sg.action.AcceptDiskUpdateAndReinjectInModel;
 import org.openflexo.sg.action.ReinjectInModel;
@@ -63,7 +65,6 @@ import org.openflexo.sgmodule.controller.browser.SGBrowser;
 import org.openflexo.sgmodule.view.CGFileModuleView;
 import org.openflexo.sgmodule.view.SGBrowserView;
 import org.openflexo.sgmodule.view.SGFooter;
-import org.openflexo.sgmodule.view.SGFrame;
 import org.openflexo.sgmodule.view.SGMainPane;
 import org.openflexo.sgmodule.view.menu.SGMenuBar;
 import org.openflexo.sgmodule.view.popup.CGFileVersionPopup;
@@ -73,6 +74,7 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -80,22 +82,9 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author sylvain
  */
-public class SGController extends FlexoController implements SelectionManagingController/*
-* , ConsistencyCheckingController
-*/
-{
+public class SGController extends FlexoController implements SelectionManagingController, ProjectGeneratorFactory {
 
 	private static final Logger logger = Logger.getLogger(SGController.class.getPackage().getName());
-
-	// ================================================
-	// ============= Instance variables ===============
-	// ================================================
-
-	protected SGMenuBar _sgMenuBar;
-
-	protected SGFrame _frame;
-
-	protected SGKeyEventListener _sgKeyEventListener;
 
 	private SGSelectionManager _selectionManager;
 
@@ -120,20 +109,14 @@ public class SGController extends FlexoController implements SelectionManagingCo
 	/**
 	 * Default constructor
 	 */
-	public SGController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
-		_sgMenuBar = (SGMenuBar) createAndRegisterNewMenuBar();
-		_sgKeyEventListener = new SGKeyEventListener(this);
-		_frame = new SGFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _sgKeyEventListener, _sgMenuBar);
-		_projectGenerators = new Hashtable<SourceRepository, ProjectGenerator>();
+	public SGController(FlexoModule module) {
+		super(module);
 
 		createFooter();
 
 		addToPerspectives(CODE_GENERATION_PERSPECTIVE = new CodeGenerationPerspective(this));
 		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
 		addToPerspectives(MODEL_REINJECTION_PERSPECTIVE = new ModelReinjectionPerspective(this));
-
-		init(_frame, _sgKeyEventListener, _sgMenuBar);
 
 		// At this point the InspectorController is not yet loaded
 		_selectionManager = new SGSelectionManager(this);
@@ -149,15 +132,18 @@ public class SGController extends FlexoController implements SelectionManagingCo
 			}
 
 		};
-
 		getMainPane().setLeftView(_browserView);
-
 		switchToPerspective(CODE_GENERATION_PERSPECTIVE);
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer() {
-		return new SGControllerActionInitializer(this);
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new SGKeyEventListener(this);
+	}
+
+	@Override
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new SGControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -179,25 +165,9 @@ public class SGController extends FlexoController implements SelectionManagingCo
 		_selectionManager.addObserver(getSharedInspectorController());
 	}
 
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
 	public ValidationModel getDefaultValidationModel() {
 		// If there is a ValidationModel associated to this module, put it here
 		return null;
-	}
-
-	public SGFrame getMainFrame() {
-		return _frame;
-	}
-
-	public SGMenuBar getEditorMenuBar() {
-		return _sgMenuBar;
 	}
 
 	public void showBrowser() {
@@ -214,11 +184,7 @@ public class SGController extends FlexoController implements SelectionManagingCo
 
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new SGMainPane(getEmptyPanel(), getMainFrame(), this);
-	}
-
-	public SGKeyEventListener getKeyEventListener() {
-		return _sgKeyEventListener;
+		return new SGMainPane(this);
 	}
 
 	public void initProgressWindow(String msg, int steps) {
@@ -275,6 +241,18 @@ public class SGController extends FlexoController implements SelectionManagingCo
 		return super.handleException(inspectable, propertyName, value, exception);
 	}
 
+	@Override
+	public AbstractProjectGenerator<? extends GenerationRepository> generatorForRepository(GenerationRepository repository) {
+		if (repository instanceof SourceRepository) {
+			return getProjectGenerator((SourceRepository) repository);
+		} else {
+			if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("Cannot create project generator for " + repository);
+			}
+		}
+		return null;
+	}
+
 	public ProjectGenerator getProjectGenerator(SourceRepository repository) {
 		ProjectGenerator returned = _projectGenerators.get(repository);
 		if (!repository.isConnected()) {
@@ -294,6 +272,20 @@ public class SGController extends FlexoController implements SelectionManagingCo
 
 	public Enumeration<ProjectGenerator> getProjectGenerators() {
 		return _projectGenerators.elements();
+	}
+
+	@Override
+	public void setEditor(FlexoEditor projectEditor) {
+		if (getEditor() != null && getEditor().getProject() != null) {
+			getEditor().getProject().getGeneratedCode().setFactory(null);
+		}
+		super.setEditor(projectEditor);
+		if (getEditor() != null && getEditor().getResourceUpdateHandler() != null) {
+			getEditor().getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+		}
+		if (getEditor() != null && getEditor().getProject() != null) {
+			getEditor().getProject().getGeneratedCode().setFactory(this);
+		}
 	}
 
 	public SourceRepository getCurrentGeneratedCodeRepository() {
@@ -344,27 +336,17 @@ public class SGController extends FlexoController implements SelectionManagingCo
 
 	private CGGeneratedResourceModifiedHook _CGGeneratedResourceModifiedHook;
 
-	public class CGGeneratedResourceModifiedHook implements GeneratedResourceModifiedHook {
-		private GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice = GeneratedResourceModifiedChoice.ASK;
+	public class CGGeneratedResourceModifiedHook implements ResourceUpdateHandler.GeneratedResourceModifiedHook {
 
 		protected CGGeneratedResourceModifiedHook() {
-			defaultGeneratedResourceModifiedChoice = SGPreferences.getGeneratedResourceModifiedChoice();
-		}
-
-		public GeneratedResourceModifiedChoice getDefaultGeneratedResourceModifiedChoice() {
-			return defaultGeneratedResourceModifiedChoice;
-		}
-
-		public void setDefaultGeneratedResourceModifiedChoice(GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice) {
-			this.defaultGeneratedResourceModifiedChoice = defaultGeneratedResourceModifiedChoice;
 		}
 
 		@Override
 		public void handleGeneratedResourceModified(FlexoGeneratedResource aGeneratedResource) {
 			if (aGeneratedResource instanceof CGRepositoryFileResource) {
 				CGRepositoryFileResource generatedResource = (CGRepositoryFileResource) aGeneratedResource;
-				GeneratedResourceModifiedChoice choice = defaultGeneratedResourceModifiedChoice;
-				if (defaultGeneratedResourceModifiedChoice == GeneratedResourceModifiedChoice.ASK) {
+				GeneratedResourceModifiedChoice choice = SGPreferences.getGeneratedResourceModifiedChoice();
+				if (choice == GeneratedResourceModifiedChoice.ASK) {
 
 					RadioButtonListParameter<String> whatToDo = new RadioButtonListParameter<String>("whatToDo",
 							"what_would_you_like_to_do", GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),

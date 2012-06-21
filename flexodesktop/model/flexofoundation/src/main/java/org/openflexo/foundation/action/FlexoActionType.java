@@ -235,7 +235,7 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 	 * @param object
 	 * @return
 	 */
-	protected abstract boolean isVisibleForSelection(T1 object, Vector<T2> globalSelection);
+	public abstract boolean isVisibleForSelection(T1 object, Vector<T2> globalSelection);
 
 	/**
 	 * Indicates if this action (eventually disabled) is enabled
@@ -243,7 +243,7 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 	 * @param object
 	 * @return
 	 */
-	protected abstract boolean isEnabledForSelection(T1 object, Vector<T2> globalSelection);
+	public abstract boolean isEnabledForSelection(T1 object, Vector<T2> globalSelection);
 
 	/**
 	 * Indicates if this action is enabled (assert that action is visible)

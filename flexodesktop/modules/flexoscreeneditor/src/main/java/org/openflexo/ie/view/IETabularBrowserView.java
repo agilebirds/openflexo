@@ -31,7 +31,7 @@ public class IETabularBrowserView extends TabularBrowserView {
 	}
 
 	public IETabularBrowserView(IEController controller, TabularBrowserModel model) {
-		super(controller, model, controller.getEditor());
+		super(controller, model);
 		setSynchronizeWithSelectionManager(true);
 	}
 

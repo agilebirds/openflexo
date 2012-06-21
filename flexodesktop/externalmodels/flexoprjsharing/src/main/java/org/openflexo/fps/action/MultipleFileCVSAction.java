@@ -52,7 +52,7 @@ public abstract class MultipleFileCVSAction<A extends MultipleFileCVSAction<A>> 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+		public boolean isVisibleForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
 			Vector<FPSObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
 			for (FPSObject obj : topLevelObjects) {
 				if (!(obj instanceof CVSAbstractFile)) {
@@ -65,7 +65,7 @@ public abstract class MultipleFileCVSAction<A extends MultipleFileCVSAction<A>> 
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+		public boolean isEnabledForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
 			SharedProject project = getSharedProject(focusedObject, globalSelection);
 			if (project == null) {
 				return false;

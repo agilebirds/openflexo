@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddPaletteElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddPaletteElement>() {
 			@Override
-			public boolean run(ActionEvent e, AddPaletteElement action) {
+			public boolean run(EventObject e, AddPaletteElement action) {
 				/*if (action.getNewElementName() != null && (action.getFocusedObject() != null))
 					return true;*/
 
@@ -88,7 +88,7 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddPaletteElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddPaletteElement>() {
 			@Override
-			public boolean run(ActionEvent e, AddPaletteElement action) {
+			public boolean run(EventObject e, AddPaletteElement action) {
 				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewElement());
 				return true;
 			}

@@ -48,12 +48,12 @@ public class AddCVSRepository extends CVSAction<AddCVSRepository, CVSRepositoryL
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CVSRepositoryList object, Vector<FPSObject> globalSelection) {
+		public boolean isVisibleForSelection(CVSRepositoryList object, Vector<FPSObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CVSRepositoryList object, Vector<FPSObject> globalSelection) {
+		public boolean isEnabledForSelection(CVSRepositoryList object, Vector<FPSObject> globalSelection) {
 			return true;
 		}
 

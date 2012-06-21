@@ -36,21 +36,8 @@ public class WSEBrowserView extends BrowserView {
 
 	private static final Logger logger = Logger.getLogger(WSEBrowserView.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected WSEController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public WSEBrowserView(WSEController controller) {
-		super(controller.getWSEBrowser(), controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(controller.getWSEBrowser(), controller);
 		FCH.setHelpItem(this, "ws-browser");
 	}
 
@@ -61,7 +48,7 @@ public class WSEBrowserView extends BrowserView {
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
 		// Try to display object in view
-		_controller.selectAndFocusObject(object);
+		getController().selectAndFocusObject(object);
 	}
 
 }

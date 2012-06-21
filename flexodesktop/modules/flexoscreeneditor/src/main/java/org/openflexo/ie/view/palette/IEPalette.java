@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.util.logging.Logger;
 
 import org.openflexo.ch.FCH;
+import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.ie.IECst;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.view.palette.FlexoPalette;
@@ -133,11 +134,11 @@ public class IEPalette extends FlexoPalette {
 		return getCurrentPalettePanel() == getBasicPalette();
 	}
 
-	protected String currentCSSStyle;
+	protected FlexoCSS currentCSSStyle;
 
-	public void setCurrentCSSStyle(String css) {
-		if (css == null) {
-			css = getController().getProject().getCssSheet().getName();
+	public void setCurrentCSSStyle(FlexoCSS css) {
+		if (css == null && getController().getProject() != null) {
+			css = getController().getProject().getCssSheet();
 		}
 		if (css.equals(currentCSSStyle)) {
 			return;
@@ -156,7 +157,11 @@ public class IEPalette extends FlexoPalette {
 
 	@Override
 	public PaletteTabbedPane makeTabbedPane() {
-		currentCSSStyle = getController().getProject().getCssSheet().getName();
+		if (getController().getProject() != null) {
+			currentCSSStyle = getController().getProject().getCssSheet();
+		} else {
+			currentCSSStyle = FlexoCSS.CONTENTO;
+		}
 		PaletteTabbedPane answer = new PaletteTabbedPane();
 		answer.add(getBasicPalette());
 		answer.add(getImagePalette());

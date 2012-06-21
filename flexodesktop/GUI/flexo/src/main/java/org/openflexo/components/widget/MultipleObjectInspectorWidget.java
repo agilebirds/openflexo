@@ -52,7 +52,7 @@ public class MultipleObjectInspectorWidget<E extends FlexoModelObject> extends C
 
 	public MultipleObjectInspectorWidget(PropertyModel model, AbstractController controller) {
 		super(model, controller);
-		_selector = new MultipleObjectSelector<E>(null, this, this, null) {
+		_selector = new MultipleObjectSelector<E>(null, null, this, this) {
 			@Override
 			public void notifySelectionChanged() {
 				super.notifySelectionChanged();

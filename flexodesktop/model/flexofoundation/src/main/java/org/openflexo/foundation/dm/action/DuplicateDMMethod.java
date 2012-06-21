@@ -46,12 +46,12 @@ public class DuplicateDMMethod extends FlexoAction<DuplicateDMMethod, DMMethod, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMMethod method, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMMethod method, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMMethod method, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMMethod method, Vector<DMObject> globalSelection) {
 			return method != null && method.getEntity() != null && !method.getEntity().getIsReadOnly();
 		}
 

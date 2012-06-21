@@ -59,7 +59,6 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 	protected FlexoPalette(FlexoController controller) {
 		super();
 		_controller = controller;
-		_controller.setPalette(this);
 		setLayout(new BorderLayout());
 		// setBackground(FlexoCst.GUI_BACK_COLOR);
 
@@ -208,7 +207,7 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 	public abstract boolean handlesPaletteEdition();
 
 	public PalettePanel getCurrentPalettePanel() {
-		return (PalettePanel) (((JScrollPane) currentTabbedPane.getSelectedComponent()).getViewport().getView());
+		return (PalettePanel) ((JScrollPane) currentTabbedPane.getSelectedComponent()).getViewport().getView();
 	}
 
 	protected abstract PaletteTabbedPane makeTabbedPane();

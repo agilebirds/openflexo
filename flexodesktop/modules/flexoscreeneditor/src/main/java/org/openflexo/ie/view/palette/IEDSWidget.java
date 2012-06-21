@@ -77,7 +77,8 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 		_label.setName(widget.getName());
 	}
 
-	public void delete(FlexoProject project) {
+	@Override
+	public void delete() {
 		if (paletteWidget.canDeleteWidget()) {
 			paletteWidget.deleteWidget();
 		} else if (logger.isLoggable(Level.WARNING)) {
@@ -99,7 +100,7 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 		if (paletteWidget.getScreenshotFile(css) != null && paletteWidget.getScreenshotFile(css).exists()) {
 			_label.setPreferredSize(null);
 			if (resizeScreenshot) {
-				_label.setIcon((ImageUtils.getThumbnail(new ImageIcon(paletteWidget.getScreenshotFile(css).getAbsolutePath()), 85)));
+				_label.setIcon(ImageUtils.getThumbnail(new ImageIcon(paletteWidget.getScreenshotFile(css).getAbsolutePath()), 85));
 			} else {
 				_label.setIcon(new ImageIcon(paletteWidget.getScreenshotFile(css).getAbsolutePath()));
 			}
