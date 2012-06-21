@@ -21,6 +21,7 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.expr.parser.Word;
 
 public class Variable extends Expression {
@@ -46,9 +47,9 @@ public class Variable extends Expression {
 	}
 
 	@Override
-	public Expression evaluate(EvaluationContext context) {
+	public Expression evaluate(EvaluationContext context, Bindable bindable) {
 		if (context != null) {
-			return context.getVariableFactory().makeVariable(new Word(getName()));
+			return context.getVariableFactory().makeVariable(new Word(getName()), bindable);
 		}
 		return this;
 	}
@@ -74,10 +75,10 @@ public class Variable extends Expression {
 			if (c == '.') {
 				startingPathItem = true;
 			} else {
-				boolean isNormalChar = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '(' || c == ')' || c == '_') // See Java
-																																// authorized
-																																// characters
-				|| (c >= '0' && c <= '9' && !startingPathItem));
+				boolean isNormalChar = c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c == '(' || c == ')' || c == '_' // See Java
+																														// authorized
+																														// characters
+						|| c >= '0' && c <= '9' && !startingPathItem;
 				if (!isNormalChar) {
 					return false;
 				}

@@ -83,6 +83,13 @@ public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> 
 			FileUtils.deleteDir(projectFile.getParentFile());
 		}
 		main = null;
+		System.gc();
+		try {
+			Thread.sleep(1234568789L);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		projectFile = null;
 	}
 

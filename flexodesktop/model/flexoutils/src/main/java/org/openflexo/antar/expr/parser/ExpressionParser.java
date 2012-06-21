@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.expr.ArithmeticBinaryOperator;
 import org.openflexo.antar.expr.ArithmeticUnaryOperator;
 import org.openflexo.antar.expr.BinaryOperator;
@@ -64,11 +65,11 @@ public class ExpressionParser {
 		this.grammar = grammar;
 	}
 
-	public Expression parse(String aString) throws ParseException {
+	public Expression parse(String aString, Bindable bindable) throws ParseException {
 		String preprocessedString = preprocessString(aString);
 		BufferedReader rdr = new BufferedReader(new StringReader(preprocessedString));
 		Token parsed = parse(rdr);
-		return makeExpression(parsed);
+		return makeExpression(parsed, bindable);
 	}
 
 	// Perform some lexical checks...
@@ -172,7 +173,7 @@ public class ExpressionParser {
 		}
 		// System.out.println("considerAsOperator: "+symbol);
 		char firstChar = symbol.charAt(0);
-		if ((firstChar >= 'a' && firstChar <= 'z') || (firstChar >= 'A' && firstChar <= 'Z')) {
+		if (firstChar >= 'a' && firstChar <= 'z' || firstChar >= 'A' && firstChar <= 'Z') {
 			// Ignore this
 		} else {
 			// System.out.println("Ordinary char: "+firstChar);
@@ -182,7 +183,7 @@ public class ExpressionParser {
 
 	private Token parse(Reader rdr) throws ParseException {
 		ListOfToken unparsedList = parseLevel(initStreamTokenizer(rdr));
-		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token)) {
+		if (unparsedList.size() == 1 && unparsedList.firstElement() instanceof Token) {
 			return (Token) unparsedList.firstElement();
 		}
 		try {
@@ -208,7 +209,7 @@ public class ExpressionParser {
 			boolean levelSeemsToBeFinished = false;
 			boolean prefixedBy$ = false;
 
-			while ((!levelSeemsToBeFinished) && (input.nextToken() != StreamTokenizer.TT_EOF)) {
+			while (!levelSeemsToBeFinished && input.nextToken() != StreamTokenizer.TT_EOF) {
 				// System.out.println("currentInput="+currentInput+" input="+input);
 
 				if (input.ttype == StreamTokenizer.TT_WORD) {
@@ -342,9 +343,9 @@ public class ExpressionParser {
 		if (word.equals("")) {
 			return;
 		}
-		if ((word.equalsIgnoreCase("true")) || (word.equalsIgnoreCase("yes"))) {
+		if (word.equalsIgnoreCase("true") || word.equalsIgnoreCase("yes")) {
 			returned.add(new BooleanValue(true));
-		} else if ((word.equalsIgnoreCase("false")) || (word.equalsIgnoreCase("no"))) {
+		} else if (word.equalsIgnoreCase("false") || word.equalsIgnoreCase("no")) {
 			returned.add(new BooleanValue(false));
 		} else if (matchOperator(word) != null) {
 			returned.add(matchOperator(word));
@@ -375,9 +376,8 @@ public class ExpressionParser {
 	private UnaryOperator matchUnaryOperator(String anInput) {
 		for (UnaryOperator operator : getAllSupportedUnaryOperators()) {
 			try {
-				if ((anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)))
-						|| (getAlternativeSymbol(operator) != null && anInput.toUpperCase()
-								.equalsIgnoreCase(getAlternativeSymbol(operator)))) {
+				if (anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)) || getAlternativeSymbol(operator) != null
+						&& anInput.toUpperCase().equalsIgnoreCase(getAlternativeSymbol(operator))) {
 					return operator;
 				}
 			} catch (OperatorNotSupportedException e) {
@@ -390,9 +390,8 @@ public class ExpressionParser {
 	private BinaryOperator matchBinaryOperator(String anInput) {
 		for (BinaryOperator operator : getAllSupportedBinaryOperators()) {
 			try {
-				if ((anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)))
-						|| (getAlternativeSymbol(operator) != null && anInput.toUpperCase()
-								.equalsIgnoreCase(getAlternativeSymbol(operator)))) {
+				if (anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)) || getAlternativeSymbol(operator) != null
+						&& anInput.toUpperCase().equalsIgnoreCase(getAlternativeSymbol(operator))) {
 					return operator;
 				}
 			} catch (OperatorNotSupportedException e) {
@@ -402,30 +401,30 @@ public class ExpressionParser {
 		return null;
 	}
 
-	private Expression makeExpression(Token parsed) throws ParseException {
+	private Expression makeExpression(Token parsed, Bindable bindable) throws ParseException {
 		if (parsed instanceof Word) {
 			for (SymbolicConstant c : SymbolicConstant.allKnownSymbolicConstants) {
 				if (((Word) parsed).getValue().equalsIgnoreCase(c.getSymbol())) {
 					return (Constant) c;
 				}
 			}
-			return _variableFactory.makeVariable((Word) parsed);
+			return _variableFactory.makeVariable((Word) parsed, bindable);
 		} else if (parsed instanceof Value) {
-			return _constantFactory.makeConstant((Value) parsed);
+			return _constantFactory.makeConstant((Value) parsed, bindable);
 		} else if (parsed instanceof ParsedFunction) {
 			ParsedFunction f = (ParsedFunction) parsed;
 			Vector<Expression> args = new Vector<Expression>();
 			for (Token t : f.getParameters()) {
-				args.add(makeExpression(t));
+				args.add(makeExpression(t, bindable));
 			}
-			return _functionFactory.makeFunction(f.getCall().getValue(), args);
+			return _functionFactory.makeFunction(f.getCall().getValue(), args, bindable);
 		} else if (parsed instanceof ParsedBinaryExpression) {
 			ParsedBinaryExpression e = (ParsedBinaryExpression) parsed;
-			return new BinaryOperatorExpression(e.getBinaryOperator(), makeExpression(e.getLeftOperand()),
-					makeExpression(e.getRightOperand()));
+			return new BinaryOperatorExpression(e.getBinaryOperator(), makeExpression(e.getLeftOperand(), bindable), makeExpression(
+					e.getRightOperand(), bindable));
 		} else if (parsed instanceof ParsedUnaryExpression) {
 			ParsedUnaryExpression e = (ParsedUnaryExpression) parsed;
-			return new UnaryOperatorExpression(e.getUnaryOperator(), makeExpression(e.getOperand()));
+			return new UnaryOperatorExpression(e.getUnaryOperator(), makeExpression(e.getOperand(), bindable));
 		}
 
 		throw new ParseException("Parse error: unexpected token found");
@@ -448,14 +447,14 @@ public class ExpressionParser {
 	}
 
 	public static interface VariableFactory {
-		public Expression makeVariable(Word value);
+		public Expression makeVariable(Word value, Bindable bindable);
 	}
 
 	public static class DefaultVariableFactory implements VariableFactory {
 		private Hashtable<String, Variable> hash = new Hashtable<String, Variable>();
 
 		@Override
-		public Variable makeVariable(Word value) {
+		public Variable makeVariable(Word value, Bindable bindable) {
 			Variable returned = hash.get(value.getValue());
 			if (returned == null) {
 				returned = new Variable(value.getValue());
@@ -466,12 +465,12 @@ public class ExpressionParser {
 	}
 
 	public static interface ConstantFactory {
-		public Expression makeConstant(Value value);
+		public Expression makeConstant(Value value, Bindable bindable);
 	}
 
 	public static class DefaultConstantFactory implements ConstantFactory {
 		@Override
-		public Constant makeConstant(Value value) {
+		public Constant makeConstant(Value value, Bindable bindable) {
 			if (value == null) {
 				return /*Constant.ObjectSymbolicConstant.NULL;*/new Constant.StringConstant("null");
 			}
@@ -501,12 +500,12 @@ public class ExpressionParser {
 	}
 
 	public static interface FunctionFactory {
-		public Expression makeFunction(String functionName, Vector<Expression> args);
+		public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable);
 	}
 
 	public static class DefaultFunctionFactory implements FunctionFactory {
 		@Override
-		public Function makeFunction(String functionName, Vector<Expression> args) {
+		public Function makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
 			return new Function(functionName, args);
 		}
 	}

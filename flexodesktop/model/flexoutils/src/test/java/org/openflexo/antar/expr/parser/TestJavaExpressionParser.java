@@ -44,14 +44,14 @@ public class TestJavaExpressionParser extends TestCase {
 	private void tryToParse(String aString, String expectedEvaluatedExpression, boolean shouldFail) {
 		try {
 			System.out.println("\nParsing " + aString);
-			Expression parsed = parser.parse(aString);
+			Expression parsed = parser.parse(aString, null);
 			System.out.println("Successfully parsed as : " + parsed.getClass().getSimpleName());
 			System.out.println("Normalized: " + prettyPrinter.getStringRepresentation(parsed));
-			System.out.println("Evaluated: " + prettyPrinter.getStringRepresentation(parsed.evaluate()));
+			System.out.println("Evaluated: " + prettyPrinter.getStringRepresentation(parsed.evaluate(null)));
 			if (shouldFail) {
 				fail();
 			}
-			assertEquals(expectedEvaluatedExpression, prettyPrinter.getStringRepresentation(parsed.evaluate()));
+			assertEquals(expectedEvaluatedExpression, prettyPrinter.getStringRepresentation(parsed.evaluate(null)));
 		} catch (ParseException e) {
 			if (!shouldFail) {
 				e.printStackTrace();

@@ -8,11 +8,9 @@ import java.util.List;
 
 public interface BindingFactory {
 
-	public void setBindable(Bindable bindable);
-
 	public void setWarnOnFailure(boolean aFlag);
 
-	public AbstractBinding convertFromString(String value);
+	public AbstractBinding convertFromString(String value, Bindable bindable);
 
 	public String convertToString(AbstractBinding value);
 

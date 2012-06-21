@@ -83,7 +83,7 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		this.method = method;
 		DefaultExpressionParser parser = new DefaultExpressionParser();
 		try {
-			methodExpression = parser.parse(method);
+			methodExpression = parser.parse(method, null);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -120,7 +120,7 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		this.isAvailable = isAvailable;
 		DefaultExpressionParser parser = new DefaultExpressionParser();
 		try {
-			isAvailableExpression = parser.parse(isAvailable);
+			isAvailableExpression = parser.parse(isAvailable, null);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

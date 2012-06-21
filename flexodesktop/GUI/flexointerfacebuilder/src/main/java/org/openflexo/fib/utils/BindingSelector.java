@@ -921,7 +921,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (getBindable() != null) {
 			BindingExpressionFactory factory = getBindable().getBindingFactory().getBindingExpressionFactory();
 			BindingExpression returned = new BindingExpression(getBindingDefinition(), getBindable());
-			returned.setExpression(factory.getVariableFactory().makeVariable(new Word("")));
+			returned.setExpression(factory.getVariableFactory().makeVariable(new Word(""), getBindable()));
 			return returned;
 		}
 		return null;
@@ -1250,8 +1250,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				logger.info("bindable=" + getBindable());
 			}
 			factory.setWarnOnFailure(false);
-			factory.setBindable(getBindable());
-			AbstractBinding returned = factory.convertFromString(stringValue);
+			AbstractBinding returned = factory.convertFromString(stringValue, getBindable());
 			if (returned == null) {
 				return null;
 			}

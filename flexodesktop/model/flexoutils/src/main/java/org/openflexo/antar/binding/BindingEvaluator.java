@@ -44,34 +44,33 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 		bindingDefinition = new BindingDefinition("object", object.getClass(), BindingDefinitionType.GET, true);
 		bindingModel = new BindingModel();
 		bindingModel.addToBindingVariables(new BindingVariableImpl(this, "object", object.getClass()));
-		BINDING_FACTORY.setBindable(this);
 	}
 
-	private static String normalizeBindingPath(String bindingPath) {
+	private static String normalizeBindingPath(String bindingPath, Bindable bindable) {
 		DefaultExpressionParser parser = new DefaultExpressionParser();
 		Expression expression = null;
 		try {
-			expression = parser.parse(bindingPath);
+			expression = parser.parse(bindingPath, bindable);
 			Expression newExpression = expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(),
 					new DefaultVariableFactory() {
 						@Override
-						public Variable makeVariable(Word value) {
+						public Variable makeVariable(Word value, Bindable bindable) {
 							if (!value.toString().startsWith("object.")) {
-								return super.makeVariable(new Word("object." + value));
+								return super.makeVariable(new Word("object." + value), bindable);
 							} else {
-								return super.makeVariable(value);
+								return super.makeVariable(value, bindable);
 							}
 						}
 					}, new DefaultFunctionFactory() {
 						@Override
-						public Function makeFunction(String functionName, Vector<Expression> args) {
+						public Function makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
 							if (!functionName.startsWith("object.")) {
-								return super.makeFunction("object." + functionName, args);
+								return super.makeFunction("object." + functionName, args, bindable);
 							} else {
-								return super.makeFunction(functionName, args);
+								return super.makeFunction(functionName, args, bindable);
 							}
 						}
-					}));
+					}), bindable);
 			return newExpression.toString();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -99,9 +98,9 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 	}
 
 	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException {
-		String normalizedBindingPath = normalizeBindingPath(bindingPath);
+		String normalizedBindingPath = normalizeBindingPath(bindingPath, this);
 		// System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
-		AbstractBinding binding = BINDING_FACTORY.convertFromString(normalizedBindingPath);
+		AbstractBinding binding = BINDING_FACTORY.convertFromString(normalizedBindingPath, this);
 		binding.setBindingDefinition(bindingDefinition);
 		// System.out.println("Binding = " + binding + " valid=" + binding.isBindingValid());
 		if (!binding.isBindingValid()) {
@@ -111,7 +110,7 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 		return binding.getBindingValue(this);
 	}
 
-	public static Object evaluateBinding(String bindingPath, Object object) throws InvalidKeyValuePropertyException {
+	public static Object evaluateBinding(String bindingPath, Object object, Bindable bindable) throws InvalidKeyValuePropertyException {
 
 		BindingEvaluator evaluator = new BindingEvaluator(object);
 		return evaluator.evaluate(bindingPath);
@@ -119,11 +118,11 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 
 	public static void main(String[] args) {
 		String thisIsATest = "Hello world, this is a test";
-		System.out.println(evaluateBinding("toString", thisIsATest));
-		System.out.println(evaluateBinding("toString()", thisIsATest));
-		System.out.println(evaluateBinding("toString()+' hash='+object.hashCode()", thisIsATest));
-		System.out.println(evaluateBinding("substring(6,11)", thisIsATest));
-		System.out.println(evaluateBinding("substring(3,length()-2)+' hash='+hashCode()", thisIsATest));
+		System.out.println(evaluateBinding("toString", thisIsATest, null));
+		System.out.println(evaluateBinding("toString()", thisIsATest, null));
+		System.out.println(evaluateBinding("toString()+' hash='+object.hashCode()", thisIsATest, null));
+		System.out.println(evaluateBinding("substring(6,11)", thisIsATest, null));
+		System.out.println(evaluateBinding("substring(3,length()-2)+' hash='+hashCode()", thisIsATest, null));
 	}
 
 }

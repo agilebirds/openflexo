@@ -32,7 +32,6 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ValidationIssue;
@@ -90,7 +89,6 @@ public abstract class FIBWidget extends FIBComponent {
 	public FIBWidget() {
 		super();
 		formatter = new FIBFormatter();
-		FIBLibrary.instance().getBindingFactory().setBindable(this);
 	}
 
 	@Override
@@ -329,7 +327,7 @@ public abstract class FIBWidget extends FIBComponent {
 						+ " dataType=" + ((FIBDropDown) FIBWidget.this).getDataType() + " obtained from "
 						+ ((FIBDropDown) FIBWidget.this).getDescription();
 			}
-			return "FIBFormatter[" + FIBWidget.this + "]" + " dataType=" + (FIBWidget.this).getDataType();
+			return "FIBFormatter[" + FIBWidget.this + "]" + " dataType=" + FIBWidget.this.getDataType();
 		}
 
 		@Override
@@ -361,7 +359,7 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public boolean hasClickAction() {
-		return (clickAction != null && clickAction.isValid());
+		return clickAction != null && clickAction.isValid();
 	}
 
 	public DataBinding getClickAction() {
@@ -379,7 +377,7 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public boolean hasDoubleClickAction() {
-		return (doubleClickAction != null && doubleClickAction.isValid());
+		return doubleClickAction != null && doubleClickAction.isValid();
 	}
 
 	public DataBinding getDoubleClickAction() {
@@ -397,7 +395,7 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public boolean hasRightClickAction() {
-		return (rightClickAction != null && rightClickAction.isValid());
+		return rightClickAction != null && rightClickAction.isValid();
 	}
 
 	public DataBinding getRightClickAction() {

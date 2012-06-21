@@ -115,8 +115,7 @@ public class BindingExpression extends AbstractBinding {
 	public static BindingExpression makeBindingExpression(String value, Bindable owner) {
 		if (owner != null) {
 			BindingExpressionFactory factory = owner.getBindingFactory().getBindingExpressionFactory();
-			factory.setBindable(owner);
-			BindingExpression returned = factory.convertFromString(value);
+			BindingExpression returned = factory.convertFromString(value, owner);
 			returned.setOwner(owner);
 			return returned;
 		}
@@ -206,8 +205,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return constant.evaluate();
+		public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
+			return constant.evaluate(bindable);
 		}
 
 		@Override
@@ -241,8 +240,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable) {
-			this(new Variable(variableName), bindable, (bindable != null ? new BindingDefinition("object", Object.class,
-					BindingDefinitionType.GET, true) : null));
+			this(new Variable(variableName), bindable, bindable != null ? new BindingDefinition("object", Object.class,
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable, BindingDefinition bd) {
@@ -250,8 +249,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable) {
-			this(aVariable, bindable, (bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
-					: null));
+			this(aVariable, bindable, bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
+					: null);
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable, BindingDefinition bd) {
@@ -259,9 +258,8 @@ public class BindingExpression extends AbstractBinding {
 			setVariable(aVariable);
 			if (bindable != null) {
 				BindingValueFactory factory = bindable.getBindingFactory().getBindingValueFactory();
-				factory.setBindable(bindable);
 				factory.setWarnOnFailure(false);
-				bindingValue = factory.convertFromString(aVariable.getName());
+				bindingValue = factory.convertFromString(aVariable.getName(), bindable);
 				factory.setWarnOnFailure(true);
 			}
 			if (bindingValue == null) {
@@ -297,8 +295,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return variable.evaluate(context);
+		public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
+			return variable.evaluate(context, bindable);
 		}
 
 		@Override
@@ -373,8 +371,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable) {
-			this(new Function(functionName, args), bindable, (bindable != null ? new BindingDefinition("object", Object.class,
-					BindingDefinitionType.GET, true) : null));
+			this(new Function(functionName, args), bindable, bindable != null ? new BindingDefinition("object", Object.class,
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable, BindingDefinition bd) {
@@ -382,8 +380,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(Function aFunction, Bindable bindable) {
-			this(aFunction, bindable, (bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
-					: null));
+			this(aFunction, bindable, bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
+					: null);
 			// System.out.println("Je me fabrique une BindingValueFunction avec "+aFunction);
 			// System.out.println("Mon bindable c'est "+bindable);
 			// System.out.println("BindingModel="+bindable.getBindingModel());
@@ -404,9 +402,8 @@ public class BindingExpression extends AbstractBinding {
 
 			if (bindable != null) {
 				BindingValueFactory factory = bindable.getBindingFactory().getBindingValueFactory();
-				factory.setBindable(bindable);
 				factory.setWarnOnFailure(false);
-				bindingValue = factory.convertFromString(analyzeAsBindingValue.toString());
+				bindingValue = factory.convertFromString(analyzeAsBindingValue.toString(), bindable);
 				factory.setWarnOnFailure(true);
 			}
 			if (bindingValue == null) {
@@ -458,8 +455,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return function.evaluate(context);
+		public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
+			return function.evaluate(context, bindable);
 		}
 
 		@Override
@@ -492,7 +489,7 @@ public class BindingExpression extends AbstractBinding {
 		}
 		EvaluationContext evaluationContext = new EvaluationContext(getConverter().getConstantFactory(), getConverter()
 				.getVariableFactory(), getConverter().getFunctionFactory());
-		Expression evaluatedExpression = expression.evaluate(evaluationContext);
+		Expression evaluatedExpression = expression.evaluate(evaluationContext, getOwner());
 		BindingExpression returned = clone();
 		returned.setExpression(evaluatedExpression);
 		return returned;
@@ -702,26 +699,27 @@ public class BindingExpression extends AbstractBinding {
 
 		EvaluationContext evaluationContext = new EvaluationContext(constantFactory, new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, Bindable bindable) {
 				// System.out.println("> makeVariable with "+value);
-				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value), getOwner());
+				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value, bindable), getOwner());
 				Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
 				// System.out.println("> found "+evaluatedVariable);
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable), bindable);
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
+			public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
 				// System.out.println("> makeFunction with "+functionName);
-				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args), getOwner());
+				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable),
+						getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
 				// System.out.println("> found "+evaluatedFunction);
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction), bindable);
 			}
 		});
 		Expression evaluatedExpression = null;
 		try {
-			evaluatedExpression = expression.evaluate(evaluationContext);
+			evaluatedExpression = expression.evaluate(evaluationContext, getOwner());
 		} catch (TypeMismatchException e) {
 			// e.printStackTrace();
 			// SGU: I dont have time to resolve this now, but want a clean console
@@ -773,30 +771,31 @@ public class BindingExpression extends AbstractBinding {
 
 		EvaluationContext evaluationContext = new EvaluationContext(constantFactory, new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
-				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value), getOwner());
+			public Expression makeVariable(Word value, Bindable bindable) {
+				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value, bindable), getOwner());
 				Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
 				List<Object> list = variable.getBindingValue().getConcernedObjects(context);
 				if (list != null) {
 					returned.addAll(list);
 				}
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable), bindable);
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
-				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args), getOwner());
+			public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable),
+						getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
 				List<Object> list = function.getBindingValue().getConcernedObjects(context);
 				if (list != null) {
 					returned.addAll(list);
 				}
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction), bindable);
 			}
 		});
 		Expression evaluatedExpression = null;
 		try {
-			evaluatedExpression = expression.evaluate(evaluationContext);
+			evaluatedExpression = expression.evaluate(evaluationContext, getOwner());
 		} catch (TypeMismatchException e) {
 			// e.printStackTrace();
 			logger.warning("TypeMismatchException while evaluating " + getStringRepresentation() + " " + e.getMessage());
@@ -826,30 +825,31 @@ public class BindingExpression extends AbstractBinding {
 
 		EvaluationContext evaluationContext = new EvaluationContext(constantFactory, new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
-				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value), getOwner());
+			public Expression makeVariable(Word value, Bindable bindable) {
+				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value, bindable), getOwner());
 				Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
 				List<TargetObject> list = variable.getBindingValue().getTargetObjects(context);
 				if (list != null) {
 					returned.addAll(list);
 				}
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable), bindable);
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
-				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args), getOwner());
+			public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable),
+						getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
 				List<TargetObject> list = function.getBindingValue().getTargetObjects(context);
 				if (list != null) {
 					returned.addAll(list);
 				}
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction), bindable);
 			}
 		});
 		Expression evaluatedExpression = null;
 		try {
-			evaluatedExpression = expression.evaluate(evaluationContext);
+			evaluatedExpression = expression.evaluate(evaluationContext, getOwner());
 		} catch (TypeMismatchException e) {
 			// e.printStackTrace();
 			// SGU: I dont have time to resolve this now, but want a clean console

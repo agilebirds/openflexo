@@ -21,6 +21,7 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 
 public class BinaryOperatorExpression extends Expression {
@@ -91,12 +92,12 @@ public class BinaryOperatorExpression extends Expression {
 	}
 
 	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 		_checkSemanticallyAcceptable();
 		// System.out.println("left="+leftArgument+" of "+leftArgument.getClass().getSimpleName()+" as "+leftArgument.evaluate(context)+" of "+leftArgument.evaluate(context).getClass().getSimpleName());
 		// System.out.println("right="+rightArgument+" of "+rightArgument.getClass().getSimpleName()+" as "+rightArgument.evaluate(context)+" of "+rightArgument.evaluate(context).getClass().getSimpleName());
 
-		Expression evaluatedLeftArgument = leftArgument.evaluate(context);
+		Expression evaluatedLeftArgument = leftArgument.evaluate(context, bindable);
 		;
 
 		// special case for AND operator, lazy evaluation
@@ -104,7 +105,7 @@ public class BinaryOperatorExpression extends Expression {
 			return BooleanConstant.FALSE; // No need to analyze further
 		}
 
-		Expression evaluatedRightArgument = rightArgument.evaluate(context);
+		Expression evaluatedRightArgument = rightArgument.evaluate(context, bindable);
 
 		if (evaluatedLeftArgument instanceof Constant && evaluatedRightArgument instanceof Constant) {
 			Constant returned = operator.evaluate((Constant) evaluatedLeftArgument, (Constant) evaluatedRightArgument);

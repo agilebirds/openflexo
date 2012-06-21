@@ -122,7 +122,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				updateDependancies();
 				if (bindingAttribute != null) {
 					owner.notifyChange(bindingAttribute, oldValue, value);
@@ -135,7 +135,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				logger.info("Binding takes now value " + value);
 				updateDependancies();
 				if (bindingAttribute != null) {
@@ -188,8 +188,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		if (getOwner() != null) {
 			BindingFactory factory = getOwner().getBindingFactory();
 			if (factory != null) {
-				factory.setBindable(getOwner());
-				binding = factory.convertFromString(getUnparsedBinding());
+				binding = factory.convertFromString(getUnparsedBinding(), getOwner());
 				binding.setBindingDefinition(getBindingDefinition());
 				// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
 				// System.out.println("binding.isBindingValid()="+binding.isBindingValid());

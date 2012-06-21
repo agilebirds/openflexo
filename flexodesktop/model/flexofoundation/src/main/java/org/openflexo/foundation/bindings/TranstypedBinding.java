@@ -242,7 +242,7 @@ public class TranstypedBinding extends AbstractBinding {
 
 			try {
 				ExpressionParser parser = new DefaultExpressionParser();
-				Expression parsedExpression = parser.parse(aValue);
+				Expression parsedExpression = parser.parse(aValue, null);
 				if (parsedExpression instanceof Function) {
 					methodName = ((Function) parsedExpression).getName();
 					paramsAsString = new Vector<String>();
@@ -347,7 +347,7 @@ public class TranstypedBinding extends AbstractBinding {
 
 			try {
 				ExpressionParser parser = new DefaultExpressionParser();
-				Expression parsedExpression = parser.parse(aValue);
+				Expression parsedExpression = parser.parse(aValue, null);
 				if (parsedExpression instanceof Function) {
 					fullyQualifiedTranstyperName = ((Function) parsedExpression).getName();
 					paramsAsString = new Vector<String>();

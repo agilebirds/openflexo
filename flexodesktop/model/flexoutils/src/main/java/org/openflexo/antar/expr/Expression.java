@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
@@ -35,11 +36,11 @@ public abstract class Expression {
 
 	private static final Logger logger = Logger.getLogger(Expression.class.getPackage().getName());
 
-	public final Expression evaluate() throws TypeMismatchException {
-		return evaluate((EvaluationContext) null);
+	public final Expression evaluate(Bindable bindable) throws TypeMismatchException {
+		return evaluate((EvaluationContext) null, bindable);
 	}
 
-	public abstract Expression evaluate(EvaluationContext context) throws TypeMismatchException;
+	public abstract Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException;
 
 	public abstract int getDepth();
 
@@ -107,10 +108,10 @@ public abstract class Expression {
 	 * @return
 	 * @throws TypeMismatchException
 	 */
-	public Expression evaluate(final Hashtable<String, ?> variables) throws TypeMismatchException {
+	public Expression evaluate(final Hashtable<String, ?> variables, Bindable bindable) throws TypeMismatchException {
 		return evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, Bindable bindable) {
 				Object valueObject = variables.get(value.getValue());
 				if (valueObject == null) {
 					return ObjectSymbolicConstant.NULL;
@@ -130,21 +131,22 @@ public abstract class Expression {
 				} else if (valueObject instanceof Double) {
 					return new Constant.FloatConstant((Double) valueObject);
 				} else if (valueObject instanceof Boolean) {
-					return ((Boolean) valueObject ? Constant.BooleanConstant.TRUE : Constant.BooleanConstant.FALSE);
+					return (Boolean) valueObject ? Constant.BooleanConstant.TRUE : Constant.BooleanConstant.FALSE;
 				}
 				// TODO Handle others
 				// return new Variable(value.getValue());
 				return new Constant.StringConstant(value.getValue());
 			}
-		}, new ExpressionParser.DefaultFunctionFactory()));
+		}, new ExpressionParser.DefaultFunctionFactory()), bindable);
 
 	}
 
-	public boolean evaluateCondition(final Hashtable<String, ?> variables) throws TypeMismatchException, UnresolvedExpressionException {
+	public boolean evaluateCondition(final Hashtable<String, ?> variables, Bindable bindable) throws TypeMismatchException,
+			UnresolvedExpressionException {
 		// logger.info("evaluate "+this);
 		// logger.info("variables "+variables);
 
-		Expression evaluation = evaluate(variables);
+		Expression evaluation = evaluate(variables, bindable);
 		// logger.info("evaluation "+evaluation);
 		if (evaluation == Constant.BooleanConstant.TRUE) {
 			return true;
@@ -162,13 +164,13 @@ public abstract class Expression {
 		throw new UnresolvedExpressionException();
 	}
 
-	public static Vector<Variable> extractVariables(String anExpression) throws ParseException, TypeMismatchException {
+	public static Vector<Variable> extractVariables(String anExpression, Bindable bindable) throws ParseException, TypeMismatchException {
 		final Hashtable<String, Variable> returnedHash = new Hashtable<String, Variable>();
 		DefaultExpressionParser parser = new DefaultExpressionParser();
-		Expression expression = parser.parse(anExpression);
+		Expression expression = parser.parse(anExpression, bindable);
 		expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, Bindable bindable) {
 				Variable returned = returnedHash.get(value.getValue());
 				if (returned == null) {
 					returned = new Variable(value.getValue());
@@ -176,7 +178,7 @@ public abstract class Expression {
 				}
 				return returned;
 			}
-		}, new ExpressionParser.DefaultFunctionFactory()));
+		}, new ExpressionParser.DefaultFunctionFactory()), bindable);
 		Vector<Variable> returned = new Vector<Variable>();
 		for (String v : returnedHash.keySet()) {
 			returned.add(returnedHash.get(v));
@@ -184,13 +186,13 @@ public abstract class Expression {
 		return returned;
 	}
 
-	public static Vector<Expression> extractPrimitives(String anExpression) throws ParseException, TypeMismatchException {
+	public static Vector<Expression> extractPrimitives(String anExpression, Bindable bindable) throws ParseException, TypeMismatchException {
 		final Hashtable<String, Expression> returnedHash = new Hashtable<String, Expression>();
 		DefaultExpressionParser parser = new DefaultExpressionParser();
-		Expression expression = parser.parse(anExpression);
+		Expression expression = parser.parse(anExpression, bindable);
 		expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, Bindable bindable) {
 				Expression returned = returnedHash.get(value.getValue());
 				if (returned == null) {
 					returned = new Variable(value.getValue());
@@ -200,7 +202,7 @@ public abstract class Expression {
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
+			public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
 				StringBuffer key = new StringBuffer();
 				key.append(functionName + "(");
 				for (int i = 0; i < args.size(); i++) {
@@ -214,7 +216,7 @@ public abstract class Expression {
 				}
 				return returned;
 			}
-		}));
+		}), bindable);
 		Vector<Expression> returned = new Vector<Expression>();
 		for (String v : returnedHash.keySet()) {
 			returned.add(returnedHash.get(v));

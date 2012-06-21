@@ -40,6 +40,9 @@ public class WindowSynchronizer implements ComponentListener, WindowListener {
 		shownWindows.remove(window);
 		window.removeWindowListener(this);
 		window.removeComponentListener(this);
+		if (activeWindow == window) {
+			activeWindow = null;
+		}
 	}
 
 	@Override

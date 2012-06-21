@@ -233,8 +233,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getBindable() != null) {
 			BindingFactory factory = getBindingFactory();
-			factory.setBindable(getBindable());
-			binding = factory.convertFromString(getUnparsedBinding());
+			binding = factory.convertFromString(getUnparsedBinding(), getBindable());
 			binding.setBindingDefinition(getBindingDefinition());
 			// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
 			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
@@ -283,7 +282,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 
 			Vector<Expression> primitives;
 			try {
-				primitives = Expression.extractPrimitives(binding.getStringRepresentation());
+				primitives = Expression.extractPrimitives(binding.getStringRepresentation(), getBindable());
 
 				FIBComponent component = (FIBComponent) getOwner();
 				FIBComponent rootComponent = component.getRootComponent();

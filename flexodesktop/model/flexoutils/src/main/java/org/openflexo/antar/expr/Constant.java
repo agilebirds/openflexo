@@ -22,6 +22,7 @@ package org.openflexo.antar.expr;
 import java.util.Date;
 import java.util.Vector;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.expr.parser.BooleanValue;
 import org.openflexo.antar.expr.parser.DateValue;
 import org.openflexo.antar.expr.parser.DurationValue;
@@ -34,7 +35,7 @@ import org.openflexo.toolbox.Duration;
 public abstract class Constant<V> extends Expression {
 
 	@Override
-	public Expression evaluate(EvaluationContext context) {
+	public Expression evaluate(EvaluationContext context, Bindable bindable) {
 		return this;
 	}
 
@@ -254,7 +255,7 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		@Override
-		public Expression evaluate(EvaluationContext context) {
+		public Expression evaluate(EvaluationContext context, Bindable bindable) {
 			return new FloatConstant(getValue());
 		}
 
@@ -335,7 +336,7 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		@Override
-		public Expression evaluate(EvaluationContext context) {
+		public Expression evaluate(EvaluationContext context, Bindable bindable) {
 			return new DateConstant(computeDateForNow());
 		}
 
@@ -401,7 +402,7 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		@Override
-		public Expression evaluate(EvaluationContext context) {
+		public Expression evaluate(EvaluationContext context, Bindable bindable) {
 			return this;
 		}
 

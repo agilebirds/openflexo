@@ -34,13 +34,6 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 	}
 
 	@Override
-	public void setBindable(Bindable bindable) {
-		bindingValueFactory.setBindable(bindable);
-		bindingExpressionFactory.setBindable(bindable);
-		staticBindingFactory.setBindable(bindable);
-	}
-
-	@Override
 	public void setWarnOnFailure(boolean aFlag) {
 		warnOnFailure = aFlag;
 		bindingValueFactory.setWarnOnFailure(aFlag);
@@ -50,6 +43,11 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 
 	@Override
 	public AbstractBinding convertFromString(String value) {
+		throw new UnsupportedOperationException("No bindable provided");
+	}
+
+	@Override
+	public AbstractBinding convertFromString(String value, Bindable bindable) {
 		/*boolean debug = (value.startsWith("data.dateBindingDefinition"));
 		if (debug) {
 			System.out.println("Identified AbstractBinding "+value);
@@ -62,7 +60,7 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 		if ("null".equals(value)) {
 			return null;
 		}
-		StaticBinding decodedStringAsStaticBinding = staticBindingFactory.convertFromString(value);
+		StaticBinding decodedStringAsStaticBinding = staticBindingFactory.convertFromString(value, bindable);
 		if (decodedStringAsStaticBinding != null) {
 			if (AbstractBinding.logger.isLoggable(Level.FINE)) {
 				AbstractBinding.logger.fine("Succeeded to decode as a StaticBinding");
@@ -73,7 +71,7 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 		} else {
 			// Lets try as a binding value
 			bindingValueFactory.setWarnOnFailure(false);
-			BindingValue decodedStringAsBindingValue = bindingValueFactory.convertFromString(value);
+			BindingValue decodedStringAsBindingValue = bindingValueFactory.convertFromString(value, bindable);
 			bindingValueFactory.setWarnOnFailure(true);
 			if (decodedStringAsBindingValue != null) {
 				if (AbstractBinding.logger.isLoggable(Level.FINE)) {
@@ -84,7 +82,7 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 				return decodedStringAsBindingValue;
 			} else {
 				// Lets try as an expression
-				BindingExpression decodedStringAsBindingExpression = bindingExpressionFactory.convertFromString(value);
+				BindingExpression decodedStringAsBindingExpression = bindingExpressionFactory.convertFromString(value, bindable);
 				if (AbstractBinding.logger.isLoggable(Level.FINE)) {
 					AbstractBinding.logger.fine("Could not decode as a BindingValue, trying as an expression");
 				}

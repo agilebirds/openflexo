@@ -773,7 +773,7 @@ if there is an associated screen make a hyperlink to the screen.
     	${generator.log("Rendering iteration")}
 
 		#foreach($_item in ${generator.getIterableObjects($_entry)})
-			${generator.iterateOnItem($_entry,$_item)}
+			#void(${generator.iterateOnItem($_entry,$_item)})
 			#if($generator.getItemCondition($_entry))
     			${generator.log("Item is valid, performing rendering for this iteration")}
     			#subTocEntries($_entry)

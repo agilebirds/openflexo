@@ -122,7 +122,7 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				updateDependancies();
 				if (bindingAttribute != null && owner instanceof TOCEntry) {
 					((TOCEntry) owner).notifyChange(bindingAttribute, oldValue, value);
@@ -137,7 +137,7 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				logger.info("Binding takes now value " + value);
 				updateDependancies();
 				if (bindingAttribute != null && owner instanceof TOCEntry) {
@@ -191,8 +191,7 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getOwner() != null) {
 			BindingFactory factory = getOwner().getBindingFactory();
-			factory.setBindable(getOwner());
-			binding = factory.convertFromString(getUnparsedBinding());
+			binding = factory.convertFromString(getUnparsedBinding(), getOwner());
 			binding.setBindingDefinition(getBindingDefinition());
 			// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
 			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());

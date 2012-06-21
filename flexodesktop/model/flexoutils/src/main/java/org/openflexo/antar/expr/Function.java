@@ -21,6 +21,8 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
+import org.openflexo.antar.binding.Bindable;
+
 public class Function extends Expression {
 
 	private String name;
@@ -63,14 +65,14 @@ public class Function extends Expression {
 	}
 
 	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 
 		Vector<Expression> evaluatedArgs = new Vector<Expression>();
 		for (Expression arg : getArgs()) {
-			evaluatedArgs.add(arg.evaluate(context));
+			evaluatedArgs.add(arg.evaluate(context, bindable));
 		}
 		if (context != null) {
-			return context.getFunctionFactory().makeFunction(getName(), evaluatedArgs);
+			return context.getFunctionFactory().makeFunction(getName(), evaluatedArgs, bindable);
 		}
 		return new Function(getName(), evaluatedArgs);
 	}

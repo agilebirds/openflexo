@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.expr.parser;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.EvaluationContext;
@@ -35,18 +36,18 @@ public class TestConditional {
 		System.out.println("ok");
 
 		try {
-			Expression parsed = parser.parse("coucou=true");
+			Expression parsed = parser.parse("coucou=true", null);
 			Expression evaluation = parsed.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(),
 					new VariableFactory() {
 						@Override
-						public Expression makeVariable(Word value) {
+						public Expression makeVariable(Word value, Bindable bindable) {
 							System.out.println("Hop");
 							if (value.getValue().equals("coucou")) {
 								return Constant.BooleanConstant.TRUE;
 							}
 							return new Variable(value.getValue());
 						}
-					}, new ExpressionParser.DefaultFunctionFactory()));
+					}, new ExpressionParser.DefaultFunctionFactory()), null);
 			System.out.println("parsed=" + parsed);
 			System.out.println("evaluation=" + evaluation + " is a " + evaluation.getClass().getName());
 		} catch (ParseException e) {

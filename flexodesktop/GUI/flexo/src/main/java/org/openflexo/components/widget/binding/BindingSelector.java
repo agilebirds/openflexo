@@ -1038,7 +1038,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	protected BindingExpression makeBindingExpression() {
 		BindingExpression returned = new BindingExpression(getBindingDefinition(), (FlexoModelObject) getBindable());
 		if (getProject() != null) {
-			returned.setExpression(getProject().getBindingExpressionConverter().getVariableFactory().makeVariable(new Word("")));
+			returned.setExpression(getProject().getBindingExpressionConverter().getVariableFactory().makeVariable(new Word(""), null));
 		}
 		return returned;
 	}

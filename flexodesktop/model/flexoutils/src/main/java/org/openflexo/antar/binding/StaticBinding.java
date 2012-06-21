@@ -51,8 +51,7 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 	public static StaticBinding makeStaticBinding(String value, Bindable owner) {
 		if (owner != null) {
 			StaticBindingFactory factory = owner.getBindingFactory().getStaticBindingFactory();
-			factory.setBindable(owner);
-			StaticBinding returned = factory.convertFromString(value);
+			StaticBinding returned = factory.convertFromString(value, owner);
 			returned.setOwner(owner);
 			return returned;
 		}
@@ -112,7 +111,7 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 					return false;
 				}
 			}
-			return ((_owner == sb._owner) && sb.getValue() != null && getValue().equals(sb.getValue()));
+			return _owner == sb._owner && sb.getValue() != null && getValue().equals(sb.getValue());
 		} else {
 			return super.equals(object);
 		}

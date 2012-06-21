@@ -21,6 +21,8 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
+import org.openflexo.antar.binding.Bindable;
+
 public class UnaryOperatorExpression extends Expression {
 
 	private UnaryOperator operator;
@@ -61,9 +63,9 @@ public class UnaryOperatorExpression extends Expression {
 	}
 
 	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 		_checkSemanticallyAcceptable();
-		Expression evaluatedArgument = argument.evaluate(context);
+		Expression evaluatedArgument = argument.evaluate(context, bindable);
 		if (evaluatedArgument instanceof Constant) {
 			Constant returned = operator.evaluate((Constant) evaluatedArgument);
 			// if (context != null) return context.getConstantFactory().makeConstant(returned.getParsingValue());

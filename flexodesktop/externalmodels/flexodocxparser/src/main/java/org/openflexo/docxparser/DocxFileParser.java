@@ -186,13 +186,17 @@ public class DocxFileParser {
 
 	public String extractTextContent(Element sdtContentElement) {
 		StringBuilder sb = new StringBuilder();
-		Iterator<?> iteratorWt = sdtContentElement.selectNodes("descendant::w:t").iterator();
-		while (iteratorWt.hasNext()) {
-			Element textElement = (Element) iteratorWt.next();
-			if (sb.length() > 0) {
+		Iterator<?> iteratorWp = sdtContentElement.selectNodes("descendant::w:p").iterator();
+		while (iteratorWp.hasNext()) {
+			Element wpElement = (Element) iteratorWp.next();
+			Iterator<?> iteratorWt = wpElement.selectNodes("descendant::w:t").iterator();
+			while (iteratorWt.hasNext()) {
+				Element textElement = (Element) iteratorWt.next();
+				sb.append(textElement.getText());
+			}
+			if (iteratorWp.hasNext()) {
 				sb.append(StringUtils.LINE_SEPARATOR);
 			}
-			sb.append(textElement.getText());
 		}
 		return sb.toString().trim();
 	}
