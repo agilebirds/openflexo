@@ -30,7 +30,6 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.FileResource;
 
 import com.hp.hpl.jena.ontology.OntClass;
@@ -42,7 +41,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class TestPizza {
 
 	public static void main(String[] args) {
-		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+		FlexoResourceCenter resourceCenter = FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
 		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 		ViewPointLibrary viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 
@@ -223,11 +222,4 @@ public class TestPizza {
 		System.out.println("Wrote " + createdFile.getName());
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
 }

@@ -24,40 +24,22 @@ import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.FlexoActionVisibleCondition;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.ShowExecutionControlGraphs;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.wkf.controller.WKFController;
 
-public class ShowExecutionControlGraphsInitializer extends ActionInitializer {
+public class ShowExecutionControlGraphsInitializer extends ActionInitializer<ShowExecutionControlGraphs, WKFObject, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ShowExecutionControlGraphsInitializer.class.getPackage().getName());
 
 	ShowExecutionControlGraphsInitializer(WKFControllerActionInitializer actionInitializer) {
 		super(ShowExecutionControlGraphs.actionType, actionInitializer);
-	}
-
-	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() {
-		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
-	}
-
-	@Override
-	protected void initActionType(FlexoActionType actionType, FlexoActionInitializer initializer, FlexoActionFinalizer finalizer,
-			FlexoExceptionHandler exceptionHandler, FlexoActionEnableCondition enableCondition,
-			FlexoActionVisibleCondition visibleCondition, KeyStroke shortcut, Icon enabledIcon, Icon disabledIcon) {
-		super.initActionType(actionType, initializer, finalizer, exceptionHandler, enableCondition, visibleCondition, shortcut,
-				enabledIcon, disabledIcon);
 		if (isControlGraphComputationAvailable()) {
 			Method initMethod;
 			try {
@@ -68,6 +50,11 @@ public class ShowExecutionControlGraphsInitializer extends ActionInitializer {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override

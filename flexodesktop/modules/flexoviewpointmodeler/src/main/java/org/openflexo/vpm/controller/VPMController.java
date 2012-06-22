@@ -32,7 +32,8 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.FlexoCst;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.ImportedOntology;
@@ -54,15 +55,17 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
+import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.action.CEDControllerActionInitializer;
-import org.openflexo.vpm.view.CEDFrame;
 import org.openflexo.vpm.view.CEDMainPane;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.menu.VPMMenuBar;
@@ -76,14 +79,6 @@ public class VPMController extends FlexoController implements SelectionManagingC
 
 	private static final Logger logger = Logger.getLogger(VPMController.class.getPackage().getName());
 
-	// ================================================
-	// ============= Instance variables ===============
-	// ================================================
-
-	protected VPMMenuBar _cedMenuBar;
-	protected CEDFrame _frame;
-
-	protected VPMKeyEventListener _cedKeyEventListener;
 	private final VPMSelectionManager _selectionManager;
 
 	private final FlexoResourceCenter resourceCenter;
@@ -110,17 +105,12 @@ public class VPMController extends FlexoController implements SelectionManagingC
 	/**
 	 * Default constructor
 	 */
-	public VPMController(FlexoModule module) throws Exception {
+	public VPMController(FlexoModule module) {
 		super(module);
 
-		resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+		resourceCenter = FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
 		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-
-		_cedMenuBar = (VPMMenuBar) createAndRegisterNewMenuBar();
-		_cedKeyEventListener = new VPMKeyEventListener(this);
-		_frame = new CEDFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _cedKeyEventListener, _cedMenuBar);
-		init(_frame, _cedKeyEventListener, _cedMenuBar);
 
 		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();
 
@@ -135,19 +125,19 @@ public class VPMController extends FlexoController implements SelectionManagingC
 			@Override
 			public void run() {
 				switchToPerspective(getDefaultPespective());
-				selectAndFocusObject(viewPointLibrary);
 			}
 		});
 
 	}
 
-	protected FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
+	@Override
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new CEDControllerActionInitializer(editor, this);
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new CEDControllerActionInitializer(this);
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new VPMKeyEventListener(this);
 	}
 
 	/**
@@ -175,22 +165,6 @@ public class VPMController extends FlexoController implements SelectionManagingC
 
 	}
 
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
-	public CEDFrame getMainFrame() {
-		return _frame;
-	}
-
-	public VPMMenuBar getEditorMenuBar() {
-		return _cedMenuBar;
-	}
-
 	public void showBrowser() {
 		if (getMainPane() != null) {
 			((CEDMainPane) getMainPane()).showBrowser();
@@ -205,16 +179,8 @@ public class VPMController extends FlexoController implements SelectionManagingC
 
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new CEDMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new CEDMainPane(this);
 	}
-
-	public VPMKeyEventListener getKeyEventListener() {
-		return _cedKeyEventListener;
-	}
-
-	// ================================================
-	// ============ Selection management ==============
-	// ================================================
 
 	@Override
 	public SelectionManager getSelectionManager() {
@@ -376,10 +342,17 @@ public class VPMController extends FlexoController implements SelectionManagingC
 		}
 	}
 
-	public void reviewModifiedResources() {
+	public boolean reviewModifiedResources() {
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			i.reviewModifiedResource();
 		}
+		FIBDialog<VPMController> dialog = FIBDialog.instanciateAndShowDialog(CEDCst.SAVE_VPM_DIALOG_FIB, this, FlexoFrame.getActiveFrame(),
+				true, FlexoLocalization.getMainLocalizer());
+		if (dialog.getStatus() == Status.VALIDATED) {
+			saveModified();
+			return true;
+		}
+		return false;
 	}
 
 	public static class ResourceSavingInfo {

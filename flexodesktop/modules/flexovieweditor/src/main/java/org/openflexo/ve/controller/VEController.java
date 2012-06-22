@@ -29,14 +29,13 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.FlexoCst;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.ve.VEPreferences;
 import org.openflexo.ve.controller.action.VEControllerActionInitializer;
-import org.openflexo.ve.view.VEFrame;
 import org.openflexo.ve.view.VEMainPane;
 import org.openflexo.ve.view.menu.OEMenuBar;
 import org.openflexo.view.FlexoMainPane;
@@ -44,6 +43,7 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -55,13 +55,6 @@ public class VEController extends FlexoController implements SelectionManagingCo
 
 	private static final Logger logger = Logger.getLogger(VEController.class.getPackage().getName());
 
-	// ================================================
-	// ============= Instance variables ===============
-	// ================================================
-
-	protected OEMenuBar _oeMenuBar;
-	protected VEFrame _frame;
-	protected VEKeyEventListener _oeKeyEventListener;
 	private VESelectionManager _selectionManager;
 
 	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
@@ -77,21 +70,11 @@ public class VEController extends FlexoController implements SelectionManagingCo
 		return false;
 	}
 
-	// ================================================
-	// ================ Constructor ===================
-	// ================================================
-
 	/**
 	 * Default constructor
 	 */
-	public VEController(FlexoModule module) throws Exception {
+	public VEController(FlexoModule module) {
 		super(module);
-		_oeMenuBar = (OEMenuBar) createAndRegisterNewMenuBar();
-		_oeKeyEventListener = new VEKeyEventListener(this);
-		_frame = new VEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _oeKeyEventListener, _oeMenuBar);
-		init(_frame, _oeKeyEventListener, _oeMenuBar);
-
-		// At this point the InspectorController is not yet loaded
 		_selectionManager = new VESelectionManager(this);
 
 		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
@@ -103,21 +86,19 @@ public class VEController extends FlexoController implements SelectionManagingCo
 			@Override
 			public void run() {
 				switchToPerspective(getDefaultPespective());
-				setCurrentEditedObjectAsModuleView(getProject().getShemaLibrary());
 			}
 		});
 
 	}
 
 	@Override
-	public void dispose() {
-		VEPreferences.reset(this);
-		super.dispose();
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new VEKeyEventListener(this);
 	}
 
 	@Override
 	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new VEControllerActionInitializer(this);
+		return new VEControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -128,6 +109,16 @@ public class VEController extends FlexoController implements SelectionManagingCo
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new OEMenuBar(this);
+	}
+
+	@Override
+	public void setEditor(FlexoEditor projectEditor) {
+		super.setEditor(projectEditor);
+		if (getProject() != null) {
+			getProject().getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
+			getProject().getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
+		}
+
 	}
 
 	/**
@@ -149,22 +140,6 @@ public class VEController extends FlexoController implements SelectionManagingCo
 
 	}
 
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
-	public VEFrame getMainFrame() {
-		return _frame;
-	}
-
-	public OEMenuBar getEditorMenuBar() {
-		return _oeMenuBar;
-	}
-
 	public void showBrowser() {
 		if (getMainPane() != null) {
 			((VEMainPane) getMainPane()).showBrowser();
@@ -179,16 +154,8 @@ public class VEController extends FlexoController implements SelectionManagingCo
 
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new VEMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new VEMainPane(this);
 	}
-
-	public VEKeyEventListener getKeyEventListener() {
-		return _oeKeyEventListener;
-	}
-
-	// ================================================
-	// ============ Selection management ==============
-	// ================================================
 
 	@Override
 	public SelectionManager getSelectionManager() {
@@ -211,10 +178,6 @@ public class VEController extends FlexoController implements SelectionManagingCo
 		// TODO: Implements this
 		setCurrentEditedObjectAsModuleView(object);
 	}
-
-	// ================================================
-	// ============ Exception management ==============
-	// ================================================
 
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {

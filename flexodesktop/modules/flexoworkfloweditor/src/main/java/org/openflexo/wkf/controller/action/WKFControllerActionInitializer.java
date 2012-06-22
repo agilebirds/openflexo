@@ -40,6 +40,7 @@ import org.openflexo.foundation.wkf.action.AddEdgeMetricsValue;
 import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
 import org.openflexo.foundation.wkf.action.AddOperationMetricsDefinition;
 import org.openflexo.foundation.wkf.action.AddOperationMetricsValue;
+import org.openflexo.foundation.wkf.action.AddPort;
 import org.openflexo.foundation.wkf.action.AddProcessMetricsDefinition;
 import org.openflexo.foundation.wkf.action.AddProcessMetricsValue;
 import org.openflexo.foundation.wkf.action.AddRole;
@@ -49,6 +50,7 @@ import org.openflexo.foundation.wkf.action.AddToAccountableRole;
 import org.openflexo.foundation.wkf.action.AddToConsultedRole;
 import org.openflexo.foundation.wkf.action.AddToInformedRole;
 import org.openflexo.foundation.wkf.action.AddToResponsibleRole;
+import org.openflexo.foundation.wkf.action.CreateNode;
 import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
 import org.openflexo.foundation.wkf.action.DeleteMetricsValue;
 import org.openflexo.foundation.wkf.action.DeleteRole;
@@ -60,6 +62,7 @@ import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
+import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -117,7 +120,12 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new DeleteRoleInitializer(this);
 		new DeleteRoleSpecializationInitializer(this);
 		new AddStatusInitializer(this);
-		new AddPortInitializer(this);
+		new AddPortInitializer(AddPort.createPort, null, this);
+		new AddPortInitializer(AddPort.createNewPort, WKFIconLibrary.SMALL_NEW_PORT_ICON, this);
+		new AddPortInitializer(AddPort.createDeletePort, WKFIconLibrary.SMALL_DELETE_PORT_ICON, this);
+		new AddPortInitializer(AddPort.createInPort, WKFIconLibrary.SMALL_IN_PORT_LEFT_ICON, this);
+		new AddPortInitializer(AddPort.createOutPort, WKFIconLibrary.SMALL_OUT_PORT_LEFT_ICON, this);
+		new AddPortInitializer(AddPort.createInOutPort, WKFIconLibrary.SMALL_IN_OUT_PORT_LEFT_ICON, this);
 
 		new ImportRolesInitializer(this);
 		new ImportProcessesInitializer(this);
@@ -137,7 +145,17 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new ViewNextOperationsInitializer(this);
 		new PrintProcessInitializer(this);
 		new DropWKFElementInitializer(this);
-		new CreateNodeInitializer(this);
+
+		new CreateNodeInitializer(CreateNode.createActivityBeginNode, WKFIconLibrary.BEGIN_ACTIVITY_ICON, this);
+		new CreateNodeInitializer(CreateNode.createActivityEndNode, WKFIconLibrary.END_ACTIVITY_ICON, this);
+		new CreateNodeInitializer(CreateNode.createActivityNormalNode, WKFIconLibrary.ACTIVITY_NODE_ICON, this);
+		new CreateNodeInitializer(CreateNode.createOperationBeginNode, WKFIconLibrary.BEGIN_OPERATION_ICON, this);
+		new CreateNodeInitializer(CreateNode.createOperationEndNode, WKFIconLibrary.END_OPERATION_ICON, this);
+		new CreateNodeInitializer(CreateNode.createOperationNormalNode, WKFIconLibrary.OPERATION_NODE_ICON, this);
+		new CreateNodeInitializer(CreateNode.createActionBeginNode, WKFIconLibrary.BEGIN_ACTION_ICON, this);
+		new CreateNodeInitializer(CreateNode.createActionEndNode, WKFIconLibrary.END_ACTION_ICON, this);
+		new CreateNodeInitializer(CreateNode.createActionNormalNode, WKFIconLibrary.ACTION_NODE_ICON, this);
+
 		new CreatePreconditionInitializer(this);
 		new CreateEdgeInitializer(this);
 		new CreateAssociationInitializer(this);
@@ -169,11 +187,10 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new AddToAccountableRoleInitializer(this);
 		new AddToConsultedRoleInitializer(this);
 		new AddToInformedRoleInitializer(this);
-
-		registerAction(RemoveFromResponsibleRole.actionType);
-		registerAction(RemoveFromAccountableRole.actionType);
-		registerAction(RemoveFromConsultedRole.actionType);
-		registerAction(RemoveFromInformedRole.actionType);
+		new RemoveFromResponsibleRoleInitializer(this);
+		new RemoveFromAccountableRoleInitializer(this);
+		new RemoveFromConsultedRoleInitializer(this);
+		new RemoveFromInformedRoleInitializer(this);
 
 		// Initialize action of inspectors
 		RoleList.addRoleActionizer = new FlexoActionizer<AddRole, WorkflowModelObject, WorkflowModelObject>(AddRole.actionType, getEditor());

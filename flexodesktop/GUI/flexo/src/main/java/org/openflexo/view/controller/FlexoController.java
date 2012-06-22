@@ -1736,7 +1736,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		_mainPane = null;
 		_menuBar = null;
 		_module = null;
-		_palette = null;
 		getPropertyChangeSupport().firePropertyChange(DELETED, false, true);
 	}
 

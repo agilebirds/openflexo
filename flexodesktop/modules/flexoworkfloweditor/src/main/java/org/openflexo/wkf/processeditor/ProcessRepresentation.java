@@ -89,6 +89,7 @@ import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
+import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.processeditor.gr.AbstractActionNodeGR;
 import org.openflexo.wkf.processeditor.gr.AbstractActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.AbstractOperationNodeGR;
@@ -368,26 +369,26 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 	public static final ProcessRepresentationObjectVisibilityDelegate SHOW_ALL = new ProcessRepresentationShowAllObjectsDelegate();
 	public static final ProcessRepresentationObjectVisibilityDelegate SHOW_TOP_LEVEL = new ProcessRepresentationShowTopLevelDelegate();
 
-	private final FlexoEditor editor;
 	private final ProcessGraphicalRepresentation graphicalRepresentation;
 	private ProcessRepresentationObjectVisibilityDelegate visibilityDelegate;
+	private final WKFController controller;
 
-	public ProcessRepresentation(final FlexoProcess process, FlexoEditor anEditor) {
-		this(process, anEditor, false);
+	public ProcessRepresentation(final FlexoProcess process, WKFController controller) {
+		this(process, controller, false);
 	}
 
 	/**
 	 * If openAllNodes is set to true, all nodes are directly open at creation. Used by the html doc generation
 	 */
-	public ProcessRepresentation(final FlexoProcess process, FlexoEditor anEditor, boolean openAllNodes) {
-		this(process, anEditor, openAllNodes ? SHOW_ALL : DEFAULT_VISIBILITY);
+	public ProcessRepresentation(final FlexoProcess process, WKFController controller, boolean visibilityDelegate2) {
+		this(process, controller, visibilityDelegate2 ? SHOW_ALL : DEFAULT_VISIBILITY);
 	}
 
-	public ProcessRepresentation(final FlexoProcess process, FlexoEditor anEditor,
+	public ProcessRepresentation(final FlexoProcess process, WKFController controller,
 			ProcessRepresentationObjectVisibilityDelegate visibilityDelegate) {
 		super(process);
+		this.controller = controller;
 
-		this.editor = anEditor;
 		if (visibilityDelegate != null) {
 			this.visibilityDelegate = visibilityDelegate;
 		} else {
@@ -896,7 +897,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 	}
 
 	public FlexoEditor getEditor() {
-		return editor;
+		return controller.getEditor();
 	}
 
 }

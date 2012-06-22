@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.ve.view.menu.OEMenuBar;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to this module
@@ -37,10 +37,10 @@ public class VESelectionManager extends SelectionManager {
 
 	public VESelectionManager(VEController controller) {
 		super(controller);
-		OEMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new VEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new VEContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new VEContextualMenuManager(this, controller);
 	}
 
 	public VEController getXXXController() {

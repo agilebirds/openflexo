@@ -87,8 +87,12 @@ public class DocumentationPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<FlexoProcess> createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-		return new WKFDocumentationView(process, (WKFController) controller);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+		if (process instanceof FlexoProcess) {
+			return new WKFDocumentationView((FlexoProcess) process, (WKFController) controller);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

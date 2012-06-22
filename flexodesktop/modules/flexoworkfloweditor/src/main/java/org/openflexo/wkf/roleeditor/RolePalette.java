@@ -20,7 +20,6 @@
 package org.openflexo.wkf.roleeditor;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -127,8 +126,8 @@ public class RolePalette extends DrawingPalette {
 				addRole.setNewColor(color);
 				addRole.setIsSystemRole(isSystemRole);
 				// addRole.doAction();
-				addRole.actionPerformed(new ActionEvent(gr, ActionEvent.ACTION_PERFORMED, ""));
-				return true;
+				addRole.doAction();
+				return addRole.hasActionExecutionSucceeded();
 			}
 
 			@Override

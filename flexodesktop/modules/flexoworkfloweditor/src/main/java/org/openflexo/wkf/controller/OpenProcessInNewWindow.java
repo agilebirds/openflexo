@@ -19,19 +19,15 @@
  */
 package org.openflexo.wkf.controller;
 
-import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.wkf.view.ExternalProcessViewWindow;
 
 public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindow, FlexoProcess, WKFObject> {
 
@@ -55,7 +51,7 @@ public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindo
 
 		@Override
 		public boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};
@@ -66,28 +62,6 @@ public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindo
 
 	OpenProcessInNewWindow(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-	}
-
-	public static void initWithController(final WKFController controller) {
-		controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<OpenProcessInNewWindow>() {
-			@Override
-			public boolean run(EventObject e, OpenProcessInNewWindow anAction) {
-				if (anAction.getFocusedObject() == null) {
-					anAction.setFocusedObject(controller.getCurrentFlexoProcess());
-				}
-				return (anAction.getFocusedObject() != null);
-			}
-		}, controller.getModule());
-
-		controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<OpenProcessInNewWindow>() {
-			@Override
-			public boolean run(EventObject e, final OpenProcessInNewWindow anAction) {
-				ExternalProcessViewWindow window = new ExternalProcessViewWindow(controller, anAction.getFocusedObject());
-				window.setVisible(true);
-				return true;
-			}
-		}, controller.getModule());
-
 	}
 
 }

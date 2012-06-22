@@ -335,7 +335,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 				}
 			}
 		}
-		FlexoAction popAction = _currentlyPerformedActionStack.pop();
+		FlexoAction<?, ?, ?> popAction = _currentlyPerformedActionStack.pop();
 		if (popAction != action) {
 			logger.warning("Expected to pop " + action + " but found " + popAction);
 		}
@@ -368,7 +368,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenUndone(
 			A action, boolean success) {
 		_undoManager.actionHasBeenUndone(action, success);
-		FlexoAction popAction = _currentlyUndoneActionStack.pop();
+		FlexoAction<?, ?, ?> popAction = _currentlyUndoneActionStack.pop();
 		if (popAction != action) {
 			logger.warning("Expected to pop " + action + " but found " + popAction);
 		}
@@ -383,7 +383,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenRedone(
 			A action, boolean success) {
 		_undoManager.actionHasBeenRedone(action, success);
-		FlexoAction popAction = _currentlyRedoneActionStack.pop();
+		FlexoAction<?, ?, ?> popAction = _currentlyRedoneActionStack.pop();
 		if (popAction != action) {
 			logger.warning("Expected to pop " + action + " but found " + popAction);
 		}
@@ -478,7 +478,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 			FlexoActionType<A, T1, T2> actionType) {
 		ControllerActionInitializer currentControllerActionInitializer = getCurrentControllerActionInitializer();
 		if (currentControllerActionInitializer != null) {
-			return currentControllerActionInitializer.getInitializer(actionType);
+			return currentControllerActionInitializer.getActionInitializer(actionType);
 		}
 		return null;
 	}

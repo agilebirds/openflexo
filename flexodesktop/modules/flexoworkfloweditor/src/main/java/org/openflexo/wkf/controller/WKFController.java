@@ -27,24 +27,26 @@ package org.openflexo.wkf.controller;
  */
 
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.DuplicateStatusException;
@@ -72,17 +74,19 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.action.WKFControllerActionInitializer;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessView;
 import org.openflexo.wkf.processeditor.gr.EdgeGR;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
+import org.openflexo.wkf.processeditor.gr.EdgeGR.EdgeRepresentation;
 import org.openflexo.wkf.view.ProcessBrowserView;
 import org.openflexo.wkf.view.ProcessBrowserWindow;
 import org.openflexo.wkf.view.RoleListBrowserView;
-import org.openflexo.wkf.view.WKFFrame;
 import org.openflexo.wkf.view.WKFMainPane;
 import org.openflexo.wkf.view.WorkflowBrowserView;
 import org.openflexo.wkf.view.WorkflowBrowserWindow;
@@ -96,7 +100,7 @@ import org.openflexo.wkf.view.menu.WKFMenuBar;
  * @author benoit, sylvain
  */
 public class WKFController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController,
-		PrintManagingController {
+		PrintManagingController, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(WKFController.class.getPackage().getName());
 
@@ -125,12 +129,6 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	private ProcessBrowserWindow _processBrowserWindow;
 
-	protected WKFMenuBar _wkfMenuBar;
-
-	protected WKFFrame _wkfFrame;
-
-	protected WKFKeyEventListener _wkfKeyEventListener;
-
 	private WKFSelectionManager _selectionManager;
 
 	// Browsers
@@ -149,8 +147,10 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
-		public ModuleView<FlexoProcess> createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-			ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, process);
+		public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+			if (process instanceof FlexoProcess) {
+				ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, (FlexoProcess) process);
+			}
 			return null;
 			// return new WKFInvaders(process,(WKFController)controller);
 		}
@@ -174,14 +174,8 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	/**
 	 * Default constructor
 	 */
-	@Inject
-	public WKFController(FlexoModule module) throws Exception {
+	public WKFController(FlexoModule module) {
 		super(module);
-		_wkfMenuBar = (WKFMenuBar) createAndRegisterNewMenuBar();
-		_wkfKeyEventListener = new WKFKeyEventListener(this);
-		_wkfFrame = new WKFFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _wkfKeyEventListener, _wkfMenuBar);
-		init(_wkfFrame, _wkfKeyEventListener, _wkfMenuBar);
-
 		_selectionManager = new WKFSelectionManager(this);
 
 		_processBrowser = new ProcessBrowser(this);
@@ -204,6 +198,9 @@ public class WKFController extends FlexoController implements SelectionManagingC
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
 		initWorkflowGraphicalPropertiesFromPrefs(getProject());
+		initWithWKFPreferences();
+		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
+
 	}
 
 	private void initWorkflowGraphicalPropertiesFromPrefs(FlexoProject project) {
@@ -223,8 +220,13 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
+	protected FlexoKeyEventListener createKeyEventListener() {
+		return new WKFKeyEventListener(this);
+	}
+
+	@Override
 	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new WKFControllerActionInitializer(this);
+		return new WKFControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -276,16 +278,15 @@ public class WKFController extends FlexoController implements SelectionManagingC
 			getWKFSelectionManager().deleteObserver(getDocInspectorController());
 			_selectionManager = null;
 		}
-		WKFPreferences.reset(this);
 		super.dispose();
 	}
 
 	public void loadRelativeWindows() {
 		// Relative windows
 
-		_workflowBrowserWindow = new WorkflowBrowserWindow(_wkfFrame);
+		_workflowBrowserWindow = new WorkflowBrowserWindow(getFlexoFrame());
 		_workflowBrowserWindow.setVisible(false);
-		_processBrowserWindow = new ProcessBrowserWindow(_wkfFrame);
+		_processBrowserWindow = new ProcessBrowserWindow(getFlexoFrame());
 		// _processBrowserWindow.setVisible(true);
 
 		/*
@@ -321,14 +322,6 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		return getProject().getWKFValidationModel();
 	}
 
-	public WKFFrame getMainFrame() {
-		return _wkfFrame;
-	}
-
-	public WKFMenuBar getEditorMenuBar() {
-		return _wkfMenuBar;
-	}
-
 	public WorkflowBrowserWindow getWorkflowBrowserWindow() {
 		return _workflowBrowserWindow;
 	}
@@ -351,7 +344,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new WKFMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new WKFMainPane(this);
 	}
 
 	@Override
@@ -450,10 +443,6 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	public WorkflowBrowser getWorkflowBrowser() {
 		return _workflowBrowser;
-	}
-
-	public WKFKeyEventListener getKeyEventListener() {
-		return _wkfKeyEventListener;
 	}
 
 	/**
@@ -738,15 +727,13 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	public FGEPoint getLastClickedPoint() {
 		if (getCurrentModuleView() instanceof DrawingView) {
-			return ((DrawingView) getCurrentModuleView()).getController().getLastClickedPoint();
+			return ((DrawingView<?>) getCurrentModuleView()).getController().getLastClickedPoint();
 		}
 		return null;
 	}
 
 	public void notifyShowGrid(boolean showGrid) {
-		Enumeration<ModuleView> en = getLoadedViewsForPerspective(PROCESS_EDITOR_PERSPECTIVE).elements();
-		while (en.hasMoreElements()) {
-			ModuleView view = en.nextElement();
+		for (ModuleView<?> view : getLoadedViewsForPerspective(PROCESS_EDITOR_PERSPECTIVE).values()) {
 			if (view instanceof ProcessView) {
 				((ProcessView) view).getDrawingGraphicalRepresentation().setShowGrid(WKFPreferences.getShowGrid());
 			}
@@ -765,4 +752,474 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		this.roleListBrowserView = _roleListBrowserView;
 	}
 
+	private void initWithWKFPreferences() {
+		/*for (GraphicalProperties prop : GraphicalProperties.values()) {
+			if (_controller.getFlexoWorkflow().hasGraphicalPropertyForKey(prop.getSerializationName())) {
+				switch (prop) {
+				case ACTION_FONT:
+					setActionNodeFont(_controller.getProject().getFlexoWorkflow().getActionFont());
+					break;
+				case ACTIVITY_FONT:
+					setActivityNodeFont(_controller.getProject().getFlexoWorkflow().getActivityFont());
+					break;
+				case COMPONENT_FONT:
+					setComponentFont(_controller.getProject().getFlexoWorkflow().getComponentFont());
+					break;
+				case CONNECTOR_REPRESENTATION:
+					try {
+						setConnectorRepresentation((EdgeRepresentation) _controller.getProject().getFlexoWorkflow()
+								.getConnectorRepresentation());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					break;
+				case EVENT_FONT:
+					setEventNodeFont(_controller.getProject().getFlexoWorkflow().getEventFont());
+					break;
+				case ARTEFACT_FONT:
+					setArtefactFont(_controller.getProject().getFlexoWorkflow().getArtefactFont());
+					break;
+				case EDGE_FONT:
+					setEdgeFont(_controller.getProject().getFlexoWorkflow().getEdgeFont());
+					break;
+				case OPERATION_FONT:
+					setOperationNodeFont(_controller.getProject().getFlexoWorkflow().getOperationFont());
+					break;
+				case ROLE_FONT:
+					setRoleFont(_controller.getProject().getFlexoWorkflow().getRoleFont());
+					break;
+				case SHOW_MESSAGES:
+					setShowMessagesInWKF(_controller.getProject().getFlexoWorkflow().getShowMessages());
+					break;
+				case SHOW_SHADOWS:
+					setShowShadows(_controller.getProject().getFlexoWorkflow().getShowShadows());
+					break;
+				case SHOW_WO_NAME:
+					setShowWONameInWKF(_controller.getProject().getFlexoWorkflow().getShowWOName());
+					break;
+				case USE_TRANSPARENCY:
+					setUseTransparency(_controller.getProject().getFlexoWorkflow().getUseTransparency());
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		_controller.notifyShowLeanTabHasChanged();
+		_controller.notifyShowMessages(getShowMessagesInWKF());*/
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(WKFPreferences.SHOW_WO_NAME_KEY)) {
+			if (_controller != null) {
+				_controller.getFlexoWorkflow().setShowWOName(showWOName);
+				notifyShowWOName(showWOName.booleanValue());
+			}
+		}
+		}
+
+		public static Boolean getShowMessagesInWKF() {
+			Boolean value = getPreferences().getBooleanProperty(SHOW_MESSAGES_NAME_KEY);
+			if (value == null) {
+				setShowMessagesInWKF(Boolean.TRUE);
+				return getShowMessagesInWKF();
+			}
+			return value;
+		}
+
+		public static void setShowMessagesInWKF(Boolean showMessages) {
+			getPreferences().setBooleanProperty(SHOW_MESSAGES_NAME_KEY, showMessages);
+			if (_controller != null) {
+				_controller.getFlexoWorkflow().setShowMessages(showMessages);
+				_controller.notifyShowMessages(showMessages.booleanValue());
+			}
+		}
+
+		public static Boolean getAlignOnGrid() {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("getAlignOnGrid");
+			}
+			Boolean value = getPreferences().getBooleanProperty(ALIGN_ON_GRID_KEY);
+			if (value == null) {
+				setAlignOnGrid(Boolean.FALSE);
+				return getAlignOnGrid();
+			}
+			return value;
+		}
+
+		public static void setAlignOnGrid(Boolean alignOnGrid) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("AlignOnGrid");
+			}
+			getPreferences().setBooleanProperty(ALIGN_ON_GRID_KEY, alignOnGrid);
+		}
+
+		public static boolean getShowGrid() {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("getShowGrid");
+			}
+			Boolean value = getPreferences().getBooleanProperty(SHOW_GRID);
+			if (value == null) {
+				setShowGrid(Boolean.FALSE);
+				return getShowGrid();
+			}
+			return value;
+		}
+
+		public static void setShowGrid(boolean showGrid) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("setShowGrid");
+			}
+			getPreferences().setBooleanProperty(SHOW_GRID, showGrid);
+			if (_controller != null) {
+				_controller.notifyShowGrid(showGrid);
+			}
+		}
+
+		public static Integer getGridSize() {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("getGridSize");
+			}
+			Integer value = getPreferences().getIntegerProperty(GRID_SIZE_KEY);
+			if (value == null) {
+				setGridSize(15);
+				return getGridSize();
+			}
+			return value;
+		}
+
+		public static void setGridSize(Integer gridSize) {
+			if (gridSize == null) {
+				return;
+			}
+			if (gridSize < 1) {
+				gridSize = 1;
+			}
+			if (gridSize > 200) {
+				gridSize = 200;
+			}
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("setGridSize");
+			}
+			getPreferences().setIntegerProperty(GRID_SIZE_KEY, gridSize);
+		}
+
+		public static Boolean getShowShadows() {
+			Boolean value = getPreferences().getBooleanProperty(SHOW_SHADOWS);
+			if (value == null) {
+				return Boolean.TRUE;
+			}
+			return value;
+		}
+
+		public static void setShowShadows(Boolean showShadows) {
+			getPreferences().setBooleanProperty(SHOW_SHADOWS, showShadows);
+			if (_controller != null) {
+				_controller.getFlexoWorkflow().setShowShadows(showShadows);
+				_controller.notifyShowShadowChanged();
+			}
+		}
+
+		public static Boolean getShowLeanTabs() {
+			Boolean value = getPreferences().getBooleanProperty(SHOW_LEAN_TAB);
+			if (value == null) {
+				return Boolean.FALSE;
+			}
+			return value;
+		}
+
+		public static void setShowLeanTabs(Boolean showLeanTabs) {
+			getPreferences().setBooleanProperty(SHOW_LEAN_TAB, showLeanTabs);
+			if (_controller != null) {
+				_controller.notifyShowLeanTabHasChanged();
+			}
+		}
+
+		public static Boolean getUseSimpleEventPalette() {
+			Boolean value = getPreferences().getBooleanProperty(USE_SIMPLE_EVENT_PALETTE);
+			if (value == null) {
+				return Boolean.TRUE;
+			}
+			return value;
+		}
+
+		public static void setUseSimpleEventPalette(Boolean showLeanTabs) {
+			getPreferences().setBooleanProperty(USE_SIMPLE_EVENT_PALETTE, showLeanTabs);
+			if (_controller != null) {
+				_controller.notifyUseSimpleEventPaletteHasChanged();
+			}
+		}
+
+		public static Boolean getShowAlertWhenDroppingIsIncorrect() {
+			Boolean value = getPreferences().getBooleanProperty(SHOW_ALERT_WHEN_DROPPING_INCORRECT);
+			if (value == null) {
+				return Boolean.TRUE;
+			}
+			return value;
+		}
+
+		public static void setShowAlertWhenDroppingIsIncorrect(Boolean showLeanTabs) {
+			getPreferences().setBooleanProperty(SHOW_ALERT_WHEN_DROPPING_INCORRECT, showLeanTabs);
+		}
+
+		public static Boolean getUseTransparency() {
+			Boolean value = getPreferences().getBooleanProperty(USE_TRANSPARENCY);
+			if (value == null) {
+				return Boolean.TRUE;
+			}
+			return value;
+		}
+
+		public static void setUseTransparency(Boolean useTransparency) {
+			getPreferences().setBooleanProperty(USE_TRANSPARENCY, useTransparency);
+			if (_controller != null) {
+				_controller.getFlexoWorkflow().setUseTransparency(useTransparency);
+				_controller.notifyUseTransparencyChanged();
+			}
+		}
+
+		public static FlexoFont getActivityNodeFont() {
+			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
+			if (returned == null) {
+				setActivityNodeFont(new FlexoFont(WKFCst.DEFAULT_ACTIVITY_NODE_LABEL_FONT));
+				return returned = FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
+			}
+			return returned;
+		}
+
+		public static void setActivityNodeFont(FlexoFont font) {
+			getPreferences().setProperty(ACTIVITY_NODE_FONT_KEY, font.toString());
+			if (_controller != null) {
+				_controller.getFlexoWorkflow().setActivityFont(font);
+				_controller.notifyActivityFontChanged();
+			}
+		}
+
+		public static FlexoFont getOperationNodeFont() {
+			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
+			if (returned == null) {
+				setOperationNodeFont(new FlexoFont(WKFCst.DEFAULT_OPERATION_NODE_LABEL_FONT));
+				return returned = FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
+			}
+			return returned;
+		}
+
+		public static void setOperationNodeFont(FlexoFont font) {
+			getPreferences().setProperty(OPERATION_NODE_FONT_KEY, font.toString());
+			if (_controller != null) {
+				_controller.getFlexoWorkflow().setOperationFont(font);
+				_controller.notifyOperationFontChanged();
+			}
+		}
+
+		public static FlexoFont getActionNodeFont() {
+			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
+			if (returned == null) {
+				setActionNodeFont(new FlexoFont(WKFCst.DEFAULT_ACTION_NODE_LABEL_FONT));
+				return returned = FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
+			}
+			return returned;
+		}
+
+		public static void setActionNodeFont(FlexoFont font) {
+			getPreferences().setProperty(ACTION_NODE_FONT_KEY, font.toString());
+			if (_controller != null) {
+				_controller.getFlexoWorkflow().setActionFont(font);
+				_controller.notifyActionFontChanged();
+			}
+		}
+
+		public static FlexoFont getEventNodeFont() {
+			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
+			if (returned == null) {
+				setEventNodeFont(new FlexoFont(WKFCst.DEFAULT_EVENT_NODE_LABEL_FONT));
+				return returned = FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
+			}
+			return returned;
+		}
+
+		public static void setEventNodeFont(FlexoFont font) {
+			getPreferences().setProperty(EVENT_NODE_FONT_KEY, font.toString());
+			if (_controller != null) {
+				_controller.getProject().getFlexoWorkflow().setEventFont(font);
+				_controller.notifyEventFontChanged();
+			}
+		}
+
+		public static FlexoFont getRoleFont() {
+			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
+			if (returned == null) {
+				setRoleFont(new FlexoFont(WKFCst.DEFAULT_ROLE_LABEL_FONT));
+				return returned = FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
+			}
+			return returned;
+		}
+
+		public static void setRoleFont(FlexoFont font) {
+			getPreferences().setProperty(ROLE_FONT_KEY, font.toString());
+			if (_controller != null) {
+				_controller.getProject().getFlexoWorkflow().setRoleFont(font);
+				_controller.notifyRoleFontChanged();
+			}
+		}
+
+		public static FlexoFont getEdgeFont() {
+			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
+			if (returned == null) {
+				setEdgeFont(new FlexoFont(WKFCst.DEFAULT_EDGE_LABEL_FONT));
+				return returned = FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
+			}
+			return returned;
+		}
+
+		public static void setEdgeFont(FlexoFont font) {
+			getPreferences().setProperty(EDGE_FONT_KEY, font.toString());
+			if (_controller != null) {
+				_controller.getProject().getFlexoWorkflow().setEdgeFont(font);
+				_controller.notifyEdgeFontChanged();
+			}
+		}
+
+		public static FlexoFont getArtefactFont() {
+			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
+			if (returned == null) {
+				setArtefactFont(new FlexoFont(WKFCst.DEFAULT_ARTEFACT_LABEL_FONT));
+				return returned = FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
+			}
+			return returned;
+		}
+
+		public static void setArtefactFont(FlexoFont font) {
+			getPreferences().setProperty(ARTEFACT_FONT_KEY, font.toString());
+			if (_controller != null) {
+				_controller.getProject().getFlexoWorkflow().setArtefactFont(font);
+				_controller.notifyArtefactFontChanged();
+			}
+		}
+
+		public static FlexoFont getComponentFont() {
+			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
+			if (returned == null) {
+				setComponentFont(new FlexoFont(WKFCst.DEFAULT_COMPONENT_LABEL_FONT));
+				return returned = FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
+			}
+			return returned;
+		}
+
+		public static void setComponentFont(FlexoFont font) {
+			getPreferences().setProperty(COMPONENT_FONT_KEY, font.toString());
+			if (_controller != null) {
+				_controller.getProject().getFlexoWorkflow().setComponentFont(font);
+				_controller.notifyComponentFontChanged();
+			}
+		}
+
+		/*
+		 * public static EdgeRepresentation getActivityConnector() { String s = preferences(WKF_PREFERENCES).getProperty(ACTIVITY_CONNECTOR);
+		 * EdgeRepresentation returned = null; if (s!=null) try { returned = EdgeRepresentation.valueOf(s); } catch (RuntimeException e) { if
+		 * (logger.isLoggable(Level.WARNING)) logger.warning("Could not decode connector type named: "+s); } if (returned == null) {
+		 * setActivityConnector(returned = EdgeRepresentation.RECT_POLYLIN); } return returned; }
+		 * 
+		 * public static void setActivityConnector(EdgeRepresentation type) { if (type!=null)
+		 * preferences(WKF_PREFERENCES).setProperty(ACTIVITY_CONNECTOR, type.name()); }
+		 * 
+		 * public static EdgeRepresentation getOperationConnector() { String s = preferences(WKF_PREFERENCES).getProperty(OPERATION_CONNECTOR);
+		 * EdgeRepresentation returned = null; if (s != null) try { returned = EdgeRepresentation.valueOf(s); } catch (RuntimeException e) { if
+		 * (logger.isLoggable(Level.WARNING)) logger.warning("Could not decode connector type named: " + s); } if (returned == null) {
+		 * setOperationConnector(returned = EdgeRepresentation.RECT_POLYLIN); } return returned; }
+		 * 
+		 * public static void setOperationConnector(EdgeRepresentation type) { if (type!=null)
+		 * preferences(WKF_PREFERENCES).setProperty(OPERATION_CONNECTOR, type.name()); }
+		 * 
+		 * public static EdgeRepresentation getActionConnector() { String s = preferences(WKF_PREFERENCES).getProperty(ACTION_CONNECTOR);
+		 * EdgeRepresentation returned = null; if (s != null) try { returned = EdgeRepresentation.valueOf(s); } catch (RuntimeException e) { if
+		 * (logger.isLoggable(Level.WARNING)) logger.warning("Could not decode connector type named: " + s); } if (returned == null) {
+		 * setActionConnector(returned = EdgeRepresentation.CURVE); } return returned; }
+		 * 
+		 * public static void setActionConnector(EdgeRepresentation type) { if (type!=null)
+		 * preferences(WKF_PREFERENCES).setProperty(ACTION_CONNECTOR, type.name()); }
+		 */
+
+		public static EdgeRepresentation getConnectorRepresentation() {
+			String s = getPreferences().getProperty(CONNECTOR_REPRESENTATION);
+			EdgeRepresentation returned = null;
+			if (s != null) {
+				try {
+					returned = EdgeRepresentation.valueOf(s);
+				} catch (RuntimeException e) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not decode connector type named: " + s);
+					}
+				}
+			}
+			if (returned == null) {
+				setConnectorRepresentation(returned = EdgeRepresentation.RECT_POLYLIN, false);
+			}
+			return returned;
+		}
+
+		public static void setConnectorRepresentation(EdgeRepresentation type) {
+			setConnectorRepresentation(type, true);
+		}
+
+		public static String getActionConnectorRepresentationInfo() {
+			return FlexoLocalization.localizedForKey("note_that_action_level_edges_are_always_curved");
+		}
+
+		public static String getPreferenceMessage() {
+			return FlexoLocalization.localizedForKey("wkf_preferences_message");
+		}
+
+		public static void setConnectorRepresentation(EdgeRepresentation type, boolean notify) {
+			if (type != null) {
+				getPreferences().setProperty(CONNECTOR_REPRESENTATION, type.name());
+				if (_controller != null) {
+					_controller.getFlexoWorkflow().setConnectorRepresentation(type);
+					_controller.notifyEdgeRepresentationChanged();
+				}
+				/*
+				 * if (notify) FlexoController.notify(FlexoLocalization.localizedForKey("connector_representation_is_a_local_preference"));
+				 */
+			}
+		}
+
+		public static RectPolylinAdjustability getConnectorAdjustability() {
+			String s = getPreferences().getProperty(CONNECTOR_ADJUSTABILITY);
+			RectPolylinAdjustability returned = null;
+			if (s != null) {
+				try {
+					returned = RectPolylinAdjustability.valueOf(s);
+				} catch (RuntimeException e) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not decode connector adjustability named: " + s);
+					}
+				}
+			}
+			if (returned == null) {
+				setConnectorAdjustability(returned = RectPolylinAdjustability.BASICALLY_ADJUSTABLE, false);
+			}
+			return returned;
+		}
+
+		public static void setConnectorAdjustability(RectPolylinAdjustability adjustability) {
+			setConnectorAdjustability(adjustability, true);
+		}
+
+		public static void setConnectorAdjustability(RectPolylinAdjustability adjustability, boolean notify) {
+			if (adjustability != null) {
+				getPreferences().setProperty(CONNECTOR_ADJUSTABILITY, adjustability.name());
+				if (_controller != null) {
+					_controller.notifyEdgeRepresentationChanged();
+				}
+				if (notify) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("connector_adjustability_is_a_local_preference") + "\n"
+							+ FlexoLocalization.localizedForKey("in_order_for_this_change_to_take_effect_you_must_restart_flexo"));
+				}
+			}
+		}
+
+		
+	}
+	
 }

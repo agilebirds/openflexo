@@ -60,9 +60,11 @@ import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.controller.WorkflowBrowser;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
@@ -91,13 +93,20 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	private static final Logger logger = FlexoLogger.getLogger(WKFModule.class.getPackage().getName());
 
 	public WKFModule(ApplicationContext applicationContext) throws Exception {
-		// super(project, new WKFController(project));
 		super(applicationContext);
-		setFlexoController(new WKFController(projectEditor, this));
 		getWKFController().loadRelativeWindows();
-		WKFPreferences.init(getWKFController());
-		// getWKFController().loadWorkflow(project.getWorkflowFile(false));
+		WKFPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
+	}
+
+	@Override
+	public Module getModule() {
+		return Module.WKF_MODULE;
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new WKFController(this);
 	}
 
 	@Override
@@ -284,7 +293,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		public DrawingController<? extends Drawing<? extends FlexoModelObject>> call() {
 			DrawingController<? extends Drawing<? extends FlexoModelObject>> screenshotController = null;
 			if (target instanceof RoleList) {
-				screenshotController = new RoleEditorController((RoleList) target, getEditor(), null);
+				screenshotController = new RoleEditorController((RoleList) target, null, null);
 			} else if (target instanceof WKFObject) {
 				screenshotController = getProcessRepresentationController((WKFObject) target, showAll);
 			} else {
@@ -310,7 +319,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		}
 		JComponent component;
 		if (target instanceof FlexoWorkflow) {
-			FlexoJTree treeView = new WorkflowBrowserView(new WorkflowBrowser(target.getProject()), null, null).getTreeView();
+			FlexoJTree treeView = new WorkflowBrowserView(new WorkflowBrowser(target.getProject()), null).getTreeView();
 			component = treeView;
 			// Expand all nodes in tree
 			for (int i = 0; i < treeView.getRowCount(); i++) {
@@ -371,13 +380,13 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		}
 		switch (pr) {
 		case BASIC_EDITOR:
-			controller = new ProcessEditorController(target.getProcess(), getEditor(), null,
+			controller = new ProcessEditorController(target.getProcess(), null, null,
 					showAll ? org.openflexo.wkf.processeditor.ProcessRepresentation.SHOW_ALL
 							: new BPEScreenshotProcessRepresentationObjectVisibilityDelegate(target));
 			break;
 		case SWIMMING_LANE:
-			controller = new SwimmingLaneEditorController(target.getProcess(), getEditor(), null,
-					showAll ? SwimmingLaneRepresentation.SHOW_ALL : new SWLScreenshotProcessRepresentationObjectVisibilityDelegate(target));
+			controller = new SwimmingLaneEditorController(target.getProcess(), null, null, showAll ? SwimmingLaneRepresentation.SHOW_ALL
+					: new SWLScreenshotProcessRepresentationObjectVisibilityDelegate(target));
 			break;
 		default:
 			if (logger.isLoggable(Level.WARNING)) {
@@ -411,7 +420,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	 */
 	@Override
 	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return getProject().getFlexoWorkflow().getRootProcess();
+		return project.getFlexoWorkflow().getRootProcess();
 	}
 
 	/**

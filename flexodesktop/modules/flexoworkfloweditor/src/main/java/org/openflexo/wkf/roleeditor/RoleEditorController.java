@@ -32,15 +32,15 @@ public class RoleEditorController extends SelectionManagingDrawingController<Rol
 	private WKFController _controller;
 	private RolePalette _palette;
 
-	public RoleEditorController(RoleList roleList, FlexoEditor editor, SelectionManager selectionManager) {
-		super(new RoleListRepresentation(roleList, editor), selectionManager);
+	public RoleEditorController(RoleList roleList, WKFController controller, SelectionManager selectionManager) {
+		super(new RoleListRepresentation(roleList, controller), selectionManager);
 		_palette = new RolePalette();
 		registerPalette(_palette);
 		activatePalette(_palette);
 	}
 
 	public RoleEditorController(WKFController controller) {
-		this(controller.getProject().getWorkflow().getRoleList(), controller.getEditor(), controller.getSelectionManager());
+		this(controller.getProject().getWorkflow().getRoleList(), controller, controller.getSelectionManager());
 		_controller = controller;
 	}
 

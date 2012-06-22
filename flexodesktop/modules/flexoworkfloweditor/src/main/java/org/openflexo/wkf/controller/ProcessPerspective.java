@@ -112,12 +112,16 @@ public class ProcessPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoProcess) && !((FlexoProcess) object).isImported();
+		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 	}
 
 	@Override
-	public ProcessView createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-		return getControllerForProcess(process).getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+		if (process instanceof FlexoProcess) {
+			return getControllerForProcess((FlexoProcess) process).getDrawingView();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -144,7 +148,7 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	public ProcessView getCurrentProcessView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof ProcessView)) {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof ProcessView) {
 			return (ProcessView) _controller.getCurrentModuleView();
 		}
 		return null;
@@ -194,7 +198,6 @@ public class ProcessPerspective extends FlexoPerspective {
 		// currentProcessView = (ProcessView) moduleView;
 		if (moduleView instanceof ProcessView) {
 			FlexoProcess process = ((ProcessView) moduleView).getRepresentedObject();
-			process.addObserver(_controller.getMainFrame());
 			_controller.getProcessBrowser().setCurrentProcess(process);
 			_controller.getExternalProcessBrowser().setCurrentProcess(process);
 			_controller.getWorkflowBrowser().focusOn(process);

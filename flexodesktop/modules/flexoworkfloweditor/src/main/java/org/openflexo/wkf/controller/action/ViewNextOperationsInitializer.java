@@ -58,7 +58,7 @@ public class ViewNextOperationsInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<ViewNextOperations>() {
 			@Override
 			public boolean run(EventObject e, ViewNextOperations action) {
-				new ViewNextOperationPopup(getControllerActionInitializer().getWKFController().getMainFrame(),
+				new ViewNextOperationPopup(getControllerActionInitializer().getWKFController().getFlexoFrame(),
 						getControllerActionInitializer().getWKFController(), (ActionNode) action.getFocusedObject());
 				return true;
 			}

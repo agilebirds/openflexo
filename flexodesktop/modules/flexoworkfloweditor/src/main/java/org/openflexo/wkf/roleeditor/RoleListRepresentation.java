@@ -33,6 +33,7 @@ import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.foundation.wkf.RoleSpecialization;
 import org.openflexo.foundation.wkf.dm.RoleInserted;
 import org.openflexo.foundation.wkf.dm.RoleRemoved;
+import org.openflexo.wkf.controller.WKFController;
 
 public class RoleListRepresentation extends DefaultDrawing<RoleList> implements GraphicalFlexoObserver {
 
@@ -41,9 +42,11 @@ public class RoleListRepresentation extends DefaultDrawing<RoleList> implements 
 	private DrawingGraphicalRepresentation<RoleList> graphicalRepresentation;
 	private FlexoEditor editor;
 
-	public RoleListRepresentation(RoleList aRoleList, FlexoEditor editor) {
+	private final WKFController controller;
+
+	public RoleListRepresentation(RoleList aRoleList, WKFController controller) {
 		super(aRoleList);
-		this.editor = editor;
+		this.controller = controller;
 		graphicalRepresentation = new DrawingGraphicalRepresentation<RoleList>(this);
 		graphicalRepresentation.addToMouseClickControls(new RoleEditorController.ShowContextualMenuControl());
 
@@ -112,6 +115,6 @@ public class RoleListRepresentation extends DefaultDrawing<RoleList> implements 
 	}
 
 	public FlexoEditor getEditor() {
-		return editor;
+		return controller.getEditor();
 	}
 }

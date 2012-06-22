@@ -28,7 +28,6 @@ import javax.swing.JComponent;
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
@@ -39,9 +38,11 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalOEModule;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.shema.VEShemaController;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Ontology Editor module
@@ -60,25 +61,18 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 
 	public VEModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
-		setFlexoController(new VEController(projectEditor, this));
-		getOEController().loadRelativeWindows();
-		VEPreferences.init(getOEController());
+		VEPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
-
-		// Put here a code to display default view
-		// getOEController().setCurrentEditedObjectAsModuleView(projectEditor.getProject());
-
-		projectEditor.getProject().getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
-		projectEditor.getProject().getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
-
-		// Retain here all necessary resources
-		// retain(<the_required_resource_data>);
 	}
 
 	@Override
-	public boolean close() {
-		// TODO Auto-generated method stub
-		return super.close();
+	protected FlexoController createControllerForModule() {
+		return new VEController(this);
+	}
+
+	@Override
+	public Module getModule() {
+		return Module.VE_MODULE;
 	}
 
 	@Override

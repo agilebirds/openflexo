@@ -23,7 +23,6 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 
 class CalcLibraryBrowser extends VPMBrowser {
 	protected CalcLibraryBrowser(VPMController controller) {
@@ -50,15 +49,7 @@ class CalcLibraryBrowser extends VPMBrowser {
 
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		return getFlexoResourceCenterService().getFlexoResourceCenter().retrieveViewPointLibrary();
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
+		return FlexoResourceCenterService.getInstance().getFlexoResourceCenter().retrieveViewPointLibrary();
 	}
 
 }

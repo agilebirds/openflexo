@@ -38,7 +38,7 @@ import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.wkf.view.menu.WKFMenuBar;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to Workflow editor This class manages a set of FlexoModelObject instances which are all at the same level
@@ -55,11 +55,11 @@ public class WKFSelectionManager extends SelectionManager {
 
 	public WKFSelectionManager(WKFController controller) {
 		super(controller);
-		WKFMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new WKFClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
 		level = null;
-		_contextualMenuManager = new WKFContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new WKFContextualMenuManager(this, controller);
 	}
 
 	public WKFController getWKFController() {

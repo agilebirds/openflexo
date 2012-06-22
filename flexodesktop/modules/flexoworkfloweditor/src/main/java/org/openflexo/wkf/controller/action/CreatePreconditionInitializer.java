@@ -35,8 +35,6 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionRedoInitializer;
 import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.action.RedoException;
-import org.openflexo.foundation.action.UndoException;
 import org.openflexo.foundation.param.NodeParameter;
 import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.param.RadioButtonListParameter;
@@ -129,8 +127,8 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 						Vector<FlexoNode> unboundBeginNodes = pg.getUnboundBeginNodes();
 						Vector<FlexoNode> alreadyBoundBeginNodes = pg.getBoundBeginNodes();
 
-						FlexoNode firstUnboundBeginNode = (unboundBeginNodes.size() > 0 ? unboundBeginNodes.firstElement() : null);
-						FlexoNode firstBoundBeginNode = (alreadyBoundBeginNodes.size() > 0 ? alreadyBoundBeginNodes.firstElement() : null);
+						FlexoNode firstUnboundBeginNode = unboundBeginNodes.size() > 0 ? unboundBeginNodes.firstElement() : null;
+						FlexoNode firstBoundBeginNode = alreadyBoundBeginNodes.size() > 0 ? alreadyBoundBeginNodes.firstElement() : null;
 
 						boolean hasUnboundBeginNodes = unboundBeginNodes.size() > 0;
 						boolean hasAlreadyBoundBeginNodes = alreadyBoundBeginNodes.size() > 0;
@@ -153,9 +151,9 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 							String[] choices = availableChoices.toArray(new String[availableChoices.size()]);
 							RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice",
 									"choose_an_option",
-									(firstUnboundBeginNode != null ? CHOOSE_EXISTING_UNBOUND_BEGIN_NODE : (firstBoundBeginNode != null
+									firstUnboundBeginNode != null ? CHOOSE_EXISTING_UNBOUND_BEGIN_NODE : firstBoundBeginNode != null
 											&& action.allowsToSelectPreconditionOnly() ? CHOOSE_EXISTING_ALREADY_BOUND_BEGIN_NODE
-											: CREATE_NEW_BEGIN_NODE)), choices);
+											: CREATE_NEW_BEGIN_NODE, choices);
 							String nodeNameProposal;
 							if (action.getFocusedObject() instanceof AbstractActivityNode) {
 								nodeNameProposal = pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("begin_node"),
@@ -239,11 +237,8 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 										executionContext.createBeginNodeAction.doAction();
 										if (!executionContext.createBeginNodeAction.hasActionExecutionSucceeded()) {
 											if (executionContext.createPg != null) {
-												try {
-													executionContext.createPg.undoAction();
-												} catch (UndoException e1) {
-													e1.printStackTrace();
-												}
+												executionContext.createPg.undoAction();
+
 											}
 											return false;
 										}
@@ -283,7 +278,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionUndoFinalizer<CreatePreCondition> getDefaultUndoFinalizer() {
 		return new FlexoActionUndoFinalizer<CreatePreCondition>() {
 			@Override
-			public boolean run(EventObject e, CreatePreCondition action) throws UndoException {
+			public boolean run(EventObject e, CreatePreCondition action) {
 				CreatePreConditionExecutionContext executionContext = (CreatePreConditionExecutionContext) action.getExecutionContext();
 				if (executionContext.createBeginNodeAction != null) {
 					executionContext.createBeginNodeAction.undoAction();
@@ -303,7 +298,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionRedoInitializer<CreatePreCondition> getDefaultRedoInitializer() {
 		return new FlexoActionRedoInitializer<CreatePreCondition>() {
 			@Override
-			public boolean run(EventObject e, CreatePreCondition action) throws RedoException {
+			public boolean run(EventObject e, CreatePreCondition action) {
 				CreatePreConditionExecutionContext executionContext = (CreatePreConditionExecutionContext) action.getExecutionContext();
 				if (executionContext.createPg != null) {
 					executionContext.createPg.redoAction();

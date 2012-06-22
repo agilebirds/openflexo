@@ -25,13 +25,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
 import org.openflexo.foundation.utils.FlexoFont;
-import org.openflexo.foundation.wkf.FlexoWorkflow.GraphicalProperties;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.processeditor.gr.EdgeGR.EdgeRepresentation;
 
 /**
@@ -46,111 +44,58 @@ public final class WKFPreferences extends ModulePreferences {
 
 	private static final Class<WKFPreferences> WKF_PREFERENCES = WKFPreferences.class;
 
-	protected static final String ALIGN_ON_GRID_KEY = "newAlignOnGrid";
+	public static final String ALIGN_ON_GRID_KEY = "newAlignOnGrid";
 
-	protected static final String SHOW_GRID = "showGrid";
+	public static final String SHOW_GRID = "showGrid";
 
-	protected static final String SHOW_WO_NAME_KEY = "showWONameInWKF";
+	public static final String SHOW_WO_NAME_KEY = "showWONameInWKF";
 
-	protected static final String SHOW_MESSAGES_NAME_KEY = "showMessagesInWKF";
+	public static final String SHOW_MESSAGES_NAME_KEY = "showMessagesInWKF";
 
-	protected static final String GRID_SIZE_KEY = "newGridSize";
+	public static final String GRID_SIZE_KEY = "newGridSize";
 
-	protected static final String SHOW_SHADOWS = "showShadows";
+	public static final String SHOW_SHADOWS = "showShadows";
 
-	protected static final String USE_TRANSPARENCY = "useTransparency";
+	public static final String USE_TRANSPARENCY = "useTransparency";
 
-	protected static final String SHOW_LEAN_TAB = "showLeanTab";
+	public static final String SHOW_LEAN_TAB = "showLeanTab";
 
-	protected static final String USE_SIMPLE_EVENT_PALETTE = "useSimpleEventPalette";
+	public static final String USE_SIMPLE_EVENT_PALETTE = "useSimpleEventPalette";
 
-	protected static final String SHOW_ALERT_WHEN_DROPPING_INCORRECT = "showAlertWhenDroppingIsIncorrect";
+	public static final String SHOW_ALERT_WHEN_DROPPING_INCORRECT = "showAlertWhenDroppingIsIncorrect";
 
-	protected static final String SCREENSHOT_QUALITY = "screenshotQuality";
+	public static final String SCREENSHOT_QUALITY = "screenshotQuality";
 
 	/*
-	 * protected static final String ACTIVITY_CONNECTOR = "activityConnector"; protected static final String OPERATION_CONNECTOR =
-	 * "operationConnector"; protected static final String ACTION_CONNECTOR = "actionConnector";
+	 * public static final String ACTIVITY_CONNECTOR = "activityConnector"; public static final String OPERATION_CONNECTOR =
+	 * "operationConnector"; public static final String ACTION_CONNECTOR = "actionConnector";
 	 */
 
-	protected static final String CONNECTOR_REPRESENTATION = "connectorRepresentation";
-	protected static final String CONNECTOR_ADJUSTABILITY = "connectorAdjustability";
+	public static final String CONNECTOR_REPRESENTATION = "connectorRepresentation";
+	public static final String CONNECTOR_ADJUSTABILITY = "connectorAdjustability";
 
-	protected static final String ACTIVITY_NODE_FONT_KEY = "activityNodeFont";
+	public static final String ACTIVITY_NODE_FONT_KEY = "activityNodeFont";
 
-	protected static final String OPERATION_NODE_FONT_KEY = "operationNodeFont";
+	public static final String OPERATION_NODE_FONT_KEY = "operationNodeFont";
 
-	protected static final String ACTION_NODE_FONT_KEY = "actionNodeFont";
+	public static final String ACTION_NODE_FONT_KEY = "actionNodeFont";
 
-	protected static final String COMPONENT_FONT_KEY = "componentFont";
+	public static final String COMPONENT_FONT_KEY = "componentFont";
 
-	protected static final String EVENT_NODE_FONT_KEY = "eventNodeFont";
+	public static final String EVENT_NODE_FONT_KEY = "eventNodeFont";
 
-	protected static final String ARTEFACT_FONT_KEY = "artefactFont";
+	public static final String ARTEFACT_FONT_KEY = "artefactFont";
 
-	protected static final String EDGE_FONT_KEY = "edgeFont";
+	public static final String EDGE_FONT_KEY = "edgeFont";
 
-	protected static final String ROLE_FONT_KEY = "roleFont";
+	public static final String ROLE_FONT_KEY = "roleFont";
 
-	private static WKFController _controller;
+	public static void init() {
+		getPreferences();
+	}
 
-	public static void init(WKFController controller) {
-		_controller = controller;
-		preferences(WKF_PREFERENCES);
-		for (GraphicalProperties prop : GraphicalProperties.values()) {
-			if (_controller.getFlexoWorkflow().hasGraphicalPropertyForKey(prop.getSerializationName())) {
-				switch (prop) {
-				case ACTION_FONT:
-					setActionNodeFont(_controller.getProject().getFlexoWorkflow().getActionFont());
-					break;
-				case ACTIVITY_FONT:
-					setActivityNodeFont(_controller.getProject().getFlexoWorkflow().getActivityFont());
-					break;
-				case COMPONENT_FONT:
-					setComponentFont(_controller.getProject().getFlexoWorkflow().getComponentFont());
-					break;
-				case CONNECTOR_REPRESENTATION:
-					try {
-						setConnectorRepresentation((EdgeRepresentation) _controller.getProject().getFlexoWorkflow()
-								.getConnectorRepresentation());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					break;
-				case EVENT_FONT:
-					setEventNodeFont(_controller.getProject().getFlexoWorkflow().getEventFont());
-					break;
-				case ARTEFACT_FONT:
-					setArtefactFont(_controller.getProject().getFlexoWorkflow().getArtefactFont());
-					break;
-				case EDGE_FONT:
-					setEdgeFont(_controller.getProject().getFlexoWorkflow().getEdgeFont());
-					break;
-				case OPERATION_FONT:
-					setOperationNodeFont(_controller.getProject().getFlexoWorkflow().getOperationFont());
-					break;
-				case ROLE_FONT:
-					setRoleFont(_controller.getProject().getFlexoWorkflow().getRoleFont());
-					break;
-				case SHOW_MESSAGES:
-					setShowMessagesInWKF(_controller.getProject().getFlexoWorkflow().getShowMessages());
-					break;
-				case SHOW_SHADOWS:
-					setShowShadows(_controller.getProject().getFlexoWorkflow().getShowShadows());
-					break;
-				case SHOW_WO_NAME:
-					setShowWONameInWKF(_controller.getProject().getFlexoWorkflow().getShowWOName());
-					break;
-				case USE_TRANSPARENCY:
-					setUseTransparency(_controller.getProject().getFlexoWorkflow().getUseTransparency());
-					break;
-				default:
-					break;
-				}
-			}
-		}
-		_controller.notifyShowLeanTabHasChanged();
-		_controller.notifyShowMessages(getShowMessagesInWKF());
+	public static WKFPreferences getPreferences() {
+		return preferences(WKF_PREFERENCES);
 	}
 
 	public static void restoreDefault() {
@@ -179,12 +124,6 @@ public final class WKFPreferences extends ModulePreferences {
 		 */
 	}
 
-	public static void reset(WKFController controller) {
-		if (_controller == controller) {
-			_controller = null;
-		}
-	}
-
 	public WKFPreferences() {
 		super(Module.WKF_MODULE);
 	}
@@ -195,7 +134,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static Boolean getShowWONameInWKF() {
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(SHOW_WO_NAME_KEY);
+		Boolean value = getPreferences().getBooleanProperty(SHOW_WO_NAME_KEY);
 		if (value == null) {
 			setShowWONameInWKF(Boolean.FALSE);
 			return getShowWONameInWKF();
@@ -204,7 +143,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static void setShowWONameInWKF(Boolean showWOName) {
-		preferences(WKF_PREFERENCES).setBooleanProperty(SHOW_WO_NAME_KEY, showWOName);
+		getPreferences().setBooleanProperty(SHOW_WO_NAME_KEY, showWOName);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setShowWONameInWKF() with " + showWOName);
 		}
@@ -215,7 +154,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static Boolean getShowMessagesInWKF() {
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(SHOW_MESSAGES_NAME_KEY);
+		Boolean value = getPreferences().getBooleanProperty(SHOW_MESSAGES_NAME_KEY);
 		if (value == null) {
 			setShowMessagesInWKF(Boolean.TRUE);
 			return getShowMessagesInWKF();
@@ -224,7 +163,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static void setShowMessagesInWKF(Boolean showMessages) {
-		preferences(WKF_PREFERENCES).setBooleanProperty(SHOW_MESSAGES_NAME_KEY, showMessages);
+		getPreferences().setBooleanProperty(SHOW_MESSAGES_NAME_KEY, showMessages);
 		if (_controller != null) {
 			_controller.getFlexoWorkflow().setShowMessages(showMessages);
 			_controller.notifyShowMessages(showMessages.booleanValue());
@@ -235,7 +174,7 @@ public final class WKFPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getAlignOnGrid");
 		}
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(ALIGN_ON_GRID_KEY);
+		Boolean value = getPreferences().getBooleanProperty(ALIGN_ON_GRID_KEY);
 		if (value == null) {
 			setAlignOnGrid(Boolean.FALSE);
 			return getAlignOnGrid();
@@ -247,14 +186,14 @@ public final class WKFPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("AlignOnGrid");
 		}
-		preferences(WKF_PREFERENCES).setBooleanProperty(ALIGN_ON_GRID_KEY, alignOnGrid);
+		getPreferences().setBooleanProperty(ALIGN_ON_GRID_KEY, alignOnGrid);
 	}
 
 	public static boolean getShowGrid() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getShowGrid");
 		}
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(SHOW_GRID);
+		Boolean value = getPreferences().getBooleanProperty(SHOW_GRID);
 		if (value == null) {
 			setShowGrid(Boolean.FALSE);
 			return getShowGrid();
@@ -266,7 +205,7 @@ public final class WKFPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setShowGrid");
 		}
-		preferences(WKF_PREFERENCES).setBooleanProperty(SHOW_GRID, showGrid);
+		getPreferences().setBooleanProperty(SHOW_GRID, showGrid);
 		if (_controller != null) {
 			_controller.notifyShowGrid(showGrid);
 		}
@@ -276,7 +215,7 @@ public final class WKFPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getGridSize");
 		}
-		Integer value = preferences(WKF_PREFERENCES).getIntegerProperty(GRID_SIZE_KEY);
+		Integer value = getPreferences().getIntegerProperty(GRID_SIZE_KEY);
 		if (value == null) {
 			setGridSize(15);
 			return getGridSize();
@@ -297,11 +236,11 @@ public final class WKFPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setGridSize");
 		}
-		preferences(WKF_PREFERENCES).setIntegerProperty(GRID_SIZE_KEY, gridSize);
+		getPreferences().setIntegerProperty(GRID_SIZE_KEY, gridSize);
 	}
 
 	public static Boolean getShowShadows() {
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(SHOW_SHADOWS);
+		Boolean value = getPreferences().getBooleanProperty(SHOW_SHADOWS);
 		if (value == null) {
 			return Boolean.TRUE;
 		}
@@ -309,7 +248,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static void setShowShadows(Boolean showShadows) {
-		preferences(WKF_PREFERENCES).setBooleanProperty(SHOW_SHADOWS, showShadows);
+		getPreferences().setBooleanProperty(SHOW_SHADOWS, showShadows);
 		if (_controller != null) {
 			_controller.getFlexoWorkflow().setShowShadows(showShadows);
 			_controller.notifyShowShadowChanged();
@@ -317,7 +256,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static Boolean getShowLeanTabs() {
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(SHOW_LEAN_TAB);
+		Boolean value = getPreferences().getBooleanProperty(SHOW_LEAN_TAB);
 		if (value == null) {
 			return Boolean.FALSE;
 		}
@@ -325,14 +264,14 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static void setShowLeanTabs(Boolean showLeanTabs) {
-		preferences(WKF_PREFERENCES).setBooleanProperty(SHOW_LEAN_TAB, showLeanTabs);
+		getPreferences().setBooleanProperty(SHOW_LEAN_TAB, showLeanTabs);
 		if (_controller != null) {
 			_controller.notifyShowLeanTabHasChanged();
 		}
 	}
 
 	public static Boolean getUseSimpleEventPalette() {
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(USE_SIMPLE_EVENT_PALETTE);
+		Boolean value = getPreferences().getBooleanProperty(USE_SIMPLE_EVENT_PALETTE);
 		if (value == null) {
 			return Boolean.TRUE;
 		}
@@ -340,14 +279,14 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static void setUseSimpleEventPalette(Boolean showLeanTabs) {
-		preferences(WKF_PREFERENCES).setBooleanProperty(USE_SIMPLE_EVENT_PALETTE, showLeanTabs);
+		getPreferences().setBooleanProperty(USE_SIMPLE_EVENT_PALETTE, showLeanTabs);
 		if (_controller != null) {
 			_controller.notifyUseSimpleEventPaletteHasChanged();
 		}
 	}
 
 	public static Boolean getShowAlertWhenDroppingIsIncorrect() {
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(SHOW_ALERT_WHEN_DROPPING_INCORRECT);
+		Boolean value = getPreferences().getBooleanProperty(SHOW_ALERT_WHEN_DROPPING_INCORRECT);
 		if (value == null) {
 			return Boolean.TRUE;
 		}
@@ -355,11 +294,11 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static void setShowAlertWhenDroppingIsIncorrect(Boolean showLeanTabs) {
-		preferences(WKF_PREFERENCES).setBooleanProperty(SHOW_ALERT_WHEN_DROPPING_INCORRECT, showLeanTabs);
+		getPreferences().setBooleanProperty(SHOW_ALERT_WHEN_DROPPING_INCORRECT, showLeanTabs);
 	}
 
 	public static Boolean getUseTransparency() {
-		Boolean value = preferences(WKF_PREFERENCES).getBooleanProperty(USE_TRANSPARENCY);
+		Boolean value = getPreferences().getBooleanProperty(USE_TRANSPARENCY);
 		if (value == null) {
 			return Boolean.TRUE;
 		}
@@ -367,7 +306,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static void setUseTransparency(Boolean useTransparency) {
-		preferences(WKF_PREFERENCES).setBooleanProperty(USE_TRANSPARENCY, useTransparency);
+		getPreferences().setBooleanProperty(USE_TRANSPARENCY, useTransparency);
 		if (_controller != null) {
 			_controller.getFlexoWorkflow().setUseTransparency(useTransparency);
 			_controller.notifyUseTransparencyChanged();
@@ -375,16 +314,16 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static FlexoFont getActivityNodeFont() {
-		FlexoFont returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(ACTIVITY_NODE_FONT_KEY));
+		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
 		if (returned == null) {
 			setActivityNodeFont(new FlexoFont(WKFCst.DEFAULT_ACTIVITY_NODE_LABEL_FONT));
-			return returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(ACTIVITY_NODE_FONT_KEY));
+			return returned = FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
 		}
 		return returned;
 	}
 
 	public static void setActivityNodeFont(FlexoFont font) {
-		preferences(WKF_PREFERENCES).setProperty(ACTIVITY_NODE_FONT_KEY, font.toString());
+		getPreferences().setProperty(ACTIVITY_NODE_FONT_KEY, font.toString());
 		if (_controller != null) {
 			_controller.getFlexoWorkflow().setActivityFont(font);
 			_controller.notifyActivityFontChanged();
@@ -392,16 +331,16 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static FlexoFont getOperationNodeFont() {
-		FlexoFont returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(OPERATION_NODE_FONT_KEY));
+		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
 		if (returned == null) {
 			setOperationNodeFont(new FlexoFont(WKFCst.DEFAULT_OPERATION_NODE_LABEL_FONT));
-			return returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(OPERATION_NODE_FONT_KEY));
+			return returned = FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
 		}
 		return returned;
 	}
 
 	public static void setOperationNodeFont(FlexoFont font) {
-		preferences(WKF_PREFERENCES).setProperty(OPERATION_NODE_FONT_KEY, font.toString());
+		getPreferences().setProperty(OPERATION_NODE_FONT_KEY, font.toString());
 		if (_controller != null) {
 			_controller.getFlexoWorkflow().setOperationFont(font);
 			_controller.notifyOperationFontChanged();
@@ -409,16 +348,16 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static FlexoFont getActionNodeFont() {
-		FlexoFont returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(ACTION_NODE_FONT_KEY));
+		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
 		if (returned == null) {
 			setActionNodeFont(new FlexoFont(WKFCst.DEFAULT_ACTION_NODE_LABEL_FONT));
-			return returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(ACTION_NODE_FONT_KEY));
+			return returned = FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
 		}
 		return returned;
 	}
 
 	public static void setActionNodeFont(FlexoFont font) {
-		preferences(WKF_PREFERENCES).setProperty(ACTION_NODE_FONT_KEY, font.toString());
+		getPreferences().setProperty(ACTION_NODE_FONT_KEY, font.toString());
 		if (_controller != null) {
 			_controller.getFlexoWorkflow().setActionFont(font);
 			_controller.notifyActionFontChanged();
@@ -426,16 +365,16 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static FlexoFont getEventNodeFont() {
-		FlexoFont returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(EVENT_NODE_FONT_KEY));
+		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
 		if (returned == null) {
 			setEventNodeFont(new FlexoFont(WKFCst.DEFAULT_EVENT_NODE_LABEL_FONT));
-			return returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(EVENT_NODE_FONT_KEY));
+			return returned = FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
 		}
 		return returned;
 	}
 
 	public static void setEventNodeFont(FlexoFont font) {
-		preferences(WKF_PREFERENCES).setProperty(EVENT_NODE_FONT_KEY, font.toString());
+		getPreferences().setProperty(EVENT_NODE_FONT_KEY, font.toString());
 		if (_controller != null) {
 			_controller.getProject().getFlexoWorkflow().setEventFont(font);
 			_controller.notifyEventFontChanged();
@@ -443,16 +382,16 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static FlexoFont getRoleFont() {
-		FlexoFont returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(ROLE_FONT_KEY));
+		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
 		if (returned == null) {
 			setRoleFont(new FlexoFont(WKFCst.DEFAULT_ROLE_LABEL_FONT));
-			return returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(ROLE_FONT_KEY));
+			return returned = FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
 		}
 		return returned;
 	}
 
 	public static void setRoleFont(FlexoFont font) {
-		preferences(WKF_PREFERENCES).setProperty(ROLE_FONT_KEY, font.toString());
+		getPreferences().setProperty(ROLE_FONT_KEY, font.toString());
 		if (_controller != null) {
 			_controller.getProject().getFlexoWorkflow().setRoleFont(font);
 			_controller.notifyRoleFontChanged();
@@ -460,16 +399,16 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static FlexoFont getEdgeFont() {
-		FlexoFont returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(EDGE_FONT_KEY));
+		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
 		if (returned == null) {
 			setEdgeFont(new FlexoFont(WKFCst.DEFAULT_EDGE_LABEL_FONT));
-			return returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(EDGE_FONT_KEY));
+			return returned = FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
 		}
 		return returned;
 	}
 
 	public static void setEdgeFont(FlexoFont font) {
-		preferences(WKF_PREFERENCES).setProperty(EDGE_FONT_KEY, font.toString());
+		getPreferences().setProperty(EDGE_FONT_KEY, font.toString());
 		if (_controller != null) {
 			_controller.getProject().getFlexoWorkflow().setEdgeFont(font);
 			_controller.notifyEdgeFontChanged();
@@ -477,16 +416,16 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static FlexoFont getArtefactFont() {
-		FlexoFont returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(ARTEFACT_FONT_KEY));
+		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
 		if (returned == null) {
 			setArtefactFont(new FlexoFont(WKFCst.DEFAULT_ARTEFACT_LABEL_FONT));
-			return returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(ARTEFACT_FONT_KEY));
+			return returned = FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
 		}
 		return returned;
 	}
 
 	public static void setArtefactFont(FlexoFont font) {
-		preferences(WKF_PREFERENCES).setProperty(ARTEFACT_FONT_KEY, font.toString());
+		getPreferences().setProperty(ARTEFACT_FONT_KEY, font.toString());
 		if (_controller != null) {
 			_controller.getProject().getFlexoWorkflow().setArtefactFont(font);
 			_controller.notifyArtefactFontChanged();
@@ -494,16 +433,16 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static FlexoFont getComponentFont() {
-		FlexoFont returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(COMPONENT_FONT_KEY));
+		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
 		if (returned == null) {
 			setComponentFont(new FlexoFont(WKFCst.DEFAULT_COMPONENT_LABEL_FONT));
-			return returned = FlexoFont.get(preferences(WKF_PREFERENCES).getProperty(COMPONENT_FONT_KEY));
+			return returned = FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
 		}
 		return returned;
 	}
 
 	public static void setComponentFont(FlexoFont font) {
-		preferences(WKF_PREFERENCES).setProperty(COMPONENT_FONT_KEY, font.toString());
+		getPreferences().setProperty(COMPONENT_FONT_KEY, font.toString());
 		if (_controller != null) {
 			_controller.getProject().getFlexoWorkflow().setComponentFont(font);
 			_controller.notifyComponentFontChanged();
@@ -537,7 +476,7 @@ public final class WKFPreferences extends ModulePreferences {
 	 */
 
 	public static EdgeRepresentation getConnectorRepresentation() {
-		String s = preferences(WKF_PREFERENCES).getProperty(CONNECTOR_REPRESENTATION);
+		String s = getPreferences().getProperty(CONNECTOR_REPRESENTATION);
 		EdgeRepresentation returned = null;
 		if (s != null) {
 			try {
@@ -568,7 +507,7 @@ public final class WKFPreferences extends ModulePreferences {
 
 	public static void setConnectorRepresentation(EdgeRepresentation type, boolean notify) {
 		if (type != null) {
-			preferences(WKF_PREFERENCES).setProperty(CONNECTOR_REPRESENTATION, type.name());
+			getPreferences().setProperty(CONNECTOR_REPRESENTATION, type.name());
 			if (_controller != null) {
 				_controller.getFlexoWorkflow().setConnectorRepresentation(type);
 				_controller.notifyEdgeRepresentationChanged();
@@ -580,7 +519,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static RectPolylinAdjustability getConnectorAdjustability() {
-		String s = preferences(WKF_PREFERENCES).getProperty(CONNECTOR_ADJUSTABILITY);
+		String s = getPreferences().getProperty(CONNECTOR_ADJUSTABILITY);
 		RectPolylinAdjustability returned = null;
 		if (s != null) {
 			try {
@@ -603,7 +542,7 @@ public final class WKFPreferences extends ModulePreferences {
 
 	public static void setConnectorAdjustability(RectPolylinAdjustability adjustability, boolean notify) {
 		if (adjustability != null) {
-			preferences(WKF_PREFERENCES).setProperty(CONNECTOR_ADJUSTABILITY, adjustability.name());
+			getPreferences().setProperty(CONNECTOR_ADJUSTABILITY, adjustability.name());
 			if (_controller != null) {
 				_controller.notifyEdgeRepresentationChanged();
 			}
@@ -615,7 +554,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static int getScreenshotQuality() {
-		Integer limit = preferences(WKF_PREFERENCES).getIntegerProperty(SCREENSHOT_QUALITY);
+		Integer limit = getPreferences().getIntegerProperty(SCREENSHOT_QUALITY);
 		if (limit == null) {
 			limit = 100;
 		}
@@ -623,7 +562,7 @@ public final class WKFPreferences extends ModulePreferences {
 	}
 
 	public static void setScreenshotQuality(int limit) {
-		preferences(WKF_PREFERENCES).setIntegerProperty(SCREENSHOT_QUALITY, limit);
+		getPreferences().setIntegerProperty(SCREENSHOT_QUALITY, limit);
 	}
 
 }

@@ -29,6 +29,7 @@ package org.openflexo.wkf.view;
 import java.awt.BorderLayout;
 
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.controller.WKFController;
@@ -47,7 +48,7 @@ public class WorkflowBrowserWindow extends FlexoRelativeWindow {
 	// ================================
 	// ==========================================================================
 
-	public WorkflowBrowserWindow(WKFFrame mainFrame) {
+	public WorkflowBrowserWindow(FlexoFrame mainFrame) {
 		super(mainFrame);
 		getContentPane().setLayout(new BorderLayout());
 

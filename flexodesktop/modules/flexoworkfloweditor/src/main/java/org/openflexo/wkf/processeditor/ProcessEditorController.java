@@ -66,17 +66,17 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	private ArtefactPalette artefactPalette;
 
 	public ProcessEditorController(WKFController controller, FlexoProcess process) {
-		this(process, controller.getEditor(), controller.getSelectionManager());
+		this(process, controller, controller.getSelectionManager());
 		_controller = controller;
 	}
 
-	public ProcessEditorController(FlexoProcess process, FlexoEditor editor, SelectionManager sm) {
-		this(process, editor, sm, null);
+	public ProcessEditorController(FlexoProcess process, WKFController controller, SelectionManager sm) {
+		this(process, controller, sm, null);
 	}
 
-	public ProcessEditorController(FlexoProcess process, FlexoEditor editor, SelectionManager sm,
+	public ProcessEditorController(FlexoProcess process, WKFController controller, SelectionManager sm,
 			ProcessRepresentation.ProcessRepresentationObjectVisibilityDelegate visibilityDelegate) {
-		super(new ProcessRepresentation(process, editor, visibilityDelegate), sm);
+		super(new ProcessRepresentation(process, controller, visibilityDelegate), sm);
 		_activityPalette = new ActivityPalette();
 		_operationPalette = new OperationPalette();
 		_actionPalette = new ActionPalette();

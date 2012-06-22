@@ -109,12 +109,16 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoProcess) && !((FlexoProcess) object).isImported();
+		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 	}
 
 	@Override
-	public SwimmingLaneView createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-		return getControllerForProcess(process).getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+		if (process instanceof FlexoProcess) {
+			return getControllerForProcess((FlexoProcess) process).getDrawingView();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -141,7 +145,7 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	}
 
 	public SwimmingLaneView getCurrentProcessView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof SwimmingLaneView)) {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof SwimmingLaneView) {
 			return (SwimmingLaneView) _controller.getCurrentModuleView();
 		}
 		return null;
@@ -191,7 +195,6 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		// currentProcessView = (SwimmingLaneView) moduleView;
 		if (moduleView instanceof SwimmingLaneView) {
 			FlexoProcess process = ((SwimmingLaneView) moduleView).getRepresentedObject();
-			process.addObserver(_controller.getMainFrame());
 			_controller.getProcessBrowser().setCurrentProcess(process);
 			_controller.getExternalProcessBrowser().setCurrentProcess(process);
 			_controller.getWorkflowBrowser().focusOn(process);

@@ -87,12 +87,16 @@ public class RolePerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof RoleList) && !((RoleList) object).isImportedRoleList();
+		return object instanceof RoleList && !((RoleList) object).isImportedRoleList();
 	}
 
 	@Override
-	public ModuleView<RoleList> createModuleViewForObject(RoleList roleList, FlexoController controller) {
-		return getRoleEditorController().getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject roleList, FlexoController controller) {
+		if (roleList instanceof RoleList) {
+			return getRoleEditorController().getDrawingView();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

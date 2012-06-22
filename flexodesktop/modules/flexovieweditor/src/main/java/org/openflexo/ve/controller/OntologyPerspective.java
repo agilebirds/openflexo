@@ -28,13 +28,11 @@ import org.openflexo.FlexoCst;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.view.OntologyPerspectiveBrowserView;
 import org.openflexo.ve.view.OntologyView;
-import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -97,12 +95,12 @@ public class OntologyPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<? extends OntologyObject> createModuleViewForObject(OntologyObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof FlexoOntology) {
 			((FlexoOntology) object).loadWhenUnloaded();
 			return new OntologyView((FlexoOntology) object, (VEController) controller, this);
 		}
-		return new EmptyPanel<OntologyObject>(controller, this, object);
+		return null;
 	}
 
 	@Override

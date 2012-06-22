@@ -21,8 +21,6 @@ package org.openflexo.ve.controller.action;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.view.action.ActionSchemeActionType;
-import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.controller.VESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -69,8 +67,8 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		new DeleteViewElementsInitializer(this);
 		new DropSchemeActionInitializer(this);
 		new LinkSchemeActionInitializer(this);
-		new ActionSchemeActionInitializer(this).initForClass(ActionSchemeActionType.class);
-		new NavigationSchemeActionInitializer(this).initForClass(NavigationSchemeActionType.class);
+		new ActionSchemeActionInitializer(this);
+		new NavigationSchemeActionInitializer(this);
 
 		// Ontology perspective
 		new CreateOntologyClassInitializer(this);

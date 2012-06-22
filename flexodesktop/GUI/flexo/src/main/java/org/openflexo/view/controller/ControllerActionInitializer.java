@@ -19,11 +19,15 @@
  */
 package org.openflexo.view.controller;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.openflexo.action.ProjectExcelExportInitializer;
 import org.openflexo.action.UploadPrjInitializer;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoProperty;
 import org.openflexo.foundation.action.AddFlexoProperty;
@@ -53,15 +57,20 @@ import org.openflexo.view.controller.action.SubmitDocumentationActionizer;
 
 public class ControllerActionInitializer {
 
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(ControllerActionInitializer.class
+			.getPackage().getName());
+
 	private final FlexoController _controller;
 
 	private Map<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>> initializers;
+	private Map<Class<?>, ActionInitializer<?, ?, ?>> initializersByActionClass;
 
 	private final InteractiveFlexoEditor editor;
 
 	protected ControllerActionInitializer(InteractiveFlexoEditor editor, FlexoController controller) {
 		super();
 		initializers = new Hashtable<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>>();
+		initializersByActionClass = new Hashtable<Class<?>, ActionInitializer<?, ?, ?>>();
 		this.editor = editor;
 		_controller = controller;
 		editor.registerControllerActionInitializer(this);
@@ -73,7 +82,19 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void registerInitializer(
 			FlexoActionType<A, T1, T2> actionType, ActionInitializer<A, T1, T2> initializer) {
-		initializers.put(actionType, initializer);
+		if (actionType != null) {
+			initializers.put(actionType, initializer);
+		} else {
+			Type superClass = initializer.getClass().getGenericSuperclass();
+			if (superClass instanceof ParameterizedType) {
+				Class<?> actionClass = TypeUtils.getBaseClass(((ParameterizedType) superClass).getActualTypeArguments()[0]);
+				initializersByActionClass.put(actionClass, initializer);
+			} else {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("You registered an action initializer without providing an action type and this method does not know how to retrieve the action Action class.");
+				}
+			}
+		}
 	}
 
 	public InteractiveFlexoEditor getEditor() {
@@ -118,14 +139,22 @@ public class ControllerActionInitializer {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> ActionInitializer<A, T1, T2> getInitializer(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> ActionInitializer<A, T1, T2> getActionInitializer(
 			FlexoActionType<A, T1, T2> actionType) {
-		return (ActionInitializer<A, T1, T2>) initializers.get(actionType);
+		ActionInitializer<A, T1, T2> actionInitializer = (ActionInitializer<A, T1, T2>) initializers.get(actionType);
+		if (actionInitializer == null) {
+			Type superClass = actionType.getClass().getGenericSuperclass();
+			if (superClass instanceof ParameterizedType) {
+				Class<?> actionClass = TypeUtils.getBaseClass(((ParameterizedType) superClass).getActualTypeArguments()[0]);
+				actionInitializer = (ActionInitializer<A, T1, T2>) initializersByActionClass.get(actionClass);
+			}
+		}
+		return actionInitializer;
 	}
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionFinalizer<A> getFinalizerFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getDefaultFinalizer();
 		}
@@ -134,7 +163,7 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<A> getInitializerFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getDefaultInitializer();
 		}
@@ -143,7 +172,7 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionUndoFinalizer<A> getUndoFinalizerFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getDefaultUndoFinalizer();
 		}
@@ -152,7 +181,7 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionUndoInitializer<A> getUndoInitializerFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getDefaultUndoInitializer();
 		}
@@ -161,7 +190,7 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionRedoFinalizer<A> getRedoFinalizerFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getDefaultRedoFinalizer();
 		}
@@ -170,7 +199,7 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionRedoInitializer<A> getRedoInitializerFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getDefaultRedoInitializer();
 		}
@@ -179,7 +208,7 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionEnableCondition<A, T1, T2> getEnableConditionFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getEnableCondition();
 		}
@@ -188,7 +217,7 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionVisibleCondition<A, T1, T2> getVisibleConditionFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getVisibleCondition();
 		}
@@ -197,7 +226,7 @@ public class ControllerActionInitializer {
 
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoExceptionHandler<A> getExceptionHandlerFor(
 			FlexoActionType<A, T1, T2> actionType) {
-		ActionInitializer<A, T1, T2> initializer = getInitializer(actionType);
+		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
 			return initializer.getDefaultExceptionHandler();
 		}

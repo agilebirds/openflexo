@@ -20,18 +20,25 @@
 package org.openflexo.wkf.controller.action;
 
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.controller.OpenProcessInNewWindow;
+import org.openflexo.wkf.controller.WKFController;
+import org.openflexo.wkf.view.ExternalProcessViewWindow;
 
-public class OpenProcessInNewWindowInitializer extends ActionInitializer {
+public class OpenProcessInNewWindowInitializer extends ActionInitializer<OpenProcessInNewWindow, FlexoProcess, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -45,9 +52,33 @@ public class OpenProcessInNewWindowInitializer extends ActionInitializer {
 	}
 
 	@Override
-	public void init() {
-		OpenProcessInNewWindow.initWithController(getControllerActionInitializer().getWKFController());
-		getControllerActionInitializer().registerAction(OpenProcessInNewWindow.actionType, getShortcut());
+	public WKFController getController() {
+		return (WKFController) super.getController();
+	}
+
+	@Override
+	protected FlexoActionInitializer<OpenProcessInNewWindow> getDefaultInitializer() {
+		return new FlexoActionInitializer<OpenProcessInNewWindow>() {
+			@Override
+			public boolean run(EventObject e, OpenProcessInNewWindow anAction) {
+				if (anAction.getFocusedObject() == null) {
+					anAction.setFocusedObject(getController().getCurrentFlexoProcess());
+				}
+				return anAction.getFocusedObject() != null;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<OpenProcessInNewWindow> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<OpenProcessInNewWindow>() {
+			@Override
+			public boolean run(EventObject e, final OpenProcessInNewWindow anAction) {
+				ExternalProcessViewWindow window = new ExternalProcessViewWindow(getController(), anAction.getFocusedObject());
+				window.setVisible(true);
+				return true;
+			}
+		};
 	}
 
 	@Override

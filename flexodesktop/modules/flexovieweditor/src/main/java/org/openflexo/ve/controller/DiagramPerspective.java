@@ -47,7 +47,6 @@ import org.openflexo.ve.VECst;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
 import org.openflexo.ve.view.VEBrowserView;
-import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -157,7 +156,7 @@ public class DiagramPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<? extends AbstractViewObject> createModuleViewForObject(AbstractViewObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof View) {
 			return getControllerForShema((View) object).getModuleView();
 		}
@@ -172,7 +171,7 @@ public class DiagramPerspective extends FlexoPerspective {
 				return getControllerForShema(shema).getModuleView();
 			}
 		}
-		return new EmptyPanel<AbstractViewObject>(controller, this, object);
+		return null;
 	}
 
 	@Override

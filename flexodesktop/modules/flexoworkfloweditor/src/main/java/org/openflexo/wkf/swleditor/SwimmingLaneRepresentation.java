@@ -102,6 +102,7 @@ import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.swleditor.gr.AbstractActionNodeGR;
 import org.openflexo.wkf.swleditor.gr.AbstractActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.AbstractOperationNodeGR;
@@ -158,7 +159,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 	protected static final Logger logger = Logger.getLogger(SwimmingLaneRepresentation.class.getPackage().getName());
 
-	private FlexoEditor editor;
+	private WKFController controller;
 	private DrawingGraphicalRepresentation<FlexoProcess> graphicalRepresentation;
 
 	private SwimmingLaneRepresentationObjectVisibilityDelegate visibilityDelegate;
@@ -363,14 +364,14 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	public static final SwimmingLaneRepresentationObjectVisibilityDelegate DEFAULT_VISIBILITY = new SwimmingLaneRepresentationDefaultVisibilityDelegate();
 	public static final SwimmingLaneRepresentationObjectVisibilityDelegate SHOW_ALL = new SwimmingLaneRepresentationShowAllObjectsDelegate();
 
-	public SwimmingLaneRepresentation(FlexoProcess process, FlexoEditor anEditor) {
-		this(process, anEditor, DEFAULT_VISIBILITY);
+	public SwimmingLaneRepresentation(FlexoProcess process, WKFController controller) {
+		this(process, controller, DEFAULT_VISIBILITY);
 	}
 
-	public SwimmingLaneRepresentation(FlexoProcess process, FlexoEditor anEditor,
+	public SwimmingLaneRepresentation(FlexoProcess process, WKFController controller,
 			SwimmingLaneRepresentationObjectVisibilityDelegate visibilityDelegate) {
 		super(process);
-		this.editor = anEditor;
+		this.controller = controller;
 		this.visibilityDelegate = visibilityDelegate != null ? visibilityDelegate : DEFAULT_VISIBILITY;
 
 		graphicalRepresentation = new SwimmingLaneGraphicalRepresentation(this, process);
@@ -1095,7 +1096,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	}
 
 	public FlexoEditor getEditor() {
-		return editor;
+		return controller.getEditor();
 	}
 
 	public static final String REPRESENTATION_ROLE_KEY = "role";
