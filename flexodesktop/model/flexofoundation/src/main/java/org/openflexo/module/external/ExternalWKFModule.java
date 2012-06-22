@@ -23,7 +23,6 @@ import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.FlexoWorkflow;
 
 /**
  * External view of the WKF Module
@@ -31,8 +30,6 @@ import org.openflexo.foundation.wkf.FlexoWorkflow;
  * @author sguerin
  */
 public interface ExternalWKFModule extends ExternalModule {
-
-	public FlexoWorkflow getFlexoWorkflow();
 
 	public JComponent createScreenshotForObject(FlexoModelObject target);
 

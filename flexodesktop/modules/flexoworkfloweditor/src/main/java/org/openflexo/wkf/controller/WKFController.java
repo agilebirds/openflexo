@@ -39,14 +39,12 @@ import javax.swing.JSplitPane;
 
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.DuplicateStatusException;
@@ -76,14 +74,12 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
-import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.action.WKFControllerActionInitializer;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessView;
 import org.openflexo.wkf.processeditor.gr.EdgeGR;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
-import org.openflexo.wkf.processeditor.gr.EdgeGR.EdgeRepresentation;
 import org.openflexo.wkf.view.ProcessBrowserView;
 import org.openflexo.wkf.view.ProcessBrowserWindow;
 import org.openflexo.wkf.view.RoleListBrowserView;
@@ -282,39 +278,9 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	public void loadRelativeWindows() {
-		// Relative windows
-
 		_workflowBrowserWindow = new WorkflowBrowserWindow(getFlexoFrame());
 		_workflowBrowserWindow.setVisible(false);
 		_processBrowserWindow = new ProcessBrowserWindow(getFlexoFrame());
-		// _processBrowserWindow.setVisible(true);
-
-		/*
-		 * if (getDocInspectorPanel() != null) { JSplitPane splitPane = new
-		 * JSplitPane(JSplitPane.VERTICAL_SPLIT,palette,getDocInspectorPanel()); splitPane.setResizeWeight(0);
-		 * splitPane.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION); getMainPane().setRightView(splitPane); } else {
-		 * getMainPane().setRightView(palette); }
-		 */
-
-	}
-
-	// ==========================================================================
-	// ============================= Class methods
-	// ==============================
-	// ==========================================================================
-
-	// ==========================================================================
-	// ============================= Instance methods
-	// ===========================
-	// ==========================================================================
-
-	// ==========================================================================
-	// ============================= Accessors
-	// ==================================
-	// ==========================================================================
-
-	public FlexoWorkflow getFlexoWorkflow() {
-		return getProject().getFlexoWorkflow();
 	}
 
 	@Override
@@ -351,11 +317,6 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	public WKFMainPane getMainPane() {
 		return (WKFMainPane) super.getMainPane();
 	}
-
-	// ==========================================================================
-	// ========================== Selection management
-	// ==========================
-	// ==========================================================================
 
 	@Override
 	public SelectionManager getSelectionManager() {
@@ -811,415 +772,42 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(WKFPreferences.SHOW_WO_NAME_KEY)) {
-			if (_controller != null) {
-				_controller.getFlexoWorkflow().setShowWOName(showWOName);
-				notifyShowWOName(showWOName.booleanValue());
-			}
-		}
-		}
-
-		public static Boolean getShowMessagesInWKF() {
-			Boolean value = getPreferences().getBooleanProperty(SHOW_MESSAGES_NAME_KEY);
-			if (value == null) {
-				setShowMessagesInWKF(Boolean.TRUE);
-				return getShowMessagesInWKF();
-			}
-			return value;
-		}
-
-		public static void setShowMessagesInWKF(Boolean showMessages) {
-			getPreferences().setBooleanProperty(SHOW_MESSAGES_NAME_KEY, showMessages);
-			if (_controller != null) {
-				_controller.getFlexoWorkflow().setShowMessages(showMessages);
-				_controller.notifyShowMessages(showMessages.booleanValue());
-			}
-		}
-
-		public static Boolean getAlignOnGrid() {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("getAlignOnGrid");
-			}
-			Boolean value = getPreferences().getBooleanProperty(ALIGN_ON_GRID_KEY);
-			if (value == null) {
-				setAlignOnGrid(Boolean.FALSE);
-				return getAlignOnGrid();
-			}
-			return value;
-		}
-
-		public static void setAlignOnGrid(Boolean alignOnGrid) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("AlignOnGrid");
-			}
-			getPreferences().setBooleanProperty(ALIGN_ON_GRID_KEY, alignOnGrid);
+		String propertyName = evt.getPropertyName();
+		if (propertyName.equals(WKFPreferences.SHOW_WO_NAME_KEY)) {
+			notifyShowWOName(WKFPreferences.getShowWONameInWKF());
+		} else if (propertyName.equals(WKFPreferences.SHOW_MESSAGES_NAME_KEY)) {
+			notifyShowMessages(WKFPreferences.getShowMessagesInWKF());
+		} else if (propertyName.equals(WKFPreferences.SHOW_GRID)) {
+			notifyShowGrid(WKFPreferences.getShowGrid());
+		} else if (propertyName.equals(WKFPreferences.SHOW_SHADOWS)) {
+			notifyShowShadowChanged();
+		} else if (propertyName.equals(WKFPreferences.SHOW_LEAN_TAB)) {
+			notifyShowLeanTabHasChanged();
+		} else if (propertyName.equals(WKFPreferences.USE_SIMPLE_EVENT_PALETTE)) {
+			notifyUseSimpleEventPaletteHasChanged();
+		} else if (propertyName.equals(WKFPreferences.USE_TRANSPARENCY)) {
+			notifyUseTransparencyChanged();
+		} else if (propertyName.equals(WKFPreferences.ACTIVITY_NODE_FONT_KEY)) {
+			notifyActivityFontChanged();
+		} else if (propertyName.equals(WKFPreferences.OPERATION_NODE_FONT_KEY)) {
+			notifyOperationFontChanged();
+		} else if (propertyName.equals(WKFPreferences.ACTION_NODE_FONT_KEY)) {
+			notifyActionFontChanged();
+		} else if (propertyName.equals(WKFPreferences.EVENT_NODE_FONT_KEY)) {
+			notifyEventFontChanged();
+		} else if (propertyName.equals(WKFPreferences.ROLE_FONT_KEY)) {
+			notifyRoleFontChanged();
+		} else if (propertyName.equals(WKFPreferences.EDGE_FONT_KEY)) {
+			notifyEdgeFontChanged();
+		} else if (propertyName.equals(WKFPreferences.ARTEFACT_FONT_KEY)) {
+			notifyArtefactFontChanged();
+		} else if (propertyName.equals(WKFPreferences.COMPONENT_FONT_KEY)) {
+			notifyComponentFontChanged();
+		} else if (propertyName.equals(WKFPreferences.CONNECTOR_REPRESENTATION)) {
+			notifyEdgeRepresentationChanged();
+		} else if (propertyName.equals(WKFPreferences.CONNECTOR_ADJUSTABILITY)) {
+			notifyEdgeRepresentationChanged();
 		}
 
-		public static boolean getShowGrid() {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("getShowGrid");
-			}
-			Boolean value = getPreferences().getBooleanProperty(SHOW_GRID);
-			if (value == null) {
-				setShowGrid(Boolean.FALSE);
-				return getShowGrid();
-			}
-			return value;
-		}
-
-		public static void setShowGrid(boolean showGrid) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("setShowGrid");
-			}
-			getPreferences().setBooleanProperty(SHOW_GRID, showGrid);
-			if (_controller != null) {
-				_controller.notifyShowGrid(showGrid);
-			}
-		}
-
-		public static Integer getGridSize() {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("getGridSize");
-			}
-			Integer value = getPreferences().getIntegerProperty(GRID_SIZE_KEY);
-			if (value == null) {
-				setGridSize(15);
-				return getGridSize();
-			}
-			return value;
-		}
-
-		public static void setGridSize(Integer gridSize) {
-			if (gridSize == null) {
-				return;
-			}
-			if (gridSize < 1) {
-				gridSize = 1;
-			}
-			if (gridSize > 200) {
-				gridSize = 200;
-			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("setGridSize");
-			}
-			getPreferences().setIntegerProperty(GRID_SIZE_KEY, gridSize);
-		}
-
-		public static Boolean getShowShadows() {
-			Boolean value = getPreferences().getBooleanProperty(SHOW_SHADOWS);
-			if (value == null) {
-				return Boolean.TRUE;
-			}
-			return value;
-		}
-
-		public static void setShowShadows(Boolean showShadows) {
-			getPreferences().setBooleanProperty(SHOW_SHADOWS, showShadows);
-			if (_controller != null) {
-				_controller.getFlexoWorkflow().setShowShadows(showShadows);
-				_controller.notifyShowShadowChanged();
-			}
-		}
-
-		public static Boolean getShowLeanTabs() {
-			Boolean value = getPreferences().getBooleanProperty(SHOW_LEAN_TAB);
-			if (value == null) {
-				return Boolean.FALSE;
-			}
-			return value;
-		}
-
-		public static void setShowLeanTabs(Boolean showLeanTabs) {
-			getPreferences().setBooleanProperty(SHOW_LEAN_TAB, showLeanTabs);
-			if (_controller != null) {
-				_controller.notifyShowLeanTabHasChanged();
-			}
-		}
-
-		public static Boolean getUseSimpleEventPalette() {
-			Boolean value = getPreferences().getBooleanProperty(USE_SIMPLE_EVENT_PALETTE);
-			if (value == null) {
-				return Boolean.TRUE;
-			}
-			return value;
-		}
-
-		public static void setUseSimpleEventPalette(Boolean showLeanTabs) {
-			getPreferences().setBooleanProperty(USE_SIMPLE_EVENT_PALETTE, showLeanTabs);
-			if (_controller != null) {
-				_controller.notifyUseSimpleEventPaletteHasChanged();
-			}
-		}
-
-		public static Boolean getShowAlertWhenDroppingIsIncorrect() {
-			Boolean value = getPreferences().getBooleanProperty(SHOW_ALERT_WHEN_DROPPING_INCORRECT);
-			if (value == null) {
-				return Boolean.TRUE;
-			}
-			return value;
-		}
-
-		public static void setShowAlertWhenDroppingIsIncorrect(Boolean showLeanTabs) {
-			getPreferences().setBooleanProperty(SHOW_ALERT_WHEN_DROPPING_INCORRECT, showLeanTabs);
-		}
-
-		public static Boolean getUseTransparency() {
-			Boolean value = getPreferences().getBooleanProperty(USE_TRANSPARENCY);
-			if (value == null) {
-				return Boolean.TRUE;
-			}
-			return value;
-		}
-
-		public static void setUseTransparency(Boolean useTransparency) {
-			getPreferences().setBooleanProperty(USE_TRANSPARENCY, useTransparency);
-			if (_controller != null) {
-				_controller.getFlexoWorkflow().setUseTransparency(useTransparency);
-				_controller.notifyUseTransparencyChanged();
-			}
-		}
-
-		public static FlexoFont getActivityNodeFont() {
-			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
-			if (returned == null) {
-				setActivityNodeFont(new FlexoFont(WKFCst.DEFAULT_ACTIVITY_NODE_LABEL_FONT));
-				return returned = FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
-			}
-			return returned;
-		}
-
-		public static void setActivityNodeFont(FlexoFont font) {
-			getPreferences().setProperty(ACTIVITY_NODE_FONT_KEY, font.toString());
-			if (_controller != null) {
-				_controller.getFlexoWorkflow().setActivityFont(font);
-				_controller.notifyActivityFontChanged();
-			}
-		}
-
-		public static FlexoFont getOperationNodeFont() {
-			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
-			if (returned == null) {
-				setOperationNodeFont(new FlexoFont(WKFCst.DEFAULT_OPERATION_NODE_LABEL_FONT));
-				return returned = FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
-			}
-			return returned;
-		}
-
-		public static void setOperationNodeFont(FlexoFont font) {
-			getPreferences().setProperty(OPERATION_NODE_FONT_KEY, font.toString());
-			if (_controller != null) {
-				_controller.getFlexoWorkflow().setOperationFont(font);
-				_controller.notifyOperationFontChanged();
-			}
-		}
-
-		public static FlexoFont getActionNodeFont() {
-			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
-			if (returned == null) {
-				setActionNodeFont(new FlexoFont(WKFCst.DEFAULT_ACTION_NODE_LABEL_FONT));
-				return returned = FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
-			}
-			return returned;
-		}
-
-		public static void setActionNodeFont(FlexoFont font) {
-			getPreferences().setProperty(ACTION_NODE_FONT_KEY, font.toString());
-			if (_controller != null) {
-				_controller.getFlexoWorkflow().setActionFont(font);
-				_controller.notifyActionFontChanged();
-			}
-		}
-
-		public static FlexoFont getEventNodeFont() {
-			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
-			if (returned == null) {
-				setEventNodeFont(new FlexoFont(WKFCst.DEFAULT_EVENT_NODE_LABEL_FONT));
-				return returned = FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
-			}
-			return returned;
-		}
-
-		public static void setEventNodeFont(FlexoFont font) {
-			getPreferences().setProperty(EVENT_NODE_FONT_KEY, font.toString());
-			if (_controller != null) {
-				_controller.getProject().getFlexoWorkflow().setEventFont(font);
-				_controller.notifyEventFontChanged();
-			}
-		}
-
-		public static FlexoFont getRoleFont() {
-			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
-			if (returned == null) {
-				setRoleFont(new FlexoFont(WKFCst.DEFAULT_ROLE_LABEL_FONT));
-				return returned = FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
-			}
-			return returned;
-		}
-
-		public static void setRoleFont(FlexoFont font) {
-			getPreferences().setProperty(ROLE_FONT_KEY, font.toString());
-			if (_controller != null) {
-				_controller.getProject().getFlexoWorkflow().setRoleFont(font);
-				_controller.notifyRoleFontChanged();
-			}
-		}
-
-		public static FlexoFont getEdgeFont() {
-			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
-			if (returned == null) {
-				setEdgeFont(new FlexoFont(WKFCst.DEFAULT_EDGE_LABEL_FONT));
-				return returned = FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
-			}
-			return returned;
-		}
-
-		public static void setEdgeFont(FlexoFont font) {
-			getPreferences().setProperty(EDGE_FONT_KEY, font.toString());
-			if (_controller != null) {
-				_controller.getProject().getFlexoWorkflow().setEdgeFont(font);
-				_controller.notifyEdgeFontChanged();
-			}
-		}
-
-		public static FlexoFont getArtefactFont() {
-			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
-			if (returned == null) {
-				setArtefactFont(new FlexoFont(WKFCst.DEFAULT_ARTEFACT_LABEL_FONT));
-				return returned = FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
-			}
-			return returned;
-		}
-
-		public static void setArtefactFont(FlexoFont font) {
-			getPreferences().setProperty(ARTEFACT_FONT_KEY, font.toString());
-			if (_controller != null) {
-				_controller.getProject().getFlexoWorkflow().setArtefactFont(font);
-				_controller.notifyArtefactFontChanged();
-			}
-		}
-
-		public static FlexoFont getComponentFont() {
-			FlexoFont returned = FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
-			if (returned == null) {
-				setComponentFont(new FlexoFont(WKFCst.DEFAULT_COMPONENT_LABEL_FONT));
-				return returned = FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
-			}
-			return returned;
-		}
-
-		public static void setComponentFont(FlexoFont font) {
-			getPreferences().setProperty(COMPONENT_FONT_KEY, font.toString());
-			if (_controller != null) {
-				_controller.getProject().getFlexoWorkflow().setComponentFont(font);
-				_controller.notifyComponentFontChanged();
-			}
-		}
-
-		/*
-		 * public static EdgeRepresentation getActivityConnector() { String s = preferences(WKF_PREFERENCES).getProperty(ACTIVITY_CONNECTOR);
-		 * EdgeRepresentation returned = null; if (s!=null) try { returned = EdgeRepresentation.valueOf(s); } catch (RuntimeException e) { if
-		 * (logger.isLoggable(Level.WARNING)) logger.warning("Could not decode connector type named: "+s); } if (returned == null) {
-		 * setActivityConnector(returned = EdgeRepresentation.RECT_POLYLIN); } return returned; }
-		 * 
-		 * public static void setActivityConnector(EdgeRepresentation type) { if (type!=null)
-		 * preferences(WKF_PREFERENCES).setProperty(ACTIVITY_CONNECTOR, type.name()); }
-		 * 
-		 * public static EdgeRepresentation getOperationConnector() { String s = preferences(WKF_PREFERENCES).getProperty(OPERATION_CONNECTOR);
-		 * EdgeRepresentation returned = null; if (s != null) try { returned = EdgeRepresentation.valueOf(s); } catch (RuntimeException e) { if
-		 * (logger.isLoggable(Level.WARNING)) logger.warning("Could not decode connector type named: " + s); } if (returned == null) {
-		 * setOperationConnector(returned = EdgeRepresentation.RECT_POLYLIN); } return returned; }
-		 * 
-		 * public static void setOperationConnector(EdgeRepresentation type) { if (type!=null)
-		 * preferences(WKF_PREFERENCES).setProperty(OPERATION_CONNECTOR, type.name()); }
-		 * 
-		 * public static EdgeRepresentation getActionConnector() { String s = preferences(WKF_PREFERENCES).getProperty(ACTION_CONNECTOR);
-		 * EdgeRepresentation returned = null; if (s != null) try { returned = EdgeRepresentation.valueOf(s); } catch (RuntimeException e) { if
-		 * (logger.isLoggable(Level.WARNING)) logger.warning("Could not decode connector type named: " + s); } if (returned == null) {
-		 * setActionConnector(returned = EdgeRepresentation.CURVE); } return returned; }
-		 * 
-		 * public static void setActionConnector(EdgeRepresentation type) { if (type!=null)
-		 * preferences(WKF_PREFERENCES).setProperty(ACTION_CONNECTOR, type.name()); }
-		 */
-
-		public static EdgeRepresentation getConnectorRepresentation() {
-			String s = getPreferences().getProperty(CONNECTOR_REPRESENTATION);
-			EdgeRepresentation returned = null;
-			if (s != null) {
-				try {
-					returned = EdgeRepresentation.valueOf(s);
-				} catch (RuntimeException e) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Could not decode connector type named: " + s);
-					}
-				}
-			}
-			if (returned == null) {
-				setConnectorRepresentation(returned = EdgeRepresentation.RECT_POLYLIN, false);
-			}
-			return returned;
-		}
-
-		public static void setConnectorRepresentation(EdgeRepresentation type) {
-			setConnectorRepresentation(type, true);
-		}
-
-		public static String getActionConnectorRepresentationInfo() {
-			return FlexoLocalization.localizedForKey("note_that_action_level_edges_are_always_curved");
-		}
-
-		public static String getPreferenceMessage() {
-			return FlexoLocalization.localizedForKey("wkf_preferences_message");
-		}
-
-		public static void setConnectorRepresentation(EdgeRepresentation type, boolean notify) {
-			if (type != null) {
-				getPreferences().setProperty(CONNECTOR_REPRESENTATION, type.name());
-				if (_controller != null) {
-					_controller.getFlexoWorkflow().setConnectorRepresentation(type);
-					_controller.notifyEdgeRepresentationChanged();
-				}
-				/*
-				 * if (notify) FlexoController.notify(FlexoLocalization.localizedForKey("connector_representation_is_a_local_preference"));
-				 */
-			}
-		}
-
-		public static RectPolylinAdjustability getConnectorAdjustability() {
-			String s = getPreferences().getProperty(CONNECTOR_ADJUSTABILITY);
-			RectPolylinAdjustability returned = null;
-			if (s != null) {
-				try {
-					returned = RectPolylinAdjustability.valueOf(s);
-				} catch (RuntimeException e) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Could not decode connector adjustability named: " + s);
-					}
-				}
-			}
-			if (returned == null) {
-				setConnectorAdjustability(returned = RectPolylinAdjustability.BASICALLY_ADJUSTABLE, false);
-			}
-			return returned;
-		}
-
-		public static void setConnectorAdjustability(RectPolylinAdjustability adjustability) {
-			setConnectorAdjustability(adjustability, true);
-		}
-
-		public static void setConnectorAdjustability(RectPolylinAdjustability adjustability, boolean notify) {
-			if (adjustability != null) {
-				getPreferences().setProperty(CONNECTOR_ADJUSTABILITY, adjustability.name());
-				if (_controller != null) {
-					_controller.notifyEdgeRepresentationChanged();
-				}
-				if (notify) {
-					FlexoController.notify(FlexoLocalization.localizedForKey("connector_adjustability_is_a_local_preference") + "\n"
-							+ FlexoLocalization.localizedForKey("in_order_for_this_change_to_take_effect_you_must_restart_flexo"));
-				}
-			}
-		}
-
-		
 	}
-	
 }

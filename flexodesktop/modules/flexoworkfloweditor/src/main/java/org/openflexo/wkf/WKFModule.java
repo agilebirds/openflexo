@@ -122,11 +122,6 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		return (WKFController) getFlexoController();
 	}
 
-	@Override
-	public FlexoWorkflow getFlexoWorkflow() {
-		return getWKFController().getFlexoWorkflow();
-	}
-
 	private static class BPEScreenshotProcessRepresentationObjectVisibilityDelegate extends ProcessRepresentationDefaultVisibilityDelegate {
 
 		private WKFObject target;

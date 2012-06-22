@@ -964,15 +964,17 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		_resource = null;
 		resources = null;
 		resourceCenter = null;
-		deleteObservers();
 		allRegisteredObjects.clear();
 		globalStatus.clear();
 		// resources.clear();
 		widgetBindingDefinitions.clear();
+		jarClassLoader = null;
+		notifyObservers(new ProjectClosedNotification(this));
+		deleteObservers();
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Closing project... DONE");
 		}
-		jarClassLoader = null;
+
 	}
 
 	// =============================================================

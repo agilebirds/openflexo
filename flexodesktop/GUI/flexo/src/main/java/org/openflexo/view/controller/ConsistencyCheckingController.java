@@ -42,5 +42,4 @@ public interface ConsistencyCheckingController {
 
 	public void initializeValidationModel();
 
-	public void cleanUpValidationModel();
 }

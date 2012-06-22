@@ -41,7 +41,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.XMLDecoder;
 
-public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidget> extends FlexoObservable {
+public abstract class FlexoIEPalette<W extends FlexoIEPalette<W>.FlexoIEPaletteWidget> extends FlexoObservable {
 	protected static final Logger logger = FlexoLogger.getLogger(FlexoIEPalette.class.getPackage().getName());
 
 	public enum PaletteAttribute {

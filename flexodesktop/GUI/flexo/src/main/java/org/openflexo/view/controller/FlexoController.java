@@ -378,8 +378,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void setEditor(FlexoEditor projectEditor) {
+		if (_consistencyCheckWindow != null && !_consistencyCheckWindow.isDisposed()) {
+			_consistencyCheckWindow.dispose();
+		}
 		FlexoEditor old = _editor;
 		_editor = projectEditor;
+		_consistencyCheckWindow = null;
 		getPropertyChangeSupport().firePropertyChange(EDITOR, old, projectEditor);
 	}
 
@@ -751,23 +755,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 		}
 	}
-
-	public void cleanUpValidationModel() {
-		if (this instanceof ConsistencyCheckingController) {
-			ValidationModel validationModel = ((ConsistencyCheckingController) this).getDefaultValidationModel();
-			for (int i = 0; i < validationModel.getSize(); i++) {
-				ValidationRuleSet ruleSet = validationModel.getElementAt(i);
-				for (ValidationRule<?, ?> rule : ruleSet.getRules()) {
-					rule.setIsEnabled(true);
-				}
-			}
-		}
-	}
-
-	// ==========================================================================
-	// ========================= JOptionPane utilities
-	// ==========================
-	// ==========================================================================
 
 	/**
 	 * Brings up a dialog with a specified icon, where the initial choice is determined by the <code>initialValue</code> parameter and the

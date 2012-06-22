@@ -35,10 +35,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.dkv.DKVModel;
@@ -51,7 +48,6 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.OperationComponentInstance;
 import org.openflexo.foundation.ie.cl.DuplicateFolderNameException;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
-import org.openflexo.foundation.ie.dm.StyleSheetFolderChanged;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.foundation.ie.operator.IEOperator;
 import org.openflexo.foundation.ie.widget.ColumnIsNotEmpty;
@@ -79,7 +75,6 @@ import org.openflexo.ie.view.dkv.DKVEditorBrowser;
 import org.openflexo.ie.view.dkv.DKVModelView;
 import org.openflexo.ie.view.listener.IEKeyEventListener;
 import org.openflexo.ie.view.palette.IEDSWidget;
-import org.openflexo.ie.view.palette.IEPaletteWindow;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -139,9 +134,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 
 	private DKVEditorBrowser _dkvEditorBrowser;
 
-	// Relative windows
-	private IEPaletteWindow _iePaletteWindow;
-
 	// Delegates
 	protected IESelectionManager _selectionManager;
 
@@ -195,35 +187,18 @@ public class IEController extends FlexoController implements SelectionManagingCo
 	}
 
 	@Override
-	public void setEditor(FlexoEditor projectEditor) {
-		if (getProject() != null) {
-			getProject().deleteObserver(this);
-		}
-		super.setEditor(projectEditor);
-		if (getProject() != null) {
-			getProject().addObserver(this);
-			setCurrentCSSStyle(getProject().getCssSheet().getName());
-		}
-	}
-
-	@Override
 	protected FlexoKeyEventListener createKeyEventListener() {
 		return new IEKeyEventListener(this);
 	}
 
 	public boolean currentPaletteIsBasicPalette() {
-		return COMPONENT_EDITOR_PERSPECTIVE.getIEPalette().currentPaletteIsBasicPalette();
+		return COMPONENT_EDITOR_PERSPECTIVE.getCurrentPalette() != null
+				&& COMPONENT_EDITOR_PERSPECTIVE.getCurrentPalette().currentPaletteIsBasicPalette();
 	}
 
 	@Override
 	public void dispose() {
-		COMPONENT_EDITOR_PERSPECTIVE.getIEPalette().disposePalettes();
-		if (getIEPaletteWindow() != null && getIEPaletteWindow().getPalette() != null) {
-			getIEPaletteWindow().getPalette().disposePalettes();
-		}
-		if (getProject() != null) {
-			getProject().deleteObserver(this);
-		}
+		COMPONENT_EDITOR_PERSPECTIVE.disposePalettes();
 		super.dispose();
 	}
 
@@ -264,13 +239,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 		getIESelectionManager().addObserver(getDocInspectorController());
 	}
 
-	public void loadRelativeWindows() {
-		// Relative windows
-		_iePaletteWindow = new IEPaletteWindow(getFlexoFrame());
-		_iePaletteWindow.setVisible(false);
-
-	}
-
 	public ComponentLibraryBrowser getComponentLibraryBrowser() {
 		return _componentLibraryBrowser;
 	}
@@ -283,10 +251,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 		return _menuEditorBrowser;
 	}
 
-	public IEPaletteWindow getIEPaletteWindow() {
-		return _iePaletteWindow;
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
 		return new IEMainPane(this);
@@ -294,11 +258,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 
 	public void setSelectedComponent(ComponentInstance component) {
 		setCurrentEditedObjectAsModuleView(component);
-	}
-
-	public void updateCSSStyleSheet() {
-		COMPONENT_EDITOR_PERSPECTIVE.getIEPalette().updateCSSStyleSheet();
-		getIEPaletteWindow().updateCSSStyleSheet();
 	}
 
 	public void setSelectedMenu(FlexoItemMenu menu) {
@@ -422,15 +381,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 				if (v instanceof IEWOComponentView) {
 					((IEWOComponentView) v).notifyDisplayPrefHasChanged();
 				}
-			}
-		}
-	}
-
-	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof StyleSheetFolderChanged) {
-			if (!dataModification.oldValue().equals(dataModification.newValue())) {
-				updateCSSStyleSheet();
 			}
 		}
 	}

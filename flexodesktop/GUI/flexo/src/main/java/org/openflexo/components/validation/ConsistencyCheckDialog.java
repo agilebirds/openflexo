@@ -127,9 +127,6 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 			_validationReportEditor.getParent().remove(_validationReportEditor);
 		}
 		super.dispose();
-		if (_controller != null) {
-			_controller.cleanUpValidationModel();
-		}
 		_controller = null;
 		_validationModelViewer = null;
 		_validationReportEditor = null;

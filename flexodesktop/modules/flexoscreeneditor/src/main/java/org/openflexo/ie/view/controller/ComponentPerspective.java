@@ -19,6 +19,8 @@
  */
 package org.openflexo.ie.view.controller;
 
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
@@ -27,10 +29,15 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
 import org.openflexo.components.ProgressWindow;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.PartialComponentInstance;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.IECst;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
@@ -42,11 +49,13 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class ComponentPerspective extends FlexoPerspective {
+class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 
 	private final IEController _controller;
-	private final IEPalette iePalette;
 	private JSplitPane splitPaneWithIEPaletteAndDocInspectorPanel;
+
+	private Map<FlexoProject, IEPalette> palettes;
+	private IEPalette currentPalette;
 
 	/**
 	 * @param controller
@@ -56,7 +65,11 @@ class ComponentPerspective extends FlexoPerspective {
 	public ComponentPerspective(IEController controller) {
 		super("component_editor_perspective");
 		_controller = controller;
-		iePalette = new IEPalette(controller);
+		palettes = new Hashtable<FlexoProject, IEPalette>();
+	}
+
+	public IEPalette getCurrentPalette() {
+		return currentPalette;
 	}
 
 	/**
@@ -170,7 +183,8 @@ class ComponentPerspective extends FlexoPerspective {
 	 */
 	protected JSplitPane getSplitPaneWithIEPaletteAndDocInspectorPanel() {
 		if (splitPaneWithIEPaletteAndDocInspectorPanel == null) {
-			splitPaneWithIEPaletteAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, iePalette,
+			currentPalette = getIEPalette(_controller.getProject());
+			splitPaneWithIEPaletteAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, currentPalette,
 					_controller.getDisconnectedDocInspectorPanel());
 			splitPaneWithIEPaletteAndDocInspectorPanel.setResizeWeight(0);
 			splitPaneWithIEPaletteAndDocInspectorPanel.setDividerLocation(IECst.PALETTE_DOC_SPLIT_LOCATION);
@@ -183,8 +197,35 @@ class ComponentPerspective extends FlexoPerspective {
 		return splitPaneWithIEPaletteAndDocInspectorPanel;
 	}
 
-	public IEPalette getIEPalette() {
-		return iePalette;
+	public IEPalette getIEPalette(FlexoProject flexoProject) {
+		IEPalette palette = palettes.get(flexoProject);
+		if (palette == null) {
+			palettes.put(flexoProject, palette = new IEPalette(_controller, flexoProject));
+			flexoProject.addObserver(this);
+		}
+		return palette;
 	}
 
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable instanceof FlexoProject) {
+			if (dataModification instanceof ProjectClosedNotification) {
+				IEPalette palette = palettes.get(observable);
+				if (palette != null) {
+					palette.disposePalettes();
+				}
+				palettes.remove(observable);
+				observable.deleteObserver(this);
+			}
+		}
+	}
+
+	public void disposePalettes() {
+		for (Map.Entry<FlexoProject, IEPalette> e : palettes.entrySet()) {
+			e.getKey().deleteObserver(this);
+			e.getValue().disposePalettes();
+		}
+		palettes.clear();
+
+	}
 }

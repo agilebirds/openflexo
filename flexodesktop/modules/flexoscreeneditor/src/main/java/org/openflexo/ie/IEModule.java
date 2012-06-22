@@ -59,7 +59,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 		super(applicationContext);
 		IEPreferences.init();
 		getIEController().initWithEmptyPanel();
-		getIEController().loadRelativeWindows();
 	}
 
 	@Override
