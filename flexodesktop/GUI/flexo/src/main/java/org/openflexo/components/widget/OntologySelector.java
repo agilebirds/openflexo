@@ -34,6 +34,7 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
+@Deprecated
 public class OntologySelector extends AbstractBrowserSelector<FlexoOntology> {
 
 	protected static final String EMPTY_STRING = "";

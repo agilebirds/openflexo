@@ -20,14 +20,17 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
@@ -36,11 +39,13 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.widget.DefaultFIBCustomComponent;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
@@ -65,7 +70,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBOntologyBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/OntologyBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/FIBOntologyBrowser.fib");
 
 	private FlexoOntology ontology;
 	private boolean hierarchicalMode = true;
@@ -79,14 +84,17 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	private boolean showClasses = true;
 	private boolean showIndividuals = true;
 
+	private boolean showOWLAndRDFConcepts = false;
+
 	private boolean allowsSearch = true;
+	private boolean displayOptions = true;
 
 	private OntologyBrowserModel model = null;
 
 	private boolean isSearching = false;
 	private String filteredName;
 	private List<OntologyObject<?>> matchingValues;
-	private OntologyObject selectedValue;
+	private OntologyObject<?> selectedValue;
 
 	public FIBOntologyBrowser(FlexoOntology ontology) {
 		super(FIB_FILE, null, FlexoLocalization.getMainLocalizer());
@@ -130,6 +138,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		return displayPropertiesInClasses;
 	}
 
+	@CustomComponentParameter(name = "displayPropertiesInClasses", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setDisplayPropertiesInClasses(boolean displayPropertiesInClasses) {
 		this.displayPropertiesInClasses = displayPropertiesInClasses;
 		update();
@@ -152,6 +161,15 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	@CustomComponentParameter(name = "allowsSearch", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setAllowsSearch(boolean allowsSearch) {
 		this.allowsSearch = allowsSearch;
+	}
+
+	public boolean getDisplayOptions() {
+		return displayOptions;
+	}
+
+	@CustomComponentParameter(name = "displayOptions", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setDisplayOptions(boolean displayOptions) {
+		this.displayOptions = displayOptions;
 	}
 
 	public boolean getShowObjectProperties() {
@@ -204,6 +222,16 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		update();
 	}
 
+	public boolean getShowOWLAndRDFConcepts() {
+		return showOWLAndRDFConcepts;
+	}
+
+	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
+		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
+		update();
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
 			model = new OntologyBrowserModel(getOntology());
@@ -216,6 +244,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			model.setShowObjectProperties(getShowObjectProperties());
 			model.setShowDataProperties(getShowDataProperties());
 			model.setShowAnnotationProperties(getShowAnnotationProperties());
+			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
 			model.recomputeStructure();
 		}
 		return model;
@@ -226,7 +255,12 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			model.delete();
 			model = null;
 			setEditedObject(this);
-			getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+				}
+			});
 		}
 	}
 
@@ -234,30 +268,43 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
 	public static void main(String[] args) {
+
+		try {
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
+				.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
+		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
+		FlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
+		// "http://www.cpmf.org/ontologies/cpmfInstance");
+		// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
+				"http://www.w3.org/2002/07/owl");
+		// "http://www.w3.org/2000/01/rdf-schema");
+		o.loadWhenUnloaded();
+		final FIBOntologyBrowser selector = new FIBOntologyBrowser(o);
+		selector.setOntology(o);
+		selector.setHierarchicalMode(false); // false
+		selector.setShowAnnotationProperties(true);
+		selector.setShowObjectProperties(true);
+		selector.setShowDataProperties(true);
+		selector.setShowClasses(true);
+		selector.setShowIndividuals(true);
+		selector.setStrictMode(false);
+		/*OntologyClass transformationRule = resourceCenter.retrieveBaseOntologyLibrary().getClass(
+				"http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#TransformationRule");*/
+		// selector.setRootClass(transformationRule);
+
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = FlexoResourceCenterService.instance().getFlexoResourceCenter();
-				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-				FlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
-				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
-				// "http://www.cpmf.org/ontologies/cpmfInstance");
-						"http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
-				// "http://www.w3.org/2002/07/owl");
-				// "http://www.w3.org/2000/01/rdf-schema");
-				o.loadWhenUnloaded();
-				FIBOntologyBrowser selector = new FIBOntologyBrowser(o);
-				selector.setOntology(o);
-				selector.setHierarchicalMode(false); // false
-				selector.setShowAnnotationProperties(true);
-				selector.setShowObjectProperties(true);
-				selector.setShowDataProperties(true);
-				selector.setShowClasses(true);
-				selector.setShowIndividuals(true);
-				selector.setStrictMode(false);
-				/*OntologyClass transformationRule = resourceCenter.retrieveBaseOntologyLibrary().getClass(
-						"http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#TransformationRule");*/
-				// selector.setRootClass(transformationRule);
 				return makeArray(selector);
 			}
 

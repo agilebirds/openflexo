@@ -19,13 +19,17 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.logging.Logger;
+
 import org.openflexo.foundation.Inspectors;
 
-import com.hp.hpl.jena.ontology.DatatypeProperty;
+import com.hp.hpl.jena.ontology.OntProperty;
 
 public class OntologyDataProperty extends OntologyProperty implements Comparable<OntologyDataProperty> {
 
-	protected OntologyDataProperty(DatatypeProperty aDataProperty, FlexoOntology ontology) {
+	static final Logger logger = Logger.getLogger(OntologyDataProperty.class.getPackage().getName());
+
+	protected OntologyDataProperty(OntProperty aDataProperty, FlexoOntology ontology) {
 		super(aDataProperty, ontology);
 	}
 
@@ -57,10 +61,10 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 		}
 	}
 
-	@Override
+	/*@Override
 	public DatatypeProperty getOntProperty() {
 		return (DatatypeProperty) super.getOntProperty();
-	}
+	}*/
 
 	@Override
 	public int compareTo(OntologyDataProperty o) {
@@ -96,8 +100,12 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 		sb.append("<html>");
 		sb.append("Datatype property <b>" + getName() + "</b><br>");
 		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Asserted in:</b> " + getOntology().getURI() + "<br>");
 		sb.append("<b>Domain:</b> " + (getDomain() != null ? getDomain().getURI() : "?") + "<br>");
 		sb.append("<b>Datatype:</b> " + (getDataType() != null ? getDataType().toString() : "?") + "<br>");
+		if (redefinesOriginalDefinition()) {
+			sb.append("<b>Redefines:</b> " + getOriginalDefinition() + "<br>");
+		}
 		sb.append("</html>");
 		return sb.toString();
 	}

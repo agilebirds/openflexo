@@ -94,8 +94,13 @@ public abstract class OntologyRestrictionClass extends OntologyClass {
 		return getDisplayableDescription();
 	}
 
-	public abstract OntologyClass getObject();
+	public abstract OntologyObject<?> getObject();
 
 	public abstract OntologicDataType getDataRange();
+
+	@Override
+	public boolean isNamedClass() {
+		return false;
+	}
 
 }

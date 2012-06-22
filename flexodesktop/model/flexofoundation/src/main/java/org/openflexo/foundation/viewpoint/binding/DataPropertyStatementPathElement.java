@@ -75,6 +75,9 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 		if (target instanceof OntologyIndividual) {
 			Object oldValue = null;
 			OntologyIndividual individual = (OntologyIndividual) target;
+			logger.info("individual=" + individual);
+			logger.info("ontologyProperty=" + ontologyProperty);
+			logger.info("individual.getPropertyStatement(ontologyProperty)=" + individual.getPropertyStatement(ontologyProperty));
 			PropertyStatement statement = individual.getPropertyStatement(ontologyProperty);
 			if (statement == null) {
 				individual.addDataPropertyStatement(ontologyProperty, value);
@@ -84,6 +87,9 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 				((DataPropertyStatement) statement).setValue(value);
 			} else {
 				logger.warning("Unexpected statement " + statement + " while evaluateBinding()");
+				logger.info("WAS individual=" + individual);
+				logger.info("WAS ontologyProperty=" + ontologyProperty);
+				logger.info("WAS individual.getPropertyStatement(ontologyProperty)=" + individual.getPropertyStatement(ontologyProperty));
 			}
 			individual.getPropertyChangeSupport().firePropertyChange(ontologyProperty.getName(), oldValue, value);
 		} else {

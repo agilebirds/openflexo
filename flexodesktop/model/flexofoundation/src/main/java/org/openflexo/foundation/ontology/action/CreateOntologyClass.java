@@ -79,7 +79,8 @@ public class CreateOntologyClass extends FlexoAction<CreateOntologyClass, Ontolo
 	CreateOntologyClass(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		newOntologyClassName = "NewClass";
-		fatherClass = (focusedObject instanceof OntologyClass ? (OntologyClass) focusedObject : focusedObject.getOntologyLibrary().THING);
+		fatherClass = (focusedObject instanceof OntologyClass ? (OntologyClass) focusedObject : focusedObject.getOntologyLibrary()
+				.getOWLOntology().getRootClass());
 		isValid();
 	}
 

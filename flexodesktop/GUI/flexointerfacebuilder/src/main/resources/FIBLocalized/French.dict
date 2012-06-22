@@ -1,5 +1,5 @@
 #French
-#Tue May 29 14:24:47 CEST 2012
+#Thu Jun 21 12:35:29 CEST 2012
 apply=Appliquer
 arithmetic=Arithm\u00E9tique
 boolean=Bool\u00E9en
@@ -29,6 +29,7 @@ please_define_expression=Veuillez d\u00E9finir une expression
 reset=RAZ
 scientific=Scientifique
 select=S\u00E9lectionner
+select_a_file=S\u00E9lectionner un fichier
 select_a_value=S\u00E9lectionner
 select_directory=S\u00E9lectionner un r\u00E9pertoire
 show_evaluation=Visualiser l'\u00E9valuation

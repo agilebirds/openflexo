@@ -84,6 +84,8 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	private String name;
 	private final FlexoOntology _ontology;
 
+	private OntologyObject<R> originalDefinition;
+
 	public OntologyObject(OntResource ontResource, FlexoOntology ontology) {
 		super();
 
@@ -359,7 +361,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		for (OntologyStatement statement : getStatements()) {
 			if (statement instanceof PropertyStatement) {
 				PropertyStatement s = (PropertyStatement) statement;
-				if (s.getProperty() == property) {
+				if (s.getProperty().equalsToConcept(property)) {
 					returned.add(s);
 				}
 			}
@@ -378,7 +380,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		for (OntologyStatement statement : getStatements()) {
 			if (statement instanceof ObjectPropertyStatement) {
 				ObjectPropertyStatement s = (ObjectPropertyStatement) statement;
-				if (s.getProperty() == property) {
+				if (s.getProperty().equalsToConcept(property)) {
 					returned.add(s);
 				}
 			}
@@ -782,9 +784,13 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	private void searchRangeAndDomains() {
 		declaredPropertiesTakingMySelfAsRange.clear();
 		declaredPropertiesTakingMySelfAsDomain.clear();
+		if (redefinesOriginalDefinition()) {
+			declaredPropertiesTakingMySelfAsRange.addAll(getOriginalDefinition().declaredPropertiesTakingMySelfAsRange);
+			declaredPropertiesTakingMySelfAsDomain.addAll(getOriginalDefinition().declaredPropertiesTakingMySelfAsDomain);
+		}
 
 		Vector<FlexoOntology> alreadyDone = new Vector<FlexoOntology>();
-		for (FlexoOntology ontology : getOntologyLibrary().getAllOntologies()) {
+		for (FlexoOntology ontology : getOntology().getAllImportedOntologies()) {
 			searchRangeAndDomains(declaredPropertiesTakingMySelfAsRange, declaredPropertiesTakingMySelfAsDomain, ontology, alreadyDone);
 		}
 		domainsAndRangesAreUpToDate = true;
@@ -855,5 +861,31 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 
 	public String getHTMLDescription() {
 		return getDisplayableDescription();
+	}
+
+	public OntologyObject<R> getOriginalDefinition() {
+		return originalDefinition;
+	}
+
+	public void setOriginalDefinition(OntologyObject<R> originalDefinition) {
+		this.originalDefinition = originalDefinition;
+	}
+
+	public boolean redefinesOriginalDefinition() {
+		return originalDefinition != null;
+	}
+
+	/**
+	 * This equals has a particular semantics in the way that it returns true only and only if compared objects are representing same
+	 * concept regarding URI. This does not guarantee that both objects will respond the same way to some methods.<br>
+	 * This method returns true if and only if objects are same, or if one of both object redefine the other one (with eventual many levels)
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public boolean equalsToConcept(OntologyObject o) {
+		if (o == null)
+			return false;
+		return StringUtils.isNotEmpty(getURI()) && getURI().equals(o.getURI());
 	}
 }

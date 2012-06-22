@@ -43,7 +43,7 @@ public class OntologyLibraryElement extends BrowserElement {
 	@Override
 	protected void buildChildrenVector() {
 		if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
-			addToChilds(getOntologyLibrary().getRootClass());
+			addToChilds(getOntologyLibrary().getOWLOntology().getRootClass());
 			/*for (OntologyObjectProperty property : getOntologyLibrary().getRootObjectProperties()) {
 				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
 					addToChilds(property);

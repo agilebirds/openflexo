@@ -53,8 +53,15 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	public static LocalResourceCenterImplementation instanciateNewLocalResourceCenterImplementation(File resourceCenterDirectory) {
+		logger.info("Instanciate ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
 		LocalResourceCenterImplementation localResourceCenterImplementation = new LocalResourceCenterImplementation(resourceCenterDirectory);
 		localResourceCenterImplementation.update();
+		return localResourceCenterImplementation;
+	}
+
+	public static LocalResourceCenterImplementation instanciateTestLocalResourceCenterImplementation(File resourceCenterDirectory) {
+		logger.info("Instanciate TEST ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
+		LocalResourceCenterImplementation localResourceCenterImplementation = new LocalResourceCenterImplementation(resourceCenterDirectory);
 		return localResourceCenterImplementation;
 	}
 
@@ -89,16 +96,16 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	@Override
 	public OntologyLibrary retrieveBaseOntologyLibrary() {
 		if (baseOntologyLibrary == null) {
-			logger.fine("Instantiating BaseOntologyLibrary");
+			File baseOntologyFolder = new File(localDirectory, "Ontologies");
+			logger.info("Instantiating BaseOntologyLibrary from " + baseOntologyFolder.getAbsolutePath());
 			baseOntologyLibrary = new OntologyLibrary(this, null);
-			findOntologies(new File(localDirectory, "Ontologies"), FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
+			findOntologies(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
 			// baseOntologyLibrary.init();
 			logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
 			// baseOntologyLibrary.debug();
 			baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getRDFOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getOWLOntology().loadWhenUnloaded();
-			baseOntologyLibrary.THING = baseOntologyLibrary.getOWLOntology().getClass(OntologyLibrary.OWL_THING_URI);
 			baseOntologyLibrary.getRDFSOntology().updateConceptsAndProperties();
 			baseOntologyLibrary.getRDFOntology().updateConceptsAndProperties();
 			baseOntologyLibrary.getOWLOntology().updateConceptsAndProperties();

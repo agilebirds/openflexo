@@ -22,14 +22,14 @@ package org.openflexo.foundation.ontology;
 import java.util.logging.Logger;
 
 import com.hp.hpl.jena.ontology.HasValueRestriction;
-import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 public class HasValueRestrictionClass extends OntologyRestrictionClass {
 
 	private static final Logger logger = Logger.getLogger(HasValueRestrictionClass.class.getPackage().getName());
 
 	private final HasValueRestriction restriction;
-	private OntologyClass object;
+	private OntologyObject<?> object;
 
 	protected HasValueRestrictionClass(HasValueRestriction aRestriction, FlexoOntology ontology) {
 		super(aRestriction, ontology);
@@ -41,8 +41,8 @@ public class HasValueRestrictionClass extends OntologyRestrictionClass {
 	protected void retrieveRestrictionInformations() {
 		super.retrieveRestrictionInformations();
 		if (restriction.getHasValue() != null) {
-			if (restriction.getHasValue().canAs(OntClass.class)) {
-				object = getOntology().retrieveOntologyClass(restriction.getHasValue().as(OntClass.class));
+			if (restriction.getHasValue().canAs(Resource.class)) {
+				object = getOntology().retrieveOntologyObject(restriction.getHasValue().as(Resource.class));
 			}
 		}
 	}
@@ -69,7 +69,7 @@ public class HasValueRestrictionClass extends OntologyRestrictionClass {
 	}
 
 	@Override
-	public OntologyClass getObject() {
+	public OntologyObject<?> getObject() {
 		return object;
 	}
 

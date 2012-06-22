@@ -94,8 +94,9 @@
     <property name="clickAction" xmlTag="clickAction" attribute="YES"/> 
     <property name="doubleClickAction" xmlTag="doubleClickAction" attribute="YES"/> 
     <property name="rightClickAction" xmlTag="rightClickAction" attribute="YES"/> 
+    <property name="enterPressedAction" xmlTag="enterPressedAction" attribute="YES"/> 
     <property name="valueChangedAction" xmlTag="valueChangedAction" attribute="YES"/> 
-  </entity>
+ </entity>
   
   <entity name="org.openflexo.fib.model.FIBLabel" xmlTag="Label"> 
     <property name="label" xmlTag="label" attribute="YES"/> 

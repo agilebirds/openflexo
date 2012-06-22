@@ -100,4 +100,12 @@ public abstract class OntologyOperatorClass extends OntologyClass {
 		return getDisplayableDescription();
 	}
 
+	@Override
+	public boolean isNamedClass() {
+		return false;
+	}
+
+	public List<OntologyClass> getOperands() {
+		return operands;
+	}
 }

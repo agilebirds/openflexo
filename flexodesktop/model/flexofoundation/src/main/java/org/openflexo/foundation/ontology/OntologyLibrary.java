@@ -75,8 +75,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	public static final String USER_MANUAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#userManualDescription";
 
 	public static final String RDFS_LITERAL_URI = RDFS_ONTOLOGY_URI + "#Literal";
+	public static final String RDFS_RESOURCE_URI = RDFS_ONTOLOGY_URI + "#Resource";
 
-	public OntologyClass THING;
+	// public OntologyClass THING;
 
 	// private FlexoProject _project;
 	protected Hashtable<String, FlexoOntology> ontologies;
@@ -151,12 +152,12 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		getFlexoConceptOntology().loadWhenUnloaded();
 	}*/
 
-	public OntologyClass getRootClass() {
+	/*public OntologyClass getRootClass() {
 		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getRootClass();
 		}
 		return THING;
-	}
+	}*/
 
 	public Collection<FlexoOntology> getAllOntologies() {
 		if (_allOntologies == null) {

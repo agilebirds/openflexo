@@ -43,6 +43,9 @@ public class ObjectPropertyStatement extends PropertyStatement {
 				System.out.println("resource: "+s.getObject());
 				System.out.println("uri: "+((Resource)s.getObject()).getURI());
 			}*/
+			if (statementObject == null) {
+				logger.warning("Ontology: " + getOntology() + " cannot retrieve " + s.getObject() + " for statement " + s);
+			}
 		} else if (s.getObject() instanceof Literal) {
 			literal = (Literal) s.getObject();
 		} else {

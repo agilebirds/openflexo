@@ -22,7 +22,10 @@ package org.openflexo.foundation;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -341,6 +344,24 @@ public abstract class FlexoTestCase extends TestCase {
 	protected static void log(String step) {
 		logger.info("\n******************************************************************************\n" + step
 				+ "\n******************************************************************************\n");
+	}
+
+	/**
+	 * Assert this is the same list, doesn't care about order
+	 * 
+	 * @param aList
+	 * @param objects
+	 * @throws AssertionFailedError
+	 */
+	public <T> void assertSameList(List<T> aList, T... objects) throws AssertionFailedError {
+		Set<T> set1 = new HashSet<T>(aList);
+		Set<T> set2 = new HashSet<T>();
+		for (T o : objects) {
+			set2.add(o);
+		}
+		if (!set1.equals(set2)) {
+			throw new AssertionFailedError("AssertionFailedError when comparing lists, expected: " + set1 + " but was " + set2);
+		}
 	}
 
 	public static IEWOComponent createComponent(String componentName, FlexoComponentFolder folder, AddComponent.ComponentType type,

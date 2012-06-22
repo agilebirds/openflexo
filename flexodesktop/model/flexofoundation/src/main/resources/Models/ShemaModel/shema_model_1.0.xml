@@ -56,7 +56,7 @@
   </entity>
 
   <entity name="org.openflexo.foundation.ontology.EditionPatternReference$RestrictionStatementActorReference" xmlTag="RestrictionStatementActorReference">
-      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
+       <!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
       <property name="propertyURI" xmlTag="propertyURI" attribute="YES" description=""/>
       <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
   </entity>

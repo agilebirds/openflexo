@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 
+import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 
@@ -128,6 +129,12 @@ public class OntologyIndividual extends OntologyObject<Individual> implements Co
 						fatherClass.individuals.add(this);
 					}
 				}
+			} catch (ConversionException e) {
+				// This happen when loading OWL2 ontology
+				// com.hp.hpl.jena.ontology.ConversionException: Cannot convert node http://www.w3.org/2002/07/owl#ObjectProperty to
+				// OntClass: it does not have rdf:type owl:Class or equivalent
+				// Please investigate this
+				logger.warning("Exception thrown while processing updateSuperClasses() for " + getURI());
 			} catch (Exception e) {
 				logger.warning("Exception thrown while processing updateSuperClasses() for " + getURI());
 				e.printStackTrace();
@@ -261,6 +268,24 @@ public class OntologyIndividual extends OntologyObject<Individual> implements Co
 		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
 			_appendRangeAndDomains(superSuperClass, alreadyComputed);
 		}
+	}
+
+	@Override
+	public String getHTMLDescription() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<html>");
+		sb.append("Individual <b>" + getName() + "</b><br>");
+		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Asserted in:</b> " + getOntology().getURI() + "<br>");
+		if (redefinesOriginalDefinition()) {
+			sb.append("<b>Redefines:</b> " + getOriginalDefinition() + "<br>");
+		}
+		sb.append("<b>Types:</b>");
+		for (OntologyClass c : getSuperClasses()) {
+			sb.append(" " + c.getDisplayableDescription() + "(" + c.getOntology() + ")");
+		}
+		sb.append("</html>");
+		return sb.toString();
 	}
 
 	@Override

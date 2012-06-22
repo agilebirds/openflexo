@@ -174,17 +174,22 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	public void setSelectedObject(Object object) {
+		setSelectedObject(object, false);
+	}
+
+	public void setSelectedObject(Object object, boolean force) {
+		// logger.info("Select " + object);
 		if (getRootValue() == null) {
 			return;
 		}
-		if (object == getSelectedObject()) {
+		if (object == getSelectedObject() && !force) {
 			logger.fine("Ignore set selected object");
 			return;
 		}
 		// logger.info("---------------------> FIBBrowserWidget, setSelectedObject from "+getSelectedObject()+" to "+object);
 		if (object != null) {
 			Collection<BrowserCell> cells = getBrowserModel().getBrowserCell(object);
-			// logger.info("Select "+cell);
+			// logger.info("Select " + cells);
 			getTreeSelectionModel().clearSelection();
 			if (cells != null) {
 				TreePath scrollTo = null;

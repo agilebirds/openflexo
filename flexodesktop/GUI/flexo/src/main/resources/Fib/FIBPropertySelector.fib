@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" titleFont="LucidaGrande,0,11" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBPropertySelector" controllerClassName="org.openflexo.components.widget.FIBModelObjectSelector$SelectorFIBController" font="LucidaGrande,0,11" width="270" height="300">
+  <Panel layout="gridbag" borderTitle="Panel" titleFont="LucidaGrande,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="Matches">
+    <Label label="dsffdsmksdfmkfdsmkfdsmkdfskmsdf" align="right" localize="true" name="MatchesLabel" data="((&quot;Found &quot; + data.matchingValues.size) + &quot; matches&quot;)" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="((data.matchingValues.size != 1) &amp; (data.isFiltered))" font="Dialog,2,11" />
+  </Panel>
+  <Browser root="data.model" iteratorClassName="org.openflexo.foundation.ontology.OntologyObject" visibleRowCount="10" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedValue" showFooter="true" rootVisible="false" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" font="LucidaGrande,0,11" name="OntologyBrowser" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" enterPressedAction="controller.apply()">
+    <BrowserElement dataClassName="org.openflexo.components.widget.OntologyBrowserModel" isEditable="false" filtered="false" defaultVisible="true" name="model">
+      <Children data="model.roots" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.ontology.OntologyObject" label="element.name" icon="controller.iconForObject(element)" tooltip="element.hTMLDescription" isEditable="false" filtered="false" defaultVisible="true" dynamicFont="data.model.getFont(element,data.fIBBrowser.retrieveValidFont)" name="element">
+      <Children data="data.model.getChildren(element)" name="children" />
+    </BrowserElement>
+  </Browser>
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" titleFont="LucidaGrande,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" font="LucidaGrande,0,12" localize="true" enable="(data.selectedValue != null)" />
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" font="LucidaGrande,0,12" localize="true" />
+    <Button action="controller.reset()" buttonType="Trigger" label="reset" constraints="flow(index=2)" font="LucidaGrande,0,12" localize="true" />
+  </Panel>
+  <List visibleRowCount="4" rowHeight="18" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" selected="data.selectedValue" layoutOrientation="vertical" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.matchingValues.size &gt; 1)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="PotentialMatches" format="object.name" icon="controller.iconForObject(object)" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" list="data.matchingValues" showIcon="true" iteratorClassName="org.openflexo.foundation.ontology.OntologyProperty" autoSelectFirstRow="true" enterPressedAction="controller.apply()"/>
+  <LocalizedDictionary />
+</Panel>
+

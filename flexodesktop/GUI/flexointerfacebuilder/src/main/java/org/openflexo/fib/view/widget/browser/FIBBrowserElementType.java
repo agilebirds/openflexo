@@ -194,7 +194,11 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 		if (browserElementDefinition.getIcon().isSet()) {
 			iteratorObject = object;
-			return (Icon) browserElementDefinition.getIcon().getBindingValue(this);
+			Object returned = browserElementDefinition.getIcon().getBindingValue(this);
+			if (returned instanceof Icon) {
+				return (Icon) returned;
+			}
+			return null;
 		} else {
 			return browserElementDefinition.getImageIcon();
 		}
@@ -340,7 +344,10 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	public Font getFont(final Object object) {
 		if (browserElementDefinition.getDynamicFont().isSet()) {
 			iteratorObject = object;
-			return (Font) browserElementDefinition.getDynamicFont().getBindingValue(this);
+			Object returned = browserElementDefinition.getDynamicFont().getBindingValue(this);
+			if (returned instanceof Font) {
+				return (Font) returned;
+			}
 		}
 		if (getBrowserElement() != null) {
 			return getBrowserElement().retrieveValidFont();

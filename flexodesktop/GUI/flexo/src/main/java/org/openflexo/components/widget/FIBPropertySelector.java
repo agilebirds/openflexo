@@ -21,10 +21,9 @@ package org.openflexo.components.widget;
 
 import java.io.File;
 import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
@@ -33,9 +32,6 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.FileResource;
@@ -68,7 +64,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBPropertySelector.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/PropertySelector.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/FIBPropertySelector.fib");
 
 	private FlexoOntology context;
 	private OntologyClass rootClass;
@@ -80,6 +76,10 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 	private boolean selectDataProperties = true;
 	private boolean selectAnnotationProperties = false;
 	private boolean strictMode = false;
+	private boolean displayPropertiesInClasses = true;
+	private boolean showOWLAndRDFConcepts = false;
+
+	private OntologyBrowserModel model = null;
 
 	public FIBPropertySelector(OntologyProperty editedObject) {
 		super(editedObject);
@@ -135,6 +135,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 		return rootClass;
 	}
 
+	@CustomComponentParameter(name = "rootClass", type = CustomComponentParameter.Type.MANDATORY)
 	public void setRootClass(OntologyClass rootClass) {
 		this.rootClass = rootClass;
 	}
@@ -211,6 +212,59 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 		this.strictMode = strictMode;
 	}
 
+	public boolean getDisplayPropertiesInClasses() {
+		return displayPropertiesInClasses;
+	}
+
+	@CustomComponentParameter(name = "displayPropertiesInClasses", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setDisplayPropertiesInClasses(boolean displayPropertiesInClasses) {
+		this.displayPropertiesInClasses = displayPropertiesInClasses;
+		update();
+	}
+
+	public boolean getShowOWLAndRDFConcepts() {
+		return showOWLAndRDFConcepts;
+	}
+
+	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
+		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
+		update();
+	}
+
+	public OntologyBrowserModel getModel() {
+		if (model == null) {
+			model = new OntologyBrowserModel(getContext());
+			model.setStrictMode(getStrictMode());
+			model.setHierarchicalMode(getHierarchicalMode());
+			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());
+			model.setRootClass(getRootClass());
+			model.setShowClasses(false);
+			model.setShowIndividuals(false);
+			model.setShowObjectProperties(getSelectObjectProperties());
+			model.setShowDataProperties(getSelectDataProperties());
+			model.setShowAnnotationProperties(getSelectAnnotationProperties());
+			model.setShowOWLAndRDFConcepts(getShowOWLAndRDFConcepts());
+			model.recomputeStructure();
+		}
+		return model;
+	}
+
+	public void update() {
+		if (model != null) {
+			model.delete();
+			model = null;
+			// setEditedObject(this);
+			fireEditedObjectChanged();
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+				}
+			});
+		}
+	}
+
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
@@ -248,250 +302,6 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 			}
 		};
 		editor.launch();
-	}
-
-	private Vector<OntologyObject<?>> roots = null;
-	private Hashtable<OntologyObject<?>, Vector<OntologyObject<?>>> structure = null;
-
-	public List<OntologyObject<?>> getRoots() {
-		if (roots == null) {
-			recomputeStructure();
-		}
-		return roots;
-	}
-
-	public List<OntologyObject<?>> getChildren(OntologyObject<?> father) {
-		return structure.get(father);
-	}
-
-	private void recomputeStructure() {
-		if (getHierarchicalMode()) {
-			computeHierarchicalStructure();
-		} else {
-			computeNonHierarchicalStructure();
-		}
-	}
-
-	private void computeNonHierarchicalStructure() {
-		if (roots != null) {
-			roots.clear();
-		} else {
-			roots = new Vector<OntologyObject<?>>();
-		}
-		if (structure != null) {
-			structure.clear();
-		} else {
-			structure = new Hashtable<OntologyObject<?>, Vector<OntologyObject<?>>>();
-		}
-		if (strictMode) {
-			List<OntologyProperty> properties = retrieveSelectableProperties(getContext());
-			if (properties.size() > 0) {
-				roots.add(getContext());
-				addPropertiesAsHierarchy(getContext(), properties);
-			}
-		} else {
-			for (FlexoOntology o : getContext().getAllImportedOntologies()) {
-				List<OntologyProperty> properties = retrieveSelectableProperties(o);
-				if (properties.size() > 0) {
-					roots.add(o);
-					addPropertiesAsHierarchy(o, properties);
-				}
-			}
-		}
-	}
-
-	private void addPropertiesAsHierarchy(OntologyObject<?> parent, List<OntologyProperty> someProperties) {
-		for (OntologyProperty p : someProperties) {
-			if (!hasASuperPropertyDefinedInList(p, someProperties)) {
-				appendPropertyInHierarchy(parent, p, someProperties);
-			}
-		}
-	}
-
-	private void appendPropertyInHierarchy(OntologyObject<?> parent, OntologyProperty p, List<OntologyProperty> someProperties) {
-		if (parent == null) {
-			roots.add(p);
-		} else {
-			addChildren(parent, p);
-		}
-		for (OntologyProperty subProperty : p.getSubProperties()) {
-			if (someProperties.contains(subProperty)) {
-				appendPropertyInHierarchy(p, subProperty, someProperties);
-			}
-		}
-	}
-
-	private boolean hasASuperPropertyDefinedInList(OntologyProperty p, List<OntologyProperty> someProperties) {
-		if (p.getSuperProperties() == null) {
-			return false;
-		} else {
-			for (OntologyProperty sp : p.getSuperProperties()) {
-				if (someProperties.contains(sp)) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-
-	private void addChildren(OntologyObject parent, OntologyObject child) {
-		Vector<OntologyObject<?>> v = structure.get(parent);
-		if (v == null) {
-			v = new Vector<OntologyObject<?>>();
-			structure.put(parent, v);
-		}
-		if (!v.contains(child)) {
-			v.add(child);
-		}
-	}
-
-	private void computeHierarchicalStructure() {
-		if (roots != null) {
-			roots.clear();
-		} else {
-			roots = new Vector<OntologyObject<?>>();
-		}
-		if (structure != null) {
-			structure.clear();
-		} else {
-			structure = new Hashtable<OntologyObject<?>, Vector<OntologyObject<?>>>();
-		}
-		List<OntologyProperty> properties = new Vector<OntologyProperty>();
-		Hashtable<OntologyProperty, OntologyClass> storedProperties = new Hashtable<OntologyProperty, OntologyClass>();
-		List<OntologyProperty> unstoredProperties = new Vector<OntologyProperty>();
-		List<OntologyClass> storageClasses = new Vector<OntologyClass>();
-		if (strictMode) {
-			properties = retrieveSelectableProperties(getContext());
-		} else {
-			for (FlexoOntology o : getContext().getAllImportedOntologies()) {
-				properties.addAll(retrieveSelectableProperties(o));
-			}
-		}
-		for (OntologyProperty p : properties) {
-			OntologyClass preferredLocation = getPreferredStorageLocation(p);
-			if (preferredLocation != null) {
-				storedProperties.put(p, preferredLocation);
-				if (!storageClasses.contains(preferredLocation)) {
-					storageClasses.add(preferredLocation);
-				}
-			} else {
-				unstoredProperties.add(p);
-			}
-		}
-
-		addClassesAsHierarchy(null, storageClasses);
-
-		for (OntologyProperty p : storedProperties.keySet()) {
-			OntologyClass preferredLocation = storedProperties.get(p);
-			addChildren(preferredLocation, p);
-		}
-
-		addPropertiesAsHierarchy(null, unstoredProperties);
-	}
-
-	private OntologyClass getPreferredStorageLocation(OntologyProperty p) {
-		if (p.getDomain() instanceof OntologyClass) {
-			return (OntologyClass) p.getDomain();
-		}
-
-		/*if (p.getStorageLocations().size() > 0) {
-			return p.getStorageLocations().get(0);
-		}*/
-		return null;
-	}
-
-	private void addClassesAsHierarchy(OntologyObject<?> parent, List<OntologyClass> someClasses) {
-		for (OntologyClass c : someClasses) {
-			if (!hasASuperClassDefinedInList(c, someClasses)) {
-				appendClassInHierarchy(parent, c, someClasses);
-			}
-		}
-	}
-
-	private void appendClassInHierarchy(OntologyObject<?> parent, OntologyClass c, List<OntologyClass> someClasses) {
-		if (parent == null) {
-			roots.add(c);
-		} else {
-			addChildren(parent, c);
-		}
-		for (OntologyClass subClass : c.getSubClasses()) {
-			if (someClasses.contains(subClass)) {
-				appendClassInHierarchy(c, subClass, someClasses);
-			}
-		}
-	}
-
-	private boolean hasASuperClassDefinedInList(OntologyClass c, List<OntologyClass> someClasses) {
-		if (c.getSuperClasses() == null) {
-			return false;
-		} else {
-			for (OntologyClass superClass : c.getSuperClasses()) {
-				if (someClasses.contains(superClass)) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-
-	private boolean isSelectable(OntologyProperty p) {
-		boolean returned = false;
-		if (p instanceof OntologyObjectProperty && selectObjectProperties) {
-			returned = true;
-		}
-		if (p instanceof OntologyDataProperty && selectDataProperties) {
-			returned = true;
-		}
-		if (p.isAnnotationProperty() && selectAnnotationProperties) {
-			returned = true;
-		}
-
-		if (returned == false) {
-			return false;
-		}
-
-		if (getDomain() != null && p.getDomain() != null) {
-			if (!getDomain().isSuperConceptOf(p.getDomain())) {
-				return false;
-			}
-		}
-
-		if (getRange() != null && p.getRange() != null) {
-			if (!getRange().isSuperConceptOf(p.getRange())) {
-				return false;
-			}
-		}
-
-		if (getDataType() != null && p instanceof OntologyDataProperty && ((OntologyDataProperty) p).getDataType() != null) {
-			if (getDataType() != ((OntologyDataProperty) p).getDataType()) {
-				return false;
-			}
-		}
-
-		if (getRootClass() != null && getHierarchicalMode()) {
-			OntologyClass preferredLocation = getPreferredStorageLocation(p);
-			if (preferredLocation == null)
-				return false;
-			if (!getRootClass().isSuperConceptOf(preferredLocation))
-				return false;
-		}
-
-		return true;
-	}
-
-	private List<OntologyProperty> retrieveSelectableProperties(FlexoOntology ontology) {
-		Vector<OntologyProperty> returned = new Vector<OntologyProperty>();
-		for (OntologyProperty p : ontology.getObjectProperties()) {
-			if (isSelectable(p)) {
-				returned.add(p);
-			}
-		}
-		for (OntologyProperty p : ontology.getDataProperties()) {
-			if (isSelectable(p)) {
-				returned.add(p);
-			}
-		}
-		return returned;
 	}
 
 }
