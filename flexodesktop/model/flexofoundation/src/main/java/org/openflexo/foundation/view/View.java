@@ -32,6 +32,7 @@ import javax.naming.InvalidNameException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
@@ -51,8 +52,8 @@ public class View extends ViewObject implements XMLStorageResourceData {
 
 	private FlexoProject _project;
 	private FlexoOEShemaResource _resource;
-	private ViewDefinition _shemaDefinition;
-	private ViewPoint _calc;
+	private ViewDefinition _viewDefinition;
+	private ViewPoint _viewpoint;
 
 	/**
 	 * Constructor invoked during deserialization
@@ -63,6 +64,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		this(builder.shemaDefinition, builder.getProject());
 		builder.shema = this;
 		initializeDeserialization(builder);
+		loadViewpointIfRequiredAndEnsureOntologyImports();
 	}
 
 	/**
@@ -74,10 +76,21 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		super(project);
 		logger.info("Created new shema with project " + project);
 		_project = project;
-		_shemaDefinition = shemaDefinition;
+		_viewDefinition = shemaDefinition;
 		setShema(this);
-		if (getCalc() != null) {
-			getCalc().loadWhenUnloaded();
+		loadViewpointIfRequiredAndEnsureOntologyImports();
+	}
+
+	private void loadViewpointIfRequiredAndEnsureOntologyImports() {
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
+		}
+		try {
+			if (getProject().getProjectOntology().importOntology(getViewPoint().getViewpointOntology())) {
+				logger.info("Imported missing viewpoint ontology: " + getViewPoint().getViewpointOntology());
+			}
+		} catch (OntologyNotFoundException e) {
+			logger.severe("Could not find viewpoint ontology: " + getViewPoint().getViewpointOntology());
 		}
 	}
 
@@ -127,7 +140,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	}
 
 	public ViewDefinition getShemaDefinition() {
-		return _shemaDefinition;
+		return _viewDefinition;
 	}
 
 	@Override
@@ -251,6 +264,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return getCalc();
 	}
 
+	@Deprecated
 	public ViewPoint getCalc() {
 		if (getShemaDefinition() != null) {
 			return getShemaDefinition().getCalc();

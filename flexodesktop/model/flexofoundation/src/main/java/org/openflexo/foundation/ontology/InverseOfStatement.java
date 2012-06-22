@@ -35,7 +35,7 @@ public class InverseOfStatement extends OntologyStatement {
 	public InverseOfStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			inverseProperty = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			inverseProperty = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {
 			logger.warning("SubPropertyStatement: object is not a Resource !");
 		}

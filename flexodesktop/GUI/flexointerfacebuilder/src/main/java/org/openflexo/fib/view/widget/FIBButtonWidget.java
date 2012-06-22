@@ -60,6 +60,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 		}
 		widgetUpdating = true;
 		updateLabel();
+		updateIcon();
 		widgetUpdating = false;
 		return false;
 	}
@@ -84,6 +85,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 			getWidget().getAction().execute(getController());
 		}
 		updateDependancies();
+		updateWidgetFromModel();
 	}
 
 	@Override
@@ -98,8 +100,8 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 
 	protected void updateLabel() {
 		// logger.info("Button update label with key="+getWidget().getLabel());
-		buttonWidget.setText(getValue() != null ? getValue() : (getWidget().getLocalize() ? getLocalized(getWidget().getLabel())
-				: getWidget().getLabel()));
+		buttonWidget.setText(getValue() != null ? (getWidget().getLocalize() ? getLocalized(getValue()) : getValue()) : (getWidget()
+				.getLocalize() ? getLocalized(getWidget().getLabel()) : getWidget().getLabel()));
 	}
 
 	protected void updateIcon() {

@@ -35,7 +35,7 @@ public class TypeStatement extends OntologyStatement {
 	public TypeStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			type = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			type = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {
 			logger.warning("TypeStatement: object is not a Resource !");
 		}

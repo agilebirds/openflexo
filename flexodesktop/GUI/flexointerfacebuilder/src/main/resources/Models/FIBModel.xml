@@ -94,8 +94,9 @@
     <property name="clickAction" xmlTag="clickAction" attribute="YES"/> 
     <property name="doubleClickAction" xmlTag="doubleClickAction" attribute="YES"/> 
     <property name="rightClickAction" xmlTag="rightClickAction" attribute="YES"/> 
+    <property name="enterPressedAction" xmlTag="enterPressedAction" attribute="YES"/> 
     <property name="valueChangedAction" xmlTag="valueChangedAction" attribute="YES"/> 
-  </entity>
+ </entity>
   
   <entity name="org.openflexo.fib.model.FIBLabel" xmlTag="Label"> 
     <property name="label" xmlTag="label" attribute="YES"/> 
@@ -251,6 +252,7 @@
     <property name="filtered" xmlTag="filtered" attribute="YES"/> 
     <property name="defaultVisible" xmlTag="defaultVisible" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
+    <property name="dynamicFont" xmlTag="dynamicFont" attribute="YES"/> 
     <property name="children" type="vector" contains="org.openflexo.fib.model.FIBBrowserElement$FIBBrowserElementChildren"/> 
     <property name="actions" type="vector" contains="org.openflexo.fib.model.FIBBrowserAction"/> 
   </entity>

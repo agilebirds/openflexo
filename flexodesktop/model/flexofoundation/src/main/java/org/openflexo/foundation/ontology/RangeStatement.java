@@ -40,7 +40,7 @@ public class RangeStatement extends OntologyStatement {
 	public RangeStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			range = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			range = getOntology().retrieveOntologyObject((Resource) s.getObject());
 			if (((Resource) s.getObject()).getURI() != null) {
 				dataType = OntologicDataType.fromURI(((Resource) s.getObject()).getURI());
 			}

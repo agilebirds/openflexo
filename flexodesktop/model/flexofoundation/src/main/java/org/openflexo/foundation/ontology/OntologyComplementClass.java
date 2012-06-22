@@ -21,20 +21,38 @@ package org.openflexo.foundation.ontology;
 
 import java.util.logging.Logger;
 
-import com.hp.hpl.jena.ontology.Restriction;
-import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.ontology.ComplementClass;
 
-public abstract class ObjectRestrictionStatement extends RestrictionStatement {
+public class OntologyComplementClass extends OntologyOperatorClass {
 
-	private static final Logger logger = Logger.getLogger(ObjectRestrictionStatement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OntologyComplementClass.class.getPackage().getName());
 
-	public ObjectRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
-		super(subject, s, r);
+	private final ComplementClass ontClass;
+
+	protected OntologyComplementClass(ComplementClass anOntClass, FlexoOntology ontology) {
+		super(anOntClass, ontology);
+		this.ontClass = anOntClass;
+		init();
 	}
 
-	public abstract OntologyClass getObject();
+	@Override
+	public String getClassNameKey() {
+		return "ontology_complement_class";
+	}
 
 	@Override
-	public abstract OntologyObjectProperty getProperty();
+	public String getFullyQualifiedName() {
+		return "OntologyComplementClass:" + ontClass.getURI();
+	}
+
+	@Override
+	public ComplementClass getOntResource() {
+		return ontClass;
+	}
+
+	@Override
+	public String getDisplayableDescription() {
+		return "Complement" + getOperandListDisplayableDescription();
+	}
 
 }

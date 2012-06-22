@@ -166,8 +166,11 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 		} else if (c.isMemberClass()) {
 			// System.out.println("Member class: "+c+" of "+c.getDeclaringClass());
 			ClassInfo parentClass = registerClass(c.getEnclosingClass());
-			ClassInfo returned = parentClass.declareMember(c);
-			return returned;
+			if (parentClass != null) {
+				ClassInfo returned = parentClass.declareMember(c);
+				return returned;
+			}
+			return null;
 		} else {
 			// System.out.println("Ignored class: "+c);
 			return null;
@@ -293,7 +296,7 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 			return null;
 		}
 
-		private ClassInfo declareMember(Class c) {
+		protected ClassInfo declareMember(Class c) {
 			ClassInfo returned = memberClasses.get(c);
 			if (returned == null) {
 				memberClasses.put(c, returned = new ClassInfo(c));

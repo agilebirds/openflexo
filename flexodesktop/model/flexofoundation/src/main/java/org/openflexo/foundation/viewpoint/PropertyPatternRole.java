@@ -20,8 +20,8 @@ public abstract class PropertyPatternRole extends OntologicObjectPatternRole {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getProperty(_getParentPropertyURI());
+		if (getViewPoint().getViewpointOntology() != null) {
+			return getViewPoint().getViewpointOntology().getProperty(_getParentPropertyURI());
 		}
 		return null;
 	}
@@ -40,7 +40,7 @@ public abstract class PropertyPatternRole extends OntologicObjectPatternRole {
 
 	public OntologyClass getDomain() {
 		getViewPoint().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getDomainURI());
+		return getViewPoint().getViewpointOntology().getClass(_getDomainURI());
 	}
 
 	public void setDomain(OntologyClass c) {

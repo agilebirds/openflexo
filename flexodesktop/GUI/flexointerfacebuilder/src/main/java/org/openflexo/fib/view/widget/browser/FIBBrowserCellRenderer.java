@@ -137,7 +137,7 @@ public class FIBBrowserCellRenderer extends DefaultTreeCellRenderer {
 	protected Font getFont(Object object) {
 		FIBBrowserElementType elementType = getElementType(object);
 		if (elementType != null) {
-			return elementType.getFont();
+			return elementType.getFont(object);
 		}
 		return widget.getFont();
 	}

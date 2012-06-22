@@ -19,36 +19,19 @@
  */
 package org.openflexo.foundation.ontology;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.toolbox.FileUtils;
-
-import com.hp.hpl.jena.ontology.DatatypeProperty;
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.ObjectProperty;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
+import org.openflexo.toolbox.FileResource;
 
 public class TestOntologies extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
 
-	private static FlexoEditor _editor;
-	private static FlexoProject _project;
-
-	private static File _resourceCenterDirectory;
-	private static FlexoResourceCenter _resourceCenter;
+	private static FlexoResourceCenter testResourceCenter;
 
 	public TestOntologies(String name) {
 		super(name);
@@ -57,171 +40,326 @@ public class TestOntologies extends FlexoTestCase {
 	/**
 	 * Instanciate new ResourceCenter
 	 */
-	public void test0InstanciateNewResourceCenter() {
-		log("test0InstanciateNewResourceCenter()");
+	public void test0LoadTestResourceCenter() {
+		log("test0LoadTestResourceCenter()");
+		testResourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new FileResource(
+				"TestResourceCenter"));
+	}
 
-		try {
-			File tempFile = File.createTempFile("LocalResourceCenter", "");
-			_resourceCenterDirectory = new File(tempFile.getParentFile(), tempFile.getName());
-			_resourceCenterDirectory.mkdirs();
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
+	public void test1AssertRDFOntologyPresentAndLoaded() {
+		log("test1AssertRDFOntologyPresentAndLoaded()");
+		FlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
+		assertNotNull(rdfOntology);
+		assertTrue(rdfOntology.isLoaded());
+		assertTrue(rdfOntology.getImportedOntologies().size() == 1);
+		assertTrue(rdfOntology.getImportedOntologies().firstElement() == testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology());
+	}
 
-		_resourceCenter = LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(_resourceCenterDirectory);
+	public void test2AssertRDFSOntologyPresentAndLoaded() {
+		log("test2AssertRDFSOntologyPresentAndLoaded()");
+		FlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
+		assertNotNull(rdfsOntology);
+		assertTrue(rdfsOntology.isLoaded());
+	}
+
+	public void test3AssertRDFAndRDFSOntologyCorrectImports() {
+		log("test3AssertRDFAndRDFSOntologyCorrectImports()");
+		FlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
+		FlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
+		assertTrue(rdfOntology.getImportedOntologies().size() == 1);
+		assertTrue(rdfOntology.getImportedOntologies().firstElement() == rdfsOntology);
+		assertTrue(rdfsOntology.getImportedOntologies().size() == 1);
+		assertTrue(rdfsOntology.getImportedOntologies().firstElement() == rdfOntology);
+	}
+
+	public void test4AssertOWLOntologyPresentAndLoaded() {
+		log("test4AssertOWLOntologyPresentAndLoaded()");
+		FlexoOntology owlOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOWLOntology();
+		assertNotNull(owlOntology);
+		assertTrue(owlOntology.isLoaded());
+		assertTrue(owlOntology.getImportedOntologies().size() == 2);
+		assertTrue(owlOntology.getImportedOntologies().contains(testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology()));
+		assertTrue(owlOntology.getImportedOntologies().contains(testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology()));
+		assertNotNull(owlOntology.getThingConcept());
+	}
+
+	public void test5AssertFlexoConceptsOntologyIsCorrect() {
+		log("test5AssertFlexoConceptsOntologyIsCorrect()");
+		FlexoOntology flexoConceptsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology();
+		assertNotNull(flexoConceptsOntology);
+		assertTrue(flexoConceptsOntology.isLoaded());
+		assertEquals(10, flexoConceptsOntology.getClasses().size());
+
+		assertNotNull(flexoConceptsOntology.getThingConcept());
+
+		OntologyClass flexoConcept = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoConcept");
+		assertNotNull(flexoConcept);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+		OntologyClass flexoModelObject = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "FlexoModelObject");
+		assertNotNull(flexoModelObject);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+		OntologyClass flexoProcessFolder = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "FlexoProcessFolder");
+		assertNotNull(flexoProcessFolder);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+		OntologyClass flexoProcess = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoProcess");
+		assertNotNull(flexoProcess);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+		OntologyClass flexoRole = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoRole");
+		assertNotNull(flexoRole);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+		OntologyClass flexoProcessElement = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "FlexoProcessElement");
+		assertNotNull(flexoProcessElement);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+		OntologyClass flexoActivity = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoActivity");
+		assertNotNull(flexoActivity);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+		OntologyClass flexoOperation = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoOperation");
+		assertNotNull(flexoOperation);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+		OntologyClass flexoEvent = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoEvent");
+		assertNotNull(flexoEvent);
+		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
+
+		OntologyDataProperty resourceNameProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "resourceName");
+		assertNotNull(resourceNameProperty);
+
+		OntologyClass classConcept = flexoConceptsOntology.getClass(OntologyLibrary.OWL_CLASS_URI);
+		assertNotNull(classConcept);
+
+		assertFalse(flexoConcept.redefinesOriginalDefinition());
+		assertFalse(flexoModelObject.redefinesOriginalDefinition());
+
+		assertTrue(flexoConcept.getSuperClasses().size() == 1);
+		assertSameList(flexoConcept.getSuperClasses(), flexoConceptsOntology.getThingConcept());
+
+		assertTrue(flexoModelObject.getSuperClasses().size() == 1);
+		assertSameList(flexoModelObject.getSuperClasses(), flexoConceptsOntology.getThingConcept());
+
+		assertSameList(flexoProcess.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoModelObject);
+
+		assertSameList(flexoProcessFolder.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoModelObject);
+
+		assertSameList(flexoRole.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoModelObject);
+
+		assertSameList(flexoProcessElement.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoModelObject);
+
+		assertSameList(flexoActivity.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoProcessElement);
+
+		assertSameList(flexoEvent.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoProcessElement);
+
+		assertSameList(flexoOperation.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoProcessElement);
+
+		System.out.println("les statements=" + flexoModelObject.getStatements());
+		System.out.println("les annotations=" + flexoModelObject.getAnnotationStatements());
+
+		assertEquals(1, flexoModelObject.getAnnotationStatements().size());
 
 	}
 
-	/**
-	 * Creates a new empty project in a temp directory
-	 */
-	public void test1CreateProject() {
-		log("test1CreateProject()");
+	public void test6TestMultiReferencesO3() {
+		log("test6TestMultiReferencesO3()");
+		FlexoOntology o1 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
+		assertNotNull(o1);
+		FlexoOntology o2 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
+		assertNotNull(o2);
+		FlexoOntology o3 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
+		assertNotNull(o3);
 
-		_editor = createProject("TestOntology", _resourceCenter);
-		_project = _editor.getProject();
-	}
+		o3.loadWhenUnloaded();
+		assertTrue(o3.isLoaded());
+		assertTrue(o1.isLoaded());
+		assertTrue(o2.isLoaded());
 
-	/**
-	 * Creates a new empty project in a temp directory, create ontology, reload project
-	 */
-	public void test2CreateOntology() {
-		log("test2CreateOntology()");
+		assertEquals(1, o3.getClasses().size());
+		assertSameList(o3.getClasses(), o3.getThingConcept());
+		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
 
-		logger.info("Hop" + _project.getProjectOntology());
+		OntologyClass a2 = o2.getClass(o2.getURI() + "#A2");
+		assertNotNull(a2);
+		OntologyClass b2 = o2.getClass(o2.getURI() + "#B2");
+		assertNotNull(b2);
+		OntologyClass c2 = o2.getClass(o2.getURI() + "#C2");
+		assertNotNull(c2);
+		assertEquals(4, o2.getClasses().size());
+		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
 
-		saveProject(_project);
-
-		logger.info("Reload project");
-
-		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project != null) {
-			_project.close();
-		}
-		_project = _editor.getProject();
-
-		logger.info("Hop" + _project.getProjectOntology());
-
-		FlexoOntology flexoConceptsOntology = _project.getProjectOntologyLibrary().getFlexoConceptOntology();
-		flexoConceptsOntology.describe();
-
-	}
-
-	/**
-	 * Import ontologies
-	 */
-	public void test3ImportOntologies() {
-		log("test3ImportOntologies()");
-
-		FlexoOntology basicOrganizationTreeOntology = _project.getProjectOntologyLibrary().getOntology(
-				"http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl");
-		assertNotNull(basicOrganizationTreeOntology);
-
-		try {
-			_project.getProjectOntology().importOntology(basicOrganizationTreeOntology);
-		} catch (OntologyNotFoundException e) {
-			fail(e.getMessage());
-		}
-
-		saveProject(_project);
-	}
-
-	/**
-	 * Load calcs, import calc
-	 */
-	public void test4loadCalcsAndImportSomeCalc() {
-		log("test4loadCalcsAndImportSomeCalc()");
-
-		logger.info("CalcLibrary: " + _resourceCenter.retrieveViewPointLibrary());
-		logger.info("All calcs: " + _resourceCenter.retrieveViewPointLibrary().getViewPoints());
-
-		ViewPoint basicOrganizationTreeEditorCalc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(
-				"http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
-		logger.info("Le calc: " + basicOrganizationTreeEditorCalc);
-		basicOrganizationTreeEditorCalc.loadWhenUnloaded();
-
-		ViewPoint thesaurusEditorCalc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(
-				"http://www.agilebirds.com/openflexo/ViewPoints/ThesaurusEditor.owl");
-		logger.info("Le calc: " + thesaurusEditorCalc);
-		thesaurusEditorCalc.loadWhenUnloaded();
-
-		try {
-			_project.getProjectOntology().importOntology(basicOrganizationTreeEditorCalc.getViewpointOntology());
-		} catch (OntologyNotFoundException e) {
-			fail(e.getMessage());
-		}
-
-		saveProject(_project);
+		OntologyClass a1 = o1.getClass(o1.getURI() + "#A1");
+		assertNotNull(a1);
+		OntologyClass b1 = o1.getClass(o1.getURI() + "#B1");
+		assertNotNull(b1);
+		OntologyClass c1 = o1.getClass(o1.getURI() + "#C1");
+		assertNotNull(c1);
+		assertEquals(4, o1.getClasses().size());
+		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
+		assertTrue(b1.isSuperConceptOf(c1));
 
 	}
 
-	/**
-	 * Edit ontology and reload project
-	 */
-	public void test5ManuallyEditOntology() {
-		log("test5ManuallyEditOntology()");
+	public void test7TestMultiReferencesO4() {
+		log("test7TestMultiReferencesO4()");
+		FlexoOntology o1 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
+		assertNotNull(o1);
+		FlexoOntology o2 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
+		assertNotNull(o2);
+		FlexoOntology o3 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
+		assertNotNull(o3);
+		FlexoOntology o5 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O4.owl");
+		assertNotNull(o5);
 
-		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
-		String FLEXO_MODEL_OBJECT = FLEXO_CONCEPTS_URI + "#FlexoModelObject";
-		String LINKED_TO_MODEL_PROPERTY = FLEXO_CONCEPTS_URI + "#linkedToModel";
-		String CLASS_NAME_PROPERTY = FLEXO_CONCEPTS_URI + "#className";
-		String FLEXO_ID_PROPERTY = FLEXO_CONCEPTS_URI + "#flexoID";
-		String RESOURCE_NAME_PROPERTY = FLEXO_CONCEPTS_URI + "#resourceName";
+		o3.loadWhenUnloaded();
+		assertTrue(o3.isLoaded());
+		assertTrue(o1.isLoaded());
+		assertTrue(o2.isLoaded());
 
-		String BOT_URI = "http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
-		String COMPANY_NAME = BOT_URI + "#companyName";
+		assertEquals(1, o3.getClasses().size());
+		assertSameList(o3.getClasses(), o3.getThingConcept());
+		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
 
-		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl";
-		String BOT_COMPANY = BOT_EDITOR_URI + "#BOTCompany";
+		OntologyClass a2 = o2.getClass(o2.getURI() + "#A2");
+		assertNotNull(a2);
+		OntologyClass b2 = o2.getClass(o2.getURI() + "#B2");
+		assertNotNull(b2);
+		OntologyClass c2 = o2.getClass(o2.getURI() + "#C2");
+		assertNotNull(c2);
+		assertEquals(4, o2.getClasses().size());
+		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
 
-		OntModel ontModel = _project.getProjectOntology().getOntModel();
+		OntologyClass a1 = o1.getClass(o1.getURI() + "#A1");
+		assertNotNull(a1);
+		OntologyClass b1 = o1.getClass(o1.getURI() + "#B1");
+		assertNotNull(b1);
+		OntologyClass c1 = o1.getClass(o1.getURI() + "#C1");
+		assertNotNull(c1);
+		assertEquals(4, o1.getClasses().size());
+		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
+		assertTrue(b1.isSuperConceptOf(c1));
 
-		OntClass fooClass = ontModel.createClass(_project.getProjectOntology().getOntologyURI() + "#" + "foo");
-		OntClass foo2Class = ontModel.createClass(_project.getProjectOntology().getOntologyURI() + "#" + "foo2");
-		foo2Class.addComment("Test de commentaire", "FR");
-		foo2Class.addComment("Comment test", "EN");
-		foo2Class.addSuperClass(fooClass);
+		o5.loadWhenUnloaded();
+		assertTrue(o5.isLoaded());
 
-		FlexoProcess process = _project.getWorkflow().getRootFlexoProcess();
-		OntClass flexoModelObject = ontModel.getOntClass(FLEXO_MODEL_OBJECT);
-		ObjectProperty linkedToModelProperty = ontModel.getObjectProperty(LINKED_TO_MODEL_PROPERTY);
-		DatatypeProperty classNameProperty = ontModel.getDatatypeProperty(CLASS_NAME_PROPERTY);
-		DatatypeProperty flexoIDProperty = ontModel.getDatatypeProperty(FLEXO_ID_PROPERTY);
-		DatatypeProperty resourceNameProperty = ontModel.getDatatypeProperty(RESOURCE_NAME_PROPERTY);
+		OntologyClass a1fromO4 = o5.getClass(o1.getURI() + "#A1");
+		assertNotNull(a1fromO4);
+		assertEquals(a1, a1fromO4.getOriginalDefinition());
 
-		Individual myRootFlexoProcess = ontModel.createIndividual(_project.getProjectOntology().getURI() + "#MyRootProcess",
-				flexoModelObject);
-		myRootFlexoProcess.addProperty(classNameProperty, process.getClass().getName());
-		myRootFlexoProcess.addProperty(flexoIDProperty, process.getSerializationIdentifier());
-		myRootFlexoProcess.addProperty(resourceNameProperty, process.getFlexoResource().getFullyQualifiedName());
+		OntologyClass a2fromO4 = o5.getClass(o2.getURI() + "#A2");
+		assertNotNull(a2fromO4);
+		assertEquals(a2, a2fromO4.getOriginalDefinition());
 
-		OntClass botCompany = ontModel.getOntClass(BOT_COMPANY);
-		DatatypeProperty companyNameProperty = ontModel.getDatatypeProperty(COMPANY_NAME);
-		Individual agileBirdsCompany = ontModel.createIndividual(_project.getProjectOntology().getURI() + "#AgileBirds", botCompany);
-		agileBirdsCompany.addProperty(companyNameProperty, "Agile Birds S.A.");
+		assertEquals(3, o5.getClasses().size());
+		assertSameList(o5.getClasses(), o5.getThingConcept(), a1fromO4, a2fromO4);
 
-		agileBirdsCompany.addProperty(linkedToModelProperty, myRootFlexoProcess);
+		assertTrue(a1fromO4.isSuperConceptOf(a2fromO4));
 
-		_project.getProjectOntology().setChanged();
-		saveProject(_project);
+	}
 
-		_project.getProjectOntology().describe();
+	public void test8TestMultiReferencesO5() {
+		log("test8TestMultiReferencesO5()");
+		FlexoOntology o1 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
+		assertNotNull(o1);
+		FlexoOntology o2 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
+		assertNotNull(o2);
+		FlexoOntology o3 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
+		assertNotNull(o3);
+		FlexoOntology o5 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O5.owl");
+		assertNotNull(o5);
 
-		logger.info("Reload project");
+		o3.loadWhenUnloaded();
+		assertTrue(o3.isLoaded());
+		assertTrue(o1.isLoaded());
+		assertTrue(o2.isLoaded());
 
-		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project != null) {
-			_project.close();
-		}
-		_project = _editor.getProject();
+		assertEquals(1, o3.getClasses().size());
+		assertSameList(o3.getClasses(), o3.getThingConcept());
+		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
 
-		_project.getProjectOntology().describe();
-		FileUtils.deleteDir(_project.getProjectDirectory());
-		_project = null;
-		_editor = null;
-		_resourceCenter = null;
-		_resourceCenterDirectory = null;
+		OntologyClass a2 = o2.getClass(o2.getURI() + "#A2");
+		assertNotNull(a2);
+		OntologyClass b2 = o2.getClass(o2.getURI() + "#B2");
+		assertNotNull(b2);
+		OntologyClass c2 = o2.getClass(o2.getURI() + "#C2");
+		assertNotNull(c2);
+		assertEquals(4, o2.getClasses().size());
+		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
+
+		OntologyClass a1 = o1.getClass(o1.getURI() + "#A1");
+		assertNotNull(a1);
+		OntologyClass b1 = o1.getClass(o1.getURI() + "#B1");
+		assertNotNull(b1);
+		OntologyClass c1 = o1.getClass(o1.getURI() + "#C1");
+		assertNotNull(c1);
+		assertEquals(4, o1.getClasses().size());
+		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
+		assertTrue(b1.isSuperConceptOf(c1));
+
+		o5.loadWhenUnloaded();
+		assertTrue(o5.isLoaded());
+
+		OntologyClass a1fromO5 = o5.getClass(o1.getURI() + "#A1");
+		assertNotNull(a1fromO5);
+		assertEquals(a1, a1fromO5.getOriginalDefinition());
+
+		OntologyClass a2fromO5 = o5.getClass(o2.getURI() + "#A2");
+		assertNotNull(a2fromO5);
+		assertEquals(a2, a2fromO5.getOriginalDefinition());
+
+		assertEquals(3, o5.getClasses().size());
+		assertSameList(o5.getClasses(), o5.getThingConcept(), a1fromO5, a2fromO5);
+
+		assertTrue(a2fromO5.isSuperConceptOf(a1fromO5));
+
+	}
+
+	public void test9TestInstances() {
+		log("test9TestInstances()");
+		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				"http://www.openflexo.org/test/TestInstances.owl");
+		assertNotNull(ontology);
+
+		ontology.loadWhenUnloaded();
+		assertTrue(ontology.isLoaded());
+
+		assertEquals(4, ontology.getIndividuals().size());
+
+		OntologyIndividual activity1 = ontology.getIndividual(ontology.getURI() + "#Activity1");
+		assertNotNull(activity1);
+		OntologyIndividual activity2 = ontology.getIndividual(ontology.getURI() + "#Activity2");
+		assertNotNull(activity2);
+		OntologyIndividual activity3 = ontology.getIndividual(ontology.getURI() + "#Activity3");
+		assertNotNull(activity3);
+		OntologyIndividual untypedIndividual = ontology.getIndividual(ontology.getURI() + "#UntypedIndividual");
+		assertNotNull(untypedIndividual);
+
+		assertSameList(ontology.getIndividuals(), activity1, activity2, activity3, untypedIndividual);
+
+		OntologyClass redefinedFlexoActivity = ontology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoActivity");
+		assertNotNull(redefinedFlexoActivity);
+		OntologyClass flexoActivity = ontology.getOntologyLibrary().getFlexoConceptOntology()
+				.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoActivity");
+		assertNotNull(flexoActivity);
+		assertTrue(redefinedFlexoActivity.redefinesOriginalDefinition());
+		assertEquals(flexoActivity, redefinedFlexoActivity.getOriginalDefinition());
+
+		assertTrue(redefinedFlexoActivity.isSuperConceptOf(activity1));
+		assertTrue(redefinedFlexoActivity.isSuperConceptOf(activity2));
+		assertTrue(redefinedFlexoActivity.isSuperConceptOf(activity3));
+
+		assertTrue(ontology.getThingConcept().isSuperConceptOf(untypedIndividual));
+		assertTrue(ontology.getThingConcept().getOriginalDefinition().isSuperConceptOf(untypedIndividual));
+
+		OntologyDataProperty resourceNameProperty = ontology.getOntologyLibrary().getFlexoConceptOntology()
+				.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "resourceName");
+		assertNotNull(resourceNameProperty);
+
+		assertEquals("Process1", activity1.getPropertyValue(resourceNameProperty));
+
+		assertEquals(35, ontology.getAccessibleClasses().size());
+
+		System.out.println("les annotations=" + activity1.getAnnotationStatements());
+
 	}
 
 }

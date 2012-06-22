@@ -74,7 +74,7 @@ public class IndividualInspectorEntry extends InspectorEntry {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getClass(_getConceptURI());
+			return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
 		}
 		return null;
 	}

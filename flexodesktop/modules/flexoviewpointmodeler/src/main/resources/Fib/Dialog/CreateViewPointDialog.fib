@@ -40,7 +40,7 @@
       <Button action="data.addToImportedOntologies(OntologySelector.data)" buttonType="Trigger" label="import_ontology" constraints="border(index=1;location=east)" name="ImportOntologyButton" localize="true" enable="(OntologySelector.data != null)">
         <LocalizedDictionary />
       </Button>
-      <Custom componentClassName="org.openflexo.components.widget.OntologySelector" constraints="border(index=2;location=center)" name="OntologySelector" localize="true" manageDynamicModel="true">
+      <Custom componentClassName="org.openflexo.components.widget.FIBOntologySelector" constraints="border(index=2;location=center)" name="OntologySelector" localize="true" manageDynamicModel="true">
         <Assignment variable="component.ontologyLibrary" value="data.calcFolder.viewPointLibrary.ontologyLibrary" />
       </Custom>
       <Label label="select_ontology" localize="true" constraints="border(index=0;location=west)">

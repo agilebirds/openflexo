@@ -45,18 +45,21 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 
 	private boolean superDomainStatementWereAppened = false;
 	private boolean superRangeStatementWereAppened = false;
+	private boolean storageLocationsAreUpToDate = false;
 
 	private final Vector<OntologyProperty> superProperties;
 	private final Vector<OntologyProperty> subProperties;
+	private final ArrayList<OntologyClass> storageLocations;
 
-	private final boolean isAnnotationProperty;
+	// private final boolean isAnnotationProperty;
 
 	protected OntologyProperty(OntProperty anOntProperty, FlexoOntology ontology) {
 		super(anOntProperty, ontology);
 		ontProperty = anOntProperty;
 		superProperties = new Vector<OntologyProperty>();
 		subProperties = new Vector<OntologyProperty>();
-		isAnnotationProperty = anOntProperty.isAnnotationProperty();
+		storageLocations = new ArrayList<OntologyClass>();
+		// isAnnotationProperty = anOntProperty.isAnnotationProperty();
 		domainStatementList = new ArrayList<DomainStatement>();
 		rangeStatementList = new ArrayList<RangeStatement>();
 		domainList = null;
@@ -125,7 +128,7 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 			Iterator it = anOntProperty.listSuperProperties(true);
 			while (it.hasNext()) {
 				OntProperty father = (OntProperty) it.next();
-				OntologyProperty fatherProp = getOntologyLibrary().getProperty(father.getURI());
+				OntologyProperty fatherProp = getOntology().getProperty(father.getURI());
 				if (fatherProp != null) {
 					if (!superProperties.contains(fatherProp)) {
 						superProperties.add(fatherProp);
@@ -143,7 +146,7 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 			if (getURI().equals("http://www.w3.org/2004/02/skos/core#altLabel")
 					|| getURI().equals("http://www.w3.org/2004/02/skos/core#prefLabel")
 					|| getURI().equals("http://www.w3.org/2004/02/skos/core#hiddenLabel")) {
-				OntologyProperty label = getOntologyLibrary().getProperty("http://www.w3.org/2000/01/rdf-schema#label");
+				OntologyProperty label = getOntology().getProperty("http://www.w3.org/2000/01/rdf-schema#label");
 				if (!superProperties.contains(label)) {
 					superProperties.add(label);
 				}
@@ -160,7 +163,7 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 			Iterator it = anOntProperty.listSubProperties(true);
 			while (it.hasNext()) {
 				OntProperty child = (OntProperty) it.next();
-				OntologyProperty childProperty = getOntologyLibrary().getProperty(child.getURI());
+				OntologyProperty childProperty = getOntology().getProperty(child.getURI());
 				if (childProperty != null) {
 					if (!subProperties.contains(childProperty)) {
 						subProperties.add(childProperty);
@@ -213,7 +216,7 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 	}
 
 	public boolean isAnnotationProperty() {
-		return isAnnotationProperty;
+		return getOntResource().isAnnotationProperty();// isAnnotationProperty;
 	}
 
 	@Override
@@ -221,8 +224,10 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 		super.updateOntologyStatements(anOntResource);
 		superDomainStatementWereAppened = false;
 		superRangeStatementWereAppened = false;
+		storageLocationsAreUpToDate = false;
 		domainStatementList.clear();
 		rangeStatementList.clear();
+		storageLocations.clear();
 		domainList = null;
 		rangeList = null;
 		for (OntologyStatement s : getSemanticStatements()) {
@@ -325,6 +330,28 @@ public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 			return null;
 		}
 		return getRangeStatement().getRange();
+	}
+
+	/**
+	 * Return list of OntologyClass where this property is used in a restriction, those storage location are convenient places where to
+	 * represent a property while browsing an ontology
+	 * 
+	 * @return
+	 */
+	public List<OntologyClass> getStorageLocations() {
+		if (!storageLocationsAreUpToDate) {
+			for (FlexoOntology o : getOntology().getAllImportedOntologies()) {
+				for (OntologyClass c : o.getClasses()) {
+					/*if (c.getRestrictionStatements(this).size() > 0) {
+						if (!storageLocations.contains(c)) {
+							storageLocations.add(c);
+						}
+					}*/
+				}
+			}
+			storageLocationsAreUpToDate = true;
+		}
+		return storageLocations;
 	}
 
 	/**

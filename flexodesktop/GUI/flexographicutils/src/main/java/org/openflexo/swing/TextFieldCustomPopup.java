@@ -68,7 +68,14 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 	protected JComponent buildFrontComponent() {
 		_frontComponent = new JPanel(new BorderLayout());
 		_frontComponent.setOpaque(false);
-		_textField = new JTextField();
+		_textField = new JTextField() {
+			@Override
+			public void setText(String t) {
+				startEditTextProgrammatically();
+				super.setText(t);
+				stopEditTextProgrammatically();
+			};
+		};
 		_textField.setEditable(false);
 		_textField.addActionListener(this);
 		_textField.setMinimumSize(new Dimension(50, 25));
@@ -148,4 +155,17 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 		}
 	}
 
+	private boolean textIsBeeingProgrammaticallyEditing = false;
+
+	protected void startEditTextProgrammatically() {
+		textIsBeeingProgrammaticallyEditing = true;
+	}
+
+	protected void stopEditTextProgrammatically() {
+		textIsBeeingProgrammaticallyEditing = false;
+	}
+
+	protected boolean textIsBeeingProgrammaticallyEditing() {
+		return textIsBeeingProgrammaticallyEditing;
+	}
 }

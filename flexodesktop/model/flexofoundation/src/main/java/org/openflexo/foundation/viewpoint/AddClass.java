@@ -72,8 +72,8 @@ public class AddClass extends AddConcept {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			if (getOntologyLibrary() != null) {
-				return getOntologyLibrary().getClass(ontologyClassURI);
+			if (getViewPoint().getViewpointOntology() != null) {
+				return getViewPoint().getViewpointOntology().getClass(ontologyClassURI);
 			}
 		} else {
 			if (getPatternRole() instanceof ClassPatternRole) {

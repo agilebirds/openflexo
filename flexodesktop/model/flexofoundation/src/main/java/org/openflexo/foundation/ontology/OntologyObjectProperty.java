@@ -19,11 +19,15 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.logging.Logger;
+
 import org.openflexo.foundation.Inspectors;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 
 public class OntologyObjectProperty extends OntologyProperty implements Comparable<OntologyObjectProperty> {
+
+	static final Logger logger = Logger.getLogger(OntologyObjectProperty.class.getPackage().getName());
 
 	protected OntologyObjectProperty(OntProperty anObjectProperty, FlexoOntology ontology) {
 		super(anObjectProperty, ontology);
@@ -89,7 +93,23 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 	}
 
 	public boolean isLiteralRange() {
-		return (getRange() == getOntologyLibrary().getOntologyObject(OntologyLibrary.RDFS_LITERAL_URI));
+		return (getRange() == getOntology().getOntologyObject(OntologyLibrary.RDFS_LITERAL_URI));
+	}
+
+	@Override
+	public String getHTMLDescription() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<html>");
+		sb.append("Object property <b>" + getName() + "</b><br>");
+		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Asserted in:</b> " + getOntology().getURI() + "<br>");
+		sb.append("<b>Domain:</b> " + (getDomain() != null ? getDomain().getURI() : "?") + "<br>");
+		sb.append("<b>Range:</b> " + (getRange() != null ? getRange().getURI() : "?") + "<br>");
+		if (redefinesOriginalDefinition()) {
+			sb.append("<b>Redefines:</b> " + getOriginalDefinition() + "<br>");
+		}
+		sb.append("</html>");
+		return sb.toString();
 	}
 
 }

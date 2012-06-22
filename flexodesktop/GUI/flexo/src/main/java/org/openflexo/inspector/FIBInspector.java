@@ -289,9 +289,18 @@ public class FIBInspector extends FIBPanel {
 		} else if (entry instanceof ClassInspectorEntry) {
 			ClassInspectorEntry classEntry = (ClassInspectorEntry) entry;
 			FIBCustom classSelector = new FIBCustom();
-			classSelector.setComponentClass(org.openflexo.components.widget.OntologyClassSelector.class);
+			classSelector.setComponentClass(org.openflexo.components.widget.FIBClassSelector.class);
+			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
+			// component.context = xxx
 			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.project"), new DataBinding(
 					"data.project"), true));
+			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.contextOntologyURI"),
+					new DataBinding('"' + classEntry.getViewPoint().getViewpointOntology().getURI() + '"') {
+						@Override
+						public BindingFactory getBindingFactory() {
+							return entry.getBindingFactory();
+						}
+					}, true));
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
 			OntologyClass conceptClass = null;
 			if (classEntry.getIsDynamicConceptValue()) {
@@ -302,7 +311,7 @@ public class FIBInspector extends FIBPanel {
 				conceptClass = classEntry.getConcept();
 			}
 			if (conceptClass != null) {
-				classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.parentClassURI"),
+				classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.rootClassURI"),
 						new DataBinding('"' + conceptClass.getURI() + '"') {
 							@Override
 							public BindingFactory getBindingFactory() {

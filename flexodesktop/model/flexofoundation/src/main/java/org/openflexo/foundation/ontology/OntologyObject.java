@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.ontology;
 
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -38,9 +36,7 @@ import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntResource;
-import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -54,16 +50,16 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	private static final Logger logger = Logger.getLogger(OntologyObject.class.getPackage().getName());
 
 	public static class OntologyObjectConverter extends Converter<OntologyObject> {
-		private OntologyLibrary _ontologyLibrary;
+		private FlexoOntology _ontology;
 
-		public OntologyObjectConverter(OntologyLibrary ontologyLibrary) {
+		public OntologyObjectConverter(FlexoOntology ontology) {
 			super(OntologyObject.class);
-			_ontologyLibrary = ontologyLibrary;
+			_ontology = ontology;
 		}
 
 		@Override
 		public OntologyObject convertFromString(String value) {
-			return _ontologyLibrary.getOntologyObject(value);
+			return _ontology.getOntologyObject(value);
 		}
 
 		@Override
@@ -88,13 +84,15 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	private String name;
 	private final FlexoOntology _ontology;
 
+	private OntologyObject<R> originalDefinition;
+
 	public OntologyObject(OntResource ontResource, FlexoOntology ontology) {
 		super();
 
 		_ontology = ontology;
 		if (ontResource != null) {
 			uri = ontResource.getURI();
-			if (uri.indexOf("#") > -1) {
+			if (uri != null && uri.indexOf("#") > -1) {
 				name = uri.substring(uri.indexOf("#") + 1);
 			} else {
 				name = uri;
@@ -149,7 +147,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 			newURI = newName;
 		}
 		logger.info("Rename object " + getURI() + " to " + newURI);
-		R returned = (R) (ResourceUtils.renameResource(resource, newURI).as(resourceClass));
+		R returned = (ResourceUtils.renameResource(resource, newURI).as(resourceClass));
 		_setOntResource(returned);
 		name = newName;
 		uri = newURI;
@@ -215,7 +213,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		_annotationStatements.clear();
 		_annotationObjectsStatements.clear();
 
-		Hashtable<OntClass, Restriction> restrictions = new Hashtable<OntClass, Restriction>();
+		// Hashtable<OntClass, Restriction> restrictions = new Hashtable<OntClass, Restriction>();
 
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS = ResourceFactory.createProperty(OWL + "onClass");
@@ -226,7 +224,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 
 		// System.out.println("***********************************************");
 
-		if (this instanceof OntologyClass) {
+		/*if (this instanceof OntologyClass) {
 			// DescribeClass dc = new DescribeClass();
 			// dc.describeClass(System.out, (OntClass)getOntResource());
 			for (Iterator it = ((OntClass) anOntResource).listSuperClasses(true); it.hasNext();) {
@@ -236,7 +234,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 					restrictions.put(s, r);
 				}
 			}
-		}
+		}*/
 
 		for (StmtIterator j = anOntResource.listProperties(); j.hasNext();) {
 			Statement s = j.nextStatement();
@@ -262,7 +260,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 						newStatement = new TypeStatement(this, s);
 					}
 				} else if (predicate.getURI().equals(SubClassStatement.SUB_CLASS_URI)) {
-					if (restrictions.get(s.getObject()) != null) {
+					/*if (restrictions.get(s.getObject()) != null) {
 						Restriction r = restrictions.get(s.getObject());
 						// TODO: differenciate ObjectRestrictionStatement and DataRestrictionStatement here
 						if (r.isSomeValuesFromRestriction()) {
@@ -287,9 +285,9 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 							}
 						}
 						// System.out.println("*********** for "+s+" restriction "+r+" obtain "+newStatement);
-					} else {
-						newStatement = new SubClassStatement(this, s);
-					}
+					} else {*/
+					newStatement = new SubClassStatement(this, s);
+					// }
 				} else if (predicate.getURI().equals(RangeStatement.RANGE_URI)) {
 					newStatement = new RangeStatement(this, s);
 				} else if (predicate.getURI().equals(DomainStatement.DOMAIN_URI)) {
@@ -298,8 +296,10 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 					newStatement = new InverseOfStatement(this, s);
 				} else if (predicate.getURI().equals(SubPropertyStatement.SUB_PROPERTY_URI)) {
 					newStatement = new SubPropertyStatement(this, s);
+				} else if (predicate.getURI().equals(EquivalentClassStatement.EQUIVALENT_CLASS_URI)) {
+					newStatement = new EquivalentClassStatement(this, s);
 				} else {
-					OntologyObject predicateProperty = /*getProject().*/getOntologyLibrary().getOntologyObject(predicate.getURI());
+					OntologyObject predicateProperty = getOntology().getOntologyObject(predicate.getURI());
 					if (predicateProperty instanceof OntologyObjectProperty) {
 						newStatement = new ObjectPropertyStatement(this, s);
 					} else if (predicateProperty instanceof OntologyDataProperty) {
@@ -361,7 +361,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		for (OntologyStatement statement : getStatements()) {
 			if (statement instanceof PropertyStatement) {
 				PropertyStatement s = (PropertyStatement) statement;
-				if (s.getProperty() == property) {
+				if (s.getProperty().equalsToConcept(property)) {
 					returned.add(s);
 				}
 			}
@@ -380,7 +380,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		for (OntologyStatement statement : getStatements()) {
 			if (statement instanceof ObjectPropertyStatement) {
 				ObjectPropertyStatement s = (ObjectPropertyStatement) statement;
-				if (s.getProperty() == property) {
+				if (s.getProperty().equalsToConcept(property)) {
 					returned.add(s);
 				}
 			}
@@ -525,23 +525,6 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	 * @return
 	 */
 	// TODO: need to handle multiple statements
-	public ObjectRestrictionStatement getObjectRestrictionStatement(OntologyProperty property, OntologyClass object) {
-		for (OntologyStatement statement : getStatements()) {
-			if ((statement instanceof ObjectRestrictionStatement) && (((ObjectRestrictionStatement) statement).getProperty() == property)
-					&& (((ObjectRestrictionStatement) statement).getObject() == object)) {
-				return (ObjectRestrictionStatement) statement;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Return first found statement related to supplied property
-	 * 
-	 * @param property
-	 * @return
-	 */
-	// TODO: need to handle multiple statements
 	public SubClassStatement getSubClassStatement(OntologyObject father) {
 		for (OntologyStatement statement : getStatements()) {
 			if ((statement instanceof SubClassStatement) && ((SubClassStatement) statement).getParent().equals(father)) {
@@ -574,7 +557,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	}
 
 	public PropertyStatement createNewAnnotation(String propertyURI) {
-		OntologyProperty property = getOntologyLibrary().getProperty(propertyURI);
+		OntologyProperty property = getOntology().getProperty(propertyURI);
 		if (property != null) {
 			return addPropertyStatement(property, "label", Language.ENGLISH);
 		} else {
@@ -588,7 +571,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 			logger.warning("Cannot create annotation " + propertyURI + " with null object");
 			return null;
 		}
-		OntologyProperty property = getOntologyLibrary().getProperty(propertyURI);
+		OntologyProperty property = getOntology().getProperty(propertyURI);
 		if (property instanceof OntologyObjectProperty) {
 			return addPropertyStatement((OntologyObjectProperty) property, object);
 		} else {
@@ -801,9 +784,13 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	private void searchRangeAndDomains() {
 		declaredPropertiesTakingMySelfAsRange.clear();
 		declaredPropertiesTakingMySelfAsDomain.clear();
+		if (redefinesOriginalDefinition()) {
+			declaredPropertiesTakingMySelfAsRange.addAll(getOriginalDefinition().declaredPropertiesTakingMySelfAsRange);
+			declaredPropertiesTakingMySelfAsDomain.addAll(getOriginalDefinition().declaredPropertiesTakingMySelfAsDomain);
+		}
 
 		Vector<FlexoOntology> alreadyDone = new Vector<FlexoOntology>();
-		for (FlexoOntology ontology : getOntologyLibrary().getAllOntologies()) {
+		for (FlexoOntology ontology : getOntology().getAllImportedOntologies()) {
 			searchRangeAndDomains(declaredPropertiesTakingMySelfAsRange, declaredPropertiesTakingMySelfAsDomain, ontology, alreadyDone);
 		}
 		domainsAndRangesAreUpToDate = true;
@@ -872,4 +859,33 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		return super.getEditionPatternReferences();
 	}
 
+	public String getHTMLDescription() {
+		return getDisplayableDescription();
+	}
+
+	public OntologyObject<R> getOriginalDefinition() {
+		return originalDefinition;
+	}
+
+	public void setOriginalDefinition(OntologyObject<R> originalDefinition) {
+		this.originalDefinition = originalDefinition;
+	}
+
+	public boolean redefinesOriginalDefinition() {
+		return originalDefinition != null;
+	}
+
+	/**
+	 * This equals has a particular semantics in the way that it returns true only and only if compared objects are representing same
+	 * concept regarding URI. This does not guarantee that both objects will respond the same way to some methods.<br>
+	 * This method returns true if and only if objects are same, or if one of both object redefine the other one (with eventual many levels)
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public boolean equalsToConcept(OntologyObject o) {
+		if (o == null)
+			return false;
+		return StringUtils.isNotEmpty(getURI()) && getURI().equals(o.getURI());
+	}
 }

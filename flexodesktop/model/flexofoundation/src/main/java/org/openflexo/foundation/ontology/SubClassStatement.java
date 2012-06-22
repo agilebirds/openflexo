@@ -30,13 +30,13 @@ public class SubClassStatement extends OntologyStatement {
 
 	public static final String SUB_CLASS_URI = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
 
-	private OntologyObject parent;
+	private OntologyObject<?> parent;
 
-	public SubClassStatement(OntologyObject subject, Statement s) {
+	public SubClassStatement(OntologyObject<?> subject, Statement s) {
 		super(subject, s);
 		// System.out.println("s.getObject() is a " + s.getObject().getClass().getName() + " : " + s.getObject());
 		if (s.getObject() instanceof Resource) {
-			parent = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			parent = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {
 			logger.warning("SubClassStatement: object is not a Resource !");
 		}
@@ -52,7 +52,7 @@ public class SubClassStatement extends OntologyStatement {
 		return "SubClassStatement: " + getStatement();
 	}
 
-	public OntologyObject getParent() {
+	public OntologyObject<?> getParent() {
 		return parent;
 	}
 

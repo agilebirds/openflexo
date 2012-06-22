@@ -60,7 +60,7 @@ public class IndividualParameter extends EditionSchemeParameter {
 
 	public OntologyClass getConcept() {
 		getViewPoint().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getConceptURI());
+		return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
 	}
 
 	public void setConcept(OntologyClass c) {

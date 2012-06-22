@@ -37,8 +37,7 @@ public class OntologyViewEDITOR {
 			public Object[] getData() {
 				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology1 = ontologyLibrary
-						.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
+				FlexoOntology ontology1 = ontologyLibrary.getFlexoConceptOntology();
 				ontology1.loadWhenUnloaded();
 				FlexoOntology ontology2 = ontologyLibrary.getOntology("http://www.w3.org/2004/02/skos/core");
 				ontology2.loadWhenUnloaded();
@@ -46,7 +45,7 @@ public class OntologyViewEDITOR {
 				ontology3.loadWhenUnloaded();
 				FlexoOntology ontology4 = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
 				ontology4.loadWhenUnloaded();
-				return makeArray(ontology1, ontology2, ontology3, ontology4);
+				return makeArray(ontology2, ontology3, ontology4);
 			}
 
 			@Override

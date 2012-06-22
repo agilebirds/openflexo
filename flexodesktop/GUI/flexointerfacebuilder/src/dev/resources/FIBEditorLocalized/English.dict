@@ -1,5 +1,5 @@
 #English
-#Tue May 29 14:13:13 CEST 2012
+#Wed Jun 13 14:59:08 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -141,6 +141,7 @@ new=New
 new_interface=New component
 no=No
 no_description=No description
+no_description_available=No description available
 no_documentation=No documentation
 no_selection=No selection
 no_type=No type

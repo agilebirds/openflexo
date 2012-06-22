@@ -83,9 +83,9 @@ public class AddIndividual extends AddConcept {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			if (getOntologyLibrary() != null) {
+			if (getViewPoint().getViewpointOntology() != null) {
 				// System.out.println("Je reponds avec " + ontologyClassURI);
-				return getOntologyLibrary().getClass(ontologyClassURI);
+				return getViewPoint().getViewpointOntology().getClass(ontologyClassURI);
 			}
 		} else {
 			if (getPatternRole() != null) {
