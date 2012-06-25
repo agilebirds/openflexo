@@ -121,6 +121,7 @@ import org.openflexo.prefs.PreferencesController;
 import org.openflexo.prefs.PreferencesHaveChanged;
 import org.openflexo.prefs.PreferencesWindow;
 import org.openflexo.rm.ResourceManagerWindow;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.ToolBox;
@@ -175,6 +176,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	protected FlexoKeyEventListener _keyEventListener;
 
+	protected SelectionManager selectionManager;
+
 	protected Hashtable<KeyStroke, AbstractAction> _keyStrokeActionTable;
 
 	protected FlexoFrame _flexoFrame;
@@ -202,7 +205,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		lastEditedObjectsForPerspective = new Hashtable<FlexoPerspective, FlexoModelObject>();
 		_module = module;
 		_menuBar = createAndRegisterNewMenuBar();
-		keyEventListener = createKeyEventListener();
+		keyEventListener = new FlexoKeyEventListener(this);
+		selectionManager = createSelectionManager();
 		_flexoFrame = createFrame();
 		_flexoFrame.setJMenuBar(_menuBar);
 		_flexoFrame.addKeyListener(keyEventListener);
@@ -220,7 +224,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return DELETED;
 	}
 
-	protected abstract FlexoKeyEventListener createKeyEventListener();
+	protected abstract SelectionManager createSelectionManager();
 
 	/**
 	 * Creates a new instance of MenuBar for the module this controller refers to
@@ -233,11 +237,15 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return new FlexoFrame(this);
 	}
 
-	public FlexoKeyEventListener getKeyEventListener() {
+	public final FlexoKeyEventListener getKeyEventListener() {
 		return keyEventListener;
 	}
 
-	public FlexoMenuBar getMenuBar() {
+	public final SelectionManager getSelectionManager() {
+		return selectionManager;
+	}
+
+	public final FlexoMenuBar getMenuBar() {
 		return _menuBar;
 	}
 
@@ -308,6 +316,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 *
 	 */
 	public void initInspectors() {
+		getSelectionManager().addObserver(getDocInspectorController());
+
 		if (useOldInspectorScheme()) {
 			if (inspectorController == null) {
 				inspectorController = new FlexoSharedInspectorController(this);
@@ -315,19 +325,16 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			/*
 			 * if (getInspectorWindow() != null) { getInspectorWindow().setAlwaysOnTop(GeneralPreferences.getInspectorAlwaysOnTop()); }
 			 */
+			getSelectionManager().addObserver(getSharedInspectorController());
 			getSharedInspectorController().addInspectorExceptionHandler(this);
 			loadAllModuleInspectors();
 		}
 		if (useNewInspectorScheme()) {
 			loadInspectorGroup(getModule().getShortName().toUpperCase());
-			if (this instanceof SelectionManagingController) {
-				((SelectionManagingController) this).getSelectionManager().addObserver(getModuleInspectorController());
-			}
+			getSelectionManager().addObserver(getModuleInspectorController());
 		}
 		_docInspectorController = new FlexoDocInspectorController(this);
-		if (this instanceof SelectionManagingController) {
-			((SelectionManagingController) this).getSelectionManager().addObserver(_docInspectorController);
-		}
+		getSelectionManager().addObserver(_docInspectorController);
 	}
 
 	public ModuleInspectorController getModuleInspectorController() {
@@ -1333,9 +1340,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			ModuleView<?> returned = moduleViewForObject(object);
 
 			if (returned != null) {
-				if (this instanceof SelectionManagingController) {
-					((SelectionManagingController) this).getSelectionManager().resetSelection();
-				}
+				getSelectionManager().resetSelection();
 				// _currentModuleView = returned;
 
 				// SGU: i exchanged order of following two lines in order to have the browser update AFTER
@@ -1346,9 +1351,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 				getFlexoFrame().updateTitle();
 				getFlexoFrame().setVisible(true);
-				if (this instanceof SelectionManagingController && object != null) {
-					((SelectionManagingController) this).getSelectionManager().setSelectedObject(object);
-				}
+				getSelectionManager().setSelectedObject(object);
 
 			} else {
 				if (object instanceof DMObject) {
@@ -1672,14 +1675,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void dispose() {
-		if (this instanceof SelectionManagingController) {
-			if (((SelectionManagingController) this).getSelectionManager() != null) {
-				if (getSharedInspectorController() != null) {
-					((SelectionManagingController) this).getSelectionManager().deleteObserver(getSharedInspectorController());
-				}
-				if (getDocInspectorController() != null) {
-					((SelectionManagingController) this).getSelectionManager().deleteObserver(getDocInspectorController());
-				}
+		if (getSelectionManager() != null) {
+			if (getSharedInspectorController() != null) {
+				getSelectionManager().deleteObserver(getSharedInspectorController());
+			}
+			if (getDocInspectorController() != null) {
+				getSelectionManager().deleteObserver(getDocInspectorController());
 			}
 		}
 		GeneralPreferences.getPreferences().deleteObserver(this);

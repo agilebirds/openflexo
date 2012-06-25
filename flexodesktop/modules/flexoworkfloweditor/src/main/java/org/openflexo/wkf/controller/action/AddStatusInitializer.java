@@ -108,7 +108,7 @@ public class AddStatusInitializer extends ActionInitializer {
 					}
 				}
 				if (e != null) {
-					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newStatus);
+					getControllerActionInitializer().getSelectionManager().setSelectedObject(newStatus);
 				}
 				// getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newStatus);
 				return true;

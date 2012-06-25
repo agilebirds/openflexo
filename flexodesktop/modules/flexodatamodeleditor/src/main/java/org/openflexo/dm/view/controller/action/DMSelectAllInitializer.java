@@ -61,7 +61,7 @@ public class DMSelectAllInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DMSelectAll>() {
 			@Override
 			public boolean run(EventObject e, DMSelectAll action) {
-				getControllerActionInitializer().getDMSelectionManager().performSelectionSelectAll();
+				getControllerActionInitializer().getSelectionManager().performSelectionSelectAll();
 				return true;
 			}
 		};

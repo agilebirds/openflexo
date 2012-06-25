@@ -61,7 +61,6 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.MouseOverButton;
 import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 /**
  * Abstract view managing global layout of a FlexoModule
@@ -175,15 +174,13 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			// _middlePane.setLeftComponent(null);
 		}
 
-		if (_controller instanceof SelectionManagingController) {
-			if (_moduleView != null && _moduleView instanceof SelectionSynchronizedModuleView) {
-				((SelectionManagingController) _controller).getSelectionManager().removeFromSelectionListeners(
-						((SelectionSynchronizedModuleView<?>) _moduleView).getSelectionListeners());
-			}
-			if (moduleView != null && moduleView instanceof SelectionSynchronizedModuleView) {
-				((SelectionManagingController) _controller).getSelectionManager().addToSelectionListeners(
-						((SelectionSynchronizedModuleView<?>) moduleView).getSelectionListeners());
-			}
+		if (_moduleView != null && _moduleView instanceof SelectionSynchronizedModuleView) {
+			_controller.getSelectionManager().removeFromSelectionListeners(
+					((SelectionSynchronizedModuleView<?>) _moduleView).getSelectionListeners());
+		}
+		if (moduleView != null && moduleView instanceof SelectionSynchronizedModuleView) {
+			_controller.getSelectionManager().addToSelectionListeners(
+					((SelectionSynchronizedModuleView<?>) moduleView).getSelectionListeners());
 		}
 
 		_moduleView = moduleView;

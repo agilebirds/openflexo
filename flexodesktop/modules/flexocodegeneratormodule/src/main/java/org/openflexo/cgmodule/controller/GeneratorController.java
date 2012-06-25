@@ -44,7 +44,6 @@ import org.openflexo.cgmodule.controller.action.GeneratorControllerActionInitial
 import org.openflexo.cgmodule.menu.GeneratorMenuBar;
 import org.openflexo.cgmodule.view.CGFileVersionPopup;
 import org.openflexo.cgmodule.view.GeneratorMainPane;
-import org.openflexo.cgmodule.view.listener.GeneratorKeyEventListener;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DataModification;
@@ -89,8 +88,6 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -98,7 +95,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author sguerin
  */
-public class GeneratorController extends FlexoController implements SelectionManagingController, GCAction.ProjectGeneratorFactory {
+public class GeneratorController extends FlexoController implements GCAction.ProjectGeneratorFactory {
 
 	protected static final Logger logger = Logger.getLogger(GeneratorController.class.getPackage().getName());
 
@@ -131,15 +128,11 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		addToPerspectives(VERSIONNING_PERSPECTIVE);
 		addToPerspectives(MODEL_REINJECTION_PERSPECTIVE);
 		_projectGenerators = new Hashtable<GenerationRepository, ProjectGenerator>();
-		if (_selectionManager == null) {
-			_selectionManager = new GeneratorSelectionManager(this);
-		}
-
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new GeneratorKeyEventListener(this);
+	protected SelectionManager createSelectionManager() {
+		return new GeneratorSelectionManager(this);
 	}
 
 	@Override
@@ -233,31 +226,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 	@Override
 	public void dispose() {
 		super.dispose();
-		getGeneratorSelectionManager().deleteObserver(getSharedInspectorController());
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		getGeneratorSelectionManager().addObserver(getSharedInspectorController());
-	}
-
-	// =========================================================
-	// ================ Selection management ===================
-	// =========================================================
-
-	private GeneratorSelectionManager _selectionManager;
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getGeneratorSelectionManager();
-	}
-
-	public GeneratorSelectionManager getGeneratorSelectionManager() {
-		return _selectionManager;
+		getSelectionManager().deleteObserver(getSharedInspectorController());
 	}
 
 	/**

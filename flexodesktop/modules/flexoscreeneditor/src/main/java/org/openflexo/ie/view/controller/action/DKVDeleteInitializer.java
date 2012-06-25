@@ -40,7 +40,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 public class DKVDeleteInitializer extends ActionInitializer {
 
@@ -67,7 +66,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 				if (action.getFocusedObject() != null && !v.contains(action.getFocusedObject())) {
 					v.add(action.getFocusedObject());
 				}
-				(action).setObjectsToDelete(v);
+				action.setObjectsToDelete(v);
 				Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
 				Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 				for (FlexoModelObject object : objects) {
@@ -119,7 +118,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 					domainToSelect = ((Key) action.getGlobalSelection().firstElement()).getDomain();
 				}
 				if (domainToSelect != null) {
-					((SelectionManagingController) getController()).getSelectionManager().setSelectedObject(domainToSelect);
+					getController().getSelectionManager().setSelectedObject(domainToSelect);
 				}
 				return true;
 			}

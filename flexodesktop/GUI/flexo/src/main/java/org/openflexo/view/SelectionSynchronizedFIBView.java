@@ -33,7 +33,6 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 /**
  * Please comment this class
@@ -70,19 +69,14 @@ public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends Fl
 	protected SelectionSynchronizedFIBView(O representedObject, FlexoController controller, FIBComponent fibComponent,
 			boolean addScrollBar, FlexoProgress progress) {
 		super(representedObject, controller, fibComponent, addScrollBar, progress);
-		if (controller instanceof SelectionManagingController) {
-			getFIBView().getController().addSelectionListener(this);
-			((SelectionManagingController) controller).getSelectionManager().addToSelectionListeners(this);
-		}
+		getFIBView().getController().addSelectionListener(this);
+		controller.getSelectionManager().addToSelectionListeners(this);
 	}
 
 	@Override
 	public void deleteView() {
-		if (getFlexoController() instanceof SelectionManagingController) {
-			getFIBView().getController().removeSelectionListener(this);
-			((SelectionManagingController) getFlexoController()).getSelectionManager().removeFromSelectionListeners(this);
-		}
-
+		getFIBView().getController().removeSelectionListener(this);
+		getFlexoController().getSelectionManager().removeFromSelectionListeners(this);
 		super.deleteView();
 	}
 
@@ -147,7 +141,7 @@ public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends Fl
 	}
 
 	public SelectionManager getSelectionManager() {
-		return ((SelectionManagingController) getFlexoController()).getSelectionManager();
+		return getFlexoController().getSelectionManager();
 	}
 
 	@Override

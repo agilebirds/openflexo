@@ -82,7 +82,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
 import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wysiwyg.FlexoWysiwyg;
 import org.openflexo.wysiwyg.FlexoWysiwygLight;
 
@@ -96,7 +96,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 
 	protected static final Logger logger = Logger.getLogger(AbstractDocItemView.class.getPackage().getName());
 
-	protected SelectionManagingController _controller;
+	protected FlexoController _controller;
 	protected DocItem _docItem;
 
 	protected JPanel topPanel;
@@ -132,7 +132,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 		}
 	}
 
-	public AbstractDocItemView(DocItem docItem, SelectionManagingController controller, FlexoEditor editor) {
+	public AbstractDocItemView(DocItem docItem, FlexoController controller, FlexoEditor editor) {
 		super(new BorderLayout());
 		_controller = controller;
 		_editor = editor;
@@ -573,8 +573,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 				if (isEditing()) {
 					closeEdition();
 				}
-				if ((historyPanel != null) && (historyPanel.getCurrentAction() != null)
-						&& (historyPanel.getCurrentAction().getVersion() != null)) {
+				if (historyPanel != null && historyPanel.getCurrentAction() != null && historyPanel.getCurrentAction().getVersion() != null) {
 					DocItemVersion version = historyPanel.getCurrentAction().getVersion();
 					if (version.getShortHTMLDescription() == null) {
 						shortHTMLDescriptionLabel.setForeground(Color.GRAY);
@@ -697,7 +696,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 			editButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (!getDocResourceManager().isEdited(_docItem) && (getCurrentAction() != null)) {
+					if (!getDocResourceManager().isEdited(_docItem) && getCurrentAction() != null) {
 						getDocResourceManager().editVersion(getCurrentAction().getVersion());
 					}
 					AbstractDocItemView.this.updateViewFromModel();
@@ -745,7 +744,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 			approveButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if ((getCurrentAction() != null) && (getCurrentAction().isProposal()) && (getCurrentAction().isPending())) {
+					if (getCurrentAction() != null && getCurrentAction().isProposal() && getCurrentAction().isPending()) {
 						historyPanel.setCurrentAction(getDocResourceManager().approveVersion(getCurrentAction().getVersion()));
 						AbstractDocItemView.this.updateViewFromModel();
 					}
@@ -758,7 +757,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 			refuseButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if ((getCurrentAction() != null) && (getCurrentAction().isProposal()) && (getCurrentAction().isPending())) {
+					if (getCurrentAction() != null && getCurrentAction().isProposal() && getCurrentAction().isPending()) {
 						historyPanel.setCurrentAction(getDocResourceManager().refuseVersion(getCurrentAction().getVersion()));
 						AbstractDocItemView.this.updateViewFromModel();
 					}
@@ -854,10 +853,10 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 					submitReviewButton.setEnabled(true);
 				} else {
 					submitReviewButton.setText(FlexoLocalization.localizedForKey("review"));
-					submitReviewButton.setEnabled((_docItem.getLastActionForLanguage(getCurrentLanguage()) == getCurrentAction()));
+					submitReviewButton.setEnabled(_docItem.getLastActionForLanguage(getCurrentLanguage()) == getCurrentAction());
 				}
-				if ((getCurrentAction() != null) && (getCurrentAction().isProposal())
-						&& (getCurrentAction().getVersion().getLanguage() == getCurrentLanguage())) {
+				if (getCurrentAction() != null && getCurrentAction().isProposal()
+						&& getCurrentAction().getVersion().getLanguage() == getCurrentLanguage()) {
 					approveButton.setEnabled(true);
 					refuseButton.setEnabled(true);
 					editButton.setEnabled(true);
@@ -979,7 +978,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 
 	}
 
-	public SelectionManagingController getController() {
+	public FlexoController getController() {
 		return _controller;
 	}
 

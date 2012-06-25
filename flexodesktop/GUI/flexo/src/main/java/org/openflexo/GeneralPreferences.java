@@ -53,7 +53,7 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	private static final Logger logger = Logger.getLogger(GeneralPreferences.class.getPackage().getName());
 
-	private static final Class GENERAL_PREFERENCES = GeneralPreferences.class;
+	private static final Class<GeneralPreferences> GENERAL_PREFERENCES = GeneralPreferences.class;
 
 	public static final String LANGUAGE_KEY = "language";
 
@@ -125,7 +125,7 @@ public final class GeneralPreferences extends ContextPreferences {
 		getPreferences().addObserver(observer);
 	}
 
-	public static FlexoPreferences getPreferences() {
+	public static GeneralPreferences getPreferences() {
 		return preferences(GENERAL_PREFERENCES);
 	}
 

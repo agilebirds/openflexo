@@ -82,7 +82,7 @@ public class WKFSelectAllInitializer extends ActionInitializer {
 					}
 					if (pg != null) {
 						Vector<PetriGraphNode> newSelection = pg.getNodes();
-						getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(newSelection);
+						getControllerActionInitializer().getSelectionManager().setSelectedObjects(newSelection);
 						return true;
 					}
 					return false;
@@ -99,7 +99,7 @@ public class WKFSelectAllInitializer extends ActionInitializer {
 					}
 					if (rl != null) {
 						Vector<Role> newSelection = rl.getRoles();
-						getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(newSelection);
+						getControllerActionInitializer().getSelectionManager().setSelectedObjects(newSelection);
 						return true;
 					}
 					return false;

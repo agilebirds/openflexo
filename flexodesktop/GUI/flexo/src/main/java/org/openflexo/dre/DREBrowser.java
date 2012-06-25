@@ -43,7 +43,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Define what to put in the browser for this module
@@ -62,22 +62,15 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 	  public static final Icon AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM_ICON = new ImageIconResource("Resources/DRE/AvailableNewVersionPendingDocItem.gif");
 	*/
 
-	// ================================================
-	// ================= Variables ===================
-	// ================================================
-
-	protected SelectionManagingController _controller;
-
 	private DynamicDropDownParameter<Language> _availableLanguages;
 
 	// ================================================
 	// ================ Constructor ===================
 	// ================================================
 
-	public DREBrowser(SelectionManagingController controller) {
+	public DREBrowser(FlexoController controller) {
 		super(makeBrowserConfiguration(controller.getProject(), DocResourceManager.instance().getDocResourceCenter()), controller
 				.getSelectionManager() /* Remove this parameter if you don't want browser synchronized with selection */);
-		_controller = controller;
 		DocResourceCenter drc = DocResourceManager.instance().getDocResourceCenter();
 		Language currentLanguage = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
 		DocItem.COMPARATOR.currentLanguage = currentLanguage;
@@ -275,7 +268,7 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine(getClass().getName() + " receive DataModification " + dataModification.getClass().getName());
 					}
-					if ((_browser != null) && (dataModification instanceof DRMDataModification)) {
+					if (_browser != null && dataModification instanceof DRMDataModification) {
 						refreshWhenPossible();
 					} else {
 						super.update(observable, dataModification);
@@ -297,7 +290,7 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 					}
 					for (Enumeration en = getDocItemFolder().getOrderedItems().elements(); en.hasMoreElements();) {
 						DocItem next = (DocItem) en.nextElement();
-						if ((next.getEmbeddingParentItem() == null) || (next.getEmbeddingParentItem().getFolder() != next.getFolder())) {
+						if (next.getEmbeddingParentItem() == null || next.getEmbeddingParentItem().getFolder() != next.getFolder()) {
 							addToChilds(next);
 						}
 					}

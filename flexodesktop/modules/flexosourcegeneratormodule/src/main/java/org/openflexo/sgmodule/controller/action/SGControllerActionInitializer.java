@@ -36,7 +36,6 @@ import org.openflexo.generator.action.ShowFileVersion;
 import org.openflexo.sgmodule.SGModule;
 import org.openflexo.sgmodule.TechnologyModuleGUIFactory;
 import org.openflexo.sgmodule.controller.SGController;
-import org.openflexo.sgmodule.controller.SGSelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -59,10 +58,6 @@ public class SGControllerActionInitializer extends ControllerActionInitializer {
 
 	protected SGController getSGController() {
 		return _sgController;
-	}
-
-	protected SGSelectionManager getSGSelectionManager() {
-		return getSGController().getSGSelectionManager();
 	}
 
 	@Override

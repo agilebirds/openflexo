@@ -39,7 +39,6 @@ import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.module.external.IModule;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 /**
  * Abstract class defining a Flexo Module. A Flexo Module is an application component part of the Flexo Application Suite and dedicated to a
@@ -146,24 +145,19 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 			if (getDefaultObjectToSelect(getEditor().getProject()) != null
 					&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
 							.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect(getEditor().getProject()))) {
-				if (getFlexoController() instanceof SelectionManagingController) {
-					if (((SelectionManagingController) getFlexoController()).getSelectionManager().getFocusedObject() == null) {
-						selectDefaultObject = true;
-					}
-				} else {
+				if (getFlexoController().getSelectionManager().getFocusedObject() == null) {
 					selectDefaultObject = true;
 				}
+			} else {
+				selectDefaultObject = true;
 			}
 			if (selectDefaultObject) {
 				getFlexoController().setCurrentEditedObjectAsModuleView(getDefaultObjectToSelect(getEditor().getProject()));
-			} else if (getFlexoController() instanceof SelectionManagingController) {
-				((SelectionManagingController) getFlexoController()).getSelectionManager().setSelectedObjects(
-						new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
-								.getSelection()));
+			} else {
+				getFlexoController().getSelectionManager().setSelectedObjects(
+						new Vector<FlexoModelObject>(getFlexoController().getSelectionManager().getSelection()));
 			}
-			if (getFlexoController() instanceof SelectionManagingController) {
-				((SelectionManagingController) getFlexoController()).getSelectionManager().fireUpdateSelection();
-			}
+			getFlexoController().getSelectionManager().fireUpdateSelection();
 		}
 	}
 

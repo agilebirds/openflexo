@@ -64,7 +64,7 @@ public class WKFCutInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<WKFCut>() {
 			@Override
 			public boolean run(EventObject e, WKFCut action) {
-				getControllerActionInitializer().getWKFSelectionManager().performSelectionCut();
+				getControllerActionInitializer().getSelectionManager().performSelectionCut();
 				return true;
 			}
 		};

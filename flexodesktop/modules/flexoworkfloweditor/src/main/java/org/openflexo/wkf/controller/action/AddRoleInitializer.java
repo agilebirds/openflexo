@@ -117,7 +117,7 @@ public class AddRoleInitializer extends ActionInitializer {
 					}
 				}
 				if (e != null) {
-					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newRole);
+					getControllerActionInitializer().getSelectionManager().setSelectedObject(newRole);
 				}
 				// getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newRole);
 				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()

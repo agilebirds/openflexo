@@ -52,7 +52,7 @@ public class ProcessBrowser extends ProjectBrowser {
 	// ==========================================================================
 
 	public ProcessBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getWKFSelectionManager());
+		super(controller.getEditor(), controller.getSelectionManager());
 		_controller = controller;
 		setCurrentProcess(controller.getCurrentFlexoProcess());
 

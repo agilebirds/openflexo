@@ -21,10 +21,10 @@ package org.openflexo.vpm.controller.action;
 
 import java.util.logging.Logger;
 
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.controller.VPMSelectionManager;
 
 /**
  * 
@@ -44,8 +44,8 @@ public class CEDControllerActionInitializer extends ControllerActionInitializer 
 		return (VPMController) getController();
 	}
 
-	protected VPMSelectionManager getCEDSelectionManager() {
-		return getCEDController().getCEDSelectionManager();
+	protected SelectionManager getCEDSelectionManager() {
+		return getCEDController().getSelectionManager();
 	}
 
 	@Override

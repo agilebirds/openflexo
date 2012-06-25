@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
@@ -43,7 +44,6 @@ import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.icon.WSEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.external.IModule;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * Represents a Module a Flexo Application Suite
@@ -85,9 +85,9 @@ public abstract class Module implements IModule {
 
 	public static final Module XXX_MODULE = new XXX();
 
-	private Class _moduleClass;
+	private Class<? extends FlexoModule> _moduleClass;
 
-	public Constructor getConstructor() {
+	public Constructor<? extends FlexoModule> getConstructor() {
 		return _constructor;
 	}
 
@@ -356,7 +356,7 @@ public abstract class Module implements IModule {
 	/**
 	 * @return
 	 */
-	public Class<?> getModuleClass() {
+	public Class<? extends FlexoModule> getModuleClass() {
 		if (_moduleClass == null) {
 			_moduleClass = searchModuleClass(getClassName());
 		}
@@ -377,9 +377,18 @@ public abstract class Module implements IModule {
 
 	private boolean notFoundNotified = false;
 
-	private Class<?> searchModuleClass(String fullQualifiedModuleName) {
+	@SuppressWarnings("unchecked")
+	private Class<? extends FlexoModule> searchModuleClass(String fullQualifiedModuleName) {
 		try {
-			return Class.forName(fullQualifiedModuleName);
+			Class<?> forName = Class.forName(fullQualifiedModuleName);
+			if (FlexoModule.class.isAssignableFrom(forName)) {
+				return (Class<? extends FlexoModule>) forName;
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Class '" + fullQualifiedModuleName + "' was found but does not extend FlexoModule.");
+				}
+				return null;
+			}
 		} catch (ClassNotFoundException e) {
 			if (!notFoundNotified) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -392,7 +401,7 @@ public abstract class Module implements IModule {
 
 	}
 
-	private Constructor _constructor;
+	private Constructor<? extends FlexoModule> _constructor;
 
 	public boolean register() {
 		_constructor = lookupConstructor();
@@ -403,19 +412,19 @@ public abstract class Module implements IModule {
 	 * Internally used to lookup constructor
 	 * 
 	 */
-	private Constructor lookupConstructor() {
+	private Constructor<? extends FlexoModule> lookupConstructor() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Registering module '" + getName() + "'");
 		}
 		Class[] constructorSigner;
 		if (requireProject()) {
 			constructorSigner = new Class[1];
-			constructorSigner[0] = InteractiveFlexoEditor.class;
+			constructorSigner[0] = ApplicationContext.class;
 		} else {
 			constructorSigner = new Class[0];
 		}
 		try {
-			Constructor constructor = getModuleClass().getDeclaredConstructor(constructorSigner);
+			Constructor<? extends FlexoModule> constructor = getModuleClass().getDeclaredConstructor(constructorSigner);
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("Contructor:" + constructor);
 			}

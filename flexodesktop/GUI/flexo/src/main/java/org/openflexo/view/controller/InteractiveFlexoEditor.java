@@ -460,10 +460,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 
 		// Only interactive editor handle this
 		getModuleLoader().getActiveModule().getFlexoController().setCurrentEditedObjectAsModuleView(object);
-		if (getModuleLoader().getActiveModule().getFlexoController() instanceof SelectionManagingController) {
-			((SelectionManagingController) getModuleLoader().getActiveModule().getFlexoController()).getSelectionManager()
-					.setSelectedObject(object);
-		}
+		getModuleLoader().getActiveModule().getFlexoController().getSelectionManager().setSelectedObject(object);
 	}
 
 	public void registerControllerActionInitializer(ControllerActionInitializer controllerActionInitializer) {

@@ -226,7 +226,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DMDelete>() {
 			@Override
 			public boolean run(EventObject e, DMDelete action) {
-				getControllerActionInitializer().getDMSelectionManager().resetSelection();
+				getControllerActionInitializer().getSelectionManager().resetSelection();
 				// getDMSelectionManager().processDeletionOfSelected();
 				ModuleView<?> view = getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
 				if (view instanceof DMView) {

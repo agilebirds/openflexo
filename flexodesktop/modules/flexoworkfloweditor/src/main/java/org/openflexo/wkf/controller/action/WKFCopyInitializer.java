@@ -63,7 +63,7 @@ public class WKFCopyInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<WKFCopy>() {
 			@Override
 			public boolean run(EventObject e, WKFCopy action) {
-				getControllerActionInitializer().getWKFSelectionManager().performSelectionCopy();
+				getControllerActionInitializer().getSelectionManager().performSelectionCopy();
 				return true;
 			}
 		};

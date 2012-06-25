@@ -183,9 +183,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Loading module " + module.getName());
 			}
-			Object[] params;
-			params = new Object[0];
-			FlexoModule flexoModule = (FlexoModule) module.getConstructor().newInstance(params);
+			FlexoModule flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
 			FCH.ensureHelpEntryForModuleHaveBeenCreated(flexoModule);
 			return flexoModule;
 		}

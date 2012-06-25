@@ -23,10 +23,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.action.ImportImageInitializer;
 import org.openflexo.doceditor.controller.DEController;
-import org.openflexo.doceditor.controller.DESelectionManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.OpenFileInExplorer;
 import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -46,7 +46,7 @@ public class DEControllerActionInitializer extends ControllerActionInitializer {
 		return (DEController) getController();
 	}
 
-	protected DESelectionManager getDGSelectionManager() {
+	protected SelectionManager getSelectionManager() {
 		return getDEController().getSelectionManager();
 	}
 

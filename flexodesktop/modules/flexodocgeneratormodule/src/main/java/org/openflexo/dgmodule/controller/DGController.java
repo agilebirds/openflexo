@@ -48,7 +48,6 @@ import org.openflexo.dgmodule.controller.action.DGControllerActionInitializer;
 import org.openflexo.dgmodule.menu.DGMenuBar;
 import org.openflexo.dgmodule.view.DGFileVersionPopup;
 import org.openflexo.dgmodule.view.DGMainPane;
-import org.openflexo.dgmodule.view.listener.DGKeyEventListener;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.controller.DESelectionManager;
 import org.openflexo.foundation.DataModification;
@@ -89,8 +88,6 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -98,7 +95,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author gpolet
  */
-public class DGController extends DEController implements FlexoObserver, SelectionManagingController, ProjectGeneratorFactory {
+public class DGController extends DEController implements FlexoObserver, ProjectGeneratorFactory {
 
 	protected static final Logger logger = Logger.getLogger(DGController.class.getPackage().getName());
 
@@ -142,14 +139,6 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		setDefaultPespective(CODE_GENERATOR_PERSPECTIVE);
 		removeFromPerspectives(DOCEDITOR_PERSPECTIVE);
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
-		if (_selectionManager == null) {
-			_selectionManager = new DGSelectionManager(this);
-		}
-	}
-
-	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new DGKeyEventListener(this);
 	}
 
 	@Override
@@ -251,30 +240,6 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	public Enumeration<ProjectDocGenerator> getProjectGenerators() {
 		return _projectGenerators.elements();
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		if (useOldInspectorScheme()) {
-			getDGSelectionManager().addObserver(getSharedInspectorController());
-		}
-	}
-
-	// =========================================================
-	// ================ Selection management ===================
-	// =========================================================
-
-	@Override
-	public DGSelectionManager getSelectionManager() {
-		return getDGSelectionManager();
-	}
-
-	public DGSelectionManager getDGSelectionManager() {
-		return (DGSelectionManager) _selectionManager;
 	}
 
 	/**

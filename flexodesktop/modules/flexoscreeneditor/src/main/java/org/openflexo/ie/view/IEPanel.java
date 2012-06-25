@@ -36,7 +36,6 @@ import org.openflexo.foundation.ie.util.FlexoConceptualColor;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.IEFocusListener;
-import org.openflexo.ie.view.listener.IEKeyEventListener;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 

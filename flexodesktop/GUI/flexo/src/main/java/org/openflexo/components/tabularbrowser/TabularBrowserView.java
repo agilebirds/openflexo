@@ -49,7 +49,6 @@ import org.openflexo.selection.DefaultContextualMenuManager;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 /**
  * Tabular and browsable view representing an TabularBrowserModel
@@ -63,7 +62,6 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	protected static final Logger logger = Logger.getLogger(TabularBrowserView.class.getPackage().getName());
 
 	protected FlexoController _controller;
-	protected SelectionManager _selectionManager;
 
 	protected JTreeTable _treeTable;
 
@@ -84,9 +82,6 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		super();
 		_model = model;
 		_controller = controller;
-		if (_controller instanceof SelectionManagingController) {
-			_selectionManager = ((SelectionManagingController) _controller).getSelectionManager();
-		}
 
 		_treeTable = new JTreeTable(model);
 		// _treeTable.setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
@@ -199,8 +194,8 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	private DefaultContextualMenuManager defaultContextualMenuManager;
 
 	protected ContextualMenuManager getContextualMenuManager() {
-		if (_selectionManager != null && _synchronizeWithSelectionManager) {
-			return _selectionManager.getContextualMenuManager();
+		if (getSelectionManager() != null && _synchronizeWithSelectionManager) {
+			return getSelectionManager().getContextualMenuManager();
 		}
 		if (defaultContextualMenuManager == null) {
 			defaultContextualMenuManager = new DefaultContextualMenuManager(getController());
@@ -317,9 +312,9 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	public void setSynchronizeWithSelectionManager(boolean synchronizeWithSelectionManager) {
 		_synchronizeWithSelectionManager = synchronizeWithSelectionManager;
 		if (synchronizeWithSelectionManager) {
-			if (_selectionManager != null) {
-				_treeTable.getTreeTableModel().setSelectionManager(_selectionManager);
-				_selectionManager.addToSelectionListeners(this);
+			if (getSelectionManager() != null) {
+				_treeTable.getTreeTableModel().setSelectionManager(getSelectionManager());
+				getSelectionManager().addToSelectionListeners(this);
 			}
 			updateSelection();
 		}
@@ -327,7 +322,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	@Override
 	public SelectionManager getSelectionManager() {
-		return _selectionManager;
+		return _controller.getSelectionManager();
 	}
 
 	@Override
@@ -493,7 +488,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 			return;
 		}
 
-		if (_selectionManager != null && _synchronizeWithSelectionManager) {
+		if (getSelectionManager() != null && _synchronizeWithSelectionManager) {
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("valueChanged() ListSelectionEvent=" + e + " ListSelectionModel=" + getSelectionModel().toString());
@@ -508,7 +503,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 			for (int i = beginIndex; i <= endIndex; i++) {
 				FlexoModelObject object = _treeTable.getObjectAt(i);
-				if (getSelectionModel().isSelectedIndex(i) != _selectionManager.selectionContains(object)) {
+				if (getSelectionModel().isSelectedIndex(i) != getSelectionManager().selectionContains(object)) {
 					// logger.info("Selection status for object "+object+" at index "+i+" has changed");
 					if (getSelectionModel().isSelectedIndex(i)) {
 						// Change for addition

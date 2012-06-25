@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.action.CompareTemplatesInNewWindowInitializer;
 import org.openflexo.dgmodule.controller.DGController;
-import org.openflexo.dgmodule.controller.DGSelectionManager;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
 import org.openflexo.doceditor.controller.action.ImportDocumentationTemplateInitializer;
 import org.openflexo.foundation.FlexoModelObject;
@@ -54,11 +53,6 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 
 	protected DGController getDGController() {
 		return (DGController) getController();
-	}
-
-	@Override
-	protected DGSelectionManager getDGSelectionManager() {
-		return getDGController().getSelectionManager();
 	}
 
 	@Override

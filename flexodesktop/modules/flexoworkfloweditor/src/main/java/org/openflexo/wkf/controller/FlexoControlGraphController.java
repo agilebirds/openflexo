@@ -90,7 +90,7 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 		_controller = controller;
 		_inspectorPanel = createInspectorTabbedPanel();
 		loadInspectors(Inspectors.WKF_CG);
-		updateSelection(_controller.getWKFSelectionManager());
+		updateSelection(_controller.getSelectionManager());
 	}
 
 	private void updateSelection(SelectionManager sm) {
@@ -255,7 +255,7 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 			private void selectorChanged() {
 				selectedInterprocedural = interproceduralSelector.isSelected();
 				selectedLanguage = (ProgrammingLanguage) languageSelector.getSelectedItem();
-				updateSelection(_controller.getWKFSelectionManager());
+				updateSelection(_controller.getSelectionManager());
 				_inspectorPanel.currentTabPanel.updateFromModel();
 			}
 

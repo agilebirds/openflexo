@@ -54,7 +54,7 @@ public class WorkflowBrowser extends ProjectBrowser {
 	}
 
 	public WorkflowBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getWKFSelectionManager());
+		super(controller.getEditor(), controller.getSelectionManager());
 		_controller = controller;
 		update();
 	}

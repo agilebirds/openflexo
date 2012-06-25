@@ -43,6 +43,7 @@ import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.ViewFinder;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IEDTListener;
+import org.openflexo.selection.MouseSelectionManager;
 
 /**
  * @author bmangez
@@ -131,7 +132,7 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 				selectedView.setTabVisibility(true);
 
 			}
-			_ieController.getIESelectionManager().processMouseClicked(selectedView, new Point(1, 1), 1, false);
+			((MouseSelectionManager) _ieController.getSelectionManager()).processMouseClicked(selectedView, new Point(1, 1), 1, false);
 		}
 	}
 

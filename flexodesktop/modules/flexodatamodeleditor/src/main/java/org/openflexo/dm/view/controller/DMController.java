@@ -40,7 +40,6 @@ import org.openflexo.dm.view.DMRepositoryView;
 import org.openflexo.dm.view.DMView;
 import org.openflexo.dm.view.EOPrototypeRepositoryView;
 import org.openflexo.dm.view.controller.action.DMControllerActionInitializer;
-import org.openflexo.dm.view.listener.DMKeyEventListener;
 import org.openflexo.dm.view.menu.DMMenuBar;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
@@ -64,8 +63,6 @@ import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -73,7 +70,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author sguerin
  */
-public class DMController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController {
+public class DMController extends FlexoController implements ConsistencyCheckingController {
 
 	@SuppressWarnings("hiding")
 	private static final Logger logger = Logger.getLogger(DMController.class.getPackage().getName());
@@ -83,8 +80,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 	public final HierarchyPerspective HIERARCHY_PERSPECTIVE;
 	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
 
-	private final DMSelectionManager _selectionManager;
-
 	/**
 	 * Default constructor
 	 * 
@@ -93,7 +88,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 	 */
 	public DMController(FlexoModule module) {
 		super(module);
-		_selectionManager = new DMSelectionManager(this);
 		addToPerspectives(REPOSITORY_PERSPECTIVE = new RepositoryPerspective(this));
 		addToPerspectives(PACKAGE_PERSPECTIVE = new PackagePerspective(this));
 		addToPerspectives(HIERARCHY_PERSPECTIVE = new HierarchyPerspective(this));
@@ -107,8 +101,8 @@ public class DMController extends FlexoController implements SelectionManagingCo
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new DMKeyEventListener(this);
+	protected SelectionManager createSelectionManager() {
+		return new DMSelectionManager(this);
 	}
 
 	@Override
@@ -131,16 +125,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 			getDocInspectorPanel().setPreferredSize(new Dimension(300, 300));
 			getMainPane().setRightView(getDocInspectorPanel());
 		}
-	}
-
-	/**
-     *
-     */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		getDMSelectionManager().addObserver(getSharedInspectorController());
-		getDMSelectionManager().addObserver(getDocInspectorController());
 	}
 
 	public DMModel getDataModel() {
@@ -225,15 +209,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 			}
 			return null;
 		}
-	}
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getDMSelectionManager();
-	}
-
-	public DMSelectionManager getDMSelectionManager() {
-		return _selectionManager;
 	}
 
 	/**

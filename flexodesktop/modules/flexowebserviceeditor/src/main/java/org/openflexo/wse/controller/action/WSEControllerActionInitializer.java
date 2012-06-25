@@ -21,10 +21,10 @@ package org.openflexo.wse.controller.action;
 
 import java.util.logging.Logger;
 
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 
 /**
  * 
@@ -47,8 +47,8 @@ public class WSEControllerActionInitializer extends ControllerActionInitializer 
 		return _wseController;
 	}
 
-	protected WSESelectionManager getWSESelectionManager() {
-		return getWSEController().getWSESelectionManager();
+	protected SelectionManager getWSESelectionManager() {
+		return getWSEController().getSelectionManager();
 	}
 
 	@Override

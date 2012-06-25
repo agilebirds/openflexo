@@ -31,13 +31,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.FlexoCst;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionSource;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -45,7 +50,7 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author benoit, sylvain
  */
-public abstract class FlexoKeyEventListener extends KeyAdapter {
+public class FlexoKeyEventListener extends KeyAdapter implements FlexoActionSource {
 
 	private static final Logger logger = Logger.getLogger(FlexoKeyEventListener.class.getPackage().getName());
 
@@ -68,6 +73,14 @@ public abstract class FlexoKeyEventListener extends KeyAdapter {
 	 */
 	@Override
 	public void keyPressed(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_DELETE || event.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			ActionListener listener = getController().getActionForKeyStroke(KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+			if (listener != null) {
+				listener.actionPerformed(new ActionEvent(this, event.getID(), ""));
+				event.consume();
+				return;
+			}
+		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("KeyPressed in " + getClass().getName() + " with " + event);
 		}
@@ -87,5 +100,24 @@ public abstract class FlexoKeyEventListener extends KeyAdapter {
 
 	public FlexoController getController() {
 		return _controller;
+	}
+
+	protected final SelectionManager getSelectionManager() {
+		return getController().getSelectionManager();
+	}
+
+	@Override
+	public final FlexoEditor getEditor() {
+		return getController().getEditor();
+	}
+
+	@Override
+	public FlexoModelObject getFocusedObject() {
+		return getSelectionManager().getLastSelectedObject();
+	}
+
+	@Override
+	public Vector<FlexoModelObject> getGlobalSelection() {
+		return getSelectionManager().getSelection();
 	}
 }

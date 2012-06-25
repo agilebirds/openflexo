@@ -37,7 +37,6 @@ import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.DREBrowser;
 import org.openflexo.dre.controller.action.DREControllerActionInitializer;
 import org.openflexo.dre.view.DREMainPane;
-import org.openflexo.dre.view.listener.DREKeyEventListener;
 import org.openflexo.dre.view.menu.DREMenuBar;
 import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
@@ -63,10 +62,8 @@ import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.controller.action.EditionAction;
 import org.openflexo.view.listener.FlexoActionButton;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -75,13 +72,11 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * @author yourname
  */
 
-public class DREController extends FlexoController implements SelectionManagingController, FlexoActionSource, ConsistencyCheckingController {
+public class DREController extends FlexoController implements FlexoActionSource, ConsistencyCheckingController {
 
 	static final Logger logger = Logger.getLogger(DREController.class.getPackage().getName());
 
 	public final FlexoPerspective DRE_PERSPECTIVE = new DREPerspective(this);
-
-	private DRESelectionManager _selectionManager;
 
 	private DREBrowser _browser;
 
@@ -96,9 +91,12 @@ public class DREController extends FlexoController implements SelectionManagingC
 		super(module);
 		addToPerspectives(DRE_PERSPECTIVE);
 		setDefaultPespective(DRE_PERSPECTIVE);
-		// At this point the InspectorController is not yet loaded
-		_selectionManager = new DRESelectionManager(this);
 		_browser = new DREBrowser(this);
+	}
+
+	@Override
+	protected SelectionManager createSelectionManager() {
+		return new DRESelectionManager(this);
 	}
 
 	@Override
@@ -117,22 +115,8 @@ public class DREController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new DREKeyEventListener(this);
-	}
-
-	@Override
 	protected FlexoMainPane createMainPane() {
 		return new DREMainPane(this);
-	}
-
-	/**
-	 * Init inspectors
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		_selectionManager.addObserver(getSharedInspectorController());
 	}
 
 	public void showBrowser() {
@@ -217,19 +201,6 @@ public class DREController extends FlexoController implements SelectionManagingC
 		return _saveDocumentationCenterButton;
 	}
 
-	// ================================================
-	// ============ Selection management ==============
-	// ================================================
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getDRESelectionManager();
-	}
-
-	public DRESelectionManager getDRESelectionManager() {
-		return _selectionManager;
-	}
-
 	@Override
 	public String getWindowTitleforObject(FlexoModelObject object) {
 		// Overriden to improve performance !!!!
@@ -260,7 +231,7 @@ public class DREController extends FlexoController implements SelectionManagingC
 	 */
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		return getDRESelectionManager().getFocusedObject();
+		return getSelectionManager().getFocusedObject();
 	}
 
 	/**
@@ -269,7 +240,7 @@ public class DREController extends FlexoController implements SelectionManagingC
 	 * @see org.openflexo.foundation.action.FlexoActionSource#getGlobalSelection()
 	 */
 	@Override
-	public Vector getGlobalSelection() {
-		return getDRESelectionManager().getSelection();
+	public Vector<FlexoModelObject> getGlobalSelection() {
+		return getSelectionManager().getSelection();
 	}
 }

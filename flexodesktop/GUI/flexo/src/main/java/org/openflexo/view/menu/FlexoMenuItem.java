@@ -44,7 +44,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.controller.action.EditionAction;
 
 /**
@@ -94,32 +93,19 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource, Prope
 	public FlexoMenuItem(FlexoActionType actionType, FlexoController controller) {
 		super();
 		this.actionType = actionType;
-		setAction(new EditionAction(actionType, this));
 		_controller = controller;
-		setAccelerator(controller.getEditor().getKeyStrokeFor(actionType));
-		if (controller.getEditor().getEnabledIconFor(actionType) != null) {
-			setIcon(controller.getEditor().getEnabledIconFor(actionType));
-		}
-		if (controller.getEditor().getDisabledIconFor(actionType) != null) {
-			setDisabledIcon(controller.getEditor().getDisabledIconFor(actionType));
-		}
+		setAction(new EditionAction(actionType, this));
 		setText(FlexoLocalization.localizedForKey(actionType.getUnlocalizedName(), this));
 	}
 
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		if (_controller instanceof SelectionManagingController) {
-			return ((SelectionManagingController) _controller).getSelectionManager().getLastSelectedObject();
-		}
-		return null;
+		return _controller.getSelectionManager().getLastSelectedObject();
 	}
 
 	@Override
 	public Vector<FlexoModelObject> getGlobalSelection() {
-		if (_controller instanceof SelectionManagingController) {
-			return ((SelectionManagingController) _controller).getSelectionManager().getSelection();
-		}
-		return null;
+		return _controller.getSelectionManager().getSelection();
 	}
 
 	@Override
@@ -128,10 +114,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource, Prope
 	}
 
 	private SelectionManager getSelectionManager() {
-		if (_controller instanceof SelectionManagingController) {
-			return ((SelectionManagingController) _controller).getSelectionManager();
-		}
-		return null;
+		return _controller.getSelectionManager();
 	}
 
 	/**

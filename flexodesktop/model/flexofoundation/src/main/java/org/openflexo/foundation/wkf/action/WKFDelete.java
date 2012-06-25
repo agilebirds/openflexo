@@ -57,11 +57,10 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 
 		@Override
 		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
-			if (globalSelection == null || (object == null && globalSelection.size() == 0)) {
+			if (globalSelection == null || object == null && globalSelection.size() == 0) {
 				return false;
 			}
-			for (Enumeration en = globalSelection.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+			for (WKFObject next : globalSelection) {
 				if (next instanceof FlexoProcess) {
 					FlexoProcess p = (FlexoProcess) next;
 					if (p.isRootProcess()) {
@@ -138,16 +137,16 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 	 * 
 	 * @return All the objects to be deleted.
 	 */
-	public Vector getObjectsToDelete() {
+	public Vector<WKFObject> getObjectsToDelete() {
 		if (_objectsToDelete == null) {
 			_objectsToDelete = new Vector<WKFObject>();
 			if (!getGlobalSelection().contains(getFocusedObject())) {
 				boolean includesIt = true;
-				for (Enumeration en2 = getGlobalSelection().elements(); en2.hasMoreElements() && includesIt;) {
-					FlexoModelObject next = (FlexoModelObject) en2.nextElement();
+				for (FlexoModelObject next : getGlobalSelection()) {
 					if (next instanceof WKFObject) {
 						if (((WKFObject) next).getAllEmbeddedDeleted().contains(getFocusedObject())) {
 							includesIt = false;
+							break;
 						}
 					}
 				}
@@ -168,11 +167,11 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 				if (object instanceof FlexoPetriGraph) {
 					includesIt = false;
 				}
-				for (Enumeration en2 = getGlobalSelection().elements(); en2.hasMoreElements() && includesIt;) {
-					FlexoModelObject next = (FlexoModelObject) en2.nextElement();
-					if ((next instanceof WKFObject) && (next != object)) {
+				for (FlexoModelObject next : getGlobalSelection()) {
+					if (next instanceof WKFObject && next != object) {
 						if (((WKFObject) next).getAllEmbeddedDeleted().contains(object)) {
 							includesIt = false;
+							break;
 						}
 					}
 				}
@@ -214,7 +213,7 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 				FlexoProcess processToDelete = (FlexoProcess) object;
 				// If process is a WS, delete the WS itself
 				if (processToDelete.getProject().getFlexoWSLibrary().isDeclaredAsWS(processToDelete)) {
-					(processToDelete.getProject().getFlexoWSLibrary().portTypeForProcess(processToDelete).getWSService()).delete();
+					processToDelete.getProject().getFlexoWSLibrary().portTypeForProcess(processToDelete).getWSService().delete();
 				} else {
 					processToDelete.delete();
 				}
@@ -226,7 +225,7 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 	}
 
 	public boolean hasBeenDeleted(FlexoProcess p) {
-		return (_objectsToDelete.contains(p)) && (_deletionContexts.get(p) != null && ((Boolean) _deletionContexts.get(p)).booleanValue());
+		return _objectsToDelete.contains(p) && _deletionContexts.get(p) != null && ((Boolean) _deletionContexts.get(p)).booleanValue();
 	}
 
 	public void setEntriesToDelete(Vector<TOCEntry> entriesToDelete) {

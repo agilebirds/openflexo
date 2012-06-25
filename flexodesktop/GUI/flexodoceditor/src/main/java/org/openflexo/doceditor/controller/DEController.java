@@ -25,7 +25,6 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
 import org.openflexo.doceditor.menu.DEMenuBar;
 import org.openflexo.doceditor.view.DEMainPane;
-import org.openflexo.doceditor.view.listener.DEKeyEventListener;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
@@ -44,8 +43,6 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -53,7 +50,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author gpolet
  */
-public class DEController extends FlexoController implements FlexoObserver, SelectionManagingController {
+public class DEController extends FlexoController implements FlexoObserver {
 
 	protected static final Logger logger = Logger.getLogger(DEController.class.getPackage().getName());
 
@@ -78,16 +75,9 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	public DEController(FlexoModule module) {
 		super(module);
 		addToPerspectives(DOCEDITOR_PERSPECTIVE);
-		if (_selectionManager == null) {
-			_selectionManager = createSelectionManager();
-		}
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new DEKeyEventListener(this);
-	}
-
 	protected DESelectionManager createSelectionManager() {
 		return new DESelectionManager(this);
 	}
@@ -135,32 +125,6 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 
 	public void disposeProgressWindow() {
 		ProgressWindow.hideProgressWindow();
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		if (useOldInspectorScheme()) {
-			getDESelectionManager().addObserver(getSharedInspectorController());
-		}
-	}
-
-	// =========================================================
-	// ================ Selection management ===================
-	// =========================================================
-
-	protected DESelectionManager _selectionManager;
-
-	@Override
-	public DESelectionManager getSelectionManager() {
-		return getDESelectionManager();
-	}
-
-	public DESelectionManager getDESelectionManager() {
-		return _selectionManager;
 	}
 
 	/**

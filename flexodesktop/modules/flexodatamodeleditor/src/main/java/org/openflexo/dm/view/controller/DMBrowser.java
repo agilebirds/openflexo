@@ -39,7 +39,7 @@ public class DMBrowser extends ProjectBrowser {
 	}
 
 	public DMBrowser(DMController controller, boolean syncWithSelectionManager) {
-		super(controller.getEditor(), (syncWithSelectionManager ? controller.getDMSelectionManager() : null));
+		super(controller.getEditor(), syncWithSelectionManager ? controller.getSelectionManager() : null);
 		_controller = controller;
 	}
 

@@ -73,8 +73,6 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -82,11 +80,9 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author sylvain
  */
-public class SGController extends FlexoController implements SelectionManagingController, ProjectGeneratorFactory {
+public class SGController extends FlexoController implements ProjectGeneratorFactory {
 
 	private static final Logger logger = Logger.getLogger(SGController.class.getPackage().getName());
-
-	private SGSelectionManager _selectionManager;
 
 	protected Hashtable<SourceRepository, ProjectGenerator> _projectGenerators;
 
@@ -118,9 +114,6 @@ public class SGController extends FlexoController implements SelectionManagingCo
 		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
 		addToPerspectives(MODEL_REINJECTION_PERSPECTIVE = new ModelReinjectionPerspective(this));
 
-		// At this point the InspectorController is not yet loaded
-		_selectionManager = new SGSelectionManager(this);
-
 		_browser = new SGBrowser(this);
 		_browserView = new SGBrowserView(this, _browser) {
 			@Override
@@ -137,8 +130,8 @@ public class SGController extends FlexoController implements SelectionManagingCo
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new SGKeyEventListener(this);
+	protected SelectionManager createSelectionManager() {
+		return new SGSelectionManager(this);
 	}
 
 	@Override
@@ -154,15 +147,6 @@ public class SGController extends FlexoController implements SelectionManagingCo
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new SGMenuBar(this);
-	}
-
-	/**
-	 * Init inspectors
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		_selectionManager.addObserver(getSharedInspectorController());
 	}
 
 	public ValidationModel getDefaultValidationModel() {
@@ -205,15 +189,6 @@ public class SGController extends FlexoController implements SelectionManagingCo
 
 	public SGBrowser getBrowser() {
 		return _browser;
-	}
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getSGSelectionManager();
-	}
-
-	public SGSelectionManager getSGSelectionManager() {
-		return _selectionManager;
 	}
 
 	/**

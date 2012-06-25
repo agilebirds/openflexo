@@ -64,11 +64,11 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.module.UserType;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.controller.WKFController;
-import org.openflexo.wkf.controller.WKFSelectionManager;
 
 public class WKFControllerActionInitializer extends ControllerActionInitializer {
 
@@ -85,8 +85,8 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		return _wkfController;
 	}
 
-	public WKFSelectionManager getWKFSelectionManager() {
-		return getWKFController().getWKFSelectionManager();
+	public SelectionManager getSelectionManager() {
+		return getController().getSelectionManager();
 	}
 
 	@Override

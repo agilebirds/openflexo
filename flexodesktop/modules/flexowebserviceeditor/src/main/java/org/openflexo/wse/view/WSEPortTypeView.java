@@ -25,14 +25,15 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.ws.MessageEntry;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.foundation.ws.ExternalWSService;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEMessageEntryTableModel;
 import org.openflexo.wse.model.WSEMessageTableModel;
 import org.openflexo.wse.model.WSEOperationTableModel;
@@ -94,25 +95,25 @@ public class WSEPortTypeView extends WSEView<ServiceInterface> {
 	}
 
 	public ServiceOperation getSelectedServiceOperation() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceOperation)) {
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceOperation) {
 			return (ServiceOperation) selection.firstElement();
 		}
 		if (getSelectedMessageDefinition() != null) {
-			return (getSelectedMessageDefinition()).getOperation();
+			return getSelectedMessageDefinition().getOperation();
 		}
 		if (getSelectedMessageEntry() != null) {
-			return ((ServiceMessageDefinition) (getSelectedMessageEntry().getMessage())).getOperation();
+			return ((ServiceMessageDefinition) getSelectedMessageEntry().getMessage()).getOperation();
 		}
 
 		return null;
 	}
 
 	public MessageEntry getSelectedMessageEntry() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof MessageEntry)) {
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof MessageEntry) {
 			return (MessageEntry) selection.firstElement();
 		}
 
@@ -120,9 +121,9 @@ public class WSEPortTypeView extends WSEView<ServiceInterface> {
 	}
 
 	public ServiceMessageDefinition getSelectedMessageDefinition() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceMessageDefinition)) {
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceMessageDefinition) {
 			return (ServiceMessageDefinition) selection.firstElement();
 		}
 		if (getSelectedMessageEntry() != null) {

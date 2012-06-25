@@ -75,7 +75,6 @@ import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 /**
  * Defines the panel allowing to show and edit a ValidationReport
@@ -169,7 +168,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					if ((_currentIssue != null) && (_currentIssue.getSize() > 0)) {
+					if (_currentIssue != null && _currentIssue.getSize() > 0) {
 						applyFixProposal((FixProposal) _currentIssue.getElementAt(0));
 					}
 				}
@@ -195,9 +194,8 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 					int selectedRow = lsm.getMinSelectionIndex();
 					ValidationIssue issue = _validationReport.getIssueAt(selectedRow);
 					setCurrentIssue(issue);
-					if (_consistencyCheckDialog.getController() instanceof SelectionManagingController) {
-						((SelectionManagingController) _consistencyCheckDialog.getController()).selectAndFocusObject(issue
-								.getSelectableObject());
+					if (_consistencyCheckDialog.getController() instanceof FlexoController) {
+						((FlexoController) _consistencyCheckDialog.getController()).selectAndFocusObject(issue.getSelectableObject());
 					}
 					ValidationReportEditor.this.grabFocus();
 				}
@@ -222,7 +220,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 					return;
 				}
 				int selectedRow = fixProposalList.getSelectedIndex();
-				if ((selectedRow >= 0) && (selectedRow < _currentIssue.getSize())) {
+				if (selectedRow >= 0 && selectedRow < _currentIssue.getSize()) {
 					FixProposal proposal = (FixProposal) _currentIssue.getElementAt(selectedRow);
 					setCurrentFixProposal(proposal);
 				} else {
@@ -454,7 +452,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 
 	public void consistencyCheckWithValidationModel(Validable objectToValidate, ValidationModel validationModel) {
 		for (int i = 0; i < validationModel.getSize(); i++) {
-			ValidationRuleSet ruleSet = (ValidationRuleSet) validationModel.getElementAt(i);
+			ValidationRuleSet ruleSet = validationModel.getElementAt(i);
 			for (ValidationRule rule : ruleSet.getRules()) {
 				rule.setIsEnabled(GeneralPreferences.isValidationRuleEnabled(rule));
 			}

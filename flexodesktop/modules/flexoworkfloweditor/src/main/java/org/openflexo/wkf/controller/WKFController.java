@@ -71,8 +71,6 @@ import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.action.WKFControllerActionInitializer;
@@ -87,7 +85,6 @@ import org.openflexo.wkf.view.WKFMainPane;
 import org.openflexo.wkf.view.WorkflowBrowserView;
 import org.openflexo.wkf.view.WorkflowBrowserWindow;
 import org.openflexo.wkf.view.doc.WKFDocumentationView;
-import org.openflexo.wkf.view.listener.WKFKeyEventListener;
 import org.openflexo.wkf.view.menu.WKFMenuBar;
 
 /**
@@ -95,8 +92,8 @@ import org.openflexo.wkf.view.menu.WKFMenuBar;
  * 
  * @author benoit, sylvain
  */
-public class WKFController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController,
-		PrintManagingController, PropertyChangeListener {
+public class WKFController extends FlexoController implements ConsistencyCheckingController, PrintManagingController,
+		PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(WKFController.class.getPackage().getName());
 
@@ -110,22 +107,10 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		return false;
 	}
 
-	// ======================================================
-	// ================== Static variables ==================
-	// ======================================================
-
-	public static boolean isDropSuccessFull = false;
-
-	// ======================================================
-	// ================= Instance variables =================
-	// ======================================================
-
 	// Relative windows
 	private WorkflowBrowserWindow _workflowBrowserWindow;
 
 	private ProcessBrowserWindow _processBrowserWindow;
-
-	private WKFSelectionManager _selectionManager;
 
 	// Browsers
 	private final ProcessBrowser _processBrowser;
@@ -172,7 +157,6 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	 */
 	public WKFController(FlexoModule module) {
 		super(module);
-		_selectionManager = new WKFSelectionManager(this);
 
 		_processBrowser = new ProcessBrowser(this);
 		_externalProcessBrowser = new ProcessBrowser(this);
@@ -216,13 +200,13 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new WKFKeyEventListener(this);
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new WKFControllerActionInitializer(editor, this);
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new WKFControllerActionInitializer(editor, this);
+	protected SelectionManager createSelectionManager() {
+		return new WKFSelectionManager(this);
 	}
 
 	/**
@@ -248,7 +232,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	protected FlexoControlGraphController getControlGraphController() {
 		if (_cgController == null) {
 			_cgController = new FlexoControlGraphController(this);
-			getWKFSelectionManager().addObserver(_cgController);
+			getSelectionManager().addObserver(_cgController);
 		}
 		return _cgController;
 	}
@@ -260,21 +244,9 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	public void initInspectors() {
 		super.initInspectors();
 		if (useOldInspectorScheme()) {
-			getWKFSelectionManager().addObserver(getSharedInspectorController());
-			getWKFSelectionManager().addObserver(getDocInspectorController());
 			notifyShowLeanTabHasChanged();
 			showBPEGraphicsInspectors();
 		}
-	}
-
-	@Override
-	public void dispose() {
-		if (getWKFSelectionManager() != null) {
-			getWKFSelectionManager().deleteObserver(getSharedInspectorController());
-			getWKFSelectionManager().deleteObserver(getDocInspectorController());
-			_selectionManager = null;
-		}
-		super.dispose();
 	}
 
 	public void loadRelativeWindows() {
@@ -316,15 +288,6 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	@Override
 	public WKFMainPane getMainPane() {
 		return (WKFMainPane) super.getMainPane();
-	}
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getWKFSelectionManager();
-	}
-
-	public WKFSelectionManager getWKFSelectionManager() {
-		return _selectionManager;
 	}
 
 	/**
@@ -577,27 +540,27 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	private void showBPEGraphicsInspectors() {
-		getWKFSelectionManager().setInspectionContext("BPE", true);
-		getWKFSelectionManager().removeInspectionContext("SWL");
-		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
+		getSelectionManager().setInspectionContext("BPE", true);
+		getSelectionManager().removeInspectionContext("SWL");
+		getSelectionManager().removeInspectionContext("ROLE_EDITOR");
 		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
 	}
 
 	private void showRoleEditorGraphicsInspectors() {
-		getWKFSelectionManager().setInspectionContext("ROLE_EDITOR", true);
-		getWKFSelectionManager().removeInspectionContext("BPE");
-		getWKFSelectionManager().removeInspectionContext("SWL");
+		getSelectionManager().setInspectionContext("ROLE_EDITOR", true);
+		getSelectionManager().removeInspectionContext("BPE");
+		getSelectionManager().removeInspectionContext("SWL");
 		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
 	}
 
 	private void showSWLGraphicsInspectors() {
-		getWKFSelectionManager().setInspectionContext("SWL", true);
-		getWKFSelectionManager().removeInspectionContext("BPE");
-		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
+		getSelectionManager().setInspectionContext("SWL", true);
+		getSelectionManager().removeInspectionContext("BPE");
+		getSelectionManager().removeInspectionContext("ROLE_EDITOR");
 		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
@@ -625,7 +588,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	public void notifyShowLeanTabHasChanged() {
 		if (WKFPreferences.getShowLeanTabs()) {
-			getWKFSelectionManager().setInspectionContext("METRICS", true);
+			getSelectionManager().setInspectionContext("METRICS", true);
 			/*
 			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
 			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
@@ -646,7 +609,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
 			 */
 		} else {
-			getWKFSelectionManager().removeInspectionContext("METRICS");
+			getSelectionManager().removeInspectionContext("METRICS");
 			/*
 			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
 			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,

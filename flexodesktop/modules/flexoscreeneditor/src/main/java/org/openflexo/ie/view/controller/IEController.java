@@ -73,7 +73,6 @@ import org.openflexo.ie.view.controller.action.IEControllerActionInitializer;
 import org.openflexo.ie.view.controller.dnd.IEDTListener;
 import org.openflexo.ie.view.dkv.DKVEditorBrowser;
 import org.openflexo.ie.view.dkv.DKVModelView;
-import org.openflexo.ie.view.listener.IEKeyEventListener;
 import org.openflexo.ie.view.palette.IEDSWidget;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.inspector.InspectableObject;
@@ -91,8 +90,6 @@ import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -101,8 +98,8 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * @author benoit, sylvain
  */
 
-public class IEController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController, Serializable,
-		FlexoObserver, ExternalIEController, PrintManagingController, PropertyChangeListener {
+public class IEController extends FlexoController implements ConsistencyCheckingController, Serializable, FlexoObserver,
+		ExternalIEController, PrintManagingController, PropertyChangeListener {
 
 	protected static final Logger logger = Logger.getLogger(IEController.class.getPackage().getName());
 
@@ -114,18 +111,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 
 	private static final Cursor dropKO = Toolkit.getDefaultToolkit().createCustomCursor(DROP_KO_IMAGE, new Point(16, 16), "Drop KO");
 
-	// ==========================================================================
-	// ============================== Static variables
-	// ==========================
-	// ==========================================================================
-
-	public static boolean isDropSuccessFull = false;
-
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
 	private ComponentLibraryBrowser _componentLibraryBrowser;
 
 	private ComponentBrowser _componentBrowser;
@@ -133,11 +118,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 	private MenuEditorBrowser _menuEditorBrowser;
 
 	private DKVEditorBrowser _dkvEditorBrowser;
-
-	// Delegates
-	protected IESelectionManager _selectionManager;
-
-	// private ComponentInstance _currentEditedComponentInstance;
 
 	private IEContainer _currentlyDroppingTarget;
 
@@ -162,9 +142,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 	 */
 	public IEController(FlexoModule module) {
 		super(module);
-		if (_selectionManager == null) {
-			_selectionManager = new IESelectionManager(this);
-		}
 		_componentLibraryBrowser = new ComponentLibraryBrowser(this);
 		_componentBrowser = new ComponentBrowser(this);
 		_menuEditorBrowser = new MenuEditorBrowser(this);
@@ -187,8 +164,12 @@ public class IEController extends FlexoController implements SelectionManagingCo
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new IEKeyEventListener(this);
+	protected SelectionManager createSelectionManager() {
+		return new IESelectionManager(this);
+	}
+
+	public IESelectionManager getIESelectionManager() {
+		return (IESelectionManager) getSelectionManager();
 	}
 
 	public boolean currentPaletteIsBasicPalette() {
@@ -227,16 +208,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new IEMenuBar(this);
-	}
-
-	/**
-	 *
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		getIESelectionManager().addObserver(getSharedInspectorController());
-		getIESelectionManager().addObserver(getDocInspectorController());
 	}
 
 	public ComponentLibraryBrowser getComponentLibraryBrowser() {
@@ -282,20 +253,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 
 	public JComponent getCurrentEditZone() {
 		return (JComponent) getCurrentModuleView();
-	}
-
-	// ==========================================================================
-	// ========================== Selection management
-	// ==========================
-	// ==========================================================================
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getIESelectionManager();
-	}
-
-	public IESelectionManager getIESelectionManager() {
-		return _selectionManager;
 	}
 
 	/**

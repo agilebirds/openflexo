@@ -62,7 +62,6 @@ import org.openflexo.fps.controller.browser.CVSRepositoriesBrowser;
 import org.openflexo.fps.controller.browser.SharedProjectBrowser;
 import org.openflexo.fps.view.ConsoleView;
 import org.openflexo.fps.view.FPSMainPane;
-import org.openflexo.fps.view.listener.FPSKeyEventListener;
 import org.openflexo.fps.view.menu.FPSMenuBar;
 import org.openflexo.icon.FPSIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -78,8 +77,6 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -87,7 +84,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author yourname
  */
-public class FPSController extends FlexoController implements SelectionManagingController {
+public class FPSController extends FlexoController {
 	static final Logger logger = Logger.getLogger(FPSController.class.getPackage().getName());
 
 	public final FlexoPerspective ALL_FILES_PERSPECTIVE = new AllFilesPerspective(this);
@@ -100,7 +97,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 	// ============= Instance variables ===============
 	// ================================================
 
-	private final FPSSelectionManager _selectionManager;
 	private final CVSRepositoriesBrowser _repositoriesBrowser;
 	private final SharedProjectBrowser _sharedProjectBrowser;
 
@@ -139,16 +135,11 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		addToPerspectives(REMOTELY_MODIFIED_PERSPECTIVE);
 		addToPerspectives(CONFLICTING_FILES_PERSPECTIVE);
 
-		// At this point the InspectorController is not yet loaded
-		_selectionManager = new FPSSelectionManager(this);
-
 		_repositoriesBrowser = new CVSRepositoriesBrowser(this);
 		_sharedProjectBrowser = new SharedProjectBrowser(this);
 
 		_consoleView = new ConsoleView();
-
 		_repositories.loadStoredRepositoryLocation(FileUtils.getApplicationDataDirectory());
-
 		_footer.refresh();
 
 		if (getCurrentPerspective() instanceof FPSPerspective) {
@@ -158,8 +149,8 @@ public class FPSController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new FPSKeyEventListener(this);
+	protected SelectionManager createSelectionManager() {
+		return new FPSSelectionManager(this);
 	}
 
 	@Override
@@ -183,15 +174,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new FPSMenuBar(this);
-	}
-
-	/**
-	 * Init inspectors
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		_selectionManager.addObserver(getSharedInspectorController());
 	}
 
 	public ValidationModel getDefaultValidationModel() {
@@ -222,19 +204,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 
 	public SharedProjectBrowser getSharedProjectBrowser() {
 		return _sharedProjectBrowser;
-	}
-
-	// ================================================
-	// ============ Selection management ==============
-	// ================================================
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getFPSSelectionManager();
-	}
-
-	public FPSSelectionManager getFPSSelectionManager() {
-		return _selectionManager;
 	}
 
 	/**

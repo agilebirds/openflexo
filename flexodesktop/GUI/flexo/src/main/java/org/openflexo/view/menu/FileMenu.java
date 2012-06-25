@@ -57,7 +57,6 @@ import org.openflexo.print.PrintManagingController;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
 /**
@@ -565,9 +564,7 @@ public class FileMenu extends FlexoMenu {
 			// FlexoModule.getActiveModule().getFlexoController().showInspector();
 			// FlexoModule.getActiveModule().getFlexoController().setCurrentInspectedObject(FlexoModule.getActiveModule().getFlexoController().getProject());
 			FlexoController controller = getController();
-			if (controller instanceof SelectionManagingController) {
-				((SelectionManagingController) controller).getSelectionManager().setSelectedObject(controller.getProject());
-			}
+			controller.getSelectionManager().setSelectedObject(controller.getProject());
 			controller.showInspector();
 			/*
 			 * int state = controller.getInspectorWindow().getExtendedState(); state &= ~Frame.ICONIFIED;

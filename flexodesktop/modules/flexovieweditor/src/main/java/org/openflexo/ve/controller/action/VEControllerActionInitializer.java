@@ -21,8 +21,8 @@ package org.openflexo.ve.controller.action;
 
 import java.util.logging.Logger;
 
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.ve.controller.VEController;
-import org.openflexo.ve.controller.VESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -44,8 +44,8 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		return (VEController) getController();
 	}
 
-	protected VESelectionManager getOESelectionManager() {
-		return getOEController().getOESelectionManager();
+	protected SelectionManager getOESelectionManager() {
+		return getOEController().getSelectionManager();
 	}
 
 	@Override

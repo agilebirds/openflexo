@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.dm.view.controller.DMSelectionManager;
 import org.openflexo.dm.view.popups.AskNewRepositoryDialog;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dm.action.CreateAnyDMRepository;
@@ -36,6 +35,7 @@ import org.openflexo.foundation.dm.action.ImportJARFileRepository;
 import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.module.UserType;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -50,8 +50,8 @@ public class DMControllerActionInitializer extends ControllerActionInitializer {
 		_dmController = controller;
 	}
 
-	protected DMSelectionManager getDMSelectionManager() {
-		return _dmController.getDMSelectionManager();
+	protected SelectionManager getSelectionManager() {
+		return _dmController.getSelectionManager();
 	}
 
 	protected DMController getDMController() {

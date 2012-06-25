@@ -144,7 +144,7 @@ public class AddPortInitializer extends ActionInitializer<AddPort, WKFObject, WK
 					}
 				}
 				if (e != null) {
-					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newFlexoPort);
+					getControllerActionInitializer().getSelectionManager().setSelectedObject(newFlexoPort);
 				}
 				return true;
 			}

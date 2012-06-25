@@ -66,7 +66,6 @@ import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 /**
  * Abstract main frame used in the context of an application module
@@ -540,18 +539,12 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		if (getController() instanceof SelectionManagingController) {
-			return ((SelectionManagingController) getController()).getSelectionManager().getFocusedObject();
-		}
-		return null;
+		return getController().getSelectionManager().getFocusedObject();
 	}
 
 	@Override
 	public Vector<FlexoModelObject> getGlobalSelection() {
-		if (getController() instanceof SelectionManagingController) {
-			return ((SelectionManagingController) getController()).getSelectionManager().getSelection();
-		}
-		return null;
+		return getController().getSelectionManager().getSelection();
 	}
 
 	public void close() {

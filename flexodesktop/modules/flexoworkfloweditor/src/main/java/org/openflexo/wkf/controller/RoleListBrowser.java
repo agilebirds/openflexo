@@ -49,7 +49,7 @@ public class RoleListBrowser extends ProjectBrowser {
 	// ==========================================================================
 
 	public RoleListBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getWKFSelectionManager());
+		super(controller.getEditor(), controller.getSelectionManager());
 		_controller = controller;
 	}
 

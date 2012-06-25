@@ -58,7 +58,7 @@ public class WKFMoveInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<WKFMove>() {
 			@Override
 			public boolean run(EventObject e, WKFMove action) {
-				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
+				getControllerActionInitializer().getSelectionManager().setSelectedObjects(action.getGlobalSelection());
 				return true;
 			}
 		};
@@ -69,7 +69,7 @@ public class WKFMoveInitializer extends ActionInitializer {
 		return new FlexoActionUndoFinalizer<WKFMove>() {
 			@Override
 			public boolean run(EventObject e, WKFMove action) {
-				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
+				getControllerActionInitializer().getSelectionManager().setSelectedObjects(action.getGlobalSelection());
 				return true;
 			}
 		};
@@ -80,7 +80,7 @@ public class WKFMoveInitializer extends ActionInitializer {
 		return new FlexoActionRedoFinalizer<WKFMove>() {
 			@Override
 			public boolean run(EventObject e, WKFMove action) {
-				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
+				getControllerActionInitializer().getSelectionManager().setSelectedObjects(action.getGlobalSelection());
 				return true;
 			}
 		};

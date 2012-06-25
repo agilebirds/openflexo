@@ -63,7 +63,7 @@ public class DMCopyInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DMCopy>() {
 			@Override
 			public boolean run(EventObject e, DMCopy action) {
-				getControllerActionInitializer().getDMSelectionManager().performSelectionCopy();
+				getControllerActionInitializer().getSelectionManager().performSelectionCopy();
 				return true;
 			}
 		};

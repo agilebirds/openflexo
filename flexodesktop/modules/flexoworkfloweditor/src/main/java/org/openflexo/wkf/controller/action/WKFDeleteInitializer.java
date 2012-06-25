@@ -20,7 +20,6 @@
 package org.openflexo.wkf.controller.action;
 
 import java.awt.Toolkit;
-import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -50,9 +49,9 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.wkf.processeditor.ProcessView;
-import org.openflexo.wkf.view.listener.WKFKeyEventListener;
 
 public class WKFDeleteInitializer extends ActionInitializer {
 
@@ -77,7 +76,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 				if (!getModule().isActive()) {
 					return false;
 				}
-				Vector v = action.getObjectsToDelete();
+				Vector<WKFObject> v = action.getObjectsToDelete();
 				if (v.size() == 0) {
 					return false;
 				}
@@ -92,7 +91,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 						return false;
 					}
 					// Cannot delete a process by pressing delete key
-					if (action.getInvoker() instanceof FlexoMenuItem || action.getInvoker() instanceof WKFKeyEventListener) {
+					if (action.getInvoker() instanceof FlexoMenuItem || action.getInvoker() instanceof FlexoKeyEventListener) {
 						logger.fine("refuse to delete a process by pressing delete key");
 						Toolkit.getDefaultToolkit().beep();
 						return false;
@@ -145,13 +144,11 @@ public class WKFDeleteInitializer extends ActionInitializer {
 						return true;
 					}
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"))) {
-						Enumeration en = v.elements();
-						while (en.hasMoreElements()) {
-							FlexoModelObject o = (FlexoModelObject) en.nextElement();
+						for (WKFObject o : v) {
 							if (o instanceof FlexoProcess) {
 								if (((FlexoProcess) o).isRootProcess()) {
 									FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_delete_the_root_process"));
-									action.setDeletionContextForObject(Boolean.FALSE, (FlexoProcess) o);
+									action.setDeletionContextForObject(Boolean.FALSE, o);
 								} else {
 									FlexoProcess process = (FlexoProcess) o;
 									if (process.getAllProcessInstances().size() > 0) {

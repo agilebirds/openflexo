@@ -68,7 +68,7 @@ public class DMPasteInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DMPaste>() {
 			@Override
 			public boolean run(EventObject e, DMPaste action) {
-				getControllerActionInitializer().getDMSelectionManager().performSelectionPaste();
+				getControllerActionInitializer().getSelectionManager().performSelectionPaste();
 				return true;
 			}
 		};
@@ -85,7 +85,7 @@ public class DMPasteInitializer extends ActionInitializer {
 			@Override
 			public boolean isEnabled(FlexoActionType<DMPaste, DMObject, DMObject> actionType, DMObject object,
 					Vector<DMObject> globalSelection, FlexoEditor editor) {
-				return getControllerActionInitializer().getDMSelectionManager().hasCopiedData();
+				return getControllerActionInitializer().getSelectionManager().hasCopiedData();
 			}
 
 		};

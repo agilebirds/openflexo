@@ -30,7 +30,6 @@ import org.openflexo.dm.model.DMPackageTableModel;
 import org.openflexo.dm.model.DMReadOnlyEntityTableModel;
 import org.openflexo.dm.model.DMReadOnlyPackageTableModel;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.dm.view.controller.DMSelectionManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
@@ -38,6 +37,7 @@ import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.action.CreateDMEntity;
 import org.openflexo.foundation.dm.action.CreateDMPackage;
 import org.openflexo.foundation.dm.action.DMDelete;
+import org.openflexo.selection.SelectionManager;
 
 /**
  * View allowing to represent/edit a DMRepository object
@@ -117,9 +117,9 @@ public class DMRepositoryView extends DMView<DMRepository> {
 	}
 
 	public DMPackage getSelectedDMPackage() {
-		DMSelectionManager sm = getDMController().getDMSelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMPackage)) {
+		SelectionManager sm = getDMController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof DMPackage) {
 			return (DMPackage) selection.firstElement();
 		}
 		if (getSelectedDMEntity() != null) {
@@ -129,9 +129,9 @@ public class DMRepositoryView extends DMView<DMRepository> {
 	}
 
 	public DMEntity getSelectedDMEntity() {
-		DMSelectionManager sm = getDMController().getDMSelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEntity)) {
+		SelectionManager sm = getDMController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEntity) {
 			return (DMEntity) selection.firstElement();
 		}
 		return null;

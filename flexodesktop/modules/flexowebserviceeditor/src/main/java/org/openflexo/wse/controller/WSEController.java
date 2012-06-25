@@ -41,12 +41,9 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wse.controller.action.WSEControllerActionInitializer;
 import org.openflexo.wse.view.WSEMainPane;
-import org.openflexo.wse.view.listener.WSEKeyEventListener;
 import org.openflexo.wse.view.menu.WSEMenuBar;
 
 /**
@@ -54,13 +51,11 @@ import org.openflexo.wse.view.menu.WSEMenuBar;
  * 
  * @author yourname
  */
-public class WSEController extends FlexoController implements SelectionManagingController {// , ConsistencyCheckingController {
+public class WSEController extends FlexoController {// , ConsistencyCheckingController {
 
 	static final Logger logger = Logger.getLogger(WSEController.class.getPackage().getName());
 
 	public final FlexoPerspective WSE_PERSPECTIVE = new WSEPerspective();
-
-	private WSESelectionManager _selectionManager;
 
 	private WSEBrowser _browser;
 
@@ -75,16 +70,12 @@ public class WSEController extends FlexoController implements SelectionManagingC
 		super(module);
 		addToPerspectives(WSE_PERSPECTIVE);
 		setDefaultPespective(WSE_PERSPECTIVE);
-
-		// At this point the InspectorController is not yet loaded
-		_selectionManager = new WSESelectionManager(this);
-
 		_browser = new WSEBrowser(this);
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new WSEKeyEventListener(this);
+	protected SelectionManager createSelectionManager() {
+		return new WSESelectionManager(this);
 	}
 
 	@Override
@@ -100,15 +91,6 @@ public class WSEController extends FlexoController implements SelectionManagingC
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new WSEMenuBar(this);
-	}
-
-	/**
-	 * Init inspectors
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		_selectionManager.addObserver(getSharedInspectorController());
 	}
 
 	public ValidationModel getDefaultValidationModel() {
@@ -136,23 +118,6 @@ public class WSEController extends FlexoController implements SelectionManagingC
 	public WSEBrowser getWSEBrowser() {
 		return _browser;
 	}
-
-	// ================================================
-	// ============ Selection management ==============
-	// ================================================
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getWSESelectionManager();
-	}
-
-	public WSESelectionManager getWSESelectionManager() {
-		return _selectionManager;
-	}
-
-	// ================================================
-	// ============ Exception management ==============
-	// ================================================
 
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {

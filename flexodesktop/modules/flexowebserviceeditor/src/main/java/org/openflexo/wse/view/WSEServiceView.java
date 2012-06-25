@@ -25,14 +25,15 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.WSDLRepository;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.ws.ExternalWSService;
 import org.openflexo.foundation.ws.WSPortTypeFolder;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEPortTypeTableModel;
 import org.openflexo.wse.model.WSERepositoryTableModel;
 
@@ -88,18 +89,18 @@ public class WSEServiceView extends WSEView<WSService> {
 	}
 
 	public ServiceInterface getSelectedServiceInterface() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceInterface) {
 			return (ServiceInterface) selection.firstElement();
 		}
 		return null;
 	}
 
 	public WSDLRepository getSelectedWSDLRepository() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof WSDLRepository)) {
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof WSDLRepository) {
 			return (WSDLRepository) selection.firstElement();
 		}
 		return null;

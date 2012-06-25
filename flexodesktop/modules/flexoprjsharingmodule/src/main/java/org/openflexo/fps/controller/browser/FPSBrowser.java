@@ -55,7 +55,7 @@ public abstract class FPSBrowser extends ConfigurableProjectBrowser implements F
 	// ==========================================================================
 
 	public FPSBrowser(BrowserConfiguration configuration, FPSController controller) {
-		super(configuration, controller.getFPSSelectionManager());
+		super(configuration, controller.getSelectionManager());
 		_controller = controller;
 	}
 

@@ -57,7 +57,7 @@ public class IEReusableWidgetView<D extends IEReusableWidget<C, CI>, CI extends 
 
 	@Override
 	public void delete() {
-		getIEController().getIESelectionManager().removeFromSelectionListeners(getReusableWidgetComponentView());
+		getIEController().getSelectionManager().removeFromSelectionListeners(getReusableWidgetComponentView());
 		super.delete();
 	}
 

@@ -42,8 +42,6 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -51,11 +49,9 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author yourname
  */
-public class VEController extends FlexoController implements SelectionManagingController {
+public class VEController extends FlexoController {
 
 	private static final Logger logger = Logger.getLogger(VEController.class.getPackage().getName());
-
-	private VESelectionManager _selectionManager;
 
 	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
 	public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
@@ -75,7 +71,6 @@ public class VEController extends FlexoController implements SelectionManagingCo
 	 */
 	public VEController(FlexoModule module) {
 		super(module);
-		_selectionManager = new VESelectionManager(this);
 
 		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
@@ -92,8 +87,8 @@ public class VEController extends FlexoController implements SelectionManagingCo
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new VEKeyEventListener(this);
+	protected SelectionManager createSelectionManager() {
+		return new VESelectionManager(this);
 	}
 
 	@Override
@@ -127,12 +122,6 @@ public class VEController extends FlexoController implements SelectionManagingCo
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		if (getSharedInspectorController() != null) {
-			getOESelectionManager().addObserver(getSharedInspectorController());
-		}
-		if (getDocInspectorController() != null) {
-			getOESelectionManager().addObserver(getDocInspectorController());
-		}
 
 		if (useNewInspectorScheme()) {
 			loadInspectorGroup("Ontology");
@@ -155,15 +144,6 @@ public class VEController extends FlexoController implements SelectionManagingCo
 	@Override
 	protected FlexoMainPane createMainPane() {
 		return new VEMainPane(this);
-	}
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getOESelectionManager();
-	}
-
-	public VESelectionManager getOESelectionManager() {
-		return _selectionManager;
 	}
 
 	/**

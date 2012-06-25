@@ -69,7 +69,7 @@ public class WKFPasteInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<WKFPaste>() {
 			@Override
 			public boolean run(EventObject e, WKFPaste action) {
-				getControllerActionInitializer().getWKFSelectionManager().performSelectionPaste();
+				getControllerActionInitializer().getSelectionManager().performSelectionPaste();
 				return true;
 			}
 		};
@@ -81,7 +81,7 @@ public class WKFPasteInitializer extends ActionInitializer {
 			@Override
 			public boolean isEnabled(FlexoActionType<WKFPaste, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject object,
 					Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-				return getControllerActionInitializer().getWKFSelectionManager().hasCopiedData();
+				return getControllerActionInitializer().getSelectionManager().hasCopiedData();
 			}
 		};
 	}

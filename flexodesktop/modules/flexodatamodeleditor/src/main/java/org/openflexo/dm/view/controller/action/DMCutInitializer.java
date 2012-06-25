@@ -65,7 +65,7 @@ public class DMCutInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DMCut>() {
 			@Override
 			public boolean run(EventObject e, DMCut action) {
-				getControllerActionInitializer().getDMSelectionManager().performSelectionCut();
+				getControllerActionInitializer().getSelectionManager().performSelectionCut();
 				return true;
 			}
 		};

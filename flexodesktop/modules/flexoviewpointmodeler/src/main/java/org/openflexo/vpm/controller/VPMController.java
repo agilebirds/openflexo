@@ -61,8 +61,6 @@ import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.action.CEDControllerActionInitializer;
@@ -75,11 +73,9 @@ import org.openflexo.vpm.view.menu.VPMMenuBar;
  * 
  * @author yourname
  */
-public class VPMController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController {
+public class VPMController extends FlexoController implements ConsistencyCheckingController {
 
 	private static final Logger logger = Logger.getLogger(VPMController.class.getPackage().getName());
-
-	private final VPMSelectionManager _selectionManager;
 
 	private final FlexoResourceCenter resourceCenter;
 	private final ViewPointLibrary viewPointLibrary;
@@ -114,8 +110,6 @@ public class VPMController extends FlexoController implements SelectionManagingC
 
 		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();
 
-		_selectionManager = new VPMSelectionManager(this);
-
 		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
 
@@ -131,13 +125,13 @@ public class VPMController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new CEDControllerActionInitializer(editor, this);
+	protected SelectionManager createSelectionManager() {
+		return new VPMSelectionManager(this);
 	}
 
 	@Override
-	protected FlexoKeyEventListener createKeyEventListener() {
-		return new VPMKeyEventListener(this);
+	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
+		return new CEDControllerActionInitializer(editor, this);
 	}
 
 	/**
@@ -156,9 +150,6 @@ public class VPMController extends FlexoController implements SelectionManagingC
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		if (getSharedInspectorController() != null) {
-			_selectionManager.addObserver(getSharedInspectorController());
-		}
 		if (useNewInspectorScheme()) {
 			loadInspectorGroup("Ontology");
 		}
@@ -180,15 +171,6 @@ public class VPMController extends FlexoController implements SelectionManagingC
 	@Override
 	protected FlexoMainPane createMainPane() {
 		return new CEDMainPane(this);
-	}
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getCEDSelectionManager();
-	}
-
-	public VPMSelectionManager getCEDSelectionManager() {
-		return _selectionManager;
 	}
 
 	/**

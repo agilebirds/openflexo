@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.fps.action.FlexoUnknownHostException;
 import org.openflexo.fps.controller.FPSController;
-import org.openflexo.fps.controller.FPSSelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -47,10 +46,6 @@ public class FPSControllerActionInitializer extends ControllerActionInitializer 
 
 	protected FPSController getFPSController() {
 		return _fpsController;
-	}
-
-	protected FPSSelectionManager getFPSSelectionManager() {
-		return getFPSController().getFPSSelectionManager();
 	}
 
 	@Override
