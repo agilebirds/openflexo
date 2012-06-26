@@ -41,12 +41,12 @@ import org.openflexo.view.controller.SelectionManagingController;
  * @author sguerin
  * 
  */
-public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends FlexoFIBView<O> implements SelectionListener,
-		GraphicalFlexoObserver, FIBSelectionListener {
+public class SelectionSynchronizedFIBView<O> extends FlexoFIBView<O> implements SelectionListener, GraphicalFlexoObserver,
+		FIBSelectionListener {
 	static final Logger logger = Logger.getLogger(SelectionSynchronizedFIBView.class.getPackage().getName());
 
 	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile) {
-		this(representedObject, controller, fibFile, false, controller.willLoad(fibFile));
+		this(representedObject, controller, fibFile, false, (controller != null ? controller.willLoad(fibFile) : null));
 	}
 
 	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {

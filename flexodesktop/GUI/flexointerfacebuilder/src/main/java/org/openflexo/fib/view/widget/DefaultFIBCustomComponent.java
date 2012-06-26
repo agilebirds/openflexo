@@ -140,4 +140,5 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 	public FIBController<T> getController() {
 		return controller;
 	}
+
 }

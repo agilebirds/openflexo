@@ -36,7 +36,7 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.fib.view.widget.DefaultFIBCustomComponent;
+import org.openflexo.fib.model.FIBCustom.FIBCustomComponent.CustomComponentParameter;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
@@ -44,11 +44,12 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.icon.UtilsIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.SelectionSynchronizedFIBView;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
@@ -57,7 +58,9 @@ import org.openflexo.view.controller.FlexoFIBController;
  * @author sguerin
  * 
  */
-public class FIBOntologyEditor extends DefaultFIBCustomComponent<FIBOntologyEditor> {
+public class FIBOntologyEditor /*extends DefaultFIBCustomComponent<FIBOntologyEditor> implements
+SelectionSynchronizedModuleView<FlexoOntology>*/
+extends SelectionSynchronizedFIBView<FIBOntologyEditor> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBOntologyEditor.class.getPackage().getName());
 
@@ -87,11 +90,11 @@ public class FIBOntologyEditor extends DefaultFIBCustomComponent<FIBOntologyEdit
 	private List<OntologyObject<?>> matchingValues;
 	private OntologyObject<?> selectedValue;
 
-	public FIBOntologyEditor(FlexoOntology ontology) {
-		super(FIB_FILE, null, FlexoLocalization.getMainLocalizer());
+	public FIBOntologyEditor(FlexoOntology ontology, FlexoController controller) {
+		super(null, controller, FIB_FILE);
 		matchingValues = new ArrayList<OntologyObject<?>>();
 		setOntology(ontology);
-		setEditedObject(this);
+		setDataObject(this);
 	}
 
 	public FlexoOntology getOntology() {
@@ -245,7 +248,7 @@ public class FIBOntologyEditor extends DefaultFIBCustomComponent<FIBOntologyEdit
 		if (model != null) {
 			model.delete();
 			model = null;
-			setEditedObject(this);
+			setDataObject(this);
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -281,7 +284,7 @@ public class FIBOntologyEditor extends DefaultFIBCustomComponent<FIBOntologyEdit
 		// "http://www.w3.org/2002/07/owl");
 		// "http://www.w3.org/2000/01/rdf-schema");
 		o.loadWhenUnloaded();
-		final FIBOntologyEditor selector = new FIBOntologyEditor(o);
+		final FIBOntologyEditor selector = new FIBOntologyEditor(o, null);
 		selector.setOntology(o);
 		selector.setHierarchicalMode(false); // false
 		selector.setShowAnnotationProperties(true);
@@ -323,7 +326,7 @@ public class FIBOntologyEditor extends DefaultFIBCustomComponent<FIBOntologyEdit
 		// "http://www.cpmf.org/ontologies/cpmfInstance");
 		o.loadWhenUnloaded();
 		System.out.println("ontology: " + o);
-		FIBOntologyEditor browser = new FIBOntologyEditor(o);
+		FIBOntologyEditor browser = new FIBOntologyEditor(o, null);
 		browser.setOntology(o);
 		frame.getContentPane().add(browser);
 		frame.pack();
@@ -392,11 +395,6 @@ public class FIBOntologyEditor extends DefaultFIBCustomComponent<FIBOntologyEdit
 		}
 	}
 
-	@Override
-	public Class<FIBOntologyEditor> getRepresentedType() {
-		return FIBOntologyEditor.class;
-	}
-
 	/**
 	 * This method is used to retrieve all potential values when implementing completion<br>
 	 * Completion will be performed on that selectable values<br>
@@ -434,7 +432,7 @@ public class FIBOntologyEditor extends DefaultFIBCustomComponent<FIBOntologyEdit
 		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
 		for (FIBComponent c : listComponent) {
 			if (c instanceof FIBBrowser) {
-				return (FIBBrowserWidget) getController().viewForComponent(c);
+				return (FIBBrowserWidget) getFIBController().viewForComponent(c);
 			}
 		}
 		return null;
@@ -451,8 +449,8 @@ public class FIBOntologyEditor extends DefaultFIBCustomComponent<FIBOntologyEdit
 	}
 
 	public void selectValue(OntologyObject selectedValue) {
-		getController().selectionCleared();
-		getController().objectAddedToSelection(selectedValue);
+		getFIBController().selectionCleared();
+		getFIBController().objectAddedToSelection(selectedValue);
 	}
 
 }
