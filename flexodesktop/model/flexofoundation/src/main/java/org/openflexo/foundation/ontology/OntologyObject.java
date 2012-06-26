@@ -869,6 +869,8 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 
 	public void setOriginalDefinition(OntologyObject<R> originalDefinition) {
 		this.originalDefinition = originalDefinition;
+		logger.info("*** " + getOntology() + " Declare object " + this + " as a redefinition of object property initially asserted in "
+				+ originalDefinition.getOntology());
 	}
 
 	public boolean redefinesOriginalDefinition() {

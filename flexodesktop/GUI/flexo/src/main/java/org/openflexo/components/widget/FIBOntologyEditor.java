@@ -278,8 +278,8 @@ extends SelectionSynchronizedFIBView<FIBOntologyEditor> {
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
 		FlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
 		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
-				"http://www.cpmf.org/ontologies/cpmfInstance");
-		// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
+		// "http://www.cpmf.org/ontologies/cpmfInstance");
+				"http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
 		// "http://www.openflexo.org/test/TestInstances.owl");
 		// "http://www.w3.org/2002/07/owl");
 		// "http://www.w3.org/2000/01/rdf-schema");

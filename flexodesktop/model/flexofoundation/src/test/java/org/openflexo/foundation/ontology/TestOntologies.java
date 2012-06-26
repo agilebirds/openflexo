@@ -123,10 +123,6 @@ public class TestOntologies extends FlexoTestCase {
 		assertNotNull(flexoEvent);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
 
-		OntologyDataProperty resourceNameProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
-				+ "resourceName");
-		assertNotNull(resourceNameProperty);
-
 		OntologyClass classConcept = flexoConceptsOntology.getClass(OntologyLibrary.OWL_CLASS_URI);
 		assertNotNull(classConcept);
 
@@ -153,8 +149,31 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertSameList(flexoOperation.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoProcessElement);
 
-		System.out.println("les statements=" + flexoModelObject.getStatements());
-		System.out.println("les annotations=" + flexoModelObject.getAnnotationStatements());
+		OntologyObjectProperty inRelationWithProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI
+				+ "#" + "inRelationWith");
+		assertNotNull(inRelationWithProperty);
+		OntologyObjectProperty linkedToModelProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI
+				+ "#" + "linkedToModel");
+		assertNotNull(linkedToModelProperty);
+		OntologyObjectProperty linkedToConceptProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI
+				+ "#" + "linkedToConcept");
+		assertNotNull(linkedToConceptProperty);
+		OntologyDataProperty resourceNameProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "resourceName");
+		assertNotNull(resourceNameProperty);
+		OntologyDataProperty classNameProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "className");
+		assertNotNull(classNameProperty);
+		OntologyDataProperty flexoIDProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "flexoID");
+		assertNotNull(flexoIDProperty);
+
+		assertFalse(inRelationWithProperty.redefinesOriginalDefinition());
+		assertFalse(linkedToModelProperty.redefinesOriginalDefinition());
+		assertFalse(linkedToConceptProperty.redefinesOriginalDefinition());
+		assertFalse(resourceNameProperty.redefinesOriginalDefinition());
+		assertFalse(classNameProperty.redefinesOriginalDefinition());
+		assertFalse(flexoIDProperty.redefinesOriginalDefinition());
 
 		assertEquals(1, flexoModelObject.getAnnotationStatements().size());
 

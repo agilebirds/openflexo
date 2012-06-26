@@ -652,17 +652,22 @@ public abstract class FlexoOntology extends OntologyObject {
 			}
 		}
 
+		// TODO
 		/*for (Individual individual : redefinedIndividuals) {
 			System.out.println("Ontology " + getURI() + ", redefine individual " + individual);
 			redefineIndividual(individual);
 		}*/
 
 		for (ObjectProperty ontProperty : redefinedObjectProperties) {
-			redefineObjectProperty(ontProperty);
+			if (StringUtils.isNotEmpty(ontProperty.getURI()) && getDeclaredObjectProperty(ontProperty.getURI()) == null) {
+				redefineObjectProperty(ontProperty);
+			}
 		}
 
 		for (DatatypeProperty ontProperty : redefinedDatatypeProperties) {
-			redefineDataProperty(ontProperty);
+			if (StringUtils.isNotEmpty(ontProperty.getURI()) && getDeclaredDataProperty(ontProperty.getURI()) == null) {
+				redefineDataProperty(ontProperty);
+			}
 		}
 	}
 
