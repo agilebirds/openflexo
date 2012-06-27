@@ -107,7 +107,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 	}
 
 	private void appendToSuperClasses(OntologyClass superClass) {
-		if (getURI().equals(OntologyLibrary.OWL_THING_URI)) {
+		if (getURI().equals(OWL2URIDefinitions.OWL_THING_URI)) {
 			return;
 		}
 		if (superClass == this) {
@@ -275,7 +275,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 
 	@Override
 	public boolean isSuperConceptOf(OntologyObject concept) {
-		if (OntologyLibrary.OWL_THING_URI.equals(getURI())) {
+		if (OWL2URIDefinitions.OWL_THING_URI.equals(getURI())) {
 			return true;
 		}
 		if (concept instanceof OntologyIndividual) {
@@ -298,7 +298,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 		if (aClass == this) {
 			return true;
 		}
-		if (OntologyLibrary.OWL_THING_URI.equals(getURI())) {
+		if (OWL2URIDefinitions.OWL_THING_URI.equals(getURI())) {
 			return true;
 		}
 		for (OntologyClass c : aClass.getSuperClasses()) {
@@ -470,6 +470,6 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 	}
 
 	public boolean isThing() {
-		return isNamedClass() && getURI().equals(OntologyLibrary.OWL_THING_URI);
+		return isNamedClass() && getURI().equals(OWL2URIDefinitions.OWL_THING_URI);
 	}
 }

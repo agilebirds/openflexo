@@ -25,6 +25,8 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.Language;
 import org.openflexo.toolbox.FileResource;
 
 public class TestOntologies extends FlexoTestCase {
@@ -60,6 +62,54 @@ public class TestOntologies extends FlexoTestCase {
 		FlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
 		assertNotNull(rdfsOntology);
 		assertTrue(rdfsOntology.isLoaded());
+
+		OntologyClass LITERAL = rdfsOntology.getClass(OntologyObject.RDFS_LITERAL_URI);
+		assertNotNull(LITERAL);
+		OntologyClass RESOURCE = rdfsOntology.getClass(OntologyObject.RDFS_RESOURCE_URI);
+		assertNotNull(RESOURCE);
+		OntologyClass CLASS = rdfsOntology.getClass(OntologyObject.RDFS_CLASS_URI);
+		assertNotNull(CLASS);
+		OntologyClass DATATYPE = rdfsOntology.getClass(OntologyObject.RDFS_DATATYPE_URI);
+		assertNotNull(DATATYPE);
+		OntologyClass CONTAINER = rdfsOntology.getClass(OntologyObject.RDFS_CONTAINER_URI);
+		assertNotNull(CONTAINER);
+
+		OntologyProperty DOMAIN = rdfsOntology.getProperty(OntologyObject.RDFS_DOMAIN_URI);
+		assertNotNull(DOMAIN);
+		assertFalse(DOMAIN.isAnnotationProperty());
+
+		OntologyProperty RANGE = rdfsOntology.getProperty(OntologyObject.RDFS_RANGE_URI);
+		assertNotNull(RANGE);
+		assertFalse(RANGE.isAnnotationProperty());
+
+		OntologyProperty SUB_CLASS = rdfsOntology.getProperty(OntologyObject.RDFS_SUB_CLASS_URI);
+		assertNotNull(SUB_CLASS);
+		assertFalse(SUB_CLASS.isAnnotationProperty());
+
+		OntologyProperty SUB_PROPERTY = rdfsOntology.getProperty(OntologyObject.RDFS_SUB_PROPERTY_URI);
+		assertNotNull(SUB_PROPERTY);
+		assertFalse(SUB_PROPERTY.isAnnotationProperty());
+
+		OntologyProperty MEMBER = rdfsOntology.getProperty(OntologyObject.RDFS_MEMBER_URI);
+		assertNotNull(MEMBER);
+		assertFalse(MEMBER.isAnnotationProperty());
+
+		OntologyProperty SEE_ALSO = rdfsOntology.getProperty(OntologyObject.RDFS_SEE_ALSO_URI);
+		assertNotNull(SEE_ALSO);
+		assertTrue(SEE_ALSO.isAnnotationProperty());
+
+		OntologyProperty IS_DEFINED_BY = rdfsOntology.getProperty(OntologyObject.RDFS_IS_DEFINED_BY_URI);
+		assertNotNull(IS_DEFINED_BY);
+		assertTrue(IS_DEFINED_BY.isAnnotationProperty());
+
+		OntologyProperty LABEL = rdfsOntology.getProperty(OntologyObject.RDFS_LABEL_URI);
+		assertNotNull(LABEL);
+		assertTrue(LABEL.isAnnotationProperty());
+
+		OntologyProperty COMMENT = rdfsOntology.getProperty(OntologyObject.RDFS_COMMENT_URI);
+		assertNotNull(COMMENT);
+		assertTrue(COMMENT.isAnnotationProperty());
+
 	}
 
 	public void test3AssertRDFAndRDFSOntologyCorrectImports() {
@@ -123,7 +173,7 @@ public class TestOntologies extends FlexoTestCase {
 		assertNotNull(flexoEvent);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
 
-		OntologyClass classConcept = flexoConceptsOntology.getClass(OntologyLibrary.OWL_CLASS_URI);
+		OntologyClass classConcept = flexoConceptsOntology.getClass(OWL2URIDefinitions.OWL_CLASS_URI);
 		assertNotNull(classConcept);
 
 		assertFalse(flexoConcept.redefinesOriginalDefinition());
@@ -377,8 +427,85 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertEquals(35, ontology.getAccessibleClasses().size());
 
-		System.out.println("les annotations=" + activity1.getAnnotationStatements());
+	}
 
+	public void test10TestAnnotations() {
+		log("test10TestAnnotations()");
+		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				"http://www.openflexo.org/test/TestInstances.owl");
+		assertNotNull(ontology);
+
+		ontology.loadWhenUnloaded();
+		assertTrue(ontology.isLoaded());
+
+		assertEquals(4, ontology.getIndividuals().size());
+
+		OntologyIndividual activity1 = ontology.getIndividual(ontology.getURI() + "#Activity1");
+		assertNotNull(activity1);
+		OntologyIndividual activity2 = ontology.getIndividual(ontology.getURI() + "#Activity2");
+		assertNotNull(activity2);
+		OntologyIndividual activity3 = ontology.getIndividual(ontology.getURI() + "#Activity3");
+		assertNotNull(activity3);
+
+		assertEquals(4, activity1.getAnnotationStatements().size());
+
+		OntologyDataProperty COMMENT = ontology.getDataProperty(OntologyObject.RDFS_COMMENT_URI);
+		assertNotNull(COMMENT);
+		assertTrue(COMMENT.isAnnotationProperty());
+
+		assertEquals(activity1.getAnnotationValue(COMMENT, Language.ENGLISH), "A comment in english");
+		assertEquals(activity1.getAnnotationValue(COMMENT, Language.FRENCH), "Un commentaire en francais");
+
+		FlexoLocalization.setCurrentLanguage(Language.ENGLISH);
+		// System.out.println("english value = " + activity1.getPropertyValue(COMMENT));
+		assertEquals(activity1.getPropertyValue(COMMENT), "A comment in english");
+
+		FlexoLocalization.setCurrentLanguage(Language.FRENCH);
+		// System.out.println("french value = " + activity1.getPropertyValue(COMMENT));
+		assertEquals(activity1.getPropertyValue(COMMENT), "Un commentaire en francais");
+
+		// System.out.println("les annotations pour activity2=" + activity2.getAnnotationStatements());
+		assertEquals(activity2.getPropertyValue(COMMENT), "Activity2 is only commented in english");
+
+		// System.out.println("les annotations pour activity3=" + activity3.getAnnotationStatements());
+		assertEquals(activity3.getPropertyValue(COMMENT), "Cette activite est commentee en francais uniquement");
+
+		assertEquals(1, activity1.getAnnotationObjectStatements().size());
+
+		OntologyObjectProperty SEE_ALSO = ontology.getObjectProperty(OntologyObject.RDFS_SEE_ALSO_URI);
+		assertNotNull(SEE_ALSO);
+		assertTrue(SEE_ALSO.isAnnotationProperty());
+
+		assertEquals(activity3, activity1.getAnnotationObjectValue(SEE_ALSO));
+
+	}
+
+	public void test11TestLoadArchimateOntology() {
+		log("test11TestLoadArchimateOntology()");
+		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.bolton.ac.uk/archimate");
+		assertNotNull(ontology);
+
+		ontology.loadWhenUnloaded();
+		assertTrue(ontology.isLoaded());
+	}
+
+	public void test12TestLoadCPMFInstanceOntology() {
+		log("test12TestLoadCPMFInstanceOntology()");
+		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary()
+				.getOntology("http://www.cpmf.org/ontologies/cpmfInstance");
+		assertNotNull(ontology);
+
+		ontology.loadWhenUnloaded();
+		assertTrue(ontology.isLoaded());
+	}
+
+	public void test13TestLoadBPMNOntology() {
+		log("test13TestLoadBPMNOntology()");
+		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://dkm.fbk.eu/index.php/BPMN_Ontology");
+		assertNotNull(ontology);
+
+		ontology.loadWhenUnloaded();
+		assertTrue(ontology.isLoaded());
 	}
 
 }

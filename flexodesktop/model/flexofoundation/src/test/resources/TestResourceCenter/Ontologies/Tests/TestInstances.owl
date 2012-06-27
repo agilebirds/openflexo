@@ -82,11 +82,16 @@
 
     <owl:Thing rdf:about="#Activity1">
         <rdf:type rdf:resource="&FlexoConceptsOntology;FlexoActivity"/>
+        <rdfs:label xml:lang="en"
+            >&quot;First activity&quot;</rdfs:label>
+        <rdfs:label xml:lang="fr"
+            >&quot;Premi&#232;re activit&#233;&quot;</rdfs:label>
         <FlexoConceptsOntology:resourceName rdf:datatype="&xsd;string">Process1</FlexoConceptsOntology:resourceName>
         <rdfs:comment xml:lang="en"
-            >Un commentaire en anglais</rdfs:comment>
+            >A comment in english</rdfs:comment>
         <rdfs:comment xml:lang="fr"
             >Un commentaire en francais</rdfs:comment>
+        <rdfs:seeAlso rdf:resource="#Activity3"/>
     </owl:Thing>
     
 
@@ -96,6 +101,8 @@
     <owl:Thing rdf:about="#Activity2">
         <rdf:type rdf:resource="&FlexoConceptsOntology;FlexoActivity"/>
         <FlexoConceptsOntology:resourceName rdf:datatype="&xsd;string">Process1</FlexoConceptsOntology:resourceName>
+        <rdfs:comment xml:lang="en"
+            >Activity2 is only commented in english</rdfs:comment>
     </owl:Thing>
     
 
@@ -105,6 +112,8 @@
     <owl:Thing rdf:about="#Activity3">
         <rdf:type rdf:resource="&FlexoConceptsOntology;FlexoActivity"/>
         <FlexoConceptsOntology:resourceName rdf:datatype="&xsd;string">Process2</FlexoConceptsOntology:resourceName>
+        <rdfs:comment xml:lang="fr"
+            >Cette activite est commentee en francais uniquement</rdfs:comment>
     </owl:Thing>
     
 

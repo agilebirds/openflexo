@@ -30,11 +30,13 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyRestrictionClass;
+import org.openflexo.foundation.ontology.OWL2URIDefinitions;
+import org.openflexo.foundation.ontology.RDFURIDefinitions;
+import org.openflexo.foundation.ontology.RDFSURIDefinitions;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -190,9 +192,9 @@ public class OntologyBrowserModel {
 			return true;
 		}
 		if (!getShowOWLAndRDFConcepts() && StringUtils.isNotEmpty(object.getURI()) && object.getOntology() != getContext()) {
-			if (object.getURI().startsWith(OntologyLibrary.RDF_ONTOLOGY_URI)
-					|| object.getURI().startsWith(OntologyLibrary.RDFS_ONTOLOGY_URI)
-					|| object.getURI().startsWith(OntologyLibrary.OWL_ONTOLOGY_URI)) {
+			if (object.getURI().startsWith(RDFURIDefinitions.RDF_ONTOLOGY_URI)
+					|| object.getURI().startsWith(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)
+					|| object.getURI().startsWith(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
 				return false;
 			}
 		}

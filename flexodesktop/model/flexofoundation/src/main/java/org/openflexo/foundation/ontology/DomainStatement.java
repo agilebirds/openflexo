@@ -28,8 +28,6 @@ public class DomainStatement extends OntologyStatement {
 
 	private static final Logger logger = Logger.getLogger(DomainStatement.class.getPackage().getName());
 
-	public static final String DOMAIN_URI = "http://www.w3.org/2000/01/rdf-schema#domain";
-
 	private OntologyObject domain;
 
 	public DomainStatement(OntologyObject subject, Statement s) {

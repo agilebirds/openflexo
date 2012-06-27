@@ -39,7 +39,6 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.ResourceUtils;
@@ -213,29 +212,6 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		_annotationStatements.clear();
 		_annotationObjectsStatements.clear();
 
-		// Hashtable<OntClass, Restriction> restrictions = new Hashtable<OntClass, Restriction>();
-
-		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
-		Property ON_CLASS = ResourceFactory.createProperty(OWL + "onClass");
-		Property ON_DATA_RANGE = ResourceFactory.createProperty(OWL + "onDataRange");
-		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + "qualifiedCardinality");
-		Property MIN_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + "minQualifiedCardinality");
-		Property MAX_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + "maxQualifiedCardinality");
-
-		// System.out.println("***********************************************");
-
-		/*if (this instanceof OntologyClass) {
-			// DescribeClass dc = new DescribeClass();
-			// dc.describeClass(System.out, (OntClass)getOntResource());
-			for (Iterator it = ((OntClass) anOntResource).listSuperClasses(true); it.hasNext();) {
-				OntClass s = (OntClass) it.next();
-				if (s.isRestriction()) {
-					Restriction r = s.asRestriction();
-					restrictions.put(s, r);
-				}
-			}
-		}*/
-
 		for (StmtIterator j = anOntResource.listProperties(); j.hasNext();) {
 			Statement s = j.nextStatement();
 
@@ -245,13 +221,13 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 				logger.warning("Inconsistant data: subject is not " + this);
 			} else {
 				Property predicate = s.getPredicate();
-				if (predicate.getURI().equals(TypeStatement.TYPE_URI)) {
-					if (s.getObject() instanceof Resource) {
-						if (((Resource) s.getObject()).getURI().equals(IsClassStatement.CLASS_URI)) {
+				if (predicate.getURI().equals(TYPE_URI)) {
+					if (s.getObject() instanceof Resource && StringUtils.isNotEmpty(((Resource) s.getObject()).getURI())) {
+						if (((Resource) s.getObject()).getURI().equals(OWL_CLASS_URI)) {
 							newStatement = new IsClassStatement(this, s);
-						} else if (((Resource) s.getObject()).getURI().equals(IsObjectPropertyStatement.OBJECT_PROPERTY_URI)) {
+						} else if (((Resource) s.getObject()).getURI().equals(OWL_OBJECT_PROPERTY_URI)) {
 							newStatement = new IsObjectPropertyStatement(this, s);
-						} else if (((Resource) s.getObject()).getURI().equals(IsDatatypePropertyStatement.DATATYPE_PROPERTY_URI)) {
+						} else if (((Resource) s.getObject()).getURI().equals(OWL_DATA_PROPERTY_URI)) {
 							newStatement = new IsDatatypePropertyStatement(this, s);
 						} else {
 							newStatement = new TypeStatement(this, s);
@@ -259,44 +235,17 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 					} else {
 						newStatement = new TypeStatement(this, s);
 					}
-				} else if (predicate.getURI().equals(SubClassStatement.SUB_CLASS_URI)) {
-					/*if (restrictions.get(s.getObject()) != null) {
-						Restriction r = restrictions.get(s.getObject());
-						// TODO: differenciate ObjectRestrictionStatement and DataRestrictionStatement here
-						if (r.isSomeValuesFromRestriction()) {
-							newStatement = new SomeRestrictionStatement(this, s, r.asSomeValuesFromRestriction());
-						} else if (r.isAllValuesFromRestriction()) {
-							newStatement = new OnlyRestrictionStatement(this, s, r.asAllValuesFromRestriction());
-						} else if (r.getProperty(ON_CLASS) != null) {
-							if (r.getProperty(QUALIFIED_CARDINALITY) != null) {
-								newStatement = new ExactRestrictionStatement(this, s, r);
-							} else if (r.getProperty(MIN_QUALIFIED_CARDINALITY) != null) {
-								newStatement = new MinRestrictionStatement(this, s, r);
-							} else if (r.getProperty(MAX_QUALIFIED_CARDINALITY) != null) {
-								newStatement = new MaxRestrictionStatement(this, s, r);
-							}
-						} else if (r.getProperty(ON_DATA_RANGE) != null) {
-							if (r.getProperty(QUALIFIED_CARDINALITY) != null) {
-								newStatement = new ExactDataRestrictionStatement(this, s, r);
-							} else if (r.getProperty(MIN_QUALIFIED_CARDINALITY) != null) {
-								newStatement = new MinDataRestrictionStatement(this, s, r);
-							} else if (r.getProperty(MAX_QUALIFIED_CARDINALITY) != null) {
-								newStatement = new MaxDataRestrictionStatement(this, s, r);
-							}
-						}
-						// System.out.println("*********** for "+s+" restriction "+r+" obtain "+newStatement);
-					} else {*/
+				} else if (predicate.getURI().equals(RDFS_SUB_CLASS_URI)) {
 					newStatement = new SubClassStatement(this, s);
-					// }
-				} else if (predicate.getURI().equals(RangeStatement.RANGE_URI)) {
+				} else if (predicate.getURI().equals(RDFS_RANGE_URI)) {
 					newStatement = new RangeStatement(this, s);
-				} else if (predicate.getURI().equals(DomainStatement.DOMAIN_URI)) {
+				} else if (predicate.getURI().equals(RDFS_DOMAIN_URI)) {
 					newStatement = new DomainStatement(this, s);
-				} else if (predicate.getURI().equals(InverseOfStatement.INVERSE_OF_URI)) {
+				} else if (predicate.getURI().equals(OWL_INVERSE_OF_URI)) {
 					newStatement = new InverseOfStatement(this, s);
-				} else if (predicate.getURI().equals(SubPropertyStatement.SUB_PROPERTY_URI)) {
+				} else if (predicate.getURI().equals(RDFS_SUB_PROPERTY_URI)) {
 					newStatement = new SubPropertyStatement(this, s);
-				} else if (predicate.getURI().equals(EquivalentClassStatement.EQUIVALENT_CLASS_URI)) {
+				} else if (predicate.getURI().equals(OWL_EQUIVALENT_CLASS_URI)) {
 					newStatement = new EquivalentClassStatement(this, s);
 				} else {
 					OntologyObject predicateProperty = getOntology().getOntologyObject(predicate.getURI());
@@ -305,7 +254,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 					} else if (predicateProperty instanceof OntologyDataProperty) {
 						newStatement = new DataPropertyStatement(this, s);
 					} else {
-						// logger.warning("Inconsistant data: unkwown property "+predicate);
+						logger.warning("Inconsistant data: unkwown property " + predicate);
 					}
 				}
 			}
@@ -361,6 +310,44 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		for (OntologyStatement statement : getStatements()) {
 			if (statement instanceof PropertyStatement) {
 				PropertyStatement s = (PropertyStatement) statement;
+				if (s.getProperty().equalsToConcept(property)) {
+					returned.add(s);
+				}
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return all annotation statement related to supplied property
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public Vector<DataPropertyStatement> getAnnotationStatements(OntologyDataProperty property) {
+		Vector<DataPropertyStatement> returned = new Vector<DataPropertyStatement>();
+		for (OntologyStatement statement : getAnnotationStatements()) {
+			if (statement instanceof DataPropertyStatement) {
+				DataPropertyStatement s = (DataPropertyStatement) statement;
+				if (s.getProperty().equalsToConcept(property)) {
+					returned.add(s);
+				}
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return all annotation object statement related to supplied property
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public Vector<ObjectPropertyStatement> getAnnotationObjectStatements(OntologyProperty property) {
+		Vector<ObjectPropertyStatement> returned = new Vector<ObjectPropertyStatement>();
+		for (OntologyStatement statement : getAnnotationObjectStatements()) {
+			if (statement instanceof PropertyStatement) {
+				ObjectPropertyStatement s = (ObjectPropertyStatement) statement;
 				if (s.getProperty().equalsToConcept(property)) {
 					returned.add(s);
 				}

@@ -39,7 +39,7 @@ import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 
-public class TestOntologiesDeprecated extends FlexoTestCase {
+public class TestProjectOntologyManipulations extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
 
@@ -49,7 +49,7 @@ public class TestOntologiesDeprecated extends FlexoTestCase {
 	private static File _resourceCenterDirectory;
 	private static FlexoResourceCenter _resourceCenter;
 
-	public TestOntologiesDeprecated(String name) {
+	public TestProjectOntologyManipulations(String name) {
 		super(name);
 	}
 

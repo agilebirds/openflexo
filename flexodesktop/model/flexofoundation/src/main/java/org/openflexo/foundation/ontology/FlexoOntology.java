@@ -312,7 +312,7 @@ public abstract class FlexoOntology extends OntologyObject {
 	 * @return
 	 */
 	public Vector<FlexoOntology> getImportedOntologies() {
-		if (getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI)) {
+		if (getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
 			// OWL ontology should at least import RDF and RDFS ontologies
 			if (!importedOntologies.contains(getOntologyLibrary().getRDFOntology())) {
 				importedOntologies.add(getOntologyLibrary().getRDFOntology());
@@ -320,12 +320,12 @@ public abstract class FlexoOntology extends OntologyObject {
 			if (!importedOntologies.contains(getOntologyLibrary().getRDFSOntology())) {
 				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
 			}
-		} else if (getURI().equals(OntologyLibrary.RDF_ONTOLOGY_URI)) {
+		} else if (getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)) {
 			// RDF ontology should at least import RDFS ontology
 			if (!importedOntologies.contains(getOntologyLibrary().getRDFSOntology())) {
 				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
 			}
-		} else if (getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+		} else if (getURI().equals(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)) {
 			// RDFS ontology has no requirement
 			if (!importedOntologies.contains(getOntologyLibrary().getRDFOntology())) {
 				importedOntologies.add(getOntologyLibrary().getRDFOntology());
@@ -503,9 +503,9 @@ public abstract class FlexoOntology extends OntologyObject {
 					makeNewDataProperty(ontProperty.as(DatatypeProperty.class));
 				} else if (ontProperty.canAs(AnnotationProperty.class)) {
 					AnnotationProperty ap = ontProperty.as(AnnotationProperty.class);
-					if (ap.getRange() != null && ap.getRange().getURI().equals(OntologyLibrary.RDFS_LITERAL_URI)) {
+					if (ap.getRange() != null && ap.getRange().getURI().equals(RDFSURIDefinitions.RDFS_LITERAL_URI)) {
 						makeNewDataProperty(ontProperty);
-					} else if (ap.getRange() != null && ap.getRange().getURI().equals(OntologyLibrary.RDFS_RESOURCE_URI)) {
+					} else if (ap.getRange() != null && ap.getRange().getURI().equals(RDFSURIDefinitions.RDFS_RESOURCE_URI)) {
 						makeNewObjectProperty(ontProperty);
 					}
 				} else {
@@ -561,19 +561,19 @@ public abstract class FlexoOntology extends OntologyObject {
 			System.exit(-1);
 		}*/
 
-		if (!getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI) && !getURI().equals(OntologyLibrary.RDF_ONTOLOGY_URI)
-				&& !getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+		if (!getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI) && !getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)
+				&& !getURI().equals(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)) {
 			// Following will not apply to RDF, RDFS and OWL ontologies
 			handleRedefinitionOfConceptsAndProperties();
 		}
 
 		// Special case for OWL ontology, register THING
-		if (getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI)) {
-			THING_CONCEPT = getClass(OntologyLibrary.OWL_THING_URI);
+		if (getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
+			THING_CONCEPT = getClass(OWL2URIDefinitions.OWL_THING_URI);
 		}
 
-		if (!getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI) && !getURI().equals(OntologyLibrary.RDF_ONTOLOGY_URI)
-				&& !getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+		if (!getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI) && !getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)
+				&& !getURI().equals(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)) {
 			// Following will not apply to RDF, RDFS and OWL ontologies
 			if (getOntologyLibrary().getOWLOntology() != null) {
 				if (!importedOntologies.contains(getOntologyLibrary().getOWLOntology())) {
@@ -645,8 +645,8 @@ public abstract class FlexoOntology extends OntologyObject {
 		}
 		for (OntClass ontClass : redefinedClasses) {
 			// Thing and Class concepts are handled differently
-			if (StringUtils.isNotEmpty(ontClass.getURI()) && !OntologyLibrary.OWL_THING_URI.equals(ontClass.getURI())
-					&& !OntologyLibrary.OWL_CLASS_URI.equals(ontClass.getURI())
+			if (StringUtils.isNotEmpty(ontClass.getURI()) && !OWL2URIDefinitions.OWL_THING_URI.equals(ontClass.getURI())
+					&& !OWL2URIDefinitions.OWL_CLASS_URI.equals(ontClass.getURI())
 					&& !ontClass.getURI().startsWith("http://www.w3.org/2001/XMLSchema#") && getDeclaredClass(ontClass.getURI()) == null) {
 				redefineClass(ontClass);
 			}
@@ -697,7 +697,7 @@ public abstract class FlexoOntology extends OntologyObject {
 	private OntologyClass makeThingConcept() {
 		logger.fine("makeThingConcept() in ontology " + this);
 		FlexoOntology owlOntology = getOntologyLibrary().getOWLOntology();
-		OntologyClass thingInOWLOntology = owlOntology.getClass(OntologyLibrary.OWL_THING_URI);
+		OntologyClass thingInOWLOntology = owlOntology.getClass(OWL2URIDefinitions.OWL_THING_URI);
 		THING_CONCEPT = makeNewClass(thingInOWLOntology.getOntResource());
 		THING_CONCEPT.setOriginalDefinition(thingInOWLOntology);
 		return THING_CONCEPT;
@@ -984,8 +984,8 @@ public abstract class FlexoOntology extends OntologyObject {
 			return returned;
 
 		// Special case for OWL, RDF and RDFS ontologies, don't create individuals !!!
-		if (!getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI) && !getURI().equals(OntologyLibrary.RDF_ONTOLOGY_URI)
-				&& !getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+		if (!getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI) && !getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)
+				&& !getURI().equals(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)) {
 			// Following will not apply to RDF, RDFS and OWL ontologies
 			if (isNamedResourceOfThisOntology(individual)) {
 				returned = makeNewIndividual(individual);

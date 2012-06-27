@@ -28,8 +28,6 @@ public class EquivalentClassStatement extends OntologyStatement {
 
 	private static final Logger logger = Logger.getLogger(EquivalentClassStatement.class.getPackage().getName());
 
-	public static final String EQUIVALENT_CLASS_URI = "http://www.w3.org/2002/07/owl#equivalentClass";
-
 	private OntologyObject<?> equivalentObject;
 
 	public EquivalentClassStatement(OntologyObject<?> subject, Statement s) {

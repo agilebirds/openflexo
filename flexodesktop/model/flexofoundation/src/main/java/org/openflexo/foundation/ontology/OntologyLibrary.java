@@ -59,23 +59,16 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	// public static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
 	// public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
-	public static final String RDFS_ONTOLOGY_URI = "http://www.w3.org/2000/01/rdf-schema";
-	public static final String RDF_ONTOLOGY_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns";
-	public static final String OWL_ONTOLOGY_URI = "http://www.w3.org/2002/07/owl";
 	public static final String FLEXO_CONCEPT_ONTOLOGY_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
-
-	public static final String OWL_THING_URI = OWL_ONTOLOGY_URI + "#Thing";
-	public static final String OWL_CLASS_URI = OWL_ONTOLOGY_URI + "#Class";
-	public static final String OWL_DATA_PROPERTY_URI = OWL_ONTOLOGY_URI + "#DatatypeProperty";
-	public static final String OWL_OBJECT_PROPERTY_URI = OWL_ONTOLOGY_URI + "#ObjectProperty";
 
 	public static final String OPENFLEXO_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#openflexoDescription";
 	public static final String BUSINESS_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#businessDescription";
 	public static final String TECHNICAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#technicalDescription";
 	public static final String USER_MANUAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#userManualDescription";
 
-	public static final String RDFS_LITERAL_URI = RDFS_ONTOLOGY_URI + "#Literal";
-	public static final String RDFS_RESOURCE_URI = RDFS_ONTOLOGY_URI + "#Resource";
+	
+
+	
 
 	// public OntologyClass THING;
 
@@ -227,15 +220,15 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	}
 
 	public FlexoOntology getRDFOntology() {
-		return getOntology(RDF_ONTOLOGY_URI);
+		return getOntology(RDFURIDefinitions.RDF_ONTOLOGY_URI);
 	}
 
 	public FlexoOntology getRDFSOntology() {
-		return getOntology(RDFS_ONTOLOGY_URI);
+		return getOntology(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
 	}
 
 	public FlexoOntology getOWLOntology() {
-		return getOntology(OWL_ONTOLOGY_URI);
+		return getOntology(OWL2URIDefinitions.OWL_ONTOLOGY_URI);
 	}
 
 	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile) {

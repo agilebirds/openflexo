@@ -28,8 +28,6 @@ public class SubClassStatement extends OntologyStatement {
 
 	private static final Logger logger = Logger.getLogger(SubClassStatement.class.getPackage().getName());
 
-	public static final String SUB_CLASS_URI = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
-
 	private OntologyObject<?> parent;
 
 	public SubClassStatement(OntologyObject<?> subject, Statement s) {

@@ -28,8 +28,6 @@ public class TypeStatement extends OntologyStatement {
 
 	private static final Logger logger = Logger.getLogger(TypeStatement.class.getPackage().getName());
 
-	public static final String TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-
 	private OntologyObject type;
 
 	public TypeStatement(OntologyObject subject, Statement s) {

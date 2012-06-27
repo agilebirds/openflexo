@@ -28,8 +28,6 @@ public class RangeStatement extends OntologyStatement {
 
 	private static final Logger logger = Logger.getLogger(RangeStatement.class.getPackage().getName());
 
-	public static final String RANGE_URI = "http://www.w3.org/2000/01/rdf-schema#range";
-
 	private OntologyObject range;
 	private OntologicDataType dataType;
 
