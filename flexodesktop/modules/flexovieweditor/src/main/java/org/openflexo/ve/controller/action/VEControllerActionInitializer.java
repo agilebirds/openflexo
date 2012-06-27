@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * 
@@ -36,8 +35,8 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public VEControllerActionInitializer(InteractiveFlexoEditor editor, VEController controller) {
-		super(editor, controller);
+	public VEControllerActionInitializer(VEController controller) {
+		super(controller);
 	}
 
 	protected VEController getOEController() {

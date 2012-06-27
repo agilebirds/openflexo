@@ -284,10 +284,6 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		}
 		browser.addBrowserListener(this);
 
-		if (controller.getKeyEventListener() != null) {
-			treeView.addKeyListener(controller.getKeyEventListener());
-		}
-
 		setMinimumSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH, FlexoCst.MINIMUM_BROWSER_VIEW_HEIGHT));
 		// setPreferredSize(new Dimension(FlexoCst.PREFERRED_BROWSER_VIEW_WIDTH, FlexoCst.PREFERRED_BROWSER_VIEW_HEIGHT));
 		setBorder(BorderFactory.createEmptyBorder());

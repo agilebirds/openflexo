@@ -24,10 +24,8 @@ import java.util.Hashtable;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.SGJarInspectorGroup;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinition;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
@@ -73,12 +71,6 @@ public class SGModule extends FlexoModule implements ExternalSGModule {
 
 	public SGController getSGController() {
 		return (SGController) getFlexoController();
-	}
-
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		// Implement this
-		return null;
 	}
 
 	@Override

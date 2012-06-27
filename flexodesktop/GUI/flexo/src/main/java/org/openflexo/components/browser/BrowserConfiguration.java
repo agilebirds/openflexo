@@ -22,13 +22,9 @@ package org.openflexo.components.browser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
-public interface BrowserConfiguration {
+@Deprecated
+public interface BrowserConfiguration extends TreeConfiguration {
 	public FlexoProject getProject();
 
-	public void configure(ProjectBrowser browser);
-
 	public FlexoModelObject getDefaultRootObject();
-
-	public BrowserElementFactory getBrowserElementFactory();
-
 }

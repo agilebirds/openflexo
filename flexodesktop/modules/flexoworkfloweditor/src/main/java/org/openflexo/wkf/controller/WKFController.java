@@ -41,6 +41,7 @@ import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -70,7 +71,6 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.action.WKFControllerActionInitializer;
@@ -139,25 +139,16 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 
 	protected BufferedImage capturedDraggedNodeImage;
 
-	// ======================================================
-	// ========= Define PROCESS_EDITOR perspective ==========
-	// ======================================================
-
 	private final JSplitPane _workflowProcessBrowserViews;
 	private final WorkflowBrowserView _wkfBrowserView;
 	private final ProcessBrowserView _processBrowserView;
 	private RoleListBrowserView roleListBrowserView;
-
-	// ==========================================================================
-	// ============================= Constructor ===============================
-	// ==========================================================================
 
 	/**
 	 * Default constructor
 	 */
 	public WKFController(FlexoModule module) {
 		super(module);
-
 		_processBrowser = new ProcessBrowser(this);
 		_externalProcessBrowser = new ProcessBrowser(this);
 		_workflowBrowser = new WorkflowBrowser(this);
@@ -177,10 +168,20 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
-		initWorkflowGraphicalPropertiesFromPrefs(getProject());
 		initWithWKFPreferences();
 		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
 
+	}
+
+	@Override
+	public void setEditor(FlexoEditor projectEditor) {
+		super.setEditor(projectEditor);
+		getWorkflowBrowser().setRootObject(projectEditor != null ? projectEditor.getProject() : null);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getFlexoWorkflow().getRootProcess();
 	}
 
 	private void initWorkflowGraphicalPropertiesFromPrefs(FlexoProject project) {
@@ -200,8 +201,8 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new WKFControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new WKFControllerActionInitializer(this);
 	}
 
 	@Override
@@ -388,7 +389,7 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 	}
 
 	private void updateGraphicalRepresentationWithNewWKFPreferenceSettings() {
-		for (ModuleView<?> moduleView : getLoadedViews().values()) {
+		for (ModuleView<?> moduleView : getAllLoadedViews()) {
 			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing) {
 				DefaultDrawing<?> drawing = (DefaultDrawing<?>) ((DrawingView<?>) moduleView).getDrawing();
 				Enumeration<GraphicalRepresentation<?>> en = drawing.getAllGraphicalRepresentations();
@@ -642,7 +643,7 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 	}
 
 	public void notifyEdgeRepresentationChanged() {
-		for (ModuleView<?> view : getLoadedViewsForPerspective(PROCESS_EDITOR_PERSPECTIVE).values()) {
+		for (ModuleView<?> view : getModuleViews(PROCESS_EDITOR_PERSPECTIVE, null, ModuleView.class)) {
 			if (view instanceof ProcessView) {
 				((ProcessView) view).refreshConnectors();
 			}
@@ -657,7 +658,7 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 	}
 
 	public void notifyShowGrid(boolean showGrid) {
-		for (ModuleView<?> view : getLoadedViewsForPerspective(PROCESS_EDITOR_PERSPECTIVE).values()) {
+		for (ModuleView<?> view : getModuleViews(PROCESS_EDITOR_PERSPECTIVE, null, ModuleView.class)) {
 			if (view instanceof ProcessView) {
 				((ProcessView) view).getDrawingGraphicalRepresentation().setShowGrid(WKFPreferences.getShowGrid());
 			}
@@ -735,41 +736,45 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		String propertyName = evt.getPropertyName();
-		if (propertyName.equals(WKFPreferences.SHOW_WO_NAME_KEY)) {
-			notifyShowWOName(WKFPreferences.getShowWONameInWKF());
-		} else if (propertyName.equals(WKFPreferences.SHOW_MESSAGES_NAME_KEY)) {
-			notifyShowMessages(WKFPreferences.getShowMessagesInWKF());
-		} else if (propertyName.equals(WKFPreferences.SHOW_GRID)) {
-			notifyShowGrid(WKFPreferences.getShowGrid());
-		} else if (propertyName.equals(WKFPreferences.SHOW_SHADOWS)) {
-			notifyShowShadowChanged();
-		} else if (propertyName.equals(WKFPreferences.SHOW_LEAN_TAB)) {
-			notifyShowLeanTabHasChanged();
-		} else if (propertyName.equals(WKFPreferences.USE_SIMPLE_EVENT_PALETTE)) {
-			notifyUseSimpleEventPaletteHasChanged();
-		} else if (propertyName.equals(WKFPreferences.USE_TRANSPARENCY)) {
-			notifyUseTransparencyChanged();
-		} else if (propertyName.equals(WKFPreferences.ACTIVITY_NODE_FONT_KEY)) {
-			notifyActivityFontChanged();
-		} else if (propertyName.equals(WKFPreferences.OPERATION_NODE_FONT_KEY)) {
-			notifyOperationFontChanged();
-		} else if (propertyName.equals(WKFPreferences.ACTION_NODE_FONT_KEY)) {
-			notifyActionFontChanged();
-		} else if (propertyName.equals(WKFPreferences.EVENT_NODE_FONT_KEY)) {
-			notifyEventFontChanged();
-		} else if (propertyName.equals(WKFPreferences.ROLE_FONT_KEY)) {
-			notifyRoleFontChanged();
-		} else if (propertyName.equals(WKFPreferences.EDGE_FONT_KEY)) {
-			notifyEdgeFontChanged();
-		} else if (propertyName.equals(WKFPreferences.ARTEFACT_FONT_KEY)) {
-			notifyArtefactFontChanged();
-		} else if (propertyName.equals(WKFPreferences.COMPONENT_FONT_KEY)) {
-			notifyComponentFontChanged();
-		} else if (propertyName.equals(WKFPreferences.CONNECTOR_REPRESENTATION)) {
-			notifyEdgeRepresentationChanged();
-		} else if (propertyName.equals(WKFPreferences.CONNECTOR_ADJUSTABILITY)) {
-			notifyEdgeRepresentationChanged();
+		if (evt.getSource() == WKFPreferences.getPreferences()) {
+			String propertyName = evt.getPropertyName();
+			if (propertyName.equals(WKFPreferences.SHOW_WO_NAME_KEY)) {
+				notifyShowWOName(WKFPreferences.getShowWONameInWKF());
+			} else if (propertyName.equals(WKFPreferences.SHOW_MESSAGES_NAME_KEY)) {
+				notifyShowMessages(WKFPreferences.getShowMessagesInWKF());
+			} else if (propertyName.equals(WKFPreferences.SHOW_GRID)) {
+				notifyShowGrid(WKFPreferences.getShowGrid());
+			} else if (propertyName.equals(WKFPreferences.SHOW_SHADOWS)) {
+				notifyShowShadowChanged();
+			} else if (propertyName.equals(WKFPreferences.SHOW_LEAN_TAB)) {
+				notifyShowLeanTabHasChanged();
+			} else if (propertyName.equals(WKFPreferences.USE_SIMPLE_EVENT_PALETTE)) {
+				notifyUseSimpleEventPaletteHasChanged();
+			} else if (propertyName.equals(WKFPreferences.USE_TRANSPARENCY)) {
+				notifyUseTransparencyChanged();
+			} else if (propertyName.equals(WKFPreferences.ACTIVITY_NODE_FONT_KEY)) {
+				notifyActivityFontChanged();
+			} else if (propertyName.equals(WKFPreferences.OPERATION_NODE_FONT_KEY)) {
+				notifyOperationFontChanged();
+			} else if (propertyName.equals(WKFPreferences.ACTION_NODE_FONT_KEY)) {
+				notifyActionFontChanged();
+			} else if (propertyName.equals(WKFPreferences.EVENT_NODE_FONT_KEY)) {
+				notifyEventFontChanged();
+			} else if (propertyName.equals(WKFPreferences.ROLE_FONT_KEY)) {
+				notifyRoleFontChanged();
+			} else if (propertyName.equals(WKFPreferences.EDGE_FONT_KEY)) {
+				notifyEdgeFontChanged();
+			} else if (propertyName.equals(WKFPreferences.ARTEFACT_FONT_KEY)) {
+				notifyArtefactFontChanged();
+			} else if (propertyName.equals(WKFPreferences.COMPONENT_FONT_KEY)) {
+				notifyComponentFontChanged();
+			} else if (propertyName.equals(WKFPreferences.CONNECTOR_REPRESENTATION)) {
+				notifyEdgeRepresentationChanged();
+			} else if (propertyName.equals(WKFPreferences.CONNECTOR_ADJUSTABILITY)) {
+				notifyEdgeRepresentationChanged();
+			}
+		} else {
+			super.propertyChange(evt);
 		}
 
 	}

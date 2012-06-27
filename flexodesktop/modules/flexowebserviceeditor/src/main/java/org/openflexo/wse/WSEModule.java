@@ -21,10 +21,8 @@ package org.openflexo.wse;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -63,16 +61,6 @@ public class WSEModule extends FlexoModule implements ExternalWSEModule {
 
 	public WSEController getWSEController() {
 		return (WSEController) getFlexoController();
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return project;
 	}
 
 }

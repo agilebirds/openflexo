@@ -49,6 +49,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSRepository;
@@ -76,7 +77,6 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -154,6 +154,11 @@ public class FPSController extends FlexoController {
 	}
 
 	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return getSharedProject();
+	}
+
+	@Override
 	public void dispose() {
 		super.dispose();
 		if (_instance == this) {
@@ -162,8 +167,8 @@ public class FPSController extends FlexoController {
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new FPSControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new FPSControllerActionInitializer(this);
 	}
 
 	/**

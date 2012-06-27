@@ -37,7 +37,6 @@ import org.openflexo.foundation.cg.templates.action.OpenTemplateFileInNewWindow;
 import org.openflexo.foundation.cg.templates.action.RedefineCustomTemplateFile;
 import org.openflexo.generator.action.OverrideWithVersion;
 import org.openflexo.generator.action.ShowFileVersion;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class DGControllerActionInitializer extends DEControllerActionInitializer {
 
@@ -47,8 +46,8 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 		FlexoModelObject.addActionForClass(OpenFileInExplorer.actionType, CGFile.class);
 	}
 
-	public DGControllerActionInitializer(InteractiveFlexoEditor editor, DGController controller) {
-		super(editor, controller);
+	public DGControllerActionInitializer(DGController controller) {
+		super(controller);
 	}
 
 	protected DGController getDGController() {
@@ -150,13 +149,13 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 		// Initialize actions available using inspector (template tab)
 
 		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(
-				OpenTemplateFileInNewWindow.actionType, getDGController().getEditor());
+				OpenTemplateFileInNewWindow.actionType, this);
 
 		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
-				EditCustomTemplateFile.actionType, getDGController().getEditor());
+				EditCustomTemplateFile.actionType, this);
 
 		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplate>(
-				RedefineCustomTemplateFile.actionType, getDGController().getEditor());
+				RedefineCustomTemplateFile.actionType, this);
 
 	}
 }

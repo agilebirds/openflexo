@@ -110,7 +110,7 @@ public class DocItemListView extends JPanel {
 	}
 
 	public interface DocItemListModel {
-		public Vector getItems();
+		public Vector<DocItem> getItems();
 
 		public void itemAdded();
 

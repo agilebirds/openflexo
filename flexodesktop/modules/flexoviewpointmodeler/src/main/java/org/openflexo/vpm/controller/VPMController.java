@@ -60,7 +60,6 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.action.CEDControllerActionInitializer;
@@ -103,11 +102,9 @@ public class VPMController extends FlexoController implements ConsistencyCheckin
 	 */
 	public VPMController(FlexoModule module) {
 		super(module);
-
 		resourceCenter = FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
 		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-
 		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();
 
 		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
@@ -130,8 +127,8 @@ public class VPMController extends FlexoController implements ConsistencyCheckin
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new CEDControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new CEDControllerActionInitializer(this);
 	}
 
 	/**
@@ -171,6 +168,11 @@ public class VPMController extends FlexoController implements ConsistencyCheckin
 	@Override
 	protected FlexoMainPane createMainPane() {
 		return new CEDMainPane(this);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return getViewPointLibrary();
 	}
 
 	/**

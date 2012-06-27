@@ -23,10 +23,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.dgmodule.controller.DGController;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.view.controller.FlexoController;
@@ -73,16 +71,6 @@ public class DGModule extends FlexoModule {
 	@Override
 	public Module getModule() {
 		return Module.DG_MODULE;
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return project.getGeneratedDoc();
 	}
 
 }

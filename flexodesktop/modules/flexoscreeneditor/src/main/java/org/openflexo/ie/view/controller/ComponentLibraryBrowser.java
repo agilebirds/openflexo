@@ -41,14 +41,8 @@ public class ComponentLibraryBrowser extends ProjectBrowser implements FlexoObse
 
 	protected static final Logger logger = Logger.getLogger(ComponentLibraryBrowser.class.getPackage().getName());
 
-	protected IEController _controller;
-
 	public ComponentLibraryBrowser(IEController controller) {
-		super(controller.getEditor(), controller.getIESelectionManager());
-		_controller = controller;
-		update();
-		getProject().getFlexoComponentLibrary().addObserver(this);
-
+		super(controller);
 	}
 
 	@Override
@@ -76,6 +70,17 @@ public class ComponentLibraryBrowser extends ProjectBrowser implements FlexoObse
 			return null;
 		} else {
 			return getProject().getFlexoComponentLibrary();
+		}
+	}
+
+	@Override
+	public void setRootObject(FlexoModelObject aRootObject) {
+		if (getRootObject() != null) {
+			getRootObject().deleteObserver(this);
+		}
+		super.setRootObject(aRootObject);
+		if (getRootObject() != null) {
+			getRootObject().addObserver(this);
 		}
 	}
 

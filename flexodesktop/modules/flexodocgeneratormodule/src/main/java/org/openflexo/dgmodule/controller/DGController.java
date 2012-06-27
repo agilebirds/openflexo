@@ -67,6 +67,7 @@ import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
@@ -87,7 +88,6 @@ import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -156,6 +156,11 @@ public class DGController extends DEController implements FlexoObserver, Project
 	}
 
 	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getGeneratedDoc();
+	}
+
+	@Override
 	protected DESelectionManager createSelectionManager() {
 		return new DGSelectionManager(this);
 	}
@@ -181,8 +186,8 @@ public class DGController extends DEController implements FlexoObserver, Project
 	}
 
 	@Override
-	public DGControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new DGControllerActionInitializer(editor, this);
+	public DGControllerActionInitializer createControllerActionInitializer() {
+		return new DGControllerActionInitializer(this);
 	}
 
 	@Override

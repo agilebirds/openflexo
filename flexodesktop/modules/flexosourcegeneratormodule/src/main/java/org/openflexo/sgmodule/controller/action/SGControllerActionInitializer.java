@@ -37,7 +37,6 @@ import org.openflexo.sgmodule.SGModule;
 import org.openflexo.sgmodule.TechnologyModuleGUIFactory;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * 
@@ -51,8 +50,8 @@ public class SGControllerActionInitializer extends ControllerActionInitializer {
 
 	private SGController _sgController;
 
-	public SGControllerActionInitializer(InteractiveFlexoEditor editor, SGController controller) {
-		super(editor, controller);
+	public SGControllerActionInitializer(SGController controller) {
+		super(controller);
 		_sgController = controller;
 	}
 
@@ -163,13 +162,13 @@ public class SGControllerActionInitializer extends ControllerActionInitializer {
 		}
 
 		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(
-				OpenTemplateFileInNewWindow.actionType, getSGController().getEditor());
+				OpenTemplateFileInNewWindow.actionType, this);
 
 		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
-				EditCustomTemplateFile.actionType, getSGController().getEditor());
+				EditCustomTemplateFile.actionType, this);
 
 		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplate>(
-				RedefineCustomTemplateFile.actionType, getSGController().getEditor());
+				RedefineCustomTemplateFile.actionType, this);
 
 	}
 

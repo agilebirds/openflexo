@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wse.controller.WSEController;
 
 /**
@@ -38,8 +37,8 @@ public class WSEControllerActionInitializer extends ControllerActionInitializer 
 
 	private WSEController _wseController;
 
-	public WSEControllerActionInitializer(InteractiveFlexoEditor editor, WSEController controller) {
-		super(editor, controller);
+	public WSEControllerActionInitializer(WSEController controller) {
+		super(controller);
 		_wseController = controller;
 	}
 

@@ -32,12 +32,10 @@ import org.openflexo.dm.view.erdiagram.ERDiagramController;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalDMModule;
@@ -81,16 +79,6 @@ public class DMModule extends FlexoModule implements ExternalDMModule {
 
 	public DMController getDMController() {
 		return (DMController) getFlexoController();
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return project.getDataModel();
 	}
 
 	@Override

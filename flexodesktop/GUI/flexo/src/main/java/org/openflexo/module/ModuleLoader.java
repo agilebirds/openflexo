@@ -162,7 +162,6 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName());
 		FlexoModule flexoModule = doInternalLoadModule(module);
 		_modules.put(module, flexoModule);
-		activeModule = flexoModule;
 		if (createProgress) {
 			ProgressWindow.hideProgressWindow();
 		}
@@ -258,7 +257,6 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	}
 
 	public FlexoModule switchToModule(Module module) throws ModuleLoadingException {
-		logger.info("switchToModule: " + module);
 		if (activeModule != null && activeModule.getModule() == module) {
 			return activeModule;
 		}
@@ -278,7 +276,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			if (activeModule != null) {
 				activeModule.setAsInactive();
 			}
-			_modules.get(m).setAsActiveModule();
+			m.setAsActiveModule();
 			activeModule = m;
 		}
 	}

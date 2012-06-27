@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.dre.controller.DREController;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * 
@@ -37,8 +36,8 @@ public class DREControllerActionInitializer extends ControllerActionInitializer 
 
 	private DREController _DREController;
 
-	public DREControllerActionInitializer(InteractiveFlexoEditor editor, DREController controller) {
-		super(editor, controller);
+	public DREControllerActionInitializer(DREController controller) {
+		super(controller);
 		_DREController = controller;
 	}
 

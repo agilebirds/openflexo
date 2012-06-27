@@ -34,7 +34,6 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.InspectorGroup;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.module.external.IModule;
 import org.openflexo.view.FlexoFrame;
@@ -142,9 +141,10 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 		});
 		if (getEditor() != null) {
 			boolean selectDefaultObject = false;
-			if (getDefaultObjectToSelect(getEditor().getProject()) != null
+			FlexoModelObject defaultObjectToSelect = getController().getDefaultObjectToSelect(getEditor().getProject());
+			if (defaultObjectToSelect != null
 					&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
-							.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect(getEditor().getProject()))) {
+							.getCurrentDisplayedObjectAsModuleView() == defaultObjectToSelect)) {
 				if (getFlexoController().getSelectionManager().getFocusedObject() == null) {
 					selectDefaultObject = true;
 				}
@@ -152,7 +152,7 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 				selectDefaultObject = true;
 			}
 			if (selectDefaultObject) {
-				getFlexoController().setCurrentEditedObjectAsModuleView(getDefaultObjectToSelect(getEditor().getProject()));
+				getFlexoController().setCurrentEditedObjectAsModuleView(defaultObjectToSelect);
 			} else {
 				getFlexoController().getSelectionManager().setSelectedObjects(
 						new Vector<FlexoModelObject>(getFlexoController().getSelectionManager().getSelection()));
@@ -237,7 +237,5 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 	public void update(FlexoObservable observable, DataModification dataModification) {
 
 	}
-
-	public abstract FlexoModelObject getDefaultObjectToSelect(FlexoProject project);
 
 }

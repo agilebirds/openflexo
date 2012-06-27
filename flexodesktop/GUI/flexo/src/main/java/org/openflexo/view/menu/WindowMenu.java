@@ -226,7 +226,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 			setAction(action);
 			KeyStroke accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_I, FlexoCst.META_MASK);
 			setAccelerator(accelerator);
-			getController().registerActionForKeyStroke(action, accelerator);
+			getController().registerActionForKeyStroke(action, accelerator, "inspect");
 			setText(FlexoLocalization.localizedForKey("inspector", this));
 		}
 

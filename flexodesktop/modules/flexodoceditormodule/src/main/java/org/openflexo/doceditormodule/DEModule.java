@@ -19,15 +19,15 @@
  */
 package org.openflexo.doceditormodule;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.doceditor.DEPreferences;
 import org.openflexo.doceditor.controller.DEController;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.view.controller.FlexoController;
@@ -72,17 +72,19 @@ public class DEModule extends FlexoModule {
 	}
 
 	public DEController getDEController() {
-		return (DEController) getFlexoController();
-	}
+		new ActionListener() {
+			private final String s;
+			{
+				s = "";
+			}
 
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return project.getTOCData();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		};
+		return (DEController) getFlexoController();
 	}
 
 }

@@ -44,6 +44,7 @@ import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Object that will act as a model for a JTree to represent a browsing perspective of a project
@@ -93,28 +94,36 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	int rowHeight = DEFAULT_ROW_HEIGHT;
 
+	private FlexoController controller;
+
+	@Deprecated
 	public ProjectBrowser(FlexoProject project) {
 		this(project, true);
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoProject project, boolean initNow) {
 		this(project, null, initNow);
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoEditor editor, SelectionManager selectionManager) {
-		this(editor.getProject(), selectionManager, true);
+		this(editor != null ? editor.getProject() : null, selectionManager, true);
 		_editor = editor;
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoEditor editor, SelectionManager selectionManager, boolean initNow) {
-		this(editor.getProject(), selectionManager, initNow);
+		this(editor != null ? editor.getProject() : null, selectionManager, initNow);
 		_editor = editor;
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoProject project, SelectionManager selectionManager) {
 		this(project, selectionManager, true);
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoProject project, SelectionManager selectionManager, boolean initNow) {
 		super(null);
 		_project = project;
@@ -135,6 +144,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
+	@Deprecated
 	protected ProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager, boolean initNow) {
 		super(null);
 		_project = configuration.getProject();
@@ -148,6 +158,34 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		configuration.configure(this);
 		if (selectionManager != null) {
 			_selectionManager = selectionManager;
+			_selectionManager.addToSelectionListeners(this);
+		}
+		_selectionController = new SelectionController.DefaultSelectionController();
+	}
+
+	protected ProjectBrowser(FlexoController controller) {
+		this(null, controller);
+	}
+
+	protected ProjectBrowser(TreeConfiguration configuration, FlexoController controller) {
+		super(null);
+		this.controller = controller;
+		if (configuration != null) {
+			_browserElementFactory = configuration.getBrowserElementFactory();
+		}
+		_filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
+		_filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
+		_filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
+		// _elementTypeFilters = new Vector<ElementTypeBrowserFilter>();
+		_browserListeners = new Vector<ProjectBrowserListener>();
+		_customFilters = new Vector<CustomBrowserFilter>();
+		if (configuration != null) {
+			configuration.configure(this);
+		} else {
+			configure();
+		}
+		if (controller != null && controller.getSelectionManager() != null) {
+			_selectionManager = controller.getSelectionManager();
 			_selectionManager.addToSelectionListeners(this);
 		}
 		_selectionController = new SelectionController.DefaultSelectionController();
@@ -1290,6 +1328,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * @return
 	 */
 	public FlexoEditor getEditor() {
+		if (controller != null) {
+			return controller.getEditor();
+		}
 		return _editor;
 	}
 

@@ -33,7 +33,6 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
@@ -89,11 +88,6 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 	public VPMController getCEDController() {
 		return (VPMController) getFlexoController();
-	}
-
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return getCEDController().getCalcLibrary();
 	}
 
 	@Override

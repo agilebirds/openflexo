@@ -38,6 +38,7 @@ import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceUpdateHandler;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
@@ -72,7 +73,6 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -135,8 +135,8 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new SGControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new SGControllerActionInitializer(this);
 	}
 
 	/**
@@ -261,6 +261,12 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 		if (getEditor() != null && getEditor().getProject() != null) {
 			getEditor().getProject().getGeneratedCode().setFactory(this);
 		}
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		// Implement this
+		return null;
 	}
 
 	public SourceRepository getCurrentGeneratedCodeRepository() {

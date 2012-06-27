@@ -33,6 +33,7 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -42,7 +43,6 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -107,8 +107,13 @@ public class DEController extends FlexoController implements FlexoObserver {
 	}
 
 	@Override
-	public DEControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new DEControllerActionInitializer(editor, this);
+	public DEControllerActionInitializer createControllerActionInitializer() {
+		return new DEControllerActionInitializer(this);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getTOCData();
 	}
 
 	public void initProgressWindow(String msg, int steps) {

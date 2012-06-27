@@ -22,6 +22,7 @@ package org.openflexo.view.controller;
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
@@ -52,7 +53,7 @@ public abstract class ActionInitializer<A extends FlexoAction<A, T1, T2>, T1 ext
 		return _controllerActionInitializer;
 	}
 
-	public InteractiveFlexoEditor getEditor() {
+	public FlexoEditor getEditor() {
 		return getControllerActionInitializer().getEditor();
 	}
 
@@ -65,7 +66,11 @@ public abstract class ActionInitializer<A extends FlexoAction<A, T1, T2>, T1 ext
 	}
 
 	public FlexoProject getProject() {
-		return getEditor().getProject();
+		if (getEditor() != null) {
+			return getEditor().getProject();
+		} else {
+			return null;
+		}
 	}
 
 	/**

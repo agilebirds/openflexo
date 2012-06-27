@@ -28,7 +28,6 @@ import org.openflexo.foundation.action.OpenFileInExplorer;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class DEControllerActionInitializer extends ControllerActionInitializer {
 
@@ -38,8 +37,8 @@ public class DEControllerActionInitializer extends ControllerActionInitializer {
 		FlexoModelObject.addActionForClass(OpenFileInExplorer.actionType, CGFile.class);
 	}
 
-	public DEControllerActionInitializer(InteractiveFlexoEditor editor, DEController controller) {
-		super(editor, controller);
+	public DEControllerActionInitializer(DEController controller) {
+		super(controller);
 	}
 
 	protected DEController getDEController() {

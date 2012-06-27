@@ -19,17 +19,9 @@
  */
 package org.openflexo.view.menu;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 
-import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.module.Module;
 import org.openflexo.view.controller.FlexoController;
@@ -157,7 +149,7 @@ public abstract class FlexoMenuBar extends JMenuBar {
 		return _helpMenu;
 	}
 
-	@Override
+	/*@Override
 	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
 		// TODO Auto-generated method stub
 		boolean b = super.processKeyBinding(ks, e, condition, pressed);
@@ -173,5 +165,5 @@ public abstract class FlexoMenuBar extends JMenuBar {
 			}
 		}
 		return b;
-	}
+	}*/
 }

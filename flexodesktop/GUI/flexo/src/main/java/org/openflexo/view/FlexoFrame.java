@@ -275,9 +275,6 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		}
 		_relativeWindows.clear();
 		if (_controller != null) {
-			if (_controller.getKeyEventListener() != null) {
-				removeKeyListener(_controller.getKeyEventListener());
-			}
 			_controller = null;
 		}
 		if (windowListener != null) {

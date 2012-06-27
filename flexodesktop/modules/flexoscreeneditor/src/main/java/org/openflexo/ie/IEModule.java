@@ -28,12 +28,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ie.IEReusableComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
 import org.openflexo.ie.view.IEWOComponentView;
@@ -58,7 +56,7 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 	public IEModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
 		IEPreferences.init();
-		getIEController().initWithEmptyPanel();
+		getIEController().initMainPane();
 	}
 
 	@Override
@@ -161,16 +159,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 		pane.doLayout();
 		pane.repaint();
 		return pane;
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return null;// getProject().getFlexoComponentLibrary();
 	}
 
 }

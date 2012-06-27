@@ -46,6 +46,11 @@ public class WelcomePanelEDITOR {
 					}
 
 					@Override
+					public FlexoEditor createApplicationEditor() {
+						return new InteractiveFlexoEditor(this, null);
+					}
+
+					@Override
 					public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
 						return new DefaultProjectLoadingHandler();
 					}

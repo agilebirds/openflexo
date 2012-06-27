@@ -76,6 +76,7 @@ public class IEMainPane extends FlexoMainPane implements GraphicalFlexoObserver 
 		         logger.severe("The current view does not implement IEModuleView!!!" + moduleView.getClass().getName());
 		 }*/
 		if (moduleView instanceof IEWOComponentView) {
+			// Listen for component rename
 			((IEWOComponentView) moduleView).getModel().getComponentDefinition().addObserver(this);
 		}
 	}

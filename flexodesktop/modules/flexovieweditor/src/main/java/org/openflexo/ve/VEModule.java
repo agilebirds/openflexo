@@ -33,7 +33,6 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.localization.FlexoLocalization;
@@ -82,11 +81,6 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 
 	public VEController getOEController() {
 		return (VEController) getFlexoController();
-	}
-
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return getOEController().getProject().getShemaLibrary();
 	}
 
 	@Override

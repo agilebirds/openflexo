@@ -52,6 +52,7 @@ import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -62,7 +63,6 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -106,8 +106,8 @@ public class DMController extends FlexoController implements ConsistencyChecking
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new DMControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new DMControllerActionInitializer(this);
 	}
 
 	/**
@@ -118,6 +118,16 @@ public class DMController extends FlexoController implements ConsistencyChecking
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new DMMenuBar(this);
+	}
+
+	/**
+	 * Overrides getDefaultObjectToSelect
+	 * 
+	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
+	 */
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getDataModel();
 	}
 
 	public void loadRelativeWindows() {

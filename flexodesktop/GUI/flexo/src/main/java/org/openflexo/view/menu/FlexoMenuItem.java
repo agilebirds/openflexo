@@ -71,7 +71,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource, Prope
 		_controller = controller;
 		if (accelerator != null) {
 			setAccelerator(accelerator);
-			_controller.registerActionForKeyStroke(action, accelerator);
+			_controller.registerActionForKeyStroke(action, accelerator, flexoActionName);
 		}
 		if (localizeActionName) {
 			setText(FlexoLocalization.localizedForKey(flexoActionName, this));

@@ -32,6 +32,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
@@ -41,7 +42,6 @@ import org.openflexo.ve.view.menu.OEMenuBar;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -92,8 +92,8 @@ public class VEController extends FlexoController {
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new VEControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new VEControllerActionInitializer(this);
 	}
 
 	/**
@@ -113,7 +113,11 @@ public class VEController extends FlexoController {
 			getProject().getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
 			getProject().getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
 		}
+	}
 
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getShemaLibrary();
 	}
 
 	/**

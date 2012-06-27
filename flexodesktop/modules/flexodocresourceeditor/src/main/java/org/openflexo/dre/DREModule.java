@@ -23,10 +23,8 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.dre.controller.DREController;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -66,17 +64,6 @@ public class DREModule extends FlexoModule implements ExternalDREModule {
 
 	public DREController getDREController() {
 		return (DREController) getFlexoController();
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

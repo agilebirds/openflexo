@@ -62,6 +62,7 @@ import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
@@ -87,7 +88,6 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -154,6 +154,11 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 		}
 	}
 
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getGeneratedCode();
+	}
+
 	/**
 	 * Creates a new instance of MenuBar for the module this controller refers to
 	 * 
@@ -165,8 +170,8 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new GeneratorControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new GeneratorControllerActionInitializer(this);
 	}
 
 	public void initProgressWindow(String msg, int steps) {

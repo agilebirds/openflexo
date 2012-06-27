@@ -38,7 +38,6 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.ActivityGroup;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -406,16 +405,6 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 				screenshot.getParent().remove(screenshot);
 			}
 		}
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect(FlexoProject)
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return project.getFlexoWorkflow().getRootProcess();
 	}
 
 	/**

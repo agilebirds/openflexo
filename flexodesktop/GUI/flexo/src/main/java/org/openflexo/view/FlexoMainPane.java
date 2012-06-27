@@ -55,6 +55,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.ObjectDeleted;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.prefs.FlexoPreferences;
@@ -76,8 +77,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 	protected FlexoController _controller;
 
 	private JComponent _centerView;
-
-	// private JSplitPane _middlePane;
 
 	protected ModuleView<?> _moduleView;
 
@@ -154,6 +153,21 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 
 	private JComponent _footer;
 	private JComponent _header;
+
+	public HistoryLocation getLastHistoryLocationForProject(FlexoProject project) {
+		// TODO: Check if this makes any sense
+		for (int i = previousHistory.size() - 1; i > -1; i--) {
+			if (previousHistory.get(i)._object.getProject() == project) {
+				return previousHistory.get(i);
+			}
+		}
+		for (HistoryLocation hl : nextHistory) {
+			if (hl._object.getProject() == project) {
+				return hl;
+			}
+		}
+		return null;
+	}
 
 	public void setModuleView(ModuleView<?> moduleView) {
 		if (logger.isLoggable(Level.FINE)) {
@@ -917,9 +931,8 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			if (canGoBackward()) {
 				goBackward();
 			} else {
-				if (_controller.getModule().getDefaultObjectToSelect(_controller.getProject()) != removedObject) {
-					_controller.setCurrentEditedObjectAsModuleView(_controller.getModule().getDefaultObjectToSelect(
-							_controller.getProject()));
+				if (_controller.getDefaultObjectToSelect(_controller.getProject()) != removedObject) {
+					_controller.setCurrentEditedObjectAsModuleView(_controller.getDefaultObjectToSelect(_controller.getProject()));
 				} else {
 					resetModuleView();
 				}

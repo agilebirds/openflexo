@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.AbstractMessageDefinition;
@@ -40,7 +41,6 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wse.controller.action.WSEControllerActionInitializer;
 import org.openflexo.wse.view.WSEMainPane;
@@ -79,8 +79,8 @@ public class WSEController extends FlexoController {// , ConsistencyCheckingCont
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new WSEControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new WSEControllerActionInitializer(this);
 	}
 
 	/**
@@ -117,6 +117,11 @@ public class WSEController extends FlexoController {// , ConsistencyCheckingCont
 
 	public WSEBrowser getWSEBrowser() {
 		return _browser;
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project;
 	}
 
 	@Override

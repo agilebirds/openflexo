@@ -23,10 +23,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
@@ -74,11 +72,6 @@ public class FPSModule extends FlexoModule implements ExternalFPSModule {
 
 	public FPSController getFPSController() {
 		return (FPSController) getFlexoController();
-	}
-
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return getFPSController().getSharedProject();
 	}
 
 	@Override

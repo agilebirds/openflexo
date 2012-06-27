@@ -20,6 +20,7 @@
 package org.openflexo.wkf.controller.action;
 
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -49,7 +50,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.wkf.processeditor.ProcessView;
 
@@ -91,7 +91,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 						return false;
 					}
 					// Cannot delete a process by pressing delete key
-					if (action.getInvoker() instanceof FlexoMenuItem || action.getInvoker() instanceof FlexoKeyEventListener) {
+					if (action.getInvoker() instanceof FlexoMenuItem || e instanceof KeyEvent) {
 						logger.fine("refuse to delete a process by pressing delete key");
 						Toolkit.getDefaultToolkit().beep();
 						return false;
@@ -182,7 +182,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 					Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 					for (FlexoModelObject object : objects) {
 						if (!object.isDeleted()) {
-							for (FlexoModelObjectReference ref : object.getReferencers()) {
+							for (FlexoModelObjectReference<?> ref : object.getReferencers()) {
 								if (ref.getOwner() instanceof TOCEntry) {
 									tocEntries.add((TOCEntry) ref.getOwner());
 								}

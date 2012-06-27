@@ -48,16 +48,10 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 		super();
 		setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
 		_parentFrame = frame;
-		// setModal(false);
 		setLocationRelativeTo(frame);
-		// setFocusable(true);
-		// addFocusListener(this);
-		addKeyListener(frame.getController().getKeyEventListener());
 		isDisplayedWhenModuleIsActive = false;
 		_parentFrame.addToRelativeWindows(this);
 		getController().notifyNewFlexoRelativeWindow(this);
-		// if (ToolBox.getPLATFORM().equals(ToolBox.MACOS))
-		// setJMenuBar(getController().createAndRegisterNewMenuBar());
 		setFocusableWindowState(false);
 
 	}
@@ -72,7 +66,6 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 		super.dispose();
 		if (_parentFrame != null) {
 			_parentFrame.removeFromRelativeWindows(this);
-			removeKeyListener(_parentFrame.getController().getKeyEventListener());
 		}
 		getController().notifyRemoveFlexoRelativeWindow(this);
 		removeAll();

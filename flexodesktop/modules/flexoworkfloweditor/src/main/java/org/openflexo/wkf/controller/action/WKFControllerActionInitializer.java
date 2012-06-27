@@ -66,7 +66,6 @@ import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.module.UserType;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.controller.WKFController;
 
@@ -76,8 +75,8 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 
 	protected WKFController _wkfController;
 
-	public WKFControllerActionInitializer(InteractiveFlexoEditor editor, WKFController controller) {
-		super(editor, controller);
+	public WKFControllerActionInitializer(WKFController controller) {
+		super(controller);
 		_wkfController = controller;
 	}
 
@@ -193,69 +192,69 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new RemoveFromInformedRoleInitializer(this);
 
 		// Initialize action of inspectors
-		RoleList.addRoleActionizer = new FlexoActionizer<AddRole, WorkflowModelObject, WorkflowModelObject>(AddRole.actionType, getEditor());
+		RoleList.addRoleActionizer = new FlexoActionizer<AddRole, WorkflowModelObject, WorkflowModelObject>(AddRole.actionType, this);
 		Role.addParentRoleActionizer = new FlexoActionizer<AddRoleSpecialization, Role, WorkflowModelObject>(
-				AddRoleSpecialization.actionType, getEditor());
-		RoleList.deleteRoleActionizer = new FlexoActionizer<DeleteRole, Role, WorkflowModelObject>(DeleteRole.actionType, getEditor());
+				AddRoleSpecialization.actionType, this);
+		RoleList.deleteRoleActionizer = new FlexoActionizer<DeleteRole, Role, WorkflowModelObject>(DeleteRole.actionType, this);
 
-		FlexoProcess.addStatusActionizer = new FlexoActionizer<AddStatus, WKFObject, WKFObject>(AddStatus.actionType, getEditor());
-		FlexoProcess.deleteActionizer = new FlexoActionizer<WKFDelete, WKFObject, WKFObject>(WKFDelete.actionType, getEditor());
+		FlexoProcess.addStatusActionizer = new FlexoActionizer<AddStatus, WKFObject, WKFObject>(AddStatus.actionType, this);
+		FlexoProcess.deleteActionizer = new FlexoActionizer<WKFDelete, WKFObject, WKFObject>(WKFDelete.actionType, this);
 
 		// MetricsDefinition actions
 		FlexoWorkflow.addProcessMetricsDefinitionActionizer = new FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject>(
-				AddProcessMetricsDefinition.actionType, getEditor());
+				AddProcessMetricsDefinition.actionType, this);
 		FlexoWorkflow.addActivityMetricsDefinitionActionizer = new FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject>(
-				AddActivityMetricsDefinition.actionType, getEditor());
+				AddActivityMetricsDefinition.actionType, this);
 		FlexoWorkflow.addOperationMetricsDefinitionActionizer = new FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject>(
-				AddOperationMetricsDefinition.actionType, getEditor());
+				AddOperationMetricsDefinition.actionType, this);
 		FlexoWorkflow.addEdgeMetricsDefinitionActionizer = new FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject>(
-				AddEdgeMetricsDefinition.actionType, getEditor());
+				AddEdgeMetricsDefinition.actionType, this);
 		FlexoWorkflow.addArtefactMetricsDefinitionActionizer = new FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject>(
-				AddArtefactMetricsDefinition.actionType, getEditor());
+				AddArtefactMetricsDefinition.actionType, this);
 		FlexoWorkflow.deleteMetricsDefinitionActionizer = new FlexoActionizer<DeleteMetricsDefinition, MetricsDefinition, MetricsDefinition>(
-				DeleteMetricsDefinition.actionType, getEditor());
+				DeleteMetricsDefinition.actionType, this);
 
 		// MetricsValue actions
 		FlexoProcess.addMetricsActionizer = new FlexoActionizer<AddProcessMetricsValue, FlexoProcess, WKFObject>(
-				AddProcessMetricsValue.actionType, getEditor());
+				AddProcessMetricsValue.actionType, this);
 		AbstractActivityNode.addMetricsActionizer = new FlexoActionizer<AddActivityMetricsValue, AbstractActivityNode, WKFObject>(
-				AddActivityMetricsValue.actionType, getEditor());
+				AddActivityMetricsValue.actionType, this);
 		OperationNode.addMetricsActionizer = new FlexoActionizer<AddOperationMetricsValue, OperationNode, WKFObject>(
-				AddOperationMetricsValue.actionType, getEditor());
+				AddOperationMetricsValue.actionType, this);
 		FlexoPostCondition.addMetricsActionizer = new FlexoActionizer<AddEdgeMetricsValue, FlexoPostCondition<?, ?>, WKFObject>(
-				AddEdgeMetricsValue.actionType, getEditor());
+				AddEdgeMetricsValue.actionType, this);
 		WKFArtefact.addMetricsActionizer = new FlexoActionizer<AddArtefactMetricsValue, WKFArtefact, WKFObject>(
-				AddArtefactMetricsValue.actionType, getEditor());
+				AddArtefactMetricsValue.actionType, this);
 
 		FlexoProcess.deleteMetricsActionizer = new FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue>(
-				DeleteMetricsValue.actionType, getEditor());
+				DeleteMetricsValue.actionType, this);
 		AbstractActivityNode.deleteMetricsActionizer = new FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue>(
-				DeleteMetricsValue.actionType, getEditor());
+				DeleteMetricsValue.actionType, this);
 		OperationNode.deleteMetricsActionizer = new FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue>(
-				DeleteMetricsValue.actionType, getEditor());
+				DeleteMetricsValue.actionType, this);
 		FlexoPostCondition.deleteMetricsActionizer = new FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue>(
-				DeleteMetricsValue.actionType, getEditor());
+				DeleteMetricsValue.actionType, this);
 		WKFArtefact.deleteMetricsActionizer = new FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue>(
-				DeleteMetricsValue.actionType, getEditor());
+				DeleteMetricsValue.actionType, this);
 		AbstractActivityNode.addResponsibleRoleActionizer = new FlexoActionizer<AddToResponsibleRole, AbstractActivityNode, AbstractActivityNode>(
-				AddToResponsibleRole.actionType, getEditor());
+				AddToResponsibleRole.actionType, this);
 		AbstractActivityNode.removeFromResponsibleRoleActionizer = new FlexoActionizer<RemoveFromResponsibleRole, Role, AbstractActivityNode>(
-				RemoveFromResponsibleRole.actionType, getEditor());
+				RemoveFromResponsibleRole.actionType, this);
 
 		AbstractActivityNode.addAccountableRoleActionizer = new FlexoActionizer<AddToAccountableRole, AbstractActivityNode, AbstractActivityNode>(
-				AddToAccountableRole.actionType, getEditor());
+				AddToAccountableRole.actionType, this);
 		AbstractActivityNode.removeFromAccountableRoleActionizer = new FlexoActionizer<RemoveFromAccountableRole, Role, AbstractActivityNode>(
-				RemoveFromAccountableRole.actionType, getEditor());
+				RemoveFromAccountableRole.actionType, this);
 
 		AbstractActivityNode.addConsultedRoleActionizer = new FlexoActionizer<AddToConsultedRole, AbstractActivityNode, AbstractActivityNode>(
-				AddToConsultedRole.actionType, getEditor());
+				AddToConsultedRole.actionType, this);
 		AbstractActivityNode.removeFromConsultedRoleActionizer = new FlexoActionizer<RemoveFromConsultedRole, Role, AbstractActivityNode>(
-				RemoveFromConsultedRole.actionType, getEditor());
+				RemoveFromConsultedRole.actionType, this);
 
 		AbstractActivityNode.addInformedRoleActionizer = new FlexoActionizer<AddToInformedRole, AbstractActivityNode, AbstractActivityNode>(
-				AddToInformedRole.actionType, getEditor());
+				AddToInformedRole.actionType, this);
 		AbstractActivityNode.removeFromInformedRoleActionizer = new FlexoActionizer<RemoveFromInformedRole, Role, AbstractActivityNode>(
-				RemoveFromInformedRole.actionType, getEditor());
+				RemoveFromInformedRole.actionType, this);
 
 	}
 

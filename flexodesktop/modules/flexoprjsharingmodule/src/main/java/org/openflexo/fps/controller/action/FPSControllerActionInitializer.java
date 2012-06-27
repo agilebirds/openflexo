@@ -25,7 +25,6 @@ import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.fps.action.FlexoUnknownHostException;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * 
@@ -39,8 +38,8 @@ public class FPSControllerActionInitializer extends ControllerActionInitializer 
 
 	private FPSController _fpsController;
 
-	public FPSControllerActionInitializer(InteractiveFlexoEditor editor, FPSController controller) {
-		super(editor, controller);
+	public FPSControllerActionInitializer(FPSController controller) {
+		super(controller);
 		_fpsController = controller;
 	}
 

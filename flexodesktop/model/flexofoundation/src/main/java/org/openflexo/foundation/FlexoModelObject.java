@@ -98,7 +98,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	private boolean hasSpecificDescriptions = false;
 
-	private Vector<FlexoModelObjectReference> referencers;
+	private Vector<FlexoModelObjectReference<?>> referencers;
 
 	// Imported objects
 	private boolean isDeletedOnServer = false;
@@ -159,7 +159,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	 */
 	public FlexoModelObject(FlexoProject project) {
 		super();
-		referencers = new Vector<FlexoModelObjectReference>();
+		referencers = new Vector<FlexoModelObjectReference<?>>();
 		specificDescriptions = new TreeMap<String, String>();
 		customProperties = new Vector<FlexoProperty>();
 		_editionPatternReferences = new Vector<EditionPatternReference>();
@@ -621,7 +621,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		}
 		isDeleted = false;
-		referencers = new Vector<FlexoModelObjectReference>();
+		referencers = new Vector<FlexoModelObjectReference<?>>();
 		setChanged();
 		if (getProject() != null) {
 			getProject().notifyObjectCreated(this);
@@ -1031,7 +1031,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
-	public Vector<FlexoModelObjectReference> getReferencers() {
+	public Vector<FlexoModelObjectReference<?>> getReferencers() {
 		return referencers;
 	}
 

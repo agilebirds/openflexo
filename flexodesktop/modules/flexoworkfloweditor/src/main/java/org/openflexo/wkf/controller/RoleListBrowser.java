@@ -77,7 +77,11 @@ public class RoleListBrowser extends ProjectBrowser {
 
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		return getProject().getWorkflow();
+		if (getProject() != null) {
+			return getProject().getWorkflow();
+		} else {
+			return null;
+		}
 	}
 
 }

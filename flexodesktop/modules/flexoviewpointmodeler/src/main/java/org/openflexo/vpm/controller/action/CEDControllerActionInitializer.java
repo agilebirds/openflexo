@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.vpm.controller.VPMController;
 
 /**
@@ -36,8 +35,8 @@ public class CEDControllerActionInitializer extends ControllerActionInitializer 
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public CEDControllerActionInitializer(InteractiveFlexoEditor editor, VPMController controller) {
-		super(editor, controller);
+	public CEDControllerActionInitializer(VPMController controller) {
+		super(controller);
 	}
 
 	protected VPMController getCEDController() {

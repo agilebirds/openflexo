@@ -75,12 +75,14 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
 	private static final String FOR_FLEXO_SERVER = "_forFlexoServer_";
+	public static final String EDITOR_ADDED = "editorAdded";
+	public static final String EDITOR_REMOVED = "editorRemoved";
 
 	private InteractiveFlexoResourceUpdateHandler resourceUpdateHandler;
 
 	private final ApplicationContext applicationContext;
 
-	private List<FlexoEditor> editors;
+	private Map<FlexoProject, FlexoEditor> editors;
 
 	private Map<FlexoProject, AutoSaveService> autoSaveServices;
 
@@ -88,7 +90,7 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 
 	public ProjectLoader(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
-		this.editors = new ArrayList<FlexoEditor>();
+		this.editors = new HashMap<FlexoProject, FlexoEditor>();
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		autoSaveServices = new HashMap<FlexoProject, AutoSaveService>();
 	}
@@ -123,7 +125,6 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		if (!projectDirectory.exists()) {
 			throw new ProjectInitializerException("project directory does not exist", projectDirectory);
 		}
-		FlexoVersion previousFlexoVersion = FlexoProjectUtil.getVersion(projectDirectory);
 		try {
 			FlexoProjectUtil.isProjectOpenable(projectDirectory);
 		} catch (UnreadableProjectException e) {
@@ -178,12 +179,13 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		return editor;
 	}
 
-	protected void newEditor(FlexoEditor editor) {
-		editors.add(editor);
+	private void newEditor(FlexoEditor editor) {
+		editors.put(editor.getProject(), editor);
 		if (applicationContext.isAutoSaveServiceEnabled()) {
 			autoSaveServices.put(editor.getProject(), new AutoSaveService(this, editor.getProject()));
 		}
 		getPropertyChangeSupport().firePropertyChange(PROJECT_OPENED, null, editor.getProject());
+		getPropertyChangeSupport().firePropertyChange(EDITOR_ADDED, null, editor);
 	}
 
 	public void closeProject(FlexoProject project) {
@@ -193,11 +195,10 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 			autoSaveService.close();
 			autoSaveServices.remove(project);
 		}
-
-		if (project != null) {
-			project.close();
-			getPropertyChangeSupport().firePropertyChange(PROJECT_CLOSED, project, null);
-		}
+		FlexoEditor editor = editors.remove(project);
+		project.close();
+		getPropertyChangeSupport().firePropertyChange(PROJECT_CLOSED, project, null);
+		getPropertyChangeSupport().firePropertyChange(EDITOR_REMOVED, editor, null);
 		KeyValueCoder.clearClassCache();
 		KeyValueLibrary.clearCache();
 		FCH.clearComponentsHashtable();
@@ -377,7 +378,7 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 
 	public List<FlexoProject> getModifiedProjects() {
 		List<FlexoProject> projects = new ArrayList<FlexoProject>(editors.size());
-		for (FlexoEditor editor : editors) {
+		for (FlexoEditor editor : editors.values()) {
 			if (editor.getProject().getUnsavedStorageResources().size() > 0) {
 				projects.add(editor.getProject());
 			}

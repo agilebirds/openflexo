@@ -37,6 +37,7 @@ import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.DREBrowser;
 import org.openflexo.dre.controller.action.DREControllerActionInitializer;
 import org.openflexo.dre.view.DREMainPane;
+import org.openflexo.dre.view.DocItemView;
 import org.openflexo.dre.view.menu.DREMenuBar;
 import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
@@ -51,6 +52,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoActionSource;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
@@ -61,7 +63,6 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.action.EditionAction;
 import org.openflexo.view.listener.FlexoActionButton;
 import org.openflexo.view.menu.FlexoMenuBar;
@@ -100,8 +101,8 @@ public class DREController extends FlexoController implements FlexoActionSource,
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new DREControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new DREControllerActionInitializer(this);
 	}
 
 	/**
@@ -119,6 +120,11 @@ public class DREController extends FlexoController implements FlexoActionSource,
 		return new DREMainPane(this);
 	}
 
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return null;
+	}
+
 	public void showBrowser() {
 		if (getMainPane() != null) {
 			((DREMainPane) getMainPane()).showBrowser();
@@ -131,7 +137,7 @@ public class DREController extends FlexoController implements FlexoActionSource,
 		}
 	}
 
-	protected AbstractDocItemView docItemView;
+	protected DocItemView docItemView;
 
 	@Override
 	public ModuleView<?> moduleViewForObject(FlexoModelObject object, boolean recalculateViewIfRequired) {

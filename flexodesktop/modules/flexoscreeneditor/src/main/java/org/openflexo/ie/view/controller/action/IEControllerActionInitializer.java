@@ -25,14 +25,13 @@ import org.openflexo.action.ImportImageInitializer;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.IESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class IEControllerActionInitializer extends ControllerActionInitializer {
 
 	protected static final Logger logger = Logger.getLogger(IEControllerActionInitializer.class.getPackage().getName());
 
-	public IEControllerActionInitializer(InteractiveFlexoEditor editor, IEController controller) {
-		super(editor, controller);
+	public IEControllerActionInitializer(IEController controller) {
+		super(controller);
 	}
 
 	protected IEController getIEController() {

@@ -37,7 +37,6 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.module.UserType;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class DMControllerActionInitializer extends ControllerActionInitializer {
 
@@ -45,8 +44,8 @@ public class DMControllerActionInitializer extends ControllerActionInitializer {
 
 	DMController _dmController;
 
-	public DMControllerActionInitializer(InteractiveFlexoEditor editor, DMController controller) {
-		super(editor, controller);
+	public DMControllerActionInitializer(DMController controller) {
+		super(controller);
 		_dmController = controller;
 	}
 

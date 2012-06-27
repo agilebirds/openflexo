@@ -27,7 +27,6 @@ import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
@@ -35,6 +34,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.InvalidArgumentException;
@@ -58,6 +58,7 @@ import org.openflexo.foundation.ie.widget.InvalidPercentage;
 import org.openflexo.foundation.ie.widget.NotEnoughRoomOnTheLeft;
 import org.openflexo.foundation.ie.widget.NotEnoughRoomOnTheRight;
 import org.openflexo.foundation.ie.widget.RowIsNotEmpty;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.ie.IEPreferences;
@@ -89,7 +90,6 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -178,7 +178,19 @@ public class IEController extends FlexoController implements ConsistencyChecking
 	}
 
 	@Override
+	public void setEditor(FlexoEditor projectEditor) {
+		super.setEditor(projectEditor);
+		_componentLibraryBrowser.setRootObject(projectEditor != null ? projectEditor.getProject().getFlexoComponentLibrary() : null);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getFlexoComponentLibrary();
+	}
+
+	@Override
 	public void dispose() {
+		_componentLibraryBrowser.setRootObject(null);
 		COMPONENT_EDITOR_PERSPECTIVE.disposePalettes();
 		super.dispose();
 	}
@@ -188,8 +200,8 @@ public class IEController extends FlexoController implements ConsistencyChecking
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer(InteractiveFlexoEditor editor) {
-		return new IEControllerActionInitializer(editor, this);
+	public ControllerActionInitializer createControllerActionInitializer() {
+		return new IEControllerActionInitializer(this);
 	}
 
 	@Override
@@ -332,13 +344,16 @@ public class IEController extends FlexoController implements ConsistencyChecking
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(IEPreferences.SHOW_BINDINGVALUE_KEY)) {
-			Map<FlexoModelObject, ModuleView<?>> views = getLoadedViewsForPerspective(COMPONENT_EDITOR_PERSPECTIVE);
-			for (ModuleView<?> v : views.values()) {
-				if (v instanceof IEWOComponentView) {
-					((IEWOComponentView) v).notifyDisplayPrefHasChanged();
+		if (evt.getSource() == IEPreferences.getPreferences()) {
+			if (evt.getPropertyName().equals(IEPreferences.SHOW_BINDINGVALUE_KEY)) {
+				for (ModuleView<?> v : getAllLoadedViewsForPerspective(COMPONENT_EDITOR_PERSPECTIVE)) {
+					if (v instanceof IEWOComponentView) {
+						((IEWOComponentView) v).notifyDisplayPrefHasChanged();
+					}
 				}
 			}
+		} else {
+			super.propertyChange(evt);
 		}
 	}
 

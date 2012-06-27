@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import org.openflexo.action.ProjectExcelExportInitializer;
 import org.openflexo.action.UploadPrjInitializer;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoProperty;
 import org.openflexo.foundation.action.AddFlexoProperty;
@@ -43,9 +44,9 @@ import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoActionUndoInitializer;
 import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoActionizer;
+import org.openflexo.foundation.action.FlexoActionizer.EditorProvider;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.SortFlexoProperties;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.controller.action.AddFlexoPropertyActionizer;
 import org.openflexo.view.controller.action.DeleteFlexoPropertyActionizer;
@@ -55,7 +56,7 @@ import org.openflexo.view.controller.action.RefreshImportedRolesActionInitialize
 import org.openflexo.view.controller.action.SortFlexoPropertiesActionizer;
 import org.openflexo.view.controller.action.SubmitDocumentationActionizer;
 
-public class ControllerActionInitializer {
+public class ControllerActionInitializer implements EditorProvider {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(ControllerActionInitializer.class
 			.getPackage().getName());
@@ -65,15 +66,16 @@ public class ControllerActionInitializer {
 	private Map<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>> initializers;
 	private Map<Class<?>, ActionInitializer<?, ?, ?>> initializersByActionClass;
 
-	private final InteractiveFlexoEditor editor;
-
-	protected ControllerActionInitializer(InteractiveFlexoEditor editor, FlexoController controller) {
+	protected ControllerActionInitializer(FlexoController controller) {
 		super();
 		initializers = new Hashtable<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>>();
 		initializersByActionClass = new Hashtable<Class<?>, ActionInitializer<?, ?, ?>>();
-		this.editor = editor;
 		_controller = controller;
-		editor.registerControllerActionInitializer(this);
+		initializeActions();
+	}
+
+	public Map<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>> getActionInitializers() {
+		return initializers;
 	}
 
 	public FlexoModule getFlexoModule() {
@@ -97,8 +99,9 @@ public class ControllerActionInitializer {
 		}
 	}
 
-	public InteractiveFlexoEditor getEditor() {
-		return editor;
+	@Override
+	public FlexoEditor getEditor() {
+		return getController().getEditor();
 	}
 
 	public FlexoController getController() {
@@ -107,10 +110,6 @@ public class ControllerActionInitializer {
 
 	public FlexoModule getModule() {
 		return getController().getModule();
-	}
-
-	public FlexoProject getProject() {
-		return getEditor().getProject();
 	}
 
 	public void initializeActions() {
@@ -126,15 +125,15 @@ public class ControllerActionInitializer {
 		new SortFlexoPropertiesActionizer(this);
 		if (FlexoModelObject.addFlexoPropertyActionizer == null) {
 			FlexoModelObject.addFlexoPropertyActionizer = new FlexoActionizer<AddFlexoProperty, FlexoModelObject, FlexoModelObject>(
-					AddFlexoProperty.actionType, getController().getEditor());
+					AddFlexoProperty.actionType, this);
 		}
 		if (FlexoModelObject.sortFlexoPropertiesActionizer == null) {
 			FlexoModelObject.sortFlexoPropertiesActionizer = new FlexoActionizer<SortFlexoProperties, FlexoModelObject, FlexoModelObject>(
-					SortFlexoProperties.actionType, getController().getEditor());
+					SortFlexoProperties.actionType, this);
 		}
 		if (FlexoModelObject.deleteFlexoPropertyActionizer == null) {
 			FlexoModelObject.deleteFlexoPropertyActionizer = new FlexoActionizer<DeleteFlexoProperty, FlexoProperty, FlexoProperty>(
-					DeleteFlexoProperty.actionType, getController().getEditor());
+					DeleteFlexoProperty.actionType, this);
 		}
 	}
 

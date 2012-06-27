@@ -417,12 +417,8 @@ public abstract class Module implements IModule {
 			logger.info("Registering module '" + getName() + "'");
 		}
 		Class[] constructorSigner;
-		if (requireProject()) {
-			constructorSigner = new Class[1];
-			constructorSigner[0] = ApplicationContext.class;
-		} else {
-			constructorSigner = new Class[0];
-		}
+		constructorSigner = new Class[1];
+		constructorSigner[0] = ApplicationContext.class;
 		try {
 			Constructor<? extends FlexoModule> constructor = getModuleClass().getDeclaredConstructor(constructorSigner);
 			if (logger.isLoggable(Level.FINE)) {
