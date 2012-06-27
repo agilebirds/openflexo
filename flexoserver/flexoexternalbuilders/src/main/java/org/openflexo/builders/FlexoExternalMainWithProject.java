@@ -7,6 +7,7 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderEditor;
 import org.openflexo.builders.utils.FlexoBuilderListener;
+import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -43,6 +44,11 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 					}
 				});
 				return builderEditor;
+			}
+
+			@Override
+			public FlexoEditor createApplicationEditor() {
+				return new DefaultFlexoEditor(null);
 			}
 
 			@Override

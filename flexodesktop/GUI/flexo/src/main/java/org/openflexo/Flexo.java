@@ -70,7 +70,9 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 import sun.misc.Signal;
@@ -222,9 +224,17 @@ public class Flexo {
 			}
 
 			@Override
+			public FlexoEditor createApplicationEditor() {
+				return new InteractiveFlexoEditor(this, null);
+			}
+
+			@Override
 			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
-				// TODO Auto-generated method stub
-				return null;
+				if (UserType.isCustomerRelease() || UserType.isAnalystRelease()) {
+					return new BasicInteractiveProjectLoadingHandler(projectDirectory);
+				} else {
+					return new FullInteractiveProjectLoadingHandler(projectDirectory);
+				}
 			}
 		};
 		FlexoApplication.initialize(applicationContext.getModuleLoader());

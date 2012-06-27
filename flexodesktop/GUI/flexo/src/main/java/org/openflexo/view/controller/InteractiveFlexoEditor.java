@@ -177,9 +177,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (confirmDoAction) {
 			actionWillBePerformed(action);
 			try {
-				getProject().clearRecentlyCreatedObjects();
+				if (getProject() != null) {
+					getProject().clearRecentlyCreatedObjects();
+				}
 				action.doActionInContext();
-				getProject().notifyRecentlyCreatedObjects();
+				if (getProject() != null) {
+					getProject().notifyRecentlyCreatedObjects();
+				}
 				actionHasBeenPerformed(action, true); // Action succeeded
 			} catch (FlexoException exception) {
 				actionHasBeenPerformed(action, false); // Action failed
@@ -228,9 +232,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (confirmUndoAction) {
 			actionWillBeUndone(action);
 			try {
-				getProject().clearRecentlyCreatedObjects();
+				if (getProject() != null) {
+					getProject().clearRecentlyCreatedObjects();
+				}
 				action.doActionInContext();
-				getProject().notifyRecentlyCreatedObjects();
+				if (getProject() != null) {
+					getProject().notifyRecentlyCreatedObjects();
+				}
 				actionHasBeenUndone(action, true); // Action succeeded
 			} catch (FlexoException exception) {
 				actionHasBeenUndone(action, false); // Action failed
@@ -278,9 +286,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (confirmRedoAction) {
 			actionWillBeRedone(action);
 			try {
-				getProject().clearRecentlyCreatedObjects();
+				if (getProject() != null) {
+					getProject().clearRecentlyCreatedObjects();
+				}
 				action.redoActionInContext();
-				getProject().notifyRecentlyCreatedObjects();
+				if (getProject() != null) {
+					getProject().notifyRecentlyCreatedObjects();
+				}
 				actionHasBeenRedone(action, true); // Action succeeded
 			} catch (FlexoException exception) {
 				actionHasBeenUndone(action, false); // Action failed
@@ -467,6 +479,10 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		actionInitializers.put(controllerActionInitializer.getModule(), controllerActionInitializer);
 	}
 
+	public void unregisterControllerActionInitializer(ControllerActionInitializer controllerActionInitializer) {
+		actionInitializers.remove(controllerActionInitializer.getModule());
+	}
+
 	private ControllerActionInitializer getCurrentControllerActionInitializer() {
 		return actionInitializers.get(getModuleLoader().getActiveModule());
 	}
@@ -493,6 +509,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 				if (condition != null) {
 					return condition.isEnabled(actionType, focusedObject, globalSelection, this);
 				}
+			} else {
+				return false;
 			}
 		}
 		return true;
@@ -508,6 +526,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 				if (condition != null) {
 					return condition.isVisible(actionType, focusedObject, globalSelection, this);
 				}
+			} else {
+				return false;
 			}
 		}
 		return true;
