@@ -19,38 +19,27 @@
  */
 package org.openflexo.components.widget;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.widget.DefaultFIBCustomComponent;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Widget allowing to browse an ontology.<br>
@@ -305,7 +294,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
@@ -336,8 +325,6 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		selector.setShowClasses(true);
 		selector.setShowIndividuals(true);
 		selector.setStrictMode(false);
-		/*OntologyClass transformationRule = resourceCenter.retrieveBaseOntologyLibrary().getClass(
-				"http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl#TransformationRule");*/
 		// selector.setRootClass(transformationRule);
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
@@ -357,9 +344,9 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			}
 		};
 		editor.launch();
-	}
+	}*/
 
-	public static void main2(String[] args) {
+	/*public static void main2(String[] args) {
 		JFrame frame = new JFrame();
 		FlexoResourceCenter resourceCenter = FlexoResourceCenterService.instance().getFlexoResourceCenter();
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
@@ -374,7 +361,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		frame.getContentPane().add(browser);
 		frame.pack();
 		frame.setVisible(true);
-	}
+	}*/
 
 	public String getFilteredName() {
 		return filteredName;

@@ -20,24 +20,15 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Widget allowing to select an OntologyClass<br>
@@ -236,7 +227,7 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
@@ -280,6 +271,6 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 			}
 		};
 		editor.launch();
-	}
+	}*/
 
 }
