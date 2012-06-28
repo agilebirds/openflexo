@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.components.widget.FIBDescriptionWidget$DescriptionWidgetFIBController" constraints="border(location=center)">
-  <HTMLEditor data="data.description" constraints="gridbag(anchor=north;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=0;index=0;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=2;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" width="200" height="100" localize="true">
+  <HTMLEditor data="data.description" dataClassName="org.openflexo.foundation.FlexoModelObject" constraints="gridbag(anchor=north;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=0;index=0;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=2;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" width="200" height="100" localize="true">
     <Line1Option index="0" name="TextEffectPanel" />
     <Line1Option index="1" name="TextEffectPanel.BoldButton" />
     <Line1Option index="2" name="TextEffectPanel.ItalicButton" />
@@ -20,10 +20,10 @@
     <Line1Option index="16" name="MiscPanel.InsertImage" />
   </HTMLEditor>
   <Panel layout="border" borderTitle="" borderTop="3" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-    <CheckBox selected="true" localize="true" name="checkbox" data="data.hasSpecificDescriptions" constraints="border(index=0;location=west)" />
-    <DropDown format="object.name" localize="true" enable="data.hasSpecificDescriptions" manageDynamicModel="true" name="selectedDocType" data="controller.currentDocType" dataClassName="java.lang.String" constraints="border(index=0;location=center)" list="data.project.docTypes" iteratorClassName="org.openflexo.foundation.DocType" autoSelectFirstRow="true" />
+    <CheckBox selected="true" localize="true" name="hasSpecificDescriptionCheckbox" data="data.hasSpecificDescriptions" constraints="border(index=0;location=west)" />
+    <DropDown format="object.name" localize="true" enable="data.hasSpecificDescriptions" manageDynamicModel="true" name="selectedDocType" data="controller.currentDocType" constraints="border(index=0;location=center)" list="data.project.docTypes" iteratorClassName="org.openflexo.foundation.DocType" autoSelectFirstRow="true" />
   </Panel>
-  <HTMLEditor data="controller.specificDescription" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=2;index=1;insetsBottom=2;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="data.hasSpecificDescriptions" width="200" height="100" localize="true">
+  <HTMLEditor data="controller.specificDescription" dataClassName="org.openflexo.foundation.FlexoModelObject" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=2;index=1;insetsBottom=2;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="data.hasSpecificDescriptions" width="200" height="100" localize="true">
     <Line1Option index="0" name="TextEffectPanel" />
     <Line1Option index="1" name="TextEffectPanel.BoldButton" />
     <Line1Option index="2" name="TextEffectPanel.ItalicButton" />
@@ -42,6 +42,7 @@
     <Line1Option index="4" name="MiscPanel" />
     <Line1Option index="16" name="MiscPanel.InsertImage" />
     <Dependancy componentName="selectedDocType" />
+    <Dependancy componentName="hasSpecificDescriptionCheckbox" />
   </HTMLEditor>
   <LocalizedDictionary />
 </Panel>

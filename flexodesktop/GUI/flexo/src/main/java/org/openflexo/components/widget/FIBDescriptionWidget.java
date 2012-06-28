@@ -53,12 +53,13 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoModelOb
 
 	@Override
 	protected FIBController<?> makeFIBController(FIBComponent fibComponent, LocalizedDelegate parentLocalizer) {
+		logger.info("************** Make DescriptionWidgetFIBController");
 		return new DescriptionWidgetFIBController(fibComponent);
 	}
 
 	public class DescriptionWidgetFIBController extends FIBController<FlexoModelObject> {
 
-		public DocType currentDocType;
+		private DocType currentDocType;
 
 		public DescriptionWidgetFIBController(FIBComponent c) {
 			super(c);
@@ -72,10 +73,20 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoModelOb
 		}
 
 		public void setSpecificDescription(String specificDescription) {
+			System.out.println("Sets " + specificDescription + " currentDocType=" + currentDocType);
 			if (currentDocType != null && getEditedObject() != null) {
 				System.out.println("For key " + currentDocType + " description=" + specificDescription);
 				getEditedObject().setSpecificDescriptionsForKey(specificDescription, currentDocType.getName());
 			}
+		}
+
+		public DocType getCurrentDocType() {
+			return currentDocType;
+		}
+
+		public void setCurrentDocType(DocType currentDocType) {
+			System.out.println("setCurrentDocType " + currentDocType);
+			this.currentDocType = currentDocType;
 		}
 	}
 }
