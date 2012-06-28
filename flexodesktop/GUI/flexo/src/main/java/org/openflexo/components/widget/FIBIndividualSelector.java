@@ -112,7 +112,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyClass>
 
 	@CustomComponentParameter(name = "type", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setType(OntologyClass rootClass) {
-		this.type = type;
+		this.type = rootClass;
 		update();
 	}
 

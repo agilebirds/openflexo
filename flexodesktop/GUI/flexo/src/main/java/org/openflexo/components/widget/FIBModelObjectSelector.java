@@ -78,7 +78,6 @@ import org.openflexo.view.controller.FlexoFIBController;
  */
 public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends TextFieldCustomPopup<T> implements
 		FIBCustomComponent<T, FIBModelObjectSelector>, HasPropertyChangeSupport {
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBModelObjectSelector.class.getPackage().getName());
 
 	private static final String DELETED = "deleted";
@@ -114,20 +113,23 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		getTextField().getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if (!textIsBeeingProgrammaticallyEditing())
+				if (!textIsBeeingProgrammaticallyEditing()) {
 					updateMatchingValues();
+				}
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if (!textIsBeeingProgrammaticallyEditing())
+				if (!textIsBeeingProgrammaticallyEditing()) {
 					updateMatchingValues();
+				}
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				if (!textIsBeeingProgrammaticallyEditing())
+				if (!textIsBeeingProgrammaticallyEditing()) {
 					updateMatchingValues();
+				}
 			}
 		});
 		getTextField().addKeyListener(new KeyAdapter() {
@@ -580,20 +582,23 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	 */
 
 	public FIBComponent getFIBComponent() {
-		if (getSelectorPanel() != null)
+		if (getSelectorPanel() != null) {
 			return getSelectorPanel().getFIBComponent();
+		}
 		return null;
 	}
 
 	protected SelectorFIBController getController() {
-		if (getSelectorPanel() == null)
+		if (getSelectorPanel() == null) {
 			return null;
+		}
 		return getSelectorPanel().getController();
 	}
 
 	protected FIBBrowser getFIBBrowser() {
-		if (getFIBComponent() == null)
+		if (getFIBComponent() == null) {
 			return null;
+		}
 		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
 		for (FIBComponent c : listComponent) {
 			if (c instanceof FIBBrowser) {
@@ -604,10 +609,12 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	}
 
 	protected FIBBrowserWidget retrieveFIBBrowserWidget() {
-		if (getFIBComponent() == null)
+		if (getFIBComponent() == null) {
 			return null;
-		if (getController() == null)
+		}
+		if (getController() == null) {
 			return null;
+		}
 		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
 		for (FIBComponent c : listComponent) {
 			if (c instanceof FIBBrowser) {
