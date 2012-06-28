@@ -31,7 +31,10 @@
       <RMResource idref="SYL_RM.TestVE" />
       <EOModel idref="SYL_EOMODEL.EOPrototypes.eomodeld" />
       <EOModel idref="SYL_EOMODEL.FlexoExecutionModel.eomodeld" />
+<<<<<<< HEAD
       <EOModel idref="SYL_EOMODEL.sdffdsfsd.eomodeld" />
+=======
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
     </SynchronizedResources>
   </DataModel>
   <DomainKeyValue id="SYL_DOMAIN_KEY_VALUE.TestVE" userID="SYL" file="DomainKeyValue/TestVE.dkv" version="0.2">
@@ -54,6 +57,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </EOModel>
+<<<<<<< HEAD
   <EOModel id="SYL_EOMODEL.sdffdsfsd.eomodeld" userID="SYL" file="DataModel/sdffdsfsd.eomodeld">
     <DependantResources id="SYL_EOMODEL.sdffdsfsd.eomodeld_DR" />
     <SynchronizedResources id="SYL_EOMODEL.sdffdsfsd.eomodeld_SR">
@@ -74,6 +78,21 @@
     </SynchronizedResources>
   </GeneratedDoc>
   <JAR id="SYL_JAR.DenaliConfigServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliConfigServiceAPI.jar">
+=======
+  <GeneratedCode id="SYL_GENERATED_CODE.TestVE" userID="SYL" file="GeneratedCode/TestVE.cg" version="0.1">
+    <DependantResources id="SYL_GENERATED_CODE.TestVE_DR" />
+    <SynchronizedResources id="SYL_GENERATED_CODE.TestVE_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </GeneratedCode>
+  <GeneratedDoc id="SYL_GENERATED_DOC.TestVE" userID="SYL" file="Documentation/TestVE.dg" version="0.1">
+    <DependantResources id="SYL_GENERATED_DOC.TestVE_DR" />
+    <SynchronizedResources id="SYL_GENERATED_DOC.TestVE_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </GeneratedDoc>
+  <JAR id="SYL_JAR.DenaliConfigServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliConfigServiceAPI.jar">
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
     <DependantResources id="SYL_JAR.DenaliConfigServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -82,7 +101,11 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
+<<<<<<< HEAD
   <JAR id="SYL_JAR.DenaliCore.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliCore.jar">
+=======
+  <JAR id="SYL_JAR.DenaliCore.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliCore.jar">
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
     <DependantResources id="SYL_JAR.DenaliCore.jar_DR">
       <JAR idref="SYL_JAR.JavaWebObjects.jar" />
       <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
@@ -100,7 +123,11 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
+<<<<<<< HEAD
   <JAR id="SYL_JAR.DenaliDBBusinessLogic.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliDBBusinessLogic.jar">
+    <DependantResources id="SYL_JAR.DenaliDBBusinessLogic.jar_DR">
+=======
+  <JAR id="SYL_JAR.DenaliDBBusinessLogic.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliDBBusinessLogic.jar">
     <DependantResources id="SYL_JAR.DenaliDBBusinessLogic.jar_DR">
       <JAR idref="SYL_JAR.JavaEOControl.jar" />
       <JAR idref="SYL_JAR.DenaliCore.jar" />
@@ -110,6 +137,120 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
+  <JAR id="SYL_JAR.DenaliExceptionServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliExceptionServiceAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliFileMimeTypeServiceAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliLanguageServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliLanguageServiceAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliLocalizationServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliLocalizationServiceAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliMailServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliMailServiceAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliMailServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliMailServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliResourcesAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliResourcesAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliResourcesAPI.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliResourcesAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliRoleServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliRoleServiceAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliRoleServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliRoleServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliServiceManager.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliServiceManager.jar">
+    <DependantResources id="SYL_JAR.DenaliServiceManager.jar_DR" />
+    <SynchronizedResources id="SYL_JAR.DenaliServiceManager.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliUserInCookieServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliUserInCookieServiceAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliUserInCookieServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliUserInCookieServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliUserServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/DenaliUserServiceAPI.jar">
+    <DependantResources id="SYL_JAR.DenaliUserServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliUserServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaEOControl.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:45:59 04/10/2011" userID="SYL" file="DataModel/JavaEOControl.jar">
+    <DependantResources id="SYL_JAR.JavaEOControl.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.JavaEOControl.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaFoundation.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:45:59 04/10/2011" userID="SYL" file="DataModel/JavaFoundation.jar">
+    <DependantResources id="SYL_JAR.JavaFoundation.jar_DR" />
+    <SynchronizedResources id="SYL_JAR.JavaFoundation.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaWebObjects.jar" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:00 04/10/2011" userID="SYL" file="DataModel/JavaWebObjects.jar">
+    <DependantResources id="SYL_JAR.JavaWebObjects.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.JavaWebObjects.jar_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </JAR>
+<<<<<<< HEAD
   <JAR id="SYL_JAR.DenaliExceptionServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliExceptionServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
@@ -135,8 +276,14 @@
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
     </DependantResources>
     <SynchronizedResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_SR">
+=======
+  <NavigationMenu id="SYL_NAVIGATION_MENU.TestVE" userID="SYL" version="2.2" file="TestVE.menu">
+    <DependantResources id="SYL_NAVIGATION_MENU.TestVE_DR" />
+    <SynchronizedResources id="SYL_NAVIGATION_MENU.TestVE_SR">
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
+<<<<<<< HEAD
   </JAR>
   <JAR id="SYL_JAR.DenaliLocalizationServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliLocalizationServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_DR">
@@ -144,8 +291,24 @@
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
     </DependantResources>
     <SynchronizedResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_SR">
+=======
+  </NavigationMenu>
+  <Process id="SYL_PROCESS.TestVE" name="TestVE" userID="SYL" version="6.0" file="Workflow/TestVE.xml">
+    <DependantResources id="SYL_PROCESS.TestVE_DR">
+      <DataModel idref="SYL_DATA_MODEL.TestVE" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_PROCESS.TestVE_SR">
+      <Workflow idref="SYL_WORKFLOW.TestVE" />
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
+  </Process>
+  <ProjectOntology id="SYL_PROJECT_ONTOLOGY.TestVE" userID="SYL" file="Ontology/TestVE.owl">
+    <DependantResources id="SYL_PROJECT_ONTOLOGY.TestVE_DR" />
+    <SynchronizedResources id="SYL_PROJECT_ONTOLOGY.TestVE_SR">
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+<<<<<<< HEAD
   </JAR>
   <JAR id="SYL_JAR.DenaliMailServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliMailServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliMailServiceAPI.jar_DR">
@@ -253,6 +416,10 @@
     </SynchronizedResources>
   </ProjectOntology>
   <RMResource id="SYL_RM.TestVE" userID="SYL" version="5.0" file="TestVE.rmxml">
+=======
+  </ProjectOntology>
+  <RMResource id="SYL_RM.TestVE" userID="SYL" version="4.1" file="TestVE.rmxml">
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
     <DependantResources id="SYL_RM.TestVE_DR" />
     <SynchronizedResources id="SYL_RM.TestVE_SR">
       <RMResource idref="SYL_RM.TestVE" />
@@ -311,6 +478,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </Shema>
+<<<<<<< HEAD
   <Shema id="SYL_SHEMA.R&amp;DDefinition" name="R&amp;DDefinition" userID="SYL" version="1.0" file="Ontology/R&amp;DDefinition.shema">
     <DependantResources id="SYL_SHEMA.R&amp;DDefinition_DR" />
     <SynchronizedResources id="SYL_SHEMA.R&amp;DDefinition_SR">
@@ -325,6 +493,8 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </Shema>
+=======
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
   <ShemaLibrary id="SYL_SHEMA_LIBRARY.TestVE" userID="SYL" version="1.0" file="Ontology/TestVE.oelib">
     <DependantResources id="SYL_SHEMA_LIBRARY.TestVE_DR" />
     <SynchronizedResources id="SYL_SHEMA_LIBRARY.TestVE_SR">
@@ -340,6 +510,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </TOCResource>
+<<<<<<< HEAD
   <FlexoWebServerFileResource id="SYL_WEBSERVER.001-Dialog.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/001-Dialog.jpg">
     <DependantResources id="SYL_WEBSERVER.001-Dialog.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.001-Dialog.jpg_SR">
@@ -412,6 +583,79 @@
       <RMResource idref="SYL_RM.TestVE" />
       <Process idref="SYL_PROCESS.TestVE" />
       <Process idref="SYL_PROCESS.NewProcess" />
+=======
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.001-Dialog.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/001-Dialog.jpg">
+    <DependantResources id="SYL_WEBSERVER.001-Dialog.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.001-Dialog.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.002-Information.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/002-Information.jpg">
+    <DependantResources id="SYL_WEBSERVER.002-Information.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.002-Information.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.003-FillForm.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/003-FillForm.jpg">
+    <DependantResources id="SYL_WEBSERVER.003-FillForm.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.003-FillForm.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.004-InformationComputer.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/004-InformationComputer.jpg">
+    <DependantResources id="SYL_WEBSERVER.004-InformationComputer.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.004-InformationComputer.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.005-AssemblyLine.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/005-AssemblyLine.jpg">
+    <DependantResources id="SYL_WEBSERVER.005-AssemblyLine.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.005-AssemblyLine.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.006-FlexoServerVideo.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/006-FlexoServerVideo.jpg">
+    <DependantResources id="SYL_WEBSERVER.006-FlexoServerVideo.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.006-FlexoServerVideo.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.007-Audio.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/007-Audio.jpg">
+    <DependantResources id="SYL_WEBSERVER.007-Audio.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.007-Audio.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.agileMapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/agileMapping.jpg">
+    <DependantResources id="SYL_WEBSERVER.agileMapping.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.agileMapping.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.objective-process.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/objective-process.jpg">
+    <DependantResources id="SYL_WEBSERVER.objective-process.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.objective-process.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.organisationStructure.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/organisationStructure.jpg">
+    <DependantResources id="SYL_WEBSERVER.organisationStructure.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.organisationStructure.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.process-mapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy,10:46:01 04/10/2011" userID="SYL" file="ImportedImages/process-mapping.jpg">
+    <DependantResources id="SYL_WEBSERVER.process-mapping.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.process-mapping.jpg_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <Workflow id="SYL_WORKFLOW.TestVE" userID="SYL" file="Workflow/TestVE.wkf" version="2.4">
+    <DependantResources id="SYL_WORKFLOW.TestVE_DR" />
+    <SynchronizedResources id="SYL_WORKFLOW.TestVE_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+      <Process idref="SYL_PROCESS.TestVE" />
+>>>>>>> branch 'goodbye_old_inspectors' of ssh://git@github.com/agilebirds/openflexo
     </SynchronizedResources>
   </Workflow>
   <FlexoWSLibrary id="SYL_WS_LIBRARY.TestVE" userID="SYL" file="WebService/TestVE.ws" version="0.2">
