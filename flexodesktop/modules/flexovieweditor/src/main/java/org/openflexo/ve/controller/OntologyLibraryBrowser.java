@@ -28,6 +28,25 @@ public class OntologyLibraryBrowser extends VEBrowser {
 		super(controller);
 	}
 
+	public void setOEViewMode(FlexoProject project, OEViewMode viewMode) {
+		switch (viewMode) {
+		case FullHierarchy:
+			setRootObject(project.getProjectOntologyLibrary());
+			break;
+		case NoHierarchy:
+			setRootObject(project);
+			break;
+		case PartialHierarchy:
+			setRootObject(project);
+			break;
+		}
+		setOEViewMode(viewMode);
+	}
+
+	public void setProject(FlexoProject project) {
+		setOEViewMode(project, getOEViewMode());
+	}
+
 	@Override
 	public void configure() {
 		super.configure();
@@ -54,9 +73,7 @@ public class OntologyLibraryBrowser extends VEBrowser {
 		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
-
-		setRootObject(project);
-		setOEViewMode(OEViewMode.NoHierarchy);
+		setOEViewMode(project, OEViewMode.NoHierarchy);
 	}
 
 	public void switchToPartialHierarchyMode(FlexoProject project) {
@@ -67,9 +84,7 @@ public class OntologyLibraryBrowser extends VEBrowser {
 		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
-
-		setRootObject(project);
-		setOEViewMode(OEViewMode.PartialHierarchy);
+		setOEViewMode(project, OEViewMode.PartialHierarchy);
 	}
 
 	public void switchToFullHierarchyMode(FlexoProject project) {
@@ -80,9 +95,7 @@ public class OntologyLibraryBrowser extends VEBrowser {
 		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-
-		setRootObject(project.getProjectOntologyLibrary());
-		setOEViewMode(OEViewMode.FullHierarchy);
+		setOEViewMode(project, OEViewMode.FullHierarchy);
 	}
 
 }

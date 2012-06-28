@@ -1132,7 +1132,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	public void addToPerspectives(FlexoPerspective perspective) {
 		if (perspectives.size() == 0) {
 			defaultPespective = perspective;
-			setCurrentPerspective(perspective);
+			switchToPerspective(perspective);
 		}
 		perspectives.add(perspective);
 		loadedViews.put(perspective, new HashMap<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>());
@@ -1182,7 +1182,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					newEditedObject = lastEditedObjectsForPerspective.get(perspective);
 				} else {
 					// But may be there is a default object i may select ?
-					if (getDefaultObjectForPerspective(currentObject, perspective) != null) {
+					if (currentObject != null && getDefaultObjectForPerspective(currentObject, perspective) != null) {
 						newEditedObject = getDefaultObjectForPerspective(currentObject, perspective);
 					} else {
 						// logger.warning("Switching to perspective "+perspective+" with an unexpected object: "+newEditedObject+". To avoid this, you should define a default object for perspective.");

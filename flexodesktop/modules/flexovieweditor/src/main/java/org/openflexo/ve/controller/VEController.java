@@ -113,6 +113,8 @@ public class VEController extends FlexoController {
 			getProject().getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
 			getProject().getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
 		}
+		DIAGRAM_PERSPECTIVE.setProject(getProject());
+		ONTOLOGY_PERSPECTIVE.setProject(getProject());
 	}
 
 	@Override

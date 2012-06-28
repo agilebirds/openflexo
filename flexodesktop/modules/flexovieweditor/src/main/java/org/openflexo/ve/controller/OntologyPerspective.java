@@ -29,6 +29,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.view.OntologyPerspectiveBrowserView;
@@ -141,6 +142,10 @@ public class OntologyPerspective extends FlexoPerspective {
 			return ((ImportedOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
+	}
+
+	public void setProject(FlexoProject project) {
+		_ontologyPerspectiveBrowserView.setProject(project);
 	}
 
 }

@@ -21,6 +21,7 @@ package org.openflexo.ve.controller;
 
 import java.awt.Dimension;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -35,6 +36,7 @@ import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
@@ -60,8 +62,8 @@ public class DiagramPerspective extends FlexoPerspective {
 	private final VEBrowserView _browserView;
 	private final VEBrowserView shemaBrowserView;
 
-	private final Hashtable<View, VEShemaController> _controllers;
-	private final Hashtable<VEShemaController, JSplitPane> _rightPanels;
+	private final Map<View, VEShemaController> _controllers;
+	private final Map<VEShemaController, JSplitPane> _rightPanels;
 
 	private final JSplitPane splitPane;
 
@@ -117,8 +119,7 @@ public class DiagramPerspective extends FlexoPerspective {
 
 	public void focusOnShema(View shema) {
 		shemaBrowser.deleteBrowserListener(_browserView);
-		shemaBrowser.setRepresentedShema(shema);
-		shemaBrowser.update();
+		shemaBrowser.setRootObject(shema);
 		shemaBrowser.addBrowserListener(_browserView);
 	}
 
@@ -291,5 +292,9 @@ public class DiagramPerspective extends FlexoPerspective {
 		}
 		new FlexoSplitPaneLocationSaver(returned, "VE_DIAGRAM_PERSPECTIVE_RIGHT_PANE");
 		return returned;
+	}
+
+	public void setProject(FlexoProject project) {
+		_browser.setRootObject(project.getShemaLibrary());
 	}
 }

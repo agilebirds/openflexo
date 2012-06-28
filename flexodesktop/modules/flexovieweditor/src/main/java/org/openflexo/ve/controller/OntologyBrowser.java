@@ -21,27 +21,11 @@ package org.openflexo.ve.controller;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
 
 public class OntologyBrowser extends VEBrowser {
-	private FlexoOntology representedOntology = null;
 
 	public OntologyBrowser(VEController controller) {
 		super(controller);
-	}
-
-	public FlexoOntology getRepresentedOntology() {
-		return representedOntology;
-	}
-
-	public void setRepresentedOntology(FlexoOntology representedOntology) {
-		this.representedOntology = representedOntology;
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return representedOntology;
 	}
 
 	@Override

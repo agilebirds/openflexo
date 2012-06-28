@@ -308,6 +308,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return _filters.get(elementType);
 	}
 
+	@Deprecated
 	public FlexoProject getProject() {
 		return _project;
 	}

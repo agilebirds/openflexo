@@ -34,6 +34,7 @@ import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.components.browser.view.BrowserViewCellRenderer;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.ve.controller.OntologyBrowser;
 import org.openflexo.ve.controller.OntologyLibraryBrowser;
@@ -72,8 +73,7 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 
 	public void focusOnOntology(FlexoOntology ontology) {
 		ontologyBrowser.deleteBrowserListener(mainBrowserView);
-		ontologyBrowser.setRepresentedOntology(ontology);
-		ontologyBrowser.update();
+		ontologyBrowser.setRootObject(ontology);
 		ontologyBrowser.addBrowserListener(mainBrowserView);
 	}
 
@@ -164,5 +164,10 @@ public class OntologyPerspectiveBrowserView extends JPanel {
 			}
 		}
 
+	}
+
+	public void setProject(FlexoProject project) {
+		mainBrowser.setProject(project);
+		ontologyBrowser.setRootObject(project);
 	}
 }

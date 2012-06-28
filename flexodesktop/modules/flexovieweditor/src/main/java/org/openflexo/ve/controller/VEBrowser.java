@@ -47,9 +47,7 @@ public abstract class VEBrowser extends ProjectBrowser {
 	// ================================================
 
 	public VEBrowser(VEController controller) {
-		super(controller.getEditor(), controller.getSelectionManager() /* Remove this parameter if you don't want browser synchronized with selection */);
-		_controller = controller;
-		update();
+		super(controller);
 	}
 
 	@Override
@@ -86,9 +84,7 @@ public abstract class VEBrowser extends ProjectBrowser {
 
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		// Defines here what is the represented root objet (ex workflow for WKF, FlexoComponentLibrary for IE, DataModelEditor for DME,
-		// etc...)
-		return getProject();
+		return null;
 	}
 
 }
