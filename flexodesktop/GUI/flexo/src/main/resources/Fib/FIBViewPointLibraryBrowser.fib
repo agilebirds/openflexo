@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" titleFont="LucidaGrande,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.ontology.OntologyLibrary" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="LucidaGrande,0,11">
+  <Browser root="data" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" font="LucidaGrande,0,11" name="OntologyLibraryBrowser" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(OntologyLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(OntologyLibraryBrowser.selected)">
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPointLibrary" label="&quot;Viewpoint Library&quot;" icon="controller.iconForObject(viewPointLibrary)" isEditable="false" filtered="false" defaultVisible="true" name="viewPointLibrary">
+      <Children data="viewPointLibrary.rootFolder.children" name="folders" />
+      <Children data="viewPointLibrary.rootFolder.viewPoints" name="viewPoints" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPointFolder" label="viewPointFolder.name" icon="controller.iconForObject(viewPointFolder)" isEditable="false" filtered="false" defaultVisible="true" name="viewPointFolder">
+      <Children data="viewPointFolder.children" name="subFolders" />
+      <Children data="viewPointFolder.viewPoints" name="viewPoints" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPoint" label="viewPoint.name" icon="controller.iconForObject(viewPoint)" isEditable="false" filtered="false" defaultVisible="true" name="viewPoint" />
+  </Browser>
+  <LocalizedDictionary />
+</Panel>
+

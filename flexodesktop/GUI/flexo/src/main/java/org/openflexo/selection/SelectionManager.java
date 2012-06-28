@@ -242,20 +242,17 @@ public abstract class SelectionManager extends Observable {
 	 * @param objects
 	 *            : objects to add to selection, as a Vector of FlexoModelObject
 	 */
-	public void addToSelected(Vector<? extends FlexoModelObject> objects) {
+	public void addToSelected(List<? extends FlexoModelObject> objects) {
 		if (objects == null || objects.isEmpty()) {
 			return;
 		}
-		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
-			SelectionListener sl = e.nextElement();
+		for (SelectionListener sl : _selectionListeners) {
 			sl.fireBeginMultipleSelection();
 		}
-		for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en.hasMoreElements();) {
-			FlexoModelObject nextObj = en.nextElement();
+		for (FlexoModelObject nextObj : objects) {
 			internallyAddToSelected(nextObj, objects.size() == 1);
 		}
-		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
-			SelectionListener sl = e.nextElement();
+		for (SelectionListener sl : _selectionListeners) {
 			sl.fireEndMultipleSelection();
 		}
 		updateInspectorManagement();
@@ -289,7 +286,7 @@ public abstract class SelectionManager extends Observable {
 	 * @param objects
 	 *            : the object to set for current selection, as a Vector of FlexoModelObject
 	 */
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
+	public void setSelectedObjects(List<? extends FlexoModelObject> objects) {
 		resetSelection();
 		addToSelected(objects);
 	}
@@ -391,7 +388,7 @@ public abstract class SelectionManager extends Observable {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("internallyAddToSelected with " + object);
 		}
-		boolean selectionWasEmpty = (getSelectionSize() == 0);
+		boolean selectionWasEmpty = getSelectionSize() == 0;
 		if (!selectionContains(object)) {
 			_selection.add(object);
 			for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
@@ -647,7 +644,7 @@ public abstract class SelectionManager extends Observable {
 		FlexoModelObject obj = (FlexoModelObject) object;
 		if (obj.getContext() != null) {
 			if (obj.getContext() instanceof PalettePanel) {
-				return (((PalettePanel) obj.getContext()).isEdited());
+				return ((PalettePanel) obj.getContext()).isEdited();
 			}
 		}
 		return true;
@@ -662,7 +659,7 @@ public abstract class SelectionManager extends Observable {
 		}
 		if (object.getContext() != null) {
 			if (object.getContext() instanceof PalettePanel) {
-				return (((PalettePanel) object.getContext()).isEdited());
+				return ((PalettePanel) object.getContext()).isEdited();
 			}
 		}
 		return true;

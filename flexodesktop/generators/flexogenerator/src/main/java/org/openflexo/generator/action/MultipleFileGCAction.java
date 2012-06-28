@@ -75,7 +75,7 @@ public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> ex
 				return false;
 			}
 			AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(repository);
-			if ((pg == null) || (!pg.hasBeenInitialized())) {
+			if (pg == null || !pg.hasBeenInitialized()) {
 				return false;
 			}
 			Vector<AbstractCGFile> selectedFiles = getSelectedCGFilesOnWhyCurrentActionShouldApply(focusedObject, globalSelection);
@@ -96,6 +96,11 @@ public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> ex
 		}
 
 		protected abstract boolean accept(AbstractCGFile aFile);
+	}
+
+	@Override
+	public final boolean isLongRunningAction() {
+		return true;
 	}
 
 	/*	public void actionStarted(CGFileRunnable runnable) {
@@ -185,9 +190,17 @@ public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> ex
 	}
 
 	@Override
-	protected void doAction(Object context) throws FlexoException {
-		// TODO : explain why there is nothing here
+	protected final void doAction(Object context) throws FlexoException {
+		GenerationRepository repository = getRepository();
+		repository.notifyLongOperationStarted();
+		try {
+			doImpl(context);
+		} finally {
+			repository.notifyLongOperationStopped();
+		}
 	}
+
+	protected abstract void doImpl(Object context) throws FlexoException;
 
 	// public abstract void performActionOnFile(AbstractCGFile file);
 

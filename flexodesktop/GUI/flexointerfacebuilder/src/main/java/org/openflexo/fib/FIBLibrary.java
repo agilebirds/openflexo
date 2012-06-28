@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.logging.Level;
@@ -36,7 +35,7 @@ import org.openflexo.fib.model.ComponentConstraints;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
@@ -82,7 +81,7 @@ public class FIBLibrary {
 	}
 
 	public static boolean hasInstance() {
-		return (_current != null);
+		return _current != null;
 	}
 
 	public BindingFactory getBindingFactory() {
@@ -134,6 +133,9 @@ public class FIBLibrary {
 	public FIBComponent retrieveFIBComponent(File fibFile, boolean useCache) {
 		if (!useCache || _fibDefinitions.get(fibFile.getAbsolutePath()) == null) {
 
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Load " + fibFile.getAbsolutePath());
+			}
 			RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(fibFile.getParentFile());
 			Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 			StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
@@ -143,6 +145,7 @@ public class FIBLibrary {
 				inputStream = new FileInputStream(fibFile);
 				return retrieveFIBComponent(fibFile.getAbsolutePath(), inputStream, useCache);
 			} catch (FileNotFoundException e) {
+				logger.warning("Not found: " + fibFile.getAbsolutePath());
 				return null;
 			} finally {
 				IOUtils.closeQuietly(inputStream);
@@ -150,6 +153,10 @@ public class FIBLibrary {
 			}
 		}
 		return _fibDefinitions.get(fibFile.getAbsolutePath());
+	}
+
+	public void removeFIBComponentFromCache(File fibFile) {
+		_fibDefinitions.remove(fibFile.getAbsolutePath());
 	}
 
 	public FIBComponent retrieveFIBComponent(String fibResourcePath) {
@@ -186,12 +193,8 @@ public class FIBLibrary {
 
 	public static void save(FIBComponent component, File file) {
 		logger.info("Save to file " + file.getAbsolutePath());
-
 		RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(file.getParentFile());
-		Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
-
-		XMLCoder coder = new XMLCoder(getFIBMapping());
+		XMLCoder coder = new XMLCoder(getFIBMapping(), new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
 
 		try {
 			coder.encodeObject(component, new FileOutputStream(file));
@@ -200,32 +203,6 @@ public class FIBLibrary {
 		} catch (Exception e) {
 			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
-		}
-
-		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
-	}
-
-	public static class RelativePathFileConverter extends Converter<File> {
-		private File relativePath;
-
-		public RelativePathFileConverter(File aRelativePath) {
-			super(File.class);
-			relativePath = aRelativePath;
-		}
-
-		@Override
-		public File convertFromString(String value) {
-			return new File(relativePath, value);
-		}
-
-		@Override
-		public String convertToString(File value) {
-			try {
-				return FileUtils.makeFilePathRelativeToDir(value, relativePath);
-			} catch (IOException e) {
-				logger.warning("IOException while computing relative path for " + value + " relative to " + relativePath);
-				return value.getAbsolutePath();
-			}
 		}
 
 	}

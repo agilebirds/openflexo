@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.view;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -41,8 +40,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -114,7 +113,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	private static final Logger logger = Logger.getLogger(DrawingView.class.getPackage().getName());
 
 	private D drawing;
-	private Hashtable<GraphicalRepresentation, FGEView> contents;
+	private Map<GraphicalRepresentation<?>, FGEView<?>> contents;
 	private DrawingController<D> _controller;
 	private FocusRetriever _focusRetriever;
 	private FGEPaintManager _paintManager;
@@ -128,7 +127,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		_controller = controller;
 		drawing = aDrawing;
 		aDrawing.getDrawingGraphicalRepresentation().updateBindingModel();
-		contents = new Hashtable<GraphicalRepresentation, FGEView>();
+		contents = new Hashtable<GraphicalRepresentation<?>, FGEView<?>>();
 		graphics = new FGEDrawingGraphics(drawing.getDrawingGraphicalRepresentation());
 		_focusRetriever = new FocusRetriever(this);
 		if (aDrawing.getDrawingGraphicalRepresentation().isResizable()) {
@@ -176,6 +175,11 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	@Override
+	public LabelView<D> getLabelView() {
+		return null;
+	}
+
+	@Override
 	public DrawingGraphicalRepresentation getGraphicalRepresentation() {
 		return drawing.getDrawingGraphicalRepresentation();
 	}
@@ -207,13 +211,12 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		return r.getSize();
 	}
 
+	@Override
 	public void rescale() {
-		for (FGEView v : contents.values()) {
-			if (v instanceof ShapeView) {
-				((ShapeView) v).rescale();
-			}
-			if (v instanceof ConnectorView) {
-				((ConnectorView) v).rescale();
+		for (FGEView<?> v : contents.values()) {
+			v.rescale();
+			if (v.getLabelView() != null) {
+				v.getLabelView().rescale();
 			}
 		}
 		resizeView();
@@ -249,107 +252,119 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	@Override
-	public void update(Observable o, Object notification) {
+	public void update(final Observable o, final Object notification) {
 		if (isDeleted) {
 			logger.warning("Received notifications for deleted view: observable=" + o);
 			return;
 		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
 
-		// logger.info("Received: "+notification);
-
-		if (notification instanceof FGENotification) {
-			FGENotification notif = (FGENotification) notification;
-			if (notification instanceof GraphicalRepresentationAdded) {
-				GraphicalRepresentation newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
-				logger.fine("DrawingView: Received ObjectAdded notification, creating view for " + newGR);
-				if (newGR instanceof ShapeGraphicalRepresentation) {
-					ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
-					add(shapeGR.makeShapeView(getController()));
-					revalidate();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-					getPaintManager().repaint(this);
-				} else if (newGR instanceof ConnectorGraphicalRepresentation) {
-					ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) newGR;
-					add(connectorGR.makeConnectorView(getController()));
-					revalidate();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-					getPaintManager().repaint(this);
-				} else if (newGR instanceof GeometricGraphicalRepresentation) {
-					newGR.addObserver(this);
-					revalidate();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-					getPaintManager().repaint(this);
+				@Override
+				public void run() {
+					update(o, notification);
 				}
-			} else if (notification instanceof GraphicalRepresentationRemoved) {
-				GraphicalRepresentation<?> removedGR = ((GraphicalRepresentationRemoved) notification).getRemovedGraphicalRepresentation();
-				if (removedGR instanceof ShapeGraphicalRepresentation) {
-					ShapeView<?> view = shapeViewForObject((ShapeGraphicalRepresentation<?>) removedGR);
-					if (view != null) {
-						remove(view);
+			});
+		} else {
+			// logger.info("Received: "+notification);
+
+			if (notification instanceof FGENotification) {
+				FGENotification notif = (FGENotification) notification;
+				if (notification instanceof GraphicalRepresentationAdded) {
+					GraphicalRepresentation newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
+					logger.fine("DrawingView: Received ObjectAdded notification, creating view for " + newGR);
+					if (newGR instanceof ShapeGraphicalRepresentation) {
+						ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
+						add(shapeGR.makeShapeView(getController()));
 						revalidate();
 						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 						getPaintManager().repaint(this);
-					} else {
-						logger.warning("Cannot find view for " + removedGR);
-					}
-				} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
-					ConnectorView<?> view = connectorViewForObject((ConnectorGraphicalRepresentation<?>) removedGR);
-					if (view != null) {
-						remove(view);
+					} else if (newGR instanceof ConnectorGraphicalRepresentation) {
+						ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) newGR;
+						add(connectorGR.makeConnectorView(getController()));
 						revalidate();
 						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 						getPaintManager().repaint(this);
-					} else {
-						logger.warning("Cannot find view for " + removedGR);
+					} else if (newGR instanceof GeometricGraphicalRepresentation) {
+						newGR.addObserver(this);
+						revalidate();
+						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+						getPaintManager().repaint(this);
 					}
-				} else if (removedGR instanceof GeometricGraphicalRepresentation) {
-					removedGR.deleteObserver(this);
-					revalidate();
+				} else if (notification instanceof GraphicalRepresentationRemoved) {
+					GraphicalRepresentation<?> removedGR = ((GraphicalRepresentationRemoved) notification)
+							.getRemovedGraphicalRepresentation();
+					if (removedGR instanceof ShapeGraphicalRepresentation) {
+						ShapeView<?> view = shapeViewForObject((ShapeGraphicalRepresentation<?>) removedGR);
+						if (view != null) {
+							remove(view);
+							revalidate();
+							getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+							getPaintManager().repaint(this);
+						} else {
+							// That may happen, remove warning
+							// logger.warning("Cannot find view for " + removedGR);
+						}
+					} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
+						ConnectorView<?> view = connectorViewForObject((ConnectorGraphicalRepresentation<?>) removedGR);
+						if (view != null) {
+							remove(view);
+							revalidate();
+							getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+							getPaintManager().repaint(this);
+						} else {
+							// That may happen, remove warning
+							// logger.warning("Cannot find view for " + removedGR);
+						}
+					} else if (removedGR instanceof GeometricGraphicalRepresentation) {
+						removedGR.deleteObserver(this);
+						revalidate();
+						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+						getPaintManager().repaint(this);
+					}
+				} else if (notification instanceof ObjectResized) {
+					rescale();
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.backgroundColor) {
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					updateBackground();
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.drawWorkingArea) {
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					updateBackground();
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.width) {
+					rescale();
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.height) {
+					rescale();
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().repaint(this);
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.isResizable) {
+					if (getDrawingGraphicalRepresentation().isResizable()) {
+						removeMouseListener(mouseListener); // We remove the mouse
+															// listener, so that the
+															// mouse resizer is
+															// called before
+															// mouseListener
+						if (resizer == null) {
+							resizer = new DrawingViewResizer();
+						} else {
+							addMouseListener(resizer);
+						}
+						addMouseListener(mouseListener);
+					} else {
+						removeMouseListener(resizer);
+					}
+				} else if (notif instanceof DrawingNeedsToBeRedrawn) {
+					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().repaint(this);
+				} else if (o instanceof GeometricGraphicalRepresentation) {
 					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 					getPaintManager().repaint(this);
 				}
-			} else if (notification instanceof ObjectResized) {
-				rescale();
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.backgroundColor) {
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				updateBackground();
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.drawWorkingArea) {
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				updateBackground();
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.width) {
-				rescale();
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.height) {
-				rescale();
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
-			} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.isResizable) {
-				if (getDrawingGraphicalRepresentation().isResizable()) {
-					removeMouseListener(mouseListener); // We remove the mouse
-														// listener, so that the
-														// mouse resizer is
-														// called before
-														// mouseListener
-					if (resizer == null) {
-						resizer = new DrawingViewResizer();
-					} else {
-						addMouseListener(resizer);
-					}
-					addMouseListener(mouseListener);
-				} else {
-					removeMouseListener(resizer);
-				}
-			} else if (notif instanceof DrawingNeedsToBeRedrawn) {
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
-			} else if (o instanceof GeometricGraphicalRepresentation) {
-				getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-				getPaintManager().repaint(this);
 			}
 		}
 	}
@@ -378,8 +393,9 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	private long cumulatedRepaintTime = 0;
 
 	private boolean isBuffering = false;
-	private Graphics2D bufferingGraphics;
 	private boolean bufferingHasBeenStartedAgain = false;
+
+	private boolean paintTemporary;
 
 	/**
 	 * 
@@ -388,7 +404,6 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	 */
 	protected synchronized void prepareForBuffering(Graphics2D g) {
 		isBuffering = true;
-		bufferingGraphics = g;
 	}
 
 	public synchronized boolean isBuffering() {
@@ -410,12 +425,13 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		forcePaintObjects(fatherGraphicalRepresentation, g, false);
 	}
 
-	private void forcePaintObjects(GraphicalRepresentation<?> fatherGraphicalRepresentation, Graphics g, boolean temporaryObjectsOnly) {
+	private void forcePaintObjects(GraphicalRepresentation<?> fatherGraphicalRepresentation, final Graphics g, boolean temporaryObjectsOnly) {
 		List<? extends GraphicalRepresentation<?>> containedGR = fatherGraphicalRepresentation
 				.getOrderedContainedGraphicalRepresentations();
 		if (containedGR == null) {
 			return;
 		}
+		paintTemporary = true;
 		for (GraphicalRepresentation<?> gr : new ArrayList<GraphicalRepresentation<?>>(containedGR)) {
 			if (gr.shouldBeDisplayed()
 					&& (!temporaryObjectsOnly || getPaintManager().isTemporaryObject(gr) || getPaintManager().containsTemporaryObject(gr))) {
@@ -429,23 +445,14 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 								+ " temporaryObjectsOnly=" + temporaryObjectsOnly);
 					}
 					gr.paint(childGraphics, getController());
-					LabelView labelView = null;
-					if (view instanceof ShapeView) {
-						labelView = ((ShapeView) view).getLabelView();
-					} else if (view instanceof ConnectorView) {
-						labelView = ((ConnectorView) view).getLabelView();
-					}
+					LabelView<?> labelView = view.getLabelView();
 					if (labelView != null) {
 						Graphics labelGraphics = g.create(labelView.getX(), labelView.getY(), labelView.getWidth(), labelView.getHeight());
-						// Tricky area: if label is currently beeing edited,
+						// Tricky area: if label is currently being edited,
 						// call to paint is required here
 						// to paint text component above buffer image.
 						// Otherwise, just call doPaint to force paint label
-						if (labelView.isEditing()) {
-							labelView.paint(labelGraphics);
-						} else {
-							labelView.doPaint(labelGraphics);
-						}
+						labelView.paint(labelGraphics);
 						labelGraphics.dispose();
 					}
 					// do the job for childs
@@ -456,10 +463,18 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 				}
 			}
 		}
+		paintTemporary = false;
+	}
+
+	public boolean isPaintTemporary() {
+		return paintTemporary;
 	}
 
 	@Override
 	public synchronized void paint(Graphics g) {
+		if (isDeleted()) {
+			return;
+		}
 		long startTime = System.currentTimeMillis();
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (isBuffering) {
@@ -485,55 +500,14 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 					// Skip buffering and perform normal rendering
 					super.paint(g);
 				}
-				// Use buffer
-				/*
-				 * Image buffer = getPaintManager().getPaintBuffer(); Rectangle
-				 * r = g.getClipBounds(); Point p1 = r.getLocation(); Point p2 =
-				 * new Point(r.x+r.width,r.y+r.height); if ((p1.x < 0) || (p1.x
-				 * > buffer.getWidth(null)) || (p1.y < 0) || (p1.y >
-				 * buffer.getHeight(null)) || (p2.x < 0) || (p2.x >
-				 * buffer.getWidth(null)) || (p2.y < 0) || (p2.y >
-				 * buffer.getHeight(null))) { // We have here a request for
-				 * render outside cached image // We cannot do that, so skip
-				 * buffer use and do normal painting if
-				 * (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
-				 * FGEPaintManager.paintPrimitiveLogger.fine(
-				 * "DrawingView: request to render outside image buffer, use normal rendering clip="
-				 * +r);
-				 * getPaintManager().invalidate(getDrawingGraphicalRepresentation
-				 * ()); super.paint(g); } else { // OK, we are in our bounds if
-				 * (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
-				 * FGEPaintManager.paintPrimitiveLogger.fine(
-				 * "DrawingView: use image buffer, copy area "+r);
-				 * g.drawImage(buffer, p1.x,p1.y,p2.x,p2.y, p1.x,p1.y,p2.x,p2.y,
-				 * null); // Now, we still have to paint objects that are
-				 * declared // to be temporary and continuously to be redrawn
-				 * forcePaintTemporaryObjects
-				 * (getDrawingGraphicalRepresentation(),g); }
-				 */
+				paintCapturedNode(g);
 			}
 		} else {
 			// Normal painting
 			super.paint(g);
 		}
 
-		Vector<GeometricGraphicalRepresentation> geomList = new Vector<GeometricGraphicalRepresentation>();
-		for (Object gr : getGraphicalRepresentation().getOrderedContainedGraphicalRepresentations()) {
-			if (gr instanceof GeometricGraphicalRepresentation) {
-				geomList.add((GeometricGraphicalRepresentation) gr);
-			}
-		}
-		if (geomList.size() > 0) {
-			Collections.sort(geomList, new Comparator<GeometricGraphicalRepresentation>() {
-				@Override
-				public int compare(GeometricGraphicalRepresentation o1, GeometricGraphicalRepresentation o2) {
-					return o1.getLayer() - o2.getLayer();
-				}
-			});
-			for (GeometricGraphicalRepresentation gr : geomList) {
-				gr.paint(g, getController());
-			}
-		}
+		paintGeometricGraphicalRepresentation(g);
 
 		if (!isBuffering) {
 
@@ -542,11 +516,13 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			graphics.createGraphics(g2, getController());
 
 			// Don't paint those things in case of buffering
-			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation>(getController().getFocusedObjects())) {
+			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation<?>>(getController().getFocusedObjects())) {
+				// logger.info("Paint focused " + o);
 				paintFocused(o, graphics);
 			}
 
-			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation>(getController().getSelectedObjects())) {
+			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation<?>>(getController().getSelectedObjects())) {
+				// logger.info("Paint selected " + o + "shouldBeDisplayed=" + o.shouldBeDisplayed());
 				if (o.shouldBeDisplayed()) {
 					paintSelected(o, graphics);
 				}
@@ -586,6 +562,26 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 	}
 
+	private void paintGeometricGraphicalRepresentation(Graphics g) {
+		List<GeometricGraphicalRepresentation<?>> geomList = new ArrayList<GeometricGraphicalRepresentation<?>>();
+		for (Object gr : getGraphicalRepresentation().getOrderedContainedGraphicalRepresentations()) {
+			if (gr instanceof GeometricGraphicalRepresentation<?>) {
+				geomList.add((GeometricGraphicalRepresentation<?>) gr);
+			}
+		}
+		if (geomList.size() > 0) {
+			Collections.sort(geomList, new Comparator<GeometricGraphicalRepresentation<?>>() {
+				@Override
+				public int compare(GeometricGraphicalRepresentation<?> o1, GeometricGraphicalRepresentation<?> o2) {
+					return o1.getLayer() - o2.getLayer();
+				}
+			});
+			for (GeometricGraphicalRepresentation<?> gr : geomList) {
+				gr.paint(g, getController());
+			}
+		}
+	}
+
 	private void paintFocusedFloatingLabel(GraphicalRepresentation<?> focusedFloatingLabel, Graphics g) {
 		Color color = Color.BLACK;
 		if (focusedFloatingLabel.getIsSelected()) {
@@ -595,13 +591,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		} else {
 			return;
 		}
-		LabelView labelView = null;
 		FGEView<?> view = viewForObject(focusedFloatingLabel);
-		if (view instanceof ShapeView) {
-			labelView = ((ShapeView) view).getLabelView();
-		} else if (view instanceof ConnectorView) {
-			labelView = ((ConnectorView) view).getLabelView();
-		}
+		LabelView<?> labelView = view.getLabelView();
 		if (labelView != null) {
 			Point p1 = SwingUtilities.convertPoint(labelView, new Point(0, labelView.getHeight() / 2), this);
 			Point p2 = SwingUtilities.convertPoint(labelView, new Point(labelView.getWidth(), labelView.getHeight() / 2), this);
@@ -625,7 +616,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		getPaintManager().addTemporaryRepaintArea(r, this);
 	}
 
-	private void paintSelected(GraphicalRepresentation selected, FGEDrawingGraphics graphics) {
+	private void paintSelected(GraphicalRepresentation<?> selected, FGEDrawingGraphics graphics) {
+
 		if (selected.isDeleted()) {
 			logger.warning("Cannot paint for a deleted GR");
 			return;
@@ -637,19 +629,20 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
+		graphics.setDefaultForeground(ForegroundStyle.makeStyle(getGraphicalRepresentation().getSelectionColor()));
 
 		if (selected instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation) selected;
-			for (ControlArea ca : gr.getControlAreas()) {
+			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) selected;
+			for (ControlArea<?> ca : gr.getControlAreas()) {
 				if (selected.isConnectedToDrawing()) {
-					graphics.setDefaultForeground(ForegroundStyle.makeStyle(getGraphicalRepresentation().getSelectionColor()));
 					paintControlArea(ca, graphics);
 				}
 			}
 		}
 
 		else if (selected instanceof ConnectorGraphicalRepresentation) {
-			ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation) selected;
+
+			ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation<?>) selected;
 			// g.setColor(getGraphicalRepresentation().getSelectionColor());
 
 			if (gr.getStartObject() == null || gr.getStartObject().isDeleted()) {
@@ -670,7 +663,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		if (selected.hasFloatingLabel()) {
-			paintFocusedFloatingLabel(selected, graphics.g2d);
+			paintFocusedFloatingLabel(selected, graphics.getGraphics());
 		}
 
 		graphics.releaseClonedGraphics(oldGraphics);
@@ -692,14 +685,14 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		Graphics2D oldGraphics = graphics.cloneGraphics();
 		graphics.setDefaultForeground(ForegroundStyle.makeStyle(getGraphicalRepresentation().getFocusColor()));
 
-		for (ControlArea ca : getController().getDrawShapeToolController().getControlAreas()) {
+		for (ControlArea<?> ca : getController().getDrawShapeToolController().getControlAreas()) {
 			paintControlArea(ca, graphics);
 		}
 
 		graphics.releaseClonedGraphics(oldGraphics);
 	}
 
-	private void paintFocused(GraphicalRepresentation focused, FGEDrawingGraphics graphics) {
+	private void paintFocused(GraphicalRepresentation<?> focused, FGEDrawingGraphics graphics) {
 		if (focused.isDeleted()) {
 			logger.warning("Cannot paint for a deleted GR");
 			return;
@@ -713,14 +706,14 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		graphics.setDefaultForeground(ForegroundStyle.makeStyle(getGraphicalRepresentation().getFocusColor()));
 
 		if (focused instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation) focused;
-			for (ControlArea ca : gr.getControlAreas()) {
+			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) focused;
+			for (ControlArea<?> ca : gr.getControlAreas()) {
 				if (focused.isConnectedToDrawing()) {
 					paintControlArea(ca, graphics);
 				}
 			}
 		} else if (focused instanceof ConnectorGraphicalRepresentation) {
-			ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation) focused;
+			ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation<?>) focused;
 
 			if (gr.getStartObject() == null || gr.getStartObject().isDeleted()) {
 				logger.warning("Could not paint connector: start object is null or deleted");
@@ -732,14 +725,14 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 				return;
 			}
 
-			for (ControlArea ca : gr.getControlAreas()) {
+			for (ControlArea<?> ca : gr.getControlAreas()) {
 				if (focused.isConnectedToDrawing()) {
 					paintControlArea(ca, graphics);
 				}
 			}
 		}
 		if (focused.hasFloatingLabel()) {
-			paintFocusedFloatingLabel(focused, graphics.g2d);
+			paintFocusedFloatingLabel(focused, graphics.getGraphics());
 		}
 		/*
 		 * else if (focused instanceof GeometricGraphicalRepresentation) {
@@ -779,7 +772,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	 * FGEConstants.CONTROL_POINT_SIZE*2); } }
 	 */
 
-	public Hashtable<GraphicalRepresentation, FGEView> getContents() {
+	public Map<GraphicalRepresentation<?>, FGEView<?>> getContents() {
 		return contents;
 	}
 
@@ -788,7 +781,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		if (gr == getGraphicalRepresentation()) {
 			return (FGEView<O>) this;
 		}
-		return contents.get(gr);
+		return (FGEView<O>) contents.get(gr);
 	}
 
 	public <O> ShapeView<O> shapeViewForObject(ShapeGraphicalRepresentation<O> gr) {
@@ -815,7 +808,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		logger.fine("Registering drop target");
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, _controller), true));
 		activePalette = aPalette;
-		for (FGEView v : contents.values()) {
+		for (FGEView<?> v : contents.values()) {
 			v.registerPalette(aPalette);
 		}
 	}
@@ -825,12 +818,15 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		return _paintManager;
 	}
 
-	public boolean contains(FGEView view) {
+	public boolean contains(FGEView<?> view) {
+		if (view == null) {
+			return false;
+		}
 		if (view == this) {
 			return true;
 		}
 		if (((JComponent) view).getParent() != null && ((JComponent) view).getParent() instanceof FGEView) {
-			return contains((FGEView) ((JComponent) view).getParent());
+			return contains((FGEView<?>) ((JComponent) view).getParent());
 		}
 		return false;
 	}
@@ -853,68 +849,81 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		removeMouseListener(mouseListener);
 		removeMouseMotionListener(mouseListener);
 
-		Vector<FGEView> views = new Vector<FGEView>(contents.values());
+		List<FGEView<?>> views = new ArrayList<FGEView<?>>(contents.values());
 
-		for (FGEView v : views) {
+		for (FGEView<?> v : views) {
 			v.delete();
 			// logger.info("Deleted view "+v);
 		}
 		contents.clear();
+		getGraphicalRepresentation().deleteObserver(this);
+
+		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+			if (gr instanceof GeometricGraphicalRepresentation) {
+				((GeometricGraphicalRepresentation<?>) gr).deleteObserver(this);
+			}
+		}
 		isDeleted = true;
 	}
 
 	private Rectangle drawnRectangle = new Rectangle();
-	protected BufferedImage capturedDraggedNodeImage;
+	private BufferedImage capturedDraggedNodeImage;
+	private Point capturedNodeLocation;
 
 	// This call is made on the edition drawing view
-	public final void paintDraggedNode(DropTargetDragEvent e, DrawingView source) {
-		Point pt = SwingUtilities.convertPoint(((DropTarget) e.getSource()).getComponent(), e.getLocation(), this);
+	public final void updateCapturedDraggedNodeImagePosition(DropTargetDragEvent e, DrawingView<?> source) {
+		capturedNodeLocation = SwingUtilities.convertPoint(((DropTarget) e.getSource()).getComponent(), e.getLocation(), this);
 		if (source != this) {
-			dragOver = activePalette.getPaletteView().dragOver; // transfer from
-																// the palette
-																// to the
-																// edition view
+			dragOrigin = activePalette.getPaletteView().dragOrigin; // transfer from
+			// the palette
+			// to the
+			// edition view
 		}
-		if (dragOver == null) {
+		if (dragOrigin == null) {
 			return;
 		}
-		pt.x -= dragOver.x * getScale();
-		pt.y -= dragOver.y * getScale();
-		BufferedImage img = source.capturedDraggedNodeImage;
-		if (pt == null || img == null || drawnRectangle != null && pt.equals(drawnRectangle.getLocation())) {
+		capturedNodeLocation.x -= dragOrigin.x * getScale();
+		capturedNodeLocation.y -= dragOrigin.y * getScale();
+		capturedDraggedNodeImage = source.capturedDraggedNodeImage;
+		if (capturedNodeLocation == null || capturedDraggedNodeImage == null || drawnRectangle != null
+				&& capturedNodeLocation.equals(drawnRectangle.getLocation())) {
 			return;
 		}
-		paintImmediately(drawnRectangle.getBounds());
+		getPaintManager().repaint(this, drawnRectangle.getBounds());
 		// System.out.println("Paint: "+drawnRectangle.getBounds()+" isDoubleBuffered="+isDoubleBuffered());
-		int scaledWidth = (int) (img.getWidth() * getScale());
-		int scaledHeight = (int) (img.getHeight() * getScale());
-		drawnRectangle.setRect((int) pt.getX(), (int) pt.getY(), scaledWidth, scaledHeight);
-		Graphics2D g = (Graphics2D) this.getGraphics().create();
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.7f));
-		// g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-		// RenderingHints.VALUE_RENDER_QUALITY);
-		/*
-		 * g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
-		 * RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-		 */
-		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g.drawImage(img, (int) pt.getX(), (int) pt.getY(), scaledWidth, scaledHeight, this);
-		g.dispose();
+		int scaledWidth = (int) (capturedDraggedNodeImage.getWidth() * getScale());
+		int scaledHeight = (int) (capturedDraggedNodeImage.getHeight() * getScale());
+		drawnRectangle.setRect((int) capturedNodeLocation.getX(), (int) capturedNodeLocation.getY(), scaledWidth, scaledHeight);
+		getPaintManager().repaint(this, drawnRectangle.getBounds());
 	}
 
-	private Point dragOver;
+	private void paintCapturedNode(Graphics g) {
+		if (capturedDraggedNodeImage != null && drawnRectangle != null) {
+			Graphics2D g2 = (Graphics2D) g;
+			// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.7f));
+			g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g2.drawImage(capturedDraggedNodeImage, (int) drawnRectangle.getX(), (int) drawnRectangle.getY(),
+					(int) drawnRectangle.getWidth(), (int) drawnRectangle.getHeight(), this);
+		}
+	}
+
+	private Point dragOrigin;
 
 	// This call is made on the drawing view of the palette
-	public void captureDraggedNode(ShapeView<?> view, DragGestureEvent e) {
-		// logger.info("Dragged node has been captured !!!!!!!!!!!!!!!!");
+	public void captureDraggedNode(ShapeView<?> view, MouseEvent e) {
 		capturedDraggedNodeImage = view.getScreenshot();
-		dragOver = e.getDragOrigin();
+		dragOrigin = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view);
+	}
+
+	public void captureDraggedNode(ShapeView<?> view, DragGestureEvent e) {
+		capturedDraggedNodeImage = view.getScreenshot();
+		dragOrigin = SwingUtilities.convertPoint(e.getComponent(), e.getDragOrigin(), view);
 	}
 
 	public void resetCapturedNode() {
-		if (drawnRectangle != null) {
-			paintImmediately(drawnRectangle.getBounds());
-			// capturedDraggedNodeImage = null;
+		if (capturedDraggedNodeImage != null) {
+			getPaintManager().repaint(this, drawnRectangle.getBounds());
+			capturedDraggedNodeImage = null;
 		}
 	}
 

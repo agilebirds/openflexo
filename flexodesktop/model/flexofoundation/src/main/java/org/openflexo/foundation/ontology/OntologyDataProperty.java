@@ -19,13 +19,17 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.logging.Logger;
+
 import org.openflexo.foundation.Inspectors;
 
-import com.hp.hpl.jena.ontology.DatatypeProperty;
+import com.hp.hpl.jena.ontology.OntProperty;
 
 public class OntologyDataProperty extends OntologyProperty implements Comparable<OntologyDataProperty> {
 
-	protected OntologyDataProperty(DatatypeProperty aDataProperty, FlexoOntology ontology) {
+	static final Logger logger = Logger.getLogger(OntologyDataProperty.class.getPackage().getName());
+
+	protected OntologyDataProperty(OntProperty aDataProperty, FlexoOntology ontology) {
 		super(aDataProperty, ontology);
 	}
 
@@ -57,10 +61,10 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 		}
 	}
 
-	@Override
+	/*@Override
 	public DatatypeProperty getOntProperty() {
 		return (DatatypeProperty) super.getOntProperty();
-	}
+	}*/
 
 	@Override
 	public int compareTo(OntologyDataProperty o) {
@@ -91,8 +95,39 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 	}
 
 	@Override
+	public String getHTMLDescription() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<html>");
+		sb.append("Datatype property <b>" + getName() + "</b><br>");
+		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Asserted in:</b> " + getOntology().getURI() + "<br>");
+		sb.append("<b>Domain:</b> " + (getDomain() != null ? getDomain().getURI() : "?") + "<br>");
+		sb.append("<b>Datatype:</b> " + (getDataType() != null ? getDataType().toString() : "?") + "<br>");
+		if (redefinesOriginalDefinition()) {
+			sb.append("<b>Redefines:</b> " + getOriginalDefinition() + "<br>");
+		}
+		sb.append("</html>");
+		return sb.toString();
+	}
+
+	@Override
 	public boolean isOntologyDataProperty() {
 		return true;
+	}
+
+	@Override
+	protected void recursivelySearchRangeAndDomains() {
+		super.recursivelySearchRangeAndDomains();
+		for (OntologyProperty aProperty : getSuperProperties()) {
+			propertiesTakingMySelfAsRange.addAll(aProperty.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(aProperty.getPropertiesTakingMySelfAsDomain());
+		}
+		OntologyClass DATA_PROPERTY_CONCEPT = getOntology().getClass(OWL_DATA_PROPERTY_URI);
+		// DATA_PROPERTY_CONCEPT is generally non null but can be null when reading RDFS for example
+		if (DATA_PROPERTY_CONCEPT != null) {
+			propertiesTakingMySelfAsRange.addAll(DATA_PROPERTY_CONCEPT.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(DATA_PROPERTY_CONCEPT.getPropertiesTakingMySelfAsDomain());
+		}
 	}
 
 }

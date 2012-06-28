@@ -50,18 +50,6 @@ public class SGModule extends FlexoModule implements ExternalSGModule {
 			SGJarInspectorGroup.INSTANCE };
 	private static Hashtable<Class<? extends TechnologyModuleImplementation>, TechnologyModuleGUIFactory> recordedGUIFactories = new Hashtable<Class<? extends TechnologyModuleImplementation>, TechnologyModuleGUIFactory>();
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		ToolBox.setPlatform();
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.SG_MODULE);
-	}
-
 	public SGModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 

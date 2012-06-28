@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
@@ -54,14 +55,15 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	/**
 	 * Never use this constructor except for ComponentLibrary
 	 */
-	public ExampleDrawingObject() {
-		super();
+	public ExampleDrawingObject(ViewPointBuilder builder) {
+		super(builder);
 		childs = new Vector<ExampleDrawingObject>();
 	}
 
 	@Override
 	public void delete() {
-		for (ExampleDrawingObject o : childs) {
+		Vector<ExampleDrawingObject> toRemove = new Vector<ExampleDrawingObject>(childs);
+		for (ExampleDrawingObject o : toRemove) {
 			o.delete();
 		}
 		super.delete();
@@ -76,9 +78,9 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getShema() != null) {
-			return getShema().getCalc();
+			return getShema().getViewPoint();
 		}
 		return null;
 	}
@@ -146,6 +148,7 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	}
 
 	private Vector<ExampleDrawingObject> ancestors;
+	private Vector<ExampleDrawingObject> descendants;
 
 	public ExampleDrawingObject getParent() {
 		return parent;
@@ -161,6 +164,23 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 			}
 		}
 		return ancestors;
+	}
+
+	public Vector<ExampleDrawingObject> getDescendants() {
+		if (descendants == null) {
+			descendants = new Vector<ExampleDrawingObject>();
+			appendDescendants(this, descendants);
+		}
+		return descendants;
+	}
+
+	private void appendDescendants(ExampleDrawingObject current, Vector<ExampleDrawingObject> descendants) {
+		descendants.add(current);
+		for (ExampleDrawingObject child : current.getChilds()) {
+			if (child != current) {
+				appendDescendants(child, descendants);
+			}
+		}
 	}
 
 	public static ExampleDrawingObject getFirstCommonAncestor(ExampleDrawingObject child1, ExampleDrawingObject child2) {
@@ -191,6 +211,7 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
+
 }

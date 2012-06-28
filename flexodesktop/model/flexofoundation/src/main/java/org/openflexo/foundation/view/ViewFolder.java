@@ -49,7 +49,6 @@ import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -71,7 +70,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	// private transient FlexoComponentLibrary _componentLibrary;
 	private Vector<ViewFolder> _subFolders;
 
-	private Vector<ViewDefinition> _shemas;
+	private Vector<ViewDefinition> _views;
 
 	private ViewFolder _fatherFolder;
 
@@ -82,10 +81,10 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	// ================================
 	// ==========================================================================
 
-	public ViewFolder(ViewLibrary componentLibrary) {
-		super(componentLibrary);
+	public ViewFolder(ViewLibrary viewLibrary) {
+		super(viewLibrary);
 		_subFolders = new Vector<ViewFolder>();
-		_shemas = new Vector<ViewDefinition>();
+		_views = new Vector<ViewDefinition>();
 	}
 
 	@Override
@@ -109,6 +108,14 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		}
 	}
 
+	public int getDepth() {
+		if (getFatherFolder() != null) {
+			return getFatherFolder().getDepth() + 1;
+		} else {
+			return 0;
+		}
+	}
+
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
@@ -121,9 +128,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		Vector<ViewFolder> v = new Vector<ViewFolder>();
 		if (folder != null) {
 			v.add(folder);
-			Enumeration en = folder.getSubFolders().elements();
+			Enumeration<ViewFolder> en = folder.getSubFolders().elements();
 			while (en.hasMoreElements()) {
-				ViewFolder f = (ViewFolder) en.nextElement();
+				ViewFolder f = en.nextElement();
 				v.addAll(getAllSubFoldersForFolder(f));
 			}
 		}
@@ -163,9 +170,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		}
 		if (getSubFolders().size() > 0) {
 			boolean answer = false;
-			Enumeration en = getSubFolders().elements();
+			Enumeration<ViewFolder> en = getSubFolders().elements();
 			while (en.hasMoreElements() && !answer) {
-				answer = ((ViewFolder) en.nextElement()).containsShemas();
+				answer = en.nextElement().containsShemas();
 			}
 			return answer;
 		}
@@ -245,9 +252,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			return true;
 		} else {
 
-			Enumeration en = getSubFolders().elements();
+			Enumeration<ViewFolder> en = getSubFolders().elements();
 			while (en.hasMoreElements()) {
-				boolean isDeleted = ((ViewFolder) en.nextElement()).delete(def);
+				boolean isDeleted = en.nextElement().delete(def);
 				if (isDeleted) {
 					return true;
 				}
@@ -270,18 +277,18 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 		String searchedName = value;
 
-		Enumeration en = getShemas().elements();
+		Enumeration<ViewDefinition> en = getShemas().elements();
 		ViewDefinition temp = null;
 		while (en.hasMoreElements()) {
-			temp = (ViewDefinition) en.nextElement();
+			temp = en.nextElement();
 			if (searchedName.toLowerCase().equals(temp.getName().toLowerCase())) {
 				return temp;
 			}
 		}
 		ViewDefinition cur = null;
-		en = getSubFolders().elements();
-		while (en.hasMoreElements() && cur == null) {
-			cur = ((ViewFolder) en.nextElement()).getShemaNamed(searchedName);
+		Enumeration<ViewFolder> en1 = getSubFolders().elements();
+		while (en1.hasMoreElements() && cur == null) {
+			cur = en1.nextElement().getShemaNamed(searchedName);
 		}
 
 		if (cur != null && cur.getName().toLowerCase().equals(searchedName.toLowerCase())) {
@@ -306,15 +313,30 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		return getShemaLibrary().getProject();
 	}
 
+	@Deprecated
 	public Vector<ViewDefinition> getShemas() {
-		return _shemas;
+		return getViews();
 	}
 
-	public void setShemas(Vector<ViewDefinition> value) {
-		_shemas = value;
+	@Deprecated
+	public void setShemas(Vector<ViewDefinition> views) {
+		setViews(views);
 	}
 
+	@Deprecated
 	public Vector<ViewDefinition> getAllShemas() {
+		return getAllViews();
+	}
+
+	public Vector<ViewDefinition> getViews() {
+		return _views;
+	}
+
+	public void setViews(Vector<ViewDefinition> value) {
+		_views = value;
+	}
+
+	public Vector<ViewDefinition> getAllViews() {
 		Vector<ViewDefinition> v = new Vector<ViewDefinition>();
 		Enumeration<ViewFolder> en = getSortedSubFolders();
 		while (en.hasMoreElements()) {
@@ -336,14 +358,14 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	}
 
 	public void addToShemas(ViewDefinition shema) {
-		if ((shema.getFolder() != null) && (shema.getFolder() != this)) {
+		if (shema.getFolder() != null && shema.getFolder() != this) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("UNEXPECTEDELY Move shema " + shema + " from folder " + shema.getFolder().getName() + " to folder "
 						+ getName());
 			}
 			shema.getFolder().removeFromShemas(shema);
 		}
-		_shemas.add(shema);
+		_views.add(shema);
 		shema.setFolder(this);
 		if (!isDeserializing()) {
 			int i = 0;
@@ -358,14 +380,22 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		}
 		setChanged();
 		notifyObservers(new ShemaInserted(shema, this));
+		if (isRootFolder()) {
+			getShemaLibrary().setChanged();
+			getShemaLibrary().notifyObservers(new ShemaInserted(shema, this));
+		}
 	}
 
 	public void removeFromShemas(ViewDefinition sub) {
-		_shemas.remove(sub);
+		_views.remove(sub);
 		sub.setFolder(null);
 		FlexoIndexManager.reIndexObjectOfArray(getShemas().toArray(new ViewDefinition[0]));
 		setChanged();
 		notifyObservers(new ShemaDeleted(sub));
+		if (isRootFolder()) {
+			getShemaLibrary().setChanged();
+			getShemaLibrary().notifyObservers(new ShemaDeleted(sub));
+		}
 	}
 
 	public Enumeration<ViewFolder> getSortedSubFolders() {
@@ -407,6 +437,10 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			sub.setShemaLibrary(getShemaLibrary());
 			setChanged();
 			notifyObservers(new ShemaFolderInserted(sub));
+			if (isRootFolder()) {
+				getShemaLibrary().setChanged();
+				getShemaLibrary().notifyObservers(new ShemaFolderInserted(sub));
+			}
 		}
 	}
 
@@ -415,6 +449,10 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		FlexoIndexManager.reIndexObjectOfArray(getSubFolders().toArray(new ViewFolder[0]));
 		setChanged();
 		notifyObservers(new ShemaFolderDeleted(sub));
+		if (isRootFolder()) {
+			getShemaLibrary().setChanged();
+			getShemaLibrary().notifyObservers(new ShemaFolderDeleted(sub));
+		}
 	}
 
 	@Override
@@ -424,16 +462,19 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 	@Override
 	public void setName(String name) throws DuplicateFolderNameException, InvalidNameException {
-		if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null) {
-			throw new DuplicateFolderNameException(this, name);
-		}
-		if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
+		if (requireChange(_name, name)) {
+			if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null) {
+				throw new DuplicateFolderNameException(this, name);
+			}
+			// There is no reason to dismiss accents
+			/*if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
 			throw new InvalidNameException(name);
+			}*/
+			String old = _name;
+			_name = name;
+			setChanged();
+			notifyObservers(new OEDataModification("name", old, name));
 		}
-		String old = _name;
-		_name = name;
-		setChanged();
-		notifyObservers(new OEDataModification("name", old, name));
 	}
 
 	public ViewFolder getFatherFolder() {
@@ -499,7 +540,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		 */
 		@Override
 		public int compare(ViewFolder o1, ViewFolder o2) {
-			return (o1).getName().compareTo((o2).getName());
+			return o1.getName().compareTo(o2.getName());
 		}
 	}
 

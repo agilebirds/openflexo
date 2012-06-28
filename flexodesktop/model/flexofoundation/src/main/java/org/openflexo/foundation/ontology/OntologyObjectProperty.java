@@ -19,11 +19,15 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.logging.Logger;
+
 import org.openflexo.foundation.Inspectors;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 
 public class OntologyObjectProperty extends OntologyProperty implements Comparable<OntologyObjectProperty> {
+
+	static final Logger logger = Logger.getLogger(OntologyObjectProperty.class.getPackage().getName());
 
 	protected OntologyObjectProperty(OntProperty anObjectProperty, FlexoOntology ontology) {
 		super(anObjectProperty, ontology);
@@ -89,6 +93,38 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 	}
 
 	public boolean isLiteralRange() {
-		return (getRange() == getOntologyLibrary().getOntologyObject(OntologyLibrary.RDFS_LITERAL_URI));
+		return (getRange() == getOntology().getOntologyObject(RDFSURIDefinitions.RDFS_LITERAL_URI));
 	}
+
+	@Override
+	public String getHTMLDescription() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<html>");
+		sb.append("Object property <b>" + getName() + "</b><br>");
+		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Asserted in:</b> " + getOntology().getURI() + "<br>");
+		sb.append("<b>Domain:</b> " + (getDomain() != null ? getDomain().getURI() : "?") + "<br>");
+		sb.append("<b>Range:</b> " + (getRange() != null ? getRange().getURI() : "?") + "<br>");
+		if (redefinesOriginalDefinition()) {
+			sb.append("<b>Redefines:</b> " + getOriginalDefinition() + "<br>");
+		}
+		sb.append("</html>");
+		return sb.toString();
+	}
+
+	@Override
+	protected void recursivelySearchRangeAndDomains() {
+		super.recursivelySearchRangeAndDomains();
+		for (OntologyProperty aProperty : getSuperProperties()) {
+			propertiesTakingMySelfAsRange.addAll(aProperty.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(aProperty.getPropertiesTakingMySelfAsDomain());
+		}
+		OntologyClass OBJECT_PROPERTY_CONCEPT = getOntology().getClass(OWL_OBJECT_PROPERTY_URI);
+		// OBJECT_PROPERTY_CONCEPT is generally non null but can be null when reading RDFS for example
+		if (OBJECT_PROPERTY_CONCEPT != null) {
+			propertiesTakingMySelfAsRange.addAll(OBJECT_PROPERTY_CONCEPT.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(OBJECT_PROPERTY_CONCEPT.getPropertiesTakingMySelfAsDomain());
+		}
+	}
+
 }

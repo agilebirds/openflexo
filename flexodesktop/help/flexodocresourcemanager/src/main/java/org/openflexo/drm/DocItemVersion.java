@@ -165,7 +165,7 @@ public class DocItemVersion extends DRMObject {
 	}
 
 	public File getFullHTMLDescriptionFile() {
-		if ((getItem() != null) && (getItem().getFolder() != null)) {
+		if (getItem() != null && getItem().getFolder() != null) {
 			File directory = getItem().getFolder().getDirectory();
 			String fileName = getItem().getIdentifier() + "-0-" + languageId + "-" + version.toString() + "-FULL.html";
 			return new File(directory, fileName);
@@ -174,7 +174,7 @@ public class DocItemVersion extends DRMObject {
 	}
 
 	public File getShortHTMLDescriptionFile() {
-		if ((getItem() != null) && (getItem().getFolder() != null)) {
+		if (getItem() != null && getItem().getFolder() != null) {
 			File directory = getItem().getFolder().getDirectory();
 			String fileName = getItem().getIdentifier() + "-0-" + languageId + "-" + version.toString() + "-SHORT.html";
 			return new File(directory, fileName);
@@ -229,20 +229,21 @@ public class DocItemVersion extends DRMObject {
 		return "doc_item_version";
 	}
 
-	public static class Version extends FlexoObject implements StringConvertable {
-		public static StringEncoder.Converter converter = StringEncoder.getDefaultInstance()._addConverter(new Converter(Version.class) {
+	public static class Version extends FlexoObject implements StringConvertable<Version> {
+		public static StringEncoder.Converter<Version> converter = StringEncoder.getDefaultInstance()._addConverter(
+				new Converter<Version>(Version.class) {
 
-			@Override
-			public Object convertFromString(String value) {
-				return new Version(value);
-			}
+					@Override
+					public Version convertFromString(String value) {
+						return new Version(value);
+					}
 
-			@Override
-			public String convertToString(Object value) {
-				return ((Version) value).toString();
-			}
+					@Override
+					public String convertToString(Version value) {
+						return value.toString();
+					}
 
-		});
+				});
 
 		public int major = 0;
 
@@ -259,13 +260,13 @@ public class DocItemVersion extends DRMObject {
 			super();
 			StringTokenizer st = new StringTokenizer(versionAsString, ".");
 			if (st.hasMoreTokens()) {
-				major = (new Integer(st.nextToken())).intValue();
+				major = Integer.valueOf(st.nextToken()).intValue();
 			}
 			if (st.hasMoreTokens()) {
-				minor = (new Integer(st.nextToken())).intValue();
+				minor = Integer.valueOf(st.nextToken()).intValue();
 			}
 			if (st.hasMoreTokens()) {
-				patch = (new Integer(st.nextToken())).intValue();
+				patch = Integer.valueOf(st.nextToken()).intValue();
 			}
 		}
 
@@ -292,11 +293,11 @@ public class DocItemVersion extends DRMObject {
 		}
 
 		public boolean isLesserThan(Version version) {
-			return ((new VersionComparator()).compare(Version.this, version) < 0);
+			return new VersionComparator().compare(Version.this, version) < 0;
 		}
 
 		public boolean isGreaterThan(Version version) {
-			return ((new VersionComparator()).compare(Version.this, version) > 0);
+			return new VersionComparator().compare(Version.this, version) > 0;
 		}
 
 		@Override
@@ -305,23 +306,23 @@ public class DocItemVersion extends DRMObject {
 		}
 
 		@Override
-		public StringEncoder.Converter getConverter() {
+		public StringEncoder.Converter<Version> getConverter() {
 			return converter;
 		}
 
 		public static VersionComparator comparator = new VersionComparator();
 
-		public static class VersionComparator implements Comparator {
+		public static class VersionComparator implements Comparator<Version> {
 
 			VersionComparator() {
 				super();
 			}
 
 			@Override
-			public int compare(Object o1, Object o2) {
-				if ((o1 instanceof Version) && (o2 instanceof Version)) {
-					Version v1 = (Version) o1;
-					Version v2 = (Version) o2;
+			public int compare(Version o1, Version o2) {
+				if (o1 instanceof Version && o2 instanceof Version) {
+					Version v1 = o1;
+					Version v2 = o2;
 					if (v1.major < v2.major) {
 						return -1;
 					} else if (v1.major > v2.major) {

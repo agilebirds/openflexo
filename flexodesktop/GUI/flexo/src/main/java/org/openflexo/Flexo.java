@@ -20,7 +20,9 @@
 package org.openflexo;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
@@ -32,9 +34,11 @@ import java.net.ProxySelector;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.net.URL;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -44,19 +48,31 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
+import org.openflexo.components.WelcomeDialog;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
-import org.openflexo.properties.FlexoProperties;
+import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.ssl.DenaliSecurityProvider;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.FlexoController;
+
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 /**
  * Main class of the Flexo Application Suite
@@ -68,6 +84,12 @@ public class Flexo {
 	private static final Logger logger = Logger.getLogger(Flexo.class.getPackage().getName());
 
 	public static boolean isDev = false;
+
+	private static File outLogFile;
+
+	private static File errLogFile;
+
+	private static String fileNameToOpen;
 
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -104,6 +126,32 @@ public class Flexo {
 		return null;
 	}
 
+	@SuppressWarnings("restriction")
+	private static void registerShutdownHook() {
+		try {
+			Class.forName("sun.misc.Signal");
+			Class.forName("sun.misc.SignalHandler");
+			Signal.handle(new Signal("TERM"), new SignalHandler() {
+
+				@Override
+				public void handle(Signal arg0) {
+					FlexoFrame activeFrame = FlexoFrame.getActiveFrame(false);
+					if (activeFrame != null && activeFrame.getModule() != null) {
+						if (ProjectLoader.someResourcesNeedsSaving(activeFrame.getModule().getProject())) {
+							if (activeFrame.getModule().showSaveDialogAndClose()) {
+								System.exit(0);
+							}
+						}
+					}
+				}
+			});
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Launch method to start Flexo in multimodule mode. Program args are in dev: -userType MAINTAINER Dev -nosplash otherwise see windows
 	 * launchers or build.xml for package args VM args: -Xmx512M (for big projects push it to 1024) For MacOS also add: -Xdock:name=Flexo
@@ -126,17 +174,22 @@ public class Flexo {
 					noSplash = true;
 				} else if (args[i].equalsIgnoreCase("DEV")) {
 					isDev = true;
+				} else if (args[i].equalsIgnoreCase("demo")) {
+
 				}
 			}
 		}
 		ToolBox.setPlatform();
+
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+		}
+
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
 
-		if (!isDev) {
-			remapStandardOuputs();
-		}
+		remapStandardOuputs(isDev);
 		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		try {
 			DenaliSecurityProvider.insertSecurityProvider();
@@ -146,21 +199,22 @@ public class Flexo {
 			}
 		}
 		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
-		ModuleLoader.setUserType(userTypeNamed);
+		UserType.setCurrentUserType(userTypeNamed);
+		FlexoProperties.load();
+		initializeLoggingManager();
+		FlexoApplication.initialize();
+		initUILAF();
 		if (ToolBox.getFrame(null) != null) {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
+		SplashWindow splashWindow = null;
 		if (!noSplash) {
-			new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed, 10000);
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed);
 		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
 		}
-		FlexoProperties.load();
 		initProxyManagement();
-		initializeLoggingManager();
-		initUILAF();
-		FlexoApplication.initialize();
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting on " + ToolBox.getPLATFORM() + "... JVM version is " + System.getProperty("java.version"));
 		}
@@ -170,14 +224,15 @@ public class Flexo {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Heap memory is about: " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "Mb");
 		}
-		ModuleLoader.setAllowsDocSubmission(FlexoProperties.instance().getAllowsDocSubmission());
+		getModuleLoader().setAllowsDocSubmission(isDev || FlexoProperties.instance().getAllowsDocSubmission());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching FLEXO Application Suite version " + FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + "...");
 		}
-		final String userTypeName2 = userTypeName;
-
-		ModuleLoader.getFlexoResourceCenter();
-
+		getFlexoResourceCenterService().getFlexoResourceCenter();
+		final SplashWindow splashWindow2 = splashWindow;
+		if (!isDev) {
+			registerShutdownHook();
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			/**
 			 * Overrides run
@@ -186,14 +241,52 @@ public class Flexo {
 			 */
 			@Override
 			public void run() {
-				ModuleLoader.initializeModules(UserType.getUserTypeNamed(userTypeName2)/*, true*/);
-				if (ModuleLoader.fileNameToOpen == null) {
-					ModuleLoader.showWelcomeDialog();
+				if (fileNameToOpen == null) {
+					WelcomeDialog welcomeDialog = new WelcomeDialog();
+					if (splashWindow2 != null) {
+						splashWindow2.setVisible(false);
+						splashWindow2.dispose();
+					}
+					welcomeDialog.showDialog();
 				} else {
-					ModuleLoader.loadProject(new File(ModuleLoader.fileNameToOpen));
+					try {
+						File projectDirectory = new File(fileNameToOpen);
+						if (splashWindow2 != null) {
+							splashWindow2.setVisible(false);
+							splashWindow2.dispose();
+						}
+						getModuleLoader().openProject(projectDirectory, null);
+					} catch (ProjectLoadingCancelledException e) {
+						// project need a conversion, but user cancelled the conversion.
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
+					} catch (ModuleLoadingException e) {
+						e.printStackTrace();
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
+					} catch (ProjectInitializerException e) {
+						e.printStackTrace();
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+								+ e.getProjectDirectory().getAbsolutePath());
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
+					}
 				}
 			}
 		});
+	}
+
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
+
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
+	private static ProjectLoader getProjectLoader() {
+		return ProjectLoader.instance();
 	}
 
 	private static void initUILAF() {
@@ -275,10 +368,10 @@ public class Flexo {
 	/**
 	 *
 	 */
-	private static void remapStandardOuputs() {
+	private static void remapStandardOuputs(boolean outputToConsole) {
 		try {
 			// First let's see if we will be able to write into the log directory
-			File outputDir = new File(System.getProperty("user.home") + "/Library/Logs/Flexo");
+			File outputDir = FlexoPreferences.getLogDirectory();
 			if (!outputDir.exists()) {
 				outputDir.mkdirs();
 			}
@@ -292,89 +385,17 @@ public class Flexo {
 					logger.severe("Can not write to " + outputDir.getAbsolutePath() + " because access is denied by the file system");
 				}
 			}
-			String outString = System.getProperty("user.home") + "/Library/Logs/Flexo/Flexo.out";
-			String errString = System.getProperty("user.home") + "/Library/Logs/Flexo/Flexo.err";
+			String outString = outputDir.getAbsolutePath() + "/Flexo.out";
+			String errString = outputDir.getAbsolutePath() + "/Flexo.err";
 
-			// Let's try to remap the standard output
-			int attempt = 0;
-			File out = null;
-			while (out == null && attempt < 100) {
-				// Get a file channel for the file
-				File file = new File(outString + (attempt == 0 ? "" : "." + attempt) + ".log");
-				File lock = new File(outString + (attempt == 0 ? "" : "." + attempt) + ".log.lck");
-				if (!file.exists()) {
-					try {
-						boolean done = file.createNewFile();
-						if (done) {
-							out = file;
-						}
-					} catch (RuntimeException e1) {
-						e1.printStackTrace();
-					}
-				}
-				if (!file.canWrite()) {
-					out = null;
-					attempt++;
-					continue;
-				}
-				if (lock.exists()) {
-					out = null;
-					attempt++;
-					continue;
-				} else {
-					try {
-						lock.createNewFile();
-						lock.deleteOnExit();
-					} catch (RuntimeException e) {
-						e.printStackTrace();
-					}
-				}
-				out = file;
-				attempt++;
-			}
-			if (out != null) {
-				System.setOut(new PrintStream(out));
+			outLogFile = getOutputFile(outString);
+			if (outLogFile != null) {
+				System.setOut(new PrintStream(new DoublePrintStream(new PrintStream(outLogFile), System.out)));
 			}
 
-			// Let's try to remap the standard error
-			attempt = 0;
-			File err = null;
-			while (err == null && attempt < 100) {
-				// Get a file channel for the file
-				File file = new File(errString + (attempt == 0 ? "" : "." + attempt) + ".log");
-				File lock = new File(errString + (attempt == 0 ? "" : "." + attempt) + ".log.lck");
-				if (!file.exists()) {
-					try {
-						boolean done = file.createNewFile();
-						if (done) {
-							err = file;
-						}
-					} catch (RuntimeException e1) {
-						e1.printStackTrace();
-					}
-				}
-				if (!file.canWrite()) {
-					err = null;
-					attempt++;
-					continue;
-				}
-				if (lock.exists()) {
-					err = null;
-					attempt++;
-					continue;
-				} else {
-					try {
-						lock.createNewFile();
-						lock.deleteOnExit();
-					} catch (RuntimeException e) {
-						e.printStackTrace();
-					}
-				}
-				err = file;
-				attempt++;
-			}
-			if (err != null) {
-				System.setErr(new PrintStream(err));
+			errLogFile = getOutputFile(errString);
+			if (errLogFile != null) {
+				System.setErr(new PrintStream(new DoublePrintStream(new PrintStream(errLogFile), System.err)));
 			}
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.SEVERE)) {
@@ -383,17 +404,168 @@ public class Flexo {
 		}
 	}
 
-	public static void initializeLoggingManager() {
+	public static File getErrLogFile() {
+		return errLogFile;
+	}
+
+	public static File getOutLogFile() {
+		return outLogFile;
+	}
+
+	private static class DoublePrintStream extends OutputStream {
+
+		private final PrintStream ps1;
+		private final PrintStream ps2;
+
+		public DoublePrintStream(PrintStream ps1, PrintStream ps2) {
+			this.ps1 = ps1;
+			this.ps2 = ps2;
+		}
+
+		@Override
+		public void write(int b) throws IOException {
+			ps1.print((char) b);
+			ps2.print((char) b);
+		}
+
+	}
+
+	private static File getOutputFile(String outString) throws IOException {
+		int attempt = 0;
+		File out = null;
+		while (out == null && attempt < 100) {
+			// Get a file channel for the file
+			File file = new File(outString + (attempt == 0 ? "" : "." + attempt) + ".log");
+			File lock = new File(outString + (attempt == 0 ? "" : "." + attempt) + ".log.lck");
+			if (!file.exists()) {
+				try {
+					boolean done = file.createNewFile();
+					if (done) {
+						out = file;
+					}
+				} catch (RuntimeException e1) {
+					e1.printStackTrace();
+				}
+			}
+			if (!file.canWrite()) {
+				out = null;
+				attempt++;
+				continue;
+			}
+			if (lock.exists()) {
+				lock.delete();
+			}
+			if (lock.exists()) {
+				out = null;
+				attempt++;
+				continue;
+			} else {
+				try {
+					lock.createNewFile();
+					boolean lockAcquired = false;
+					FileOutputStream fos = new FileOutputStream(lock);
+					try {
+						FileLock fileLock = fos.getChannel().lock();
+						lockAcquired = true;
+					} catch (IOException e) {
+					} finally {
+						if (!lockAcquired) {
+							fos.close();
+						}
+					}
+					lock.deleteOnExit();
+				} catch (RuntimeException e) {
+					e.printStackTrace();
+				}
+			}
+			out = file;
+			attempt++;
+		}
+		return out;
+	}
+
+	public static FlexoLoggingManager initializeLoggingManager() {
 		try {
-			FlexoLoggingManager.initialize();
+			FlexoProperties properties = FlexoProperties.load();
+			logger.info("Default logging config file " + System.getProperty("java.util.logging.config.file"));
+			return FlexoLoggingManager.initialize(
+					properties.getMaxLogCount(),
+					properties.getIsLoggingTrace(),
+					properties.getCustomLoggingFile() != null ? properties.getCustomLoggingFile() : new File(System
+							.getProperty("java.util.logging.config.file")), properties.getDefaultLoggingLevel(),
+					new LoggingManagerDelegate() {
+						@Override
+						public void setMaxLogCount(Integer maxLogCount) {
+							FlexoProperties.instance().setMaxLogCount(maxLogCount);
+						}
+
+						@Override
+						public void setKeepLogTrace(boolean logTrace) {
+							FlexoProperties.instance().setIsLoggingTrace(logTrace);
+						}
+
+						@Override
+						public void setDefaultLoggingLevel(Level lev) {
+							String fileName = "SEVERE";
+							if (lev == Level.SEVERE) {
+								fileName = "SEVERE";
+							}
+							if (lev == Level.WARNING) {
+								fileName = "WARNING";
+							}
+							if (lev == Level.INFO) {
+								fileName = "INFO";
+							}
+							if (lev == Level.FINE) {
+								fileName = "FINE";
+							}
+							if (lev == Level.FINER) {
+								fileName = "FINER";
+							}
+							if (lev == Level.FINEST) {
+								fileName = "FINEST";
+							}
+							reloadLoggingFile(new FileResource("Config/logging_" + fileName + ".properties").getAbsolutePath());
+							FlexoProperties.instance().setLoggingFileName(null);
+						}
+
+						@Override
+						public void setConfigurationFileName(String configurationFile) {
+							reloadLoggingFile(configurationFile);
+							FlexoProperties.instance().setLoggingFileName(configurationFile);
+						}
+					});
 		} catch (SecurityException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file")
 					+ "\nIt seems the file has read access protection.");
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file"));
 			e.printStackTrace();
+			return null;
 		}
+	}
+
+	private static boolean reloadLoggingFile(String filePath) {
+		logger.info("reloadLoggingFile with " + filePath);
+		System.setProperty("java.util.logging.config.file", filePath);
+		try {
+			LogManager.getLogManager().readConfiguration();
+		} catch (SecurityException e) {
+			logger.warning("The specified logging configuration file can't be read (not enough privileges).");
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			logger.warning("The specified logging configuration file cannot be read.");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public static void setFileNameToOpen(String filename) {
+		Flexo.fileNameToOpen = filename;
 	}
 
 }

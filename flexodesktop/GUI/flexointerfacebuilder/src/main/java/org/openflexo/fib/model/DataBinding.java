@@ -240,13 +240,20 @@ public class DataBinding implements StringConvertable<DataBinding> {
 			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
 		}
 
-		if (!binding.isBindingValid()) {
+		if (binding == null) {
+			logger.warning("Unexpected null binding for [" + getUnparsedBinding() + "]");
+		}
+
+		if (binding != null && !binding.isBindingValid()) {
 			if (!silentMode) {
 				logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
-						+ (getOwner() != null ? getOwner().getRootComponent() : null));
+						+ (getOwner() != null ? getOwner().getRootComponent() : null) + "reason=" + binding.invalidBindingReason());
+				// binding.debugIsBindingValid();
 				// Dev note: Uncomment following to get more informations
-				// logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));
-				// logger.info("BindingModel="+getOwner().getBindingModel());
+				// logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
+				// + (getOwner() != null ? (getOwner()).getRootComponent() : null));
+				// logger.info("BindingModel=" + getOwner().getBindingModel());
+				// logger.info("BindingFactory=" + getOwner().getBindingFactory());
 				// binding.debugIsBindingValid();
 				// BindingExpression.logger.setLevel(Level.FINE);
 				// binding = AbstractBinding.abstractBindingConverter.convertFromString(getUnparsedBinding());
@@ -261,7 +268,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	}
 
 	protected void finalizeDeserialization() {
-		finalizeDeserialization(false);
+		finalizeDeserialization(true);
 		if (owner != null && hasBinding() && isValid()) {
 			owner.notifyBindingChanged(this);
 		}

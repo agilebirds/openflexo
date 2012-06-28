@@ -38,6 +38,7 @@ import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepres
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddShape;
@@ -83,10 +84,13 @@ public class ContextualPalette extends DrawingPalette {
 			}
 			if (target.getDrawable() instanceof ViewShape) {
 				ViewShape targetShape = (ViewShape) target.getDrawable();
-				if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
-					returned.add(dropScheme);
+				for (EditionPatternReference ref : targetShape.getEditionPatternReferences()) {
+					if (dropScheme.isValidTarget(ref.getEditionPattern(), ref.getPatternRole())) {
+						returned.add(dropScheme);
+					}
 				}
 			}
+
 		}
 		return returned;
 	}
@@ -100,8 +104,10 @@ public class ContextualPalette extends DrawingPalette {
 				}
 				if (target.getDrawable() instanceof ViewShape) {
 					ViewShape targetShape = (ViewShape) target.getDrawable();
-					if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
-						return true;
+					for (EditionPatternReference ref : targetShape.getEditionPatternReferences()) {
+						if (dropScheme.isValidTarget(ref.getEditionPattern(), ref.getPatternRole())) {
+							return true;
+						}
 					}
 				}
 			}
@@ -110,8 +116,16 @@ public class ContextualPalette extends DrawingPalette {
 	}
 
 	private PaletteElement makePaletteElement(final ViewPointPaletteElement element) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(
-				(ShapeGraphicalRepresentation) element.getGraphicalRepresentation(), null, getPaletteDrawing());
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(element.getGraphicalRepresentation(),
+				null, getPaletteDrawing()) {
+			@Override
+			public String getText() {
+				if (element != null && element.getBoundLabelToElementName()) {
+					return element.getName();
+				}
+				return "";
+			}
+		};
 
 		gr.setText(element.getName());
 
@@ -126,7 +140,7 @@ public class ContextualPalette extends DrawingPalette {
 			}
 
 			@Override
-			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
+			public boolean elementDragged(GraphicalRepresentation containerGR, final FGEPoint dropLocation) {
 				logger.info("Dragging " + getGraphicalRepresentation() + " with text " + getGraphicalRepresentation().getText());
 
 				if (containerGR.getDrawable() instanceof ViewObject) {
@@ -150,8 +164,6 @@ public class ContextualPalette extends DrawingPalette {
 					shapeGR.setLocation(dropLocation);
 					shapeGR.setLayer(containerGR.getLayer() + 1);
 					shapeGR.setAllowToLeaveBounds(true);
-
-					logger.info("drop location = " + shapeGR.getLocation());
 
 					if (element.getEditionPattern() == null) {
 						// No associated edition pattern, just drop shape !
@@ -180,9 +192,9 @@ public class ContextualPalette extends DrawingPalette {
 									public void actionPerformed(ActionEvent e) {
 										DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null,
 												getController().getOEController().getEditor());
+										action.dropLocation = dropLocation;
 										action.setDropScheme(dropScheme);
 										action.setPaletteElement(element);
-										action.setOverridenGraphicalRepresentation(shapeGR);
 										action.doAction();
 									}
 								});
@@ -196,9 +208,9 @@ public class ContextualPalette extends DrawingPalette {
 						} else if (availableDropPatterns.size() == 1) {
 							DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null, getController()
 									.getOEController().getEditor());
+							action.dropLocation = dropLocation;
 							action.setDropScheme(availableDropPatterns.firstElement());
 							action.setPaletteElement(element);
-							action.setOverridenGraphicalRepresentation(shapeGR);
 							action.doAction();
 							return action.hasActionExecutionSucceeded();
 						}

@@ -4,14 +4,18 @@
     <Tab index="0" title="Semantic" layout="twocols" font="SansSerif,0,11" name="SemanticTab">
       <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="editionPattern" localize="true" name="EditionPatternLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <Label label="edition_pattern" localize="true" name="EditionPatternLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
       <DropDown format="object.name" localize="true" name="EditionPattern" data="data.editionPattern" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" list="data.allAvailableEditionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" />
-      <Label label="parameters" align="center" localize="true" name="ParametersLabel" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.parameters" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=true)" name="Parameters" localize="true" manageDynamicModel="true">
+      <Label label="drop_scheme" localize="true" name="DropSchemeLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="DropScheme" data="data.dropScheme" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" list="data.editionPattern.dropSchemes" iteratorClassName="org.openflexo.foundation.viewpoint.DropScheme" />
+      <Label label="bound_label" localize="true" name="BoundLabelLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="BoundLabelCB" data="data.boundLabelToElementName" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
+      <Label label="parameters" align="center" localize="true" name="ParametersLabel" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.parameters" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="Parameters" localize="true" manageDynamicModel="true">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
         <TextFieldColumn isEditable="iterator.isEditable" data="iterator.value" title="value" columnWidth="100" resizable="true" displayTitle="true" />
       </Table>
-      <TextArea columns="10" data="data.description" constraints="twocols(location=center;index=7;expandHorizontally=true;expandVertically=true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Description" localize="true" />
+      <TextArea columns="10" data="data.description" constraints="twocols(location=center;index=11;expandHorizontally=true;expandVertically=true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Description" localize="true" />
     </Tab>
 
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
@@ -48,22 +52,28 @@
           <Custom componentClassName="org.openflexo.fge.view.widget.FIBTextStyleSelector" data="GRTab.data.textStyle" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="TextStyle" localize="true" manageDynamicModel="true" />
           <Label label="multiple_lines" localize="true" name="IsMultilineAllowedLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
           <CheckBox selected="false" localize="true" name="IsMultilineAllowed" data="GRTab.data.isMultilineAllowed" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
-          <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="TextAlignment" data="GRTab.data.textAlignment" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" />
-           <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-          <CheckBox selected="false" localize="true" name="IsFloatingLabel" data="GRTab.data.isFloatingLabel" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" />
-          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextX" localize="true" />
-          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextY" localize="true" />
-          <Label label="relative_text_x" localize="true" name="RelativeTextXLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" />
-          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextX" constraints="twocols(location=right;index=17;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextX" localize="true" />
-          <Label label="relative_text_y" localize="true" name="RelativeTextYLabel" constraints="twocols(location=left;index=18;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" />
-          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextY" constraints="twocols(location=right;index=19;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextY" localize="true" />
-          <CheckBox selected="false" localize="true" name="AdjustMinimalWidthToLabelWidth" data="GRTab.data.adjustMinimalWidthToLabelWidth" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
-          <Label label="adjust_minimal_width_to_label_width" localize="true" name="AdjustMinimalWidthToLabelWidthLabel" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" />
-          <CheckBox selected="false" localize="true" name="AdjustMinimalHeightToLabelHeight" data="GRTab.data.adjustMinimalHeightToLabelHeight" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" />
-          <Label label="adjust_minimal_height_to_label_height" localize="true" name="AdjustMinimalHeightToLabelHeightLabel" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" />
+          <Label label="horizontal_text_alignment" localize="true" name="HTextAlignmentLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+          <DropDown format="object.name.toLowerCase" localize="true" name="HTextAlignment" data="GRTab.data.horizontalTextAlignment" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$HorizontalTextAlignment" />
+          <Label label="vertical_text_alignment" localize="true" name="VTextAlignmentLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+          <DropDown format="object.name.toLowerCase" localize="true" name="VTextAlignment" data="GRTab.data.verticalTextAlignment" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$VerticalTextAlignment" />
+          <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+          <DropDown format="object.name.toLowerCase" localize="true" name="TextAlignment" data="GRTab.data.paragraphAlignment" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" />
+          <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(location=left;index=18;expandHorizontally=false;expandVertically=false)" />
+          <CheckBox selected="false" localize="true" name="IsFloating" data="GRTab.data.isFloatingLabel" constraints="twocols(location=right;index=19;expandHorizontally=false;expandVertically=false)" />
+          <Label label="floating_label" localize="true" name="LineWrapLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)"/>
+          <CheckBox selected="false" localize="true" name="LineWrap" data="GRTab.data.lineWrap" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)"/>
+          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextX" localize="true" />
+          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=24;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(location=right;index=25;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextY" localize="true" />
+          <Label label="relative_text_x" localize="true" name="RelativeTextXLabel" constraints="twocols(location=left;index=26;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" />
+          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextX" constraints="twocols(location=right;index=27;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextX" localize="true" />
+          <Label label="relative_text_y" localize="true" name="RelativeTextYLabel" constraints="twocols(location=left;index=28;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" />
+          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextY" constraints="twocols(location=right;index=29;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextY" localize="true" />
+          <CheckBox selected="false" localize="true" name="AdjustMinimalWidthToLabelWidth" data="GRTab.data.adjustMinimalWidthToLabelWidth" constraints="twocols(location=left;index=30;expandHorizontally=false;expandVertically=false)" />
+          <Label label="adjust_minimal_width_to_label_width" localize="true" name="AdjustMinimalWidthToLabelWidthLabel" constraints="twocols(location=right;index=31;expandHorizontally=false;expandVertically=false)" />
+          <CheckBox selected="false" localize="true" name="AdjustMinimalHeightToLabelHeight" data="GRTab.data.adjustMinimalHeightToLabelHeight" constraints="twocols(location=left;index=32;expandHorizontally=false;expandVertically=false)" />
+          <Label label="adjust_minimal_height_to_label_height" localize="true" name="AdjustMinimalHeightToLabelHeightLabel" constraints="twocols(location=right;index=33;expandHorizontally=false;expandVertically=false)" />
         </Tab>
         <Tab index="2" title="Location/Size" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="LocationSizeTab">
           <Label label="layer" localize="true" name="LayerLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
@@ -101,18 +111,69 @@
         <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
           <Label label="read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
           <CheckBox selected="false" localize="true" name="IsReadOnly" data="GRTab.data.isReadOnly" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
-          <Label label="is_selectable" localize="true" name="IsSelectableLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)">
-            <CheckBox selected="false" localize="true" name="IsSelectable" data="GRTab.data.isSelectable" constraints="flow(location=right;index=0;expandVertically=false;expandHorizontally=false)" />
-            <Label label="is_selected" localize="true" name="IsSelectedLabel" constraints="flow(location=left;index=1;expandVertically=false;expandHorizontally=false)" />
-            <CheckBox selected="false" readOnly="true" localize="true" name="IsSelected" data="GRTab.data.isSelected" constraints="flow(location=right;index=2;expandVertically=false;expandHorizontally=false)" />
-          </Panel>
-          <Label label="is_focusable" localize="true" name="IsFocusableLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-          <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)">
-            <CheckBox selected="false" localize="true" name="IsFocusable" data="GRTab.data.isFocusable" constraints="flow(location=right;index=0;expandVertically=false;expandHorizontally=false)" />
-            <Label label="is_focused" localize="true" name="IsFocusedLabel" constraints="flow(location=left;index=1;expandVertically=false;expandHorizontally=false)" />
-            <CheckBox selected="false" readOnly="true" localize="true" name="IsFocused" data="GRTab.data.isFocused" constraints="flow(location=right;index=2;expandVertically=false;expandHorizontally=false)" />
-          </Panel>
+ 	<Label label="is_selectable" localize="true" name="IsSelectableLabel"
+		constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)"
+		useScrollBar="false" />
+	<Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING"
+		borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11"
+		darkLevel="0"
+		constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+		<CheckBox selected="false" localize="true" name="IsSelectable"
+			data="GRTab.data.isSelectable" useScrollBar="false" />
+		<CheckBox data="GRTab.data.hasSelectedForeground" enable="GRTab.data.isSelectable"
+			selected="true" localize="true" constraints="flow(index=1)" />
+		<Label label="use" localize="true" enable="GRTab.data.isSelectable"
+			constraints="flow(index=2;location=east)" />
+		<Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector"
+			enable="GRTab.data.isSelectable &amp;&amp; GRTab.data.hasSelectedForeground"
+			data="GRTab.data.selectedForeground" constraints="flow(index=3)" />
+		<CheckBox data="GRTab.data.hasSelectedBackground" enable="GRTab.data.isSelectable"
+			selected="true" localize="true" constraints="flow(index=4)" />
+		<Label label="use" localize="true" enable="GRTab.data.isSelectable"
+			constraints="flow(index=5)" />
+		<Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"
+			enable="GRTab.data.isSelectable &amp;&amp; GRTab.data.hasSelectedBackground"
+			data="GRTab.data.selectedBackground" constraints="flow(index=6)" />
+		<Label label="cp" enable="GRTab.data.isSelectable" localize="true"
+			constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)"
+			useScrollBar="false" />
+		<CheckBox selected="false" enable="GRTab.data.isSelectable"
+			localize="true" data="GRTab.data.drawControlPointsWhenSelected"
+			constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)"
+			useScrollBar="false" />
+	</Panel>
+	<Label label="is_focusable" localize="true" name="IsFocusableLabel"
+		constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)"
+		useScrollBar="false" />
+	<Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING"
+		borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11"
+		darkLevel="0"
+		constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+		<CheckBox selected="false" localize="true" name="IsFocusable"
+			data="GRTab.data.isFocusable"
+			constraints="flow(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" />
+		<CheckBox data="GRTab.data.hasFocusedForeground" selected="true"
+			localize="true" enable="GRTab.data.isFocusable" constraints="flow(index=1)" />
+		<Label label="use" localize="true" enable="GRTab.data.isFocusable"
+			constraints="flow(index=2;location=east)" />
+		<Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector"
+			enable="GRTab.data.isFocusable &amp;&amp; GRTab.data.hasFocusedForeground"
+			data="GRTab.data.focusedForeground" constraints="flow(index=3)" />
+		<CheckBox data="GRTab.data.hasFocusedBackground" selected="true"
+			localize="true" enable="GRTab.data.isFocusable" constraints="flow(index=4)" />
+		<Label label="use" localize="true" enable="GRTab.data.isFocusable"
+			constraints="flow(index=5)" />
+		<Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"
+			enable="GRTab.data.isFocusable &amp;&amp; GRTab.data.hasFocusedBackground"
+			data="GRTab.data.focusedBackground" constraints="flow(index=6)" />
+		<Label label="cp" enable="GRTab.data.isFocusable" localize="true"
+			constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)"
+			useScrollBar="false" />
+		<CheckBox selected="false" enable="GRTab.data.isFocusable"
+			localize="true" data="GRTab.data.drawControlPointsWhenFocused"
+			constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)"
+			useScrollBar="false" />
+	</Panel>
           <TabPanel name="ControlsTab" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=true)">
             <Tab index="0" title="mouse_click_controls" layout="border" font="SansSerif,0,11" name="MouseClickControlTab">
               <Table iteratorClassName="org.openflexo.fge.controller.MouseClickControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="GRTab.data.mouseClickControls" constraints="border(location=center;index=0)" name="MouseClickControls" localize="true" manageDynamicModel="true">

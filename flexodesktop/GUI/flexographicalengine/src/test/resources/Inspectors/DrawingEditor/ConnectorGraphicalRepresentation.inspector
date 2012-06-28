@@ -2,6 +2,24 @@
 <Panel className="org.openflexo.fge.drawingeditor.FIBInspector" layout="border" dataClassName="org.openflexo.fge.ConnectorGraphicalRepresentation" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)" useScrollBar="false">
     <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="EditionTab">
+      <Label label="is_selectable" localize="true" name="IsSelectableLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+       <CheckBox selected="false" localize="true" name="IsSelectable" data="data.isSelectable"  useScrollBar="false" />
+        <CheckBox data="data.hasSelectedForeground" enable="data.isSelectable" selected="true" localize="true" constraints="flow(index=1)" />
+        <Label label="use" localize="true" enable="data.isSelectable" constraints="flow(index=2;location=east)" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" enable="data.isSelectable &amp;&amp; data.hasSelectedForeground" data="data.selectedForeground" constraints="flow(index=3)" />
+         <Label label="cp" enable="data.isSelectable" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+        <CheckBox selected="false" enable="data.isSelectable" localize="true" data="data.drawControlPointsWhenSelected" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+       </Panel>
+      <Label label="is_focusable" localize="true" name="IsFocusableLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <CheckBox selected="false" localize="true" name="IsFocusable" data="data.isFocusable" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" />
+        <CheckBox data="data.hasFocusedForeground" selected="true" localize="true" enable="data.isFocusable" constraints="flow(index=1)" />
+        <Label label="use" localize="true" enable="data.isFocusable" constraints="flow(index=2;location=east)" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" enable="data.isFocusable &amp;&amp; data.hasFocusedForeground" data="data.focusedForeground" constraints="flow(index=3)" />
+        <Label label="cp" enable="data.isFocusable" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+        <CheckBox selected="false" enable="data.isFocusable" localize="true" data="data.drawControlPointsWhenFocused" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      </Panel>
       <Label label="debug_covering_area" localize="true" name="DebugCoveringAreaLabel" constraints="twocols(location=left;index=100;expandVertically=false;expandHorizontally=false)" useScrollBar="false" />
       <CheckBox selected="false" localize="true" name="DebugCoveringArea" data="data.debugCoveringArea" constraints="twocols(location=right;index=101;expandVertically=false;expandHorizontally=false)" useScrollBar="false" />
     </Tab>
@@ -10,10 +28,10 @@
       <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" data="data.layer" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" useScrollBar="false" name="Layer" localize="true" />
     </Tab>
     <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="TextTab">
-      <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=10;expandVertically=false;expandHorizontally=false)" useScrollBar="false" />
-      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="data.absoluteTextX" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=false)" useScrollBar="false" name="AbsoluteTextX" localize="true" />
-      <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=12;expandVertically=false;expandHorizontally=false)" useScrollBar="false" />
-      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="data.absoluteTextY" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=false)" useScrollBar="false" name="AbsoluteTextY" localize="true" />
+      <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=14;expandVertically=false;expandHorizontally=false)" useScrollBar="false" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="data.absoluteTextX" constraints="twocols(location=right;index=15;expandVertically=false;expandHorizontally=false)" useScrollBar="false" name="AbsoluteTextX" localize="true" />
+      <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=16;expandVertically=false;expandHorizontally=false)" useScrollBar="false" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="data.absoluteTextY" constraints="twocols(location=right;index=17;expandVertically=false;expandHorizontally=false)" useScrollBar="false" name="AbsoluteTextY" localize="true" />
     </Tab>
     <Tab index="0" title="Connector" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="ConnectorTab">
       <Label label="foreground" width="130" height="16" align="right" localize="true" name="ForegroundLabel" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=false)" useScrollBar="false" />

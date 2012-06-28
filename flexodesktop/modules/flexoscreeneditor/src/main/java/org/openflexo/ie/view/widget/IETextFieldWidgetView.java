@@ -33,11 +33,8 @@ import java.awt.event.MouseListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -47,6 +44,7 @@ import org.openflexo.foundation.ie.util.TextFieldClass;
 import org.openflexo.foundation.ie.widget.IEEditableTextWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.ie.IEPreferences;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.logging.FlexoLogger;
@@ -122,17 +120,6 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 		updateDisplayedValue();
 	}
 
-	/**
-	 * Overrides doLayout
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		super.doLayout();
-		_jTextField.doLayout();
-	}
-
 	public IETextFieldWidget getTextFieldModel() {
 		return getModel();
 	}
@@ -143,8 +130,7 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 	// ==========================================================================
 
 	private void applyCss() {
-		getPreferredSize();
-		doLayout();
+		revalidate();
 		repaint();
 	}
 
@@ -172,17 +158,13 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 		if (modif instanceof IETextFieldCssClassChange) {
 			applyCss();
 		}
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(IEEditableTextWidget.BINDING_VALUE) && arg0 == getTextFieldModel()) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(IEEditableTextWidget.BINDING_VALUE) && arg0 == getTextFieldModel()) {
 				updateDisplayedValue();
-			} else if (modif.propertyName().equals(ATTRIB_DESCRIPTION_NAME)) {
+			} else if (propertyName.equals(ATTRIB_DESCRIPTION_NAME)) {
 				_jTextField.setToolTipText(getTextFieldModel().getDescription());
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				if (getParent() != null) {
-					getParent().doLayout();
-					((JComponent) getParent()).repaint();
-				}
-			} else if (modif.propertyName().equals("value")) {
+			} else if (propertyName.equals("value")) {
 				if (getTextFieldModel().getBindingValue() == null) {
 					_jTextField.setText(getTextFieldModel().getValue());
 					applyCss();
@@ -236,27 +218,7 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 			}
 		});
 
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			public void updateSize() {
-				validate();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_jLabelTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {

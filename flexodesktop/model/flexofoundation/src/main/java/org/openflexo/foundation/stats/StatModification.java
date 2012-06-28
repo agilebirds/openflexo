@@ -33,7 +33,7 @@ public class StatModification extends DataModification {
 	 * @param newValue
 	 */
 	public StatModification(String statName, Object oldValue, Object newValue) {
-		super(ATTRIBUTE, statName, oldValue, newValue);
+		super(statName, oldValue, newValue);
 	}
 
 }

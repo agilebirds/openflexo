@@ -21,7 +21,9 @@ package org.openflexo.vpm.view.widget;
 
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
@@ -29,6 +31,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.GraphicalRepresentationChanged;
 
 public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresentation<ConnectorPatternRole> implements
 		GraphicalFlexoObserver, EditionPatternPreviewConstants {
@@ -46,9 +49,48 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	public EditionPatternPreviewConnectorGR(ConnectorPatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) {
 		super(ConnectorType.LINE, aDrawing != null ? aDrawing.getStartShape(aPatternRole) : null, aDrawing != null ? aDrawing
 				.getEndShape(aPatternRole) : null, aPatternRole, aDrawing);
-
+		// System.out.println("CREATED " + this + " for " + getPatternRole());
+		// logger.info("CREATED " + this + " for " + getPatternRole());
 		init(aPatternRole, aDrawing);
 
+	}
+
+	private ShapeGraphicalRepresentation<?> startObjectGR;
+	private ShapeGraphicalRepresentation<?> endObjectGR;
+
+	@Override
+	public ShapeGraphicalRepresentation<?> getStartObject() {
+		if (startObjectGR == null && getDrawing() != null) {
+			startObjectGR = getDrawing().getStartShape(getPatternRole());
+			enableStartObjectObserving(startObjectGR);
+		}
+		return startObjectGR;
+	}
+
+	@Override
+	public ShapeGraphicalRepresentation<?> getEndObject() {
+		if (endObjectGR == null && getDrawing() != null) {
+			endObjectGR = getDrawing().getEndShape(getPatternRole());
+			enableEndObjectObserving(endObjectGR);
+		}
+		return endObjectGR;
+	}
+
+	@Override
+	public void notifyObjectHierarchyWillBeUpdated() {
+		super.notifyObjectHierarchyWillBeUpdated();
+		if (startObjectGR != getDrawing().getStartShape(getPatternRole()) || endObjectGR != getDrawing().getEndShape(getPatternRole())) {
+			dismissGraphicalRepresentation();
+		}
+	}
+
+	protected void dismissGraphicalRepresentation() {
+		// logger.info("*********** dismissGraphicalRepresentation()");
+		disableStartObjectObserving();
+		disableEndObjectObserving();
+		startObjectGR = null;
+		endObjectGR = null;
+		getDrawing().invalidateGraphicalObjectsHierarchy(getPatternRole());
 	}
 
 	private boolean isInitialized = false;
@@ -73,6 +115,7 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 
 	@Override
 	public void delete() {
+		// logger.info("DELETED " + this + " for " + getPatternRole());
 		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
 		}
@@ -96,16 +139,18 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 				// setText(getText());
 			}
+		} else if (dataModification instanceof GraphicalRepresentationChanged) {
+			logger.info("Handle GR change !!!");
+			setsWith((ConnectorGraphicalRepresentation<?>) getPatternRole().getGraphicalRepresentation());
 		}
 	}
 
 	@Override
 	public String getText() {
 		if (getPatternRole() != null) {
-			if (getPatternRole().getLabel() != null) {
-				return getPatternRole().getLabel().toString();
+			if (StringUtils.isNotEmpty(getPatternRole().getExampleLabel())) {
+				return getPatternRole().getExampleLabel();
 			}
-			return getPatternRole().getPatternRoleName();
 		}
 		return null;
 	}

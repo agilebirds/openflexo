@@ -65,6 +65,34 @@ public class EditorToolbox {
 		this.controller = controller;
 	}
 
+	public void delete() {
+
+		if (backgroundSelector != null) {
+			backgroundSelector.delete();
+			backgroundSelector = null;
+		}
+		if (foregroundSelector != null) {
+			foregroundSelector.delete();
+			foregroundSelector = null;
+		}
+		if (shadowStyleSelector != null) {
+			shadowStyleSelector.delete();
+			shadowStyleSelector = null;
+		}
+		if (shapeSelector != null) {
+			shapeSelector.delete();
+			shapeSelector = null;
+		}
+		if (textStyleSelector != null) {
+			textStyleSelector.delete();
+			textStyleSelector = null;
+		}
+		selectedShapes.clear();
+		selectedConnectors.clear();
+		selectedGR.clear();
+		controller = null;// Don't delete, we did not create it
+	}
+
 	public class ToolPanel extends JPanel {
 		private ToolButton selectionToolButton;
 		private ToolButton drawShapeToolButton;
@@ -233,10 +261,6 @@ public class EditorToolbox {
 	private List<GraphicalRepresentation> selectedGR = new ArrayList<GraphicalRepresentation>();
 
 	public void update() {
-		/*
-		 * logger.info("Updating EditorToolbox with selection: " +
-		 * controller.getSelectedObjects());
-		 */
 		selectedShapes.clear();
 		selectedConnectors.clear();
 		selectedGR.clear();
@@ -250,8 +274,9 @@ public class EditorToolbox {
 				selectedConnectors.add((ConnectorGraphicalRepresentation) gr);
 			}
 		}
-		if (stylesToolBar == null)
+		if (stylesToolBar == null) {
 			return;
+		}
 		if (selectedGR.size() > 0) {
 			textStyleSelector.setEditedObject(selectedGR.get(0).getTextStyle());
 			if (selectedShapes.size() > 0) {

@@ -22,10 +22,10 @@ package org.openflexo.ve.controller;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.View;
 
-class ShemaBrowser extends OEBrowser {
+class ShemaBrowser extends VEBrowser {
 	private View representedShema = null;
 
-	protected ShemaBrowser(OEController controller) {
+	protected ShemaBrowser(VEController controller) {
 		super(controller);
 	}
 

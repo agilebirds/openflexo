@@ -32,6 +32,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGObject;
+import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.view.controller.ActionInitializer;
@@ -57,6 +58,7 @@ public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGO
 			@Override
 			public boolean run(ActionEvent e, ReinjectDocx action) {
 				FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(getController().getMainPane()));
+				fileChooser.setCurrentDirectory(((DGRepository) action.getRepository()).getPostBuildDirectory());
 				fileChooser.setFileFilterAsString("*.docx");
 				fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -93,6 +95,10 @@ public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGO
 						+ FlexoLocalization.localizedForKey("number_of_updated_tocentry_content")
 						+ ": "
 						+ action.getNumberOfTocEntryContentUpdated()
+						+ "\n"
+						+ FlexoLocalization.localizedForKey("number_of_updated_edition_pattern")
+						+ ": "
+						+ action.getNumberOfEPIUpdated()
 						+ "\n"
 						+ FlexoLocalization.localizedForKey("number_of_not_found_object")
 						+ ": "

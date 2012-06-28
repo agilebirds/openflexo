@@ -20,8 +20,9 @@
 package org.openflexo.foundation.rm;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * 
@@ -29,15 +30,15 @@ import java.util.Vector;
 
 public class FlexoResourceTreeImplementation implements FlexoResourceTree {
 	private FlexoResource _root;
-	private Vector<FlexoResourceTree> _childs;
+	private List<FlexoResourceTree> _childs;
 
 	public FlexoResourceTreeImplementation(FlexoResource resource) {
 		_root = resource;
-		_childs = new Vector<FlexoResourceTree>();
+		_childs = new ArrayList<FlexoResourceTree>();
 	}
 
 	@Override
-	public Vector<FlexoResourceTree> getChildNodes() {
+	public List<FlexoResourceTree> getChildNodes() {
 		return _childs;
 	}
 
@@ -62,7 +63,7 @@ public class FlexoResourceTreeImplementation implements FlexoResourceTree {
 
 	@Override
 	public String toString(int offset, boolean isLastChild) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < offset; i++) {
 			if (i + 1 == offset) {
 				sb.append("|---");

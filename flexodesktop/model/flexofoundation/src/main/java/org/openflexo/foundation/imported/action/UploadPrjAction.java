@@ -20,6 +20,8 @@
 package org.openflexo.foundation.imported.action;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -33,12 +35,16 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.ws.client.PPMWebService.CLProjectDescriptor;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
 public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, FlexoProject> {
+
+	private static final int NUMBER_OF_STATES = 1000;
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(UploadPrjAction.class.getPackage().getName());
@@ -78,7 +84,37 @@ public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, 
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		DataHandler zip = new DataHandler(new FileDataSource(zippedPrj));
+		final long length = zippedPrj.length();
+		final FlexoProgress flexoProgress = makeFlexoProgress(FlexoLocalization.localizedForKey("sending_project"), NUMBER_OF_STATES);
+		FileDataSource datasource = new FileDataSource(zippedPrj) {
+			@Override
+			public InputStream getInputStream() throws IOException {
+				final InputStream orig = super.getInputStream();
+				return new InputStream() {
+					long progress = 0;
+					long lastUpdate = 0;
+					int stepSize = (int) (length / NUMBER_OF_STATES);
+
+					@Override
+					public int read() throws IOException {
+						progress++;
+						updateProgress();
+						return orig.read();
+					}
+
+					private void updateProgress() {
+						double percent = progress * 100.0d / length;
+						if (flexoProgress != null && (lastUpdate == 0 || progress - lastUpdate > stepSize || progress == length)) {
+							flexoProgress.setProgress(String.format("%1$.2f%1$%"/*+" (%2$d/%3$d)"*/, percent, progress, length));
+							lastUpdate = progress;
+						}
+					}
+				};
+			}
+		};
+
+		DataHandler zip = new DataHandler(datasource);
+
 		try {
 			uploadReport = client.uploadPrj(target, zip, _comments != null && _comments.trim().length() > 0 ? _comments
 					: "direct upload from flexo", client.getLogin());

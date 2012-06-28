@@ -152,7 +152,7 @@ public class CGFolder extends CGObject implements CGPathElement {
 
 	public CGSymbolicDirectory getSymbolicDirectory() {
 		CGPathElement current = this;
-		while (!(current instanceof CGSymbolicDirectory) && (current.getParent() != null)) {
+		while (!(current instanceof CGSymbolicDirectory) && current.getParent() != null) {
 			current = current.getParent();
 		}
 		if (current instanceof CGSymbolicDirectory) {
@@ -167,33 +167,21 @@ public class CGFolder extends CGObject implements CGPathElement {
 
 	@Override
 	public boolean hasGenerationErrors() {
-		if (getGeneratedCodeRepository() != null) {
-			getGeneratedCodeRepository().ensureStructureIsUpToDate();
-		}
 		return hasGenerationErrors;
 	}
 
 	@Override
 	public boolean needsRegeneration() {
-		if (getGeneratedCodeRepository() != null) {
-			getGeneratedCodeRepository().ensureStructureIsUpToDate();
-		}
 		return needsRegeneration;
 	}
 
 	@Override
 	public boolean needsModelReinjection() {
-		if (getGeneratedCodeRepository() != null) {
-			getGeneratedCodeRepository().ensureStructureIsUpToDate();
-		}
 		return needsModelReinjection;
 	}
 
 	@Override
 	public GenerationStatus getGenerationStatus() {
-		if (getGeneratedCodeRepository() != null) {
-			getGeneratedCodeRepository().ensureStructureIsUpToDate();
-		}
 		return generationStatus;
 	}
 
@@ -208,20 +196,20 @@ public class CGFolder extends CGObject implements CGPathElement {
 
 	public boolean isContainedInFolder(CGFolder folder) {
 		CGPathElement current = this;
-		while ((current != folder) && (current.getParent() != null)) {
+		while (current != folder && current.getParent() != null) {
 			current = current.getParent();
 		}
-		return (current == folder);
+		return current == folder;
 	}
 
 	@Override
 	public boolean isContainedIn(CGObject obj) {
 		if (obj instanceof GeneratedOutput) {
-			return (obj == getGeneratedCode());
+			return obj == getGeneratedCode();
 		} else if (obj instanceof GenerationRepository) {
-			return (obj == _repository);
+			return obj == _repository;
 		} else if (obj instanceof CGSymbolicDirectory) {
-			return (obj == getSymbolicDirectory());
+			return obj == getSymbolicDirectory();
 		} else if (obj instanceof CGFolder) {
 			return isContainedInFolder((CGFolder) obj);
 		}

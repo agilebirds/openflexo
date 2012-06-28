@@ -109,13 +109,13 @@ public class IEDTListener implements DropTargetListener {
 				|| cls == IESequenceButton.class) {
 			return false;
 		}
-		if (cls == IESequenceTab.class && (container.getWOComponent() instanceof IETabComponent)) {
+		if (cls == IESequenceTab.class && container.getWOComponent() instanceof IETabComponent) {
 			return false;
 		}
 		if (container instanceof IESequenceWidget && ((IESequenceWidget) container).isTopComponent()) {
 			return cls == IEBlocWidget.class || cls == IESequenceTab.class || cls == IEHTMLTableWidget.class
-					|| (cls == TopComponentReusableWidget.class && !container.getWOComponent().hasTabContainer())
-					|| cls == IESequenceTR.class || (cls == IESequenceWidget.class && isTopComponent);
+					|| cls == TopComponentReusableWidget.class && !container.getWOComponent().hasTabContainer()
+					|| cls == IESequenceTR.class || cls == IESequenceWidget.class && isTopComponent;
 		}
 
 		else if (container instanceof IESequenceWidget || container instanceof IETDWidget) {
@@ -132,7 +132,7 @@ public class IEDTListener implements DropTargetListener {
 
 		if (container instanceof IEBlocWidget) {
 			return (cls.equals(IEHTMLTableWidget.class) || cls.equals(InnerBlocReusableWidget.class))
-					&& (((IEBlocWidget) container).getContent() == null);
+					&& ((IEBlocWidget) container).getContent() == null;
 		}
 		return false;
 
@@ -352,6 +352,7 @@ public class IEDTListener implements DropTargetListener {
 				}
 
 				DropIEElement dropAction = DropIEElement.actionType.makeNewAction(_dropContainerModel, null, _ieController.getEditor());
+				dropAction.setUpdateDates(_ieController.currentPaletteIsBasicPalette());
 				dropAction.setDroppedWidget(newWidget);
 
 				if (_dropContainer instanceof DropZoneTopComponent) {

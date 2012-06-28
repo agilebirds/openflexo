@@ -93,7 +93,6 @@ public class GeneratedSources extends GeneratedOutput {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
 			}
 			e1.printStackTrace();
-			System.exit(-1);
 		}
 
 		return newGS;

@@ -25,20 +25,19 @@ import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 
-public class MyShape extends MyDrawingElement {
+public class MyShape extends MyDrawingElement<MyShape, MyShapeGraphicalRepresentation> {
 	public String name;
-	private MyShapeGraphicalRepresentation gr;
 
 	// Called for LOAD
 	public MyShape(DrawingBuilder builder) {
-		super(builder.drawing.getModel());
+		super(builder.drawing);
 		initializeDeserialization();
 	}
 
 	// Called for NEW
 	public MyShape(ShapeType shape, FGEPoint p, EditedDrawing drawing) {
 		super(drawing.getModel());
-		gr = new MyShapeGraphicalRepresentation(shape, this, drawing);
+		MyShapeGraphicalRepresentation gr = new MyShapeGraphicalRepresentation(shape, this, drawing);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setWidth(80);
 			gr.setHeight(80);
@@ -48,11 +47,12 @@ public class MyShape extends MyDrawingElement {
 		}
 		gr.setX(p.x);
 		gr.setY(p.y);
+		setGraphicalRepresentation(gr);
 	}
 
 	public MyShape(ShapeGraphicalRepresentation<?> aGR, FGEPoint p, EditedDrawing drawing) {
 		super(drawing.getModel());
-		gr = new MyShapeGraphicalRepresentation(aGR, this, drawing);
+		MyShapeGraphicalRepresentation gr = new MyShapeGraphicalRepresentation(aGR, this, drawing);
 		/*if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setWidth(80);
 			gr.setHeight(80);
@@ -63,22 +63,12 @@ public class MyShape extends MyDrawingElement {
 		}*/
 		gr.setX(p.x);
 		gr.setY(p.y);
-
-	}
-
-	@Override
-	public MyShapeGraphicalRepresentation getGraphicalRepresentation() {
-		return gr;
-	}
-
-	public void setGraphicalRepresentation(MyShapeGraphicalRepresentation aGR) {
-		aGR.setDrawable(this);
-		gr = aGR;
+		setGraphicalRepresentation(gr);
 	}
 
 	@Override
 	public String toString() {
-		return "MyShape[" + name + ":" + gr.toString() + "]";
+		return "MyShape[" + name + ":" + getGraphicalRepresentation().toString() + "]";
 	}
 
 }

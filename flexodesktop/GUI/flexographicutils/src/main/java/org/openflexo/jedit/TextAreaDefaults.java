@@ -34,7 +34,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.openflexo.toolbox.Localized;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Encapsulates default settings for a text area. This can be passed to the constructor once the necessary fields have been filled out. The
@@ -85,7 +85,7 @@ public class TextAreaDefaults {
 	 * @return
 	 */
 	private static JMenuItem makeMenu(String string, ActionListener actionListener) {
-		JMenuItem menu = new JMenuItem(Localized.localizedForKey(string));
+		JMenuItem menu = new JMenuItem(FlexoLocalization.localizedForKey(string));
 		menu.addActionListener(actionListener);
 		return menu;
 	}

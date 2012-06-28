@@ -22,7 +22,6 @@ package org.openflexo.view;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -32,11 +31,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.openflexo.components.OpenProjectComponent;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * @author gpolet
@@ -84,7 +88,7 @@ public class ModuleBar extends JPanel {
 	public void notifySwitchToModule(Module m) {
 		refresh();
 		if (moduleButtons.get(m) != null) {
-			(moduleButtons.get(m)).setAsActive();
+			moduleButtons.get(m).setAsActive();
 		}
 	}
 
@@ -97,15 +101,17 @@ public class ModuleBar extends JPanel {
 		moduleButtons = new Hashtable<Module, ModuleButton>();
 		moduleBars.add(this);
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		Enumeration en = ModuleLoader.availableModules().elements();
-		while (en.hasMoreElements()) {
-			Module m = (Module) en.nextElement();
+		for (Module m : getModuleLoader().availableModules()) {
 			ModuleButton mb = new ModuleButton(m);
 			moduleButtons.put(m, mb);
 			add(mb);
 		}
 		validate();
 		repaint();
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	private void refresh() {
@@ -128,18 +134,30 @@ public class ModuleBar extends JPanel {
 				 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
 				 */
 				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (ModuleLoader.getProject() == null && module.requireProject()) {
-						File projectDirectory;
+				public void mouseClicked(MouseEvent event) {
+					FlexoProject currentProject = getModuleLoader().getProject();
+					if (currentProject == null && module.requireProject()) {
 						try {
-							projectDirectory = OpenProjectComponent.getProjectDirectory();
-						} catch (ProjectLoadingCancelledException e1) {
+							ModuleLoader.instance().openProject(null, module);
+						} catch (ProjectLoadingCancelledException e) {
+							e.printStackTrace();
+						} catch (ModuleLoadingException e) {
+							e.printStackTrace();
+							FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+						} catch (ProjectInitializerException e) {
+							e.printStackTrace();
+							FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+									+ e.getProjectDirectory().getAbsolutePath());
+						}
+					} else {
+						try {
+							getModuleLoader().switchToModule(module, currentProject);
+						} catch (ModuleLoadingException e) {
+							FlexoController.notify("Cannot load module." + e.getMessage());
 							return;
 						}
-						ModuleLoader.loadProject(projectDirectory);
 					}
 
-					ModuleLoader.switchToModule(module);
 				}
 
 				/**
@@ -165,6 +183,14 @@ public class ModuleBar extends JPanel {
 			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 			setToolTipText(module.getLocalizedName());
 			refresh();
+		}
+
+		private ModuleLoader getModuleLoader() {
+			return ModuleLoader.instance();
+		}
+
+		private ProjectLoader getProjectLoader() {
+			return ProjectLoader.instance();
 		}
 
 		protected void setAsActive() {

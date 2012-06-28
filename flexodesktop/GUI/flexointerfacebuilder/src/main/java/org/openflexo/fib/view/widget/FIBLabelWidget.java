@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
@@ -40,6 +41,8 @@ public class FIBLabelWidget extends FIBWidgetView<FIBLabel, JLabel, String> {
 		} else {
 			labelWidget = new JLabel();
 		}
+		labelWidget.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, TOP_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
+				RIGHT_COMPENSATING_BORDER));
 		updateFont();
 		updateAlign();
 		updateLabel();

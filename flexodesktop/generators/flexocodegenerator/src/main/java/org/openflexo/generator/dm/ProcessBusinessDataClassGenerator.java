@@ -55,7 +55,6 @@ public class ProcessBusinessDataClassGenerator extends JavaClassGenerator {
 	public VelocityContext defaultContext() {
 		VelocityContext context = super.defaultContext();
 		context.put("entity", getEntity());
-
 		return context;
 	}
 

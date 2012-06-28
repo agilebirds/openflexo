@@ -21,15 +21,21 @@ package org.openflexo.fib.view.widget.browser;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
@@ -38,12 +44,17 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
+import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.DependingObjects;
+import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 
 public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionListener, TreeModel {
 
@@ -55,6 +66,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 	private FIBBrowserWidget _widget;
 	private Object selectedObject;
 	private final Vector<Object> selection;
+	private final Multimap<Object, BrowserCell> contents;
 
 	/**
 	 * Stores controls: key is the JButton and value the PropertyListActionListener
@@ -63,7 +75,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 
 	public FIBBrowserModel(FIBBrowser fibBrowser, FIBBrowserWidget widget, FIBController controller) {
 		super(null);
-		contents = new Hashtable<Object, BrowserCell>();
+		contents = Multimaps.synchronizedMultimap(ArrayListMultimap.<Object, BrowserCell> create());
 		selection = new Vector<Object>();
 		_fibBrowser = fibBrowser;
 		_widget = widget;
@@ -77,7 +89,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 
 	public void delete() {
 		for (FIBBrowserElement c : _elementTypes.keySet()) {
-			(_elementTypes.get(c)).delete();
+			_elementTypes.get(c).delete();
 		}
 
 		_footer.delete();
@@ -103,6 +115,10 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		}
 	}
 
+	public FIBBrowser getBrowser() {
+		return _fibBrowser;
+	}
+
 	public FIBBrowserWidget getWidget() {
 		return _widget;
 	}
@@ -119,6 +135,15 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		if (getRoot() != rootCell) {
 			logger.fine("updateRootObject() with " + root + " rootCell=" + rootCell);
 			setRoot(rootCell);
+			if (!getBrowser().getRootVisible() && ((BrowserCell) getRoot()).getChildCount() == 1) {
+				// Only one cell and roots are hidden, expand this first cell
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						getWidget().getJTree().expandPath(getTreePath((BrowserCell) ((BrowserCell) getRoot()).getChildAt(0)));
+					}
+				});
+			}
 			return true;
 		}
 		return false;
@@ -188,19 +213,23 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 	}
 
 	public void addToSelection(Object o) {
-		BrowserCell cell = getBrowserCell(o);
-		if (cell != null) {
-			TreePath path = getTreePath(cell);
-			getWidget().getTreeSelectionModel().addSelectionPath(path);
-			getWidget().getJTree().scrollPathToVisible(path);
+		Collection<BrowserCell> cells = getBrowserCell(o);
+		if (cells != null) {
+			for (BrowserCell cell : cells) {
+				TreePath path = getTreePath(cell);
+				getWidget().getTreeSelectionModel().addSelectionPath(path);
+				getWidget().getJTree().scrollPathToVisible(path);
+			}
 		}
 	}
 
 	public void removeFromSelection(Object o) {
-		BrowserCell cell = getBrowserCell(o);
-		if (cell != null) {
-			TreePath path = getTreePath(cell);
-			getWidget().getTreeSelectionModel().removeSelectionPath(path);
+		Collection<BrowserCell> cells = getBrowserCell(o);
+		if (cells != null) {
+			for (BrowserCell cell : cells) {
+				TreePath path = getTreePath(cell);
+				getWidget().getTreeSelectionModel().removeSelectionPath(path);
+			}
 		}
 	}
 
@@ -276,40 +305,49 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		return returned;
 	}
 
-	private final Hashtable<Object, BrowserCell> contents;
+	public Multimap<Object, BrowserCell> getContents() {
+		return contents;
+	}
 
-	public BrowserCell retrieveBrowserCell(Object representedObject, BrowserCell father) {
-		BrowserCell returned = contents.get(representedObject);
-		if (returned != null) {
-			if (returned.getParent() != null) {
-				if (!returned.getParent().equals(father)) {
-					// logger.warning("Found object at different places in browser: "+representedObject);
+	public Iterator<Object> retrieveContents() {
+		return contents.keys().iterator();
+	}
+
+	private BrowserCell retrieveBrowserCell(Object representedObject, BrowserCell parent) {
+		ArrayList<BrowserCell> cells = new ArrayList<FIBBrowserModel.BrowserCell>(contents.get(representedObject));
+		// Collection<BrowserCell> cells = contents.get(representedObject);
+		if (cells != null) {
+			for (BrowserCell cell : cells) {
+				if (cell.getFather() == parent) {
+					return cell;
 				}
-			} else if (father != null) {
-				logger.warning("Found object at different places in browser: " + representedObject);
 			}
-			return returned;
 		}
-		returned = new BrowserCell(representedObject, father);
+		BrowserCell returned = new BrowserCell(representedObject, parent);
 		contents.put(representedObject, returned);
 		return returned;
+	}
+
+	private void removeBrowserCell(BrowserCell cell) {
+		contents.remove(cell.getRepresentedObject(), cell);
 	}
 
 	public boolean containsObject(Object representedObject) {
 		return contents.get(representedObject) != null;
 	}
 
-	public BrowserCell getBrowserCell(Object representedObject) {
+	public Collection<BrowserCell> getBrowserCell(Object representedObject) {
 		return contents.get(representedObject);
 	}
 
-	public class BrowserCell implements TreeNode, Observer, PropertyChangeListener {
+	public class BrowserCell implements TreeNode, Observer, PropertyChangeListener, HasDependencyBinding {
 		private Object representedObject;
 		private FIBBrowserElementType browserElementType;
 		private BrowserCell father;
 		private final Vector<BrowserCell> children;
 		private boolean isDeleted = false;
 		private boolean isVisible = true;
+		private DependingObjects dependingObjects;
 
 		public BrowserCell(Object representedObject, BrowserCell father) {
 			// logger.info("Build new BrowserCell for "+representedObject);
@@ -318,22 +356,16 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 			this.father = father;
 			children = new Vector<BrowserCell>();
 
-			if (representedObject instanceof HasPropertyChangeSupport && getBrowserElementType() != null) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) representedObject).getPropertyChangeSupport();
-				List<TargetObject> dependingObjectList = getBrowserElementType().getDependingObjects(representedObject);
-				// System.out.println("For cell "+this+" target objects are: "+targetObjectList);
-				if (dependingObjectList != null) {
-					for (TargetObject targetObject : dependingObjectList) {
-						if (targetObject.target == representedObject) {
-							pcSupport.addPropertyChangeListener(targetObject.propertyName, this);
-						}
-					}
-				}
-			} else if (representedObject instanceof Observable) {
-				((Observable) representedObject).addObserver(this);
+			if (browserElementType != null) {
+				dependingObjects = new DependingObjects(this);
+				dependingObjects.refreshObserving(browserElementType);
 			}
-
 			update(false);
+		}
+
+		@Override
+		public List<AbstractBinding> getDependencyBindings() {
+			return getBrowserElementType().getDependencyBindings(representedObject);
 		}
 
 		public void delete() {
@@ -343,22 +375,12 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				c.delete();
 			}
 
-			if (representedObject instanceof HasPropertyChangeSupport) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) representedObject).getPropertyChangeSupport();
-				List<TargetObject> dependingObjectList = getBrowserElementType().getDependingObjects(representedObject);
-				if (dependingObjectList != null) {
-					for (TargetObject targetObject : dependingObjectList) {
-						if (targetObject.target == representedObject) {
-							pcSupport.removePropertyChangeListener(targetObject.propertyName, this);
-						}
-					}
-				}
-			} else if (representedObject instanceof Observable) {
-				((Observable) representedObject).deleteObserver(this);
+			if (dependingObjects != null) {
+				dependingObjects.stopObserving();
 			}
 
 			if (representedObject != null) {
-				contents.remove(representedObject);
+				removeBrowserCell(this);
 			}
 
 			if (selection.contains(representedObject)) {
@@ -388,40 +410,60 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				}
 			}
 
-			Vector<BrowserCell> oldChildren = new Vector<BrowserCell>();
-			Vector<BrowserCell> removedChildren = new Vector<BrowserCell>();
-			Vector<BrowserCell> newChildren = new Vector<BrowserCell>();
-			for (BrowserCell c : children) {
-				removedChildren.add(c);
-				oldChildren.add(c);
-			}
+			List<BrowserCell> oldChildren = new ArrayList<BrowserCell>(children);
+			List<BrowserCell> removedChildren = new ArrayList<BrowserCell>(children);
+			List<BrowserCell> newChildren = new ArrayList<BrowserCell>();
 			boolean isEnabled = browserElementType.isEnabled(representedObject);
-			List newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
+			final List newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
 			int index = 0;
 
 			for (Object o : newChildrenObjects) {
-				BrowserCell cell = retrieveBrowserCell(o, this);
-				FIBBrowserElementType childElementType = elementTypeForClass(o.getClass());
-				if (childElementType != null && childElementType.isVisible(o)) {
-					if (children.contains(cell)) {
-						// OK, child still here
-						removedChildren.remove(cell);
-						if (recursively) {
-							cell.update(true);
+				if (o != null && o != representedObject) {
+					BrowserCell cell = retrieveBrowserCell(o, this);
+					FIBBrowserElementType childElementType = elementTypeForClass(o.getClass());
+					if (childElementType != null && childElementType.isVisible(o)) {
+						if (children.contains(cell)) {
+							// OK, child still here
+							removedChildren.remove(cell);
+							if (recursively) {
+								cell.update(true);
+							}
+							index = children.indexOf(cell) + 1;
+						} else {
+							newChildren.add(cell);
+							children.insertElementAt(cell, index);
+							index++;
 						}
-						index = children.indexOf(cell) + 1;
 					} else {
-						newChildren.add(cell);
-						children.insertElementAt(cell, index);
-						index++;
+						cell.isVisible = false;
 					}
-				} else {
-					cell.isVisible = false;
 				}
 			}
 			for (BrowserCell c : removedChildren) {
 				children.remove(c);
 				c.delete();
+			}
+
+			boolean requireSorting = false;
+			for (int i = 0; i < children.size() - 1; i++) {
+				BrowserCell c1 = children.elementAt(i);
+				BrowserCell c2 = children.elementAt(i + 1);
+				if (newChildrenObjects.indexOf(c1.representedObject) != newChildrenObjects.indexOf(c2.representedObject) - 1) {
+					requireSorting = true;
+				}
+			}
+
+			if (requireSorting) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Detected sorting required");
+				}
+				// Sort children according to supplied list
+				Collections.sort(children, new Comparator<BrowserCell>() {
+					@Override
+					public int compare(BrowserCell o1, BrowserCell o2) {
+						return newChildrenObjects.indexOf(o1.representedObject) - newChildrenObjects.indexOf(o2.representedObject);
+					}
+				});
 			}
 
 			// System.out.println("removedChildren ["+removedChildren.size()+"] "+removedChildren);
@@ -434,7 +476,15 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				structureChanged = true;
 				if (oldChildren.size() == 0) {
 					// Special case, i don't undertand why (SGU)
-					nodeStructureChanged(this);
+					try {
+						nodeStructureChanged(this);
+					} catch (Exception e) {
+						// Might happen when a structural modification will call parent's nodeChanged()
+						// An Exception might be raised here
+						// We should investigate further, but since no real consequences are raised here, we just ignore exception
+						logger.warning("Unexpected " + e.getClass().getSimpleName()
+								+ " when refreshing browser, no severity but please investigate");
+					}
 				} else {
 					if (removedChildren.size() > 0) {
 						int[] childIndices = new int[removedChildren.size()];
@@ -462,11 +512,37 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				// An ArrayIndexOutOfBoundsException might be raised here
 				// We should investigate further, but since no real consequences are raised here, we just ignore exception
 				logger.warning("Unexpected ArrayIndexOutOfBoundsException when refreshing browser, no severity but please investigate");
+			} catch (NullPointerException e) {
+				// Might happen when a structural modification will call parent's nodeChanged()
+				// An NullPointerException might be raised here
+				// We should investigate further, but since no real consequences are raised here, we just ignore exception
+				logger.warning("Unexpected NullPointerException when refreshing browser, no severity but please investigate");
+			}
+
+			if (requireSorting) {
+				Object wasSelected = getSelectedObject();
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Will reselect " + wasSelected);
+				}
+				try {
+					nodeStructureChanged(this);
+				} catch (Exception e) {
+					// Might happen when a structural modification will call parent's nodeChanged()
+					// An Exception might be raised here
+					// We should investigate further, but since no real consequences are raised here, we just ignore exception
+					logger.warning("Unexpected " + e.getClass().getSimpleName()
+							+ " when refreshing browser, no severity but please investigate");
+				}
+				if (wasSelected != null) {
+					resetSelection();
+					addToSelection(wasSelected);
+				}
 			}
 		}
 
 		@Override
 		public void update(Observable o, Object arg) {
+			// logger.info("Object " + o + " received " + arg);
 			if (!isDeleted && o == representedObject) {
 				update(false);
 			}
@@ -474,8 +550,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (!isDeleted && evt.getSource() == representedObject) {
-				// System.out.println("cell "+this+" propertyChanged "+evt.getPropertyName()+" for "+evt.getSource());
+			// logger.info("Object " + representedObject + " received " + evt);
+			if (!isDeleted) {
+				// System.out.println("cell " + this + " propertyChanged " + evt.getPropertyName() + " for " + evt.getSource());
 				update(false);
 			}
 		}
@@ -517,9 +594,13 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 			return children.indexOf(node);
 		}
 
+		public BrowserCell getFather() {
+			return father;
+		}
+
 		@Override
 		public TreeNode getParent() {
-			return father;
+			return getFather();
 		}
 
 		@Override
@@ -535,6 +616,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		public TreePath getTreePath() {
 			return new TreePath(getPathToRoot(this));
 		}
+
 	}
 
 	/*@Override

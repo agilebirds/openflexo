@@ -107,10 +107,10 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 	@Override
 	public void update(Observable observable, Object dataModification) {
 		if (observable == observedContainer) {
-			if ((dataModification instanceof ObjectWillMove) || (dataModification instanceof ObjectWillResize)
-					|| (dataModification instanceof ObjectHasMoved) || (dataModification instanceof ObjectHasResized)
-					|| (dataModification instanceof ObjectMove) || (dataModification instanceof ObjectResized)
-					|| (dataModification instanceof ShapeChanged)) {
+			if (dataModification instanceof ObjectWillMove || dataModification instanceof ObjectWillResize
+					|| dataModification instanceof ObjectHasMoved || dataModification instanceof ObjectHasResized
+					|| dataModification instanceof ObjectMove || dataModification instanceof ObjectResized
+					|| dataModification instanceof ShapeChanged) {
 				updateLayout();
 			}
 		}
@@ -130,7 +130,7 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 	}
 
 	private void updateLayout() {
-		if ((getContainerGraphicalRepresentation() != null) && (getContainerGraphicalRepresentation() instanceof PortmapRegisteryGR)) {
+		if (getContainerGraphicalRepresentation() != null && getContainerGraphicalRepresentation() instanceof PortmapRegisteryGR) {
 			if (observedContainer != getContainerGraphicalRepresentation()) {
 				if (observedContainer != null) {
 					observedContainer.deleteObserver(this);
@@ -163,36 +163,46 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 		return visiblePortmaps.indexOf(getPortMap());
 	}
 
+	private boolean isLayingout = false;
+
 	private void layoutAs(SimplifiedCardinalDirection orientation) {
 		if (observedContainer == null) {
 			return;
 		}
-		int index = getPortmapIndex();
-
-		setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
-		if (orientation == SimplifiedCardinalDirection.NORTH) {
-			setX(ProcessEditorConstants.PORTMAP_MARGIN + index * PORTMAP_SIZE);
-			setY(0);
-			setBorder(new ShapeGraphicalRepresentation.ShapeBorder(2, 18, 3, 3));
-			setLocationConstrainedArea(FGELine.makeHorizontalLine(new FGEPoint(0.5, 0.5)));
-		} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
-			setX(ProcessEditorConstants.PORTMAP_MARGIN + index * PORTMAP_SIZE);
-			setY(observedContainer.getHeight() - ProcessEditorConstants.PORTMAP_REGISTERY_WIDTH);
-			setBorder(new ShapeGraphicalRepresentation.ShapeBorder(18, 2, 3, 3));
-			setLocationConstrainedArea(FGELine.makeHorizontalLine(new FGEPoint(0.5, 0.5)));
-		} else if (orientation == SimplifiedCardinalDirection.WEST) {
-			setX(0);
-			setY(ProcessEditorConstants.PORTMAP_MARGIN + index * PORTMAP_SIZE);
-			setBorder(new ShapeGraphicalRepresentation.ShapeBorder(3, 3, 2, 18));
-			setLocationConstrainedArea(FGELine.makeVerticalLine(new FGEPoint(0.5, 0.5)));
-		} else if (orientation == SimplifiedCardinalDirection.EAST) {
-			setX(observedContainer.getWidth() - ProcessEditorConstants.PORTMAP_REGISTERY_WIDTH);
-			setY(ProcessEditorConstants.PORTMAP_MARGIN + index * PORTMAP_SIZE);
-			setBorder(new ShapeGraphicalRepresentation.ShapeBorder(3, 3, 18, 2));
-			setLocationConstrainedArea(FGELine.makeVerticalLine(new FGEPoint(0.5, 0.5)));
+		if (isLayingout) {
+			return;
 		}
-		// System.out.println("layout as "+orientation+" index="+index);
-		layoutedAs = orientation;
+		isLayingout = true;
+		try {
+			int index = getPortmapIndex();
+
+			setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
+			if (orientation == SimplifiedCardinalDirection.NORTH) {
+				setX(ProcessEditorConstants.PORTMAP_MARGIN + index * PORTMAP_SIZE);
+				setY(0);
+				setBorder(new ShapeGraphicalRepresentation.ShapeBorder(2, 18, 3, 3));
+				setLocationConstrainedArea(FGELine.makeHorizontalLine(new FGEPoint(0.5, 0.5)));
+			} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
+				setX(ProcessEditorConstants.PORTMAP_MARGIN + index * PORTMAP_SIZE);
+				setY(observedContainer.getHeight() - ProcessEditorConstants.PORTMAP_REGISTERY_WIDTH);
+				setBorder(new ShapeGraphicalRepresentation.ShapeBorder(18, 2, 3, 3));
+				setLocationConstrainedArea(FGELine.makeHorizontalLine(new FGEPoint(0.5, 0.5)));
+			} else if (orientation == SimplifiedCardinalDirection.WEST) {
+				setX(0);
+				setY(ProcessEditorConstants.PORTMAP_MARGIN + index * PORTMAP_SIZE);
+				setBorder(new ShapeGraphicalRepresentation.ShapeBorder(3, 3, 2, 18));
+				setLocationConstrainedArea(FGELine.makeVerticalLine(new FGEPoint(0.5, 0.5)));
+			} else if (orientation == SimplifiedCardinalDirection.EAST) {
+				setX(observedContainer.getWidth() - ProcessEditorConstants.PORTMAP_REGISTERY_WIDTH);
+				setY(ProcessEditorConstants.PORTMAP_MARGIN + index * PORTMAP_SIZE);
+				setBorder(new ShapeGraphicalRepresentation.ShapeBorder(3, 3, 18, 2));
+				setLocationConstrainedArea(FGELine.makeVerticalLine(new FGEPoint(0.5, 0.5)));
+			}
+			// System.out.println("layout as "+orientation+" index="+index);
+			layoutedAs = orientation;
+		} finally {
+			isLayingout = false;
+		}
 	}
 
 	@Override
@@ -254,7 +264,7 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 		FlexoPortMap afterPortmap = null;
 		if (observedContainer != null) {
 			for (GraphicalRepresentation<?> gr : observedContainer.getContainedGraphicalRepresentations()) {
-				if ((gr instanceof PortmapGR) && (gr != this) && gr.getIsVisible()) {
+				if (gr instanceof PortmapGR && gr != this && gr.getIsVisible()) {
 					PortmapGR portmapGR = (PortmapGR) gr;
 					if (getOrientation().isVertical()) {
 						if (portmapGR.getX() < getX()) {

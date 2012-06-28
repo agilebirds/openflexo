@@ -28,35 +28,43 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.action.DeleteOntologyObjects;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.ve.VECst;
 
-
 public class DeleteOntologyObjectsDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData() 
-			{
+			@Override
+			public Object[] getData() {
 				String URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl";
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
+				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				FlexoOntology ontology = ontologyLibrary.getOntology(URI);
 				ontology.loadWhenUnloaded();
 				Vector<OntologyObject> selection = new Vector<OntologyObject>();
-				selection.add(ontologyLibrary.getOntologyObject(URI+"#Actor"));
-				selection.add(ontologyLibrary.getOntologyObject(URI+"#Mission"));
-				selection.add(ontologyLibrary.getOntologyObject(URI+"#hasMission"));
-				selection.add(ontologyLibrary.getOntologyObject(URI+"#description"));
-				DeleteOntologyObjects action = DeleteOntologyObjects.actionType.makeNewAction(null, selection,null);
+				selection.add(ontology.getOntologyObject(URI + "#Actor"));
+				selection.add(ontology.getOntologyObject(URI + "#Mission"));
+				selection.add(ontology.getOntologyObject(URI + "#hasMission"));
+				selection.add(ontology.getOntologyObject(URI + "#description"));
+				DeleteOntologyObjects action = DeleteOntologyObjects.actionType.makeNewAction(null, selection, null);
 				return makeArray(action);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return VECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB;
 			}
 		};
 		editor.launch();
+	}
+
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
 	}
 }

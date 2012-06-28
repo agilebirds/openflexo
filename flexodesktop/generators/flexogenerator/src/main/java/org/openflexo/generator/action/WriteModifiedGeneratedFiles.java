@@ -55,9 +55,9 @@ public class WriteModifiedGeneratedFiles extends MultipleFileGCAction<WriteModif
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.isCodeGenerationAvailable() && !file.hasGenerationErrors() && file.getResource() != null
-					&& file.getResource().needsGeneration() && file.getGenerationStatus() != GenerationStatus.ConflictingUnMerged)
-					|| (file.isMarkedForDeletion());
+			return file.isCodeGenerationAvailable() && !file.hasGenerationErrors() && file.getResource() != null
+					&& file.getResource().needsGeneration() && file.getGenerationStatus() != GenerationStatus.ConflictingUnMerged
+					|| file.isMarkedForDeletion();
 		}
 
 	};
@@ -73,7 +73,7 @@ public class WriteModifiedGeneratedFiles extends MultipleFileGCAction<WriteModif
 	private MultipleGenerationException exception;
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Write modified files");
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();

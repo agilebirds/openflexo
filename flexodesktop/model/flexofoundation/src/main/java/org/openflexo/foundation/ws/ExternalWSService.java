@@ -19,7 +19,8 @@
  */
 package org.openflexo.foundation.ws;
 
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,7 +83,7 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		// fucking things to do.
+		// TODO
 		/*
 		if (dataModification instanceof LanguageRemoved) {
 		    Language lg = (Language) ((LanguageRemoved) dataModification).oldValue();
@@ -125,10 +126,8 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: externalWSGroup " + getName());
 		}
-		Vector processesToDelete = new Vector();
-		processesToDelete.addAll(getWSPortTypes());
-		for (Enumeration en = processesToDelete.elements(); en.hasMoreElements();) {
-			WSPortType next = (WSPortType) en.nextElement();
+		List<WSPortType> processesToDelete = new ArrayList<WSPortType>(getWSPortTypes());
+		for (WSPortType next : processesToDelete) {
 
 			// Delete only deletes WSObjects by default.
 			// It is the responsibility of the WSService to decide if it should delete also the
@@ -142,11 +141,8 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 			next.delete();
 		}
 
-		Vector repositoriesToDelete = new Vector();
-		repositoriesToDelete.addAll(getWSRepositories());
-		for (Enumeration en = repositoriesToDelete.elements(); en.hasMoreElements();) {
-
-			WSRepository next = (WSRepository) en.nextElement();
+		List<WSRepository> repositoriesToDelete = new ArrayList<WSRepository>(getWSRepositories());
+		for (WSRepository next : repositoriesToDelete) {
 			// Delete only deletes WSObjects by default.
 			// It is the responsibility of the WSService to decide if it should delete also the
 			// real DataRepository.

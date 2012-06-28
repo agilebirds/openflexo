@@ -21,8 +21,10 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 import org.openflexo.fib.controller.FIBController;
@@ -42,9 +44,11 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonClicked();
+				// updateDependancies();
 			}
 		});
 		updateLabel();
+		updateIcon();
 		// updatePreferredSize();
 		updateFont();
 	}
@@ -56,6 +60,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 		}
 		widgetUpdating = true;
 		updateLabel();
+		updateIcon();
 		widgetUpdating = false;
 		return false;
 	}
@@ -70,11 +75,17 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 	}
 
 	public synchronized void buttonClicked() {
-		logger.info("Button " + getWidget() + " has clicked");
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Button " + getWidget() + " has clicked");
+			logger.fine("Action: " + getWidget().getAction() + " valid=" + getWidget().getAction().isValid());
+			logger.fine("Data: " + getController().getDataObject());
+		}
+		Object data = getController().getDataObject();
 		if (getWidget().getAction().isValid()) {
 			getWidget().getAction().execute(getController());
 		}
 		updateDependancies();
+		updateWidgetFromModel();
 	}
 
 	@Override
@@ -89,8 +100,18 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 
 	protected void updateLabel() {
 		// logger.info("Button update label with key="+getWidget().getLabel());
-		buttonWidget.setText(getValue() != null ? getValue() : (getWidget().getLocalize() ? getLocalized(getWidget().getLabel())
-				: getWidget().getLabel()));
+		buttonWidget.setText(getValue() != null ? (getWidget().getLocalize() ? getLocalized(getValue()) : getValue()) : (getWidget()
+				.getLocalize() ? getLocalized(getWidget().getLabel()) : getWidget().getLabel()));
+	}
+
+	protected void updateIcon() {
+		// logger.info("Button update label with key="+getWidget().getLabel());
+		if (getWidget().getButtonIcon() != null && getWidget().getButtonIcon().isSet() && getWidget().getButtonIcon().isValid()) {
+			Icon icon = (Icon) getWidget().getButtonIcon().getBindingValue(getController());
+			buttonWidget.setIcon(icon);
+		} else {
+			buttonWidget.setIcon(null);
+		}
 	}
 
 	@Override

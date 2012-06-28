@@ -111,11 +111,10 @@ public class DoubleWidget extends DenaliWidget<Double> {
 	@Override
 	public synchronized void updateWidgetFromModel() {
 		widgetUpdating = true;
-		Double currentValue = null;
-		if (getObjectValue() == null) {
-			setObjectValue(new Double(0));
+		Double currentValue = getObjectValue();
+		if (currentValue == null) {
+			currentValue = Double.valueOf(0);
 		}
-		currentValue = getObjectValue();
 		ignoreTextfieldChanges = true;
 		try {
 			valueChooser.setValue(currentValue);
@@ -134,8 +133,7 @@ public class DoubleWidget extends DenaliWidget<Double> {
 	public synchronized void updateModelFromWidget() {
 		modelUpdating = true;
 		Number value = (Number) valueChooser.getValue();
-		double currentValue = value.doubleValue();
-		setObjectValue(currentValue);
+		setObjectValue(value != null ? value.doubleValue() : null);
 		modelUpdating = false;
 	}
 

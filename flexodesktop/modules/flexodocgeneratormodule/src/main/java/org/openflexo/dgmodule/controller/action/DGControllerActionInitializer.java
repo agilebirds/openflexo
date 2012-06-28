@@ -27,6 +27,7 @@ import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.dgmodule.controller.DGSelectionManager;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
+import org.openflexo.doceditor.controller.action.ImportDocumentationTemplateInitializer;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.action.OpenFileInExplorer;
@@ -70,14 +71,14 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 
 		new AddGeneratedCodeRepositoryInitializer(this).init();
 		new RemoveGeneratedCodeRepositoryInitializer(this).init();
-
-		(new DGSetPropertyInitializer(this)).init();
-		(new OpenFileInExplorerInitializer(this)).init();
+		new ImportDocumentationTemplateInitializer(this).init();
+		new DGSetPropertyInitializer(this).init();
+		new OpenFileInExplorerInitializer(this).init();
 		new CompareTemplatesInNewWindowInitializer(this).init();
-		(new GenerateProcessScreenshotInitializer(this)).init();
-		(new GenerateActivityScreenshotInitializer(this)).init();
-		(new GenerateComponentScreenshotInitializer(this)).init();
-		(new GenerateOperationScreenshotInitializer(this)).init();
+		new GenerateProcessScreenshotInitializer(this).init();
+		new GenerateActivityScreenshotInitializer(this).init();
+		new GenerateComponentScreenshotInitializer(this).init();
+		new GenerateOperationScreenshotInitializer(this).init();
 
 		// Doc generation
 		getProject().getGeneratedDoc().setFactory(new GCAction.ProjectGeneratorFactory() {
@@ -99,75 +100,75 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 				return null;
 			}
 		});
-		(new SynchronizeRepositoryCodeGenerationInitializer(this)).init();
-		(new GenerateSourceCodeInitializer(this)).init();
-		(new GenerateAndWriteCodeInitializer(this)).init();
-		(new ForceRegenerateSourceCodeInitializer(this)).init();
-		(new RegenerateAndOverrideInitializer(this)).init();
-		(new IncludeFromGenerationInitializer(this)).init();
-		(new ExcludeFromGenerationInitializer(this)).init();
-		(new ExportTOCAsTemplateInitializer(this)).init();
-		(new WriteModifiedGeneratedFilesInitializer(this)).init();
-		(new DismissUnchangedGeneratedFilesInitializer(this)).init();
+		new SynchronizeRepositoryCodeGenerationInitializer(this).init();
+		new GenerateSourceCodeInitializer(this).init();
+		new GenerateAndWriteCodeInitializer(this).init();
+		new ForceRegenerateSourceCodeInitializer(this).init();
+		new RegenerateAndOverrideInitializer(this).init();
+		new IncludeFromGenerationInitializer(this).init();
+		new ExcludeFromGenerationInitializer(this).init();
+		new ExportTOCAsTemplateInitializer(this).init();
+		new WriteModifiedGeneratedFilesInitializer(this).init();
+		new DismissUnchangedGeneratedFilesInitializer(this).init();
 
 		// Refreshing
-		(new RefreshDGStructureInitializer(this)).init();
+		new RefreshDGStructureInitializer(this).init();
 
 		// Edition
-		(new EditGeneratedFileInitializer(this)).init();
-		(new SaveGeneratedFileInitializer(this)).init();
-		(new RevertToSavedGeneratedFileInitializer(this)).init();
+		new EditGeneratedFileInitializer(this).init();
+		new SaveGeneratedFileInitializer(this).init();
+		new RevertToSavedGeneratedFileInitializer(this).init();
 
 		// Merge
-		(new MarkAsMergedInitializer(this)).init();
-		(new MarkAsUnmergedInitializer(this)).init();
-		(new MarkAsMergedAllTrivialMergableFilesInitializer(this)).init();
-		(new OverrideWithVersionInitializer(this)).init();
-		(new CancelOverrideWithVersionInitializer(this)).init();
+		new MarkAsMergedInitializer(this).init();
+		new MarkAsUnmergedInitializer(this).init();
+		new MarkAsMergedAllTrivialMergableFilesInitializer(this).init();
+		new OverrideWithVersionInitializer(this).init();
+		new CancelOverrideWithVersionInitializer(this).init();
 
 		// Accept disk version
-		(new AcceptDiskUpdateInitializer(this)).init();
+		new AcceptDiskUpdateInitializer(this).init();
 
 		// Versionning
-		(new RegisterNewCGReleaseInitializer(this)).init();
-		(new RevertRepositoryToVersionInitializer(this)).init();
-		(new RevertToHistoryVersionInitializer(this)).init();
+		new RegisterNewCGReleaseInitializer(this).init();
+		new RevertRepositoryToVersionInitializer(this).init();
+		new RevertToHistoryVersionInitializer(this).init();
 
-		(new CleanIntermediateFilesInitializer(this)).init();
-		(new RefreshHistoryInitializer(this)).init();
+		new CleanIntermediateFilesInitializer(this).init();
+		new RefreshHistoryInitializer(this).init();
 
-		(new ShowReleaseHistoryInitializer(this)).init();
-		(new ShowFileHistoryInitializer(this)).init();
-		(new ShowDifferencesInitializer(this)).init();
+		new ShowReleaseHistoryInitializer(this).init();
+		new ShowFileHistoryInitializer(this).init();
+		new ShowDifferencesInitializer(this).init();
 
 		// PDF management
-		(new GeneratePDFInitializer(this)).init();
+		new GeneratePDFInitializer(this).init();
 
 		// DOCX management
-		(new GenerateDocxInitializer(this)).init();
-		(new ReinjectDocxInitializer(this)).init();
+		new GenerateDocxInitializer(this).init();
+		new ReinjectDocxInitializer(this).init();
 
 		// ZIP management
-		(new GenerateZipInitializer(this)).init();
+		new GenerateZipInitializer(this).init();
 
 		// Repository management
-		(new ConnectCGRepositoryInitializer(this)).init();
-		(new DisconnectCGRepositoryInitializer(this)).init();
+		new ConnectCGRepositoryInitializer(this).init();
+		new DisconnectCGRepositoryInitializer(this).init();
 
 		// Show/view
-		(new ShowFileVersionInitializer(this)).init();
-		(new OpenDiffEditorInitializer(this)).init();
+		new ShowFileVersionInitializer(this).init();
+		new OpenDiffEditorInitializer(this).init();
 
 		// Templates management
-		(new AddCustomTemplateRepositoryInitializer(this)).init();
-		(new RemoveCustomTemplateRepositoryInitializer(this)).init();
-		(new RedefineCustomTemplateFileInitializer(this)).init();
-		(new EditCustomTemplateFileInitializer(this)).init();
-		(new SaveCustomTemplateFileInitializer(this)).init();
-		(new RefreshTemplatesInitializer(this)).init();
-		(new OpenTemplateFileInNewWindowInitializer(this)).init();
-		(new CancelEditionOfCustomTemplateFileInitializer(this)).init();
-		(new RemoveTemplateFileInitializer(this)).init();
+		new AddCustomTemplateRepositoryInitializer(this).init();
+		new RemoveCustomTemplateRepositoryInitializer(this).init();
+		new RedefineCustomTemplateFileInitializer(this).init();
+		new EditCustomTemplateFileInitializer(this).init();
+		new SaveCustomTemplateFileInitializer(this).init();
+		new RefreshTemplatesInitializer(this).init();
+		new OpenTemplateFileInNewWindowInitializer(this).init();
+		new CancelEditionOfCustomTemplateFileInitializer(this).init();
+		new RemoveTemplateFileInitializer(this).init();
 		// Initialize actions available using inspector (template tab)
 
 		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(
@@ -176,7 +177,7 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
 				EditCustomTemplateFile.actionType, getDGController().getEditor());
 
-		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>(
+		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplate>(
 				RedefineCustomTemplateFile.actionType, getDGController().getEditor());
 
 	}

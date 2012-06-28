@@ -21,6 +21,7 @@ package org.openflexo.foundation.rm.cg;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -589,10 +590,12 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	/**
 	 * Overrides renameFileTo
 	 * 
+	 * @throws IOException
+	 * 
 	 * @see org.openflexo.foundation.rm.FlexoFileResource#renameFileTo(java.lang.String)
 	 */
 	@Override
-	public boolean renameFileTo(String name) throws InvalidFileNameException {
+	public boolean renameFileTo(String name) throws InvalidFileNameException, IOException {
 		String old = getFileName();
 		boolean succeed = super.renameFileTo(name);
 		if (succeed && getCGFile() != null) {
@@ -627,27 +630,22 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Load resource exception.", e);
 			}
-			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "File not found exception.", e);
 			}
-			e.printStackTrace();
 		} catch (ProjectLoadingCancelledException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Project loading cancel exception.", e);
 			}
-			e.printStackTrace();
 		} catch (ResourceDependancyLoopException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Loop in dependancies exception.", e);
 			}
-			e.printStackTrace();
 		} catch (FlexoException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Flexo exception.", e);
 			}
-			e.printStackTrace();
 		}
 	}
 

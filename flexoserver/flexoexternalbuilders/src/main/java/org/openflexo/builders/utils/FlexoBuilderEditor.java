@@ -1,13 +1,21 @@
 package org.openflexo.builders.utils;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+
+import org.openflexo.builders.FlexoExternalMainWithProject;
+import org.openflexo.components.ProgressWindow;
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
 import org.openflexo.dg.html.ProjectDocHTMLGenerator;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -41,12 +49,11 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 
 	private ProjectDocGenerator projectDocGenerator;
 
-	public FlexoBuilderEditor(FlexoProject project) {
-		super(project);
-	}
+	private final FlexoExternalMainWithProject externalMainWithProject;
 
-	public FlexoBuilderEditor() {
-		this(null);
+	public FlexoBuilderEditor(FlexoExternalMainWithProject externalMainWithProject, FlexoProject project) {
+		super(project);
+		this.externalMainWithProject = externalMainWithProject;
 	}
 
 	@Override
@@ -87,6 +94,68 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 	}
 
 	private FlexoProgressFactory flexoProgressFactory;
+
+	private volatile List<FlexoAction<?, ?, ?>> todos;
+
+	private Runnable whenDone;
+
+	@Override
+	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(final A action)
+			throws FlexoException {
+		if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
+			ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					action.execute();
+					return null;
+				}
+
+				@Override
+				protected void done() {
+					if (!action.isEmbedded()) {
+						doNextTodo(action);
+					}
+				}
+			};
+			worker.execute();
+		} else {
+			action.execute();
+			if (!action.isEmbedded()) {
+				doNextTodo(action);
+			} else {
+				System.err.println("Skipping");
+			}
+		}
+	}
+
+	public void chainActions(List<FlexoAction<?, ?, ?>> actions, Runnable whenDone) {
+		this.todos = actions;
+		this.whenDone = whenDone;
+		doNextTodo(null);
+	}
+
+	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void doNextTodo(final A action) {
+		if (action != null && !action.hasActionExecutionSucceeded()) {
+			externalMainWithProject.handleActionFailed(action);
+		} else {
+			if (todos == null && whenDone == null) {
+				return;
+			}
+			if (todos.isEmpty()) {
+				SwingUtilities.invokeLater(whenDone);
+			} else {
+				final FlexoAction<?, ?, ?> todo = todos.remove(0);
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						todo.doAction();
+					}
+				});
+			}
+		}
+	}
 
 	@Override
 	public FlexoProgressFactory getFlexoProgressFactory() {

@@ -29,12 +29,12 @@ public class WSDataModification extends DataModification {
 	 * @param oldValue
 	 * @param newValue
 	 */
-	public WSDataModification(int modificationType, String propertyName, Object oldValue, Object newValue) {
-		super(modificationType, propertyName, oldValue, newValue);
+	public WSDataModification(String propertyName, Object oldValue, Object newValue) {
+		super(propertyName, oldValue, newValue);
 		// TODO Auto-generated constructor stub
 	}
 
 	public WSDataModification(Object oldValue, Object newValue) {
-		super(DataModification.WS_DM, oldValue, newValue);
+		super(oldValue, newValue);
 	}
 }

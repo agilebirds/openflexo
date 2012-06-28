@@ -42,18 +42,6 @@ import org.openflexo.wse.controller.WSEController;
 public class WSEModule extends FlexoModule implements ExternalWSEModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.WSE };
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		ToolBox.setPlatform();
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.WSE_MODULE);
-	}
-
 	public WSEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 		setFlexoController(new WSEController(projectEditor, this));

@@ -36,12 +36,13 @@ import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.ModuleLoader;
 
 public abstract class ActionInitializer<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
 	private final ControllerActionInitializer _controllerActionInitializer;
 	private final FlexoActionType _actionType;
 
-	public ActionInitializer(FlexoActionType actionType, ControllerActionInitializer controllerActionInitializer) {
+	public ActionInitializer(FlexoActionType<A, T1, T2> actionType, ControllerActionInitializer controllerActionInitializer) {
 		super();
 		_controllerActionInitializer = controllerActionInitializer;
 		_actionType = actionType;
@@ -53,6 +54,10 @@ public abstract class ActionInitializer<A extends FlexoAction<?, T1, T2>, T1 ext
 
 	public InteractiveFlexoEditor getEditor() {
 		return getController().getEditor();
+	}
+
+	final protected ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	public FlexoController getController() {

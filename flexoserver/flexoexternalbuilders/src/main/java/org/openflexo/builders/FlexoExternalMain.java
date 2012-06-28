@@ -4,27 +4,33 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
+import org.openflexo.FlexoProperties;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.builders.exception.FlexoRunException;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
-import org.openflexo.properties.FlexoProperties;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
 
-public abstract class FlexoExternalMain {
+public abstract class FlexoExternalMain implements Runnable {
 
 	public static final String CONSOLE_OUTPUT_ENCODING = "UTF-8";
 
@@ -48,15 +54,25 @@ public abstract class FlexoExternalMain {
 
 	public static final int CLASS_NOT_FOUND = -8;
 
+	public static final int UNEXPECTED_EXCEPTION = -100;
+
+	public static final int UNKNOWN_EXIT = -120;
+
 	public static final int TIMEOUT = -126;
 
-	private int exitCode = 0;
+	private volatile int exitCode = 0;
 
 	protected boolean isDev = false;
 
 	private PrintStream consoleStream;
 
 	protected static byte[] mem = new byte[500 * 1024]; // Let's grab 500kb to free in case of an error (especially OutOfMemoryError)
+
+	private boolean notifyOnExit;
+
+	private boolean done;
+
+	private FlexoResourceCenter resourceCenter;
 
 	public FlexoExternalMain() {
 		try {
@@ -91,6 +107,7 @@ public abstract class FlexoExternalMain {
 		if (!isDev) {
 			ResourceLocator.resetFlexoResourceLocation(new File(resourcePath));
 		}
+		UserType.setCurrentUserType(UserType.DEVELOPER);
 		FlexoProperties.load();
 		initializeLoggingManager();
 		if (!isDev) {
@@ -98,15 +115,30 @@ public abstract class FlexoExternalMain {
 				logger.info("PreferredResourcePath is set to " + ResourceLocator.getPreferredResourcePath().getAbsolutePath());
 			}
 		}
-		FlexoObject.initialize();
+		FlexoObject.initialize(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching " + getName() + "...");
 		}
 		GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
 	}
 
-	protected abstract void run() throws FlexoRunException;
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
+	@Override
+	public final void run() {
+		try {
+			doRun();
+		} catch (Throwable t) {
+			mem = null;
+			System.gc();
+			t.printStackTrace();
+			setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
+		}
+	}
+
+	protected abstract void doRun();
 
 	protected abstract String getName();
 
@@ -114,17 +146,79 @@ public abstract class FlexoExternalMain {
 
 	}
 
-	private void initializeLoggingManager() {
+	public static FlexoLoggingManager initializeLoggingManager() {
 		try {
-			FlexoLoggingManager.initialize();
+			FlexoProperties properties = FlexoProperties.load();
+			return FlexoLoggingManager.initialize(properties.getMaxLogCount(), properties.getIsLoggingTrace(),
+					properties.getCustomLoggingFile(), properties.getDefaultLoggingLevel(), new LoggingManagerDelegate() {
+						@Override
+						public void setMaxLogCount(Integer maxLogCount) {
+							FlexoProperties.instance().setMaxLogCount(maxLogCount);
+						}
+
+						@Override
+						public void setKeepLogTrace(boolean logTrace) {
+							FlexoProperties.instance().setIsLoggingTrace(logTrace);
+						}
+
+						@Override
+						public void setDefaultLoggingLevel(Level lev) {
+							String fileName = "SEVERE";
+							if (lev == Level.SEVERE) {
+								fileName = "SEVERE";
+							}
+							if (lev == Level.WARNING) {
+								fileName = "WARNING";
+							}
+							if (lev == Level.INFO) {
+								fileName = "INFO";
+							}
+							if (lev == Level.FINE) {
+								fileName = "FINE";
+							}
+							if (lev == Level.FINER) {
+								fileName = "FINER";
+							}
+							if (lev == Level.FINEST) {
+								fileName = "FINEST";
+							}
+							reloadLoggingFile(new FileResource("Config/logging_" + fileName + ".properties").getAbsolutePath());
+							FlexoProperties.instance().setLoggingFileName(null);
+						}
+
+						@Override
+						public void setConfigurationFileName(String configurationFile) {
+							reloadLoggingFile(configurationFile);
+							FlexoProperties.instance().setLoggingFileName(configurationFile);
+						}
+					});
 		} catch (SecurityException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file")
 					+ "\nIt seems the file has read access protection.");
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file"));
 			e.printStackTrace();
+			return null;
 		}
+	}
+
+	private static boolean reloadLoggingFile(String filePath) {
+		logger.info("reloadLoggingFile with " + filePath);
+		System.setProperty("java.util.logging.config.file", filePath);
+		try {
+			LogManager.getLogManager().readConfiguration();
+		} catch (SecurityException e) {
+			logger.warning("The specified logging configuration file can't be read (not enough privileges).");
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			logger.warning("The specified logging configuration file cannot be read.");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action, File fileToOpen) {
@@ -142,19 +236,22 @@ public abstract class FlexoExternalMain {
 		if (action.getThrownException() != null) {
 			action.getThrownException().printStackTrace();
 		}
-		cleanUp();
-		if (getExitCode() == 0) {
-			System.exit(FLEXO_ACTION_FAILED);
-		} else {
-			System.exit(getExitCode());
-		}
+		setExitCodeCleanUpAndExit(getExitCode() == 0 ? FLEXO_ACTION_FAILED : getExitCode());
+	}
+
+	public FlexoResourceCenter getResourceCenter() {
+		return resourceCenter;
+	}
+
+	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
+		this.resourceCenter = resourceCenter;
 	}
 
 	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
 		handleActionFailed(action, null);
 	}
 
-	private void build(String[] args) {
+	void build(String[] args) {
 		try {
 			init(args);
 		} catch (MissingArgumentException e) {
@@ -167,15 +264,15 @@ public abstract class FlexoExternalMain {
 			}
 		}
 		try {
-			run();
-		} catch (FlexoRunException e) {
+			SwingUtilities.invokeAndWait(this);
+			// Don't perform any code after this
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cleanUp();
-		if (isDev) {
-			return;
-		}
-		System.exit(getExitCode());
 	}
 
 	public static void main(String[] args) {
@@ -219,7 +316,7 @@ public abstract class FlexoExternalMain {
 		}
 	}
 
-	public static <A extends FlexoExternalMain> A launch(Class<A> builderClass, String[] args) {
+	public static <A extends FlexoExternalMain> void launch(Class<A> builderClass, String[] args) {
 		// The next line is very important for performance purposes. External mains can always be run with the smallest priority because
 		// they are not immediate
 		final Thread currentThread = Thread.currentThread();
@@ -242,7 +339,6 @@ public abstract class FlexoExternalMain {
 			A main = builderClass.newInstance();
 			try {
 				main.build(args);
-				return main;
 			} catch (Exception e) {
 				mem = null;
 				e.printStackTrace();
@@ -279,7 +375,6 @@ public abstract class FlexoExternalMain {
 		} finally {
 			timeout.interrupt();
 		}
-		return null;
 	}
 
 	/**
@@ -343,7 +438,39 @@ public abstract class FlexoExternalMain {
 		return exitCode;
 	}
 
-	public void setExitCode(int exitCode) {
+	private void setExitCode(int exitCode) {
 		this.exitCode = exitCode;
+		this.done = true;
+	}
+
+	public boolean isDone() {
+		return done;
+	}
+
+	public synchronized void setExitCodeCleanUpAndExit(int exitCode) {
+		setExitCode(exitCode);
+		try {
+			cleanUp();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		if (isDev) {
+			if (notifyOnExit) {
+				synchronized (this) {
+					notifyAll();
+				}
+			}
+
+			return;
+		}
+		System.exit(getExitCode());
+	}
+
+	public boolean notifyOnExit() {
+		return notifyOnExit;
+	}
+
+	public void setNotifyOnExit(boolean notifyOnExit) {
+		this.notifyOnExit = notifyOnExit;
 	}
 }

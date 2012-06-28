@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.gen;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,16 +26,16 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.module.external.IModuleLoader;
-import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.SwingUtils;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -45,30 +44,7 @@ import org.openflexo.ws.client.PPMWebService.PPMWebService_PortType;
 
 public class FlexoProcessImageBuilder {
 
-	private static BufferedImage generateImage(FlexoProcess process) {
-		if (process == null) {
-			return null;
-		}
-		ExternalWKFModule wkfModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-				.getWKFModuleInstance() : null;
-		if (wkfModule == null) {
-			return null;
-		}
-		try {
-			JComponent c = wkfModule.createScreenshotForProcess(process);
-			c.setOpaque(true);
-			c.setBackground(Color.WHITE);
-			JFrame frame = new JFrame();
-			frame.setBackground(Color.WHITE);
-			frame.setUndecorated(true);
-			frame.getContentPane().add(c);
-			frame.pack();
-			BufferedImage bi = ImageUtils.createImageFromComponent(c);
-			return bi;
-		} finally {
-			wkfModule.finalizeScreenshotGeneration();
-		}
-	}
+	private static final Logger logger = Logger.getLogger(FlexoProcessImageBuilder.class.getPackage().getName());
 
 	private static void saveImageOfProcess(FlexoProcess process, File dest) {
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
@@ -78,11 +54,18 @@ public class FlexoProcessImageBuilder {
 		if (!moduleLoader.isWKFLoaded()) {
 			return;
 		}
-		ExternalWKFModule wkfModule = moduleLoader.getWKFModuleInstance();
+		ExternalWKFModule wkfModule = null;
+		try {
+			wkfModule = moduleLoader.getWKFModuleInstance(process.getProject());
+		} catch (ModuleLoadingException e) {
+			logger.warning("cannot load WKF module (and so can't create screenshot)." + e.getMessage());
+			e.printStackTrace();
+		}
+
 		if (wkfModule == null) {
 			return;
 		}
-		BufferedImage bi = generateImage(process);
+		BufferedImage bi = ScreenshotGenerator.getImage(process).image;
 		if (bi == null) {
 			return;
 		}
@@ -139,11 +122,20 @@ public class FlexoProcessImageBuilder {
 		}
 	}
 
-	public static void writeSnapshot(FlexoProcess process) {
+	public static void writeSnapshot(final FlexoProcess process) {
 		if (!process.getProject().isGenerateSnapshot()) {
 			return;
 		}
 		if (!process.isImported()) {
+			if (!SwingUtilities.isEventDispatchThread()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						writeSnapshot(process);
+					}
+				});
+				return;
+			}
 			File dest = getImageFile(process);
 			saveImageOfProcess(process, dest);
 		}

@@ -71,7 +71,7 @@ public abstract class ValidationIssue<R extends ValidationRule<R, V>, V extends 
 	}
 
 	public FlexoProject getProject() {
-		if ((_object != null) && (_object instanceof FlexoModelObject)) {
+		if (_object != null && _object instanceof FlexoModelObject) {
 			return ((FlexoModelObject) _object).getProject();
 		}
 		return null;
@@ -82,7 +82,7 @@ public abstract class ValidationIssue<R extends ValidationRule<R, V>, V extends 
 	}
 
 	public String getLocalizedMessage() {
-		if ((_localizedMessage == null) && (_message != null) && _isLocalized) {
+		if (_localizedMessage == null && _message != null && _isLocalized) {
 			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(_message, this);
 		}
 		return _localizedMessage;
@@ -159,6 +159,13 @@ public abstract class ValidationIssue<R extends ValidationRule<R, V>, V extends 
 			((FlexoObservable) _object).deleteObserver(this);
 		}
 		_validationReport.removeFromValidationIssues(this);
+		setChanged();
+		notifyObservers(new DataModification(DELETED_PROPERTY, this, null));
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return DELETED_PROPERTY;
 	}
 
 	public void setLocalized(boolean localized) {

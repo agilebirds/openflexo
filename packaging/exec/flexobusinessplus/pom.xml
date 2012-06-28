@@ -1,13 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<name>Flexo Business + Packaging</name>
-	<parent>
-		<groupId>org.openflexo.packaging</groupId>
-		<artifactId>exec</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
-	</parent>
-	<artifactId>flexobusinessplus</artifactId>
-	<build>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>Executable :: Flexo Business + Packaging</name>
+    <parent>
+        <groupId>org.openflexo.packaging</groupId>
+        <artifactId>exec</artifactId>
+        <version>1.4.5-SNAPSHOT</version>
+    </parent>
+    <artifactId>flexobusinessplus</artifactId>
+<!--     <packaging>pom</packaging> -->
+    <properties>
+        <userType>analyst_release</userType>
+    </properties>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -15,78 +23,23 @@
             </plugin>
         </plugins>
     </build>
-	<dependencies>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoworkfloweditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoscreeneditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodoceditormodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodatamodeleditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexovieweditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoworkfloweditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoscreeneditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodoceditormodule</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodatamodeleditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexovieweditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.openflexo.packaging</groupId>
+            <artifactId>flexobusiness</artifactId>
+            <scope>runtime</scope>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>flexodatamodeleditor</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>flexodatamodeleditor</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+    </dependencies>
 </project>

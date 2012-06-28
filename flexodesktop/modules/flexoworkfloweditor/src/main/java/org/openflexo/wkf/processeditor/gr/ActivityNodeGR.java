@@ -56,7 +56,7 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 				Dimension labelSize = getNormalizedLabelSize();
 				double vGap = getVerticalGap();
 				double absoluteRoleLabelCenterY = vGap * 2 + labelSize.height + getRoleFont().getSize() / 2 - 3;
-				g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), TextAlignment.CENTER);
+				g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
 				if (getImageIcon() != null) {
 					g.drawImage(getImageIcon().getImage(), new FGEPoint(0d, 0d));
 				}

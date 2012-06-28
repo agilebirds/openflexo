@@ -189,8 +189,8 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 						return false;
 					}
 				}
-				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
+				return !(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject)
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null;
 			} else if (targetObject instanceof WKFArtefact) {
 				return isVisible(((WKFArtefact) targetObject).getParentPetriGraph());
 			} else if (targetObject instanceof WKFGroup) {
@@ -346,8 +346,8 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 						return false;
 					}
 				}
-				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
+				return !(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject)
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null;
 			} else if (targetObject instanceof WKFArtefact) {
 				return isVisible(((WKFArtefact) targetObject).getParentPetriGraph());
 			} else if (targetObject instanceof OperatorNode) {
@@ -401,6 +401,14 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		process.getActivityPetriGraph().addObserver(this);
 
 		updateGraphicalObjectsHierarchy();
+	}
+
+	@Override
+	public void delete() {
+		getFlexoProcess().getWorkflow().deleteObserver(this);
+		getFlexoProcess().deleteObserver(this);
+		getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
+		super.delete();
 	}
 
 	private void addGroup(WKFGroup group, WKFObject container) {

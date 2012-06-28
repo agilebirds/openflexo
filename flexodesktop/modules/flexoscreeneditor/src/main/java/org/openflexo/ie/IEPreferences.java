@@ -45,8 +45,10 @@ public final class IEPreferences extends ModulePreferences {
 		preferences(IE_PREFERENCES);
 	}
 
-	public static void reset() {
-		_controller = null;
+	public static void reset(IEController controller) {
+		if (_controller == controller) {
+			_controller = null;
+		}
 	}
 
 	public IEPreferences() {

@@ -25,6 +25,8 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -129,6 +131,20 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		super(frameOwner = FlexoFrame.getOwner(frameOwner));
 		setUndecorated(true);
 		initOwner = frameOwner;
+		if (initOwner != null) {
+			initOwner.addComponentListener(new ComponentAdapter() {
+
+				@Override
+				public void componentMoved(ComponentEvent e) {
+					center();
+				}
+
+				@Override
+				public void componentResized(ComponentEvent e) {
+					center();
+				}
+			});
+		}
 		// logger.info("Build progress max="+steps);
 		setFocusable(false);
 		mainProgress = 0;
@@ -186,13 +202,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		mainPane.setPreferredSize(new Dimension(600, 300));
 		getContentPane().add(mainPane);
 		setSize(600, 300);
-		Dimension dim = null;
-		if (getActiveModuleFrame() == null || !getActiveModuleFrame().isVisible()) {
-			dim = Toolkit.getDefaultToolkit().getScreenSize();
-			setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-		} else {
-			centerOnFrame(getActiveModuleFrame());
-		}
+		center();
 		pack();
 		setVisible(true);
 		toFront();
@@ -207,7 +217,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	}
 
 	private void paintImmediately() {
-		if (ToolBox.getPLATFORM() != ToolBox.WINDOWS) {
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			paintImmediately((JComponent) getContentPane());
 			// paintImmediately(flexoLogo);
 			paintImmediately(label);
@@ -241,6 +251,16 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	@Override
 	public void hideWindow() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					hideWindow();
+				}
+			});
+			return;
+		}
 		setVisible(false);
 		dispose();
 		if (initOwner != null) {
@@ -258,7 +278,17 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	}
 
 	@Override
-	public void setProgress(String stepName) {
+	public void setProgress(final String stepName) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					setProgress(stepName);
+				}
+			});
+			return;
+		}
 		// logger.info("Progress "+mainProgress+"/"+mainProgressBar.getMaximum());
 		if (!isVisible()) {
 			setVisible(true);
@@ -272,17 +302,25 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		isSecondaryProgressIndeterminate = true;
 		secondaryProgressBar.setIndeterminate(true);
 		secondaryProgressBarLabel.setText("");
-		// paintImmediately(flexoLogo);
 		paintImmediately(label);
 		paintImmediately(mainProgressBarLabel);
 		paintImmediately(mainProgressBar);
 		paintImmediately(secondaryProgressBarLabel);
 		paintImmediately(secondaryProgressBar);
-		// toFront();
 	}
 
 	@Override
-	public void resetSecondaryProgress(int steps) {
+	public void resetSecondaryProgress(final int steps) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					resetSecondaryProgress(steps);
+				}
+			});
+			return;
+		}
 		isSecondaryProgressIndeterminate = false;
 		secondaryProgressBar.setIndeterminate(false);
 		secondaryProgressBar.setMinimum(0);
@@ -295,7 +333,17 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	}
 
 	@Override
-	public void setSecondaryProgress(String stepName) {
+	public void setSecondaryProgress(final String stepName) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					setSecondaryProgress(stepName);
+				}
+			});
+			return;
+		}
 		secondaryProgress++;
 		secondaryProgressBar.setValue(secondaryProgress);
 		secondaryProgressBarLabel.setText(stepName);
@@ -330,37 +378,11 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	protected void paintImmediately(final JComponent component) {
 		if (!SwingUtilities.isEventDispatchThread()) {
-			/*Thread t = new Thread() {
-
-				public void run() {
-					try {*/
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					paintImmediately(component);
-				}
-			});
-			/*} catch (InterruptedException e) {
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						e.printStackTrace();
-					}
-				};
-			};
-			t.start();*/
-			/*try {
-				t.join(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}*/
+			repaint();
 			return;
 		}
 		try {
-			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-				/*
-				 * if ((Frame.getFrames().length < 2 || !backgroundIsPainted) && component != getContentPane()) {
-				 * mainPane.paintImmediately(mainPane.getBounds()); backgroundIsPainted = true; } else { }
-				 */
+			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 				mainPane.paintImmediately(mainPane.getBounds());
 			} else {
 				Rectangle r = component.getBounds();
@@ -376,12 +398,14 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	/**
 	 * @param flexoFrame
 	 */
-	public void centerOnFrame(FlexoFrame frame) {
-		if (frame == null) {
-			return;
+	public void center() {
+		Dimension dim;
+		if (initOwner != null && initOwner.isVisible()) {
+			dim = new Dimension(initOwner.getLocationOnScreen().x + initOwner.getWidth() / 2, initOwner.getLocationOnScreen().y
+					+ initOwner.getHeight() / 2);
+		} else {
+			dim = Toolkit.getDefaultToolkit().getScreenSize();
 		}
-		Dimension dim = new Dimension(frame.getLocationOnScreen().x + frame.getWidth() / 2, frame.getLocationOnScreen().y
-				+ frame.getHeight() / 2);
 		setLocation(dim.width - getSize().width / 2, dim.height - getSize().height / 2);
 	}
 }

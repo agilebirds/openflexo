@@ -83,6 +83,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
 import org.openflexo.module.InteractiveFlexoResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
@@ -103,6 +104,16 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	public final FlexoPerspective<FlexoModelObject> CODE_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
 
 	public final FlexoPerspective<FlexoModelObject> VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
+
+	@Override
+	public boolean useNewInspectorScheme() {
+		return false;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return true;
+	}
 
 	// ==========================================================================
 	// ============================= Instance variables
@@ -131,7 +142,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	public DGController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
 		super(projectEditor, module);
 		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
-		ModuleLoader.getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+		ProjectLoader.instance().getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		createFooter();
 		addToPerspectives(CODE_GENERATOR_PERSPECTIVE);
 		addToPerspectives(VERSIONNING_PERSPECTIVE);
@@ -149,6 +160,10 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		}
 
 		_generatorPanels = new Hashtable();
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	@Override
@@ -291,7 +306,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			} else {
 				refreshProgressWindow(((GenerationProgressNotification) dataModification).getProgressMessage());
 			}
-		} else if ((observable instanceof DGRepository) && (dataModification instanceof ObjectDeleted)) {
+		} else if (observable instanceof DGRepository && dataModification instanceof ObjectDeleted) {
 			observedRepositories.remove(observable);
 			observable.deleteObserver(this);
 		}
@@ -334,7 +349,9 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		getDGSelectionManager().addObserver(getSharedInspectorController());
+		if (useOldInspectorScheme()) {
+			getDGSelectionManager().addObserver(getSharedInspectorController());
+		}
 	}
 
 	// =========================================================
@@ -459,14 +476,14 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			statusCountPanel.add(conflictsLabel);
 			statusCountPanel.add(new JLabel(UtilsIconLibrary.CONFLICT_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			needsMemoryGenerationLabel = new JLabel("1");
 			needsMemoryGenerationLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(needsMemoryGenerationLabel);
 			statusCountPanel.add(new JLabel(GeneratorIconLibrary.GENERATE_CODE_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			errorsLabel = new JLabel("0");
 			errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
@@ -475,14 +492,14 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			add(statusCountPanel);
 
 			editorInfoPanel = new JPanel(new FlowLayout());
-			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
 			cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
 			cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
 			editorInfoPanel.add(cursorPositionLabel);
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			editorStatusLabel = new JLabel("");
 			editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);
@@ -561,7 +578,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		public void focusGained(FocusEvent e) {
 			if (e.getComponent() instanceof JEditTextArea) {
 				((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
-				_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
+				_activeGenericCodeDisplayer = (JEditTextArea) e.getComponent();
 				refresh();
 			}
 		}
@@ -591,8 +608,8 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 				editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
 			} else {
 				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
-				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
-						: FlexoLocalization.localizedForKey("read_only")));
+				editorStatusLabel.setText(_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+						: FlexoLocalization.localizedForKey("read_only"));
 			}
 		}
 
@@ -617,7 +634,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 		@Override
 		public void handleGeneratedResourceModified(FlexoGeneratedResource aGeneratedResource) {
-			if ((aGeneratedResource instanceof CGRepositoryFileResource) && !(aGeneratedResource instanceof FlexoCopiedResource)) {
+			if (aGeneratedResource instanceof CGRepositoryFileResource && !(aGeneratedResource instanceof FlexoCopiedResource)) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Resource " + aGeneratedResource + " has been modified on the disk.");
 				}

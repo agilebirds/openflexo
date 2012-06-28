@@ -23,6 +23,8 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.naming.InvalidNameException;
+
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -84,7 +86,7 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 			throw new InvalidParameterException("folder is undefined");
 		}
 		if (getNewShapeName() == null && !isNameSetToNull()) {
-			throw new InvalidParameterException("shema name is undefined");
+			throw new InvalidParameterException("shape name is undefined");
 		}
 
 		_newShape = new ViewShape(getParent().getShema());
@@ -92,7 +94,12 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 			_newShape.setGraphicalRepresentation(getGraphicalRepresentation());
 		}
 
-		_newShape.setName(getNewShapeName());
+		try {
+			_newShape.setName(getNewShapeName());
+		} catch (InvalidNameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		getParent().addToChilds(_newShape);
 
 		logger.info("Added shape " + _newShape + " under " + getParent());

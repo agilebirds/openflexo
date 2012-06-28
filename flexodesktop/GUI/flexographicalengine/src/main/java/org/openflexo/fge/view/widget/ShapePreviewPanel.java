@@ -114,6 +114,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		shapeGR.setIsFocusable(false);
 		shapeGR.setIsReadOnly(true);
 		shapeGR.setBorder(new ShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
+		shapeGR.setValidated(true);
 
 		controller = new DrawingController<Drawing<?>>(drawing);
 		add(controller.getDrawingView());

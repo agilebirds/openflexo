@@ -19,18 +19,12 @@
  */
 package org.openflexo.view.controller;
 
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
-import org.openflexo.GeneralPreferences;
 import org.openflexo.ch.DefaultInspectorHelpDelegate;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.Inspectors;
@@ -47,16 +41,14 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorDelegate;
 import org.openflexo.inspector.InspectorWindow;
 import org.openflexo.module.Module;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.utils.WindowBoundsSaver;
 
 public class FlexoSharedInspectorController extends FlexoInspectorController {
 
 	private final Logger logger = Logger.getLogger(FlexoSharedInspectorController.class.getPackage().getName());
 
 	protected InspectorWindow _inspectorWindow;
-
-	private boolean isBoundsSaverEnabled = true;
 
 	protected FlexoSharedInspectorController(FlexoController controller) {
 		this(controller.new FlexoControllerInspectorDelegate(), new DefaultInspectorHelpDelegate(DocResourceManager.instance()), controller
@@ -68,101 +60,7 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 	private FlexoSharedInspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate, JFrame frame) {
 		super(inspectorDelegate, helpDelegate);
 		_inspectorWindow = createInspectorWindow(frame);
-		Rectangle bounds = GeneralPreferences.getBoundForFrameWithID("Inspector");
-		if (bounds != null) {
-			// In case we remove a screen (if you go from 3 to 2 screen, go to hell, that's all you deserve ;-))
-			if (GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length == 1) {
-				Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-				if (screen.width <= bounds.x) {
-					bounds.x = 0;
-				} else if (screen.height <= bounds.y) {
-					bounds.y = 0;
-				}
-			}
-			_inspectorWindow.setBounds(bounds);
-		}
-		_inspectorWindow.addComponentListener(new ComponentAdapter() {
-			/**
-			 * Overrides componentResized
-			 * 
-			 * @see java.awt.event.ComponentAdapter#componentResized(java.awt.event.ComponentEvent)
-			 */
-			@Override
-			public void componentResized(ComponentEvent e) {
-				if (isBoundsSaverEnabled()) {
-					saveBoundsInPreferenceWhenPossible();
-				}
-			}
-
-			/**
-			 * Overrides componentMoved
-			 * 
-			 * @see java.awt.event.ComponentAdapter#componentMoved(java.awt.event.ComponentEvent)
-			 */
-			@Override
-			public void componentMoved(ComponentEvent e) {
-				if (isBoundsSaverEnabled()) {
-					saveBoundsInPreferenceWhenPossible();
-				}
-			}
-		});
-	}
-
-	public boolean isBoundsSaverEnabled() {
-		return isBoundsSaverEnabled;
-	}
-
-	public void setBoundsSaverEnabled(boolean isBoundsSaverEnable) {
-		this.isBoundsSaverEnabled = isBoundsSaverEnable;
-	}
-
-	private Thread boundsSaver;
-
-	protected synchronized void saveBoundsInPreferenceWhenPossible() {
-		if (!_inspectorWindow.isVisible()) {
-			return;
-		}
-		if (boundsSaver != null) {
-			boundsSaver.interrupt();// Resets thread sleep
-			return;
-		}
-
-		boundsSaver = new Thread(new Runnable() {
-			/**
-			 * Overrides run
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				boolean go = true;
-				while (go) {
-					try {
-						go = false;
-						Thread.sleep(800);
-					} catch (InterruptedException e) {
-						go = true;// interruption is used to reset sleep.
-					}
-				}
-				saveBoundsInPreference();
-			}
-		});
-		boundsSaver.start();
-	}
-
-	protected void saveBoundsInPreference() {
-		try {
-			if (_inspectorWindow.getBounds().x + _inspectorWindow.getBounds().width < 0) {
-				return;
-			}
-			if (_inspectorWindow.getBounds().y + _inspectorWindow.getHeight() < 0) {
-				return;
-			}
-			GeneralPreferences.setBoundForFrameWithID("Inspector", _inspectorWindow.getBounds());
-			FlexoPreferences.savePreferences(true);
-		} finally {
-			boundsSaver = null;
-		}
+		new WindowBoundsSaver(_inspectorWindow, "Inspector", new Rectangle(800, 400, 400, 400));
 	}
 
 	public InspectorWindow getInspectorWindow() {

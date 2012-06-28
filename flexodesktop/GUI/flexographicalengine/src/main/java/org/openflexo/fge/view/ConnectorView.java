@@ -30,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -54,7 +55,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 	private ConnectorGraphicalRepresentation<O> graphicalRepresentation;
 	private ConnectorViewMouseListener mouseListener;
-	private DrawingController _controller;
+	private DrawingController<?> _controller;
 
 	private LabelView<O> _labelView;
 
@@ -91,16 +92,17 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public void delete() {
+	public synchronized void delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete ConnectorView for " + getGraphicalRepresentation());
 		}
 		if (getParentView() != null) {
-			FGELayeredView parentView = getParentView();
+			FGELayeredView<?> parentView = getParentView();
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
 			parentView.revalidate();
 			if (getPaintManager() != null) {
+				getPaintManager().invalidate(getGraphicalRepresentation());
 				getPaintManager().repaint(parentView);
 			}
 		}
@@ -130,16 +132,16 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public DrawingView getDrawingView() {
+	public DrawingView<?> getDrawingView() {
 		return getController().getDrawingView();
 	}
 
 	@Override
-	public FGELayeredView getParent() {
-		return (FGELayeredView) super.getParent();
+	public FGELayeredView<?> getParent() {
+		return (FGELayeredView<?>) super.getParent();
 	}
 
-	public FGELayeredView getParentView() {
+	public FGELayeredView<?> getParentView() {
 		return getParent();
 	}
 
@@ -157,6 +159,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 		return getController().getScale();
 	}
 
+	@Override
 	public void rescale() {
 		relocateAndResizeView();
 	}
@@ -250,6 +253,9 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 	@Override
 	public void paint(Graphics g) {
+		if (isDeleted()) {
+			return;
+		}
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (getDrawingView().isBuffering()) {
 				// Buffering painting
@@ -308,102 +314,125 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public void update(Observable o, Object aNotification) {
+	public void update(final Observable o, final Object aNotification) {
 		if (isDeleted) {
 			logger.warning("Received notifications for deleted view: observable=" + o);
 			return;
 		}
 
 		// System.out.println("ConnectorView, received: "+aNotification);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
 
-		if (aNotification instanceof FGENotification) {
-			FGENotification notification = (FGENotification) aNotification;
-			if (notification instanceof ConnectorModified) {
-				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-					getPaintManager().invalidate(getGraphicalRepresentation());
+				@Override
+				public void run() {
+					update(o, aNotification);
 				}
-				relocateAndResizeView();
-				revalidate();
-				getPaintManager().repaint(this);
-			} else if (notification instanceof GraphicalRepresentationDeleted) {
-				GraphicalRepresentation deletedGR = ((GraphicalRepresentationDeleted) notification).getDeletedGraphicalRepresentation();
-				// If was not removed, try to do it now
-				if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
-						&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
-					getGraphicalRepresentation().getContainerGraphicalRepresentation().notifyDrawableRemoved(deletedGR);
-				}
-				if (getGraphicalRepresentation() != null && getController().getFocusedObjects().contains(getGraphicalRepresentation())) {
-					getController().removeFromFocusedObjects(getGraphicalRepresentation());
-				}
-				if (getGraphicalRepresentation() != null && getController().getSelectedObjects().contains(getGraphicalRepresentation())) {
-					getController().removeFromSelectedObjects(getGraphicalRepresentation());
-				}
-				delete();
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
-				updateLayer();
-				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-					getPaintManager().invalidate(getGraphicalRepresentation());
-				}
-				getPaintManager().repaint(this);
-				/*if (getParentView() != null) {
-					getParentView().revalidate();
+			});
+		} else {
+			if (aNotification instanceof FGENotification) {
+				FGENotification notification = (FGENotification) aNotification;
+				if (notification instanceof ConnectorModified) {
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+					relocateAndResizeView();
+					revalidate();
 					getPaintManager().repaint(this);
-				}*/
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
-				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
-				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
-				updateLabelView();
-			} else if (notification.getParameter() == ConnectorGraphicalRepresentation.Parameters.applyForegroundToSymbols) {
-				getPaintManager().repaint(this);
-			} else if (notification instanceof ObjectWillMove) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
+				} else if (notification instanceof GraphicalRepresentationDeleted) {
+					GraphicalRepresentation<?> deletedGR = ((GraphicalRepresentationDeleted) notification)
+							.getDeletedGraphicalRepresentation();
+					// If was not removed, try to do it now
+					if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
+							&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
+						getGraphicalRepresentation().getContainerGraphicalRepresentation().notifyDrawableRemoved(deletedGR);
+					}
+					if (getGraphicalRepresentation() != null && getController().getFocusedObjects().contains(getGraphicalRepresentation())) {
+						getController().removeFromFocusedObjects(getGraphicalRepresentation());
+					}
+					if (getGraphicalRepresentation() != null && getController().getSelectedObjects().contains(getGraphicalRepresentation())) {
+						getController().removeFromSelectedObjects(getGraphicalRepresentation());
+					}
+					delete();
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
+					updateLayer();
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+					getPaintManager().repaint(this);
+					/*if (getParentView() != null) {
+						getParentView().revalidate();
+						getPaintManager().repaint(this);
+					}*/
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
 					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
-				}
-			} else if (notification instanceof ObjectMove) {
-				relocateView();
-				if (getParentView() != null) {
-					// getParentView().revalidate();
 					getPaintManager().repaint(this);
-				}
-			} else if (notification instanceof ObjectHasMoved) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
-					getPaintManager().repaint(getParentView());
-				}
-			} else if (notification instanceof ObjectWillResize) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
+					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
 					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
-				}
-			} else if (notification instanceof ObjectResized) {
-				relocateView();
-				if (getParentView() != null) {
-					// getParentView().revalidate();
 					getPaintManager().repaint(this);
-				}
-			} else if (notification instanceof ObjectHasResized) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-					getPaintManager().invalidate(getGraphicalRepresentation());
-					getPaintManager().repaint(getParentView());
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
+					updateLabelView();
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
+					updateVisibility();
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+							getPaintManager().invalidate(getGraphicalRepresentation());
+						}
+					}
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == ConnectorGraphicalRepresentation.Parameters.applyForegroundToSymbols) {
+					getPaintManager().repaint(this);
+				} else if (notification instanceof ObjectWillMove) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+				} else if (notification instanceof ObjectMove) {
+					relocateView();
+					if (getParentView() != null) {
+						// getParentView().revalidate();
+						getPaintManager().repaint(this);
+					}
+				} else if (notification instanceof ObjectHasMoved) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());
+					}
+				} else if (notification instanceof ObjectWillResize) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+				} else if (notification instanceof ObjectResized) {
+					relocateView();
+					if (getParentView() != null) {
+						// getParentView().revalidate();
+						getPaintManager().repaint(this);
+					}
+				} else if (notification instanceof ObjectHasResized) {
+					if (getPaintManager().isPaintingCacheEnabled()) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().repaint(getParentView());
+					}
+				} else {
+					// revalidate();
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+					getPaintManager().repaint(this);
 				}
 			} else {
-				// revalidate();
-				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-					getPaintManager().invalidate(getGraphicalRepresentation());
-				}
+				revalidate();
 				getPaintManager().repaint(this);
 			}
-		} else {
-			revalidate();
-			getPaintManager().repaint(this);
 		}
 	}
 
+	@Override
 	public LabelView<O> getLabelView() {
 		return _labelView;
 	}

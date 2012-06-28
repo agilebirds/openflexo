@@ -19,13 +19,15 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -42,6 +44,9 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.localization.FlexoLocalization;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
+
 /**
  * Please comment this class
  * 
@@ -55,10 +60,8 @@ public class JarLoader implements ImportedResourceData {
 	JarFile jarFile;
 
 	private Manifest manifest;
-	Hashtable<String, JarEntry> jarEntriesForClassName = new Hashtable<String, JarEntry>();
+	Set<String> classNames = new HashSet<String>();
 	private JarClassLoader classLoader;
-	private Hashtable<String, Class<?>> classes;
-	private ExternalRepository _jarRepository = null;
 	FlexoProject _project;
 	private FlexoJarResource _jarResource;
 
@@ -66,7 +69,7 @@ public class JarLoader implements ImportedResourceData {
 		if (_jarResource != null) {
 			return _jarResource.getJarRepository();
 		}
-		return _jarRepository;
+		return null;
 	}
 
 	public JarLoader(File aJarFile, FlexoJarResource jarResource, FlexoProject project) {
@@ -88,14 +91,9 @@ public class JarLoader implements ImportedResourceData {
 	private JarLoader(File aJarFile, ExternalRepository jarRepository, FlexoJarResource jarResource, FlexoProject project,
 			FlexoProgress progress) {
 		super();
-		_jarRepository = jarRepository;
 		_jarResource = jarResource;
-		classLoader = new JarClassLoader();
-		if (getJarRepository() != null) {
-			getJarRepository().getDMModel().getClassLibrary().addClassLoader(classLoader);
-		}
-		classes = new Hashtable<String, Class<?>>();
 		_project = project;
+		classLoader = _project.getJarClassLoader();
 		try {
 			jarFile = new JarFile(aJarFile);
 			if (logger.isLoggable(Level.INFO)) {
@@ -110,12 +108,35 @@ public class JarLoader implements ImportedResourceData {
 		}
 	}
 
-	public Hashtable<String, Class<?>> getContainedClasses() {
-		return classes;
+	public void delete() {
+		if (classLoader != null) {
+			// Actually I don't think this is needed as the deletion of the LoadableDMEntities should already do that
+			// But let's just be sure.
+			classLoader.unloadClasses(new ArrayList<String>(classNames));
+		}
+		classNames = null;
+		_jarResource = null;
+		classLoader = null;
+		jarFile = null;
+		manifest = null;
+		_project = null;
+	}
+
+	public boolean contains(String className) {
+		return getContainedClasses().containsKey(className);
+	}
+
+	public Map<String, Class<?>> getContainedClasses() {
+		return Maps.filterKeys(classLoader.getClassForClassName(), new Predicate<String>() {
+			@Override
+			public boolean apply(String input) {
+				return classNames.contains(input);
+			}
+		});
 	}
 
 	public Class<?> getClassForName(String aName) {
-		return classes.get(aName);
+		return getContainedClasses().get(aName);
 	}
 
 	private void loadJarFile(FlexoProgress progress) {
@@ -127,14 +148,14 @@ public class JarLoader implements ImportedResourceData {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_class_definitions"));
 			progress.resetSecondaryProgress(jarFile.size());
 		}
+		List<JarEntry> jarEntries = new ArrayList<JarEntry>();
 		for (Enumeration<JarEntry> en = jarFile.entries(); en.hasMoreElements();) {
 			JarEntry entry = en.nextElement();
 			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("loading_and_parsing") + " " + entry.getName());
 			}
 			if (isClassFile(entry.getName())) {
-				String className = parseClassName(entry.getName());
-				jarEntriesForClassName.put(className, entry);
+				jarEntries.add(entry);
 			} else {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Entry " + entry.getName());
@@ -142,12 +163,10 @@ public class JarLoader implements ImportedResourceData {
 			}
 		}
 		int i = 0;
-		for (Enumeration<JarEntry> en = jarEntriesForClassName.elements(); en.hasMoreElements();) {
-			JarEntry entry = en.nextElement();
-			// logger.info("Entry: "+entry.getName()+" / "+entry);
-			Class<?> loadedClass = classLoader.findClass(entry);
+		for (JarEntry entry : jarEntries) {
+			Class<?> loadedClass = classLoader.findClass(jarFile, entry);
 			if (loadedClass != null) {
-				classes.put(loadedClass.getName(), loadedClass);
+				classNames.add(loadedClass.getName());
 				i++;
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Loaded " + loadedClass.getName());
@@ -160,205 +179,8 @@ public class JarLoader implements ImportedResourceData {
 
 	}
 
-	public boolean contains(Class aClass) {
-		return classes.get(aClass.getName()) != null;
-	}
-
 	boolean isClassFile(String jarentryname) {
-		return jarentryname.endsWith(".class");
-	}
-
-	String parseClassName(String jarentryname) {
-		String classname;
-		if (jarentryname.indexOf("WebServerResources/Java/") == 0) {
-			jarentryname = jarentryname.substring("WebServerResources/Java/".length());
-		}
-		int index = jarentryname.indexOf("class");
-		if (index - 1 > 0) {
-			classname = jarentryname.substring(0, index - 1);
-		} else {
-			classname = jarentryname;
-		}
-		classname = classname.replace('/', '.');
-		return classname;
-	}
-
-	public class JarClassLoader extends ClassLoader {
-
-		private Hashtable<String, Class<?>> classForClassName = new Hashtable<String, Class<?>>();
-
-		JarClassLoader() {
-			super();
-			classForClassName = new Hashtable<String, Class<?>>();
-		}
-
-		public Class<?> findClass(JarEntry entry) {
-			String className = entry.getName();
-			if (isClassFile(className)) {
-				String parsedClassName = parseClassName(className);
-				return findClass(parsedClassName, entry);
-			}
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("This JarEntry does not match a class definition");
-			}
-			return null;
-		}
-
-		public Class<?> findClass(String className, JarEntry entry) {
-			className = parseClassName(className);
-			if (className != null && className.indexOf("WORPCProvider") > -1) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Skipping load of class " + className
-							+ " because it can lead to System.exit(1) if invoked within a WOApplication");
-				}
-				// We don't try to load this class because it contains a static block that tries to load an additional class which is not
-				// automatically on the classpath.
-				// If the load of that second class fails, then, if we are within a wo_application, the static block will perform
-				// System.exit(1) causing the application to stop
-				return null;
-			}
-			Class<?> tryToLookup = lookupClass(className);
-			if (tryToLookup != null) {
-				return tryToLookup;
-			} else {
-				try {
-					InputStream is = jarFile.getInputStream(entry);
-					BufferedInputStream bis = new BufferedInputStream(is);
-					byte[] content = new byte[(int) entry.getSize()];
-					bis.read(content, 0, (int) entry.getSize());
-					Class<?> returned = defineClass(className, content, 0, content.length);
-					classForClassName.put(className, returned);
-					return returned;
-				} catch (ClassFormatError err) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Error: " + err + " : class not loaded: " + className);
-					}
-				} catch (NoClassDefFoundError err) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Error: " + err + " : class not loaded: " + className);
-					}
-				} catch (IllegalAccessError err) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Error: " + err + " : class not loaded: " + className);
-					}
-				} catch (IOException err) {
-					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Exception raised: " + err.getClass().getName() + ". See console for details.");
-					}
-					err.printStackTrace();
-				} catch (LinkageError err) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Error: " + err + " : class not loaded: " + className);
-					}
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public Class<?> findClass(String className) {
-			return findClass(className, true);
-		}
-
-		public Class<?> findClass(String className, boolean searchInAllJarsInProject) {
-			className = parseClassName(className);
-			Class<?> tryToLookup = lookupClass(className);
-			if (tryToLookup != null) {
-				return tryToLookup;
-			} else {
-				if (classForClassName.get(className) != null) {
-					return classForClassName.get(className);
-				}
-				JarEntry foundJar = jarEntriesForClassName.get(className);
-				if (foundJar != null) {
-					return findClass(className, foundJar);
-				} else if (searchInAllJarsInProject) {
-					// Search in dependant jars
-					if (getJarResource() != null) {
-						for (FlexoResource res : getJarResource().getDependentResources()) {
-							if (res instanceof FlexoJarResource) {
-								JarLoader jarLoader = ((FlexoJarResource) res).getJarLoader();
-								Class tryThis = jarLoader.getClassForName(className);
-								if (tryThis != null) {
-									// logger.info("Found in "+jarLoader+" !!!");
-									return tryThis;
-								}
-							}
-						}
-					}
-					if (getJarRepository() != null && getJarRepository().getJarResource() != null) {
-						for (FlexoResource res : getJarRepository().getJarResource().getDependentResources()) {
-							if (res instanceof FlexoJarResource) {
-								JarLoader jarLoader = ((FlexoJarResource) res).getJarLoader();
-								Class tryThis = jarLoader.getClassForName(className);
-								if (tryThis != null) {
-									// logger.info("Found in "+jarLoader+" !!!");
-									return tryThis;
-								}
-							}
-						}
-					}
-
-					/*	logger.info("_project="+_project);
-					logger.info("_project.getFlexoDMResource()="+_project.getFlexoDMResource());
-					logger.info("_project.getDataModel()="+_project.getDataModel());*/
-
-					// Our last chance is now to search in all other known Jars in current project
-					// Normally we don't go there until dependancies are broken or a class really not resolvable
-					if (_project != null && _project.getFlexoDMResource() != null && _project.getFlexoDMResource().isLoaded()
-							&& _project.getDataModel() != null) {
-						for (ExternalRepository rep : _project.getDataModel().getExternalRepositories()) {
-							if (rep != getJarRepository()) {
-								// logger.info("Searching "+className+" in "+rep.getName());
-								if (rep.getJarLoader() != null) {
-									Class tryThis = rep.getJarLoader().getClassForName(className);
-									if (tryThis != null) {
-										// logger.info("Found in "+rep.getName()+" !!!");
-										// Found a dependancy between resources
-										if (getJarRepository() != null && getJarRepository().getJarResource() != null
-												&& rep.getJarResource() != null) {
-											getJarRepository().getJarResource().addToDependentResources(rep.getJarResource());
-										}
-										return tryThis;
-									}
-								}
-							}
-						}
-					}
-				}
-				/*if (logger.isLoggable(Level.WARNING))
-				    logger.warning("Could not find Class for " + className);*/
-				return null;
-			}
-		}
-
-		private Class<?> lookupClass(String className) {
-			// Put the class name in right format
-			className = parseClassName(className);
-
-			// Look in the application class loader
-			try {
-				return Class.forName(className);
-			} catch (ClassNotFoundException e) {
-			} catch (NoClassDefFoundError e) {
-			} catch (ExceptionInInitializerError e) {
-			} catch (LinkageError e) {
-			}
-
-			// Look in this class loader
-			if (classForClassName.get(className) != null) {
-				return classForClassName.get(className);
-			}
-
-			// Nowhere, sorry...
-			return null;
-		}
-
-		public ExternalRepository getJarRepository() {
-			return JarLoader.this.getJarRepository();
-		}
-
+		return jarentryname.endsWith(".class") && !jarentryname.startsWith("WebServerResources/");
 	}
 
 	public FlexoJarResource getJarResource() {
@@ -373,9 +195,6 @@ public class JarLoader implements ImportedResourceData {
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_jarResource = (FlexoJarResource) resource;
-		if (_jarResource != null) {
-			_jarRepository = _jarResource.getJarRepository();
-		}
 	}
 
 	@Override

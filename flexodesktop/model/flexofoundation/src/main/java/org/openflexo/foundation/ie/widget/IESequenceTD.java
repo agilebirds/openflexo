@@ -80,8 +80,6 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 	@Override
 	public void insertElementAt(ITableData td, int i) {
 		super.insertElementAt(td, i);
-		td.setParent(this);
-		setChanged();
 		if (td.getClass() == IETDWidget.class) {
 			notifyObservers(new TDInserted((IETDWidget) td));
 		}

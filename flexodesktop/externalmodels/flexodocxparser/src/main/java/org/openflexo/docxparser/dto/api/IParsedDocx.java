@@ -20,6 +20,7 @@
 package org.openflexo.docxparser.dto.api;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface IParsedDocx {
 	/**
@@ -56,4 +57,7 @@ public interface IParsedDocx {
 	public IParsedFlexoObject getParsedFlexoObject(String flexoId, String userId);
 
 	public Collection<IParsedFlexoObject> getAllParsedFlexoObjects();
+
+	public List<IParsedFlexoEPI> getAllParsedEPIs();
+
 }

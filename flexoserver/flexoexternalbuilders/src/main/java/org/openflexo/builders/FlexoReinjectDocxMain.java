@@ -1,11 +1,14 @@
 package org.openflexo.builders;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.dg.action.ReinjectDocx;
+import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -18,6 +21,8 @@ public class FlexoReinjectDocxMain extends FlexoExternalMainWithProject {
 
 	// Variables
 	private File docxFile = null;
+
+	private ReinjectDocx docxAction;
 
 	@Override
 	protected void init(String[] args) throws MissingArgumentException {
@@ -50,52 +55,62 @@ public class FlexoReinjectDocxMain extends FlexoExternalMainWithProject {
 	}
 
 	@Override
-	protected void run() {
+	protected void doRun() {
 		if (project != null) {
-			ReinjectDocx docxAction = ReinjectDocx.actionType.makeNewAction(editor.getProject().getGeneratedDoc(), null, editor);
+			docxAction = ReinjectDocx.actionType.makeNewAction(editor.getProject().getGeneratedDoc(), null, editor);
 			docxAction.setDocxToReinject(docxFile);
-			docxAction.doAction();
-			if (!docxAction.hasActionExecutionSucceeded()) {
-				handleActionFailed(docxAction);
-			}
-			try {
-				editor.getProject().save();
+			List<FlexoAction<?, ?, ?>> actions = new ArrayList<FlexoAction<?, ?, ?>>();
+			actions.add(docxAction);
+			editor.chainActions(actions, new Runnable() {
 
-				// Ok, post feedback
-				StringBuilder sb = new StringBuilder();
-				sb.append(FlexoLocalization.localizedForKey("reinject_docx_succeed"));
-				sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_description") + ": "
-						+ docxAction.getNumberOfDescriptionUpdated());
-				sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_name") + ": " + docxAction.getNumberOfNameUpdated());
-				sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_tocentry_title") + ": "
-						+ docxAction.getNumberOfTocEntryTitleUpdated());
-				sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_tocentry_content") + ": "
-						+ docxAction.getNumberOfTocEntryContentUpdated());
-				sb.append("\n" + FlexoLocalization.localizedForKey("number_of_not_found_object") + ": "
-						+ docxAction.getNumberOfObjectNotFound());
-				if (docxAction.hasError()) {
-					sb.append("\n" + FlexoLocalization.localizedForKey("reinject_docx_warnings") + ":\n" + docxAction.getErrorReport());
-				}
+				@Override
+				public void run() {
+					try {
+						editor.getProject().save();
 
-				reportMessage(sb.toString());
-			} catch (SaveResourceException e) {
-				e.printStackTrace();
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.log(Level.SEVERE, "Could not save project after reinject", e);
+						// Ok, post feedback
+						StringBuilder sb = new StringBuilder();
+						sb.append(FlexoLocalization.localizedForKey("reinject_docx_succeed"));
+						sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_description") + ": "
+								+ docxAction.getNumberOfDescriptionUpdated());
+						sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_name") + ": "
+								+ docxAction.getNumberOfNameUpdated());
+						sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_tocentry_title") + ": "
+								+ docxAction.getNumberOfTocEntryTitleUpdated());
+						sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_tocentry_content") + ": "
+								+ docxAction.getNumberOfTocEntryContentUpdated());
+						sb.append("\n" + FlexoLocalization.localizedForKey("number_of_not_found_object") + ": "
+								+ docxAction.getNumberOfObjectNotFound());
+						sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_edition_pattern") + ": "
+								+ docxAction.getNumberOfEPIUpdated());
+						if (docxAction.hasError()) {
+							sb.append("\n" + FlexoLocalization.localizedForKey("reinject_docx_warnings") + ":\n"
+									+ docxAction.getErrorReport());
+						}
+
+						reportMessage(sb.toString());
+						setExitCodeCleanUpAndExit(0);
+					} catch (SaveResourceException e) {
+						e.printStackTrace();
+						if (logger.isLoggable(Level.SEVERE)) {
+							logger.log(Level.SEVERE, "Could not save project after reinject", e);
+						}
+						setExitCodeCleanUpAndExit(FLEXO_ACTION_FAILED);
+					}
 				}
-				setExitCode(FLEXO_ACTION_FAILED);
-			}
+			});
+
 		} else {
-			setExitCode(PROJECT_NOT_FOUND);
+			setExitCodeCleanUpAndExit(PROJECT_NOT_FOUND);
 		}
+	}
+
+	public ReinjectDocx getDocxAction() {
+		return docxAction;
 	}
 
 	public static void main(String[] args) {
 		launch(FlexoReinjectDocxMain.class, args);
-	}
-
-	public static FlexoReinjectDocxMain mainTest(String[] args) {
-		return launch(FlexoReinjectDocxMain.class, args);
 	}
 
 	@Override

@@ -142,7 +142,7 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	public Role roleWithName(String aName) {
 		for (Enumeration e = getRoles().elements(); e.hasMoreElements();) {
 			Role temp = (Role) e.nextElement();
-			if ((temp.getName() != null) && (temp.getName().equals(aName))) {
+			if (temp.getName() != null && temp.getName().equals(aName)) {
 				return temp;
 			}
 		}
@@ -356,7 +356,7 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 			// Create a default system role
 			String defaultRoleName = FlexoLocalization.localizedForKey("no_role");
 			Role newRole = new Role(getWorkflow(), defaultRoleName);
-			newRole.setColor(new FlexoColor(Color.DARK_GRAY));
+			newRole.setColor(Color.DARK_GRAY);
 			newRole.setIsSystemRole(true);
 			defaultRole = newRole;
 		}
@@ -387,7 +387,7 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 		}
 	}
 
-	public FlexoColor getNewRoleColor() {
+	public Color getNewRoleColor() {
 		Vector<Color> v = new Vector<Color>();
 		for (Role role : getRoles()) {
 			if (role.getColor() != null) {

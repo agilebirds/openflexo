@@ -66,7 +66,6 @@ import org.openflexo.fps.view.FPSMainPane;
 import org.openflexo.fps.view.listener.FPSKeyEventListener;
 import org.openflexo.fps.view.menu.FPSMenuBar;
 import org.openflexo.icon.FPSIconLibrary;
-import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.jedit.JEditTextArea;
@@ -354,14 +353,14 @@ public class FPSController extends FlexoController implements SelectionManagingC
 			add(statusCountPanel);
 
 			editorInfoPanel = new JPanel(new FlowLayout());
-			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
 			cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
 			cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
 			editorInfoPanel.add(cursorPositionLabel);
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			editorStatusLabel = new JLabel("");
 			editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);

@@ -19,11 +19,9 @@
  */
 package org.openflexo.ie.view.widget;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -99,26 +97,6 @@ public class IEFileUploadWidgetView extends AbstractInnerTableWidgetView<IEFileU
 	// ===================================
 	// ==========================================================================
 
-	/**
-	 * Overrides getPreferredSize
-	 * 
-	 * @see javax.swing.JComponent#getPreferredSize()
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -126,12 +104,6 @@ public class IEFileUploadWidgetView extends AbstractInnerTableWidgetView<IEFileU
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				getParent().doLayout();
-				((JComponent) getParent()).repaint();
-			}
-		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
 		} else {

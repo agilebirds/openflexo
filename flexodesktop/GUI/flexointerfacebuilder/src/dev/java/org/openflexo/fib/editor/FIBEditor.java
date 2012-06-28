@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
@@ -44,6 +46,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -60,11 +63,10 @@ import org.openflexo.fib.editor.controller.FIBInspectorController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Layout;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.localization.LocalizedDelegate;
-import org.openflexo.localization.LocalizedDelegateImplementation;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.ComponentBoundSaver;
@@ -198,8 +200,6 @@ public class FIBEditor implements FIBGenericEditor {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditor.class.getPackage().getName());
 
-	public static LocalizedDelegate LOCALIZATION = new LocalizedDelegateImplementation(new FileResource("FIBEditorLocalized"));
-
 	public static File COMPONENT_LOCALIZATION_FIB = new FileResource("Fib/ComponentLocalization.fib");
 
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
@@ -227,9 +227,8 @@ public class FIBEditor implements FIBGenericEditor {
 
 		try {
 			ToolBox.setPlatform();
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
+			FlexoLocalization.initWith(FIBAbstractEditor.LOCALIZATION);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -429,7 +428,7 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public void testFIB() {
-		FIBView view = FIBController.makeView(editedFIB.fibComponent);
+		FIBView view = FIBController.makeView(editedFIB.fibComponent, FIBAbstractEditor.LOCALIZATION);
 
 		// Class testClass = null;
 		if (editedFIB.fibComponent.getDataClass() != null) {
@@ -456,11 +455,17 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public void localizeFIB() {
+
+		if (editorController == null) {
+			return;
+		}
+
 		FIBComponent componentLocalizationComponent = FIBLibrary.instance().retrieveFIBComponent(COMPONENT_LOCALIZATION_FIB);
 
-		FIBView view = FIBController.makeView(componentLocalizationComponent);
+		FIBView view = FIBController.makeView(componentLocalizationComponent, FIBAbstractEditor.LOCALIZATION);
 		view.getController().setDataObject(editorController.getController());
-		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(LOCALIZATION, "component_localization"), false);
+		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,
+				"component_localization"), false);
 		localizationInterface.getContentPane().add(view.getResultingJComponent());
 		localizationInterface.validate();
 		localizationInterface.pack();
@@ -686,12 +691,14 @@ public class FIBEditor implements FIBGenericEditor {
 					getInspector().setVisible(true);
 				}
 			});
+			inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? KeyEvent.CTRL_MASK
+					: KeyEvent.META_MASK));
 
 			logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "logs"));
 			logsItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					FlexoLoggingManager.showLoggingViewer();
+					FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), frame);
 				}
 			});
 
@@ -699,7 +706,7 @@ public class FIBEditor implements FIBGenericEditor {
 			localizedItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					FlexoLocalization.showLocalizedEditor();
+					FIBAbstractEditor.LOCALIZATION.showLocalizedEditor(frame);
 				}
 			});
 

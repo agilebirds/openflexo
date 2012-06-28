@@ -55,6 +55,12 @@ public class ERDiagramRepresentation extends DefaultDrawing<ERDiagram> implement
 	}
 
 	@Override
+	public void delete() {
+		getDiagram().deleteObserver(this);
+		super.delete();
+	}
+
+	@Override
 	protected void buildGraphicalObjectsHierarchy() {
 		for (DMEntity entity : getDiagram().getEntities()) {
 			addDrawable(entity, getDiagram());

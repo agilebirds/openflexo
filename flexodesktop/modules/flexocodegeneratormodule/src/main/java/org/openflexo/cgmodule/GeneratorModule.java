@@ -19,19 +19,13 @@
  */
 package org.openflexo.cgmodule;
 
-import java.util.Map;
 import java.util.logging.Logger;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalGeneratorModule;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -44,17 +38,6 @@ public class GeneratorModule extends FlexoModule implements ExternalGeneratorMod
 
 	private static final Logger logger = Logger.getLogger(GeneratorModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.CG };
-
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.CG_MODULE);
-	}
 
 	public GeneratorModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
@@ -77,24 +60,6 @@ public class GeneratorModule extends FlexoModule implements ExternalGeneratorMod
 
 	public GeneratorController getGeneratorController() {
 		return (GeneratorController) getFlexoController();
-	}
-
-	/**
-	 * SGU: what's that ?
-	 * 
-	 * @deprecated
-	 */
-	@Override
-	@Deprecated
-	public String generateCode(FlexoProject project, String templateName, Map replacement) {
-		logger.warning("deprecated ?");
-		/*try {
-		return Generator.generateCode(project, templateName, replacement);
-		} catch (TemplateReplacementException e) {
-		e.printStackTrace();
-		return null;
-		}*/
-		return "deprecated";
 	}
 
 	/**

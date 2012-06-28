@@ -40,6 +40,9 @@ public class TypeUtils {
 		if (aType == null) {
 			return null;
 		}
+		if (aType instanceof CustomType) {
+			return ((CustomType) aType).getBaseClass();
+		}
 		if (isResolved(aType)) {
 			if (aType instanceof Class) {
 				return (Class) aType;
@@ -239,10 +242,27 @@ public class TypeUtils {
 		return isTypeAssignableFrom(aType, anOtherType, true);
 	}
 
+	/**
+	 * Determines if the class or interface represented by supplied <code>aType</code> object is either the same as, or is a superclass or
+	 * superinterface of, the class or interface represented by the specified <code>anOtherType</code> parameter. It returns
+	 * <code>true</code> if so; otherwise false<br>
+	 * This method also tried to resolve generics before to perform the assignability test
+	 * 
+	 * @param aType
+	 * @param anOtherType
+	 * @param permissive
+	 *            is a flag indicating if basic conversion between primitive types is allowed: for example, an int may be assign to a float
+	 *            value after required conversion.
+	 * @return
+	 */
 	public static boolean isTypeAssignableFrom(Type aType, Type anOtherType, boolean permissive) {
 		// Test if anOtherType instanceof aType
 
-		// logger.info("Called "+aType+" isAssignableFrom("+anOtherType+")");
+		/*if (aType instanceof CustomType || anOtherType instanceof CustomType) {
+			logger.info("Called " + aType + " isAssignableFrom(" + anOtherType + ")");
+			logger.info("En gros je me demande si " + anOtherType + " est bien une instance de " + aType + " anOtherType est un "
+					+ anOtherType.getClass().getSimpleName());
+		}*/
 
 		// If supplied type is null return false
 		if ((aType == null) || (anOtherType == null)) {
@@ -251,6 +271,15 @@ public class TypeUtils {
 
 		// Everything could be assigned to Object
 		if (isObject(aType)) {
+			return true;
+		}
+
+		// Special case for Custom types
+		if (aType instanceof CustomType) {
+			return ((CustomType) aType).isTypeAssignableFrom(anOtherType, permissive);
+		}
+
+		if (anOtherType instanceof CustomType && isTypeAssignableFrom(aType, ((CustomType) anOtherType).getBaseClass())) {
 			return true;
 		}
 
@@ -407,6 +436,9 @@ public class TypeUtils {
 		if (aType == null) {
 			return "null";
 		}
+		if (aType instanceof CustomType) {
+			return ((CustomType) aType).simpleRepresentation();
+		}
 		if (aType instanceof Class) {
 			return ((Class) aType).getSimpleName();
 		} else if (aType instanceof ParameterizedType) {
@@ -428,6 +460,9 @@ public class TypeUtils {
 		if (aType == null) {
 			return null;
 		}
+		if (aType instanceof CustomType) {
+			return ((CustomType) aType).fullQualifiedRepresentation();
+		}
 		if (aType instanceof Class) {
 			return ((Class) aType).getName();
 		} else if (aType instanceof ParameterizedType) {
@@ -446,7 +481,8 @@ public class TypeUtils {
 	}
 
 	public static boolean isResolved(Type type) {
-		return (type instanceof Class) || (type instanceof GenericArrayType) || (type instanceof ParameterizedType);
+		return (type instanceof Class) || (type instanceof GenericArrayType) || (type instanceof ParameterizedType)
+				|| (type instanceof CustomType);
 	}
 
 	/**
@@ -457,6 +493,9 @@ public class TypeUtils {
 	 * @return a flag indicating whether this type is resolved or not
 	 */
 	public static boolean isGeneric(Type type) {
+		if (type instanceof CustomType) {
+			return false;
+		}
 		if (type instanceof Class) {
 			return false;
 		}
@@ -593,6 +632,9 @@ public class TypeUtils {
 			}
 		} else if (type instanceof Class) {
 			return ((Class) type).getGenericSuperclass();
+		}
+		if (type instanceof CustomType) {
+			return getSuperType(((CustomType) type).getBaseClass());
 		}
 
 		return null;

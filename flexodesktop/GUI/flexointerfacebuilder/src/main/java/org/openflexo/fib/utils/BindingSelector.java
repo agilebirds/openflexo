@@ -27,8 +27,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +48,7 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingDefinitionTypeChanged;
 import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingExpression.BindingValueConstant;
 import org.openflexo.antar.binding.BindingExpression.BindingValueFunction;
@@ -51,6 +56,7 @@ import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
 import org.openflexo.antar.binding.BindingExpressionFactory;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.antar.binding.BindingVariable;
@@ -70,9 +76,11 @@ import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.swing.SwingUtils;
 import org.openflexo.swing.TextFieldCustomPopup;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -81,7 +89,8 @@ import org.openflexo.toolbox.StringUtils;
  * @author sguerin
  * 
  */
-public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> implements FIBCustomComponent<AbstractBinding, BindingSelector> {
+public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> implements FIBCustomComponent<AbstractBinding, BindingSelector>,
+		Observer, PropertyChangeListener {
 	static final Logger logger = Logger.getLogger(BindingSelector.class.getPackage().getName());
 
 	private AbstractBinding _revertBindingValue;
@@ -115,7 +124,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 																				NEW_ENTRY;*/
 
 		boolean useCommonPanel() {
-			return (this != BINDING_EXPRESSION);
+			return this != BINDING_EXPRESSION;
 		}
 	}
 
@@ -146,9 +155,9 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("focus lost for " + (opposite != null ? SwingUtils.getComponentPath(opposite) : "null"));
 				}
-				if ((opposite != null) && !(opposite instanceof JRootPane)
-						&& !(SwingUtils.isComponentContainedInContainer(opposite, getParent()))
-						&& !(SwingUtils.isComponentContainedInContainer(opposite, _selectorPanel))) {
+				if (opposite != null && !(opposite instanceof JRootPane)
+						&& !SwingUtils.isComponentContainedInContainer(opposite, getParent())
+						&& !SwingUtils.isComponentContainedInContainer(opposite, _selectorPanel)) {
 					// Little hook used to automatically apply a valid value which has generally been edited
 					// By typing text in text field
 					if (getEditedObject() != null && getEditedObject().isBindingValid()) {
@@ -160,12 +169,18 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		shortcutsKeyAdapter = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				boolean isSignificativeKey = (e.getKeyCode() >= KeyEvent.VK_A && e.getKeyCode() <= KeyEvent.VK_Z)
-						|| (e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9);
+
+				// if command-key is pressed, do not open popup
+				if (e.isAltDown() || e.isAltGraphDown() || e.isControlDown() || e.isMetaDown()) {
+					return;
+				}
+
+				boolean isSignificativeKey = e.getKeyCode() >= KeyEvent.VK_A && e.getKeyCode() <= KeyEvent.VK_Z
+						|| e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9;
 
 				if (!popupIsShown() && getTextField().getText() != null
 						&& !isAcceptableAsBeginningOfStaticBindingValue(getTextField().getText()) && isSignificativeKey) {
-					boolean requestFocus = (getTextField().hasFocus());
+					boolean requestFocus = getTextField().hasFocus();
 					openPopup();
 					if (requestFocus) {
 						SwingUtilities.invokeLater(new Runnable() {
@@ -175,6 +190,12 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 							}
 						});
 					}
+				}
+
+				// This code was added to allow direct typing without opening selector panel (sic !)
+				// TODO:provide better implementation !!!
+				if (_selectorPanel == null) {
+					createCustomPanel(getEditedObject());
 				}
 
 				if (_selectorPanel != null) {
@@ -358,6 +379,13 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				setBindable(object.getOwner());
 			}
 		}
+		// SGU: I suppress this code that was the cause for huge problems
+		// in BindingSelector, making it quite unusable
+		// I don't think this code was usefull, was it ?
+		/*else {
+			setBindingDefinition(null);
+			setBindable(null);
+			}*/
 	}
 
 	public void setEditedObject(AbstractBinding object, boolean updateBindingSelectionMode) {
@@ -407,8 +435,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			newEditionMode = EditionMode.BINDING_EXPRESSION;
 		}
 		if (returned instanceof BindingValue) {
-			if (((BindingValue) returned).isCompoundBinding()
-					|| (getBindingDefinition() != null && getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE)) {
+			if (((BindingValue) returned).isCompoundBinding() || getBindingDefinition() != null
+					&& getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
 				newEditionMode = EditionMode.COMPOUND_BINDING;
 			} else if (oldEditionMode != EditionMode.NORMAL_BINDING && oldEditionMode != EditionMode.COMPOUND_BINDING) {
 				newEditionMode = EditionMode.NORMAL_BINDING;
@@ -554,7 +582,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			logger.fine("ActivateCompoundBindingMode() getEditedObject()=" + getEditedObject() + " editionMode=" + editionMode
 					+ " popupIsShown()=" + popupIsShown() + " _selectorPanel=" + _selectorPanel);
 		}
-		if ((_selectorPanel != null) && (editionMode != EditionMode.COMPOUND_BINDING)) {
+		if (_selectorPanel != null && editionMode != EditionMode.COMPOUND_BINDING) {
 			editionMode = EditionMode.COMPOUND_BINDING;
 			boolean showAgain = false;
 			if (popupIsShown()) {
@@ -577,7 +605,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("activateNormalBindingMode()");
 		}
-		if ((_selectorPanel != null) && (editionMode != EditionMode.NORMAL_BINDING)) {
+		if (_selectorPanel != null && editionMode != EditionMode.NORMAL_BINDING) {
 			editionMode = EditionMode.NORMAL_BINDING;
 			boolean showAgain = false;
 			if (popupIsShown()) {
@@ -621,8 +649,23 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		unregisterListenerForBindable();
+		unregisterListenerForBindingDefinition();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
+		_selectorPanel = null;
+		_bindable = null;
+	}
+
+	@Override
 	protected void deleteCustomPanel() {
 		super.deleteCustomPanel();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
 		_selectorPanel = null;
 	}
 
@@ -664,8 +707,13 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 	public void refreshBindingModel() {
 		if (_bindable != null && _selectorPanel != null) {
-			// _selectorPanel.setBindingModel(_bindable.getBindingModel());
 			_selectorPanel.update();
+		}
+	}
+
+	public void refreshBindingDefinitionType() {
+		if (_selectorPanel != null) {
+			_selectorPanel.fireBindingDefinitionChanged();
 		}
 	}
 
@@ -680,6 +728,18 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
+		if (getBindingDefinition() != null && getBindingDefinition().getIsMandatory() && getEditedObject() == null) {
+			getLabel().setVisible(true);
+			getLabel().setIcon(UtilsIconLibrary.WARNING_ICON);
+		} else if (getEditedObject() != null && !getEditedObject().isBindingValid()) {
+			getLabel().setVisible(true);
+			getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
+		} else if (getEditedObject() != null && getEditedObject().isBindingValid()) {
+			getLabel().setVisible(true);
+			getLabel().setIcon(UtilsIconLibrary.OK_ICON);
+		} else {
+			getLabel().setVisible(false);
+		}
 	}
 
 	public void resetMethodCallPanel() {
@@ -691,7 +751,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	@Override
 	public String renderedString(AbstractBinding editedObject) {
 		if (editedObject != null) {
-			return (editedObject).getStringRepresentation();
+			return editedObject.getStringRepresentation();
 		}
 		return "";
 	}
@@ -700,16 +760,39 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		return _bindable;
 	}
 
+	@CustomComponentParameter(name = "bindable", type = CustomComponentParameter.Type.MANDATORY)
 	public void setBindable(Bindable bindable) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setBindable with " + bindable);
 		}
+		unregisterListenerForBindable();
 		_bindable = bindable;
-		if ((bindable != null) && (_selectorPanel != null)) {
+		if (bindable != null && _selectorPanel != null) {
 			_selectorPanel.fireBindableChanged();
 		}
+		registerListenerForBindable();
 		// getCustomPanel().setBindingModel(bindable.getBindingModel());
 		updateTextFieldProgrammaticaly();
+	}
+
+	public void registerListenerForBindable() {
+		if (_bindable instanceof Observable) {
+			((Observable) _bindable).addObserver(this);
+		}
+		if (_bindable instanceof HasPropertyChangeSupport) {
+			// System.out.println("registering " + bindable + " for " + this);
+			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().addPropertyChangeListener(
+					BindingModelChanged.BINDING_MODEL_CHANGED, this);
+		}
+	}
+
+	public void unregisterListenerForBindable() {
+		if (_bindable instanceof Observable) {
+			((Observable) _bindable).deleteObserver(this);
+		}
+		if (_bindable instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
 	}
 
 	@Override
@@ -718,6 +801,34 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (!textIsEditing) {
 			super.updateTextFieldProgrammaticaly();
 		}
+	}
+
+	@Override
+	public void update(Observable observable, Object notification) {
+		if (observable == _bindable) {
+			if (notification instanceof BindingModelChanged) {
+				logger.fine("Refreshing Binding Model");
+				refreshBindingModel();
+			}
+		}
+		if (observable == _bindingDefinition) {
+			if (notification instanceof BindingDefinitionTypeChanged) {
+				logger.fine("Updating BindingDefinition type");
+				refreshBindingDefinitionType();
+			}
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(BindingModelChanged.BINDING_MODEL_CHANGED)) {
+			logger.fine("Refreshing Binding Model");
+			refreshBindingModel();
+		} else if (evt.getPropertyName().equals(BindingDefinitionTypeChanged.BINDING_DEFINITION_TYPE_CHANGED)) {
+			logger.fine("Updating BindingDefinition type");
+			refreshBindingDefinitionType();
+		}
+
 	}
 
 	/*public void setCustomBindingModel(BindingModel aBindingModel)
@@ -749,11 +860,13 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		return _bindingDefinition;
 	}
 
+	@CustomComponentParameter(name = "bindingDefinition", type = CustomComponentParameter.Type.MANDATORY)
 	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(toString() + "Setting new binding definition: " + bindingDefinition + " old: " + _bindingDefinition);
 		}
 		if (bindingDefinition != _bindingDefinition) {
+			unregisterListenerForBindingDefinition();
 			_bindingDefinition = bindingDefinition;
 			AbstractBinding bindingValue = getEditedObject();
 			if (bindingValue != null) {
@@ -765,6 +878,30 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			if (_selectorPanel != null) {
 				_selectorPanel.fireBindingDefinitionChanged();
 			}
+			registerListenerForBindingDefinition();
+			updateCustomPanel(getEditedObject());
+		}
+	}
+
+	public void registerListenerForBindingDefinition() {
+		if (_bindingDefinition instanceof Observable) {
+			((Observable) _bindingDefinition).addObserver(this);
+		}
+		if (_bindingDefinition instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) _bindingDefinition).getPropertyChangeSupport().addPropertyChangeListener(
+					BindingDefinitionTypeChanged.BINDING_DEFINITION_TYPE_CHANGED, this);
+			((HasPropertyChangeSupport) _bindingDefinition).getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
+	}
+
+	public void unregisterListenerForBindingDefinition() {
+		if (_bindingDefinition instanceof Observable) {
+			((Observable) _bindingDefinition).deleteObserver(this);
+		}
+		if (_bindingDefinition instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) _bindingDefinition).getPropertyChangeSupport().removePropertyChangeListener(
+					BindingDefinitionTypeChanged.BINDING_DEFINITION_TYPE_CHANGED, this);
+			((HasPropertyChangeSupport) _bindingDefinition).getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 	}
 
@@ -793,11 +930,11 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	protected AbstractBinding makeBinding() {
 		AbstractBinding returned = null;
 		if (editionMode == EditionMode.BINDING_EXPRESSION) {
-			if ((getBindingDefinition() != null) && (getBindable() != null)) {
+			if (getBindingDefinition() != null && getBindable() != null) {
 				returned = makeBindingExpression();
 			}
 		} else if (editionMode == EditionMode.STATIC_BINDING) {
-			if ((getBindingDefinition() != null) && (getBindable() != null)) {
+			if (getBindingDefinition() != null && getBindable() != null) {
 				if (getBindingDefinition().getType() != null) {
 					if (TypeUtils.isBoolean(getBindingDefinition().getType())) {
 						returned = new BooleanStaticBinding(getBindingDefinition(), getBindable(), false);
@@ -813,7 +950,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				}
 			}
 		} else if (editionMode == EditionMode.NORMAL_BINDING || editionMode == EditionMode.COMPOUND_BINDING) { // Normal or compound binding
-			if ((getBindingDefinition() != null) && (getBindable() != null)) {
+			if (getBindingDefinition() != null && getBindable() != null) {
 				returned = new BindingValue(getBindingDefinition(), getBindable());
 			}
 		}
@@ -856,6 +993,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		protected abstract void processDelete();
 
 		protected abstract void willApply();
+
+		protected abstract void delete();
 
 	}
 
@@ -972,7 +1111,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (selectedValue == null) {
 			return;
 		}
-		if (index == 0 && (selectedValue.getElement() instanceof BindingVariable)) { // ICI
+		if (index == 0 && selectedValue.getElement() instanceof BindingVariable) { // ICI
 			if (list.getSelectedValue() != bindingValue.getBindingVariable()) {
 				bindingValue.setBindingVariable((BindingVariable) selectedValue.getElement());
 				setEditedObject(bindingValue);
@@ -985,11 +1124,11 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 					setEditedObject(bindingValue);
 					fireEditedObjectChanged();
 				}
-			} else if ((selectedValue.getElement() instanceof ComplexPathElement) && (editionMode == EditionMode.COMPOUND_BINDING)) {
+			} else if (selectedValue.getElement() instanceof ComplexPathElement && editionMode == EditionMode.COMPOUND_BINDING) {
 				// TODO: we need to handle here generic ComplexPathElement and not only MethodCall
 				BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(index - 1);
 				if (!(currentElement instanceof MethodCall)
-						|| (((MethodCall) currentElement).getMethod() != ((MethodDefinition) selectedValue.getElement()).getMethod())) {
+						|| ((MethodCall) currentElement).getMethod() != ((MethodDefinition) selectedValue.getElement()).getMethod()) {
 					Method method = ((MethodDefinition) selectedValue.getElement()).getMethod();
 					MethodCall newMethodCall = new MethodCall(bindingValue, method, bindingValue.getAccessedType());
 					bindingValue.setBindingPathElementAtIndex(newMethodCall, index - 1);
@@ -1008,22 +1147,22 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (b == null) {
 			return false;
 		}
-		if (TypeUtils.isObject(getBindingDefinition().getType()) && !(stringValue.endsWith("."))) {
+		if (TypeUtils.isObject(getBindingDefinition().getType()) && !stringValue.endsWith(".")) {
 			return true;
 		}
 		if (TypeUtils.isBoolean(getBindingDefinition().getType())) {
-			return (b instanceof BooleanStaticBinding);
+			return b instanceof BooleanStaticBinding;
 		} else if (TypeUtils.isInteger(getBindingDefinition().getType()) || TypeUtils.isLong(getBindingDefinition().getType())
 				|| TypeUtils.isShort(getBindingDefinition().getType()) || TypeUtils.isChar(getBindingDefinition().getType())
 				|| TypeUtils.isByte(getBindingDefinition().getType())) {
-			return (b instanceof IntegerStaticBinding);
+			return b instanceof IntegerStaticBinding;
 		} else if (TypeUtils.isFloat(getBindingDefinition().getType()) || TypeUtils.isDouble(getBindingDefinition().getType())) {
 			if (stringValue.endsWith(".")) {
 				return false;
 			}
-			return (b instanceof IntegerStaticBinding) || (b instanceof FloatStaticBinding);
+			return b instanceof IntegerStaticBinding || b instanceof FloatStaticBinding;
 		} else if (TypeUtils.isString(getBindingDefinition().getType())) {
-			return (b instanceof StringStaticBinding);
+			return b instanceof StringStaticBinding;
 		}
 		return false;
 	}
@@ -1044,7 +1183,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 	boolean isAcceptableAsBeginningOfStringStaticBindingValue(String stringValue) {
 		if (stringValue.length() > 0) {
-			if ((stringValue.indexOf("\"") == 0) || (stringValue.indexOf("'") == 0)) {
+			if (stringValue.indexOf("\"") == 0 || stringValue.indexOf("'") == 0) {
 				return true;
 			}
 			return false;
@@ -1065,9 +1204,11 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 		if (TypeUtils.isObject(getBindingDefinition().getType())) {
 			// In this case, any of matching is enough
-			return ((isAcceptableStaticBindingValue(stringValue) && !(stringValue.endsWith("."))) // Special case to handle float on-the-fly
-																									// typing
-					|| isAcceptableAsBeginningOfBooleanStaticBindingValue(stringValue) || isAcceptableAsBeginningOfStringStaticBindingValue(stringValue));
+			return isAcceptableStaticBindingValue(stringValue)
+					&& !stringValue.endsWith(".") // Special case to handle float on-the-fly
+													// typing
+					|| isAcceptableAsBeginningOfBooleanStaticBindingValue(stringValue)
+					|| isAcceptableAsBeginningOfStringStaticBindingValue(stringValue);
 		}
 
 		if (TypeUtils.isBoolean(getBindingDefinition().getType())) {

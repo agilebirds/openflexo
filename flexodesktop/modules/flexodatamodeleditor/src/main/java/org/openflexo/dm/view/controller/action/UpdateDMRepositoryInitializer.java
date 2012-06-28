@@ -20,7 +20,6 @@
 package org.openflexo.dm.view.controller.action;
 
 import java.awt.event.ActionEvent;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -30,6 +29,7 @@ import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.dm.view.popups.SelectClassesPopup;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.ExternalRepository;
 import org.openflexo.foundation.dm.JDKRepository;
@@ -63,8 +63,8 @@ public class UpdateDMRepositoryInitializer extends ActionInitializer {
 				if (repository instanceof JDKRepository) {
 					action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
 					Vector<LoadableDMEntity> allEntities = new Vector<LoadableDMEntity>();
-					for (Enumeration en = repository.getEntities().elements(); en.hasMoreElements();) {
-						LoadableDMEntity entity = (LoadableDMEntity) en.nextElement();
+					for (DMEntity ent : repository.getEntities().values()) {
+						LoadableDMEntity entity = (LoadableDMEntity) ent;
 						if (entity.getType() != null) {
 							allEntities.add(entity);
 						}
@@ -75,7 +75,7 @@ public class UpdateDMRepositoryInitializer extends ActionInitializer {
 							getControllerActionInitializer().getDMController(), action.getFlexoProgress());
 					action.hideFlexoProgress();
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getDMSet().getSelectedObjects().size() > 0) {
 						action.setUpdatedSet(popup.getDMSet());
 						return true;
 					} else {
@@ -84,8 +84,8 @@ public class UpdateDMRepositoryInitializer extends ActionInitializer {
 				} else if (repository instanceof ExternalRepository) {
 					action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
 					Vector<LoadableDMEntity> allEntities = new Vector<LoadableDMEntity>();
-					for (Enumeration en = repository.getEntities().elements(); en.hasMoreElements();) {
-						LoadableDMEntity entity = (LoadableDMEntity) en.nextElement();
+					for (DMEntity ent : repository.getEntities().values()) {
+						LoadableDMEntity entity = (LoadableDMEntity) ent;
 						if (entity.getType() != null) {
 							allEntities.add(entity);
 						}
@@ -96,7 +96,7 @@ public class UpdateDMRepositoryInitializer extends ActionInitializer {
 							getProject(), getControllerActionInitializer().getDMController(), action.getFlexoProgress());
 					action.hideFlexoProgress();
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getDMSet().getSelectedObjects().size() > 0) {
 						action.setUpdatedSet(popup.getDMSet());
 						return true;
 					} else {

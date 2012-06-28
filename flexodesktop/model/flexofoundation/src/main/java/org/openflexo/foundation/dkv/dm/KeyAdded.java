@@ -32,7 +32,7 @@ public class KeyAdded extends DKVDataModification {
 	 * @param newValue
 	 */
 	public KeyAdded(Object newValue) {
-		super(-1, "keys", null, newValue);
+		super("keys", null, newValue);
 	}
 
 }

@@ -23,9 +23,9 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
 
 /**
@@ -34,28 +34,35 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
+@Deprecated
 public class OntologyIndividualSelector extends AbstractBrowserSelector<OntologyIndividual> {
 
 	protected static final String EMPTY_STRING = "";
 	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
-	private OntologyLibrary ontologyLibrary;
+	private FlexoOntology ontology;
 
 	public OntologyIndividualSelector(OntologyIndividual object) {
 		super(null, object, OntologyIndividual.class);
 	}
 
-	public OntologyIndividualSelector(OntologyLibrary ontologyLibrary, OntologyIndividual object, int cols) {
+	public OntologyIndividualSelector(FlexoOntology ontology, OntologyIndividual object, int cols) {
 		super(null, object, OntologyIndividual.class, cols);
-		setOntologyLibrary(ontologyLibrary);
+		setOntology(ontology);
 	}
 
-	public OntologyLibrary getOntologyLibrary() {
-		return ontologyLibrary;
+	@Override
+	public void delete() {
+		super.delete();
+		setOntology(null);
 	}
 
-	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
-		this.ontologyLibrary = ontologyLibrary;
+	public FlexoOntology getOntology() {
+		return ontology;
+	}
+
+	public void setOntology(FlexoOntology ontology) {
+		this.ontology = ontology;
 	}
 
 	@Override
@@ -86,7 +93,7 @@ public class OntologyIndividualSelector extends AbstractBrowserSelector<Ontology
 	protected class OntologyBrowser extends ProjectBrowser {
 
 		protected OntologyBrowser() {
-			super((getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null), false);
+			super(getOntology() != null ? getOntology().getProject() : null, false);
 			init();
 		}
 
@@ -102,8 +109,8 @@ public class OntologyIndividualSelector extends AbstractBrowserSelector<Ontology
 
 		@Override
 		public FlexoModelObject getDefaultRootObject() {
-			if (getOntologyLibrary() != null) {
-				return getOntologyLibrary().getRootClass();
+			if (getOntology() != null) {
+				return getOntology().getRootClass();
 			}
 			return null;
 		}
@@ -113,8 +120,49 @@ public class OntologyIndividualSelector extends AbstractBrowserSelector<Ontology
 		STRING_REPRESENTATION_WHEN_NULL = aString;
 	}
 
+	@Override
+	public FlexoModelObject getRootObject() {
+		if (super.getRootObject() != null) {
+			return super.getRootObject();
+		} else if (getOntology() != null) {
+			return getOntology().getRootClass();
+		}
+		return null;
+	}
+
+	public OntologyClass getOntologyClass() {
+		if (getRootObject() instanceof OntologyClass) {
+			return (OntologyClass) getRootObject();
+		}
+		return null;
+	}
+
 	public void setOntologyClass(OntologyClass aClass) {
 		super.setRootObject(aClass);
+	}
+
+	public String getOntologyClassURI() {
+		if (getOntologyClass() != null) {
+			return getOntologyClass().getURI();
+		}
+		return null;
+	}
+
+	public void setOntologyClassURI(String aClassURI) {
+		if (getOntology() != null) {
+			OntologyClass ontologyClass = getOntology().getClass(aClassURI);
+			if (ontologyClass != null) {
+				setOntologyClass(ontologyClass);
+			}
+		}
+	}
+
+	@Override
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		if (project != null && getOntology() == null) {
+			setOntology(project.getProjectOntology());
+		}
 	}
 
 }

@@ -2,7 +2,7 @@
 
 <!-- Mapping model for drawing editor -->
 
-<model handlesReferences="yes" serializationMode="pseudoTree"> 
+<model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder"  handlesReferences="yes" serializationMode="pseudoTree"> 
 
   <entity name="org.openflexo.foundation.viewpoint.ExampleDrawingObject" abstract="YES" finalizer="finalizeDeserialization" contexts="Contained">
     <property name="childs" type="vector" contains="org.openflexo.foundation.viewpoint.ExampleDrawingObject" primary="yes" context="Contained"/>
@@ -40,11 +40,11 @@
   	 <property name="isMultilineAllowed" xmlTag="isMultilineAllowed" attribute="YES"/>
   	 <property name="continuousTextEditing" xmlTag="continuousTextEditing" attribute="YES"/>
  	 <property name="textStyle" xmlTag="TextStyle"/>
-  	 <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
-  	 <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
   	 <property name="absoluteTextX" xmlTag="absoluteTextX" attribute="YES"/>
   	 <property name="absoluteTextY" xmlTag="absoluteTextY" attribute="YES"/>
-  	 <property name="textAlignment" xmlTag="textAlignment" attribute="YES"/>
+     <property name="paragraphAlignment" xmlTag="paragraphAlignment" attribute="YES"/>
+     <property name="horizontalTextAlignment" xmlTag="horizontalTextAlignment" attribute="YES"/>
+     <property name="verticalTextAlignment" xmlTag="verticalTextAlignment" attribute="YES"/>
   	 <property name="isSelectable" xmlTag="isSelectable" attribute="YES"/>
   	 <property name="isFocusable" xmlTag="isFocusable" attribute="YES"/>
   	 <property name="drawControlPointsWhenFocused" xmlTag="drawControlPointsWhenFocused" attribute="YES"/>
@@ -83,6 +83,8 @@
    	 <property name="minimalHeight" xmlTag="minimalHeight" attribute="YES"/>
    	 <property name="maximalWidth" xmlTag="maximalWidth" attribute="YES"/>
    	 <property name="maximalHeight" xmlTag="maximalHeight" attribute="YES"/>
+   	 <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
+     <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
   	 <property name="locationConstraints" xmlTag="locationConstraints" attribute="YES"/>
   	 <property name="dimensionConstraints" xmlTag="dimensionConstraints" attribute="YES"/>
    	 <property name="adjustMinimalWidthToLabelWidth" xmlTag="adjustMinimalWidthToLabelWidth" attribute="YES"/>
@@ -91,10 +93,19 @@
    	 <property name="adjustMaximalHeightToLabelHeight" xmlTag="adjustMaximalHeightToLabelHeight" attribute="YES"/>
  	 <property name="foreground" xmlTag="ForegroundStyle"/>
   	 <property name="background" contains="org.openflexo.fge.graphics.BackgroundStyle"/>
+ 	 <property name="selectedForeground" contains="org.openflexo.fge.graphics.ForegroundStyle" context="Selected"/>
+  	 <property name="selectedBackground" contains="org.openflexo.fge.graphics.BackgroundStyle" context="Selected"/>
+ 	 <property name="focusedForeground" contains="org.openflexo.fge.graphics.ForegroundStyle" context="Focused"/>
+  	 <property name="focusedBackground" contains="org.openflexo.fge.graphics.BackgroundStyle" context="Focused"/>
+   	 <property name="hasSelectedForeground" xmlTag="hasSelectedForeground" attribute="YES"/>
+   	 <property name="hasSelectedBackground" xmlTag="hasSelectedBackground" attribute="YES"/>
+   	 <property name="hasFocusedForeground" xmlTag="hasFocusedForeground" attribute="YES"/>
+   	 <property name="hasFocusedBackground" xmlTag="hasFocusedBackground" attribute="YES"/>
   	 <property name="border" xmlTag="Border"/>
  	 <property name="shape" contains="org.openflexo.fge.shapes.Shape"/>
    	 <property name="shadowStyle" xmlTag="ShadowStyle"/>
      <property name="isFloatingLabel" xmlTag="isFloatingLabel" attribute="YES"/>
+     <property name="lineWrap" xmlTag="lineWrap" attribute="YES"/>
      <property name="allowToLeaveBounds" xmlTag="allowToLeaveBounds" attribute="YES"/>
  	 <property name="xConstraints" xmlTag="xConstraints" attribute="YES"/>
  	 <property name="yConstraints" xmlTag="yConstraints" attribute="YES"/>
@@ -105,6 +116,10 @@
   <entity name="org.openflexo.fge.ConnectorGraphicalRepresentation" xmlTag="ConnectorGraphicalRepresentation" >
      <description>Connector graphical representation</description>
  	 <property name="foreground" xmlTag="ForegroundStyle"/>
+ 	 <property name="selectedForeground" contains="org.openflexo.fge.graphics.ForegroundStyle" context="Selected"/>
+ 	 <property name="focusedForeground" contains="org.openflexo.fge.graphics.ForegroundStyle" context="Focused"/>
+   	 <property name="hasSelectedForeground" xmlTag="hasSelectedForeground" attribute="YES"/>
+   	 <property name="hasFocusedForeground" xmlTag="hasFocusedForeground" attribute="YES"/>
  	 <property name="startObject" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="Start"/>
  	 <property name="endObject" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="End"/>
   	 <property name="connector" contains="org.openflexo.fge.connectors.Connector"/>
@@ -153,6 +168,7 @@
   	 <property name="nPoints" xmlTag="nPoints" attribute="YES"/>
   	 <property name="startAngle" xmlTag="startAngle" attribute="YES"/>
    </entity>
+	
 	
 	
    <entity name="org.openflexo.fge.shapes.Triangle" xmlTag="TriangleShape">
@@ -225,7 +241,7 @@
    	 <property name="backgroundColor" xmlTag="backgroundColor" attribute="YES"/>
   </entity>
 
-  <entity name="org.openflexo.fge.graphics.ForegroundStyle" xmlTag="ForegroundStyle">
+  <entity name="org.openflexo.fge.graphics.ForegroundStyle" xmlTag="ForegroundStyle" contexts="Focused,Selected">
      <description>Foreground style</description>
    	 <property name="noStroke" xmlTag="noStroke" attribute="YES"/>
    	 <property name="color" xmlTag="color" attribute="YES"/>
@@ -237,7 +253,7 @@
  	 <property name="transparencyLevel" xmlTag="transparencyLevel" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle" abstract="YES">
+  <entity name="org.openflexo.fge.graphics.BackgroundStyle" abstract="YES" contexts="Focused,Selected">
      <description>Background style</description>
  	 <property name="useTransparency" xmlTag="useTransparency" attribute="YES"/>
  	 <property name="transparencyLevel" xmlTag="transparencyLevel" attribute="YES"/>

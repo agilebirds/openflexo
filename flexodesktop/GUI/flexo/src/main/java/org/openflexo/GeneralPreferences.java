@@ -36,8 +36,10 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
+import org.openflexo.module.AutoSaveService;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.prefs.PreferencesHaveChanged;
@@ -106,6 +108,8 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY = "localResourceCenterDirectory";
 
+	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY2 = "localResourceCenterDirectory2";
+
 	private static final FlexoObserver observer = new FlexoObserver() {
 
 		@Override
@@ -160,11 +164,18 @@ public final class GeneralPreferences extends ContextPreferences {
 			Locale.setDefault(Locale.US);
 		}
 		FlexoLocalization.setCurrentLanguage(language);
-		ModuleLoader.updateModuleFrameTitles();
+		updateModuleFrameTitles();
 		FlexoLocalization.updateGUILocalized();
-		if ((language != null) && (ModuleLoader.getUserType() != null)) {
-			FlexoHelp.configure(language.getIdentifier(), ModuleLoader.getUserType().getIdentifier());
+		if (language != null && UserType.getCurrentUserType() != null) {
+			FlexoHelp.configure(language.getIdentifier(), UserType.getCurrentUserType().getIdentifier());
 			FlexoHelp.reloadHelpSet();
+		}
+	}
+
+	public static void updateModuleFrameTitles() {
+		Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
+		while (en.hasMoreElements()) {
+			en.nextElement().getFlexoFrame().updateTitle();
 		}
 	}
 
@@ -308,11 +319,19 @@ public final class GeneralPreferences extends ContextPreferences {
 		if (files.size() > 4) {
 			setLastOpenedProject5(files.get(4).getAbsolutePath());
 		}
-		Enumeration<FlexoModule> en = ModuleLoader.loadedModules();
+		Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
 		while (en.hasMoreElements()) {
 			FlexoModule module = en.nextElement();
 			module.getFlexoController().updateRecentProjectMenu();
 		}
+	}
+
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
+	private static AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
 	}
 
 	public static void addToLastOpenedProjects(File project) {
@@ -439,7 +458,6 @@ public final class GeneralPreferences extends ContextPreferences {
 	}
 
 	/**
-	 * @param string
 	 * @param extendedState
 	 */
 	public static void setFrameStateForFrameWithID(String id, int extendedState) {
@@ -447,8 +465,8 @@ public final class GeneralPreferences extends ContextPreferences {
 	}
 
 	public static String getAutoSaveDirectory() {
-		if (ModuleLoader.getAutoSaveDirectory() != null) {
-			return ModuleLoader.getAutoSaveDirectory().getAbsolutePath();
+		if (getAutoSaveService().getAutoSaveDirectory() != null) {
+			return getAutoSaveService().getAutoSaveDirectory().getAbsolutePath();
 		} else {
 			return FlexoLocalization.localizedForKey("time_traveling_is_disabled");
 		}
@@ -480,9 +498,9 @@ public final class GeneralPreferences extends ContextPreferences {
 	public static void setAutoSaveEnabled(boolean enabled) {
 		getPreferences().setBooleanProperty(AUTO_SAVE_ENABLED, enabled);
 		if (enabled) {
-			ModuleLoader.startAutoSaveThread();
+			getAutoSaveService().startAutoSaveThread();
 		} else {
-			ModuleLoader.stopAutoSaveThread();
+			getAutoSaveService().stopAutoSaveThread();
 		}
 	}
 
@@ -502,7 +520,7 @@ public final class GeneralPreferences extends ContextPreferences {
 	public static void setAutoSaveInterval(int interval) {
 		if (interval > 0) {
 			getPreferences().setIntegerProperty(AUTO_SAVE_INTERVAL, interval);
-			ModuleLoader.setAutoSaveSleepTime(interval);
+			getAutoSaveService().setAutoSaveSleepTime(interval);
 		}
 	}
 
@@ -521,7 +539,7 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	public static void setAutoSaveLimit(int limit) {
 		getPreferences().setIntegerProperty(AUTO_SAVE_LIMIT, limit);
-		ModuleLoader.setAutoSaveLimit(limit);
+		getAutoSaveService().setAutoSaveLimit(limit);
 	}
 
 	public static File getLastImageDirectory() {
@@ -559,11 +577,14 @@ public final class GeneralPreferences extends ContextPreferences {
 	}
 
 	public static File getLocalResourceCenterDirectory() {
-		return getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY);
+		File file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2);
+		if (file == null) {
+			file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY);
+		}
+		return file;
 	}
 
 	public static void setLocalResourceCenterDirectory(File directory) {
-		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY, directory);
+		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2, directory);
 	}
-
 }

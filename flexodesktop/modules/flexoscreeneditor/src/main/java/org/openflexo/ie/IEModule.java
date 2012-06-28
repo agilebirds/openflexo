@@ -21,14 +21,12 @@ package org.openflexo.ie;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
@@ -39,13 +37,9 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalIEController;
 import org.openflexo.module.external.ExternalIEModule;
-import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
@@ -58,20 +52,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 	private static final Logger logger = Logger.getLogger(IEModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.IE };
 	private IEWOComponentView componentView;
-
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application.
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Start Interface Editor stand-alone.");
-		}
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.IE_MODULE);
-	}
 
 	public IEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
@@ -98,14 +78,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 	@Override
 	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
-	}
-
-	public File getSmallButtonsDirectory() {
-		return new FileResource(IECst.SMALL_BUTTONS_DIR);
-	}
-
-	public File getBigButtonsDirectory() {
-		return new FileResource(IECst.BIG_BUTTONS_DIR);
 	}
 
 	public IEController getIEController() {
@@ -144,7 +116,7 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 		pane.validate();
 		pane.doLayout();
 		pane.repaint();
-		answer.dropZone.propagateResize();
+		answer.dropZone.revalidate();
 		componentView = answer;
 		return pane;
 	}
@@ -158,7 +130,7 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 			if (componentView.getParent() != null) {
 				componentView.getParent().remove(componentView);
 			}
-			componentView.deleteModuleView();
+			componentView.delete();
 		}
 		componentView = null;
 	}
@@ -215,14 +187,4 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 		return null;// getProject().getFlexoComponentLibrary();
 	}
 
-	/**
-	 * Overrides moduleWillClose
-	 * 
-	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
-	 */
-	@Override
-	public void moduleWillClose() {
-		super.moduleWillClose();
-		IEPreferences.reset();
-	}
 }

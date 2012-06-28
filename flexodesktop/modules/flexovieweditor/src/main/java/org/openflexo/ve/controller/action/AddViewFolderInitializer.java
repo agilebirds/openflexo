@@ -22,7 +22,6 @@ package org.openflexo.ve.controller.action;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import javax.swing.Icon;
 import javax.swing.JTree;
@@ -36,7 +35,6 @@ import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.action.AddViewFolder;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -45,13 +43,13 @@ public class AddViewFolderInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddViewFolderInitializer(OEControllerActionInitializer actionInitializer) {
+	AddViewFolderInitializer(VEControllerActionInitializer actionInitializer) {
 		super(AddViewFolder.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -70,10 +68,11 @@ public class AddViewFolderInitializer extends ActionInitializer {
 				if (parentFolder != null) {
 					String newFolderName = null;
 					while (newFolderName == null) {
-						newFolderName = FlexoController.askForStringMatchingPattern(
+						/*newFolderName = FlexoController.askForStringMatchingPattern(
 								FlexoLocalization.localizedForKey("enter_name_for_the_new_folder"),
 								Pattern.compile(FileUtils.GOOD_CHARACTERS_REG_EXP + "+"),
-								FlexoLocalization.localizedForKey("folder_name_cannot_contain_:_\\_\"_:_*_?_<_>_/"));
+								FlexoLocalization.localizedForKey("folder_name_cannot_contain_:_\\_\"_:_*_?_<_>_/"));*/
+						newFolderName = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_name_for_the_new_folder"));
 						if (newFolderName == null) {
 							return false;
 						}

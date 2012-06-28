@@ -866,6 +866,10 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			paintImmediately(rect2D.getBounds());
 			capturedDraggedNodeImage = null;
 		}
+
+		public BrowserView getBrowserView() {
+			return BrowserView.this;
+		}
 	}
 
 	public JScrollPane getTreeScrollPane() {
@@ -881,6 +885,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	public FlexoModelObject getFocusedObject() {
 		/*if(_browser.getSelectionManager()!=null)
 			return _browser.getSelectionManager().getFocusedObject();*/
+		if (getSelectedObject() == null && _browser.showRootNode()) {
+			return _browser.getRootObject();
+		}
 		return getSelectedObject();
 	}
 

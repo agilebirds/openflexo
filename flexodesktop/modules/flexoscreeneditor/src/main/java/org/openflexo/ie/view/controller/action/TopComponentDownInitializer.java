@@ -30,7 +30,7 @@ import org.openflexo.foundation.ie.action.TopComponentDown;
 import org.openflexo.foundation.ie.widget.IESequence;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ie.widget.IWidget;
-import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -78,7 +78,7 @@ public class TopComponentDownInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return IconLibrary.MOVE_DOWN_ICON;
+		return UtilsIconLibrary.MOVE_DOWN_ICON;
 	}
 
 }

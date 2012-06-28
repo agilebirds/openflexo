@@ -28,7 +28,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ie.action.MoveTabLeft;
 import org.openflexo.foundation.ie.widget.IETabWidget;
-import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.ie.view.widget.DropTabZone;
 import org.openflexo.ie.view.widget.IETabWidgetView;
 import org.openflexo.view.controller.ActionInitializer;
@@ -85,7 +85,7 @@ public class MoveTabLeftInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return IconLibrary.MOVE_LEFT_ICON;
+		return UtilsIconLibrary.MOVE_LEFT_ICON;
 	}
 
 }

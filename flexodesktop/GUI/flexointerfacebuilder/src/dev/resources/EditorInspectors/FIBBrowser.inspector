@@ -139,6 +139,12 @@
 							<Font data="ElementsTable.selected.font" visible="ElementsTable.selected.hasSpecificFont"/>
 						</Panel>
 
+            			<Label label="dynamic_font" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+          				<Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ElementsTable.selected.dynamicFont.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+							<Assignment variable="component.bindable" value="ElementsTable.selected.iterator"/>
+							<Assignment variable="component.bindingDefinition" value="ElementsTable.selected.DYNAMIC_FONT"/>
+      				    </Custom>
+
 				</Tab>
 
 				<Tab name="ChildrenTab" title="Children" index="2" layout="border" font="SansSerif,0,11" >
@@ -168,6 +174,15 @@
 								value="iterator.browserElement.iterator" />
 							<ColumnAssignment variable="component.bindingDefinition"
 								value="iterator.VISIBLE" />
+						</CustomColumn>
+						<CustomColumn name="cast" title="cast"
+							data="iterator.cast.binding" 
+							componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="200">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator.childBindable" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.CAST" />
 						</CustomColumn>
 						<AddAction name="new_children" method="ElementsTable.selected.createChildren()" />
 						<RemoveAction name="delete_children" method="ElementsTable.selected.deleteChildren(selected)" />

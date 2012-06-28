@@ -19,16 +19,13 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +48,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.ModelEntity;
 import org.openflexo.xmlcode.ModelProperty;
 import org.openflexo.xmlcode.SerializationHandler;
+import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -119,6 +117,8 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		if (_resourceData == null) {
 			try {
 				_resourceData = loadResourceData(progress, getLoadingHandler());
+				// Now that the resource is loaded, we try to resolve pending EP refs
+				getProject().resolvePendingEditionPatternReferences();
 			} catch (LoadXMLResourceException e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING)) {
@@ -162,6 +162,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			// already loaded
 			return _resourceData;
 		}
+		if (!isLoadable()) {
+			return null;
+		}
 		_isLoading = true;
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading") + " " + this.getName());
@@ -201,7 +204,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		}
 		try {
 			while (notCorrectelyDeserialized
-					&& ((i >= 0 && performLoadWithPreviousVersion) || (i == availableVersionsNew.length - 1 && !performLoadWithPreviousVersion))) {
+					&& (i >= 0 && performLoadWithPreviousVersion || i == availableVersionsNew.length - 1 && !performLoadWithPreviousVersion)) {
 				// triedVersion = availableVersions[i];
 				triedVersion = availableVersionsNew[i];
 				i--;
@@ -346,7 +349,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				FlexoXMLMappings.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), triedVersion);
 
 				boolean convertToLatestVersion = false;
-				if (cmv.needsManualConversion || (!triedVersion.equals(latestVersion()))) {
+				if (cmv.needsManualConversion || !triedVersion.equals(latestVersion())) {
 					convertToLatestVersion = loadingHandler.upgradeResourceToLatestVersion(this);
 				}
 
@@ -568,7 +571,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 							logger.info("Successfully converted resource " + getResourceIdentifier() + " from " + v[i] + " to "
 									+ cmv.toVersion);
 						}
-						while ((i + 1) < v.length && !v[i + 1].equals(cmv.toVersion)) {
+						while (i + 1 < v.length && !v[i + 1].equals(cmv.toVersion)) {
 							i++;
 						}
 						if (i + 1 == v.length || !v[i + 1].equals(cmv.toVersion)) {
@@ -689,8 +692,8 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	void fillInUnmappedAttributesAsDynamicProperties(FlexoModelObject object, XMLMapping currentMapping, XMLMapping revertedMapping) {
 		ModelEntity currentEntity = currentMapping.entityForClass(object.getClass());
 		ModelEntity revertedEntity = revertedMapping.entityForClass(object.getClass());
-		for (Enumeration en = currentEntity.getModelProperties(); en.hasMoreElements();) {
-			ModelProperty p = (ModelProperty) en.nextElement();
+		for (Enumeration<ModelProperty> en = currentEntity.getModelProperties(); en.hasMoreElements();) {
+			ModelProperty p = en.nextElement();
 			if (p.getIsAttribute()) {
 				if (revertedEntity.getModelPropertyWithName(p.getName()) == null) {
 					// Found unmapped property
@@ -806,7 +809,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	 */
 	private void postXMLSerialization(FlexoVersion version, File temporaryFile, FileWritingLock lock, boolean clearIsModified)
 			throws IOException {
-		rename(temporaryFile, getFile());
+		FileUtils.rename(temporaryFile, getFile());
 		hasWrittenOnDisk(lock);
 		((FlexoXMLSerializableObject) getResourceData()).finalizeSerialization();
 		_currentVersion = version;
@@ -835,7 +838,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			FlexoXMLSerializableObject dataToSerialize = (FlexoXMLSerializableObject) getResourceData();
 			dataToSerialize.initializeSerialization();
 			XMLCoder.encodeObjectWithMapping(dataToSerialize, getXmlMappings()
-					.getMappingForClassAndVersion(getResourceDataClass(), version), out, getProject().getStringEncoder(), handler);
+					.getMappingForClassAndVersion(getResourceDataClass(), version), out, getStringEncoder(), handler);
 			dataToSerialize.finalizeSerialization();
 			out.flush();
 			out.close();
@@ -848,98 +851,17 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		}
 	}
 
+	@Override
+	public StringEncoder getStringEncoder() {
+		return getProject().getStringEncoder();
+	}
+
 	protected abstract boolean isDuplicateSerializationIdentifierRepairable();
 
 	protected abstract boolean repairDuplicateSerializationIdentifier();
 
-	/**
-	 * An extension to Java's API rename method. Will attempt Java's method of doing the rename, if this fails, this method will then
-	 * attempt to forcibly copy the old file to the new file name, and then delete the old file. (This in appearance makes it look like a
-	 * file rename has occurred.) The method will also attempt to preserve the new file's modification times and permissions to equal that
-	 * of the original file's.
-	 * 
-	 * @param f1
-	 *            File
-	 * @param f2
-	 *            File
-	 * @return boolean
-	 * @throws IOException
-	 */
-	public static boolean rename(File f1, File f2) throws IOException {
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
-		try {
-			// Ensure the system dereferences any open links to these files
-			// System.gc(); // protection against Windows
-
-			// Do a normal API rename attempt
-			if (f2.exists()) {
-				f2.delete();
-			}
-			if (f1.renameTo(f2)) {
-				return true;
-			}
-			if (!f2.exists()) {
-				FileUtils.createNewFile(f2);
-			}
-			// API rename attempt failed, forcibly copy
-			bis = new BufferedInputStream(new FileInputStream(f1));
-			bos = new BufferedOutputStream(new FileOutputStream(f2));
-
-			// Do the copy
-			pipeStreams(bos, bis);
-
-			// Close the files
-			bos.flush();
-
-			// Close the files
-			bis.close();
-			bos.close();
-
-			// Attempt to preserve file modification times
-			f2.setLastModified(f1.lastModified());
-			if (!f1.canWrite()) {
-				f2.setReadOnly();
-			}
-
-			// Delete the original
-			// System.gc();
-			f1.delete();
-
-			bis = null;
-			bos = null;
-			return true;
-		} finally {
-			try {
-				if (bis != null) {
-					bis.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			try {
-				if (bos != null) {
-					bos.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public static void pipeStreams(OutputStream to, InputStream from) throws IOException {
-		BufferedInputStream in = new BufferedInputStream(from);
-		BufferedOutputStream out = new BufferedOutputStream(to);
-		byte[] buffer = new byte[8192];
-		int read;
-		while ((read = in.read(buffer, 0, 8192)) != -1) {
-			out.write(buffer, 0, read);
-		}
-		out.flush();
-	}
-
 	private void makeLocalCopy() throws IOException {
-		if ((getFile() != null) && (getFile().exists())) {
+		if (getFile() != null && getFile().exists()) {
 			String localCopyName = getFile().getName() + "~";
 			File localCopy = new File(getFile().getParentFile(), localCopyName);
 			FileUtils.copyFileToFile(getFile(), localCopy);
@@ -961,7 +883,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			if (hasBuilder() && mapping.hasBuilderClass()) {
 				if (getProject() != null) {
 					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, instanciateNewBuilder(),
-							getProject().getStringEncoder());
+							getStringEncoder());
 				} else {
 					if (!(this instanceof FlexoRMResource)) {
 						if (logger.isLoggable(Level.WARNING)) {
@@ -972,16 +894,16 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				}
 			} else {
 				if (getProject() != null) {
-					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getProject()
-							.getStringEncoder());
+					returned = (XMLRD) XMLDecoder
+							.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getStringEncoder());
 				} else {
 					if (!(this instanceof FlexoRMResource)) {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Project is not set on " + this.getFullyQualifiedName());
 						}
 					}
-					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getProject()
-							.getStringEncoder());
+					returned = (XMLRD) XMLDecoder
+							.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getStringEncoder());
 				}
 			}
 			if (logger.isLoggable(Level.FINE)) {
@@ -1036,7 +958,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 	public String getResourceXMLRepresentation() throws XMLOperationException {
 		try {
-			return XMLCoder.encodeObjectWithMapping(getXMLResourceData(), getCurrentMapping(), getProject().getStringEncoder(), null);
+			return XMLCoder.encodeObjectWithMapping(getXMLResourceData(), getCurrentMapping(), getStringEncoder(), null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new XMLOperationException(e, _currentVersion);
@@ -1155,11 +1077,11 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		/**
 		 * Vector of LoadResourceWithVersionException
 		 */
-		private Vector loadResourceExceptions;
+		private List<XMLOperationException> loadResourceExceptions;
 
 		public LoadXMLResourceException(FlexoXMLStorageResource thisResource, String message) {
 			super(thisResource, message);
-			loadResourceExceptions = new Vector();
+			loadResourceExceptions = new Vector<FlexoXMLStorageResource.XMLOperationException>();
 		}
 
 		@Deprecated
@@ -1178,37 +1100,38 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 		@Override
 		public String getMessage() {
-			String returned = "LoadXMLResourceException caused by multiple exceptions:\n";
-			XMLOperationException temp;
-			for (Enumeration e = loadResourceExceptions.elements(); e.hasMoreElements();) {
-				temp = (XMLOperationException) e.nextElement();
-				returned += "Trying to load with version " + temp.getVersion() + " exception raised: " + temp.getMessage() + "\n";
+			if (loadResourceExceptions.size() == 0) {
+				return super.getMessage();
+			}
+			StringBuilder sb = new StringBuilder("LoadXMLResourceException caused by multiple exceptions:\n");
+			for (XMLOperationException temp : loadResourceExceptions) {
+				sb.append("Trying to load with version ").append(temp.getVersion()).append(" exception raised: ").append(temp.getMessage())
+						.append('\n');
 				temp.exception.printStackTrace();
 			}
-			return returned;
+			return sb.toString();
 		}
 
 		public String getExtendedMessage() {
-			String returned = "LoadXMLResourceException caused by multiple exceptions:\n";
-			XMLOperationException temp;
-			for (Enumeration e = loadResourceExceptions.elements(); e.hasMoreElements();) {
-				temp = (XMLOperationException) e.nextElement();
-				returned += "Trying to load with version " + temp.getVersion() + " exception raised: " + temp.getMessage() + "\n";
-				returned += "StackTrace:\n";
+			StringBuilder sb = new StringBuilder("LoadXMLResourceException caused by multiple exceptions:\n");
+			for (XMLOperationException temp : loadResourceExceptions) {
+				sb.append("Trying to load with version ").append(temp.getVersion()).append(" exception raised: ").append(temp.getMessage())
+						.append('\n');
+				sb.append("StackTrace:\n");
 				if (temp.getException().getStackTrace() != null) {
 					for (int i = 0; i < temp.getException().getStackTrace().length; i++) {
-						returned += "\tat " + temp.getException().getStackTrace()[i] + "\n";
+						sb.append("\tat ").append(temp.getException().getStackTrace()[i]).append('\n');
 					}
 				}
 				if (temp.getException() instanceof AccessorInvocationException) {
-					returned += "Caused by :\n";
+					sb.append("Caused by :\n");
 					for (int i = 0; i < ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace().length; i++) {
-						returned += "\tat " + ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace()[i]
-								+ "\n";
+						sb.append("\tat " + ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace()[i])
+								.append('\n');
 					}
 				}
 			}
-			return returned;
+			return sb.toString();
 		}
 	}
 

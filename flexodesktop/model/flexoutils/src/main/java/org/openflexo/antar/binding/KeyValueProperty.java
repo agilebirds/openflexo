@@ -40,7 +40,7 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	protected String name;
 
 	/** Stores related object'class */
-	protected Class declaringClass;
+	protected Class<?> declaringClass;
 
 	/** Stores related object'type */
 	protected Type declaringType;
@@ -77,10 +77,15 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	public boolean equals(Object obj) {
 		if (obj instanceof KeyValueProperty) {
 			KeyValueProperty kvp = (KeyValueProperty) obj;
-			return ((declaringClass.equals(kvp.declaringClass)) || (TypeUtils.isClassAncestorOf(declaringClass, kvp.declaringClass)) || (TypeUtils
-					.isClassAncestorOf(kvp.declaringClass, declaringClass))) && name.equals(kvp.name);
+			return (declaringClass.equals(kvp.declaringClass) || TypeUtils.isClassAncestorOf(declaringClass, kvp.declaringClass) || TypeUtils
+					.isClassAncestorOf(kvp.declaringClass, declaringClass)) && name.equals(kvp.name);
 		}
 		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode() + (field != null ? field.getDeclaringClass().hashCode() : getMethod.getDeclaringClass().hashCode());
 	}
 
 	/**
@@ -155,7 +160,7 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 
 		settable = field != null || setMethod != null;
 
-		if ((getMethod != null) && (setMethod != null)) {
+		if (getMethod != null && setMethod != null) {
 			// If related field exist (is public) and accessors methods exists
 			// also,
 			// the operations are processed using accessors (field won't be used
@@ -242,12 +247,20 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	protected Method searchMatchingSetMethod(Class declaringClass, String propertyName, Type aType) {
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
-		String[] tries = new String[2];
+		String[] tries;
+		if (TypeUtils.isBoolean(aType) && propertyName.startsWith("is")) {
+			tries = new String[4];
+			String propertyNameWithFirstCharToUpperCase2 = propertyName.substring(2);
+			tries[2] = "set" + propertyNameWithFirstCharToUpperCase2;
+			tries[3] = "_set" + propertyNameWithFirstCharToUpperCase2;
+		} else {
+			tries = new String[2];
+		}
 		tries[0] = "set" + propertyNameWithFirstCharToUpperCase;
 		tries[1] = "_set" + propertyNameWithFirstCharToUpperCase;
 
 		for (Method m : declaringClass.getMethods()) {
-			for (int i = 0; i < 2; i++) {
+			for (int i = 0; i < tries.length; i++) {
 				if (m.getName().equals(tries[i]) && m.getGenericParameterTypes().length == 1
 						&& m.getGenericParameterTypes()[0].equals(aType)) {
 					return m;
@@ -328,15 +341,15 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	 * 
 	 * @see AccessorMethod
 	 */
-	protected TreeSet searchMethodsWithNameAndParamsNumber(String[] searchedNames, int paramNumber) {
+	protected TreeSet<AccessorMethod> searchMethodsWithNameAndParamsNumber(String[] searchedNames, int paramNumber) {
 
-		TreeSet returnedTreeSet = new TreeSet();
+		TreeSet<AccessorMethod> returnedTreeSet = new TreeSet<AccessorMethod>();
 		Method[] allMethods = declaringClass.getMethods();
 
 		for (int i = 0; i < allMethods.length; i++) {
 			Method tempMethod = allMethods[i];
 			for (int j = 0; j < searchedNames.length; j++) {
-				if ((tempMethod.getName().equalsIgnoreCase(searchedNames[j])) && (tempMethod.getParameterTypes().length == paramNumber)) {
+				if (tempMethod.getName().equalsIgnoreCase(searchedNames[j]) && tempMethod.getParameterTypes().length == paramNumber) {
 					// This is a good candidate
 					returnedTreeSet.add(new AccessorMethod(this, tempMethod));
 				}

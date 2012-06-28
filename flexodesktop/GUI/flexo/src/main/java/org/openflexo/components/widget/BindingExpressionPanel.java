@@ -90,6 +90,15 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 	BindingExpression _bindingExpression;
 
+	public void delete() {
+		if (rootExpressionPanel != null) {
+			rootExpressionPanel.delete();
+			rootExpressionPanel = null;
+		}
+		_bindingExpression = null;
+		converter = null;
+	}
+
 	protected static ImageIcon iconForOperator(Operator op) {
 		if (op == ArithmeticBinaryOperator.ADDITION) {
 			return FIBIconLibrary.ADDITION_ICON;
@@ -145,7 +154,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 	public BindingExpressionPanel(BindingExpression bindingExpression) {
 		super();
-		if ((bindingExpression != null) && (bindingExpression.getProject() != null)) {
+		if (bindingExpression != null && bindingExpression.getProject() != null) {
 			converter = bindingExpression.getProject().getBindingExpressionConverter();
 		}
 		setLayout(new BorderLayout());
@@ -180,13 +189,13 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	private ExpressionInnerPanel focusReceiver = null;
 
 	public void setEditedExpression(BindingExpression bindingExpression) {
-		if ((bindingExpression != null) && (bindingExpression.getProject() != null)) {
+		if (bindingExpression != null && bindingExpression.getProject() != null) {
 			converter = bindingExpression.getProject().getBindingExpressionConverter();
 		}
 		_bindingExpression = bindingExpression;
 		if (bindingExpression != null) {
 			_setEditedExpression(bindingExpression.getExpression());
-			if ((rootExpressionPanel.getRepresentedExpression() == null)
+			if (rootExpressionPanel.getRepresentedExpression() == null
 					|| !rootExpressionPanel.getRepresentedExpression().equals(bindingExpression.getExpression())) {
 				rootExpressionPanel.setRepresentedExpression(bindingExpression.getExpression());
 			}
@@ -214,7 +223,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			return;
 		}
 
-		if ((evaluationPanel != null) && (evaluationTA != null) && evaluationPanel.isVisible()) {
+		if (evaluationPanel != null && evaluationTA != null && evaluationPanel.isVisible()) {
 			evaluationTA.setText(FlexoLocalization.localizedForKey("cannot_evaluate"));
 		}
 
@@ -227,7 +236,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				for (Expression e : _bindingExpression.getExpression().getAllAtomicExpressions()) {
 					if (e instanceof BindingValueConstant) {
 						BindingValueConstant c = (BindingValueConstant) e;
-						if ((c.getStaticBinding() == null) || !c.getStaticBinding().isBindingValid()) {
+						if (c.getStaticBinding() == null || !c.getStaticBinding().isBindingValid()) {
 							message = FlexoLocalization.localizedForKey("invalid_value") + " " + c.getConstant();
 							status = ExpressionParsingStatus.INVALID;
 							return;
@@ -235,7 +244,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 					}
 					if (e instanceof BindingValueVariable) {
 						BindingValueVariable v = (BindingValueVariable) e;
-						if ((v.getBindingValue() == null) || !v.getBindingValue().isBindingValid()) {
+						if (v.getBindingValue() == null || !v.getBindingValue().isBindingValid()) {
 							message = FlexoLocalization.localizedForKey("invalid_binding") + " " + v.getVariable();
 							status = ExpressionParsingStatus.INVALID;
 							return;
@@ -261,12 +270,12 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			try {
 				EvaluationType evaluationType = _bindingExpression.getEvaluationType();
 
-				if ((_bindingExpression != null) && (_bindingExpression.getBindingDefinition() != null)
-						&& (_bindingExpression.getBindingDefinition().getType() != null)) {
+				if (_bindingExpression != null && _bindingExpression.getBindingDefinition() != null
+						&& _bindingExpression.getBindingDefinition().getType() != null) {
 					EvaluationType wantedEvaluationType = DMType.kindOf(_bindingExpression.getBindingDefinition().getType());
-					if ((wantedEvaluationType == EvaluationType.LITERAL)
-							|| (evaluationType == wantedEvaluationType)
-							|| ((wantedEvaluationType == EvaluationType.ARITHMETIC_FLOAT) && (evaluationType == EvaluationType.ARITHMETIC_INTEGER))) {
+					if (wantedEvaluationType == EvaluationType.LITERAL || evaluationType == wantedEvaluationType
+							|| wantedEvaluationType == EvaluationType.ARITHMETIC_FLOAT
+							&& evaluationType == EvaluationType.ARITHMETIC_INTEGER) {
 						status = ExpressionParsingStatus.VALID;
 						message = FlexoLocalization.localizedForKey(VALID_EXPRESSION) + " : " + evaluationType.getLocalizedName();
 					} else {
@@ -279,7 +288,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 					message = FlexoLocalization.localizedForKey(VALID_EXPRESSION) + " : " + evaluationType.getLocalizedName();
 				}
 
-				if ((evaluationPanel != null) && (evaluationTA != null) && evaluationPanel.isVisible() && (_bindingExpression != null)) {
+				if (evaluationPanel != null && evaluationTA != null && evaluationPanel.isVisible() && _bindingExpression != null) {
 					BindingExpression evaluatedExpression = _bindingExpression.evaluate();
 					if (evaluatedExpression.getExpression() != null) {
 						evaluationTA.setText(evaluatedExpression.getExpression().toString());
@@ -295,7 +304,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	}
 
 	private boolean expressionIsUndefined(Expression expression) {
-		return ((expression instanceof BindingValueVariable) && ((BindingValueVariable) expression).getName().trim().equals(""));
+		return expression instanceof BindingValueVariable && ((BindingValueVariable) expression).getName().trim().equals("");
 	}
 
 	private Operator firstOperatorWithUndefinedOperand(Expression expression) {
@@ -337,22 +346,22 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 		try {
 			Expression newExpression;
-			if (expressionTA.getText().trim().equals("") && (_bindingExpression.getOwner() instanceof Bindable)) {
+			if (expressionTA.getText().trim().equals("") && _bindingExpression.getOwner() instanceof Bindable) {
 				newExpression = new BindingExpression.BindingValueVariable("", (Bindable) _bindingExpression.getOwner());
 			} else {
-				if ((converter == null) && (getProject() != null)) {
+				if (converter == null && getProject() != null) {
 					converter = getProject().getBindingExpressionConverter();
 				}
 				if (converter == null) {
 					logger.warning("Could not access to BindingExpressionConverter : project=" + getProject());
 					return;
 				}
-				if ((_bindingExpression != null) && (_bindingExpression.getOwner() instanceof Bindable)) {
+				if (_bindingExpression != null && _bindingExpression.getOwner() instanceof Bindable) {
 					converter.setBindable((Bindable) _bindingExpression.getOwner());
 				}
 				newExpression = converter.parseExpressionFromString(expressionTA.getText());
 			}
-			if (!newExpression.equals(_bindingExpression.getExpression()) || (status == ExpressionParsingStatus.INVALID)) {
+			if (!newExpression.equals(_bindingExpression.getExpression()) || status == ExpressionParsingStatus.INVALID) {
 				_setEditedExpression(newExpression);
 				rootExpressionPanel.setRepresentedExpression(_bindingExpression.getExpression());
 				update();
@@ -591,6 +600,20 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			_representedExpression = expression;
 			update();
 			// addFocusListeners();
+		}
+
+		public void delete() {
+			if (_bindingSelector != null) {
+				_bindingSelector.delete();
+			}
+			for (Component c : getComponents()) {
+				if (c instanceof ExpressionInnerPanel) {
+					((ExpressionInnerPanel) c).delete();
+				}
+			}
+			removeAll();
+			_representedExpression = null;
+			_bindingSelector = null;
 		}
 
 		private void addFocusListeners() {
@@ -839,7 +862,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 		private void update() {
 			ExpressionInnerPanel parent = (ExpressionInnerPanel) SwingUtilities.getAncestorOfClass(ExpressionInnerPanel.class, this);
-			if ((parent != null) && parent.isHorizontallyLayouted && (parent._representedExpression.getDepth() > 1)) {
+			if (parent != null && parent.isHorizontallyLayouted && parent._representedExpression.getDepth() > 1) {
 				parent.update();
 				return;
 			}
@@ -891,9 +914,9 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				}
 			}*/
 
-			else if ((_representedExpression instanceof BindingExpression.BindingValueVariable)
-					|| (_representedExpression instanceof BindingExpression.BindingValueFunction)
-					|| (_representedExpression instanceof BindingExpression.BindingValueConstant)) {
+			else if (_representedExpression instanceof BindingExpression.BindingValueVariable
+					|| _representedExpression instanceof BindingExpression.BindingValueFunction
+					|| _representedExpression instanceof BindingExpression.BindingValueConstant) {
 				GridBagLayout gridbag = new GridBagLayout();
 				GridBagConstraints c = new GridBagConstraints();
 				setLayout(gridbag);
@@ -1065,4 +1088,5 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		}
 		return null;
 	}
+
 }

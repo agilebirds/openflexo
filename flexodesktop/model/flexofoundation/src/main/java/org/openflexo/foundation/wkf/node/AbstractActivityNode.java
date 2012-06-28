@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.wkf.node;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -885,8 +886,8 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification instanceof RoleInserted) || (dataModification instanceof RoleRemoved)
-				|| (dataModification instanceof RoleNameChange) || (dataModification instanceof RoleColorChange)
+		if (dataModification instanceof RoleInserted || dataModification instanceof RoleRemoved
+				|| dataModification instanceof RoleNameChange || dataModification instanceof RoleColorChange
 				|| "color".equals(dataModification.propertyName())) {
 			if (dataModification instanceof RoleRemoved) {
 				if (((RoleRemoved) dataModification).oldValue() == getRole()) {
@@ -911,8 +912,8 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 		@Override
 		public ValidationIssue<ActivityMustHaveARole, AbstractActivityNode> applyValidation(final AbstractActivityNode activity) {
-			if ((activity.getNodeType() == NodeType.NORMAL) && !(activity instanceof SelfExecutableActivityNode)
-					&& (activity.getRole() == null)) {
+			if (activity.getNodeType() == NodeType.NORMAL && !(activity instanceof SelfExecutableActivityNode)
+					&& activity.getRole() == null) {
 				ValidationError<ActivityMustHaveARole, AbstractActivityNode> error = new ValidationError<ActivityMustHaveARole, AbstractActivityNode>(
 						this, activity, "activity_($object.name)_has_no_role");
 				for (Role role : activity.getProcess().getWorkflow().getRoleList().getRoles()) {
@@ -1030,14 +1031,14 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return "ABSTRACTACTIVITY";
 	}
 
-	protected FlexoColor roleTextColor = FlexoColor.GRAY_COLOR;
+	protected Color roleTextColor = FlexoColor.GRAY_COLOR;
 
-	public FlexoColor getRoleTextColor() {
+	public Color getRoleTextColor() {
 		return roleTextColor;
 	}
 
-	public void setRoleTextColor(FlexoColor roleTextColor) {
-		FlexoColor old = roleTextColor;
+	public void setRoleTextColor(Color roleTextColor) {
+		Color old = roleTextColor;
 		this.roleTextColor = roleTextColor;
 		setChanged();
 		notifyObservers(new RoleTextColorChanged(old, roleTextColor));

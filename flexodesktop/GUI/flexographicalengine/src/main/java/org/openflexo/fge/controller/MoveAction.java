@@ -46,10 +46,10 @@ public class MoveAction extends MouseDragControlAction {
 	private static final Logger logger = Logger.getLogger(MoveAction.class.getPackage().getName());
 
 	private MoveInfo currentMove = null;
-	DNDInfo currentDND = null;
+	private DNDInfo currentDND = null;
 
-	private static Image DROP_OK_IMAGE = FIBIconLibrary.DROP_OK_CURSOR.getImage();
-	private static Image DROP_KO_IMAGE = FIBIconLibrary.DROP_KO_CURSOR.getImage();
+	private static final Image DROP_OK_IMAGE = FIBIconLibrary.DROP_OK_CURSOR.getImage();
+	private static final Image DROP_KO_IMAGE = FIBIconLibrary.DROP_KO_CURSOR.getImage();
 
 	public static Cursor dropOK = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(DROP_OK_IMAGE,
 			new Point(16, 16), "Drop OK") : DragSource.DefaultMoveDrop;
@@ -72,12 +72,12 @@ public class MoveAction extends MouseDragControlAction {
 			Point newPointLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 					controller.getDrawingView());
 
-			if ((graphicalRepresentation instanceof ShapeGraphicalRepresentation)
-					&& ((ShapeGraphicalRepresentation) graphicalRepresentation).isAllowedToBeDraggedOutsideParentContainer()
-					&& currentMove.isDnDPattern(newPointLocation, event) && (currentDND == null)) {
+			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation
+					&& ((ShapeGraphicalRepresentation<?>) graphicalRepresentation).isAllowedToBeDraggedOutsideParentContainer()
+					&& currentMove.isDnDPattern(newPointLocation, event) && currentDND == null) {
 				currentMove.stopDragging();
 				currentMove = null;
-				currentDND = new DNDInfo(this, (ShapeGraphicalRepresentation) graphicalRepresentation, controller, event);
+				currentDND = new DNDInfo(this, (ShapeGraphicalRepresentation<?>) graphicalRepresentation, controller, event);
 			} else {
 				currentMove.moveTo(newPointLocation);
 			}
@@ -91,10 +91,10 @@ public class MoveAction extends MouseDragControlAction {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse PRESSED on MOVE MouseDragControlAction");
 		}
-		if ((graphicalRepresentation instanceof ShapeGraphicalRepresentation) && !graphicalRepresentation.getIsReadOnly()
-				&& (((ShapeGraphicalRepresentation<?>) graphicalRepresentation).getLocationConstraints() != LocationConstraints.UNMOVABLE)) {
-			FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
-			initialClickOffset = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), (Component) view);
+		FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
+		initialClickOffset = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), (Component) view);
+		if (graphicalRepresentation instanceof ShapeGraphicalRepresentation && !graphicalRepresentation.getIsReadOnly()
+				&& ((ShapeGraphicalRepresentation<?>) graphicalRepresentation).getLocationConstraints() != LocationConstraints.UNMOVABLE) {
 			// Let's go for a move
 			currentMove = new MoveInfo((ShapeGraphicalRepresentation<?>) graphicalRepresentation, event, view, controller);
 			controller.notifyWillMove(currentMove);
@@ -155,24 +155,28 @@ public class MoveAction extends MouseDragControlAction {
 	}
 
 	public static class TransferedShapeGraphicalRepresentation {
-		private final Point _offset;
+		private final Point offset;
 
-		private final ShapeGraphicalRepresentation _transfered;
+		private final ShapeGraphicalRepresentation<?> transfered;
 
-		public TransferedShapeGraphicalRepresentation(ShapeGraphicalRepresentation element, Point dragOffset) {
+		public TransferedShapeGraphicalRepresentation(ShapeGraphicalRepresentation<?> element, Point dragOffset) {
 			super();
-			_transfered = element;
-			_offset = dragOffset;
+			transfered = element;
+			offset = dragOffset;
 		}
 
 		public Point getOffset() {
-			return _offset;
+			return offset;
 		}
 
-		public ShapeGraphicalRepresentation getTransferedElement() {
-			return _transfered;
+		public ShapeGraphicalRepresentation<?> getTransferedElement() {
+			return transfered;
 		}
 
+	}
+
+	public void resetCurrentDND() {
+		currentDND = null;
 	}
 
 }

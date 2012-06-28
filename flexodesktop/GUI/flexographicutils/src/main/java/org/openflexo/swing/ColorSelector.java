@@ -26,6 +26,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,7 +47,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class ColorSelector extends CustomPopup<Color> implements ChangeListener {
+public class ColorSelector extends CustomPopup<Color> implements ColorSelectionModel {
 
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(ColorSelector.class.getPackage().getName());
@@ -53,13 +55,11 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 	private Color _revertValue;
 
 	protected ColorDetailsPanel _selectorPanel;
-	protected ColorSelectionModel _csm;
+	private final List<ChangeListener> listeners;
 
-	public ColorSelector(ColorSelectionModel csm) {
-		super(csm.getSelectedColor());
-		_csm = csm;
-		_csm.addChangeListener(this);
-		setRevertValue(csm.getSelectedColor());
+	public ColorSelector() {
+		super(Color.WHITE);
+		listeners = new ArrayList<ChangeListener>();
 		setFocusable(true);
 	}
 
@@ -114,8 +114,7 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 			if (editedColor == null) {
 				editedColor = Color.WHITE;
 			}
-			_csm.setSelectedColor(editedColor);
-			colorChooser = new JColorChooser(_csm);
+			colorChooser = new JColorChooser(ColorSelector.this);
 
 			setLayout(new BorderLayout());
 			add(colorChooser, BorderLayout.CENTER);
@@ -154,17 +153,11 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 	}
 
 	@Override
-	public Color getEditedObject() {
-		if (_csm != null) {
-			return _csm.getSelectedColor();
-		}
-		return null;
-	}
-
-	@Override
 	public void setEditedObject(Color color) {
-		_csm.setSelectedColor(color);
 		super.setEditedObject(color);
+		for (ChangeListener l : listeners) {
+			l.stateChanged(new ChangeEvent(this));
+		}
 	}
 
 	@Override
@@ -186,7 +179,6 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 
 	@Override
 	protected void deletePopup() {
-		_csm.removeChangeListener(this);
 		if (_selectorPanel != null) {
 			_selectorPanel.delete();
 		}
@@ -236,8 +228,23 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent e) {
-		getFrontComponent().update();
+	public void addChangeListener(ChangeListener listener) {
+		listeners.add(listener);
+	}
+
+	@Override
+	public void removeChangeListener(ChangeListener listener) {
+		listeners.remove(listener);
+	}
+
+	@Override
+	public Color getSelectedColor() {
+		return getEditedObject();
+	}
+
+	@Override
+	public void setSelectedColor(Color color) {
+		setEditedObject(color);
 	}
 
 }

@@ -32,7 +32,6 @@ import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepres
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
@@ -50,49 +49,47 @@ public class RolePalette extends DrawingPalette {
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 4; j++) {
 				if (j < 3) {
-					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "Role" + (n++),
-							false));
+					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "Role" + n++, false));
 				} else {
-					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "System" + (m++),
-							true));
+					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "System" + m++, true));
 				}
 			}
 		}
 		makePalettePanel();
 	}
 
-	private FlexoColor colorFor(int x, int y) {
+	private Color colorFor(int x, int y) {
 		if (x == 0) {
 			if (y == 0) {
-				return new FlexoColor(FGEUtils.NICE_RED);
+				return FGEUtils.NICE_RED;
 			}
 			if (y == 1) {
-				return new FlexoColor(FGEUtils.NICE_BLUE);
+				return FGEUtils.NICE_BLUE;
 			}
 			if (y == 2) {
-				return new FlexoColor(FGEUtils.NICE_YELLOW);
+				return FGEUtils.NICE_YELLOW;
 			}
 			if (y == 3) {
-				return new FlexoColor(Color.LIGHT_GRAY);
+				return Color.LIGHT_GRAY;
 			}
 		} else if (x == 1) {
 			if (y == 0) {
-				return new FlexoColor(FGEUtils.NICE_PINK);
+				return FGEUtils.NICE_PINK;
 			}
 			if (y == 1) {
-				return new FlexoColor(FGEUtils.NICE_GREEN);
+				return FGEUtils.NICE_GREEN;
 			}
 			if (y == 2) {
-				return new FlexoColor(FGEUtils.NICE_TURQUOISE);
+				return FGEUtils.NICE_TURQUOISE;
 			}
 			if (y == 3) {
-				return new FlexoColor(Color.GRAY);
+				return Color.GRAY;
 			}
 		}
-		return new FlexoColor(Color.WHITE);
+		return Color.WHITE;
 	}
 
-	private PaletteElement makeRoleElement(final FlexoColor color, int x, int y, String roleName, final boolean isSystemRole) {
+	private PaletteElement makeRoleElement(final Color color, int x, int y, String roleName, final boolean isSystemRole) {
 		Role role = new Role((FlexoProject) null, (FlexoWorkflow) null);
 		role.setColor(color);
 		role.setX(x, RepresentableFlexoModelObject.DEFAULT);
@@ -109,7 +106,7 @@ public class RolePalette extends DrawingPalette {
 		PaletteElement returned = new PaletteElement() {
 			@Override
 			public boolean acceptDragging(GraphicalRepresentation gr) {
-				return (gr instanceof DrawingGraphicalRepresentation);
+				return gr instanceof DrawingGraphicalRepresentation;
 			}
 
 			@Override

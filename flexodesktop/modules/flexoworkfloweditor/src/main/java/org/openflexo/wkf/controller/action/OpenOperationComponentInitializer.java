@@ -31,10 +31,12 @@ import org.openflexo.foundation.wkf.action.OpenOperationComponent;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class OpenOperationComponentInitializer extends ActionInitializer {
 
@@ -71,7 +73,13 @@ public class OpenOperationComponentInitializer extends ActionInitializer {
 				if (action.getFocusedObject() instanceof OperationNode) {
 					OperationNode operationNode = action.getFocusedObject();
 					if (operationNode.getComponentInstance().getComponentDefinition() != null) {
-						ExternalIEModule ieModule = ModuleLoader.getIEModule();
+						ExternalIEModule ieModule = null;
+						try {
+							ieModule = getModuleLoader().getIEModule(getProject());
+						} catch (ModuleLoadingException e1) {
+							FlexoController.notify("Cannot load Screen Editor. Exception : " + e1.getMessage());
+							e1.printStackTrace();
+						}
 						if (ieModule == null) {
 							return false;
 						}
@@ -97,11 +105,15 @@ public class OpenOperationComponentInitializer extends ActionInitializer {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switching to IE");
 			}
-			ModuleLoader.switchToModule(Module.IE_MODULE);
+			try {
+				getModuleLoader().switchToModule(Module.IE_MODULE, getController().getProject());
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
+				e.printStackTrace();
+			}
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switched to IE done!");
 			}
 		}
 	}
-
 }

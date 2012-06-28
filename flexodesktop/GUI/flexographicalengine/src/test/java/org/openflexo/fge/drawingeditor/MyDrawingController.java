@@ -50,8 +50,8 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super(aDrawing);
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
-			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
-					GraphicalRepresentation parentGraphicalRepresentation) {
+			public void performedDrawNewShape(ShapeGraphicalRepresentation<?> graphicalRepresentation,
+					GraphicalRepresentation<?> parentGraphicalRepresentation) {
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
 				MyShape newShape = new MyShape(graphicalRepresentation, graphicalRepresentation.getLocation(), getDrawing());
@@ -99,7 +99,20 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 			}
 		});
 		contextualMenu.add(cutItem);
+		initPalette();
+	}
 
+	private void initPalette() {
+		// TODO Auto-generated method stub
+		_palette = new MyDrawingPalette();
+		registerPalette(_palette);
+		activatePalette(_palette);
+	}
+
+	private MyDrawingPalette _palette;
+
+	public MyDrawingPalette getPalette() {
+		return _palette;
 	}
 
 	public void addNewShape(MyShape aShape, MyDrawingElement father) {

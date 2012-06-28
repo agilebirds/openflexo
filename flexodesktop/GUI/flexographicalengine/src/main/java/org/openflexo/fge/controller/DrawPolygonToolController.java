@@ -107,7 +107,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 
 	@Override
 	public ShapeGraphicalRepresentation<?> buildShapeGraphicalRepresentation() {
-		ShapeGraphicalRepresentation returned = new ShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON, null, getController()
+		ShapeGraphicalRepresentation<?> returned = new ShapeGraphicalRepresentation<Object>(ShapeType.CUSTOM_POLYGON, null, getController()
 				.getDrawing());
 		returned.setBorder(new ShapeBorder(5, 5, 5, 5));
 		returned.setBackground(getController().getCurrentBackgroundStyle());

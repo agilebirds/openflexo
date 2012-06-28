@@ -139,7 +139,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		Graphics2D oldGraphics = graphics.cloneGraphics();
 		graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.GREEN));
 
-		currentEditedShapeGR.paint(graphics.g2d, getController());
+		currentEditedShapeGR.paint(graphics.getGraphics(), getController());
 
 		graphics.releaseClonedGraphics(oldGraphics);
 	}

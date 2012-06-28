@@ -29,11 +29,11 @@ import org.openflexo.foundation.DataModification;
 public abstract class DMDataModification extends DataModification {
 
 	public DMDataModification(Object oldValue, Object newValue) {
-		super(DataModification.DM_DM, oldValue, newValue);
+		super(oldValue, newValue);
 	}
 
 	public DMDataModification(String propertyName, Object oldValue, Object newValue) {
-		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+		super(propertyName, oldValue, newValue);
 	}
 
 }

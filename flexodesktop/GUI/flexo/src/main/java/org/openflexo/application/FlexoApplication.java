@@ -39,10 +39,11 @@ import org.openflexo.AdvancedPrefs;
 import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.br.view.NewBugReport;
+import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.ch.DefaultHelpRetriever;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.drm.DocResourceManager;
+import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -51,9 +52,7 @@ import org.openflexo.inspector.InspectorCst;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.localization.LocalizedEditor;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.logging.viewer.FlexoLoggingViewerWindow;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
@@ -90,6 +89,8 @@ public class FlexoApplication {
 
 	private static byte[] mem = new byte[1024 * 1024];
 
+	public static boolean DEMO = false;
+
 	public static void flushPendingEvents(boolean blockUserEvents) {
 		eventProcessor.flushPendingEvents(blockUserEvents);
 	}
@@ -99,6 +100,10 @@ public class FlexoApplication {
 			return;
 		}
 		isInitialized = true;
+
+		// First init localization with default location
+		FlexoLocalization.initWith(new FlexoMainLocalizer());
+
 		boolean isMacOS = ToolBox.getPLATFORM().equals(ToolBox.MACOS);
 		JEditTextArea.DIALOG_FACTORY = FlexoDialog.DIALOG_FACTORY;
 		eventProcessor = new EventProcessor();
@@ -141,8 +146,6 @@ public class FlexoApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		FlexoLoggingViewerWindow.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
-		LocalizedEditor.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
 		InspectorCst.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
 		FlexoModelObject.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
 		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs
@@ -234,7 +237,7 @@ public class FlexoApplication {
 					// all uncaught awt thread exceptions will ultimately be
 					// caught here
 					if (exception instanceof Exception) {
-						FlexoLoggingManager.unhandledException((Exception) exception);
+						FlexoLoggingManager.instance().unhandledException((Exception) exception);
 					}
 					// FlexoLoggingManager.getMainLogger().unhandledException(exception);
 					if (logger.isLoggable(Level.SEVERE)) {
@@ -266,8 +269,8 @@ public class FlexoApplication {
 						if (!testAndSetIsReportingBug()) {
 							try {
 								if (FlexoController.confirm(message)) {
-									NewBugReport.newBugReport((Exception) exception, FlexoModule.getActiveModule() != null ? FlexoModule
-											.getActiveModule().getModule() : null);
+									JIRAIssueReportDialog.newBugReport((Exception) exception,
+											FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
 								}
 							} catch (HeadlessException e1) {
 								e1.printStackTrace();
@@ -332,6 +335,9 @@ public class FlexoApplication {
 		 * Determines if exception can be ignored.
 		 */
 		private boolean isIgnorable(Throwable exception) {
+			if (DEMO) {
+				return true;
+			}
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			exception.printStackTrace(pw);
@@ -344,6 +350,12 @@ public class FlexoApplication {
 		 * Determines if the message can be ignored. (Note: this code comes from Gnutella).
 		 */
 		private boolean isIgnorable(Throwable bug, String msg) {
+			// OutOfMemory error should definitely not be ignored. First, they can give a hint on where there is a problem. Secondly,
+			// if we ran out of memory, Flexo will not work anymore and bogus behaviour will appear everywhere. So definitely, no, we don't
+			// ignore.
+			if (bug instanceof OutOfMemoryError) {
+				return false;
+			}
 			// We are going to store 100 exceptions (although it is not going to hold a lot)
 			// and we ignore the ones with identical stacktraces
 			if (!exceptions.contains(msg)) {
@@ -353,13 +365,6 @@ public class FlexoApplication {
 				}
 			} else {
 				return true;
-			}
-
-			// OutOfMemory error should definitely not be ignored. First, they can give a hint on where there is a problem. Secondly,
-			// if we ran out of memory, Flexo will not work anymore and bogus behaviour will appear everywhere. So definitely, no, we don't
-			// ignore.
-			if (bug instanceof OutOfMemoryError) {
-				return false;
 			}
 
 			// no bug? kinda impossible, but shouldn't report.

@@ -27,11 +27,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 
+import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntResource;
 
-public class OntologyIndividual extends OntologyObject implements Comparable<OntologyIndividual> {
+public class OntologyIndividual extends OntologyObject<Individual> implements Comparable<OntologyIndividual> {
 
 	private static final Logger logger = Logger.getLogger(OntologyIndividual.class.getPackage().getName());
 
@@ -45,9 +45,12 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		superClasses = new Vector<OntologyClass>();
 	}
 
+	/**
+	 * Update this OntologyIndividual, given base Individual
+	 */
 	protected void init() {
-		updateOntologyStatements();
-		updateSuperClasses();
+		updateOntologyStatements(individual);
+		updateSuperClasses(individual);
 	}
 
 	@Override
@@ -59,10 +62,23 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		deleteObservers();
 	}
 
+	/**
+	 * Update this OntologyIndividual, given base Individual
+	 */
 	@Override
 	protected void update() {
-		updateOntologyStatements();
-		updateSuperClasses();
+		updateOntologyStatements(individual);
+		updateSuperClasses(individual);
+	}
+
+	/**
+	 * Update this OntologyIndividual, given base Individual which is assumed to extends base Individual
+	 * 
+	 * @param anOntClass
+	 */
+	protected void update(Individual anIndividual) {
+		updateOntologyStatements(anIndividual);
+		updateSuperClasses(anIndividual);
 	}
 
 	/*@Override
@@ -92,25 +108,36 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 	}
 
 	@Override
-	protected void _setOntResource(OntResource r) {
-		individual = (Individual) r;
+	protected void _setOntResource(Individual r) {
+		individual = r;
 	}
 
-	private void updateSuperClasses() {
+	private void updateSuperClasses(Individual anIndividual) {
 		// superClasses.clear();
-		Iterator it = individual.listOntClasses(true);
+		Iterator<OntClass> it = anIndividual.listOntClasses(true);
 		while (it.hasNext()) {
-			OntClass father = (OntClass) it.next();
-			OntologyClass fatherClass = getOntologyLibrary().getClass(father.getURI());
-			if (fatherClass != null) {
-				if (!superClasses.contains(fatherClass)) {
-					superClasses.add(fatherClass);
+			try {
+				OntClass father = it.next();
+				OntologyClass fatherClass = getOntology().retrieveOntologyClass(father);// getOntologyLibrary().getClass(father.getURI());
+				if (fatherClass != null) {
+					if (!superClasses.contains(fatherClass)) {
+						superClasses.add(fatherClass);
+					}
+					// System.out.println("Add "+fatherClass.getName()+" as a super class of "+getName());
+					if (!fatherClass.individuals.contains(this)) {
+						// System.out.println("Add "+getName()+" as an individual of "+fatherClass.getName());
+						fatherClass.individuals.add(this);
+					}
 				}
-				// System.out.println("Add "+fatherClass.getName()+" as a super class of "+getName());
-				if (!fatherClass.individuals.contains(this)) {
-					// System.out.println("Add "+getName()+" as an individual of "+fatherClass.getName());
-					fatherClass.individuals.add(this);
-				}
+			} catch (ConversionException e) {
+				// This happen when loading OWL2 ontology
+				// com.hp.hpl.jena.ontology.ConversionException: Cannot convert node http://www.w3.org/2002/07/owl#ObjectProperty to
+				// OntClass: it does not have rdf:type owl:Class or equivalent
+				// Please investigate this
+				logger.warning("Exception thrown while processing updateSuperClasses() for " + getURI());
+			} catch (Exception e) {
+				logger.warning("Exception thrown while processing updateSuperClasses() for " + getURI());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -164,40 +191,6 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		return false;
 	}
 
-	// Return first property value matching supplied data property
-	public Object getPropertyValue(OntologyProperty property) {
-		PropertyStatement s = getPropertyStatement(property);
-		if (s != null) {
-			if (s.hasLitteralValue()) {
-				return s.getLiteral().getValue();
-			} else if (s instanceof ObjectPropertyStatement) {
-				return ((ObjectPropertyStatement) s).getStatementObject();
-			}
-		}
-		return null;
-	}
-
-	public void setPropertyValue(OntologyProperty property, Object newValue) {
-		PropertyStatement s = getPropertyStatement(property);
-		if (s != null) {
-			if (s.hasLitteralValue() && (newValue instanceof String)) {
-				s.setStringValue((String) newValue);
-				return;
-			} else if ((s instanceof ObjectPropertyStatement) && (newValue instanceof OntologyObject)) {
-				((ObjectPropertyStatement) s).setStatementObject((OntologyObject) newValue);
-				return;
-			}
-		} else {
-			if (newValue instanceof String) {
-				getOntResource().addProperty(property.getOntProperty(), (String) newValue);
-				updateOntologyStatements();
-			} else if (newValue instanceof OntologyObject) {
-				getOntResource().addProperty(property.getOntProperty(), ((OntologyObject) newValue).getOntResource());
-				updateOntologyStatements();
-			}
-		}
-	}
-
 	@Override
 	public String getDisplayableDescription() {
 		String extendsLabel = " extends ";
@@ -215,6 +208,15 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 	}
 
 	@Override
+	protected void recursivelySearchRangeAndDomains() {
+		super.recursivelySearchRangeAndDomains();
+		for (OntologyClass aClass : getSuperClasses()) {
+			propertiesTakingMySelfAsRange.addAll(aClass.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(aClass.getPropertiesTakingMySelfAsDomain());
+		}
+	}
+
+	/*@Override
 	protected void recursivelySearchRangeAndDomains() {
 		super.recursivelySearchRangeAndDomains();
 		Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
@@ -241,6 +243,63 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
 			_appendRangeAndDomains(superSuperClass, alreadyComputed);
 		}
+	}*/
+
+	@Override
+	public String getHTMLDescription() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<html>");
+		sb.append("Individual <b>" + getName() + "</b><br>");
+		sb.append("<i>" + getURI() + "</i><br>");
+		sb.append("<b>Asserted in:</b> " + getOntology().getURI() + "<br>");
+		if (redefinesOriginalDefinition()) {
+			sb.append("<b>Redefines:</b> " + getOriginalDefinition() + "<br>");
+		}
+		sb.append("<b>Types:</b>");
+		for (OntologyClass c : getSuperClasses()) {
+			sb.append(" " + c.getDisplayableDescription() + "(" + c.getOntology() + ")");
+		}
+		sb.append("</html>");
+		return sb.toString();
 	}
 
+	@Override
+	public String getDescription() {
+		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI));
+	}
+
+	@Override
+	public void setDescription(String aDescription) {
+		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.OPENFLEXO_DESCRIPTION_URI), aDescription);
+	}
+
+	@Override
+	public String getTechnicalDescription() {
+		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI));
+	}
+
+	@Override
+	public void setTechnicalDescription(String technicalDescription) {
+		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.TECHNICAL_DESCRIPTION_URI), technicalDescription);
+	};
+
+	@Override
+	public String getBusinessDescription() {
+		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI));
+	}
+
+	@Override
+	public void setBusinessDescription(String businessDescription) {
+		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.BUSINESS_DESCRIPTION_URI), businessDescription);
+	}
+
+	@Override
+	public String getUserManualDescription() {
+		return (String) getPropertyValue(getOntology().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI));
+	}
+
+	@Override
+	public void setUserManualDescription(String userManualDescription) {
+		setPropertyValue(getOntology().getDataProperty(OntologyLibrary.USER_MANUAL_DESCRIPTION_URI), userManualDescription);
+	}
 }

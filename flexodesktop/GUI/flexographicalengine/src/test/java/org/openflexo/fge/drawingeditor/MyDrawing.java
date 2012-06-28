@@ -31,7 +31,7 @@ import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
-public class MyDrawing extends MyDrawingElement {
+public class MyDrawing extends MyDrawingElement<MyDrawing, MyDrawingGraphicalRepresentation> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MyDrawing.class.getPackage().getName());
 
@@ -51,7 +51,7 @@ public class MyDrawing extends MyDrawingElement {
 
 	public File file = null;
 
-	private EditedDrawing editedDrawing;
+	private EditedDrawing editedDrawing = new EditedDrawing(this);
 
 	// Called for NEW
 	public static MyDrawing makeNewDrawing() {
@@ -64,53 +64,49 @@ public class MyDrawing extends MyDrawingElement {
 
 	private MyDrawing() {
 		super(null);
-		_drawing = this;
-		editedDrawing = new EditedDrawing(this);
+		setGraphicalRepresentation(new MyDrawingGraphicalRepresentation(editedDrawing));
 	}
 
 	// Called for LOAD
 	public MyDrawing(DrawingBuilder builder) {
-		this();
-		builder.drawing = editedDrawing;
+		super(null);
+		builder.drawing = this;
 		initializeDeserialization();
+	}
+
+	@Override
+	public MyDrawing getDrawing() {
+		return this;
 	}
 
 	public String getTitle() {
 		if (file != null) {
 			return file.getName();
 		} else {
-			return FlexoLocalization.localizedForKey("untitled") + "-" + index;
+			return FlexoLocalization.localizedForKey(TestDrawingEditor.LOCALIZATION, "untitled") + "-" + index;
 		}
-	}
-
-	@Override
-	public MyDrawingGraphicalRepresentation getGraphicalRepresentation() {
-		return editedDrawing.getDrawingGraphicalRepresentation();
-	}
-
-	public void setGraphicalRepresentation(MyDrawingGraphicalRepresentation aGR) {
-		aGR.setDrawable(this);
-		editedDrawing.setDrawingGraphicalRepresentation(aGR);
 	}
 
 	public EditedDrawing getEditedDrawing() {
 		return editedDrawing;
 	}
 
-	public void save() {
+	public boolean save() {
 		System.out.println("Saving " + file);
 
 		XMLCoder coder = new XMLCoder(mapping);
 
 		try {
 			coder.encodeObject(this, new FileOutputStream(file));
+			clearChanged();
 			logger.info("Succeeded to save: " + file);
-			System.out.println("> " + (new XMLCoder(mapping)).encodeObject(this));
+			System.out.println("> " + new XMLCoder(mapping).encodeObject(this));
+			return true;
 		} catch (Exception e) {
 			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-
+		return false;
 	}
 
 	public static MyDrawing load(File file) {
@@ -132,7 +128,7 @@ public class MyDrawing extends MyDrawingElement {
 	}
 
 	public static class DrawingBuilder {
-		public EditedDrawing drawing;
+		public MyDrawing drawing;
 	}
 
 	@Override
@@ -149,9 +145,9 @@ public class MyDrawing extends MyDrawingElement {
 
 	}
 
-	private void _finalizeDeserializationFor(MyDrawingElement element) {
+	private void _finalizeDeserializationFor(MyDrawingElement<?, ?> element) {
 		// element.getGraphicalRepresentation().resetToDefaultIdentifier();
-		for (MyDrawingElement e : element.getChilds()) {
+		for (MyDrawingElement<?, ?> e : element.getChilds()) {
 			getDrawing().getEditedDrawing().addDrawable(e, element);
 			_finalizeDeserializationFor(e);
 		}

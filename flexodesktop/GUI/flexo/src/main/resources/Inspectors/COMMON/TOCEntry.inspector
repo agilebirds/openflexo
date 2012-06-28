@@ -1,47 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.toc.TOCEntry" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="level" localize="true" name="LevelLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="3" data="data.level.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Level" readOnly="true" localize="true">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.TOCEntry" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="AdvancedTab">
+      <Label label="level" localize="true" name="LevelLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <TextField passwd="false" readOnly="true" localize="true" name="Level" data="data.level.toString" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" useScrollBar="false">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="depth" localize="true" name="DepthLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="5" data="data.depth.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="Depth" readOnly="true" localize="true">
+      <Label label="depth" localize="true" name="DepthLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <TextField passwd="false" readOnly="true" localize="true" name="Depth" data="data.depth.toString" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" useScrollBar="false">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="section" localize="true" name="IdentifierLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="7" data="data.identifier.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="Identifier" readOnly="true" localize="true">
+      <Label label="section" localize="true" name="IdentifierLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <TextField passwd="false" readOnly="true" localize="true" name="Identifier" data="data.identifier.toString" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=false)" useScrollBar="false">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="subType" localize="true" name="SubTypeLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="9" data="data.subType.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" name="SubType" readOnly="true" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
-      </TextField>
-    </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="title" localize="true" name="TitleLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="3" data="data.title" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Title" localize="true" />
-      <Label label="index" localize="true" name="IndexLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <Number numberType="IntegerType" index="5" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="Index" localize="true" />
-      <Label label="startOnANewPage" localize="true" name="StartOnANewPageLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
-      <CheckBox selected="false" localize="true" name="StartOnANewPage" index="7" data="data.startOnANewPage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" />
-      <Label label="include_subprocesses" localize="true" name="RecursionEnabledLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="(data.isDocSubType = true)" />
-      <CheckBox selected="false" localize="true" name="RecursionEnabled" index="9" data="data.recursionEnabled" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" visible="(data.isDocSubType = true)" />
-      <Label label="is_read_only" localize="true" name="IsReadOnlyLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
-      <Label label="include_statuslist" localize="true" name="IncludeStatusListLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsTop=5;location=left)" visible="((data.isDocSubType = true) | (data.isProcessesSection = true))" />
-      <CheckBox selected="false" readOnly="true" localize="true" name="IsReadOnly" index="11" data="data.isReadOnly" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;location=right)">
+     </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
+      <Label label="title" localize="true" name="TitleLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <TextField passwd="false" localize="true" name="Title" data="data.title" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <Number numberType="IntegerType" data="data.index" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" useScrollBar="false" name="Index" localize="true" />
+      <Label label="startOnANewPage" localize="true" name="StartOnANewPageLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <CheckBox selected="false" localize="true" name="StartOnANewPage" data="data.startOnANewPage" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <Label label="renderSectionTitle" localize="true" name="RenderSectionTitleLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <CheckBox selected="false" localize="true" name="RenderSectionTitle" data="data.renderSectionTitle" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <Label label="include_subprocesses" localize="true" name="RecursionEnabledLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="(data.isDocSubType = true)" useScrollBar="false" />
+      <CheckBox selected="false" localize="true" name="RecursionEnabled" data="data.recursionEnabled" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" visible="(data.isDocSubType = true)" useScrollBar="false" />
+      <Label label="is_read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <CheckBox selected="false" readOnly="true" localize="true" name="IsReadOnly" data="data.isReadOnly" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" useScrollBar="false">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </CheckBox>
-      <CheckBox selected="false" localize="true" name="IncludeStatusList" index="11" data="data.includeStatusList" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" visible="((data.isDocSubType = true) | (data.isProcessesSection = true))" />
-      <Label label="diagram" localize="true" name="DocumentedDiagramLabel" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" visible="(data.isERDiagram = true)" />
-      <Custom componentClassName="org.openflexo.components.widget.FIBRoleSelector" index="13" data="data.documentedRole" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;location=right)" visible="(data.isIndividualRole = true)" name="DocumentedRole" localize="true" manageDynamicModel="true">
+      <Label label="include_statuslist" localize="true" name="IncludeStatusListLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="((data.isDocSubType = true) | (data.isProcessesSection = true))" useScrollBar="false" />
+      <CheckBox selected="false" localize="true" name="IncludeStatusList" data="data.includeStatusList" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" visible="((data.isDocSubType = true) | (data.isProcessesSection = true))" useScrollBar="false" />
+      <Label label="diagram" localize="true" name="DocumentedDiagramLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" visible="(data.isERDiagram = true)" useScrollBar="false" />
+      <DropDown format="object.name" localize="true" name="DocumentedDiagram" data="data.documentedDiagram" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" visible="(data.isERDiagram = true)" useScrollBar="false" list="data.availableDiagrams" iteratorClassName="org.openflexo.foundation.dm.ERDiagram" />
+      <Label label="role" localize="true" name="DocumentedRoleLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" visible="(data.isIndividualRole = true)" useScrollBar="false" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBRoleSelector" data="data.documentedRole" constraints="twocols(location=right;index=17;expandHorizontally=false;expandVertically=false)" visible="(data.isIndividualRole = true)" useScrollBar="false" name="DocumentedRole" localize="true">
         <Assignment variable="component.project" value="data.project" />
       </Custom>
-      <Label label="type" localize="true" name="SubTypeLabel" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" visible="(data.isIndividualProcessOrProcessFolder = true)" />
-      <TextField passwd="false" index="15" data="data.subType.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;location=right)" visible="(data.isIndividualProcessOrProcessFolder = true)" name="SubType" readOnly="true" localize="true" />
-      <DropDown showReset="true" format="object.name" localize="true" name="DocumentedDiagram" index="13" data="data.documentedDiagram" constraints="twocols(expandHorizontally=false;expandVertically=false;index=16;location=right)" visible="(data.isERDiagram = true)" list="data.availableDiagrams" iteratorClassName="org.openflexo.foundation.dm.ERDiagram" autoSelectFirstRow="false" />
-      <Label label="role" localize="true" name="DocumentedRoleLabel" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=17;insetsTop=5;location=left)" visible="(data.isIndividualRole = true)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

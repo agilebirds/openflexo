@@ -66,6 +66,8 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 	protected ShadowStyleDetailsPanel _selectorPanel;
 
+	private ShadowStylePreviewPanel shadowStylePreviewPanel;
+
 	public FIBShadowStyleSelector(ShadowStyle editedObject) {
 		super(editedObject);
 		setRevertValue(editedObject != null ? editedObject.clone() : null);
@@ -73,7 +75,28 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		shadowStylePreviewPanel.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
+	}
+
+	@Override
 	public void init(FIBCustom component, FIBController controller) {
+	}
+
+	/**
+	 * Return a flag indicating if equals() method should be used to determine equality.<br>
+	 * For the FIBForegroundStyleSelector implementation, we MUST return false, because we can otherwise switch between ForegroundStyle
+	 * which are equals, and then start to share ShadowStyle between many GraphicalRepresentation
+	 * 
+	 * @return false
+	 */
+	@Override
+	public boolean useEqualsLookup() {
+		return false;
 	}
 
 	@Override
@@ -141,6 +164,11 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 		}
 
 		public void delete() {
+			controller.delete();
+			fibView.delete();
+			fibComponent = null;
+			controller = null;
+			fibView = null;
 		}
 
 		public class CustomFIBController extends FIBController<ShadowStyle> {
@@ -201,7 +229,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 	@Override
 	protected ShadowStylePreviewPanel buildFrontComponent() {
-		return new ShadowStylePreviewPanel();
+		return shadowStylePreviewPanel = new ShadowStylePreviewPanel();
 	}
 
 	@Override
@@ -297,12 +325,20 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			shapeGR.setIsFocusable(false);
 			shapeGR.setIsReadOnly(true);
 			shapeGR.setBorder(new ShapeBorder(20, 20, 20, 20));
+			shapeGR.setValidated(true);
 
 			update();
 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
 
+		}
+
+		public void delete() {
+			controller.delete();
+			drawingGR.delete();
+			shapeGR.delete();
+			drawing = null;
 		}
 
 		protected void update() {

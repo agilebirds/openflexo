@@ -20,51 +20,58 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.Color;
-import java.util.Vector;
 import java.util.logging.Logger;
-
-import javax.swing.colorchooser.ColorSelectionModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.swing.ColorSelector;
+import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
-public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color> implements ColorSelectionModel {
+public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color> implements ApplyCancelListener {
 
 	private static final Logger logger = Logger.getLogger(FIBColorWidget.class.getPackage().getName());
 
 	// public static final Icon ARROW_DOWN = new ImageIconResource("Resources/ArrowDown.gif");
 
 	protected ColorSelector _selector;
-	private final Vector<ChangeListener> _listeners;
 
 	public FIBColorWidget(FIBColor model, FIBController controller) {
 		super(model, controller);
 
-		_listeners = new Vector<ChangeListener>();
-
-		_selector = new ColorSelector(this);
+		_selector = new ColorSelector();
 		if (isReadOnly()) {
 			_selector.getDownButton().setEnabled(false);
+		} else {
+			_selector.addApplyCancelListener(this);
 		}
-
 		getJComponent().addFocusListener(this);
 
 		updateFont();
 	}
 
 	@Override
+	public void fireApplyPerformed() {
+		updateModelFromWidget();
+	}
+
+	@Override
+	public void fireCancelPerformed() {
+		// Nothing to do, widget resets itself automatically and model has not been changed.
+	}
+
+	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		// if (notEquals(getValue(),getSelectedColor())) {
-		widgetUpdating = true;
-		setColor(getValue());
-		widgetUpdating = false;
-		return true;
-		// }
-		// return false;
+		if (notEquals(getValue(), _selector.getEditedObject())) {
+			widgetUpdating = true;
+			try {
+				setColor(getValue());
+			} finally {
+				widgetUpdating = false;
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -72,11 +79,16 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), getSelectedColor())) {
+		if (notEquals(getValue(), _selector.getEditedObject())) {
 			if (isReadOnly()) {
 				return false;
 			}
-			setValue(_selector.getEditedObject());
+			modelUpdating = true;
+			try {
+				setValue(_selector.getEditedObject());
+			} finally {
+				modelUpdating = false;
+			}
 			return true;
 		}
 		return false;
@@ -94,29 +106,6 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 
 	protected void setColor(Color aColor) {
 		_selector.setEditedObject(aColor);
-	}
-
-	@Override
-	public Color getSelectedColor() {
-		return getValue();
-	}
-
-	@Override
-	public void addChangeListener(ChangeListener listener) {
-		_listeners.add(listener);
-	}
-
-	@Override
-	public void removeChangeListener(ChangeListener listener) {
-		_listeners.remove(listener);
-	}
-
-	@Override
-	public void setSelectedColor(Color color) {
-		setValue(color);
-		for (ChangeListener l : _listeners) {
-			l.stateChanged(new ChangeEvent(this));
-		}
 	}
 
 }

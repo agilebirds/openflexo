@@ -50,13 +50,14 @@ import javax.swing.event.ListSelectionListener;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 
 /**
  * Defines the panel allowing to show and edit a ValidationModel
@@ -290,11 +291,11 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 				_ruleDescription.setEditable(false);
 				_ruleName.getDocument().removeDocumentListener(_ruleNameDocumentListener);
 				_ruleDescription.getDocument().removeDocumentListener(_ruleDescriptionDocumentListener);
-				FlexoLocalization.saveAllDictionaries();
+				((FlexoMainLocalizer) FlexoLocalization.getMainLocalizer()).saveAllDictionaries();
 			}
 		});
 		controlPanel.add(closeButton);
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			controlPanel.add(editButton);
 			controlPanel.add(saveButton);
 		}

@@ -1,7 +1,6 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -9,6 +8,7 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 
@@ -41,7 +41,7 @@ public class EditionSchemeParameterPathElement<T> implements SimplePathElement<T
 
 	@Override
 	public Type getType() {
-		return parameter.getWidget().getType();
+		return parameter.getType();
 	}
 
 	@Override
@@ -56,13 +56,13 @@ public class EditionSchemeParameterPathElement<T> implements SimplePathElement<T
 
 	@Override
 	public boolean isSettable() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public T getBindingValue(Object target, BindingEvaluationContext context) {
-		if (target instanceof Hashtable) {
-			return (T) ((Hashtable) target).get(parameter.getName());
+		if (target instanceof EditionSchemeAction<?>) {
+			return (T) ((EditionSchemeAction<?>) target).getParameterValue(parameter);
 		} else {
 			logger.warning("Unexpected: " + target);
 			return null;
@@ -71,7 +71,11 @@ public class EditionSchemeParameterPathElement<T> implements SimplePathElement<T
 
 	@Override
 	public void setBindingValue(T value, Object target, BindingEvaluationContext context) {
-		// Not relevant because not settable
+		if (target instanceof EditionSchemeAction<?>) {
+			((EditionSchemeAction<?>) target).setParameterValue(parameter, value);
+		} else {
+			logger.warning("Unexpected: " + target);
+		}
 	}
 
 	@Override

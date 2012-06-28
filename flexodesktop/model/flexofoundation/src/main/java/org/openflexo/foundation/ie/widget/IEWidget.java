@@ -20,7 +20,7 @@
 package org.openflexo.foundation.ie.widget;
 
 /**
- * Abstract class defining the common behaviour of a widget embedded in a
+ * Abstract class defining the common behavior of a widget embedded in a
  * WOComponent
  * 
  * @author bmangez
@@ -29,7 +29,6 @@ package org.openflexo.foundation.ie.widget;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -98,8 +97,6 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 	// ==================================
 	// ==========================================================================
 
-	private Hashtable _bindings;
-
 	protected String _inspectorName;
 
 	protected int _row;
@@ -136,7 +133,6 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 		_project = prj;
 		_parent = parent;
 		setWOComponent(woComponent);
-		_bindings = new Hashtable();
 		_additionalBindings = new Vector<AdditionalBindingDefinition>();
 	}
 
@@ -378,17 +374,9 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 	 */
 	@Override
 	public Vector<IEWidget> getAllEmbeddedDeleted() {
-		Vector returned = new Vector();
+		Vector<IEWidget> returned = new Vector<IEWidget>();
 		returned.add(this);
 		return returned;
-	}
-
-	public boolean isUsedName(String name) {
-		return _bindings.containsKey(name);
-	}
-
-	public Enumeration bindings() {
-		return _bindings.elements();
 	}
 
 	@Override
@@ -544,7 +532,7 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 		return false;
 	}
 
-	public Vector getAvailableDomains() {
+	public Vector<Domain> getAvailableDomains() {
 		return getProject().getDKVModel().getSortedDomains();
 	}
 
@@ -705,9 +693,7 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 	public void setAdditionalBindings(Vector<AdditionalBindingDefinition> value) {
 		_additionalBindings = value;
 		if (_additionalBindings != null) {
-			Enumeration en = _additionalBindings.elements();
-			while (en.hasMoreElements()) {
-				AdditionalBindingDefinition element = (AdditionalBindingDefinition) en.nextElement();
+			for (AdditionalBindingDefinition element : _additionalBindings) {
 				element.setOwner(this);
 			}
 		}
@@ -740,9 +726,7 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 
 	public AdditionalBindingDefinition findBindingNamed(String s) {
 		if (_additionalBindings != null) {
-			Enumeration en = _additionalBindings.elements();
-			while (en.hasMoreElements()) {
-				AdditionalBindingDefinition element = (AdditionalBindingDefinition) en.nextElement();
+			for (AdditionalBindingDefinition element : _additionalBindings) {
 				if (element.getVariableName().equalsIgnoreCase(s)) {
 					return element;
 				}
@@ -1335,13 +1319,13 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 				try {
 					switch (type) {
 					case DOUBLE:
-						result.add(new Double(valueString));
+						result.add(Double.valueOf(valueString));
 						break;
 					case FLOAT:
-						result.add(new Float(valueString));
+						result.add(Float.valueOf(valueString));
 						break;
 					case INTEGER:
-						result.add(new Integer(valueString));
+						result.add(Integer.valueOf(valueString));
 						break;
 					}
 				} catch (NumberFormatException e) {

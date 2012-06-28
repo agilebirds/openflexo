@@ -19,18 +19,17 @@
  */
 package org.openflexo.fge;
 
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -40,8 +39,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.JLabel;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
@@ -67,23 +64,41 @@ import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
 import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
 import org.openflexo.fge.notifications.GraphicalRepresentationRemoved;
 import org.openflexo.fge.notifications.LabelHasEdited;
+import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
+import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.inspector.DefaultInspectableObject;
-import org.openflexo.toolbox.StringUtils;
+import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public abstract class GraphicalRepresentation<O> extends DefaultInspectableObject implements XMLSerializable, Bindable,
-		BindingEvaluationContext, Cloneable, FGEConstants, Observer {
+		BindingEvaluationContext, Cloneable, FGEConstants, Observer, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(GraphicalRepresentation.class.getPackage().getName());
+
+	// Instantiate a new localizer in directory src/dev/resources/FGELocalized
+	// Little hack to be removed: linked to parent localizer (which is Openflexo main localizer)
+	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FGELocalized"),
+			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null, false), true);
+
 	private Stroke specificStroke = null;
 
 	private static BindingFactory BINDING_FACTORY = new GRBindingFactory();
 
+	private static final List<Object> EMPTY_VECTOR = Collections.emptyList();
+	private static final List<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = Collections.emptyList();
+
 	// *******************************************************************************
 	// * Parameters *
 	// *******************************************************************************
+
+	public static interface LabelMetricsProvider {
+		public Dimension getScaledPreferredDimension(double scale);
+
+	}
 
 	public static interface GRParameter {
 		public String name();
@@ -95,13 +110,14 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		hasText,
 		text,
 		isMultilineAllowed,
+		lineWrap,
 		continuousTextEditing,
 		textStyle,
-		relativeTextX,
-		relativeTextY,
 		absoluteTextX,
 		absoluteTextY,
-		textAlignment,
+		horizontalTextAlignment,
+		verticalTextAlignment,
+		paragraphAlignment,
 		isSelectable,
 		isFocusable,
 		isSelected,
@@ -122,12 +138,13 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	private TextStyle textStyle = TextStyle.makeDefault();
 	private String text;
 	private boolean multilineAllowed = false;
+	private boolean lineWrap = false;
 	private boolean continuousTextEditing = true;
-	private double relativeTextX = 0.5;
-	private double relativeTextY = 0.5;
 	private double absoluteTextX = 0;
 	private double absoluteTextY = 0;
-	private TextAlignment textAlignment = TextAlignment.CENTER;
+	private HorizontalTextAlignment horizontalTextAlignment = HorizontalTextAlignment.CENTER;
+	private VerticalTextAlignment verticalTextAlignment = VerticalTextAlignment.MIDDLE;
+	private ParagraphAlignment paragraphAlignment = ParagraphAlignment.CENTER;
 
 	private boolean isSelectable = true;
 	private boolean isFocusable = true;
@@ -143,20 +160,30 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	private Vector<MouseClickControl> mouseClickControls;
 	private Vector<MouseDragControl> mouseDragControls;
 
+	private PropertyChangeSupport pcSupport;
+
 	private String toolTipText = null;
 
-	public static enum TextAlignment {
-		CENTER, LEFT, RIGHT
+	public static enum ParagraphAlignment {
+		LEFT, CENTER, RIGHT, JUSTIFY;
+	}
+
+	public static enum HorizontalTextAlignment {
+		LEFT, CENTER, RIGHT
+	}
+
+	public static enum VerticalTextAlignment {
+		TOP, MIDDLE, BOTTOM;
 	}
 
 	protected static class ConstraintDependency {
-		GraphicalRepresentation requiringGR;
+		GraphicalRepresentation<?> requiringGR;
 		GRParameter requiringParameter;
-		GraphicalRepresentation requiredGR;
+		GraphicalRepresentation<?> requiredGR;
 		GRParameter requiredParameter;
 
-		public ConstraintDependency(GraphicalRepresentation requiringGR, GRParameter requiringParameter,
-				GraphicalRepresentation requiredGR, GRParameter requiredParameter) {
+		public ConstraintDependency(GraphicalRepresentation<?> requiringGR, GRParameter requiringParameter,
+				GraphicalRepresentation<?> requiredGR, GRParameter requiredParameter) {
 			super();
 			this.requiringGR = requiringGR;
 			this.requiringParameter = requiringParameter;
@@ -302,6 +329,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (textStyle != null) {
 			textStyle.deleteObserver(this);
 		}
+		_bindingModel = null;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationDeleted(this));
 		deleteObservers();
@@ -356,7 +384,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 						excepted = true;
 					}
 				}
-				if (p != Parameters.mouseClickControls && p != Parameters.mouseDragControls && !excepted) {
+				if (p != Parameters.mouseClickControls && p != Parameters.mouseDragControls && p != Parameters.identifier && !excepted) {
 					_setParameterValueWith(p, gr);
 				}
 			}
@@ -455,7 +483,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (getParentGraphicalRepresentation() == null) {
 			return "root";
 		} else {
-			int index = getParentGraphicalRepresentation().getContainedGraphicalRepresentations().indexOf(this);
+			// int index = getParentGraphicalRepresentation().getContainedGraphicalRepresentations().indexOf(this);
+			int index = getIndex();
 			if (getParentGraphicalRepresentation().getParentGraphicalRepresentation() == null) {
 				// logger.info("retrieveDefaultIdentifier return "+index);
 				return "object_" + index;
@@ -553,13 +582,17 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		return getDrawing().getContainedObjects(getDrawable());
 	}
 
-	public Vector<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
+	public List<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
 		// Indirection added to separate callers that require an ordered list of contained GR and those who do not care. Wa may then later
 		// reimplement these methods to optimizer perfs.
 		return getOrderedContainedGraphicalRepresentations();
 	}
 
-	public Vector<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
+	public List<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
+		if (!isValidated()) {
+			return EMPTY_GR_VECTOR;
+		}
+
 		if (getContainedObjects() == null) {
 			return null;
 		}
@@ -589,11 +622,15 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		return orderedContainedGR;
 	}
 
-	private Vector<GraphicalRepresentation<?>> orderedContainedGR = null;
+	private List<GraphicalRepresentation<?>> orderedContainedGR = null;
 
-	private Vector<GraphicalRepresentation<?>> getOrderedContainedGR() {
+	private List<GraphicalRepresentation<?>> getOrderedContainedGR() {
+		if (!isValidated()) {
+			logger.warning("GR " + this + " is not validated");
+			return EMPTY_GR_VECTOR;
+		}
 		if (orderedContainedGR == null) {
-			orderedContainedGR = new Vector<GraphicalRepresentation<?>>();
+			orderedContainedGR = new ArrayList<GraphicalRepresentation<?>>();
 			for (GraphicalRepresentation<?> c : getOrderedContainedGraphicalRepresentations()) {
 				if (!orderedContainedGR.contains(c)) {
 					orderedContainedGR.add(c);
@@ -603,16 +640,22 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		return orderedContainedGR;
 	}
 
-	public void moveToTop(GraphicalRepresentation gr) {
-		getOrderedContainedGR();
-		if (orderedContainedGR.contains(gr)) {
-			orderedContainedGR.remove(gr);
+	public void moveToTop(GraphicalRepresentation<?> gr) {
+		// TODO: something to do here
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("moveToTop temporarily desactivated");
 		}
-		orderedContainedGR.add(gr);
+		/*if (!gr.isValidated()) {
+			logger.warning("GR " + gr + " is not validated");
+		}
+		if (getOrderedContainedGR().contains(gr)) {
+			getOrderedContainedGR().remove(gr);
+		}
+		getOrderedContainedGR().add(gr);*/
 	}
 
-	public int getOrder(GraphicalRepresentation child1, GraphicalRepresentation child2) {
-		Vector<GraphicalRepresentation<?>> orderedGRList = getOrderedContainedGraphicalRepresentations();
+	public int getOrder(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2) {
+		List<GraphicalRepresentation<?>> orderedGRList = getOrderedContainedGraphicalRepresentations();
 
 		// logger.info("getOrder: "+orderedGRList);
 		if (!orderedGRList.contains(child1)) {
@@ -632,10 +675,18 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public int getLayerOrder() {
+		if (!isValidated()) {
+			return -1;
+		}
 		if (getParentGraphicalRepresentation() == null) {
 			return -1;
 		}
-		Vector<GraphicalRepresentation<?>> orderedGRList = getParentGraphicalRepresentation().getOrderedContainedGraphicalRepresentations();
+		List<GraphicalRepresentation<?>> orderedGRList = getParentGraphicalRepresentation().getOrderedContainedGraphicalRepresentations();
+		/*System.out.println("Index of " + this + " inside parent " + getParentGraphicalRepresentation() + " is "
+				+ orderedGRList.indexOf(this));
+		for (GraphicalRepresentation gr : orderedGRList) {
+			System.out.println("> " + gr + " : is this=" + gr.equals(this));
+		}*/
 		return orderedGRList.indexOf(this);
 	}
 
@@ -654,6 +705,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public GraphicalRepresentation<?> getContainerGraphicalRepresentation() {
+		if (!isValidated()) {
+			return null;
+		}
 		Object container = getContainer();
 		if (container == null) {
 			// logger.warning("No container for "+this);
@@ -667,20 +721,30 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public boolean contains(GraphicalRepresentation<?> gr) {
+		if (!isValidated()) {
+			return false;
+		}
 		return getContainedGraphicalRepresentations().contains(gr);
 	}
 
 	public boolean contains(Object drawable) {
+		if (!isValidated()) {
+			return false;
+		}
 		return getContainedGraphicalRepresentations().contains(getGraphicalRepresentation(drawable));
 	}
 
-	private static Vector<Object> EMPTY_VECTOR = new Vector<Object>();
-
-	public Vector<Object> getAncestors() {
+	public List<Object> getAncestors() {
+		if (!isValidated()) {
+			return EMPTY_VECTOR;
+		}
 		return getAncestors(false);
 	}
 
-	public Vector<Object> getAncestors(boolean forceRecompute) {
+	public List<Object> getAncestors(boolean forceRecompute) {
+		if (!isValidated()) {
+			return EMPTY_VECTOR;
+		}
 		if (getDrawing() == null) {
 			return EMPTY_VECTOR;
 		}
@@ -702,6 +766,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public boolean isConnectedToDrawing() {
+		if (!isValidated()) {
+			return false;
+		}
 		Object current = getDrawable();
 		while (current != getDrawing().getModel()) {
 			Object container = drawing.getContainer(current);
@@ -714,6 +781,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public boolean isAncestorOf(GraphicalRepresentation<?> child) {
+		if (!isValidated()) {
+			return false;
+		}
 		GraphicalRepresentation<?> father = child.getContainerGraphicalRepresentation();
 		while (father != null) {
 			if (father == this) {
@@ -725,21 +795,33 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2) {
+		if (!child1.isValidated()) {
+			return null;
+		}
+		if (!child2.isValidated()) {
+			return null;
+		}
 		return getFirstCommonAncestor(child1, child2, false);
 	}
 
 	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2,
 			boolean includeCurrent) {
-		Vector<Object> ancestors1 = child1.getAncestors(true);
-		if (includeCurrent) {
-			ancestors1.insertElementAt(child1, 0);
+		if (!child1.isValidated()) {
+			return null;
 		}
-		Vector<Object> ancestors2 = child2.getAncestors(true);
+		if (!child2.isValidated()) {
+			return null;
+		}
+		List<Object> ancestors1 = child1.getAncestors(true);
 		if (includeCurrent) {
-			ancestors2.insertElementAt(child2, 0);
+			ancestors1.add(0, child1);
+		}
+		List<Object> ancestors2 = child2.getAncestors(true);
+		if (includeCurrent) {
+			ancestors2.add(0, child2);
 		}
 		for (int i = 0; i < ancestors1.size(); i++) {
-			Object o1 = ancestors1.elementAt(i);
+			Object o1 = ancestors1.get(i);
 			if (ancestors2.contains(o1)) {
 				return child1.getGraphicalRepresentation(o1);
 			}
@@ -748,10 +830,10 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public static boolean areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation<?> element1, GraphicalRepresentation<?> element2) {
-		if (element1 == null) {
+		if (!element1.isValidated()) {
 			return false;
 		}
-		if (element2 == null) {
+		if (!element2.isValidated()) {
 			return false;
 		}
 		return getFirstCommonAncestor(element1, element2) != null;
@@ -806,7 +888,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 
 		/*
-		 * if (this instanceof ShapeGraphicalRepresentation) { // Be carefull, maybe this point is just on outline // So translate it to the
+		 * if (this instanceof ShapeGraphicalRepresentation) { // Be careful, maybe this point is just on outline // So translate it to the
 		 * center to be sure FGEPoint center = ((ShapeGraphicalRepresentation)this).getShape ().getShape().getCenter(); p.x =
 		 * p.x+FGEGeometricObject.EPSILON*(center.x-p.x); p.y = p.y+FGEGeometricObject.EPSILON*(center.y-p.y); }
 		 * 
@@ -814,10 +896,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		 * = drawingGR.getTopLevelShapeGraphicalRepresentation( convertNormalizedPoint(this, p, drawingGR));
 		 */
 
-		ShapeGraphicalRepresentation<?> topLevelShape = shapeHiding(p);
+		GraphicalRepresentation<?> topLevelShape = shapeHiding(p);
 
 		return topLevelShape == null;
-
 	}
 
 	public ShapeGraphicalRepresentation<?> shapeHiding(FGEPoint p) {
@@ -826,9 +907,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 
 		if (this instanceof ShapeGraphicalRepresentation) {
-			// Be carefull, maybe this point is just on outline
+			// Be careful, maybe this point is just on outline
 			// So translate it to the center to be sure
-			FGEPoint center = ((ShapeGraphicalRepresentation) this).getShape().getShape().getCenter();
+			FGEPoint center = ((ShapeGraphicalRepresentation<?>) this).getShape().getShape().getCenter();
 			p.x = p.x + FGEGeometricObject.EPSILON * (center.x - p.x);
 			p.y = p.y + FGEGeometricObject.EPSILON * (center.y - p.y);
 		}
@@ -853,7 +934,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public void setTextStyle(TextStyle aTextStyle) {
-		FGENotification notification = requireChange(Parameters.textStyle, aTextStyle);
+		FGENotification notification = requireChange(Parameters.textStyle, aTextStyle, false);
 		if (notification != null) {
 			if (textStyle != null) {
 				textStyle.deleteObserver(this);
@@ -862,30 +943,6 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 			if (aTextStyle != null) {
 				aTextStyle.addObserver(this);
 			}
-			hasChanged(notification);
-		}
-	}
-
-	public double getRelativeTextX() {
-		return relativeTextX;
-	}
-
-	public void setRelativeTextX(double textX) {
-		FGENotification notification = requireChange(Parameters.relativeTextX, textX);
-		if (notification != null) {
-			this.relativeTextX = textX;
-			hasChanged(notification);
-		}
-	}
-
-	public double getRelativeTextY() {
-		return relativeTextY;
-	}
-
-	public void setRelativeTextY(double textY) {
-		FGENotification notification = requireChange(Parameters.relativeTextY, textY);
-		if (notification != null) {
-			this.relativeTextY = textY;
 			hasChanged(notification);
 		}
 	}
@@ -1024,6 +1081,18 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 	}
 
+	public boolean getLineWrap() {
+		return lineWrap;
+	}
+
+	public void setLineWrap(boolean lineWrap) {
+		FGENotification notification = requireChange(Parameters.lineWrap, lineWrap);
+		if (notification != null) {
+			this.lineWrap = lineWrap;
+			hasChanged(notification);
+		}
+	}
+
 	public boolean getContinuousTextEditing() {
 		return continuousTextEditing;
 	}
@@ -1137,30 +1206,31 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public FGERectangle getNormalizedBounds() {
-		/*
-		 * Rectangle viewBounds = getViewBounds(scale); FGEPoint topLeft = convertViewCoordinatesToNormalizedPoint
-		 * (viewBounds.x,viewBounds.y,scale); FGEPoint bottomRight = convertViewCoordinatesToNormalizedPoint
-		 * (viewBounds.x+viewBounds.width,viewBounds.y+viewBounds.height,scale); return new
-		 * FGERectangle(topLeft.x,topLeft.y,bottomRight.x-topLeft.x,bottomRight .y-topLeft.y);
-		 */
 		return new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 	}
 
-	/**
-	 * Return center of label, relative to container view
-	 * 
-	 * @param scale
-	 * @return
-	 */
-	public abstract Point getLabelViewCenter(double scale);
+	public Point getLabelLocation(double scale) {
+		return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
+	}
 
-	/**
-	 * Sets center of label, relative to container view
-	 * 
-	 * @param scale
-	 * @return
-	 */
-	public abstract void setLabelViewCenter(Point aPoint, double scale);
+	public Dimension getLabelDimension(double scale) {
+		Dimension d;
+		if (labelMetricsProvider != null) {
+			d = labelMetricsProvider.getScaledPreferredDimension(scale);
+		} else {
+			d = new Dimension(0, 0);
+		}
+		return d;
+	}
+
+	public void setLabelLocation(Point point, double scale) {
+		setAbsoluteTextX((point.x - getViewX(scale)) / scale);
+		setAbsoluteTextY((point.y - getViewY(scale)) / scale);
+	}
+
+	public Rectangle getLabelBounds(double scale) {
+		return new Rectangle(getLabelLocation(scale), getLabelDimension(scale));
+	}
 
 	// *******************************************************************************
 	// * Methods *
@@ -1182,20 +1252,48 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
 		}
-		propagateConstraintsAfterModification(parameter);
+		hasChanged(new FGENotification(parameter, oldValue, newValue));
+		/*propagateConstraintsAfterModification(parameter);
 		setChanged();
-		notifyObservers(new FGENotification(parameter, oldValue, newValue));
+		notifyObservers(new FGENotification(parameter, oldValue, newValue));*/
 	}
 
-	protected void notifyChange(GRParameter parameter) {
+	public void notifyChange(GRParameter parameter) {
 		notifyChange(parameter, null, null);
 	}
 
-	protected void notifyAttributeChange(GRParameter parameter) {
+	public void notifyAttributeChange(GRParameter parameter) {
 		notifyChange(parameter);
 	}
 
+	/**
+	 * Build and return a new notification for a potential parameter change, given a new value. Change is required if values are different
+	 * considering equals() method
+	 * 
+	 * @param parameter
+	 * @param value
+	 * @param useEquals
+	 * @return
+	 */
 	protected FGENotification requireChange(GRParameter parameter, Object value) {
+		return requireChange(parameter, value, true);
+	}
+
+	/**
+	 * Build and return a new notification for a potential parameter change, given a new value. Change is required if values are different
+	 * considering:
+	 * <ul>
+	 * <li>If useEquals flag set to true, equals() method
+	 * <li>
+	 * <li>If useEquals flag set to false, same reference for objects, same value for primitives</li>
+	 * </ul>
+	 * 
+	 * @param parameter
+	 * @param value
+	 * @param useEquals
+	 * @return
+	 */
+	protected FGENotification requireChange(GRParameter parameter, Object value, boolean useEquals) {
 		Class<?> type = getTypeForKey(parameter.name());
 		Object oldValue = null;
 		if (type.isPrimitive()) {
@@ -1237,10 +1335,18 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 				return new FGENotification(parameter, oldValue, value);
 			}
 		} else {
-			if (oldValue.equals(value)) {
-				return null; // No change
+			if (useEquals) {
+				if (oldValue.equals(value)) {
+					return null; // No change
+				} else {
+					return new FGENotification(parameter, oldValue, value);
+				}
 			} else {
-				return new FGENotification(parameter, oldValue, value);
+				if (oldValue == value) {
+					return null; // No change
+				} else {
+					return new FGENotification(parameter, oldValue, value);
+				}
 			}
 		}
 	}
@@ -1249,6 +1355,11 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		hasChanged(notification);
 	}
 
+	/**
+	 * This method is called whenever a notification is triggered from GR model
+	 * 
+	 * @param notification
+	 */
 	protected void hasChanged(FGENotification notification) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Change attribute " + notification.parameter + " for object " + this + " was: " + notification.oldValue
@@ -1257,6 +1368,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		propagateConstraintsAfterModification(notification.parameter);
 		setChanged();
 		notifyObservers(notification);
+		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
 	}
 
 	@Override
@@ -1392,10 +1504,13 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	 * @param scale
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static AffineTransform convertFromDrawableToDrawingAT(GraphicalRepresentation<?> source, double scale) {
 		double tx = 0;
 		double ty = 0;
+		if (source == null) {
+			logger.warning("Called convertFromDrawableToDrawingAT() for null graphical representation (source)");
+			return new AffineTransform();
+		}
 		Object current = source.getDrawable();
 		while (current != source.getDrawing().getModel()) {
 			if (source.getDrawing().getGraphicalRepresentation(current) == null) {
@@ -1440,10 +1555,13 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	 * @param scale
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static AffineTransform convertFromDrawingToDrawableAT(GraphicalRepresentation<?> destination, double scale) {
 		double tx = 0;
 		double ty = 0;
+		if (destination == null) {
+			logger.warning("Called convertFromDrawingToDrawableAT() for null graphical representation (destination)");
+			return new AffineTransform();
+		}
 		Object current = destination.getDrawable();
 		while (current != destination.getDrawing().getModel()) {
 			if (destination.getDrawing().getContainer(current) == null) {
@@ -1666,124 +1784,6 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
-	private JLabel _labelUsedToComputedNormalizedLabelBounds;
-
-	public Rectangle getNormalizedLabelBounds() {
-		if (_labelUsedToComputedNormalizedLabelBounds == null) {
-			_labelUsedToComputedNormalizedLabelBounds = new JLabel();
-		}
-		return getLabelBounds(_labelUsedToComputedNormalizedLabelBounds, 1);
-	}
-
-	public Rectangle getLabelBounds(double scale) {
-		if (_labelUsedToComputedNormalizedLabelBounds == null) {
-			_labelUsedToComputedNormalizedLabelBounds = new JLabel();
-		}
-		return getLabelBounds(_labelUsedToComputedNormalizedLabelBounds, scale);
-	}
-
-	public Rectangle getLabelBounds(Component component, double scale) {
-		Rectangle newBounds;
-		// if (hasText()) {
-		/*
-		 * AffineTransform at = AffineTransform.getScaleInstance(scale,scale); if (getTextStyle().getOrientation() != 0)
-		 * at.concatenate(AffineTransform .getRotateInstance(Math.toRadians(getTextStyle().getOrientation()))); Font font =
-		 * getTextStyle().getFont().deriveFont(at); FontMetrics fm = component.getFontMetrics(font); int height = 0; int width = 0; if
-		 * (getIsMultilineAllowed()) { StringTokenizer st = new StringTokenizer(getText(),LINE_SEPARATOR); while (st.hasMoreTokens()) {
-		 * height += fm.getHeight(); width = Math.max(width, fm.stringWidth(st.
-		 * nextToken())+4*FGEConstants.CONTROL_POINT_SIZE_FOR_SELECTION); } } else { height = fm.getHeight(); width =
-		 * fm.stringWidth(getText())+4*FGEConstants .CONTROL_POINT_SIZE_FOR_SELECTION; } if (getTextStyle().getOrientation() != 0) height =
-		 * (int)Math.max(height,height +width*Math.sin(Math.toRadians(getTextStyle().getOrientation())));
-		 */
-		Dimension labelSize = getLabelSize(component, scale);
-		int width = labelSize.width;
-		int height = labelSize.height;
-
-		Point center;
-		try {
-			center = getLabelViewCenter(scale);
-			newBounds = getLabelBoundsWithAlignement(center, width, height);
-
-		} catch (IllegalArgumentException e) {
-			logger.warning("Unexpected exception: " + e);
-			newBounds = new Rectangle(0, 0, 0, 0);
-		}
-		/*
-		 * } else { newBounds = new Rectangle(0,0,0,0); }
-		 */
-
-		return newBounds;
-	}
-
-	public Dimension getNormalizedLabelSize() {
-		if (_labelUsedToComputedNormalizedLabelBounds == null) {
-			_labelUsedToComputedNormalizedLabelBounds = new JLabel();
-		}
-		return getLabelSize(_labelUsedToComputedNormalizedLabelBounds, 1);
-	}
-
-	/**
-	 * @param labelCenter
-	 * @param labelWidth
-	 * @param labelHeight
-	 * @return
-	 */
-	public Rectangle getLabelBoundsWithAlignement(Point labelCenter, int labelWidth, int labelHeight) {
-		// if (getTextAlignment() == TextAlignment.CENTER) {
-		// Bug 1006530 Fix
-
-		// }
-		/*
-		 * else if (getTextAlignment() == TextAlignment.LEFT) { return new
-		 * Rectangle(labelCenter.x,labelCenter.y-labelHeight/2,labelWidth,labelHeight); } else { return new
-		 * Rectangle(labelCenter.x-labelWidth,labelCenter.y-labelHeight/2,labelWidth,labelHeight); }
-		 */
-		// Bug 1007601 Fix
-		// When using left/right alignement with multiple lines annotation, position of the text is relative to the center of the shape
-		// The objective is to have the center of the label positioned according to relativeX/relativeY relatively to the shape.
-		// The text alignement applies for the alignement of the text within its own bounds (therefore a one line label is not modified by
-		// its textalignement property.
-		return new Rectangle(labelCenter.x - labelWidth / 2, labelCenter.y - labelHeight / 2, labelWidth, labelHeight);
-	}
-
-	public Dimension getLabelSize(Component component, double scale) {
-		if (hasText()) {
-			TextStyle ts = getTextStyle();
-			if (ts == null) {
-				ts = TextStyle.makeDefault();
-			}
-			AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
-			if (ts.getOrientation() != 0) {
-				at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(getTextStyle().getOrientation())));
-			}
-			Font font = ts.getFont().deriveFont(at);
-			FontMetrics fm = component.getFontMetrics(font);
-			int height = 2 * fm.getDescent();
-			int width = 0;
-			int fontHeight = fm.getHeight();
-			if (getIsMultilineAllowed()) {
-				StringTokenizer st = new StringTokenizer(getText(), StringUtils.LINE_SEPARATOR);
-				while (st.hasMoreTokens()) {
-					height += fontHeight;
-					width = Math.max(width, fm.stringWidth(st.nextToken()) + 4 * FGEConstants.CONTROL_POINT_SIZE);
-				}
-				if (getText().endsWith(StringUtils.LINE_SEPARATOR)) {
-					height += fontHeight;
-				}
-			} else {
-				height = fontHeight;
-				width = fm.stringWidth(getText()) + 4 * FGEConstants.CONTROL_POINT_SIZE;
-			}
-			if (ts.getOrientation() != 0) {
-				height = (int) Math.max(height, height + width * Math.sin(Math.toRadians(ts.getOrientation())));
-			}
-
-			return new Dimension(width, height);
-		} else {
-			return new Dimension(0, 0);
-		}
-	}
-
 	public void notifyLabelWillBeEdited() {
 		setChanged();
 		notifyObservers(new LabelWillEdit());
@@ -1792,6 +1792,16 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	public void notifyLabelHasBeenEdited() {
 		setChanged();
 		notifyObservers(new LabelHasEdited());
+	}
+
+	public void notifyLabelWillMove() {
+		setChanged();
+		notifyObservers(new LabelWillMove());
+	}
+
+	public void notifyLabelHasMoved() {
+		setChanged();
+		notifyObservers(new LabelHasMoved());
 	}
 
 	// Override when required
@@ -1824,14 +1834,38 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 	}
 
-	public TextAlignment getTextAlignment() {
-		return textAlignment;
+	public HorizontalTextAlignment getHorizontalTextAlignment() {
+		return horizontalTextAlignment;
 	}
 
-	public void setTextAlignment(TextAlignment atextAlignment) {
-		FGENotification notification = requireChange(Parameters.textAlignment, atextAlignment);
+	public void setHorizontalTextAlignment(HorizontalTextAlignment horizontalTextAlignment) {
+		FGENotification notification = requireChange(Parameters.horizontalTextAlignment, horizontalTextAlignment);
 		if (notification != null) {
-			this.textAlignment = atextAlignment;
+			this.horizontalTextAlignment = horizontalTextAlignment;
+			hasChanged(notification);
+		}
+	}
+
+	public VerticalTextAlignment getVerticalTextAlignment() {
+		return verticalTextAlignment;
+	}
+
+	public void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment) {
+		FGENotification notification = requireChange(Parameters.verticalTextAlignment, verticalTextAlignment);
+		if (notification != null) {
+			this.verticalTextAlignment = verticalTextAlignment;
+			hasChanged(notification);
+		}
+	}
+
+	public ParagraphAlignment getParagraphAlignment() {
+		return paragraphAlignment;
+	}
+
+	public void setParagraphAlignment(ParagraphAlignment paragraphAlignment) {
+		FGENotification notification = requireChange(Parameters.paragraphAlignment, paragraphAlignment);
+		if (notification != null) {
+			this.paragraphAlignment = paragraphAlignment;
 			hasChanged(notification);
 		}
 	}
@@ -1842,7 +1876,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void performRandomLayout(double width, double height) {
 		Random r = new Random();
-		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
 				ShapeGraphicalRepresentation<?> child = (ShapeGraphicalRepresentation<?>) gr;
 				child.setLocation(new FGEPoint(r.nextDouble() * (width - child.getWidth()), r.nextDouble() * (height - child.getHeight())));
@@ -1915,9 +1949,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));
 
-		Iterator<GraphicalRepresentation> it = allContainedGRIterator();
+		Iterator<GraphicalRepresentation<?>> it = allContainedGRIterator();
 		while (it.hasNext()) {
-			GraphicalRepresentation subComponent = it.next();
+			GraphicalRepresentation<?> subComponent = it.next();
 			// _bindingModel.addToBindingVariables(new ComponentBindingVariable(subComponent));
 			subComponent.notifiedBindingModelRecreated();
 		}
@@ -1949,13 +1983,16 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		logger.fine("notifyBindingChanged() for " + binding);
 	}
 
-	public Vector<GraphicalRepresentation> retrieveAllContainedGR() {
-		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
+	public List<GraphicalRepresentation<?>> retrieveAllContainedGR() {
+		if (!isValidated()) {
+			return EMPTY_GR_VECTOR;
+		}
+		List<GraphicalRepresentation<?>> returned = new ArrayList<GraphicalRepresentation<?>>();
 		addAllContainedGR(this, returned);
 		return returned;
 	}
 
-	private void addAllContainedGR(GraphicalRepresentation<?> gr, Vector<GraphicalRepresentation> returned) {
+	private void addAllContainedGR(GraphicalRepresentation<?> gr, List<GraphicalRepresentation<?>> returned) {
 		if (gr.getContainedGraphicalRepresentations() == null) {
 			return;
 		}
@@ -1965,23 +2002,29 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 	}
 
-	public Iterator<GraphicalRepresentation> allGRIterator() {
-		Vector<GraphicalRepresentation> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
-		returned.insertElementAt(getRootGraphicalRepresentation(), 0);
+	public Iterator<GraphicalRepresentation<?>> allGRIterator() {
+		List<GraphicalRepresentation<?>> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
+		if (!isValidated()) {
+			return returned.iterator();
+		}
+		returned.add(0, getRootGraphicalRepresentation());
 		return returned.iterator();
 	}
 
-	public Iterator<GraphicalRepresentation> allContainedGRIterator() {
-		Vector<GraphicalRepresentation> allGR = retrieveAllContainedGR();
+	public Iterator<GraphicalRepresentation<?>> allContainedGRIterator() {
+		List<GraphicalRepresentation<?>> allGR = retrieveAllContainedGR();
+		if (!isValidated()) {
+			return allGR.iterator();
+		}
 		if (allGR == null) {
-			return new Iterator<GraphicalRepresentation>() {
+			return new Iterator<GraphicalRepresentation<?>>() {
 				@Override
 				public boolean hasNext() {
 					return false;
 				}
 
 				@Override
-				public GraphicalRepresentation next() {
+				public GraphicalRepresentation<?> next() {
 					return null;
 				}
 
@@ -2002,7 +2045,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		return alterings;
 	}
 
-	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
+	public void declareDependantOf(GraphicalRepresentation<?> aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
 			throws DependencyLoopException {
 		// logger.info("Component "+this+" depends of "+aComponent);
 		if (aComponent == this) {
@@ -2106,6 +2149,56 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void deleteVariable(GRVariable v) {
 		removeFromVariables(v);
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		if (pcSupport == null) {
+			pcSupport = new PropertyChangeSupport(this);
+		}
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return "delete";
+	}
+
+	private boolean validated = false;
+	protected LabelMetricsProvider labelMetricsProvider;
+
+	/**
+	 * Return boolean indicating if this graphical representation is validated. A validated graphical representation is a graphical
+	 * representation fully embedded in its graphical representation tree, which means that parent and child are set and correct, and that
+	 * start and end shapes are set for connectors
+	 * 
+	 * 
+	 * @return
+	 */
+	public boolean isValidated() {
+		return validated;
+	}
+
+	public void setValidated(boolean validated) {
+		this.validated = validated;
+	}
+
+	public LabelMetricsProvider getLabelMetricsProvider() {
+		return labelMetricsProvider;
+	}
+
+	public void setLabelMetricsProvider(LabelMetricsProvider labelMetricsProvider) {
+		this.labelMetricsProvider = labelMetricsProvider;
+	}
+
+	/**
+	 * Returns the number of pixels available for the label considering its positioning. This method is used in case of line wrapping.
+	 * 
+	 * @param scale
+	 * @return
+	 */
+	public int getAvailableLabelWidth(double scale) {
+		return Integer.MAX_VALUE;
 	}
 
 }

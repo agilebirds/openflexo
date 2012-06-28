@@ -25,6 +25,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +65,7 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 			MouseEvent event, boolean isSignificativeDrag) {
 		// logger.info("Perform mouse RELEASED on RECTANGLE_SELECTING MouseDragControlAction");
 		if (isSignificativeDrag) {
-			Vector<GraphicalRepresentation> newSelection = buildCurrentSelection(graphicalRepresentation, controller);
+			List<GraphicalRepresentation<?>> newSelection = buildCurrentSelection(graphicalRepresentation, controller);
 			controller.setSelectedObjects(newSelection);
 			if (controller.getDrawingView() == null) {
 				return false;
@@ -82,7 +83,7 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 		currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
 
-		Vector<GraphicalRepresentation> newFocusSelection = buildCurrentSelection(graphicalRepresentation, controller);
+		List<GraphicalRepresentation<?>> newFocusSelection = buildCurrentSelection(graphicalRepresentation, controller);
 		controller.setFocusedObjects(newFocusSelection);
 		if (controller.getDrawingView() == null) {
 			return false;
@@ -92,13 +93,13 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 		return true;
 	}
 
-	private Vector<GraphicalRepresentation> buildCurrentSelection(GraphicalRepresentation<?> graphicalRepresentation,
+	private List<GraphicalRepresentation<?>> buildCurrentSelection(GraphicalRepresentation<?> graphicalRepresentation,
 			DrawingController<?> controller) {
 		if (getRectangleSelection() == null) {
 			return null;
 		}
-		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
-		for (GraphicalRepresentation child : graphicalRepresentation.getContainedGraphicalRepresentations()) {
+		List<GraphicalRepresentation<?>> returned = new Vector<GraphicalRepresentation<?>>();
+		for (GraphicalRepresentation<?> child : graphicalRepresentation.getContainedGraphicalRepresentations()) {
 			if (child.getIsVisible()) {
 				if (child.isContainedInSelection(getRectangleSelection(), controller.getScale())) {
 					returned.add(child);

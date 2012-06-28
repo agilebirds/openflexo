@@ -43,7 +43,7 @@ import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
 import org.openflexo.vpm.palette.CalcPaletteController;
 
@@ -62,21 +62,9 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	private boolean drawWorkingArea;
 	private FlexoModelObject screenshotObject;
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		ToolBox.setPlatform();
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.FPS_MODULE);
-	}
-
 	public VPMModule() throws Exception {
 		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
-		setFlexoController(new CEDController(this));
+		setFlexoController(new VPMController(this));
 		getCEDController().loadRelativeWindows();
 		CEDPreferences.init(getCEDController());
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
@@ -93,8 +81,8 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 		return inspectorGroups;
 	}
 
-	public CEDController getCEDController() {
-		return (CEDController) getFlexoController();
+	public VPMController getCEDController() {
+		return (VPMController) getFlexoController();
 	}
 
 	@Override

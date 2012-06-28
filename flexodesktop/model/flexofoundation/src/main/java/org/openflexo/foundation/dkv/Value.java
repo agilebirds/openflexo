@@ -82,7 +82,7 @@ public class Value extends DKVObject implements InspectableObject {
 			this.value = value;
 		}
 		setChanged();
-		notifyObservers(new DKVDataModification(-1, "value", old, this.value));
+		notifyObservers(new DKVDataModification("value", old, this.value));
 	}
 
 	public Key getKey() {

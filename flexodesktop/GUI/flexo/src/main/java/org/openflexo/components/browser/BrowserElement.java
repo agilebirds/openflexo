@@ -126,7 +126,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		return null;
 	}
 
-	private boolean isDeleted = false;
+	private volatile boolean isDeleted = false;
 
 	public boolean isDeleted() {
 		return isDeleted;
@@ -312,8 +312,8 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 					elementHasBeenAdded = true;
 				} else if (_browser.requiresDeepBrowsing(newElement)) {
 					Vector<BrowserElement> childrenToRemove = new Vector<BrowserElement>();
-					for (Enumeration e = newElement.children(); e.hasMoreElements();) {
-						BrowserElement newElement2 = (BrowserElement) e.nextElement();
+					for (Enumeration<BrowserElement> e = newElement.children(); e.hasMoreElements();) {
+						BrowserElement newElement2 = e.nextElement();
 						childrenToRemove.add(newElement2);
 						newElement2._parent = this;
 						_childs.add(newElement2);
@@ -364,14 +364,14 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 			logger.fine(getClass().getName() + " receive DataModification " + dataModification.getClass().getName());
 		}
 		if (_browser != null) {
-			if (((dataModification instanceof WKFDataModification) || (dataModification instanceof IEDataModification)
-					|| (dataModification instanceof DKVDataModification) || (dataModification instanceof DMDataModification)
-					|| (dataModification instanceof WSDataModification) || (dataModification instanceof OEDataModification)
-					|| (dataModification instanceof CGDataModification) || (dataModification instanceof SGDataModification)
-					|| (dataModification instanceof ObjectDeleted) || (dataModification instanceof TOCModification) || (dataModification instanceof NameChanged))
-					&& (!(dataModification instanceof ObjectLocationChanged))
-					&& (!(dataModification instanceof ObjectSizeChanged))
-					&& (!(dataModification instanceof ObjectNeedsRefresh))) {
+			if ((dataModification instanceof WKFDataModification || dataModification instanceof IEDataModification
+					|| dataModification instanceof DKVDataModification || dataModification instanceof DMDataModification
+					|| dataModification instanceof WSDataModification || dataModification instanceof OEDataModification
+					|| dataModification instanceof CGDataModification || dataModification instanceof SGDataModification
+					|| dataModification instanceof ObjectDeleted || dataModification instanceof TOCModification || dataModification instanceof NameChanged)
+					&& !(dataModification instanceof ObjectLocationChanged)
+					&& !(dataModification instanceof ObjectSizeChanged)
+					&& !(dataModification instanceof ObjectNeedsRefresh)) {
 				refreshWhenPossible();
 			}
 		}
@@ -388,7 +388,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 				repaintRequested = true;
 			}
 		}
-		if (SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure()) {
+		if (!SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -423,7 +423,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	public void refreshWhenPossible() {
 		synchronized (this) {
-			if (isDeleted || _browser.isHoldingStructure() || refreshRequested || (_parent != null && _parent.refreshRequested)) {
+			if (isDeleted || _browser.isHoldingStructure() || refreshRequested || _parent != null && _parent.refreshRequested) {
 				return;
 			}
 			refreshRequested = true;
@@ -471,8 +471,8 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 			Enumeration<FlexoModelObject> en1 = expanded.elements();
 			while (en1.hasMoreElements()) {
-				Object o = en1.nextElement();
-				_browser.expand((FlexoModelObject) o, false);
+				FlexoModelObject o = en1.nextElement();
+				_browser.expand(o, false);
 			}
 		} finally {
 			_browser.resetIsRebuildingStructure();
@@ -514,7 +514,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	@Override
-	public Enumeration children() {
+	public Enumeration<BrowserElement> children() {
 		return _childs.elements();
 	}
 
@@ -530,8 +530,8 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	@Override
 	public int getIndex(TreeNode node) {
 		int returned = 0;
-		for (Enumeration e = children(); e.hasMoreElements(); returned++) {
-			if (node == (TreeNode) e.nextElement()) {
+		for (Enumeration<BrowserElement> e = children(); e.hasMoreElements(); returned++) {
+			if (node == e.nextElement()) {
 				return returned;
 			}
 		}
@@ -619,7 +619,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 				return _parent;
 			}
 		}
-		return (_parent.findNearestAncestor(types));
+		return _parent.findNearestAncestor(types);
 	}
 
 }

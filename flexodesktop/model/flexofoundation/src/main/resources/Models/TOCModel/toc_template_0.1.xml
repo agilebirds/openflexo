@@ -39,19 +39,59 @@
   </entity>
 	
   <entity name="org.openflexo.foundation.toc.TOCEntry" xmlTag="TOCEntry">
-  	<description>Element of the hierarchy of a table of content</description>
-  	<property name="tocEntries" xmlTag="TOCEntry" primary="yes" type="vector" description="Sub elements of the hierarchy of a table of content"/>
-  	<property name="title" xmlTag="title" attribute="yes" description="The title of the entry of the table of content"/>
-  	<property name="identifier" xmlTag="identifier" attribute="yes" description="A unique identifier to be able to find back an automatically created entry."/>
-  	<property name="index" xmlTag="index" attribute="yes" description="The index order of this toc entry (they should be serialized correctly, but for sure, we add this argument)"/>
-  	<property name="isReadOnly" xmlTag="isReadOnly" attribute="yes" description="Wheter this entry can be edited or not"/>
-  	<property name="startOnANewPage" xmlTag="startOnANewPage" attribute="yes" description="this entry must start on a new page"/>
-  	<property name="recursionEnabled" xmlTag="recursionEnabled" attribute="yes" description="this entry may contains sub entries recursively deduced from the model (relevant for processes)"/>
-  	<property name="includeStatusList" xmlTag="includeStatusList" attribute="yes" description="(relevant for processes)"/>
-   	<property name="subType" xmlTag="subType" attribute="yes" description="(relevant for processes)"/>
-  	<property name="resourceName" xmlTag="resourceName" attribute="yes" description="The associated generated resource name (only if isReadOnly is true)"/>
-  	<property name="content" xmlTag="content" attribute="yes" description="The content of this table of content entry (only if isReadOnly is false)"/>
+    <description>Element of the hierarchy of a table of content</description>
+    <property name="tocEntries" contains="org.openflexo.foundation.toc.TOCEntry" primary="yes" type="vector" description="Sub elements of the hierarchy of a table of content"/>
+    <property name="title" xmlTag="title" attribute="yes" description="The title of the entry of the table of content"/>
+    <property name="objectReference" xmlTag="modelObject" attribute="yes" description="The associated flexo model object reference"/>
+    <property name="identifier" xmlTag="identifier" attribute="yes" description="A unique identifier to be able to find back an automatically created entry."/>
+    <property name="index" xmlTag="index" attribute="yes" description="The index order of this toc entry (they should be serialized correctly, but for sure, we add this argument)"/>
+    <property name="isReadOnly" xmlTag="isReadOnly" attribute="yes" description="Wheter this entry can be edited or not"/>
+    <property name="renderSectionTitle" xmlTag="renderSectionTitle" attribute="yes" description="this entry must be titled as a section"/>
+    <property name="startOnANewPage" xmlTag="startOnANewPage" attribute="yes" description="this entry must start on a new page"/>
+    <property name="includeStatusList" xmlTag="includeStatusList" attribute="yes" description="(relevant for processes)"/>
+    <property name="subType" xmlTag="subType" attribute="yes" description="(relevant for processes)"/>
+    <property name="recursionEnabled" xmlTag="recursionEnabled" attribute="yes" description="this entry may contains sub entries recursively deduced from the model (relevant for processes)"/>
+    <property name="content" xmlTag="content" attribute="yes" description="The content of this table of content entry (only if isReadOnly is false)"/>
   </entity>
-	
+    
+  <entity name="org.openflexo.foundation.toc.NormalSection" xmlTag="NormalSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.PredefinedSection" xmlTag="PredefinedSection">
+    <property name="type" xmlTag="type" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ModelObjectSection" abstract="yes">
+    <property name="modelObjectReference" xmlTag="modelObjectReference" attribute="yes" description="The associated flexo model object reference"/>
+    <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ProcessSection" xmlTag="ProcessSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.RoleSection" xmlTag="RoleSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ViewSection" xmlTag="ViewSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.EntitySection" xmlTag="EntitySection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ERDiagramSection" xmlTag="ERDiagramSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.OperationScreenSection" xmlTag="OperationScreenSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ConditionalSection" xmlTag="ConditionalSection">
+    <property name="condition" xmlTag="condition" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.IterationSection" xmlTag="IterationSection">
+    <property name="iteratorName" xmlTag="iteratorName" attribute="yes"/>
+    <property name="iteration" xmlTag="iteration" attribute="yes"/>
+    <property name="condition" xmlTag="condition" attribute="yes"/>
+  </entity>
 
 </model>

@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -37,7 +38,7 @@ public abstract class FIBContainer extends FIBComponent {
 	private Vector<FIBComponent> subComponents;
 
 	public static enum Parameters implements FIBModelAttribute {
-		subComponents
+		subComponents;
 	}
 
 	public FIBContainer() {
@@ -146,7 +147,7 @@ public abstract class FIBContainer extends FIBComponent {
 
 		// if (this instanceof FIBTab && ())
 
-		Vector<FIBComponent> addedComponents = new Vector<FIBComponent>();
+		List<FIBComponent> addedComponents = new ArrayList<FIBComponent>();
 		for (int i = container.getSubComponents().size() - 1; i >= 0; i--) {
 			FIBComponent c2 = container.getSubComponents().get(i);
 			boolean merged = false;
@@ -172,7 +173,7 @@ public abstract class FIBContainer extends FIBComponent {
 						previousIndex = subComponents.firstElement().getConstraints().getIndex();
 					}
 					// if (previousIndex == null) previousIndex=0;
-					subComponents.insertElementAt(c2, 0);
+					subComponents.add(0, c2);
 					if (previousIndex != null && c2.getConstraints() != null && !c2.getConstraints().hasIndex()) {
 						c2.getConstraints().setIndexNoNotification(previousIndex - 1);
 					}

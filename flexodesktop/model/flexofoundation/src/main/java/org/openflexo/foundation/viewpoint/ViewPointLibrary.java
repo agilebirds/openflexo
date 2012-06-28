@@ -31,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.FileResource;
@@ -77,6 +78,11 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 
 	}
 
+	@Override
+	public String getFullyQualifiedName() {
+		return "ViewPointLibrary";
+	}
+
 	public FlexoResourceCenter getResourceCenter() {
 		return resourceCenter;
 	}
@@ -85,19 +91,37 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		this.resourceCenter = resourceCenter;
 	}
 
+	@Deprecated
 	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
 		return map.get(ontologyCalcUri);
 	}
 
+	public ViewPoint getViewPoint(String viewpointURI) {
+		return getOntologyCalc(viewpointURI);
+	}
+
+	/**
+	 * Return all viewpoints contained in this library<br>
+	 * No consideration is performed on underlying organization structure
+	 * 
+	 * @return
+	 */
 	public Vector<ViewPoint> getViewPoints() {
 		return calcs;
 	}
 
-	public ViewPoint importViewPoint(File calcDirectory, ViewPointFolder folder) {
-		logger.info("Import view point " + calcDirectory.getAbsolutePath());
-		ViewPoint calc = ViewPoint.openViewPoint(calcDirectory, this, folder);
-		registerViewPoint(calc);
-		return calc;
+	public ViewPoint importViewPoint(File viewpointDirectory, ViewPointFolder folder) {
+		logger.info("Import viewpoint " + viewpointDirectory.getAbsolutePath());
+		ViewPoint viewpoint = ViewPoint.openViewPoint(viewpointDirectory, this, folder);
+		if (viewpoint != null) {
+			registerViewPoint(viewpoint);
+			return viewpoint;
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Coult not open VP in " + viewpointDirectory.getAbsolutePath());
+			}
+			return null;
+		}
 	}
 
 	public ViewPoint registerViewPoint(ViewPoint vp) {
@@ -106,6 +130,9 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		calcs.add(vp);
 		setChanged();
 		notifyObservers(new OntologyCalcCreated(vp));
+		for (EditionPattern ep : vp.getEditionPatterns()) {
+			ep.finalizeParentEditionPatternDeserialization();
+		}
 		return vp;
 	}
 
@@ -246,6 +273,34 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		}
 		logger.warning("Cannot find edition pattern:" + editionPatternURI);
 		return null;
+	}
+
+	public EditionScheme getEditionScheme(String editionSchemeURI) {
+		if (editionSchemeURI.lastIndexOf(".") > -1) {
+			String editionPatternURI = editionSchemeURI.substring(0, editionSchemeURI.lastIndexOf("."));
+			EditionPattern ep = getEditionPattern(editionPatternURI);
+			if (ep != null) {
+				return ep.getEditionScheme(editionSchemeURI.substring(editionSchemeURI.lastIndexOf(".") + 1));
+			}
+		}
+		logger.warning("Cannot find edition scheme:" + editionSchemeURI);
+		return null;
+	}
+
+	/**
+	 * Return a vector of all embedded objects on which the validation will be performed
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	@Override
+	public Vector<Validable> getAllEmbeddedValidableObjects() {
+		Vector<Validable> returned = new Vector<Validable>();
+		returned.add(this);
+		for (ViewPoint v : getViewPoints()) {
+			returned.addAll(v.getAllEmbeddedValidableObjects());
+		}
+
+		return returned;
 	}
 
 }

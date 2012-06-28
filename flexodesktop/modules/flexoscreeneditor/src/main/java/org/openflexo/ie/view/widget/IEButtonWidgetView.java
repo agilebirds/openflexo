@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -123,12 +122,6 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		Dimension d;
 		if (getModel().getUsePercentage()) {
 			int width, height;
@@ -138,9 +131,6 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 			d = new Dimension(width, height);
 		} else {
 			d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
-		}
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
 		}
 		return d;
 	}
@@ -165,20 +155,19 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 	@Override
 	public void update(FlexoObservable arg0, DataModification arg1) {
 		if (getModel() == arg0 && arg1 instanceof ButtonRemoved) {
-			JComponent parent = (JComponent) getParent();
 			delete();
-			parent.validate();
-			parent.repaint();
+			revalidate();
+			repaint();
 		} else if (getModel() == arg0 && arg1.propertyName() == "file") {
 			computeImage();
 			revalidate();
 			repaint();
 		} else if (getModel() == arg0 && (arg1.propertyName() == "heightPixel" || arg1.propertyName() == "widthPixel")) {
-			doLayout();
-			paintImmediately(getBounds());
+			revalidate();
+			repaint();
 		} else if (getModel() == arg0 && (arg1.propertyName() == "usePercentage" || arg1.propertyName() == "widthPercentage")) {
-			doLayout();
-			paintImmediately(getBounds());
+			revalidate();
+			repaint();
 		} else {
 			super.update(arg0, arg1);
 		}
@@ -193,7 +182,7 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 		if (getModel().getUsePercentage()) {
 			int widthPercentage = getModel().getWidthPercentage();
 			int w = getPixelWidthUsingPercentage();
-			int newWidthPercentage = widthPercentage + (int) (((double) deltaX / (double) w) * 100);
+			int newWidthPercentage = widthPercentage + (int) ((double) deltaX / (double) w * 100);
 			if (newWidthPercentage != widthPercentage) {
 				getModel().setWidthPercentage(newWidthPercentage);
 			}

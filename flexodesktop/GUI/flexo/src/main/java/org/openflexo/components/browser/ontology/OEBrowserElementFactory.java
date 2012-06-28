@@ -47,6 +47,8 @@ import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
 
 public class OEBrowserElementFactory implements BrowserElementFactory {
 	@Override
@@ -82,6 +84,10 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 			return new CalcPaletteBrowserElement((ViewPointPalette) object, browser, parent);
 		} else if (object instanceof ViewPointPaletteElement) {
 			return new CalcPaletteElementBrowserElement((ViewPointPaletteElement) object, browser, parent);
+		} else if (object instanceof ShapeOverridingGraphicalRepresentation) {
+			return new ShapeOverridingGRBrowserElement((ShapeOverridingGraphicalRepresentation) object, browser, parent);
+		} else if (object instanceof ConnectorOverridingGraphicalRepresentation) {
+			return new ConnectorOverridingGRBrowserElement((ConnectorOverridingGraphicalRepresentation) object, browser, parent);
 		} else if (object instanceof ExampleDrawingShema) {
 			return new CalcDrawingShemaBrowserElement((ExampleDrawingShema) object, browser, parent);
 		} else if (object instanceof ExampleDrawingShape) {
@@ -89,13 +95,13 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 		} else if (object instanceof ExampleDrawingConnector) {
 			return new CalcDrawingConnectorBrowserElement((ExampleDrawingConnector) object, browser, parent);
 		} else if (object instanceof ViewLibrary) {
-			return new ShemaLibraryElement((ViewLibrary) object, browser, parent);
+			return new ViewLibraryElement((ViewLibrary) object, browser, parent);
 		} else if (object instanceof ViewFolder) {
-			return new ShemaFolderElement((ViewFolder) object, browser, parent);
+			return new ViewFolderElement((ViewFolder) object, browser, parent);
 		} else if (object instanceof ViewDefinition) {
-			return new ShemaDefinitionElement((ViewDefinition) object, browser, parent);
+			return new ViewDefinitionElement((ViewDefinition) object, browser, parent);
 		} else if (object instanceof View) {
-			return new OEShemaElement((View) object, browser, parent);
+			return new ViewElement((View) object, browser, parent);
 		} else if (object instanceof ViewShape) {
 			return new OEShapeElement((ViewShape) object, browser, parent);
 		} else if (object instanceof ViewConnector) {

@@ -54,6 +54,12 @@ public class RoleListRepresentation extends DefaultDrawing<RoleList> implements 
 	}
 
 	@Override
+	public void delete() {
+		getRoleList().deleteObserver(this);
+		super.delete();
+	}
+
+	@Override
 	protected void buildGraphicalObjectsHierarchy() {
 		for (Role r : getRoleList().getRoles()) {
 			addDrawable(r, getRoleList());

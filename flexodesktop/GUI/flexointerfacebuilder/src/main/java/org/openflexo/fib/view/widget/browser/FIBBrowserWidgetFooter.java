@@ -493,7 +493,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	}
 
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent(_fibBrowser), key);
 	}
 
 	private JPopupMenu filtersPopupMenu;

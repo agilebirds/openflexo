@@ -11,8 +11,17 @@
 				<Label label="label" constraints="twocols(location=left)"/>
 				<TextField data="data.label" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
 	
+				<Label label="button_icon" constraints="twocols(location=left)"/>
+				<Custom data="data.buttonIcon.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindingDefinition" value="data.BUTTON_ICON"/>
+				</Custom>
+		
 				<Label label="button_type" constraints="twocols(location=left)"/>
 				<DropDown data="data.buttonType" constraints="twocols(location=right)" showReset="false"/>
+				
+				<Label label="is_default" constraints="twocols(location=left;expandHorizontally=true)"/>
+				<CheckBox data="data.isDefault" constraints="twocols(location=right)" />
 			
 			</Tab>
 

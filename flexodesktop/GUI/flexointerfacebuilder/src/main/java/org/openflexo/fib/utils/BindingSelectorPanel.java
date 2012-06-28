@@ -25,7 +25,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +32,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Observable;
@@ -79,6 +78,7 @@ import org.openflexo.antar.binding.MethodDefinition;
 import org.openflexo.antar.binding.StaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.Typed;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.utils.BindingSelector.EditionMode;
 import org.openflexo.fib.utils.table.AbstractModel;
 import org.openflexo.fib.utils.table.BindingValueColumn;
@@ -133,6 +133,18 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		_listModels = new Hashtable<BindingPathElement, Hashtable<Type, BindingColumnListModel>>();
 		_rootBindingColumnListModel = null;
 		_lists = new Vector<FilteredJList>();
+	}
+
+	@Override
+	public void delete() {
+		for (JList list : _lists) {
+			list.removeListSelectionListener(this);
+			list.setModel(null);
+		}
+		_lists.clear();
+		_listModels.clear();
+		_rootBindingColumnListModel = null;
+		currentFocused = null;
 	}
 
 	public int getIndexOfList(BindingColumnListModel model) {
@@ -401,7 +413,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		_controlPanel = new ButtonsControlPanel() {
 			@Override
 			public String localizedForKeyAndButton(String key, JButton component) {
-				return FlexoLocalization.localizedForKey(key, component);
+				return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, key, component);
 			}
 		};
 		_connectButton = _controlPanel.addButton("connect", new ActionListener() {
@@ -463,13 +475,17 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				showHideCompoundBindingsButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_ICON);
 				showHideCompoundBindingsButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey("specify_basic_binding"));
-				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey("specify_basic_binding") + "  ");
+				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+						"specify_basic_binding"));
+				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+						"specify_basic_binding") + "  ");
 			} else {
 				showHideCompoundBindingsButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
 				showHideCompoundBindingsButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey("specify_compound_binding"));
-				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey("specify_compound_binding") + "  ");
+				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+						"specify_compound_binding"));
+				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+						"specify_compound_binding") + "  ");
 			}
 
 			JPanel showHideCompoundBindingsButtonPanel = new JPanel();
@@ -488,11 +504,12 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			optionsPanel.add(optionsWestPanel, BorderLayout.WEST);
 		}
 
-		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey("no_type"), SwingConstants.LEFT);
+		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"), SwingConstants.LEFT);
 		currentTypeLabel.setFont(new Font("SansSerif", Font.ITALIC, 10));
 		currentTypeLabel.setForeground(Color.GRAY);
 
-		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey("no_type") + "]", SwingConstants.LEFT);
+		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type") + "]",
+				SwingConstants.LEFT);
 		searchedTypeLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		searchedTypeLabel.setForeground(Color.RED);
 
@@ -601,11 +618,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		@Override
 		public void setModel(ListModel model) {
-			if (!(model instanceof BindingColumnListModel)) {
-				new Exception("oops").printStackTrace();
+			if (model != null && !(model instanceof BindingColumnListModel)) {
+				new Exception("Oops, this model is " + model).printStackTrace();
 			}
 			setFilter(null);
-			super.setModel(model);
+			if (model != null) {
+				super.setModel(model);
+			}
 		}
 
 		@Override
@@ -613,7 +632,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (super.getModel() instanceof BindingColumnListModel) {
 				return (BindingColumnListModel) super.getModel();
 			} else {
-				new Exception("oops, j'ai un " + super.getModel()).printStackTrace();
+				new Exception("Oops, got a " + super.getModel()).printStackTrace();
 				return null;
 			}
 		}
@@ -622,7 +641,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 	protected JList makeNewJList() {
 		FilteredJList newList = new FilteredJList();
 
-		newList.addMouseMotionListener(new TypeResolver(newList));
+		TypeResolver typeResolver = new TypeResolver(newList);
+
+		newList.addMouseMotionListener(typeResolver);
+		newList.addMouseListener(typeResolver);
 
 		_lists.add(newList);
 		if (logger.isLoggable(Level.FINE)) {
@@ -943,8 +965,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				updateMethodCallPanel();
 			}
 
-			currentTypeLabel.setText(FlexoLocalization.localizedForKey("no_type"));
-			currentTypeLabel.setToolTipText(null);
+			// currentTypeLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"));
+			// currentTypeLabel.setToolTipText(null);
 
 		}
 
@@ -961,7 +983,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		// Set connect button state
 		_connectButton.setEnabled(binding != null && binding.isBindingValid());
 		/*if (!binding.isBindingValid()) {
-			logger.info("Binding NOT valid: "+binding);
+			logger.info("Binding NOT valid: " + binding);
 			binding.debugIsBindingValid();
 		}*/
 		if (binding != null && binding.isBindingValid()) {
@@ -971,6 +993,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		}
 		if (binding != null) {
 			_bindingSelector.getTextField().setForeground(binding.isBindingValid() ? Color.BLACK : Color.RED);
+			_bindingSelector.getTextField().setSelectedTextColor(binding.isBindingValid() ? Color.BLACK : Color.RED);
 		}
 
 		if (_bindingSelector.areStaticValuesAllowed() && staticBindingPanel != null) {
@@ -1131,7 +1154,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		public String getTypeStringRepresentation() {
 			if (getResultingType() == null) {
-				return FlexoLocalization.localizedForKey("no_type");
+				return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type");
 			} else {
 				return TypeUtils.simpleRepresentation(getResultingType());
 			}
@@ -1495,7 +1518,6 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (TypeUtils.getBaseClass(_type) == null) {
 				return;
 			}
-
 			// _accessibleProperties.addAll(KeyValueLibrary.getAccessibleProperties(_type));
 			_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleBindingPathElements(_element));
 			// _accessibleProperties.addAll(_element.getAccessibleBindingPathElements());
@@ -1615,7 +1637,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	}
 
-	protected class TypeResolver extends MouseMotionAdapter {
+	protected class TypeResolver extends MouseAdapter implements MouseMotionListener {
 
 		private JList list;
 
@@ -1626,6 +1648,15 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			displayLabel(e);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			displayLabel(e);
+		}
+
+		private void displayLabel(MouseEvent e) {
 
 			// Get item index
 			int index = list.locationToIndex(e.getPoint());
@@ -1641,15 +1672,28 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				currentTypeLabel.setText(currentFocused.getTypeStringRepresentation());
 			}
 		}
+
 	}
 
 	protected class BindingSelectorCellRenderer extends DefaultListCellRenderer {
 
+		private JPanel panel;
+		private JLabel iconLabel;
+
+		public BindingSelectorCellRenderer() {
+			panel = new JPanel(new BorderLayout());
+			iconLabel = new JLabel();
+			panel.add(iconLabel, BorderLayout.EAST);
+			panel.add(this);
+		}
+
 		@Override
 		public Component getListCellRendererComponent(JList list, Object bce, int index, boolean isSelected, boolean cellHasFocus) {
-			Component returned = super.getListCellRendererComponent(list, bce, index, isSelected, cellHasFocus);
+			JComponent returned = (JComponent) super.getListCellRendererComponent(list, bce, index, isSelected, cellHasFocus);
 			if (returned instanceof JLabel) {
 				JLabel label = (JLabel) returned;
+				label.setToolTipText(null);
+				iconLabel.setVisible(false);
 				if (bce instanceof BindingColumnElement) {
 					BindingColumnElement columnElement = (BindingColumnElement) bce;
 					// Class resultingTypeBaseClass =
@@ -1657,10 +1701,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					Type resultingType = columnElement.getResultingType();
 					label.setText(columnElement.getLabel());
 					if (!(columnElement.getElement() instanceof FinalBindingPathElement)) {
-						setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
+						returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 					}
 					if (columnElement.getElement().getType() != null) {
-						label.setToolTipText(columnElement.getTooltipText());
+						returned.setToolTipText(columnElement.getTooltipText());
 					} else {
 						label.setForeground(Color.GRAY);
 					}
@@ -1670,13 +1714,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 						BindingValue bindingValue = (BindingValue) binding;
 						if (bindingValue.isConnected()
 								&& bindingValue.isLastBindingPathElement(columnElement.getElement(), _lists.indexOf(list) - 1)) {
-							setIcon(label, FIBIconLibrary.CONNECTED_ICON, list);
+							returned = getIconLabelComponent(label, FIBIconLibrary.CONNECTED_ICON);
 						} else if (columnElement.getResultingType() != null) {
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
 								if (_bindingSelector.getBindable().getBindingFactory()
 										.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
-									setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
+									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 								} else {
 									if (_bindingSelector.getBindingDefinition() != null
 											&& _bindingSelector.getBindingDefinition().getType() != null
@@ -1797,14 +1841,16 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			return returned;
 		}
 
-		private void setIcon(JLabel label, Icon icon, JList list) {
-			label.setIcon(icon);
-			label.setHorizontalAlignment(SwingConstants.LEFT);
-			label.setHorizontalTextPosition(SwingConstants.LEFT);
-			FontMetrics fm = label.getFontMetrics(label.getFont());
-			int labelLength = fm.stringWidth(label.getText() == null ? "" : label.getText());
-			// System.out.println("gap="+(list.getWidth() - 20 - labelLength));
-			label.setIconTextGap(list.getWidth() - 20 - labelLength);
+		private JComponent getIconLabelComponent(JLabel label, Icon icon) {
+			iconLabel.setVisible(true);
+			iconLabel.setIcon(icon);
+			iconLabel.setOpaque(label.isOpaque());
+			iconLabel.setBackground(label.getBackground());
+			panel.setToolTipText(label.getToolTipText());
+			if (label.getParent() != panel) {
+				panel.add(label);
+			}
+			return panel;
 		}
 	}
 
@@ -1814,9 +1860,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
+
 		AbstractBinding bindingValue = _bindingSelector.getEditedObject();
 		if (bindingValue == null) {
 			if (_bindingSelector.getBindingDefinition() != null && _bindingSelector.getBindable() != null) {
@@ -1872,6 +1920,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		list.removeListSelectionListener(this);
 		list.setSelectedIndex(newSelectedIndex);
 		list.addListSelectionListener(this);
+
 	}
 
 	private boolean hasBindingPathForm(String textValue) {
@@ -2023,7 +2072,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					if (endCommonPathIndex < matchingElements.firstElement().getLabel().length()) {
 						char c = matchingElements.firstElement().getLabel().charAt(endCommonPathIndex);
 						for (int i = 1; i < matchingElements.size(); i++) {
-							if (matchingElements.elementAt(i).getLabel().charAt(endCommonPathIndex) != c) {
+							String label = matchingElements.elementAt(i).getLabel();
+							if (endCommonPathIndex < label.length() && label.charAt(endCommonPathIndex) != c) {
 								foundDiff = true;
 							}
 						}
@@ -2073,13 +2123,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		}
 
 		FilteredJList list = listAtIndex(index);
-
-		int currentSelected = list.getSelectedIndex();
-		if (currentSelected > -1) {
-			valueChanged(new ListSelectionEvent(list, currentSelected, currentSelected, false));
-			// list.setSelectedIndex(currentSelected);
-			update();
-			completionInfo = null;
+		if (list != null) {
+			int currentSelected = list.getSelectedIndex();
+			if (currentSelected > -1) {
+				valueChanged(new ListSelectionEvent(list, currentSelected, currentSelected, false));
+				// list.setSelectedIndex(currentSelected);
+				update();
+				completionInfo = null;
+			}
 		}
 
 		if (_bindingSelector.getEditedObject() != null && _bindingSelector.getEditedObject().isBindingValid()) {

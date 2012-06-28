@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.dm.action;
 
-import java.util.Enumeration;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
@@ -55,7 +55,7 @@ public class UpdateDMRepository extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DMRepository) && (((DMRepository) object).isUpdatable()));
+			return object instanceof DMRepository && ((DMRepository) object).isUpdatable();
 		}
 
 	};
@@ -68,7 +68,7 @@ public class UpdateDMRepository extends FlexoAction {
 	private DMSet _updatedSet;
 
 	public DMSet getUpdatedSet() {
-		if ((_updatedSet == null) && (getRepository() instanceof ExternalRepository)) {
+		if (_updatedSet == null && getRepository() instanceof ExternalRepository) {
 			_updatedSet = new DMSet(getRepository().getProject(), (ExternalRepository) getRepository(), false, null);
 		}
 		return _updatedSet;
@@ -84,25 +84,30 @@ public class UpdateDMRepository extends FlexoAction {
 		makeFlexoProgress(FlexoLocalization.localizedForKey("updating_repository"), 3);
 		setProgress(FlexoLocalization.localizedForKey("updating_classes"));
 
-		logger.info("repository = " + getRepository());
-		logger.info("getUpdatedSet() = " + getUpdatedSet());
-		logger.info("getUpdatedSet().getSelectedObjects() = " + getUpdatedSet().getSelectedObjects());
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("repository = " + getRepository());
+			logger.info("getUpdatedSet() = " + getUpdatedSet());
+			logger.info("getUpdatedSet().getSelectedObjects() = " + getUpdatedSet().getSelectedObjects());
+		}
 		resetSecondaryProgress(getUpdatedSet().getSelectedObjects().size());
 
-		for (Enumeration en = getUpdatedSet().getSelectedObjects().elements(); en.hasMoreElements();) {
-			FlexoModelObject next = (FlexoModelObject) en.nextElement();
+		for (FlexoModelObject next : getUpdatedSet().getSelectedObjects()) {
 			if (next instanceof ClassReference) {
 				ClassReference classReference = (ClassReference) next;
 				setSecondaryProgress(FlexoLocalization.localizedForKey("updating") + " " + classReference.getName());
 				LoadableDMEntity entity = (LoadableDMEntity) getRepository().getDMEntity(classReference.getPackageName(),
 						classReference.getName());
 				if (entity != null) {
-					logger.info("Update entity for " + classReference.getReferencedClass());
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Update entity for " + classReference.getReferencedClass());
+					}
 					entity.update(getUpdatedSet().getImportGetOnlyProperties(), getUpdatedSet().getImportMethods());
 				} else if (classReference.getReferencedClass() != null) {
-					logger.info("Create entity for " + classReference.getReferencedClass());
-					LoadableDMEntity.createLoadableDMEntity(classReference.getReferencedClass(), getRepository().getDMModel(),
-							getUpdatedSet().getImportGetOnlyProperties(), getUpdatedSet().getImportMethods());
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Create entity for " + classReference.getReferencedClass());
+					}
+					LoadableDMEntity.createLoadableDMEntity(getRepository(), classReference.getReferencedClass(), getUpdatedSet()
+							.getImportGetOnlyProperties(), getUpdatedSet().getImportMethods());
 				}
 			}
 		}
@@ -114,7 +119,7 @@ public class UpdateDMRepository extends FlexoAction {
 
 	public DMRepository getRepository() {
 		if (_repository == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMRepository)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DMRepository) {
 				_repository = (DMRepository) getFocusedObject();
 			}
 		}

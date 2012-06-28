@@ -30,10 +30,12 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.generator.action.OpenDMEntity;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class OpenDMEntityInitializer extends ActionInitializer {
 
@@ -63,7 +65,14 @@ public class OpenDMEntityInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<OpenDMEntity>() {
 			@Override
 			public boolean run(ActionEvent e, OpenDMEntity action) {
-				ExternalDMModule dmModule = ModuleLoader.getDMModule();
+				ExternalDMModule dmModule = null;
+				try {
+					dmModule = getModuleLoader().getDMModule(getProject());
+				} catch (ModuleLoadingException e1) {
+					e1.printStackTrace();
+					;
+					FlexoController.notify("Cannot load DM editor." + e1.getMessage());
+				}
 				if (dmModule == null) {
 					return false;
 				}
@@ -87,11 +96,15 @@ public class OpenDMEntityInitializer extends ActionInitializer {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switching to DM");
 			}
-			ModuleLoader.switchToModule(Module.DM_MODULE);
+			try {
+				getModuleLoader().switchToModule(Module.DM_MODULE, getController().getProject());
+			} catch (ModuleLoadingException e) {
+				e.printStackTrace();
+				FlexoController.notify("Cannot load DM Editor." + e.getMessage());
+			}
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switched to DM done!");
 			}
 		}
 	}
-
 }

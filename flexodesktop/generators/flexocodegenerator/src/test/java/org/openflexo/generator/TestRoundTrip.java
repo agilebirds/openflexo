@@ -23,7 +23,11 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import org.openflexo.diff.ComputeDiff;
 import org.openflexo.diff.ComputeDiff.DiffReport;
@@ -119,13 +123,28 @@ public class TestRoundTrip extends CGTestCase {
 		super.reloadProject(fullLoading);
 	}
 
+	public static Test suite() {
+		final TestSuite suite = new TestSuite("TestSuite for TestRoundTrip");
+		suite.addTest(new TestRoundTrip("test0CreateProject"));
+		suite.addTest(new TestRoundTrip("test1InitializeCodeGeneration"));
+		suite.addTest(new TestRoundTrip("test2CheckDependancyCheckingWithComponents"));
+		suite.addTest(new TestRoundTrip("test3CheckTemplateDependancies"));
+		suite.addTest(new TestRoundTrip("test4TestEditCustomTemplate"));
+		suite.addTest(new TestRoundTrip("test5TestEditGeneratedFileInFlexo"));
+		suite.addTest(new TestRoundTrip("test6TestEditGeneratedFileOutsideFlexo"));
+		suite.addTest(new TestRoundTrip("test7TestMergeWithoutConflict"));
+		suite.addTest(new TestRoundTrip("test8TestMergeWithGenerationConflict"));
+		suite.addTest(new TestRoundTrip("test9TestMergeWithConflict"));
+		return suite;
+	}
+
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_RT, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");

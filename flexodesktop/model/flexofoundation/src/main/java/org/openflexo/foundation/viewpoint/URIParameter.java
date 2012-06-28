@@ -20,11 +20,16 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Vector;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.antar.expr.Variable;
+import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
@@ -33,7 +38,11 @@ public class URIParameter extends EditionSchemeParameter {
 
 	private ViewPointDataBinding baseURI;
 
-	private BindingDefinition BASE_URI = new BindingDefinition("baseURI", String.class, BindingDefinitionType.GET, false);
+	private BindingDefinition BASE_URI = new BindingDefinition("baseURI", String.class, BindingDefinitionType.GET, true);
+
+	public URIParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	public BindingDefinition getBaseURIBindingDefinition() {
 		return BASE_URI;
@@ -64,7 +73,7 @@ public class URIParameter extends EditionSchemeParameter {
 	}
 
 	@Override
-	public boolean isMandatory() {
+	public boolean getIsRequired() {
 		return true;
 	}
 
@@ -92,9 +101,9 @@ public class URIParameter extends EditionSchemeParameter {
 	}
 
 	@Override
-	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) {
+	public Object getDefaultValue(EditionSchemeAction<?> action) {
 		if (getBaseURI().isValid()) {
-			String baseProposal = (String) getBaseURI().getBindingValue(parameterRetriever);
+			String baseProposal = (String) getBaseURI().getBindingValue(action);
 			if (baseProposal == null) {
 				return null;
 			}
@@ -113,6 +122,53 @@ public class URIParameter extends EditionSchemeParameter {
 			return proposal;
 		}
 		return null;
+	}
+
+	public Vector<EditionSchemeParameter> getDependancies() {
+		if (getBaseURI().isSet() && getBaseURI().isValid()) {
+			Vector<EditionSchemeParameter> returned = new Vector<EditionSchemeParameter>();
+			try {
+				Vector<Variable> variables = Expression.extractVariables(getBaseURI().toString());
+				for (Variable v : variables) {
+					String parameterName = v.getName().substring(v.getName().indexOf(".") + 1);
+					EditionSchemeParameter p = getScheme().getParameter(parameterName);
+					if (p != null) {
+						returned.add(p);
+					} else {
+						p = getScheme().getParameter(parameterName.substring(0, parameterName.indexOf(".")));
+						if (p != null) {
+							returned.add(p);
+						}
+					}
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return returned;
+		} else {
+			return null;
+		}
+	}
+
+	public static class BaseURIBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<URIParameter> {
+		public BaseURIBindingIsRequiredAndMustBeValid() {
+			super("'base_uri'_binding_is_required", URIParameter.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(URIParameter object) {
+			return object.getBaseURI();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(URIParameter object) {
+			return object.getBaseURIBindingDefinition();
+		}
+
 	}
 
 }

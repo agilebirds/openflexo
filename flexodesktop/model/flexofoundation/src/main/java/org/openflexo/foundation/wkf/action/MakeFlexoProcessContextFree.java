@@ -33,7 +33,7 @@ import org.openflexo.foundation.wkf.WKFObject;
 
 public class MakeFlexoProcessContextFree extends FlexoUndoableAction<MakeFlexoProcessContextFree, FlexoProcess, WKFObject> {
 
-	private static final Logger logger = Logger.getLogger(AddDeadline.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(MakeFlexoProcessContextFree.class.getPackage().getName());
 
 	public static FlexoActionType<MakeFlexoProcessContextFree, FlexoProcess, WKFObject> actionType = new FlexoActionType<MakeFlexoProcessContextFree, FlexoProcess, WKFObject>(
 			"make_context_free", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {

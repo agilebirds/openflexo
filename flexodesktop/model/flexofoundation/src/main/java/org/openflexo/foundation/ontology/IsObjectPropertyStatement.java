@@ -27,8 +27,6 @@ public class IsObjectPropertyStatement extends IsAStatement {
 
 	private static final Logger logger = Logger.getLogger(IsObjectPropertyStatement.class.getPackage().getName());
 
-	public static final String OBJECT_PROPERTY_URI = "http://www.w3.org/2002/07/owl#ObjectProperty";
-
 	public IsObjectPropertyStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 	}

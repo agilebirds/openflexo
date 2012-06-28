@@ -21,6 +21,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 
+import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.localization.FlexoLocalization;
@@ -44,6 +45,8 @@ public class FlexoProjectBuilder {
 	private int current;
 	private int stepsToNotify;
 
+	public FlexoResourceCenter resourceCenter;
+
 	public void initResourcesCount(int resourcesCount) {
 		if (progress != null) {
 			this.resourcesCount = resourcesCount;
@@ -56,7 +59,7 @@ public class FlexoProjectBuilder {
 			} else if (resourcesCount < 1000) {
 				stepsToNotify = 50;
 			} else {
-				stepsToNotify = (resourcesCount / 20);
+				stepsToNotify = resourcesCount / 20;
 			}
 			current = 0;
 			// System.out.println("Steps to notify "+stepsToNotify);
@@ -68,8 +71,8 @@ public class FlexoProjectBuilder {
 		if (progress != null) {
 			current++;
 			if (stepsToNotify > 0 && current % stepsToNotify == 0) {
-				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("loading_resources...") + " "
-						+ ((current * 100 / resourcesCount)) + " % " + FlexoLocalization.localizedForKey("completed"));
+				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("loading_resources...") + " " + current * 100
+						/ resourcesCount + " % " + FlexoLocalization.localizedForKey("completed"));
 			}
 		}
 	}

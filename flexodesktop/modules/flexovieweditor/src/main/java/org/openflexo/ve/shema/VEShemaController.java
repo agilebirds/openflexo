@@ -37,16 +37,16 @@ import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 
 public class VEShemaController extends SelectionManagingDrawingController<VEShemaRepresentation> {
 
-	private OEController _controller;
+	private VEController _controller;
 	private CommonPalette _commonPalette;
 	private VEShemaModuleView _moduleView;
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
-	public VEShemaController(OEController controller, View shema) {
+	public VEShemaController(VEController controller, View shema) {
 		super(new VEShemaRepresentation(shema), controller.getSelectionManager());
 
 		_controller = controller;
@@ -89,9 +89,10 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			if (getDrawingView() != null) {
 				_controller.removeModuleView(getModuleView());
 			}
-			_controller.SHEMA_PERSPECTIVE.removeFromControllers(this);
+			_controller.DIAGRAM_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
+		getDrawing().delete();
 	}
 
 	@Override
@@ -99,7 +100,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		return new VEShemaView(drawing, this);
 	}
 
-	public OEController getOEController() {
+	public VEController getOEController() {
 		return _controller;
 	}
 
@@ -129,7 +130,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
 			for (ViewPointPalette palette : orderedPalettes) {
-				paletteView.add(palette.getName(), (_contextualPalettes.get(palette)).getPaletteView());
+				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteView());
 			}
 			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
 					.getPaletteView());

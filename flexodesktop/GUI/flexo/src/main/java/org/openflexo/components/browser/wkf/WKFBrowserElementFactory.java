@@ -25,8 +25,6 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.wkf.DeadLine;
-import org.openflexo.foundation.wkf.DeadLineList;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -105,8 +103,6 @@ public class WKFBrowserElementFactory implements BrowserElementFactory {
 			return new RoleElement((Role) object, browser, parent);
 		} else if (object instanceof Status) {
 			return new StatusElement((Status) object, browser, parent);
-		} else if (object instanceof DeadLine) {
-			return new DeadLineElement((DeadLine) object, browser, parent);
 		} else if (object instanceof RoleList) {
 			return new RoleListElement((RoleList) object, browser, parent);
 		} else if (object instanceof FlexoPort) {
@@ -119,11 +115,9 @@ public class WKFBrowserElementFactory implements BrowserElementFactory {
 			return new PortMapRegisteryElement((PortMapRegistery) object, browser, parent);
 		} else if (object instanceof StatusList) {
 			return new StatusListElement((StatusList) object, browser, parent);
-		} else if (object instanceof DeadLineList) {
-			return new DeadLineListElement((DeadLineList) object, browser, parent);
 		} else if (object instanceof MessageBindings) {
 			return new MessageElement((MessageBindings) object, browser, parent);
-		} else if ((object instanceof MessageDefinition) || (object instanceof ServiceMessageDefinition)) {
+		} else if (object instanceof MessageDefinition || object instanceof ServiceMessageDefinition) {
 			// just to show that there are TWO types of message definitions
 			return new MessageDefinitionElement((AbstractMessageDefinition) object, browser, parent);
 		} else if (object instanceof ServiceInterface) {

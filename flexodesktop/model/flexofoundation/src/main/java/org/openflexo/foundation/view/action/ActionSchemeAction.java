@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view.action;
 
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
@@ -27,7 +28,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
 public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> {
@@ -42,7 +43,7 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 		this.actionType = actionType;
 	}
 
-	public ActionScheme getActionScheme() {
+	public AbstractActionScheme getActionScheme() {
 		if (actionType != null) {
 			return actionType.getActionScheme();
 		}
@@ -64,7 +65,9 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Perform action " + actionType);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Perform action " + actionType);
+		}
 
 		if (getActionScheme() != null && getActionScheme().evaluateCondition(actionType.getEditionPatternReference())) {
 			applyEditionActions();
@@ -79,8 +82,4 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 		return null;
 	}
 
-	@Override
-	protected Object getOverridenGraphicalRepresentation() {
-		return null;
-	}
 }

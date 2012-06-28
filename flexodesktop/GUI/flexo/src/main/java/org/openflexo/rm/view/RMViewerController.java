@@ -39,6 +39,12 @@ public class RMViewerController extends DrawingController<RMViewerRepresentation
 		super(new RMViewerRepresentation(project));
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		getDrawing().delete();
+	}
+
 	private JPanel mainView;
 
 	public JPanel getMainView() {

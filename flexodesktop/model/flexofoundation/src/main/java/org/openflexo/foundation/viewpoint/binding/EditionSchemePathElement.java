@@ -19,18 +19,18 @@ public class EditionSchemePathElement<E extends Bindable> implements BindingVari
 	private EditionScheme editionScheme;
 
 	private EditionSchemeParameterListPathElement parametersElement;
-	private Hashtable<PatternRole, PatternRolePathElement> patternRoleElements;
+	private Hashtable<PatternRole, BindingPathElement> elements;
 	private Vector<BindingPathElement> allElements;
 
 	public EditionSchemePathElement(EditionScheme anEditionScheme, E container) {
 		this.editionScheme = anEditionScheme;
 		this.container = container;
-		patternRoleElements = new Hashtable<PatternRole, PatternRolePathElement>();
+		elements = new Hashtable<PatternRole, BindingPathElement>();
 		allElements = new Vector<BindingPathElement>();
 		parametersElement = new EditionSchemeParameterListPathElement(editionScheme, this);
 		for (PatternRole pr : anEditionScheme.getEditionPattern().getPatternRoles()) {
-			PatternRolePathElement newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, editionScheme);
-			patternRoleElements.put(pr, newPathElement);
+			BindingPathElement<?> newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, editionScheme);
+			elements.put(pr, newPathElement);
 			allElements.add(newPathElement);
 		}
 	}
@@ -39,8 +39,8 @@ public class EditionSchemePathElement<E extends Bindable> implements BindingVari
 		return allElements;
 	}
 
-	public PatternRolePathElement getPatternRolePathElement(PatternRole pr) {
-		return patternRoleElements.get(pr);
+	public BindingPathElement getPathElement(PatternRole pr) {
+		return elements.get(pr);
 	}
 
 	@Override

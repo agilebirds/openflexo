@@ -45,53 +45,47 @@ public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget i
 	private final FIBEditorController editorController;
 
 	@Override
-	public FIBEditorController getEditorController()
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
 
-	public FIBEditableRadioButtonListWidget(FIBRadioButtonList model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+	public FIBEditableRadioButtonListWidget(FIBRadioButtonList model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBRadioButtonList, JPanel>(this);
 		model.addObserver(this);
 	}
 
-
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
 	}
 
 	@Override
-	public Vector<PlaceHolder> getPlaceHolders()
-	{
+	public Vector<PlaceHolder> getPlaceHolders() {
 		return null;
 	}
 
 	@Override
-	public FIBEditableViewDelegate<FIBRadioButtonList, JPanel> getDelegate()
-	{
+	public FIBEditableViewDelegate<FIBRadioButtonList, JPanel> getDelegate() {
 		return delegate;
 	}
 
 	@Override
-	public void update(Observable o, Object dataModification)
-	{
-		 if (dataModification instanceof FIBAttributeNotification) {			 
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
-				if (n.getAttribute() == FIBWidget.Parameters.format
-						|| n.getAttribute() == FIBWidget.Parameters.localize) {
-					rebuildRadioButtons();
-				}
-		 }
+	public void update(Observable o, Object dataModification) {
+		if (dataModification instanceof FIBAttributeNotification) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBWidget.Parameters.format || n.getAttribute() == FIBWidget.Parameters.localize
+					|| n.getAttribute() == FIBRadioButtonList.Parameters.columns || n.getAttribute() == FIBRadioButtonList.Parameters.hGap
+					|| n.getAttribute() == FIBRadioButtonList.Parameters.vGap) {
+				rebuildRadioButtons();
+			}
+		}
 		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
 		}
 	}
 

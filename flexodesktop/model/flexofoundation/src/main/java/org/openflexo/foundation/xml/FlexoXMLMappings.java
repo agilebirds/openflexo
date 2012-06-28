@@ -35,7 +35,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom.JDOMException;
 import org.openflexo.foundation.FlexoLinks;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dm.DMModel;
@@ -57,6 +56,7 @@ import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
+import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
@@ -145,7 +145,7 @@ public class FlexoXMLMappings {
 	/**
 	 * Returns all available versions for given class, ordered in ascendant order
 	 */
-	public FlexoVersion[] getAvailableVersionsForClass(Class aClass) {
+	public FlexoVersion[] getAvailableVersionsForClass(Class<?> aClass) {
 		if (modelVersions != null) {
 			ClassModels modelsForClass = modelVersions.classModels.get(aClass.getName());
 			if (modelsForClass != null) {
@@ -158,11 +158,11 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
-	public XMLMapping getMappingForClass(Class aClass) {
+	public XMLMapping getMappingForClass(Class<?> aClass) {
 		return getMappingForClassAndVersion(aClass, getLatestVersionForClass(aClass));
 	}
 
-	public XMLMapping getMappingForClassAndVersion(Class aClass, FlexoVersion version) {
+	public XMLMapping getMappingForClassAndVersion(Class<?> aClass, FlexoVersion version) {
 		ClassModelVersion cmv = getClassModelVersion(aClass, version);
 		if (cmv != null) {
 			return cmv.getMapping();
@@ -173,11 +173,11 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
-	public ClassModels getModelsForClass(Class aClass) {
+	public ClassModels getModelsForClass(Class<?> aClass) {
 		return modelVersions.classModels.get(aClass.getName());
 	}
 
-	public ClassModelVersion getClassModelVersion(Class aClass, FlexoVersion version) {
+	public ClassModelVersion getClassModelVersion(Class<?> aClass, FlexoVersion version) {
 		if (modelVersions != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finest("Searching ClassModelFlexoVersion for class " + aClass.getName());
@@ -199,7 +199,7 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
-	public FlexoVersion getLatestVersionForClass(Class aClass) {
+	public FlexoVersion getLatestVersionForClass(Class<?> aClass) {
 		if (modelVersions != null && aClass != null) {
 			ClassModels modelsForClass = modelVersions.classModels.get(aClass.getName());
 			if (modelsForClass != null) {
@@ -209,7 +209,7 @@ public class FlexoXMLMappings {
 		return null;
 	}
 
-	public FlexoVersion getVersionForClassAndRelease(Class aClass, FlexoVersion releaseVersion) {
+	public FlexoVersion getVersionForClassAndRelease(Class<?> aClass, FlexoVersion releaseVersion) {
 		if (modelVersions != null && aClass != null) {
 			ReleaseModels modelsForRelease = modelVersions.releaseModels.get(releaseVersion);
 			if (modelsForRelease != null) {
@@ -273,18 +273,25 @@ public class FlexoXMLMappings {
 	}
 
 	public void initialize() {
+		// We use here a dedicated and resetted String Converter
+		// Fix a bug where relative path converter overrided File converter, and causing big issues
+		StringEncoder stringEncoder = new StringEncoder();
+		stringEncoder._addConverter(FlexoVersion.converter);
+
 		// Register all declared string converters
-		FlexoObject.initialize();
+		// FlexoObject.initialize(true);
+
 		// The next line ensure that the FlexoVersion converter is well registered by XMLCoDe
-		FlexoVersion registerMyConverter = new FlexoVersion("1.0");
-		registerMyConverter.toString();
+		// FlexoVersion registerMyConverter = new FlexoVersion("1.0");
+		// registerMyConverter.toString();
 		// File flexoFoundationDirectory = getFlexoFoundationDirectory();
 		// File modelFlexoVersionFile = new File (flexoFoundationDirectory,
 		// "Models/ModelFlexoVersions.xml");
+
 		File modelFlexoVersionFile = new FileResource("Models/ModelVersions.xml");
 		try {
-			modelVersions = (ModelVersions) XMLDecoder.decodeObjectWithMapping(new FileInputStream(modelFlexoVersionFile),
-					getVersionningModel());
+			modelVersions = (ModelVersions) XMLDecoder.decodeObjectWithMappingAndStringEncoder(new FileInputStream(modelFlexoVersionFile),
+					getVersionningModel(), stringEncoder);
 			Iterator<ClassModels> i = modelVersions.classModels.values().iterator();
 			while (i.hasNext()) {
 				ClassModels cm = i.next();

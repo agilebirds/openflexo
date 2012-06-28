@@ -37,10 +37,14 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
@@ -103,7 +107,7 @@ public class WindowMenu extends FlexoMenu {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build NEW module menu for " + module.getName());
 		}
-		for (Enumeration e = ModuleLoader.loadedModules(); e.hasMoreElements();) {
+		for (Enumeration e = getModuleLoader().loadedModules(); e.hasMoreElements();) {
 			Module next = ((FlexoModule) e.nextElement()).getModule();
 			createNewAvailableModuleItem(next, true);
 		}
@@ -113,8 +117,7 @@ public class WindowMenu extends FlexoMenu {
 		loadWindowMenu.setText(FlexoLocalization.localizedForKey("load_module", loadWindowMenu));
 		add(loadWindowMenu);
 
-		for (Enumeration e = ModuleLoader.unloadedButAvailableModules().elements(); e.hasMoreElements();) {
-			Module next = (Module) e.nextElement();
+		for (Module next : getModuleLoader().unloadedButAvailableModules()) {
 			createNewLoadModuleItem(next);
 		}
 		add(closeModuleItem = new CloseModuleItem());
@@ -160,6 +163,10 @@ public class WindowMenu extends FlexoMenu {
 		});
 	}
 
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
 	protected void updateWindowState() {
 		if (getController().getInspectorWindow() != null) {
 			inspectorWindowItem.setState(getController().getInspectorWindow().isVisible());
@@ -168,7 +175,7 @@ public class WindowMenu extends FlexoMenu {
 			preferencesWindowItem.setState(getController().getPreferencesWindow().isVisible());
 		}
 		if (checkConsistencyWindowItem != null) {
-			if (getController().getConsistencyCheckWindow() != null) {
+			if (getController().getConsistencyCheckWindow(false) != null) {
 				checkConsistencyWindowItem.setState(getController().getConsistencyCheckWindow().isVisible());
 			} else {
 				checkConsistencyWindowItem.setEnabled(false);
@@ -369,7 +376,12 @@ public class WindowMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ModuleLoader.switchToModule(_module);
+			try {
+				getModuleLoader().switchToModule(_module, null);
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load module." + e.getMessage());
+				return;
+			}
 			_menuItem.setState(ModuleLoader.instance().getActiveModule() == _module);
 			_menuItem.setIcon(_module.getSmallIcon());
 		}
@@ -380,16 +392,37 @@ public class WindowMenu extends FlexoMenu {
 	}
 
 	public static class LoadModuleAction extends AbstractAction {
-		private Module _module;
+		private Module module;
 
 		public LoadModuleAction(Module module) {
 			super();
-			_module = module;
+			this.module = module;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ModuleLoader.switchToModule(_module);
+			FlexoProject currentProject = getModuleLoader().getProject();
+			if (currentProject == null && module.requireProject()) {
+				try {
+					ModuleLoader.instance().openProject(null, module);
+				} catch (ProjectLoadingCancelledException e) {
+					e.printStackTrace();
+				} catch (ModuleLoadingException e) {
+					e.printStackTrace();
+					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+				} catch (ProjectInitializerException e) {
+					e.printStackTrace();
+					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+							+ e.getProjectDirectory().getAbsolutePath());
+				}
+			} else {
+				try {
+					getModuleLoader().switchToModule(module, currentProject);
+				} catch (ModuleLoadingException e) {
+					FlexoController.notify("Cannot load module." + e.getMessage());
+					return;
+				}
+			}
 		}
 	}
 
@@ -418,11 +451,17 @@ public class WindowMenu extends FlexoMenu {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Notify switching to module " + module + " DOING it.");
 			}
-			if ((getActiveModule() != null) && (getActiveModule().isLoaded())) {
+			if (getActiveModule() != null && getActiveModule().isLoaded()) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus OFF module " + getActiveModule());
 				}
-				getActiveModule().getInstance().focusOff();
+				try {
+					getModuleLoader().getModuleInstance(getActiveModule(), getModuleLoader().getProject()).focusOff();
+				} catch (ModuleLoadingException e) {
+					logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
+							+ "PLEASE INVESTIGATE AND  FIX");
+					e.printStackTrace();
+				}
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Updating menus for " + module);
@@ -569,7 +608,13 @@ public class WindowMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (getActiveModule() != null) {
-				getActiveModule().getInstance().close();
+				try {
+					getModuleLoader().getModuleInstance(getActiveModule(), getModuleLoader().getProject()).close();
+				} catch (ModuleLoadingException e) {
+					logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
+							+ "PLEASE INVESTIGATE AND  FIX");
+					e.printStackTrace();
+				}
 			}
 		}
 	}

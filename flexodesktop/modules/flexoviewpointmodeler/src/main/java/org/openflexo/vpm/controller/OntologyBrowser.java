@@ -24,10 +24,11 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 
-public class OntologyBrowser extends CEDBrowser {
+@Deprecated
+public class OntologyBrowser extends VPMBrowser {
 	private FlexoOntology representedOntology = null;
 
-	public OntologyBrowser(CEDController controller) {
+	public OntologyBrowser(VPMController controller) {
 		super(controller);
 	}
 

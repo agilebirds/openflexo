@@ -31,29 +31,33 @@ import javax.swing.JComponent;
 
 import org.jdom.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
+import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
 public class ViewPointPalette extends ViewPointObject implements Comparable<ViewPointPalette> {
 
-	private static final Logger logger = Logger.getLogger(ViewPointPalette.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ViewPointPalette.class.getPackage().getName());
 
 	private int index;
 
@@ -72,16 +76,16 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	public static ViewPointPalette instanciateCalcPalette(ViewPoint calc, File paletteFile) {
 		if (paletteFile.exists()) {
-			Converter<File> previousConverter = null;
 			FileInputStream inputStream = null;
 			try {
-				previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(paletteFile.getParentFile());
-				StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 				inputStream = new FileInputStream(paletteFile);
 				logger.info("Loading file " + paletteFile.getAbsolutePath());
+				ViewPointBuilder builder = new ViewPointBuilder((ImportedOntology) calc.getViewpointOntology());
 				ViewPointPalette returned = (ViewPointPalette) XMLDecoder.decodeObjectWithMapping(inputStream, calc.getViewPointLibrary()
-						.get_VIEW_POINT_PALETTE_MODEL());
+						.get_VIEW_POINT_PALETTE_MODEL(), builder, new StringEncoder(StringEncoder.getDefaultInstance(),
+						relativePathFileConverter));
+				logger.info("Loaded file " + paletteFile.getAbsolutePath());
 				returned.init(calc, paletteFile);
 				return returned;
 			} catch (FileNotFoundException e) {
@@ -105,8 +109,10 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 			} catch (JDOMException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} finally {
-				StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 				try {
 					if (inputStream != null) {
 						inputStream.close();
@@ -127,7 +133,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	public static ViewPointPalette newCalcPalette(ViewPoint calc, File paletteFile, Object graphicalRepresentation) {
-		ViewPointPalette palette = new ViewPointPalette();
+		ViewPointPalette palette = new ViewPointPalette(null);
 		palette.setIndex(calc.getPalettes().size());
 		palette.setGraphicalRepresentation(graphicalRepresentation);
 		palette.init(calc, paletteFile);
@@ -135,8 +141,8 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	// Used during deserialization, do not use it
-	public ViewPointPalette() {
-		super();
+	public ViewPointPalette(ViewPointBuilder builder) {
+		super(builder);
 		_elements = new Vector<ViewPointPaletteElement>();
 	}
 
@@ -156,9 +162,10 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	@Override
 	public void delete() {
-		if (getCalc() != null) {
-			getCalc().removeFromCalcPalettes(this);
+		if (getViewPoint() != null) {
+			getViewPoint().removeFromCalcPalettes(this);
 		}
+		logger.info("Deleting file " + _paletteFile);
 		_paletteFile.delete();
 		super.delete();
 		deleteObservers();
@@ -171,7 +178,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	@Override
 	public String toString() {
-		return "OntologyCalcPalette:" + (getCalc() != null ? getCalc().getName() : "null");
+		return "OntologyCalcPalette:" + (getViewPoint() != null ? getViewPoint().getName() : "null");
 	}
 
 	public int getIndex() {
@@ -188,6 +195,14 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	@Override
+	public void setName(String name) throws Exception {
+		super.setName(name);
+		if (_paletteFile != null && !_paletteFile.getName().startsWith(name)) {
+			FileUtils.rename(_paletteFile, new File(_paletteFile.getParentFile(), name + ".palette"));
+		}
+	}
+
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -198,13 +213,13 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		return _calc;
 	}
 
 	@Override
 	public ViewPointLibrary getViewPointLibrary() {
-		return getCalc().getViewPointLibrary();
+		return getViewPoint().getViewPointLibrary();
 	}
 
 	@Override
@@ -248,12 +263,19 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		return getViewPointLibrary().get_VIEW_POINT_PALETTE_MODEL();
 	}
 
+	private StringEncoder encoder;
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		if (encoder == null) {
+			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
+		}
+		return encoder;
+	}
+
 	@Override
 	public void saveToFile(File aFile) {
-		Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 		super.saveToFile(aFile);
-		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 		clearIsModified(true);
 	}
 
@@ -269,7 +291,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 			makeLocalCopy();
 			temporaryFile = File.createTempFile("temp", ".xml", dir);
 			saveToFile(temporaryFile);
-			temporaryFile.renameTo(_paletteFile);
+			FileUtils.rename(temporaryFile, _paletteFile);
 			clearIsModified(true);
 			buildAndSaveScreenshotImage();
 			logger.info("Saved palette to " + _paletteFile.getAbsolutePath() + ". Done.");
@@ -283,7 +305,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	private void makeLocalCopy() throws IOException {
-		if ((_paletteFile != null) && (_paletteFile.exists())) {
+		if (_paletteFile != null && _paletteFile.exists()) {
 			String localCopyName = _paletteFile.getName() + "~";
 			File localCopy = new File(_paletteFile.getParentFile(), localCopyName);
 			FileUtils.copyFileToFile(_paletteFile, localCopy);
@@ -291,36 +313,11 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	public ViewPointPaletteElement addPaletteElement(String name, Object graphicalRepresentation) {
-		ViewPointPaletteElement newElement = new ViewPointPaletteElement();
+		ViewPointPaletteElement newElement = new ViewPointPaletteElement(null);
 		newElement.setName(name);
-		newElement.setGraphicalRepresentation(graphicalRepresentation);
+		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation) graphicalRepresentation);
 		addToElements(newElement);
 		return newElement;
-	}
-
-	public static class RelativePathFileConverter extends Converter<File> {
-		private final File relativePath;
-
-		public RelativePathFileConverter(File aRelativePath) {
-			super(File.class);
-			relativePath = aRelativePath;
-		}
-
-		@Override
-		public File convertFromString(String value) {
-			return new File(relativePath, value);
-		}
-
-		@Override
-		public String convertToString(File value) {
-			try {
-				return FileUtils.makeFilePathRelativeToDir(value, relativePath);
-			} catch (IOException e) {
-				logger.warning("IOException while computing relative path for " + value + " relative to " + relativePath);
-				return value.getAbsolutePath();
-			}
-		}
-
 	}
 
 	@Override
@@ -344,8 +341,14 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	private ScreenshotImage buildAndSaveScreenshotImage() {
-		ExternalCEDModule cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-				.getCEDModuleInstance() : null;
+		ExternalCEDModule cedModule = null;
+		try {
+			cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader().getCEDModuleInstance(
+					getProject()) : null;
+		} catch (ModuleLoadingException e) {
+			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
+			e.printStackTrace();
+		}
 
 		if (cedModule == null) {
 			return null;
@@ -388,7 +391,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	public ScreenshotImage getScreenshotImage() {
-		if ((screenshotImage == null) || screenshotModified) {
+		if (screenshotImage == null || screenshotModified) {
 			if (screenshotModified) {
 				logger.info("Rebuilding screenshot for " + this + " because screenshot is modified");
 			}
@@ -412,7 +415,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 
 }

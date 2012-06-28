@@ -19,35 +19,68 @@
  */
 package org.openflexo.vpm.view;
 
+import java.util.List;
+import java.util.Vector;
+
+import org.openflexo.components.widget.FIBOntologyEditor;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.view.FIBModuleView;
+import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.FlexoPerspective;
-import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.vpm.controller.VPMController;
 
 /**
- * Please comment this class
+ * This class represent the module view for an ontology.<br>
+ * Underlying representation is supported by FIBOntologyEditor implementation.
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-public class OntologyView extends FIBModuleView<FlexoOntology> {
+@SuppressWarnings("serial")
+public class OntologyView extends FIBOntologyEditor implements SelectionSynchronizedModuleView<FlexoOntology> {
 
 	private FlexoPerspective<? super FlexoOntology> declaredPerspective;
 
-	public OntologyView(FlexoOntology ontology, CEDController controller, FlexoPerspective<? super FlexoOntology> perspective) {
-		super(ontology, controller, CEDCst.ONTOLOGY_VIEW_FIB);
+	public OntologyView(FlexoOntology ontology, VPMController controller, FlexoPerspective<? super FlexoOntology> perspective) {
+		super(ontology, controller);
 		declaredPerspective = perspective;
 		controller.manageResource(ontology);
 	}
 
 	@Override
-	public CEDController getFlexoController() {
-		return (CEDController) super.getFlexoController();
+	public VPMController getFlexoController() {
+		return (VPMController) super.getFlexoController();
 	}
 
 	@Override
 	public FlexoPerspective<? super FlexoOntology> getPerspective() {
 		return declaredPerspective;
 	}
+
+	@Override
+	public void deleteModuleView() {
+		deleteView();
+		getFlexoController().removeModuleView(this);
+	}
+
+	@Override
+	public List<SelectionListener> getSelectionListeners() {
+		Vector<SelectionListener> reply = new Vector<SelectionListener>();
+		reply.add(this);
+		return reply;
+	}
+
+	@Override
+	public void willHide() {
+	}
+
+	@Override
+	public void willShow() {
+	}
+
+	@Override
+	public FlexoOntology getRepresentedObject() {
+		return getOntology();
+	}
+
 }

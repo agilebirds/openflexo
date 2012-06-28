@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -35,38 +36,44 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBDropDown;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ToolBox;
 
 public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComboBox, Object> {
 
 	static final Logger logger = Logger.getLogger(FIBDropDownWidget.class.getPackage().getName());
 
-	private final JButton _resetButton;
+	private final JButton resetButton;
 
-	private final JPanel _mySmallPanel;
+	private final JPanel dropdownPanel;
 
-	protected JComboBox _jComboBox;
+	protected JComboBox jComboBox;
 
 	public FIBDropDownWidget(FIBDropDown model, FIBController controller) {
 		super(model, controller);
 		initJComboBox();
-		_mySmallPanel = new JPanel(new BorderLayout());
-		_resetButton = new JButton();
-		_resetButton.setText(FlexoLocalization.localizedForKey("reset", _resetButton));
-		_resetButton.addActionListener(new ActionListener() {
+		dropdownPanel = new JPanel(new BorderLayout());
+		resetButton = new JButton();
+		resetButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "reset", resetButton));
+		resetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				_jComboBox.getModel().setSelectedItem(null);
+				jComboBox.getModel().setSelectedItem(null);
 				setValue(null);
 			}
 		});
-
-		_mySmallPanel.add(_jComboBox, BorderLayout.CENTER);
-		if (model.showReset) {
-			_mySmallPanel.add(_resetButton, BorderLayout.EAST);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			dropdownPanel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER,
+					BOTTOM_COMPENSATING_BORDER, RIGHT_COMPENSATING_BORDER));
 		}
-		_mySmallPanel.setOpaque(false);
-		_mySmallPanel.addFocusListener(this);
+
+		dropdownPanel.add(jComboBox, BorderLayout.CENTER);
+		if (model.showReset) {
+			dropdownPanel.add(resetButton, BorderLayout.EAST);
+		}
+		dropdownPanel.setOpaque(false);
+		dropdownPanel.addFocusListener(this);
 
 		updateFont();
 
@@ -79,15 +86,15 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		Dimension dimTemp = null;
 		Point locTemp = null;
 		Container parentTemp = null;
-		if ((_jComboBox != null) && (_jComboBox.getParent() != null)) {
-			dimTemp = _jComboBox.getSize();
-			locTemp = _jComboBox.getLocation();
-			parentTemp = _jComboBox.getParent();
-			parentTemp.remove(_jComboBox);
-			parentTemp.remove(_resetButton);
+		if (jComboBox != null && jComboBox.getParent() != null) {
+			dimTemp = jComboBox.getSize();
+			locTemp = jComboBox.getLocation();
+			parentTemp = jComboBox.getParent();
+			parentTemp.remove(jComboBox);
+			parentTemp.remove(resetButton);
 		}
 		listModel = null;
-		_jComboBox = new JComboBox(getListModel());
+		jComboBox = new JComboBox(getListModel());
 		/*if (getDataObject() == null) {
 			Vector<Object> defaultValue = new Vector<Object>();
 			defaultValue.add(FlexoLocalization.localizedForKey("no_selection"));
@@ -97,9 +104,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 			listModel=null;
 			_jComboBox = new JComboBox(getListModel());
 		}*/
-		_jComboBox.setFont(getFont());
-		_jComboBox.setRenderer(getListCellRenderer());
-		_jComboBox.addActionListener(new ActionListener() {
+		jComboBox.setFont(getFont());
+		jComboBox.setRenderer(getListCellRenderer());
+		jComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (logger.isLoggable(Level.FINE)) {
@@ -110,37 +117,37 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		});
 		if (parentTemp != null) {
 			// _jComboBox.setSize(dimTemp);
-			_jComboBox.setLocation(locTemp);
-			((JPanel) parentTemp).add(_jComboBox, BorderLayout.CENTER);
+			jComboBox.setLocation(locTemp);
+			((JPanel) parentTemp).add(jComboBox, BorderLayout.CENTER);
 			if (getWidget().showReset) {
-				((JPanel) parentTemp).add(_resetButton, BorderLayout.EAST);
+				((JPanel) parentTemp).add(resetButton, BorderLayout.EAST);
 			}
 		}
 		// Important: otherwise might be desynchronized
-		_jComboBox.revalidate();
+		jComboBox.revalidate();
 
 		if ((getWidget().getData() == null || !getWidget().getData().isValid()) && getWidget().getAutoSelectFirstRow()
 				&& getListModel().getSize() > 0) {
-			_jComboBox.setSelectedIndex(0);
+			jComboBox.setSelectedIndex(0);
 		}
-		_jComboBox.setEnabled(isComponentEnabled());
+		jComboBox.setEnabled(isComponentEnabled());
 	}
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (notEquals(getValue(), _jComboBox.getSelectedItem()) || listModelRequireChange()) {
+		if (notEquals(getValue(), jComboBox.getSelectedItem()) || listModelRequireChange()) {
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
 			}
 			widgetUpdating = true;
 			initJComboBox();
-			_jComboBox.setSelectedItem(getValue());
+			jComboBox.setSelectedItem(getValue());
 
 			widgetUpdating = false;
 
 			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
-				_jComboBox.setSelectedIndex(0);
+				jComboBox.setSelectedIndex(0);
 			}
 
 			return true;
@@ -153,13 +160,16 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), _jComboBox.getSelectedItem())) {
+		if (widgetUpdating) {
+			return false;
+		}
+		if (notEquals(getValue(), jComboBox.getSelectedItem())) {
 			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("updateModelFromWidget with " + _jComboBox.getSelectedItem());
+				logger.fine("updateModelFromWidget with " + jComboBox.getSelectedItem());
 			}
-			if ((_jComboBox.getSelectedItem() != null) && (!widgetUpdating)) {
-				setValue(_jComboBox.getSelectedItem());
+			if (jComboBox.getSelectedItem() != null && !widgetUpdating) {
+				setValue(jComboBox.getSelectedItem());
 			}
 			modelUpdating = false;
 			return true;
@@ -176,14 +186,14 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	protected MyComboBoxModel updateListModelWhenRequired() {
 		if (listModel == null) {
 			listModel = new MyComboBoxModel(getValue());
-			if (_jComboBox != null) {
-				_jComboBox.setModel((MyComboBoxModel) listModel);
+			if (jComboBox != null) {
+				jComboBox.setModel((MyComboBoxModel) listModel);
 			}
 		} else {
 			MyComboBoxModel aNewMyComboBoxModel = new MyComboBoxModel(getValue());
 			if (!aNewMyComboBoxModel.equals(listModel)) {
 				listModel = aNewMyComboBoxModel;
-				_jComboBox.setModel((MyComboBoxModel) listModel);
+				jComboBox.setModel((MyComboBoxModel) listModel);
 			}
 		}
 		return (MyComboBoxModel) listModel;
@@ -231,18 +241,18 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 
 	@Override
 	public JPanel getJComponent() {
-		return _mySmallPanel;
+		return dropdownPanel;
 	}
 
 	@Override
 	public JComboBox getDynamicJComponent() {
-		return _jComboBox;
+		return jComboBox;
 	}
 
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		_jComboBox.setFont(getFont());
+		jComboBox.setFont(getFont());
 	}
 
 }

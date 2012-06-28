@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class LocalizedEntry extends ViewPointObject {
 
@@ -29,11 +30,12 @@ public class LocalizedEntry extends ViewPointObject {
 	private String language;
 	private String value;
 
-	public LocalizedEntry() {
+	public LocalizedEntry(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public LocalizedEntry(LocalizedDictionary localizedDictionary, String key, String language, String value) {
-		super();
+		super(null);
 		setLocalizedDictionary(localizedDictionary);
 		this.key = key;
 		this.language = language;
@@ -44,13 +46,14 @@ public class LocalizedEntry extends ViewPointObject {
 		_dictionary = dict;
 	}
 
+	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
 		return _dictionary;
 	}
 
 	@Override
-	public ViewPoint getCalc() {
-		return getLocalizedDictionary().getCalc();
+	public ViewPoint getViewPoint() {
+		return getLocalizedDictionary().getViewPoint();
 	}
 
 	public String getKey() {
@@ -85,7 +88,7 @@ public class LocalizedEntry extends ViewPointObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 
 }

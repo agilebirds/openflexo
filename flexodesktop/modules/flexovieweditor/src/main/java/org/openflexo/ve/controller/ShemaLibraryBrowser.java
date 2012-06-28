@@ -23,8 +23,8 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 
-class ShemaLibraryBrowser extends OEBrowser {
-	protected ShemaLibraryBrowser(OEController controller) {
+class ShemaLibraryBrowser extends VEBrowser {
+	protected ShemaLibraryBrowser(VEController controller) {
 		super(controller);
 	}
 

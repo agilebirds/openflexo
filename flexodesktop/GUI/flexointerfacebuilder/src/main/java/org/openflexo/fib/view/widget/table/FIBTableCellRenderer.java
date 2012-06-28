@@ -3,9 +3,11 @@
  */
 package org.openflexo.fib.view.widget.table;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -62,6 +64,10 @@ class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
 			((JComponent) returned).setFont(this.column.getColumnModel().retrieveValidFont());
 		}
 
+		if (returned instanceof JLabel) {
+			((JLabel) returned).setText(this.column.getStringRepresentation(value));
+		}
+
 		if (isSelected) {
 			if (getTableWidget().isLastFocusedSelectable()) {
 				setForeground(getTable().getTextSelectionColor());
@@ -77,6 +83,16 @@ class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
 				setForeground(getTable().getTextNonSelectionColor());
 			}
 			setBackground(getTable().getBackgroundNonSelectionColor());
+		}
+
+		Color specificColor = this.column.getSpecificColor(getTableModel().elementAt(row));
+		if (specificColor != null) {
+			setForeground(specificColor);
+		}
+
+		Color specificBgColor = this.column.getSpecificBgColor(getTableModel().elementAt(row));
+		if (specificBgColor != null) {
+			setBackground(specificBgColor);
 		}
 
 		return returned;

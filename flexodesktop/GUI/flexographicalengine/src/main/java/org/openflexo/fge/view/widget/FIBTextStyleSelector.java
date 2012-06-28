@@ -22,8 +22,8 @@ package org.openflexo.fge.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,6 +69,8 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 	protected TextStyleDetailsPanel _selectorPanel;
 
+	private TextStylePreviewPanel textStylePreviewPanel;
+
 	public FIBTextStyleSelector(TextStyle editedObject) {
 		super(editedObject);
 		setRevertValue(editedObject != null ? editedObject.clone() : null);
@@ -76,7 +78,28 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		textStylePreviewPanel.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
+	}
+
+	@Override
 	public void init(FIBCustom component, FIBController controller) {
+	}
+
+	/**
+	 * Return a flag indicating if equals() method should be used to determine equality.<br>
+	 * For the FIBForegroundStyleSelector implementation, we MUST return false, because we can otherwise switch between ForegroundStyle
+	 * which are equals, and then start to share TextStyle between many GraphicalRepresentation
+	 * 
+	 * @return false
+	 */
+	@Override
+	public boolean useEqualsLookup() {
+		return false;
 	}
 
 	@Override
@@ -144,6 +167,11 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 		}
 
 		public void delete() {
+			controller.delete();
+			fibView.delete();
+			fibComponent = null;
+			controller = null;
+			fibView = null;
 		}
 
 		public class CustomFIBController extends FIBController<TextStyle> {
@@ -204,7 +232,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 	@Override
 	protected TextStylePreviewPanel buildFrontComponent() {
-		return new TextStylePreviewPanel();
+		return textStylePreviewPanel = new TextStylePreviewPanel();
 	}
 
 	@Override
@@ -242,8 +270,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 			text = new Object();
 
-			final Vector<Object> singleton = new Vector<Object>();
-			singleton.add(text);
+			final List<Object> singleton = Collections.singletonList(text);
 
 			drawing = new Drawing<TextStylePreviewPanel>() {
 				@Override
@@ -293,7 +320,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setHeight(20);
 			textGR.setX(0);
 			textGR.setY(0);
-			textGR.setText(FlexoLocalization.localizedForKey("no_font_selected"));
+			textGR.setText(FlexoLocalization.localizedForKey(GraphicalRepresentation.LOCALIZATION, "no_font_selected"));
 			textGR.setIsFloatingLabel(false);
 			textGR.setRelativeTextX(0.5);
 			textGR.setRelativeTextY(0.35);
@@ -305,11 +332,22 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setIsFocusable(false);
 			textGR.setIsReadOnly(true);
 			textGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+			textGR.setValidated(true);
 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
 
 			update();
+		}
+
+		public void delete() {
+			controller.delete();
+			drawingGR.delete();
+			textGR.delete();
+			controller = null;
+			drawingGR = null;
+			textGR = null;
+			drawing = null;
 		}
 
 		protected void update() {

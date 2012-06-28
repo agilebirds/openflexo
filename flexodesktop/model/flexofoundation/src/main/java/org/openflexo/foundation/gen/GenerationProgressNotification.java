@@ -25,16 +25,16 @@ public class GenerationProgressNotification extends DataModification {
 
 	private boolean _isFine = false;
 
-	public GenerationProgressNotification(int modificationType, Object oldValue, Object newValue) {
-		super(modificationType, oldValue, newValue);
+	public GenerationProgressNotification(Object oldValue, Object newValue) {
+		super(oldValue, newValue);
 	}
 
 	public GenerationProgressNotification(String message) {
-		super(123456, null, message);
+		super(null, message);
 	}
 
 	public GenerationProgressNotification(String message, boolean isFine) {
-		super(123456, null, message);
+		super(null, message);
 		_isFine = isFine;
 	}
 

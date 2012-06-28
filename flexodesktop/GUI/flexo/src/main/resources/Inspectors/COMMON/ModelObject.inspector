@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="flexo_id" localize="true" name="FlexoIDLabel" index="200" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="201" data="data.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="FlexoID" readOnly="true" localize="true">
+    <Tab index="2" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="flexo_id" localize="true" name="FlexoIDLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+      <TextField data="data.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="FlexoID" readOnly="true" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="custom_properties" align="center" localize="true" name="CustomPropertiesLabel" index="202" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=center)" />
-      <Table iteratorClassName="org.openflexo.foundation.FlexoProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="CustomProperties" index="203" data="data.customProperties" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;location=right)">
+      <Label label="EP refs" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+        <LocalizedDictionary />
+      </Label>
+      <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)">
+        <Table iteratorClassName="org.openflexo.foundation.ontology.EditionPatternReference" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="EPRefsTable" data="data.editionPatternReferences" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=5;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)">
+          <TextFieldColumn data="iterator.instanceId" title="Id" columnWidth="30" resizable="true" displayTitle="true" />
+          <TextFieldColumn data="iterator.editionPattern.name" title="EditionPattern" columnWidth="100" resizable="true" displayTitle="true" />
+          <TextFieldColumn data="iterator.patternRole" title="PatternRole" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+          <LocalizedDictionary />
+        </Table>
+        <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="EPRefsTable.selected.editionPattern.patternRoles" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+          <LabelColumn data="iterator.patternRoleName" title="pattern_role" columnWidth="60" resizable="true" displayTitle="true" name="label" />
+          <LabelColumn data="EPRefsTable.selected.editionPatternInstance.getPatternActor(iterator)" title="actor" columnWidth="150" resizable="true" displayTitle="true" name="label" />
+          <LocalizedDictionary />
+        </Table>
+      </Panel>
+      <Label label="custom_properties" align="center" localize="true" name="CustomPropertiesLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)" />
+      <Table iteratorClassName="org.openflexo.foundation.FlexoProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="CustomProperties" data="data.customProperties" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="150" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" />
         <AddAction method="data.addProperty" name="new" />
         <RemoveAction method="data.deleteProperty(selected)" name="delete" />
-        <CustomAction method="data.sortProperties" isAvailable="data.canSortProperties" name="sort" />
+        <CustomAction name="sort" />
       </Table>
     </Tab>
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
+    <Tab index="1" title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DocTab">
       <Label label="specific_description" localize="true" name="SpecificDescriptionsLabel" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
       <Custom componentClassName="org.openflexo.components.widget.FIBDescriptionWidget" index="21" data="data" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)" name="SpecificDescriptions" localize="true" manageDynamicModel="true" />
       <Label label="dont_generate" localize="true" name="DontGenerateLabel" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
@@ -30,9 +46,6 @@
     <Localized key="custom_properties" lang="English">Custom properties</Localized>
     <Localized key="custom_properties" lang="French">Propriétés supplémentaires</Localized>
     <Localized key="custom_properties" lang="Dutch">Custom properties</Localized>
-    <Localized key="specific_description" lang="English">Specific descriptions</Localized>
-    <Localized key="specific_description" lang="French">Description spécifiques</Localized>
-    <Localized key="specific_description" lang="Dutch">Specific descriptions</Localized>
     <Localized key="dont_generate" lang="English">Don't generate doc</Localized>
     <Localized key="dont_generate" lang="French">Ne pas générer</Localized>
     <Localized key="dont_generate" lang="Dutch">Don't generate doc</Localized>

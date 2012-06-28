@@ -20,6 +20,7 @@
 package org.openflexo.foundation.exec;
 
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.AlgorithmicUnit;
@@ -51,7 +52,9 @@ public class ControlGraphFactories {
 	static final Logger logger = Logger.getLogger(ControlGraphFactories.class.getPackage().getName());
 
 	public static void init() {
-		logger.info("Initializing control graph factories on ExecutableWorkflowElement");
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Initializing control graph factories on ExecutableWorkflowElement");
+		}
 		FlexoNode.setActivationComputingFactory(new NodeActivationControlGraphFactory());
 		FlexoNode.setDesactivationComputingFactory(new NodeDesactivationControlGraphFactory());
 		OperatorNode.setExecutionComputingFactory(new OperatorNodeExecutionControlGraphFactory());
@@ -153,8 +156,10 @@ public class ControlGraphFactories {
 
 			@Override
 			protected void refreshAlgorithmicUnit() {
-				logger.info("Recomputing control flow graph for " + getObject() + " and precondition " + getPrecondition()
-						+ " interprocedural=" + isInterprocedural());
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Recomputing control flow graph for " + getObject() + " and precondition " + getPrecondition()
+							+ " interprocedural=" + isInterprocedural());
+				}
 				algorithmicUnit = getFactory().computeAlgorithmicUnit(getObject(), getPrecondition(), isInterprocedural());
 				refreshPrettyPrintedCode();
 			}
@@ -166,9 +171,8 @@ public class ControlGraphFactories {
 
 			@Override
 			public String getInfoLabel() {
-				if (getAllPreconditions().size() == 0
-						|| (getAllPreconditions().size() == 1 && getAllPreconditions().firstElement().getAttachedBeginNode() == null)
-						|| getPrecondition() == null) {
+				if (getAllPreconditions().size() == 0 || getAllPreconditions().size() == 1
+						&& getAllPreconditions().firstElement().getAttachedBeginNode() == null || getPrecondition() == null) {
 					return FlexoLocalization.localizedForKey("control_flow_graph_executed_when_node_is_activated");
 				} else {
 					return FlexoLocalization.localizedForKeyWithParams(
@@ -258,8 +262,10 @@ public class ControlGraphFactories {
 
 			@Override
 			protected void refreshAlgorithmicUnit() {
-				logger.info("Recomputing control flow graph for " + getObject() + " and edge " + getEdge() + " interprocedural="
-						+ interprocedural);
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Recomputing control flow graph for " + getObject() + " and edge " + getEdge() + " interprocedural="
+							+ interprocedural);
+				}
 				algorithmicUnit = getFactory().computeAlgorithmicUnit(getObject(), getEdge(), isInterprocedural());
 				refreshPrettyPrintedCode();
 			}
@@ -321,7 +327,9 @@ public class ControlGraphFactories {
 
 			@Override
 			protected void refreshAlgorithmicUnit() {
-				logger.info("Recomputing control flow graph for " + getObject() + " interprocedural=" + interprocedural);
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Recomputing control flow graph for " + getObject() + " interprocedural=" + interprocedural);
+				}
 				algorithmicUnit = getFactory().computeAlgorithmicUnit(getObject(), isInterprocedural());
 				refreshPrettyPrintedCode();
 			}
@@ -413,8 +421,10 @@ public class ControlGraphFactories {
 
 			@Override
 			protected void refreshAlgorithmicUnit() {
-				logger.info("Recomputing control flow graph for " + getObject() + " and edge " + getEdge() + " interprocedural="
-						+ interprocedural);
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Recomputing control flow graph for " + getObject() + " and edge " + getEdge() + " interprocedural="
+							+ interprocedural);
+				}
 				algorithmicUnit = getFactory().computeAlgorithmicUnit(getObject(), getEdge(), isInterprocedural());
 				refreshPrettyPrintedCode();
 			}

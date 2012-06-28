@@ -17,6 +17,7 @@ import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ProjectLoader;
 
 public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
@@ -30,6 +31,15 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	protected FlexoProject project;
 
 	public FlexoExternalMainWithProject() {
+	}
+
+	/**
+	 * This is only code by test classes to dereference project from everywhere.
+	 */
+	public void close() {
+		ProjectLoader.instance().closeCurrentProject();
+		editor = null;
+		project = null;
 	}
 
 	@Override
@@ -61,9 +71,9 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		try {
 			editor = loadProject(projectDirectory);
 		} catch (ProjectLoadingCancelledException e) {
-			// Should not happend in external builder
+			// Should not happen in external builder
 			e.printStackTrace();
-			System.exit(PROJECT_CANCELED_FAILURE);
+			setExitCodeCleanUpAndExit(PROJECT_CANCELED_FAILURE);
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
 			System.exit(PROJECT_LOADING_FAILURE);
@@ -71,11 +81,15 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		project = editor.getProject();
 		project.getGeneratedCode().setFactory(editor);
 		project.getGeneratedDoc().setFactory(editor);
-		ModuleLoader.setProject(project);
+		/*************************** MEGA-WARNING ***************************/
+		/** ##### DO NOT UNDER ANY (AND I HIGHLY INSIST ON THE "ANY") ##### */
+		/** ########### CIRCUMSTANCES REMOVE THE NEXT LINE ################ */
+		/********************************************************************/
+		ModuleLoader.instance(); // <-- DO NOT REMOVE!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
 	@Override
-	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
+	public void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
 		handleActionFailed(action, projectDirectory);
 	}
 
@@ -151,7 +165,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			@Override
 			public FlexoEditor makeFlexoEditor(FlexoProject project) {
 
-				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(project);
+				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
 				builderEditor.setFactory(new FlexoProgressFactory() {
 					@Override
 					public FlexoProgress makeFlexoProgress(String title, int steps) {
@@ -161,7 +175,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 				return builderEditor;
 			}
 
-		}, null);
+		}, getResourceCenter());
 	}
 
 }

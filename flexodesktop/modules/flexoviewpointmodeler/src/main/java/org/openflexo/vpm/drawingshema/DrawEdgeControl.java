@@ -79,8 +79,8 @@ public class DrawEdgeControl extends MouseDragControl {
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge && toShape != null) {
 
-				if (fromShape.getDrawable().getCalc() != null) {
-					Vector<LinkScheme> availableConnectors = fromShape.getDrawable().getCalc().getAllConnectors();
+				if (fromShape.getDrawable().getViewPoint() != null) {
+					Vector<LinkScheme> availableConnectors = fromShape.getDrawable().getViewPoint().getAllConnectors();
 
 					if (availableConnectors.size() > 0) {
 						JPopupMenu popup = new JPopupMenu();
@@ -172,8 +172,8 @@ public class DrawEdgeControl extends MouseDragControl {
 		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 				MouseEvent event) {
 			if (drawEdge) {
-				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof CalcDrawingShapeGR && gr != fromShape && !(fromShape.getAncestors().contains(gr.getDrawable()))) {
+				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
+				if (gr instanceof CalcDrawingShapeGR && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
 					toShape = (CalcDrawingShapeGR) gr;
 				} else {
 					toShape = null;
@@ -186,7 +186,7 @@ public class DrawEdgeControl extends MouseDragControl {
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController controller) {
+		public void paint(Graphics g, DrawingController<?> controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());

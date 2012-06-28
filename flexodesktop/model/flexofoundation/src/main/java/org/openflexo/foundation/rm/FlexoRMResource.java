@@ -37,6 +37,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -151,7 +152,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				project = _resourceData;
 			} else {
 				try {
-					project = loadProject(null, getLoadingHandler());
+					logger.warning("You should retrieve a ResourceCenter here !!!");
+					project = loadProject(null, getLoadingHandler(), null);
 				} catch (ProjectLoadingCancelledException e) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.log(Level.WARNING, "Project loading cancel exception.", e);
@@ -233,12 +235,15 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 	private boolean isInitializingProject = false;
 
+	private FlexoResourceCenter resourceCenter;
+
 	public boolean isInitializingProject() {
 		return isInitializingProject;
 	}
 
-	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws RuntimeException,
-			ProjectLoadingCancelledException {
+	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler, FlexoResourceCenter resourceCenter)
+			throws RuntimeException, ProjectLoadingCancelledException {
+		this.resourceCenter = resourceCenter;
 		FlexoRMResource rmRes = null;
 		try {
 			isInitializingProject = true;
@@ -265,6 +270,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				_loadProjectProgress = null;
 				return null;
 			}
+
 			//
 			// !!!!!!!!!!!!!! BE CAREFUL BIG TRICK HERE !!!!!!!!!!!!!!!!
 			// We have here initialized a new RM resource in order to
@@ -351,7 +357,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			}
 
 			// After loading the resources, we clear the isModified flag on RMResource (since basically we haven't changed anything yet)
-			project.clearIsModified(false);
+			if (!project.hasBackwardSynchronizationBeenPerformed()) {
+				project.clearIsModified(false);
+			}
 
 			// Look-up observed object for screenshot resources
 			// (pas terrible comme technique, mais on verra plus tard)
@@ -606,6 +614,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 		returned.loadingHandler = _loadingHandler;
 		returned.projectDirectory = projectDirectory;
 		returned.progress = _loadProjectProgress;
+		returned.resourceCenter = resourceCenter;
 		return returned;
 	}
 
@@ -626,6 +635,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				getProject().checkResourceIntegrity();
 			}
 			super.saveResourceData(clearIsModified);
+			if (getProject() != null) {
+				getProject().writeDotVersion();
+			}
 			saveTSFile();
 			if (!isInitializingProject && getProject() != null) {
 				getProject().deleteFilesToBeDeleted();
@@ -689,7 +701,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				logger.finer("Renaming temp file " + temporaryFile.getAbsolutePath() + " to " + getFile().getAbsolutePath());
 			}
 			// temporaryFile.renameTo(getFile());
-			rename(temporaryFile, getTSFile());
+			FileUtils.rename(temporaryFile, getTSFile());
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Succeeding to save RM/TS file");
 			}

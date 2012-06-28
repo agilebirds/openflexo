@@ -41,13 +41,19 @@ public class DGVersionSelector extends AbstractBrowserSelector<AbstractCGFileVer
 	protected CGFile file;
 
 	public DGVersionSelector(CGFile aFile, AbstractCGFileVersion version) {
-		super((aFile != null ? aFile.getProject() : null), version, AbstractCGFileVersion.class);
+		super(aFile != null ? aFile.getProject() : null, version, AbstractCGFileVersion.class);
 		setFile(aFile);
 	}
 
 	public DGVersionSelector(CGFile aFile, AbstractCGFileVersion version, int cols) {
 		super(aFile.getProject(), version, AbstractCGFileVersion.class, cols);
 		setFile(aFile);
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		setFile(null);
 	}
 
 	@Override
@@ -58,7 +64,7 @@ public class DGVersionSelector extends AbstractBrowserSelector<AbstractCGFileVer
 	@Override
 	public String renderedString(AbstractCGFileVersion editedObject) {
 		if (editedObject != null) {
-			return (editedObject).getStringRepresentation();
+			return editedObject.getStringRepresentation();
 		}
 		return EMPTY_STRING;
 	}

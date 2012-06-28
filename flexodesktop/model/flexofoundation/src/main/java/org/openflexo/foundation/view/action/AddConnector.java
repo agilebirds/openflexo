@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view.action;
 
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
@@ -52,7 +53,7 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 
 		@Override
 		protected boolean isEnabledForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
-			return (shape != null);
+			return shape != null;
 		}
 
 	};
@@ -74,10 +75,14 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Add connector");
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Add connector");
+		}
 		if (getFocusedObject() != null && getFromShape() != null && getToShape() != null) {
 			ViewObject parent = ViewObject.getFirstCommonAncestor(getFromShape(), getToShape());
-			logger.info("Parent=" + parent);
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Parent=" + parent);
+			}
 			if (parent == null) {
 				throw new IllegalArgumentException("No common ancestor");
 			}
@@ -85,7 +90,9 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 			_newConnector.setDescription(annotation);
 			parent.addToChilds(_newConnector);
 		} else {
-			logger.warning("Focused role is null !");
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Focused role is null !");
+			}
 		}
 	}
 

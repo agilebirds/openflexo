@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.rm;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,7 +96,7 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 	}
 
 	public FlexoFileResource getResourceToCopy() {
-		if ((resourceToCopy != null) && resourceToCopy.isDeleted()) {
+		if (resourceToCopy != null && resourceToCopy.isDeleted()) {
 			return null;
 		}
 		return resourceToCopy;
@@ -116,21 +117,24 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 	@Override
 	public String getName() {
 		if (getResourceToCopy() != null) {
-			if ((getCGFile() != null) && getCGFile().isMarkedForDeletion()) {
+			if (getCGFile() != null && getCGFile().isMarkedForDeletion()) {
 				return super.getName();
 			}
-			if ((getCGFile() != null) && (getCGFile().getRepository() != null)) {
+			if (getCGFile() != null && getCGFile().getRepository() != null) {
 				String name = nameForCopiedResource(getCGFile().getRepository(), getResourceToCopy());
 				if (!name.equals(super.getName()) && !project.isDeserializing() && !project.isSerializing()) {
 					setName(name);
 				}
 			}
 
-			if ((getFileName() != null) && (getResourceToCopy().getFileName() != null)
+			if (getFileName() != null && getResourceToCopy().getFileName() != null
 					&& !getFileName().equals(getResourceToCopy().getFileName()) && !isDeleted()) {
 				try {
 					renameFileTo(getResourceToCopy().getFileName());
 				} catch (InvalidFileNameException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -162,11 +166,13 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 					super.setName(old);
 				}
 			}
-			if ((getResourceToCopy() != null) && (getFileName() != null) && (getResourceToCopy().getFileName() != null)
+			if (getResourceToCopy() != null && getFileName() != null && getResourceToCopy().getFileName() != null
 					&& !getFileName().equals(getResourceToCopy().getFileName())) {
 				try {
 					renameFileTo(getResourceToCopy().getFileName());
 				} catch (InvalidFileNameException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -175,7 +181,7 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 
 	@Override
 	public boolean checkIntegrity() {
-		if (!isDeleted() && !project.isDeserializing() && (getProject() != null) && (getProject().getResourceManagerInstance() != null)
+		if (!isDeleted() && !project.isDeserializing() && getProject() != null && getProject().getResourceManagerInstance() != null
 				&& !getProject().getResourceManagerInstance().isLoadingAProject()) {
 			if (resourceToCopy == null) {
 				if (logger.isLoggable(Level.INFO)) {
@@ -281,7 +287,7 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification instanceof ResourceRemoved) && (((ResourceRemoved) dataModification).getRemovedResource() == resourceToCopy)) {
+		if (dataModification instanceof ResourceRemoved && ((ResourceRemoved) dataModification).getRemovedResource() == resourceToCopy) {
 			if (getCGFile() == null) {
 				this.delete();
 			} else {

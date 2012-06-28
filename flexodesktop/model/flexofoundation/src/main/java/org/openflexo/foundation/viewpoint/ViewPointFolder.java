@@ -67,4 +67,13 @@ public class ViewPointFolder extends ViewPointLibraryObject {
 		}
 		return viewPointLibrary.getResourceCenter().getNewCalcSandboxDirectory();
 	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		if (parent != null) {
+			return parent.getFullyQualifiedName() + "." + name;
+		}
+		return name;
+	}
+
 }

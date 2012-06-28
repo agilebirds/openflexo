@@ -73,15 +73,12 @@ public class CheckBoxWidget extends DenaliWidget<Object> {
 		// _jPanel.setBackground(InspectorCst.BACK_COLOR);
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this));
 		Boolean b = getPropertyModel().getBooleanValueForParameter("negate");
-		isNegate = (b != null && b);
+		isNegate = b != null && b;
 	}
 
 	@Override
 	public synchronized void updateWidgetFromModel() {
 		widgetUpdating = true;
-		if (getObjectValue() == null) {
-			setObjectValue(new Boolean(false));
-		}
 		boolean value = getObjectValue() != null ? (Boolean) getObjectValue() : false;
 		if (isNegate) {
 			value = !value;
@@ -89,26 +86,6 @@ public class CheckBoxWidget extends DenaliWidget<Object> {
 		_jCheckBox.setSelected(value);
 		widgetUpdating = false;
 
-		/*
-		if (getType() == Boolean.class) {
-		    if (getObjectValue() == null) {
-		        setObjectValue(new Boolean(false));
-		    }
-		    boolean value = (getObjectValue()!=null?(Boolean)getObjectValue():false);
-		    _jCheckBox.setSelected(value);
-		} else if (getType() == Boolean.TYPE) {
-		    _jCheckBox.setSelected(getBooleanValue());
-		} else if (getType() == String.class) {
-		    String value = (String) getObjectValue();
-		    if (value != null) {
-		        _jCheckBox.setSelected(value.equalsIgnoreCase("true"));
-		    } else {
-		        _jCheckBox.setSelected(false);
-		    }
-		} else {
-		    if (logger.isLoggable(Level.WARNING))
-		        logger.warning("Property " + _propertyModel.name + " is supposed to be a boolean or a Boolean or a String, not a " + getType());
-		}*/
 	}
 
 	/**
@@ -119,19 +96,7 @@ public class CheckBoxWidget extends DenaliWidget<Object> {
 		if (isReadOnly()) {
 			return;
 		}
-
-		setObjectValue(new Boolean(isNegate ? !_jCheckBox.isSelected() : _jCheckBox.isSelected()));
-
-		/*if (getType() == Boolean.class) {
-		    setObjectValue(new Boolean(_jCheckBox.isSelected()));
-		} else if (getType() == Boolean.TYPE) {
-		    setBooleanValue(_jCheckBox.isSelected());
-		} else if (getType() == String.class) {
-		    setObjectValue(_jCheckBox.isSelected() ? "true" : "false");
-		} else {
-		    if (logger.isLoggable(Level.WARNING))
-		        logger.warning("Property " + _propertyModel.name + " is supposed to be a boolean or a Boolean or a String, not a " + getType());
-		}*/
+		setObjectValue(isNegate ? !_jCheckBox.isSelected() : _jCheckBox.isSelected());
 	}
 
 	@Override

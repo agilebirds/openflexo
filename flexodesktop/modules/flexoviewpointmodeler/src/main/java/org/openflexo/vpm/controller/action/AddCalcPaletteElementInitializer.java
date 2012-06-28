@@ -34,7 +34,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.palette.PaletteElementGR;
 
 public class AddCalcPaletteElementInitializer extends ActionInitializer {
@@ -89,7 +89,7 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddPaletteElement>() {
 			@Override
 			public boolean run(ActionEvent e, AddPaletteElement action) {
-				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewElement());
+				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewElement());
 				return true;
 			}
 		};

@@ -56,7 +56,7 @@ public class UpdateModel extends MultipleFileGCAction<UpdateModel> {
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null && file instanceof ModelReinjectableFile && file.supportModelReinjection());
+			return file.getResource() != null && file instanceof ModelReinjectableFile && file.supportModelReinjection();
 		}
 
 	};
@@ -70,7 +70,7 @@ public class UpdateModel extends MultipleFileGCAction<UpdateModel> {
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Update model");
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();

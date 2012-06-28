@@ -20,6 +20,7 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeSupport;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -31,10 +32,13 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIBCustomComponent<T, DefaultFIBCustomComponent<T>> {
+public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIBCustomComponent<T, DefaultFIBCustomComponent<T>>,
+		HasPropertyChangeSupport {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DefaultFIBCustomComponent.class.getPackage().getName());
@@ -47,13 +51,17 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 	private FIBView<?, ?> fibView;
 	private FIBController<T> controller;
 
-	public DefaultFIBCustomComponent(FileResource fibFile, T editedObject) {
+	private PropertyChangeSupport pcSupport;
+
+	public DefaultFIBCustomComponent(FileResource fibFile, T editedObject, LocalizedDelegate parentLocalizer) {
 		super();
+
+		pcSupport = new PropertyChangeSupport(this);
 
 		this.editedObject = editedObject;
 
 		fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
-		controller = makeFIBController(fibComponent);
+		controller = makeFIBController(fibComponent, parentLocalizer);
 		fibView = controller.buildView(fibComponent);
 
 		controller.setDataObject(editedObject);
@@ -64,8 +72,18 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 		applyCancelListener = new Vector<ApplyCancelListener>();
 	}
 
-	protected FIBController makeFIBController(FIBComponent fibComponent) {
-		return FIBController.instanciateController(fibComponent);
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
+	}
+
+	protected FIBController makeFIBController(FIBComponent fibComponent, LocalizedDelegate parentLocalizer) {
+		return FIBController.instanciateController(fibComponent, parentLocalizer);
 	}
 
 	@Override
@@ -113,6 +131,14 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 	@Override
 	public void setRevertValue(T oldValue) {
 		// Not implemented here, implement in sub-classes
+	}
+
+	public FIBComponent getFIBComponent() {
+		return fibComponent;
+	}
+
+	public FIBController<T> getController() {
+		return controller;
 	}
 
 }

@@ -19,26 +19,29 @@
  */
 package org.openflexo.foundation.utils;
 
+import java.io.File;
+
 public class ProjectInitializerException extends Exception {
 
-	public ProjectInitializerException() {
-		super();
-		// TODO Auto-generated constructor stub
+	private final File projectDirectory;
+
+	public ProjectInitializerException(String message, Throwable arg1, File projectDirectory) {
+		super(message, arg1);
+		this.projectDirectory = projectDirectory;
 	}
 
-	public ProjectInitializerException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
+	public ProjectInitializerException(String message, File projectDirectory) {
+		super(message);
+		this.projectDirectory = projectDirectory;
 	}
 
-	public ProjectInitializerException(String arg0) {
+	public ProjectInitializerException(Throwable arg0, File projectDirectory) {
 		super(arg0);
-		// TODO Auto-generated constructor stub
+		this.projectDirectory = projectDirectory;
 	}
 
-	public ProjectInitializerException(Throwable arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
+	public File getProjectDirectory() {
+		return projectDirectory;
 	}
 
 }

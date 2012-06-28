@@ -69,7 +69,7 @@ public class ExcludeFromGeneration extends MultipleFileGCAction<ExcludeFromGener
 	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
 	 */
 	@Override
-	protected void doAction(Object context) throws FlexoException {
+	protected void doImpl(Object context) throws FlexoException {
 		for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
 			file.setMarkedAsDoNotGenerate(true);
 		}

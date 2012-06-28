@@ -30,10 +30,12 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ontology.action.CreateOntologyIndividual;
 import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CreateOntologyIndividualInitializer extends ActionInitializer {
 
@@ -53,8 +55,9 @@ public class CreateOntologyIndividualInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateOntologyIndividual>() {
 			@Override
 			public boolean run(ActionEvent e, CreateOntologyIndividual action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_ONTOLOGY_INDIVIDUAL_FIB, action, null, true);
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_ONTOLOGY_INDIVIDUAL_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -64,7 +67,7 @@ public class CreateOntologyIndividualInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateOntologyIndividual>() {
 			@Override
 			public boolean run(ActionEvent e, CreateOntologyIndividual action) {
-				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewIndividual());
+				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewIndividual());
 				return true;
 			}
 		};

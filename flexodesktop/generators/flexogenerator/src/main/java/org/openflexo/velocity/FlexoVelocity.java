@@ -20,20 +20,26 @@
 package org.openflexo.velocity;
 
 import java.io.FileInputStream;
+import java.io.StringWriter;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.collections.ExtendedProperties;
+import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.util.introspection.Uberspect;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
+
+import com.google.inject.Injector;
 
 /**
  * @author gpolet
@@ -44,6 +50,8 @@ public class FlexoVelocity {
 	private static boolean isInitialized = false;
 
 	private static FlexoVelocityResourceCache resourceCache;
+
+	private static Injector injector;
 
 	static {
 		try {
@@ -87,6 +95,16 @@ public class FlexoVelocity {
 			// not handle properly "\ " as value " ")
 			Properties p = new Properties();
 			p.load(new FileInputStream(new FileResource("Config/velocity.properties")));
+			for (Entry<Object, Object> e : p.entrySet()) {
+				String value = e.getValue().toString();
+				if (value.indexOf("${") > -1) {
+					for (Entry<Object, Object> sp : System.getProperties().entrySet()) {
+						value = value.replace("${" + sp.getKey() + "}", sp.getValue().toString());
+					}
+					p.setProperty(e.getKey().toString(), value);
+				}
+
+			}
 			// 2. We convert properties to extended properties (this conversion only handles values of type String (i.e., a VelocityLogger
 			// cannot be set directly in the Properties, see 3.)
 			ExtendedProperties ep = ExtendedProperties.convertProperties(p);
@@ -109,5 +127,23 @@ public class FlexoVelocity {
 			logger.info("Setting Velocity resource cache");
 		}
 		FlexoVelocity.resourceCache = resourceCache;
+	}
+
+	public static void clearResourceCache() {
+		if (resourceCache != null) {
+			resourceCache.clearCache();
+		}
+	}
+
+	public static void mergeTemplate(String templateName, String encoding, VelocityContext context, StringWriter writer) {
+		Velocity.mergeTemplate(templateName, encoding, context, writer);
+	}
+
+	public static void clearCaches() {
+		clearResourceCache();
+		Uberspect introspector = RuntimeSingleton.getRuntimeServices().getUberspect();
+		if (introspector instanceof FlexoVelocityIntrospector) {
+			((FlexoVelocityIntrospector) introspector).clearCache();
+		}
 	}
 }

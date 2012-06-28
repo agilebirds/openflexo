@@ -29,7 +29,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 /**
  * Represents the main pane for this module
@@ -38,7 +38,7 @@ import org.openflexo.vpm.controller.CEDController;
  */
 public class CEDMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public CEDMainPane(ModuleView moduleView, CEDFrame mainFrame, CEDController controller) {
+	public CEDMainPane(ModuleView moduleView, CEDFrame mainFrame, VPMController controller) {
 		super(moduleView, mainFrame, controller);
 	}
 

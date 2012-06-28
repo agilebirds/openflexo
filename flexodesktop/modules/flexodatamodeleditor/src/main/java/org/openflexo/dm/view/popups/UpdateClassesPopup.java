@@ -20,7 +20,7 @@
 package org.openflexo.dm.view.popups;
 
 import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,15 +51,13 @@ public class UpdateClassesPopup extends MultipleObjectSelectorPopup {
 
 	static final Logger logger = Logger.getLogger(UpdateClassesPopup.class.getPackage().getName());
 
-	public UpdateClassesPopup(Vector entities, FlexoProject project, DMController controller, FlexoProgress progress) {
+	public UpdateClassesPopup(List<LoadableDMEntity> entities, FlexoProject project, DMController controller, FlexoProgress progress) {
 		super(FlexoLocalization.localizedForKey("update_classes"), FlexoLocalization
 				.localizedForKey("please_select_properties_and_methods_to_update"), FlexoLocalization
 				.localizedForKey("update_classes_description"), new UpdateClassesPopupBrowserConfiguration(entities, project, progress),
 				project, controller.getFlexoFrame(), controller.getEditor());
 		choicePanel.setSelectedObjects(getDMSet().getSelectedObjects());
-		for (Enumeration en = entities.elements(); en.hasMoreElements();) {
-			LoadableDMEntity next = (LoadableDMEntity) en.nextElement();
-
+		for (LoadableDMEntity next : entities) {
 			if (next.getType() != null && next.getJavaType() != null) { // next.getType() is null when the class cannot be loaded (A
 																		// ClassNotFoundException has been thrown)
 				ClassReference classReference = getDMSet().getClassReference(next.getJavaType());
@@ -80,7 +78,7 @@ public class UpdateClassesPopup extends MultipleObjectSelectorPopup {
 		private UpdateClassesBrowserElementFactory _factory;
 		private FlexoProject _project;
 
-		protected UpdateClassesPopupBrowserConfiguration(Vector entities, FlexoProject project, FlexoProgress progress) {
+		protected UpdateClassesPopupBrowserConfiguration(List<LoadableDMEntity> entities, FlexoProject project, FlexoProgress progress) {
 			_project = project;
 			dmSet = new DMSet(project, "updated_classes", entities, true, progress);
 			_factory = new UpdateClassesBrowserElementFactory();

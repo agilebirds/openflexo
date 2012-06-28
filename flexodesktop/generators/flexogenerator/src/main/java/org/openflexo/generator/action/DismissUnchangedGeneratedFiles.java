@@ -52,8 +52,9 @@ public class DismissUnchangedGeneratedFiles extends MultipleFileGCAction<Dismiss
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null && (file.getGenerationStatus() == GenerationStatus.GenerationModified || file
-					.getGenerationStatus() == GenerationStatus.OverrideScheduled)) && file.getResource().doesGenerationKeepFileUnchanged();
+			return file.getResource() != null
+					&& (file.getGenerationStatus() == GenerationStatus.GenerationModified || file.getGenerationStatus() == GenerationStatus.OverrideScheduled)
+					&& file.getResource().doesGenerationKeepFileUnchanged();
 		}
 
 	};
@@ -67,7 +68,7 @@ public class DismissUnchangedGeneratedFiles extends MultipleFileGCAction<Dismiss
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Dismiss unchanged files");
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();

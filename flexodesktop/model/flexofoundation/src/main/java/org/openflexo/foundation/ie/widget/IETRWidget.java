@@ -160,14 +160,8 @@ public class IETRWidget extends IEWidget implements ITableRow {
 
 	@Override
 	public void performOnDeleteOperations() {
-		Enumeration<ITableData> en = _sequenceTD.elements();
-		Vector<ITableData> temp = new Vector<ITableData>();
-		while (en.hasMoreElements()) {
-			temp.add(en.nextElement());
-		}
-		en = temp.elements();
-		while (en.hasMoreElements()) {
-			(en.nextElement()).makeRealDelete(true);
+		for (ITableData temp : new Vector<ITableData>(_sequenceTD.getInnerWidgets())) {
+			temp.makeRealDelete(true);
 		}
 		_sequenceTD.delete();
 		super.performOnDeleteOperations();
@@ -230,7 +224,7 @@ public class IETRWidget extends IEWidget implements ITableRow {
 		IEWidget cur = null;
 		IETDWidget td = null;
 		while (en.hasMoreElements()) {
-			cur = ((IEWidget) en.nextElement());
+			cur = (IEWidget) en.nextElement();
 			if (cur instanceof IETDWidget) {
 				((IETDWidget) cur).constraints.gridy = y;
 				// here cur's view have to be notified that constraints change
@@ -502,7 +496,7 @@ public class IETRWidget extends IEWidget implements ITableRow {
 	}
 
 	public ITableRowReusableWidget geTableRowReusableWidget() {
-		return (ITableRowReusableWidget) ((SingleWidgetComponentInstance) (((IESequenceTR) getParent()).getParent())).getReusableWidget();
+		return (ITableRowReusableWidget) ((SingleWidgetComponentInstance) ((IESequenceTR) getParent()).getParent()).getReusableWidget();
 	}
 
 	/**

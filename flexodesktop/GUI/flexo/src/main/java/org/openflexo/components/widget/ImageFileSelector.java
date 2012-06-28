@@ -25,8 +25,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,6 +43,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.TextFieldCustomPopup;
+import org.openflexo.swing.layout.WrapLayout;
 
 /**
  * Widget allowing to select a DocItem while browsing the DocResourceCenter
@@ -77,6 +76,14 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 		this.revertValue = docItem;
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		importer = null;
+		revertValue = null;
+		project = null;
+	}
+
 	public FlexoProject getProject() {
 		return project;
 	}
@@ -86,7 +93,6 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 	}
 
 	protected class ImageSelectorPanel extends ResizablePanel {
-		private JPanel rootPanel;
 		private JPanel imagePanel;
 
 		private JButton applyButton;
@@ -96,13 +102,8 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 
 		protected ImageSelectorPanel() {
 			super();
-			rootPanel = new JPanel(new BorderLayout());
-			imagePanel = new JPanel(new GridBagLayout()) {
-				@Override
-				public Dimension getPreferredSize() {
-					return super.getPreferredSize();
-				}
-			};
+			setLayout(new BorderLayout());
+			imagePanel = new JPanel(new WrapLayout());
 			JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 			applyButton = new JButton(FlexoLocalization.localizedForKey("ok"));
 			applyButton.addActionListener(new ActionListener() {
@@ -132,7 +133,11 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						importer.importImage(e);
-						openPopup();
+						updateImagePanel();
+						// Just to be extra sure, but the next lines should not be useful.
+						if (!popupIsShown()) {
+							openPopup();
+						}
 					}
 				});
 			}
@@ -145,17 +150,15 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 			updateImagePanel();
 			final JScrollPane scroll = new JScrollPane(imagePanel);
 			scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-			scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			scroll.setPreferredSize(new Dimension(280, 340));
 			if (scroll.getVerticalScrollBar() != null) {
 				scroll.getVerticalScrollBar().setUnitIncrement(10);
 				scroll.getVerticalScrollBar().setBlockIncrement(30);
 			}
 			scroll.validate();
-			rootPanel.add(scroll, BorderLayout.CENTER);
-			rootPanel.add(buttonPanel, BorderLayout.SOUTH);
-			rootPanel.validate();
-			add(rootPanel);
+			add(scroll, BorderLayout.CENTER);
+			add(buttonPanel, BorderLayout.SOUTH);
 			validate();
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -175,26 +178,11 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 
 		private void updateImagePanel() {
 			imagePanel.removeAll();
-			GridBagConstraints gc = new GridBagConstraints();
-			gc.gridwidth = 1;
-			gc.gridheight = 1;
-			gc.weightx = 1;
-			gc.weighty = 1;
-			gc.fill = GridBagConstraints.BOTH;
-			gc.anchor = GridBagConstraints.CENTER;
-			gc.gridx = 0;
-			gc.gridy = 0;
 			for (ImageFile file : getProject().getAvailableImageFiles()) {
 				if (importedImageOnly && !file.isImported()) {
 					continue;
 				}
-				imagePanel.add(new ImageView(file), gc);
-				if (gc.gridx < 2) {
-					gc.gridx += 1;
-				} else {
-					gc.gridx = 0;
-					gc.gridy += 1;
-				}
+				imagePanel.add(new ImageView(file));
 			}
 			imagePanel.validate();
 		}
@@ -222,7 +210,7 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 				setToolTipText(file.getBeautifiedImageName());
 				addMouseListener(this);
 				setOpaque(true);
-				setPreferredSize(new Dimension(80, 30));
+				setPreferredSize(new Dimension(80, 80));
 			}
 
 			public ImageFile getFile() {

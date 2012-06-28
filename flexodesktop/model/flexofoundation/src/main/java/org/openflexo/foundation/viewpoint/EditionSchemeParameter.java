@@ -27,79 +27,33 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
+import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeParameter extends ViewPointObject {
+public abstract class EditionSchemeParameter extends EditionSchemeObject implements InspectorBindingAttribute {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
 	public static enum WidgetType {
-		URI {
-			@Override
-			public Type getType() {
-				return String.class;
-			}
-		},
-		TEXT_FIELD {
-			@Override
-			public Type getType() {
-				return String.class;
-			}
-		},
-		LOCALIZED_TEXT_FIELD {
-			@Override
-			public Type getType() {
-				return String.class;
-			}
-		},
-		TEXT_AREA {
-			@Override
-			public Type getType() {
-				return String.class;
-			}
-		},
-		INTEGER {
-			@Override
-			public Type getType() {
-				return Integer.class;
-			}
-		},
-		FLOAT {
-			@Override
-			public Type getType() {
-				return Float.class;
-			}
-		},
-		CHECKBOX {
-			@Override
-			public Type getType() {
-				return Boolean.class;
-			}
-		},
-		DROPDOWN {
-			@Override
-			public Type getType() {
-				return Object.class;
-			}
-		},
-		INDIVIDUAL {
-			@Override
-			public Type getType() {
-				return OntologyIndividual.class;
-			}
-		},
-		FLEXO_OBJECT {
-			@Override
-			public Type getType() {
-				return OntologyIndividual.class;
-			}
-		};
-
-		public abstract Type getType();
+		URI,
+		TEXT_FIELD,
+		LOCALIZED_TEXT_FIELD,
+		TEXT_AREA,
+		INTEGER,
+		FLOAT,
+		CHECKBOX,
+		DROPDOWN,
+		INDIVIDUAL,
+		CLASS,
+		OBJECT_PROPERTY,
+		DATA_PROPERTY,
+		FLEXO_OBJECT,
+		LIST,
+		EDITION_PATTERN;
 	}
 
 	private String name;
@@ -109,19 +63,55 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 
 	private EditionScheme _scheme;
 
-	public EditionSchemeParameter() {
+	private ViewPointDataBinding conditional;
+	private ViewPointDataBinding defaultValue;
+
+	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
+		conditional, baseURI, defaultValue, list, domainValue, rangeValue, parentClassValue, conceptValue
+	}
+
+	public EditionSchemeParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "."
+				+ (getEditionScheme() != null ? getEditionScheme().getName() : "null") + "." + getName();
 	}
 
 	public abstract Type getType();
 
 	public abstract WidgetType getWidget();
 
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, BindingDefinitionType.GET, false) {
+		@Override
+		public Type getType() {
+			return EditionSchemeParameter.this.getType();
+		};
+	};
+
+	public BindingDefinition getConditionalBindingDefinition() {
+		return CONDITIONAL;
+	}
+
+	public BindingDefinition getDefaultValueBindingDefinition() {
+		return DEFAULT_VALUE;
+	}
+
 	public void setScheme(EditionScheme scheme) {
 		_scheme = scheme;
 	}
 
-	public EditionScheme getScheme() {
+	@Override
+	public EditionScheme getEditionScheme() {
 		return _scheme;
+	}
+
+	public EditionScheme getScheme() {
+		return getEditionScheme();
 	}
 
 	@Override
@@ -135,8 +125,11 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
-		return getScheme().getCalc();
+	public ViewPoint getViewPoint() {
+		if (getScheme() != null) {
+			return getScheme().getViewPoint();
+		}
+		return null;
 	}
 
 	@Override
@@ -150,6 +143,9 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	}
 
 	public String getLabel() {
+		if (label == null || StringUtils.isEmpty(label)) {
+			return getName();
+		}
 		return label;
 	}
 
@@ -186,29 +182,6 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		return getScheme().getParameters().indexOf(this);
 	}
 
-	private ViewPointDataBinding conditional;
-	private ViewPointDataBinding defaultValue;
-
-	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
-		conditional, baseURI, defaultValue
-	}
-
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, BindingDefinitionType.GET, false) {
-		@Override
-		public Type getType() {
-			return EditionSchemeParameter.this.getType();
-		};
-	};
-
-	public BindingDefinition getConditionalBindingDefinition() {
-		return CONDITIONAL;
-	}
-
-	public BindingDefinition getDefaultValueBindingDefinition() {
-		return DEFAULT_VALUE;
-	}
-
 	public ViewPointDataBinding getConditional() {
 		if (conditional == null) {
 			conditional = new ViewPointDataBinding(this, ParameterBindingAttribute.conditional, getConditionalBindingDefinition());
@@ -217,19 +190,22 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	}
 
 	public void setConditional(ViewPointDataBinding conditional) {
-		conditional.setOwner(this);
-		conditional.setBindingAttribute(ParameterBindingAttribute.conditional);
-		conditional.setBindingDefinition(getConditionalBindingDefinition());
+		if (conditional != null) {
+			conditional.setOwner(this);
+			conditional.setBindingAttribute(ParameterBindingAttribute.conditional);
+			conditional.setBindingDefinition(getConditionalBindingDefinition());
+		}
 		this.conditional = conditional;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return getScheme().getEditionPattern();
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getScheme().getParametersBindingModel();
+		return getScheme().getBindingModel();
 	}
 
 	public ViewPointDataBinding getDefaultValue() {
@@ -240,13 +216,15 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	}
 
 	public void setDefaultValue(ViewPointDataBinding defaultValue) {
-		defaultValue.setOwner(this);
-		defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);
-		defaultValue.setBindingDefinition(getDefaultValueBindingDefinition());
+		if (defaultValue != null) {
+			defaultValue.setOwner(this);
+			defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);
+			defaultValue.setBindingDefinition(getDefaultValueBindingDefinition());
+		}
 		this.defaultValue = defaultValue;
 	}
 
-	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) {
+	public Object getDefaultValue(EditionSchemeAction<?> action) {
 		ViewPointPaletteElement paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
 				: null);
 
@@ -255,17 +233,23 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 			return paletteElement.getName();
 		}
 		if (getDefaultValue().isValid()) {
-			return getDefaultValue().getBindingValue(parameterRetriever);
+			return getDefaultValue().getBindingValue(action);
 		}
 		return null;
 	}
 
-	public boolean isMandatory() {
+	private boolean isRequired = false;
+
+	public boolean getIsRequired() {
 		return false;
 	}
 
+	public void setIsRequired(boolean flag) {
+		isRequired = flag;
+	}
+
 	public boolean isValid(EditionSchemeAction action, Object value) {
-		return !isMandatory() || value != null;
+		return !getIsRequired() || value != null;
 	}
 
 }

@@ -144,7 +144,11 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 				return null;
 			}
 		}
-
+		try {
+			FlexoItemMenu.createNewRootMenu(newMenu);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		try {
 			res.saveResourceData();
 			project.registerResource(res);
@@ -154,11 +158,6 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
 			}
 			e1.printStackTrace();
-		}
-		try {
-			FlexoItemMenu.createNewRootMenu(newMenu);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return newMenu;
 	}

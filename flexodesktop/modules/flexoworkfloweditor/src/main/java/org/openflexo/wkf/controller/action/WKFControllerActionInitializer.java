@@ -70,7 +70,7 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -128,7 +128,6 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new DeleteRoleInitializer(this).init();
 		new DeleteRoleSpecializationInitializer(this).init();
 		new AddStatusInitializer(this).init();
-		// new AddDeadlineInitializer(this).init();
 		new AddPortInitializer(this).init();
 
 		new ImportRolesInitializer(this).init();
@@ -136,7 +135,7 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new ConvertIntoLocalRoleInitializer(this).init();
 		new ConvertIntoLocalProcessInitializer(this).init();
 
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			new AddServiceInterfaceInitializer(this).init();
 			new AddServiceOperationInitializer(this).init();
 		}
@@ -154,7 +153,7 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new CreateAssociationInitializer(this).init();
 		new MakeFlexoProcessContextFreeInitializer(this).init();
 		new MoveFlexoProcessInitializer(this).init();
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			new ShowExecutionControlGraphsInitializer(this).init();
 		}
 		new ShowRolesInitializer(this).init();

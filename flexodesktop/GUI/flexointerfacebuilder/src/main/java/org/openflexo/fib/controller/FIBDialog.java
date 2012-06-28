@@ -20,55 +20,121 @@
 package org.openflexo.fib.controller;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.io.File;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.localization.LocalizedDelegate;
 
 @SuppressWarnings("serial")
 public class FIBDialog<T> extends JDialog {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
-	private static FIBDialog _visibleDialog = null;
-
 	private FIBView view;
 
-	public static <T> FIBDialog<T> instanciateComponent(File componentFile, T data, JFrame frame, boolean modal) {
+	public static <T> FIBDialog<T> instanciateDialog(File componentFile, T data, Window frame, boolean modal, LocalizedDelegate localizer) {
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(componentFile);
 		if (fibComponent == null) {
 			logger.warning("FileNotFoundException: " + componentFile.getAbsolutePath());
 			return null;
 		}
-		return instanciateComponent(fibComponent, data, frame, modal);
+		return instanciateDialog(fibComponent, data, frame, modal, localizer);
 	}
 
-	public static <T> FIBDialog<T> instanciateComponent(String fibResourcePath, T data, JFrame frame, boolean modal) {
+	public static <T> FIBDialog<T> instanciateDialog(FIBComponent fibComponent, T data, Window frame, boolean modal,
+			LocalizedDelegate localizer) {
+		FIBDialog<T> dialog;
+		if (frame instanceof JFrame) {
+			dialog = new FIBDialog<T>(fibComponent, data, (JFrame) frame, modal, localizer);
+		} else if (frame instanceof JDialog) {
+			dialog = new FIBDialog<T>(fibComponent, data, (JDialog) frame, modal, localizer);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Parent window of FIBDialog is either null or is not an instanceof JFrame nor JDialog. "
+						+ "Please investigate this call and make sure a proper parent is used");
+			}
+			dialog = new FIBDialog<T>(fibComponent, data, (JFrame) null, modal, localizer);
+		}
+		return dialog;
+	}
+
+	public static <T> FIBDialog<T> instanciateAndShowDialog(FIBComponent fibComponent, T data, Window frame, boolean modal,
+			LocalizedDelegate localizer) {
+		FIBDialog<T> dialog = instanciateDialog(fibComponent, data, frame, modal, localizer);
+		dialog.showDialog();
+		return dialog;
+	}
+
+	public static <T> FIBDialog<T> instanciateAndShowDialog(File componentFile, T data, Window frame, boolean modal,
+			LocalizedDelegate localizer) {
+		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(componentFile);
+		if (fibComponent == null) {
+			logger.warning("FileNotFoundException: " + componentFile.getAbsolutePath());
+			return null;
+		}
+		return instanciateAndShowDialog(fibComponent, data, frame, modal, localizer);
+	}
+
+	public static <T> FIBDialog<T> instanciateAndShowDialog(String fibResourcePath, T data, Window frame, boolean modal,
+			LocalizedDelegate localizer) {
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibResourcePath);
 		if (fibComponent == null) {
 			logger.warning("ResourceNotFoundException: " + fibResourcePath);
 			return null;
 		}
-		return instanciateComponent(fibComponent, data, frame, modal);
+		return instanciateAndShowDialog(fibComponent, data, frame, modal, localizer);
 	}
 
-	private FIBDialog(JFrame frame, boolean modal, FIBComponent fibComponent) {
+	private FIBDialog(JDialog dialog, boolean modal, FIBComponent fibComponent, LocalizedDelegate localizer) {
+		super(dialog, fibComponent.getParameter("title"), modal);
+		initDialog(fibComponent, localizer);
+	}
+
+	private FIBDialog(JFrame frame, boolean modal, FIBComponent fibComponent, LocalizedDelegate localizer) {
 		super(frame, fibComponent.getParameter("title"), modal);
-		view = FIBController.makeView(fibComponent);
+		initDialog(fibComponent, localizer);
+	}
+
+	public void initDialog(FIBComponent fibComponent, LocalizedDelegate localizer) {
+		view = FIBController.makeView(fibComponent, localizer);
 		getContentPane().add(view.getResultingJComponent());
+		List<FIBButton> def = fibComponent.getDefaultButtons();
+		boolean defaultButtonSet = false;
+		if (def.size() > 0) {
+			JButton button = (JButton) view.geDynamicJComponentForObject(def.get(0));
+			if (button != null) {
+				getRootPane().setDefaultButton(button);
+				defaultButtonSet = true;
+			}
+		}
+		if (!defaultButtonSet) {
+			// TODO: choose a button
+		}
 		validate();
 		pack();
 	}
 
-	protected FIBDialog(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
-		this(frame, modal, fibComponent);
+	protected FIBDialog(FIBComponent fibComponent, T data, JFrame frame, boolean modal, LocalizedDelegate localizer) {
+		this(frame, modal, fibComponent, localizer);
+		getController().setDataObject(data);
+	}
+
+	protected FIBDialog(FIBComponent fibComponent, T data, JDialog frame, boolean modal, LocalizedDelegate localizer) {
+		this(frame, modal, fibComponent, localizer);
 		getController().setDataObject(data);
 	}
 
@@ -84,41 +150,25 @@ public class FIBDialog<T> extends JDialog {
 		return getController().getStatus();
 	}
 
-	protected void showDialog() {
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-		if (_visibleDialog == null) {
-			_visibleDialog = this;
-			setVisible(true);
-			toFront();
+	/**
+	 * @param flexoFrame
+	 */
+	public void center() {
+		Point center;
+		if (getOwner() != null && getOwner().isVisible()) {
+			center = new Point(getOwner().getLocationOnScreen().x + getOwner().getWidth() / 2, getOwner().getLocationOnScreen().y
+					+ getOwner().getHeight() / 2);
 		} else {
-			logger.warning("An other dialog box is already opened");
-			// _waitingDialog.add(this);
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			center = new Point(screenSize.width / 2, screenSize.height / 2);
 		}
+		setLocation(Math.max(center.x - getSize().width / 2, 0), Math.max(center.y - getSize().height / 2, 0));
 	}
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		if (_visibleDialog == this) {
-			_visibleDialog = null;
-		}
-	}
-
-	@Override
-	public void setVisible(boolean b) {
-		super.setVisible(b);
-		if (!b) {
-			if (_visibleDialog == this) {
-				_visibleDialog = null;
-			}
-		}
-	}
-
-	private static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
-		FIBDialog<T> dialog = new FIBDialog<T>(fibComponent, data, frame, modal);
-		dialog.showDialog();
-		return dialog;
+	public void showDialog() {
+		center();
+		setVisible(true);
+		toFront();
 	}
 
 }

@@ -28,9 +28,11 @@ import java.awt.Dimension;
 import java.awt.FocusTraversalPolicy;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.IllegalComponentStateException;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -44,6 +46,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -58,6 +61,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.icon.UtilsIconLibrary;
+import org.openflexo.toolbox.ToolBox;
 
 /**
  * Abstract widget allowing to edit a complex object with a popup
@@ -81,7 +85,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 	public JComponent _frontComponent;
 
-	private final List<ApplyCancelListener> applyCancelListener;
+	private List<ApplyCancelListener> applyCancelListener;
 
 	private int posX;
 
@@ -114,21 +118,28 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	protected abstract JComponent buildFrontComponent();
 
 	public CustomPopup(T editedObject) {
-		super();
+		super(new BorderLayout());
 		_editedObject = editedObject;
-		setLayout(new BorderLayout());
-		add(_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_DOWN), BorderLayout.WEST);
-		_downButton.setDisabledIcon(UtilsIconLibrary.CUSTOM_POPUP_DOWN_DISABLED);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_BUTTON);
+		} else {
+			_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_DOWN);
+			_downButton.setDisabledIcon(UtilsIconLibrary.CUSTOM_POPUP_DOWN_DISABLED);
+		}
+		_downButton.addActionListener(this);
+		add(_downButton, BorderLayout.WEST);
 		/*Border border = getDownButtonBorder();
 		if (border != null) {
 			_downButton.setBorder(border);
 		}*/
 		setOpaque(false);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			setBorder(BorderFactory.createEmptyBorder(3, 5, 3, 5));
+		}
 		_downButton.setBorder(BorderFactory.createEmptyBorder());
 		_frontComponent = buildFrontComponent();
 		add(_frontComponent, BorderLayout.CENTER);
 
-		_downButton.addActionListener(this);
 		applyCancelListener = new Vector<ApplyCancelListener>();
 		setFocusTraversalPolicy(new FocusTraversalPolicy() {
 
@@ -197,13 +208,17 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		_customPanel = null;
 	}
 
-	public JButton getDownButton() {
+	public JComponent getDownButton() {
 		return _downButton;
 	}
 
 	public ResizablePanel getCustomPanel() {
 		if (_customPanel == null) {
-			_customPanel = createCustomPanel(getEditedObject());
+			try {
+				_customPanel = createCustomPanel(getEditedObject());
+			} catch (ClassCastException e) {
+				_customPanel = createCustomPanel(null);
+			}
 			_customPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		}
 		return _customPanel;
@@ -252,7 +267,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			private Point parentPosition;
 
 			public ParentPopupMoveListener() {
-				if (CustomJPopupMenu.this.getOwner().isVisible()) {
+				if (CustomJPopupMenu.this.getOwner() != null && CustomJPopupMenu.this.getOwner().isVisible()) {
 					parentPosition = CustomJPopupMenu.this.getOwner().getLocationOnScreen();
 				}
 			}
@@ -401,6 +416,10 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	// This actionListener handles the next/prev month buttons.
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		onEvent(e);
+	}
+
+	private void onEvent(EventObject e) {
 		if (e.getSource() == _downButton) {
 			if (!popupIsShown()) {
 				openPopup();
@@ -410,7 +429,6 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		} else {
 			additionalActions();
 		}
-
 	}
 
 	private boolean closersAdded = false;
@@ -434,15 +452,29 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					if (e.getOppositeWindow() != _popup) {
-						if (_popup.isChildOf(e.getOppositeWindow())) {
+					if (_popup == null) {
+						return;
+					}
+					Window oppositeWindow = e.getOppositeWindow();
+					if (!(oppositeWindow instanceof CustomPopup.CustomJPopupMenu) && oppositeWindow != null
+							&& oppositeWindow.getOwner() instanceof CustomPopup.CustomJPopupMenu) {
+						oppositeWindow = oppositeWindow.getOwner();
+					}
+					if (oppositeWindow != _popup) {
+						if (_popup.isChildOf(oppositeWindow)) {
 							CustomPopup.CustomJPopupMenu w = _popup;
-							while (w != e.getOppositeWindow()) {
+							while (w != null && w != oppositeWindow) {
 								w.getCustomPopup().pointerLeavesPopup();
+								w = w.getParentPopupMenu();
 							}
-						} else if (e.getOppositeWindow() != parentWindow || FocusManager.getCurrentManager().getFocusOwner() != null
+						} else if (oppositeWindow != parentWindow || FocusManager.getCurrentManager().getFocusOwner() != null
 								&& !_frontComponent.hasFocus()) {
-							// pointerLeavesPopup();
+							// This test is used to detect the case of the lost of focus is performed
+							// Because a child popup gained the focus: in this case, nothing should be performed
+							if (!(oppositeWindow instanceof CustomPopup.CustomJPopupMenu)
+									|| !((CustomPopup.CustomJPopupMenu) oppositeWindow).isChildOf(_popup)) {
+								pointerLeavesPopup();
+							}
 						}
 					}
 				}
@@ -519,6 +551,14 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		return SwingUtilities.getWindowAncestor(c);
 	}
 
+	public void delete() {
+		closePopup();
+		deletePopup(); // just to be sure
+		setEditedObject(null);
+		setRevertValue(null);
+		applyCancelListener = null;
+	}
+
 	protected void deletePopup() {
 		// _customPopup = null;
 		_popup = null;
@@ -565,33 +605,44 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			}
 		});
 		if (isShowing()) {
-			Point p = this.getLocationOnScreen();
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// Multiple screen management
-			if (GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length > 1) {
-				screenSize = new Dimension(0, 0);
-				boolean found = false;
-				for (int i = 0; !found && i < GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length; i++) {
-					GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[i];
-					screenSize.width = Math.max(screenSize.width, gd.getDefaultConfiguration().getBounds().x
-							+ gd.getDefaultConfiguration().getBounds().width);
-					screenSize.height = Math.max(screenSize.height, gd.getDefaultConfiguration().getBounds().y
-							+ gd.getDefaultConfiguration().getBounds().height);
+			Point p = _downButton.getLocationOnScreen(); // This can have negative x or y if the secondary screen is on the right ir or on
+															// top of the main screen.
+			GraphicsConfiguration graphicsConfiguration = _downButton.getGraphicsConfiguration();
+			if (!graphicsConfiguration.getBounds().contains(p)) {
+				// Sometimes, if the CustomPopup is across two screens, the graphics configuration returned is not the one containing the
+				// _downButton.
+				// We can then perform a look-up to find the actual screen where the button is located and show the CustomPopup on that
+				// screen
+				// it feels a lot more natural.
+				for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
 					if (gd.getDefaultConfiguration().getBounds().contains(p)) {
-						found = true;
+						graphicsConfiguration = gd.getDefaultConfiguration();
+						break;
 					}
 				}
+
 			}
-			Point position = new Point(p.x, p.y + getHeight());
-			if (position.x + getCustomPanel().getDefaultSize().width > screenSize.width) {
-				position.x = screenSize.width - getCustomPanel().getDefaultSize().width;
+			Rectangle screenBounds = graphicsConfiguration.getBounds();
+			Dimension screenSize = screenBounds.getSize();
+			Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(graphicsConfiguration);
+			// screen insets reflect the possible Dock/Task bar size and possibly the menu on MacOS.
+			Point position = new Point(p.x, p.y + _downButton.getHeight());
+			if (position.x + getCustomPanel().getDefaultSize().width > screenBounds.x + screenSize.width) {
+				// If we are too close to the right edged of the screen, we offset the location
+				position.x = screenBounds.x + screenSize.width - getCustomPanel().getDefaultSize().width - screenInsets.right;
 			}
-			if (position.y + getCustomPanel().getDefaultSize().height > screenSize.height) {
-				position.y = screenSize.height - getCustomPanel().getDefaultSize().height;
+			if (position.y + getCustomPanel().getDefaultSize().height > screenBounds.y + screenSize.height) {
+				position.y = screenBounds.y + screenSize.height - getCustomPanel().getDefaultSize().height - screenInsets.bottom;
 			}
+			position.x = Math.max(position.x, screenBounds.x + screenInsets.left);
+			position.y = Math.max(position.y, screenBounds.y + screenInsets.top);
 			_popup.setLocation(position);
 			_popup.pack();
 			_popup.setVisible(true);
+			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+				_downButton.setIcon(UtilsIconLibrary.CUSTOM_POPUP_OPEN_BUTTON);
+			}
+
 			MouseAdapter mouseListener = new MouseAdapter() {
 
 				private Point previous;
@@ -617,6 +668,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 				@Override
 				public void mouseMoved(MouseEvent e) {
+					if (_popup == null) {
+						return;
+					}
 					if (getResizeRectangle().contains(e.getPoint())) {
 						_popup.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
 					} else {
@@ -631,6 +685,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 				}
 
 				public Rectangle getResizeRectangle() {
+					if (_popup == null) {
+						return new Rectangle();
+					}
 					Rectangle r = _popup.getBounds();
 					int size = 3 * (BULLET_SIZE + BULLET_SPACING);
 					r.x = r.width - size;
@@ -658,6 +715,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			return;
 		}
 		_popup.setVisible(false);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			_downButton.setIcon(UtilsIconLibrary.CUSTOM_POPUP_BUTTON);
+		}
 		if (notifyObjectChanged) {
 			fireEditedObjectChanged();
 		}
@@ -678,11 +738,43 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		return _editedObject;
 	}
 
-	// WARNING: this method uses the equals(Object) method to see if a change is required or not. Therefore, if the edited object type
-	// overrides the equals method, some objects that are different may not be swapped and cause very unpredictable behaviour. The
-	// workaround for this is to clone the value when setting on the model. See bug 1004363
+	private boolean requireChange(T value) {
+		T currentValue = _editedObject;
+		if (value == null) {
+			return currentValue != null;
+		} else {
+			if (useEqualsLookup()) {
+				return !value.equals(currentValue);
+			} else {
+				return value != currentValue;
+			}
+		}
+	}
+
+	/**
+	 * Return a flag indicating if equals() method should be used to determine equality.<br>
+	 * If this method return false (should be overriden), equality lookup is performed using references (pointer equality) Default behaviour
+	 * is to use equals() lookup method, please override this method (and return false) whenever a CustomPopup is used to edit a value and
+	 * not only choose a value
+	 * 
+	 * @return true
+	 */
+	protected boolean useEqualsLookup() {
+		return true;
+	}
+
+	/**
+	 * Sets edited object<br>
+	 * Before to set edited object, an equality test is performed to determine if setting is required. When not, just return.<br>
+	 * Default behaviour is to use the equals(Object) method to see if a change is required or not. Therefore, if the edited object type
+	 * overrides the equals method, some objects that are different may not be swapped and cause very unpredictable behaviour. A workaround
+	 * for this is to clone the value when setting on the model. See bug 1004363. An other workaround is to override useEqualsLookup()
+	 * method with false value, to use pointer comparison.
+	 * 
+	 * @param object
+	 */
 	public void setEditedObject(T object) {
-		if (_editedObject == null || !_editedObject.equals(object)) {
+		if (requireChange(object)) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("CustomPopup setEditedObject: " + object);
 			}
@@ -696,7 +788,11 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	}
 
 	public void fireEditedObjectChanged() {
-		updateCustomPanel(getEditedObject());
+		try {
+			updateCustomPanel(getEditedObject());
+		} catch (ClassCastException e) {
+			updateCustomPanel(null);
+		}
 	}
 
 	public abstract void updateCustomPanel(T editedObject);
@@ -741,6 +837,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 				}
 			}
 		}
+		onEvent(e);
 	}
 
 	@Override

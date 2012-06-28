@@ -23,6 +23,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -33,7 +34,8 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
-public class OntologySelector extends AbstractBrowserSelector<ImportedOntology> {
+@Deprecated
+public class OntologySelector extends AbstractBrowserSelector<FlexoOntology> {
 
 	protected static final String EMPTY_STRING = "";
 	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
@@ -41,17 +43,23 @@ public class OntologySelector extends AbstractBrowserSelector<ImportedOntology> 
 	private OntologyLibrary ontologyLibrary;
 
 	public OntologySelector(ImportedOntology object) {
-		super(null, object, ImportedOntology.class);
+		super(null, object, FlexoOntology.class);
 	}
 
 	public OntologySelector(OntologyLibrary ontologyLibrary, ImportedOntology object) {
-		super(null, object, ImportedOntology.class);
+		super(null, object, FlexoOntology.class);
 		setOntologyLibrary(ontologyLibrary);
 	}
 
 	public OntologySelector(OntologyLibrary ontologyLibrary, ImportedOntology object, int cols) {
-		super(null, object, ImportedOntology.class, cols);
+		super(null, object, FlexoOntology.class, cols);
 		setOntologyLibrary(ontologyLibrary);
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		setOntologyLibrary(null);
 	}
 
 	public OntologyLibrary getOntologyLibrary() {
@@ -63,19 +71,19 @@ public class OntologySelector extends AbstractBrowserSelector<ImportedOntology> 
 	}
 
 	@Override
-	protected OntologySelectorPanel makeCustomPanel(ImportedOntology editedObject) {
+	protected OntologySelectorPanel makeCustomPanel(FlexoOntology editedObject) {
 		return new OntologySelectorPanel();
 	}
 
 	@Override
-	public String renderedString(ImportedOntology editedObject) {
+	public String renderedString(FlexoOntology editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
 		return STRING_REPRESENTATION_WHEN_NULL;
 	}
 
-	protected class OntologySelectorPanel extends AbstractSelectorPanel<ImportedOntology> {
+	protected class OntologySelectorPanel extends AbstractSelectorPanel<FlexoOntology> {
 		protected OntologySelectorPanel() {
 			super(OntologySelector.this);
 		}
@@ -90,7 +98,7 @@ public class OntologySelector extends AbstractBrowserSelector<ImportedOntology> 
 	protected class OntologyBrowser extends ProjectBrowser {
 
 		protected OntologyBrowser() {
-			super((getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null), false);
+			super(getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null, false);
 			init();
 		}
 

@@ -74,6 +74,7 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 		if (getShema() != null) {
 			getShema().deleteObserver(this);
 		}
+		super.delete();
 	}
 
 	@Override
@@ -156,8 +157,7 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 	private CalcDrawingConnectorGR buildGraphicalRepresentation(ExampleDrawingConnector connector) {
 		if (connector.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
 			CalcDrawingConnectorGR graphicalRepresentation = new CalcDrawingConnectorGR(connector, this);
-			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation) connector.getGraphicalRepresentation(),
-					GraphicalRepresentation.Parameters.text);
+			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation) connector.getGraphicalRepresentation());
 			if (!readOnly) {
 				connector.setGraphicalRepresentation(graphicalRepresentation);
 			}
@@ -173,8 +173,7 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 	private CalcDrawingShapeGR buildGraphicalRepresentation(ExampleDrawingShape shape) {
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			CalcDrawingShapeGR graphicalRepresentation = new CalcDrawingShapeGR(shape, this);
-			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation(),
-					GraphicalRepresentation.Parameters.text);
+			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) shape.getGraphicalRepresentation());
 			if (!readOnly) {
 				shape.setGraphicalRepresentation(graphicalRepresentation);
 			}

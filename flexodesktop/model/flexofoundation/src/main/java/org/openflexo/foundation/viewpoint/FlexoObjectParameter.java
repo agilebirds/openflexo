@@ -22,23 +22,50 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.ProcessFolder;
+import org.openflexo.foundation.wkf.Role;
+import org.openflexo.foundation.wkf.node.AbstractActivityNode;
+import org.openflexo.foundation.wkf.node.ActionNode;
+import org.openflexo.foundation.wkf.node.OperationNode;
 
 public class FlexoObjectParameter extends EditionSchemeParameter {
 
+	// TODO: unify this this FlexoObjectType in FlexoObjectInspectorEntry and FlexoModelObjectPatternRole
+	public enum FlexoObjectType {
+		Process, ProcessFolder, Role, Activity, Operation, Action
+	}
+
 	private FlexoObjectType flexoObjectType;
+
+	public FlexoObjectParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public Type getType() {
-		return FlexoModelObject.class;
+		switch (getFlexoObjectType()) {
+		case Process:
+			return FlexoProcess.class;
+		case ProcessFolder:
+			return ProcessFolder.class;
+		case Role:
+			return Role.class;
+		case Activity:
+			return AbstractActivityNode.class;
+		case Operation:
+			return OperationNode.class;
+		case Action:
+			return ActionNode.class;
+		default:
+			return FlexoModelObject.class;
+		}
 	};
 
 	@Override
 	public WidgetType getWidget() {
 		return WidgetType.FLEXO_OBJECT;
-	}
-
-	public static enum FlexoObjectType {
-		Process, ProcessFolder, Role, Activity, Operation, Action
 	}
 
 	public FlexoObjectType getFlexoObjectType() {

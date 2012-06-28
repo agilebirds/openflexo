@@ -21,6 +21,7 @@ package org.openflexo.logging;
 
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.StringEncoder;
@@ -49,7 +50,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 
 	public String message;
 
-	public String level;
+	public Level level;
 
 	public StackTraceElement[] stackTrace;
 
@@ -69,7 +70,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 		super();
 	}
 
-	public LogRecord(java.util.logging.LogRecord record) {
+	public LogRecord(java.util.logging.LogRecord record, FlexoLoggingManager loggingManager) {
 		super();
 		date = new Date();
 		millis = record.getMillis();
@@ -82,15 +83,15 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 		if (message != null) {
 			message = message.intern();
 		}
-		level = record.getLevel().toString();
-		if (FlexoLoggingManager.getKeepLogTrace()) {
-			stackTrace = (new Exception()).getStackTrace();
+		level = record.getLevel();
+		if (loggingManager != null && loggingManager.getKeepLogTrace()) {
+			stackTrace = new Exception().getStackTrace();
 		}
 		isUnhandledException = false;
 	}
 
-	public LogRecord(java.util.logging.LogRecord record, Exception e) {
-		this(record);
+	public LogRecord(java.util.logging.LogRecord record, Exception e, FlexoLoggingManager loggingManager) {
+		this(record, loggingManager);
 		stackTrace = e.getStackTrace();
 		className = stackTrace[0].getClassName();
 		methodName = stackTrace[0].getMethodName();
@@ -108,7 +109,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 	}
 
 	public String classAsString() {
-		if ((_classAsString == null) && (className != null)) {
+		if (_classAsString == null && className != null) {
 			StringTokenizer st = new StringTokenizer(className, ".");
 			while (st.hasMoreTokens()) {
 				_classAsString = st.nextToken();
@@ -139,8 +140,10 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 	}
 
 	public String getStackTraceAsString() {
-		String returned = "";
-		if (stackTrace != null) {
+		if (_stackTraceAsString != null) {
+			return _stackTraceAsString;
+		} else if (stackTrace != null) {
+			StringBuilder returned = new StringBuilder();
 			int beginAt;
 			if (isUnhandledException) {
 				beginAt = 0;
@@ -148,14 +151,13 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 				beginAt = 6;
 			}
 			for (int i = beginAt; i < stackTrace.length; i++) {
-				returned += ("\tat " + stackTrace[i] + "\n");
+				// returned += ("\tat " + stackTrace[i] + "\n");
+				returned.append("\t").append("at ").append(stackTrace[i]).append('\n');
 			}
-		} else if (_stackTraceAsString != null) {
-			returned = _stackTraceAsString;
+			return returned.toString();
 		} else {
-			returned = "StackTrace not available";
+			return "StackTrace not available";
 		}
-		return returned;
 	}
 
 	private String _stackTraceAsString;

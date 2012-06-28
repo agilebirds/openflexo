@@ -107,6 +107,17 @@ public class ResourceLocator {
 		}
 	}
 
+	public static void init() {
+		getDirectoriesSearchOrder();
+	}
+
+	public static void addProjectDirectory(File projectDirectory) {
+		init();
+		if (projectDirectory.exists()) {
+			addProjectResourceDirs(directoriesSearchOrder, projectDirectory);
+		}
+	}
+
 	private static Vector<File> getDirectoriesSearchOrder() {
 		if (directoriesSearchOrder == null) {
 			if (logger.isLoggable(Level.INFO)) {
@@ -120,7 +131,7 @@ public class ResourceLocator {
 				directoriesSearchOrder.add(preferredResourcePath);
 			}
 			File workingDirectory = new File(System.getProperty("user.dir"));
-			File flexoDesktopDirectory = findFlexoDesktopDirectory(workingDirectory);
+			File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "flexodesktop");
 			if (flexoDesktopDirectory != null) {
 				findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
 			}
@@ -129,13 +140,13 @@ public class ResourceLocator {
 		return directoriesSearchOrder;
 	}
 
-	public static File findFlexoDesktopDirectory(File currentDir) {
+	public static File findProjectDirectoryWithName(File currentDir, String projectName) {
 		if (currentDir != null) {
-			File attempt = new File(currentDir, "flexodesktop");
+			File attempt = new File(currentDir, projectName);
 			if (attempt.exists()) {
 				return attempt;
 			} else {
-				return findFlexoDesktopDirectory(currentDir.getParentFile());
+				return findProjectDirectoryWithName(currentDir.getParentFile(), projectName);
 			}
 		}
 		return null;
@@ -146,39 +157,43 @@ public class ResourceLocator {
 			files.add(dir);
 			for (File f : dir.listFiles()) {
 				if (f.getName().startsWith("flexo")) {
-					File file1 = new File(f.getAbsolutePath() + "/src/main/resources");
-					File file2 = new File(f.getAbsolutePath() + "/src/test/resources");
-					File file3 = new File(f.getAbsolutePath() + "/src/dev/resources");
-					// File file4 = new File(f.getAbsolutePath());
-					if (logger.isLoggable(Level.FINE)) {
-						logger.info("Adding directory " + file1.getAbsolutePath());
-					}
-					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Adding directory " + file2.getAbsolutePath());
-					}
-					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Adding directory " + file3.getAbsolutePath());
-					}
-					/*if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Adding directory " + file4.getAbsolutePath());
-					}*/
-					if (file1.exists()) {
-						files.add(file1);
-					}
-					if (file2.exists()) {
-						files.add(file2);
-					}
-					if (file3.exists()) {
-						files.add(file3);
-					}
-					/*if (file4.exists()) {
-						files.add(file4);
-					}*/
+					addProjectResourceDirs(files, f);
 				} else if (f.isDirectory()) {
 					findAllFlexoProjects(f, files);
 				}
 			}
 		}
+	}
+
+	public static void addProjectResourceDirs(List<File> files, File f) {
+		File file1 = new File(f.getAbsolutePath() + "/src/main/resources");
+		File file2 = new File(f.getAbsolutePath() + "/src/test/resources");
+		File file3 = new File(f.getAbsolutePath() + "/src/dev/resources");
+		// File file4 = new File(f.getAbsolutePath());
+		if (logger.isLoggable(Level.FINE)) {
+			logger.info("Adding directory " + file1.getAbsolutePath());
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Adding directory " + file2.getAbsolutePath());
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Adding directory " + file3.getAbsolutePath());
+		}
+		/*if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Adding directory " + file4.getAbsolutePath());
+		}*/
+		if (file1.exists()) {
+			files.add(file1);
+		}
+		if (file2.exists()) {
+			files.add(file2);
+		}
+		if (file3.exists()) {
+			files.add(file3);
+		}
+		/*if (file4.exists()) {
+			files.add(file4);
+		}*/
 	}
 
 	public static File getUserDirectory() {

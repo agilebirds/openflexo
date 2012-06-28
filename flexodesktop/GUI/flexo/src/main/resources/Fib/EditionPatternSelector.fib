@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" titleFont="LucidaGrande,0,11" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBEditionPatternSelector" controllerClassName="org.openflexo.components.widget.FIBModelObjectSelector$SelectorFIBController" font="LucidaGrande,0,11" width="270" height="300">
+  <Panel layout="gridbag" borderTitle="Panel" titleFont="LucidaGrande,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="Matches">
+    <Label label="dsffdsmksdfmkfdsmkfdsmkdfskmsdf" align="right" localize="true" name="MatchesLabel" data="((&quot;Found &quot; + data.matchingValues.size) + &quot; matches&quot;)" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="((data.matchingValues.size != 1) &amp; (data.isFiltered))" font="Dialog,2,11" />
+  </Panel>
+  <Browser root="data.rootObject" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedObject" showFooter="true" rootVisible="true" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" font="LucidaGrande,0,11" name="ViewPointBrowser" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" enterPressedAction="controller.apply()">
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPointLibrary" label="&quot;Viewpoint Library&quot;" icon="controller.iconForObject(viewPointLibrary)" isEditable="false" filtered="false" defaultVisible="true" name="viewPointLibrary">
+      <Children data="viewPointLibrary.rootFolder.children" name="folders" />
+      <Children data="viewPointLibrary.rootFolder.viewPoints" name="viewPoints" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPointFolder" label="viewPointFolder.name" icon="controller.iconForObject(viewPointFolder)" isEditable="false" filtered="false" defaultVisible="true" name="viewPointFolder">
+      <Children data="viewPointFolder.children" name="subFolders" />
+      <Children data="viewPointFolder.viewPoints" name="viewPoints" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPoint" label="viewPoint.name" icon="controller.iconForObject(viewPoint)" isEditable="false" filtered="false" defaultVisible="true" name="viewPoint">
+      <Children data="viewPoint.allRootEditionPatterns" name="editionPatterns" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" label="editionPattern.name" icon="controller.iconForObject(editionPattern)" isEditable="false" filtered="false" defaultVisible="true" name="editionPattern">
+      <Children data="editionPattern.childEditionPatterns" name="children" />
+    </BrowserElement>
+  </Browser>
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" titleFont="LucidaGrande,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" font="LucidaGrande,0,12" localize="true" enable="(data.selectedValue != null)" />
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" font="LucidaGrande,0,12" localize="true" />
+    <Button action="controller.reset()" buttonType="Trigger" label="reset" constraints="flow(index=2)" font="LucidaGrande,0,12" localize="true" />
+  </Panel>
+  <List visibleRowCount="4" rowHeight="18" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" selected="data.selectedValue" layoutOrientation="vertical" format="object.name" icon="controller.iconForObject(object)" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" name="PotentialMatches" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.matchingValues.size &gt; 1)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" list="data.matchingValues" showIcon="true" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true" enterPressedAction="controller.apply()"/>
+  <LocalizedDictionary />
+</Panel>
+

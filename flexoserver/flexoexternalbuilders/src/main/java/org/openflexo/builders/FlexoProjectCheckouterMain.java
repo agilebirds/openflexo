@@ -8,9 +8,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.builders.exception.FlexoRunException;
 import org.openflexo.builders.exception.MissingArgumentException;
-import org.openflexo.builders.exception.ProjectNotFoundException;
 import org.openflexo.builders.utils.FlexoCVSConsoleListener;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
@@ -135,7 +133,7 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 	}
 
 	@Override
-	protected void run() throws FlexoRunException {
+	protected void doRun() {
 		CVSFile.xmlDiff3MergeEnabled = true;
 		CVSModule module = cvsRepository.getModuleNamed(moduleName);
 		if (module == null) {
@@ -169,8 +167,9 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 			}
 		}
 		if (projectDirectory == null || !projectDirectory.exists()) {
-			setExitCode(PROJECT_NOT_FOUND);
-			throw new ProjectNotFoundException();
+			setExitCodeCleanUpAndExit(PROJECT_NOT_FOUND);
+		} else {
+			setExitCodeCleanUpAndExit(0);
 		}
 	}
 
@@ -212,10 +211,6 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 	 */
 	public static void main(String[] args) {
 		launch(FlexoProjectCheckouterMain.class, args);
-	}
-
-	public static FlexoProjectCheckouterMain mainTest(String[] args) {
-		return launch(FlexoProjectCheckouterMain.class, args);
 	}
 
 }

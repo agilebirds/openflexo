@@ -19,9 +19,12 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-public abstract class AddShemaElementAction<R extends PatternRole> extends EditionAction<R> {
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
-	public AddShemaElementAction() {
+public abstract class AddShemaElementAction extends AssignableAction {
+
+	public AddShemaElementAction(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	/*@Override

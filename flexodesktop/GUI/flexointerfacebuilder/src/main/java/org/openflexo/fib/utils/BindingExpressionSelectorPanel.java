@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import javax.swing.JButton;
 
 import org.openflexo.antar.binding.BindingExpression;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.toolbox.ToolBox;
@@ -46,6 +47,14 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 	BindingExpressionSelectorPanel(BindingSelector bindingSelector) {
 		bindingSelector.super();
 		_bindingSelector = bindingSelector;
+	}
+
+	@Override
+	public void delete() {
+		if (_expressionPanel != null) {
+			_expressionPanel.delete();
+			_expressionPanel = null;
+		}
 	}
 
 	protected ButtonsControlPanel _controlPanel;
@@ -66,7 +75,7 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 		_controlPanel = new ButtonsControlPanel() {
 			@Override
 			public String localizedForKeyAndButton(String key, JButton component) {
-				return FlexoLocalization.localizedForKey(key, component);
+				return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, key, component);
 			}
 		};
 		_applyButton = _controlPanel.addButton("apply", new ActionListener() {
@@ -209,8 +218,8 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 		BindingExpression bindingExpression = (BindingExpression) _bindingSelector.getEditedObject();
 
 		// Update apply button state
-		_applyButton.setEnabled((bindingExpression != null) && (bindingExpression.isBindingValid()));
-		if ((bindingExpression != null) && (bindingExpression.isBindingValid())) {
+		_applyButton.setEnabled(bindingExpression != null && bindingExpression.isBindingValid());
+		if (bindingExpression != null && bindingExpression.isBindingValid()) {
 			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				_applyButton.setSelected(true);
 			}

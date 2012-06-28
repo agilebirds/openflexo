@@ -35,8 +35,6 @@ import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -46,6 +44,7 @@ import org.openflexo.foundation.ie.util.TextCSSClass;
 import org.openflexo.foundation.ie.util.TextFieldType;
 import org.openflexo.foundation.ie.widget.IEStringWidget;
 import org.openflexo.ie.IEPreferences;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.DoubleClickResponder;
@@ -112,10 +111,9 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 			jLabel.setToolTipText(getModel().getDescription());
 		}
 		add(jLabel);
-		doLayout();
 		updateDisplayedValue();
 		setBackground(getBackgroundColor());
-
+		revalidate();
 	}
 
 	private static final String SPAN_OPEN = "<html><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" SIZE=2>";// SIZE is not pixel for
@@ -139,17 +137,15 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
+		String propertyName = modif.propertyName();
 		if (modif instanceof CSSChanged) {
 			jLabel.setFont(getModel().getTextCSSClass().font());
-		} else if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(BINDING_VALUE_NAME) || modif.propertyName().equals("bindingValue")) {
+		} else if (propertyName != null) {
+			if (propertyName.equals(BINDING_VALUE_NAME) || propertyName.equals("bindingValue")) {
 				updateDisplayedValue();
-			} else if (modif.propertyName().equals("cssClass")) {
+			} else if (propertyName.equals("cssClass")) {
 				jLabel.setFont(getModel().getTextCSSClass().font());
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				getParent().doLayout();
-				((JComponent) getParent()).repaint();
-			} else if (modif.propertyName().equals("isHTML") || modif.propertyName().equals("fieldType")) {
+			} else if (propertyName.equals("isHTML") || propertyName.equals("fieldType")) {
 				updateDisplayedValue();
 			}
 		}
@@ -219,31 +215,7 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 				finalizeEditString();
 			}
 		});
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				// getStringModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				// getStringModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				// getStringModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			public void updateSize() {
-				_jLabelTextField.setPreferredSize(_jLabelTextField.getPreferredSize());
-				doLayout();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_jLabelTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {

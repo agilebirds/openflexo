@@ -36,7 +36,7 @@ public class LanguageRemoved extends DKVDataModification {
 	 * @param newValue
 	 */
 	public LanguageRemoved(Language oldValue) {
-		super(-1, "languages", oldValue, null);
+		super("languages", oldValue, null);
 		_removedLanguage = oldValue;
 	}
 

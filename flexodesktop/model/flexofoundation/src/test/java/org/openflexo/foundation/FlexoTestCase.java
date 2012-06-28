@@ -22,7 +22,10 @@ package org.openflexo.foundation;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +36,7 @@ import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
+import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -97,8 +101,10 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.xmlcode.KeyValueCoder;
 
 /**
  * @author gpolet
@@ -110,7 +116,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	static {
 		try {
-			FlexoLoggingManager.initialize();
+			FlexoLoggingManager.initialize(-1, true, null, Level.WARNING, null);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -152,6 +158,10 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	public FlexoTestCase() {
+	}
+
+	protected void initResourceLocatorFromSystemProperty() {
+		// GPO: Kept in case we need this, but we should try not to depend on this.
 		logger.severe("Here is the system property : " + System.getProperty("flexo.resources.location"));
 		if (System.getProperty("flexo.resources.location") != null) {
 			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
@@ -160,11 +170,8 @@ public abstract class FlexoTestCase extends TestCase {
 
 	public FlexoTestCase(String name) {
 		super(name);
-		logger.severe("Here is the system property : " + System.getProperty("flexo.resources.location"));
-		if (System.getProperty("flexo.resources.location") != null) {
-			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
-		}
-		FlexoObject.initialize();
+		// initResourceLocatorFromSystemProperty();
+		FlexoObject.initialize(false);
 	}
 
 	public File getResource(String resourceRelativeName) {
@@ -172,7 +179,7 @@ public abstract class FlexoTestCase extends TestCase {
 		if (retval.exists()) {
 			return retval;
 		}
-		retval = new File("../FlexoFoundation/src/test/resources", resourceRelativeName);
+		retval = new File("../flexofoundation/src/test/resources", resourceRelativeName);
 		if (retval.exists()) {
 			return retval;
 		}
@@ -186,12 +193,23 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	protected FlexoEditor createProject(String projectName) {
-		return createProject(projectName, null);
+		return createProject(projectName, getNewResourceCenter(projectName));
+	}
+
+	protected FlexoResourceCenter getNewResourceCenter(String name) {
+		try {
+			return LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(FileUtils.createTempDirectory(name,
+					"ResourceCenter"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		return null;
 	}
 
 	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter) {
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File _projectDirectory = null;
 		try {
 			File tempFile = File.createTempFile(projectName, "");
@@ -326,6 +344,36 @@ public abstract class FlexoTestCase extends TestCase {
 	protected static void log(String step) {
 		logger.info("\n******************************************************************************\n" + step
 				+ "\n******************************************************************************\n");
+	}
+
+	/**
+	 * Assert this is the same list, doesn't care about order
+	 * 
+	 * @param aList
+	 * @param objects
+	 * @throws AssertionFailedError
+	 */
+	public <T> void assertSameList(Collection<T> aList, T... objects) throws AssertionFailedError {
+		Set<T> set1 = new HashSet<T>(aList);
+		Set<T> set2 = new HashSet<T>();
+		for (T o : objects) {
+			set2.add(o);
+		}
+		if (!set1.equals(set2)) {
+			StringBuffer message = new StringBuffer();
+			for (T o : set1) {
+				if (!set2.contains(o)) {
+					message.append(" Extra: " + o);
+				}
+			}
+			for (T o : set2) {
+				if (!set1.contains(o)) {
+					message.append(" Missing: " + o);
+				}
+			}
+			throw new AssertionFailedError("AssertionFailedError when comparing lists, expected: " + set1 + " but was " + set2
+					+ " Details = " + message);
+		}
 	}
 
 	public static IEWOComponent createComponent(String componentName, FlexoComponentFolder folder, AddComponent.ComponentType type,
@@ -805,4 +853,10 @@ public abstract class FlexoTestCase extends TestCase {
 		assertTrue(deleteAction.doAction().hasActionExecutionSucceeded());
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		KeyValueCoder.clearClassCache();
+		KeyValueLibrary.clearCache();
+		super.tearDown();
+	}
 }

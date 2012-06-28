@@ -76,7 +76,7 @@ public class ComponentBindingDefinition extends BindingDefinition {
 					return false;
 				}
 			}
-			return ((getOwner() == bd.getOwner()) && (getType() == bd.getType()) && (getIsMandatory() == bd.getIsMandatory()));
+			return getOwner() == bd.getOwner() && getType() == bd.getType() && getIsMandatory() == bd.getIsMandatory();
 		} else {
 			return super.equals(object);
 		}
@@ -170,14 +170,14 @@ public class ComponentBindingDefinition extends BindingDefinition {
 				_property.setName(variableName);
 			} catch (InvalidNameException e) {
 				setChanged();
-				notifyObserversAsReentrantModification(new DataModification(-1, "variableName", null, _property.getName()));
+				notifyObserversAsReentrantModification(new DataModification("variableName", null, _property.getName()));
 				new FlexoException(e.getMessage(), e);
 			} catch (DuplicatePropertyNameException e) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning(e.getMessage());
 				}
 				setChanged();
-				notifyObserversAsReentrantModification(new DataModification(-1, "variableName", null, _property.getName()));
+				notifyObserversAsReentrantModification(new DataModification("variableName", null, _property.getName()));
 			}
 		} else {
 			super.setVariableName(variableName);

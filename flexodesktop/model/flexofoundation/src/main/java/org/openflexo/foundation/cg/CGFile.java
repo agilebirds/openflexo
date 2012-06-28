@@ -160,7 +160,7 @@ public class CGFile extends CGObject implements CGPathElement {
 	}
 
 	public CGSymbolicDirectory getSymbolicDirectory() {
-		if ((_symbolicDirectory == null) && (_symbolicDirectoryName != null) && (getRepository() != null)) {
+		if (_symbolicDirectory == null && _symbolicDirectoryName != null && getRepository() != null) {
 			setSymbolicDirectory(getRepository().getSymbolicDirectoryNamed(_symbolicDirectoryName));
 		}
 		return _symbolicDirectory;
@@ -186,49 +186,49 @@ public class CGFile extends CGObject implements CGPathElement {
 	}
 
 	public String getFileName() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null) && (getResource().getResourceFile().getFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null && getResource().getResourceFile().getFile() != null) {
 			return getResource().getResourceFile().getFile().getName();
 		}
 		return "???";
 	}
 
 	public String getPathName() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getResource().getResourceFile().getStringRepresentation();
 		}
 		return "???";
 	}
 
 	public Date getLastGenerationDate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getResource().getLastGenerationDate();
 		}
 		return null;
 	}
 
 	public Date getDiskLastModifiedDate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getResource().getDiskLastModifiedDate();
 		}
 		return null;
 	}
 
 	public Date getLastAcceptingDate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getResource().getLastAcceptingDate();
 		}
 		return null;
 	}
 
 	public Date getLastGenerationCheckedDate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getResource().getLastGenerationCheckedDate();
 		}
 		return null;
 	}
 
 	public Date getMemoryLastGenerationDate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getResource().getMemoryLastGenerationDate();
 		}
 		return null;
@@ -236,7 +236,7 @@ public class CGFile extends CGObject implements CGPathElement {
 
 	@Override
 	public Date getLastUpdate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getResource().getLastUpdate();
 		}
 		return null;
@@ -276,7 +276,7 @@ public class CGFile extends CGObject implements CGPathElement {
 
 	@Override
 	public boolean isEnabled() {
-		return ((!isMarkedForDeletion() && isCodeGenerationAvailable()) || isMarkedForDeletion()) && !getMarkedAsDoNotGenerate();
+		return (!isMarkedForDeletion() && isCodeGenerationAvailable() || isMarkedForDeletion()) && !getMarkedAsDoNotGenerate();
 	}
 
 	@Override
@@ -314,24 +314,24 @@ public class CGFile extends CGObject implements CGPathElement {
 
 	public boolean isContainedInFolder(CGFolder folder) {
 		CGPathElement current = this;
-		while ((current != folder) && (current.getParent() != null)) {
+		while (current != folder && current.getParent() != null) {
 			current = current.getParent();
 		}
-		return (current == folder);
+		return current == folder;
 	}
 
 	@Override
 	public boolean isContainedIn(CGObject obj) {
 		if (obj instanceof GeneratedOutput) {
-			return (obj == getGeneratedCode());
+			return obj == getGeneratedCode();
 		} else if (obj instanceof GenerationRepository) {
-			return (obj == _repository);
+			return obj == _repository;
 		} else if (obj instanceof CGSymbolicDirectory) {
-			return (obj == getSymbolicDirectory());
+			return obj == getSymbolicDirectory();
 		} else if (obj instanceof CGFolder) {
 			return isContainedInFolder((CGFolder) obj);
 		} else if (obj instanceof CGFile) {
-			return (obj == this);
+			return obj == this;
 		}
 		return false;
 	}
@@ -366,8 +366,7 @@ public class CGFile extends CGObject implements CGPathElement {
 	}
 
 	public Vector<String> getUsedTemplates() {
-		if ((getResource() != null) && (getResource().getGenerator() != null)
-				&& (getResource().getGenerator().getUsedTemplates().size() > 0)) {
+		if (getResource() != null && getResource().getGenerator() != null && getResource().getGenerator().getUsedTemplates().size() > 0) {
 			usedTemplates.clear();
 			for (CGTemplate file : getResource().getGenerator().getUsedTemplates()) {
 				usedTemplates.add(file.getRelativePath());
@@ -442,13 +441,13 @@ public class CGFile extends CGObject implements CGPathElement {
 		} else {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Write modified file: "
-						+ (getResource() != null ? (getResource().getFile() != null ? getResource().getFile().getAbsolutePath()
-								: "file is null") : "resource is null"));
+						+ (getResource() != null ? getResource().getFile() != null ? getResource().getFile().getAbsolutePath()
+								: "file is null" : "resource is null"));
 			}
 			boolean updated = getResource().ensureGenerationIsUpToDate();
 			if (getResource().isForceRegenerate()
-					|| (!getResource().getDependentResources().elements(false, getProject().getDependancyScheme()).hasMoreElements() && !updated)
-					|| !getResource().doesGenerationKeepFileUnchanged() || !getResource().getFile().exists()) {
+					|| !getResource().getDependentResources().elements(false, getProject().getDependancyScheme()).hasMoreElements()
+					&& !updated || !getResource().doesGenerationKeepFileUnchanged() || !getResource().getFile().exists()) {
 				getResource().generate();
 			} else {
 				getResource().setLastGenerationDate(new Date());
@@ -484,7 +483,7 @@ public class CGFile extends CGObject implements CGPathElement {
 	}
 
 	public void overrideWith(ContentSource contentSource, boolean doItNow) throws SaveResourceException, FlexoException {
-		if ((getGeneratedResourceData() != null) && (getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+		if (getGeneratedResourceData() != null && getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 			((AbstractGeneratedFile) getGeneratedResourceData()).overrideWith(contentSource);
 		}
 		setForceRegenerate(true);
@@ -495,7 +494,7 @@ public class CGFile extends CGObject implements CGPathElement {
 
 	public void cancelOverriding() {
 		if (isOverrideScheduled()) {
-			if ((getGeneratedResourceData() != null) && (getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+			if (getGeneratedResourceData() != null && getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 				((AbstractGeneratedFile) getGeneratedResourceData()).cancelOverriding();
 			}
 			setForceRegenerate(false);
@@ -530,7 +529,8 @@ public class CGFile extends CGObject implements CGPathElement {
 
 		if (dataModification instanceof TemplateFileNotification) {
 			if (getRepository() != null) {
-				getRepository().refresh();
+				// It looks like something else makes the refresh. eventually we'll remove this commented code
+				// getRepository().invalidateStructure();
 				// _markedAsMerged = false;
 				// logger.info("Il semblerait que le fichier "+getFileName()+" ait ete affecte par la modification sur le template "+dataModification.newValue());
 			}
@@ -586,15 +586,15 @@ public class CGFile extends CGObject implements CGPathElement {
 
 	public static FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject> showTemplateActionizer;
 	public static FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject> editCustomTemplateActionizer;
-	public static FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject> redefineTemplateActionizer;
+	public static FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplate> redefineTemplateActionizer;
 
 	public boolean isShowable(CGTemplate template) {
 		return true;
 	}
 
 	public boolean hasVersionOnDisk() {
-		if ((getResource() != null) && (getResource().getGeneratedResourceData() != null)
-				&& (getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+		if (getResource() != null && getResource().getGeneratedResourceData() != null
+				&& getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 			return ((AbstractGeneratedFile) getResource().getGeneratedResourceData()).hasVersionOnDisk();
 		}
 		return false;
@@ -609,7 +609,7 @@ public class CGFile extends CGObject implements CGPathElement {
 	private FileContentEditor _editor;
 
 	public boolean isEdited() {
-		return (_editor != null);
+		return _editor != null;
 	}
 
 	public void edit(FileContentEditor editor) {
@@ -675,17 +675,16 @@ public class CGFile extends CGObject implements CGPathElement {
 		if (getResource() == null) {
 			return false;
 		}
-		return (getResource().isForceRegenerate());
+		return getResource().isForceRegenerate();
 	}
 
 	public boolean isOverrideScheduled() {
-		return (isForceRegenerate() && (getGeneratedResourceData() != null)
-				&& (getGeneratedResourceData() instanceof AbstractGeneratedFile) && (((AbstractGeneratedFile) getGeneratedResourceData())
-					.isOverrideScheduled()));
+		return isForceRegenerate() && getGeneratedResourceData() != null && getGeneratedResourceData() instanceof AbstractGeneratedFile
+				&& ((AbstractGeneratedFile) getGeneratedResourceData()).isOverrideScheduled();
 	}
 
 	public ContentSource getScheduledOverrideVersion() {
-		if (isOverrideScheduled() && (getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+		if (isOverrideScheduled() && getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 			return ((AbstractGeneratedFile) getGeneratedResourceData()).getScheduledOverrideVersion();
 		}
 		return null;
@@ -695,8 +694,8 @@ public class CGFile extends CGObject implements CGPathElement {
 	 * Returns flag indicating if merge for generation is actually raising conflicts (collision in changes)
 	 */
 	public boolean isGenerationConflicting() {
-		if ((getResource() != null) && (getResource().getGeneratedResourceData() != null)
-				&& (getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+		if (getResource() != null && getResource().getGeneratedResourceData() != null
+				&& getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 			return ((AbstractGeneratedFile) getResource().getGeneratedResourceData()).isGenerationConflicting();
 		}
 		return false;
@@ -708,15 +707,15 @@ public class CGFile extends CGObject implements CGPathElement {
 	}
 
 	public boolean isTriviallyMergable() {
-		return ((getGenerationStatus() == GenerationStatus.ConflictingUnMerged) && (getResource() != null)
-				&& (getResource().getGeneratedResourceData() != null)
-				&& (getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) && (((AbstractGeneratedFile) getResource()
-				.getGeneratedResourceData()).isTriviallyMergable()));
+		return getGenerationStatus() == GenerationStatus.ConflictingUnMerged && getResource() != null
+				&& getResource().getGeneratedResourceData() != null
+				&& getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile
+				&& ((AbstractGeneratedFile) getResource().getGeneratedResourceData()).isTriviallyMergable();
 	}
 
 	public void releaseAs(CGRelease newCGRelease) {
-		if ((getResource() != null) && (getResource().getGeneratedResourceData() != null)
-				&& (getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+		if (getResource() != null && getResource().getGeneratedResourceData() != null
+				&& getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 			((AbstractGeneratedFile) getGeneratedResourceData()).getHistory().storeCurrentFileInHistoryAs(
 					newCGRelease.getVersionIdentifier());
 			setChanged();
@@ -749,7 +748,7 @@ public class CGFile extends CGObject implements CGPathElement {
 			if (getLastGenerationDate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
 			}
-			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastGenerationDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastGenerationDate());
 		}
 		return "???";
 	}
@@ -759,7 +758,7 @@ public class CGFile extends CGObject implements CGPathElement {
 			if (getDiskLastModifiedDate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
 			}
-			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getDiskLastModifiedDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getDiskLastModifiedDate());
 		}
 		return "???";
 	}
@@ -769,7 +768,7 @@ public class CGFile extends CGObject implements CGPathElement {
 			if (getLastAcceptingDate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
 			}
-			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastAcceptingDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastAcceptingDate());
 		}
 		return "???";
 	}
@@ -779,7 +778,7 @@ public class CGFile extends CGObject implements CGPathElement {
 			if (getLastGenerationCheckedDate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
 			}
-			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastGenerationCheckedDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastGenerationCheckedDate());
 		}
 		return "???";
 	}
@@ -789,7 +788,7 @@ public class CGFile extends CGObject implements CGPathElement {
 			if (getMemoryLastGenerationDate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
 			}
-			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getMemoryLastGenerationDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getMemoryLastGenerationDate());
 		}
 		return "???";
 	}

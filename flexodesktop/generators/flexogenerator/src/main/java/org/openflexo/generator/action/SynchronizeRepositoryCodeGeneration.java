@@ -89,6 +89,11 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 	private boolean hasFailed = false;
 
 	@Override
+	public boolean isLongRunningAction() {
+		return true;
+	}
+
+	@Override
 	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Synchronize repository code generation " + getFocusedObject());
 		PlaySound.tryToPlayRandomSound();
@@ -129,12 +134,15 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 				+ getFocusedObject().getProject().getPrefix() + "Application " + FlexoLocalization.localizedForKey("into") + " "
 				+ getRepository().getDirectory().getAbsolutePath(), 15);
 
-		pg.refreshConcernedResources();
-		GenerateSourceCode generateSourceCode = GenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(),
-				getGlobalSelection(), this);
-		generateSourceCode.doAction();
-		hasFailed &= generateSourceCode.didGenerationSucceeded();
-		hideFlexoProgress();
+		try {
+			pg.refreshConcernedResources();
+			GenerateSourceCode generateSourceCode = GenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(),
+					getGlobalSelection(), this);
+			generateSourceCode.doAction();
+			hasFailed &= generateSourceCode.didGenerationSucceeded();
+		} finally {
+			hideFlexoProgress();
+		}
 	}
 
 	@Override

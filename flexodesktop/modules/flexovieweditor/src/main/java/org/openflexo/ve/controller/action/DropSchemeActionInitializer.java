@@ -19,25 +19,20 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.controller.OEController;
-import org.openflexo.ve.shema.VEShapeGR;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -46,13 +41,13 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DropSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
+	DropSchemeActionInitializer(VEControllerActionInitializer actionInitializer) {
 		super(DropSchemeAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -71,18 +66,20 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DropSchemeAction>() {
 			@Override
 			public boolean run(ActionEvent e, DropSchemeAction action) {
-				ViewShape shape = action.getNewShape();
-				if (shape.getParent() != action.getParent()) {
-					VEShapeGR parentGR = (VEShapeGR) shape.getParent().getGraphicalRepresentation();
-					VEShapeGR expectedGR = (VEShapeGR) action.getParent().getGraphicalRepresentation();
-					VEShapeGR myGR = (VEShapeGR) action.getNewShape().getGraphicalRepresentation();
-					Point p = new Point((int) myGR.getX(), (int) myGR.getY());
-					Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
-					myGR.setLocation(new FGEPoint(newP.x, newP.y));
-					logger.info("Shape has been relocated");
-				}
+				/*	ViewShape shape = action.getPrimaryShape();
+					logger.info("border5 = " + ((ShapeGraphicalRepresentation<?>) shape.getGraphicalRepresentation()).getBorder());
+					if (shape.getParent() != action.getParent()) {
+						VEShapeGR parentGR = (VEShapeGR) shape.getParent().getGraphicalRepresentation();
+						VEShapeGR expectedGR = (VEShapeGR) action.getParent().getGraphicalRepresentation();
+						VEShapeGR myGR = (VEShapeGR) action.getPrimaryShape().getGraphicalRepresentation();
+						Point p = new Point((int) myGR.getX(), (int) myGR.getY());
+						Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
+						myGR.setLocation(new FGEPoint(newP.x, newP.y));
+						logger.info("border6 = " + myGR.getBorder());
+						logger.info("Shape has been relocated");
+					}*/
 
-				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewShape());
+				((VEController) getController()).getSelectionManager().setSelectedObject(action.getPrimaryShape());
 				return true;
 			}
 		};

@@ -1,201 +1,93 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<name>Flexo Enterprise Packaging</name>
+	<name>Executable :: Flexo Enterprise Packaging</name>
 	<parent>
 		<groupId>org.openflexo.packaging</groupId>
 		<artifactId>exec</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.4.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexoenterprise</artifactId>
+	<!-- <packaging>pom</packaging> -->
+	<properties>
+		<userType>maintainer_release</userType>
+		<vm.args>-Xmx1G -XX:MaxPermSize=256M</vm.args>
+	</properties>
 	<build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoworkfloweditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
+			<groupId>org.openflexo.packaging</groupId>
+			<artifactId>flexobusinessplus</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoscreeneditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodatamodeleditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>org.openflexo</groupId>
+					<artifactId>flexodoceditormodule</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexocodegeneratormodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexodocgeneratormodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexowebserviceeditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexovieweditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoviewpointmodeler</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoprjsharingmodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexosourcegeneratormodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
+			<artifactId>flexoviewpointmodeler</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>hibernatetechnologymodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>javatechnologymodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>springtechnologymodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>postgrestechnologymodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>maventechnologymodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>bpslibtechnologymodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoworkfloweditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoscreeneditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodatamodeleditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexocodegeneratormodule</artifactId>
-			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexodocgeneratormodule</artifactId>
-			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexowebserviceeditor</artifactId>
-			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoprjsharingmodule</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexovieweditor</artifactId>
-			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoviewpointmodeler</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexosourcegeneratormodule</artifactId>
-			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>

@@ -21,11 +21,15 @@ package org.openflexo.fib.controller;
 
 import java.awt.Component;
 import java.awt.Window;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -39,9 +43,11 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
+import org.openflexo.fib.model.FIBCheckboxList;
 import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
@@ -74,6 +80,7 @@ import org.openflexo.fib.view.container.FIBTabView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBButtonWidget;
 import org.openflexo.fib.view.widget.FIBCheckBoxWidget;
+import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
 import org.openflexo.fib.view.widget.FIBColorWidget;
 import org.openflexo.fib.view.widget.FIBCustomWidget;
 import org.openflexo.fib.view.widget.FIBDropDownWidget;
@@ -90,19 +97,29 @@ import org.openflexo.fib.view.widget.FIBTextAreaWidget;
 import org.openflexo.fib.view.widget.FIBTextFieldWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
+import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
+/**
+ * Represent the controller of an instanciation of a FIBComponent in a particular Window Toolkit context (eg Swing)
+ * 
+ * @author sylvain
+ * 
+ * @param <T>
+ */
 public class FIBController<T> extends Observable implements BindingEvaluationContext, Observer {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
 	private T dataObject;
 	private final FIBComponent rootComponent;
-	private final Hashtable<FIBComponent, FIBView> views;
+	private final Hashtable<FIBComponent, FIBView<?, ?>> views;
 	private FIBSelectable selectionLeader;
 	private FIBSelectable lastFocusedSelectable;
 
 	private FIBWidgetView focusedWidget;
+
+	private LocalizedDelegate parentLocalizer = null;
 
 	private FIBViewFactory viewFactory;
 
@@ -117,12 +134,29 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	private MouseEvent mouseEvent;
 
+	private boolean deleted = false;
+
 	public FIBController(FIBComponent rootComponent) {
 		this.rootComponent = rootComponent;
-		views = new Hashtable<FIBComponent, FIBView>();
+		views = new Hashtable<FIBComponent, FIBView<?, ?>>();
 		selectionListeners = new Vector<FIBSelectionListener>();
 		mouseClickListeners = new Vector<FIBMouseClickListener>();
 		viewFactory = new DefaultFIBViewFactory();
+	}
+
+	public void delete() {
+		if (!deleted) {
+			getRootView().delete();
+			// Next for-block should not be necessary because deletion is recursive, but just to be sure
+			for (FIBView<?, ?> view : new ArrayList<FIBView<?, ?>>(views.values())) {
+				view.delete();
+			}
+			if (dataObject instanceof Observable) {
+				((Observable) dataObject).deleteObserver(this);
+			}
+			dataObject = null;
+			deleted = true;
+		}
 	}
 
 	public FIBView<FIBComponent, ?> buildView() {
@@ -137,19 +171,27 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		this.viewFactory = viewFactory;
 	}
 
-	public void registerView(FIBView view) {
+	public void registerView(FIBView<?, ?> view) {
 		views.put(view.getComponent(), view);
 	}
 
-	public void unregisterView(FIBView view) {
+	public void unregisterView(FIBView<?, ?> view) {
 		views.remove(view.getComponent());
 	}
 
-	public FIBView viewForComponent(FIBComponent component) {
+	public FIBView<?, ?> viewForComponent(FIBComponent component) {
 		return views.get(component);
 	}
 
-	public Enumeration<FIBView> getViews() {
+	public FIBView<?, ?> viewForComponent(String componentName) {
+		FIBComponent c = getRootComponent().getComponentNamed(componentName);
+		if (c != null) {
+			return views.get(c);
+		}
+		return null;
+	}
+
+	public Enumeration<FIBView<?, ?>> getViews() {
 		return views.elements();
 	}
 
@@ -205,15 +247,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		}
 	}
 
-	/**
-	 * Force the whole underlying view hierarchy to be recomputed Beware of using this method only when a strong structure modification
-	 * raised, since this execution is really costly
-	 */
-	public void update() {
-		setDataObject(getDataObject(), true);
-	}
-
-	public static FIBController instanciateController(FIBComponent fibComponent) {
+	public static FIBController instanciateController(FIBComponent fibComponent, LocalizedDelegate parentLocalizer) {
 		FIBController returned = null;
 		if (fibComponent.getControllerClass() != null) {
 			try {
@@ -236,11 +270,12 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		if (returned == null) {
 			returned = new FIBController(fibComponent);
 		}
+		returned.setParentLocalizer(parentLocalizer);
 		return returned;
 	}
 
-	public static FIBView makeView(FIBComponent fibComponent) {
-		return makeView(fibComponent, instanciateController(fibComponent));
+	public static FIBView makeView(FIBComponent fibComponent, LocalizedDelegate parentLocalizer) {
+		return makeView(fibComponent, instanciateController(fibComponent, parentLocalizer));
 	}
 
 	public static FIBView makeView(FIBComponent fibComponent, FIBController controller) {
@@ -306,6 +341,15 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 				}
 			}
 		});
+		returned.getDynamicJComponent().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (fibWidget.hasEnterPressedAction() && e.getKeyCode() == KeyEvent.VK_ENTER) {
+					// Detected double-click associated with action
+					fibWidget.getEnterPressedAction().execute(FIBController.this);
+				}
+			}
+		});
 		if (StringUtils.isNotEmpty(fibWidget.getTooltipText())) {
 			returned.getDynamicJComponent().setToolTipText(fibWidget.getTooltipText());
 		}
@@ -321,6 +365,20 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	public void update(Observable o, Object arg) {
 		// System.out.println("Received "+arg);
 		getRootView().updateDataObject(dataObject);
+	}
+
+	public void show() {
+		Window w = retrieveWindow();
+		if (w != null) {
+			w.setVisible(true);
+		}
+	}
+
+	public void hide() {
+		Window w = retrieveWindow();
+		if (w != null) {
+			w.setVisible(false);
+		}
 	}
 
 	private Window retrieveWindow() {
@@ -396,7 +454,38 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	}
 
 	public FIBLocalizedDictionary getLocalizer() {
-		return getRootComponent().retrieveFIBLocalizedDictionary();
+		return getLocalizerForComponent(null);
+	}
+
+	public FIBLocalizedDictionary getLocalizerForComponent(FIBComponent component) {
+		if (getRootComponent() != null) {
+			FIBLocalizedDictionary returned = getRootComponent().retrieveFIBLocalizedDictionary();
+			if (getParentLocalizer() != null) {
+				returned.setParent(getParentLocalizer());
+			}
+			return returned;
+		} else {
+			logger.warning("Could not find localizer");
+			return null;
+		}
+	}
+
+	/**
+	 * Return parent localizer for component localizer
+	 * 
+	 * @return
+	 */
+	public final LocalizedDelegate getParentLocalizer() {
+		return parentLocalizer;
+	}
+
+	/**
+	 * Sets parent localizer for component localizer
+	 * 
+	 * @param parentLocalizer
+	 */
+	public void setParentLocalizer(LocalizedDelegate parentLocalizer) {
+		this.parentLocalizer = parentLocalizer;
 	}
 
 	public void switchToLanguage(Language language) {
@@ -476,9 +565,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 					objectsToAddToSelection.add(o);
 				}
 			}
-			Enumeration<FIBView> en = getViews();
+			Enumeration<FIBView<?, ?>> en = getViews();
 			while (en.hasMoreElements()) {
-				FIBView v = en.nextElement();
+				FIBView<?, ?> v = en.nextElement();
 				if (v.isSelectableComponent() && v.getSelectableComponent() != selectionLeader
 						&& v.getSelectableComponent().synchronizedWithSelection()) {
 					for (Object o : objectsToAddToSelection) {
@@ -498,9 +587,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	public void objectAddedToSelection(Object o) {
 		logger.fine("FIBController: objectAddedToSelection(): " + o);
-		Enumeration<FIBView> en = getViews();
+		Enumeration<FIBView<?, ?>> en = getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				if (v.getSelectableComponent().mayRepresent(o)) {
 					v.getSelectableComponent().objectAddedToSelection(o);
@@ -514,9 +603,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	public void objectRemovedFromSelection(Object o) {
 		logger.fine("FIBController: objectRemovedFromSelection(): " + o);
-		Enumeration<FIBView> en = getViews();
+		Enumeration<FIBView<?, ?>> en = getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				if (v.getSelectableComponent().mayRepresent(o)) {
 					v.getSelectableComponent().objectRemovedFromSelection(o);
@@ -527,9 +616,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	public void selectionCleared() {
 		logger.fine("FIBController: selectionCleared()");
-		Enumeration<FIBView> en = getViews();
+		Enumeration<FIBView<?, ?>> en = getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				v.getSelectableComponent().selectionResetted();
 			}
@@ -646,6 +735,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			if (fibWidget instanceof FIBRadioButtonList) {
 				return new FIBRadioButtonListWidget((FIBRadioButtonList) fibWidget, FIBController.this);
 			}
+			if (fibWidget instanceof FIBCheckboxList) {
+				return new FIBCheckboxListWidget((FIBCheckboxList) fibWidget, FIBController.this);
+			}
 			if (fibWidget instanceof FIBCustom) {
 				return new FIBCustomWidget((FIBCustom) fibWidget, FIBController.this);
 			}
@@ -674,6 +766,17 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	}
 
 	protected void openFIBEditor(final FIBComponent component, MouseEvent event) {
+		if (component.getDefinitionFile() == null) {
+			try {
+				File fibFile = File.createTempFile("FIBComponent", ".fib");
+				component.setDefinitionFile(fibFile.getAbsolutePath());
+				FIBLibrary.save(component, fibFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.warning("Cannot create FIB temp file definition for component, aborting FIB edition");
+				return;
+			}
+		}
 		try {
 			File fibFile = new File(component.getDefinitionFile());
 			if (!fibFile.exists()) {
@@ -713,4 +816,16 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		this.mouseEvent = mouseEvent;
 	}
 
+	/**
+	 * Called when a throwable has been raised during model code invocation. Requires to be overriden, this base implementation just log
+	 * exception
+	 * 
+	 * @param t
+	 * @return true is exception was correctely handled
+	 */
+	public boolean handleException(Throwable t) {
+		logger.warning("Unexpected exception raised: " + t.getMessage());
+		t.printStackTrace();
+		return false;
+	}
 }

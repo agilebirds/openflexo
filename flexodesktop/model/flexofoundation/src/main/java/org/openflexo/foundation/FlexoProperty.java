@@ -67,7 +67,7 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 	public void setName(String name) {
 		this.name = name;
 		setChanged();
-		notifyObservers(new DataModification(-1, "name", null, name));
+		notifyObservers(new DataModification("name", null, name));
 	}
 
 	public String getValue() {
@@ -77,7 +77,7 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 	public void setValue(String value) {
 		this.value = value;
 		setChanged();
-		notifyObservers(new DataModification(-1, "value", null, value));
+		notifyObservers(new DataModification("value", null, value));
 	}
 
 	public FlexoModelObject getOwner() {

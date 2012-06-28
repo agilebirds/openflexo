@@ -24,7 +24,7 @@ import org.openflexo.foundation.DataModification;
 public class MetricsDefinitionAdded extends DataModification {
 
 	public MetricsDefinitionAdded(MetricsDefinition newValue, String propertyName) {
-		super(-1, propertyName, null, newValue);
+		super(propertyName, null, newValue);
 	}
 
 }

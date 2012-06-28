@@ -33,7 +33,9 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.sg.implmodel.CreateTechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.icon.SGIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGCst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -56,9 +58,9 @@ public class CreateTechnologyModuleImplementationInitializer extends ActionIniti
 		return new FlexoActionInitializer<CreateTechnologyModuleImplementation>() {
 			@Override
 			public boolean run(ActionEvent e, CreateTechnologyModuleImplementation action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action, null,
-						true);
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -68,7 +70,7 @@ public class CreateTechnologyModuleImplementationInitializer extends ActionIniti
 		return new FlexoExceptionHandler<CreateTechnologyModuleImplementation>() {
 			@Override
 			public boolean handleException(FlexoException exception, CreateTechnologyModuleImplementation action) {
-				if ((exception instanceof InvalidParametersException) || (exception instanceof TechnologyModuleCompatibilityCheckException)) {
+				if (exception instanceof InvalidParametersException || exception instanceof TechnologyModuleCompatibilityCheckException) {
 					FlexoController.notify(exception.getLocalizedMessage());
 					return true;
 				}

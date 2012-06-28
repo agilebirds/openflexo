@@ -631,8 +631,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 
 		// Code
-
-		logger.info("Updating property " + getName() + " with " + property);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Updating property " + getName() + " with " + property);
+		}
 
 		if (getImplementationType().requiresField()) {
 			try {

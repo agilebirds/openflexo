@@ -47,7 +47,7 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 	public FIBRadioButtonListWidget(FIBRadioButtonList model, FIBController controller) {
 		super(model, controller);
 		buttonGroup = new ButtonGroup();
-		panel = new JPanel(new GridLayout(0, model.getColumns()));
+		panel = new JPanel(new GridLayout(0, model.getColumns(), model.getHGap(), model.getVGap()));
 		panel.setOpaque(false);
 		rebuildRadioButtons();
 		if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
@@ -58,16 +58,21 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 	protected void rebuildRadioButtons() {
 		panel.removeAll();
+		((GridLayout) panel.getLayout()).setColumns(getWidget().getColumns());
+		((GridLayout) panel.getLayout()).setHgap(getWidget().getHGap());
+		((GridLayout) panel.getLayout()).setVgap(getWidget().getVGap());
 		buttonGroup = new ButtonGroup();
 		radioButtonArray = new JRadioButton[getListModel().getSize()];
 		for (int i = 0; i < getListModel().getSize(); i++) {
 			Object object = getListModel().getElementAt(i);
 			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
+			rb.setOpaque(false);
 			rb.addActionListener(new RadioButtonListener(rb, object, i));
 			radioButtonArray[i] = rb;
 			panel.add(rb);
 			buttonGroup.add(rb);
 		}
+		updateFont();
 		panel.validate();
 	}
 

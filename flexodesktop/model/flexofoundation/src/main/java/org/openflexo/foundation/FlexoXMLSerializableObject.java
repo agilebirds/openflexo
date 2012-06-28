@@ -249,7 +249,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 		}
 		// Modified by DVA on June 2006: getBindingModel() cannot be called now. too soon !!
 		try {
-			if ((this instanceof Bindable) && (((Bindable) this).getBindingModel() != null)) {
+			if (this instanceof Bindable && ((Bindable) this).getBindingModel() != null) {
 				if (builder instanceof FlexoBuilder) {
 					((FlexoBuilder) builder).getProject().getAbstractBindingConverter().setBindable((Bindable) this);
 					((FlexoBuilder) builder).getProject().getBindingAssignementConverter().setBindable((Bindable) this);
@@ -318,9 +318,12 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 			// GPO: I really think that this line has absolutely no effect but since it was there before, I leave it
 			((FlexoBuilder<FlexoXMLStorageResource>) builder).isCloner = false;
 		}
+		// Note: we need to clear is modified before setting isDeserializing to false
+		// See method clearIsModified in FlexoProject.
+
+		clearIsModified(true);// we just finished deserializing so all update dates are wrong and should be forgotten
 		isDeserializing = false;
 		isCreatedByCloning = false;
-		clearIsModified(true);// we just finished deserializing so all update dates are wrong and should be forgotten
 		_builder = null;
 	}
 
@@ -361,7 +364,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 		if (getXMLResourceData() == this) {
 			return isSerializing && serializingThread == Thread.currentThread();
 		} else {
-			return ((getXMLResourceData() != null) && (getXMLResourceData().isSerializing()));
+			return getXMLResourceData() != null && getXMLResourceData().isSerializing();
 		}
 	}
 
@@ -387,15 +390,15 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 
 	public Date resourceLastMemoryUpdate() {
 		if (getXMLResourceData() != null) {
-			return (getXMLResourceData().lastMemoryUpdate());
+			return getXMLResourceData().lastMemoryUpdate();
 		} else {
 			return lastMemoryUpdate();
 		}
 	}
 
 	public Date resourceLastUpdate() {
-		if ((getXMLResourceData() != null) && (getXMLResourceData().getFlexoResource() != null)) {
-			return (getXMLResourceData().getFlexoResource().getLastUpdate());
+		if (getXMLResourceData() != null && getXMLResourceData().getFlexoResource() != null) {
+			return getXMLResourceData().getFlexoResource().getLastUpdate();
 		}
 		return null;
 	}
@@ -406,8 +409,8 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 
 	public Date lastMemoryUpdate() {
 		if (lastMemoryUpdate == null) {
-			if ((getXMLResourceData() != null) && (getXMLResourceData() != this)) {
-				lastMemoryUpdate = (getXMLResourceData().lastMemoryUpdate());
+			if (getXMLResourceData() != null && getXMLResourceData() != this) {
+				lastMemoryUpdate = getXMLResourceData().lastMemoryUpdate();
 			}
 		}
 		return lastMemoryUpdate;
@@ -442,7 +445,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 		if (ignoreNotifications) {
 			return;
 		}
-		if ((getXMLResourceData() == this) && (isModified == false) && (getXMLResourceData().getFlexoResource() != null)) {
+		if (getXMLResourceData() == this && isModified == false && getXMLResourceData().getFlexoResource() != null) {
 			// (new Exception("Resource "+getXMLResourceData().getFlexoResource()+" has been modified")).printStackTrace();
 			logger.info(">>>>>>> Resource " + getXMLResourceData().getFlexoResource() + " has been modified");
 			// A resource has been modified, while it's wasn't before
@@ -472,7 +475,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 			if (getLastUpdate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
 			}
-			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastUpdate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastUpdate());
 		}
 		return "???";
 	}
@@ -504,11 +507,11 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 		}
 		synchronized (this) {
 			super.setChanged();
-			if ((!isDeserializing()) && (!isSerializing())) {
+			if (!isDeserializing() && !isSerializing()) {
 				if (propagateModified) {
 					setIsModified();
 				}
-				if ((getXMLResourceData() != null) && (getXMLResourceData() != this)) {
+				if (getXMLResourceData() != null && getXMLResourceData() != this) {
 					// This object is embedded in an XMLResourceData
 					if (propagateModified) {
 						getXMLResourceData().setIsModified();
@@ -537,7 +540,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
 	 */
 	public void notifyRM(RMNotification notification) throws FlexoException {
-		if ((this instanceof FlexoResourceData) && (((FlexoResourceData) this).getFlexoResource() != null)) {
+		if (this instanceof FlexoResourceData && ((FlexoResourceData) this).getFlexoResource() != null) {
 			((FlexoResourceData) this).getFlexoResource().notifyRM(notification);
 		}
 	}
@@ -573,7 +576,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 			return;
 		}
 		super.notifyObservers(dataModification);
-		if ((dataModification instanceof RMNotification) && (getXMLResourceData() != null)) {
+		if (dataModification instanceof RMNotification && getXMLResourceData() != null) {
 			try {
 				getXMLResourceData().notifyRM((RMNotification) dataModification);
 			} catch (FlexoException e) {

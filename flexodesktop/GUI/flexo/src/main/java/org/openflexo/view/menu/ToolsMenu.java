@@ -33,12 +33,13 @@ import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.br.view.BugReportViewerWindow;
-import org.openflexo.br.view.NewBugReport;
+import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
 import org.openflexo.drm.DocResourceManager;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.validation.ValidationFinishedNotification;
@@ -52,10 +53,12 @@ import org.openflexo.foundation.validation.ValidationSecondaryProgressNotificati
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.logging.LoggingConfigurationWindow;
+import org.openflexo.module.AutoSaveService;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ProjectLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
 
@@ -81,48 +84,31 @@ public class ToolsMenu extends FlexoMenu {
 
 	public JMenuItem submitBug;
 
-	public JMenuItem brEditor;
-
 	public JMenuItem repairProject;
 
 	public JMenuItem timeTraveler;
-
-	public LogConfiguratorItem logConfig;
 
 	public SaveDocSubmissionItem saveDocSubmissions;
 
 	public ToolsMenu(FlexoController controller) {
 		super("tools", controller);
 		addSpecificItems();
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
+		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			add(loggingItem = new LoggingItem());
-		}
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			add(localizedEditorItem = new LocalizedEditorItem());
-		}
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			add(rmItem = new ResourceManagerItem());
-		}
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			addSeparator();
 		}
 		add(submitBug = new SubmitBugItem());
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
-			add(brEditor = new BREditorItem());
-		}
-		if ((ModuleLoader.allowsDocSubmission()) && (!ModuleLoader.isAvailable(Module.DRE_MODULE))) {
+		if (getModuleLoader().allowsDocSubmission() && !getModuleLoader().isAvailable(Module.DRE_MODULE)) {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
 		}
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
+		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			addSeparator();
 			add(repairProject = new RepairProjectItem());
 		}
 		add(timeTraveler = new TimeTraveler());
-		addSeparator();
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
-			add(logConfig = new LogConfiguratorItem());
-		}
 	}
 
 	public void addSpecificItems() {
@@ -149,9 +135,8 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			FlexoLoggingManager.showLoggingViewer();
+			FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), getController().getFlexoFrame());
 		}
-
 	}
 
 	// ==========================================================================
@@ -174,7 +159,7 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			FlexoLocalization.showLocalizedEditor();
+			((FlexoMainLocalizer) FlexoLocalization.getMainLocalizer()).showLocalizedEditor(getController().getFlexoFrame());
 		}
 
 	}
@@ -182,30 +167,6 @@ public class ToolsMenu extends FlexoMenu {
 	// ===================================================
 	// ================== Licence Manager ===============
 	// ===================================================
-
-	// ===================================================
-	// ================== Log Config =====================
-	// ===================================================
-
-	public class LogConfiguratorItem extends FlexoMenuItem {
-
-		public LogConfiguratorItem() {
-			super(new LogConfiguratorAction(), "Configure logging...", null, getController(), true);
-		}
-
-	}
-
-	public class LogConfiguratorAction extends AbstractAction {
-		public LogConfiguratorAction() {
-			super();
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			new LoggingConfigurationWindow().askLoggingConfiguration();
-		}
-
-	}
 
 	// ===================================================
 	// ================== Resource Manager ===============
@@ -232,9 +193,13 @@ public class ToolsMenu extends FlexoMenu {
 			if (getController().getProject() == null) {
 				return;
 			}
-			ModuleLoader.getRMWindow(getController().getProject()).show();
+			getProjectLoader().getRMWindow(getController().getProject()).show();
 		}
 
+	}
+
+	private ProjectLoader getProjectLoader() {
+		return ProjectLoader.instance();
 	}
 
 	// ==========================================================================
@@ -256,40 +221,10 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			NewBugReport.newBugReport(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
+			JIRAIssueReportDialog.newBugReport(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
 		}
 
 	}
-
-	// ==========================================================================
-	// ========================== BugReport Editor
-	// ==============================
-	// ==========================================================================
-
-	public class BREditorItem extends FlexoMenuItem {
-
-		public BREditorItem() {
-			super(new BREditorAction(), "bug_reports_editor", null, getController(), true);
-		}
-
-	}
-
-	public class BREditorAction extends AbstractAction {
-		public BREditorAction() {
-			super();
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			new BugReportViewerWindow();
-		}
-
-	}
-
-	// ==========================================================================
-	// ========================== BugReport Editor
-	// ==============================
-	// ==========================================================================
 
 	public class SaveDocSubmissionItem extends FlexoMenuItem {
 
@@ -321,7 +256,7 @@ public class ToolsMenu extends FlexoMenu {
 				}
 
 			});
-			if ((chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) && (chooser.getSelectedFile() != null)) {
+			if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 				try {
 					File savedFile;
 					if (!chooser.getSelectedFile().getName().endsWith(".dsr")) {
@@ -438,17 +373,24 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (ModuleLoader.isTimeTravelingAvailable()) {
-				ModuleLoader.showTimeTravelerDialog();
+			if (getAutoSaveService().isTimeTravelingAvailable()) {
+				getAutoSaveService().showTimeTravelerDialog();
 			} else {
 				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". "
 						+ FlexoLocalization.localizedForKey("would_you_like_to_activate_it_now?"))) {
 					GeneralPreferences.setAutoSaveEnabled(true);
 					FlexoPreferences.savePreferences(true);
-					ModuleLoader.showTimeTravelerDialog();
+					getAutoSaveService().showTimeTravelerDialog();
 				}
 			}
 		}
+	}
 
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
+	private AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
 	}
 }

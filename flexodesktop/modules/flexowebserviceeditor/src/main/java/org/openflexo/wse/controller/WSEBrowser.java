@@ -59,7 +59,6 @@ public class WSEBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.STATUS, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.DEADLINE, BrowserFilterStatus.HIDE);
 
 		setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.HIDE, true);
 		setFilterStatus(BrowserElementType.PORT_REGISTERY, BrowserFilterStatus.HIDE);

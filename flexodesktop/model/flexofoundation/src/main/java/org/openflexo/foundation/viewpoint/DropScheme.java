@@ -21,16 +21,18 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class DropScheme extends EditionScheme {
+public class DropScheme extends AbstractCreationScheme {
 
 	private String target;
+	private ShapePatternRole targetPatternRole;
 
-	public DropScheme() {
-		super();
+	public DropScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -88,19 +90,40 @@ public class DropScheme extends EditionScheme {
 		}
 	}
 
-	public boolean isValidTarget(EditionPattern aTarget) {
-		return getTargetEditionPattern() == aTarget;
+	public boolean targetHasMultipleRoles() {
+		return getTargetEditionPattern() != null && getTargetEditionPattern().getShapePatternRoles().size() > 1;
+	}
 
+	public ShapePatternRole getTargetPatternRole() {
+		return targetPatternRole;
+	}
+
+	public void setTargetPatternRole(ShapePatternRole targetPatternRole) {
+		this.targetPatternRole = targetPatternRole;
+	}
+
+	public boolean isValidTarget(EditionPattern aTarget, PatternRole contextRole) {
+		if (getTargetEditionPattern() != null && getTargetEditionPattern().isAssignableFrom(aTarget)) {
+			if (targetHasMultipleRoles()) {
+				// TODO make proper implementation when role inheritance will be in use !!!
+				return getTargetPatternRole() == null
+						|| (getTargetPatternRole().getPatternRoleName().equals(contextRole.getPatternRoleName()));
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getTargetEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>(EditionScheme.TARGET, getTargetEditionPattern(),
 					this));
 		} else if (_getTarget() != null && !_getTarget().equals("top")) {
-			logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
+			// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
 		}
 	}
@@ -110,9 +133,17 @@ public class DropScheme extends EditionScheme {
 	@Override
 	public BindingModel getBindingModel() {
 		if (bindingModelNeedToBeRecomputed) {
+			bindingModelNeedToBeRecomputed = false;
 			updateBindingModels();
 		}
 		return super.getBindingModel();
+	}
+
+	@Override
+	protected void rebuildActionsBindingModel() {
+		if (!bindingModelNeedToBeRecomputed) {
+			super.rebuildActionsBindingModel();
+		}
 	}
 
 	@Override

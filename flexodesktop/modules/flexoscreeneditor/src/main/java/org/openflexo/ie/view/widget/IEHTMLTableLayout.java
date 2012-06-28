@@ -129,7 +129,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 	}
 
 	private int getParentWidth() {
-		int parentWidth = (_parent.getWidth() == 0 && _parent.getParent() != null) ? _parent.getParent().getWidth() : _parent.getWidth();
+		int parentWidth = _parent.getWidth() == 0 && _parent.getParent() != null ? _parent.getParent().getWidth() : _parent.getWidth();
 		return parentWidth - 2 * BORDER_SIZE;
 	}
 
@@ -139,7 +139,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 			if (widget instanceof IESequenceTR) {
 				int retval = new Double(sum(0, ((ITableRow) widget).getColCount() - 1) * parentWidth).intValue();
 				if (((IESequenceTR) widget).isSubsequence()) {
-					retval -= (2 * ((IESequenceTR) widget).getSequenceDepth());
+					retval -= 2 * ((IESequenceTR) widget).getSequenceDepth();
 				}
 				return retval;
 			} else if (widget instanceof IETDWidget) {
@@ -160,7 +160,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 			IEReusableWidget reusable = ci.getReusableWidget();
 			ITableRow iTableRow = (ITableRow) ((ITableRowReusableWidget) reusable).getRootObject();
 			int retval = new Double(sum(0, iTableRow.getColCount() - 1) * parentWidth).intValue();
-			retval -= (2 * iTableRow.getSequenceDepth());
+			retval -= 2 * iTableRow.getSequenceDepth();
 			return retval;
 
 		}
@@ -179,7 +179,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 				// each border
 			} else if (model instanceof IETDWidget) {
 				Insets i = _parent.getInsets();
-				int retval = new Double(sum(0, ((IETDWidget) model).getXLocation() - 1) * (getParentWidth())).intValue();
+				int retval = new Double(sum(0, ((IETDWidget) model).getXLocation() - 1) * getParentWidth()).intValue();
 				if (retval == 0 && i != null) {
 					return i.left + BORDER_SIZE;
 				}
@@ -256,7 +256,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 			}
 			if (weight > 0.0) {
 				for (i = 0; i < info.width; i++) {
-					int dx = (int) (((diffw) * info.weightX[i]) / weight);
+					int dx = (int) (diffw * info.weightX[i] / weight);
 					info.minWidth[i] += dx;
 					r.width += dx;
 					if (info.minWidth[i] < 0) {
@@ -278,7 +278,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 			}
 			if (weight > 0.0) {
 				for (i = 0; i < info.height; i++) {
-					int dy = (int) (((diffh) * info.weightY[i]) / weight);
+					int dy = (int) (diffh * info.weightY[i] / weight);
 					info.minHeight[i] += dy;
 					r.height += dy;
 					if (info.minHeight[i] < 0) {
@@ -322,7 +322,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 			// r.width += info.minWidth[i];
 			// }
 			r.height = 0;
-			for (i = constraints.tempY; i < (constraints.tempY + constraints.tempHeight); i++) {
+			for (i = constraints.tempY; i < constraints.tempY + constraints.tempHeight; i++) {
 				r.height += info.minHeight[i];
 			}
 
@@ -347,7 +347,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 			 * Otherwise configure it and then make sure it's mapped.
 			 */
 
-			if ((r.width <= 0) || (r.height <= 0)) {
+			if (r.width <= 0 || r.height <= 0) {
 				comp.setBounds(0, 0, 0, 0);
 			} else {
 				if (comp.getX() != r.x || comp.getY() != r.y || comp.getWidth() != r.width || comp.getHeight() != r.height) {
@@ -847,7 +847,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 				}
 				if (curX < 0) {
 					px = 0;
-					for (i = curY; i < (curY + curHeight); i++) {
+					for (i = curY; i < curY + curHeight; i++) {
 						if (xMax[i] > px) {
 							px = xMax[i];
 						}
@@ -859,7 +859,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 					}
 				} else if (curY < 0) {
 					py = 0;
-					for (i = curX; i < (curX + curWidth); i++) {
+					for (i = curX; i < curX + curWidth; i++) {
 						if (yMax[i] > py) {
 							py = yMax[i];
 						}
@@ -883,10 +883,10 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 					r.height = py;
 				}
 				/* Adjust the xMax and yMax arrays */
-				for (i = curX; i < (curX + curWidth); i++) {
+				for (i = curX; i < curX + curWidth; i++) {
 					yMax[i] = py;
 				}
-				for (i = curY; i < (curY + curHeight); i++) {
+				for (i = curY; i < curY + curHeight; i++) {
 					xMax[i] = px;
 				}
 
@@ -970,7 +970,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 					}
 
 					px = 0;
-					for (i = curY; i < (curY + curHeight); i++) {
+					for (i = curY; i < curY + curHeight; i++) {
 						if (xMax[i] > px) {
 							px = xMax[i];
 						}
@@ -989,7 +989,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 					}
 
 					py = 0;
-					for (i = curX; i < (curX + curWidth); i++) {
+					for (i = curX; i < curX + curWidth; i++) {
 						if (yMax[i] > py) {
 							py = yMax[i];
 						}
@@ -1018,10 +1018,10 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 				px = curX + curWidth;
 				py = curY + curHeight;
 
-				for (i = curX; i < (curX + curWidth); i++) {
+				for (i = curX; i < curX + curWidth; i++) {
 					yMax[i] = py;
 				}
-				for (i = curY; i < (curY + curHeight); i++) {
+				for (i = curY; i < curY + curHeight; i++) {
 					xMax[i] = px;
 				}
 
@@ -1099,7 +1099,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 							}
 							for (k = constraints.tempX; weight > 0.0 && k < px; k++) {
 								double wt = r.weightX[k];
-								double dx = (wt * weight_diff) / weight;
+								double dx = wt * weight_diff / weight;
 								r.weightX[k] += dx;
 								weight_diff -= dx;
 								weight -= wt;
@@ -1128,7 +1128,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 							}
 							for (k = constraints.tempX; weight > 0.0 && k < px; k++) {
 								double wt = r.weightX[k];
-								int dx = (int) ((wt * (pixels_diff)) / weight);
+								int dx = (int) (wt * pixels_diff / weight);
 								r.minWidth[k] += dx;
 								pixels_diff -= dx;
 								weight -= wt;
@@ -1165,7 +1165,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 							}
 							for (k = constraints.tempY; weight > 0.0 && k < py; k++) {
 								double wt = r.weightY[k];
-								double dy = (wt * weight_diff) / weight;
+								double dy = wt * weight_diff / weight;
 								r.weightY[k] += dy;
 								weight_diff -= dy;
 								weight -= wt;
@@ -1193,7 +1193,7 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 							}
 							for (k = constraints.tempY; weight > 0.0 && k < py; k++) {
 								double wt = r.weightY[k];
-								int dy = (int) ((wt * (pixels_diff)) / weight);
+								int dy = (int) (wt * pixels_diff / weight);
 								r.minHeight[k] += dy;
 								pixels_diff -= dy;
 								weight -= wt;
@@ -1311,20 +1311,20 @@ public class IEHTMLTableLayout implements LayoutManager2 {
 		} else {
 			r.x -= r.width - constraints.insets.right;
 		}
-		r.width -= (constraints.insets.left + constraints.insets.right);
+		r.width -= constraints.insets.left + constraints.insets.right;
 		r.y += constraints.insets.top;
-		r.height -= (constraints.insets.top + constraints.insets.bottom);
+		r.height -= constraints.insets.top + constraints.insets.bottom;
 
 		diffx = 0;
-		if ((constraints.fill != IEHTMLTableConstraints.HORIZONTAL && constraints.fill != IEHTMLTableConstraints.BOTH)
-				&& (r.width > (constraints.minWidth + constraints.ipadx))) {
+		if (constraints.fill != IEHTMLTableConstraints.HORIZONTAL && constraints.fill != IEHTMLTableConstraints.BOTH
+				&& r.width > constraints.minWidth + constraints.ipadx) {
 			diffx = r.width - (constraints.minWidth + constraints.ipadx);
 			r.width = constraints.minWidth + constraints.ipadx;
 		}
 
 		diffy = 0;
-		if ((constraints.fill != IEHTMLTableConstraints.VERTICAL && constraints.fill != IEHTMLTableConstraints.BOTH)
-				&& (r.height > (constraints.minHeight + constraints.ipady))) {
+		if (constraints.fill != IEHTMLTableConstraints.VERTICAL && constraints.fill != IEHTMLTableConstraints.BOTH
+				&& r.height > constraints.minHeight + constraints.ipady) {
 			diffy = r.height - (constraints.minHeight + constraints.ipady);
 			r.height = constraints.minHeight + constraints.ipady;
 		}

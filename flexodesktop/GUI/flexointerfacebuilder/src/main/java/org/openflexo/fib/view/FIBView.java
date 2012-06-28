@@ -42,6 +42,11 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	private static final Logger logger = Logger.getLogger(FIBView.class.getPackage().getName());
 
+	protected static final int TOP_COMPENSATING_BORDER = 3;
+	protected static final int BOTTOM_COMPENSATING_BORDER = TOP_COMPENSATING_BORDER;
+	protected static final int LEFT_COMPENSATING_BORDER = 5;
+	protected static final int RIGHT_COMPENSATING_BORDER = LEFT_COMPENSATING_BORDER;
+
 	private M component;
 	private FIBController controller;
 	private final FIBComponentDynamicModel dynamicModel;
@@ -68,21 +73,54 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public void delete() {
-		logger.fine("Delete view for component " + getComponent());
-		for (FIBView v : subViews) {
-			v.delete();
+		if (isDeleted) {
+			return;
 		}
-		subViews.clear();
-		subViews = null;
-		isDeleted = true;
+		logger.fine("Delete view for component " + getComponent());
+		if (subViews != null) {
+			for (FIBView v : subViews) {
+				v.delete();
+			}
+			subViews.clear();
+			subViews = null;
+		}
 		if (controller != null) {
 			controller.unregisterView(this);
 		}
 		if (dynamicModel != null) {
 			dynamicModel.delete();
 		}
+		isDeleted = true;
 		component = null;
 		controller = null;
+	}
+
+	public JComponent getJComponentForObject(FIBComponent component) {
+		if (getComponent() == component) {
+			return getJComponent();
+		} else {
+			for (FIBView v : getSubViews()) {
+				JComponent j = v.getJComponentForObject(component);
+				if (j != null) {
+					return j;
+				}
+			}
+		}
+		return null;
+	}
+
+	public JComponent geDynamicJComponentForObject(FIBComponent component) {
+		if (getComponent() == component) {
+			return getDynamicJComponent();
+		} else {
+			for (FIBView v : getSubViews()) {
+				JComponent j = v.geDynamicJComponentForObject(component);
+				if (j != null) {
+					return j;
+				}
+			}
+		}
+		return null;
 	}
 
 	public boolean isDeleted() {
@@ -254,16 +292,20 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	public void notifyDynamicModelChanged() {
 		// System.out.println("notifyDynamicModelChanged()");
-		Iterator<FIBComponent> it = getComponent().getMayAltersIterator();
-		while (it.hasNext()) {
-			FIBComponent c = it.next();
-			logger.fine("Because dynamic model change, now update " + c);
-			FIBView view = getController().viewForComponent(c);
-			if (view != null) {
-				view.updateDataObject(getDataObject());
-			} else {
-				logger.warning("Unexpected null view when retrieving view for " + c);
+		if (getComponent() != null) {
+			Iterator<FIBComponent> it = getComponent().getMayAltersIterator();
+			while (it.hasNext()) {
+				FIBComponent c = it.next();
+				logger.fine("Because dynamic model change, now update " + c);
+				FIBView view = getController().viewForComponent(c);
+				if (view != null) {
+					view.updateDataObject(getDataObject());
+				} else {
+					logger.warning("Unexpected null view when retrieving view for " + c);
+				}
 			}
+		} else {
+			logger.warning("Unexpected null component");
 		}
 	}
 
@@ -288,7 +330,10 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	public abstract void updateFont();
 
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		if (getController().getLocalizerForComponent(getComponent()) != null) {
+			return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent(getComponent()), key);
+		}
+		return key;
 	}
 
 	public boolean isSelectableComponent() {
@@ -371,7 +416,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 			return true;
 		}
 		if (o1 == null) {
-			return (o2 == null);
+			return o2 == null;
 		} else {
 			return o1.equals(o2);
 		}

@@ -17,10 +17,18 @@ public class UtilsIconLibrary {
 	public static final ImageIcon CUSTOM_POPUP_DOWN = new ImageIconResource("Icons/CustomPopupDown.png");
 	public static final ImageIcon CUSTOM_POPUP_DOWN_DISABLED = new ImageIconResource("Icons/CustomPopupDownDisabled.png");
 
+	public static final ImageIcon CUSTOM_POPUP_BUTTON = new ImageIconResource("Icons/CustomPopupButton.png");
+	public static final ImageIcon CUSTOM_POPUP_OPEN_BUTTON = new ImageIconResource("Icons/CustomPopupOpenButton.png");
+
 	public static final ImageIcon ARROW_DOWN = new ImageIconResource("Icons/ArrowDown.gif");
 	public static final ImageIcon ARROW_UP = new ImageIconResource("Icons/ArrowUp.gif");
 	public static final ImageIcon ARROW_LEFT = new ImageIconResource("Icons/ArrowLeft.gif");
 	public static final ImageIcon ARROW_RIGHT = new ImageIconResource("Icons/ArrowRight.gif");
+
+	public static final ImageIcon ARROW_DOWN_2 = new ImageIconResource("Icons/Arrows/Down.png");
+	public static final ImageIcon ARROW_UP_2 = new ImageIconResource("Icons/Arrows/Up.png");
+	public static final ImageIcon ARROW_BOTTOM_2 = new ImageIconResource("Icons/Arrows/Bottom.png");
+	public static final ImageIcon ARROW_TOP_2 = new ImageIconResource("Icons/Arrows/Top.png");
 
 	// Diff icons
 
@@ -78,5 +86,25 @@ public class UtilsIconLibrary {
 	public static final IconMarker RIGHT_MODIFICATION = new IconMarker(RIGHT_MODIFICATION_ICON, 12, 7);
 	public static final IconMarker RIGHT_REMOVAL = new IconMarker(RIGHT_REMOVAL_ICON, 12, 7);
 	public static final IconMarker CONFLICT = new IconMarker(CONFLICT_ICON, 12, 7);
+
+	// Utils icons
+
+	public static final ImageIcon OK_ICON = new ImageIconResource("Icons/Utils/OK.gif");
+	public static final ImageIcon WARNING_ICON = new ImageIconResource("Icons/Utils/Warning.gif");
+	public static final ImageIcon ERROR_ICON = new ImageIconResource("Icons/Utils/Error.gif");
+
+	public static final ImageIcon MOVE_UP_ICON = new ImageIconResource("Icons/Utils/Up.gif");
+	public static final ImageIcon MOVE_DOWN_ICON = new ImageIconResource("Icons/Utils/Down.gif");
+	public static final ImageIcon MOVE_LEFT_ICON = new ImageIconResource("Icons/Utils/Left.gif");
+	public static final ImageIcon MOVE_RIGHT_ICON = new ImageIconResource("Icons/Utils/Right.gif");
+	public static final ImageIcon CLOCK_ICON = new ImageIconResource("Icons/Clock.gif");
+	public static final ImageIcon SEPARATOR_ICON = new ImageIconResource("Icons/Utils/Separator.gif");
+	public static final ImageIcon SEARCH_ICON = new ImageIconResource("Icons/Utils/Search.png");
+	public static final ImageIcon CANCEL_ICON = new ImageIconResource("Icons/Utils/Cancel.png");
+
+	// Flags
+	public static final ImageIcon UK_FLAG = new ImageIconResource("Icons/Lang/uk-flag.gif");
+	public static final ImageIcon FR_FLAG = new ImageIconResource("Icons/Lang/fr-flag.gif");
+	public static final ImageIcon NE_FLAG = new ImageIconResource("Icons/Lang/ne-flag.gif");
 
 }

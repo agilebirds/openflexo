@@ -23,28 +23,45 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.foundation.viewpoint.AddClass;
+import org.openflexo.foundation.viewpoint.AddConnector;
+import org.openflexo.foundation.viewpoint.AddDiagram;
+import org.openflexo.foundation.viewpoint.AddEditionPattern;
+import org.openflexo.foundation.viewpoint.AddIndividual;
+import org.openflexo.foundation.viewpoint.AddShape;
+import org.openflexo.foundation.viewpoint.AddStatement;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
+import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.DeclarePatternRole;
+import org.openflexo.foundation.viewpoint.DeleteAction;
+import org.openflexo.foundation.viewpoint.DeletionScheme;
+import org.openflexo.foundation.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
+import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
+import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ShemaPatternRole;
 import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
@@ -89,6 +106,9 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource ACTION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/ActionSchemeIcon.png");
 	public static final ImageIconResource DROP_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DropSchemeIcon.png");
 	public static final ImageIconResource LINK_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/LinkSchemeIcon.png");
+	public static final ImageIconResource CREATION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/CreationSchemeIcon.png");
+	public static final ImageIconResource DELETION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DeletionSchemeIcon.png");
+	public static final ImageIconResource NAVIGATION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/NavigationSchemeIcon.png");
 	public static final ImageIconResource EDITION_PATTERN_PARAMETER_ICON = new ImageIconResource("Icons/Model/VPM/ParameterIcon.png");
 	public static final ImageIconResource EDITION_PATTERN_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ActionIcon.png");
 	public static final ImageIconResource LOCALIZATION_ICON = new ImageIconResource("Icons/Model/VPM/LocalizationIcon.png");
@@ -96,6 +116,10 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource EXAMPLE_DIAGRAM_ICON = new ImageIconResource("Icons/Model/VPM/ExampleDiagram.png");
 	public static final ImageIconResource CALC_SHAPE_ICON = new ImageIconResource("Icons/Model/VPM/ShapeIcon.png");
 	public static final ImageIconResource CALC_CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
+	public static final ImageIconResource DECLARE_PATTERN_ROLE_ICON = new ImageIconResource("Icons/Model/VPM/DeclarePatternRoleIcon.png");
+	public static final ImageIconResource GRAPHICAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/GraphicalActionIcon.png");
+	public static final ImageIconResource CONDITIONAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ConditionalActionIcon.png");
+	public static final ImageIconResource ITERATION_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/IterationActionIcon.png");
 
 	public static ImageIcon iconForObject(ViewPointLibraryObject object) {
 		if (object instanceof ViewPointFolder) {
@@ -117,6 +141,36 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof ExampleDrawingShema) {
 			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionAction) {
+			if (object instanceof AddClass) {
+				return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+			} else if (object instanceof AddIndividual) {
+				return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
+			} else if (object instanceof AddDiagram) {
+				return EXAMPLE_DIAGRAM_ICON;
+			} else if (object instanceof AddEditionPattern) {
+				return EDITION_PATTERN_ICON;
+			} else if (object instanceof AddShape) {
+				return CALC_SHAPE_ICON;
+			} else if (object instanceof AddConnector) {
+				return CALC_CONNECTOR_ICON;
+			} else if (object instanceof AddStatement) {
+				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
+			} else if (object instanceof DeclarePatternRole) {
+				return DECLARE_PATTERN_ROLE_ICON;
+			} else if (object instanceof ConditionalAction) {
+				return CONDITIONAL_ACTION_ICON;
+			} else if (object instanceof IterationAction) {
+				return ITERATION_ACTION_ICON;
+			} else if (object instanceof DeleteAction) {
+				PatternRole pr = ((DeleteAction) object).getPatternRole();
+				if (pr != null) {
+					ImageIcon baseIcon = iconForObject(pr);
+					return IconFactory.getImageIcon(baseIcon, DELETE);
+				}
+				return DELETE_ICON;
+			} else if (object instanceof GraphicalAction) {
+				return GRAPHICAL_ACTION_ICON;
+			}
 			return EDITION_PATTERN_ACTION_ICON;
 		} else if (object instanceof EditionPattern) {
 			return EDITION_PATTERN_ICON;
@@ -128,35 +182,47 @@ public class VPMIconLibrary extends IconLibrary {
 			return DROP_SCHEME_ICON;
 		} else if (object instanceof LinkScheme) {
 			return LINK_SCHEME_ICON;
+		} else if (object instanceof AbstractCreationScheme) {
+			return CREATION_SCHEME_ICON;
+		} else if (object instanceof NavigationScheme) {
+			return NAVIGATION_SCHEME_ICON;
+		} else if (object instanceof DeletionScheme) {
+			return DELETION_SCHEME_ICON;
 		} else if (object instanceof ViewPoint) {
 			return CALC_ICON;
 		} else if (object instanceof PaletteElementPatternParameter) {
 			return EDITION_PATTERN_PARAMETER_ICON;
 		} else if (object instanceof FlexoModelObjectPatternRole) {
-			switch (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType()) {
-			case Process:
-				return WKFIconLibrary.PROCESS_ICON;
-			case ProcessFolder:
-				return WKFIconLibrary.PROCESS_FOLDER_ICON;
-			case Role:
-				return WKFIconLibrary.ROLE_ICON;
-			case Activity:
-				return WKFIconLibrary.ACTIVITY_NODE_ICON;
-			case Operation:
-				return WKFIconLibrary.OPERATION_NODE_ICON;
-			case Action:
-				return WKFIconLibrary.ACTION_NODE_ICON;
-			case Event:
-				return WKFIconLibrary.EVENT_ICON;
-			default:
+			if (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType() != null) {
+				switch (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType()) {
+				case Process:
+					return WKFIconLibrary.PROCESS_ICON;
+				case ProcessFolder:
+					return WKFIconLibrary.PROCESS_FOLDER_ICON;
+				case Role:
+					return WKFIconLibrary.ROLE_ICON;
+				case Activity:
+					return WKFIconLibrary.ACTIVITY_NODE_ICON;
+				case Operation:
+					return WKFIconLibrary.OPERATION_NODE_ICON;
+				case Action:
+					return WKFIconLibrary.ACTION_NODE_ICON;
+				case Event:
+					return WKFIconLibrary.EVENT_ICON;
+				default:
+					return null;
+				}
+			} else {
 				return null;
 			}
 		} else if (object instanceof ConnectorPatternRole) {
 			return CALC_CONNECTOR_ICON;
 		} else if (object instanceof ShapePatternRole) {
 			return CALC_SHAPE_ICON;
-		} else if (object instanceof ShemaPatternRole) {
+		} else if (object instanceof DiagramPatternRole) {
 			return EXAMPLE_DIAGRAM_ICON;
+		} else if (object instanceof EditionPatternPatternRole) {
+			return EDITION_PATTERN_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
 		} else if (object instanceof ClassPatternRole) {

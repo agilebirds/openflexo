@@ -23,8 +23,8 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
 
 /**
@@ -33,33 +33,41 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
+@Deprecated
+// Use FIBClassSelector instead
 public class OntologyClassSelector extends AbstractBrowserSelector<OntologyClass> {
 
 	protected static final String EMPTY_STRING = "";
 	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
-	private OntologyLibrary ontologyLibrary;
+	private FlexoOntology ontology;
 
 	public OntologyClassSelector(OntologyClass object) {
 		super(null, object, OntologyClass.class);
 	}
 
-	public OntologyClassSelector(OntologyLibrary ontologyLibrary, OntologyClass object) {
+	public OntologyClassSelector(FlexoOntology ontology, OntologyClass object) {
 		super(null, object, OntologyClass.class);
-		setOntologyLibrary(ontologyLibrary);
+		setOntology(ontology);
 	}
 
-	public OntologyClassSelector(OntologyLibrary ontologyLibrary, OntologyClass object, int cols) {
+	public OntologyClassSelector(FlexoOntology ontology, OntologyClass object, int cols) {
 		super(null, object, OntologyClass.class, cols);
-		setOntologyLibrary(ontologyLibrary);
+		setOntology(ontology);
 	}
 
-	public OntologyLibrary getOntologyLibrary() {
-		return ontologyLibrary;
+	@Override
+	public void delete() {
+		super.delete();
+		setOntology(null);
 	}
 
-	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
-		this.ontologyLibrary = ontologyLibrary;
+	public FlexoOntology getOntology() {
+		return ontology;
+	}
+
+	public void setOntology(FlexoOntology ontology) {
+		this.ontology = ontology;
 	}
 
 	@Override
@@ -90,7 +98,7 @@ public class OntologyClassSelector extends AbstractBrowserSelector<OntologyClass
 	protected class OntologyBrowser extends ProjectBrowser {
 
 		protected OntologyBrowser() {
-			super((getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null), false);
+			super(getOntology() != null ? getOntology().getProject() : null, false);
 			init();
 		}
 
@@ -106,8 +114,8 @@ public class OntologyClassSelector extends AbstractBrowserSelector<OntologyClass
 
 		@Override
 		public FlexoModelObject getDefaultRootObject() {
-			if (getOntologyLibrary() != null) {
-				return getOntologyLibrary().getRootClass();
+			if (getOntology() != null) {
+				return getOntology().getRootClass();
 			}
 			return null;
 		}
@@ -119,10 +127,47 @@ public class OntologyClassSelector extends AbstractBrowserSelector<OntologyClass
 
 	@Override
 	public FlexoModelObject getRootObject() {
-		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getRootClass();
+		if (super.getRootObject() != null) {
+			return super.getRootObject();
+		} else if (getOntology() != null) {
+			return getOntology().getRootClass();
 		}
 		return null;
+	}
+
+	public OntologyClass getParentClass() {
+		if (getRootObject() instanceof OntologyClass) {
+			return (OntologyClass) getRootObject();
+		}
+		return null;
+	}
+
+	public void setParentClass(OntologyClass aClass) {
+		super.setRootObject(aClass);
+	}
+
+	public String getParentClassURI() {
+		if (getParentClass() != null) {
+			return getParentClass().getURI();
+		}
+		return null;
+	}
+
+	public void setParentClassURI(String aParentClassURI) {
+		if (getOntology() != null) {
+			OntologyClass ontologyClass = getOntology().getClass(aParentClassURI);
+			if (ontologyClass != null) {
+				setParentClass(ontologyClass);
+			}
+		}
+	}
+
+	@Override
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		if (project != null && getOntology() == null) {
+			setOntology(project.getProjectOntology());
+		}
 	}
 
 }

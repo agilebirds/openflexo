@@ -19,7 +19,6 @@
  */
 package org.openflexo.ie.view.widget;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -34,8 +33,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -43,6 +40,7 @@ import org.openflexo.foundation.ie.dm.CSSChanged;
 import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
 import org.openflexo.foundation.ie.util.TextCSSClass;
 import org.openflexo.foundation.ie.widget.IELabelWidget;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.DoubleClickResponder;
@@ -76,21 +74,21 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
 		layout.setVgap(4);
 		setLayout(layout);
-		_jLabel = new JLabel(getLablelModel().getValue());
-		_jLabel.setFont(getLablelModel().getTextCSSClass() != null ? getLablelModel().getTextCSSClass().font()
-				: TextCSSClass.BLOC_BODY_TITLE.font());
+		_jLabel = new JLabel(getLabelModel().getValue());
+		_jLabel.setFont(getLabelModel().getTextCSSClass() != null ? getLabelModel().getTextCSSClass().font() : TextCSSClass.BLOC_BODY_TITLE
+				.font());
 		_jLabel.setAlignmentY(0.5f);
 		_jLabel.setOpaque(false);
 		TransparentMouseListener tml = new TransparentMouseListener(_jLabel, this);
 		_jLabel.addMouseListener(tml);
 		_jLabel.addMouseMotionListener(tml);
-		if (getLablelModel().getTooltip() != null) {
-			_jLabel.setToolTipText(getLablelModel().getTooltip());
+		if (getLabelModel().getTooltip() != null) {
+			_jLabel.setToolTipText(getLabelModel().getTooltip());
 		}
 		add(_jLabel);
 	}
 
-	public IELabelWidget getLablelModel() {
+	public IELabelWidget getLabelModel() {
 		return getModel();
 	}
 
@@ -99,7 +97,7 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("actionPerformed with " + event);
 		}
-		getLablelModel().setValue(editableLabel.getText());
+		getLabelModel().setValue(editableLabel.getText());
 		remove(editableLabel);
 		add(_jLabel);
 		editableLabel.removeActionListener(this);
@@ -128,19 +126,14 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
 		if (modif instanceof CSSChanged) {
-			_jLabel.setFont(getLablelModel().getTextCSSClass().font());
+			_jLabel.setFont(getLabelModel().getTextCSSClass().font());
 		}
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(BINDING_VALUE_NAME)) {
-				_jLabel.setText(getLablelModel().getValue());
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				if (getParent() != null) {
-					getParent().doLayout();
-					((JComponent) getParent()).repaint();
-				}
-
-			} else if (modif.propertyName().equals("cssClass")) {
-				_jLabel.setFont(getLablelModel().getTextCSSClass().font());
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(BINDING_VALUE_NAME)) {
+				_jLabel.setText(getLabelModel().getValue());
+			} else if (propertyName.equals("cssClass")) {
+				_jLabel.setFont(getLabelModel().getTextCSSClass().font());
 			}
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
@@ -160,9 +153,9 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 			logger.fine("Edit ie label");
 		}
 		labelEditing = true;
-		_jLabelTextField = new JTextField(getLablelModel().getValue());
+		_jLabelTextField = new JTextField(getLabelModel().getValue());
 		_jLabelTextField.setSelectionStart(0);
-		_jLabelTextField.setSelectionEnd(getLablelModel().getValue().length());
+		_jLabelTextField.setSelectionEnd(getLabelModel().getValue().length());
 		_jLabelTextField.setFont(_jLabel.getFont());
 		_jLabelTextField.setBorder(BorderFactory.createEmptyBorder());
 		_jLabelTextField.setBounds(_jLabel.getBounds());
@@ -173,30 +166,7 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 				finalizeEditIELabel();
 			}
 		});
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				// getLablelModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				// getLablelModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				// getLablelModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			public void updateSize() {
-				revalidate();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_jLabelTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
@@ -206,7 +176,7 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		remove(_jLabel);
 		add(_jLabelTextField);
 		_jLabelTextField.requestFocus();
-		if (getLablelModel().getValue() != null && getLablelModel().getValue().endsWith(":")) {
+		if (getLabelModel().getValue() != null && getLabelModel().getValue().endsWith(":")) {
 			_jLabelTextField.select(0, _jLabelTextField.getText().length() - 1);
 		} else {
 			_jLabelTextField.selectAll();
@@ -223,7 +193,7 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		}
 		// _jLabel.setText(_jLabelTextField.getText());
 		if (labelEditing) {
-			getLablelModel().setValue(_jLabelTextField.getText());
+			getLabelModel().setValue(_jLabelTextField.getText());
 		}
 		labelEditing = false;
 		remove(_jLabelTextField);
@@ -231,26 +201,6 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		revalidate();
 		repaint();
 		// getIEController().clearEditedNodeLabel();
-	}
-
-	/**
-	 * Overrides getPreferredSize
-	 * 
-	 * @see javax.swing.JComponent#getPreferredSize()
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
 	}
 
 }

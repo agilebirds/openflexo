@@ -25,9 +25,10 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.Serializable;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
@@ -51,6 +52,8 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.OperationComponentInstance;
 import org.openflexo.foundation.ie.cl.DuplicateFolderNameException;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
+import org.openflexo.foundation.ie.cl.dm.ComponentFolderDeleted;
+import org.openflexo.foundation.ie.cl.dm.ComponentFolderInserted;
 import org.openflexo.foundation.ie.dm.StyleSheetFolderChanged;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.foundation.ie.operator.IEOperator;
@@ -64,6 +67,7 @@ import org.openflexo.foundation.ie.widget.NotEnoughRoomOnTheRight;
 import org.openflexo.foundation.ie.widget.RowIsNotEmpty;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.ie.IEPreferences;
 import org.openflexo.ie.menu.IEMenuBar;
 import org.openflexo.ie.view.ComponentBrowserView;
 import org.openflexo.ie.view.ComponentLibraryBrowserView;
@@ -84,7 +88,7 @@ import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalIEController;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
@@ -190,7 +194,7 @@ public class IEController extends FlexoController implements SelectionManagingCo
 		_dkvEditorBrowser = new DKVEditorBrowser(this);
 		getProject().getFlexoComponentLibrary().addObserver(this);
 		getProject().addObserver(this);
-		registerComponentFolders();
+		registerComponentFolders(getProject().getFlexoComponentLibrary().getRootFolder());
 
 		_componentLibraryBrowserView = new ComponentLibraryBrowserView(this);// new
 		_componentBrowserView = new ComponentBrowserView(this);// new
@@ -201,12 +205,16 @@ public class IEController extends FlexoController implements SelectionManagingCo
 
 		addToPerspectives(COMPONENT_EDITOR_PERSPECTIVE = new ComponentPerspective(this));
 		EXAMPLE_VALUE_PERSPECTIVE = new DefaultValuePerspective(this);
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(EXAMPLE_VALUE_PERSPECTIVE);
 		}
 		addToPerspectives(MENU_EDITOR_PERSPECTIVE = new MenuPerspective(this));
 		addToPerspectives(DKV_EDITOR_PERSPECTIVE = new DKVPerspective(this));
 
+	}
+
+	public boolean currentPaletteIsBasicPalette() {
+		return COMPONENT_EDITOR_PERSPECTIVE.getIEPalette().currentPaletteIsBasicPalette();
 	}
 
 	@Override
@@ -215,6 +223,10 @@ public class IEController extends FlexoController implements SelectionManagingCo
 		if (getIEPaletteWindow() != null && getIEPaletteWindow().getPalette() != null) {
 			getIEPaletteWindow().getPalette().disposePalettes();
 		}
+		unregisterComponentFolders(getProject().getFlexoComponentLibrary().getRootFolder());
+		getProject().getFlexoComponentLibrary().deleteObserver(this);
+		getProject().deleteObserver(this);
+		IEPreferences.reset(this);
 		super.dispose();
 	}
 
@@ -227,13 +239,21 @@ public class IEController extends FlexoController implements SelectionManagingCo
 		return new IEControllerActionInitializer(this);
 	}
 
-	private void registerComponentFolders() {
-		FlexoComponentFolder root = getProject().getFlexoComponentLibrary().getRootFolder();
-		root.addObserver(this);
-		Iterator i = root.getAllSubFolders().iterator();
-		while (i.hasNext()) {
-			FlexoComponentFolder f = (FlexoComponentFolder) i.next();
-			f.addObserver(this);
+	private void registerComponentFolders(FlexoComponentFolder folder) {
+		folder.addObserver(this);
+		if (folder.getSubFolders() != null) {
+			for (FlexoComponentFolder child : folder.getSubFolders()) {
+				registerComponentFolders(child);
+			}
+		}
+	}
+
+	private void unregisterComponentFolders(FlexoComponentFolder folder) {
+		folder.deleteObserver(this);
+		if (folder.getSubFolders() != null) {
+			for (FlexoComponentFolder child : folder.getSubFolders()) {
+				unregisterComponentFolders(child);
+			}
 		}
 	}
 
@@ -461,23 +481,19 @@ public class IEController extends FlexoController implements SelectionManagingCo
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof StyleSheetFolderChanged) {
 			if (!dataModification.oldValue().equals(dataModification.newValue())) {
-				Hashtable loadedComponentViews = getLoadedViewsForPerspective(COMPONENT_EDITOR_PERSPECTIVE);
+				Map<FlexoModelObject, ModuleView> loadedComponentViews = getLoadedViewsForPerspective(COMPONENT_EDITOR_PERSPECTIVE);
 				ComponentInstance current = getCurrentEditedComponent();
 				if (getCurrentEditedComponent() != null) {
 					((IEWOComponentView) loadedComponentViews.get(getCurrentEditedComponent())).deleteModuleView();
 					loadedComponentViews.remove(getCurrentEditedComponent());
 				}
 				// reseting all views
-				Hashtable clone = (Hashtable) loadedComponentViews.clone();
-				Enumeration en = clone.keys();
-				Object k = null;
-				while (en.hasMoreElements()) {
-					k = en.nextElement();
-					Object o = loadedComponentViews.get(k);
+				Map<FlexoModelObject, ModuleView> clone = new HashMap<FlexoModelObject, ModuleView>(loadedComponentViews);
+				for (Entry<FlexoModelObject, ModuleView> e : clone.entrySet()) {
+					ModuleView o = e.getValue();
 					if (o instanceof IEWOComponentView) {
 						((IEWOComponentView) o).deleteModuleView();
 					}
-					loadedComponentViews.remove(k);
 				}
 				setCurrentEditedObjectAsModuleView(null);
 				if (current != null) {
@@ -485,8 +501,10 @@ public class IEController extends FlexoController implements SelectionManagingCo
 				}
 				setCurrentCSSStyle(getProject().getCssSheet().getName());
 			}
-		} else if (dataModification != null && dataModification.modificationType() == DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY) {
-			((FlexoComponentFolder) dataModification.newValue()).addObserver(this);
+		} else if (dataModification instanceof ComponentFolderInserted) {
+			registerComponentFolders(((ComponentFolderInserted) dataModification).getInsertedFolder());
+		} else if (dataModification instanceof ComponentFolderDeleted) {
+			unregisterComponentFolders(((ComponentFolderDeleted) dataModification).getRemovedComponentFolder());
 		}
 	}
 

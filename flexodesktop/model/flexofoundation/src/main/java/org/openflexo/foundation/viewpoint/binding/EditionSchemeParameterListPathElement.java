@@ -1,36 +1,46 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.EditionPatternParameter;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.localization.FlexoLocalization;
 
-public class EditionSchemeParameterListPathElement implements SimplePathElement<Hashtable<?, ?>>, BindingVariable<Hashtable<?, ?>> {
+public class EditionSchemeParameterListPathElement implements SimplePathElement<EditionSchemeAction<?>>,
+		BindingVariable<EditionSchemeAction<?>> {
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameterListPathElement.class.getPackage().getName());
 
 	private EditionScheme editionScheme;
 	private EditionSchemePathElement parent;
-	private Vector<EditionSchemeParameterPathElement> allProperties;
+	private Vector<BindingPathElement> allProperties;
 
 	public EditionSchemeParameterListPathElement(EditionScheme editionScheme, EditionSchemePathElement aParent) {
 		super();
 		parent = aParent;
 		this.editionScheme = editionScheme;
-		allProperties = new Vector<EditionSchemeParameterPathElement>();
+		allProperties = new Vector<BindingPathElement>();
 		for (EditionSchemeParameter p : editionScheme.getParameters()) {
-			allProperties.add(new EditionSchemeParameterPathElement(this, p));
+			if (p instanceof EditionPatternParameter) {
+				allProperties.add(new EditionPatternParameterPathElement(p.getName(), ((EditionPatternParameter) p), p));
+			} else {
+				allProperties.add(new EditionSchemeParameterPathElement(this, p));
+				if (p instanceof ListParameter) {
+					allProperties.add(new ListValueForListParameterPathElement(this, (ListParameter) p));
+				}
+			}
 		}
 	}
 
-	public Vector<EditionSchemeParameterPathElement> getAllProperties() {
+	public Vector<BindingPathElement> getAllProperties() {
 		return allProperties;
 	}
 
@@ -51,7 +61,7 @@ public class EditionSchemeParameterListPathElement implements SimplePathElement<
 
 	@Override
 	public Type getType() {
-		return List.class;
+		return EditionSchemeAction.class;
 	}
 
 	@Override
@@ -70,16 +80,16 @@ public class EditionSchemeParameterListPathElement implements SimplePathElement<
 	}
 
 	@Override
-	public Hashtable<?, ?> getBindingValue(Object target, BindingEvaluationContext context) {
-		if (target instanceof Hashtable) {
-			return (Hashtable) target;
+	public EditionSchemeAction<?> getBindingValue(Object target, BindingEvaluationContext context) {
+		if (target instanceof EditionSchemeAction) {
+			return (EditionSchemeAction<?>) target;
 		}
 		logger.warning("Unexpected " + target);
 		return null;
 	}
 
 	@Override
-	public void setBindingValue(Hashtable<?, ?> value, Object target, BindingEvaluationContext context) {
+	public void setBindingValue(EditionSchemeAction<?> value, Object target, BindingEvaluationContext context) {
 		// Not relevant because not settable
 	}
 

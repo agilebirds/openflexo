@@ -2,6 +2,7 @@ package org.openflexo.fge;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -28,18 +29,18 @@ public class GRBindingFactory extends DefaultBindingFactory {
 
 	private static final Logger logger = Logger.getLogger(GRBindingFactory.class.getPackage().getName());
 
-	private static GRParameter[] allowedPropertiesInBindings = { Parameters.layer, Parameters.text, Parameters.relativeTextX,
-			Parameters.relativeTextY, Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible,
-			ShapeGraphicalRepresentation.Parameters.x, ShapeGraphicalRepresentation.Parameters.y,
-			ShapeGraphicalRepresentation.Parameters.width, ShapeGraphicalRepresentation.Parameters.height,
-			ShapeGraphicalRepresentation.Parameters.minimalWidth, ShapeGraphicalRepresentation.Parameters.minimalHeight,
-			ShapeGraphicalRepresentation.Parameters.maximalWidth, ShapeGraphicalRepresentation.Parameters.maximalHeight };
-
-	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
+	private static GRParameter[] allowedPropertiesInBindings = { Parameters.layer, Parameters.text,
+			ShapeGraphicalRepresentation.Parameters.relativeTextX, ShapeGraphicalRepresentation.Parameters.relativeTextY,
+			Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible, ShapeGraphicalRepresentation.Parameters.x,
+			ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
+			ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.minimalWidth,
+			ShapeGraphicalRepresentation.Parameters.minimalHeight, ShapeGraphicalRepresentation.Parameters.maximalWidth,
+			ShapeGraphicalRepresentation.Parameters.maximalHeight };
 
 	private static Class<? extends GraphicalRepresentation<?>> DECLARING_CLASS;
 
 	static {
+		// Hack to have a grab on the Type Class<? extends GraphicalRepresentation<?>
 		try {
 			DECLARING_CLASS = (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentation.class.getName());
 		} catch (ClassNotFoundException e) {
@@ -171,9 +172,9 @@ public class GRBindingFactory extends DefaultBindingFactory {
 			super(owner, "components", new ParameterizedTypeImpl(Vector.class, GraphicalRepresentation.class));
 			this.owner = owner;
 			components = new Vector<GRBindingFactory.ComponentPathElement>();
-			Iterator<GraphicalRepresentation> it = owner.getRootGraphicalRepresentation().allContainedGRIterator();
+			Iterator<GraphicalRepresentation<?>> it = owner.getRootGraphicalRepresentation().allContainedGRIterator();
 			while (it.hasNext()) {
-				GraphicalRepresentation subComponent = it.next();
+				GraphicalRepresentation<?> subComponent = it.next();
 				components.add(new ComponentPathElement(subComponent.getIdentifier(), subComponent, owner));
 			}
 		}
@@ -388,9 +389,9 @@ public class GRBindingFactory extends DefaultBindingFactory {
 	@Override
 	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father) {
 		if (father instanceof ComponentsBindingVariable) {
-			return EMPTY_LIST;
+			return Collections.emptyList();
 		} else if (father instanceof ComponentPathElement) {
-			return EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		return super.getAccessibleCompoundBindingPathElements(father);
 	}

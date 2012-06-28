@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation;
 
+import org.openflexo.fge.DataBinding;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.cg.version.CGVersionIdentifier;
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
@@ -41,7 +43,6 @@ import org.openflexo.foundation.ie.util.TextFieldFormatType;
 import org.openflexo.foundation.ie.util.TextFieldType;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.utils.FlexoCSS;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -67,11 +68,11 @@ public abstract class FlexoObject extends KVCObject {
 	private static boolean isInitialized = false;
 
 	static {
-		initialize();
+		initialize(true);
 	}
 
-	public static void initialize() {
-		if (!isInitialized) {
+	public static void initialize(boolean force) {
+		if (!isInitialized || force) {
 			initialize(StringEncoder.getDefaultInstance());
 			isInitialized = true;
 		}
@@ -87,7 +88,6 @@ public abstract class FlexoObject extends KVCObject {
 		encoder._addConverter(NodeType.nodeTypeConverter);
 		encoder._addConverter(ActionType.actionTypeConverter);
 		encoder._addConverter(LoopType.loopTypeConverter);
-		encoder._addConverter(FlexoColor.flexoColorConverter);
 		encoder._addConverter(FlexoFont.flexoFontConverter);
 		encoder._addConverter(FlexoCSS.flexoCSSConverter);
 		encoder._addConverter(DropDownType.dropdownTypeConverter);
@@ -115,6 +115,9 @@ public abstract class FlexoObject extends KVCObject {
 		encoder._addConverter(FlexoVersion.converter);
 		encoder._addConverter(CGVersionIdentifier.converter);
 		encoder._addConverter(Duration.converter);
+		encoder._addConverter(DataBinding.CONVERTER);
+		encoder._addConverter(GraphicalRepresentation.POINT_CONVERTER);
+		encoder._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
 	}
 
 	@Override

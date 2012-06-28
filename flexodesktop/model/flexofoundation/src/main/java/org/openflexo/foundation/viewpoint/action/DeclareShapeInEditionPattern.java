@@ -19,9 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint.action;
 
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -44,6 +46,7 @@ import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.FloatParameter;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
@@ -84,7 +87,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return (shape != null && shape.getCalc() != null);
+			return shape != null && shape.getViewPoint() != null;
 		}
 
 	};
@@ -102,14 +105,13 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private String editionPatternName;
 	private OntologyClass concept;
 	private String individualPatternRoleName;
-	private String shapePatternRoleName;
 
 	public boolean isTopLevel = true;
 	public EditionPattern containerEditionPattern;
 	private String dropSchemeName;
 
 	private EditionPattern newEditionPattern;
-	private ShapePatternRole newShapePatternRole;
+	private Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
 
 	public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
@@ -119,12 +121,12 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Push to palette");
+		logger.info("Declare shape in edition pattern");
 		if (isValid()) {
 			switch (primaryChoice) {
 			case CHOOSE_EXISTING_EDITION_PATTERN:
 				if (getPatternRole() != null) {
-					getPatternRole().setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
+					getPatternRole().updateGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
 				}
 				break;
 			case CREATES_EDITION_PATTERN:
@@ -133,14 +135,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 				case BLANK_EDITION_PATTERN:
 
 					// Create new edition pattern
-					newEditionPattern = new EditionPattern();
+					newEditionPattern = new EditionPattern(null);
 					newEditionPattern.setName(getEditionPatternName());
 
 					// Find best URI base candidate
 					PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
 
 					// Create individual pattern role
-					IndividualPatternRole individualPatternRole = new IndividualPatternRole();
+					IndividualPatternRole individualPatternRole = new IndividualPatternRole(null);
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 						individualPatternRole.setOntologicType(getConcept());
@@ -148,19 +150,47 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						newEditionPattern.setPrimaryConceptRole(individualPatternRole);
 					}
 
-					// Create shape pattern role
-					newShapePatternRole = new ShapePatternRole();
-					newShapePatternRole.setPatternRoleName(getShapePatternRoleName());
-					if (mainPropertyDescriptor != null) {
-						newShapePatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
-								+ mainPropertyDescriptor.property.getName()));
-					} else {
-						newShapePatternRole.setReadOnlyLabel(true);
-						newShapePatternRole.setLabel(new ViewPointDataBinding("\"label\""));
+					// Create graphical elements pattern role
+
+					newGraphicalElementPatternRoles = new Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole>();
+
+					GraphicalElementPatternRole primaryRepresentationRole = null;
+					for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
+						if (entry.getSelectThis()) {
+							if (entry.graphicalObject instanceof ExampleDrawingShape) {
+								ShapePatternRole newShapePatternRole = new ShapePatternRole(null);
+								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
+								if (mainPropertyDescriptor != null && entry.isMainEntry()) {
+									newShapePatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
+											+ mainPropertyDescriptor.property.getName()));
+								} else {
+									newShapePatternRole.setReadOnlyLabel(true);
+									if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
+										newShapePatternRole
+												.setLabel(new ViewPointDataBinding("\"" + entry.graphicalObject.getName() + "\""));
+									}
+								}
+								newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
+										.getGraphicalRepresentation()).getText());
+								// We clone here the GR (fixed unfocusable GR bug)
+								newShapePatternRole.setGraphicalRepresentation(((ShapeGraphicalRepresentation<?>) entry.graphicalObject
+										.getGraphicalRepresentation()).clone());
+								// Forces GR to be displayed in view
+								((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
+										.setAllowToLeaveBounds(false);
+								newEditionPattern.addToPatternRoles(newShapePatternRole);
+								if (entry.getParentEntry() != null) {
+									newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles
+											.get(entry.getParentEntry()));
+								}
+								if (entry.isMainEntry()) {
+									primaryRepresentationRole = newShapePatternRole;
+								}
+								newGraphicalElementPatternRoles.put(entry, newShapePatternRole);
+							}
+						}
 					}
-					newShapePatternRole.setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
-					newEditionPattern.addToPatternRoles(newShapePatternRole);
-					newEditionPattern.setPrimaryRepresentationRole(newShapePatternRole);
+					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
 
 					// Create other individual roles
 					Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
@@ -170,7 +200,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								if (e.property instanceof OntologyObjectProperty) {
 									OntologyObject range = e.property.getRange();
 									if (range instanceof OntologyClass) {
-										IndividualPatternRole newPatternRole = new IndividualPatternRole();
+										IndividualPatternRole newPatternRole = new IndividualPatternRole(null);
 										newPatternRole.setPatternRoleName(e.property.getName());
 										newPatternRole.setOntologicType((OntologyClass) range);
 										newEditionPattern.addToPatternRoles(newPatternRole);
@@ -182,7 +212,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					}
 
 					// Create new drop scheme
-					DropScheme newDropScheme = new DropScheme();
+					DropScheme newDropScheme = new DropScheme(null);
 					newDropScheme.setName(getDropSchemeName());
 					newDropScheme.setTopTarget(isTopLevel);
 					if (!isTopLevel) {
@@ -193,12 +223,12 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 						for (PropertyEntry e : propertyEntries) {
-							if (e.selectEntry) {
+							if (e != null && e.selectEntry) {
 								EditionSchemeParameter newParameter = null;
 								if (e.property instanceof OntologyDataProperty) {
 									switch (((OntologyDataProperty) e.property).getDataType()) {
 									case Boolean:
-										newParameter = new CheckboxParameter();
+										newParameter = new CheckboxParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										break;
@@ -206,18 +236,18 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									case Integer:
 									case Long:
 									case Short:
-										newParameter = new IntegerParameter();
+										newParameter = new IntegerParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										break;
 									case Double:
 									case Float:
-										newParameter = new FloatParameter();
+										newParameter = new FloatParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										break;
 									case String:
-										newParameter = new TextFieldParameter();
+										newParameter = new TextFieldParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										break;
@@ -227,7 +257,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								} else if (e.property instanceof OntologyObjectProperty) {
 									OntologyObject range = e.property.getRange();
 									if (range instanceof OntologyClass) {
-										newParameter = new IndividualParameter();
+										newParameter = new IndividualParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										((IndividualParameter) newParameter).setConcept((OntologyClass) range);
@@ -239,7 +269,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 							}
 						}
 
-						URIParameter uriParameter = new URIParameter();
+						URIParameter uriParameter = new URIParameter(null);
 						uriParameter.setName("uri");
 						uriParameter.setLabel("uri");
 						if (mainPropertyDescriptor != null) {
@@ -249,28 +279,28 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 						// Declare pattern role
 						for (IndividualPatternRole r : otherRoles) {
-							DeclarePatternRole action = new DeclarePatternRole();
-							action.setPatternRole(r);
+							DeclarePatternRole action = new DeclarePatternRole(null);
+							action.setAssignation(new ViewPointDataBinding(r.getPatternRoleName()));
 							action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
 							newDropScheme.addToActions(action);
 						}
 
 						// Add individual action
-						AddIndividual newAddIndividual = new AddIndividual();
-						newAddIndividual.setPatternRole(individualPatternRole);
+						AddIndividual newAddIndividual = new AddIndividual(null);
+						newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
 						newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
 						for (PropertyEntry e : propertyEntries) {
 							if (e.selectEntry) {
 								if (e.property instanceof OntologyObjectProperty) {
 									OntologyObject range = e.property.getRange();
 									if (range instanceof OntologyClass) {
-										ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion();
+										ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion(null);
 										propertyAssertion.setOntologyProperty(e.property);
 										propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
 										newAddIndividual.addToObjectAssertions(propertyAssertion);
 									}
 								} else if (e.property instanceof OntologyDataProperty) {
-									DataPropertyAssertion propertyAssertion = new DataPropertyAssertion();
+									DataPropertyAssertion propertyAssertion = new DataPropertyAssertion(null);
 									propertyAssertion.setOntologyProperty(e.property);
 									propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
 									newAddIndividual.addToDataAssertions(propertyAssertion);
@@ -280,16 +310,25 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						newDropScheme.addToActions(newAddIndividual);
 					}
 
-					// Add shape action
-					AddShape newAddShape = new AddShape();
-					newAddShape.setPatternRole(newShapePatternRole);
-					if (isTopLevel) {
-						newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
-					} else {
-						newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TARGET + "."
-								+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+					// Add shape/connector actions
+					boolean mainPatternRole = true;
+					for (GraphicalElementPatternRole graphicalElementPatternRole : newGraphicalElementPatternRoles.values()) {
+						if (graphicalElementPatternRole instanceof ShapePatternRole) {
+							// Add shape action
+							AddShape newAddShape = new AddShape(null);
+							newAddShape.setAssignation(new ViewPointDataBinding(graphicalElementPatternRole.getPatternRoleName()));
+							if (mainPatternRole) {
+								if (isTopLevel) {
+									newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
+								} else {
+									newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TARGET + "."
+											+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+								}
+							}
+							mainPatternRole = false;
+							newDropScheme.addToActions(newAddShape);
+						}
 					}
-					newDropScheme.addToActions(newAddShape);
 
 					// Add new drop scheme
 					newEditionPattern.addToEditionSchemes(newDropScheme);
@@ -304,7 +343,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									OntologyObject range = e.property.getRange();
 									if (range instanceof OntologyClass) {
 										InspectorEntry newInspectorEntry = null;
-										newInspectorEntry = new TextFieldInspectorEntry();
+										newInspectorEntry = new TextFieldInspectorEntry(null);
 										newInspectorEntry.setName(e.property.getName());
 										newInspectorEntry.setLabel(e.label);
 										newInspectorEntry.setIsReadOnly(true);
@@ -315,20 +354,20 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									InspectorEntry newInspectorEntry = null;
 									switch (((OntologyDataProperty) e.property).getDataType()) {
 									case Boolean:
-										newInspectorEntry = new CheckboxInspectorEntry();
+										newInspectorEntry = new CheckboxInspectorEntry(null);
 										break;
 									case Byte:
 									case Integer:
 									case Long:
 									case Short:
-										newInspectorEntry = new IntegerInspectorEntry();
+										newInspectorEntry = new IntegerInspectorEntry(null);
 										break;
 									case Double:
 									case Float:
-										newInspectorEntry = new FloatInspectorEntry();
+										newInspectorEntry = new FloatInspectorEntry(null);
 										break;
 									case String:
-										newInspectorEntry = new TextFieldInspectorEntry();
+										newInspectorEntry = new TextFieldInspectorEntry(null);
 										break;
 									default:
 										logger.warning("Not handled: " + ((OntologyDataProperty) e.property).getDataType());
@@ -346,7 +385,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					}
 
 					// And add the newly created edition pattern
-					getFocusedObject().getCalc().addToEditionPatterns(newEditionPattern);
+					getFocusedObject().getViewPoint().addToEditionPatterns(newEditionPattern);
 
 				default:
 					break;
@@ -361,8 +400,9 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	@Override
 	public boolean isValid() {
-		if (getFocusedObject() == null)
+		if (getFocusedObject() == null) {
 			return false;
+		}
 		switch (primaryChoice) {
 		case CHOOSE_EXISTING_EDITION_PATTERN:
 			return getEditionPattern() != null && getPatternRole() != null;
@@ -370,10 +410,10 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 			switch (patternChoice) {
 			case MAP_SINGLE_INDIVIDUAL:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
-						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && StringUtils.isNotEmpty(getShapePatternRoleName())
+						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && getSelectedEntriesCount() > 0
 						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
 			case BLANK_EDITION_PATTERN:
-				return StringUtils.isNotEmpty(getEditionPatternName()) && StringUtils.isNotEmpty(getShapePatternRoleName())
+				return StringUtils.isNotEmpty(getEditionPatternName()) && getSelectedEntriesCount() > 0
 						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
 			default:
 				break;
@@ -387,8 +427,6 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	@Override
 	public ShapePatternRole getPatternRole() {
-		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN)
-			return newShapePatternRole;
 		return patternRole;
 	}
 
@@ -439,7 +477,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		this.individualPatternRoleName = individualPatternRoleName;
 	}
 
-	public String getShapePatternRoleName() {
+	/*public String getShapePatternRoleName() {
 		if (StringUtils.isEmpty(shapePatternRoleName)) {
 			return "shape";
 		}
@@ -448,12 +486,12 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	public void setShapePatternRoleName(String shapePatternRoleName) {
 		this.shapePatternRoleName = shapePatternRoleName;
-	}
+	}*/
 
 	public String getDropSchemeName() {
 		if (StringUtils.isEmpty(dropSchemeName)) {
 			return "drop" + (StringUtils.isEmpty(getEditionPatternName()) ? "" : getEditionPatternName())
-					+ (isTopLevel ? "AtTopLevel" : (containerEditionPattern != null ? "In" + containerEditionPattern.getName() : ""));
+					+ (isTopLevel ? "AtTopLevel" : containerEditionPattern != null ? "In" + containerEditionPattern.getName() : "");
 		}
 		return dropSchemeName;
 	}
@@ -466,7 +504,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		public OntologyProperty property;
 		public String label;
-		public boolean selectEntry = true;
+		public boolean selectEntry = false;
 
 		public PropertyEntry(OntologyProperty property) {
 			this.property = property;
@@ -479,10 +517,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		public String getRange() {
 			if (property instanceof OntologyDataProperty) {
-				return ((OntologyDataProperty) property).getDataType().name();
+				if (((OntologyDataProperty) property).getDataType() != null) {
+					return ((OntologyDataProperty) property).getDataType().name();
+				}
+				return "";
 			}
-			if (property.getRange() != null)
+			if (property.getRange() != null) {
 				return property.getRange().getName();
+			}
 			return "";
 		}
 	}

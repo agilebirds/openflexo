@@ -376,6 +376,37 @@ public class XMLDecoder {
 	}
 
 	/**
+	 * Decode and returns a newly created object from input stream <code>xmlStream</code> according to mapping <code>xmlMapping</code>.
+	 * 
+	 * @param xmlStream
+	 *            a <code>InputStream</code> value
+	 * @param xmlMapping
+	 *            a <code>XMLMapping</code> value
+	 * @return an <code>XMLSerializable</code> value
+	 * @exception InvalidXMLDataException
+	 *                if an error occurs
+	 * @exception InvalidObjectSpecificationException
+	 *                if an error occurs
+	 * @exception SAXException
+	 *                if an error occurs
+	 * @exception ParserConfigurationException
+	 *                if an error occurs
+	 * @exception IOException
+	 *                if an error occurs
+	 * @exception AccessorInvocationException
+	 *                if an error occurs during accessor invocation
+	 * @throws JDOMException
+	 * @throws InvalidModelException
+	 */
+	public static XMLSerializable decodeObjectWithMappingAndStringEncoder(InputStream xmlStream, XMLMapping xmlMapping,
+			StringEncoder stringEncoder) throws InvalidXMLDataException, InvalidObjectSpecificationException, IOException,
+			AccessorInvocationException, InvalidModelException, JDOMException {
+
+		XMLDecoder decoder = new XMLDecoder(xmlMapping, stringEncoder);
+		return decoder.decodeObject(xmlStream);
+	}
+
+	/**
 	 * Decode and returns a newly created object from input stream <code>xmlStream</code> according to mapping defined in model file
 	 * <code>modelFile</code>.
 	 * 
@@ -600,6 +631,42 @@ public class XMLDecoder {
 			InvalidModelException, AccessorInvocationException, JDOMException {
 
 		XMLDecoder decoder = new XMLDecoder(modelFile, builder);
+		return decoder.decodeObject(xmlStream);
+
+	}
+
+	/**
+	 * Decode and returns a newly created object from input stream with a builder <code>xmlStream</code> according to mapping defined in
+	 * model file <code>modelFile</code>.
+	 * 
+	 * @param modelFile
+	 *            a <code>File</code> value
+	 * @param xmlStream
+	 *            a <code>InputStream</code> value
+	 * @param stringEncoder
+	 *            a <code>StringEncoder</code> value
+	 * @return an <code>XMLSerializable</code> value
+	 * @exception InvalidXMLDataException
+	 *                if an error occurs
+	 * @exception InvalidObjectSpecificationException
+	 *                if an error occurs
+	 * @exception IOException
+	 *                if an error occurs
+	 * @exception SAXException
+	 *                if an error occurs
+	 * @exception ParserConfigurationException
+	 *                if an error occurs
+	 * @exception InvalidModelException
+	 *                if an error occurs
+	 * @exception AccessorInvocationException
+	 *                if an error occurs during accessor invocation
+	 * @throws JDOMException
+	 */
+	public static XMLSerializable decodeObjectWithMappingFile(InputStream xmlStream, File modelFile, Object builder, StringEncoder encoder)
+			throws InvalidXMLDataException, InvalidObjectSpecificationException, IOException, SAXException, ParserConfigurationException,
+			InvalidModelException, AccessorInvocationException, JDOMException {
+
+		XMLDecoder decoder = new XMLDecoder(modelFile, builder, encoder);
 		return decoder.decodeObject(xmlStream);
 
 	}
@@ -1013,7 +1080,12 @@ public class XMLDecoder {
 			if (classNameAttribute != null) {
 				try {
 					returnedObjectClass = Class.forName(classNameAttribute.getValue());
-					returnedObject = instanciateMoreSpecializedObject(modelEntity, returnedObjectClass);
+					if (returnedObjectClass.isAnonymousClass()) {
+						// Anomynous classes will be ignored
+						returnedObject = instanciateNewObject(modelEntity);
+					} else {
+						returnedObject = instanciateMoreSpecializedObject(modelEntity, returnedObjectClass);
+					}
 				} catch (ClassNotFoundException e) {
 					// System.out.println("node qui foire="+node);
 					// throw new InvalidXMLDataException("Cannot find " + classNameAttribute.getValue() + " class.");
@@ -1115,7 +1187,8 @@ public class XMLDecoder {
 
 		if (constructorWithoutParameter == null && constructorWithParameter == null) {
 			throw new InvalidObjectSpecificationException("Class " + modelEntity.getName()
-					+ " is not instanciable because no constructor with or without builder is declared.");
+					+ " is not instanciable because no constructor with or without builder is declared returnedObjectClass="
+					+ returnedObjectClass);
 		}
 
 		Object returned = null;

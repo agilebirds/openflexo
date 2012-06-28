@@ -85,7 +85,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 				g.fillRect(border, border, g.getWidth()/*-2*border*/- 1, HEADER_HEIGHT);
 				g.useForegroundStyle(foreground);
 				g.drawRect(border, border, g.getWidth()/*-2*border*/- 1, HEADER_HEIGHT);
-				g.drawImage(DMEIconLibrary.getIconFor(getEntity()).getImage(), new FGEPoint(ENTITY_BORDER * 2, ENTITY_BORDER * 1.6));
+				g.drawImage(DMEIconLibrary.iconForObject(getEntity()).getImage(), new FGEPoint(ENTITY_BORDER * 2, ENTITY_BORDER * 1.6));
 			};
 
 			@Override

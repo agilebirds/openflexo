@@ -19,19 +19,27 @@
  */
 package org.openflexo.fib.view.widget;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.view.FIBWidgetView;
+import org.openflexo.toolbox.ToolBox;
 
 /**
  * Represents a widget able to edit a Text (more than one line) object
@@ -45,52 +53,69 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	private static final int DEFAULT_COLUMNS = 30;
 	private static final int DEFAULT_ROWS = 5;
 
-	private final JTextArea _textArea;
-	// private final JScrollPane pane;
+	private JPanel panel;
+	private final JTextArea textArea;
+	private JScrollPane scrollPane;
 	boolean validateOnReturn;
 
 	public FIBTextAreaWidget(FIBTextArea model, FIBController controller) {
 		super(model, controller);
-		_textArea = new JTextArea();
+		textArea = new JTextArea();
+		panel = new JPanel(new BorderLayout());
+		panel.setOpaque(false);
+		panel.add(textArea, BorderLayout.CENTER);
 		validateOnReturn = model.validateOnReturn;
 		if (model.columns != null && model.columns > 0) {
-			_textArea.setColumns(model.columns);
+			textArea.setColumns(model.columns);
 		} else {
-			_textArea.setColumns(DEFAULT_COLUMNS);
+			textArea.setColumns(DEFAULT_COLUMNS);
 		}
 		if (model.rows != null && model.rows > 0) {
-			_textArea.setRows(model.rows);
+			textArea.setRows(model.rows);
 		} else {
-			_textArea.setRows(DEFAULT_ROWS);
+			textArea.setRows(DEFAULT_ROWS);
 		}
-		_textArea.setEditable(!isReadOnly());
+		Border border;
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			border = BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
+					RIGHT_COMPENSATING_BORDER);
+		} else {
+			border = BorderFactory.createEmptyBorder(2, 3, 2, 3);
+		}
+		border = BorderFactory.createCompoundBorder(border, BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+		panel.setBorder(border);
+		/*else {
+				textArea.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+				}*/
+
+		textArea.setEditable(!isReadOnly());
 		if (model.text != null) {
-			_textArea.setText(model.text);
+			textArea.setText(model.text);
 		}
 
-		_textArea.getDocument().addDocumentListener(new DocumentListener() {
+		textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 		});
-		_textArea.addKeyListener(new KeyAdapter() {
+		textArea.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -98,12 +123,12 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 				}
 			}
 		});
-		_textArea.addFocusListener(this);
+		textArea.addFocusListener(this);
 
-		_textArea.setAutoscrolls(true);
-		_textArea.setLineWrap(true);
-		_textArea.setWrapStyleWord(true);
-		_textArea.setEnabled(true);
+		textArea.setAutoscrolls(true);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setEnabled(true);
 		/*pane = new JScrollPane(_textArea);
 		
 		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -117,27 +142,30 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	@Override
 	public void focusGained(FocusEvent event) {
 		super.focusGained(event);
-		_textArea.selectAll();
+		textArea.selectAll();
 	}
 
 	@Override
 	public void updateDataObject(Object aDataObject) {
 		super.updateDataObject(aDataObject);
-		_textArea.setEditable(!isReadOnly());
+		textArea.setEditable(!isReadOnly());
 	}
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (notEquals(getValue(), _textArea.getText())) {
+		if (notEquals(getValue(), textArea.getText())) {
 			if (modelUpdating) {
 				return false;
 			}
-			if (getValue() != null && (getValue() + "\n").equals(_textArea.getText())) {
+			if (getValue() != null && (getValue() + "\n").equals(textArea.getText())) {
 				return false;
 			}
 			widgetUpdating = true;
-			_textArea.setText(getValue());
-			widgetUpdating = false;
+			try {
+				textArea.setText(getValue());
+			} finally {
+				widgetUpdating = false;
+			}
 			return true;
 		}
 		return false;
@@ -148,33 +176,59 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), _textArea.getText())) {
-			modelUpdating = true;
+		if (notEquals(getValue(), textArea.getText())) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget() in TextAreaWidget");
 			}
-			setValue(_textArea.getText());
-			modelUpdating = false;
+			modelUpdating = true;
+			try {
+				setValue(textArea.getText());
+			} finally {
+				modelUpdating = false;
+			}
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public JTextArea getJComponent() {
-		return _textArea;
+	public JPanel getJComponent() {
+		return panel;
 	}
 
 	@Override
 	public JTextArea getDynamicJComponent() {
-		return _textArea;
+		return textArea;
+	}
+
+	/**
+	 * Return the effective component to be added to swing hierarchy This component may be the same as the one returned by
+	 * {@link #getJComponent()} or a encapsulation in a JScrollPane
+	 * 
+	 * @return JComponent
+	 */
+	@Override
+	public JComponent getResultingJComponent() {
+		if (getComponent().getUseScrollBar()) {
+			if (scrollPane == null) {
+				scrollPane = new JScrollPane(textArea, getComponent().getVerticalScrollbarPolicy().getPolicy(), getComponent()
+						.getHorizontalScrollbarPolicy().getPolicy());
+				scrollPane.setOpaque(false);
+				scrollPane.getViewport().setOpaque(false);
+				scrollPane.setBorder(BorderFactory.createEmptyBorder());
+			}
+			panel.add(scrollPane);
+			return panel;
+		} else {
+			return getJComponent();
+		}
 	}
 
 	@Override
 	public void updateFont() {
 		super.updateFont();
 		if (getFont() != null) {
-			_textArea.setFont(getFont());
+			textArea.setFont(getFont());
 		}
 	}
 }

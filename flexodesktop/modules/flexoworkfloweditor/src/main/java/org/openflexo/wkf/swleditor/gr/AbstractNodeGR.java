@@ -24,7 +24,6 @@ import java.awt.Point;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -99,9 +98,7 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 				checkAndUpdateDimensionIfRequired();
 			} else if (dataModification instanceof ObjectLocationChanged) {
-				if (!isUpdatingPosition) {
-					handlePositionChanged();
-				}
+				handlePositionChanged();
 			} else if (dataModification instanceof LabelLocationChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
@@ -110,9 +107,17 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	}
 
 	private void handlePositionChanged() {
-		checkAndUpdateLocationIfRequired();
-		notifyObjectMoved();
-		notifyShapeNeedsToBeRedrawn();
+		if (isUpdatingPosition) {
+			return;
+		}
+		isUpdatingPosition = true;
+		try {
+			checkAndUpdateLocationIfRequired();
+			notifyObjectMoved();
+			notifyShapeNeedsToBeRedrawn();
+		} finally {
+			isUpdatingPosition = false;
+		}
 	}
 
 	@Override
@@ -170,12 +175,12 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	}
 
 	@Override
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container) {
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container) {
 		return container instanceof RoleContainerGR;
 	}
 
 	@Override
-	public boolean dragOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container, FGEPoint location) {
+	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location) {
 		if (container instanceof RoleContainerGR) {
 			resetLocationConstrainedArea();
 			getDrawing().setRepresentationRole(((RoleContainerGR) container).getRole(), getNode());

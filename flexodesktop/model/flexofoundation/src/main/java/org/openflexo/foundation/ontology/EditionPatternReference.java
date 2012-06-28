@@ -20,6 +20,7 @@
 package org.openflexo.foundation.ontology;
 
 import java.util.Hashtable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -33,7 +34,9 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
+import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.XMLMapping;
@@ -72,6 +75,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		initializeDeserialization(builder);
 	}
 
+	// Constructor used during deserialization
+	public EditionPatternReference(FlexoWorkflowBuilder builder) {
+		this(builder.getProject());
+		initializeDeserialization(builder);
+	}
+
 	public EditionPatternReference(EditionPatternInstance instance, PatternRole patternRole) {
 		this();
 		_project = instance.getProject();
@@ -84,7 +93,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
-		System.out.println("Called finalizeDeserialization() for EditionPatternReference ");
+		logger.fine("Called finalizeDeserialization() for EditionPatternReference ");
 		for (ActorReference ref : actors.values()) {
 			if (ref instanceof ConceptActorReference) {
 				getProject()._addToPendingEditionPatternReferences(((ConceptActorReference) ref)._getObjectURI(),
@@ -95,7 +104,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 	@Override
 	public void delete() {
-		logger.warning("TODO: implements EditionPatternReference deletion !");
+		if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
+			getEditionPatternInstance().delete();
+		}
 		super.delete();
 	}
 
@@ -114,9 +125,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 				actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement) o, role, this));
 			} else if (o instanceof SubClassStatement) {
 				actors.put(role, new SubClassStatementActorReference((SubClassStatement) o, role, this));
-			} else if (o instanceof ObjectRestrictionStatement) {
+			} /*else if (o instanceof ObjectRestrictionStatement) {
 				actors.put(role, new RestrictionStatementActorReference((ObjectRestrictionStatement) o, role, this));
-			} else {
+				}*/else {
 				actors.put(role, new ModelObjectActorReference(o, role, this));
 			}
 		}
@@ -155,6 +166,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		private EditionPatternReference _patternReference;
 
 		protected ActorReference(FlexoProject project) {
+			super(project);
 			_project = project;
 		}
 
@@ -192,7 +204,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		private String objectURI;
 
 		public ConceptActorReference(OntologyObject o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			object = o;
@@ -207,6 +219,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 		// Constructor used during deserialization
 		public ConceptActorReference(FlexoProcessBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
+		// Constructor used during deserialization
+		public ConceptActorReference(FlexoWorkflowBuilder builder) {
 			super(builder.getProject());
 			initializeDeserialization(builder);
 		}
@@ -226,7 +244,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public FlexoModelObject retrieveObject() {
 			if (object == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				object = getProject().getProjectOntologyLibrary().getOntologyObject(objectURI);
+				object = getProject().getProjectOntology().getOntologyObject(objectURI);
 			}
 			if (object == null) {
 				logger.warning("Could not retrieve object " + objectURI);
@@ -257,7 +275,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String objectURI;
 
 		public ObjectPropertyStatementActorReference(ObjectPropertyStatement o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
@@ -278,6 +296,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public ObjectPropertyStatementActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "object_property_statement_actor_reference";
@@ -293,8 +317,14 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public ObjectPropertyStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
-				OntologyObjectProperty property = getProject().getProjectOntologyLibrary().getObjectProperty(objectPropertyURI);
+				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				if (subject == null) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not find subject with URI " + subjectURI);
+					}
+					return null;
+				}
+				OntologyObjectProperty property = getProject().getProjectOntology().getObjectProperty(objectPropertyURI);
 				statement = subject.getObjectPropertyStatement(property);
 				// logger.info("Found statement: "+statement);
 			}
@@ -312,7 +342,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String value;
 
 		public DataPropertyStatementActorReference(DataPropertyStatement o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
@@ -333,6 +363,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public DataPropertyStatementActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "data_property_statement_actor_reference";
@@ -348,8 +384,8 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public DataPropertyStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
-				OntologyDataProperty property = getProject().getProjectOntologyLibrary().getDataProperty(dataPropertyURI);
+				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				OntologyDataProperty property = getProject().getProjectOntology().getDataProperty(dataPropertyURI);
 				statement = subject.getDataPropertyStatement(property);
 				// logger.info("Found statement: "+statement);
 			}
@@ -361,17 +397,17 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	}
 
 	public static class RestrictionStatementActorReference extends ActorReference {
-		public ObjectRestrictionStatement statement;
-		public String subjectURI;
+		public OntologyRestrictionClass restriction;
+		// public String subjectURI;
 		public String propertyURI;
 		public String objectURI;
 
-		public RestrictionStatementActorReference(ObjectRestrictionStatement o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+		public RestrictionStatementActorReference(OntologyRestrictionClass o, String aPatternRole, EditionPatternReference ref) {
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
-			statement = o;
-			subjectURI = o.getSubject().getURI();
+			restriction = o;
+			// subjectURI = o.getSubject().getURI();
 			objectURI = o.getObject().getURI();
 			propertyURI = o.getProperty().getURI();
 		}
@@ -388,6 +424,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public RestrictionStatementActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "restriction_statement_actor_reference";
@@ -400,21 +442,23 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 
 		@Override
-		public RestrictionStatement retrieveObject() {
-			if (statement == null) {
+		public OntologyRestrictionClass retrieveObject() {
+			if (restriction == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
-				OntologyObject object = getProject().getProjectOntologyLibrary().getOntologyObject(objectURI);
-				OntologyProperty property = getProject().getProjectOntologyLibrary().getProperty(propertyURI);
+				// OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
+				OntologyObject object = getProject().getProjectOntology().getOntologyObject(objectURI);
+				OntologyProperty property = getProject().getProjectOntology().getProperty(propertyURI);
 				if (object instanceof OntologyClass) {
-					statement = subject.getObjectRestrictionStatement(property, (OntologyClass) object);
-					logger.info("Found statement: " + statement);
+					// restriction = subject.getObjectRestrictionStatement(property, (OntologyClass) object);
+					// logger.info("Found restriction: " + restriction);
+					// TODO implement this
+					logger.warning("Not implemented !!!");
 				}
 			}
-			if (statement == null) {
+			if (restriction == null) {
 				logger.warning("Could not retrieve object " + objectURI);
 			}
-			return statement;
+			return restriction;
 		}
 	}
 
@@ -424,7 +468,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String parentURI;
 
 		public SubClassStatementActorReference(SubClassStatement o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
@@ -444,6 +488,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public SubClassStatementActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "sub_class_statement_actor_reference";
@@ -459,8 +509,8 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public SubClassStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
-				OntologyObject parent = getProject().getProjectOntologyLibrary().getOntologyObject(parentURI);
+				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				OntologyObject parent = getProject().getProjectOntology().getOntologyObject(parentURI);
 				statement = subject.getSubClassStatement(parent);
 				logger.info("Found statement: " + statement);
 			}
@@ -495,6 +545,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public ModelObjectActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "model_object_actor_reference";
@@ -523,12 +579,17 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			return _editionPatternInstance;
 		}
 		_editionPatternInstance = getProject().getEditionPatternInstance(this);
+
+		// Warning: this is really important to keep synchro between EPInstance and EPReference
+		if (_editionPatternInstance != null) {
+			_editionPatternInstance.addObserver(this);
+		}
 		return _editionPatternInstance;
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof EditionPatternChanged) {
+		if (dataModification instanceof EditionPatternActorChanged) {
 			update();
 		}
 	}
@@ -564,6 +625,20 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		this.editionPattern = pattern;
 	}
 
+	public ViewPoint getViewPoint() {
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getViewPoint();
+		}
+		return null;
+	}
+
+	public FlexoOntology getViewPointOntology() {
+		if (getViewPoint() != null) {
+			return getViewPoint().getViewpointOntology();
+		}
+		return null;
+	}
+
 	public long getInstanceId() {
 		return instanceId;
 	}
@@ -594,4 +669,19 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		return getEditionPatternInstance().getValue(variable);
 	}
 
+	public String debug() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Reference to EditionPattern with role : " + getPatternRole() + "\n");
+		sb.append("EditionPattern: " + getEditionPatternInstance().getPattern().getName() + "\n");
+		sb.append("Instance: " + instanceId + " hash=" + Integer.toHexString(hashCode()) + "\n");
+		for (String patternRole : actors.keySet()) {
+			FlexoModelObject object = actors.get(patternRole);
+			sb.append("Role: " + patternRole + " : " + object + "\n");
+		}
+		return sb.toString();
+	}
+
+	public boolean isPrimaryRole() {
+		return getPatternRole() != null && getPatternRole().getIsPrimaryRole();
+	}
 }

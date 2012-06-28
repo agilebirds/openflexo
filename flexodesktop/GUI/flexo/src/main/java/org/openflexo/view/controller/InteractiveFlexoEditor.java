@@ -26,8 +26,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -43,13 +44,21 @@ import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoActionUndoInitializer;
 import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.dm.DMObject;
+import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
+import org.openflexo.foundation.wkf.WKFObject;
+import org.openflexo.foundation.ws.WSObject;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
+import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 
 public abstract class InteractiveFlexoEditor implements FlexoEditor {
 
@@ -247,8 +256,36 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public void performPendingActions() {
-		FlexoApplication.flushPendingEvents(true);
+	public <A extends org.openflexo.foundation.action.FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(
+			final A action) throws org.openflexo.foundation.FlexoException {
+		if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
+			ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					try {
+						action.execute();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return null;
+				}
+
+				@Override
+				protected void done() {
+					super.done();
+					if (!action.isEmbedded()) {
+						if (ProgressWindow.hasInstance()) {
+							ProgressWindow.hideProgressWindow();
+						}
+					}
+				}
+			};
+			worker.execute();
+		} else {
+			action.execute();
+		}
 	}
 
 	public abstract boolean isAutoSaveEnabledByDefault();
@@ -277,7 +314,7 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		_undoManager.actionHasBeenPerformed(action, success);
 		if (success) {
 			if (_scenarioRecorder != null) {
-				if (!action.isEmbedded() || (action.getOwnerAction().getExecutionStatus() != ExecutionStatus.EXECUTING_CORE)) {
+				if (!action.isEmbedded() || action.getOwnerAction().getExecutionStatus() != ExecutionStatus.EXECUTING_CORE) {
 					_scenarioRecorder.registerDoneAction(action);
 				}
 			}
@@ -691,6 +728,34 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 
 	@Override
 	public void focusOn(FlexoModelObject object) {
+
+		try {
+			if (object instanceof WKFObject) {
+				if (ModuleLoader.instance().getActiveModule() != Module.WKF_MODULE) {
+					ModuleLoader.instance().switchToModule(Module.WKF_MODULE, getProject());
+				}
+			} else if (object instanceof IEObject) {
+				if (ModuleLoader.instance().getActiveModule() != Module.IE_MODULE) {
+					ModuleLoader.instance().switchToModule(Module.IE_MODULE, getProject());
+				}
+			} else if (object instanceof DMObject) {
+				if (ModuleLoader.instance().getActiveModule() != Module.DM_MODULE) {
+					ModuleLoader.instance().switchToModule(Module.DM_MODULE, getProject());
+				}
+			} else if (object instanceof WSObject) {
+				if (ModuleLoader.instance().getActiveModule() != Module.WSE_MODULE) {
+					ModuleLoader.instance().switchToModule(Module.WSE_MODULE, getProject());
+				}
+			} else if (object instanceof ViewObject) {
+				if (ModuleLoader.instance().getActiveModule() != Module.VE_MODULE) {
+					ModuleLoader.instance().switchToModule(Module.VE_MODULE, getProject());
+				}
+			}
+		} catch (ModuleLoadingException e) {
+			logger.warning("Cannot load module " + e.getModule());
+			e.printStackTrace();
+		}
+
 		// Only interactive editor handle this
 		getActiveModule().getFlexoController().setCurrentEditedObjectAsModuleView(object);
 		if (getActiveModule().getFlexoController() instanceof SelectionManagingController) {

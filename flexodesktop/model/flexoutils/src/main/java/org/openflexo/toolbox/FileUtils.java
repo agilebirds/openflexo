@@ -19,6 +19,8 @@
  */
 package org.openflexo.toolbox;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -29,15 +31,22 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.openflexo.logging.FlexoLogger;
 
 /**
  * Some File utilities
@@ -45,6 +54,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
  * @author sguerin
  */
 public class FileUtils {
+
+	private static final Logger logger = FlexoLogger.getLogger(FileUtils.class.getPackage().getName());
 
 	public static enum CopyStrategy {
 		REPLACE, REPLACE_OLD_ONLY, IGNORE_EXISTING
@@ -394,6 +405,10 @@ public class FileUtils {
 	}
 
 	public static int countFilesInDirectory(File directory, boolean recursive) {
+		return countFilesInDirectory(directory, recursive, null);
+	}
+
+	public static int countFilesInDirectory(File directory, boolean recursive, FileFilter fileFilter) {
 		if (!directory.isDirectory() || !directory.exists()) {
 			return -1;
 		}
@@ -401,6 +416,9 @@ public class FileUtils {
 		int count = 0;
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
+			if (fileFilter != null && !fileFilter.accept(file)) {
+				continue;
+			}
 			if (file.isDirectory()) {
 				if (recursive) {
 					count += countFilesInDirectory(file, recursive);
@@ -771,4 +789,146 @@ public class FileUtils {
 		}
 		return fileName;
 	}
+
+	/**
+	 * An extension to Java's API rename method. Will attempt Java's method of doing the rename, if this fails, this method will then
+	 * attempt to forcibly copy the old file to the new file name, and then delete the old file. (This in appearance makes it look like a
+	 * file rename has occurred.) The method will also attempt to preserve the new file's modification times and permissions to equal that
+	 * of the original file's.
+	 * 
+	 * @param source
+	 *            File
+	 * @param destination
+	 *            File
+	 * @return boolean
+	 * @throws IOException
+	 */
+	public static boolean rename(File source, File destination) throws IOException {
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		try {
+			// First (very important on Windows) delete the destination if it exists (rename will fail on Windows if destination
+			// exists)
+			if (destination.exists()) {
+				destination.delete();
+			}
+			// Do a normal API rename attempt
+			if (source.renameTo(destination)) {
+				return true;
+			}
+			FileUtils.createNewFile(destination);
+			// API rename attempt failed, forcibly copy
+			bis = new BufferedInputStream(new FileInputStream(source));
+			bos = new BufferedOutputStream(new FileOutputStream(destination));
+
+			// Do the copy
+			pipeStreams(bos, bis);
+
+			// Close the files
+			bos.flush();
+
+			// Close the files
+			bis.close();
+			bos.close();
+
+			// Attempt to preserve file modification times
+			destination.setLastModified(source.lastModified());
+			if (!source.canWrite()) {
+				destination.setReadOnly();
+			}
+
+			// Delete the original
+			source.delete();
+
+			bis = null;
+			bos = null;
+			return true;
+		} finally {
+			try {
+				if (bis != null) {
+					bis.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (bos != null) {
+					bos.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void pipeStreams(OutputStream to, InputStream from) throws IOException {
+		BufferedInputStream in = new BufferedInputStream(from);
+		BufferedOutputStream out = new BufferedOutputStream(to);
+		byte[] buffer = new byte[8192];
+		int read;
+		while ((read = in.read(buffer, 0, 8192)) != -1) {
+			out.write(buffer, 0, read);
+		}
+		out.flush();
+	}
+
+	public static String createOrUpdateFileFromURL(URL url, File file) {
+		return createOrUpdateFileFromURL(url, file, null);
+	}
+
+	public static String createOrUpdateFileFromURL(URL url, File file, Map<String, String> headers) {
+		long lastModified = 0;
+		String fileContent = null;
+		if (file.exists()) {
+			lastModified = file.lastModified();
+			try {
+				fileContent = FileUtils.fileContents(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (url != null) {
+			try {
+				URLConnection c = url.openConnection();
+				if (headers != null) {
+					for (Map.Entry<String, String> h : headers.entrySet()) {
+						c.addRequestProperty(h.getKey(), h.getValue());
+					}
+				}
+				if (c instanceof HttpURLConnection) {
+					HttpURLConnection connection = (HttpURLConnection) c;
+					connection.setIfModifiedSince(lastModified);
+					connection.connect();
+					if (connection.getResponseCode() == 200) {
+						fileContent = FileUtils.fileContents(connection.getInputStream(), "UTF-8");
+						FileUtils.saveToFile(file, fileContent);
+					}
+				} else {
+					if (c.getDate() == 0 || c.getDate() > lastModified) {
+						fileContent = FileUtils.fileContents(c.getInputStream(), "UTF-8");
+						FileUtils.saveToFile(file, fileContent);
+					}
+				}
+			} catch (IOException e) {
+				logger.warning("Could not read url " + url);
+				e.printStackTrace();
+
+			}
+		}
+		return fileContent;
+	}
+
+	public static File getDocumentFolder() {
+		File defaultFolder = new File(System.getProperty("user.home"), "Documents");
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			String folder = WinRegistryAccess.getRegistryValue(
+					"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", "Personal",
+					WinRegistryAccess.REG_SZ_TOKEN);
+			if (folder != null) {
+				return new File(folder);
+			}
+		}
+		return defaultFolder;
+	}
+
 }

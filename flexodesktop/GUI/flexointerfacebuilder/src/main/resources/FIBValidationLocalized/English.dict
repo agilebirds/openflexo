@@ -1,5 +1,5 @@
 #English
-#Wed Nov 16 15:29:03 CET 2011
+#Tue May 15 11:12:41 CEST 2012
 'array'_binding_is_not_valid='array' binding is not valid
 'array'_binding_is_not_valid_description='array' binding is not valid description
 'click_action'_binding_is_not_valid='click action' binding is not valid
@@ -24,16 +24,20 @@
 'value_change_acion'_binding_is_not_valid_description='value change acion' binding is not valid description
 'visible'_binding_is_not_valid='visible' binding is not valid
 'visible'_binding_is_not_valid_description='visible' binding is not valid description
+component_($object.toString)_has_a_localized_dictionary_but_is_not_root_component=component_($object.toString)_has_a_localized_dictionary_but_is_not_root_component
 component_($object.toString)_is_declared_as_root_but_does_not_have_any_data_class=Component ($object.toString) is declared as root but does not have any data class
 delete_this_binding=Delete this binding
 disable_dynamic_model_management=Disable dynamic model management
 generate_default_name_\:_($defaultName)=Generate default name \: ($defaultName)
 generate_default_static_list=Generate default static list
 generate_unique_name_\:_($uniqueName)=Generate unique name \: ($uniqueName)
+non_root_component_should_not_have_localized_dictionary=non_root_component_should_not_have_localized_dictionary
+non_root_component_should_not_have_localized_dictionary_description=non_root_component_should_not_have_localized_dictionary_description
 object_($object.name)_has_no_name=Object ($object.name) has no name
 object_($object.toString)_has_duplicated_name=Object ($object.toString) has duplicated name
 object_should_not_have_duplicated_name=Object should not have duplicated name
 object_should_not_have_duplicated_name_description=Object should not have duplicated name description
+remove_extra_dictionary=remove_extra_dictionary
 root_component_should_have_data_class=Root component should have data class
 root_component_should_have_data_class_description=Root component should have data class description
 widget_($object.toString)_declares_managing_dynamic_model_but_does_not_have_a_name=Widget ($object.toString) declares managing dynamic model but does not have a name

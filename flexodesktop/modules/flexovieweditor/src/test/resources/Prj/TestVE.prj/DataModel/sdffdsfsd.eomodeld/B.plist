@@ -1,0 +1,16 @@
+
+{
+    attributes = 
+    ();
+    attributesUsedForLocking = 
+    ();
+    className = B;
+    classProperties = 
+    ();
+    externalName = ENTITY1;
+    name = B;
+    primaryKeyAttributes = 
+    ();
+    relationships = 
+    ();
+}

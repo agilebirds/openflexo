@@ -75,14 +75,65 @@
           <CheckBox selected="false" localize="true" name="Connectordebug" data="GRTab.data.connector.debug" constraints="twocols(location=right;index=17;expandHorizontally=false;expandVertically=false)" />
         </Tab>
         <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="TextTab">
-          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" name="AbsoluteTextX" localize="true" />
-          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" name="AbsoluteTextY" localize="true" />
+          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" name="AbsoluteTextX" localize="true" />
+          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" name="AbsoluteTextY" localize="true" />
         </Tab>
         <Tab index="2" title="Location/Size" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="LocationSizeTab">
           <Label label="layer" localize="true" name="LayerLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
           <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" data="GRTab.data.layer" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" name="Layer" localize="true" />
+        </Tab>
+                <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
+	<Label label="is_selectable" localize="true" name="IsSelectableLabel"
+		constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)"
+		useScrollBar="false" />
+	<Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING"
+		borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11"
+		darkLevel="0"
+		constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+		<CheckBox selected="false" localize="true" name="IsSelectable"
+			data="GRTab.data.isSelectable" useScrollBar="false" />
+		<CheckBox data="GRTab.data.hasSelectedForeground" enable="GRTab.data.isSelectable"
+			selected="true" localize="true" constraints="flow(index=1)" />
+		<Label label="use" localize="true" enable="GRTab.data.isSelectable"
+			constraints="flow(index=2;location=east)" />
+		<Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector"
+			enable="GRTab.data.isSelectable &amp;&amp; GRTab.data.hasSelectedForeground"
+			data="GRTab.data.selectedForeground" constraints="flow(index=3)" />
+		<Label label="cp" enable="GRTab.data.isSelectable" localize="true"
+			constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)"
+			useScrollBar="false" />
+		<CheckBox selected="false" enable="GRTab.data.isSelectable"
+			localize="true" data="GRTab.data.drawControlPointsWhenSelected"
+			constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)"
+			useScrollBar="false" />
+	</Panel>
+	<Label label="is_focusable" localize="true" name="IsFocusableLabel"
+		constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)"
+		useScrollBar="false" />
+	<Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING"
+		borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11"
+		darkLevel="0"
+		constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+		<CheckBox selected="false" localize="true" name="IsFocusable"
+			data="GRTab.data.isFocusable"
+			constraints="flow(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" />
+		<CheckBox data="GRTab.data.hasFocusedForeground" selected="true"
+			localize="true" enable="GRTab.data.isFocusable" constraints="flow(index=1)" />
+		<Label label="use" localize="true" enable="GRTab.data.isFocusable"
+			constraints="flow(index=2;location=east)" />
+		<Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector"
+			enable="GRTab.data.isFocusable &amp;&amp; GRTab.data.hasFocusedForeground"
+			data="GRTab.data.focusedForeground" constraints="flow(index=3)" />
+		<Label label="cp" enable="GRTab.data.isFocusable" localize="true"
+			constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)"
+			useScrollBar="false" />
+		<CheckBox selected="false" enable="GRTab.data.isFocusable"
+			localize="true" data="GRTab.data.drawControlPointsWhenFocused"
+			constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)"
+			useScrollBar="false" />
+	</Panel>
         </Tab>
       </TabPanel>
     </Tab>

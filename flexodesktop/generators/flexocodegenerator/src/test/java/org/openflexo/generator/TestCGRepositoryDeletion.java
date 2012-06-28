@@ -22,6 +22,7 @@ package org.openflexo.generator;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junit.framework.Test;
@@ -132,7 +133,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
@@ -736,7 +737,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		saveProject();
 		OperationComponentJavaFileResource generatedFile = (OperationComponentJavaFileResource) _project.resourceForKey(
 				ResourceType.JAVA_FILE, codeRepository.getName() + "." + OPERATION_COMPONENT_1);
-		assertNull("A generated resource of the deleted repository is supposed to be null after deletion", generatedFile);
+		assertNull("A generated resource of the deleted repository is supposed to be null after deletion: " + generatedFile, generatedFile);
 		assertFalse("The physical directory with Generated code data is supposed to be physically deleted after a delete and save",
 				new File(_projectDirectory, "GeneratedCode/GeneratedCode").exists());
 

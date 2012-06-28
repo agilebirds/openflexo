@@ -88,14 +88,15 @@
     <property name="icon" xmlTag="icon" attribute="YES"/> 
     <property name="tooltip" xmlTag="tooltip" attribute="YES"/> 
     <property name="tooltipText" xmlTag="tooltipText" attribute="YES"/> 
-    <property name="localize" xmlTag="localize" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="localize" xmlTag="localize" attribute="YES"/> 
     <property name="enable" xmlTag="enable" attribute="YES"/> 
     <property name="manageDynamicModel" xmlTag="manageDynamicModel" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="clickAction" xmlTag="clickAction" attribute="YES"/> 
     <property name="doubleClickAction" xmlTag="doubleClickAction" attribute="YES"/> 
     <property name="rightClickAction" xmlTag="rightClickAction" attribute="YES"/> 
+    <property name="enterPressedAction" xmlTag="enterPressedAction" attribute="YES"/> 
     <property name="valueChangedAction" xmlTag="valueChangedAction" attribute="YES"/> 
-  </entity>
+ </entity>
   
   <entity name="org.openflexo.fib.model.FIBLabel" xmlTag="Label"> 
     <property name="label" xmlTag="label" attribute="YES"/> 
@@ -130,6 +131,15 @@
   </entity>
  
   <entity name="org.openflexo.fib.model.FIBRadioButtonList" xmlTag="RadioButtonList"> 
+    <property name="columns" xmlTag="columns" attribute="YES"/> 
+    <property name="HGap" xmlTag="hGap" attribute="YES"/> 
+    <property name="VGap" xmlTag="vGap" attribute="YES"/> 
+  </entity>
+ 
+  <entity name="org.openflexo.fib.model.FIBCheckboxList" xmlTag="CheckboxList"> 
+    <property name="columns" xmlTag="columns" attribute="YES"/> 
+    <property name="HGap" xmlTag="hGap" attribute="YES"/> 
+    <property name="VGap" xmlTag="vGap" attribute="YES"/> 
   </entity>
  
   <entity name="org.openflexo.fib.model.FIBList" xmlTag="List"> 
@@ -145,7 +155,7 @@
   <entity name="org.openflexo.fib.model.FIBTextField" xmlTag="TextField"> 
     <property name="validateOnReturn" xmlTag="validateOnReturn" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="columns" xmlTag="columns" attribute="YES"/> 
-    <property name="passwd" xmlTag="passwd" attribute="YES"/> 
+    <property name="passwd" xmlTag="passwd" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="text" xmlTag="text" attribute="YES"/> 
    </entity>
  
@@ -195,6 +205,8 @@
     <property name="action" xmlTag="action" attribute="YES"/> 
     <property name="buttonType" xmlTag="buttonType" attribute="YES"/> 
     <property name="label" xmlTag="label" attribute="YES"/> 
+    <property name="isDefault" xmlTag="default" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="buttonIcon" xmlTag="buttonIcon" attribute="YES"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBCustom" xmlTag="Custom"> 
@@ -240,6 +252,7 @@
     <property name="filtered" xmlTag="filtered" attribute="YES"/> 
     <property name="defaultVisible" xmlTag="defaultVisible" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
+    <property name="dynamicFont" xmlTag="dynamicFont" attribute="YES"/> 
     <property name="children" type="vector" contains="org.openflexo.fib.model.FIBBrowserElement$FIBBrowserElementChildren"/> 
     <property name="actions" type="vector" contains="org.openflexo.fib.model.FIBBrowserAction"/> 
   </entity>
@@ -247,6 +260,7 @@
   <entity name="org.openflexo.fib.model.FIBBrowserElement$FIBBrowserElementChildren" xmlTag="Children"> 
     <property name="data" xmlTag="data" attribute="YES"/> 
     <property name="visible" xmlTag="visible" attribute="YES"/> 
+    <property name="cast" xmlTag="cast" attribute="YES"/>
   </entity>
 
   <entity name="org.openflexo.fib.model.FIBBrowserAction" abstract="yes"> 
@@ -304,6 +318,8 @@
     <property name="resizable" xmlTag="resizable" attribute="YES"/> 
     <property name="displayTitle" xmlTag="displayTitle" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
+    <property name="color" xmlTag="color" attribute="YES"/> 
+    <property name="bgColor" xmlTag="bgColor" attribute="YES"/> 
     <property name="tooltip" xmlTag="tooltip" attribute="YES"/> 
     <property name="tooltipText" xmlTag="tooltipText" attribute="YES"/> 
     <property name="valueChangedAction" xmlTag="valueChangedAction" attribute="YES"/> 

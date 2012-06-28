@@ -102,6 +102,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 			_controller.SWIMMING_LANE_PERSPECTIVE.removeProcessController(this);
 		}
 		super.delete();
+		getDrawing().delete();
 	}
 
 	@Override
@@ -306,7 +307,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
 		}
 
-		for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+		for (GraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
 			if (gr instanceof WKFObjectGR<?>) {
 				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 			}

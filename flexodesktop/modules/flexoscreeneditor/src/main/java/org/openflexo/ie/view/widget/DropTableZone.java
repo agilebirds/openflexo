@@ -21,7 +21,6 @@ package org.openflexo.ie.view.widget;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -37,12 +36,11 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.ie.view.IEContainer;
 import org.openflexo.ie.view.IEPanel;
 import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IEDTListener;
 import org.openflexo.toolbox.ToolBox;
 
-public class DropTableZone extends IEPanel implements IEContainer, Layoutable {
+public class DropTableZone extends IEPanel implements IEContainer {
 
 	private IEWOComponentView _componentView;
 
@@ -108,36 +106,6 @@ public class DropTableZone extends IEPanel implements IEContainer, Layoutable {
 		removeAll();
 	}
 
-	/**
-	 * Overrides doLayout
-	 * 
-	 * @see java.awt.Container#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		_componentView.notifyAllViewsToHoldTheirNextComputedPreferredSize(this);
-		if (getParent() instanceof Layoutable) {
-			((Layoutable) getParent()).doLayout();
-		}
-		super.doLayout();
-		_componentView.resetAllViewsPreferredSize(this);
-	}
-
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		Component[] c = getComponents();
-		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable) {
-				((Layoutable) c[i]).propagateResize();
-			}
-		}
-	}
-
 	@Override
 	public Dimension getMinimumSize() {
 		return new Dimension(_parent.getWidth() + 5, 24);
@@ -150,17 +118,11 @@ public class DropTableZone extends IEPanel implements IEContainer, Layoutable {
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize() && preferredSize != null) {
-			return preferredSize;
-		}
 		Dimension d;
 		if (_tableView != null) {
 			d = new Dimension(_tableView.getPreferredSize().width, _tableView.getPreferredSize().height + 24);
 		} else {
 			d = super.getPreferredSize();
-		}
-		if (getHoldsNextComputedPreferredSize()) {
-			preferredSize = d;
 		}
 		return d;
 	}
@@ -196,37 +158,6 @@ public class DropTableZone extends IEPanel implements IEContainer, Layoutable {
 	 */
 	public void add(IEHTMLTableWidget widget) {
 		getBlocModel().insertContent(widget);
-	}
-
-	/**
-	 * Overrides getHoldsNextComputedPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#getHoldsNextComputedPreferredSize()
-	 */
-	@Override
-	public boolean getHoldsNextComputedPreferredSize() {
-		return holdsNextComputedPreferredSize;
-	}
-
-	/**
-	 * Overrides resetPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#resetPreferredSize()
-	 */
-	@Override
-	public void resetPreferredSize() {
-		holdsNextComputedPreferredSize = false;
-		preferredSize = null;
-	}
-
-	/**
-	 * Overrides setHoldsNextComputedPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#setHoldsNextComputedPreferredSize()
-	 */
-	@Override
-	public void setHoldsNextComputedPreferredSize() {
-		holdsNextComputedPreferredSize = true;
 	}
 
 	@Override

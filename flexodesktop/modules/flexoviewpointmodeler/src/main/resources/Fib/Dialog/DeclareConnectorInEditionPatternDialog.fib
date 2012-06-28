@@ -35,20 +35,27 @@
     <Label label="ontologic_concept" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
       <LocalizedDictionary />
     </Label>
-    <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="conceptSelector" localize="true" manageDynamicModel="true">
+    <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="conceptSelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.ontologyLibrary" value="data.focusedObject.calc.ontologyLibrary" />
       <Assignment variable="component.defaultHeight" value="200" />
     </Custom>
-    <Label label="new_edition_pattern_name" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+    <Label label="ontologic_property" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 1)">
       <LocalizedDictionary />
     </Label>
-    <TextField columns="7" passwd="false" text="TextField" data="data.editionPatternName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="newEditionPatternName" localize="true">
+    <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="data.objectProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)" name="propertySelector" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.ontologyLibrary" value="data.focusedObject.calc.ontologyLibrary" />
+      <Assignment variable="component.defaultHeight" value="200" />
+    </Custom>
+    <Label label="new_edition_pattern_name" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <TextField columns="7" passwd="false" text="TextField" data="data.editionPatternName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="newEditionPatternName" localize="true">
       <Dependancy componentName="conceptSelector" />
     </TextField>
-    <Label label="properties_to_handle" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
+    <Label label="properties_to_handle" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
       <LocalizedDictionary />
     </Label>
-    <Table iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareConnectorInEditionPattern$PropertyEntry" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DataPropertyAssertionTable" data="data.propertyEntries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=8;insetsBottom=0;insetsLeft=4;insetsRight=4;insetsTop=2;location=right)" visible="(patternChoice.selectedIndex = 0)" font="LucidaGrande,0,11">
+    <Table iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareConnectorInEditionPattern$PropertyEntry" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DataPropertyAssertionTable" data="data.propertyEntries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=10;insetsBottom=0;insetsLeft=4;insetsRight=4;insetsTop=2;location=right)" visible="(patternChoice.selectedIndex = 0)" font="LucidaGrande,0,11">
       <CheckBoxColumn data="iterator.selectEntry" title="" columnWidth="25" resizable="false" displayTitle="false" name="checkbox" />
       <IconColumn data="controller.iconForObject(iterator.property)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
       <CustomColumn componentClassName="org.openflexo.components.widget.OntologyPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.property" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
@@ -64,32 +71,38 @@
       <CustomAction method="data.selectNoneProperties()" name="select_none" />
       <Dependancy componentName="conceptSelector" />
     </Table>
-    <Label label="individual_pattern_role_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
+    <Label label="individual_pattern_role_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
       <LocalizedDictionary />
     </Label>
-    <TextField columns="7" passwd="false" text="TextField" data="data.individualPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="individualPatternRoleName" localize="true">
+    <TextField columns="7" passwd="false" text="TextField" data="data.individualPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="individualPatternRoleName" localize="true">
       <Dependancy componentName="conceptSelector" />
     </TextField>
-    <Label label="connector_pattern_role_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+    <Label label="property_statement_pattern_role_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 1)">
       <LocalizedDictionary />
     </Label>
-    <TextField columns="7" passwd="false" text="TextField" data="data.connectorPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="connectorPatternRoleName" localize="true" />
-    <Label label="from_target" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+    <TextField columns="7" passwd="false" text="TextField" data="data.objectPropertyStatementPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)" name="propertyStatementPatternRoleName" localize="true">
+      <Dependancy componentName="propertySelector" />
+    </TextField>
+    <Label label="connector_pattern_role_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
-    <DropDown format="object.name" localize="true" name="fromDropDown" data="data.fromEditionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" list="data.focusedObject.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
+    <TextField columns="7" passwd="false" text="TextField" data="data.connectorPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="connectorPatternRoleName" localize="true" />
+    <Label label="from_target" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name" localize="true" name="fromDropDown" data="data.fromEditionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" list="data.focusedObject.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </DropDown>
-    <Label label="to_target" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+    <Label label="to_target" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
-    <DropDown format="object.name" localize="true" name="toDropDown" data="data.toEditionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" list="data.focusedObject.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
+    <DropDown format="object.name" localize="true" name="toDropDown" data="data.toEditionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" list="data.focusedObject.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </DropDown>
-    <Label label="drop_scheme_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+    <Label label="drop_scheme_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
-    <TextField columns="7" passwd="false" text="TextField" data="data.linkSchemeName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true">
+    <TextField columns="7" passwd="false" text="TextField" data="data.linkSchemeName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true">
       <Dependancy componentName="fromDropDown" />
       <Dependancy componentName="conceptSelector" />
       <Dependancy componentName="toDropDown" />
@@ -106,6 +119,8 @@
       <Dependancy componentName="conceptSelector" />
       <Dependancy componentName="fromDropDown" />
       <Dependancy componentName="toDropDown" />
+      <Dependancy componentName="propertyStatementPatternRoleName" />
+      <Dependancy componentName="propertySelector" />
     </Button>
     <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
   </Panel>

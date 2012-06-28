@@ -28,7 +28,7 @@ import org.openflexo.foundation.dkv.Value;
 public class ValueAdded extends DKVDataModification {
 
 	public ValueAdded(Value newValue) {
-		super(-1, "values", null, newValue);
+		super("values", null, newValue);
 	}
 
 }

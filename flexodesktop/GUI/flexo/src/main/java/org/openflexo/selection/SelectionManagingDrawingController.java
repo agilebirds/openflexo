@@ -21,8 +21,8 @@ package org.openflexo.selection;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -60,6 +60,15 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		}
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		if (_selectionManager != null) {
+			_selectionManager.removeFromSelectionListeners(this);
+		}
+		_selectionManager = null;
+	}
+
 	public SelectionManager getSelectionManager() {
 		return _selectionManager;
 	}
@@ -75,7 +84,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void setSelectedObjects(List<? extends GraphicalRepresentation> someSelectedObjects) {
+	public void setSelectedObjects(List<? extends GraphicalRepresentation<?>> someSelectedObjects) {
 		if (_selectionManager != null) {
 			_selectionManager.resetSelection();
 		}
@@ -83,11 +92,11 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void addToSelectedObjects(GraphicalRepresentation anObject) {
+	public void addToSelectedObjects(GraphicalRepresentation<?> anObject) {
 		// logger.info("_selectionManager="+_selectionManager);
 		// logger.info("anObject.getDrawable()="+anObject.getDrawable());
 		if (_selectionManager != null) {
-			for (FlexoModelObject o : (Vector<FlexoModelObject>) _selectionManager.getSelection().clone()) {
+			for (FlexoModelObject o : new ArrayList<FlexoModelObject>(_selectionManager.getSelection())) {
 				if (!mayRepresent(o)) {
 					_selectionManager.removeFromSelected(o);
 				}
@@ -103,9 +112,9 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void removeFromSelectedObjects(GraphicalRepresentation anObject) {
+	public void removeFromSelectedObjects(GraphicalRepresentation<?> anObject) {
 		if (_selectionManager != null) {
-			for (FlexoModelObject o : (Vector<FlexoModelObject>) _selectionManager.getSelection().clone()) {
+			for (FlexoModelObject o : new ArrayList<FlexoModelObject>(_selectionManager.getSelection())) {
 				if (!mayRepresent(o)) {
 					_selectionManager.removeFromSelected(o);
 				}
@@ -157,7 +166,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 						return false;
 					}
 					FlexoModelObject o = (FlexoModelObject) graphicalRepresentation.getDrawable();
-					SelectionManager selectionManager = ((SelectionManagingDrawingController) controller).getSelectionManager();
+					SelectionManager selectionManager = ((SelectionManagingDrawingController<?>) controller).getSelectionManager();
 					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 						if (!selectionManager.selectionContains(o)) {
 							if (selectionManager.getSelectionSize() < 2) {

@@ -22,6 +22,7 @@ package org.openflexo.view.controller;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
 
 import org.openflexo.Flexo;
@@ -33,28 +34,58 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.ontology.OntologyFolder;
+import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
+import org.openflexo.icon.DEIconLibrary;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 
+/**
+ * Represents the controller of a FIBComponent in Openflexo graphical context (at this time, Swing)<br>
+ * Extends FIBController by supporting FlexoController and icon management for Openflexo objects
+ * 
+ * 
+ * @author sylvain
+ * 
+ * @param <T>
+ */
 public class FlexoFIBController<T> extends FIBController<T> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(FlexoFIBController.class.getPackage().getName());
 
 	private FlexoController controller;
 
+	public static final ImageIcon ARROW_DOWN = UtilsIconLibrary.ARROW_DOWN_2;
+	public static final ImageIcon ARROW_UP = UtilsIconLibrary.ARROW_UP_2;
+	public static final ImageIcon ARROW_BOTTOM = UtilsIconLibrary.ARROW_BOTTOM_2;
+	public static final ImageIcon ARROW_TOP = UtilsIconLibrary.ARROW_TOP_2;
+
+	public static final ImageIcon ONTOLOGY_CLASS_ICON = OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+	public static final ImageIcon ONTOLOGY_INDIVIDUAL_ICON = OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
+	public static final ImageIcon ONTOLOGY_DATA_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+	public static final ImageIcon ONTOLOGY_OBJECT_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
+	public static final ImageIcon ONTOLOGY_ANNOTATION_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_ANNOTATION_PROPERTY_ICON;
+
 	public FlexoFIBController(FIBComponent component) {
 		super(component);
+		// Default parent localizer is the main localizer
+		setParentLocalizer(FlexoLocalization.getMainLocalizer());
 	}
 
 	public FlexoFIBController(FIBComponent component, FlexoController controller) {
@@ -124,14 +155,22 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
+		} else if (object instanceof DMObject) {
+			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibraryObject) {
 			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
 		} else if (object instanceof AbstractViewObject) {
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
+		} else if (object instanceof OntologyLibrary) {
+			return OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON;
+		} else if (object instanceof OntologyFolder) {
+			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof AbstractOntologyObject) {
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
+		} else if (object instanceof TOCObject) {
+			return DEIconLibrary.iconForObject((TOCObject) object);
 		}
-		logger.warning("Sorry, no icon defined for " + object + (object != null ? object.getClass() : ""));
+		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
 	}
 
@@ -146,4 +185,57 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		super.openFIBEditor(component, event);
 		ProgressWindow.hideProgressWindow();
 	}
+
+	/**
+	 * Called when a throwable has been raised during model code invocation.
+	 * 
+	 * @param t
+	 * @return true is exception was correctely handled
+	 */
+	@Override
+	public boolean handleException(Throwable t) {
+		if (t instanceof InvalidNameException) {
+			FlexoController.showError(FlexoLocalization.localizedForKey("invalid_name") + " : "
+					+ ((InvalidNameException) t).getExplanation());
+			return true;
+		}
+		return super.handleException(t);
+	}
+
+	public ImageIcon getArrowDown() {
+		return ARROW_DOWN;
+	}
+
+	public ImageIcon getArrowUp() {
+		return ARROW_UP;
+	}
+
+	public ImageIcon getArrowTop() {
+		return ARROW_TOP;
+	}
+
+	public ImageIcon getArrowBottom() {
+		return ARROW_BOTTOM;
+	}
+
+	public ImageIcon getOntologyClassIcon() {
+		return ONTOLOGY_CLASS_ICON;
+	}
+
+	public ImageIcon getOntologyIndividualIcon() {
+		return ONTOLOGY_INDIVIDUAL_ICON;
+	}
+
+	public ImageIcon getOntologyDataPropertyIcon() {
+		return ONTOLOGY_DATA_PROPERTY_ICON;
+	}
+
+	public ImageIcon getOntologyObjectPropertyIcon() {
+		return ONTOLOGY_OBJECT_PROPERTY_ICON;
+	}
+
+	public ImageIcon getOntologyAnnotationPropertyIcon() {
+		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
+	}
+
 }

@@ -19,14 +19,10 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
+import java.util.Set;
 import java.util.logging.Logger;
-
-import org.openflexo.foundation.dm.JarLoader.JarClassLoader;
 
 import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -40,8 +36,11 @@ public class DMClassLibrary extends ClassLibrary {
 	private Hashtable<String, JavaClass> _javaClassCache;
 	private HashSet<Type> _unresolvedTypes;
 
+	private DMModel dataModel;
+
 	public DMClassLibrary(DMModel dataModel) {
 		super(null);
+		this.dataModel = dataModel;
 		_javaClassCache = new Hashtable<String, JavaClass>();
 		addDefaultLoader();
 		_cachedTypes = new Hashtable<JavaClassParent, Hashtable<String, Hashtable<Integer, Type>>>();
@@ -58,6 +57,11 @@ public class DMClassLibrary extends ClassLibrary {
 		_cachedTypes = new Hashtable<JavaClassParent, Hashtable<String, Hashtable<Integer, Type>>>();
 		_unresolvedTypes = new HashSet<Type>();
 		_unresolvedClassName = new HashSet<String>();
+	}
+
+	public void close() {
+		clearLibrary();
+		dataModel = null;
 	}
 
 	@Override
@@ -136,61 +140,23 @@ public class DMClassLibrary extends ClassLibrary {
 		}
 	}
 
-	private boolean potentiallyModifyingCL = false;
-	private Vector<ClassLoader> _classLoaderBeingAddedDuringClassResolution = new Vector<ClassLoader>();
-
-	private HashSet<String> _unresolvedClassName;
+	private Set<String> _unresolvedClassName;
 
 	@Override
-	public synchronized Class getClass(String className) {
+	public synchronized Class<?> getClass(String className) {
 		if (_unresolvedClassName.contains(className)) {
 			return null;
 		}
-		potentiallyModifyingCL = true;
-		Class returned = super.getClass(className);
+		Class<?> returned = super.getClass(className);
 		if (returned == null) {
-			for (JarClassLoader cl : loadedJarClassLoaders) {
-				// Don't search in all jars since we are already iterating
-				returned = cl.findClass(className, false);
-				if (returned != null) {
-					break;
-				}
-			}
+			returned = dataModel.getProject().getJarClassLoader().findClass(className);
 		}
 		if (returned != null) {
 			// logger.info("Found "+returned+" in "+returned.getClassLoader());
 		} else {
 			_unresolvedClassName.add(className);
 		}
-		potentiallyModifyingCL = false;
-		if (_classLoaderBeingAddedDuringClassResolution.size() > 0) {
-			for (ClassLoader cl : _classLoaderBeingAddedDuringClassResolution) {
-				addClassLoader(cl);
-			}
-			_classLoaderBeingAddedDuringClassResolution.clear();
-		}
 		return returned;
 	}
 
-	private transient List<JarClassLoader> loadedJarClassLoaders = new ArrayList<JarClassLoader>();
-
-	@Override
-	public synchronized boolean contains(String className) {
-		return super.contains(className);
-	}
-
-	@Override
-	public synchronized void addClassLoader(ClassLoader classLoader) {
-		if (potentiallyModifyingCL) {
-			_classLoaderBeingAddedDuringClassResolution.add(classLoader);
-		} else {
-			if (classLoader instanceof JarClassLoader) {
-				loadedJarClassLoaders.add((JarClassLoader) classLoader);
-			} else {
-				super.addClassLoader(classLoader);
-			}
-			// Some unresolved classes may become resolved !
-			_unresolvedClassName.clear();
-		}
-	}
 }

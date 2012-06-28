@@ -80,6 +80,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
 import org.openflexo.module.InteractiveFlexoResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
@@ -139,9 +140,9 @@ public class GeneratorController extends FlexoController implements SelectionMan
 	public GeneratorController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
 		super(projectEditor, module);
 		_CGGeneratedResourceModifiedHook = new CGGeneratedResourceModifiedHook();
-		if (ModuleLoader.getFlexoResourceUpdateHandler() != null) {
+		if (ProjectLoader.instance().getFlexoResourceUpdateHandler() != null) {
 			logger.warning("Cette procedure n'est pas correcte, il faut passer par le ModuleLoader, remember me (sylvain)");
-			ModuleLoader.getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+			ProjectLoader.instance().getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		}
 
 		createFooter();
@@ -160,6 +161,10 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		}
 
 		_generatorPanels = new Hashtable();
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	/**
@@ -359,7 +364,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 			statusCountPanel.add(conflictsLabel);
 			statusCountPanel.add(new JLabel(UtilsIconLibrary.CONFLICT_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			needsMemoryGenerationLabel = new JLabel("1");
 			needsMemoryGenerationLabel.setFont(FlexoCst.MEDIUM_FONT);
@@ -371,7 +376,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 			statusCountPanel.add(needsReinjectionLabel);
 			statusCountPanel.add(new JLabel(GeneratorIconLibrary.NEEDS_MODEL_REINJECTION_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			errorsLabel = new JLabel("0");
 			errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
@@ -380,14 +385,14 @@ public class GeneratorController extends FlexoController implements SelectionMan
 			add(statusCountPanel);
 
 			editorInfoPanel = new JPanel(new FlowLayout());
-			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
 			cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
 			cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
 			editorInfoPanel.add(cursorPositionLabel);
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			editorStatusLabel = new JLabel("");
 			editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);

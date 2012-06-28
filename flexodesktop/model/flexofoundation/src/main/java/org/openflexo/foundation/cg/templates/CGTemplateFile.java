@@ -157,9 +157,7 @@ public class CGTemplateFile extends CGTemplate {
 	 */
 	@Override
 	public boolean getIsVersionOnDiskSeemsNewer() {
-		synchronized (this) {
-			return FileUtils.getDiskLastModifiedDate(getTemplateFile()).after(getLastUpdate());
-		}
+		return getTemplateFile().lastModified() != getLastUpdate().getTime();
 	}
 
 	/**

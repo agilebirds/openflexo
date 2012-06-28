@@ -35,64 +35,64 @@ import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.view.widget.FIBButtonWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableButtonWidget extends FIBButtonWidget implements FIBEditableView<FIBButton,JButton> {
+public class FIBEditableButtonWidget extends FIBButtonWidget implements FIBEditableView<FIBButton, JButton> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableButtonWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBButton,JButton> delegate;
-	
+	private FIBEditableViewDelegate<FIBButton, JButton> delegate;
+
 	private FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableButtonWidget(FIBButton model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableButtonWidget(FIBButton model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-		
-		delegate = new FIBEditableViewDelegate<FIBButton,JButton>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBButton, JButton>(this);
 		model.addObserver(this);
 	}
-	
-	
-	public void delete() 
-	{
+
+	@Override
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
-	}	
-	
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
+	}
+
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
 		return null;
 	}
-	
-	public FIBEditableViewDelegate<FIBButton,JButton> getDelegate()
-	{
+
+	@Override
+	public FIBEditableViewDelegate<FIBButton, JButton> getDelegate() {
 		return delegate;
 	}
 
-	public void update(Observable o, Object dataModification) 
-	{
-		 if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
-				if (n.getAttribute() == FIBButton.Parameters.label) {
-					updateLabel();
-				}
-		 }
+	@Override
+	public void update(Observable o, Object dataModification) {
+		if (dataModification instanceof FIBAttributeNotification) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBButton.Parameters.label) {
+				updateLabel();
+			}
+			if (n.getAttribute() == FIBButton.Parameters.buttonIcon) {
+				updateIcon();
+			}
+		}
 
 		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
 	}
-	
-    public synchronized void buttonClicked()
-    {
-    	logger.info("Button "+getWidget()+" has clicked: NOT ACTIVE in EDIT mode");
-    }
+
+	@Override
+	public synchronized void buttonClicked() {
+		logger.info("Button " + getWidget() + " has clicked: NOT ACTIVE in EDIT mode");
+	}
 
 }

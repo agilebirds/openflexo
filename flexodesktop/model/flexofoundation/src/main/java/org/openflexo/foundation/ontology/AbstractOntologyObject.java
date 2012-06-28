@@ -27,7 +27,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-public abstract class AbstractOntologyObject extends FlexoModelObject implements InspectableObject {
+public abstract class AbstractOntologyObject extends FlexoModelObject implements InspectableObject, OWL2URIDefinitions, RDFURIDefinitions, RDFSURIDefinitions {
 
 	private static final Logger logger = Logger.getLogger(AbstractOntologyObject.class.getPackage().getName());
 
@@ -40,9 +40,32 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 		return null;
 	}
 
+	/**
+	 * @return Returns the flexoID.
+	 */
 	@Override
-	public XMLStorageResourceData getXMLResourceData() {
+	public long getFlexoID() {
+		if (isBeingCloned()) {
+			return -1;
+		}
+		if (getFlexoOntology() instanceof ImportedOntology) {
+			// Special case for ontology objects declared in imported ontology
+			// They are not linked to any project and have no FlexoID
+			return -3;
+		}
+		return super.getFlexoID();
+	}
+
+	@Override
+	public final XMLStorageResourceData getXMLResourceData() {
+		// These objects are never serialized therefore they should never return an XMLResourceData.
+		// If that was to ever change, consider also modifying
+		// org.openflexo.dg.docx.ProjectDocDocxGenerator.getEPITag(EditionPatternInstance)
 		return null;
+	}
+
+	public FlexoOntology getOntology() {
+		return getFlexoOntology();
 	}
 
 	public abstract FlexoOntology getFlexoOntology();
@@ -53,7 +76,10 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 	}
 
 	public OntologyLibrary getOntologyLibrary() {
-		return getFlexoOntology().getOntologyLibrary();
+		if (getFlexoOntology() != null) {
+			return getFlexoOntology().getOntologyLibrary();
+		}
+		return null;
 	}
 
 	@Override
@@ -61,5 +87,6 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 		return getClass().getSimpleName() + "_" + getURI();
 	}
 
+	@Override
 	public abstract String getDisplayableDescription();
 }

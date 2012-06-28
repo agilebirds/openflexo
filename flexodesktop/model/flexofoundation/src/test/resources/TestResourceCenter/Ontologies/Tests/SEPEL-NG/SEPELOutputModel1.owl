@@ -1,0 +1,401 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY SEPELOutputModel1 "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#"
+     xml:base="http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:SEPELOutputModel1="http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#applicable -->
+
+    <owl:ObjectProperty rdf:about="&SEPELOutputModel1;applicable">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;EmSubmode"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;Scan"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#association -->
+
+    <owl:ObjectProperty rdf:about="&SEPELOutputModel1;association">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;Component"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;DetailedSubMode"/>
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;DetailedSynthesisSubMode"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;DummyMode"/>
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;EmMode"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;EmMode"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;EmSubmode"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;Scan"/>
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubmodeGroup"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;SubmodeGroup"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#detail -->
+
+    <owl:ObjectProperty rdf:about="&SEPELOutputModel1;detail">
+        <rdfs:range rdf:resource="&SEPELOutputModel1;DetailedSubMode"/>
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubmodeGroup"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#groups -->
+
+    <owl:ObjectProperty rdf:about="&SEPELOutputModel1;groups">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;DetailedSynthesisSubMode"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;SubmodeGroup"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#next -->
+
+    <owl:ObjectProperty rdf:about="&SEPELOutputModel1;next">
+        <rdfs:range rdf:resource="&SEPELOutputModel1;DetailedSubMode"/>
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;DetailedSubMode"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#nextGroup -->
+
+    <owl:ObjectProperty rdf:about="&SEPELOutputModel1;nextGroup">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubmodeGroup"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;SubmodeGroup"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#submodes -->
+
+    <owl:ObjectProperty rdf:about="&SEPELOutputModel1;submodes">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;EmMode"/>
+        <rdfs:range rdf:resource="&SEPELOutputModel1;EmSubmode"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#frequenceMax -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;frequenceMax">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubMode"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#frequenceMin -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;frequenceMin">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubMode"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#liMax -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;liMax">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubMode"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#liMin -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;liMin">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubMode"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#praMax -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;praMax">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;Scan"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#praMin -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;praMin">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;Scan"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#priMax -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;priMax">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubMode"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#priMin -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;priMin">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;SubMode"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#typeDirection -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;typeDirection">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;Scan"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#typeModulation -->
+
+    <owl:DatatypeProperty rdf:about="&SEPELOutputModel1;typeModulation">
+        <rdfs:domain rdf:resource="&SEPELOutputModel1;EmMode"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#Component -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;Component">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;RootClassForOutputModel1"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;association"/>
+                <owl:onClass rdf:resource="&SEPELOutputModel1;DummyMode"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#DetailedSubMode -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;DetailedSubMode">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;SubMode"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#DetailedSynthesisSubMode -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;DetailedSynthesisSubMode">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;EmSubmode"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#DummyMode -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;DummyMode">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;RootClassForOutputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#EmMode -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;EmMode">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;RootClassForOutputModel1"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;typeModulation"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;association"/>
+                <owl:onClass rdf:resource="&SEPELOutputModel1;EmSubmode"/>
+                <owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;submodes"/>
+                <owl:onClass rdf:resource="&SEPELOutputModel1;EmSubmode"/>
+                <owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;association"/>
+                <owl:onClass rdf:resource="&SEPELOutputModel1;Scan"/>
+                <owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#EmSubmode -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;EmSubmode">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;SubMode"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#NonDetailedSubmode -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;NonDetailedSubmode">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;EmSubmode"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#RootClassForOutputModel1 -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;RootClassForOutputModel1"/>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#Scan -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;Scan">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;RootClassForOutputModel1"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;typeDirection"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;praMin"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;praMax"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#SubMode -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;SubMode">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;RootClassForOutputModel1"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;frequenceMax"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;priMin"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;liMin"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;liMax"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;priMax"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;frequenceMin"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#SubmodeGroup -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;SubmodeGroup">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;RootClassForOutputModel1"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&SEPELOutputModel1;detail"/>
+                <owl:onClass rdf:resource="&SEPELOutputModel1;DetailedSubMode"/>
+                <owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl#WeaponComponent -->
+
+    <owl:Class rdf:about="&SEPELOutputModel1;WeaponComponent">
+        <rdfs:subClassOf rdf:resource="&SEPELOutputModel1;Component"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

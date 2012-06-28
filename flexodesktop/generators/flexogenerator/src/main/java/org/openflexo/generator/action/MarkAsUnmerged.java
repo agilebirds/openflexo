@@ -50,7 +50,7 @@ public class MarkAsUnmerged extends MultipleFileGCAction<MarkAsUnmerged> {
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return ((file.getResource() != null) && file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged);
+			return file.getResource() != null && file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged;
 		}
 
 	};
@@ -64,7 +64,7 @@ public class MarkAsUnmerged extends MultipleFileGCAction<MarkAsUnmerged> {
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Mark files as NOT merged");
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();

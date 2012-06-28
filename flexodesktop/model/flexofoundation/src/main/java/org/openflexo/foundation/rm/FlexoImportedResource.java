@@ -79,14 +79,14 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 		}
 	}
 
-	public void backwardSynchronizeWith(FlexoResource aResource) throws FlexoException /*throws FlexoException*/
-	{
+	public void backwardSynchronizeWith(FlexoResource aResource) throws FlexoException {
 		// Must be called sub sub-classes implementation: must be overriden in subclasses !
 		// At this level, only set last synchronized date
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("Backsynchronizing " + this + " with " + aResource);
 		}
 		setLastSynchronizedWithResource(aResource, new Date());
+		getProject().notifyResourceHasBeenBackwardSynchronized(this);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 	 * @return
 	 */
 	public synchronized boolean isLoaded() {
-		return (_resourceData != null);
+		return _resourceData != null;
 	}
 
 	public Date getLastImportDate() {
@@ -118,20 +118,20 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 					logger.warning("Time stamps not loaded yet!!! Impossible to say if we have to do something or not");
 				}
 			}
-			if ((lastBackSynchronizationDate == null) || (resource.getLastUpdate().after(lastBackSynchronizationDate))) {
+			if (lastBackSynchronizationDate == null || resource.getLastUpdate().after(lastBackSynchronizationDate)) {
 				if (lastBackSynchronizationDate != null) {
 					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("Resource " + this + " is to be backward synchronized for " + resource + " because "
-								+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(resource.getLastUpdate()) + " is more recent than "
-								+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(lastBackSynchronizationDate));
+								+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(resource.getLastUpdate()) + " is more recent than "
+								+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(lastBackSynchronizationDate));
 					}
 				}
 				return true;
 			} else {
 				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("NOT: Resource " + this + " must NOT be BS with " + resource + " because "
-							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(resource.getLastUpdate()) + " is more anterior than "
-							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(lastBackSynchronizationDate));
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(resource.getLastUpdate()) + " is more anterior than "
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(lastBackSynchronizationDate));
 				}
 			}
 		}

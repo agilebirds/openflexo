@@ -35,4 +35,8 @@ public class ComponentFolderDeleted extends IEDataModification {
 		super(sub, null);
 	}
 
+	public FlexoComponentFolder getRemovedComponentFolder() {
+		return (FlexoComponentFolder) oldValue();
+	}
+
 }

@@ -21,6 +21,11 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * A PatternRole is an element of an EditionPattern, which play a role in this edition pattern
@@ -28,7 +33,7 @@ import org.openflexo.foundation.Inspectors;
  * @author sylvain
  * 
  */
-public abstract class PatternRole extends ViewPointObject {
+public abstract class PatternRole extends EditionPatternObject {
 
 	public static enum PatternRoleType {
 		Shape,
@@ -42,7 +47,8 @@ public abstract class PatternRole extends ViewPointObject {
 		DataPropertyStatement,
 		RestrictionStatement,
 		FlexoModelObject,
-		Shema,
+		Diagram,
+		EditionPattern,
 		Primitive
 	}
 
@@ -50,13 +56,15 @@ public abstract class PatternRole extends ViewPointObject {
 	private String patternRoleName;
 	private String description;
 
-	public PatternRole() {
+	public PatternRole(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public void setEditionPattern(EditionPattern pattern) {
 		_pattern = pattern;
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return _pattern;
 	}
@@ -72,9 +80,9 @@ public abstract class PatternRole extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getCalc();
+			return getEditionPattern().getViewPoint();
 		}
 		return null;
 	}
@@ -132,4 +140,17 @@ public abstract class PatternRole extends ViewPointObject {
 
 	public abstract void setIsPrimaryRole(boolean isPrimary);
 
+	public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
+		public PatternRoleMustHaveAName() {
+			super(PatternRole.class, "pattern_role_must_have_a_name");
+		}
+
+		@Override
+		public ValidationIssue<PatternRoleMustHaveAName, PatternRole> applyValidation(PatternRole patternRole) {
+			if (StringUtils.isEmpty(patternRole.getPatternRoleName())) {
+				return new ValidationError<PatternRoleMustHaveAName, PatternRole>(this, patternRole, "pattern_role_has_no_name");
+			}
+			return null;
+		}
+	}
 }

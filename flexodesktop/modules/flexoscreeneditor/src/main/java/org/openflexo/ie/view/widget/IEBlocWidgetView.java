@@ -42,8 +42,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -60,6 +58,7 @@ import org.openflexo.foundation.ie.widget.ContentSizeChanged;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.DropZoneTopComponent;
 import org.openflexo.ie.view.IEContainer;
 import org.openflexo.ie.view.IEWOComponentView;
@@ -98,13 +97,13 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		super(ieController, model, addDnDSupport, componentView);
 		setLayout(new BorderLayout());
 		setDefaultBorder();
-		model.getWOComponent().addObserver(this);
+		new ObserverRegistation(this, model.getWOComponent());
 		setBackground(Color.WHITE);
 		_topTitle = new TopTitle(model);
 		_buttonPanel = new ButtonPanel(getIEController(), model, _componentView);
 		_dropTableZone = new DropTableZone(getIEController(), this, _componentView);
 		if (model.getContent() instanceof FlexoModelObject) {
-			((FlexoModelObject) model.getContent()).addObserver(this);
+			new ObserverRegistation(this, (FlexoModelObject) model.getContent());
 		}
 		add(_topTitle, BorderLayout.NORTH);
 		add(_buttonPanel, BorderLayout.SOUTH);
@@ -121,16 +120,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		if (getModel().getContent() != null && getModel().getContent() instanceof FlexoModelObject) {
 			((FlexoModelObject) getModel().getContent()).deleteObserver(this);
 		}
-		if (getModel().getWOComponent() != null) {
-			getModel().getWOComponent().deleteObserver(this);
-		} else {
-			if (_componentView.getModel() != null) {
-				_componentView.getModel().deleteObserver(this);
-			} else if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Bloc widget view not removed from observers of WO. Memory will not be freed.");
-			}
-		}
-		getModel().deleteObserver(_buttonPanel);
+
 		if (_dropTableZone != null) {
 			_dropTableZone.delete();
 		}
@@ -149,18 +139,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		}
 	}
 
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		super.propagateResize();
-		_buttonPanel.propagateResize();
-		_dropTableZone.propagateResize();
-	}
-
 	// ==========================================================================
 	// ============================= Observer
 	// ===================================
@@ -169,15 +147,15 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		IEWidgetView view = _componentView.getViewForWidget(widget, true);
 		_dropTableZone.add(view, BorderLayout.CENTER);
 		_dropTableZone.setTableView(view);
-		_dropTableZone.validate();
-		_dropTableZone.doLayout();
+		revalidate();
+		repaint();
 		((JPanel) _dropTableZone.getParent()).repaint();
-		widget.addObserver(this);
+		new ObserverRegistation(this, widget);
 		handleContentResize();
 	}
 
 	private void updateInnerBlocRemoved(IEWidget widget) {
-		widget.deleteObserver(this);
+		stopObserving(widget);
 		if (widget.getParent() != null && widget.getParent() == getModel()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateHTMLTableRemoval");
@@ -187,8 +165,8 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			}
 			_dropTableZone.removeAll();// (_dropTableZone.getTableView());
 			_dropTableZone.removeTableView();
-			_dropTableZone.validate();
-			((JPanel) _dropTableZone.getParent()).repaint();
+			revalidate();
+			repaint();
 		}
 	}
 
@@ -224,17 +202,8 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			_topTitle.buttonPane.revalidate();
 			_topTitle.buttonPane.repaint();
 		}
-		if (modif.modificationType() == DataModification.BLOC_BG_CLOR_CHANGE) {
-			setBorder(BorderFactory.createLineBorder(getMainColor()));
-			_topTitle.setBackground(getMainColor());
-			_buttonPanel.setBackground(getMainColor());
-			_topTitle.setLabelBackground(getMainColor());
-		} else if (modif.modificationType() == DataModification.BLOC_FG_CLOR_CHANGE) {
-			_topTitle.setLabelForeground(getTextColor());
-		} else if (modif.modificationType() == DataModification.ATTRIBUTE && modif.propertyName().equals("title")) {
-			{
-				setTitle(getModel().getTitle());
-			}
+		if (IEBlocWidget.BLOC_TITLE_ATTRIBUTE_NAME.equals(modif.propertyName())) {
+			setTitle(getModel().getTitle());
 		} else if (modif instanceof InnerBlocInserted) {
 			updateInnerBlocInsertion((IEWidget) modif.newValue());
 			_topTitle.initButtonPane();
@@ -254,7 +223,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		}
 		_dropTableZone.setPreferredSize(new Dimension(_dropTableZone.getPreferredSize().width,
 				_dropTableZone.getPreferredSize().height + 24));
-		doLayout();
+		revalidate();
 		repaint();
 	}
 
@@ -283,12 +252,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		// int k = getModel().getParent() instanceof IETDWidget ? 8 : 0;
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
@@ -303,9 +266,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			Dimension d = new Dimension(width, _dropTableZone.getComponentCount() > 0 ? new Double(_dropTableZone.getComponent(0)
 					.getPreferredSize().getHeight()).intValue()
 					+ titleAndButtonPanelHeight : 24 + titleAndButtonPanelHeight);
-			if (getHoldsNextComputedPreferredSize()) {
-				storePrefSize(d);
-			}
 			return d;
 		}
 		int parentInsetsWidth = getParent().getInsets().left + getParent().getInsets().right;
@@ -319,9 +279,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		Dimension dim = new Dimension(getDropZoneWith() - totalWidth, _dropTableZone.getComponentCount() > 0 ? new Double(_dropTableZone
 				.getComponent(0).getPreferredSize().getHeight()).intValue()
 				+ titleAndButtonPanelHeight : 24 + titleAndButtonPanelHeight);
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(dim);
-		}
 		return dim;
 	}
 
@@ -368,34 +325,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		// _jLabelTextField.setForeground(getFlexoNode().getTextColor());
 		_jLabelTextField.setBounds(topTitleLabel().getBounds());
 		_jLabelTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				// ((IEBlocWidget)
-				// getModel()).setTitle(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				// ((IEBlocWidget)
-				// getModel()).setTitle(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				// ((IEBlocWidget)
-				// getModel()).setTitle(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			public void updateSize() {
-				// updateLabelBounds();
-				revalidate();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_topTitle.removeLabel(topTitleLabel());
 		_topTitle.addTextField(_jLabelTextField);
 		_jLabelTextField.addActionListener(new ActionListener() {

@@ -62,10 +62,10 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 	public static final FGEPoint WEST = new FGEPoint(0, 0.5);
 
 	public static enum ShapeType {
-		RECTANGLE, SQUARE, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON/*
-																								* ,
-																								* CUSTOM_COMPLEX_SHAPE
-																								*/
+		RECTANGLE, SQUARE, RECTANGULAROCTOGON, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON/*
+																													* ,
+																													* CUSTOM_COMPLEX_SHAPE
+																													*/
 	}
 
 	// *******************************************************************************
@@ -86,6 +86,8 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 			return new Triangle(aGraphicalRepresentation);
 		} else if (type == ShapeType.LOSANGE) {
 			return new Losange(aGraphicalRepresentation);
+		} else if (type == ShapeType.RECTANGULAROCTOGON) {
+			return new RectangularOctogon(aGraphicalRepresentation);
 		} else if (type == ShapeType.POLYGON) {
 			return new RegularPolygon(aGraphicalRepresentation);
 		} else if (type == ShapeType.CUSTOM_POLYGON) {
@@ -107,8 +109,38 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 	// *******************************************************************************
 
 	public void setPaintAttributes(FGEShapeGraphics g) {
-		g.setDefaultBackground(getGraphicalRepresentation().getBackground());
-		g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+
+		// Background
+		if (getGraphicalRepresentation().getIsSelected()) {
+			if (getGraphicalRepresentation().getHasSelectedBackground()) {
+				g.setDefaultBackground(getGraphicalRepresentation().getSelectedBackground());
+			} else if (getGraphicalRepresentation().getHasFocusedBackground()) {
+				g.setDefaultBackground(getGraphicalRepresentation().getFocusedBackground());
+			} else {
+				g.setDefaultBackground(getGraphicalRepresentation().getBackground());
+			}
+		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedBackground()) {
+			g.setDefaultBackground(getGraphicalRepresentation().getFocusedBackground());
+		} else {
+			g.setDefaultBackground(getGraphicalRepresentation().getBackground());
+		}
+
+		// Foreground
+		if (getGraphicalRepresentation().getIsSelected()) {
+			if (getGraphicalRepresentation().getHasSelectedForeground()) {
+				g.setDefaultForeground(getGraphicalRepresentation().getSelectedForeground());
+			} else if (getGraphicalRepresentation().getHasFocusedForeground()) {
+				g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+			} else {
+				g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+			}
+		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedForeground()) {
+			g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+		} else {
+			g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+		}
+
+		// Text
 		g.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
 	}
 
@@ -307,7 +339,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 		Area a = new Area(getGraphicalRepresentation().getShape().getShape());
 		a.transform(getGraphicalRepresentation().convertNormalizedPointToViewCoordinatesAT(g.getScale()));
 		clipArea.subtract(a);
-		g.g2d.clip(clipArea);
+		g.getGraphics().clip(clipArea);
 
 		Color shadowColor = new Color(darkness, darkness, darkness);
 		ForegroundStyle foreground = ForegroundStyle.makeStyle(shadowColor);
@@ -364,7 +396,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 	public boolean equals(Object object) {
 		if (object instanceof Shape && getShape() != null) {
 			return getShape().equals(((Shape) object).getShape())
-					&& (areDimensionConstrained() == ((Shape) object).areDimensionConstrained());
+					&& areDimensionConstrained() == ((Shape) object).areDimensionConstrained();
 		}
 		return super.equals(object);
 	}

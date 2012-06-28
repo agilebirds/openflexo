@@ -30,7 +30,7 @@ public class MyConnectorGraphicalRepresentation extends ConnectorGraphicalRepres
 
 	// Called for LOAD
 	public MyConnectorGraphicalRepresentation(DrawingBuilder builder) {
-		this(ConnectorType.LINE, null, null, null, builder.drawing);
+		this(ConnectorType.LINE, null, null, null, builder.drawing.getEditedDrawing());
 		initializeDeserialization();
 	}
 

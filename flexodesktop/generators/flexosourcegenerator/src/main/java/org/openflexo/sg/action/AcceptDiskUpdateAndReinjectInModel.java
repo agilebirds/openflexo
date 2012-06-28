@@ -52,8 +52,8 @@ public class AcceptDiskUpdateAndReinjectInModel extends MultipleFileGCAction<Acc
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null && file.getGenerationStatus().isDiskModified() && file instanceof ModelReinjectableFile && ((ModelReinjectableFile) file)
-					.needsModelReinjection());
+			return file.getResource() != null && file.getGenerationStatus().isDiskModified() && file instanceof ModelReinjectableFile
+					&& ((ModelReinjectableFile) file).needsModelReinjection();
 		}
 
 	};
@@ -67,7 +67,7 @@ public class AcceptDiskUpdateAndReinjectInModel extends MultipleFileGCAction<Acc
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Accepting disk update and reinject in model");
 
 		ProjectGenerator pg = (ProjectGenerator) getProjectGenerator();

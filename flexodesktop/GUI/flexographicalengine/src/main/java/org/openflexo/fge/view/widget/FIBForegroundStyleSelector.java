@@ -68,10 +68,21 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 	protected ForegroundStyleDetailsPanel _selectorPanel;
 
+	private ForegroundStylePreviewPanel foregroundStylePreviewPanel;
+
 	public FIBForegroundStyleSelector(ForegroundStyle editedObject) {
 		super(editedObject);
 		setRevertValue(editedObject != null ? editedObject.clone() : null);
 		setFocusable(true);
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		foregroundStylePreviewPanel.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
 	}
 
 	@Override
@@ -81,6 +92,18 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 	@Override
 	public Class<ForegroundStyle> getRepresentedType() {
 		return ForegroundStyle.class;
+	}
+
+	/**
+	 * Return a flag indicating if equals() method should be used to determine equality.<br>
+	 * For the FIBForegroundStyleSelector implementation, we MUST return false, because we can otherwise switch between ForegroundStyle
+	 * which are equals, and then start to share ForegroundStyle between many GraphicalRepresentation
+	 * 
+	 * @return false
+	 */
+	@Override
+	public boolean useEqualsLookup() {
+		return false;
 	}
 
 	@Override
@@ -153,6 +176,11 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 		}
 
 		public void delete() {
+			controller.delete();
+			fibView.delete();
+			fibComponent = null;
+			controller = null;
+			fibView = null;
 		}
 
 		public class CustomFIBController extends FIBController<ForegroundStyle> {
@@ -212,7 +240,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 	@Override
 	protected ForegroundStylePreviewPanel buildFrontComponent() {
-		return new ForegroundStylePreviewPanel();
+		return foregroundStylePreviewPanel = new ForegroundStylePreviewPanel();
 	}
 
 	@Override
@@ -307,9 +335,20 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 			lineGR.setIsFocusable(false);
 			lineGR.setIsReadOnly(true);
 			lineGR.setBorder(new ShapeBorder(10, 10, 10, 10));
+			lineGR.setValidated(true);
 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
+		}
+
+		public void delete() {
+			controller.delete();
+			drawingGR.delete();
+			lineGR.delete();
+			drawing = null;
+			lineGR = null;
+			drawingGR = null;
+			controller = null;
 		}
 
 		protected void update() {

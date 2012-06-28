@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JDialog;
@@ -35,13 +36,19 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.DataBinding;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
+import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -54,16 +61,48 @@ public class TestDrawingEditor {
 
 	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
 
+	// Retrieve default Openflexo locales
+	public static final String LOCALIZATION_DIRNAME = "Localized";
+	private static LocalizedDelegateGUIImpl MAIN_LOCALIZER = new LocalizedDelegateGUIImpl(new FileResource(LOCALIZATION_DIRNAME), null,
+			false);
+
+	// Instanciate a new localizer in directory src/dev/resources/FIBEditorLocalizer
+	// linked to parent localizer (which is Openflexo main localizer)
+	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FGEEditorLocalized"),
+			MAIN_LOCALIZER, true);
+
 	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				init();
+			}
+		});
+	}
+
+	private static void init() {
 		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			ToolBox.setPlatform();
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
+			FlexoLocalization.initWith(LOCALIZATION);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -72,20 +111,7 @@ public class TestDrawingEditor {
 
 		TestDrawingEditor editor = new TestDrawingEditor();
 		editor.showPanel();
-
-		/*(new Thread(new Runnable() {
-			public void run()
-			{
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				logger.info("Stopping application");
-				System.exit(-1);
-			}
-		})).start();*/
+		editor.newDrawing();
 	}
 
 	private JFrame frame;
@@ -136,7 +162,9 @@ public class TestDrawingEditor {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					MyDrawingViewScrollPane c = (MyDrawingViewScrollPane) tabbedPane.getSelectedComponent();
-					drawingSwitched(c.drawingView.getDrawing().getModel());
+					if (c != null) {
+						drawingSwitched(c.drawingView.getDrawing().getModel());
+					}
 				}
 			});
 			mainPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -205,7 +233,7 @@ public class TestDrawingEditor {
 		mainPanel.revalidate();
 		mainPanel.repaint();
 		paletteDialog.getContentPane().removeAll();
-		paletteDialog.getContentPane().add(drawing.getEditedDrawing().getPalette().getPaletteView());
+		paletteDialog.getContentPane().add(drawing.getEditedDrawing().getController().getPalette().getPaletteView());
 		paletteDialog.pack();
 	}
 
@@ -222,12 +250,12 @@ public class TestDrawingEditor {
 		mainPanel = new JPanel(new BorderLayout());
 
 		JMenuBar mb = new JMenuBar();
-		JMenu fileMenu = new JMenu(FlexoLocalization.localizedForKey("file"));
-		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey("edit"));
-		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey("tools"));
-		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey("help"));
+		JMenu fileMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "file"));
+		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "edit"));
+		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "tools"));
+		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "help"));
 
-		JMenuItem newItem = new JMenuItem(FlexoLocalization.localizedForKey("new_drawing"));
+		JMenuItem newItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "new_drawing"));
 		newItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -235,7 +263,7 @@ public class TestDrawingEditor {
 			}
 		});
 
-		JMenuItem loadItem = new JMenuItem(FlexoLocalization.localizedForKey("open_drawing"));
+		JMenuItem loadItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "open_drawing"));
 		loadItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -243,7 +271,7 @@ public class TestDrawingEditor {
 			}
 		});
 
-		JMenuItem saveItem = new JMenuItem(FlexoLocalization.localizedForKey("save_drawing"));
+		JMenuItem saveItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "save_drawing"));
 		saveItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -251,7 +279,7 @@ public class TestDrawingEditor {
 			}
 		});
 
-		JMenuItem saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey("save_drawing_as"));
+		JMenuItem saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "save_drawing_as"));
 		saveAsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -259,7 +287,7 @@ public class TestDrawingEditor {
 			}
 		});
 
-		JMenuItem closeItem = new JMenuItem(FlexoLocalization.localizedForKey("close_drawing"));
+		JMenuItem closeItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "close_drawing"));
 		closeItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -267,7 +295,7 @@ public class TestDrawingEditor {
 			}
 		});
 
-		JMenuItem quitItem = new JMenuItem(FlexoLocalization.localizedForKey("quit"));
+		JMenuItem quitItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "quit"));
 		quitItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -283,7 +311,7 @@ public class TestDrawingEditor {
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
 
-		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey("inspect"));
+		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "inspect"));
 		inspectItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -291,19 +319,19 @@ public class TestDrawingEditor {
 			}
 		});
 
-		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey("logs"));
+		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "logs"));
 		logsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingManager.showLoggingViewer();
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), frame);
 			}
 		});
 
-		JMenuItem localizedItem = new JMenuItem(FlexoLocalization.localizedForKey("localized_editor"));
+		JMenuItem localizedItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "localized_editor"));
 		localizedItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLocalization.showLocalizedEditor();
+				LOCALIZATION.showLocalizedEditor(frame);
 			}
 		});
 
@@ -332,7 +360,29 @@ public class TestDrawingEditor {
 	}
 
 	public void closeDrawing() {
-		logger.warning("Not implemented yet");
+		if (currentDrawing == null) {
+			return;
+		}
+		if (currentDrawing.hasChanged()) {
+			int result = JOptionPane.showOptionDialog(frame, "Would you like to save drawing changes?", "Save changes",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, JOptionPane.YES_OPTION);
+			switch (result) {
+			case JOptionPane.YES_OPTION:
+				if (!currentDrawing.save()) {
+					return;
+				}
+				break;
+			case JOptionPane.NO_OPTION:
+				break;
+			default:
+				return;
+			}
+		}
+		_drawings.remove(currentDrawing);
+		tabbedPane.remove(tabbedPane.getSelectedIndex());
+		if (_drawings.size() == 0) {
+			newDrawing();
+		}
 	}
 
 	public void newDrawing() {
@@ -350,20 +400,20 @@ public class TestDrawingEditor {
 		}
 	}
 
-	public void saveDrawing() {
+	public boolean saveDrawing() {
 		if (currentDrawing == null) {
-			return;
+			return false;
 		}
 		if (currentDrawing.file == null) {
-			saveDrawingAs();
+			return saveDrawingAs();
 		} else {
-			currentDrawing.save();
+			return currentDrawing.save();
 		}
 	}
 
-	public void saveDrawingAs() {
+	public boolean saveDrawingAs() {
 		if (currentDrawing == null) {
-			return;
+			return false;
 		}
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
@@ -373,9 +423,9 @@ public class TestDrawingEditor {
 			currentDrawing.file = file;
 			updateFrameTitle();
 			updateTabTitle();
-			currentDrawing.save();
+			return currentDrawing.save();
 		} else {
-			return;
+			return false;
 		}
 	}
 }

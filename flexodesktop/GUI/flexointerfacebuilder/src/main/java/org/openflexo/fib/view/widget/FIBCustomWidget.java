@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
@@ -28,6 +29,7 @@ import javax.swing.JLabel;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBCustomDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -56,8 +58,7 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 	public FIBCustomWidget(FIBCustom model, FIBController controller) {
 		super(model, controller);
 		try {
-			customComponent = makeCustomComponent((Class<FIBCustomComponent<T, J>>) model.getComponentClass(),
-					(Class<T>) model.getDataType(), controller);
+			customComponent = makeCustomComponent(model.getComponentClass(), TypeUtils.getBaseClass(model.getDataType()), controller);
 		} catch (ClassCastException e) {
 			logger.warning("Could not instanciate component: ClassCastException, see logs for details");
 			e.printStackTrace();
@@ -144,14 +145,16 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), customComponent.getEditedObject())) {
+		return updateModelFromWidget(false);
+	}
+
+	public synchronized boolean updateModelFromWidget(boolean forceUpdate) {
+		if (forceUpdate || notEquals(getValue(), customComponent.getEditedObject())) {
 			setValue(customComponent.getEditedObject());
+			if (getWidget().getValueChangedAction().isValid()) {
+				getWidget().getValueChangedAction().execute(getController());
+			}
 			return true;
-		}
-		// Notify anyway (in case CustomWidget modify the same object, no change
-		// will be detected and this notification is required)
-		if (getWidget().getValueChangedAction().isValid()) {
-			getWidget().getValueChangedAction().execute(getController());
 		}
 		return false;
 	}
@@ -172,34 +175,54 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 		return null;
 	}
 
+	private void performAssignments() {
+		for (FIBCustomAssignment assign : getWidget().getAssignments()) {
+			DataBinding variableDB = assign.getVariable();
+			DataBinding valueDB = assign.getValue();
+			if (valueDB != null && valueDB.getBinding() != null && valueDB.getBinding().isBindingValid()) {
+				Object value = valueDB.getBinding().getBindingValue(getController());
+				if (variableDB.getBinding().isBindingValid()) {
+					// System.out.println("Assignment "+assign+" set value with "+value);
+					variableDB.getBinding().setBindingValue(value, this);
+				}
+			}
+		}
+	}
+
 	@Override
 	public boolean updateWidgetFromModel() {
 		// We need here to "force" update while some assignments may be required
 
 		// if (notEquals(getValue(), customComponent.getEditedObject())) {
 
-		// logger.info("updateWidgetFromModel() with "+getValue()+" for "+customComponent);
+		/*if (getWidget().getComponentClass().getName().endsWith("FIBForegroundStyleSelector")) {
+			logger.info("GET updateWidgetFromModel() with " + getValue() + " for " + customComponent);
+		}*/
 
 		if (customComponent != null) {
 
+			// performAssignments();
+
 			try {
 				customComponent.setEditedObject(getValue());
-				customComponent.setRevertValue(getValue());
 			} catch (ClassCastException e) {
-				logger.warning("Unexpected exception in " + customComponent + ": " + e.getMessage());
+				customComponent.setEditedObject(null);
+				logger.warning("Unexpected ClassCastException in " + customComponent + ": " + e.getMessage());
+				// e.printStackTrace();
 			}
 
-			for (FIBCustomAssignment assign : getWidget().getAssignments()) {
-				DataBinding variableDB = assign.getVariable();
-				DataBinding valueDB = assign.getValue();
-				if (valueDB != null && valueDB.getBinding() != null && valueDB.getBinding().isBindingValid()) {
-					Object value = valueDB.getBinding().getBindingValue(getController());
-					if (variableDB.getBinding().isBindingValid()) {
-						// System.out.println("Assignment "+assign+" set value with "+value);
-						variableDB.getBinding().setBindingValue(value, this);
-					}
-				}
+			// Perform assignement AFTER the edited value was set !!!
+			// Tried to to it before raised to severe issues
+			performAssignments();
+
+			try {
+				customComponent.setRevertValue(getValue());
+			} catch (ClassCastException e) {
+				customComponent.setRevertValue(null);
+				logger.warning("Unexpected ClassCastException in " + customComponent + ": " + e.getMessage());
+				// e.printStackTrace();
 			}
+
 		}
 		return true;
 		// }
@@ -208,8 +231,11 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 	@Override
 	public void fireApplyPerformed() {
-		// logger.info("fireApplyPerformed() in FIBCustomWidget, value="+customComponent.getEditedObject());
-		updateModelFromWidget();
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("fireApplyPerformed() in FIBCustomWidget, value=" + customComponent.getEditedObject());
+		}
+		// In this case, we force model updating
+		updateModelFromWidget(true);
 	}
 
 	@Override
@@ -296,4 +322,5 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 		}
 
 	}
+
 }

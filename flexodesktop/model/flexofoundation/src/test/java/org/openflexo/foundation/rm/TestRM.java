@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
@@ -118,7 +119,7 @@ public class TestRM extends FlexoTestCase {
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_RM, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
@@ -511,11 +512,14 @@ public class TestRM extends FlexoTestCase {
 		assertEquals(0, dmReport.getErrorNb());
 		ValidationReport ieReport = _project.getFlexoComponentLibrary().validate();
 		System.out.println(ieReport.errorAsString());
+		// Expected errors are
+		// VALIDATION / ERROR: Root menu item must select an operation
+		// VALIDATION / ERROR: Menu item must be bound to an operation
 		assertEquals(2, ieReport.getErrorNb());
 		ValidationReport dkvReport = _project.getDKVModel().validate();
 		assertEquals(0, dkvReport.getErrorNb());
 		ValidationReport wkfReport = _project.getFlexoWorkflow().validate();
-		assertEquals(1, wkfReport.getErrorNb());
+		assertEquals(0, wkfReport.getErrorNb());
 	}
 
 	/**
@@ -727,7 +731,7 @@ public class TestRM extends FlexoTestCase {
 		}
 
 		protected void assertBackSynchronizationCount(int count) {
-			assertEquals(getBackSynchronizationCount(), count);
+			assertEquals(count, getBackSynchronizationCount());
 		}
 
 		protected int getBackSynchronizationCount() {

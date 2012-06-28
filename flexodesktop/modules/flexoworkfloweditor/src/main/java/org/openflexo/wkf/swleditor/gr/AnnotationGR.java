@@ -20,7 +20,7 @@
 package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Point;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -98,11 +98,11 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 	public void setSize(FGEDimension newSize) {
 		Point p = null;
 		if (getDrawing() != null && getDrawing().getGraphicalRepresentation(getModel()) == this) {
-			p = getLabelViewCenter(1.0);
+			p = getLabelLocation(1.0);
 		}
 		super.setSize(newSize);
 		if (p != null) {
-			setLabelViewCenter(p, 1.0);
+			setLabelLocation(p, 1.0);
 		}
 	}
 
@@ -111,14 +111,14 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		if (getAnnotation().isAnnotation()) {
 			super.doLayoutMethod3(x, y);
 		} else {
-			Enumeration<GraphicalRepresentation<?>> en = null;
+			Iterator<GraphicalRepresentation<?>> i = null;
 			double attemptX = x, attemptY = y;
 			boolean found = false;
 			while (!found) {
-				en = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().elements();
+				i = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
 				found = true;
-				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+				while (i.hasNext()) {
+					GraphicalRepresentation<?> gr = i.next();
 					if (gr instanceof AnnotationGR && ((AnnotationGR) gr).getDrawable().isBoundingBox()) {
 						AnnotationGR rgr = (AnnotationGR) gr;
 						if (rgr != this) {
@@ -197,10 +197,10 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		}
 		setIsMultilineAllowed(true);
 		// setTextStyle(TextStyle.makeTextStyle(getAnnotation().getTextColor(), getAnnotation().getTextFont().getTheFont()));
-		if (getAnnotation().getTextAlignment() == null) {
-			getAnnotation().setTextAlignment(GraphicalRepresentation.TextAlignment.CENTER);
+		if (getAnnotation().getTextAlignment() == null || !(getDrawable().getTextAlignment() instanceof ParagraphAlignment)) {
+			getAnnotation().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
 		}
-		setTextAlignment((TextAlignment) getAnnotation().getTextAlignment());
+		setParagraphAlignment((ParagraphAlignment) getAnnotation().getTextAlignment());
 	}
 
 }

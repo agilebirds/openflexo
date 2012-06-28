@@ -105,4 +105,8 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 	public void willShow() {
 	}
 
+	@Override
+	public O getRepresentedObject() {
+		return getDataObject();
+	}
 }

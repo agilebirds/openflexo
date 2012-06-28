@@ -21,13 +21,13 @@ package org.openflexo.ie.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -109,15 +109,11 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 
 public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver, IEViewManaging,
-		SelectionSynchronizedModuleView<ComponentInstance>, ChangeListener, Layoutable {
+		SelectionSynchronizedModuleView<ComponentInstance>, ChangeListener {
 
-	public boolean holdsNextComputedPreferredSize = false;
-	private Hashtable<IEWidgetView, Dimension> _storedPrefSize;
 	public JLabel title;
-	private Hashtable<IEObject, IEWidgetView> _widgetViews;
+	private Hashtable<IEObject, IEWidgetView<?>> _widgetViews;
 	private Hashtable<IEReusableWidget, IEReusableWidgetView> _reusableWidgetViews;
-	private Layoutable lastLayoutInvoker;
-	private boolean isDisplayed = false;
 	private IEWOComponent _model;
 	private ComponentInstance _instance;
 	// CommentZone commentZone;
@@ -134,20 +130,19 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		super(iecontroller);
 		int widgetsCount = ci.getComponentDefinition().getWOComponent().getAllEmbeddedIEObjects().size();
 		int over = widgetsCount / 5;
-		_storedPrefSize = new Hashtable<IEWidgetView, Dimension>(widgetsCount + over, 0.4f);
-		_widgetViews = new Hashtable<IEObject, IEWidgetView>(widgetsCount + over, 0.4f);
+		_widgetViews = new Hashtable<IEObject, IEWidgetView<?>>(widgetsCount + over, 0.4f);
 		_reusableWidgetViews = new Hashtable<IEReusableWidget, IEReusableWidgetView>();
 		_instance = ci;
 		IEWOComponent model = ci.getComponentDefinition().getWOComponent();
 		_model = model;
-		title = new JLabel((model).getName(), SwingConstants.CENTER);
+		title = new JLabel(model.getName(), SwingConstants.CENTER);
 		title.setFont(TITLE_FONT);
 		title.setBackground(Color.WHITE);
 		model.addObserver(this);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if ((!e.isConsumed()) && (getIEController().getSelectionManager() != null)) {
+				if (!e.isConsumed() && getIEController().getSelectionManager() != null) {
 					getIEController().getSelectionManager().getContextualMenuManager().processMousePressed(e);
 				}
 
@@ -155,7 +150,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if ((!e.isConsumed()) && (getIEController().getSelectionManager() != null)) {
+				if (!e.isConsumed() && getIEController().getSelectionManager() != null) {
 					getIEController().getSelectionManager().getContextualMenuManager().processMouseReleased(e);
 				}
 			}
@@ -163,7 +158,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				if ((!e.isConsumed()) && (getIEController().getSelectionManager() != null)) {
+				if (!e.isConsumed() && getIEController().getSelectionManager() != null) {
 					getIEController().getSelectionManager().getContextualMenuManager().processMouseMoved(e);
 				}
 
@@ -184,6 +179,13 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	@Override
 	public void deleteModuleView() {
 		getIEController().removeModuleView(this);
+		delete();
+	}
+
+	public void delete() {
+		for (IEWidgetView<?> view : new ArrayList<IEWidgetView<?>>(_widgetViews.values())) {
+			view.delete();
+		}
 		getModel().deleteObserver(this);
 		logger.info("Component view deleted !");
 		if (dropZone != null) {
@@ -191,30 +193,11 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		}
 	}
 
-	public void clearPrefSize() {
-		_storedPrefSize.clear();
-	}
-
-	public void storePrefSize(IEWidgetView view, Dimension value) {
-		_storedPrefSize.put(view, value);
-	}
-
-	public Dimension storedPrefSize(IEWidgetView view) {
-		return _storedPrefSize.get(view);
-	}
-
-	public void removeStoredSizeForWidgetView(IEWidgetView view) {
-		_storedPrefSize.remove(view);
-	}
-
 	public void removeFrowWidgetViews(IEWidget w) {
-		if (_widgetViews.containsKey(w)) {
-			removeStoredSizeForWidgetView(_widgetViews.get(w));
-			_widgetViews.remove(w);
-		}
+		_widgetViews.remove(w);
 	}
 
-	public void registerViewForWidget(IEWidget w, IEWidgetView v) {
+	public void registerViewForWidget(IEWidget w, IEWidgetView<?> v) {
 		_widgetViews.put(w, v);
 		if (w instanceof IEReusableWidget) {
 			_reusableWidgetViews.put((IEReusableWidget) w, (IEReusableWidgetView) v);
@@ -222,13 +205,12 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	@Override
-	public IEWidgetView findViewForModel(IEObject object) {
-		IEWidgetView reply = _widgetViews.get(object);
-		return reply;
+	public IEWidgetView<?> findViewForModel(IEObject object) {
+		return _widgetViews.get(object);
 	}
 
-	public IEWidgetView getViewForWidget(IEWidget insertedWidget, boolean addDnDSupport) {
-		IEWidgetView view = _widgetViews.get(insertedWidget);
+	public IEWidgetView<?> getViewForWidget(IEWidget insertedWidget, boolean addDnDSupport) {
+		IEWidgetView<?> view = _widgetViews.get(insertedWidget);
 		if (view == null) {
 			view = createView(getIEController(), insertedWidget, addDnDSupport);
 			if (view != null) {
@@ -243,7 +225,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		return view;
 	}
 
-	public IEWidgetView createView(IEController controller, IEWidget insertedWidget, boolean addDnDSupport) {
+	public IEWidgetView<?> createView(IEController controller, IEWidget insertedWidget, boolean addDnDSupport) {
 
 		if (insertedWidget == null) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -339,31 +321,6 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		return null;
 	}
 
-	public void notifyAllViewsToHoldTheirNextComputedPreferredSize(Layoutable invoker) {
-		if (!isDisplayed || lastLayoutInvoker != null) {
-			return;
-		}
-		lastLayoutInvoker = invoker;
-		holdsNextComputedPreferredSize = true;
-		// Enumeration<IEWidgetView> en = _widgetViews.elements();
-		// while (en.hasMoreElements()) {
-		// en.nextElement().setHoldsNextComputedPreferredSize();
-		// }
-	}
-
-	public void resetAllViewsPreferredSize(Layoutable invoker) {
-		if (invoker != lastLayoutInvoker) {
-			return;
-		}
-		holdsNextComputedPreferredSize = false;
-		clearPrefSize();
-		// Enumeration<IEWidgetView> en = _widgetViews.elements();
-		// while (en.hasMoreElements()) {
-		// en.nextElement().resetPreferredSize();
-		// }
-		lastLayoutInvoker = null;
-	}
-
 	/**
      *
      */
@@ -372,10 +329,8 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 			logger.fine("Update wo component view preferred size");
 		}
 		setPreferredSize(getPreferredSize());
-		if (getParent() != null) {
-			getParent().doLayout();
-			getParent().repaint();
-		}
+		revalidate();
+		repaint();
 	}
 
 	/**
@@ -388,8 +343,8 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("WOComponent will show..." + _widgetViews.size());
 		}
-		propagateResize();
-		isDisplayed = true;
+		revalidate();
+		repaint();
 	}
 
 	/**
@@ -399,29 +354,13 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 */
 	@Override
 	public void willHide() {
-		isDisplayed = false;
-	}
-
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		Component[] c = getComponents();
-		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable) {
-				((Layoutable) c[i]).propagateResize();
-			}
-		}
 	}
 
 	// ===============================================================
 	// ======== SelectionSynchronizedModuleView implementation =======
 	// ===============================================================
 
-	private Vector<IESelectable> _selectedViews = new Vector<IESelectable>();
+	private List<IESelectable> _selectedViews = new Vector<IESelectable>();
 
 	/**
 	 * Return all the views representing current selection represented IN THIS VIEW (this is not the selection of the selection manager), as
@@ -429,7 +368,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 * 
 	 * @return a Vector of IESelectable
 	 */
-	public Vector<IESelectable> getSelectedViews() {
+	public List<IESelectable> getSelectedViews() {
 		return _selectedViews;
 	}
 
@@ -466,9 +405,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	@Override
 	public void fireObjectDeselected(FlexoModelObject object) {
 		if (object instanceof IEWidget) {
-			IEWidgetView view = findViewForModel((IEObject) object);
+			IEWidgetView<?> view = findViewForModel((IEObject) object);
 			if (view != null) {
-				(view).setIsSelected(false);
+				view.setIsSelected(false);
 				if (_selectedViews.contains(view)) {
 					_selectedViews.remove(view);
 				}
@@ -481,8 +420,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 */
 	@Override
 	public void fireResetSelection() {
-		for (Enumeration en = _selectedViews.elements(); en.hasMoreElements();) {
-			IESelectable next = (IESelectable) en.nextElement();
+		for (IESelectable next : _selectedViews) {
 			next.setIsSelected(false);
 		}
 		_selectedViews.clear();
@@ -580,41 +518,10 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		return answer;
 	}
 
-	/**
-	 * Overrides getHoldsNextComputedPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#getHoldsNextComputedPreferredSize()
-	 */
-	@Override
-	public boolean getHoldsNextComputedPreferredSize() {
-		return false;
-	}
-
-	/**
-	 * Overrides resetPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#resetPreferredSize()
-	 */
-	@Override
-	public void resetPreferredSize() {
-
-	}
-
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		propagateResize();
-		doLayout();
+		revalidate();
 		repaint();
-	}
-
-	/**
-	 * Overrides setHoldsNextComputedPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#setHoldsNextComputedPreferredSize()
-	 */
-	@Override
-	public void setHoldsNextComputedPreferredSize() {
-
 	}
 
 	@Override
@@ -661,7 +568,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	public void notifyDisplayPrefHasChanged() {
-		for (IEWidgetView widgetView : _widgetViews.values()) {
+		for (IEWidgetView<?> widgetView : _widgetViews.values()) {
 			if (widgetView instanceof DisplayableBindingValue) {
 				((DisplayableBindingValue) widgetView).updateDisplayedValue();
 			}

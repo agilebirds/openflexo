@@ -40,7 +40,6 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.ie.view.IEContainer;
 import org.openflexo.ie.view.IEViewManaging;
 import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.ViewFinder;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IEDTListener;
@@ -48,7 +47,7 @@ import org.openflexo.ie.view.controller.dnd.IEDTListener;
 /**
  * @author bmangez
  */
-public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManaging, ChangeListener, Layoutable {
+public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManaging, ChangeListener {
 
 	private IEWOComponentView _rootView;
 
@@ -150,10 +149,7 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		view.validate();
-		view.doLayout();
-		view.repaint();
-		doLayout();
+		revalidate();
 		repaint();
 		setSelectedComponent(view);
 	}
@@ -175,19 +171,6 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 		updateConditionalIcons();
 		if (c != null && indexOfComponent(c) > -1) {
 			setSelectedComponent(c);
-		}
-	}
-
-	/**
-	 * Overrides setSelectedComponent
-	 * 
-	 * @see javax.swing.JTabbedPane#setSelectedComponent(java.awt.Component)
-	 */
-	@Override
-	public void setSelectedComponent(Component c) {
-		super.setSelectedComponent(c);
-		if (c != null && c instanceof Layoutable) {
-			propagateResize();
 		}
 	}
 
@@ -219,81 +202,6 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 				setIconAt(i, null);
 			}
 		}
-	}
-
-	/**
-	 * Overrides doLayout
-	 * 
-	 * @see java.awt.Container#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		_rootView.notifyAllViewsToHoldTheirNextComputedPreferredSize(this);
-		if (getParent() instanceof Layoutable) {
-			((Layoutable) getParent()).doLayout();
-		}
-		super.doLayout();
-		_rootView.resetAllViewsPreferredSize(this);
-	}
-
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		if (getSelectedComponent() != null && getSelectedComponent() instanceof Layoutable) {
-			((Layoutable) getSelectedComponent()).propagateResize();
-		}
-	}
-
-	/**
-	 * Overrides getHoldsNextComputedPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#getHoldsNextComputedPreferredSize()
-	 */
-	@Override
-	public boolean getHoldsNextComputedPreferredSize() {
-		return holdsNextComputedPreferredSize;
-	}
-
-	/**
-	 * Overrides resetPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#resetPreferredSize()
-	 */
-	@Override
-	public void resetPreferredSize() {
-		holdsNextComputedPreferredSize = false;
-		preferredSize = null;
-	}
-
-	/**
-	 * Overrides setHoldsNextComputedPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#setHoldsNextComputedPreferredSize()
-	 */
-	@Override
-	public void setHoldsNextComputedPreferredSize() {
-		holdsNextComputedPreferredSize = true;
-	}
-
-	/**
-	 * Overrides getPreferredSize
-	 * 
-	 * @see javax.swing.JComponent#getPreferredSize()
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize() && preferredSize != null) {
-			return preferredSize;
-		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			preferredSize = d;
-		}
-		return d;
 	}
 
 	@Override

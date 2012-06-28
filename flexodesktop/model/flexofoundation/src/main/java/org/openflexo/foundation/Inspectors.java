@@ -347,8 +347,6 @@ public class Inspectors {
 
 		public String ROLE_LIST_INSPECTOR = "RoleList.inspector";
 
-		public String DEADLINE_INSPECTOR = "DeadLine.inspector";
-
 		public String EDGE_INSPECTOR = "Edge.inspector";
 
 		public String ASSOCIATION_INSPECTOR = "Association.inspector";
@@ -489,6 +487,8 @@ public class Inspectors {
 		public String REUSABLE_COMPONENT_DEFINITION_INSPECTOR = "ReusableComponentDefinition.inspector";
 
 		public String ABSTRACT_WIDGET_INSPECTOR = "AbstractWidget.inspector";
+
+		public String ABSTRACT_LIST_INSPECTOR = "AbstractList.inspector";
 
 		public String BLOC_INSPECTOR = "Bloc.inspector";
 
@@ -933,6 +933,9 @@ public class Inspectors {
 		public String DROP_SCHEME_INSPECTOR = "DropScheme.inspector";
 		public String LINK_SCHEME_INSPECTOR = "LinkScheme.inspector";
 		public String ACTION_SCHEME_INSPECTOR = "ActionScheme.inspector";
+		public String NAVIGATION_SCHEME_INSPECTOR = "NavigationScheme.inspector";
+		public String DELETION_SCHEME_INSPECTOR = "DeletionScheme.inspector";
+		public String CREATION_SCHEME_INSPECTOR = "CreationScheme.inspector";
 
 		public String ADD_SHAPE_INSPECTOR = "AddShape.inspector";
 		public String ADD_CONNECTOR_INSPECTOR = "AddConnector.inspector";

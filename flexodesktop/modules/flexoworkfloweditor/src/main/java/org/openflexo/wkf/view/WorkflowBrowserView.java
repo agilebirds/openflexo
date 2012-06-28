@@ -31,7 +31,9 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalIEModule;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.controller.WKFTreeDropTarget;
@@ -84,9 +86,16 @@ public class WorkflowBrowserView extends BrowserView {
 		if (object instanceof WKFObject) {
 			FlexoProcess objectProcess = ((WKFObject) object).getProcess();
 			_controller.setCurrentFlexoProcess(objectProcess);
+
 			treeSingleClick(object);
 		} else if (object instanceof ComponentDefinition) {
-			ExternalIEModule ieModule = ModuleLoader.getIEModule();
+			ExternalIEModule ieModule = null;
+			try {
+				ieModule = getModuleLoader().getIEModule(object.getProject());
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
+				e.printStackTrace();
+			}
 			if (ieModule == null) {
 				return;
 			}
@@ -97,4 +106,7 @@ public class WorkflowBrowserView extends BrowserView {
 		}
 	}
 
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 }

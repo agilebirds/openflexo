@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.localization.LocalizedDelegate;
 
 public class ActionSchemeActionType extends FlexoActionType<ActionSchemeAction, FlexoModelObject, FlexoModelObject> {
 
@@ -33,9 +34,14 @@ public class ActionSchemeActionType extends FlexoActionType<ActionSchemeAction, 
 	private EditionPatternReference editionPatternReference;
 
 	public ActionSchemeActionType(ActionScheme actionScheme, EditionPatternReference editionPatternReference) {
-		super(actionScheme.getName(), FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE);
+		super(actionScheme.getLabel(), FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE);
 		this.actionScheme = actionScheme;
 		this.editionPatternReference = editionPatternReference;
+	}
+
+	@Override
+	public LocalizedDelegate getLocalizer() {
+		return actionScheme.getLocalizedDictionary();
 	}
 
 	@Override

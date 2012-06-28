@@ -3,14 +3,19 @@ package org.openflexo.builders;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.builders.exception.FlexoRunException;
+import org.apache.tools.ant.BuildEvent;
+import org.apache.tools.ant.BuildListener;
+import org.apache.tools.ant.Project;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.Format;
+import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
@@ -113,7 +118,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 				}
 			}
 		}
-		if (outputPath == null || warName == null) {
+		if ((outputPath == null || warName == null) && !nowar) {
 			StringBuilder sb = new StringBuilder();
 			if (args.length > 0) {
 				for (int i = 0; i < args.length; i++) {
@@ -135,7 +140,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 	}
 
 	@Override
-	protected void run() throws FlexoRunException {
+	protected void doRun() {
 		File output = null;
 		if (workingDir != null) {
 			output = new File(workingDir);
@@ -153,8 +158,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 				output = FileUtils.createTempDirectory("CodeOutput", "");
 			} catch (IOException e) {
 				e.printStackTrace();
-				setExitCode(LOCAL_IO_EXCEPTION);
-				throw new FlexoRunException(e);
+				setExitCodeCleanUpAndExit(LOCAL_IO_EXCEPTION);
 			}
 		}
 		if (logger.isLoggable(Level.INFO)) {
@@ -162,10 +166,15 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 		}
 		File srcDir = new File(output, "Source");
 		File docDir = new File(output, "Doc");
-		File warDir = new File(outputPath);
 		srcDir.mkdirs();
 		docDir.mkdirs();
-		warDir.mkdirs();
+		final File warDir;
+		if (!nowar) {
+			warDir = new File(outputPath);
+			warDir.mkdirs();
+		} else {
+			warDir = null;
+		}
 		if (project != null) {
 			project.setComputeDiff(false);
 
@@ -184,19 +193,20 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 			add.setNewGeneratedCodeRepositoryName("FlexoServerGeneratedCode" + new Random().nextInt(1000000));
 			add.setNewGeneratedCodeRepositoryDirectory(srcDir);
 			add.doAction();
-			((CGRepository) add.getNewGeneratedCodeRepository()).getWarRepository();
-			((CGRepository) add.getNewGeneratedCodeRepository()).setWarDirectory(warDir);
+			final CGRepository repository = (CGRepository) add.getNewGeneratedCodeRepository();
+			repository.getWarRepository();
+			repository.setWarDirectory(warDir);
 			try {
-				((CGRepository) add.getNewGeneratedCodeRepository()).setWarName(warName);
+				repository.setWarName(warName);
 			} catch (DuplicateCodeRepositoryNameException e) {
 				e.printStackTrace();
 			}
-			((CGRepository) add.getNewGeneratedCodeRepository()).setManageHistory(false);
+			repository.setManageHistory(false);
 			if (login != null) {
-				((CGRepository) add.getNewGeneratedCodeRepository()).setPrototypeLogin(login);
+				repository.setPrototypeLogin(login);
 			}
 			if (password != null) {
-				((CGRepository) add.getNewGeneratedCodeRepository()).setPrototypePassword(password);
+				repository.setPrototypePassword(password);
 			}
 			if (!add.hasActionExecutionSucceeded()) {
 				handleActionFailed(add);
@@ -218,71 +228,113 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 				if (!importTemplates.hasActionExecutionSucceeded()) {
 					handleActionFailed(importTemplates);
 				}
-				((CGRepository) add.getNewGeneratedCodeRepository()).setPreferredTemplateRepository(custom
-						.getNewCustomTemplatesRepository());
+				repository.setPreferredTemplateRepository(custom.getNewCustomTemplatesRepository());
 			}
 			codeType = add.getNewTargetType().toString();
-			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
-					add.getNewGeneratedCodeRepository(), null, editor);
+			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(repository, null,
+					editor);
 			sync.setSaveBeforeGenerating(false);
 			sync.setContinueAfterValidation(true);
-			sync.doAction();
-			if (!sync.hasActionExecutionSucceeded()) {
-				handleActionFailed(sync);
-			}
-			WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(add.getNewGeneratedCodeRepository(),
-					null, editor);
+			WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(repository, null, editor);
 			write.setSaveBeforeGenerating(false);
-			write.doAction();
-			if (!write.hasActionExecutionSucceeded()) {
-				handleActionFailed(write);
-			}
-			if (nowar) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("No war option is true, ignoring WAR generation.\nReturning now.");
-				}
-				return;
-			}
-			GenerateWAR war = GenerateWAR.actionType.makeNewAction((CGRepository) add.getNewGeneratedCodeRepository(), null, editor);
+			final GenerateWAR war = GenerateWAR.actionType.makeNewAction(repository, null, editor);
 			war.setSaveBeforeGenerating(false);
 			war.setCleanImmediately(true);
-			war.doAction();
-			if (!war.hasActionExecutionSucceeded()) {
-				handleActionFailed(war);
-			}
-			File warFile = war.getGeneratedWar();// new File(warDir,((CGRepository) add.getNewGeneratedCodeRepository()).getWarName()+
-													// ".war");
-			if (!warFile.exists()) {
-				File[] files = warDir.listFiles(new FilenameFilter() {
+			war.getProjectGenerator().addBuildListener(new BuildListener() {
 
-					@Override
-					public boolean accept(File dir, String name) {
-						return name.endsWith(".war");
-					}
-				});
-				if (files == null || files.length == 0) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("War file not found at " + warDir.getAbsolutePath());
-					}
-					setExitCode(WAR_NOT_FOUND);
-					return;
+				@Override
+				public void taskStarted(BuildEvent event) {
+					// TODO Auto-generated method stub
+
 				}
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("War file has been found at " + files[0].getAbsolutePath() + " but is not what was expected");
+
+				@Override
+				public void taskFinished(BuildEvent event) {
+					// TODO Auto-generated method stub
+
 				}
+
+				@Override
+				public void targetStarted(BuildEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void targetFinished(BuildEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void messageLogged(BuildEvent event) {
+					if (event.getPriority() == Project.MSG_INFO) {
+						System.err.println("INFO: " + event.getMessage());
+					} else if (event.getPriority() == Project.MSG_WARN) {
+						System.err.println("WARNING: " + event.getMessage());
+					} else if (event.getPriority() == Project.MSG_ERR) {
+						reportMessage("ERROR: " + event.getMessage());
+					}
+				}
+
+				@Override
+				public void buildStarted(BuildEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void buildFinished(BuildEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			List<FlexoAction<?, ?, ?>> actions = new ArrayList<FlexoAction<?, ?, ?>>();
+			actions.add(sync);
+			actions.add(write);
+			if (!nowar) {
+				actions.add(war);
 			}
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("WAR Generated at " + warFile.getAbsolutePath());
-			}
+			editor.chainActions(actions, new Runnable() {
+
+				@Override
+				public void run() {
+					if (nowar) {
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("No war option is true, ignoring WAR generation.\nReturning now.");
+						}
+						setExitCodeCleanUpAndExit(0);
+					}
+					File warFile = war.getGeneratedWar();
+					if (!warFile.exists()) {
+						File[] files = warDir.listFiles(new FilenameFilter() {
+
+							@Override
+							public boolean accept(File dir, String name) {
+								return name.endsWith(".war");
+							}
+						});
+						if (files == null || files.length == 0) {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning("War file not found at " + warDir.getAbsolutePath());
+							}
+							setExitCodeCleanUpAndExit(WAR_NOT_FOUND);
+						}
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("War file has been found at " + files[0].getAbsolutePath() + " but is not what was expected");
+						}
+					}
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("WAR Generated at " + warFile.getAbsolutePath());
+					}
+					setExitCodeCleanUpAndExit(0);
+				}
+			});
 		}
 	}
 
 	public static void main(String[] args) {
 		launch(FlexoCodeGeneratorMain.class, args);
-	}
-
-	public static FlexoCodeGeneratorMain mainTest(String[] args) {
-		return launch(FlexoCodeGeneratorMain.class, args);
 	}
 
 	@Override

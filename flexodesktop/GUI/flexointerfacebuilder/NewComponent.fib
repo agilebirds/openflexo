@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="grid" hGap="5" vGap="5" cols="2" rows="2" titleFont="Lucida Grande,0,13" darkLevel="0">
+  <List visibleRowCount="3" rowHeight="20" createNewRowOnClick="false" boundToSelectionManager="false" selectionMode="MultipleIntervalSelection" layoutOrientation="vertical" localize="true" name="list" constraints="grid(x=0;y=0)" staticList="Item-1 ,Item-2 ,Item-3 " iteratorClassName="java.lang.String" autoSelectFirstRow="true" />
+  <RadioButtonList localize="true" name="PaletteRadioButtonList" constraints="grid(x=1;y=0)" font="LucidaGrande,0,11" staticList="Item-1 ,Item-2 ,Item-3 " iteratorClassName="java.lang.String" autoSelectFirstRow="true" />
+  <DropDown localize="true" name="dropdown" constraints="grid(x=0;y=1)" staticList="Item-1 ,Item-2 ,Item-3 " iteratorClassName="java.lang.String" autoSelectFirstRow="true" />
+  <LocalizedDictionary />
+</Panel>
+

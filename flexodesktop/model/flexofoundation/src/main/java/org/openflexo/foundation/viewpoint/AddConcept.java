@@ -19,16 +19,19 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class AddConcept<R extends OntologicObjectPatternRole> extends EditionAction<R> {
+public abstract class AddConcept extends AssignableAction {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
-	public AddConcept() {
+	public AddConcept(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public abstract OntologyClass getOntologyClass();
@@ -42,7 +45,7 @@ public abstract class AddConcept<R extends OntologicObjectPatternRole> extends E
 		return project.getOntologyLibrary().getOntologyObject(getConceptURI());
 	}*/
 
-	@Override
+	/*@Override
 	public R getPatternRole() {
 		try {
 			return super.getPatternRole();
@@ -51,13 +54,16 @@ public abstract class AddConcept<R extends OntologicObjectPatternRole> extends E
 			setPatternRole(null);
 			return null;
 		}
-	}
+	}*/
 
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
-	@Override
+	/*@Override
 	public void setPatternRole(R patternRole) {
 		super.setPatternRole(patternRole);
-	}
+	}*/
+
+	@Override
+	public abstract Type getAssignableType();
 
 }

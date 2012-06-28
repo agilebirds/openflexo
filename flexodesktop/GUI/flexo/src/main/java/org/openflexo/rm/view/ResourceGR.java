@@ -82,10 +82,10 @@ public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource<? ext
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
 				g.useTextStyle(resourceTypeStyle);
-				g.drawString(getResource().getResourceType().getName(), new FGEPoint(0.5, 0.25), TextAlignment.CENTER);
+				g.drawString(getResource().getResourceType().getName(), new FGEPoint(0.5, 0.25), HorizontalTextAlignment.CENTER);
 				g.useTextStyle(lastUpdateStyle);
 				g.drawString(new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getResource().getLastUpdate()), new FGEPoint(0.5, 0.75),
-						TextAlignment.CENTER);
+						HorizontalTextAlignment.CENTER);
 			};
 		});
 

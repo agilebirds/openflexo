@@ -39,6 +39,9 @@ public interface FlexoEditor {
 
 	public FlexoProject getProject();
 
+	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(A action)
+			throws FlexoException;
+
 	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBePerformed(
 			FlexoAction<A, T1, T2> action);
 
@@ -103,8 +106,6 @@ public interface FlexoEditor {
 
 	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoExceptionHandler<? super A> getExceptionHandlerFor(
 			FlexoActionType<A, T1, T2> actionType);
-
-	public void performPendingActions();
 
 	public void focusOn(FlexoModelObject object);
 

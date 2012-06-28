@@ -37,14 +37,14 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.generator.action.GCAction;
+import org.openflexo.generator.action.GenerateArtefact;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.IOExceptionOccuredException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.LatexUtils;
 import org.openflexo.toolbox.LogListener;
 
-public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements LogListener {
+public class GeneratePDF extends GenerateArtefact<GeneratePDF, DGRepository> implements LogListener {
 
 	private static final Logger logger = Logger.getLogger(GeneratePDF.class.getPackage().getName());
 
@@ -171,6 +171,11 @@ public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements 
 
 	public File getGeneratedPDF() {
 		return generatedPDF;
+	}
+
+	@Override
+	public File getArtefactFile() {
+		return getGeneratedPDF();
 	}
 
 	/**

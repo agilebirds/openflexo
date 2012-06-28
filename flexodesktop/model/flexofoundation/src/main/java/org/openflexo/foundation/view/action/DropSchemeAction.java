@@ -23,6 +23,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -36,6 +40,7 @@ import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddShape;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
@@ -61,7 +66,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (object instanceof ViewObject);
+			return object instanceof ViewObject;
 		}
 
 	};
@@ -69,9 +74,9 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	private ViewObject _parent;
 	private ViewPointPaletteElement _paletteElement;
 	private DropScheme _dropScheme;
-	private ViewShape _newShape;
+	private ViewShape _primaryShape;
 
-	private Object _graphicalRepresentation;
+	public FGEPoint dropLocation;
 
 	DropSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -85,7 +90,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Drop palette element");
 
-		getEditionPattern().getCalc().getCalcOntology().loadWhenUnloaded();
+		getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
 		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 
@@ -129,17 +134,8 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		_paletteElement = paletteElement;
 	}
 
-	@Override
-	public Object getOverridenGraphicalRepresentation() {
-		return _graphicalRepresentation;
-	}
-
-	public void setOverridenGraphicalRepresentation(Object graphicalRepresentation) {
-		_graphicalRepresentation = graphicalRepresentation;
-	}
-
-	public ViewShape getNewShape() {
-		return _newShape;
+	public ViewShape getPrimaryShape() {
+		return _primaryShape;
 	}
 
 	@Override
@@ -160,19 +156,88 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 	@Override
 	protected ViewShape performAddShape(AddShape action) {
-		_newShape = super.performAddShape(action);
-		return _newShape;
+		ViewShape newShape = super.performAddShape(action);
+		if (newShape != null) {
+			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) newShape.getGraphicalRepresentation();
+			if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
+				// Declare shape as new shape only if it is the primary representation role of the EP
+
+				_primaryShape = newShape;
+				gr.setLocation(dropLocation);
+
+				// Temporary comment this portion of code if child shapes are declared inside this shape
+				if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(EditionScheme.TOP_LEVEL)) {
+					ShapeBorder border = gr.getBorder();
+					ShapeBorder newBorder = new ShapeBorder(border);
+					boolean requireNewBorder = false;
+					double deltaX = 0;
+					double deltaY = 0;
+					if (border.top < 25) {
+						requireNewBorder = true;
+						deltaY = border.top - 25;
+						newBorder.top = 25;
+					}
+					if (border.left < 25) {
+						requireNewBorder = true;
+						deltaX = border.left - 25;
+						newBorder.left = 25;
+					}
+					if (border.right < 25) {
+						requireNewBorder = true;
+						newBorder.right = 25;
+					}
+					if (border.bottom < 25) {
+						requireNewBorder = true;
+						newBorder.bottom = 25;
+					}
+					if (requireNewBorder) {
+						gr.setBorder(newBorder);
+						gr.setLocation(new FGEPoint(gr.getX() + deltaX, gr.getY() + deltaY));
+						if (gr.getIsFloatingLabel()) {
+							gr.setAbsoluteTextX(gr.getAbsoluteTextX() - deltaX);
+							gr.setAbsoluteTextY(gr.getAbsoluteTextY() - deltaY);
+						}
+					}
+				}
+			} else if (action.getPatternRole().getParentShapeAsDefinedInAction()) {
+				Object graphicalRepresentation = action.getEditionPattern().getPrimaryRepresentationRole().getGraphicalRepresentation();
+				if (graphicalRepresentation instanceof ShapeGraphicalRepresentation<?>) {
+					ShapeGraphicalRepresentation<?> primaryGR = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
+					gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY()
+							- primaryGR.getY()));
+				}
+			}
+			gr.updateConstraints();
+		} else {
+			logger.warning("Inconsistant data: shape has not been created");
+		}
+		return newShape;
 	}
 
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionPatternPathElement) {
 			if (variable.getVariableName().equals(EditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
-				return ((ViewShape) getParent()).getEditionPatternInstance();
+				if (getParent() instanceof ViewShape) {
+					return ((ViewShape) getParent()).getEditionPatternInstance();
+				}
 			}
 			return parameterValues;
 		}
 		return super.getValue(variable);
+	}
+
+	@Override
+	public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+		if (getPaletteElement() != null) {
+			if (getPaletteElement().getOverridingGraphicalRepresentation(patternRole) != null) {
+				return getPaletteElement().getOverridingGraphicalRepresentation(patternRole);
+			}
+		}
+
+		// return overridenGraphicalRepresentations.get(patternRole);
+		// TODO temporary desactivate overriden GR
+		return null;
 	}
 
 }

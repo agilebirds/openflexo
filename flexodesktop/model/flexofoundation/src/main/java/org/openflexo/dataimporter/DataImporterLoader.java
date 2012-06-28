@@ -63,7 +63,7 @@ public final class DataImporterLoader {
 	 * @return
 	 */
 	public static DataImporter getDataImporter(String aDataImporter) {
-		return (DataImporter) getAllDataImporter().get(aDataImporter);
+		return getAllDataImporter().get(aDataImporter);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public final class DataImporterLoader {
 	 * 
 	 * @return a Hashtable of DataImporter instances
 	 */
-	public static Hashtable getAllDataImporter() {
+	public static Hashtable<String, DataImporter> getAllDataImporter() {
 		if (_dataImporter.size() == 0) {
 			loadAllDataImporter();
 		}
@@ -86,7 +86,7 @@ public final class DataImporterLoader {
 		for (int i = 0; i < KnownDataImporter.values().length; i++) {
 			KnownDataImporter candidate = KnownDataImporter.values()[i];
 			try {
-				Class importer = Class.forName(candidate.getClassName());
+				Class<?> importer = Class.forName(candidate.getClassName());
 				Object dataImporter = importer.newInstance();
 				if (dataImporter instanceof DataImporter) {
 					_dataImporter.put(candidate.getClassName(), (DataImporter) dataImporter);

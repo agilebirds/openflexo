@@ -1,74 +1,11 @@
-<inspector title = "DropDown" inheritsfrom ="ControlWidget.inspector">
+<inspector title = "DropDown" inheritsfrom ="AbstractList.inspector">
 
-	<tab name="Basic" index="0" layout="DEFAULT">
-		<property name="value" label="value" widget="TEXT_FIELD" constraint="2">
-			<param name="columns" value="10"/>
-		</property>
-		<property name="exampleList" label="example_list" widget="TEXT_FIELD" help = "Use , as a separator for your example values"  depends="dropdownType" conditional="(dropdownType!=DomainKeyValue)" constraint="3">
-			<param name="columns" value="10"/>
-			<param name="validateOnReturn" value="true"/>
-		</property>
-		<property name="submitForm" label="reload_on_change" widget="CHECKBOX" constraint="4" help="true if the page has to be reloaded when we change the value."/>
-		<property name="dropdownType" label="dropdown_type" widget="DROPDOWN" constraint="5"/>
-		<property name="domain" label="domain" widget="DROPDOWN" constraint="6" depends="dropdownType" conditional="(dropdownType=DomainKeyValue)">;
-			<param name="dynamiclist" value="availableDomains"/>
-			<param name="format" value="name"/>
-		</property>
-	</tab>
-
-	<tab name="Advanced" index="1" layout="DEFAULT">
-		<!--<property name="name" label="name" widget="TEXT_FIELD" constraint="5"/>-->
-	</tab>
-
-	<tab name="Doc" index="2" layout="DEFAULT">
-		<property name="funcName" label="function_name" widget="TEXT_FIELD" constraint="2">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
-		</property>
-<!--		<property name="behavior" label="behavior" widget="TEXT_AREA" constraint="4">
-			<param name="height" value="64"/>
-		</property>-->
-	</tab>
-
-	<tab name="Data" index="3" layout="DEFAULT">
-		<property name="contentType" label="content_type" widget="CUSTOM" constraint="0">
-			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
-		</property>
-		<property name="bindingList" label="binding_list" widget="CUSTOM" constraint="1" depends="dropdownType,contentType" conditional="(dropdownType=null || dropdownType=DropDown ) and contentType.isDKV=false">
-			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
-			<param name="binding_definition" value="bindingListDefinition"/>			
-			<param name="creates_entry" value="createsBindingVariable"/>			
-		</property>
-		<property name="bindingItem" label="binding_item" widget="CUSTOM" constraint="2" depends="dropdownType,contentType" conditional="(dropdownType!=DomainKeyValue and dropdownType!=StatusList and contentType.isDKV=false)">
-			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
-			<param name="binding_definition" value="bindingItemDefinition"/>			
-			<param name="creates_entry" value="createsBindingVariable"/>			
-		</property>
-		<property name="bindingSelection" label="binding_selection" widget="CUSTOM" constraint="3" depends="dropdownType,contentType">
-			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
-			<param name="binding_definition" value="bindingSelectionDefinition"/>			
-			<param name="creates_entry" value="createsBindingVariable"/>			
-		</property>
-		<property name="bindingIsEdit" label="binding_isEditable" widget="CUSTOM" constraint="4" depends="dropdownType,contentType" conditional="dropdownType=DomainKeyValue or contentType.isDKV">
-			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
-			<param name="binding_definition" value="bindingIsEditDefinition"/>			
-			<param name="creates_entry" value="createsBindingVariable"/>			
-		</property>
-		<property name="hasNewOption" label="has_new_option" widget="CHECKBOX" constraint="5" help="Show the &quot;New...&quot; option in the popup" 
-				depends="dropdownType,bindingIsEdit" conditional="dropdownType=DomainKeyValue AND bindingIsEdit!=null"/>
-		<property name="showLanguagePopup" label="show_language_popup" widget="CHECKBOX" constraint="5" help="Show the language popup when adding a new option" 
-				depends="hasNewOption,dropdownType,bindingIsEdit" conditional="hasNewOption=true and dropdownType=DomainKeyValue and bindingIsEdit!=null"/>
-		<property name="bindingDisplayString" label="binding_display_string" widget="CUSTOM" constraint="6" depends="dropdownType,contentType" conditional="(dropdownType!=DomainKeyValue and dropdownType!=StatusList and contentType.isDKV=false)">
-			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
-			<param name="binding_definition" value="bindingDisplayStringDefinition"/>			
-			<param name="creates_entry" value="createsBindingVariable"/>			
-		</property>
-		<property name="bindingNoSelectionString" label="binding_no_selection_string" widget="CUSTOM" constraint="7">
-			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
-			<param name="binding_definition" value="bindingNoSelectionStringDefinition"/>			
-			<param name="creates_entry" value="createsBindingVariable"/>			
-		</property>
-
-		<hidden name="javaAccessor"/>
-	</tab>
-
+    <tab name="Data" index="3" layout="DEFAULT">
+        <property name="bindingIsEdit" label="binding_isEditable" widget="CUSTOM" constraint="4" depends="dropdownType,contentType" conditional="dropdownType=DomainKeyValue or contentType.isDKV">
+            <param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+            <param name="binding_definition" value="bindingIsEditDefinition"/>          
+            <param name="creates_entry" value="createsBindingVariable"/>            
+        </property>
+    </tab>
+    
 </inspector>

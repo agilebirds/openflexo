@@ -105,8 +105,8 @@ public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRep
 
 	public void updatePropertiesFromWKFPreferences() {
 		if (supportShadow()
-				&& ((getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows())) || (getWorkflow() == null && WKFPreferences
-						.getShowShadows()))) {
+				&& (getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows()) || getWorkflow() == null
+						&& WKFPreferences.getShowShadows())) {
 			setShadowStyle(ShadowStyle.makeDefault());
 		} else {
 			setShadowStyle(ShadowStyle.makeNone());

@@ -19,9 +19,6 @@
  */
 package org.openflexo.module.external;
 
-import java.util.Map;
-
-import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * External view of the Generator Module
@@ -29,15 +26,5 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  */
 public interface ExternalGeneratorModule extends ExternalModule {
-
-	// public void setPreferedOutputDirectory (File f);
-
-	/**
-	 * SGU: what's that ?
-	 * 
-	 * @deprecated
-	 */
-	@Deprecated
-	public String generateCode(FlexoProject project, String templateName, Map replacement);
 
 }

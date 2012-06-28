@@ -21,9 +21,13 @@ package org.openflexo.generator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DefaultFlexoEditor;
@@ -92,13 +96,24 @@ public class TestCG2 extends CGTestCase {
 				GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, DefaultApplicationConfGenerator.IDENTIFIER));
 	}
 
+	public static Test suite() {
+		final TestSuite suite = new TestSuite("TestSuite for TestCG2");
+		suite.addTest(new TestCG2("test0CreateProject"));
+		suite.addTest(new TestCG2("test1InitializeCodeGeneration"));
+		suite.addTest(new TestCG2("test2TestRenamingComponentInsideSynchronization"));
+		suite.addTest(new TestCG2("test3TestRenamingComponentOutsideSynchronization"));
+		suite.addTest(new TestCG2("test4TestRemovingComponentInsideSynchronization"));
+		suite.addTest(new TestCG2("test5TestRemovingComponentOutsideSynchronization"));
+		return suite;
+	}
+
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_CG2, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");

@@ -37,7 +37,7 @@ import org.openflexo.foundation.ie.action.TopComponentUp;
 import org.openflexo.foundation.ie.dm.ColumnInserted;
 import org.openflexo.foundation.ie.dm.ColumnRemoved;
 import org.openflexo.foundation.ie.dm.IEDataModification;
-import org.openflexo.foundation.ie.dm.PourcentageChanged;
+import org.openflexo.foundation.ie.dm.PercentageChanged;
 import org.openflexo.foundation.ie.dm.TRInserted;
 import org.openflexo.foundation.ie.dm.TRRemoved;
 import org.openflexo.foundation.ie.dm.table.DisplayBorderChanged;
@@ -908,7 +908,6 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 
 	@Override
 	public void notifyDisplayNeedsRefresh() {
-		_sequenceTR.holdDisplayRefresh();
 		int rowCount = getRowCount();
 		int colCount = getColCount();
 		for (int i = 0; i < rowCount; i++) {
@@ -924,9 +923,8 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 				}
 			}
 		}
-		_sequenceTR.activateDisplayRefresh();
 		_sequenceTR.setChanged();
-		_sequenceTR.notifyObservers(new PourcentageChanged(this));
+		_sequenceTR.notifyObservers(new PercentageChanged(this));
 	}
 
 	/**
@@ -939,7 +937,6 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 	 *            - The end column (not included)
 	 */
 	private void notifyPercentageChangeFromColToCol(int startCol, int endCol) {
-		_sequenceTR.holdDisplayRefresh();
 		int rowCount = getRowCount();
 		for (int i = 0; i < rowCount; i++) {
 			for (int j = startCol; j < endCol; j++) {
@@ -956,7 +953,6 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 				}
 			}
 		}
-		_sequenceTR.activateDisplayRefresh();
 	}
 
 	public IESequenceTR getFirstRepeatedSequence() {

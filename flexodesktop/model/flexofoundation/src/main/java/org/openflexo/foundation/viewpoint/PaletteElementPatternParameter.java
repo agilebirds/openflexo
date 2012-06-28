@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class PaletteElementPatternParameter extends ViewPointObject {
 
@@ -28,11 +29,12 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 	private String name;
 	private String value;
 
-	public PaletteElementPatternParameter() {
+	public PaletteElementPatternParameter(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public PaletteElementPatternParameter(EditionSchemeParameter p) {
-		this();
+		super(null);
 		_parameter = p;
 		setName(p.getName());
 		setValue(p.getDefaultValue().toString());
@@ -78,9 +80,9 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getElement() != null) {
-			return getElement().getCalc();
+			return getElement().getViewPoint();
 		}
 		return null;
 	}
@@ -103,7 +105,7 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getCalc().getBindingModel();
+		return getViewPoint().getBindingModel();
 	}
 
 }

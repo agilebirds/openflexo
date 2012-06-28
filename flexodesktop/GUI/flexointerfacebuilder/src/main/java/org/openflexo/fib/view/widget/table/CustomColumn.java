@@ -159,7 +159,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c;
-			if (((isSelected) && (hasFocus)) || useCustomViewForCellRendering) {
+			if (isSelected && hasFocus || useCustomViewForCellRendering) {
 				c = getViewCustomWidget(elementAt(row)).getJComponent();
 				Color fg = null;
 				Color bg = null;
@@ -311,7 +311,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 				});
 			}
-			return _customWidget.getJComponent();
+			JComponent jComponent = _customWidget.getJComponent();
+			jComponent.setBorder(null);
+			return jComponent;
 		}
 	}
 

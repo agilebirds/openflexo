@@ -22,14 +22,17 @@ package org.openflexo.prefs;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.axis.encoding.Base64;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.FlexoProperties;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Class FlexoAbstractPreferences is internally used to be inherited from FlexoPreferences
@@ -39,6 +42,8 @@ import org.openflexo.toolbox.FlexoProperties;
 public abstract class FlexoAbstractPreferences extends FlexoObservable implements InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
+
+	private static final String CHEESE = "l@iUh%gvwe@#{8ç]74562";
 
 	protected FlexoAbstractPreferences() {
 		super();
@@ -77,7 +82,7 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 				logger.finest("Parent file = " + parentDir);
 			}
 			if (!parentDir.exists()) {
-				parentDir.mkdir();
+				parentDir.mkdirs();
 			}
 			if (!preferencesFile.exists()) {
 				preferencesFile.createNewFile();
@@ -120,6 +125,35 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 
 	public String getProperty(String key) {
 		return _preferences.getProperty(key);
+	}
+
+	public String getPasswordProperty(String key) {
+		String base64 = _preferences.getProperty(key);
+		if (base64 != null) {
+			try {
+				String decoded = StringUtils.circularOffset(StringUtils.reverse(new String(Base64.decode(base64), "UTF-8")), -2);
+				if (decoded.length() < CHEESE.length()) {
+					return "";
+				}
+				return decoded.substring(CHEESE.length());
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return base64;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public void setPasswordProperty(String key, String value) {
+		if (value != null) {
+			try {
+				value = new String(Base64.encode(StringUtils.reverse(StringUtils.circularOffset(CHEESE + value, 2)).getBytes("UTF-8")));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		setProperty(key, value);
 	}
 
 	public abstract File getPreferencesFile();

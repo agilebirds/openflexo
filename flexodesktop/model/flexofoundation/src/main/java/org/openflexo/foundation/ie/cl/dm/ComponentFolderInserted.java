@@ -35,4 +35,8 @@ public class ComponentFolderInserted extends IEDataModification {
 		super(null, sub);
 	}
 
+	public FlexoComponentFolder getInsertedFolder() {
+		return (FlexoComponentFolder) newValue();
+	}
+
 }

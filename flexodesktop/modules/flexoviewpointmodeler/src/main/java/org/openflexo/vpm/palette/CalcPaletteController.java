@@ -25,15 +25,15 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CalcPaletteController extends SelectionManagingDrawingController<CalcPaletteRepresentation> {
 
-	private CEDController _controller;
+	private VPMController _controller;
 	private PalettePalette _commonPalette;
 	private CalcPaletteModuleView _moduleView;
 
-	public CalcPaletteController(CEDController controller, ViewPointPalette palette, boolean readOnly) {
+	public CalcPaletteController(VPMController controller, ViewPointPalette palette, boolean readOnly) {
 		super(new CalcPaletteRepresentation(palette, readOnly), controller.getSelectionManager());
 		_controller = controller;
 
@@ -47,7 +47,6 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 
 	@Override
 	public void delete() {
-		getDrawing().delete();
 		if (_controller != null) {
 			if (getDrawingView() != null && _moduleView != null) {
 				_controller.removeModuleView(_moduleView);
@@ -55,6 +54,7 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 			_controller.VIEW_POINT_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
+		getDrawing().delete();
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 		return new DrawingView<CalcPaletteRepresentation>(drawing, this);
 	}
 
-	public CEDController getCEDController() {
+	public VPMController getCEDController() {
 		return _controller;
 	}
 

@@ -23,50 +23,50 @@ import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragGestureRecognizer;
-import java.awt.dnd.DragSource;
-import java.awt.dnd.DragSourceContext;
-import java.awt.dnd.DragSourceDragEvent;
-import java.awt.dnd.DragSourceDropEvent;
-import java.awt.dnd.DragSourceEvent;
-import java.awt.dnd.DragSourceListener;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingPalette.PaletteDrawing;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.view.PaletteElementView;
 import org.openflexo.fge.view.ShapeView;
 
 public interface PaletteElement extends Serializable {
 
 	public PaletteElementGraphicalRepresentation getGraphicalRepresentation();
 
-	public boolean acceptDragging(GraphicalRepresentation target);
+	public boolean acceptDragging(GraphicalRepresentation<?> target);
 
-	public boolean elementDragged(GraphicalRepresentation target, FGEPoint dropLocation);
+	public boolean elementDragged(GraphicalRepresentation<?> target, FGEPoint dropLocation);
 
 	public DrawingPalette getPalette();
 
 	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentation<PaletteElement> {
+		private ShapeGraphicalRepresentation<?> originalGR;
+
 		public PaletteElementGraphicalRepresentation(ShapeType shapeType, PaletteElement paletteElement, PaletteDrawing paletteDrawing) {
 			super(shapeType, paletteElement, paletteDrawing);
+			// setValidated(true);
 		}
 
 		public PaletteElementGraphicalRepresentation(ShapeGraphicalRepresentation<?> shapeGR, PaletteElement paletteElement,
 				PaletteDrawing paletteDrawing) {
-			super(shapeGR.getShapeType(), paletteElement, paletteDrawing);
+			this(shapeGR.getShapeType(), paletteElement, paletteDrawing);
 			// Copy parameters...
 			setsWith(shapeGR);
+			this.originalGR = shapeGR;
+			// setValidated(true);
+		}
+
+		@Override
+		public void delete() {
+			if (originalGR != null) {
+				originalGR.delete();
+			}
+			super.delete();
 		}
 
 		@Override
@@ -114,208 +114,6 @@ public interface PaletteElement extends Serializable {
 			return super.getLocationConstraints();
 		}
 
-	}
-
-	public static class PaletteElementView extends ShapeView<PaletteElement> {
-
-		private static final Logger logger = Logger.getLogger(PaletteElementView.class.getPackage().getName());
-
-		private DragSource dragSource;
-		private DragGestureListener dgListener;
-		private DragSourceListener dsListener;
-		private int dragAction = DnDConstants.ACTION_COPY;
-		private DragGestureRecognizer dgr;
-
-		/* Local controller ONLY */
-		private DrawingController<PaletteDrawing> paletteController;
-
-		public PaletteElementView(PaletteElementGraphicalRepresentation aGraphicalRepresentation,
-				DrawingController<PaletteDrawing> controller) {
-			super(aGraphicalRepresentation, controller);
-			this.dgListener = new DGListener();
-			this.dragSource = DragSource.getDefaultDragSource();
-			this.dsListener = new DSListener();
-			this.paletteController = controller;
-
-			// component, action, listener
-			dgr = this.dragSource.createDefaultDragGestureRecognizer(this, this.dragAction, this.dgListener);
-
-			enableDragging();
-
-			if (aGraphicalRepresentation.getToolTipText() != null) {
-				setToolTipText(aGraphicalRepresentation.getToolTipText());
-			}
-		}
-
-		@Override
-		public String getToolTipText(MouseEvent event) {
-			return getToolTipText();
-		}
-
-		@Override
-		public PaletteElementGraphicalRepresentation getGraphicalRepresentation() {
-			return (PaletteElementGraphicalRepresentation) super.getGraphicalRepresentation();
-		}
-
-		public PaletteElement getPaletteElement() {
-			return getGraphicalRepresentation().getDrawable();
-		}
-
-		public DrawingPalette getPalette() {
-			return getPaletteElement().getPalette();
-		}
-
-		public BufferedImage getBuffer() {
-			return getDrawingView().getPaintManager().getScreenshot(getGraphicalRepresentation());
-		}
-
-		// ===============================================================
-		// ================== Dnd Stuff =================================
-		// ===============================================================
-
-		protected void enableDragging() {
-			dgr.setComponent(this);
-
-			/**
-			 * FIX for bug where element is not draggable when initial click begins on label
-			 * 
-			 * There is a big trick here: the label view is not a subcomponent of view, so dragging on this component will not be seen by
-			 * palette element view, so we need here to force disable mouse listeners registered for this palette view
-			 */
-			if (getLabelView() != null) {
-				getLabelView().disableMouseListeners();
-			}
-
-		}
-
-		protected void disableDragging() {
-			dgr.setComponent(null);
-			if (getLabelView() != null) {
-				getLabelView().enableMouseListeners();
-			}
-		}
-
-		/**
-		 * DGListener a listener that will start the drag. has access to top level's dsListener and dragSource
-		 * 
-		 * @see java.awt.dnd.DragGestureListener
-		 * @see java.awt.dnd.DragSource
-		 * @see java.awt.datatransfer.StringSelection
-		 */
-		class DGListener implements DragGestureListener {
-			/**
-			 * Start the drag if the operation is ok. uses java.awt.datatransfer.StringSelection to transfer the label's data
-			 * 
-			 * @param e
-			 *            the event object
-			 */
-			@Override
-			public void dragGestureRecognized(DragGestureEvent e) {
-				logger.info("dragGestureRecognized");
-
-				// if the action is ok we go ahead
-				// otherwise we punt
-				if ((e.getDragAction() & dragAction) == 0) {
-					return;
-					// get the label's text and put it inside a Transferable
-					// Transferable transferable = new StringSelection(
-					// DragLabel.this.getText() );
-				}
-
-				PaletteElementTransferable transferable = new PaletteElementTransferable(getDrawable(), e.getDragOrigin());
-
-				try {
-					// initial cursor, transferrable, dsource listener
-					e.startDrag(DrawingPalette.dropKO, transferable, dsListener);
-					logger.info("Starting drag for " + getGraphicalRepresentation());
-					getDrawingView().captureDraggedNode(PaletteElementView.this, e);
-				} catch (Exception idoe) {
-					logger.warning("Unexpected exception " + idoe);
-				}
-			}
-
-		}
-
-		/**
-		 * DSListener a listener that will track the state of the DnD operation
-		 * 
-		 * @see java.awt.dnd.DragSourceListener
-		 * @see java.awt.dnd.DragSource
-		 * @see java.awt.datatransfer.StringSelection
-		 */
-		public class DSListener implements DragSourceListener {
-
-			/**
-			 * @param e
-			 *            the event
-			 */
-			@Override
-			public void dragDropEnd(DragSourceDropEvent e) {
-				getDrawingView().resetCapturedNode();
-				if (e.getDropSuccess() == false) {
-					if (logger.isLoggable(Level.INFO)) {
-						logger.info("Dropping was not successful");
-					}
-					return;
-				}
-				/*
-				 * the dropAction should be what the drop target specified in
-				 * acceptDrop
-				 */
-				// this is the action selected by the drop target
-				if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
-					setName("");
-				}
-			}
-
-			/**
-			 * @param e
-			 *            the event
-			 */
-			@Override
-			public void dragEnter(DragSourceDragEvent e) {
-				DragSourceContext context = e.getDragSourceContext();
-				// intersection of the users selected action, and the source and
-				// target actions
-				int myaction = e.getDropAction();
-				if ((myaction & dragAction) != 0) {
-					context.setCursor(DragSource.DefaultCopyDrop);
-				} else {
-					context.setCursor(DragSource.DefaultCopyNoDrop);
-				}
-			}
-
-			/**
-			 * @param e
-			 *            the event
-			 */
-			@Override
-			public void dragOver(DragSourceDragEvent e) {
-				// interface
-				getPalette().dragSourceContext = e.getDragSourceContext();
-			}
-
-			/**
-			 * @param e
-			 *            the event
-			 */
-			@Override
-			public void dragExit(DragSourceEvent e) {
-				// interface
-			}
-
-			/**
-			 * for example, press shift during drag to change to a link action
-			 * 
-			 * @param e
-			 *            the event
-			 */
-			@Override
-			public void dropActionChanged(DragSourceDragEvent e) {
-				DragSourceContext context = e.getDragSourceContext();
-				context.setCursor(DragSource.DefaultCopyNoDrop);
-			}
-		}
 	}
 
 	public static class PaletteElementTransferable implements Transferable {

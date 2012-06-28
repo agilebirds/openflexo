@@ -23,7 +23,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -38,11 +40,13 @@ import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ValidationIssue;
 import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class FIBComponent extends FIBModelObject implements TreeNode {
@@ -513,6 +517,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
+	/**
+	 * Creates binding variable identified by "data"<br>
+	 * Default behavior is to generate a binding variable with the java type identified by data class
+	 */
+	protected void createDataBindingVariable() {
+		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+	}
+
 	protected void createBindingModel() {
 		_bindingModel = new BindingModel();
 
@@ -527,7 +539,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}*/
 		// if (dataClass == null) dataClass = Object.class;
 
-		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+		createDataBindingVariable();
 
 		if (StringUtils.isNotEmpty(getName()) && getDynamicAccessType() != null) {
 			_bindingModel.addToBindingVariables(new BindingVariableImpl(this, getName(), getDynamicAccessType()));
@@ -810,7 +822,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	}
 
-	public Class getDataClass() {
+	// IMPORTANT do NOT use generics here, as Class<?> getDataClass() will not be recognized as getter of setDataClass(Class)
+	@SuppressWarnings("rawtypes")
+	public Class/*<?>*/getDataClass() {
 		return dataClass;
 	}
 
@@ -1108,7 +1122,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		// Little hask to recover previously created fib
 		if (p.name.equals("controllerClassName")) {
 			try {
-				Class myControllerClass = Class.forName(p.value);
+				Class<?> myControllerClass = Class.forName(p.value);
 				setControllerClass(myControllerClass);
 			} catch (ClassNotFoundException e) {
 				logger.warning("Could not find class " + p.value);
@@ -1128,7 +1142,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefinePreferredDimensions(boolean definePreferredDimensions) {
 		if (definePreferredDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			Dimension p = v.getJComponent().getPreferredSize();
 			setWidth(p.width);
 			setHeight(p.height);
@@ -1145,7 +1159,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefineMaxDimensions(boolean defineMaxDimensions) {
 		if (defineMaxDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			setMaxWidth(1024);
 			setMaxHeight(1024);
 			v.delete();
@@ -1161,7 +1175,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefineMinDimensions(boolean defineMinDimensions) {
 		if (defineMinDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			Dimension p = v.getJComponent().getMinimumSize();
 			setMinWidth(p.width);
 			setMinHeight(p.height);
@@ -1245,7 +1259,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public void setLocalizedDictionary(FIBLocalizedDictionary localizedDictionary) {
-		localizedDictionary.setComponent(this);
+		if (localizedDictionary != null) {
+			localizedDictionary.setComponent(this);
+		}
 		this.localizedDictionary = localizedDictionary;
 	}
 
@@ -1261,12 +1277,40 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		this.definitionFile = definitionFile;
 	}
 
+	public List<FIBButton> getDefaultButtons() {
+		List<FIBButton> defaultButtons = new ArrayList<FIBButton>();
+		if (this instanceof FIBContainer) {
+			List<FIBButton> buttons = getFIBButtons(((FIBContainer) this).getSubComponents());
+			if (buttons.size() > 0) {
+				for (FIBButton b : buttons) {
+					if (b.isDefault() != null && b.isDefault()) {
+						defaultButtons.add(b);
+					}
+				}
+			}
+		}
+		return defaultButtons;
+	}
+
+	private List<FIBButton> getFIBButtons(List<FIBComponent> subComponents) {
+		List<FIBButton> buttons = new ArrayList<FIBButton>();
+		for (FIBComponent c : subComponents) {
+			if (c instanceof FIBButton) {
+				buttons.add((FIBButton) c);
+			} else if (c instanceof FIBContainer) {
+				buttons.addAll(getFIBButtons(((FIBContainer) c).getSubComponents()));
+			}
+		}
+		return buttons;
+	}
+
 	@Override
 	protected void applyValidation(ValidationReport report) {
 		super.applyValidation(report);
 		performValidation(RootComponentShouldHaveDataClass.class, report);
 		performValidation(DataBindingMustBeValid.class, report);
 		performValidation(VisibleBindingMustBeValid.class, report);
+		performValidation(NonRootComponentShouldNotHaveLocalizedDictionary.class, report);
 	}
 
 	public static class RootComponentShouldHaveDataClass extends ValidationRule<RootComponentShouldHaveDataClass, FIBComponent> {
@@ -1279,6 +1323,58 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			if (object.isRootComponent() && object.getDataClass() == null) {
 				return new ValidationWarning<RootComponentShouldHaveDataClass, FIBComponent>(this, object,
 						"component_($object.toString)_is_declared_as_root_but_does_not_have_any_data_class");
+			}
+			return null;
+		}
+
+	}
+
+	public static class NonRootComponentShouldNotHaveLocalizedDictionary extends
+			ValidationRule<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> {
+		public NonRootComponentShouldNotHaveLocalizedDictionary() {
+			super(FIBModelObject.class, "non_root_component_should_not_have_localized_dictionary");
+		}
+
+		@Override
+		public ValidationIssue<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> applyValidation(FIBComponent object) {
+			if (!object.isRootComponent() && object.getLocalizedDictionary() != null) {
+				RemoveExtraLocalizedDictionary fixProposal = new RemoveExtraLocalizedDictionary();
+				return new ValidationWarning<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent>(this, object,
+						"component_($object.toString)_has_a_localized_dictionary_but_is_not_root_component", fixProposal);
+			}
+			return null;
+		}
+
+	}
+
+	protected static class RemoveExtraLocalizedDictionary extends
+			FixProposal<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> {
+
+		public RemoveExtraLocalizedDictionary() {
+			super("remove_extra_dictionary");
+		}
+
+		@Override
+		protected void fixAction() {
+			getObject().setLocalizedDictionary(null);
+		}
+
+	}
+
+	public static class RootComponentShouldHaveMaximumOneDefaultButton extends
+			ValidationRule<RootComponentShouldHaveMaximumOneDefaultButton, FIBComponent> {
+		public RootComponentShouldHaveMaximumOneDefaultButton() {
+			super(FIBModelObject.class, "root_component_should_have_maximum_one_default_button");
+		}
+
+		@Override
+		public ValidationIssue<RootComponentShouldHaveMaximumOneDefaultButton, FIBComponent> applyValidation(FIBComponent object) {
+			if (object.isRootComponent() && object instanceof FIBContainer) {
+				List<FIBButton> defaultButtons = object.getDefaultButtons();
+				if (defaultButtons.size() > 1) {
+					return new ValidationWarning<RootComponentShouldHaveMaximumOneDefaultButton, FIBComponent>(this, object,
+							"component_($object.toString)_has_more_than_one_default_button");
+				}
 			}
 			return null;
 		}

@@ -43,17 +43,6 @@ public class DGModule extends FlexoModule {
 
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.DE, Inspectors.DG };
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.DG_MODULE);
-	}
-
 	public DGModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 		setFlexoController(new DGController(projectEditor, this));

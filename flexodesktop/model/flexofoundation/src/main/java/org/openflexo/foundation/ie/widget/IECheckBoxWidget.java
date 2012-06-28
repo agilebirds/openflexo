@@ -129,7 +129,7 @@ public class IECheckBoxWidget extends IEControlWidget implements Serializable, I
 	public void setValue(boolean value) {
 		this._value = value;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, ATTRIB_DEFAULTVALUE_NAME, null, null));
+		notifyObservers(new DataModification(ATTRIB_DEFAULTVALUE_NAME, null, null));
 	}
 
 	public boolean getSubmitForm() {

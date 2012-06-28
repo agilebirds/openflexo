@@ -29,6 +29,7 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class ObjectPropertyAssertion extends AbstractAssertion {
@@ -36,6 +37,10 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyAssertion.class.getPackage().getName());
 
 	private String objectPropertyURI;
+
+	public ObjectPropertyAssertion(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public String getInspectorName() {
@@ -51,7 +56,10 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	}
 
 	public OntologyProperty getOntologyProperty() {
-		return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());
+		if (getViewPoint().getViewpointOntology() != null) {
+			return getViewPoint().getViewpointOntology().getObjectProperty(_getObjectPropertyURI());
+		}
+		return null;
 	}
 
 	public void setOntologyProperty(OntologyProperty p) {

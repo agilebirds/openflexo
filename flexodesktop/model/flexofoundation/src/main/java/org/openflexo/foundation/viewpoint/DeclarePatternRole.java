@@ -19,18 +19,21 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class DeclarePatternRole extends EditionAction<PatternRole> {
+public class DeclarePatternRole extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
 
-	public DeclarePatternRole() {
+	public DeclarePatternRole(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -38,10 +41,20 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 		return EditionActionType.DeclarePatternRole;
 	}
 
+	/*@Override
+	public List<PatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles();
+	}*/
+
 	@Override
 	public String getInspectorName() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean isAssignationRequired() {
+		return true;
 	}
 
 	public Object getDeclaredObject(EditionSchemeAction action) {
@@ -50,7 +63,7 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 
 	private ViewPointDataBinding object;
 
-	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, false);
+	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;
@@ -68,6 +81,45 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 		object.setBindingAttribute(EditionActionBindingAttribute.object);
 		object.setBindingDefinition(getObjectBindingDefinition());
 		this.object = object;
+	}
+
+	@Override
+	public Type getAssignableType() {
+		return Object.class;
+	}
+
+	public static class AssignationBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeclarePatternRole> {
+		public AssignationBindingIsRequiredAndMustBeValid() {
+			super("'assign'_binding_is_not_valid", DeclarePatternRole.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+			return object.getAssignation();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
+			return object.getAssignationBindingDefinition();
+		}
+
+	}
+
+	public static class ObjectBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeclarePatternRole> {
+		public ObjectBindingIsRequiredAndMustBeValid() {
+			super("'object'_binding_is_not_valid", DeclarePatternRole.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+			return object.getObject();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
+			return object.getObjectBindingDefinition();
+		}
+
 	}
 
 }

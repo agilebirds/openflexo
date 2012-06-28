@@ -19,83 +19,202 @@
  */
 package org.openflexo.fge.view;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
+import java.util.Arrays;
 import java.util.Observable;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.TextAlignment;
+import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
+import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
-import org.openflexo.fge.graphics.DrawUtils;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.LabelHasMoved;
+import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.fge.notifications.ObjectHasMoved;
+import org.openflexo.fge.notifications.ObjectHasResized;
+import org.openflexo.fge.notifications.ObjectWillMove;
+import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.LabelViewMouseListener;
-import org.openflexo.toolbox.StringUtils;
+import org.openflexo.swing.FlexoSwingUtils;
+import org.openflexo.toolbox.ToolBox;
 
-public class LabelView<O> extends JPanel implements FGEView<O> {
+public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetricsProvider {
+
+	private boolean mouseInsideLabel = false;
+
+	/**
+	 * This class tries to keep trace if the mouse is inside the label or not. This partially works but it heavily relies on the fact that
+	 * FGEViewMouseListener will simulate mouse in/out events. In some cases, this may not work.
+	 * 
+	 * @author Guillaume
+	 * 
+	 */
+	private class InOutMouseListener extends MouseAdapter {
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			mouseInsideLabel = true;
+			textComponent.updateCursor();
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			mouseInsideLabel = false;
+			textComponent.updateCursor();
+		}
+	}
+
+	public boolean isMouseInsideLabel() {
+		return mouseInsideLabel;
+	}
+
+	public class TextComponent extends JTextPane {
+
+		public TextComponent() {
+			setOpaque(false);
+			setEditable(false);
+			setAutoscrolls(false);
+			setFocusable(true);
+		}
+
+		protected void updateCursor() {
+			if (getDrawingView() != null) {
+				getDrawingView().setCursor(isMouseInsideLabel() ? getCursor() : null);
+			}
+		}
+
+		@Override
+		public void setCursor(Cursor cursor) {
+			super.setCursor(cursor);
+			updateCursor();
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return true;
+		}
+
+		@Override
+		public void setDoubleBuffered(boolean aFlag) {
+			super.setDoubleBuffered(aFlag && ToolBox.getPLATFORM() == ToolBox.MACOS);
+		}
+
+		@Override
+		public void setEditable(boolean b) {
+			super.setEditable(b);
+			setEnabled(b);
+			if (!initialized) {
+				return;
+			}
+			setDoubleBuffered(!b);
+			if (b) {
+				removeFGEMouseListener();
+				requestFocus();
+				selectAll();
+			} else {
+				addFGEMouseListener();
+			}
+		}
+
+	}
 
 	private static final Logger logger = Logger.getLogger(LabelView.class.getPackage().getName());
 
 	private GraphicalRepresentation<O> graphicalRepresentation;
 	private LabelViewMouseListener mouseListener;
-	private DrawingController _controller;
-	private FGEView _delegateView;
+	private DrawingController<?> controller;
+	private FGEView<?> delegateView;
+	private boolean isEditing = false;
 
-	public LabelView(GraphicalRepresentation<O> aGraphicalRepresentation, DrawingController controller, FGEView delegateView) {
-		super(null);
+	private TextComponent textComponent;
 
-		_controller = controller;
-		graphicalRepresentation = aGraphicalRepresentation;
-		_delegateView = delegateView;
+	private boolean initialized = false;
 
-		updateBounds();
-		mouseListener = new LabelViewMouseListener(aGraphicalRepresentation, this);
-		addMouseListener(mouseListener);
-		addMouseMotionListener(mouseListener);
-		getGraphicalRepresentation().addObserver(this);
+	public LabelView(GraphicalRepresentation<O> graphicalRepresentation, DrawingController<?> controller, FGEView<?> delegateView) {
+		this.controller = controller;
+		this.graphicalRepresentation = graphicalRepresentation;
+		this.delegateView = delegateView;
+		this.mouseListener = new LabelViewMouseListener(graphicalRepresentation, this);
+		this.textComponent = new TextComponent();
+		this.textComponentListener = new LabelDocumentListener();
+		textComponent.addMouseListener(new InOutMouseListener());
+		setViewportView(textComponent);
+		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		// Note: if for debug purposes you add a Border to the textComponent, this could mess up the labels preferredSize computation.
+		getViewport().setBorder(null);
+		setBorder(null);
 		setOpaque(false);
-
-		// setToolTipText(getClass().getSimpleName()+hashCode());
-
+		getViewport().setOpaque(false);
+		graphicalRepresentation.setLabelMetricsProvider(this);
+		textComponent.setLocation(0, 0);
+		updateFont();
+		updateText();
+		getGraphicalRepresentation().addObserver(this);
+		validate();
+		initialized = true;
+		textComponent.setEditable(false);
 	}
 
-	private boolean isDeleted = false;
+	public void registerTextListener() {
+		textComponent.addKeyListener(textComponentListener);
+		textComponent.getDocument().addDocumentListener(textComponentListener);
+		textComponent.addCaretListener(textComponentListener);
+	}
+
+	public void unregisterTextListener() {
+		textComponent.removeKeyListener(textComponentListener);
+		textComponent.getDocument().removeDocumentListener(textComponentListener);
+		textComponent.removeCaretListener(textComponentListener);
+	}
+
+	@Override
+	protected JViewport createViewport() {
+		return new JViewport() {
+			@Override
+			public void setViewPosition(Point p) {
+				// We don't want to scroll so we prevent the view port
+				// from moving.
+			}
+		};
+	}
+
+	public TextComponent getTextComponent() {
+		return textComponent;
+	}
+
+	private volatile boolean isDeleted = false;
+
+	private LabelDocumentListener textComponentListener;
 
 	@Override
 	public boolean isDeleted() {
@@ -103,15 +222,16 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public void delete() {
+	public synchronized void delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete LabelView for " + getGraphicalRepresentation());
 		}
 		if (getController() != null && getController().getEditedLabel() == this) {
-			getController().resetEditedLabel();
+			getController().resetEditedLabel(this);
 		}
-		if (getParentView() != null) {
-			FGELayeredView parentView = getParentView();
+		removeFGEMouseListener();
+		FGELayeredView<?> parentView = getParentView();
+		if (parentView != null) {
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
 			parentView.revalidate();
@@ -121,37 +241,22 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 		}
 		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().deleteObserver(this);
+			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
+				((ShapeGraphicalRepresentation<O>) graphicalRepresentation).setLabelMetricsProvider(null);
+			}
 		}
-		disableMouseListeners();
-		_controller = null;
+		isDeleted = true;
+		controller = null;
 		mouseListener = null;
 		graphicalRepresentation = null;
-		isDeleted = true;
 	}
 
-	private Vector<MouseListener> disabledMouseListeners = new Vector<MouseListener>();
-	private Vector<MouseMotionListener> disabledMouseMotionListeners = new Vector<MouseMotionListener>();
-
-	public void enableMouseListeners() {
-		for (MouseListener ml : disabledMouseListeners) {
-			addMouseListener(ml);
-		}
-		for (MouseMotionListener mml : disabledMouseMotionListeners) {
-			addMouseMotionListener(mml);
-		}
+	public void enableTextComponentMouseListeners() {
+		removeFGEMouseListener();
 	}
 
-	public void disableMouseListeners() {
-		disabledMouseListeners.clear();
-		disabledMouseMotionListeners.clear();
-		for (MouseListener ml : getMouseListeners()) {
-			disabledMouseListeners.add(ml);
-			removeMouseListener(ml);
-		}
-		for (MouseMotionListener mml : getMouseMotionListeners()) {
-			disabledMouseMotionListeners.add(mml);
-			removeMouseMotionListener(mml);
-		}
+	public void disableTextComponentMouseListeners() {
+		addFGEMouseListener();
 	}
 
 	@Override
@@ -164,7 +269,7 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public DrawingView getDrawingView() {
+	public DrawingView<?> getDrawingView() {
 		if (getController() != null) {
 			return getController().getDrawingView();
 		}
@@ -172,11 +277,16 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public FGELayeredView getParent() {
-		return (FGELayeredView) super.getParent();
+	public LabelView<O> getLabelView() {
+		return this;
 	}
 
-	public FGELayeredView getParentView() {
+	@Override
+	public FGELayeredView<?> getParent() {
+		return (FGELayeredView<?>) super.getParent();
+	}
+
+	public FGELayeredView<?> getParentView() {
 		return getParent();
 	}
 
@@ -191,436 +301,334 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 
 	@Override
 	public double getScale() {
-		return getController().getScale();
+		if (getController() != null) {
+			return getController().getScale();
+		} else {
+			return 1.0;
+		}
+	}
+
+	@Override
+	public void rescale() {
+		updateFont();
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		if (getPaintManager().isPaintingCacheEnabled() && getDrawingView().isBuffering() && isEditing) {
-			// Dont' call super paint
-			// System.err.println("Skipping print in buffering "+this);
-		} else {
-			/*if (logger.isLoggable(Level.INFO))
-				logger.info("Normal painting"+this);*/
-			super.paint(g);
-		}
-
-		// super.paint(g);
-
-		if (isEditing) {
+		boolean skipPaint = getPaintManager().isPaintingCacheEnabled() && getPaintManager().getDrawingView().isBuffering()
+				&& (getPaintManager().isTemporaryObject(getGraphicalRepresentation()) || isEditing);
+		if (skipPaint || isDeleted() || !getGraphicalRepresentation().hasText()) {
 			return;
 		}
-
-		if (getPaintManager().isPaintingCacheEnabled()) {
-			if (getDrawingView().isBuffering()) {
-				// Buffering painting
-				if (getPaintManager().isTemporaryObject(getGraphicalRepresentation())) {
-					// This object is declared to be a temporary object, to be redrawn
-					// continuously, so we need to ignore it: do nothing
-					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-						FGEPaintManager.paintPrimitiveLogger.fine("LabelView: buffering paint, ignore: " + getGraphicalRepresentation());
-					}
-				} else {
-					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-						FGEPaintManager.paintPrimitiveLogger.fine("LabelView: buffering paint, draw: " + getGraphicalRepresentation()
-								+ " clip=" + g.getClip());
-					}
-					doPaint(g);
-				}
-			} else {
-				// TODO: implement usage of buffer
-				doPaint(g);
-			}
-		} else {
-			// Normal painting
-			doPaint(g);
-		}
-
-	}
-
-	protected void doPaint(Graphics g) {
-		// When editing, escape now
-		if (isEditing) {
-			// logger.info("Ignore paint beause editing");
-			return;
-		}
-		/*else {
-			logger.info("I'm NOT editing, so i paint myself");
-		}*/
-
-		// When no text, escape now
-		if (!getGraphicalRepresentation().hasText()) {
-			return;
-		}
-
-		Graphics2D g2 = (Graphics2D) g.create();
-		DrawUtils.turnOnAntiAlising(g2);
-		DrawUtils.setRenderQuality(g2);
-		DrawUtils.setColorRenderQuality(g2);
-
-		TextStyle ts = getGraphicalRepresentation().getTextStyle();
-		if (ts == null) {
-			ts = TextStyle.makeDefault();
-		}
-
-		if (ts.getIsBackgroundColored()) {
-			g2.setColor(ts.getBackgroundColor());
-			g2.fillRect(0, 0, getWidth(), getHeight());
-		}
-
-		g2.setColor(ts.getColor());
-
-		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
-		if (ts.getOrientation() != 0) {
-			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(getGraphicalRepresentation().getTextStyle().getOrientation())));
-		}
-		Font font = ts.getFont().deriveFont(at);
-
-		g2.setFont(font);
-
-		FontMetrics fm = getDrawingView().getFontMetrics(font);
-		int height = fm.getHeight();
-
-		if (getGraphicalRepresentation().getIsMultilineAllowed()) {
-			int maxWidth = -1;
-			StringTokenizer st1 = new StringTokenizer(getGraphicalRepresentation().getText(), StringUtils.LINE_SEPARATOR);
-			while (st1.hasMoreTokens()) {
-				int currentWidth = fm.stringWidth(st1.nextToken());
-				if (currentWidth > maxWidth) {
-					maxWidth = currentWidth;
-				}
-			}
-			StringTokenizer st = new StringTokenizer(getGraphicalRepresentation().getText(), StringUtils.LINE_SEPARATOR);
-			int lineIndex = 0;
-			while (st.hasMoreTokens()) {
-				String nextLine = st.nextToken();
-				int currentWidth = fm.stringWidth(nextLine);
-				if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.LEFT) {
-					g2.drawString(nextLine, 2 * FGEConstants.CONTROL_POINT_SIZE, (lineIndex + 1) * height/*-(int)(1*getScale())-1*/);
-				} else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.CENTER) {
-					g2.drawString(nextLine, 2 * FGEConstants.CONTROL_POINT_SIZE + (maxWidth - currentWidth) / 2, (lineIndex + 1) * height/*-(int)(1*getScale())-1*/);
-				} else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.RIGHT) {
-					g2.drawString(nextLine, 2 * FGEConstants.CONTROL_POINT_SIZE + maxWidth - currentWidth, (lineIndex + 1) * height/*-(int)(1*getScale())-1*/);
-				}
-				lineIndex++;
-			}
-		} else {
-			g2.drawString(getGraphicalRepresentation().getText(), 2 * FGEConstants.CONTROL_POINT_SIZE, height/*-(int)(1*getScale())-1*/);
-		}
-		/*if (logger.isLoggable(Level.INFO))
-			logger.info("Drawing string "+g2);*/
-
-		// g2.drawString(getGraphicalRepresentation().getText(),2*FGEConstants.CONTROL_POINT_SIZE,getHeight()-(int)(1*getScale())-1);
-
-		/*if (getGraphicalRepresentation().hasFloatingLabel()
-				&& ((getGraphicalRepresentation().getIsFocused() && getController().getFocusedFloatingLabel() == graphicalRepresentation)
-						|| getGraphicalRepresentation().getIsSelected())) {
-			if (getGraphicalRepresentation().getIsFocused()) {
-				g2.setColor(getDrawingView().getDrawingGraphicalRepresentation().getFocusColor());
-			}
-			if (getGraphicalRepresentation().getIsSelected()) {
-				g2.setColor(getDrawingView().getDrawingGraphicalRepresentation().getSelectionColor());
-			}
-			g2.fillRect(0,
-					getHeight()/2-FGEConstants.CONTROL_POINT_SIZE,
-					(int)(FGEConstants.CONTROL_POINT_SIZE*2),
-					(int)(FGEConstants.CONTROL_POINT_SIZE*2));
-			g2.fillRect(getWidth()-FGEConstants.CONTROL_POINT_SIZE*2,
-					getHeight()/2-FGEConstants.CONTROL_POINT_SIZE,
-					(int)(FGEConstants.CONTROL_POINT_SIZE*2),
-					(int)(FGEConstants.CONTROL_POINT_SIZE*2));
-		}*/
-
-		g2.dispose();
-
+		super.paint(g);
 	}
 
 	@Override
 	public DrawingController<?> getController() {
-		return _controller;
+		return controller;
 	}
 
 	@Override
-	public void update(Observable o, Object aNotification) {
+	public synchronized void update(final Observable o, final Object aNotification) {
 		if (isDeleted) {
 			// logger.warning("Received notifications for deleted view: observable="+(o!=null?o.getClass().getSimpleName():"null"));
 			return;
 		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
 
-		// System.out.println("Received: "+aNotification);
+				@Override
+				public void run() {
+					update(o, aNotification);
+				}
+			});
+		} else {
+			// System.out.println("Received: "+aNotification);
 
-		if (aNotification instanceof FGENotification) {
-			FGENotification notification = (FGENotification) aNotification;
-			if ((notification.getParameter() == GraphicalRepresentation.Parameters.text)
-					|| (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle)
-					|| (notification.getParameter() == GraphicalRepresentation.Parameters.relativeTextX)
-					|| (notification.getParameter() == GraphicalRepresentation.Parameters.relativeTextY)
-					|| (notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextX)
-					|| (notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextY)
-					|| (notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel)) {
-				if (isEditing && (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle)) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Text style attributes are not taken into account when editing");
-						// TODO: update textcomponent style during edition.
+			if (aNotification instanceof FGENotification) {
+				FGENotification notification = (FGENotification) aNotification;
+				if (notification.getParameter() == GraphicalRepresentation.Parameters.text) {
+					updateText();
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle) {
+					updateFont();
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.paragraphAlignment) {
+					updateFont();
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.horizontalTextAlignment
+						|| notification.getParameter() == GraphicalRepresentation.Parameters.verticalTextAlignment) {
+					updateBounds();
+					getPaintManager().repaint(this);
+				} else if (notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextX
+						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextY
+						|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextX
+						|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextY
+						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel) {
+					updateBounds();
+					getPaintManager().repaint(this);
+				} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
+						|| notification instanceof LabelWillMove) {
+					setDoubleBuffered(false);
+					if (notification instanceof LabelWillMove) {
+						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+				} else if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
+						|| notification instanceof LabelHasMoved) {
+					setDoubleBuffered(true);
+					if (notification instanceof LabelHasMoved) {
+						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
 					}
 				}
-				updateBounds();
-				revalidate();
-				getPaintManager().repaint(this);
 			}
 		}
 	}
 
 	protected void updateBounds() {
-		Rectangle newBounds = computeBounds();
-
-		/*if (getGraphicalRepresentation().getText() != null && getGraphicalRepresentation().getText().equals("AreteA")) {
-			logger.info("updateBounds() for AreteA with "+newBounds);
-		}
-		if (getGraphicalRepresentation().getText() != null && getGraphicalRepresentation().getText().equals("AreteB")) {
-			logger.info("updateBounds() for AreteB with "+newBounds);
-		}*/
-
-		if (!newBounds.equals(getBounds())) {
-			setBounds(newBounds);
-		}
+		updateBounds(true);
 	}
 
-	protected Rectangle computeBounds() {
-
-		Rectangle newBounds = getGraphicalRepresentation().getLabelBounds(getDrawingView(), getScale());
-		if (newBounds.isEmpty()) {
-			newBounds = getGraphicalRepresentation().getLabelBoundsWithAlignement(newBounds.getLocation(), 20,
-					(int) (getFontMetrics(getFont()).getHeight() * getScale()));
+	protected synchronized void updateBounds(final boolean repeat) {
+		if (isDeleted()) {
+			return;
 		}
-		/*Rectangle newBounds;
-		if (getGraphicalRepresentation().hasText()) {
-			AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
-			if (getGraphicalRepresentation().getTextStyle().getOrientation() != 0) at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(getGraphicalRepresentation().getTextStyle().getOrientation())));
-			Font font = getGraphicalRepresentation().getTextStyle().getFont().deriveFont(at);
-			FontMetrics fm = getDrawingView().getFontMetrics(font);
-			int height = 0;
-			int width = 0;
-			if (getGraphicalRepresentation().getIsMultilineAllowed()) {
-				StringTokenizer st = new StringTokenizer(getGraphicalRepresentation().getText(),LINE_SEPARATOR);
-				while (st.hasMoreTokens()) {
-					height += fm.getHeight();
-					width = Math.max(width, fm.stringWidth(st.nextToken())+4*FGEConstants.CONTROL_POINT_SIZE);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateBounds(repeat);
 				}
-			}
-			else {
-				height = fm.getHeight();
-				width = fm.stringWidth(getGraphicalRepresentation().getText())+4*FGEConstants.CONTROL_POINT_SIZE;
-			}
-			if (getGraphicalRepresentation().getTextStyle().getOrientation() != 0)
-				height = (int)Math.max(height,height+width*Math.sin(Math.toRadians(getGraphicalRepresentation().getTextStyle().getOrientation())));
-			Point center;
-			try {
-			center= getGraphicalRepresentation().getLabelViewCenter(getScale());
-			newBounds = new Rectangle(center.x-width/2,center.y-height/2,width,height);
-			}
-			catch (IllegalArgumentException e) {
-				logger.warning("Unexpected exception: "+e);
-				newBounds = new Rectangle(0,0,0,0);
+			});
+			return;
+		}
+		Rectangle bounds = graphicalRepresentation.getLabelBounds(getScale());
+		if (bounds.isEmpty() || bounds.width < 5) {
+			bounds.width = 20;
+			bounds.height = getFont().getSize();
+		}
+		if (!bounds.equals(getBounds())) {
+			setBounds(bounds);
+			validate();
+			if (repeat) {
+				updateBoundsLater();
 			}
 		}
-		else {
-			newBounds = new Rectangle(0,0,0,0);
-		}*/
-
-		/*if (isEditing) {
-			newBounds.x -= 3;
-			newBounds.y -= 3;
-			newBounds.width += 6;
-			newBounds.height += 6;
-		}*/
-
-		return newBounds;
 	}
 
-	private boolean isEditing = false;
-	private JTextComponent textComponent;
+	public void updateBoundsLater() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				updateBounds(true);
+			}
+		});
+	}
+
+	@Override
+	public Dimension getScaledPreferredDimension(double scale) {
+		Dimension preferredSize = getCurrentPreferredSize(scale);
+		if (scale == getScale()) {
+			return preferredSize;
+		} else {
+			Dimension d = preferredSize;
+			d.width *= scale;
+			d.height *= scale;
+			d.width /= getScale();
+			d.height /= getScale();
+			return d;
+		}
+	}
+
+	private class PreferredSizeRetriever implements Callable<Dimension> {
+
+		private double scale;
+
+		protected PreferredSizeRetriever(double scale) {
+			super();
+			this.scale = scale;
+		}
+
+		@Override
+		public Dimension call() {
+			if (isDeleted()) {
+				return getSize();
+			}
+			return getCurrentPreferredSize(scale);
+		}
+
+	}
+
+	private Dimension getCurrentPreferredSize(final double scale) {
+		if (isDeleted || getGraphicalRepresentation() == null) {
+			return getSize();
+		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			final PreferredSizeRetriever retriever = new PreferredSizeRetriever(scale);
+			try {
+				return FlexoSwingUtils.syncRunInEDT(retriever);
+			} catch (Exception e) {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.log(Level.SEVERE, "Exception when computing preferredSize of " + this, e);
+				}
+
+			}
+		}
+		int width = getGraphicalRepresentation().getAvailableLabelWidth(scale);
+		if (getGraphicalRepresentation().getLineWrap()) {
+			textComponent.setSize(width, Short.MAX_VALUE);
+		}
+
+		Dimension preferredSize = textComponent.getPreferredScrollableViewportSize();
+		if (preferredSize.width > width) {
+			preferredSize.width = width;
+		}
+		return preferredSize;
+	}
+
+	private void updateFont() {
+		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
+		TextStyle ts = getGraphicalRepresentation().getTextStyle();
+		if (ts == null) {
+			ts = TextStyle.makeDefault();
+		}
+		if (ts.getOrientation() != 0) {
+			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(ts.getOrientation())));
+		}
+		Font font = ts.getFont().deriveFont(at);
+		textComponent.setFont(font);
+		SimpleAttributeSet set = new SimpleAttributeSet();
+		if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.CENTER) {
+			StyleConstants.setAlignment(set, StyleConstants.ALIGN_CENTER);
+		} else if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.LEFT) {
+			StyleConstants.setAlignment(set, StyleConstants.ALIGN_LEFT);
+		} else if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.RIGHT) {
+			StyleConstants.setAlignment(set, StyleConstants.ALIGN_RIGHT);
+		} else if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.JUSTIFY) {
+			StyleConstants.setAlignment(set, StyleConstants.ALIGN_JUSTIFIED);
+		}
+		textComponent.setOpaque(ts.getIsBackgroundColored());
+		textComponent.setBackground(ts.getBackgroundColor());
+		StyleConstants.setFontFamily(set, font.getFamily());
+		StyleConstants.setFontSize(set, (int) (ts.getFont().getSize() * getScale()));
+		if (font.isBold()) {
+			StyleConstants.setBold(set, true);
+		}
+		if (font.isItalic()) {
+			StyleConstants.setItalic(set, true);
+		}
+		Color color = ts.getColor();
+		if (color == null) {
+			color = Color.BLACK;
+		}
+		StyleConstants.setForeground(set, color);
+		textComponent.setForeground(color);
+		textComponent.setDisabledTextColor(color);
+		textComponent.setParagraphAttributes(set, true);
+		textComponent.validate();
+		updateBounds();
+	}
+
+	@Override
+	public void setDoubleBuffered(boolean aFlag) {
+		super.setDoubleBuffered(aFlag && ToolBox.getPLATFORM() == ToolBox.MACOS);
+		if (textComponent != null) {
+			textComponent.setDoubleBuffered(aFlag);
+		}
+	}
+
+	private void updateText() {
+		if (isEditing || isDeleted) {
+			return;
+		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateText();
+				}
+			});
+			return;
+		}
+		if (getGraphicalRepresentation().hasText()) {
+			textComponent.setText(getGraphicalRepresentation().getText());
+		} else {
+			textComponent.setText("");
+		}
+		updateBounds();
+	}
+
+	public void addFGEMouseListener() {
+		/*if (!Arrays.asList(getMouseListeners()).contains(mouseListener)) {
+			addMouseListener(mouseListener);
+		}
+		if (!Arrays.asList(getMouseMotionListeners()).contains(mouseListener)) {
+			addMouseMotionListener(mouseListener);
+		}*/
+		if (!Arrays.asList(textComponent.getMouseListeners()).contains(mouseListener)) {
+			textComponent.addMouseListener(mouseListener);
+		}
+		if (!Arrays.asList(textComponent.getMouseMotionListeners()).contains(mouseListener)) {
+			textComponent.addMouseMotionListener(mouseListener);
+		}
+	}
+
+	public void removeFGEMouseListener() {
+		// removeMouseListener(mouseListener);
+		// removeMouseMotionListener(mouseListener);
+		textComponent.removeMouseListener(mouseListener);
+		textComponent.removeMouseMotionListener(mouseListener);
+	}
+
+	public void startEdition() {
+		if (!getGraphicalRepresentation().getIsLabelEditable()) {
+			return;
+		}
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Start edition of " + getGraphicalRepresentation());
+		}
+		isEditing = true;
+		registerTextListener();
+		textComponent.setEditable(true);
+		setDoubleBuffered(false);
+		if (getController() != null) {
+			getController().setEditedLabel(LabelView.this);
+		}
+		getGraphicalRepresentation().notifyLabelWillBeEdited();
+		getPaintManager().invalidate(getGraphicalRepresentation());
+		getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+		repaint();
+	}
 
 	public void stopEdition() {
 		if (!isEditing) {
 			return;
 		}
 
-		// If not continous edition, do it now
+		// If not continuous edition, do it now
 		if (!getGraphicalRepresentation().getContinuousTextEditing()) {
 			getGraphicalRepresentation().setText(textComponent.getText());
 		}
-
 		isEditing = false;
-		logger.info("Stop edition of " + getGraphicalRepresentation() + " getController()=" + getController());
-
-		if (getController() != null) {
-			getController().resetEditedLabel();
+		unregisterTextListener();
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Stop edition of " + getGraphicalRepresentation() + " getController()=" + getController());
 		}
-
+		textComponent.setEditable(false);
+		setDoubleBuffered(true);
+		if (getController() != null) {
+			getController().resetEditedLabel(LabelView.this);
+		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Stop edition of " + getGraphicalRepresentation());
 		}
-		remove(textComponent);
-		updateBounds();
 		if (getGraphicalRepresentation() == null || getGraphicalRepresentation().isDeleted()) {
 			return;
 		}
 		getGraphicalRepresentation().notifyLabelHasBeenEdited();
-
-		// enableMouseListeners();
-
-		setDoubleBuffered(true);
-		revalidate();
-		getPaintManager().resetTemporaryObjects();
+		getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
 		getPaintManager().invalidate(getGraphicalRepresentation());
-		getPaintManager().repaint(getDrawingView());
-	}
-
-	private int hOffset;
-	private int vOffset;
-
-	public void startEdition() {
-		if (!getGraphicalRepresentation().getIsLabelEditable()) {
-			return;
-		}
-		logger.info("Start edition of " + getGraphicalRepresentation());
-
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Start edition of " + getGraphicalRepresentation());
-		}
-
-		isEditing = true;
-
-		// disableMouseListeners();
-
-		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
-		if (getGraphicalRepresentation().getTextStyle().getOrientation() != 0) {
-			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(getGraphicalRepresentation().getTextStyle().getOrientation())));
-		}
-		Font font = getGraphicalRepresentation().getTextStyle().getFont().deriveFont(at);
-		if (getGraphicalRepresentation().getIsMultilineAllowed()) {
-			// textComponent = new JTextArea(getGraphicalRepresentation().getText());
-			final JTextPane text = new JTextPane();
-			text.setOpaque(false);
-			StyledDocument doc = text.getStyledDocument();
-			// doc.putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
-			SimpleAttributeSet set = new SimpleAttributeSet();
-			if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.CENTER) {
-				StyleConstants.setAlignment(set, StyleConstants.ALIGN_CENTER);
-			} else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.LEFT) {
-				StyleConstants.setAlignment(set, StyleConstants.ALIGN_LEFT);
-			} else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.RIGHT) {
-				StyleConstants.setAlignment(set, StyleConstants.ALIGN_RIGHT);
-			}
-			StyleConstants.setFontFamily(set, font.getFamily());
-			StyleConstants.setFontSize(set, (int) (font.getSize() * getScale()));
-			if (font.isBold()) {
-				StyleConstants.setBold(set, true);
-			}
-			if (font.isItalic()) {
-				StyleConstants.setItalic(set, true);
-			}
-			if (getGraphicalRepresentation().getTextStyle().getColor() != null) {
-				StyleConstants.setForeground(set, getGraphicalRepresentation().getTextStyle().getColor());
-			}
-			/*if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation
-					&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground()!=null
-					&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor()!=null)
-				StyleConstants.setBackground(set, ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor());
-			else if (getGraphicalRepresentation().getTextStyle().getBackgroundColor()!=null)
-				StyleConstants.setBackground(set, getGraphicalRepresentation().getTextStyle().getBackgroundColor());*/
-			text.setParagraphAttributes(set, true);
-			try {
-				doc.insertString(0, getGraphicalRepresentation().getText(), set);
-			} catch (BadLocationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			textComponent = text;
-		} else {
-			textComponent = new JTextField(getGraphicalRepresentation().getText());
-			textComponent.setBorder(BorderFactory.createEmptyBorder());
-			((JTextField) textComponent).setHorizontalAlignment(SwingConstants.CENTER);
-			((JTextField) textComponent).addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusLost(FocusEvent e) {
-					stopEdition();
-				}
-			});
-
-			((JTextField) textComponent).addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent event) {
-					stopEdition();
-				}
-			});
-			textComponent.setFont(font);
-			textComponent.setOpaque(false);
-			if (getGraphicalRepresentation().getTextStyle().getColor() != null) {
-				textComponent.setForeground(getGraphicalRepresentation().getTextStyle().getColor());
-				/*if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation
-						&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground()!=null
-						&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor()!=null)
-					textComponent.setBackground(((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor());
-				else if (getGraphicalRepresentation().getTextStyle().getBackgroundColor()!=null)
-				textComponent.setBackground(getGraphicalRepresentation().getTextStyle().getBackgroundColor());*/
-			}
-		}
-		textComponent.setDoubleBuffered(false);
-		setDoubleBuffered(false);
-		vOffset = (int) (textComponent.getInsets().top * getScale());
-		hOffset = ((textComponent.getInsets().left - textComponent.getInsets().right));
-		textComponent.setBorder(BorderFactory.createEmptyBorder());
-		// textComponent.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-		textComponent.setForeground(getGraphicalRepresentation().getTextStyle().getColor());
-		setBounds(computeBounds());
-		/*FontMetrics fm = getDrawingView().getFontMetrics(font);
-		int height = fm.getHeight();*/
-		textComponent.setBounds(hOffset, vOffset, getWidth(), getHeight());
-
-		LabelDocumentListener listener = new LabelDocumentListener();
-
-		textComponent.addKeyListener(listener);
-
-		textComponent.getDocument().addDocumentListener(listener);
-		textComponent.addCaretListener(listener);
-		/*textComponent.getDocument().addDocumentListener(new DocumentListener() {
-			public void insertUpdate(DocumentEvent event)
-			{
-				getGraphicalRepresentation().setText(textComponent.getText());
-				updateBounds();
-				textComponent.setBounds(0,vOffset,getWidth(),getHeight()+vOffset);
-			}
-
-			public void removeUpdate(DocumentEvent event)
-			{
-				getGraphicalRepresentation().setText(textComponent.getText());
-				updateBounds();
-				textComponent.setBounds(0,vOffset,getWidth(),getHeight()+vOffset);
-			}
-
-			public void changedUpdate(DocumentEvent event)
-			{
-				getGraphicalRepresentation().setText(textComponent.getText());
-				updateBounds();
-				textComponent.setBounds(0,vOffset,getWidth(),getHeight()+vOffset);
-			}
-		});*/
-
-		add(textComponent);
-		textComponent.setOpaque(false);
-		textComponent.requestFocus();
-		textComponent.selectAll();
-		getController().setEditedLabel(this);
-		getGraphicalRepresentation().notifyLabelWillBeEdited();
-		getPaintManager().invalidate(getGraphicalRepresentation());
-
-		revalidate();
-
-		getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-		getPaintManager().repaint(getDrawingView());
-
+		getPaintManager().repaint(this);
 	}
 
 	class LabelDocumentListener extends KeyAdapter implements DocumentListener, CaretListener {
@@ -665,8 +673,7 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 			if (getGraphicalRepresentation().getContinuousTextEditing()) {
 				getGraphicalRepresentation().setText(textComponent.getText());
 			}
-			updateBounds();
-			textComponent.setBounds(hOffset, vOffset, getWidth(), getHeight());
+			updateBoundsLater();
 		}
 
 		@Override
@@ -686,8 +693,7 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 			if (getGraphicalRepresentation().getContinuousTextEditing()) {
 				getGraphicalRepresentation().setText(textComponent.getText());
 			}
-			updateBounds();
-			textComponent.setBounds(hOffset, vOffset, getWidth(), getHeight());
+			updateBoundsLater();
 		}
 
 		@Override
@@ -699,8 +705,7 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 			if (getGraphicalRepresentation().getContinuousTextEditing()) {
 				getGraphicalRepresentation().setText(textComponent.getText());
 			}
-			updateBounds();
-			textComponent.setBounds(hOffset, vOffset, getWidth(), getHeight());
+			updateBoundsLater();
 		}
 
 		@Override
@@ -709,7 +714,7 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 			int start = textComponent.getSelectionStart();
 			int end = textComponent.getSelectionEnd();
 			if (start != end) {
-				if ((end == 0 && start == textComponent.getDocument().getLength()) || start == 0
+				if (end == 0 && start == textComponent.getDocument().getLength() || start == 0
 						&& end == textComponent.getDocument().getLength()) {
 					wasEdited = false;
 				}
@@ -717,7 +722,6 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 				wasEdited = true;
 			}
 		}
-
 	}
 
 	@Override
@@ -737,14 +741,6 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 	@Override
 	public String getToolTipText(MouseEvent event) {
 		return getController().getToolTipText();
-	}
-
-	public LabelViewMouseListener getMouseListener() {
-		return mouseListener;
-	}
-
-	public JTextComponent getTextComponent() {
-		return textComponent;
 	}
 
 }

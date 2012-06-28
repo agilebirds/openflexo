@@ -35,6 +35,7 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IETopComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.util.HyperlinkType;
+import org.openflexo.foundation.ie.util.TextFieldType;
 import org.openflexo.foundation.ie.util.WidgetType;
 import org.openflexo.foundation.ie.widget.ButtonedWidgetInterface;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
@@ -45,6 +46,7 @@ import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.ie.widget.IESequenceTopComponent;
 import org.openflexo.foundation.ie.widget.IESequenceWidget;
+import org.openflexo.foundation.ie.widget.IEStringWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
@@ -76,7 +78,7 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 
 		@Override
 		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};
@@ -93,6 +95,8 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 	private static final String COL = "col";
 
 	private IEWidget droppedWidget;
+
+	private boolean updateDates = false;
 
 	private IEObject container;
 
@@ -175,6 +179,14 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 		if (getDroppedWidget() == null) {
 			throw new InvalidDropException("Cannot drop a null widget !");
 		}
+		if (isUpdateDates()) {
+			Vector<IEStringWidget> stringWidgets = droppedWidget.getAllEmbeddedIEWidgets(IEStringWidget.class);
+			for (IEStringWidget w : stringWidgets) {
+				if (w.getFieldType() != null && w.getFieldType() == TextFieldType.DATE) {
+					w.setValue(w.getDefaultValue());
+				}
+			}
+		}
 		getProject().register(droppedWidget);
 		droppedWidget.setWOComponent(getWOComponent());
 		droppedWidget.setParent(getContainer());
@@ -194,9 +206,9 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 
 	public IEWOComponent getWOComponent() {
 		if (getContainer() instanceof IEWOComponent) {
-			return ((IEWOComponent) getContainer());
+			return (IEWOComponent) getContainer();
 		} else if (getContainer() instanceof IEWidget) {
-			return (((IEWidget) getContainer()).getWOComponent());
+			return ((IEWidget) getContainer()).getWOComponent();
 		} else {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot resolve component!");
@@ -211,7 +223,7 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 			logger.info("IEWidget=" + model);
 		}
 
-		if ((container instanceof IESequenceTopComponent) && (model instanceof IETopComponent)) {
+		if (container instanceof IESequenceTopComponent && model instanceof IETopComponent) {
 			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
@@ -227,7 +239,7 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 			}
 		}
 
-		if ((container instanceof IEBlocWidget) && (model instanceof IEHTMLTableWidget)) {
+		if (container instanceof IEBlocWidget && model instanceof IEHTMLTableWidget) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("CASE 3: insert IEHTMLTableWidget in IEBlocWidget (DropTableZone)");
 			}
@@ -235,7 +247,7 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 			return true;
 		}
 
-		if ((container instanceof ButtonedWidgetInterface) && (model instanceof IEHyperlinkWidget)) {
+		if (container instanceof ButtonedWidgetInterface && model instanceof IEHyperlinkWidget) {
 			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
@@ -246,7 +258,7 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 			return true;
 		}
 
-		if ((container instanceof IESequenceTab) && (model instanceof IETabWidget)) {
+		if (container instanceof IESequenceTab && model instanceof IETabWidget) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("CASE 7: insert IETabWidget in IESequenceTab (DropTabZone)");
 			}
@@ -254,7 +266,7 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 			return true;
 		}
 
-		if ((container instanceof IEButtonContainerWidget) && (model instanceof IEButtonWidget)) {
+		if (container instanceof IEButtonContainerWidget && model instanceof IEButtonWidget) {
 			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
@@ -265,7 +277,7 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 			return true;
 		}
 
-		if ((container instanceof IESequenceWidget)) {
+		if (container instanceof IESequenceWidget) {
 			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
@@ -367,8 +379,8 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 					return aFile.isFile() && aFile.getName().endsWith(".properties");
 				}
 			})) {
-				if ((file.getName().equalsIgnoreCase(paletteElementName))
-						|| (file.getName().equalsIgnoreCase(paletteElementName + ".properties"))) {
+				if (file.getName().equalsIgnoreCase(paletteElementName)
+						|| file.getName().equalsIgnoreCase(paletteElementName + ".properties")) {
 					return file;
 				}
 			}
@@ -421,6 +433,14 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 		dropWidget.setElementType(widgetType);
 		dropWidget.setIndex(index);
 		return dropWidget;
+	}
+
+	public boolean isUpdateDates() {
+		return updateDates;
+	}
+
+	public void setUpdateDates(boolean updateDates) {
+		this.updateDates = updateDates;
 	}
 
 }

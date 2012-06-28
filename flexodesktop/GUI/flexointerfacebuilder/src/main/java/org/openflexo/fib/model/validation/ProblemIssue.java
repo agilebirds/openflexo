@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.model.validation;
 
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -85,9 +84,8 @@ public abstract class ProblemIssue<R extends ValidationRule<R, C>, C extends FIB
 	}
 
 	public void revalidateAfterFixing(boolean isDeleteAction) {
-		Vector<ValidationIssue> allIssuesToRemove = getValidationReport().issuesRegarding(getObject());
-		for (Enumeration e = getRelatedValidableObjects().elements(); e.hasMoreElements();) {
-			FIBModelObject relatedValidable = (FIBModelObject) e.nextElement();
+		List<ValidationIssue<?, ?>> allIssuesToRemove = getValidationReport().issuesRegarding(getObject());
+		for (FIBModelObject relatedValidable : getRelatedValidableObjects()) {
 			allIssuesToRemove.addAll(getValidationReport().issuesRegarding(relatedValidable));
 		}
 		if (getObject().getEmbeddedObjects() != null) {
@@ -107,20 +105,17 @@ public abstract class ProblemIssue<R extends ValidationRule<R, C>, C extends FIB
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("Found " + newReportForThisObject.getValidationIssues().size() + " new issues for this revalidated object");
 			}
-			for (Enumeration e = newReportForThisObject.getValidationIssues().elements(); e.hasMoreElements();) {
-				ValidationIssue newIssue = (ValidationIssue) e.nextElement();
+			for (ValidationIssue<?, ?> newIssue : newReportForThisObject.getValidationIssues()) {
 				getValidationReport().addToValidationIssues(newIssue);
 			}
 		}
-		for (Enumeration e = getRelatedValidableObjects().elements(); e.hasMoreElements();) {
-			C relatedValidable = (C) e.nextElement();
+		for (FIBModelObject relatedValidable : getRelatedValidableObjects()) {
 			ValidationReport newReportForRelatedObject = relatedValidable.validate();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("Found " + newReportForRelatedObject.getValidationIssues().size()
 						+ " new issues for this revalidated related object");
 			}
-			for (Enumeration e2 = newReportForRelatedObject.getValidationIssues().elements(); e2.hasMoreElements();) {
-				ValidationIssue newIssue = (ValidationIssue) e2.nextElement();
+			for (ValidationIssue<?, ?> newIssue : newReportForRelatedObject.getValidationIssues()) {
 				getValidationReport().addToValidationIssues(newIssue);
 			}
 		}

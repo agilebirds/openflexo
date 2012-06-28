@@ -27,6 +27,8 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.dm.CGStructureRefreshed;
+import org.openflexo.foundation.cg.dm.LongOperationStarted;
+import org.openflexo.foundation.cg.dm.LongOperationStopped;
 
 public class GeneratedCodeRepositoryElement extends GCBrowserElement {
 	public GeneratedCodeRepositoryElement(GenerationRepository repository, ProjectBrowser browser, BrowserElement parent) {
@@ -36,7 +38,6 @@ public class GeneratedCodeRepositoryElement extends GCBrowserElement {
 	@Override
 	protected void buildChildrenVector() {
 		if (getRepository().isEnabled()) {
-			getRepository().ensureStructureIsUpToDate();
 			for (CGSymbolicDirectory dir : getRepository().getSymbolicDirectories().values()) {
 				addToChilds(dir);
 			}
@@ -60,6 +61,15 @@ public class GeneratedCodeRepositoryElement extends GCBrowserElement {
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof LongOperationStarted) {
+			_browser.setHoldStructure();
+			return;
+		} else if (dataModification instanceof LongOperationStopped) {
+			_browser.resetHoldStructure();
+			refreshWhenPossible();
+			return;
+		}
+
 		if (dataModification instanceof CGStructureRefreshed) {
 			refreshWhenPossible();
 			return;

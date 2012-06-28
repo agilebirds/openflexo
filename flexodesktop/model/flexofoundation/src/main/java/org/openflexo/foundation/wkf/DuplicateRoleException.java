@@ -32,7 +32,7 @@ public class DuplicateRoleException extends FlexoException {
 	private String name;
 
 	public DuplicateRoleException(String aName) {
-		super(null);
+		super((String) null);
 		name = aName;
 	}
 

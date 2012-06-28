@@ -757,6 +757,7 @@ if there is an associated screen make a hyperlink to the screen.
 
 #macro(tocEntry $_entry)
 <!--Entering macro tocEntry -->
+    $!{generator.beginTocEntry($_entry)}
     #if(${_entry.getStartOnANewPage()})
         <w:p>
             <w:r>
@@ -764,8 +765,29 @@ if there is an associated screen make a hyperlink to the screen.
             </w:r>
         </w:p>
     #end
-    #set($templateName = "#getTemplateNameForTocEntry($_entry)")
-    #set($templateType = "#getTemplateTypeForTocEntry($_entry)")
+    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
+    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
+    #set($templateName = ${_entry.getDefaultTemplateName()})
+    
+    #if(${_entry.isIteration()})
+    	${generator.log("Rendering iteration")}
+
+		#foreach($_item in ${generator.getIterableObjects($_entry)})
+			#void(${generator.iterateOnItem($_entry,$_item)}) ## ICI C'est super foireux comme appel, ça va foutre du texte dans l'XML
+			#if($generator.getItemCondition($_entry))
+    			${generator.log("Item is valid, performing rendering for this iteration")}
+    			#subTocEntries($_entry)
+			#end
+		#end
+    
+    #elseif(${_entry.isConditional()})
+    	${generator.log("Rendering conditional")}
+    	#if($generator.getCondition($_entry))
+    		${generator.log("Condition is true, performing rendering for this conditional")}
+    		#subTocEntries($_entry)
+		#end
+    #else
+    #if(${_entry.getRenderSectionTitle()})
     <w:p>
         <w:pPr>
             <w:keepNext/>
@@ -776,12 +798,25 @@ if there is an associated screen make a hyperlink to the screen.
         #end
         #renderTocEntryTitle($_entry)
     </w:p>
-    #renderTocEntryContent($_entry)
-    #if($templateName.trim().length()>0)
-        #set($newEntryLevel = $_entry.getLevel() + 1)
-        #render($_entry.getObject() $newEntryLevel $templateName $_entry)
+	#end
+    #if(${_entry.getRenderContent()})
+    	#renderTocEntryContent($_entry)
+	#end
+    #if($templateName)
+    	#if(${_entry.getRenderSectionTitle()})
+        	#set($newEntryLevel = $_entry.getLevel() + 1)
+        #else
+            #set($newEntryLevel = $_entry.getLevel())
+        #end
+        #set($passedObject = $generator.getAccessedModelObject($_entry))
+    	${generator.log($templateName, $passedObject)}
+        #render($passedObject $newEntryLevel $templateName $_entry)
+        ##render($generator.getCondition($_entry) $newEntryLevel $templateName $_entry)
     #end
     #subTocEntries($_entry)
+    #end
+    ${generator.endTocEntry($_entry)}
+
 <!-- Exiting macro tocEntry -->
 #end
 
@@ -799,10 +834,13 @@ name of the template corresponding to the specific toc_entry.
 !!!in particular, no debug info should be written out!!!!!
 *#
 #macro(getTemplateNameForTocEntry $_tocEntry)
-    #if(${_tocEntry.getIdentifier()} == $DocSection.PROCESSES)
+#parse(${_tocEntry.getDefaultTemplateName()})
+    #** #if(${_tocEntry.getIdentifier()} == $DocSection.PROCESSES)
         docx_tocentry_processes.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.SCREENS)
         docx_tocentry_screens.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.VIEWS)
+        docx_tocentry_views.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.DATA_MODEL)
         docx_tocentry_datamodel.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.DEFINITIONS)
@@ -811,6 +849,8 @@ name of the template corresponding to the specific toc_entry.
         docx_tocentry_roles.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.RACI)
         docx_tocentry_raci_full.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.VIEWS)
+        docx_tocentry_views.xml.vm
     #elseif(${_tocEntry.isIndividualProcessFolder()})
         docx_tocentry_processfolder.xml.vm
     #elseif(${_tocEntry.isIndividualProcess()})
@@ -823,7 +863,7 @@ name of the template corresponding to the specific toc_entry.
         docx_tocentry_individualrole.xml.vm
     #elseif($_tocEntry.isIndividualComponentDefinition())
         docx_tocentry_screen.xml.vm
-    #end
+    #end *#
 #end
 
 #macro(getProcessTemplateNameForTocEntry $_tocEntry)
@@ -840,6 +880,8 @@ name of the template corresponding to the specific toc_entry.
     #end
 #end
 
+
+#**
 #macro(getTemplateTypeForTocEntry $_tocEntry)
     #if(${_tocEntry.getIdentifier()} == $DocSection.PROCESSES)
         tocentry_processes
@@ -877,6 +919,8 @@ name of the template corresponding to the specific toc_entry.
         tocentry_screen
     #end
 #end
+
+*#
 
 #macro(addAdditionalRels $rels)
 <!--Entering macro addAdditionalRels -->
@@ -1193,7 +1237,7 @@ name of the template corresponding to the specific toc_entry.
     #set($currentTocEntry = ${currentTocEntry.get()})
     #if(${currentTocEntry.getRecursionEnabled()})
         #if(${processOrFolder.getClassNameKey()} == 'process_folder')
-            #set($subFolders = ${processOrFolder.getFolders()})
+            #set($subFolders = ${processOrFolder.getSortedFolders()})
             #set($subProcesses = ${processOrFolder.getProcesses()})
         #else
             #set($subFolders = ${processOrFolder.getProcessNode().getSortedFolders()})
@@ -1342,6 +1386,10 @@ name of the template corresponding to the specific toc_entry.
 ##headersArray: contains a list of string which will be used as headers
 ##contents: contains a list of list of String which will be used to fill the table 
 #macro(renderDocxTable $headersArray $contents)
+#renderDocxTable2($headersArray $contents $falseValue)
+#end
+
+#macro(renderDocxTable2 $headersArray $contents $isRawContent)
 <!--Entering macro renderDocxTable -->
     <w:tbl>
         <w:tblPr>
@@ -1395,7 +1443,7 @@ name of the template corresponding to the specific toc_entry.
                                 <w:sz w:val="24"/>
                                 <w:szCs w:val="24"/>
                             </w:rPr>
-                            <w:t>$header</w:t>
+                            <w:t>#if(${isRawContent})#escape(${header})#else${header}#end</w:t>
                         </w:r>
                     </w:p>
                 </w:tc>
@@ -1418,7 +1466,17 @@ name of the template corresponding to the specific toc_entry.
                             #end
                         </w:tcPr>
                         #if($column.trim().length()>0)
-                            $column
+                            #if(${isRawContent})
+                            <w:p>
+                                <w:pPr><w:keepNext/></w:pPr>
+                                <w:r>
+                                    <w:t>#escape(${column})</w:t>
+                                </w:r>
+                            </w:p>
+                            #else
+                                ${column}
+                            #end
+                        
                         #else
                             <w:p>
                                 <w:pPr><w:keepNext/></w:pPr>
@@ -1434,6 +1492,7 @@ name of the template corresponding to the specific toc_entry.
     </w:tbl>
 <!-- Exiting macro renderDocxTable -->
 #end
+
 
 #*
 * This macro outputs a table environment with the metrics, with an introduction text.
@@ -1897,7 +1956,7 @@ name of the template corresponding to the specific toc_entry.
 #set($activities=$generator.getNewVector())
 #foreach($subProcessNode in ${process.getSortedMeaningFullActivitiesAndSubProcessNode()})
     #void($activities.add($subProcessNode))
-    #if($subProcessNode.getSubProcess())
+    #if($subProcessNode.getSubProcess() && $falseValue)
     #foreach($a in $subProcessNode.getSubProcess().getSortedMeaningFullActivities())
         #if(!${a.getDontGenerate()})#void($activities.add($a))#end
     #end
@@ -2027,6 +2086,80 @@ name of the template corresponding to the specific toc_entry.
 #end ##if
 <!--Exiting macro raciTable -->
 #end ##raciTable
+
+#macro(renderEPIWithTag $_epi $_bindingPath $_enclosingTag)
+    #set($_a = "")
+    #foreach($entry in ${_epi.getPattern().getInspector().getEntries()})
+        #if($entry.getData().toString() == $_bindingPath)
+            #set($_a = ${_epi.getPattern().getViewPoint().getLocalizedDictionary().getLocalizedForKeyAndLanguage($entry.getLabel(), ${Language.ENGLISH})})
+            #if(!$_a)
+               #set($_a = $entry.getLabel())
+            #end
+            #break
+        #end
+    #end
+    #renderEPIWithTagAndAlias($_epi $_bindingPath $_enclosingTag $_a)
+#end
+
+#macro(renderEPIWithTagAndAlias $_epi $_bindingPath $_enclosingTag $_alias)
+#set($_text = $_epi.evaluate($_bindingPath))
+#set($muliline = $_text.contains($n))
+#if(!$multiline)
+    #foreach($patternRole in ${_epi.getPattern().getPatternRoles()})
+        #if(${patternRole.getLabel().toString()}==$_bindingPath)
+            #set($muliline = ${patternRole.getGraphicalRepresentation().getIsMultilineAllowed()})
+            #break
+        #end
+    #end
+#end
+#if(!$multiline)
+    #foreach($entry in ${_epi.getPattern().getInspector().getEntries()})
+        #if(${entry.getData()}==$_bindingPath)
+            #set($muliline = ${entry.getWidgetName().equals("TextArea")})
+            #break
+        #end
+    #end
+#end
+#set($_hasText = $falseValue)
+#if($_text && ${_text.trim().length()}>0)
+    #set($_hasText = $trueValue)
+#end
+#set($_ot="") ## opening tags
+#set($_ct="") ## closing tags
+#if($_enclosingTag=="w:tr")
+    #set($_ot="<w:tr><w:tc><w:p><w:r><w:t>")
+    #set($_ct="</w:t></w:r></w:p></w:tc></w:tr>")
+#elseif($_enclosingTag=="w:r")
+    #set($_ot="<w:r><w:t>")
+    #set($_ct="</w:t></w:r>")
+#elseif($_enclosingTag=="w:p")
+    #set($_ot="<w:p><w:r><w:t>")
+    #set($_ct="</w:t></w:r></w:p>")
+#else
+    #set($_ot="<${_enclosingTag}><w:p><w:r><w:t>")
+    #set($_ct="</w:t></w:r></w:p></${_enclosingTag}>")
+#end
+   <w:sdt>
+        <w:sdtPr>
+            <w:alias w:val="#escape($_alias)"/>
+            <w:tag w:val="#escape(${projectGenerator.getEPITag($_epi, $_bindingPath)})" />
+            <w:lock w:val="sdtLocked" />
+            <w:text w:multiLine="$muliline"/>
+            #if(!$_hasText)
+                <w:showingPlcHdr/>
+            #end
+        </w:sdtPr>
+        <w:sdtContent>
+            $_ot
+            #if($_hasText)
+                #escape($_text)
+            #else
+                Click here to fill the $_alias
+            #end
+            $_ct
+        </w:sdtContent>
+    </w:sdt>
+#end
 
 #macro(displayFormattedToday)#set($dateFormat = ${generator.getNewHolder()})#getDateFormat($dateFormat)#set($dateFormat = ${dateFormat.get()})${dateFormat.format($today)}#end
 

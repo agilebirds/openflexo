@@ -20,6 +20,7 @@
 package org.openflexo.fge.view;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -112,10 +113,6 @@ public class FGEPaintManager {
 		return _temporaryObjects;
 	}
 
-	public void resetTemporaryObjects() {
-		_temporaryObjects.clear();
-	}
-
 	public boolean containsTemporaryObject(GraphicalRepresentation<?> gr) {
 		if (gr == null) {
 			return false;
@@ -152,7 +149,9 @@ public class FGEPaintManager {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("addToTemporaryObjects() " + gr);
 		}
-		_temporaryObjects.add(gr);
+		if (!_temporaryObjects.contains(gr)) {
+			_temporaryObjects.add(gr);
+		}
 	}
 
 	public void removeFromTemporaryObjects(GraphicalRepresentation<?> gr) {
@@ -173,9 +172,10 @@ public class FGEPaintManager {
 			paintRequestLogger.info("CALLED clear paint buffer on FGEPaintManager");
 		}
 		_paintBuffer = null;
+
 	}
 
-	public void repaint(FGEView view, Rectangle bounds) {
+	public void repaint(FGEView<?> view, Rectangle bounds) {
 		if (!_drawingView.contains(view)) {
 			return;
 		}
@@ -193,6 +193,9 @@ public class FGEPaintManager {
 	}
 
 	public void repaint(final FGEView view) {
+		if (view.isDeleted()) {
+			return;
+		}
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -216,12 +219,7 @@ public class FGEPaintManager {
 		repaintManager.repaintTemporaryRepaintAreas(_drawingView);
 		((JComponent) view).repaint();
 		if (view.getGraphicalRepresentation().hasFloatingLabel()) {
-			LabelView<?> label = null;
-			if (view instanceof ConnectorView) {
-				label = ((ConnectorView<?>) view).getLabelView();
-			} else if (view instanceof ShapeView) {
-				label = ((ShapeView<?>) view).getLabelView();
-			}
+			LabelView<?> label = view.getLabelView();
 			if (label != null) {
 				label.repaint();
 			}
@@ -229,47 +227,44 @@ public class FGEPaintManager {
 		// repaintManager.repaintTemporaryRepaintAreas((JComponent)view);
 
 		if (view instanceof ShapeView /*&& isPaintingCacheEnabled()*/) {
-			if (((Component) view).getParent() == null) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Parent view to repaint is null: "
-							+ (view.getGraphicalRepresentation() != null ? view.getModel() : view));
-				}
+			Container parent = ((Component) view).getParent();
+			if (parent == null) {
 				return;
 			}
 			// What may happen here ?
 			// Control points displayed focus or selection might changed, and to be refresh correctely
-			// we mut assume that a request to an extended area embedding those control points
+			// we must assume that a request to an extended area embedding those control points
 			// must be performed (in case of border is not sufficient)
-			ShapeGraphicalRepresentation<?> gr = ((ShapeView) view).getGraphicalRepresentation();
+			ShapeGraphicalRepresentation<?> gr = ((ShapeView<?>) view).getGraphicalRepresentation();
 			int requiredControlPointSpace = FGEConstants.CONTROL_POINT_SIZE;
 			if (gr.getBorder().top * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
 						((Component) view).getWidth() + requiredControlPointSpace * 2, requiredControlPointSpace * 2);
-				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, ((Component) view).getParent());
-				((Component) view).getParent().repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
+				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
+				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
 			if (gr.getBorder().bottom * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, ((Component) view).getHeight()
 						- requiredControlPointSpace, ((Component) view).getWidth() + requiredControlPointSpace * 2,
 						requiredControlPointSpace * 2);
-				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, ((Component) view).getParent());
-				((Component) view).getParent().repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
+				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
+				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
 			if (gr.getBorder().left * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
 						requiredControlPointSpace * 2, ((Component) view).getHeight() + requiredControlPointSpace * 2);
-				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, ((Component) view).getParent());
-				((Component) view).getParent().repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
+				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
+				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
 			if (gr.getBorder().right * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(((Component) view).getWidth() - requiredControlPointSpace,
 						-requiredControlPointSpace, requiredControlPointSpace * 2, ((Component) view).getHeight()
 								+ requiredControlPointSpace * 2);
-				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, ((Component) view).getParent());
-				((Component) view).getParent().repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
+				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
+				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
 		}
@@ -279,7 +274,7 @@ public class FGEPaintManager {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Called REPAINT for graphical representation " + gr);
 		}
-		FGEView view = _drawingView.viewForObject(gr);
+		FGEView<?> view = _drawingView.viewForObject(gr);
 		if (view != null) {
 			repaint(view);
 		}
@@ -295,8 +290,8 @@ public class FGEPaintManager {
 		Rectangle rect = new Rectangle(((JComponent) v).getX(), ((JComponent) v).getY(), ((JComponent) v).getWidth(),
 				((JComponent) v).getHeight());
 		if (v instanceof ShapeView) {
-			if (((ShapeView<?>) v).getLabelView() != null) {
-				rect = rect.union(((ShapeView<?>) v).getLabelView().getBounds());
+			if (v.getLabelView() != null) {
+				rect = rect.union(v.getLabelView().getBounds());
 			}
 		}
 		return getPaintBuffer().getSubimage(rect.x, rect.y, rect.width, rect.height);
@@ -385,6 +380,7 @@ public class FGEPaintManager {
 			if (paintRequestLogger.isLoggable(Level.FINEST)) {
 				paintRequestLogger.finest("adding DirtyRegion: " + c.getName() + ", " + x + "," + y + " " + w + "x" + h);
 			}
+
 			// paintRequestLogger.warning("adding DirtyRegion: "+c.getName()+", "+x+","+y+" "+w+"x"+h);
 			super.addDirtyRegion(c, x, y, w, h);
 			/*if (MANAGE_DIRTY_REGIONS) {
@@ -481,8 +477,8 @@ public class FGEPaintManager {
 		Point sp2 = new Point(viewBoundsInDrawingView.x + viewBoundsInDrawingView.width, viewBoundsInDrawingView.y
 				+ viewBoundsInDrawingView.height);
 
-		if ((sp1.x < 0) || (sp1.x > buffer.getWidth()) || (sp1.y < 0) || (sp1.y > buffer.getHeight()) || (sp2.x < 0)
-				|| (sp2.x > buffer.getWidth()) || (sp2.y < 0) || (sp2.y > buffer.getHeight())) {
+		if (sp1.x < 0 || sp1.x > buffer.getWidth() || sp1.y < 0 || sp1.y > buffer.getHeight() || sp2.x < 0 || sp2.x > buffer.getWidth()
+				|| sp2.y < 0 || sp2.y > buffer.getHeight()) {
 			// We have here a request for render outside cached image
 			// We cannot do that, so skip buffer use and do normal painting
 			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {

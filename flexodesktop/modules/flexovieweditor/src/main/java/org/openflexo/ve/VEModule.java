@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -35,14 +34,11 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalOEModule;
-import org.openflexo.toolbox.ToolBox;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -61,21 +57,9 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	private boolean drawWorkingArea;
 	private FlexoModelObject screenshotObject;
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		ToolBox.setPlatform();
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.VE_MODULE);
-	}
-
 	public VEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
-		setFlexoController(new OEController(projectEditor, this));
+		setFlexoController(new VEController(projectEditor, this));
 		getOEController().loadRelativeWindows();
 		VEPreferences.init(getOEController());
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
@@ -91,12 +75,18 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	}
 
 	@Override
+	public boolean close() {
+		// TODO Auto-generated method stub
+		return super.close();
+	}
+
+	@Override
 	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public OEController getOEController() {
-		return (OEController) getFlexoController();
+	public VEController getOEController() {
+		return (VEController) getFlexoController();
 	}
 
 	@Override
@@ -117,7 +107,8 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForShema(View target) {
+	public JComponent createScreenshotForShema(ViewDefinition viewDefinition) {
+		View target = viewDefinition.getShema();
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");

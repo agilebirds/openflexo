@@ -121,7 +121,7 @@ public abstract class DKVObject extends FlexoModelObject implements Validable {
 		String old = this.name;
 		this.name = name;
 		setChanged();
-		notifyObservers(new DKVDataModification(-1, "name", old, name));
+		notifyObservers(new DKVDataModification("name", old, name));
 	}
 
 	public DKVModel getDkvModel() {

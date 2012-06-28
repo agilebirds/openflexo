@@ -30,10 +30,12 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ontology.action.CreateDataProperty;
 import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class CreateDataPropertyInitializer extends ActionInitializer {
 
@@ -53,8 +55,9 @@ public class CreateDataPropertyInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateDataProperty>() {
 			@Override
 			public boolean run(ActionEvent e, CreateDataProperty action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_DATA_PROPERTY_DIALOG_FIB, action, null, true);
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_DATA_PROPERTY_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -64,7 +67,7 @@ public class CreateDataPropertyInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateDataProperty>() {
 			@Override
 			public boolean run(ActionEvent e, CreateDataProperty action) {
-				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
+				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
 				return true;
 			}
 		};

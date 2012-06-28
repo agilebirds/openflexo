@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -37,8 +37,8 @@ public abstract class FlexoNodeGR<O extends FlexoNode> extends PetriGraphNodeGR<
 	}
 
 	@Override
-	protected Vector<WKFNodeGR<?>> getFromInterestingNodeGR() {
-		Vector<WKFNodeGR<?>> v = super.getFromInterestingNodeGR();
+	protected List<WKFNodeGR<?>> getFromInterestingNodeGR() {
+		List<WKFNodeGR<?>> v = super.getFromInterestingNodeGR();
 		for (FlexoPreCondition pc : getModel().getPreConditions()) {
 			PreConditionGR pcgr = (PreConditionGR) getGraphicalRepresentation(pc);
 			if (pcgr != null) {

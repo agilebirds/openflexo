@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.wkf;
 
+import java.awt.Color;
 import java.util.Vector;
 
 import org.openflexo.foundation.action.FlexoActionizer;
@@ -163,13 +164,13 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 		}
 	}
 
-	public FlexoColor getTextColor() {
+	public Color getTextColor() {
 		return getTextColor(DEFAULT, FlexoColor.BLACK_COLOR);
 	}
 
-	public void setTextColor(FlexoColor aColor) {
+	public void setTextColor(Color aColor) {
 		if (requireChange(getTextColor(), aColor)) {
-			FlexoColor oldColor = getTextColor();
+			Color oldColor = getTextColor();
 			setTextColor(aColor, DEFAULT);
 			setChanged();
 			notifyObservers(new WKFAttributeDataModification(TEXT_COLOR, oldColor, aColor));

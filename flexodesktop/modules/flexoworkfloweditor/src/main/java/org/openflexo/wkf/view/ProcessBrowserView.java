@@ -27,7 +27,9 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalIEModule;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.controller.ProcessBrowser;
 import org.openflexo.wkf.controller.WKFController;
 
@@ -83,13 +85,23 @@ public class ProcessBrowserView extends BrowserView {
 		if (object instanceof WKFObject) {
 			treeSingleClick(object);
 		} else if (object instanceof ComponentDefinition) {
-			ExternalIEModule ieModule = ModuleLoader.getIEModule();
+			ExternalIEModule ieModule = null;
+			try {
+				ieModule = getModuleLoader().getIEModule(object.getProject());
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
+				e.printStackTrace();
+			}
 			if (ieModule == null) {
 				return;
 			}
 			ieModule.focusOn();
 			ieModule.showScreenInterface(((ComponentDefinition) object).getDummyComponentInstance());
 		}
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 }

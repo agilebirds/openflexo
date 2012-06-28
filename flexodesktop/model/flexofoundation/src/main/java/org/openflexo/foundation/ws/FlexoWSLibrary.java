@@ -106,8 +106,8 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		_resource.saveResourceData();
 	}
 
-	protected Vector externalWSServices;
-	protected Vector internalWSServices;
+	protected Vector<ExternalWSService> externalWSServices;
+	protected Vector<InternalWSService> internalWSServices;
 
 	private ExternalWSFolder externalWSServiceList = new ExternalWSFolder(this);
 	private InternalWSFolder internalWSServiceList = new InternalWSFolder(this);
@@ -125,8 +125,8 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	public FlexoWSLibrary(FlexoProject project) {
 		super(project);
 		setWSLibrary(this);
-		externalWSServices = new Vector();
-		internalWSServices = new Vector();
+		externalWSServices = new Vector<ExternalWSService>();
+		internalWSServices = new Vector<InternalWSService>();
 		setProject(project);
 	}
 
@@ -205,9 +205,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	 * @throws EmptyStringException
 	 */
 	public ExternalWSService addExternalWSService(ExternalWSService group, File wsdlFileToCopy) throws DuplicateWSObjectException {
-		Enumeration en = externalWSServices.elements();
+		Enumeration<ExternalWSService> en = externalWSServices.elements();
 		while (en.hasMoreElements()) {
-			ExternalWSService element = (ExternalWSService) en.nextElement();
+			ExternalWSService element = en.nextElement();
 			if (element.getName().equals(group.getName())) {
 				throw new DuplicateWSObjectException(element, "ws_service_already_exists");
 			}
@@ -264,9 +264,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 
 	public InternalWSService addInternalWSServiceNamed(InternalWSService group) throws DuplicateWSObjectException {
 
-		Enumeration en = internalWSServices.elements();
+		Enumeration<InternalWSService> en = internalWSServices.elements();
 		while (en.hasMoreElements()) {
-			InternalWSService elem = (InternalWSService) en.nextElement();
+			InternalWSService elem = en.nextElement();
 			if (elem.getName().equals(group.getName())) {
 				throw new DuplicateWSObjectException(group, "ws_service_already_exists");
 			}
@@ -326,19 +326,19 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		getInternalWSFolder().notifyObservers(gr);
 	}
 
-	public Vector getExternalWSServices() {
+	public Vector<ExternalWSService> getExternalWSServices() {
 		return externalWSServices;
 	}
 
-	public void setExternalWSServices(Vector wsServices) {
+	public void setExternalWSServices(Vector<ExternalWSService> wsServices) {
 		this.externalWSServices = wsServices;
 	}
 
-	public Vector getInternalWSServices() {
+	public Vector<InternalWSService> getInternalWSServices() {
 		return internalWSServices;
 	}
 
-	public void setInternalWSServices(Vector wsServices) {
+	public void setInternalWSServices(Vector<InternalWSService> wsServices) {
 		this.internalWSServices = wsServices;
 	}
 
@@ -347,9 +347,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	}
 
 	public ExternalWSService getExternalWSServiceNamed(String name) {
-		Enumeration en = externalWSServices.elements();
+		Enumeration<ExternalWSService> en = externalWSServices.elements();
 		while (en.hasMoreElements()) {
-			ExternalWSService group = (ExternalWSService) en.nextElement();
+			ExternalWSService group = en.nextElement();
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("looking in :" + group.getName());
 			}
@@ -364,9 +364,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	}
 
 	public InternalWSService getInternalWSServiceNamed(String name) {
-		Enumeration en = internalWSServices.elements();
+		Enumeration<InternalWSService> en = internalWSServices.elements();
 		while (en.hasMoreElements()) {
-			InternalWSService group = (InternalWSService) en.nextElement();
+			InternalWSService group = en.nextElement();
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("looking in :" + group.getName());
 			}
@@ -392,10 +392,10 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	public WSPortType getWSPortTypeNamed(String s) {
 
 		// Look in external wsgroups.
-		Enumeration en = getExternalWSServices().elements();
+		Enumeration<ExternalWSService> en = getExternalWSServices().elements();
 		WSPortType toReturn = null;
 		while (en.hasMoreElements()) {
-			ExternalWSService group = (ExternalWSService) en.nextElement();
+			ExternalWSService group = en.nextElement();
 			toReturn = group.getWSPortTypeNamed(s);
 			if (toReturn != null) {
 				return toReturn;
@@ -403,9 +403,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		}
 
 		// Look in internal wsgroups
-		en = getInternalWSServices().elements();
-		while (en.hasMoreElements()) {
-			InternalWSService group = (InternalWSService) en.nextElement();
+		Enumeration<InternalWSService> en1 = getInternalWSServices().elements();
+		while (en1.hasMoreElements()) {
+			InternalWSService group = en1.nextElement();
 			toReturn = group.getWSPortTypeNamed(s);
 			if (toReturn != null) {
 				return toReturn;
@@ -422,10 +422,10 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	public WSRepository getWSRepositoryNamed(String s) {
 
 		// Look in external wsgroups.
-		Enumeration en = getExternalWSServices().elements();
+		Enumeration<ExternalWSService> en = getExternalWSServices().elements();
 		WSRepository toReturn = null;
 		while (en.hasMoreElements()) {
-			ExternalWSService group = (ExternalWSService) en.nextElement();
+			ExternalWSService group = en.nextElement();
 			toReturn = group.getWSRepositoryNamed(s);
 			if (toReturn != null) {
 				return toReturn;
@@ -433,9 +433,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		}
 
 		// Look in internal wsgroups
-		en = getInternalWSServices().elements();
-		while (en.hasMoreElements()) {
-			InternalWSService group = (InternalWSService) en.nextElement();
+		Enumeration<InternalWSService> en1 = getInternalWSServices().elements();
+		while (en1.hasMoreElements()) {
+			InternalWSService group = en1.nextElement();
 			toReturn = group.getWSRepositoryNamed(s);
 			if (toReturn != null) {
 				return toReturn;
@@ -488,7 +488,7 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	}
 
 	public boolean isDeclaredAsWS(FlexoProcess aProcess) {
-		return (portTypeForProcess(aProcess) != null);
+		return portTypeForProcess(aProcess) != null;
 	}
 
 	public WSPortType portTypeForProcess(FlexoProcess aProcess) {

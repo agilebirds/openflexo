@@ -177,7 +177,7 @@ public class DefaultFileHandler implements FileHandler {
 			// now transmit the file itself
 			byte[] chunk = new byte[CHUNK_SIZE];
 			while (length > 0) {
-				int bytesToRead = (length >= CHUNK_SIZE) ? CHUNK_SIZE : (int) length;
+				int bytesToRead = length >= CHUNK_SIZE ? CHUNK_SIZE : (int) length;
 				int count = bis.read(chunk, 0, bytesToRead);
 				if (count == -1) {
 					throw new IOException("Unexpected end of stream from " + fileToSend + ".");
@@ -226,7 +226,7 @@ public class DefaultFileHandler implements FileHandler {
 			// now transmit the file itself
 			byte[] chunk = new byte[CHUNK_SIZE];
 			while (length > 0) {
-				int bytesToRead = (length >= CHUNK_SIZE) ? CHUNK_SIZE : (int) length;
+				int bytesToRead = length >= CHUNK_SIZE ? CHUNK_SIZE : (int) length;
 				int count = bis.read(chunk, 0, bytesToRead);
 				if (count == -1) {
 					throw new IOException("Unexpected end of stream from " + file + ".");
@@ -310,7 +310,7 @@ public class DefaultFileHandler implements FileHandler {
 				os = new BufferedOutputStream(new FileOutputStream(tempFile));
 				byte[] chunk = new byte[CHUNK_SIZE];
 				while (length > 0) {
-					int count = (length >= CHUNK_SIZE) ? CHUNK_SIZE : length;
+					int count = length >= CHUNK_SIZE ? CHUNK_SIZE : length;
 					count = dis.read(chunk, 0, count);
 					if (count == -1) {
 						throw new IOException("Unexpected end of stream: " + path + "\nMissing " + length
@@ -395,7 +395,7 @@ public class DefaultFileHandler implements FileHandler {
 			byte[] chunk = new byte[CHUNK_SIZE];
 			try {
 				while (length > 0) {
-					int bytesToRead = (length >= CHUNK_SIZE) ? CHUNK_SIZE : (int) length;
+					int bytesToRead = length >= CHUNK_SIZE ? CHUNK_SIZE : (int) length;
 					int count = dis.read(chunk, 0, bytesToRead);
 					if (count == -1) {
 						throw new IOException("Unexpected end of stream: " + path + "\nMissing " + length
@@ -511,6 +511,9 @@ public class DefaultFileHandler implements FileHandler {
 	public void renameLocalFile(String pathname, String newName) throws IOException {
 		File sourceFile = new File(pathname);
 		File destinationFile = new File(sourceFile.getParentFile(), newName);
+		if (destinationFile.exists()) {
+			destinationFile.delete();
+		}
 		sourceFile.renameTo(destinationFile);
 	}
 

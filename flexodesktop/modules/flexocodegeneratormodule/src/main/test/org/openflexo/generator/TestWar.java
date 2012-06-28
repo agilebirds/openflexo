@@ -277,16 +277,14 @@ public class TestWar extends CGTestCase {
 	 * @param flexoProject
 	 */
 	private void initModuleLoader(File projectDirectory, FlexoProject project) {
-		ModuleLoader.setAllowsDocSubmission(false);
+		getModuleLoader().setAllowsDocSubmission(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Init Module loader...");
 		}
 		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
-		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER"), false);
-		ModuleLoader.setProject(project);
+		getModuleLoader().fileNameToOpen = projectDirectory.getAbsolutePath();
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
 		} else if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance() == null) {
@@ -295,6 +293,10 @@ public class TestWar extends CGTestCase {
 			fail("WKF Module not on the classpath. Process and activity screenshots cannot be generated");
 		}
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	@Override
 	protected void setUp() throws Exception {

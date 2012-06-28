@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
@@ -32,7 +33,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import org.openflexo.components.widget.binding.BindingSelector;
-import org.openflexo.fib.utils.DurationSelector;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
@@ -53,6 +54,7 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.DateSelector;
+import org.openflexo.swing.DurationSelector;
 import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.Duration;
 import org.openflexo.toolbox.Duration.DurationUnit;
@@ -79,9 +81,7 @@ public class TestBindingExpressionSelector {
 
 	public static void main(String[] args) {
 		try {
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,7 +135,7 @@ public class TestBindingExpressionSelector {
 		logButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingManager.showLoggingViewer();
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), dialog);
 			}
 		});
 

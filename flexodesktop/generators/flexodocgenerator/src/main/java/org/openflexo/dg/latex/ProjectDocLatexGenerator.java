@@ -51,7 +51,6 @@ import org.openflexo.dg.rm.WorkflowLatexFileResource;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplates;
-import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
@@ -65,6 +64,8 @@ import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
+import org.openflexo.foundation.toc.PredefinedSection;
+import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -180,7 +181,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 			workflowGenerator = new DGLatexGenerator<FlexoWorkflow>(this, getProject().getFlexoWorkflow(), WKF_TEMPLATE_NAME, getProject()
 					.getFlexoWorkflow().getFullyQualifiedName(),
 					DGGenerator.nameForObjectNoExt(getProject().getFlexoWorkflow(), repository), repository.getTocRepository()
-							.getTOCEntryWithID(DocSection.PROCESSES));
+							.getTOCEntryWithID(PredefinedSection.PredefinedSectionType.PROCESSES));
 		}
 		if (clGenerator == null) {
 			clGenerator = new DGLatexGenerator<FlexoComponentLibrary>(this, getProject().getFlexoComponentLibrary(), CL_TEMPLATE_NAME);
@@ -196,15 +197,15 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 		}
 		if (readersGuideGenerator == null) {
 			readersGuideGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), READERS_TEMPLATE_NAME, "ReadersGuide",
-					DGGenerator.nameForReadersGuideNoExt(getRepository()), getRepository().getTOCEntryWithID(DocSection.READERS_GUIDE));
+					DGGenerator.nameForReadersGuideNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.READERS_GUIDE));
 		}
 		if (definitionsGenerator == null) {
 			definitionsGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), DEFINITIONS_TEMPLATE_NAME, "Definitions",
-					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(DocSection.DEFINITIONS));
+					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.DEFINITIONS));
 		}
 		if (rolesGenerator == null) {
 			rolesGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), ROLES_TEMPLATE_NAME, "Roles",
-					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(DocSection.ROLES));
+					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.ROLES));
 		}
 		if (stylesAndImagesGenerator == null) {
 			stylesAndImagesGenerator = new StylesAndImagesGenerator(this, getProject());

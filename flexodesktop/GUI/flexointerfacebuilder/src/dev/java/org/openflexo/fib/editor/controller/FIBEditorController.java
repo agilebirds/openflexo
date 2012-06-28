@@ -30,6 +30,7 @@ import javax.swing.JSplitPane;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBViewFactory;
+import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.editor.FIBGenericEditor;
 import org.openflexo.fib.editor.notifications.FocusedObjectChange;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
@@ -38,6 +39,7 @@ import org.openflexo.fib.editor.view.container.FIBEditableTabPanelView;
 import org.openflexo.fib.editor.view.container.FIBEditableTabView;
 import org.openflexo.fib.editor.view.widget.FIBEditableBrowserWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableButtonWidget;
+import org.openflexo.fib.editor.view.widget.FIBEditableCheckboxListWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableCheckboxWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableColorWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableCustomWidget;
@@ -56,6 +58,7 @@ import org.openflexo.fib.editor.view.widget.FIBEditableTextFieldWidget;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
+import org.openflexo.fib.model.FIBCheckboxList;
 import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
@@ -124,7 +127,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 	}
 
 	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject) {
-		this(fibComponent, editor, dataObject, FIBController.instanciateController(fibComponent));
+		this(fibComponent, editor, dataObject, FIBController.instanciateController(fibComponent, FIBAbstractEditor.LOCALIZATION));
 	}
 
 	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject, FIBController controller) {
@@ -311,6 +314,9 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 			}
 			if (fibWidget instanceof FIBRadioButtonList) {
 				return new FIBEditableRadioButtonListWidget((FIBRadioButtonList) fibWidget, FIBEditorController.this);
+			}
+			if (fibWidget instanceof FIBCheckboxList) {
+				return new FIBEditableCheckboxListWidget((FIBCheckboxList) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBList) {
 				return new FIBEditableListWidget((FIBList) fibWidget, FIBEditorController.this);

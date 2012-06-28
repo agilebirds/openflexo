@@ -1,8 +1,16 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ClassPatternRole extends OntologicObjectPatternRole {
+
+	public ClassPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {
@@ -33,12 +41,33 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 	}
 
 	public OntologyClass getOntologicType() {
-		getCalc().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getConceptURI());
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
+		}
+		if (getViewPoint().getViewpointOntology() != null) {
+			return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+		}
+		return null;
 	}
 
 	public void setOntologicType(OntologyClass ontologyClass) {
 		conceptURI = (ontologyClass != null ? ontologyClass.getURI() : null);
+	}
+
+	public static class ClassPatternRoleMustDefineAValidConceptClass extends
+			ValidationRule<ClassPatternRoleMustDefineAValidConceptClass, ClassPatternRole> {
+		public ClassPatternRoleMustDefineAValidConceptClass() {
+			super(ClassPatternRole.class, "pattern_role_must_define_a_valid_concept_class");
+		}
+
+		@Override
+		public ValidationIssue<ClassPatternRoleMustDefineAValidConceptClass, ClassPatternRole> applyValidation(ClassPatternRole patternRole) {
+			if (patternRole.getOntologicType() == null) {
+				return new ValidationError<ClassPatternRoleMustDefineAValidConceptClass, ClassPatternRole>(this, patternRole,
+						"pattern_role_does_not_define_any_concept_class");
+			}
+			return null;
+		}
 	}
 
 }

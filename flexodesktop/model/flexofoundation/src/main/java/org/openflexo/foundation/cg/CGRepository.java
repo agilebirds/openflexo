@@ -125,12 +125,12 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		CodeType old = this._targetType;
 		_targetType = targetType;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "targetType", old, targetType));
+		notifyObservers(new DataModification("targetType", old, targetType));
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return super.isEnabled() && (!includeReader() || (getReaderRepository().isEnabled()));
+		return super.isEnabled() && (!includeReader() || getReaderRepository().isEnabled());
 	}
 
 	@Override
@@ -195,9 +195,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		setChanged();
 		if (warName != null && !warName.matches(ToolBox.WAR_NAME_ACCEPTABLE_CHARS)) {
 			this.warName = ToolBox.getWarName(warName);
-			notifyObserversAsReentrantModification(new DataModification(DataModification.CG_WAR, "warName", oldName, warName));
+			notifyObserversAsReentrantModification(new DataModification("warName", oldName, warName));
 		} else {
-			notifyObservers(new DataModification(DataModification.CG_WAR, "warName", oldName, warName));
+			notifyObservers(new DataModification("warName", oldName, warName));
 		}
 	}
 

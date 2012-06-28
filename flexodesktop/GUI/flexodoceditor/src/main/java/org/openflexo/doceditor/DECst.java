@@ -21,6 +21,9 @@ package org.openflexo.doceditor;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+
+import org.openflexo.toolbox.FileResource;
 
 /**
  * Constants used by the Doc editor module.
@@ -42,4 +45,8 @@ public class DECst {
 	public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 240;
 
 	public static final Color DEFAULT_CONSOLE_COLOR = new Color(0, 128, 64);
+
+	public static File CREATE_TOC_ENTRY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateTOCEntryDialog.fib");
+	public static File IMPORT_DOCUMENTATION_TEMPLATES_FIB = new FileResource("Fib/Dialog/ImportDocumentationTemplates.fib");
+
 }

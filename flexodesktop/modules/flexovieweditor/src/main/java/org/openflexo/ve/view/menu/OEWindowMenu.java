@@ -28,7 +28,7 @@ package org.openflexo.ve.view.menu;
 import java.util.logging.Logger;
 
 import org.openflexo.module.Module;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.menu.WindowMenu;
 
 /**
@@ -45,20 +45,20 @@ public class OEWindowMenu extends WindowMenu {
 	// =========================
 	// ==========================================================================
 
-	protected OEController _xxxController;
+	protected VEController _xxxController;
 
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public OEWindowMenu(OEController controller) {
+	public OEWindowMenu(VEController controller) {
 		super(controller, Module.XXX_MODULE);
 		_xxxController = controller;
 		// Put your actions here
 	}
 
-	public OEController getXXXController() {
+	public VEController getXXXController() {
 		return _xxxController;
 	}
 }

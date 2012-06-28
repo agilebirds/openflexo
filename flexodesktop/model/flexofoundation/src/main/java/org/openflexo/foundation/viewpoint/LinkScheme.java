@@ -21,17 +21,25 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class LinkScheme extends EditionScheme {
+public class LinkScheme extends AbstractCreationScheme {
 
 	private String fromTarget;
 	private String toTarget;
 
-	public LinkScheme() {
-		super();
+	private boolean northDirectionSupported = true;
+	private boolean eastDirectionSupported = true;
+	private boolean southDirectionSupported = true;
+	private boolean westDirectionSupported = true;
+
+	private boolean isAvailableWithFloatingPalette = true;
+
+	public LinkScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -91,11 +99,13 @@ public class LinkScheme extends EditionScheme {
 	}
 
 	public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget) {
-		return getFromTargetEditionPattern() == actualFromTarget && getToTargetEditionPattern() == actualToTarget;
+		return getFromTargetEditionPattern().isAssignableFrom(actualFromTarget)
+				&& getToTargetEditionPattern().isAssignableFrom(actualToTarget);
 	}
 
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getFromTargetEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.FROM_TARGET,
@@ -116,9 +126,17 @@ public class LinkScheme extends EditionScheme {
 	@Override
 	public BindingModel getBindingModel() {
 		if (bindingModelNeedToBeRecomputed) {
+			bindingModelNeedToBeRecomputed = false;
 			updateBindingModels();
 		}
 		return super.getBindingModel();
+	}
+
+	@Override
+	protected void rebuildActionsBindingModel() {
+		if (!bindingModelNeedToBeRecomputed) {
+			super.rebuildActionsBindingModel();
+		}
 	}
 
 	@Override
@@ -139,6 +157,46 @@ public class LinkScheme extends EditionScheme {
 			}
 		}
 		return newAction;
+	}
+
+	public boolean getIsAvailableWithFloatingPalette() {
+		return isAvailableWithFloatingPalette;
+	}
+
+	public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette) {
+		this.isAvailableWithFloatingPalette = isAvailableWithFloatingPalette;
+	}
+
+	public boolean getNorthDirectionSupported() {
+		return northDirectionSupported;
+	}
+
+	public void setNorthDirectionSupported(boolean northDirectionSupported) {
+		this.northDirectionSupported = northDirectionSupported;
+	}
+
+	public boolean getEastDirectionSupported() {
+		return eastDirectionSupported;
+	}
+
+	public void setEastDirectionSupported(boolean eastDirectionSupported) {
+		this.eastDirectionSupported = eastDirectionSupported;
+	}
+
+	public boolean getSouthDirectionSupported() {
+		return southDirectionSupported;
+	}
+
+	public void setSouthDirectionSupported(boolean southDirectionSupported) {
+		this.southDirectionSupported = southDirectionSupported;
+	}
+
+	public boolean getWestDirectionSupported() {
+		return westDirectionSupported;
+	}
+
+	public void setWestDirectionSupported(boolean westDirectionSupported) {
+		this.westDirectionSupported = westDirectionSupported;
 	}
 
 }

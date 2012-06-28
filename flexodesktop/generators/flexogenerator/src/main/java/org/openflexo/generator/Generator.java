@@ -23,10 +23,12 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -45,6 +47,15 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.tools.generic.AlternatorTool;
+import org.apache.velocity.tools.generic.ComparisonDateTool;
+import org.apache.velocity.tools.generic.ConversionTool;
+import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.DisplayTool;
+import org.apache.velocity.tools.generic.EscapeTool;
+import org.apache.velocity.tools.generic.RenderTool;
+import org.apache.velocity.tools.generic.SortTool;
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -62,6 +73,7 @@ import org.openflexo.foundation.cg.templates.TemplateFileEdited;
 import org.openflexo.foundation.cg.templates.TemplateFileEditionCancelled;
 import org.openflexo.foundation.cg.templates.TemplateFileRedefined;
 import org.openflexo.foundation.cg.templates.TemplateFileSaved;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ResourceType;
@@ -81,6 +93,9 @@ import org.openflexo.velocity.PostVelocityParser;
 
 public abstract class Generator<T extends FlexoModelObject, R extends GenerationRepository> extends FlexoObservable implements
 		DataFlexoObserver {
+
+	private static final List<Class<?>> TOOL_CLASSES = Arrays.asList(AlternatorTool.class, ComparisonDateTool.class, ConversionTool.class,
+			DateTool.class, DisplayTool.class, EscapeTool.class, RenderTool.class, SortTool.class);
 
 	public static class Holder<T> {
 		private T value;
@@ -134,6 +149,12 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		if (projectGenerator != null) {
 			projectGenerator.addToGenerators(this);
 		}
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public AbstractProjectGenerator<R> getProjectGenerator() {
@@ -194,18 +215,23 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		context.put("n", StringUtils.LINE_SEPARATOR);
 		context.put("trueValue", Boolean.TRUE);
 		context.put("falseValue", Boolean.FALSE);
-		context.put("toolbox", new ToolBox());
-		context.put("javaUtils", new JavaUtils());
-		context.put("globalVariableMap", new HashMap<String, Object>() {
-			@Override
-			public Object put(String key, Object value) {
-				if (value == null) {
-					System.err.println("coucou");
-				}
-				return super.put(key, value);
-			}
-		});
+		context.put("toolbox", ToolBox.class);
+		context.put("javaUtils", JavaUtils.class);
+		context.put("Math", Math.class);
+		context.put("globalVariableMap", new HashMap<String, Object>());
 		context.put("today", new Date());
+		context.put("stringUtils", org.apache.commons.lang.StringUtils.class);
+		for (Class<?> klass : TOOL_CLASSES) {
+			try {
+				context.put(klass.getSimpleName(), klass.newInstance());
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return context;
 	}
 
@@ -330,7 +356,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			CGTemplate template = templateWithName(templateRelativePath);
 
 			Velocity.setApplicationAttribute("templateLocator", getTemplateLocator());
-			Velocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
+			FlexoVelocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
 			Velocity.setApplicationAttribute("templateLocator", null);
 
 		} catch (TemplateNotFoundException e) {
@@ -446,7 +472,9 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	}
 
 	public void notifyTemplateRequired(CGTemplate templateFile) {
-		// logger.info("notifyTemplateRequired " + templateFile.getRelativePath() + " for " + this);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("notifyTemplateRequired " + templateFile.getRelativePath() + " for " + this);
+		}
 		if (!_usedTemplates.contains(templateFile)) {
 			_usedTemplates.add(templateFile);
 			templateFile.addObserver(this);
@@ -605,12 +633,20 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return new Vector<Object>();
 	}
 
+	public List<Object> getNewList() {
+		return new ArrayList<Object>();
+	}
+
 	public Hashtable<Object, Object> getNewHashtable() {
 		return new Hashtable<Object, Object>();
 	}
 
 	public TreeMap<Object, Object> getNewTreeMap() {
 		return new TreeMap<Object, Object>();
+	}
+
+	public LinkedHashMap<Object, Object> getNewLinkedHashMap() {
+		return new LinkedHashMap<Object, Object>();
 	}
 
 	public Properties getNewProperties() {
@@ -700,4 +736,70 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 		return null;
 	}
+
+	public boolean isInstance(Object object, String className) {
+		try {
+			Class<?> klass = Class.forName(className);
+			return klass.isInstance(object);
+		} catch (ClassNotFoundException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not find class with name '" + className + "'");
+			}
+			return false;
+		}
+	}
+
+	public Object e(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object eval(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object evaluate(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object evaluateBinding(BindingEvaluationContext context, String bindingExpression) {
+		if (context == null) {
+			return null;
+		}
+		if (bindingExpression == null) {
+			return null;
+		}
+		if (context instanceof EditionPatternInstance) {
+			return ((EditionPatternInstance) context).evaluate(bindingExpression);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Binding evaluation not implemented for objects of type " + context.getClass().getName());
+			}
+		}
+		return null;
+	}
+
+	public void log(String s) {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: " + s);
+		}
+	}
+
+	public void log(String s, Object o) {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: " + s + " object=" + o + (o != null ? "(" + o.getClass().getSimpleName() + ")" : ""));
+		}
+	}
+
+	public void logO(Object o) {
+		if (o == null) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("LOG: object=null");
+			}
+			return;
+		}
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: object=" + o + " of " + o.getClass().getSimpleName());
+		}
+	}
+
 }

@@ -32,7 +32,7 @@ public class DuplicateURIException extends FlexoException {
 	private String uri;
 
 	public DuplicateURIException(String aURI) {
-		super(null);
+		super((String) null);
 		uri = aURI;
 	}
 

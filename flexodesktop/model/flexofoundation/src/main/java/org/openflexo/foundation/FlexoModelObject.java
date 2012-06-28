@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -146,8 +147,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	 * instantiated without a constructor and initialized using the serialized instance data. The only requirement on the constructor for a
 	 * class that implements Serializable is that the first non-serializable superclass in its inheritence hierarchy must have a no-argument
 	 * constructor. <BR>
-	 * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; From <a href="http://www.jguru.com/faq/view.jsp?EID=251942"
-	 * >http://www.jguru.com/faq/view.jsp?EID=251942</A></blockquote>
+	 * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; From <a
+	 * href="http://www.jguru.com/faq/view.jsp?EID=251942">http://www.jguru.com/faq/view.jsp?EID=251942</A></blockquote>
 	 */
 	public FlexoModelObject() {
 		this(null);
@@ -163,11 +164,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		customProperties = new Vector<FlexoProperty>();
 		_editionPatternReferences = new Vector<EditionPatternReference>();
 		if (project != null) {
-			/*
-			 * if (project.getLastUniqueIDHasBeenSet() && flexoID < 0) { flexoID
-			 * = project.getNewFlexoID();
-			 * System.err.println("Via constructor New flexo ID: "+flexoID); }
-			 */
+			/*if (project.getLastUniqueIDHasBeenSet() && flexoID < 0) {
+				flexoID = project.getNewFlexoID();
+				System.err.println("Via constructor New flexo ID: "+flexoID);
+			}*/
 			project.register(this);
 			isRegistered = true;
 		} else {
@@ -216,7 +216,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 		this.isDeletedOnServer = isDeletedOnServer;
 		setChanged();
-		notifyObservers(new DataModification(-1, "isDeletedOnServer", !this.isDeletedOnServer, isDeletedOnServer));
+		notifyObservers(new DataModification("isDeletedOnServer", !this.isDeletedOnServer, isDeletedOnServer));
 	}
 
 	public void markAsDeletedOnServer() {
@@ -388,6 +388,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
+	public String getDisplayableDescription() {
+		return getDisplayableName();
+	}
+
 	/**
 	 * @return
 	 */
@@ -428,7 +432,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			this.flexoID = flexoID;
 			if (!isDeserializing()) {
 				setChanged();
-				notifyObservers(new DataModification(-1, "flexoID", new Long(this.flexoID), new Long(flexoID)));
+				notifyObservers(new DataModification("flexoID", new Long(this.flexoID), new Long(flexoID)));
 				fireSerializationIdChanged();
 			}
 		}
@@ -564,8 +568,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		// if (logger.isLoggable(Level.FINE)) logger.fine ("Delete
 		// "+this.getClass().getName()+" : "+this);
 		if (isDeleted) {
-			// in some case : the delete may be called twice on a sequence (in
-			// case of deletion of last widget of the sequence)...
+			// in some case : the delete may be called twice on a sequence (in case of deletion of last widget of the sequence)...
 			// and it will fail
 			// a good idea would be to avoid this double invocation.
 			// In the mean time, this little hack will do the trick.
@@ -590,7 +593,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		_editionPatternReferences.clear();
 		_editionPatternReferences = null;
 
-		for (FlexoModelObjectReference ref : new Vector<FlexoModelObjectReference>(referencers)) {
+		for (FlexoModelObjectReference ref : new ArrayList<FlexoModelObjectReference>(referencers)) {
 			ref.notifyObjectDeletion();
 		}
 		referencers.clear();
@@ -600,6 +603,11 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (getProject() != null) {
 			getProject().notifyObjectDeleted(this);
 		}
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return DELETED_PROPERTY;
 	}
 
 	public void undelete() {
@@ -657,7 +665,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			setDocFormat(FlexoDocFormat.LATEX);
 		}
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "dontEscapeLatex", null, new Boolean(dontEscapeLatex)));
+		notifyObservers(new DataModification("dontEscapeLatex", null, new Boolean(dontEscapeLatex)));
 	}
 
 	public FlexoDocFormat getDocFormat() {
@@ -673,7 +681,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		this.docFormat = docFormat;
 		if (notify) {
 			setChanged();
-			notifyObservers(new DataModification(DataModification.ATTRIBUTE, "docFormat", old, docFormat));
+			notifyObservers(new DataModification("docFormat", old, docFormat));
 		}
 	}
 
@@ -735,7 +743,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (old == null || !old.equals(description)) {
 			this.description = description;
 			setChanged();
-			notifyObservers(new DataModification(-1, "description", old, description));
+			notifyObservers(new DataModification("description", old, description));
 		}
 	}
 
@@ -804,7 +812,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			property.setOwner(this);
 		}
 		setChanged();
-		DataModification dm = new DataModification(DataModification.ATTRIBUTE, "customProperties", null, property);
+		DataModification dm = new DataModification("customProperties", null, property);
 		notifyObservers(dm);
 	}
 
@@ -917,7 +925,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			removeSpecificDescriptionsWithKey(DocType.DefaultDocType.Business.name());
 		}
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "businessDescription", null, businessDescription));
+		notifyObservers(new DataModification("businessDescription", null, businessDescription));
 	}
 
 	/**
@@ -930,7 +938,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			removeSpecificDescriptionsWithKey(DocType.DefaultDocType.Technical.name());
 		}
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "technicalDescription", null, technicalDescription));
+		notifyObservers(new DataModification("technicalDescription", null, technicalDescription));
 	}
 
 	/**
@@ -943,7 +951,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			removeSpecificDescriptionsWithKey(DocType.DefaultDocType.UserManual.name());
 		}
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "userManualDescription", null, userManualDescription));
+		notifyObservers(new DataModification("userManualDescription", null, userManualDescription));
 	}
 
 	public String getSpecificDescriptionForKey(String key) {
@@ -953,7 +961,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public void setSpecificDescriptionsForKey(String description, String key) {
 		specificDescriptions.put(key, description);
 		setChanged();
-		DataModification dm = new DataModification(DataModification.ATTRIBUTE, "specificDescriptions", null, description);
+		DataModification dm = new DataModification("specificDescriptions", null, description);
 		notifyObservers(dm);
 	}
 
@@ -1173,7 +1181,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		boolean old = this.hasSpecificDescriptions;
 		this.hasSpecificDescriptions = hasSpecificDescription;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "hasSpecificDescriptions", old, hasSpecificDescription));
+		notifyObservers(new DataModification("hasSpecificDescriptions", old, hasSpecificDescription));
 	}
 
 	/**
@@ -1227,7 +1235,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	@Override
 	public String toString() {
-		return getClass().getName() + "_" + getFlexoID();
+		return getClass().getSimpleName() + "_" + (getName() != null ? getName() : getFlexoID());
 	}
 
 	protected <T> boolean requireChange(T oldValue, T newValue) {
@@ -1278,6 +1286,19 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return null;
 	}
 
+	public EditionPatternReference getEditionPatternReference(EditionPatternInstance epInstance) {
+		if (_editionPatternReferences == null) {
+			logger.warning("Unexpected _editionPatternReferences=null !!!");
+			return null;
+		}
+		for (EditionPatternReference r : _editionPatternReferences) {
+			if (r.getEditionPatternInstance() == epInstance) {
+				return r;
+			}
+		}
+		return null;
+	}
+
 	// Return first one if many
 	public EditionPatternReference getEditionPatternReference(String editionPatternId) {
 		if (editionPatternId == null) {
@@ -1297,6 +1318,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			return null;
 		}
 		for (EditionPatternReference r : _editionPatternReferences) {
+			System.out.println("1: " + r.getEditionPattern().getName() + "  2: " + editionPattern.getName());
 			if (r.getEditionPattern().getName().equals(editionPattern.getName())) {
 				return r;
 			}
@@ -1305,9 +1327,32 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		// TODO: check if not already registered !
-		EditionPatternReference newReference = new EditionPatternReference(editionPatternInstance, patternRole);
-		addToEditionPatternReferences(newReference);
+		EditionPatternReference existingReference = getEditionPatternReference(editionPatternInstance);
+		if (existingReference == null) {
+			// logger.info("registerEditionPatternReference for " + editionPatternInstance.debug());
+			EditionPatternReference newReference = new EditionPatternReference(editionPatternInstance, patternRole);
+			addToEditionPatternReferences(newReference);
+			setChanged();
+		} else {
+			if (existingReference.getPatternRole() != patternRole) {
+				logger.warning("Called for register a new EditionPatternReference with an already existing EditionPatternReference with a different PatternRole");
+			}
+		}
+	}
+
+	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
+		EditionPatternReference referenceToRemove = getEditionPatternReference(editionPatternInstance);
+		if (referenceToRemove == null) {
+			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance EP="
+					+ editionPatternInstance.getPattern().getName() + " id=" + editionPatternInstance.getInstanceId());
+			for (EditionPatternReference ref : getEditionPatternReferences()) {
+				logger.warning("* Reference:");
+				logger.warning(ref.debug());
+			}
+		} else {
+			removeFromEditionPatternReferences(referenceToRemove);
+			setChanged();
+		}
 	}
 
 	@Deprecated
@@ -1315,17 +1360,25 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return null;
 	}
 
-	/*
-	 * private Vector<TabModel> _tabList;
-	 * 
-	 * public Vector<TabModel> inspectionExtraTabs() { if (_tabList == null) {
-	 * _tabList = new Vector<TabModel>(); if (getEditionPatternReferences() !=
-	 * null) { for (EditionPatternReference ref : getEditionPatternReferences())
-	 * { EditionPatternInspector inspector =
-	 * ref.getEditionPattern().getInspector(); if (inspector != null) { //for
-	 * (Integer i : inspector.getTabs().keySet()) { //
-	 * _tabList.add(inspector.getTabs().get(i)); //} } } } } return _tabList; }
-	 */
+	/* private Vector<TabModel> _tabList;
+
+	public Vector<TabModel> inspectionExtraTabs()
+	{
+	if (_tabList == null) {
+		_tabList = new Vector<TabModel>();
+		if (getEditionPatternReferences() != null) {
+			for (EditionPatternReference ref : getEditionPatternReferences()) {
+				EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
+				if (inspector != null) {
+					//for (Integer i : inspector.getTabs().keySet()) {
+					//	_tabList.add(inspector.getTabs().get(i));
+					//}
+				}
+			}
+		}
+	}
+	return _tabList;
+	}*/
 
 	public String getInspectorTitle() {
 		// By default, take default inspector name
@@ -1335,4 +1388,25 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public String makeReference() {
 		return FlexoModelObjectReference.getSerializationRepresentationForObject(this, true);
 	}
+
+	/**
+	 * Return true is this object is somewhere involved as a primary representation pattern role in any of its EditionPatternReferences
+	 * 
+	 * @return
+	 */
+	public boolean providesSupportAsPrimaryRole() {
+		if (getEditionPatternReferences() != null) {
+			if (getEditionPatternReferences().size() > 0) {
+				for (EditionPatternReference r : getEditionPatternReferences()) {
+					if (r.getPatternRole() == null) {
+						logger.warning("Found an EditionPatternReference with a null pattern role. Please investigate...");
+					} else if (r.getPatternRole().getIsPrimaryRole()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 }

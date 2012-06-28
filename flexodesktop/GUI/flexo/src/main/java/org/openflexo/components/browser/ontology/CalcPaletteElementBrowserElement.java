@@ -23,6 +23,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.OverridingGraphicalRepresentation;
 
 /**
  * Browser element representing the calc palette element
@@ -38,14 +39,17 @@ public class CalcPaletteElementBrowserElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
+		for (OverridingGraphicalRepresentation ogr : getPaletteElement().getOverridingGraphicalRepresentations()) {
+			addToChilds(ogr);
+		}
 	}
 
 	@Override
 	public String getName() {
-		return getCalcElement().getName();
+		return getPaletteElement().getName();
 	}
 
-	protected ViewPointPaletteElement getCalcElement() {
+	protected ViewPointPaletteElement getPaletteElement() {
 		return (ViewPointPaletteElement) getObject();
 	}
 

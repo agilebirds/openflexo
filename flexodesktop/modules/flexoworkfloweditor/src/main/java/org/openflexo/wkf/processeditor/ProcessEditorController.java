@@ -106,7 +106,9 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			}
 			_controller.PROCESS_EDITOR_PERSPECTIVE.removeProcessController(this);
 		}
+		// We created the ProcessRepresentation, so we delete it as well.
 		super.delete();
+		getDrawing().delete();
 	}
 
 	@Override
@@ -307,7 +309,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
 		}
 
-		for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+		for (GraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
 			if (gr instanceof WKFObjectGR<?>) {
 				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 			}

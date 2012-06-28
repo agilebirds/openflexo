@@ -21,6 +21,7 @@ package org.openflexo.view;
 
 import java.io.File;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fib.FIBLibrary;
@@ -40,12 +41,12 @@ import org.openflexo.view.controller.SelectionManagingController;
  * @author sguerin
  * 
  */
-public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends FlexoFIBView<O> implements SelectionListener,
-		GraphicalFlexoObserver, FIBSelectionListener {
+public class SelectionSynchronizedFIBView<O> extends FlexoFIBView<O> implements SelectionListener, GraphicalFlexoObserver,
+		FIBSelectionListener {
 	static final Logger logger = Logger.getLogger(SelectionSynchronizedFIBView.class.getPackage().getName());
 
 	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile) {
-		this(representedObject, controller, fibFile, false, controller.willLoad(fibFile));
+		this(representedObject, controller, fibFile, false, (controller != null ? controller.willLoad(fibFile) : null));
 	}
 
 	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
@@ -160,7 +161,9 @@ public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends Fl
 				newSelection.add((FlexoModelObject) o);
 			}
 		}
-		logger.fine("FlexoFIBView now impose new selection : " + newSelection);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("FlexoFIBView now impose new selection : " + newSelection);
+		}
 		ignoreFiredSelectionEvents = true;
 		getSelectionManager().setSelectedObjects(newSelection);
 		ignoreFiredSelectionEvents = false;

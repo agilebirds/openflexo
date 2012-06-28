@@ -2,6 +2,13 @@
 <FlexoWorkflow id="SYL_385" name="TestVE" userID="SYL" flexoID="385" dontGenerate="false" useSpecificDescriptions="false">
   <FlexoProcess id="SYL_393" processResourceName="TestVE" docIndex="1" userID="SYL" flexoID="393" dontGenerate="false" useSpecificDescriptions="false" />
   <RootFlexoProcess idref="SYL_393" />
+  <RoleList id="SYL_443" userID="SYL" flexoID="443" dontGenerate="false" useSpecificDescriptions="false">
+    <DefaultRole id="SYL_444" label="No role" systemRole="true" isAssignable="true" docIndex="-1" isDeletedOnServer="false" userID="SYL" flexoID="444" dontGenerate="false" useSpecificDescriptions="false">
+      <GraphicalProperties>
+        <bgColor_default className="org.openflexo.foundation.utils.FlexoColor">64,64,64</bgColor_default>
+      </GraphicalProperties>
+    </DefaultRole>
+  </RoleList>
   <ProcessMetricsDefinition id="SYL_394" name="Process time" type="TIME" alwaysDefined="false" userID="SYL" flexoID="394" dontGenerate="false" description="This is the actual time it takes to complete a process or a task" useSpecificDescriptions="false" />
   <ProcessMetricsDefinition id="SYL_395" name="Lead time" type="TIME" alwaysDefined="false" userID="SYL" flexoID="395" dontGenerate="false" description="This is the elapsed time associated with completing a task (incl. queue time)" useSpecificDescriptions="false" />
   <ProcessMetricsDefinition id="SYL_396" name="Percent Complete and Accurate" type="TEXT" alwaysDefined="false" userID="SYL" flexoID="396" dontGenerate="false" description="Describes how often an activity receives information that is complete and accurate from the perspective of the recipient" useSpecificDescriptions="false" />

@@ -71,6 +71,12 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 		_resource = resource;
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public EOModel getEOModel() {
 		return _eoModel;
 	}

@@ -36,8 +36,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -46,6 +44,7 @@ import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
 import org.openflexo.foundation.ie.widget.IEHeaderWidget;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.IECst;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.DoubleClickResponder;
@@ -101,12 +100,6 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
 			parentSequenceView = (IESequenceWidgetWidgetView) getParent();
@@ -115,16 +108,9 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 			int width = parentSequenceView.getAvailableWidth();
 			Dimension d = super.getPreferredSize();
 			d = new Dimension(width, d.height);
-			if (getHoldsNextComputedPreferredSize()) {
-				storePrefSize(d);
-			}
 			return d;
 		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
+		return super.getPreferredSize();
 	}
 
 	/*
@@ -134,14 +120,12 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(BINDING_VALUE_NAME)) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(BINDING_VALUE_NAME)) {
 				_jLabel.setText(getHeaderModel().getValue());
-			} else if (modif.propertyName().equals(ISSORTABLE_ATTRIBUTENAME) || modif.propertyName().equals(ISSORTED_ATTRIBUTENAME)) {
+			} else if (propertyName.equals(ISSORTABLE_ATTRIBUTENAME) || propertyName.equals(ISSORTED_ATTRIBUTENAME)) {
 				_jLabel.setIcon(getSortIcon());
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				getParent().doLayout();
-				((JComponent) getParent()).repaint();
 			}
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
@@ -198,27 +182,7 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 				finalizeEditHeader();
 			}
 		});
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			public void updateSize() {
-				revalidate();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_jLabelTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {

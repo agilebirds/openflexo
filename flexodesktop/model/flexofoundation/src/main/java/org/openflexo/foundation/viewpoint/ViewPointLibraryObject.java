@@ -21,10 +21,15 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.validation.Validable;
+import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-public abstract class ViewPointLibraryObject extends TemporaryFlexoModelObject implements InspectableObject {
+public abstract class ViewPointLibraryObject extends TemporaryFlexoModelObject implements InspectableObject, Validable {
+
+	public static final ViewPointValidationModel VALIDATION_MODEL = new ViewPointValidationModel();
 
 	public abstract ViewPointLibrary getViewPointLibrary();
 
@@ -41,6 +46,71 @@ public abstract class ViewPointLibraryObject extends TemporaryFlexoModelObject i
 			return getViewPointLibrary().get_VIEW_POINT_MODEL();
 		}
 		return super.getXMLMapping();
+	}
+
+	/**
+	 * Returns a flag indicating if this object is valid according to default validation model
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isValid() {
+		return isValid(getDefaultValidationModel());
+	}
+
+	/**
+	 * Returns a flag indicating if this object is valid according to specified validation model
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isValid(ValidationModel validationModel) {
+		return validationModel.isValid(this);
+	}
+
+	/**
+	 * Validates this object by building new ValidationReport object Default validation model is used to perform this validation.
+	 */
+	@Override
+	public ValidationReport validate() {
+		return validate(getDefaultValidationModel());
+	}
+
+	/**
+	 * Validates this object by building new ValidationReport object Supplied validation model is used to perform this validation.
+	 */
+	@Override
+	public ValidationReport validate(ValidationModel validationModel) {
+		return validationModel.validate(this);
+	}
+
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	@Override
+	public void validate(ValidationReport report) {
+		validate(report, getDefaultValidationModel());
+	}
+
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	@Override
+	public void validate(ValidationReport report, ValidationModel validationModel) {
+		validationModel.validate(this, report);
+	}
+
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		return VALIDATION_MODEL;
 	}
 
 }

@@ -86,7 +86,7 @@ public class NewPackageConverter {
 		// be.denali.flexo* --> org.openflexo*
 		StringBuilder sb = new StringBuilder(content.length());
 		for (int i = 0; i < content.length(); i++) {
-			if (content.charAt(i) == '@' && i > 0 && !Character.isWhitespace(content.charAt(i - 1))) {
+			if (content.charAt(i) == '@' && i > 0 && !Character.isWhitespace(content.charAt(i - 1)) && content.charAt(i - 1) != '~') {
 				boolean needsWhitespace = false;
 				for (String tag : AT_TAGS) {
 					needsWhitespace |= content.regionMatches(i + 1, tag, 0, tag.length());

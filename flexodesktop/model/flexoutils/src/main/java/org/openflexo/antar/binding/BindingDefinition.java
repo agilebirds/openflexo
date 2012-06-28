@@ -22,6 +22,7 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Type;
 import java.text.Collator;
 import java.util.Comparator;
+import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.localization.FlexoLocalization;
@@ -32,7 +33,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class BindingDefinition {
+public class BindingDefinition extends Observable {
 
 	static final Logger logger = Logger.getLogger(BindingDefinition.class.getPackage().getName());
 
@@ -152,5 +153,10 @@ public class BindingDefinition {
 	public String toString() {
 		return "BindingDefinition[name=" + _variableName + ",type=" + _type + ",mandatory=" + _isMandatory + ",kind="
 				+ _bindingDefinitionType + "]";
+	}
+
+	public void notifyBindingDefinitionTypeChanged() {
+		setChanged();
+		notifyObservers(new BindingDefinitionTypeChanged());
 	}
 }

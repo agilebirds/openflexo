@@ -20,16 +20,17 @@
 package org.openflexo.foundation.ontology;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.ontology.OntResource;
 
-public abstract class OntologyProperty extends OntologyObject {
+public abstract class OntologyProperty extends OntologyObject<OntProperty> {
 
 	private static final Logger logger = Logger.getLogger(OntologyProperty.class.getPackage().getName());
 
@@ -37,31 +38,62 @@ public abstract class OntologyProperty extends OntologyObject {
 
 	private DomainStatement domainStatement;
 	private RangeStatement rangeStatement;
+	private List<DomainStatement> domainStatementList;
+	private List<RangeStatement> rangeStatementList;
+	private List<OntologyObject> domainList;
+	private List<OntologyObject> rangeList;
+
+	private boolean superDomainStatementWereAppened = false;
+	private boolean superRangeStatementWereAppened = false;
+	private boolean storageLocationsAreUpToDate = false;
 
 	private final Vector<OntologyProperty> superProperties;
 	private final Vector<OntologyProperty> subProperties;
+	private final ArrayList<OntologyClass> storageLocations;
 
-	private final boolean isAnnotationProperty;
+	// private final boolean isAnnotationProperty;
 
 	protected OntologyProperty(OntProperty anOntProperty, FlexoOntology ontology) {
 		super(anOntProperty, ontology);
 		ontProperty = anOntProperty;
 		superProperties = new Vector<OntologyProperty>();
 		subProperties = new Vector<OntologyProperty>();
-		isAnnotationProperty = anOntProperty.isAnnotationProperty();
+		storageLocations = new ArrayList<OntologyClass>();
+		// isAnnotationProperty = anOntProperty.isAnnotationProperty();
+		domainStatementList = new ArrayList<DomainStatement>();
+		rangeStatementList = new ArrayList<RangeStatement>();
+		domainList = null;
+		rangeList = null;
 	}
 
+	/**
+	 * Init this OntologyProperty, given base OntProperty
+	 */
 	protected void init() {
-		updateOntologyStatements();
-		updateSuperProperties();
-		updateSubProperties();
+		updateOntologyStatements(ontProperty);
+		updateSuperProperties(ontProperty);
+		updateSubProperties(ontProperty);
 	}
 
+	/**
+	 * Update this OntologyProperty, given base OntProperty
+	 */
 	@Override
 	protected void update() {
-		updateOntologyStatements();
-		updateSuperProperties();
-		updateSubProperties();
+		updateOntologyStatements(ontProperty);
+		updateSuperProperties(ontProperty);
+		updateSubProperties(ontProperty);
+	}
+
+	/**
+	 * Update this OntologyProperty given a new OntProperty which is assumed to extends base OntProperty
+	 * 
+	 * @param anOntProperty
+	 */
+	protected void update(OntProperty anOntProperty) {
+		updateOntologyStatements(anOntProperty);
+		updateSuperProperties(anOntProperty);
+		updateSubProperties(anOntProperty);
 	}
 
 	@Override
@@ -70,8 +102,8 @@ public abstract class OntologyProperty extends OntologyObject {
 	}
 
 	@Override
-	protected void _setOntResource(OntResource r) {
-		ontProperty = (OntProperty) r;
+	protected void _setOntResource(OntProperty r) {
+		ontProperty = r;
 	}
 
 	public static final Comparator<OntologyProperty> COMPARATOR = new Comparator<OntologyProperty>() {
@@ -90,13 +122,13 @@ public abstract class OntologyProperty extends OntologyObject {
 		return getOntProperty();
 	}
 
-	private void updateSuperProperties() {
+	private void updateSuperProperties(OntProperty anOntProperty) {
 		// superClasses.clear();
 		try {
-			Iterator it = ontProperty.listSuperProperties(true);
+			Iterator it = anOntProperty.listSuperProperties(true);
 			while (it.hasNext()) {
 				OntProperty father = (OntProperty) it.next();
-				OntologyProperty fatherProp = getOntologyLibrary().getProperty(father.getURI());
+				OntologyProperty fatherProp = getOntology().getProperty(father.getURI());
 				if (fatherProp != null) {
 					if (!superProperties.contains(fatherProp)) {
 						superProperties.add(fatherProp);
@@ -114,7 +146,7 @@ public abstract class OntologyProperty extends OntologyObject {
 			if (getURI().equals("http://www.w3.org/2004/02/skos/core#altLabel")
 					|| getURI().equals("http://www.w3.org/2004/02/skos/core#prefLabel")
 					|| getURI().equals("http://www.w3.org/2004/02/skos/core#hiddenLabel")) {
-				OntologyProperty label = getOntologyLibrary().getProperty("http://www.w3.org/2000/01/rdf-schema#label");
+				OntologyProperty label = getOntology().getProperty("http://www.w3.org/2000/01/rdf-schema#label");
 				if (!superProperties.contains(label)) {
 					superProperties.add(label);
 				}
@@ -125,13 +157,13 @@ public abstract class OntologyProperty extends OntologyObject {
 		}
 	}
 
-	private void updateSubProperties() {
+	private void updateSubProperties(OntProperty anOntProperty) {
 		// subClasses.clear();
 		try {
-			Iterator it = ontProperty.listSubProperties(true);
+			Iterator it = anOntProperty.listSubProperties(true);
 			while (it.hasNext()) {
 				OntProperty child = (OntProperty) it.next();
-				OntologyProperty childProperty = getOntologyLibrary().getProperty(child.getURI());
+				OntologyProperty childProperty = getOntology().getProperty(child.getURI());
 				if (childProperty != null) {
 					if (!subProperties.contains(childProperty)) {
 						subProperties.add(childProperty);
@@ -184,22 +216,37 @@ public abstract class OntologyProperty extends OntologyObject {
 	}
 
 	public boolean isAnnotationProperty() {
-		return isAnnotationProperty;
+		return getOntResource().isAnnotationProperty();// isAnnotationProperty;
 	}
 
 	@Override
-	public void updateOntologyStatements() {
-		super.updateOntologyStatements();
+	public void updateOntologyStatements(OntProperty anOntResource) {
+		super.updateOntologyStatements(anOntResource);
+		superDomainStatementWereAppened = false;
+		superRangeStatementWereAppened = false;
+		storageLocationsAreUpToDate = false;
+		domainStatementList.clear();
+		rangeStatementList.clear();
+		storageLocations.clear();
+		domainList = null;
+		rangeList = null;
 		for (OntologyStatement s : getSemanticStatements()) {
 			if (s instanceof DomainStatement) {
 				domainStatement = (DomainStatement) s;
+				domainStatementList.add(domainStatement);
 			}
 			if (s instanceof RangeStatement) {
 				rangeStatement = (RangeStatement) s;
+				rangeStatementList.add(rangeStatement);
 			}
 		}
 	}
 
+	/**
+	 * Return domain statement, asserting there is only one domain statement
+	 * 
+	 * @return
+	 */
 	public DomainStatement getDomainStatement() {
 		if (domainStatement == null) {
 			for (OntologyProperty p : getSuperProperties()) {
@@ -213,6 +260,11 @@ public abstract class OntologyProperty extends OntologyObject {
 		return domainStatement;
 	}
 
+	/**
+	 * Return range statement, asserting there is only one range statement
+	 * 
+	 * @return
+	 */
 	public RangeStatement getRangeStatement() {
 		if (rangeStatement == null) {
 			for (OntologyProperty p : getSuperProperties()) {
@@ -226,6 +278,11 @@ public abstract class OntologyProperty extends OntologyObject {
 		return rangeStatement;
 	}
 
+	/**
+	 * Return domain as ontology object, asserting there is only one domain statement
+	 * 
+	 * @return
+	 */
 	public OntologyObject getDomain() {
 		/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 		//			System.out.println("Pour "+getURI()+" le domain statement est "+getDomainStatement());
@@ -260,6 +317,11 @@ public abstract class OntologyProperty extends OntologyObject {
 		return getDomainStatement().getDomain();
 	}
 
+	/**
+	 * Return range as ontology object, asserting there is only one range statement
+	 * 
+	 * @return
+	 */
 	public OntologyObject getRange() {
 		/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 					System.out.println("Pour "+getURI()+" le range statement est "+getRangeStatement());
@@ -268,6 +330,77 @@ public abstract class OntologyProperty extends OntologyObject {
 			return null;
 		}
 		return getRangeStatement().getRange();
+	}
+
+	/**
+	 * Return list of OntologyClass where this property is used in a restriction, those storage location are convenient places where to
+	 * represent a property while browsing an ontology
+	 * 
+	 * @return
+	 */
+	public List<OntologyClass> getStorageLocations() {
+		if (!storageLocationsAreUpToDate) {
+			for (FlexoOntology o : getOntology().getAllImportedOntologies()) {
+				for (OntologyClass c : o.getClasses()) {
+					/*if (c.getRestrictionStatements(this).size() > 0) {
+						if (!storageLocations.contains(c)) {
+							storageLocations.add(c);
+						}
+					}*/
+				}
+			}
+			storageLocationsAreUpToDate = true;
+		}
+		return storageLocations;
+	}
+
+	/**
+	 * Return list of DomainStatement
+	 * 
+	 * @return
+	 */
+	public List<DomainStatement> getDomainStatementList() {
+		if (!superDomainStatementWereAppened) {
+			for (OntologyProperty p : getSuperProperties()) {
+				domainStatementList.addAll(p.getDomainStatementList());
+			}
+			superDomainStatementWereAppened = true;
+		}
+		return domainStatementList;
+	}
+
+	public List<RangeStatement> getRangeStatementList() {
+		if (!superRangeStatementWereAppened) {
+			for (OntologyProperty p : getSuperProperties()) {
+				rangeStatementList.addAll(p.getRangeStatementList());
+			}
+			superRangeStatementWereAppened = true;
+		}
+		return rangeStatementList;
+	}
+
+	public List<OntologyObject> getDomainList() {
+		if (domainList == null) {
+			domainList = new ArrayList<OntologyObject>();
+			for (DomainStatement s : getDomainStatementList()) {
+				if (s.getDomain() != null) {
+					domainList.add(s.getDomain());
+				}
+			}
+		}
+		return domainList;
+	}
+
+	public List<OntologyObject> getRangeList() {
+		if (rangeList == null) {
+			rangeList = new ArrayList<OntologyObject>();
+			for (RangeStatement s : getRangeStatementList()) {
+				if (s.getRange() != null) {
+					rangeList.add(s.getRange());
+				}
+			}
+		}
+		return rangeList;
 	}
 
 }

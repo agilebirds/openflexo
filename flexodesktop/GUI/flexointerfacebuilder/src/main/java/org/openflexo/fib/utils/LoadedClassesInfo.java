@@ -116,6 +116,11 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 		return pcSupport;
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		return null;
+	}
+
 	public List<PackageInfo> getPackages() {
 		if (needsReordering) {
 			packageList = new Vector<PackageInfo>();
@@ -161,8 +166,11 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 		} else if (c.isMemberClass()) {
 			// System.out.println("Member class: "+c+" of "+c.getDeclaringClass());
 			ClassInfo parentClass = registerClass(c.getEnclosingClass());
-			ClassInfo returned = parentClass.declareMember(c);
-			return returned;
+			if (parentClass != null) {
+				ClassInfo returned = parentClass.declareMember(c);
+				return returned;
+			}
+			return null;
 		} else {
 			// System.out.println("Ignored class: "+c);
 			return null;
@@ -193,6 +201,12 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 		@Override
 		public PropertyChangeSupport getPropertyChangeSupport() {
 			return pcSupport;
+		}
+
+		@Override
+		public String getDeletedProperty() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 		public List<ClassInfo> getClasses() {
@@ -277,7 +291,12 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 			return pcSupport;
 		}
 
-		private ClassInfo declareMember(Class c) {
+		@Override
+		public String getDeletedProperty() {
+			return null;
+		}
+
+		protected ClassInfo declareMember(Class c) {
 			ClassInfo returned = memberClasses.get(c);
 			if (returned == null) {
 				memberClasses.put(c, returned = new ClassInfo(c));

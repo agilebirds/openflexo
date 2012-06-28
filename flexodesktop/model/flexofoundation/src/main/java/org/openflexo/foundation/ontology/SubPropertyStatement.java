@@ -28,14 +28,12 @@ public class SubPropertyStatement extends OntologyStatement {
 
 	private static final Logger logger = Logger.getLogger(SubPropertyStatement.class.getPackage().getName());
 
-	public static final String SUB_PROPERTY_URI = "http://www.w3.org/2000/01/rdf-schema#subPropertyOf";
-
 	private OntologyObject superProperty;
 
 	public SubPropertyStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			superProperty = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			superProperty = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {
 			logger.warning("SubPropertyStatement: object is not a Resource !");
 		}

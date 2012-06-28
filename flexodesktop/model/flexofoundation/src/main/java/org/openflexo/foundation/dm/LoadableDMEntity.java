@@ -29,8 +29,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -58,7 +59,7 @@ public class LoadableDMEntity extends DMEntity {
 
 	private static final Logger logger = Logger.getLogger(LoadableDMEntity.class.getPackage().getName());
 
-	private Class javaType;
+	private Class<?> javaType;
 
 	/**
 	 * Constructor used during deserialization
@@ -78,7 +79,7 @@ public class LoadableDMEntity extends DMEntity {
 	/**
 	 * Constructor used for dynamic creation
 	 */
-	private LoadableDMEntity(DMRepository repository, Class aClass, boolean includesGetOnlyProperties, boolean includesMethods) {
+	private LoadableDMEntity(DMRepository repository, Class<?> aClass, boolean includesGetOnlyProperties, boolean includesMethods) {
 		this(repository.getDMModel());
 		setRepository(repository);
 		if (logger.isLoggable(Level.FINE)) {
@@ -99,7 +100,7 @@ public class LoadableDMEntity extends DMEntity {
 		}
 		initializeFromClass(includesGetOnlyProperties, includesMethods);
 		repository.registerEntity(this);
-		Vector<String> excludedSignatures = registerProperties(includesGetOnlyProperties);
+		List<String> excludedSignatures = registerProperties(includesGetOnlyProperties);
 		if (includesMethods) {
 			registerMethods(excludedSignatures);
 		}
@@ -108,24 +109,17 @@ public class LoadableDMEntity extends DMEntity {
 	/**
 	 * Static builder used for dynamic creation
 	 */
-	public static LoadableDMEntity createLoadableDMEntity(DMModel dataModel, Class aClass) {
-		return createLoadableDMEntity(aClass, dataModel, false, false);
+	public static LoadableDMEntity createLoadableDMEntity(DMRepository repository, Class<?> aClass) {
+		return createLoadableDMEntity(repository, aClass, false, false);
 	}
 
 	/**
 	 * Static builder used for dynamic creation
 	 */
-	public static LoadableDMEntity createLoadableDMEntity(/*DMRepository repository,*/Class aClass, DMModel dataModel,
-			boolean includesGetOnlyProperties, boolean includesMethods) {
-		DMRepository repository = null;
+	public static LoadableDMEntity createLoadableDMEntity(DMRepository repository, Class<?> aClass, boolean includesGetOnlyProperties,
+			boolean includesMethods) {
 
-		if (aClass.getClassLoader() instanceof JarLoader.JarClassLoader) {
-			repository = ((JarLoader.JarClassLoader) aClass.getClassLoader()).getJarRepository();
-		} else {
-			repository = dataModel.getJDKRepository();
-		}
-
-		DMEntity alreadyExistingEntity = dataModel.getDMEntity(aClass);
+		DMEntity alreadyExistingEntity = repository.getDMModel().getDMEntity(aClass);
 
 		// logger.info("createLoadableDMEntity() for "+aClass+" repository="+repository+" cl="+aClass.getClassLoader());
 
@@ -146,6 +140,12 @@ public class LoadableDMEntity extends DMEntity {
 	}
 
 	@Override
+	public void delete() {
+		getProject().getJarClassLoader().unloadClass(javaType);
+		super.delete();
+	};
+
+	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
 		returned.add(UpdateLoadableDMEntity.actionType);
@@ -162,14 +162,14 @@ public class LoadableDMEntity extends DMEntity {
 		// Not authorized
 	}
 
-	public Class getJavaType() {
+	public Class<?> getJavaType() {
 		if (javaType == null) {
 			javaType = retrieveJavaType();
 		}
 		return javaType;
 	}
 
-	public Class retrieveJavaType() {
+	public Class<?> retrieveJavaType() {
 		if (getRepository() == getDMModel().getJDKRepository()) {
 			try {
 				javaType = Class.forName(getFullyQualifiedName());
@@ -226,7 +226,7 @@ public class LoadableDMEntity extends DMEntity {
 		return super.isAncestorOf(entity);
 	}
 
-	protected static String packageNameForClass(Class aClass) {
+	protected static String packageNameForClass(Class<?> aClass) {
 		return packageNameForClassName(aClass.getName());
 	}
 
@@ -286,13 +286,13 @@ public class LoadableDMEntity extends DMEntity {
 		// Sets the parent entity if relevant
 		// Register by the way all non-registered intermediate DMEntity in same
 		// repositery
-		Class current = javaType;
+		Class<?> current = javaType;
 		while (current.getSuperclass() != null) {
 			current = current.getSuperclass();
 			DMEntity currentParentEntity = getDMModel().getDMEntity(current);
 			if (currentParentEntity == null) {
 				// This entity is not yet known
-				LoadableDMEntity.createLoadableDMEntity(current, getDMModel(), includesGetOnlyProperties, includesMethods);
+				LoadableDMEntity.createLoadableDMEntity(getRepository(), current, includesGetOnlyProperties, includesMethods);
 				currentParentEntity = getDMModel().getDMEntity(current);
 				if (logger.isLoggable(Level.FINE)) {
 					logger.finer("Force register " + current.getName() + " in DataModel: " + currentParentEntity);
@@ -304,7 +304,7 @@ public class LoadableDMEntity extends DMEntity {
 				}
 			}
 			if (current == javaType.getSuperclass()) {
-				setParentType(makeType(javaType.getGenericSuperclass(), getDMModel(), true), true);
+				setParentType(makeType(getRepository(), javaType.getGenericSuperclass(), true), true);
 				// setParentEntity(currentParentEntity);
 			}
 		}
@@ -315,7 +315,7 @@ public class LoadableDMEntity extends DMEntity {
 		// implements clauses
 		int implementedTypesIndex = 0;
 		for (Type t : javaType.getGenericInterfaces()) {
-			DMType implementsType = makeType(t, getDMModel(), true);
+			DMType implementsType = makeType(getRepository(), t, true);
 			implementsType.setOwner(this);
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Implements " + implementsType);
@@ -354,7 +354,7 @@ public class LoadableDMEntity extends DMEntity {
 				StringBuffer sb = new StringBuffer();
 				boolean isFirst = true;
 				for (Type t : tv.getBounds()) {
-					DMType type = makeType(t, getDMModel(), false);
+					DMType type = makeType(getRepository(), t, false);
 					type.setOwner(this);
 					sb.append((isFirst ? "" : ",") + type.getStringRepresentation());
 					isFirst = false;
@@ -372,21 +372,18 @@ public class LoadableDMEntity extends DMEntity {
 		}
 	}
 
-	private void registerMethods(Vector<String> excludedSignatures) {
-		for (Enumeration en = searchForMethods(javaType, getDMModel(), getRepository(), true, excludedSignatures).elements(); en
-				.hasMoreElements();) {
-			DMMethod next = (DMMethod) en.nextElement();
+	private void registerMethods(List<String> excludedSignatures) {
+		for (DMMethod next : searchForMethods(javaType, getDMModel(), getRepository(), true, excludedSignatures)) {
 			registerMethod(next);
 		}
-		;
 	}
 
 	/**
 	 * Build a new Vector containing unregistered DMMethod instances, given flags includesGetOnlyProperties and includesMethods
 	 */
-	public static Vector<DMMethod> searchForMethods(Class type, DMModel dmModel, DMRepository repository, boolean importReferencedEntities,
-			Vector<String> excludedSignatures) {
-		Vector<DMMethod> returned = new Vector<DMMethod>();
+	public static List<DMMethod> searchForMethods(Class<?> type, DMModel dmModel, DMRepository repository,
+			boolean importReferencedEntities, List<String> excludedSignatures) {
+		List<DMMethod> returned = new ArrayList<DMMethod>();
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("searchForMethods()");
@@ -432,7 +429,7 @@ public class LoadableDMEntity extends DMEntity {
 	/**
 	 * Build a new DMMethod
 	 */
-	private static DMMethod makeMethod(Class type, String signature, DMModel dmModel, DMRepository repository,
+	private static DMMethod makeMethod(Class<?> type, String signature, DMModel dmModel, DMRepository repository,
 			boolean importReferencedEntities) {
 		Method method = searchMatchingMethod(type, signature);
 		if (method != null) {
@@ -441,13 +438,14 @@ public class LoadableDMEntity extends DMEntity {
 		return null;
 	}
 
-	private static DMEntity obtainDMEntity(Class aClass, DMModel dmModel, boolean importReferencedEntities) {
+	private static DMEntity obtainDMEntity(DMRepository repository, Class<?> aClass, boolean importReferencedEntities) {
+		DMModel dmModel = repository.getDMModel();
 		DMEntity returned = dmModel.getDMEntity(aClass);
-		if ((returned == null) && (importReferencedEntities)) {
+		if (returned == null && importReferencedEntities) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("Force register " + aClass.getName() + " in DataModel");
 			}
-			LoadableDMEntity.createLoadableDMEntity(aClass, dmModel, false, false);
+			LoadableDMEntity.createLoadableDMEntity(repository, aClass, false, false);
 			returned = dmModel.getDMEntity(aClass);
 			if (returned == null) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -458,10 +456,11 @@ public class LoadableDMEntity extends DMEntity {
 		return returned;
 	}
 
-	private static DMType makeType(Type type, DMModel dmModel, boolean importReferencedEntities) {
+	private static DMType makeType(DMRepository repository, Type type, boolean importReferencedEntities) {
+		DMModel dmModel = repository.getDMModel();
 		if (type instanceof Class) {
-			Class typeAsClass = (Class) type;
-			Class baseType;
+			Class<?> typeAsClass = (Class<?>) type;
+			Class<?> baseType;
 			if (typeAsClass.isArray()) {
 				baseType = typeAsClass.getComponentType();
 				while (baseType.isArray()) {
@@ -470,7 +469,7 @@ public class LoadableDMEntity extends DMEntity {
 			} else {
 				baseType = typeAsClass;
 			}
-			DMEntity returnTypeBaseEntity = obtainDMEntity(baseType, dmModel, importReferencedEntities);
+			DMEntity returnTypeBaseEntity = obtainDMEntity(repository, baseType, importReferencedEntities);
 
 			/*if ((returnTypeBaseEntity == null) && (importReferencedEntities)) {
 				if (logger.isLoggable(Level.FINE))
@@ -492,7 +491,7 @@ public class LoadableDMEntity extends DMEntity {
 			TypeVariable typeAsTypeVariable = (TypeVariable) type;
 			GenericDeclaration gd = typeAsTypeVariable.getGenericDeclaration();
 			if (gd instanceof Class) {
-				DMEntity owner = obtainDMEntity((Class) gd, dmModel, importReferencedEntities);
+				DMEntity owner = obtainDMEntity(repository, (Class<?>) gd, importReferencedEntities);
 				if (owner != null) {
 					DMTypeVariable typeVariable = null;
 					for (DMTypeVariable tv : owner.getTypeVariables()) {
@@ -523,11 +522,11 @@ public class LoadableDMEntity extends DMEntity {
 		} else if (type instanceof ParameterizedType) {
 			ParameterizedType typeAsParameterizedType = (ParameterizedType) type;
 			if (typeAsParameterizedType.getRawType() instanceof Class) {
-				DMEntity baseEntity = obtainDMEntity((Class) typeAsParameterizedType.getRawType(), dmModel, importReferencedEntities);
+				DMEntity baseEntity = obtainDMEntity(repository, (Class<?>) typeAsParameterizedType.getRawType(), importReferencedEntities);
 				if (baseEntity != null) {
 					Vector<DMType> parameters = new Vector<DMType>();
 					for (Type t : typeAsParameterizedType.getActualTypeArguments()) {
-						parameters.add(makeType(t, dmModel, importReferencedEntities));
+						parameters.add(makeType(repository, t, importReferencedEntities));
 					}
 					return DMType.makeResolvedDMType(baseEntity, 0, parameters);
 				} else {
@@ -550,7 +549,7 @@ public class LoadableDMEntity extends DMEntity {
 				baseType = ((GenericArrayType) baseType).getGenericComponentType();
 				dimensions++;
 			}
-			DMType returned = makeType(baseType, dmModel, importReferencedEntities);
+			DMType returned = makeType(repository, baseType, importReferencedEntities);
 			returned.setDimensions(dimensions);
 			return returned;
 		} else if (type instanceof WildcardType) {
@@ -563,14 +562,14 @@ public class LoadableDMEntity extends DMEntity {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Upper: " + t);
 				}
-				upperBounds.add(makeType(t, dmModel, importReferencedEntities));
+				upperBounds.add(makeType(repository, t, importReferencedEntities));
 			}
 			Vector<DMType> lowerBounds = new Vector<DMType>();
 			for (Type t : typeAsWildcardType.getLowerBounds()) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Lower: " + t);
 				}
-				lowerBounds.add(makeType(t, dmModel, importReferencedEntities));
+				lowerBounds.add(makeType(repository, t, importReferencedEntities));
 			}
 			DMType returned = DMType.makeWildcardDMType(upperBounds, lowerBounds);
 			if (logger.isLoggable(Level.FINE)) {
@@ -591,7 +590,7 @@ public class LoadableDMEntity extends DMEntity {
 		String methodName = method.getName();
 
 		DMMethod newMethod = new DMMethod(dmModel, methodName);
-		newMethod.setEntity(obtainDMEntity(method.getDeclaringClass(), dmModel, true));
+		newMethod.setEntity(obtainDMEntity(repository, method.getDeclaringClass(), true));
 
 		// Visibility
 		DMVisibilityType visibility;
@@ -616,7 +615,7 @@ public class LoadableDMEntity extends DMEntity {
 		newMethod.setIsSynchronized(Modifier.isSynchronized(method.getModifiers()));
 
 		// lookup return type
-		DMType returnedDMType = makeType(returnType, dmModel, importReferencedEntities);
+		DMType returnedDMType = makeType(repository, returnType, importReferencedEntities);
 		newMethod.setReturnType(returnedDMType, true);
 
 		/*DMEntity returnTypeEntity = dmModel.getDMEntity(returnType);
@@ -642,7 +641,7 @@ public class LoadableDMEntity extends DMEntity {
 			for (int j = 0; j < parameters.length; j++) {
 				Type parameter = parameters[j];
 
-				DMType paramDMType = makeType(parameter, dmModel, importReferencedEntities);
+				DMType paramDMType = makeType(repository, parameter, importReferencedEntities);
 				DMMethodParameter param = new DMMethodParameter(dmModel, newMethod);
 				String name = "arg" + j;
 				if (paramDMType.getBaseEntity() != null) {
@@ -691,27 +690,25 @@ public class LoadableDMEntity extends DMEntity {
 	 * @param includesGetOnlyProperties
 	 * @return a Vector of signature of all methods used to build properties
 	 */
-	private Vector<String> registerProperties(boolean includesGetOnlyProperties) {
-		Vector<String> excludedSignatures = new Vector<String>();
-		Vector<DMProperty> properties = searchForProperties(javaType, getDMModel(), getRepository(), includesGetOnlyProperties, true,
+	private List<String> registerProperties(boolean includesGetOnlyProperties) {
+		List<String> excludedSignatures = new ArrayList<String>();
+		List<DMProperty> properties = searchForProperties(javaType, getDMModel(), getRepository(), includesGetOnlyProperties, true,
 				excludedSignatures);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Properties to register: " + properties);
 		}
-		for (Enumeration en = properties.elements(); en.hasMoreElements();) {
-			DMProperty next = (DMProperty) en.nextElement();
+		for (DMProperty next : properties) {
 			registerProperty(next, false);
 		}
-		;
 		return excludedSignatures;
 	}
 
 	/**
 	 * Build a new Vector containing unregistered DMProperty instances, given flags includesGetOnlyProperties and includesMethods
 	 */
-	public static Vector<DMProperty> searchForProperties(Class type, DMModel dmModel, DMRepository repository,
-			boolean includesGetOnlyProperties, boolean importReferencedEntities, Vector<String> excludedSignatures) {
-		Vector<DMProperty> returned = new Vector<DMProperty>();
+	public static List<DMProperty> searchForProperties(Class<?> type, DMModel dmModel, DMRepository repository,
+			boolean includesGetOnlyProperties, boolean importReferencedEntities, List<String> excludedSignatures) {
+		List<DMProperty> returned = new ArrayList<DMProperty>();
 
 		try {
 			Method[] declaredMethods = type.getDeclaredMethods();
@@ -753,7 +750,7 @@ public class LoadableDMEntity extends DMEntity {
 		return returned;
 	}
 
-	private static boolean containsAPropertyNamed(Vector<DMProperty> properties, String aName) {
+	private static boolean containsAPropertyNamed(List<DMProperty> properties, String aName) {
 		for (DMProperty p : properties) {
 			if (p.getName().equals(aName)) {
 				return true;
@@ -765,7 +762,7 @@ public class LoadableDMEntity extends DMEntity {
 	/**
 	 * Build a new DMProperty
 	 */
-	private static DMProperty makeProperty(Class type, String propertyName, DMModel dmModel, DMRepository repository,
+	private static DMProperty makeProperty(Class<?> type, String propertyName, DMModel dmModel, DMRepository repository,
 			boolean includesGetOnlyProperties, boolean importReferencedEntities, Vector<String> excludedSignatures) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("makeProperty() " + propertyName + " for " + type);
@@ -792,12 +789,12 @@ public class LoadableDMEntity extends DMEntity {
 	 * Build a new DMProperty
 	 */
 	private static DMProperty makeProperty(Method method, DMModel dmModel, DMRepository repository, boolean includesGetOnlyProperties,
-			boolean importReferencedEntities, Vector<String> excludedSignatures) {
-		Class type = method.getDeclaringClass();
+			boolean importReferencedEntities, List<String> excludedSignatures) {
+		Class<?> type = method.getDeclaringClass();
 		Type returnType = method.getGenericReturnType();
 		Type[] parameters = method.getGenericParameterTypes();
-		if ((returnType != Void.TYPE) && (Modifier.isPublic(method.getModifiers())) && (!Modifier.isStatic(method.getModifiers()))
-				&& (parameters.length == 0)) {
+		if (returnType != Void.TYPE && Modifier.isPublic(method.getModifiers()) && !Modifier.isStatic(method.getModifiers())
+				&& parameters.length == 0) {
 			// This signature matches a GET property, lets continue !
 
 			// Look for name
@@ -810,10 +807,10 @@ public class LoadableDMEntity extends DMEntity {
 
 			// Beautify property name
 
-			if ((propertyName.length() > 3) && (propertyName.substring(0, 3).equalsIgnoreCase("get"))) {
+			if (propertyName.length() > 3 && propertyName.substring(0, 3).equalsIgnoreCase("get")) {
 				propertyName = propertyName.substring(3);
 			}
-			if ((propertyName.length() > 1) && (propertyName.substring(0, 1).equals("_"))) {
+			if (propertyName.length() > 1 && propertyName.substring(0, 1).equals("_")) {
 				propertyName = propertyName.substring(1);
 			}
 
@@ -822,8 +819,8 @@ public class LoadableDMEntity extends DMEntity {
 
 			// Is there a SET method ?
 			Method setMethod = searchMatchingSetMethod(type, propertyName, returnType);
-			boolean isSettable = (setMethod != null);
-			if ((setMethod != null) && (excludedSignatures != null)) {
+			boolean isSettable = setMethod != null;
+			if (setMethod != null && excludedSignatures != null) {
 				excludedSignatures.add(DMMethod.signatureForMethod(setMethod, true));
 			}
 
@@ -831,36 +828,32 @@ public class LoadableDMEntity extends DMEntity {
 			DMCardinality cardinality = DMCardinality.get(returnType);
 
 			if (cardinality == DMCardinality.VECTOR) {
-				TreeSet addToMethods = searchMatchingAddToMethods(type, propertyName);
-				TreeSet removeFromMethods = searchMatchingRemoveFromMethods(type, propertyName);
+				TreeSet<AccessorMethod> addToMethods = searchMatchingAddToMethods(type, propertyName);
+				TreeSet<AccessorMethod> removeFromMethods = searchMatchingRemoveFromMethods(type, propertyName);
 				if (excludedSignatures != null) {
-					for (Iterator it = addToMethods.iterator(); it.hasNext();) {
-						AccessorMethod next = (AccessorMethod) it.next();
+					for (AccessorMethod next : addToMethods) {
 						excludedSignatures.add(DMMethod.signatureForMethod(next.getMethod(), true));
 					}
-					for (Iterator it = removeFromMethods.iterator(); it.hasNext();) {
-						AccessorMethod next = (AccessorMethod) it.next();
+					for (AccessorMethod next : removeFromMethods) {
 						excludedSignatures.add(DMMethod.signatureForMethod(next.getMethod(), true));
 					}
-					if ((addToMethods.size() == 0) || (removeFromMethods.size() == 0)) {
+					if (addToMethods.size() == 0 || removeFromMethods.size() == 0) {
 						isSettable = false;
 					}
 				}
 			}
 
 			if (cardinality == DMCardinality.HASHTABLE) {
-				TreeSet setMethods = searchMatchingSetForKeyMethods(type, propertyName);
-				TreeSet removeMethods = searchMatchingRemoveWithKeyMethods(type, propertyName);
+				TreeSet<AccessorMethod> setMethods = searchMatchingSetForKeyMethods(type, propertyName);
+				TreeSet<AccessorMethod> removeMethods = searchMatchingRemoveWithKeyMethods(type, propertyName);
 				if (excludedSignatures != null) {
-					for (Iterator it = setMethods.iterator(); it.hasNext();) {
-						AccessorMethod next = (AccessorMethod) it.next();
+					for (AccessorMethod next : setMethods) {
 						excludedSignatures.add(DMMethod.signatureForMethod(next.getMethod(), true));
 					}
-					for (Iterator it = removeMethods.iterator(); it.hasNext();) {
-						AccessorMethod next = (AccessorMethod) it.next();
+					for (AccessorMethod next : removeMethods) {
 						excludedSignatures.add(DMMethod.signatureForMethod(next.getMethod(), true));
 					}
-					if ((setMethods.size() == 0) || (removeMethods.size() == 0)) {
+					if (setMethods.size() == 0 || removeMethods.size() == 0) {
 						isSettable = false;
 					}
 				}
@@ -871,7 +864,7 @@ public class LoadableDMEntity extends DMEntity {
 			if (includesGetOnlyProperties || isSettable) {
 
 				// lookup type
-				DMType propertyType = makeType(returnType, dmModel, importReferencedEntities);
+				DMType propertyType = makeType(repository, returnType, importReferencedEntities);
 
 				/*DMEntity returnTypeEntity = dmModel.getDMEntity(returnType);
 				 if ((returnTypeEntity == null) && (importReferencedEntities)) {
@@ -894,7 +887,7 @@ public class LoadableDMEntity extends DMEntity {
 
 				DMProperty newProperty = new DMProperty(dmModel, propertyName, propertyType, cardinality, true, isSettable,
 						DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
-				newProperty.setEntity(obtainDMEntity(method.getDeclaringClass(), dmModel, true));
+				newProperty.setEntity(obtainDMEntity(repository, method.getDeclaringClass(), true));
 
 				// if ((!importReferencedEntities) && (returnTypeEntity == null))
 				// newProperty.setUnresolvedTypeName(returnType.getCanonicalName());
@@ -913,11 +906,11 @@ public class LoadableDMEntity extends DMEntity {
 			boolean importReferencedEntities/*, Vector excludedSignatures*/) {
 		// Class type = field.getDeclaringClass();
 		Type fieldType = field.getGenericType();
-		if ((fieldType != Void.TYPE) && (Modifier.isPublic(field.getModifiers())) && (!Modifier.isStatic(field.getModifiers()))) {
+		if (fieldType != Void.TYPE && Modifier.isPublic(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())) {
 			// This signature matches a GET property, lets continue !
 
 			// lookup type
-			DMType propertyType = makeType(fieldType, dmModel, importReferencedEntities);
+			DMType propertyType = makeType(repository, fieldType, importReferencedEntities);
 
 			/*  DMEntity typeEntity = dmModel.getDMEntity(fieldType);
 			 if ((typeEntity == null) && (importReferencedEntities)) {
@@ -946,7 +939,7 @@ public class LoadableDMEntity extends DMEntity {
 
 			DMProperty newProperty = new DMProperty(dmModel, propertyName, propertyType, cardinality, true, true,
 					DMPropertyImplementationType.PUBLIC_FIELD);
-			newProperty.setEntity(obtainDMEntity(field.getDeclaringClass(), dmModel, true));
+			newProperty.setEntity(obtainDMEntity(repository, field.getDeclaringClass(), true));
 
 			/* if ((!importReferencedEntities) && (typeEntity == null))
 			 	newProperty.setUnresolvedTypeName(fieldType.getCanonicalName());*/
@@ -962,7 +955,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * 
 	 * Returns corresponding method, null if no such method exist
 	 */
-	private static Method searchMatchingMethod(Class type, String signature) {
+	private static Method searchMatchingMethod(Class<?> type, String signature) {
 		Method[] methods = type.getDeclaredMethods();
 		for (int i = 0; i < methods.length; i++) {
 			Method method = methods[i];
@@ -986,7 +979,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * </ul>
 	 * Returns corresponding method, null if no such method exist
 	 */
-	private static Method searchMatchingGetMethod(Class type, String propertyName) {
+	private static Method searchMatchingGetMethod(Class<?> type, String propertyName) {
 
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
@@ -1022,7 +1015,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * </ul>
 	 * Returns corresponding field, null if no such method exist
 	 */
-	private static Field searchMatchingField(Class type, String propertyName) {
+	private static Field searchMatchingField(Class<?> type, String propertyName) {
 		Vector<String> tries = new Vector<String>();
 
 		tries.add(propertyName);
@@ -1051,7 +1044,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * </ul>
 	 * Returns corresponding method, null if no such method exist
 	 */
-	private static Method searchMatchingSetMethod(Class type, String propertyName, Type aType) {
+	private static Method searchMatchingSetMethod(Class<?> type, String propertyName, Type aType) {
 
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
@@ -1089,7 +1082,7 @@ public class LoadableDMEntity extends DMEntity {
 
 	}
 
-	private static Method getMethod(Class type, String methodName, Type... params) throws NoSuchMethodException {
+	private static Method getMethod(Class<?> type, String methodName, Type... params) throws NoSuchMethodException {
 		if (params == null) {
 			params = new Type[0];
 		}
@@ -1134,7 +1127,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * <code>_setXXXForKey(Class anObject, Class aKey)</code>, where XXX is the property name (try with or without a terminal 's'
 	 * character), and Class could be anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
 	 */
-	private static TreeSet searchMatchingSetForKeyMethods(Class type, String propertyName) {
+	private static TreeSet<AccessorMethod> searchMatchingSetForKeyMethods(Class<?> type, String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
@@ -1142,7 +1135,7 @@ public class LoadableDMEntity extends DMEntity {
 		if (propertyName.endsWith("ies")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 3) + "y";
 			pluralPropertyName = propertyName;
-		} else if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		} else if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -1165,7 +1158,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * <code>_removeXXXWithKey(Class aKey)</code>, where XXX is the property name (try with or without a terminal 's' character), and Class
 	 * could be anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
 	 */
-	private static TreeSet searchMatchingRemoveWithKeyMethods(Class type, String propertyName) {
+	private static TreeSet<AccessorMethod> searchMatchingRemoveWithKeyMethods(Class<?> type, String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
@@ -1173,7 +1166,7 @@ public class LoadableDMEntity extends DMEntity {
 		if (propertyName.endsWith("ies")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 3) + "y";
 			pluralPropertyName = propertyName;
-		} else if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		} else if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -1196,12 +1189,12 @@ public class LoadableDMEntity extends DMEntity {
 	 * , where XXX is the property name (try with or without a terminal 's' character), and Class could be anything... Returns an ordered
 	 * TreeSet of {@link AccessorMethod} objects
 	 */
-	private static TreeSet searchMatchingAddToMethods(Class type, String propertyName) {
+	private static TreeSet<AccessorMethod> searchMatchingAddToMethods(Class<?> type, String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
 
-		if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -1224,12 +1217,12 @@ public class LoadableDMEntity extends DMEntity {
 	 * <code>_removeFromXXX(Class anObject)</code>, where XXX is the property name (try with or without a terminal 's' character), and Class
 	 * could be anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
 	 */
-	private static TreeSet<AccessorMethod> searchMatchingRemoveFromMethods(Class type, String propertyName) {
+	private static TreeSet<AccessorMethod> searchMatchingRemoveFromMethods(Class<?> type, String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
 
-		if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -1252,7 +1245,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * 
 	 * @see AccessorMethod
 	 */
-	private static TreeSet<AccessorMethod> searchMethodsWithNameAndParamsNumber(Class type, String[] searchedNames, int paramNumber) {
+	private static TreeSet<AccessorMethod> searchMethodsWithNameAndParamsNumber(Class<?> type, String[] searchedNames, int paramNumber) {
 
 		TreeSet<AccessorMethod> returnedTreeSet = new TreeSet<AccessorMethod>();
 		Method[] allMethods = type.getMethods();
@@ -1260,7 +1253,7 @@ public class LoadableDMEntity extends DMEntity {
 		for (int i = 0; i < allMethods.length; i++) {
 			Method tempMethod = allMethods[i];
 			for (int j = 0; j < searchedNames.length; j++) {
-				if ((tempMethod.getName().equalsIgnoreCase(searchedNames[j])) && (tempMethod.getParameterTypes().length == paramNumber)) {
+				if (tempMethod.getName().equalsIgnoreCase(searchedNames[j]) && tempMethod.getParameterTypes().length == paramNumber) {
 					// This is a good candidate
 					returnedTreeSet.add(new AccessorMethod(tempMethod));
 				}
@@ -1280,7 +1273,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * class has a natural ordering that is inconsistent with equals, which means that <code>(x.compareTo(y)==0) == (x.equals(y))</code>
 	 * condition is violated.
 	 */
-	public static class AccessorMethod implements Comparable {
+	public static class AccessorMethod implements Comparable<AccessorMethod> {
 
 		/** Stores the related <code>Method</code> */
 		protected Method method;
@@ -1310,54 +1303,36 @@ public class LoadableDMEntity extends DMEntity {
 		 *                if an error occurs
 		 */
 		@Override
-		public int compareTo(Object object) throws ClassCastException {
+		public int compareTo(AccessorMethod comparedAccessorMethod) throws ClassCastException {
+			if (getMethod().getParameterTypes().length != comparedAccessorMethod.getMethod().getParameterTypes().length) {
 
-			if (object instanceof AccessorMethod) {
+				// Those objects could not be compared and should be treated
+				// as equals
+				// regarding the specialization of their parameters
+				return 2;
+			} else {
 
-				AccessorMethod comparedAccessorMethod = (AccessorMethod) object;
-
-				if (getMethod().getParameterTypes().length != comparedAccessorMethod.getMethod().getParameterTypes().length) {
-
-					// Those objects could not be compared and should be treated
-					// as equals
-					// regarding the specialization of their parameters
-					return 2;
-				}
-
-				else {
-
-					for (int i = 0; i < getMethod().getParameterTypes().length; i++) {
-
-						Class<?> localParameterType = (getMethod().getParameterTypes())[i];
-						Class<?> comparedParameterType = (comparedAccessorMethod.getMethod().getParameterTypes())[i];
-
-						if (!localParameterType.equals(comparedParameterType)) {
-
-							boolean localParamIsParentOfComparedParam = localParameterType.isAssignableFrom(comparedParameterType);
-
-							boolean localParamIsChildOfComparedParam = comparedParameterType.isAssignableFrom(localParameterType);
-
-							if (localParamIsParentOfComparedParam) {
-								return 1;
-							}
-							if (localParamIsChildOfComparedParam) {
-								return -1;
-							}
-							// Those objects could not be compared
-							return 2;
+				for (int i = 0; i < getMethod().getParameterTypes().length; i++) {
+					Class<?> localParameterType = getMethod().getParameterTypes()[i];
+					Class<?> comparedParameterType = comparedAccessorMethod.getMethod().getParameterTypes()[i];
+					if (!localParameterType.equals(comparedParameterType)) {
+						boolean localParamIsParentOfComparedParam = localParameterType.isAssignableFrom(comparedParameterType);
+						boolean localParamIsChildOfComparedParam = comparedParameterType.isAssignableFrom(localParameterType);
+						if (localParamIsParentOfComparedParam) {
+							return 1;
 						}
+						if (localParamIsChildOfComparedParam) {
+							return -1;
+						}
+						// Those objects could not be compared
+						return 2;
+					}
 
-					} // end of for
+				} // end of for
 
-					// Those objects are equals regarding the specialization of
-					// their parameters
-					return 0;
-				}
-
-			}
-
-			else {
-				throw new ClassCastException();
+				// Those objects are equals regarding the specialization of
+				// their parameters
+				return 0;
 			}
 		}
 
@@ -1465,9 +1440,9 @@ public class LoadableDMEntity extends DMEntity {
 			initializeFromClass(false, false);
 
 			// Then what's about properties ?
-			Vector<DMProperty> propertiesToDelete = new Vector<DMProperty>(getProperties().values());
-			for (Enumeration en = aClassReference.getPropertiesEnumeration(); en.hasMoreElements();) {
-				PropertyReference nextPropertyRef = (PropertyReference) en.nextElement();
+			List<DMProperty> propertiesToDelete = new ArrayList<DMProperty>(getProperties().values());
+			for (Enumeration<PropertyReference> en = aClassReference.getPropertiesEnumeration(); en.hasMoreElements();) {
+				PropertyReference nextPropertyRef = en.nextElement();
 				if (nextPropertyRef.isSelected()) {
 					DMProperty property = getDMProperty(nextPropertyRef.getName());
 					// logger.info("Next selected: "+nextPropertyRef.getName()+" existing="+property);
@@ -1489,8 +1464,7 @@ public class LoadableDMEntity extends DMEntity {
 					}
 				}
 			}
-			for (Enumeration en = (new Vector<DMProperty>(propertiesToDelete)).elements(); en.hasMoreElements();) {
-				DMProperty toDelete = (DMProperty) en.nextElement();
+			for (DMProperty toDelete : propertiesToDelete) {
 				logger.info("Delete property: " + toDelete.getName());
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Delete property " + toDelete);
@@ -1499,9 +1473,9 @@ public class LoadableDMEntity extends DMEntity {
 			}
 
 			// Then what's about methods ?
-			Vector<DMMethod> methodsToDelete = new Vector<DMMethod>(getMethods().values());
-			for (Enumeration en = aClassReference.getMethodsEnumeration(); en.hasMoreElements();) {
-				MethodReference nextMethodRef = (MethodReference) en.nextElement();
+			List<DMMethod> methodsToDelete = new ArrayList<DMMethod>(getMethods().values());
+			for (Enumeration<MethodReference> en = aClassReference.getMethodsEnumeration(); en.hasMoreElements();) {
+				MethodReference nextMethodRef = en.nextElement();
 				if (nextMethodRef.isSelected()) {
 					DMMethod method = getDeclaredMethod(nextMethodRef.getSignature());
 					if (method != null) {
@@ -1518,8 +1492,7 @@ public class LoadableDMEntity extends DMEntity {
 					}
 				}
 			}
-			for (Enumeration en = (new Vector<DMMethod>(methodsToDelete)).elements(); en.hasMoreElements();) {
-				DMMethod toDelete = (DMMethod) en.nextElement();
+			for (DMMethod toDelete : methodsToDelete) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Delete method " + toDelete);
 				}
@@ -1542,10 +1515,10 @@ public class LoadableDMEntity extends DMEntity {
 
 			// Look after all required properties
 
-			Vector<String> excludedSignatures = new Vector<String>();
-			Vector<DMProperty> allRequiredProperties = LoadableDMEntity.searchForProperties(getJavaType(), getDMModel(), getRepository(),
+			List<String> excludedSignatures = new Vector<String>();
+			List<DMProperty> allRequiredProperties = LoadableDMEntity.searchForProperties(getJavaType(), getDMModel(), getRepository(),
 					includeGetOnlyProperties, false, excludedSignatures);
-			Vector<DMMethod> allRequiredMethods;
+			List<DMMethod> allRequiredMethods;
 			if (includeMethods) {
 				allRequiredMethods = LoadableDMEntity.searchForMethods(getJavaType(), getDMModel(), getRepository(), false,
 						excludedSignatures);
@@ -1555,10 +1528,9 @@ public class LoadableDMEntity extends DMEntity {
 
 			// Then what's about properties ?
 
-			Vector<DMProperty> properties = new Vector<DMProperty>(getProperties().values());
+			List<DMProperty> properties = new ArrayList<DMProperty>(getProperties().values());
 
-			for (Enumeration en = properties.elements(); en.hasMoreElements();) {
-				DMProperty nextProperty = (DMProperty) en.nextElement();
+			for (DMProperty nextProperty : properties) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update property " + nextProperty);
 				}
@@ -1572,8 +1544,7 @@ public class LoadableDMEntity extends DMEntity {
 					logger.warning(e.getMessage());
 				}
 
-				for (Enumeration en2 = new Vector<DMProperty>(allRequiredProperties).elements(); en2.hasMoreElements();) {
-					DMProperty next = (DMProperty) en2.nextElement();
+				for (DMProperty next : new ArrayList<DMProperty>(allRequiredProperties)) {
 					if (next.getName().equals(nextProperty.getName())) {
 						allRequiredProperties.remove(next);
 					}
@@ -1582,8 +1553,7 @@ public class LoadableDMEntity extends DMEntity {
 
 			// Those properties still required, add them:
 
-			for (Enumeration en = allRequiredProperties.elements(); en.hasMoreElements();) {
-				DMProperty nextProperty = (DMProperty) en.nextElement();
+			for (DMProperty nextProperty : allRequiredProperties) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Create property " + nextProperty);
 				}
@@ -1592,10 +1562,9 @@ public class LoadableDMEntity extends DMEntity {
 
 			// Then what's about methods ?
 
-			Vector<DMMethod> methods = new Vector<DMMethod>(getMethods().values());
+			List<DMMethod> methods = new ArrayList<DMMethod>(getMethods().values());
 
-			for (Enumeration en = methods.elements(); en.hasMoreElements();) {
-				DMMethod nextMethod = (DMMethod) en.nextElement();
+			for (DMMethod nextMethod : methods) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update method " + nextMethod);
 				}
@@ -1604,8 +1573,7 @@ public class LoadableDMEntity extends DMEntity {
 				} catch (DuplicateMethodSignatureException e) {
 					e.printStackTrace();
 				}
-				for (Enumeration en2 = new Vector<DMMethod>(allRequiredMethods).elements(); en2.hasMoreElements();) {
-					DMMethod next = (DMMethod) en2.nextElement();
+				for (DMMethod next : new ArrayList<DMMethod>(allRequiredMethods)) {
 					if (next.getSignature().equals(nextMethod.getSignature())) {
 						allRequiredMethods.remove(next);
 					}
@@ -1614,8 +1582,7 @@ public class LoadableDMEntity extends DMEntity {
 
 			// Those methods still required, add them:
 
-			for (Enumeration en = allRequiredMethods.elements(); en.hasMoreElements();) {
-				DMMethod nextMethod = (DMMethod) en.nextElement();
+			for (DMMethod nextMethod : allRequiredMethods) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Create method " + nextMethod);
 				}

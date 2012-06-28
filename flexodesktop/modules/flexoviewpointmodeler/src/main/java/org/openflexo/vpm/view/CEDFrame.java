@@ -34,9 +34,9 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
-import org.openflexo.vpm.controller.CEDKeyEventListener;
-import org.openflexo.vpm.view.menu.CEDMenuBar;
+import org.openflexo.vpm.controller.VPMController;
+import org.openflexo.vpm.controller.VPMKeyEventListener;
+import org.openflexo.vpm.view.menu.VPMMenuBar;
 
 /**
  * The main window of this module
@@ -52,11 +52,11 @@ public class CEDFrame extends FlexoFrame {
 	// =========================
 	// ==========================================================================
 
-	protected CEDController _cedController;
+	protected VPMController _cedController;
 
-	protected CEDMenuBar _cedMenuBar;
+	protected VPMMenuBar _cedMenuBar;
 
-	protected CEDKeyEventListener _cedKeyEventListener;
+	protected VPMKeyEventListener _cedKeyEventListener;
 
 	// ================================================
 	// ================ Constructor ===================
@@ -65,7 +65,7 @@ public class CEDFrame extends FlexoFrame {
 	/**
 	 * Constructor for XXXFrame
 	 */
-	public CEDFrame(String title, CEDController controller, CEDKeyEventListener cedKeyEventListener, CEDMenuBar menuBar)
+	public CEDFrame(String title, VPMController controller, VPMKeyEventListener cedKeyEventListener, VPMMenuBar menuBar)
 			throws HeadlessException {
 		super(title, controller, cedKeyEventListener, menuBar);
 		_cedController = controller;
@@ -90,7 +90,7 @@ public class CEDFrame extends FlexoFrame {
 	/**
 	 * @return Returns the controller.
 	 */
-	public CEDController getCEDController() {
+	public VPMController getCEDController() {
 		return _cedController;
 	}
 

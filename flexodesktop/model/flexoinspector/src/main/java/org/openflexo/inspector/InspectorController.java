@@ -202,10 +202,10 @@ public class InspectorController implements Observer, AbstractController {
 	}
 
 	public boolean updateSuperInspectors() {
-		Iterator it = _inspectors.values().iterator();
+		Iterator<InspectorModel> it = _inspectors.values().iterator();
 		while (it.hasNext()) {
-			InspectorModel inspector = (InspectorModel) it.next();
-			if (inspector.superInspectorName != null && inspector.superInspectorName != "") {
+			InspectorModel inspector = it.next();
+			if (inspector.superInspectorName != null) {
 				InspectorModel superInspector = _inspectors.get(inspector.superInspectorName);
 				if (superInspector == null) {
 					if (logger.isLoggable(Level.WARNING)) {
@@ -217,10 +217,6 @@ public class InspectorController implements Observer, AbstractController {
 			}
 		}
 		return true;
-	}
-
-	public Enumeration getInspectors() {
-		return _inspectors.elements();
 	}
 
 	// ==========================================================================
@@ -296,7 +292,7 @@ public class InspectorController implements Observer, AbstractController {
 		return e;
 	}
 
-	public Hashtable fillParameters(Hashtable<String, String> hash, NodeList list) {
+	public Hashtable<String, String> fillParameters(Hashtable<String, String> hash, NodeList list) {
 		for (int i = 0; i < list.getLength(); i++) {
 			if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
 				if (list.item(i).getLocalName().equals("param")) {
@@ -379,8 +375,8 @@ public class InspectorController implements Observer, AbstractController {
 	 */
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
-		for (Enumeration en = _exceptionHandlers.elements(); en.hasMoreElements();) {
-			InspectorExceptionHandler next = (InspectorExceptionHandler) en.nextElement();
+		for (Enumeration<InspectorExceptionHandler> en = _exceptionHandlers.elements(); en.hasMoreElements();) {
+			InspectorExceptionHandler next = en.nextElement();
 			if (next.handleException(inspectable, propertyName, value, exception)) {
 				return true;
 			}

@@ -91,7 +91,6 @@ public class ProcessSelector extends AbstractBrowserSelector<FlexoProcess> {
 			setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.STATUS, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.DEADLINE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.COMPONENT, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ACTIVITY_NODE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ACTION_NODE, BrowserFilterStatus.HIDE);
@@ -119,6 +118,7 @@ public class ProcessSelector extends AbstractBrowserSelector<FlexoProcess> {
 			setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW, true);
+			setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
 		}
 
 		@Override

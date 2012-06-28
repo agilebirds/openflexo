@@ -19,13 +19,13 @@
  */
 package org.openflexo.vpm.drawingshema;
 
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.geom.FGEPoint;
@@ -33,16 +33,20 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.viewpoint.AddShape;
 import org.openflexo.foundation.viewpoint.DropScheme;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.action.AddExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
-import org.openflexo.localization.FlexoLocalization;
 
 public class ContextualPalette extends DrawingPalette implements GraphicalFlexoObserver {
 
@@ -114,8 +118,10 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 			}
 			if (target.getDrawable() instanceof ViewShape) {
 				ViewShape targetShape = (ViewShape) target.getDrawable();
-				if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
-					returned.add(dropScheme);
+				for (EditionPatternReference ref : targetShape.getEditionPatternReferences()) {
+					if (dropScheme.isValidTarget(ref.getEditionPattern(), ref.getPatternRole())) {
+						returned.add(dropScheme);
+					}
 				}
 			}
 		}
@@ -130,11 +136,17 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 		private ViewPointPaletteElement viewPointPaletteElement;
 		private PaletteElementGraphicalRepresentation gr;
 
-		public ContextualPaletteElement(ViewPointPaletteElement aPaletteElement) {
+		public ContextualPaletteElement(final ViewPointPaletteElement aPaletteElement) {
 			viewPointPaletteElement = aPaletteElement;
-			gr = new PaletteElementGraphicalRepresentation(
-					(ShapeGraphicalRepresentation) viewPointPaletteElement.getGraphicalRepresentation(), null, getPaletteDrawing());
-			gr.setText(aPaletteElement.getName());
+			gr = new PaletteElementGraphicalRepresentation(viewPointPaletteElement.getGraphicalRepresentation(), null, getPaletteDrawing()) {
+				@Override
+				public String getText() {
+					if (aPaletteElement != null && aPaletteElement.getBoundLabelToElementName()) {
+						return aPaletteElement.getName();
+					}
+					return "";
+				}
+			};
 			gr.setDrawable(this);
 		}
 
@@ -147,9 +159,45 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 		public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
 			if (containerGR.getDrawable() instanceof ExampleDrawingObject) {
 
-				ExampleDrawingObject container = (ExampleDrawingObject) containerGR.getDrawable();
+				ExampleDrawingObject rootContainer = (ExampleDrawingObject) containerGR.getDrawable();
 
-				ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
+				DropScheme dropScheme = viewPointPaletteElement.getDropScheme();
+
+				Hashtable<GraphicalElementPatternRole, ExampleDrawingObject> grHierarchy = new Hashtable<GraphicalElementPatternRole, ExampleDrawingObject>();
+
+				for (EditionAction action : dropScheme.getActions()) {
+					if (action instanceof AddShape) {
+						ShapePatternRole role = ((AddShape) action).getPatternRole();
+						ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) viewPointPaletteElement
+								.getOverridingGraphicalRepresentation(role);
+						if (shapeGR == null) {
+							shapeGR = (ShapeGraphicalRepresentation<?>) role.getGraphicalRepresentation();
+						}
+						ExampleDrawingObject container = null;
+						if (role.getParentShapePatternRole() != null) {
+							logger.info("Adding shape " + role + " under " + role.getParentShapePatternRole());
+							container = grHierarchy.get(role.getParentShapePatternRole());
+						} else {
+							logger.info("Adding shape " + role + " as root");
+							container = rootContainer;
+							if (viewPointPaletteElement.getBoundLabelToElementName()) {
+								shapeGR.setText(viewPointPaletteElement.getName());
+							}
+							shapeGR.setLocation(dropLocation);
+						}
+						AddExampleDrawingShape addShapeAction = AddExampleDrawingShape.actionType.makeNewAction(container, null,
+								getController().getCEDController().getEditor());
+						addShapeAction.graphicalRepresentation = shapeGR;
+						addShapeAction.newShapeName = role.getPatternRoleName();
+						if (role.getParentShapePatternRole() == null) {
+							addShapeAction.newShapeName = viewPointPaletteElement.getName();
+						}
+						addShapeAction.doAction();
+						grHierarchy.put(role, addShapeAction.getNewShape());
+					}
+				}
+
+				/*ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 				shapeGR.setIsSelectable(true);
 				shapeGR.setIsFocusable(true);
 				shapeGR.setIsReadOnly(false);
@@ -169,7 +217,9 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 				}
 
 				action.doAction();
-				return action.hasActionExecutionSucceeded();
+				return action.hasActionExecutionSucceeded();*/
+
+				return true;
 			}
 
 			return false;

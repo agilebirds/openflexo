@@ -44,6 +44,7 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
 import org.openflexo.module.external.ExternalModuleDelegater;
+import org.openflexo.module.external.ExternalWKFModule;
 
 /**
  * @author ndaniels
@@ -203,13 +204,17 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 			return;
 		}
 		startGeneration();
+		Object processRepresentation = null;
+		ExternalWKFModule wkfModuleInstance = null;
 		try {
 			VelocityContext context = defaultContext();
 			if (getObject() instanceof FlexoProcess) {
-				if (ExternalModuleDelegater.getModuleLoader() != null
-						&& ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() != null) {
-					context.put("processRepresentation", ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance()
-							.getProcessRepresentation((FlexoProcess) getObject(), true));
+				if (ExternalModuleDelegater.getModuleLoader() != null) {
+					wkfModuleInstance = ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(getObject().getProject());
+					if (wkfModuleInstance != null) {
+						processRepresentation = wkfModuleInstance.getProcessRepresentation((FlexoProcess) getObject(), true);
+						context.put("processRepresentation", processRepresentation);
+					}
 				}
 			}
 			generatedCode = new GeneratedTextResource(getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName()
@@ -222,6 +227,10 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 			}
 			e.printStackTrace();
 			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		} finally {
+			if (processRepresentation != null && wkfModuleInstance != null) {
+				wkfModuleInstance.disposeProcessRepresentation(processRepresentation);
+			}
 		}
 		stopGeneration();
 	}

@@ -26,6 +26,8 @@ import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public abstract class FlexoModuleTestCase extends FlexoTestCase {
@@ -35,9 +37,23 @@ public abstract class FlexoModuleTestCase extends FlexoTestCase {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	protected void setUp() throws Exception {
+		UserType.setCurrentUserType(UserType.DEVELOPER);
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+
 	public static void assertNoObservers(FlexoObservable observable) {
 		assertEquals("The following observers remain : " + printObservers(observable.getAllObservers()), 0, observable.getAllObservers()
 				.size());
+	}
+
+	protected final ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	private static String printObservers(Vector allObservers) {

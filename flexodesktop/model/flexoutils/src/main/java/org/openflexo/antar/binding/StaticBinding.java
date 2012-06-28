@@ -180,6 +180,27 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 	}
 
 	@Override
+	public String invalidBindingReason() {
+		// logger.setLevel(Level.FINE);
+
+		if (getAccessedType() == null) {
+			return "Invalid binding " + this + " because accessed type is null";
+		}
+
+		if (getBindingDefinition() == null) {
+			return "Invalid binding because binding definition is null";
+		} else if (getBindingDefinition().getIsSettable()) {
+			return "Invalid binding because binding definition is declared as settable for a constant value";
+		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
+			return "Invalid binding because binding definition is declared as executable for a constant value";
+		}
+
+		return "Invalid binding because types doesn't match: " + getAccessedType() + " cannot be assigned to "
+				+ getBindingDefinition().getType();
+
+	}
+
+	@Override
 	public boolean debugIsBindingValid() {
 		logger.info("Is StaticBinding " + this + " valid ?");
 

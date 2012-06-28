@@ -25,7 +25,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 
 import org.openflexo.foundation.DataModification;
@@ -129,21 +128,17 @@ public class IEWysiwygWidgetView extends AbstractInnerTableWidgetView<IEWysiwygW
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
 
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(BINDING_VALUE_NAME)) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(BINDING_VALUE_NAME)) {
 				_jEditorPane.setText(getValue());
-				if (getParent() != null) {
-					getParent().doLayout();
-					getParent().repaint();
-				}
-			} else if (modif.propertyName().equals("cssClass")) {
+				revalidate();
+				repaint();
+			} else if (propertyName.equals("cssClass")) {
 				_jEditorPane.setFont(getWysiwygModel().getTextCSSClass().font());
 			}
 		}
-		if ((modif.propertyName() != null) && (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan"))) {
-			getParent().doLayout();
-			((JComponent) getParent()).repaint();
-		} else if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
+		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
 		} else {
 			super.update(arg0, modif);
@@ -154,11 +149,6 @@ public class IEWysiwygWidgetView extends AbstractInnerTableWidgetView<IEWysiwygW
 		return false;
 	}
 
-	@Override
-	public boolean getHoldsNextComputedPreferredSize() {
-		return false;
-	}
-
 	/**
 	 * Overrides getPreferredSize
 	 * 
@@ -166,18 +156,9 @@ public class IEWysiwygWidgetView extends AbstractInnerTableWidgetView<IEWysiwygW
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		Dimension d = _jEditorPane.getPreferredSize();
 		d.width += 4;
 		d.height += 6;
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
 		return d;
 	}
 

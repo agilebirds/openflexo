@@ -93,6 +93,7 @@ import org.openflexo.foundation.dkv.DKVValidationModel;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMValidationModel;
+import org.openflexo.foundation.dm.JarClassLoader;
 import org.openflexo.foundation.gen.FlexoProcessImageNotificationCenter;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.ie.IEOperationComponent;
@@ -129,6 +130,7 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
 import org.openflexo.foundation.toc.TOCData;
+import org.openflexo.foundation.toc.TOCDataBinding;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
@@ -157,6 +159,7 @@ import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.foundation.wkf.Status;
+import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WKFValidationModel;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
@@ -358,7 +361,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			_addConverter(bindingAssignmentConverter);
 			_addConverter(objectReferenceConverter);
 			_addConverter(imageFileConverter);
-			// _addConverter(editionPatternConverter);
+			_addConverter(TOCDataBinding.CONVERTER);
 		}
 	}
 
@@ -398,6 +401,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			logger.info("Deserialization for FlexoProject started");
 		}
 		builder.project = this;
+		setResourceCenter(builder.resourceCenter);
 		setProjectDirectory(builder.projectDirectory);
 		_loadingHandler = builder.loadingHandler;
 		initializeDeserialization(builder);
@@ -428,7 +432,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (old != targetType) {
 			_targetType = targetType;
 			setChanged();
-			notifyObservers(new DataModification(DataModification.ATTRIBUTE, "targetType", old, targetType));
+			notifyObservers(new DataModification("targetType", old, targetType));
 			_ieValidationModel = null;
 			_dmValidationModel = null;
 			_wkfValidationModel = null;
@@ -758,6 +762,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 	}
 
+	protected void writeDotVersion() {
+		writeDotVersion(FlexoXMLMappings.latestRelease());
+	}
+
 	private void writeDotVersion(FlexoVersion version) {
 		FileOutputStream fos = null;
 		File f = new File(projectDirectory, ".version");
@@ -819,17 +827,30 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			progress.setProgress(FlexoLocalization.localizedForKey("saving_modified_resources"));
 			progress.resetSecondaryProgress(unsaved.size() + 1);
 		}
-		for (FlexoStorageResource<? extends StorageResourceData> data : unsaved) {
-			if (progress != null) {
-				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
+		boolean resourceSaved = false;
+		try {
+			for (FlexoStorageResource<? extends StorageResourceData> data : unsaved) {
+				if (data == getFlexoRMResource()) {
+					continue;
+				}
+				if (progress != null) {
+					progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
+				}
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Saving " + data.getResourceIdentifier() + " file: " + data.getFileName());
+				}
+				data.saveResourceData(clearModifiedStatus);
+				resourceSaved = true;
 			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Saving " + data.getResourceIdentifier() + " file: " + data.getFileName());
+		} finally {
+			if (resourceSaved || getFlexoRMResource().isModified()) {
+				// If at least one resource has been saved, let's try to save the RM so that the lastID is also saved, avoiding possible
+				// duplication of flexoID's.
+				writeDotVersion();
+				// We save RM at the end so that all dates are always up-to-date and we also save the lastID which may have changed!
+				getFlexoRMResource().saveResourceData(clearModifiedStatus);
 			}
-			data.saveResourceData(clearModifiedStatus);
 		}
-		// We save RM at the end so that all dates are always up-to-date and we also save the lastID which may have changed!
-		getFlexoRMResource().saveResourceData(clearModifiedStatus);
 	}
 
 	/**
@@ -848,6 +869,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		for (FlexoStorageResource<? extends StorageResourceData> r : loaded) {
 			r.saveResourceData();
 		}
+		writeDotVersion();
 	}
 
 	/*
@@ -890,7 +912,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 		if (sortResources) {
 			DependencyAlgorithmScheme scheme = _dependancyScheme;
-			// Pessimistic dependancy scheme is cheaper and is not intended for this situation
+			// Pessimistic dependency scheme is cheaper and is not intended for this situation
 			setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
 			FlexoResource.sortResourcesWithDependancies(returned);
 			setDependancyScheme(scheme);
@@ -935,6 +957,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (getGeneratedDocResource(false) != null && getGeneratedDocResource(false).isLoaded()) {
 			getGeneratedDoc().setFactory(null);
 		}
+		getDataModel().close();
+		_resource = null;
+		resources = null;
+		resourceCenter = null;
 		deleteObservers();
 		allRegisteredObjects.clear();
 		globalStatus.clear();
@@ -943,6 +969,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Closing project... DONE");
 		}
+		jarClassLoader = null;
 	}
 
 	// =============================================================
@@ -1016,7 +1043,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	@Override
 	public Iterator<FlexoResource<? extends FlexoResourceData>> iterator() {
-		return resources.values().iterator();
+		return new ArrayList<FlexoResource<? extends FlexoResourceData>>(resources.values()).iterator();
 	}
 
 	public FlexoResource<? extends FlexoResourceData> resourceForKey(String fullQualifiedResourceIdentifier) {
@@ -1040,7 +1067,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		notifyObservers(new ResourceAdded(resource));
 	}
 
-	public void removeResourceWithKey(String resourceIdentifier) {
+	public synchronized void removeResourceWithKey(String resourceIdentifier) {
 		if (resources.get(resourceIdentifier) != null) {
 			FlexoResource<? extends FlexoResourceData> resource = resources.get(resourceIdentifier);
 			resources.remove(resourceIdentifier);
@@ -1049,7 +1076,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 	}
 
-	public void registerResource(FlexoResource<? extends FlexoResourceData> resource) throws DuplicateResourceException {
+	public synchronized void registerResource(FlexoResource<? extends FlexoResourceData> resource) throws DuplicateResourceException {
 		if (resourceForKey(resource.getResourceIdentifier()) != null) {
 			throw new DuplicateResourceException(resource);
 		}
@@ -1059,7 +1086,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 	}
 
-	public void renameResource(FlexoResource<? extends FlexoResourceData> resource, String newName) throws DuplicateResourceException {
+	public synchronized void renameResource(FlexoResource<? extends FlexoResourceData> resource, String newName)
+			throws DuplicateResourceException {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("renameResource() " + resource.getResourceIdentifier() + " with " + newName);
 		}
@@ -1148,24 +1176,22 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					}
 				}
 			}
-			if (identifier != null) {
-				removeResourceWithKey(identifier);
-				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getAlteredResources())) {
-					res.removeFromDependentResources(resource);
-				}
-				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(
-						resource.getDependentResources())) {
-					res.removeFromAlteredResources(resource);
-				}
-				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(
-						resource.getSynchronizedResources())) {
-					res.removeFromSynchronizedResources(resource);
-				}
-			} else {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not remove resource " + resource.getResourceIdentifier()
-							+ " because this resource is not registered !");
-				}
+		}
+		if (identifier != null) {
+			removeResourceWithKey(identifier);
+			for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getAlteredResources())) {
+				res.removeFromDependentResources(resource);
+			}
+			for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getDependentResources())) {
+				res.removeFromAlteredResources(resource);
+			}
+			for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getSynchronizedResources())) {
+				res.removeFromSynchronizedResources(resource);
+			}
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not remove resource " + resource.getResourceIdentifier()
+						+ " because this resource is not registered !");
 			}
 		}
 	}
@@ -1600,6 +1626,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return getFlexoWSLibraryResource().getWSLibrary();
 	}
 
+	private DMModel buildingDataModel = null;
+	private boolean dataModelIsBuilding = false;
+	private JarClassLoader jarClassLoader;
+
 	public DMModel getDataModel() {
 		if (dataModelIsBuilding) {
 			return getBuildingDataModel();
@@ -1620,8 +1650,16 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		this.buildingDataModel = buildingDataModel;
 	}
 
-	private DMModel buildingDataModel = null;
-	private boolean dataModelIsBuilding = false;
+	public JarClassLoader getJarClassLoader() {
+		if (jarClassLoader == null) {
+			jarClassLoader = new JarClassLoader(Arrays.asList(new FlexoProjectFile(this, ProjectRestructuration.DATA_MODEL_DIR).getFile()));
+		}
+		return jarClassLoader;
+	}
+
+	public void setJarClassLoader(JarClassLoader jarClassLoader) {
+		this.jarClassLoader = jarClassLoader;
+	}
 
 	public DKVModel getDKVModel() {
 		return getFlexoDKVResource().getResourceData();
@@ -1719,8 +1757,11 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	// ============================
 	// ==========================================================================
 
-	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress) {
+	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress,
+			FlexoResourceCenter resourceCenter) {
+		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
 		FlexoProject project = new FlexoProject(aProjectDirectory);
+		project.setResourceCenter(resourceCenter);
 		FlexoEditor editor = editorFactory.makeFlexoEditor(project);
 		project.setLastUniqueID(0);
 		if (logger.isLoggable(Level.INFO)) {
@@ -1744,7 +1785,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			FlexoNavigationMenu.createNewFlexoNavigationMenu(project);
 			DKVModel.createNewDKVModel(project);
 			TOCData tocData = project.getTOCData();
-			tocData.addToRepositories(new TOCRepository(tocData, project.getDocTypes().get(0), null));
+			TOCRepository repository = TOCRepository.createTOCRepositoryForDocType(tocData, project.getDocTypes().get(0));
+			repository.setTitle(project.getName());
+			tocData.addToRepositories(repository);
 			GeneratedDoc.createNewGeneratedDoc(project);
 			project.initJavaFormatter();
 			importInitialImages(project, editor);
@@ -1857,7 +1900,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		clearCachedFiles();
 		if (notify) {
 			setChanged();
-			notifyObservers(new DataModification(DataModification.ATTRIBUTE, "projectDirectory", null, projectDirectory));
+			notifyObservers(new DataModification("projectDirectory", null, projectDirectory));
 		}
 	}
 
@@ -1919,17 +1962,22 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		} else {
 			prefix = getProjectName().toUpperCase();
 		}
-		return ToolBox.getJavaName(prefix);
+		return ToolBox.getJavaName(prefix, true, false);
 	}
 
 	private DateFormatType _dateFormat = DateFormatType.EUDEFAULT;
 
 	public DateFormatType getProjectDateFormat() {
+		if (_dateFormat == null) {
+			_dateFormat = DateFormatType.EUDEFAULT;
+		}
 		return _dateFormat;
 	}
 
 	public void setProjectDateFormat(DateFormatType value) {
-		_dateFormat = value;
+		if (value != null) {
+			_dateFormat = value;
+		}
 	}
 
 	// ==========================================================================
@@ -2078,6 +2126,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	@Override
 	public synchronized void clearIsModified(boolean clearLastMemoryUpdate) {
 		// logger.info("Project clearIsModified()");
+		if (isDeserializing() && hasBackwardSynchronizationBeenPerformed()) {
+			return;
+		}
 		super.clearIsModified(clearLastMemoryUpdate);
 		_backwardSynchronizationHasBeenPerformed = false;
 	}
@@ -2659,7 +2710,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends FlexoResource<? extends FlexoResourceData>> List<T> getResourcesOfClass(Class<T> resourceClass) {
+	public synchronized <T extends FlexoResource<? extends FlexoResourceData>> List<T> getResourcesOfClass(Class<T> resourceClass) {
 		List<T> reply = new Vector<T>();
 		for (FlexoResource<? extends FlexoResourceData> item : this) {
 			if (resourceClass.isInstance(item)) {
@@ -3755,6 +3806,11 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public static void cleanUpActionizer() {
+		// FlexoModelObject
+		FlexoModelObject.addFlexoPropertyActionizer = null;
+		FlexoModelObject.deleteFlexoPropertyActionizer = null;
+		FlexoModelObject.sortFlexoPropertiesActionizer = null;
+
 		// CGFile
 		CGFile.editCustomTemplateActionizer = null;
 		CGFile.redefineTemplateActionizer = null;
@@ -3768,9 +3824,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 		// FlexoWorkflow
 		FlexoWorkflow.addActivityMetricsDefinitionActionizer = null;
+		FlexoWorkflow.addArtefactMetricsDefinitionActionizer = null;
 		FlexoWorkflow.addEdgeMetricsDefinitionActionizer = null;
-		FlexoWorkflow.addProcessMetricsDefinitionActionizer = null;
 		FlexoWorkflow.addOperationMetricsDefinitionActionizer = null;
+		FlexoWorkflow.addProcessMetricsDefinitionActionizer = null;
 		FlexoWorkflow.deleteMetricsDefinitionActionizer = null;
 
 		// Role
@@ -3780,13 +3837,27 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		RoleList.addRoleActionizer = null;
 		RoleList.deleteRoleActionizer = null;
 
+		// WKFArtefact
+		WKFArtefact.addMetricsActionizer = null;
+		WKFArtefact.deleteMetricsActionizer = null;
+
 		// FlexoPostCondition
 		FlexoPostCondition.addMetricsActionizer = null;
 		FlexoPostCondition.deleteMetricsActionizer = null;
 
 		// AbstractActivityNode
+		AbstractActivityNode.addAccountableRoleActionizer = null;
+		AbstractActivityNode.addConsultedRoleActionizer = null;
+		AbstractActivityNode.addInformedRoleActionizer = null;
 		AbstractActivityNode.addMetricsActionizer = null;
+		AbstractActivityNode.addResponsibleRoleActionizer = null;
+
 		AbstractActivityNode.deleteMetricsActionizer = null;
+
+		AbstractActivityNode.removeFromAccountableRoleActionizer = null;
+		AbstractActivityNode.removeFromConsultedRoleActionizer = null;
+		AbstractActivityNode.removeFromInformedRoleActionizer = null;
+		AbstractActivityNode.removeFromResponsibleRoleActionizer = null;
 
 		// OperationNode
 		OperationNode.addMetricsActionizer = null;
@@ -3896,6 +3967,13 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public EditionPatternInstance getEditionPatternInstance(EditionPatternReference reference) {
+		if (reference == null) {
+			return null;
+		}
+		if (reference.getEditionPattern() == null) {
+			logger.warning("Found a reference to a null EP, please investigate");
+			return null;
+		}
 		if (_editionPatternInstances == null) {
 			_editionPatternInstances = new Hashtable<String, Map<Long, EditionPatternInstance>>();
 		}
@@ -3922,7 +4000,13 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public FlexoResourceCenter getResourceCenter() {
 		if (resourceCenter == null) {
 			File file = getResourceCenterFile();
-			resourceCenter = new LocalResourceCenterImplementation(file);
+			if (file != null && file.exists()) {
+				setResourceCenter(LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(file));
+			} else {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("This really sucks: I don't have a resource center and was unable to look up for one.");
+				}
+			}
 		}
 		// logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
 		return resourceCenter;
@@ -3931,7 +4015,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public static File getResourceCenterFile() {
 		String base = "FlexoResourceCenter";
 		String attempt = base;
-		File root = new File(System.getProperty("user.home"), "Library/Flexo/");
+		File root = new File(System.getProperty("user.home"), "Library/OpenFlexo/");
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 			String appData = System.getenv("APPDATA");
 			if (appData != null) {
@@ -3940,6 +4024,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					root = new File(f, "OpenFlexo");
 				}
 			}
+		} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {
+			root = new File(System.getProperty("user.home"), ".openflexo");
 		}
 		File file = null;
 		boolean ok = false;
@@ -3973,21 +4059,24 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
-		logger.info(">>>>>>>>>>>>>>>>> setResourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
-
-		this.resourceCenter = resourceCenter;
-		EditionPatternConverter editionPatternConverter = new EditionPatternConverter(resourceCenter);
-		getStringEncoder()._addConverter(editionPatternConverter);
-	}
-
-	private Role testRole;
-
-	public Role getTestRole() {
-		return testRole;
-	}
-
-	public void setTestRole(Role testRole) {
-		this.testRole = testRole;
+		if (resourceCenter != null) {
+			if (resourceCenter == this.resourceCenter) {
+				logger.warning("Resource center is already set and the same as this new attempt. I will simply ignore the call.");
+				return;
+			}
+			logger.info(">>>>>>>>>>>>>>>>> setResourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
+			if (this.resourceCenter != null) {
+				logger.warning("Changing resource center on project " + getProjectName() + ". This is likely to cause problems.");
+			}
+			this.resourceCenter = resourceCenter;
+			EditionPatternConverter editionPatternConverter = new EditionPatternConverter(resourceCenter);
+			getStringEncoder()._addConverter(editionPatternConverter);
+		} else {
+			getResourceCenter();
+			logger.warning("#@!#@!#@!#@! An attempt to set a null resource center was made. I will print a stacktrace to let you know where it came from but I am not setting the RC to null!\n"
+					+ "I will try to find one.");
+			new Exception("Attempt to set a null resource center on project " + getProjectName()).printStackTrace();
+		}
 	}
 
 	public boolean isComputeDiff() {
@@ -4006,8 +4095,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 * @param actorReference
 	 */
 	public void _addToPendingEditionPatternReferences(String conceptURI, ConceptActorReference actorReference) {
-		System.out.println("OK, j'enregistre le concept " + conceptURI + " associe a la reference " + actorReference);
-		logger.info("Registering as pending pattern object reference: " + conceptURI);
+		logger.fine("Registering concept " + conceptURI + " as pending pattern object reference: " + actorReference);
 		List<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
 		if (values == null) {
 			values = new Vector<ConceptActorReference>();
@@ -4024,14 +4112,34 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			// No pending EditionPattern references for object
 			return;
 		} else {
-			for (ConceptActorReference actorReference : values) {
+			List<ConceptActorReference> clonedValues = new ArrayList<EditionPatternReference.ConceptActorReference>(values);
+			for (ConceptActorReference actorReference : clonedValues) {
 				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
-				PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
-				logger.info("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
-				object.registerEditionPatternReference(instance, pr);
+				if (instance == null) {
+					logger.warning("Found null EditionPatternInstance, please investigate");
+				} else if (actorReference == null) {
+					logger.warning("Found null actorReference, please investigate");
+				} else if (actorReference.getPatternReference() == null) {
+					logger.warning("Found null actorReference.getPatternReference(), please investigate");
+				} else if (actorReference.getPatternReference().getEditionPattern() == null) {
+					logger.warning("Found null actorReference.getPatternReference().getEditionPattern(), please investigate");
+				} else {
+					PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
+					logger.fine("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
+					object.registerEditionPatternReference(instance, pr);
+				}
 			}
 			values.clear();
 		}
 	}
 
+	public void resolvePendingEditionPatternReferences() {
+		ArrayList<String> allKeys = new ArrayList<String>(pendingEditionPatternReferences.keySet());
+		for (String conceptURI : allKeys) {
+			OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
+			if (oo != null) {
+				_retrievePendingEditionPatternReferences(oo);
+			}
+		}
+	}
 }

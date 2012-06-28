@@ -28,7 +28,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.view.FIBModuleView;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
 /**
@@ -39,13 +39,13 @@ import org.openflexo.vpm.controller.ViewPointPerspective;
  */
 public class CalcLibraryView extends FIBModuleView<ViewPointLibrary> implements FIBMouseClickListener {
 
-	public CalcLibraryView(ViewPointLibrary viewPointLibrary, CEDController controller) {
+	public CalcLibraryView(ViewPointLibrary viewPointLibrary, VPMController controller) {
 		super(viewPointLibrary, controller, CEDCst.CALC_LIBRARY_VIEW_FIB);
 	}
 
 	@Override
-	public CEDController getFlexoController() {
-		return (CEDController) super.getFlexoController();
+	public VPMController getFlexoController() {
+		return (VPMController) super.getFlexoController();
 	}
 
 	@Override

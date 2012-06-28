@@ -89,11 +89,11 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.search.view.ITextComponent;
 import org.openflexo.search.view.TextSearchPanel;
 import org.openflexo.swing.DialogFactory;
 import org.openflexo.toolbox.FontCst;
-import org.openflexo.toolbox.Localized;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -2398,25 +2398,26 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 		if (windowAncestor != null) {
 			if (windowAncestor instanceof Dialog) {
 				if (DIALOG_FACTORY != null) {
-					searchDialog = DIALOG_FACTORY.getNewDialog((Dialog) windowAncestor, Localized.localizedForKey("find_and_replace"),
-							false);
+					searchDialog = DIALOG_FACTORY.getNewDialog((Dialog) windowAncestor,
+							FlexoLocalization.localizedForKey("find_and_replace"), false);
 				} else {
-					searchDialog = new Dialog((Dialog) windowAncestor, Localized.localizedForKey("find_and_replace"), false);
+					searchDialog = new Dialog((Dialog) windowAncestor, FlexoLocalization.localizedForKey("find_and_replace"), false);
 				}
 			} else if (windowAncestor instanceof Frame) {
 				if (DIALOG_FACTORY != null) {
-					searchDialog = DIALOG_FACTORY
-							.getNewDialog((Frame) windowAncestor, Localized.localizedForKey("find_and_replace"), false);
+					searchDialog = DIALOG_FACTORY.getNewDialog((Frame) windowAncestor,
+							FlexoLocalization.localizedForKey("find_and_replace"), false);
 				} else {
-					searchDialog = new Dialog((Frame) windowAncestor, Localized.localizedForKey("find_and_replace"), false);
+					searchDialog = new Dialog((Frame) windowAncestor, FlexoLocalization.localizedForKey("find_and_replace"), false);
 				}
 			}
 		}
 		if (searchDialog == null) {
 			if (DIALOG_FACTORY != null) {
-				searchDialog = DIALOG_FACTORY.getNewDialog((Frame) windowAncestor, Localized.localizedForKey("find_and_replace"), false);
+				searchDialog = DIALOG_FACTORY.getNewDialog((Frame) windowAncestor, FlexoLocalization.localizedForKey("find_and_replace"),
+						false);
 			} else {
-				searchDialog = new Dialog((Frame) windowAncestor, Localized.localizedForKey("find_and_replace"), false);
+				searchDialog = new Dialog((Frame) windowAncestor, FlexoLocalization.localizedForKey("find_and_replace"), false);
 			}
 		}
 		if (searchPanel == null) {

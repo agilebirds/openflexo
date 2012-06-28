@@ -35,7 +35,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ie.action.DropIEElement;
 import org.openflexo.foundation.ie.dm.AlignementChanged;
-import org.openflexo.foundation.ie.dm.PourcentageChanged;
+import org.openflexo.foundation.ie.dm.PercentageChanged;
 import org.openflexo.foundation.ie.dm.VerticalAlignementChanged;
 import org.openflexo.foundation.ie.dm.table.ColSpanDecrease;
 import org.openflexo.foundation.ie.dm.table.ColSpanIncrease;
@@ -45,6 +45,7 @@ import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IESequenceWidget;
 import org.openflexo.foundation.ie.widget.IESpanTDWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
+import org.openflexo.foundation.ie.widget.IETDWidget.TDConstraintModification;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ie.widget.SequenceOfTDChanged;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
@@ -75,9 +76,9 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 		super(ieController, model, false, componentView);
 		((IETDFlowLayout) getLayout()).setVerticalAlignement(findVerticalAlignement(td()));
 		if (td() != null) {
-			td().addObserver(this);
+			new ObserverRegistation(this, td());
 			if (td().tr() != null) {
-				td().tr().addObserver(this);
+				new ObserverRegistation(this, td().tr());
 			}
 		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Instanciated a new TDWidgetView but the sequence is not inside a TD");
@@ -275,14 +276,14 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 	public void update(FlexoObservable arg0, DataModification modif) {
 		if (modif instanceof AlignementChanged) {
 			((FlowLayout) getLayout()).setAlignment(alignement(getSequenceModel().getAlignement()));
-			doLayout();
+			revalidate();
 			repaint();
 		} else if (modif instanceof VerticalAlignementChanged) {
 			((IETDFlowLayout) getLayout()).setVerticalAlignement(findVerticalAlignement(td()));
-			doLayout();
+			revalidate();
 			repaint();
-		} else if (modif instanceof PourcentageChanged) {
-			doLayout();
+		} else if (modif instanceof PercentageChanged) {
+			revalidate();
 			repaint();
 		} else if (modif.propertyName() != null && modif.propertyName().equals("rowIndex")) {
 			setBackground(getBackground());
@@ -292,12 +293,13 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 				Component component = c[i];
 				remove(component);
 			}
-			validate();
-			doLayout();
+			revalidate();
 			repaint();
 			switchToModel(((SequenceOfTDChanged) modif).getTD().getSequenceWidget());
 		} else if (modif instanceof ColSpanIncrease || modif instanceof ColSpanDecrease) {
 			updateCursorSetter();
+		} else if (modif instanceof TDConstraintModification) {
+			updateConstraints();
 		}
 		super.update(arg0, modif);
 

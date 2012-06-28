@@ -65,7 +65,6 @@ public class WorkflowBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.STATUS, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		setFilterStatus(BrowserElementType.DEADLINE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PORT_REGISTERY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 		setFilterStatus(BrowserElementType.MESSAGE_DEFINITION, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.SERVICE_INTERFACE, BrowserFilterStatus.HIDE);
@@ -92,6 +91,7 @@ public class WorkflowBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ROLE_LIST, BrowserFilterStatus.HIDE);

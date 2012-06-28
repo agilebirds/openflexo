@@ -21,7 +21,13 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+
 public class FloatParameter extends EditionSchemeParameter {
+
+	public FloatParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public Type getType() {

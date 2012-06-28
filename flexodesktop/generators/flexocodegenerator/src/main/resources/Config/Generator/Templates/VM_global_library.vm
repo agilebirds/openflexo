@@ -416,6 +416,10 @@ No after login DA possible #end#end
         return nextOperationMapFor#capName();
     }
 
+    public Map<String, String> getOperations#capName()(long ciID) {
+         return getNextOperationMapFor#capName()().get(ciID);
+    }
+    
     public Map<String, String> getOperations#capName()() {
         return getNextOperationMapFor#capName()().get(Long.valueOf(getOperationComponentInstanceID()));
     }

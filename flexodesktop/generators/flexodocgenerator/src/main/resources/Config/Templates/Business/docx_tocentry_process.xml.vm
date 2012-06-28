@@ -180,7 +180,7 @@
                 <w:u w:val="single"/>
                 <w:b/>
             </w:rPr>
-            <w:t xml:space="preserve">Activities :</w:t>
+            <w:t xml:space="preserve">Process description :</w:t>
         </w:r>
     </w:p>
     <w:p>

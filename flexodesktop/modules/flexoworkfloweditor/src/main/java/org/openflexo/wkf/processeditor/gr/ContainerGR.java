@@ -121,7 +121,7 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 						+ crossBorder, closingBoxRect.y + closingBoxRect.height - crossBorder);
 
 				g.useTextStyle(TextStyle.makeTextStyle(Color.WHITE, FGEConstants.DEFAULT_TEXT_FONT));
-				g.drawString(getLabel(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT, TextAlignment.CENTER);
+				g.drawString(getLabel(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT, HorizontalTextAlignment.CENTER);
 			};
 
 			@Override
@@ -149,7 +149,7 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 	public void delete() {
 		WKFObject o = null;
 		if (getModel() instanceof FlexoPetriGraph && ((FlexoPetriGraph) getModel()).getContainer() != null) {
-			o = (((FlexoPetriGraph) getModel()).getContainer());
+			o = ((FlexoPetriGraph) getModel()).getContainer();
 		}
 		super.delete();
 		if (o != null) {
@@ -171,8 +171,8 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 	}
 
 	protected void updateDecorationBackground() {
-		if ((getWorkflow() != null && getWorkflow().getUseTransparency(WKFPreferences.getUseTransparency()))
-				|| (getWorkflow() == null && WKFPreferences.getUseTransparency())) {
+		if (getWorkflow() != null && getWorkflow().getUseTransparency(WKFPreferences.getUseTransparency()) || getWorkflow() == null
+				&& WKFPreferences.getUseTransparency()) {
 			decorationBackground = BackgroundStyle.makeColorGradientBackground(backColor, Color.WHITE,
 					ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 			decorationBackground.setUseTransparency(true);
@@ -300,19 +300,19 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		// logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
 		if (observable == getModel()) {
-			if ((dataModification instanceof NodeInserted) || (dataModification instanceof NodeRemoved)
-					|| (dataModification instanceof ArtefactInserted) || (dataModification instanceof ArtefactRemoved)
-					|| (dataModification instanceof PostRemoved)) {
+			if (dataModification instanceof NodeInserted || dataModification instanceof NodeRemoved
+					|| dataModification instanceof ArtefactInserted || dataModification instanceof ArtefactRemoved
+					|| dataModification instanceof PostRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 				notifyShapeNeedsToBeRedrawn();
 				notifyObjectMoved();
 				notifyObjectResized();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
-				if ((((WKFAttributeDataModification) dataModification).getAttributeName().equals("posX"))
-						|| (((WKFAttributeDataModification) dataModification).getAttributeName().equals("posY"))) {
+				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("posX")
+						|| ((WKFAttributeDataModification) dataModification).getAttributeName().equals("posY")) {
 					notifyObjectMoved();
-				} else if ((((WKFAttributeDataModification) dataModification).getAttributeName().equals("width"))
-						|| (((WKFAttributeDataModification) dataModification).getAttributeName().equals("height"))) {
+				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("width")
+						|| ((WKFAttributeDataModification) dataModification).getAttributeName().equals("height")) {
 					notifyObjectResized();
 				} else {
 					notifyShapeNeedsToBeRedrawn();

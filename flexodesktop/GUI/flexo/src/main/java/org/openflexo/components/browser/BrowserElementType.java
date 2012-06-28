@@ -137,8 +137,8 @@ import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.wkf.DeadLine;
-import org.openflexo.foundation.wkf.DeadLineList;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverridingGraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
@@ -192,6 +192,7 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.JavaIconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.icon.WKFIconLibrary;
@@ -233,9 +234,6 @@ public enum BrowserElementType {
 	ROLE_LIST("role_list", RoleList.class, WKFIconLibrary.ROLE_LIBRARY_ICON),
 	STATUS_LIST("status_list", StatusList.class, WKFIconLibrary.STATUS_ICON),
 	STATUS("status", Status.class, STATUS_LIST.getIcon()),
-	@Deprecated
-	DEADLINE_LIST("deadline_list", DeadLineList.class, null),
-	DEADLINE("deadline", DeadLine.class, DEADLINE_LIST.getIcon()),
 	COMPONENT("component", ComponentDefinition.class, SEIconLibrary.SCREEN_COMPONENT_ICON),
 	OPERATION_COMPONENT("operation_component", OperationComponentDefinition.class, SEIconLibrary.OPERATION_COMPONENT_ICON),
 	REUSABLE_COMPONENT("reusable_component", ReusableComponentDefinition.class, SEIconLibrary.REUSABLE_COMPONENT_ICON),
@@ -358,14 +356,14 @@ public enum BrowserElementType {
 	UP_TO_DATE_DOC_ITEM("available_uptodate_doc_item", DocItem.class, DREIconLibrary.DOC_ITEM_ICON),
 	TOC_DATA("toc_data", TOCData.class, DGIconLibrary.GENERATED_DOC_ICON),
 	DOC_TYPE("doc_type", DocType.class, CGIconLibrary.TARGET_ICON),
-	TOC_ENTRY("toc_entry", TOCEntry.class, DEIconLibrary.TOC_ENTRY),
-	TOC_REPOSITORY("toc_repository", TOCRepository.class, DEIconLibrary.TOC_REPOSITORY),
+	TOC_ENTRY("toc_entry", TOCEntry.class, DEIconLibrary.TOC_ENTRY_ICON),
+	TOC_REPOSITORY("toc_repository", TOCRepository.class, DEIconLibrary.TOC_REPOSITORY_ICON),
 	GENERATED_DOC("generated_doc", GeneratedDoc.class, DGIconLibrary.GENERATED_DOC_ICON),
 	GENERATED_DOC_REPOSITORY("generated_doc_repository", DGRepository.class, CGIconLibrary.GENERATED_CODE_REPOSITORY_ICON),
 	CVS_REPOSITORY_LIST("cvs_repository_list", null/*Used outside this scope*/, FPSIconLibrary.CVS_REPOSITORY_LIST_ICON),
 	CVS_REPOSITORY("cvs_repository", null/*Used outside this scope*/, FPSIconLibrary.CVS_REPOSITORY_ICON),
 	CVS_MODULE("cvs_module", null/*Used outside this scope*/, FPSIconLibrary.CVS_MODULE_ICON),
-	CVS_EXPLORER("cvs_explorer", null/*Used outside this scope*/, IconLibrary.CLOCK_ICON),
+	CVS_EXPLORER("cvs_explorer", null/*Used outside this scope*/, UtilsIconLibrary.CLOCK_ICON),
 	SHARED_PROJECT("shared_project", null/*Used outside this scope*/, IconLibrary.PROJECT_ICON),
 	CVS_DIRECTORY("cvs_directory", null/*Used outside this scope*/, IconLibrary.FOLDER_ICON),
 	CVS_FILE("cvs_file", null/*Used outside this scope*/, FilesIconLibrary.SMALL_MISC_FILE_ICON),
@@ -384,6 +382,8 @@ public enum BrowserElementType {
 	EDITION_PATTERN("edition_pattern", EditionPattern.class, VPMIconLibrary.EDITION_PATTERN_ICON),
 	ONTOLOGY_CALC_PALETTE("palette", ViewPointPalette.class, VPMIconLibrary.CALC_PALETTE_ICON),
 	ONTOLOGY_CALC_PALETTE_ELEMENT("palette_element", ViewPointPaletteElement.class, VEIconLibrary.SHAPE_ICON),
+	OVERRIDING_SHAPE_GR("overriding_shape_gr", ShapeOverridingGraphicalRepresentation.class, VEIconLibrary.SHAPE_ICON),
+	OVERRIDING_CONNECTOR_GR("overriding_connector_gr", ConnectorOverridingGraphicalRepresentation.class, VEIconLibrary.CONNECTOR_ICON),
 	ONTOLOGY_CALC_DRAWING_SHEMA("calc_drawing_shema", ExampleDrawingShema.class, VPMIconLibrary.EXAMPLE_DIAGRAM_ICON),
 	ONTOLOGY_CALC_DRAWING_SHAPE("calc_drawing_shape", ExampleDrawingShape.class, VPMIconLibrary.CALC_SHAPE_ICON),
 	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector", ExampleDrawingConnector.class, VPMIconLibrary.CALC_CONNECTOR_ICON),

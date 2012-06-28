@@ -30,10 +30,12 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.controller.CEDController;
+import org.openflexo.vpm.controller.VPMController;
 
 public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 
@@ -49,8 +51,8 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 	}
 
 	@Override
-	public CEDController getController() {
-		return (CEDController) super.getController();
+	public VPMController getController() {
+		return (VPMController) super.getController();
 	}
 
 	@Override
@@ -59,8 +61,9 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DeclareShapeInEditionPattern action) {
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB, action, null, true);
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -71,7 +74,7 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DeclareShapeInEditionPattern action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
-				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
+				getController().getSelectionManager().setSelectedObject(action.getEditionPattern().getPrimaryRepresentationRole());
 				return true;
 			}
 		};

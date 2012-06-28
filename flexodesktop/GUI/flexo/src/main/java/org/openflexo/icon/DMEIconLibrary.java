@@ -25,11 +25,13 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMTranstyper;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMType.KindOfType;
+import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOJoin;
 import org.openflexo.toolbox.ImageIconResource;
 
@@ -108,8 +110,12 @@ public class DMEIconLibrary extends IconLibrary {
 	public static final ImageIcon EOENTITY_ICON = new ImageIconResource("Icons/Model/DM/EOEntity.png");
 	public static final ImageIcon EOMODEL_ICON = new ImageIconResource("Icons/Model/DM/EOModel.png");
 
-	public static ImageIcon getIconFor(DMObject object) {
-		if (object instanceof DMEntity) {
+	public static ImageIcon iconForObject(DMObject object) {
+		if (object instanceof DMModel) {
+			return DMEIconLibrary.DM_MODEL_ICON;
+		} else if (object instanceof ERDiagram) {
+			return DMEIconLibrary.DIAGRAM_ICON;
+		} else if (object instanceof DMEntity) {
 			DMEntity entity = (DMEntity) object;
 			if (entity.getIsNormalClass()) {
 				return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
@@ -129,7 +135,7 @@ public class DMEIconLibrary extends IconLibrary {
 		return null;
 	}
 
-	public static Icon getIconForType(DMType type) {
+	public static Icon iconForType(DMType type) {
 		if (type.getKindOfType() == KindOfType.UNRESOLVED) {
 			return IconLibrary.UNFIXABLE_ERROR_ICON;
 		} else if ((type.getKindOfType() == KindOfType.RESOLVED) || (type.getKindOfType() == KindOfType.RESOLVED_ARRAY)) {

@@ -26,10 +26,11 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
@@ -41,7 +42,7 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class EditionPatternInspector extends ViewPointObject implements Bindable {
+public class EditionPatternInspector extends EditionPatternObject implements Bindable {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternInspector.class.getPackage().toString());
 
@@ -52,17 +53,18 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	private BindingModel _bindingModel;
 
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep) {
-		EditionPatternInspector returned = new EditionPatternInspector();
+		EditionPatternInspector returned = new EditionPatternInspector(null);
 		returned.setInspectorTitle(ep.getName());
 		ep.setInspector(returned);
 		return returned;
 	}
 
-	public EditionPatternInspector() {
-		super();
+	public EditionPatternInspector(ViewPointBuilder builder) {
+		super(builder);
 		entries = new Vector<InspectorEntry>();
 	}
 
+	@Override
 	public EditionPattern getEditionPattern() {
 		return _editionPattern;
 	}
@@ -72,15 +74,15 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	}
 
 	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getCalc();
+			return getEditionPattern().getViewPoint();
 		}
 		return null;
 	}
 
 	public ViewPointLibrary getCalcLibrary() {
-		return getCalc().getViewPointLibrary();
+		return getViewPoint().getViewPointLibrary();
 	}
 
 	@Override
@@ -120,33 +122,73 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	}
 
 	public TextFieldInspectorEntry createNewTextField() {
-		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
+		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry(null);
 		newEntry.setName("textfield");
-		newEntry.setLabel("textfield");
+		// newEntry.setLabel("textfield");
 		addToEntries(newEntry);
 		return newEntry;
 	}
 
 	public TextAreaInspectorEntry createNewTextArea() {
-		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
+		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry(null);
 		newEntry.setName("textarea");
-		newEntry.setLabel("textarea");
+		// newEntry.setLabel("textarea");
 		addToEntries(newEntry);
 		return newEntry;
 	}
 
 	public IntegerInspectorEntry createNewInteger() {
-		IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
+		IntegerInspectorEntry newEntry = new IntegerInspectorEntry(null);
 		newEntry.setName("integer");
-		newEntry.setLabel("integer");
+		// newEntry.setLabel("integer");
 		addToEntries(newEntry);
 		return newEntry;
 	}
 
 	public CheckboxInspectorEntry createNewCheckbox() {
-		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
+		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry(null);
 		newEntry.setName("checkbox");
-		newEntry.setLabel("checkbox");
+		// newEntry.setLabel("checkbox");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public IndividualInspectorEntry createNewIndividual() {
+		IndividualInspectorEntry newEntry = new IndividualInspectorEntry(null);
+		newEntry.setName("individual");
+		// newEntry.setLabel("individual");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public ClassInspectorEntry createNewClass() {
+		ClassInspectorEntry newEntry = new ClassInspectorEntry(null);
+		newEntry.setName("class");
+		// newEntry.setLabel("class");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public ObjectPropertyInspectorEntry createNewObjectProperty() {
+		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry(null);
+		newEntry.setName("property");
+		// newEntry.setLabel("class");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public DataPropertyInspectorEntry createNewDataProperty() {
+		DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry(null);
+		newEntry.setName("property");
+		// newEntry.setLabel("class");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public FlexoObjectInspectorEntry createNewFlexoObject() {
+		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry(null);
+		newEntry.setName("flexoObject");
+		// newEntry.setLabel("flexoObject");
 		addToEntries(newEntry);
 		return newEntry;
 	}

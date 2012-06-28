@@ -31,13 +31,14 @@ import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.FileUtils.CopyStrategy;
 
 public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
 
-	public static final File CALC_LIBRARY_DIR = new FileResource("ViewPoints");
-	public static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
+	private static final File CALC_LIBRARY_DIR = new FileResource("ViewPoints");
+	private static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
 	public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
 	private File localDirectory;
@@ -52,46 +53,37 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	public static LocalResourceCenterImplementation instanciateNewLocalResourceCenterImplementation(File resourceCenterDirectory) {
-		copyViewPoints(CALC_LIBRARY_DIR, resourceCenterDirectory);
-		copyOntologies(ONTOLOGY_LIBRARY_DIR, resourceCenterDirectory);
-		return new LocalResourceCenterImplementation(resourceCenterDirectory);
+		logger.info("Instanciate ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
+		LocalResourceCenterImplementation localResourceCenterImplementation = new LocalResourceCenterImplementation(resourceCenterDirectory);
+		localResourceCenterImplementation.update();
+		return localResourceCenterImplementation;
 	}
 
-	private static void copyViewPoints(File calcDir, File resourceCenterDirectory) {
-		File resourceCenterCalcDirectory = new File(resourceCenterDirectory, "ViewPoints");
-		if (!resourceCenterCalcDirectory.exists()) {
-			resourceCenterCalcDirectory.mkdir();
+	public static LocalResourceCenterImplementation instanciateTestLocalResourceCenterImplementation(File resourceCenterDirectory) {
+		logger.info("Instanciate TEST ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
+		LocalResourceCenterImplementation localResourceCenterImplementation = new LocalResourceCenterImplementation(resourceCenterDirectory);
+		return localResourceCenterImplementation;
+	}
+
+	private static void copyViewPoints(File resourceCenterDirectory, CopyStrategy copyStrategy) {
+		if (CALC_LIBRARY_DIR.getParentFile().equals(resourceCenterDirectory)) {
+			return;
 		}
+
 		try {
-			FileUtils.copyContentDirToDir(calcDir, resourceCenterCalcDirectory);
+			FileUtils.copyDirToDir(CALC_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		/*for (File f : calcDir.listFiles()) {
-			if (f.isDirectory() && f.getName().endsWith(".calc")) {
-				try {
-					System.out.println("Copy " + f.getAbsolutePath());
-					FileUtils.copyContentDirToDir(f, new File(resourceCenterCalcDirectory, f.getName()));
-				} catch (IOException e) {
-					logger.warning("IOException: " + e.getMessage());
-				}
-			} else if (f.isDirectory()) {
-				copyCalcs(f, new File(resourceCenterDirectory, f.getName()));
-			}
-		}*/
 	}
 
-	private static void copyOntologies(File dir, File resourceCenterDirectory) {
-		File resourceCenterOntologiesDirectory = new File(resourceCenterDirectory, "Ontologies");
-		if (!resourceCenterOntologiesDirectory.exists()) {
-			resourceCenterOntologiesDirectory.mkdir();
+	private static void copyOntologies(File resourceCenterDirectory, CopyStrategy copyStrategy) {
+		if (ONTOLOGY_LIBRARY_DIR.getParentFile().equals(resourceCenterDirectory)) {
+			return;
 		}
 		try {
-			FileUtils.copyContentDirToDir(dir, resourceCenterOntologiesDirectory);
+			FileUtils.copyDirToDir(ONTOLOGY_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -104,18 +96,19 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	@Override
 	public OntologyLibrary retrieveBaseOntologyLibrary() {
 		if (baseOntologyLibrary == null) {
-			logger.fine("Instanciating BaseOntologyLibrary");
+			File baseOntologyFolder = new File(localDirectory, "Ontologies");
+			logger.info("Instantiating BaseOntologyLibrary from " + baseOntologyFolder.getAbsolutePath());
 			baseOntologyLibrary = new OntologyLibrary(this, null);
-			findOntologies(new File(localDirectory, "Ontologies"), FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
+			findOntologies(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
 			// baseOntologyLibrary.init();
-			logger.fine("Instanciating BaseOntologyLibrary Done. Loading some ontologies...");
+			logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
 			// baseOntologyLibrary.debug();
 			baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getRDFOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getOWLOntology().loadWhenUnloaded();
-			baseOntologyLibrary.THING = baseOntologyLibrary.getClass(OntologyLibrary.OWL_THING_URI);
 			baseOntologyLibrary.getRDFSOntology().updateConceptsAndProperties();
 			baseOntologyLibrary.getRDFOntology().updateConceptsAndProperties();
+			baseOntologyLibrary.getOWLOntology().updateConceptsAndProperties();
 			baseOntologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
 			// baseOntologyLibrary.debug();
 		}
@@ -137,7 +130,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			dir.mkdirs();
 		}
 		if (dir.listFiles().length == 0) {
-			copyOntologies(ONTOLOGY_LIBRARY_DIR, dir.getParentFile());
+			copyOntologies(localDirectory, CopyStrategy.REPLACE);
 		}
 		for (File f : dir.listFiles()) {
 			if (f.isFile() && f.getName().endsWith(".owl")) {
@@ -158,11 +151,13 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			dir.mkdirs();
 		}
 		if (dir.listFiles().length == 0) {
-			copyViewPoints(CALC_LIBRARY_DIR, dir.getParentFile());
+			copyViewPoints(localDirectory, CopyStrategy.REPLACE);
 		}
 		for (File f : dir.listFiles()) {
 			if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
-				viewPointLibrary.importViewPoint(f, folder);
+				if (f.listFiles().length > 0) {
+					viewPointLibrary.importViewPoint(f, folder);
+				}
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
 				ViewPointFolder newFolder = new ViewPointFolder(f.getName(), folder, viewPointLibrary);
 				findViewPoints(f, newFolder);
@@ -180,4 +175,9 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		return super.toString() + " directory=" + localDirectory.getAbsolutePath();
 	}
 
+	@Override
+	public void update() {
+		copyOntologies(localDirectory, CopyStrategy.REPLACE_OLD_ONLY);
+		copyViewPoints(localDirectory, CopyStrategy.REPLACE_OLD_ONLY);
+	}
 }

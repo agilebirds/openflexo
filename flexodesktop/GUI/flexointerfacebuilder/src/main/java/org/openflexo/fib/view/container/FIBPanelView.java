@@ -156,7 +156,8 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 				v.delete();
 			}
 		}
-		getResultingJComponent().removeAll();
+		getJComponent().removeAll();
+
 		_setPanelLayoutParameters();
 		buildSubComponents();
 		updateDataObject(getDataObject());
@@ -229,7 +230,6 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 	protected void addJComponent(JComponent c) {
 
 		Object constraint = getConstraints().get(c);
-
 		if (constraint instanceof ComponentConstraints) {
 			((ComponentConstraints) constraint).performConstrainedAddition(getJComponent(), c);
 		} else {

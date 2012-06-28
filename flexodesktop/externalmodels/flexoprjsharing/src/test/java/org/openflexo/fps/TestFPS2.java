@@ -64,7 +64,7 @@ public class TestFPS2 extends FPSTestCase {
 
 	static {
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		CVSConsole.logger.setLevel(Level.FINE);
 	}
 

@@ -22,6 +22,7 @@ package org.openflexo.application;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.Flexo;
 import org.openflexo.components.AboutDialog;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.module.ModuleLoader;
@@ -51,7 +52,9 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handlePreferences");
 		}
-		PreferencesController.instance().showPreferences();
+		if (PreferencesController.hasInstance()) {
+			PreferencesController.instance().showPreferences();
+		}
 	}
 
 	public void handleQuit(ApplicationEvent event) {
@@ -59,13 +62,17 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 			logger.fine("handleQuit");
 		}
 		try {
-			ModuleLoader.quit();
+			getModuleLoader().quit(true);
 		} catch (ProjectExitingCancelledException e) {
 		}
 	}
 
 	public void handleOpenFile(ApplicationEvent arg0) {
-		ModuleLoader.fileNameToOpen = arg0.getFilename();
+		Flexo.setFileNameToOpen(arg0.getFilename());
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 }

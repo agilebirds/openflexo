@@ -24,11 +24,11 @@ import org.openflexo.foundation.DataModification;
 public class CGDataModification extends DataModification {
 
 	public CGDataModification(Object oldValue, Object newValue) {
-		super(DataModification.CG_DM, oldValue, newValue);
+		super(oldValue, newValue);
 	}
 
 	public CGDataModification(String propertyName, Object oldValue, Object newValue) {
-		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+		super(propertyName, oldValue, newValue);
 	}
 
 }

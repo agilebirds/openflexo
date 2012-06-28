@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.wkf.action;
 
+import java.awt.Color;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -26,7 +27,6 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
@@ -50,8 +50,8 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 		@Override
 		protected boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return object != null && (object instanceof RoleList && !((RoleList) object).isImportedRoleList())
-					|| (object instanceof Role && !((Role) object).isImported());
+			return object != null && object instanceof RoleList && !((RoleList) object).isImportedRoleList() || object instanceof Role
+					&& !((Role) object).isImported();
 		}
 
 		@Override
@@ -62,7 +62,7 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 	};
 
 	private String _newRoleName;
-	private FlexoColor _newColor;
+	private Color _newColor;
 	private String _newDescription;
 	private boolean _isSystemRole = false;
 
@@ -73,13 +73,17 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 	private Role _newRole;
 
+	static {
+		FlexoWorkflow.addActionForClass(actionType, FlexoWorkflow.class);
+	}
+
 	AddRole(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	public FlexoWorkflow getWorkflow() {
 		if (getFocusedObject() != null) {
-			return (getFocusedObject()).getWorkflow();
+			return getFocusedObject().getWorkflow();
 		}
 		return null;
 	}
@@ -118,11 +122,11 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 		return _newRole;
 	}
 
-	public FlexoColor getNewColor() {
+	public Color getNewColor() {
 		return _newColor;
 	}
 
-	public void setNewColor(FlexoColor newColor) {
+	public void setNewColor(Color newColor) {
 		_newColor = newColor;
 	}
 

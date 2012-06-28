@@ -30,7 +30,8 @@ import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.controller.OEController;
+import org.openflexo.toolbox.StringUtils;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -39,13 +40,13 @@ public class AddShapeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddShapeInitializer(OEControllerActionInitializer actionInitializer) {
+	AddShapeInitializer(VEControllerActionInitializer actionInitializer) {
 		super(AddShape.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() {
-		return (OEControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -59,7 +60,11 @@ public class AddShapeInitializer extends ActionInitializer {
 
 				ViewObject parent = action.getParent();
 				if (parent != null) {
-					action.setNewShapeName(FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_shape")));
+					String newName = FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_shape"));
+					if (newName == null || StringUtils.isEmpty(newName)) {
+						return false;
+					}
+					action.setNewShapeName(newName);
 					return true;
 				}
 				return false;
@@ -72,7 +77,7 @@ public class AddShapeInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddShape>() {
 			@Override
 			public boolean run(ActionEvent e, AddShape action) {
-				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewShape());
+				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewShape());
 				return true;
 			}
 		};

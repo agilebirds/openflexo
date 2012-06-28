@@ -58,6 +58,8 @@ import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorObserver;
@@ -294,7 +296,6 @@ public class FlexoAutoSaveThread extends Thread {
 	}
 
 	public void restoreAutoSaveProject(FlexoAutoSaveFile autoSaveFile, FlexoProgress progress) throws IOException {
-		Module module = FlexoModule.getActiveModule().getModule();
 		File projectDirectory = project.getProjectDirectory();
 		File dest = null;
 		int attempt = 0;
@@ -309,7 +310,7 @@ public class FlexoAutoSaveThread extends Thread {
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("closing_project"));
 		}
-		ModuleLoader.closeCurrentProject();
+		ProjectLoader.instance().closeCurrentProject();
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("deleting_project"));
 		}
@@ -321,7 +322,22 @@ public class FlexoAutoSaveThread extends Thread {
 		if (progress != null) {
 			progress.hideWindow();
 		}
-		ModuleLoader.openProjectWithModule(projectDirectory, module);
+		try {
+			getModuleLoader().openProject(projectDirectory, null);
+		} catch (ModuleLoadingException e) {
+			logger.severe("This shouldn't append since module is already loaded." + e.getMessage());
+			e.printStackTrace();
+			FlexoController.notify("This shouldn't append since module is already loaded." + e.getMessage());
+		} catch (ProjectLoadingCancelledException e) {
+			return;
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			return;
+		}
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	public FlexoProject getProject() {
@@ -355,7 +371,9 @@ public class FlexoAutoSaveThread extends Thread {
 		return (List<File>) projects.clone();
 	}
 
-	public static class AutoSaveActionFailed implements Runnable {
+	private boolean autoSaveFailedNotified = false;
+
+	private class AutoSaveActionFailed implements Runnable {
 		/**
 		 * Overrides run
 		 * 
@@ -363,12 +381,16 @@ public class FlexoAutoSaveThread extends Thread {
 		 */
 		@Override
 		public void run() {
+			if (autoSaveFailedNotified) {
+				return;
+			}
 			FlexoController.showError(
 					FlexoLocalization.localizedForKey("auto_save_action_failed"),
 					FlexoLocalization.localizedForKey("auto_save_action_could_not_be_performed")
 							+ "\n"
 							+ FlexoLocalization
 									.localizedForKey("verify_that_your_disk_is_not_full_and_that_you_can_write_in_the_temp_directory."));
+			autoSaveFailedNotified = true;
 		}
 	}
 
@@ -493,8 +515,12 @@ public class FlexoAutoSaveThread extends Thread {
 		this.run = run;
 	}
 
+	private AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
+	}
+
 	public void showTimeTravelerDialog() {
-		ModuleLoader.stopAutoSaveThread();
+		getAutoSaveService().stopAutoSaveThread();
 		final FlexoDialog dialog = new FlexoDialog(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame()
 				: null, true);
 		final ParameterDefinition[] parameters = new ParameterDefinition[2];
@@ -529,7 +555,7 @@ public class FlexoAutoSaveThread extends Thread {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
-				ModuleLoader.startAutoSaveThread();
+				getAutoSaveService().startAutoSaveThread();
 			}
 		});
 		JButton ok = new JButton(FlexoLocalization.localizedForKey("restore"));
@@ -548,7 +574,7 @@ public class FlexoAutoSaveThread extends Thread {
 						try {
 							ProgressWindow.showProgressWindow(null, FlexoLocalization.localizedForKey("project_restoration"), 4);
 							if (FlexoModule.getActiveModule() != null) {
-								ProgressWindow.instance().centerOnFrame(FlexoModule.getActiveModule().getFlexoFrame());
+								ProgressWindow.instance().center();
 							}
 							restoreAutoSaveProject(autoSaveFile, ProgressWindow.instance());
 						} catch (IOException e1) {
@@ -559,10 +585,10 @@ public class FlexoAutoSaveThread extends Thread {
 									+ project.getProjectDirectory().getAbsolutePath());
 						}
 					} else {
-						ModuleLoader.startAutoSaveThread();
+						getAutoSaveService().startAutoSaveThread();
 					}
 				} else {
-					ModuleLoader.startAutoSaveThread();
+					getAutoSaveService().startAutoSaveThread();
 				}
 
 			}
@@ -575,7 +601,7 @@ public class FlexoAutoSaveThread extends Thread {
 			 */
 			@Override
 			public void windowClosing(WindowEvent e) {
-				ModuleLoader.startAutoSaveThread();
+				getAutoSaveService().startAutoSaveThread();
 				super.windowClosing(e);
 			}
 		});

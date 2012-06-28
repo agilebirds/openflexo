@@ -58,7 +58,7 @@ import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSucces
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.selection.SelectionManager;
@@ -75,7 +75,6 @@ import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.action.WKFControllerActionInitializer;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
-import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.processeditor.ProcessView;
 import org.openflexo.wkf.processeditor.gr.EdgeGR;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
@@ -107,7 +106,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	@Override
 	public boolean useOldInspectorScheme() {
-		return true;
+		return false;
 	}
 
 	// ======================================================
@@ -150,13 +149,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
 		public ModuleView<FlexoProcess> createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-			ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, process) {
-				@Override
-				public DrawingView<ProcessRepresentation> makeDrawingView(ProcessRepresentation drawing) {
-					// TODO Auto-generated method stub
-					return super.makeDrawingView(drawing);
-				}
-			};
+			ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, process);
 			return null;
 			// return new WKFInvaders(process,(WKFController)controller);
 		}
@@ -205,11 +198,10 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		addToPerspectives(SWIMMING_LANE_PERSPECTIVE = new SwimmingLanePerspective(this));
 		addToPerspectives(ROLE_EDITOR_PERSPECTIVE = new RolePerspective(this));
 		DOCUMENTATION_PERSPECTIVE = new DocumentationPerspective(this, "documentation");
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
 		initWorkflowGraphicalPropertiesFromPrefs(getProject());
-		switchToPerspective(PROCESS_EDITOR_PERSPECTIVE);
 	}
 
 	private void initWorkflowGraphicalPropertiesFromPrefs(FlexoProject project) {
@@ -267,10 +259,12 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		getWKFSelectionManager().addObserver(getSharedInspectorController());
-		getWKFSelectionManager().addObserver(getDocInspectorController());
-		notifyShowLeanTabHasChanged();
-		showBPEGraphicsInspectors();
+		if (useOldInspectorScheme()) {
+			getWKFSelectionManager().addObserver(getSharedInspectorController());
+			getWKFSelectionManager().addObserver(getDocInspectorController());
+			notifyShowLeanTabHasChanged();
+			showBPEGraphicsInspectors();
+		}
 	}
 
 	@Override
@@ -280,6 +274,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 			getWKFSelectionManager().deleteObserver(getDocInspectorController());
 			_selectionManager = null;
 		}
+		WKFPreferences.reset(this);
 		super.dispose();
 	}
 
@@ -293,10 +288,8 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 		/*
 		 * if (getDocInspectorPanel() != null) { JSplitPane splitPane = new
-		 * JSplitPane(JSplitPane.VERTICAL_SPLIT,palette,getDocInspectorPanel());
-		 * splitPane.setResizeWeight(0);
-		 * splitPane.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION);
-		 * getMainPane().setRightView(splitPane); } else {
+		 * JSplitPane(JSplitPane.VERTICAL_SPLIT,palette,getDocInspectorPanel()); splitPane.setResizeWeight(0);
+		 * splitPane.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION); getMainPane().setRightView(splitPane); } else {
 		 * getMainPane().setRightView(palette); }
 		 */
 
@@ -475,8 +468,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	 */
 	public void notifyShowMessages(boolean b) {
 		showMessages = b;
-		// GPO: I commented the code hereunder because it is just not
-		// implemented anywhere.
+		// GPO: I commented the code hereunder because it is just not implemented anywhere.
 		// updateGraphicalRepresentationWithNewWKFPreferenceSettings();
 	}
 
@@ -632,50 +624,29 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		return null;
 	}
 
-	@Override
-	public boolean displayInspectorTabForContext(String context) {
-
-		if (context.equals("BPE")) {
-			return getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE;
-		} else if (context.equals("SWL")) {
-			return getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE;
-		} else if (context.equals("ROLE_EDITOR")) {
-			return getCurrentPerspective() == ROLE_EDITOR_PERSPECTIVE;
-		} else if (context.equals("METRICS")) {
-			if (WKFPreferences.getShowLeanTabs()) {
-				System.out.println("Les gars, faut afficher les metriques");
-			}
-			return WKFPreferences.getShowLeanTabs();
-		}
-		return super.displayInspectorTabForContext(context);
-	}
-
-	@Deprecated
 	private void showBPEGraphicsInspectors() {
 		getWKFSelectionManager().setInspectionContext("BPE", true);
 		getWKFSelectionManager().removeInspectionContext("SWL");
 		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
-		if (getInspectorWindow() != null && getInspectorWindow().getContent() != null) {
+		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
 	}
 
-	@Deprecated
 	private void showRoleEditorGraphicsInspectors() {
 		getWKFSelectionManager().setInspectionContext("ROLE_EDITOR", true);
 		getWKFSelectionManager().removeInspectionContext("BPE");
 		getWKFSelectionManager().removeInspectionContext("SWL");
-		if (getInspectorWindow() != null && getInspectorWindow().getContent() != null) {
+		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
 	}
 
-	@Deprecated
 	private void showSWLGraphicsInspectors() {
 		getWKFSelectionManager().setInspectionContext("SWL", true);
 		getWKFSelectionManager().removeInspectionContext("BPE");
 		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
-		if (getInspectorWindow() != null && getInspectorWindow().getContent() != null) {
+		if (getInspectorWindow() != null) {
 			getInspectorWindow().getContent().refresh();
 		}
 	}
@@ -683,8 +654,6 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	@Override
 	public void switchToPerspective(FlexoPerspective perspective) {
 		super.switchToPerspective(perspective);
-		getMainInspectorController().updateInspectorWindow();
-
 		if (perspective == PROCESS_EDITOR_PERSPECTIVE) {
 			showBPEGraphicsInspectors();
 		}
@@ -697,23 +666,58 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	}
 
 	/*
-	 * private static final String WORKFLOW_LEAN_TAB_NAME="Metrics Definition";
-	 * private static final String PROCESS_LEAN_TAB_NAME="Process Metrics";
-	 * private static final String ACTIVITY_LEAN_TAB_NAME="Activity Metrics";
-	 * private static final String OPERATION_LEAN_TAB_NAME="Operation Metrics";
-	 * private static final String EDGE_LEAN_TAB_NAME="Edge Metrics";
+	 * private static final String WORKFLOW_LEAN_TAB_NAME="Metrics Definition"; private static final String
+	 * PROCESS_LEAN_TAB_NAME="Process Metrics"; private static final String ACTIVITY_LEAN_TAB_NAME="Activity Metrics"; private static final
+	 * String OPERATION_LEAN_TAB_NAME="Operation Metrics"; private static final String EDGE_LEAN_TAB_NAME="Edge Metrics";
 	 */
 
 	public void notifyShowLeanTabHasChanged() {
-		getMainInspectorController().updateInspectorWindow();
 		if (WKFPreferences.getShowLeanTabs()) {
 			getWKFSelectionManager().setInspectionContext("METRICS", true);
-
+			/*
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
+			 * Inspectors.WKF.FLEXO_PROCESS_INSPECTOR);
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
+			 * Inspectors.WKF.ABSTRACT_ACTIVITY_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
+			 * Inspectors.WKF.BEGIN_ACTIVITY_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
+			 * Inspectors.WKF.END_ACTIVITY_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
+			 * Inspectors.WKF.OPERATION_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
+			 * Inspectors.WKF.BEGIN_OPERATION_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
+			 * Inspectors.WKF.END_OPERATION_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().showTabWithNameInInspectorNamed(EDGE_LEAN_TAB_NAME,
+			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
+			 */
 		} else {
 			getWKFSelectionManager().removeInspectionContext("METRICS");
-
+			/*
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(WORKFLOW_LEAN_TAB_NAME, Inspectors.WKF.WORKFLOW_INSPECTOR);
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(PROCESS_LEAN_TAB_NAME,
+			 * Inspectors.WKF.FLEXO_PROCESS_INSPECTOR);
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
+			 * Inspectors.WKF.ABSTRACT_ACTIVITY_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
+			 * Inspectors.WKF.BEGIN_ACTIVITY_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(ACTIVITY_LEAN_TAB_NAME,
+			 * Inspectors.WKF.END_ACTIVITY_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
+			 * Inspectors.WKF.OPERATION_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
+			 * Inspectors.WKF.BEGIN_OPERATION_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(OPERATION_LEAN_TAB_NAME,
+			 * Inspectors.WKF.END_OPERATION_NODE_INSPECTOR);
+			 * getInspectorWindow().getContent().hideTabWithNameInInspectorNamed(EDGE_LEAN_TAB_NAME,
+			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
+			 */
 		}
-		getInspectorWindow().getContent().refresh();
+		if (getInspectorWindow() != null) {
+			getInspectorWindow().getContent().refresh();
+		}
 	}
 
 	public void notifyUseSimpleEventPaletteHasChanged() {

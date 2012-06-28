@@ -22,13 +22,15 @@ package org.openflexo.wkf;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
 import org.openflexo.fge.Drawing;
@@ -57,11 +59,9 @@ import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalWKFModule;
+import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wkf.controller.WKFController;
@@ -83,22 +83,13 @@ import org.openflexo.wkf.view.WorkflowBrowserView;
 public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.WKF };
 
+	private Map<Drawing<? extends FlexoModelObject>, DrawingController<? extends Drawing<? extends FlexoModelObject>>> drawingControllers = new Hashtable<Drawing<? extends FlexoModelObject>, DrawingController<? extends Drawing<? extends FlexoModelObject>>>();
+
 	public static enum ProcessRepresentation {
 		BASIC_EDITOR, SWIMMING_LANE;
 	}
 
 	private static final Logger logger = FlexoLogger.getLogger(WKFModule.class.getPackage().getName());
-
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.WKF_MODULE);
-	}
 
 	public WKFModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		// super(project, new WKFController(project));
@@ -138,9 +129,6 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		return getWKFController().getFlexoWorkflow();
 	}
 
-	private DrawingController<? extends Drawing<? extends FlexoModelObject>> screenshotController;
-	private DrawingView<? extends Drawing<? extends FlexoModelObject>> screenshot = null;
-
 	private static class BPEScreenshotProcessRepresentationObjectVisibilityDelegate extends ProcessRepresentationDefaultVisibilityDelegate {
 
 		private WKFObject target;
@@ -160,11 +148,10 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 			if (object == target) {
 				return true;
 			} else if (object instanceof FlexoPetriGraph) {
-				return ((FlexoPetriGraph) object).getContainer() == target
-						|| ((object instanceof ActivityPetriGraph) && ((ActivityPetriGraph) object).getContainer() instanceof FlexoProcess)
-						|| ((target instanceof PetriGraphNode) && (((PetriGraphNode) target)
-								.isEmbeddedInPetriGraph((FlexoPetriGraph) object)))
-						|| ((target instanceof WKFArtefact) && (((WKFArtefact) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object)));
+				return ((FlexoPetriGraph) object).getContainer() == target || object instanceof ActivityPetriGraph
+						&& ((ActivityPetriGraph) object).getContainer() instanceof FlexoProcess || target instanceof PetriGraphNode
+						&& ((PetriGraphNode) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object) || target instanceof WKFArtefact
+						&& ((WKFArtefact) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object);
 			} else if (object instanceof FlexoPort) {
 				return isVisible(((FlexoPort) object).getPortRegistery());
 			} else if (object instanceof FlexoPortMap) {
@@ -203,8 +190,8 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 						}
 					}
 				}
-				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
+				return !(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject)
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null;
 			} else if (object instanceof ActivityGroup) {
 				if (target instanceof PetriGraphNode) {
 					if (((PetriGraphNode) target).isGrouped()) {
@@ -239,11 +226,10 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 					&& ((PetriGraphNode) object).getParentPetriGraph() == object.getProcess().getActivityPetriGraph()) {
 				return true;
 			} else if (object instanceof FlexoPetriGraph) {
-				return ((FlexoPetriGraph) object).getContainer() == target
-						|| ((object instanceof ActivityPetriGraph) && ((ActivityPetriGraph) object).getContainer() instanceof FlexoProcess)
-						|| ((target instanceof PetriGraphNode) && (((PetriGraphNode) target)
-								.isEmbeddedInPetriGraph((FlexoPetriGraph) object)))
-						|| ((target instanceof WKFArtefact) && (((WKFArtefact) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object)));
+				return ((FlexoPetriGraph) object).getContainer() == target || object instanceof ActivityPetriGraph
+						&& ((ActivityPetriGraph) object).getContainer() instanceof FlexoProcess || target instanceof PetriGraphNode
+						&& ((PetriGraphNode) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object) || target instanceof WKFArtefact
+						&& ((WKFArtefact) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object);
 			} else if (object instanceof FlexoPort) {
 				return isVisible(((FlexoPort) object).getPortRegistery());
 			} else if (object instanceof FlexoPortMap) {
@@ -282,8 +268,8 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 						}
 					}
 				}
-				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
+				return !(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject)
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null;
 			} else if (object instanceof ActivityGroup) {
 				if (target instanceof PetriGraphNode) {
 					if (((PetriGraphNode) target).isGrouped()) {
@@ -295,8 +281,38 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		}
 	}
 
+	private class ScreenshotRetriever implements Callable<DrawingController<? extends Drawing<? extends FlexoModelObject>>> {
+		private FlexoModelObject target;
+		private final boolean showAll;
+
+		protected ScreenshotRetriever(FlexoModelObject target, boolean showAll) {
+			super();
+			this.target = target;
+			this.showAll = showAll;
+		}
+
+		@Override
+		public DrawingController<? extends Drawing<? extends FlexoModelObject>> call() {
+			DrawingController<? extends Drawing<? extends FlexoModelObject>> screenshotController = null;
+			if (target instanceof RoleList) {
+				screenshotController = new RoleEditorController((RoleList) target, getEditor(), null);
+			} else if (target instanceof WKFObject) {
+				screenshotController = getProcessRepresentationController((WKFObject) target, showAll);
+			} else {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("Cannot create drawing controller for " + target);
+				}
+			}
+			if (screenshotController != null) {
+				drawingControllers.put(screenshotController.getDrawing(), screenshotController);
+			}
+			return screenshotController;
+		}
+
+	}
+
 	@Override
-	public JComponent createScreenshotForObject(FlexoModelObject target) {
+	public JComponent createScreenshotForObject(final FlexoModelObject target) {
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
@@ -312,7 +328,9 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 				treeView.expandRow(i);
 			}
 		} else {
-			screenshotController = getScreenshotControllerForObject(target);
+			DrawingController<? extends Drawing<? extends FlexoModelObject>> screenshotController = getScreenshotControllerForObject(
+					target, false);
+			DrawingView<? extends Drawing<? extends FlexoModelObject>> screenshot;
 			component = screenshot = screenshotController.getDrawingView();
 			screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
 			if (screenshot instanceof ProcessView) {
@@ -330,37 +348,6 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForProcess(FlexoProcess target) {
-		if (target == null) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("Cannot create screenshot for null target!");
-			}
-			return null;
-		}
-		JComponent component;
-
-		// prevent process to be marked as modified during screenshot generation
-		target.getProcess().setIgnoreNotifications();
-		screenshotController = new ProcessEditorController(target.getProcess(), getEditor(), null,
-				org.openflexo.wkf.processeditor.ProcessRepresentation.SHOW_TOP_LEVEL);
-		component = screenshot = screenshotController.getDrawingView();
-		screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
-		if (screenshot instanceof ProcessView) {
-			((ProcessView) screenshot).getDrawingGraphicalRepresentation().setShowGrid(false);
-		}
-		screenshot.getPaintManager().disablePaintingCache();
-		screenshot.validate();
-		Dimension d = screenshot.getComputedMinimumSize();
-		d.height += 20;
-		d.width += 20;
-		screenshot.setSize(d);
-		screenshot.setPreferredSize(d);
-		target.getProcess().resetIgnoreNotifications();
-
-		return component;
-	}
-
-	@Override
 	public float getScreenshotQuality() {
 		float reply = Float.valueOf(WKFPreferences.getScreenshotQuality()) / 100f;
 		if (reply > 1) {
@@ -372,13 +359,16 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		return reply;
 	}
 
-	private DrawingController<? extends Drawing<? extends FlexoModelObject>> getScreenshotControllerForObject(FlexoModelObject target) {
-		if (target instanceof RoleList) {
-			return new RoleEditorController((RoleList) target, getEditor(), null);
-		} else if (target instanceof WKFObject) {
-			return getProcessRepresentationController((WKFObject) target, false);
+	private DrawingController<? extends Drawing<? extends FlexoModelObject>> getScreenshotControllerForObject(FlexoModelObject target,
+			boolean showAll) {
+		try {
+			return FlexoSwingUtils.syncRunInEDT(new ScreenshotRetriever(target, showAll));
+		} catch (Exception e) {
+			if (logger.isLoggable(Level.SEVERE)) {
+				logger.log(Level.SEVERE, "Could not retrieve screenshot for " + target, e);
+			}
+			return null;
 		}
-		return null;
 	}
 
 	/**
@@ -410,14 +400,18 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	}
 
 	@Override
-	public void finalizeScreenshotGeneration() {
+	public void finalizeScreenshotGeneration(JComponent screenshot) {
 		if (screenshot != null) {
-			screenshotController.delete();
+			if (screenshot instanceof DrawingView) {
+				DrawingController<?> controller = ((DrawingView<?>) screenshot).getController();
+				drawingControllers.remove(controller.getDrawing());
+				controller.delete();
+			} else if (screenshot instanceof FlexoJTree) {
+				((FlexoJTree) screenshot).getBrowserView().getBrowser().delete();
+			}
 			if (screenshot.getParent() != null) {
 				screenshot.getParent().remove(screenshot);
 			}
-			screenshotController = null;
-			screenshot = null;
 		}
 	}
 
@@ -439,17 +433,29 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	@Override
 	public void moduleWillClose() {
 		super.moduleWillClose();
-		WKFPreferences.reset();
+		for (DrawingController<? extends Drawing<? extends FlexoModelObject>> drawingController : drawingControllers.values()) {
+			drawingController.delete();
+		}
+		drawingControllers.clear();
 	}
 
 	@Override
 	public Object getProcessRepresentation(FlexoProcess process, boolean showAll) {
 		try {
 			process.setIgnoreNotifications();
-			return getProcessRepresentationController(process, showAll).getDrawing();
+			DrawingController<? extends Drawing<? extends FlexoModelObject>> controller = getScreenshotControllerForObject(process, showAll);
+			return controller.getDrawing();
 		} finally {
 			process.resetIgnoreNotifications();
 		}
 	}
 
+	@Override
+	public void disposeProcessRepresentation(Object processRepresentation) {
+		DrawingController<? extends Drawing<? extends FlexoModelObject>> drawingController = drawingControllers
+				.remove(processRepresentation);
+		if (drawingController != null) {
+			drawingController.delete();
+		}
+	}
 }

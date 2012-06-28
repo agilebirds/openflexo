@@ -21,6 +21,7 @@ package org.openflexo.foundation.ie;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
@@ -63,7 +64,7 @@ public class TestCreateComponent extends FlexoIETestCase {
 	 */
 	public void test0CreateProject() {
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_COMPONENT, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");

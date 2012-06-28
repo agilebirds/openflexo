@@ -65,6 +65,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 		if (getShema() != null) {
 			getShema().deleteObserver(this);
 		}
+		super.delete();
 	}
 
 	@Override
@@ -182,7 +183,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 	private VEConnectorGR buildGraphicalRepresentation(ViewConnector connector) {
 		if (connector.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
 			VEConnectorGR graphicalRepresentation = new VEConnectorGR(connector, this);
-			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation) connector.getGraphicalRepresentation(),
+			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation<?>) connector.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			connector.setGraphicalRepresentation(graphicalRepresentation);
 			return graphicalRepresentation;
@@ -195,8 +196,8 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 	private VEShapeGR buildGraphicalRepresentation(ViewShape shape) {
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			VEShapeGR graphicalRepresentation = new VEShapeGR(shape, this);
-			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation(),
-					GraphicalRepresentation.Parameters.text, ShapeGraphicalRepresentation.Parameters.border);
+			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) shape.getGraphicalRepresentation(),
+					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentation.Parameters.border*/);
 			shape.setGraphicalRepresentation(graphicalRepresentation);
 			return graphicalRepresentation;
 		}

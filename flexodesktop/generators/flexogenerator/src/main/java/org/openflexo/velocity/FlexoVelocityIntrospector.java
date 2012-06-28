@@ -23,14 +23,48 @@ import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.RuntimeServices;
+import org.apache.velocity.runtime.log.Log;
 import org.apache.velocity.util.introspection.Info;
-import org.apache.velocity.util.introspection.UberspectImpl;
+import org.apache.velocity.util.introspection.SecureIntrospectorImpl;
+import org.apache.velocity.util.introspection.SecureUberspector;
 import org.apache.velocity.util.introspection.VelMethod;
+import org.apache.velocity.util.introspection.VelPropertyGet;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
-public class FlexoVelocityIntrospector extends UberspectImpl {
+public class FlexoVelocityIntrospector extends SecureUberspector {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoVelocityIntrospector.class.getPackage().getName());
+
+	private static class FlexoSecureIntrospectorImpl extends SecureIntrospectorImpl {
+
+		public FlexoSecureIntrospectorImpl(String[] badClasses, String[] badPackages, Log log) {
+			super(badClasses, badPackages, log);
+		}
+
+		public void clearCache() {
+			getIntrospectorCache().clear();
+		}
+	}
+
+	private RuntimeServices runtimeServices;
+
+	@Override
+	public void init() {
+		String[] badPackages = runtimeServices.getConfiguration().getStringArray(RuntimeConstants.INTROSPECTOR_RESTRICT_PACKAGES);
+		String[] badClasses = runtimeServices.getConfiguration().getStringArray(RuntimeConstants.INTROSPECTOR_RESTRICT_CLASSES);
+
+		introspector = new FlexoSecureIntrospectorImpl(badClasses, badPackages, log);
+	}
+
+	private FlexoSecureIntrospectorImpl getIntrospector() {
+		return (FlexoSecureIntrospectorImpl) introspector;
+	}
 
 	@Override
 	public VelMethod getMethod(Object obj, String methodName, Object[] args, Info i) throws Exception {
@@ -46,31 +80,89 @@ public class FlexoVelocityIntrospector extends UberspectImpl {
 		Class objClass = obj.getClass();
 
 		Method m = introspector.getMethod(objClass, methodName, args);
-		// if it's an array
-		if (m == null) {
-			if (objClass == Class.class) {
-				m = introspector.getMethod((Class) obj, methodName, args);
-				if (m != null) {
-					return new VelMethodImpl(m);
+		if (m != null) {
+			// Fix a bug in security manager of JDK1.5 where access to a public method of a non-visible inherited class is refused although
+			// it
+			// shouldn't (e.g, the method length() on StringBuilder is inherited from AbstractStringBuilder which has a package visibility)
+			try {
+				m.setAccessible(true);
+			} catch (SecurityException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.log(Level.WARNING, "Security exception for method: " + objClass + "." + methodName, e);
 				}
 			}
+			return m != null ? new VelMethodImpl(m) : null;
+		}
+		// if it's an array
+		if (obj instanceof Class) {
+			m = introspector.getMethod((Class<?>) obj, methodName, args);
+			if (m != null) {
+				return new VelMethodImpl(m);
+			}
+		}
+		if (obj instanceof EditionPatternInstance) {
+			EditionPatternInstance epi = (EditionPatternInstance) obj;
+			ViewPointDataBinding vpdb = VPBindingEvaluator.buildBindingForMethodAndParams(methodName, args);
+			vpdb.setOwner(epi.getPattern());
+			vpdb.setBindingDefinition(new BindingDefinition(methodName, Object.class, BindingDefinitionType.GET, false));
+			if (vpdb.isValid()) {
+				return new VPBindingEvaluator(vpdb, epi);
+			}
+		}
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Method '" + methodName + "' could not be found on " + objClass.getName() + " called in " + i.getTemplateName()
+					+ " at line " + i.getLine() + " column " + i.getColumn());
+		}
+		return null;
 
+	}
+
+	@Override
+	public VelPropertyGet getPropertyGet(Object obj, String identifier, Info i) throws Exception {
+		VelPropertyGet get = super.getPropertyGet(obj, identifier, i);
+		if (get == null) {
+			if (obj instanceof EditionPatternInstance) {
+				EditionPatternInstance epi = (EditionPatternInstance) obj;
+				ViewPointDataBinding vpdb = new ViewPointDataBinding(identifier);
+				vpdb.setOwner(epi.getPattern());
+				vpdb.setBindingDefinition(new BindingDefinition(identifier, Object.class, BindingDefinitionType.GET, false));
+				if (vpdb.isValid()) {
+					return new VPBindingEvaluator(vpdb, epi);
+				}
+			}
+			get = getPropertyGetForClass(obj.getClass(), identifier, i);
+			if (get == null && obj instanceof Class) {
+				get = getPropertyGetForClass((Class<?>) obj, identifier, i);
+			}
+		}
+
+		return get;
+	}
+
+	private VelPropertyGet getPropertyGetForClass(Class<?> klass, String identifier, Info i) {
+		try {
+			return new FlexoVelocityPropertyGet(klass, identifier);
+		} catch (NoSuchFieldException e) {
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Method '" + methodName + "' could not be found on " + objClass.getName() + " called in " + i.getTemplateName()
+				logger.info("Field '" + identifier + "' could not be found on " + klass.getName() + " called in " + i.getTemplateName()
 						+ " at line " + i.getLine() + " column " + i.getColumn());
 			}
-			return null;
-		}
-		// Fix a bug in security manager of JDK1.5 where access to a public method of a non-visible inherited class is refused although it
-		// shouldn't (e.g, the method length() on StringBuilder is inherited from AbstractStringBuilder which has a package visibility)
-		try {
-			m.setAccessible(true);
 		} catch (SecurityException e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.log(Level.WARNING, "Security exception for method: " + objClass + "." + methodName, e);
+				logger.log(Level.WARNING, "Security exception for field: " + klass + "." + identifier, e);
 			}
 		}
-		return m != null ? new VelMethodImpl(m) : null;
+		return null;
+	}
+
+	public void clearCache() {
+		getIntrospector().clearCache();
+	}
+
+	@Override
+	public void setRuntimeServices(RuntimeServices rs) {
+		super.setRuntimeServices(rs);
+		this.runtimeServices = rs;
 	}
 
 }

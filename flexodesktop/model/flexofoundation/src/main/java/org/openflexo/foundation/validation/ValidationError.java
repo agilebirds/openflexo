@@ -48,7 +48,7 @@ public class ValidationError<R extends ValidationRule<R, V>, V extends Validable
 
 	@Override
 	public String toString() {
-		return "VALIDATION / ERROR:   " + getLocalizedMessage();
+		return "VALIDATION / ERROR:   " + getMessage();
 	}
 
 }

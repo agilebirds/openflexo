@@ -106,7 +106,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	}
 
 	// Override when required
-	public void stopDragging(DrawingController<?> controller) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
 	}
 
 	// Override when required

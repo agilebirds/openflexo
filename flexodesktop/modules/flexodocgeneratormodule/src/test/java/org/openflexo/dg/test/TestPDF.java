@@ -29,6 +29,7 @@ import java.util.zip.ZipException;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.Flexo;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.application.FlexoApplication;
 import org.openflexo.dg.action.GeneratePDF;
@@ -57,7 +58,8 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.UserType;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -175,12 +177,15 @@ public class TestPDF extends DGTestCase {
 			 */
 			@Override
 			public void run() {
-				ModuleLoader.closeCurrentProject();
-				// FlexoSharedInspectorController.resetInstance();
+				ProjectLoader.instance().closeCurrentProject();
 				System.gc();
 			}
 		});
 		super.tearDown();
+	}
+
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	/**
@@ -230,7 +235,7 @@ public class TestPDF extends DGTestCase {
 
 		log("Build PDF: " + name + " for target " + docTypeString);
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File outputDir = null;
 		try {
 			File f = File.createTempFile("TestPDFBuilding_", null);
@@ -345,25 +350,28 @@ public class TestPDF extends DGTestCase {
 
 	/**
 	 * @param projectDirectory
-	 * @param flexoProject
+	 * @param project
 	 */
 	private void initModuleLoader(File projectDirectory, FlexoProject project) {
-		ModuleLoader.setAllowsDocSubmission(false);
+		getModuleLoader().setAllowsDocSubmission(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Init Module loader...");
 		}
 		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
-		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
-		ModuleLoader.setProject(project);
-		if (ExternalModuleDelegater.getModuleLoader() == null) {
-			fail("Module loader is not there. Screenshots cannot be generated");
-		} else if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance() == null) {
-			fail("IE Module not on the classpath. Component screenshots cannot be generated");
-		} else if (ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() == null) {
-			fail("WKF Module not on the classpath. Process and activity screenshots cannot be generated");
+		Flexo.setFileNameToOpen(projectDirectory.getAbsolutePath());
+		try {
+			if (ExternalModuleDelegater.getModuleLoader() == null) {
+				fail("Module loader is not there. Screenshots cannot be generated");
+			} else if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(project) == null) {
+				fail("IE Module not on the classpath. Component screenshots cannot be generated");
+			} else if (ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(project) == null) {
+				fail("WKF Module not on the classpath. Process and activity screenshots cannot be generated");
+			}
+		} catch (ModuleLoadingException e) {
+			logger.warning("Module " + e.getModule() + " cannot be loaded. Screenshot cannot be generated." + e.getMessage());
 		}
+
 	}
 }

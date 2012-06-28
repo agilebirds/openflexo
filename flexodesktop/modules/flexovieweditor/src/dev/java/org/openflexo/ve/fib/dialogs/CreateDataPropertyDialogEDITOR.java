@@ -26,28 +26,37 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.action.CreateDataProperty;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.ve.VECst;
 
-
 public class CreateDataPropertyDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData() 
-			{
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
+			@Override
+			public Object[] getData() {
+				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
-				CreateDataProperty action = CreateDataProperty.actionType.makeNewAction(ontology, null,null);
+				FlexoOntology ontology = ontologyLibrary
+						.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
+				CreateDataProperty action = CreateDataProperty.actionType.makeNewAction(ontology, null, null);
 				return makeArray(action);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return VECst.CREATE_DATA_PROPERTY_DIALOG_FIB;
 			}
 		};
 		editor.launch();
+	}
+
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
 	}
 }

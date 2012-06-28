@@ -64,7 +64,6 @@ public class ProcessBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 		setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.STATUS, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		setFilterStatus(BrowserElementType.DEADLINE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.MESSAGE_DEFINITION, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.MESSAGE, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);

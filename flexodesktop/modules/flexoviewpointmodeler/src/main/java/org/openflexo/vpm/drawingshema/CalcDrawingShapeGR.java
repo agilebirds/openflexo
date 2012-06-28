@@ -84,7 +84,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getCalcDrawingShape()) {
-			logger.info("Notified " + dataModification);
+			// logger.info("Notified " + dataModification);
 			if ((dataModification instanceof CalcDrawingShapeInserted) || (dataModification instanceof CalcDrawingShapeRemoved)
 					|| (dataModification instanceof CalcDrawingConnectorInserted)
 					|| (dataModification instanceof CalcDrawingConnectorRemoved)) {
@@ -97,12 +97,12 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean getAllowToLeaveBounds() {
 		return false;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public String getText() {
 		if (getCalcDrawingShape() != null) {
 			return getCalcDrawingShape().getName();
@@ -115,13 +115,13 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		if (getCalcDrawingShape() != null) {
 			getCalcDrawingShape().setName(text);
 		}
-	}
+	}*/
 
 	@Override
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
-				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null
+				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null && getCalcDrawingShape().getShema() != null
 				&& !getCalcDrawingShape().getShema().ignoreNotifications()) {
 			getCalcDrawingShape().setChanged();
 		}

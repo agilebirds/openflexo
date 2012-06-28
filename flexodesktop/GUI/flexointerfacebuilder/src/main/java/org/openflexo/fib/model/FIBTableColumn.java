@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -37,7 +38,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	private FIBTable table;
 
 	public static enum Parameters implements FIBModelAttribute {
-		data, format, tooltip, title, tooltipText, columnWidth, resizable, displayTitle, font, valueChangedAction
+		data, format, tooltip, title, tooltipText, columnWidth, resizable, displayTitle, font, color, bgColor, valueChangedAction
 
 	}
 
@@ -45,15 +46,19 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		CheckBox, Custom, DropDown, Icon, Label, Number, TextField
 	}
 
-	public static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
-	public static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, BindingDefinitionType.GET, false);
-	public static BindingDefinition FORMAT = new BindingDefinition("format", String.class, BindingDefinitionType.GET, false);
-	public static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
+	private static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition FORMAT = new BindingDefinition("format", String.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition COLOR = new BindingDefinition("color", Color.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition BG_COLOR = new BindingDefinition("bgColor", Color.class, BindingDefinitionType.GET, false);
+	private static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
 			BindingDefinitionType.EXECUTE, false);
 
 	private DataBinding data;
 	private DataBinding format;
 	private DataBinding tooltip;
+	private DataBinding color;
+	private DataBinding bgColor;
 	private String title;
 	private String tooltipText;
 	private int columnWidth = 100;
@@ -74,6 +79,30 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 	public void setTable(FIBTable table) {
 		this.table = table;
+	}
+
+	public BindingDefinition getDataBindingDefinition() {
+		return DATA;
+	}
+
+	public BindingDefinition getTooltipBindingDefinition() {
+		return TOOLTIP;
+	}
+
+	public BindingDefinition getFormatBindingDefinition() {
+		return FORMAT;
+	}
+
+	public BindingDefinition getColorBindingDefinition() {
+		return COLOR;
+	}
+
+	public BindingDefinition getBgColorBindingDefinition() {
+		return BG_COLOR;
+	}
+
+	public BindingDefinition getValueChangedActionBindingDefinition() {
+		return VALUE_CHANGED_ACTION;
 	}
 
 	@Override
@@ -192,6 +221,18 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		}
 	}
 
+	public boolean getHasSpecificFont() {
+		return getFont() != null;
+	}
+
+	public void setHasSpecificFont(boolean aFlag) {
+		if (aFlag) {
+			setFont(retrieveValidFont());
+		} else {
+			setFont(null);
+		}
+	}
+
 	public abstract ColumnType getColumnType();
 
 	public DataBinding getFormat() {
@@ -276,6 +317,34 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		tooltip.setBindingAttribute(Parameters.tooltip);
 		tooltip.setBindingDefinition(TOOLTIP);
 		this.tooltip = tooltip;
+	}
+
+	public DataBinding getColor() {
+		if (color == null) {
+			color = new DataBinding(this, Parameters.color, COLOR);
+		}
+		return color;
+	}
+
+	public void setColor(DataBinding color) {
+		color.setOwner(this);
+		color.setBindingAttribute(Parameters.color);
+		color.setBindingDefinition(COLOR);
+		this.color = color;
+	}
+
+	public DataBinding getBgColor() {
+		if (bgColor == null) {
+			bgColor = new DataBinding(this, Parameters.bgColor, BG_COLOR);
+		}
+		return bgColor;
+	}
+
+	public void setBgColor(DataBinding bgColor) {
+		bgColor.setOwner(this);
+		bgColor.setBindingAttribute(Parameters.bgColor);
+		bgColor.setBindingDefinition(BG_COLOR);
+		this.bgColor = bgColor;
 	}
 
 	public DataBinding getValueChangedAction() {

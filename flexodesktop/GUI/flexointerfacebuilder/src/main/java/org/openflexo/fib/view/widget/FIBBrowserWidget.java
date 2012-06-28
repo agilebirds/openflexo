@@ -22,6 +22,7 @@ package org.openflexo.fib.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -33,9 +34,10 @@ import javax.swing.JTree;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -66,6 +68,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	public FIBBrowserWidget(FIBBrowser fibBrowser, FIBController controller) {
 		super(fibBrowser, controller);
+
 		_fibBrowser = fibBrowser;
 
 		_dynamicComponent = new JPanel();
@@ -171,21 +174,35 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	public void setSelectedObject(Object object) {
+		setSelectedObject(object, false);
+	}
+
+	public void setSelectedObject(Object object, boolean force) {
+		// logger.info("Select " + object);
 		if (getRootValue() == null) {
 			return;
 		}
-		if (object == getSelectedObject()) {
+		if (object == getSelectedObject() && !force) {
 			logger.fine("Ignore set selected object");
 			return;
 		}
 		// logger.info("---------------------> FIBBrowserWidget, setSelectedObject from "+getSelectedObject()+" to "+object);
 		if (object != null) {
-			BrowserCell cell = getBrowserModel().getBrowserCell(object);
-			// logger.info("Select "+cell);
+			Collection<BrowserCell> cells = getBrowserModel().getBrowserCell(object);
+			// logger.info("Select " + cells);
 			getTreeSelectionModel().clearSelection();
-			if (cell != null) {
-				getTreeSelectionModel().addSelectionPath(cell.getTreePath());
-				_tree.scrollPathToVisible(cell.getTreePath());
+			if (cells != null) {
+				TreePath scrollTo = null;
+				for (BrowserCell cell : cells) {
+					TreePath treePath = cell.getTreePath();
+					if (scrollTo == null) {
+						scrollTo = treePath;
+					}
+					getTreeSelectionModel().addSelectionPath(treePath);
+				}
+				if (scrollTo != null) {
+					_tree.scrollPathToVisible(scrollTo);
+				}
 			}
 		} else {
 			clearSelection();
@@ -197,8 +214,8 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	@Override
-	public synchronized List<TargetObject> getDependingObjects() {
-		List<TargetObject> returned = super.getDependingObjects();
+	public List<AbstractBinding> getDependencyBindings() {
+		List<AbstractBinding> returned = super.getDependencyBindings();
 		appendToDependingObjects(getWidget().getSelected(), returned);
 		appendToDependingObjects(getWidget().getRoot(), returned);
 		return returned;
