@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Browser root="data" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" dataClassName="org.openflexo.foundation.rm.FlexoProject" controllerClassName="org.openflexo.fib.ProjectBrowserController" font="LucidaGrande,0,11" minWidth="100" minHeight="100" useScrollBar="false" name="Browser" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(Browser.selected)" doubleClickAction="controller.doubleClick(Browser.selected)">
-  <BrowserElement dataClassName="org.openflexo.foundation.rm.FlexoProject" label="Project.name" imageIconFile="../../../main/resources/Resources/WKF/SmallFlexo.gif" isEditable="false" filtered="false" defaultVisible="true" name="Project">
-    <Children data="Project.workflow" name="workflow" />
+<Browser root="data" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" dataClassName="org.openflexo.foundation.rm.FlexoProject" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="LucidaGrande,0,11" minWidth="100" minHeight="100" name="Browser" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(Browser.selected)" doubleClickAction="controller.doubleClick(Browser.selected)">
+  <BrowserElement dataClassName="org.openflexo.foundation.rm.FlexoProject" label="project.name" icon="controller.iconForObject(project)" imageIconFile="../../../main/resources/Resources/WKF/SmallFlexo.gif" isEditable="false" filtered="false" defaultVisible="true" name="project">
+    <Children data="project.workflow" name="workflow" />
   </BrowserElement>
-  <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoWorkflow" label="(Workflow.project.name + &quot;- Workflow&quot;)" imageIconFile="../../../main/resources/Resources/Flexo/Library_WKF.gif" isEditable="false" filtered="false" defaultVisible="true" name="Workflow">
-    <Children data="Workflow.topLevelFlexoProcesses" name="children" />
+  <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoWorkflow" label="(workflow.project.name + &quot;- Workflow&quot;)" imageIconFile="../../../main/resources/Resources/Flexo/Library_WKF.gif" isEditable="false" filtered="false" defaultVisible="true" name="workflow">
+    <Children data="workflow.topLevelFlexoProcesses" name="children" />
   </BrowserElement>
-  <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoProcess" label="Process.name" imageIconFile="../../../main/resources/Resources/WKF/SmallProcess.gif" isEditable="false" filtered="false" defaultVisible="true" name="Process">
-    <Children data="Process.portRegistery" name="portRegistery" />
-    <Children data="Process.activityPetriGraph.nodes" name="nodes" />
+  <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoProcess" label="process.name" imageIconFile="../../../main/resources/Resources/WKF/SmallProcess.gif" isEditable="false" filtered="false" defaultVisible="true" name="process">
+    <Children data="process.portRegistery" name="portRegistery" />
+    <Children data="process.activityPetriGraph.nodes" name="nodes" />
   </BrowserElement>
-  <BrowserElement dataClassName="org.openflexo.foundation.wkf.ProcessFolder" imageIconFile="../../../main/resources/Resources/WKF/ProcessFolder.gif" isEditable="false" filtered="false" defaultVisible="true" name="ProcessFolder">
-    <Children data="ProcessFolder.folders" name="children" />
+  <BrowserElement dataClassName="org.openflexo.foundation.wkf.ProcessFolder" imageIconFile="../../../main/resources/Resources/WKF/ProcessFolder.gif" isEditable="false" filtered="false" defaultVisible="true" name="processFolder">
+    <Children data="processFolder.folders" name="children" />
   </BrowserElement>
-  <BrowserElement dataClassName="org.openflexo.foundation.wkf.node.SubProcessNode" imageIconFile="../../../main/resources/Resources/WKF/SmallSubProcessNode.gif" isEditable="false" filtered="false" defaultVisible="true" name="SubProcessNode" />
+  <BrowserElement dataClassName="org.openflexo.foundation.wkf.node.SubProcessNode" imageIconFile="../../../main/resources/Resources/WKF/SmallSubProcessNode.gif" isEditable="false" filtered="false" defaultVisible="true" name="subProcessNode" />
   <BrowserElement dataClassName="org.openflexo.foundation.wkf.node.ActivityNode" imageIconFile="../../../main/resources/Resources/WKF/SmallActivity.gif" isEditable="false" filtered="false" defaultVisible="true" name="ActivityNode" />
   <BrowserElement dataClassName="org.openflexo.foundation.wkf.node.OperationNode" imageIconFile="../../../main/resources/Resources/WKF/SmallOperation.gif" isEditable="false" filtered="false" defaultVisible="true" name="OperationNode" />
   <BrowserElement dataClassName="org.openflexo.foundation.wkf.node.ActionNode" imageIconFile="../../../main/resources/Resources/WKF/SmallAction.gif" isEditable="false" filtered="false" defaultVisible="true" name="ActionNode" />

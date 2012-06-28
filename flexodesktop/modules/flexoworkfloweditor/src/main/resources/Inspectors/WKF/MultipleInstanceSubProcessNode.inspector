@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.MultipleInstanceSubProcessNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.MultipleInstanceSubProcessNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="is_sequential" localize="true" name="IsSequentialLabel" constraints="twocols(location=left;index=18;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="IsSequential" data="data.isSequential" constraints="twocols(location=right;index=19;expandHorizontally=false;expandVertically=false)" />
-      <Label label="display_thumb" localize="true" name="DisplaySubProcessImageLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="DisplaySubProcessImage" data="data.displaySubProcessImage" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="is_sequential" localize="true" name="IsSequentialLabel" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="IsSequential" index="19" data="data.isSequential" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
+      <Label label="display_thumb" localize="true" name="DisplaySubProcessImageLabel" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="DisplaySubProcessImage" index="21" data="data.displaySubProcessImage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

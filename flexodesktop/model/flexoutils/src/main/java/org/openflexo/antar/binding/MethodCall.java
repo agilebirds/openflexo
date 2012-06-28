@@ -173,7 +173,8 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 
 	@Override
 	public boolean isSettable() {
-		// TODO MethodCall with all other params as constants are also settable !!!!
+		// TODO MethodCall with all other params as constants are also settable
+		// !!!!
 		return false;
 	}
 
@@ -202,8 +203,13 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
+			logger.info("InvocationTargetException while evaluating method " + _method + " with args: ");
+			for (int j = 0; j < args.length; j++) {
+				logger.info("arg " + j + " = " + args[j]);
+			}
 			e.printStackTrace();
+			logger.info("Caused by:");
+			e.getTargetException().printStackTrace();
 		}
 		return null;
 
@@ -211,7 +217,8 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
-		// TODO MethodCall with all other params as constants are also settable !!!!
+		// TODO MethodCall with all other params as constants are also settable
+		// !!!!
 		logger.warning("Please implement me !!!");
 	}
 

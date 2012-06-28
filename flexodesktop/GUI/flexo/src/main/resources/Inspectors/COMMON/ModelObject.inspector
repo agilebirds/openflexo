@@ -32,10 +32,10 @@
       </Table>
     </Tab>
     <Tab index="1" title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DocTab">
-      <Label label="dont_generate" localize="true" name="DontGenerateLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;index=0)" />
-      <CheckBox selected="false" localize="true" name="DontGenerate" data="data.dontGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;index=1)" />
-      <Label label="description" localize="true" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;index=2)" />
-      <TextArea localize="true" name="description" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+      <Label label="specific_description" localize="true" name="SpecificDescriptionsLabel" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBDescriptionWidget" index="21" data="data" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)" name="SpecificDescriptions" localize="true" manageDynamicModel="true" />
+      <Label label="dont_generate" localize="true" name="DontGenerateLabel" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="DontGenerate" index="23" data="data.dontGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

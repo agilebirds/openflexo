@@ -18,6 +18,7 @@
   </entity>
    
   <entity name="org.openflexo.fib.model.FIBComponent" abstract="yes"> 
+    <property name="index" xmlTag="index" attribute="YES" ignoreDefaultValue="-1"/> 
     <property name="data" xmlTag="data" attribute="YES"/> 
     <property name="dataClass" xmlTag="dataClassName" attribute="YES"/> 
     <property name="controllerClass" xmlTag="controllerClassName" attribute="YES"/> 
@@ -75,7 +76,6 @@
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBTab" xmlTag="Tab"> 
-     <property name="index" xmlTag="index" attribute="YES"/> 
      <property name="title" xmlTag="title" attribute="YES"/> 
   </entity>
    

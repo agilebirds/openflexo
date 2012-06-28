@@ -1,4 +1,4 @@
-<inspector title = "EOEntity" inheritsfrom="DMEntity.inspector">
+<inspector title = "EOEntity" inspectedClassName="org.openflexo.foundation.dm.DMEOEntity" inheritsfrom="DMEntity.inspector">
 	<tab name="Basic" index="0">
 		<property name="externalName" label="external_name" widget="TEXT_FIELD" constraint="0">
 			<param name="columns" value="10"/>

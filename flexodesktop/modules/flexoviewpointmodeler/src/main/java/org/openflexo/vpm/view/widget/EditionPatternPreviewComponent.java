@@ -37,6 +37,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
+// TODO: this should inherit from DefaultFIBCustomComponent
 public class EditionPatternPreviewComponent extends JPanel implements FIBCustomComponent<EditionPattern, JPanel>, FIBSelectable {
 
 	@SuppressWarnings("unused")

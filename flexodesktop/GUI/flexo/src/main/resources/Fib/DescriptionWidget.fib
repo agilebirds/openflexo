@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.components.widget.FIBDescriptionWidget$DescriptionWidgetFIBController" constraints="border(location=center)">
+  <TextArea validateOnReturn="true" data="data.description" constraints="gridbag(anchor=north;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=0;index=0;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=2;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
+  <Panel layout="border" borderTitle="" borderTop="3" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+    <CheckBox selected="true" localize="true" name="checkbox" data="data.hasSpecificDescriptions" constraints="border(index=0;location=west)" />
+    <DropDown format="object.name" localize="true" enable="data.hasSpecificDescriptions" manageDynamicModel="true" name="selectedDocType" data="controller.currentDocType" dataClassName="java.lang.String" constraints="border(index=0;location=center)" list="data.project.docTypes" iteratorClassName="org.openflexo.foundation.DocType" autoSelectFirstRow="true" />
+  </Panel>
+  <TextArea validateOnReturn="true" data="controller.specificDescription" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=2;index=1;insetsBottom=2;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="data.hasSpecificDescriptions" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="SpecificDescription" localize="true" manageDynamicModel="true">
+    <Dependancy componentName="selectedDocType" />
+  </TextArea>
+  <LocalizedDictionary />
+</Panel>
+

@@ -8,7 +8,7 @@
 		</property>
 	</tab>
 
-	<tab name="Graphics" index="20" layout="DEFAULT">
+	<tab name="Graphics_BPE" index="20" layout="DEFAULT" visibilityContext="BPE">
 		<property name="color" label="background_color" widget="COLOR" constraint="6">
 			<param name="columns" value="10"/>
 		</property>

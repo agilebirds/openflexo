@@ -47,7 +47,6 @@ import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.DateSelector;
-import org.openflexo.swing.DurationSelector;
 import org.openflexo.toolbox.ToolBox;
 
 class StaticBindingPanel extends JPanel {

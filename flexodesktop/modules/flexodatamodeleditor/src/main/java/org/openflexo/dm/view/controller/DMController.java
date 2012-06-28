@@ -93,6 +93,16 @@ public class DMController extends FlexoController implements SelectionManagingCo
 
 	private final DMSelectionManager _selectionManager;
 
+	@Override
+	public boolean useNewInspectorScheme() {
+		return true;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return true;
+	}
+
 	/**
 	 * Default constructor
 	 * 

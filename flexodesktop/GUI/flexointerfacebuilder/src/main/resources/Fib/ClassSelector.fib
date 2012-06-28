@@ -7,13 +7,13 @@
     <LocalizedDictionary />
   </Table>
   <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="8" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedClassInfo" showFooter="true" rootVisible="false" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" constraints="twocols(location=center;index=2;expandVertically=true;expandHorizontally=true)" font="LucidaGrande,0,11" name="ClassesBrowser" localize="true" manageDynamicModel="true">
-    <BrowserElement dataClassName="org.openflexo.fib.utils.LoadedClassesInfo$PackageInfo" label="package.packageName" visible="(!(package.isFiltered))" imageIconFile="../Resources/Package.gif" isEditable="false" filtered="true" defaultVisible="true" name="package">
+    <BrowserElement dataClassName="org.openflexo.fib.utils.LoadedClassesInfo$PackageInfo" label="package.packageName" visible="(!(package.isFiltered))" isEditable="false" filtered="true" defaultVisible="true" name="package" icon="package.icon">
       <Children data="package.classes" name="children" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.fib.utils.LoadedClassesInfo" label="loadedClasses.toString" isEditable="false" filtered="false" defaultVisible="true" name="loadedClasses">
       <Children data="loadedClasses.packages" name="children" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.fib.utils.LoadedClassesInfo$ClassInfo" label="class.className" icon="class.icon" imageIconFile="../Resources/Class.gif" isEditable="false" filtered="false" defaultVisible="true" name="class">
+    <BrowserElement dataClassName="org.openflexo.fib.utils.LoadedClassesInfo$ClassInfo" label="class.className" icon="class.icon" isEditable="false" filtered="false" defaultVisible="true" name="class">
       <Children data="class.memberClasses" name="children" />
     </BrowserElement>
     <Dependancy componentName="FilteredPackageName" />

@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
@@ -102,7 +103,12 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		for (Enumeration<FlexoProcess> e = getProject().getFlexoWorkflow().getAllLocalFlexoProcesses().elements(); e.hasMoreElements();) {
 			retain(e.nextElement());
 		}
-		getWKFController().setCurrentFlexoProcess(getFlexoWorkflow().getRootFlexoProcess());
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				getWKFController().setCurrentFlexoProcess(getFlexoWorkflow().getRootFlexoProcess());
+			}
+		});
 	}
 
 	@Override

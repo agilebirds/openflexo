@@ -81,7 +81,8 @@ public abstract class SelectionManager extends Observable {
 	public static final String MODULE_KEY = "MODULE";
 
 	// ==========================================================================
-	// ============================= Constructor ================================
+	// ============================= Constructor
+	// ================================
 	// ==========================================================================
 
 	public SelectionManager(FlexoController controller) {
@@ -109,7 +110,8 @@ public abstract class SelectionManager extends Observable {
 	}
 
 	// ==========================================================================
-	// =================== Selection Management, public A.P.I ===================
+	// =================== Selection Management, public A.P.I
+	// ===================
 	// ==========================================================================
 
 	public void addToSelectionListeners(SelectionListener listener) {
@@ -338,7 +340,8 @@ public abstract class SelectionManager extends Observable {
 	}
 
 	// ==========================================================================
-	// ================ Selection Management, protected A.P.I ===================
+	// ================ Selection Management, protected A.P.I
+	// ===================
 	// ==========================================================================
 
 	/**
@@ -484,7 +487,8 @@ public abstract class SelectionManager extends Observable {
 	}
 
 	// ==========================================================================
-	// ============================= Cut&Paste Management =======================
+	// ============================= Cut&Paste Management
+	// =======================
 	// ==========================================================================
 
 	public boolean performSelectionCopy() {
@@ -524,16 +528,19 @@ public abstract class SelectionManager extends Observable {
 	// ======================= Inspector ==========================
 	// ============================================================
 
+	@Deprecated
 	public Hashtable<String, Object> getInspectionContext() {
 		return inspectionContext;
 	}
 
+	@Deprecated
 	public Object setInspectionContext(String key, Object value) {
 		Object returned = inspectionContext.get(key);
 		inspectionContext.put(key, value);
 		return returned;
 	}
 
+	@Deprecated
 	public Object removeInspectionContext(String key) {
 		Object returned = inspectionContext.get(key);
 		inspectionContext.remove(key);
@@ -543,10 +550,10 @@ public abstract class SelectionManager extends Observable {
 	/**
 	 * override this method in your Module's selectionManager if you want to specify another inspector for an object.
 	 */
-	/*protected String getInspectorNameForObject(InspectableObject inspectable)
-	{
-			return null;
-	}*/
+	/*
+	 * protected String getInspectorNameForObject(InspectableObject inspectable)
+	 * { return null; }
+	 */
 
 	private void setCurrentInspectedObject(InspectableObject inspectable) {
 		// logger.info("Inspect "+inspectable);
@@ -570,7 +577,8 @@ public abstract class SelectionManager extends Observable {
 							+ ((FlexoModelObject) _inspectedObject).countObservers() + " observers");
 				}
 				setChanged();
-				// Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+				// Component focusOwner =
+				// KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 				notifyObservers(new UniqueSelection(_inspectedObject, getInspectionContext()));
 				// this code seems to be the cause of the switch module bug
 				// if (focusOwner != null) {

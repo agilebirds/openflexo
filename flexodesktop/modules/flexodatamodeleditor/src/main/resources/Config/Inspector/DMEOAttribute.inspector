@@ -1,4 +1,4 @@
-<inspector title = "EOAttribute" inheritsfrom="DMEOProperty.inspector">
+<inspector title = "EOAttribute" inspectedClassName="org.openflexo.foundation.dm.DMEOAttribute" inheritsfrom="DMEOProperty.inspector">
 	<tab name="Basic" index="0">
 		<hidden name="type"/> // Type cannot be edited directly, use prototype
 		<property name="isPrimaryKeyAttribute" label="is_primary_key_attribute" widget="CHECKBOX" constraint="4"/>

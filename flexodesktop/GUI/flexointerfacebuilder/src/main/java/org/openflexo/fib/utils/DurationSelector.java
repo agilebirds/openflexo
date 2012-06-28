@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.swing;
+package org.openflexo.fib.utils;
 
 /**
  * Widget allowing to edit a file with a popup
@@ -44,10 +44,15 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBCustom;
+import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
+import org.openflexo.swing.ButtonsControlPanel;
+import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.Duration;
 import org.openflexo.toolbox.Duration.DurationUnit;
 
-public class DurationSelector extends TextFieldCustomPopup<Duration> {
+public class DurationSelector extends TextFieldCustomPopup<Duration> implements FIBCustomComponent<Duration, DurationSelector> {
 	public static final Font NORMAL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
 	private static final String EMPTY_STRING = "";
@@ -60,15 +65,15 @@ public class DurationSelector extends TextFieldCustomPopup<Duration> {
 		this((Duration) null);
 	}
 
-	public DurationSelector(int col) {
-		this((Duration) null, col);
-	}
-
 	public DurationSelector(Duration aDuration) {
 		super(aDuration);
 		if (aDuration != null) {
 			_revertValue = aDuration.clone();
 		}
+	}
+
+	public DurationSelector(int col) {
+		this((Duration) null, col);
 	}
 
 	public DurationSelector(Duration aDuration, int col) {
@@ -144,7 +149,7 @@ public class DurationSelector extends TextFieldCustomPopup<Duration> {
 				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 					Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 					if (returned != null && returned instanceof JLabel && value != null) {
-						boolean isMultiple = (getEditedObject() != null ? getEditedObject().getValue() > 1 : false);
+						boolean isMultiple = getEditedObject() != null ? getEditedObject().getValue() > 1 : false;
 						((JLabel) returned).setText(localizedForKey(((DurationUnit) value).getLocalizedKey() + (isMultiple ? "s" : "")));
 					}
 					return returned;
@@ -224,7 +229,8 @@ public class DurationSelector extends TextFieldCustomPopup<Duration> {
 
 		@Override
 		public void setPreferredSize(Dimension aDimension) {
-			durationChooserPanel.setPreferredSize(aDimension);
+			// durationChooserPanel.setPreferredSize(aDimension);
+			super.setPreferredSize(aDimension);
 		}
 
 	}
@@ -248,6 +254,7 @@ public class DurationSelector extends TextFieldCustomPopup<Duration> {
 		_revertValue = oldValue;
 	}
 
+	@Override
 	public Duration getRevertValue() {
 		return _revertValue;
 	}
@@ -286,6 +293,20 @@ public class DurationSelector extends TextFieldCustomPopup<Duration> {
 		if (durationChooserPanel != null) {
 			durationChooserPanel.controlPanel.applyFocusTraversablePolicyTo(durationChooserPanel, true);
 		}
+	}
+
+	@Override
+	public DurationSelector getJComponent() {
+		return this;
+	}
+
+	@Override
+	public Class<Duration> getRepresentedType() {
+		return Duration.class;
+	}
+
+	@Override
+	public void init(FIBCustom component, FIBController controller) {
 	}
 
 }

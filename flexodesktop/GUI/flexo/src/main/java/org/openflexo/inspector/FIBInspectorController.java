@@ -95,7 +95,8 @@ public class FIBInspectorController extends FlexoFIBController {
 				System.out.println("> " + inspectorFile);
 				if (inspectorFile.exists()) {
 					JMenuItem menuItem = new JMenuItem(inspectorFile.getName());
-					// We dont use existing inspector which is already aggregated !!!
+					// We dont use existing inspector which is already
+					// aggregated !!!
 					final FIBInspector inspectorToOpen = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(inspectorFile, false);
 					menuItem.addActionListener(new ActionListener() {
 						@Override

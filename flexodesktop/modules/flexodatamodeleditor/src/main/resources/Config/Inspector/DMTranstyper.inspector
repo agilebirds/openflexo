@@ -1,4 +1,4 @@
-<inspector title = "Transtyper" inheritsfrom="DMObject.inspector">
+<inspector title = "Transtyper" inspectedClassName="org.openflexo.foundation.dm.DMTranstyper" inheritsfrom="DMObject.inspector">
 	<tab name="Basic" index="0">
 		<layout name ="DEFAULT">
 			<param name="aLayoutParamName" value="aLayoutParamValue"/>

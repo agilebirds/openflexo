@@ -17,7 +17,7 @@
 						constraints="border(location=center)"
 						visibleRowCount="5" rowHeight="18" font="SansSerif,0,11">
 						<NumberColumn numberType="IntegerType"
-							data="iterator.constraints.index" title="index" columnWidth="40"
+							data="iterator.index" title="index" columnWidth="40"
 							resizable="false" />
 						<LabelColumn data="iterator.toString"
 							title="Component" columnWidth="200" resizable="true" />
@@ -30,6 +30,8 @@
    					    <Button name="upButton" action="data.componentUp(ComponentsTable.selected)" buttonType="Trigger" label="Up" constraints="flow(index=0)" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.constraints.index &gt; 0))"/>
    					    <Button name="downButton" action="data.componentDown(ComponentsTable.selected)" buttonType="Trigger" label="Down" constraints="flow(index=0)" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.constraints.index &lt; (data.subComponents.size-1)))"/>
    					    <Button name="lastButton" action="data.componentLast(ComponentsTable.selected)" buttonType="Trigger" label="Last" constraints="flow(index=0)" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.constraints.index &lt; (data.subComponents.size-1)))"/>
+  					    <Button name="refreshButton" action="data.reorderComponents()" buttonType="Trigger" label="Refresh" constraints="flow(index=0)" />
+  					    <Button name="reindexButton" action="data.reindexComponents()" buttonType="Trigger" label="Re-index" constraints="flow(index=0)" />
 	 			    </Panel>
 				</Panel>
 

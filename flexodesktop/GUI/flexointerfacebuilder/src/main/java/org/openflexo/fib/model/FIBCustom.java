@@ -126,6 +126,7 @@ public class FIBCustom extends FIBWidget {
 					} catch (IllegalArgumentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						logger.warning("While trying to instanciate " + getComponentClass() + " with null");
 					} catch (InstantiationException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
