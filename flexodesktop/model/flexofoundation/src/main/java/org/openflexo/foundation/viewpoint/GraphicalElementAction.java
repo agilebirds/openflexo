@@ -24,6 +24,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme.ActionSchemeBindingAttribute;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class GraphicalElementAction extends EditionPatternObject {
@@ -38,7 +39,8 @@ public class GraphicalElementAction extends EditionPatternObject {
 
 	private ViewPointDataBinding conditional;
 
-	public GraphicalElementAction() {
+	public GraphicalElementAction(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public GraphicalElementPatternRole getGraphicalElementPatternRole() {

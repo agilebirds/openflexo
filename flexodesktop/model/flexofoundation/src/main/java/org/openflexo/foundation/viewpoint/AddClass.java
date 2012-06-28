@@ -32,6 +32,7 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -41,7 +42,8 @@ public class AddClass extends AddConcept {
 
 	private String ontologyClassURI = null;
 
-	public AddClass() {
+	public AddClass(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

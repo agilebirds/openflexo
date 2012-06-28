@@ -25,6 +25,7 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class ClassParameter extends EditionSchemeParameter {
@@ -34,6 +35,10 @@ public class ClassParameter extends EditionSchemeParameter {
 	private ViewPointDataBinding conceptValue;
 
 	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
+
+	public ClassParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public Type getType() {

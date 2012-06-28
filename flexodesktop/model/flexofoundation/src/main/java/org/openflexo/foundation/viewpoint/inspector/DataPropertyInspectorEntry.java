@@ -20,7 +20,8 @@
 package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 /**
  * Represents an inspector entry for an ontology object property
@@ -32,14 +33,18 @@ public class DataPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	private OntologicDataType dataType;
 
+	public DataPropertyInspectorEntry(ViewPointBuilder builder) {
+		super(builder);
+	}
+
 	@Override
 	public Class getDefaultDataClass() {
-		return OntologyObjectProperty.class;
+		return OntologyDataProperty.class;
 	}
 
 	@Override
 	public String getWidgetName() {
-		return "OntologyPropertySelector";
+		return "DataPropertySelector";
 	}
 
 	public OntologicDataType getDataType() {

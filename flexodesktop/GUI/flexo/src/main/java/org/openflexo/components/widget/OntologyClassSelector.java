@@ -34,6 +34,7 @@ import org.openflexo.foundation.rm.FlexoProject;
  * 
  */
 @Deprecated
+// Use FIBClassSelector instead
 public class OntologyClassSelector extends AbstractBrowserSelector<OntologyClass> {
 
 	protected static final String EMPTY_STRING = "";

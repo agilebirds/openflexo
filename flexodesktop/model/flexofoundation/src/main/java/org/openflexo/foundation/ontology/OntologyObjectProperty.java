@@ -112,4 +112,19 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 		return sb.toString();
 	}
 
+	@Override
+	protected void recursivelySearchRangeAndDomains() {
+		super.recursivelySearchRangeAndDomains();
+		for (OntologyProperty aProperty : getSuperProperties()) {
+			propertiesTakingMySelfAsRange.addAll(aProperty.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(aProperty.getPropertiesTakingMySelfAsDomain());
+		}
+		OntologyClass OBJECT_PROPERTY_CONCEPT = getOntology().getClass(OWL_OBJECT_PROPERTY_URI);
+		// OBJECT_PROPERTY_CONCEPT is generally non null but can be null when reading RDFS for example
+		if (OBJECT_PROPERTY_CONCEPT != null) {
+			propertiesTakingMySelfAsRange.addAll(OBJECT_PROPERTY_CONCEPT.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(OBJECT_PROPERTY_CONCEPT.getPropertiesTakingMySelfAsDomain());
+		}
+	}
+
 }

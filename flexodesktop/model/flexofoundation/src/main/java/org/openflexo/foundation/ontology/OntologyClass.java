@@ -21,9 +21,12 @@ package org.openflexo.foundation.ontology;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -294,8 +297,11 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 		return false;
 	}
 
-	private boolean isSuperClassOf(OntologyClass aClass) {
+	public boolean isSuperClassOf(OntologyClass aClass) {
 		if (aClass == this) {
+			return true;
+		}
+		if (equalsToConcept(aClass)) {
 			return true;
 		}
 		if (OWL2URIDefinitions.OWL_THING_URI.equals(getURI())) {
@@ -311,6 +317,62 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 
 	public Vector<OntologyClass> getSuperClasses() {
 		return superClasses;
+	}
+
+	public Set<OntologyClass> getAllSuperClasses() {
+		Set<OntologyClass> returned = new HashSet<OntologyClass>();
+		for (OntologyClass c : getSuperClasses()) {
+			returned.add(c);
+			returned.addAll(c.getAllSuperClasses());
+		}
+		return returned;
+	}
+
+	public static OntologyClass getMostSpecializedClass(Collection<OntologyClass> someClasses) {
+
+		if (someClasses.size() == 0) {
+			return null;
+		}
+		if (someClasses.size() == 1) {
+			return someClasses.iterator().next();
+		}
+		OntologyClass[] array = someClasses.toArray(new OntologyClass[someClasses.size()]);
+
+		for (int i = 0; i < someClasses.size(); i++) {
+			for (int j = i + 1; j < someClasses.size(); j++) {
+				OntologyClass c1 = array[i];
+				OntologyClass c2 = array[j];
+				if (c1.isSuperClassOf(c2)) {
+					someClasses.remove(c1);
+					return getMostSpecializedClass(someClasses);
+				}
+				if (c2.isSuperClassOf(c1)) {
+					someClasses.remove(c2);
+					return getMostSpecializedClass(someClasses);
+				}
+			}
+		}
+
+		// No parent were found, take first item
+		logger.warning("Undefined specializing criteria between " + someClasses);
+		return someClasses.iterator().next();
+
+	}
+
+	public static OntologyClass getFirstCommonAncestor(OntologyClass c1, OntologyClass c2) {
+		Set<OntologyClass> commonAncestors = new HashSet<OntologyClass>();
+		Set<OntologyClass> ancestors1 = c1.getAllSuperClasses();
+		ancestors1.add(c1);
+		Set<OntologyClass> ancestors2 = c2.getAllSuperClasses();
+		ancestors2.add(c2);
+		for (OntologyClass cl1 : ancestors1) {
+			for (OntologyClass cl2 : ancestors2) {
+				if (cl1.equalsToConcept(cl2)) {
+					commonAncestors.add(cl1);
+				}
+			}
+		}
+		return getMostSpecializedClass(commonAncestors);
 	}
 
 	@Deprecated
@@ -376,13 +438,27 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 	@Override
 	protected void recursivelySearchRangeAndDomains() {
 		super.recursivelySearchRangeAndDomains();
-		Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
+		for (OntologyClass aClass : getSuperClasses()) {
+			propertiesTakingMySelfAsRange.addAll(aClass.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(aClass.getPropertiesTakingMySelfAsDomain());
+		}
+		OntologyClass CLASS_CONCEPT = getOntology().getClass(OWL_CLASS_URI);
+		// CLASS_CONCEPT is generally non null but can be null when reading RDFS for exampel
+		if (CLASS_CONCEPT != null) {
+			propertiesTakingMySelfAsRange.addAll(CLASS_CONCEPT.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(CLASS_CONCEPT.getPropertiesTakingMySelfAsDomain());
+		}
+
+		/*Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
+		if (redefinesOriginalDefinition()) {
+			_appendRangeAndDomains(getOriginalDefinition(), alreadyComputed);
+		}
 		for (OntologyClass aClass : getSuperClasses()) {
 			_appendRangeAndDomains(aClass, alreadyComputed);
-		}
+		}*/
 	}
 
-	private void _appendRangeAndDomains(OntologyClass superClass, Vector<OntologyClass> alreadyComputed) {
+	/*private void _appendRangeAndDomains(OntologyClass superClass, Vector<OntologyClass> alreadyComputed) {
 		if (alreadyComputed.contains(superClass)) {
 			return;
 		}
@@ -400,7 +476,7 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
 			_appendRangeAndDomains(superSuperClass, alreadyComputed);
 		}
-	}
+	}*/
 
 	private OntologyClass equivalentClass;
 	private List<OntologyClass> equivalentClasses = new ArrayList<OntologyClass>();
@@ -472,4 +548,5 @@ public class OntologyClass extends OntologyObject<OntClass> implements Comparabl
 	public boolean isThing() {
 		return isNamedClass() && getURI().equals(OWL2URIDefinitions.OWL_THING_URI);
 	}
+
 }

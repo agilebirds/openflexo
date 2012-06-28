@@ -22,13 +22,10 @@ package org.openflexo.foundation.ontology;
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.localization.Language;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.Individual;
@@ -194,102 +191,6 @@ public class OntologyIndividual extends OntologyObject<Individual> implements Co
 		return false;
 	}
 
-	/**
-	 * Return the value defined for supplied property, asserting that current individual defines one and only one assertion for this
-	 * property.<br>
-	 * <ul>
-	 * <li>If many assertions for this properties are defined for this individual, then the first assertion is used<br>
-	 * Special case: if supplied property is an annotation property defined on a literal (datatype property) then the returned value will
-	 * match the current language as defined in FlexoLocalization.</li>
-	 * <li>If no assertion is defined for this property, then the result will be null</li>
-	 * </ul>
-	 * 
-	 * @param property
-	 * @return
-	 */
-	public Object getPropertyValue(OntologyProperty property) {
-		if (property.isAnnotationProperty() && property instanceof OntologyDataProperty
-				&& getAnnotationStatements((OntologyDataProperty) property).size() > 1) {
-			return getAnnotationValue((OntologyDataProperty) property, FlexoLocalization.getCurrentLanguage());
-		}
-
-		PropertyStatement s = getPropertyStatement(property);
-		if (s != null) {
-			if (s.hasLitteralValue()) {
-				return s.getLiteral().getValue();
-			} else if (s instanceof ObjectPropertyStatement) {
-				return ((ObjectPropertyStatement) s).getStatementObject();
-			}
-		}
-		return null;
-	}
-
-	public void setPropertyValue(OntologyProperty property, Object newValue) {
-		PropertyStatement s = getPropertyStatement(property);
-		if (s != null) {
-			if (s.hasLitteralValue() && (newValue instanceof String)) {
-				s.setStringValue((String) newValue);
-				return;
-			} else if ((s instanceof ObjectPropertyStatement) && (newValue instanceof OntologyObject)) {
-				((ObjectPropertyStatement) s).setStatementObject((OntologyObject) newValue);
-				return;
-			}
-		} else {
-			if (newValue instanceof String) {
-				getOntResource().addProperty(property.getOntProperty(), (String) newValue);
-				updateOntologyStatements();
-			} else if (newValue instanceof OntologyObject) {
-				getOntResource().addProperty(property.getOntProperty(), ((OntologyObject) newValue).getOntResource());
-				updateOntologyStatements();
-			}
-		}
-	}
-
-	// Return first property value matching supplied data property
-	public Object getAnnotationValue(OntologyDataProperty property, Language language) {
-		List<DataPropertyStatement> literalAnnotations = getAnnotationStatements(property);
-		for (DataPropertyStatement annotation : literalAnnotations) {
-			if (annotation != null && annotation.getLanguage() == language) {
-				if (annotation.hasLitteralValue()) {
-					return annotation.getLiteral().getValue();
-				}
-			}
-		}
-		return null;
-	}
-
-	// Return first property value matching supplied data property
-	public Object getAnnotationObjectValue(OntologyObjectProperty property) {
-		List<ObjectPropertyStatement> annotations = getAnnotationObjectStatements(property);
-		for (ObjectPropertyStatement annotation : annotations) {
-			OntologyObject returned = annotation.getStatementObject();
-			if (returned != null)
-				return returned;
-		}
-		return null;
-	}
-
-	/*public void setPropertyValue(OntologyProperty property, Object newValue) {
-		PropertyStatement s = getPropertyStatement(property);
-		if (s != null) {
-			if (s.hasLitteralValue() && (newValue instanceof String)) {
-				s.setStringValue((String) newValue);
-				return;
-			} else if ((s instanceof ObjectPropertyStatement) && (newValue instanceof OntologyObject)) {
-				((ObjectPropertyStatement) s).setStatementObject((OntologyObject) newValue);
-				return;
-			}
-		} else {
-			if (newValue instanceof String) {
-				getOntResource().addProperty(property.getOntProperty(), (String) newValue);
-				updateOntologyStatements();
-			} else if (newValue instanceof OntologyObject) {
-				getOntResource().addProperty(property.getOntProperty(), ((OntologyObject) newValue).getOntResource());
-				updateOntologyStatements();
-			}
-		}
-	}*/
-
 	@Override
 	public String getDisplayableDescription() {
 		String extendsLabel = " extends ";
@@ -307,6 +208,15 @@ public class OntologyIndividual extends OntologyObject<Individual> implements Co
 	}
 
 	@Override
+	protected void recursivelySearchRangeAndDomains() {
+		super.recursivelySearchRangeAndDomains();
+		for (OntologyClass aClass : getSuperClasses()) {
+			propertiesTakingMySelfAsRange.addAll(aClass.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(aClass.getPropertiesTakingMySelfAsDomain());
+		}
+	}
+
+	/*@Override
 	protected void recursivelySearchRangeAndDomains() {
 		super.recursivelySearchRangeAndDomains();
 		Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
@@ -333,7 +243,7 @@ public class OntologyIndividual extends OntologyObject<Individual> implements Co
 		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
 			_appendRangeAndDomains(superSuperClass, alreadyComputed);
 		}
-	}
+	}*/
 
 	@Override
 	public String getHTMLDescription() {

@@ -35,6 +35,7 @@ import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class GraphicalAction extends EditionAction {
@@ -53,7 +54,8 @@ public class GraphicalAction extends EditionAction {
 		}
 	};
 
-	public GraphicalAction() {
+	public GraphicalAction(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

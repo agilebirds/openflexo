@@ -1,6 +1,7 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -27,11 +28,11 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 	private OntologyObjectProperty ontologyProperty;
 
 	public static ObjectPropertyStatementPathElement makeObjectPropertyStatementPathElement(BindingPathElement aParent,
-			OntologyObjectProperty anOntologyProperty, boolean recursive) {
+			OntologyObjectProperty anOntologyProperty, boolean recursive, int levels) {
 		if (anOntologyProperty.isLiteralRange()) {
 			return new ObjectPropertyStatementAccessingLiteralPathElement(aParent, anOntologyProperty);
 		} else {
-			return new ObjectPropertyStatementAccessingObjectPathElement(aParent, anOntologyProperty, recursive);
+			return new ObjectPropertyStatementAccessingObjectPathElement(aParent, anOntologyProperty, recursive && levels > 0, levels - 1);
 		}
 	}
 
@@ -66,7 +67,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		private SimpleBindingPathElementImpl<String> uriProperty;
 
 		public ObjectPropertyStatementAccessingObjectPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty,
-				boolean recursive) {
+				boolean recursive, int levels) {
 			super(aParent, anOntologyProperty);
 
 			uriNameProperty = new SimpleBindingPathElementImpl<String>(URINameChanged.URI_NAME_KEY, TypeUtils.getBaseClass(getType()),
@@ -116,14 +117,14 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 			};
 			allProperties.add(uriProperty);
 
-			if (recursive) {
+			/*if (recursive && levels > 0) {
 				if (anOntologyProperty.getRange() instanceof OntologyClass) {
 					OntologyClass rangeClass = (OntologyClass) anOntologyProperty.getRange();
 					for (final OntologyProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
 						StatementPathElement propertyPathElement = null;
 						if (property instanceof OntologyObjectProperty) {
 							propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
-									(OntologyObjectProperty) property, false);
+									(OntologyObjectProperty) property, true, levels - 1);
 						} else if (property instanceof OntologyDataProperty) {
 							propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
 						}
@@ -132,8 +133,35 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 						}
 					}
 				}
-			}
+			}*/
 
+		}
+
+		@Override
+		public List<BindingPathElement> getAllProperties() {
+			if (!propertiesFound && getOntologyProperty().getRange() instanceof OntologyClass) {
+				searchProperties((OntologyClass) getOntologyProperty().getRange());
+			}
+			return allProperties;
+		}
+
+		boolean propertiesFound = false;
+
+		private void searchProperties(OntologyClass rangeClass) {
+
+			for (final OntologyProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
+				StatementPathElement propertyPathElement = null;
+				if (property instanceof OntologyObjectProperty) {
+					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
+							(OntologyObjectProperty) property, true, OntologyObjectPathElement.MAX_LEVELS);
+				} else if (property instanceof OntologyDataProperty) {
+					propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+				}
+				if (propertyPathElement != null) {
+					allProperties.add(propertyPathElement);
+				}
+			}
+			propertiesFound = true;
 		}
 
 		public BindingPathElement getUriNameProperty() {
@@ -194,7 +222,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		}
 	}
 
-	public static class ObjectPropertyStatementAccessingLiteralPathElement extends ObjectPropertyStatementPathElement<Literal> {
+	public static class ObjectPropertyStatementAccessingLiteralPathElement extends ObjectPropertyStatementPathElement<Object> {
 
 		private SimpleBindingPathElementImpl<String> asStringProperty;
 		private SimpleBindingPathElementImpl<Boolean> asBooleanProperty;
@@ -209,12 +237,14 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		public ObjectPropertyStatementAccessingLiteralPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty) {
 			super(aParent, anOntologyProperty);
 
-			asStringProperty = new SimpleBindingPathElementImpl<String>("asString", Literal.class, String.class, true,
+			asStringProperty = new SimpleBindingPathElementImpl<String>("asString", Object.class, String.class, true,
 					"string_value_for_literal") {
 				@Override
 				public String getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof Literal) {
 						return ((Literal) target).getString();
+					} else if (target instanceof String) {
+						return (String) target;
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -227,7 +257,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(asStringProperty);
-			asBooleanProperty = new SimpleBindingPathElementImpl<Boolean>("asBoolean", Literal.class, Boolean.class, true,
+			asBooleanProperty = new SimpleBindingPathElementImpl<Boolean>("asBoolean", Object.class, Boolean.class, true,
 					"boolean_value_for_literal") {
 				@Override
 				public Boolean getBindingValue(Object target, BindingEvaluationContext context) {
@@ -245,7 +275,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(asBooleanProperty);
-			asIntegerProperty = new SimpleBindingPathElementImpl<Integer>("asInteger", Literal.class, Integer.class, true,
+			asIntegerProperty = new SimpleBindingPathElementImpl<Integer>("asInteger", Object.class, Integer.class, true,
 					"int_value_for_literal") {
 				@Override
 				public Integer getBindingValue(Object target, BindingEvaluationContext context) {
@@ -263,7 +293,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(asIntegerProperty);
-			asByteProperty = new SimpleBindingPathElementImpl<Byte>("asByte", Literal.class, Byte.class, true, "byte_value_for_literal") {
+			asByteProperty = new SimpleBindingPathElementImpl<Byte>("asByte", Object.class, Byte.class, true, "byte_value_for_literal") {
 				@Override
 				public Byte getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof Literal) {
@@ -280,8 +310,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(asByteProperty);
-			asShortProperty = new SimpleBindingPathElementImpl<Short>("asShort", Literal.class, Short.class, true,
-					"short_value_for_literal") {
+			asShortProperty = new SimpleBindingPathElementImpl<Short>("asShort", Object.class, Short.class, true, "short_value_for_literal") {
 				@Override
 				public Short getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof Literal) {
@@ -298,7 +327,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(asShortProperty);
-			asLongProperty = new SimpleBindingPathElementImpl<Long>("asLong", Literal.class, Long.class, true, "long_value_for_literal") {
+			asLongProperty = new SimpleBindingPathElementImpl<Long>("asLong", Object.class, Long.class, true, "long_value_for_literal") {
 				@Override
 				public Long getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof Literal) {
@@ -315,7 +344,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(asLongProperty);
-			asCharProperty = new SimpleBindingPathElementImpl<Character>("asChar", Literal.class, Character.class, true,
+			asCharProperty = new SimpleBindingPathElementImpl<Character>("asChar", Object.class, Character.class, true,
 					"char_value_for_literal") {
 				@Override
 				public Character getBindingValue(Object target, BindingEvaluationContext context) {
@@ -333,8 +362,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(asCharProperty);
-			asFloatProperty = new SimpleBindingPathElementImpl<Float>("asFloat", Literal.class, Float.class, true,
-					"float_value_for_literal") {
+			asFloatProperty = new SimpleBindingPathElementImpl<Float>("asFloat", Object.class, Float.class, true, "float_value_for_literal") {
 				@Override
 				public Float getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof Literal) {
@@ -351,7 +379,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(asFloatProperty);
-			asDoubleProperty = new SimpleBindingPathElementImpl<Double>("asDouble", Literal.class, Double.class, true,
+			asDoubleProperty = new SimpleBindingPathElementImpl<Double>("asDouble", Object.class, Double.class, true,
 					"string_value_for_literal") {
 				@Override
 				public Double getBindingValue(Object target, BindingEvaluationContext context) {
@@ -368,23 +396,19 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 					logger.warning("not implemented");
 				}
 			};
-			allProperties.add(asStringProperty);
+			allProperties.add(asDoubleProperty);
 		}
 
 		@Override
 		public Type getType() {
-			return Literal.class;
+			return Object.class;
 		}
 
 		@Override
-		public Literal getBindingValue(Object target, BindingEvaluationContext context) {
-			if (target instanceof OntologyIndividual) {
-				OntologyIndividual individual = (OntologyIndividual) target;
-				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
-				if (statement != null) {
-					return statement.getLiteral();
-				}
-				return null;
+		public Object getBindingValue(Object target, BindingEvaluationContext context) {
+			if (target instanceof OntologyObject<?>) {
+				OntologyObject<?> object = (OntologyObject<?>) target;
+				return object.getPropertyValue(getOntologyProperty());
 			} else {
 				logger.warning("Unexpected target " + target + " while evaluateBinding()");
 				return null;
@@ -392,7 +416,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		}
 
 		@Override
-		public void setBindingValue(Literal value, Object target, BindingEvaluationContext context) {
+		public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
 			logger.warning("Implement me");
 			// individual.getPropertyChangeSupport().firePropertyChange(ontologyProperty.getName(), oldValue, value);
 		}

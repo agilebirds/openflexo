@@ -2,7 +2,7 @@
 
 <!-- Mapping model for calc palette -->
 
-<model handlesReferences="yes" serializationMode="pseudoTree"> 
+<model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
 
   <entity name="org.openflexo.foundation.viewpoint.ViewPointPalette" xmlTag="Palette"> 
     <property name="index" xmlTag="index" attribute="YES"/> 

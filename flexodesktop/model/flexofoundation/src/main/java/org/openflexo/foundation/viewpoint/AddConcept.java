@@ -23,13 +23,15 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.logging.FlexoLogger;
 
 public abstract class AddConcept extends AssignableAction {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
-	public AddConcept() {
+	public AddConcept(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public abstract OntologyClass getOntologyClass();

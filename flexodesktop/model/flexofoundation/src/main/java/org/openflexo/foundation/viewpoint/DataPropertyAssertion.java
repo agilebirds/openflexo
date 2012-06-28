@@ -27,11 +27,16 @@ import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class DataPropertyAssertion extends AbstractAssertion {
 
 	private String dataPropertyURI;
+
+	public DataPropertyAssertion(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	public String _getDataPropertyURI() {
 		return dataPropertyURI;

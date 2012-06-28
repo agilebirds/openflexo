@@ -22,8 +22,8 @@ package org.openflexo.foundation;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
@@ -353,14 +353,26 @@ public abstract class FlexoTestCase extends TestCase {
 	 * @param objects
 	 * @throws AssertionFailedError
 	 */
-	public <T> void assertSameList(List<T> aList, T... objects) throws AssertionFailedError {
+	public <T> void assertSameList(Collection<T> aList, T... objects) throws AssertionFailedError {
 		Set<T> set1 = new HashSet<T>(aList);
 		Set<T> set2 = new HashSet<T>();
 		for (T o : objects) {
 			set2.add(o);
 		}
 		if (!set1.equals(set2)) {
-			throw new AssertionFailedError("AssertionFailedError when comparing lists, expected: " + set1 + " but was " + set2);
+			StringBuffer message = new StringBuffer();
+			for (T o : set1) {
+				if (!set2.contains(o)) {
+					message.append(" Extra: " + o);
+				}
+			}
+			for (T o : set2) {
+				if (!set1.contains(o)) {
+					message.append(" Missing: " + o);
+				}
+			}
+			throw new AssertionFailedError("AssertionFailedError when comparing lists, expected: " + set1 + " but was " + set2
+					+ " Details = " + message);
 		}
 	}
 

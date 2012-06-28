@@ -33,6 +33,7 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
@@ -45,8 +46,8 @@ public class AddIndividual extends AddConcept {
 	private Vector<ObjectPropertyAssertion> objectAssertions;
 	private String ontologyClassURI = null;
 
-	public AddIndividual() {
-		super();
+	public AddIndividual(ViewPointBuilder builder) {
+		super(builder);
 		dataAssertions = new Vector<DataPropertyAssertion>();
 		objectAssertions = new Vector<ObjectPropertyAssertion>();
 	}
@@ -149,7 +150,7 @@ public class AddIndividual extends AddConcept {
 	}
 
 	public DataPropertyAssertion createDataPropertyAssertion() {
-		DataPropertyAssertion newDataPropertyAssertion = new DataPropertyAssertion();
+		DataPropertyAssertion newDataPropertyAssertion = new DataPropertyAssertion(null);
 		addToDataAssertions(newDataPropertyAssertion);
 		return newDataPropertyAssertion;
 	}
@@ -179,7 +180,7 @@ public class AddIndividual extends AddConcept {
 	}
 
 	public ObjectPropertyAssertion createObjectPropertyAssertion() {
-		ObjectPropertyAssertion newObjectPropertyAssertion = new ObjectPropertyAssertion();
+		ObjectPropertyAssertion newObjectPropertyAssertion = new ObjectPropertyAssertion(null);
 		addToObjectAssertions(newObjectPropertyAssertion);
 		return newObjectPropertyAssertion;
 	}

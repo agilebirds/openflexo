@@ -20,11 +20,12 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class CreationScheme extends AbstractCreationScheme {
 
-	public CreationScheme() {
-		super();
+	public CreationScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

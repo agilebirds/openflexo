@@ -34,6 +34,8 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
+@Deprecated
+// Use FIBPropertySelector instead
 public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyProperty> {
 
 	protected static final String EMPTY_STRING = "";

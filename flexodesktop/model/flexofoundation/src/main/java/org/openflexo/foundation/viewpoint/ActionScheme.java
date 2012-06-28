@@ -20,11 +20,12 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ActionScheme extends AbstractActionScheme {
 
-	public ActionScheme() {
-		super();
+	public ActionScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

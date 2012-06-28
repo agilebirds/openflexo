@@ -26,13 +26,13 @@ import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OWL2URIDefinitions;
-import org.openflexo.foundation.ontology.RDFURIDefinitions;
 import org.openflexo.foundation.ontology.RDFSURIDefinitions;
+import org.openflexo.foundation.ontology.RDFURIDefinitions;
 import org.openflexo.toolbox.FileResource;
 
 public class TestOntologyBrowserModel extends FlexoTestCase {
@@ -98,7 +98,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -108,7 +109,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -192,7 +194,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -202,7 +205,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -269,7 +273,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -279,7 +284,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -339,7 +345,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -349,7 +356,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -420,7 +428,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -430,7 +439,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -498,7 +508,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -508,7 +519,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -578,7 +590,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -588,7 +601,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -638,8 +652,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty bottomObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "bottomObjectProperty");
 		assertNotNull(bottomObjectProperty);
-		OntologyDataProperty bottomDataProperty = owlOntology
-				.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "bottomDataProperty");
+		OntologyDataProperty bottomDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "bottomDataProperty");
 		assertNotNull(bottomDataProperty);
 		OntologyDataProperty topDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topDataProperty");
 		assertNotNull(topDataProperty);
@@ -678,7 +692,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(propertyDisjointWithProperty);
 		OntologyObjectProperty unionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "unionOf");
 		assertNotNull(unionOfProperty);
-		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "versionInfo");
+		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "versionInfo");
 		assertNotNull(versionInfoProperty);
 		OntologyObjectProperty withRestrictionsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "withRestrictions");
@@ -696,11 +711,11 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty disjointUnionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "disjointUnionOf");
 		assertNotNull(disjointUnionOfProperty);
-		OntologyObjectProperty complementOfProperty = owlOntology
-				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "complementOf");
+		OntologyObjectProperty complementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "complementOf");
 		assertNotNull(complementOfProperty);
-		OntologyObjectProperty disjointWithProperty = owlOntology
-				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "disjointWith");
+		OntologyObjectProperty disjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "disjointWith");
 		assertNotNull(disjointWithProperty);
 		OntologyObjectProperty sourceIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "sourceIndividual");
@@ -708,7 +723,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty assertionPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "assertionProperty");
 		assertNotNull(assertionPropertyProperty);
-		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "targetValue");
+		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "targetValue");
 		assertNotNull(targetValueProperty);
 		OntologyObjectProperty targetIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "targetIndividual");
@@ -807,7 +823,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -817,7 +834,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -867,8 +885,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty bottomObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "bottomObjectProperty");
 		assertNotNull(bottomObjectProperty);
-		OntologyDataProperty bottomDataProperty = owlOntology
-				.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "bottomDataProperty");
+		OntologyDataProperty bottomDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "bottomDataProperty");
 		assertNotNull(bottomDataProperty);
 		OntologyDataProperty topDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topDataProperty");
 		assertNotNull(topDataProperty);
@@ -906,7 +924,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(propertyDisjointWithProperty);
 		OntologyObjectProperty unionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "unionOf");
 		assertNotNull(unionOfProperty);
-		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "versionInfo");
+		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "versionInfo");
 		assertNotNull(versionInfoProperty);
 		OntologyObjectProperty withRestrictionsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "withRestrictions");
@@ -924,11 +943,11 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty disjointUnionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "disjointUnionOf");
 		assertNotNull(disjointUnionOfProperty);
-		OntologyObjectProperty complementOfProperty = owlOntology
-				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "complementOf");
+		OntologyObjectProperty complementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "complementOf");
 		assertNotNull(complementOfProperty);
-		OntologyObjectProperty disjointWithProperty = owlOntology
-				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "disjointWith");
+		OntologyObjectProperty disjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "disjointWith");
 		assertNotNull(disjointWithProperty);
 		OntologyObjectProperty sourceIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "sourceIndividual");
@@ -936,7 +955,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty assertionPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "assertionProperty");
 		assertNotNull(assertionPropertyProperty);
-		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "targetValue");
+		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "targetValue");
 		assertNotNull(targetValueProperty);
 		OntologyObjectProperty targetIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "targetIndividual");
@@ -1033,7 +1053,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -1043,7 +1064,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -1093,8 +1115,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty bottomObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "bottomObjectProperty");
 		assertNotNull(bottomObjectProperty);
-		OntologyDataProperty bottomDataProperty = owlOntology
-				.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "bottomDataProperty");
+		OntologyDataProperty bottomDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "bottomDataProperty");
 		assertNotNull(bottomDataProperty);
 		OntologyDataProperty topDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topDataProperty");
 		assertNotNull(topDataProperty);
@@ -1132,7 +1154,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(propertyDisjointWithProperty);
 		OntologyObjectProperty unionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "unionOf");
 		assertNotNull(unionOfProperty);
-		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "versionInfo");
+		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "versionInfo");
 		assertNotNull(versionInfoProperty);
 		OntologyObjectProperty withRestrictionsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "withRestrictions");
@@ -1150,11 +1173,11 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty disjointUnionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "disjointUnionOf");
 		assertNotNull(disjointUnionOfProperty);
-		OntologyObjectProperty complementOfProperty = owlOntology
-				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "complementOf");
+		OntologyObjectProperty complementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "complementOf");
 		assertNotNull(complementOfProperty);
-		OntologyObjectProperty disjointWithProperty = owlOntology
-				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "disjointWith");
+		OntologyObjectProperty disjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "disjointWith");
 		assertNotNull(disjointWithProperty);
 		OntologyObjectProperty sourceIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "sourceIndividual");
@@ -1162,7 +1185,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty assertionPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "assertionProperty");
 		assertNotNull(assertionPropertyProperty);
-		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "targetValue");
+		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "targetValue");
 		assertNotNull(targetValueProperty);
 		OntologyObjectProperty targetIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "targetIndividual");
@@ -1245,7 +1269,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -1255,7 +1280,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -1305,8 +1331,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty bottomObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "bottomObjectProperty");
 		assertNotNull(bottomObjectProperty);
-		OntologyDataProperty bottomDataProperty = owlOntology
-				.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "bottomDataProperty");
+		OntologyDataProperty bottomDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "bottomDataProperty");
 		assertNotNull(bottomDataProperty);
 		OntologyDataProperty topDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topDataProperty");
 		assertNotNull(topDataProperty);
@@ -1437,7 +1463,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(labelProperty);
 		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
 		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
@@ -1447,7 +1474,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(domainProperty);
 		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
 		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
@@ -1497,8 +1525,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty bottomObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "bottomObjectProperty");
 		assertNotNull(bottomObjectProperty);
-		OntologyDataProperty bottomDataProperty = owlOntology
-				.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "bottomDataProperty");
+		OntologyDataProperty bottomDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "bottomDataProperty");
 		assertNotNull(bottomDataProperty);
 		OntologyDataProperty topDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topDataProperty");
 		assertNotNull(topDataProperty);
@@ -1537,7 +1565,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		assertNotNull(propertyDisjointWithProperty);
 		OntologyObjectProperty unionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "unionOf");
 		assertNotNull(unionOfProperty);
-		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "versionInfo");
+		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "versionInfo");
 		assertNotNull(versionInfoProperty);
 		OntologyObjectProperty withRestrictionsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "withRestrictions");
@@ -1555,11 +1584,11 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty disjointUnionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "disjointUnionOf");
 		assertNotNull(disjointUnionOfProperty);
-		OntologyObjectProperty complementOfProperty = owlOntology
-				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "complementOf");
+		OntologyObjectProperty complementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "complementOf");
 		assertNotNull(complementOfProperty);
-		OntologyObjectProperty disjointWithProperty = owlOntology
-				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "disjointWith");
+		OntologyObjectProperty disjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "disjointWith");
 		assertNotNull(disjointWithProperty);
 		OntologyObjectProperty sourceIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "sourceIndividual");
@@ -1567,7 +1596,8 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 		OntologyObjectProperty assertionPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "assertionProperty");
 		assertNotNull(assertionPropertyProperty);
-		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "targetValue");
+		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "targetValue");
 		assertNotNull(targetValueProperty);
 		OntologyObjectProperty targetIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "targetIndividual");
@@ -1749,4 +1779,210 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 
 	}
 
+	public void test13AssertTestPropertiesOntology() {
+		log("test13AssertTestPropertiesOntology()");
+		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				"http://www.openflexo.org/test/TestProperties.owl");
+		assertNotNull(ontology);
+
+		ontology.loadWhenUnloaded();
+		assertTrue(ontology.isLoaded());
+
+		OntologyClass conceptA = ontology.getClass(ontology.getURI() + "#ConceptA");
+		assertNotNull(conceptA);
+		OntologyClass conceptB = ontology.getClass(ontology.getURI() + "#ConceptB");
+		assertNotNull(conceptB);
+		OntologyClass conceptC = ontology.getClass(ontology.getURI() + "#ConceptC");
+		assertNotNull(conceptC);
+		OntologyClass conceptD = ontology.getClass(ontology.getURI() + "#ConceptD");
+		assertNotNull(conceptD);
+		OntologyClass conceptE = ontology.getClass(ontology.getURI() + "#ConceptE");
+		assertNotNull(conceptE);
+		OntologyClass conceptF = ontology.getClass(ontology.getURI() + "#ConceptF");
+		assertNotNull(conceptF);
+		OntologyClass conceptG = ontology.getClass(ontology.getURI() + "#ConceptG");
+		assertNotNull(conceptG);
+		OntologyClass conceptH = ontology.getClass(ontology.getURI() + "#ConceptH");
+		assertNotNull(conceptH);
+		OntologyClass conceptX = ontology.getClass(ontology.getURI() + "#ConceptX");
+		assertNotNull(conceptX);
+
+		OntologyObjectProperty property1 = ontology.getObjectProperty(ontology.getURI() + "#property1");
+		assertNotNull(property1);
+		OntologyObjectProperty property2 = ontology.getObjectProperty(ontology.getURI() + "#property2");
+		assertNotNull(property2);
+		OntologyObjectProperty property3 = ontology.getObjectProperty(ontology.getURI() + "#property3");
+		assertNotNull(property3);
+		OntologyObjectProperty property4 = ontology.getObjectProperty(ontology.getURI() + "#property4");
+		assertNotNull(property4);
+
+		// Some tests on ancestors computing
+		assertEquals(conceptB, OntologyClass.getFirstCommonAncestor(conceptF, conceptE));
+		assertEquals(conceptC, OntologyClass.getFirstCommonAncestor(conceptH, conceptG));
+		assertEquals(conceptA, OntologyClass.getFirstCommonAncestor(conceptF, conceptG));
+		assertEquals(conceptA, OntologyClass.getFirstCommonAncestor(conceptC, conceptE));
+		assertEquals(conceptC, OntologyClass.getFirstCommonAncestor(conceptC, conceptH));
+		assertEquals(ontology.getThingConcept(), OntologyClass.getFirstCommonAncestor(conceptA, conceptX));
+
+		OntologyBrowserModel obm = new OntologyBrowserModel(ontology);
+		obm.setStrictMode(true);
+		obm.setHierarchicalMode(true);
+		obm.setDisplayPropertiesInClasses(true);
+		obm.setShowOWLAndRDFConcepts(false);
+		obm.setShowClasses(false);
+		obm.setShowIndividuals(false);
+		obm.setShowObjectProperties(true);
+		obm.setShowDataProperties(true);
+		obm.setShowAnnotationProperties(true);
+		obm.recomputeStructure();
+
+	}
+
+	public void test14AssertSepelMappingOntology() {
+		log("test14AssertSepelMappingOntology()");
+
+		String MAPPING_SPECS_URI = "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl";
+		String INPUT_MODEL_1_URI = "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl";
+		String INPUT_MODEL_2_URI = "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel2.owl";
+		String OUTPUT_MODEL_1_URI = "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel1.owl";
+		String OUTPUT_MODEL_2_URI = "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel2.owl";
+		String OUTPUT_MODEL_3_URI = "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELOutputModel3.owl";
+
+		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				"http://www.thalesgroup.com/ViewPoints/sepel-ng/MappingSpecification.owl");
+		assertNotNull(ontology);
+
+		ontology.loadWhenUnloaded();
+		assertTrue(ontology.isLoaded());
+
+		FlexoOntology mappingSpecsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(MAPPING_SPECS_URI);
+		assertNotNull(mappingSpecsOntology);
+		assertTrue(mappingSpecsOntology.isLoaded());
+
+		FlexoOntology inputModel1Ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(INPUT_MODEL_1_URI);
+		assertNotNull(inputModel1Ontology);
+		assertTrue(inputModel1Ontology.isLoaded());
+
+		FlexoOntology inputModel2Ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(INPUT_MODEL_2_URI);
+		assertNotNull(inputModel2Ontology);
+		assertTrue(inputModel2Ontology.isLoaded());
+
+		FlexoOntology outputModel1Ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(OUTPUT_MODEL_1_URI);
+		assertNotNull(outputModel1Ontology);
+		assertTrue(outputModel1Ontology.isLoaded());
+
+		FlexoOntology outputModel2Ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(OUTPUT_MODEL_2_URI);
+		assertNotNull(outputModel2Ontology);
+		assertTrue(outputModel2Ontology.isLoaded());
+
+		FlexoOntology outputModel3Ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(OUTPUT_MODEL_3_URI);
+		assertNotNull(outputModel3Ontology);
+		assertTrue(outputModel3Ontology.isLoaded());
+
+		OntologyClass rootClassForInputModel1 = ontology.getClass(inputModel1Ontology.getURI() + "#RootClassForInputModel1");
+		assertNotNull(rootClassForInputModel1);
+
+		OntologyClass rootClassForInputModel2 = ontology.getClass(inputModel2Ontology.getURI() + "#RootClassForInputModel2");
+		assertNotNull(rootClassForInputModel2);
+
+		OntologyClass rootClassForOutputModel1 = ontology.getClass(outputModel1Ontology.getURI() + "#RootClassForOutputModel1");
+		assertNotNull(rootClassForOutputModel1);
+
+		OntologyClass rootClassForOutputModel2 = ontology.getClass(outputModel2Ontology.getURI() + "#RootClassForOutputModel2");
+		assertNotNull(rootClassForOutputModel2);
+
+		OntologyClass rootClassForOutputModel3 = ontology.getClass(outputModel3Ontology.getURI() + "#RootClassForOutputModel3");
+		assertNotNull(rootClassForOutputModel3);
+
+		OntologyClass inputModelObject = ontology.getClass(mappingSpecsOntology.getURI() + "#InputModelObject");
+		assertNotNull(inputModelObject);
+
+		OntologyClass outputModelObject = ontology.getClass(mappingSpecsOntology.getURI() + "#OutputModelObject");
+		assertNotNull(outputModelObject);
+
+		OntologyClass mappingSpecificationObject = ontology.getClass(mappingSpecsOntology.getURI() + "#MappingSpecificationObject");
+		assertNotNull(mappingSpecificationObject);
+
+		assertTrue(inputModelObject.redefinesOriginalDefinition());
+		assertEquals(mappingSpecsOntology.getClass(mappingSpecsOntology.getURI() + "#InputModelObject"),
+				inputModelObject.getOriginalDefinition());
+
+		assertTrue(outputModelObject.redefinesOriginalDefinition());
+		assertEquals(mappingSpecsOntology.getClass(mappingSpecsOntology.getURI() + "#OutputModelObject"),
+				outputModelObject.getOriginalDefinition());
+
+		assertTrue(rootClassForInputModel1.redefinesOriginalDefinition());
+		assertEquals(inputModel1Ontology.getClass(inputModel1Ontology.getURI() + "#RootClassForInputModel1"),
+				rootClassForInputModel1.getOriginalDefinition());
+
+		assertTrue(rootClassForInputModel2.redefinesOriginalDefinition());
+		assertEquals(inputModel2Ontology.getClass(inputModel2Ontology.getURI() + "#RootClassForInputModel2"),
+				rootClassForInputModel2.getOriginalDefinition());
+
+		assertTrue(rootClassForOutputModel1.redefinesOriginalDefinition());
+		assertEquals(outputModel1Ontology.getClass(outputModel1Ontology.getURI() + "#RootClassForOutputModel1"),
+				rootClassForOutputModel1.getOriginalDefinition());
+
+		assertTrue(rootClassForOutputModel2.redefinesOriginalDefinition());
+		assertEquals(outputModel2Ontology.getClass(outputModel2Ontology.getURI() + "#RootClassForOutputModel2"),
+				rootClassForOutputModel2.getOriginalDefinition());
+
+		assertTrue(rootClassForOutputModel3.redefinesOriginalDefinition());
+		assertEquals(outputModel3Ontology.getClass(outputModel3Ontology.getURI() + "#RootClassForOutputModel3"),
+				rootClassForOutputModel3.getOriginalDefinition());
+
+		assertTrue(inputModelObject.isSuperConceptOf(rootClassForInputModel1));
+		assertTrue(inputModelObject.isSuperConceptOf(rootClassForInputModel2));
+		assertTrue(outputModelObject.isSuperConceptOf(rootClassForOutputModel1));
+		assertTrue(outputModelObject.isSuperConceptOf(rootClassForOutputModel2));
+		assertTrue(outputModelObject.isSuperConceptOf(rootClassForOutputModel3));
+
+		OntologyBrowserModel obm = new OntologyBrowserModel(ontology);
+		obm.setStrictMode(false);
+		obm.setHierarchicalMode(true);
+		obm.setDisplayPropertiesInClasses(true);
+		obm.setShowOWLAndRDFConcepts(false);
+		obm.setShowClasses(true);
+		obm.setShowIndividuals(false);
+		obm.setShowObjectProperties(true);
+		obm.setShowDataProperties(true);
+		obm.setShowAnnotationProperties(true);
+		obm.recomputeStructure();
+
+		assertSameList(obm.getChildren(ontology.getThingConcept()), inputModelObject, outputModelObject, mappingSpecificationObject);
+
+		// We want now to see only properties, lets look at the infered class hierarchy
+		obm.setShowClasses(false);
+		obm.recomputeStructure();
+
+		assertSameList(obm.getRoots(), ontology.getThingConcept());
+		assertSameList(obm.getChildren(ontology.getThingConcept()), rootClassForInputModel1, rootClassForOutputModel1,
+				mappingSpecificationObject);
+
+		// Now we want to see only properties below rootClass
+		obm.setRootClass(rootClassForInputModel1);
+		obm.recomputeStructure();
+
+		OntologyClass etat = ontology.getClass(inputModel1Ontology.getURI() + "#Etat");
+		assertNotNull(etat);
+		OntologyClass descriptionSpatiale = ontology.getClass(inputModel1Ontology.getURI() + "#DescriptionSpatiale");
+		assertNotNull(descriptionSpatiale);
+		OntologyClass emetteur = ontology.getClass(inputModel1Ontology.getURI() + "#Emetteur");
+		assertNotNull(emetteur);
+		OntologyClass descriptionSpectrale = ontology.getClass(inputModel1Ontology.getURI() + "#DescriptionSpectrale");
+		assertNotNull(descriptionSpectrale);
+		OntologyClass descriptionTemporelle = ontology.getClass(inputModel1Ontology.getURI() + "#DescriptionTemporelle");
+		assertNotNull(descriptionTemporelle);
+		OntologyClass intervalleComplexe = ontology.getClass(inputModel1Ontology.getURI() + "#IntervalleComplexe");
+		assertNotNull(intervalleComplexe);
+		OntologyClass frequence = ontology.getClass(inputModel1Ontology.getURI() + "#Frequence");
+		assertNotNull(frequence);
+		OntologyClass contenu = ontology.getClass(inputModel1Ontology.getURI() + "#Contenu");
+		assertNotNull(contenu);
+
+		assertSameList(obm.getRoots(), rootClassForInputModel1);
+		assertSameList(obm.getChildren(rootClassForInputModel1), etat, descriptionSpatiale, emetteur, descriptionSpectrale,
+				descriptionTemporelle, intervalleComplexe, frequence, contenu);
+
+	}
 }

@@ -30,6 +30,7 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyRestrictionClass.RestrictionType;
 import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddRestrictionStatement extends AddStatement {
@@ -38,7 +39,8 @@ public class AddRestrictionStatement extends AddStatement {
 
 	private String propertyURI;
 
-	public AddRestrictionStatement() {
+	public AddRestrictionStatement(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

@@ -23,10 +23,15 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class DataPropertyParameter extends PropertyParameter {
 
 	private OntologicDataType dataType;
+
+	public DataPropertyParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public Type getType() {

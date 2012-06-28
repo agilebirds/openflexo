@@ -36,6 +36,7 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -45,8 +46,8 @@ public class AddObjectPropertyStatement extends AddStatement {
 
 	private String objectPropertyURI = null;
 
-	public AddObjectPropertyStatement() {
-		super();
+	public AddObjectPropertyStatement(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

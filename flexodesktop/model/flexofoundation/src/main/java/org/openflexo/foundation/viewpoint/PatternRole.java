@@ -24,6 +24,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -55,7 +56,8 @@ public abstract class PatternRole extends EditionPatternObject {
 	private String patternRoleName;
 	private String description;
 
-	public PatternRole() {
+	public PatternRole(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public void setEditionPattern(EditionPattern pattern) {

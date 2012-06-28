@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<model handlesReferences="yes" serializationMode="pseudoTree">
+<model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder"  handlesReferences="yes" serializationMode="pseudoTree">
+
+  <entity name="org.openflexo.foundation.viewpoint.ViewPointObject" abstract="YES" finalizer="finalizeDeserialization">
+   <description>Root class for all objects of ViewPoint model</description>
+  </entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.ViewPoint"
 		xmlTag="ViewPoint" finalizer="finalizeCalcDeserialization">

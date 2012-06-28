@@ -33,6 +33,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddEditionPattern extends AssignableAction {
@@ -43,7 +44,8 @@ public class AddEditionPattern extends AssignableAction {
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
 
-	public AddEditionPattern() {
+	public AddEditionPattern(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -211,11 +213,12 @@ public class AddEditionPattern extends AssignableAction {
 		private BindingDefinition BD;
 
 		// Use it only for deserialization
-		public AddEditionPatternParameter() {
-			super();
+		public AddEditionPatternParameter(ViewPointBuilder builder) {
+			super(builder);
 		}
 
 		public AddEditionPatternParameter(EditionSchemeParameter param) {
+			super(null);
 			this.param = param;
 			BD = new BindingDefinition(param.getName(), param.getType(), BindingDefinitionType.GET, true);
 		}

@@ -4,8 +4,13 @@ import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ClassPatternRole extends OntologicObjectPatternRole {
+
+	public ClassPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {

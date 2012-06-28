@@ -28,6 +28,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.components.widget.FIBIndividualSelector;
+import org.openflexo.components.widget.FIBPropertySelector;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.model.BorderLayoutConstraints;
@@ -327,11 +329,21 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			}
 		} else if (parameter instanceof IndividualParameter) {
 			FIBCustom individualSelector = new FIBCustom();
-			individualSelector.setComponentClass(org.openflexo.components.widget.OntologyIndividualSelector.class);
+			individualSelector.setComponentClass(FIBIndividualSelector.class);
+			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
+			// component.context = xxx
 			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.project"),
 					new DataBinding("data.project"), true));
+			/*individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector,
+					new DataBinding("component.contextOntologyURI"), new DataBinding('"' + parameter.getViewPoint().getViewpointOntology()
+							.getURI() + '"') {
+						@Override
+						public BindingFactory getBindingFactory() {
+							return parameter.getBindingFactory();
+						}
+					}, true));*/
 			// Quick and dirty hack to configure IndividualSelector: refactor this when new binding model will be in use
-			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.ontologyClassURI"),
+			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.typeURI"),
 					new DataBinding('"' + ((IndividualParameter) parameter)._getConceptURI() + '"') {
 						@Override
 						public BindingFactory getBindingFactory() {
@@ -354,13 +366,13 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			// component.context = xxx
 			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.project"), new DataBinding(
 					"data.project"), true));
-			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.contextOntologyURI"),
+			/*classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.contextOntologyURI"),
 					new DataBinding('"' + classParameter.getViewPoint().getViewpointOntology().getURI() + '"') {
 						@Override
 						public BindingFactory getBindingFactory() {
 							return parameter.getBindingFactory();
 						}
-					}, true));
+					}, true));*/
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
 			OntologyClass conceptClass = null;
 			if (classParameter.getIsDynamicConceptValue()) {
@@ -388,9 +400,19 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		} else if (parameter instanceof PropertyParameter) {
 			PropertyParameter propertyParameter = (PropertyParameter) parameter;
 			FIBCustom propertySelector = new FIBCustom();
-			propertySelector.setComponentClass(org.openflexo.components.widget.OntologyPropertySelector.class);
+			propertySelector.setComponentClass(FIBPropertySelector.class);
+			// Quick and dirty hack to configure FIBPropertySelector: refactor this when new binding model will be in use
+			// component.context = xxx
 			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.project"),
 					new DataBinding("data.project"), true));
+			/*propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.contextOntologyURI"),
+					new DataBinding('"' + propertyParameter.getViewPoint().getViewpointOntology().getURI() + '"') {
+						@Override
+						public BindingFactory getBindingFactory() {
+							return parameter.getBindingFactory();
+						}
+					}, true));*/
+
 			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
 			OntologyClass domainClass = null;
 			if (propertyParameter.getIsDynamicDomainValue()) {

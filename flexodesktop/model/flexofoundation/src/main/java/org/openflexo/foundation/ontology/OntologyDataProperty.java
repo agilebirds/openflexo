@@ -115,4 +115,19 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 		return true;
 	}
 
+	@Override
+	protected void recursivelySearchRangeAndDomains() {
+		super.recursivelySearchRangeAndDomains();
+		for (OntologyProperty aProperty : getSuperProperties()) {
+			propertiesTakingMySelfAsRange.addAll(aProperty.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(aProperty.getPropertiesTakingMySelfAsDomain());
+		}
+		OntologyClass DATA_PROPERTY_CONCEPT = getOntology().getClass(OWL_DATA_PROPERTY_URI);
+		// DATA_PROPERTY_CONCEPT is generally non null but can be null when reading RDFS for example
+		if (DATA_PROPERTY_CONCEPT != null) {
+			propertiesTakingMySelfAsRange.addAll(DATA_PROPERTY_CONCEPT.getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(DATA_PROPERTY_CONCEPT.getPropertiesTakingMySelfAsDomain());
+		}
+	}
+
 }

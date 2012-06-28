@@ -35,13 +35,15 @@ import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddConnector extends AddShemaElementAction {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public AddConnector() {
+	public AddConnector(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

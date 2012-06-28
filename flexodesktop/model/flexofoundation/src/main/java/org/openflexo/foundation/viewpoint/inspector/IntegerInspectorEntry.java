@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+
 /**
  * Represents an inspector entry for an integer
  * 
@@ -26,6 +28,10 @@ package org.openflexo.foundation.viewpoint.inspector;
  * 
  */
 public class IntegerInspectorEntry extends InspectorEntry {
+
+	public IntegerInspectorEntry(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public Class getDefaultDataClass() {

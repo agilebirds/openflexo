@@ -2,11 +2,16 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public abstract class PropertyPatternRole extends OntologicObjectPatternRole {
 
 	private String parentPropertyURI;
 	private String domainURI;
+
+	public PropertyPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	public String _getParentPropertyURI() {
 		return parentPropertyURI;

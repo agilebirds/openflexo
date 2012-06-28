@@ -67,6 +67,9 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
+		/*if (df == null) {
+			System.out.println("Binding " + this + " has been created with NULL binding definition !!!");
+		}*/
 	}
 
 	public ViewPointDataBinding(String unparsed) {
@@ -101,6 +104,9 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 
 	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		this.bindingDefinition = bindingDefinition;
+		/*if (bindingDefinition == null) {
+			System.out.println("Binding " + this + " has been set with NULL binding definition !!!");
+		}*/
 	}
 
 	public AbstractBinding getBinding() {

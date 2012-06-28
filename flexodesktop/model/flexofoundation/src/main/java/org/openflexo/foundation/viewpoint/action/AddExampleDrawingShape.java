@@ -83,7 +83,7 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 			throw new InvalidParametersException("folder is undefined");
 		}
 
-		_newShape = new ExampleDrawingShape();
+		_newShape = new ExampleDrawingShape(null);
 		if (graphicalRepresentation != null) {
 			_newShape.setGraphicalRepresentation(graphicalRepresentation);
 		}

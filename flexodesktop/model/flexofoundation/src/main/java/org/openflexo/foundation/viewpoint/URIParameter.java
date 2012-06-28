@@ -29,6 +29,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
 import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
@@ -38,6 +39,10 @@ public class URIParameter extends EditionSchemeParameter {
 	private ViewPointDataBinding baseURI;
 
 	private BindingDefinition BASE_URI = new BindingDefinition("baseURI", String.class, BindingDefinitionType.GET, true);
+
+	public URIParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	public BindingDefinition getBaseURIBindingDefinition() {
 		return BASE_URI;

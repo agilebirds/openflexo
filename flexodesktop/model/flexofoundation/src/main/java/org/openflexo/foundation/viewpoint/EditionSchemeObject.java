@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+
 /**
  * Represents an object which is part of the model of an EditionScheme
  * 
@@ -26,6 +28,10 @@ package org.openflexo.foundation.viewpoint;
  * 
  */
 public abstract class EditionSchemeObject extends EditionPatternObject {
+
+	public EditionSchemeObject(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	public abstract EditionScheme getEditionScheme();
 

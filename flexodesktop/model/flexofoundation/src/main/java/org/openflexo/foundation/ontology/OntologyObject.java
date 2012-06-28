@@ -19,6 +19,9 @@
  */
 package org.openflexo.foundation.ontology;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -74,10 +77,10 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 
 	private boolean domainsAndRangesAreUpToDate = false;
 	private boolean domainsAndRangesAreRecursivelyUpToDate = false;
-	private Vector<OntologyProperty> declaredPropertiesTakingMySelfAsRange;
-	private Vector<OntologyProperty> declaredPropertiesTakingMySelfAsDomain;
-	protected Vector<OntologyProperty> propertiesTakingMySelfAsRange;
-	protected Vector<OntologyProperty> propertiesTakingMySelfAsDomain;
+	private Set<OntologyProperty> declaredPropertiesTakingMySelfAsRange;
+	private Set<OntologyProperty> declaredPropertiesTakingMySelfAsDomain;
+	protected Set<OntologyProperty> propertiesTakingMySelfAsRange;
+	protected Set<OntologyProperty> propertiesTakingMySelfAsDomain;
 
 	private String uri;
 	private String name;
@@ -102,10 +105,10 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		_semanticStatements = new Vector<OntologyStatement>();
 		_annotationStatements = new Vector<PropertyStatement>();
 		_annotationObjectsStatements = new Vector<ObjectPropertyStatement>();
-		propertiesTakingMySelfAsRange = new Vector<OntologyProperty>();
-		propertiesTakingMySelfAsDomain = new Vector<OntologyProperty>();
-		declaredPropertiesTakingMySelfAsRange = new Vector<OntologyProperty>();
-		declaredPropertiesTakingMySelfAsDomain = new Vector<OntologyProperty>();
+		propertiesTakingMySelfAsRange = new HashSet<OntologyProperty>();
+		propertiesTakingMySelfAsDomain = new HashSet<OntologyProperty>();
+		declaredPropertiesTakingMySelfAsRange = new HashSet<OntologyProperty>();
+		declaredPropertiesTakingMySelfAsDomain = new HashSet<OntologyProperty>();
 	}
 
 	@Override
@@ -579,6 +582,113 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		return (!getIsReadOnly());
 	}
 
+	/**
+	 * Return the value defined for supplied property, asserting that current individual defines one and only one assertion for this
+	 * property.<br>
+	 * <ul>
+	 * <li>If many assertions for this properties are defined for this individual, then the first assertion is used<br>
+	 * Special case: if supplied property is an annotation property defined on a literal (datatype property) then the returned value will
+	 * match the current language as defined in FlexoLocalization.</li>
+	 * <li>If no assertion is defined for this property, then the result will be null</li>
+	 * </ul>
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public Object getPropertyValue(OntologyProperty property) {
+		if (property == null) {
+			logger.warning("getPropertyValue() called for null property");
+			return null;
+		}
+		if (property.isAnnotationProperty() && property instanceof OntologyDataProperty
+				&& getAnnotationStatements((OntologyDataProperty) property).size() > 1) {
+			return getAnnotationValue((OntologyDataProperty) property, FlexoLocalization.getCurrentLanguage());
+		}
+
+		// Special case for label annotation
+		if (property.equalsToConcept(property.getOntology().getProperty(RDFS_LABEL_URI)) && getPropertyStatement(property) == null) {
+			// If label is requested and no label annotation are set, return uriName
+			return getName();
+		}
+
+		PropertyStatement s = getPropertyStatement(property);
+		if (s != null) {
+			if (s.hasLitteralValue()) {
+				return s.getLiteral().getValue();
+			} else if (s instanceof ObjectPropertyStatement) {
+				return ((ObjectPropertyStatement) s).getStatementObject();
+			}
+		}
+		return null;
+	}
+
+	public void setPropertyValue(OntologyProperty property, Object newValue) {
+		PropertyStatement s = getPropertyStatement(property);
+		if (s != null) {
+			if (s.hasLitteralValue() && (newValue instanceof String)) {
+				s.setStringValue((String) newValue);
+				return;
+			} else if ((s instanceof ObjectPropertyStatement) && (newValue instanceof OntologyObject)) {
+				((ObjectPropertyStatement) s).setStatementObject((OntologyObject) newValue);
+				return;
+			}
+		} else {
+			if (newValue instanceof String) {
+				getOntResource().addProperty(property.getOntProperty(), (String) newValue);
+				updateOntologyStatements();
+			} else if (newValue instanceof OntologyObject) {
+				getOntResource().addProperty(property.getOntProperty(), ((OntologyObject) newValue).getOntResource());
+				updateOntologyStatements();
+			}
+		}
+	}
+
+	/**
+	 * Return value of specified property, asserting this property is an annotation property matching a literal value
+	 * 
+	 * @param property
+	 * @param language
+	 * @return
+	 */
+	public Object getAnnotationValue(OntologyDataProperty property, Language language) {
+		List<DataPropertyStatement> literalAnnotations = getAnnotationStatements(property);
+		for (DataPropertyStatement annotation : literalAnnotations) {
+			if (annotation != null && annotation.getLanguage() == language) {
+				if (annotation.hasLitteralValue()) {
+					return annotation.getLiteral().getValue();
+				}
+			}
+		}
+		return null;
+	}
+
+	public void setAnnotationValue(Object value, OntologyDataProperty property, Language language) {
+		// TODO: implement this
+		logger.warning("setAnnotationValue not implemented !");
+	}
+
+	/**
+	 * Return value of specified property, asserting this property is an annotation property matching an object value
+	 * 
+	 * @param property
+	 * @param language
+	 * @return
+	 */
+	public Object getAnnotationObjectValue(OntologyObjectProperty property) {
+		List<ObjectPropertyStatement> annotations = getAnnotationObjectStatements(property);
+		for (ObjectPropertyStatement annotation : annotations) {
+			OntologyObject returned = annotation.getStatementObject();
+			if (returned != null)
+				return returned;
+		}
+		return null;
+	}
+
+	public void setAnnotationObjectValue(Object value, OntologyObjectProperty property, Language language) {
+		// TODO: implement this
+		logger.warning("setAnnotationObjectValue not implemented !");
+	}
+
 	public ObjectPropertyStatement addPropertyStatement(OntologyObjectProperty property, OntologyObject object) {
 		// System.out.println("Subject: "+this+" resource="+getOntResource());
 		// System.out.println("Predicate: "+property+" resource="+property.getOntProperty());
@@ -676,21 +786,21 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		domainsAndRangesAreRecursivelyUpToDate = false;
 	}
 
-	public Vector<OntologyProperty> getDeclaredPropertiesTakingMySelfAsRange() {
+	public Set<OntologyProperty> getDeclaredPropertiesTakingMySelfAsRange() {
 		if (!domainsAndRangesAreUpToDate) {
 			searchRangeAndDomains();
 		}
 		return declaredPropertiesTakingMySelfAsRange;
 	}
 
-	public Vector<OntologyProperty> getDeclaredPropertiesTakingMySelfAsDomain() {
+	public Set<OntologyProperty> getDeclaredPropertiesTakingMySelfAsDomain() {
 		if (!domainsAndRangesAreUpToDate) {
 			searchRangeAndDomains();
 		}
 		return declaredPropertiesTakingMySelfAsDomain;
 	}
 
-	public Vector<OntologyProperty> getPropertiesTakingMySelfAsRange() {
+	public Set<OntologyProperty> getPropertiesTakingMySelfAsRange() {
 		getDeclaredPropertiesTakingMySelfAsRange(); // Required in some cases: TODO: investigate this
 		if (!domainsAndRangesAreRecursivelyUpToDate) {
 			recursivelySearchRangeAndDomains();
@@ -698,7 +808,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		return propertiesTakingMySelfAsRange;
 	}
 
-	public Vector<OntologyProperty> getPropertiesTakingMySelfAsDomain() {
+	public Set<OntologyProperty> getPropertiesTakingMySelfAsDomain() {
 		getDeclaredPropertiesTakingMySelfAsDomain(); // Required in some cases: TODO: investigate this
 		if (!domainsAndRangesAreRecursivelyUpToDate) {
 			recursivelySearchRangeAndDomains();
@@ -728,7 +838,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	private Vector<OntologyProperty> getPropertiesTakingMyselfAsDomain(boolean includeDataProperties, boolean includeObjectProperties,
 			boolean includeAnnotationProperties, boolean includeBaseOntologies, OntologyObject<?> range, OntologicDataType dataType,
 			FlexoOntology... ontologies) {
-		Vector<OntologyProperty> allProperties = getPropertiesTakingMySelfAsDomain();
+		Vector<OntologyProperty> allProperties = new Vector(getPropertiesTakingMySelfAsDomain());
 		Vector<OntologyProperty> returnedProperties = new Vector<OntologyProperty>();
 		for (OntologyProperty p : allProperties) {
 			boolean takeIt = (includeDataProperties && p instanceof OntologyDataProperty)
@@ -786,12 +896,16 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	protected void recursivelySearchRangeAndDomains() {
 		propertiesTakingMySelfAsRange.clear();
 		propertiesTakingMySelfAsDomain.clear();
-		propertiesTakingMySelfAsRange.addAll(declaredPropertiesTakingMySelfAsRange);
-		propertiesTakingMySelfAsDomain.addAll(declaredPropertiesTakingMySelfAsDomain);
+		propertiesTakingMySelfAsRange.addAll(getDeclaredPropertiesTakingMySelfAsRange());
+		propertiesTakingMySelfAsDomain.addAll(getDeclaredPropertiesTakingMySelfAsDomain());
+		if (redefinesOriginalDefinition()) {
+			propertiesTakingMySelfAsRange.addAll(getOriginalDefinition().getPropertiesTakingMySelfAsRange());
+			propertiesTakingMySelfAsDomain.addAll(getOriginalDefinition().getPropertiesTakingMySelfAsDomain());
+		}
 		domainsAndRangesAreRecursivelyUpToDate = true;
 	}
 
-	private void searchRangeAndDomains(Vector<OntologyProperty> rangeProperties, Vector<OntologyProperty> domainProperties,
+	private void searchRangeAndDomains(Set<OntologyProperty> rangeProperties, Set<OntologyProperty> domainProperties,
 			FlexoOntology ontology, Vector<FlexoOntology> alreadyDone) {
 		if (alreadyDone.contains(ontology)) {
 			return;

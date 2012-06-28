@@ -28,6 +28,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
 public class ViewPointPaletteElement extends ViewPointObject {
@@ -57,7 +58,8 @@ public class ViewPointPaletteElement extends ViewPointObject {
 
 	private ViewPointPalette _palette;
 
-	public ViewPointPaletteElement() {
+	public ViewPointPaletteElement(ViewPointBuilder builder) {
+		super(builder);
 		overridingGraphicalRepresentations = new Vector<OverridingGraphicalRepresentation>();
 		parameters = new Vector<PaletteElementPatternParameter>();
 	}
@@ -318,11 +320,13 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		private String patternRoleName;
 
 		// Do not use, required for deserialization
-		public OverridingGraphicalRepresentation() {
+		public OverridingGraphicalRepresentation(ViewPointBuilder builder) {
+			super(builder);
 		}
 
 		// Do not use, required for deserialization
 		public OverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+			super(null);
 			patternRoleName = patternRole.getPatternRoleName();
 		}
 
@@ -368,7 +372,8 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		private ShapeGraphicalRepresentation graphicalRepresentation;
 
 		// Do not use, required for deserialization
-		public ShapeOverridingGraphicalRepresentation() {
+		public ShapeOverridingGraphicalRepresentation(ViewPointBuilder builder) {
+			super(builder);
 		}
 
 		// Do not use, required for deserialization
@@ -393,7 +398,8 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		private ConnectorGraphicalRepresentation graphicalRepresentation;
 
 		// Do not use, required for deserialization
-		public ConnectorOverridingGraphicalRepresentation() {
+		public ConnectorOverridingGraphicalRepresentation(ViewPointBuilder builder) {
+			super(builder);
 		}
 
 		// Do not use, required for deserialization

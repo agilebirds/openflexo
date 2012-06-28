@@ -508,4 +508,250 @@ public class TestOntologies extends FlexoTestCase {
 		assertTrue(ontology.isLoaded());
 	}
 
+	public void test14TestBasicOntologEditor() {
+		log("test14TestBasicOntologEditor()");
+		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				"http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl");
+		assertNotNull(ontology);
+
+		ontology.loadWhenUnloaded();
+		assertTrue(ontology.isLoaded());
+	}
+
+	public void test15TestLoadSKOS() {
+		log("test15TestLoadSKOS()");
+		String SKOS_URI = "http://www.w3.org/2004/02/skos/core";
+		FlexoOntology skosOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(SKOS_URI);
+		assertNotNull(skosOntology);
+
+		skosOntology.loadWhenUnloaded();
+		assertTrue(skosOntology.isLoaded());
+
+		OntologyObjectProperty hasTopConceptProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "hasTopConcept");
+		assertNotNull(hasTopConceptProperty);
+		OntologyObjectProperty inSchemeProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "inScheme");
+		assertNotNull(inSchemeProperty);
+		OntologyObjectProperty topConceptOfProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "topConceptOf");
+		assertNotNull(topConceptOfProperty);
+		OntologyObjectProperty skosMemberProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "member");
+		assertNotNull(skosMemberProperty);
+		OntologyObjectProperty memberListProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "memberList");
+		assertNotNull(memberListProperty);
+		OntologyObjectProperty semanticRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "semanticRelation");
+		assertNotNull(semanticRelationProperty);
+		OntologyObjectProperty relatedProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "related");
+		assertNotNull(relatedProperty);
+		OntologyObjectProperty relatedMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "relatedMatch");
+		assertNotNull(relatedMatchProperty);
+		OntologyObjectProperty mappingRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "mappingRelation");
+		assertNotNull(mappingRelationProperty);
+		OntologyObjectProperty closeMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "closeMatch");
+		assertNotNull(closeMatchProperty);
+		OntologyObjectProperty exactMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "exactMatch");
+		assertNotNull(exactMatchProperty);
+		OntologyObjectProperty narrowMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowMatch");
+		assertNotNull(narrowMatchProperty);
+		OntologyObjectProperty broadMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broadMatch");
+		assertNotNull(broadMatchProperty);
+		OntologyObjectProperty broaderTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broaderTransitive");
+		assertNotNull(broaderTransitiveProperty);
+		OntologyObjectProperty broaderProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broader");
+		assertNotNull(broaderProperty);
+		OntologyObjectProperty narrowerTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowerTransitive");
+		assertNotNull(narrowerTransitiveProperty);
+		OntologyObjectProperty narrowerProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrower");
+		assertNotNull(narrowerProperty);
+
+	}
+
+	public void test16TestAccessibleProperties() {
+		log("test16TestAccessibleProperties()");
+
+		FlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
+		assertNotNull(rdfOntology);
+		assertTrue(rdfOntology.isLoaded());
+		FlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
+		assertNotNull(rdfsOntology);
+		assertTrue(rdfsOntology.isLoaded());
+		FlexoOntology owlOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOWLOntology();
+		assertNotNull(owlOntology);
+		assertTrue(owlOntology.isLoaded());
+
+		OntologyObjectProperty valueProperty = rdfOntology.getObjectProperty(RDFURIDefinitions.RDF_ONTOLOGY_URI + "#" + "value");
+		assertNotNull(valueProperty);
+		OntologyObjectProperty typeProperty = rdfOntology.getObjectProperty(RDFURIDefinitions.RDF_ONTOLOGY_URI + "#" + "type");
+		assertNotNull(typeProperty);
+
+		OntologyDataProperty labelProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "label");
+		assertNotNull(labelProperty);
+		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
+		assertNotNull(commentProperty);
+		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "isDefinedBy");
+		assertNotNull(isDefinedByProperty);
+		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
+		assertNotNull(seeAlsoProperty);
+		OntologyObjectProperty memberProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "member");
+		assertNotNull(memberProperty);
+		OntologyObjectProperty domainProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "domain");
+		assertNotNull(domainProperty);
+		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
+		assertNotNull(rangeProperty);
+		OntologyObjectProperty subClassOfProperty = rdfOntology
+				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		assertNotNull(subClassOfProperty);
+		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+				+ "subPropertyOf");
+		assertNotNull(subPropertyOfProperty);
+
+		OntologyObjectProperty topObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "topObjectProperty");
+		assertNotNull(topObjectProperty);
+		OntologyObjectProperty bottomObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "bottomObjectProperty");
+		assertNotNull(bottomObjectProperty);
+		OntologyDataProperty bottomDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "bottomDataProperty");
+		assertNotNull(bottomDataProperty);
+		OntologyDataProperty topDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topDataProperty");
+		assertNotNull(topDataProperty);
+
+		OntologyObjectProperty annotatedPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "annotatedProperty");
+		assertNotNull(annotatedPropertyProperty);
+		OntologyObjectProperty annotatedSourceProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "annotatedSource");
+		assertNotNull(annotatedSourceProperty);
+		OntologyObjectProperty annotatedTargetProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "annotatedTarget");
+		assertNotNull(annotatedTargetProperty);
+		OntologyObjectProperty datatypeComplementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "datatypeComplementOf");
+		assertNotNull(datatypeComplementOfProperty);
+		OntologyObjectProperty deprecatedProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "deprecated");
+		assertNotNull(deprecatedProperty);
+		OntologyObjectProperty equivalentClassProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "equivalentClass");
+		assertNotNull(equivalentClassProperty);
+		OntologyObjectProperty equivalentPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "equivalentProperty");
+		assertNotNull(equivalentPropertyProperty);
+		OntologyObjectProperty intersectionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "intersectionOf");
+		assertNotNull(intersectionOfProperty);
+		OntologyObjectProperty membersProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "members");
+		assertNotNull(membersProperty);
+		OntologyObjectProperty onDatatypeProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "onDatatype");
+		assertNotNull(onDatatypeProperty);
+		OntologyObjectProperty oneOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "oneOf");
+		assertNotNull(oneOfProperty);
+		OntologyObjectProperty propertyDisjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "propertyDisjointWith");
+		assertNotNull(propertyDisjointWithProperty);
+		OntologyObjectProperty unionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "unionOf");
+		assertNotNull(unionOfProperty);
+		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "versionInfo");
+		assertNotNull(versionInfoProperty);
+		OntologyObjectProperty withRestrictionsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "withRestrictions");
+		assertNotNull(withRestrictionsProperty);
+		OntologyObjectProperty differentFromProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "differentFrom");
+		assertNotNull(differentFromProperty);
+		OntologyObjectProperty sameAsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "sameAs");
+		assertNotNull(sameAsProperty);
+		OntologyObjectProperty distinctMembersProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "distinctMembers");
+		assertNotNull(distinctMembersProperty);
+		OntologyObjectProperty hasKeyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "hasKey");
+		assertNotNull(hasKeyProperty);
+		OntologyObjectProperty disjointUnionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "disjointUnionOf");
+		assertNotNull(disjointUnionOfProperty);
+		OntologyObjectProperty complementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "complementOf");
+		assertNotNull(complementOfProperty);
+		OntologyObjectProperty disjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "disjointWith");
+		assertNotNull(disjointWithProperty);
+		OntologyObjectProperty sourceIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "sourceIndividual");
+		assertNotNull(sourceIndividualProperty);
+		OntologyObjectProperty assertionPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "assertionProperty");
+		assertNotNull(assertionPropertyProperty);
+		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "targetValue");
+		assertNotNull(targetValueProperty);
+		OntologyObjectProperty targetIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "targetIndividual");
+		assertNotNull(targetIndividualProperty);
+		OntologyObjectProperty propertyChainAxiomProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+				+ "propertyChainAxiom");
+		assertNotNull(propertyChainAxiomProperty);
+		OntologyObjectProperty inverseOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "inverseOf");
+		assertNotNull(inverseOfProperty);
+
+		String SKOS_URI = "http://www.w3.org/2004/02/skos/core";
+		FlexoOntology skosOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(SKOS_URI);
+		assertNotNull(skosOntology);
+
+		skosOntology.loadWhenUnloaded();
+		assertTrue(skosOntology.isLoaded());
+
+		OntologyObjectProperty hasTopConceptProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "hasTopConcept");
+		assertNotNull(hasTopConceptProperty);
+		OntologyObjectProperty inSchemeProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "inScheme");
+		assertNotNull(inSchemeProperty);
+		OntologyObjectProperty topConceptOfProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "topConceptOf");
+		assertNotNull(topConceptOfProperty);
+		OntologyObjectProperty skosMemberProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "member");
+		assertNotNull(skosMemberProperty);
+		OntologyObjectProperty memberListProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "memberList");
+		assertNotNull(memberListProperty);
+		OntologyObjectProperty semanticRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "semanticRelation");
+		assertNotNull(semanticRelationProperty);
+		OntologyObjectProperty relatedProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "related");
+		assertNotNull(relatedProperty);
+		OntologyObjectProperty relatedMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "relatedMatch");
+		assertNotNull(relatedMatchProperty);
+		OntologyObjectProperty mappingRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "mappingRelation");
+		assertNotNull(mappingRelationProperty);
+		OntologyObjectProperty closeMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "closeMatch");
+		assertNotNull(closeMatchProperty);
+		OntologyObjectProperty exactMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "exactMatch");
+		assertNotNull(exactMatchProperty);
+		OntologyObjectProperty narrowMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowMatch");
+		assertNotNull(narrowMatchProperty);
+		OntologyObjectProperty broadMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broadMatch");
+		assertNotNull(broadMatchProperty);
+		OntologyObjectProperty broaderTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broaderTransitive");
+		assertNotNull(broaderTransitiveProperty);
+		OntologyObjectProperty broaderProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broader");
+		assertNotNull(broaderProperty);
+		OntologyObjectProperty narrowerTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowerTransitive");
+		assertNotNull(narrowerTransitiveProperty);
+		OntologyObjectProperty narrowerProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrower");
+		assertNotNull(narrowerProperty);
+
+		OntologyClass concept = skosOntology.getClass("http://www.w3.org/2004/02/skos/core#Concept");
+		System.out.println("concept super classes = " + concept.getSuperClasses());
+		System.out.println("concept super classes = " + concept.getSuperClasses().get(0).getPropertiesTakingMySelfAsDomain());
+		System.out.println("accessible properties = " + concept.getPropertiesTakingMySelfAsDomain());
+
+		assertSameList(concept.getPropertiesTakingMySelfAsDomain(), broaderProperty, broaderTransitiveProperty, broadMatchProperty,
+				closeMatchProperty, exactMatchProperty, mappingRelationProperty, narrowerProperty, narrowerTransitiveProperty,
+				narrowMatchProperty, relatedProperty, relatedMatchProperty, semanticRelationProperty, topConceptOfProperty,
+				bottomObjectProperty, bottomDataProperty, differentFromProperty, sameAsProperty, topDataProperty, topObjectProperty,
+				hasKeyProperty, complementOfProperty, seeAlsoProperty, memberProperty, disjointUnionOfProperty, disjointWithProperty,
+				subClassOfProperty, valueProperty, typeProperty, commentProperty, isDefinedByProperty, labelProperty);
+
+		OntologyClass thingFromOWL = owlOntology.getThingConcept();
+		System.out.println("thingFromOWL = " + thingFromOWL.getPropertiesTakingMySelfAsDomain());
+
+		OntologyClass thingFromSKOS = skosOntology.getThingConcept();
+		System.out.println("thingFromSKOS = " + thingFromSKOS.getPropertiesTakingMySelfAsDomain());
+
+	}
 }

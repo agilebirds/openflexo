@@ -129,6 +129,8 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 
 	public abstract boolean debugIsBindingValid();
 
+	public abstract String invalidBindingReason();
+
 	public abstract boolean isStaticValue();
 
 	@Override

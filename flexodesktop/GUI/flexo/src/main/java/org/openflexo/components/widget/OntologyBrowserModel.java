@@ -27,6 +27,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.OWL2URIDefinitions;
+import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
@@ -34,9 +36,8 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyRestrictionClass;
-import org.openflexo.foundation.ontology.OWL2URIDefinitions;
-import org.openflexo.foundation.ontology.RDFURIDefinitions;
 import org.openflexo.foundation.ontology.RDFSURIDefinitions;
+import org.openflexo.foundation.ontology.RDFURIDefinitions;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -57,6 +58,9 @@ public class OntologyBrowserModel {
 	private OntologyClass rootClass;
 	private boolean displayPropertiesInClasses = true;
 	private boolean showOWLAndRDFConcepts = false;
+	private OntologyClass domain = null;
+	private OntologyClass range = null;
+	private OntologicDataType dataType = null;
 
 	private boolean showObjectProperties = true;
 	private boolean showDataProperties = true;
@@ -183,7 +187,32 @@ public class OntologyBrowserModel {
 		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
 	}
 
+	public OntologyClass getDomain() {
+		return domain;
+	}
+
+	public void setDomain(OntologyClass domain) {
+		this.domain = domain;
+	}
+
+	public OntologyClass getRange() {
+		return range;
+	}
+
+	public void setRange(OntologyClass range) {
+		this.range = range;
+	}
+
+	public OntologicDataType getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(OntologicDataType dataType) {
+		this.dataType = dataType;
+	}
+
 	public boolean isDisplayable(OntologyObject<?> object) {
+
 		if (object instanceof FlexoOntology) {
 			if ((object == object.getOntologyLibrary().getRDFOntology() || object == object.getOntologyLibrary().getRDFSOntology() || object == object
 					.getOntologyLibrary().getOWLOntology()) && object != getContext()) {
@@ -198,6 +227,7 @@ public class OntologyBrowserModel {
 				return false;
 			}
 		}
+
 		boolean returned = false;
 		if (object instanceof OntologyClass && showClasses) {
 			if (getRootClass() != null) {
@@ -225,6 +255,59 @@ public class OntologyBrowserModel {
 
 		if (returned == false) {
 			return false;
+		}
+
+		if (object instanceof OntologyProperty && getRootClass() != null) {
+			boolean foundAPreferredLocationAsSubClassOfRootClass = false;
+			List<OntologyClass> preferredLocation = getPreferredStorageLocations((OntologyProperty) object, null);
+			for (OntologyClass pl : preferredLocation) {
+				if (rootClass.isSuperConceptOf(pl)) {
+					foundAPreferredLocationAsSubClassOfRootClass = true;
+					break;
+				}
+			}
+			if (!foundAPreferredLocationAsSubClassOfRootClass) {
+				return false;
+			}
+		}
+
+		if (object instanceof OntologyProperty && getDomain() != null) {
+			OntologyProperty p = (OntologyProperty) object;
+			if (p.getDomain() instanceof OntologyClass) {
+				if (!((OntologyClass) p.getDomain()).isSuperClassOf(getDomain())) {
+					/*System.out.println("Dismiss " + object + " becasuse " + p.getDomain().getName() + " is not superclass of "
+							+ getDomain().getName());*/
+					return false;
+				}
+				/*if (!getDomain().isSuperClassOf(((OntologyClass) p.getDomain()))) {
+					return false;
+				}*/
+			} else {
+				// System.out.println("Dismiss " + object + " becasuse domain=" + p.getDomain());
+				return false;
+			}
+		}
+
+		if (object instanceof OntologyObjectProperty && getRange() != null) {
+			OntologyObjectProperty p = (OntologyObjectProperty) object;
+			if (p.getRange() instanceof OntologyClass) {
+				if (!((OntologyClass) p.getRange()).isSuperClassOf(getRange())) {
+					return false;
+				}
+				/*if (!getRange().isSuperClassOf(((OntologyClass) p.getRange()))) {
+					return false;
+				}*/
+			} else {
+				return false;
+			}
+		}
+
+		if (object instanceof OntologyDataProperty && getDataType() != null) {
+			OntologyDataProperty p = (OntologyDataProperty) object;
+			if (p.getDataType() != getDataType()) {
+				// System.out.println("Dismiss " + object + " becasuse " + p.getDataType() + " is not  " + getDataType());
+				return false;
+			}
 		}
 
 		return true;
@@ -283,6 +366,7 @@ public class OntologyBrowserModel {
 			}
 		} else if (getDisplayPropertiesInClasses() || showIndividuals) {
 			removeOriginalFromRedefinedObjects(storageClasses);
+			appendParentClassesToStorageClasses(storageClasses);
 			addClassesAsHierarchy(parent == null ? null : o, storageClasses);
 		}
 
@@ -467,6 +551,8 @@ public class OntologyBrowserModel {
 			addClassesAsHierarchy(null, classes);
 		} else if (getDisplayPropertiesInClasses() || showIndividuals) {
 			removeOriginalFromRedefinedObjects(storageClasses);
+			appendParentClassesToStorageClasses(storageClasses);
+			removeOriginalFromRedefinedObjects(storageClasses);
 			addClassesAsHierarchy(null, storageClasses);
 		}
 
@@ -645,6 +731,30 @@ public class OntologyBrowserModel {
 			if (c instanceof OntologyClass && ((OntologyClass) c).isThing() && c.getOntology() != getContext()
 					&& list.contains(getContext().getThingConcept())) {
 				list.remove(c);
+			}
+		}
+	}
+
+	private void appendParentClassesToStorageClasses(List<OntologyClass> someClasses) {
+		if (someClasses.size() > 1) {
+			for (int i = 0; i < someClasses.size(); i++) {
+				for (int j = i + 1; j < someClasses.size(); j++) {
+					OntologyClass c1 = someClasses.get(i);
+					OntologyClass c2 = someClasses.get(j);
+					OntologyClass ancestor = OntologyClass.getFirstCommonAncestor(c1, c2);
+					if (ancestor != null) {
+						OntologyClass ancestorSeenFromContextOntology = getContext().getClass(ancestor.getURI());
+						if (ancestorSeenFromContextOntology != null) {
+							if (!someClasses.contains(ancestorSeenFromContextOntology)) {
+								/*System.out.println("Add parent " + ancestorSeenFromContextOntology + " because of c1=" + c1.getName()
+									+ " and c2=" + c2.getName());*/
+								someClasses.add(ancestorSeenFromContextOntology);
+								appendParentClassesToStorageClasses(someClasses);
+								return;
+							}
+						}
+					}
+				}
 			}
 		}
 	}

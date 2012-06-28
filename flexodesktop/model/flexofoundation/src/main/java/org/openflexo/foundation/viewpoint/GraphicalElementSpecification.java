@@ -9,6 +9,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.ViewElement;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
@@ -31,12 +32,13 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	private BindingDefinition BD;
 
 	// Use it only for deserialization
-	public GraphicalElementSpecification() {
-		super();
+	public GraphicalElementSpecification(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public GraphicalElementSpecification(GraphicalElementPatternRole patternRole, GraphicalFeature<T, GR> feature, boolean readOnly,
 			boolean mandatory) {
+		super(null);
 		this.patternRole = patternRole;
 		this.feature = feature;
 		this.readOnly = readOnly;

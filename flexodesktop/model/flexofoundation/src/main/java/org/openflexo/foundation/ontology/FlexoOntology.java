@@ -452,7 +452,6 @@ public abstract class FlexoOntology extends OntologyObject {
 
 		for (Iterator i = getOntModel().listClasses(); i.hasNext();) {
 			OntClass ontClass = (OntClass) i.next();
-			// logger.info(">>>>> Load class " + ontClass);
 			if (_classes.get(ontClass) == null && isNamedResourceOfThisOntology(ontClass)) {
 				// Only named classes will be appended
 				makeNewClass(ontClass);
@@ -724,6 +723,7 @@ public abstract class FlexoOntology extends OntologyObject {
 
 	protected OntologyClass redefineClass(OntClass ontClass) {
 		OntologyClass originalDefinition = getClass(ontClass.getURI());
+		logger.info("###### REDEFINE class " + ontClass.getURI() + " originalDefinition=" + originalDefinition);
 		OntologyClass returned = makeNewClass(ontClass);
 		returned.setOriginalDefinition(originalDefinition);
 		logger.info("Declare class " + returned.getName() + " as a redefinition of class initially asserted in "

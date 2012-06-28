@@ -41,6 +41,7 @@ import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -83,6 +84,10 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	private boolean showAnnotationProperties = true;
 	private boolean showClasses = true;
 	private boolean showIndividuals = true;
+
+	private OntologyClass domain = null;
+	private OntologyClass range = null;
+	private OntologicDataType dataType = null;
 
 	private boolean showOWLAndRDFConcepts = false;
 
@@ -232,6 +237,36 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		update();
 	}
 
+	public OntologyClass getDomain() {
+		return domain;
+	}
+
+	@CustomComponentParameter(name = "domain", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setDomain(OntologyClass domain) {
+		this.domain = domain;
+		update();
+	}
+
+	public OntologyClass getRange() {
+		return range;
+	}
+
+	@CustomComponentParameter(name = "range", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setRange(OntologyClass range) {
+		this.range = range;
+		update();
+	}
+
+	public OntologicDataType getDataType() {
+		return dataType;
+	}
+
+	@CustomComponentParameter(name = "dataType", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setDataType(OntologicDataType dataType) {
+		this.dataType = dataType;
+		update();
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
 			model = new OntologyBrowserModel(getOntology());
@@ -245,6 +280,9 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			model.setShowDataProperties(getShowDataProperties());
 			model.setShowAnnotationProperties(getShowAnnotationProperties());
 			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
+			model.setDomain(getDomain());
+			model.setRange(getRange());
+			model.setDataType(getDataType());
 			model.recomputeStructure();
 		}
 		return model;

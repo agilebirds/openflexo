@@ -75,7 +75,7 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern, ViewPoint,
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add new edition pattern");
 
-		_newEditionPattern = new EditionPattern();
+		_newEditionPattern = new EditionPattern(null);
 		_newEditionPattern.setName(getNewEditionPatternName());
 		getFocusedObject().addToEditionPatterns(_newEditionPattern);
 	}

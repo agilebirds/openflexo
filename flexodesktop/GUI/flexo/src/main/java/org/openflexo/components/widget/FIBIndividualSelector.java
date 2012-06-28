@@ -20,13 +20,14 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.util.Enumeration;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -44,8 +45,8 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyClass> {
-	@SuppressWarnings("hiding")
+@SuppressWarnings("serial")
+public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndividual> {
 	static final Logger logger = Logger.getLogger(FIBIndividualSelector.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBIndividualSelector.fib");
@@ -58,7 +59,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyClass>
 
 	private OntologyBrowserModel model = null;
 
-	public FIBIndividualSelector(OntologyClass editedObject) {
+	public FIBIndividualSelector(OntologyIndividual editedObject) {
 		super(editedObject);
 	}
 
@@ -74,26 +75,34 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyClass>
 	}
 
 	@Override
-	public Class<OntologyClass> getRepresentedType() {
-		return OntologyClass.class;
+	public Class<OntologyIndividual> getRepresentedType() {
+		return OntologyIndividual.class;
 	}
 
 	@Override
-	public String renderedString(OntologyClass editedObject) {
+	public String renderedString(OntologyIndividual editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
 		return "";
 	}
 
-	/**
-	 * This method must be implemented if we want to implement completion<br>
-	 * Completion will be performed on that selectable values<br>
-	 * Return all viewpoints of this library
-	 */
-	@Override
-	protected Enumeration<OntologyClass> getAllSelectableValues() {
-		return super.getAllSelectableValues();
+	public String getContextOntologyURI() {
+		if (getContext() != null) {
+			return getContext().getURI();
+		}
+		return null;
+	}
+
+	@CustomComponentParameter(name = "contextOntologyURI", type = CustomComponentParameter.Type.MANDATORY)
+	public void setContextOntologyURI(String ontologyURI) {
+		// logger.info("Sets ontology with " + ontologyURI);
+		if (getProject() != null) {
+			FlexoOntology context = getProject().getResourceCenter().retrieveBaseOntologyLibrary().getOntology(ontologyURI);
+			if (context != null) {
+				setContext(context);
+			}
+		}
 	}
 
 	public FlexoOntology getContext() {
@@ -112,8 +121,26 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyClass>
 
 	@CustomComponentParameter(name = "type", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setType(OntologyClass rootClass) {
-		this.type = type;
+		this.type = rootClass;
 		update();
+	}
+
+	public String getTypeURI() {
+		if (getType() != null) {
+			return getType().getURI();
+		}
+		return null;
+	}
+
+	@CustomComponentParameter(name = "typeURI", type = CustomComponentParameter.Type.MANDATORY)
+	public void setTypeURI(String aClassURI) {
+		// logger.info("Sets typeClassURI with " + aClassURI + " context=" + getContext());
+		if (getContext() != null) {
+			OntologyClass typeClass = getContext().getClass(aClassURI);
+			if (typeClass != null) {
+				setType(typeClass);
+			}
+		}
 	}
 
 	public boolean getHierarchicalMode() {
@@ -176,6 +203,14 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyClass>
 					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
 				}
 			});
+		}
+	}
+
+	@Override
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		if (project != null) {
+			setContext(project.getProjectOntology());
 		}
 	}
 
