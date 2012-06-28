@@ -77,6 +77,5 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoModelOb
 				getEditedObject().setSpecificDescriptionsForKey(specificDescription, currentDocType.getName());
 			}
 		}
-
 	}
 }
