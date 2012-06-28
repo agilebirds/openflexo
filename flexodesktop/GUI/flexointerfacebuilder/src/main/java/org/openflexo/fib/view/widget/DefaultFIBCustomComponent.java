@@ -34,12 +34,10 @@ import org.openflexo.fib.view.FIBView;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 import org.openflexo.toolbox.FileResource;
 
-public abstract class DefaultFIBCustomComponent<T> extends JPanel implements
-		FIBCustomComponent<T, DefaultFIBCustomComponent<T>> {
+public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIBCustomComponent<T, DefaultFIBCustomComponent<T>> {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger
-			.getLogger(DefaultFIBCustomComponent.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DefaultFIBCustomComponent.class.getPackage().getName());
 
 	private final Vector<ApplyCancelListener> applyCancelListener;
 

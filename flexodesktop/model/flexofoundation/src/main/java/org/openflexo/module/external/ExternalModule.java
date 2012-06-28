@@ -19,7 +19,6 @@
  */
 package org.openflexo.module.external;
 
-
 /**
  * Common interface for all external-view modules
  * 

@@ -335,7 +335,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 								next.getCardinality(),
 								// (next.getType()!=null?next.getType().getName():next.getUnresolvedTypeName()+"<unloaded>"));
 								next.getType().getStringRepresentation(), next.getType().getSimplifiedStringRepresentation()
-								+ (next.getType().isResolved() ? "" : "<unloaded>"));
+										+ (next.getType().isResolved() ? "" : "<unloaded>"));
 						_properties.add(propertyReference);
 						if (entity != null && entity.getDMProperty(next.getName()) != null) {
 							addToSelectedObjects(propertyReference);
@@ -346,9 +346,9 @@ public class DMSet extends TemporaryFlexoModelObject {
 					for (Enumeration en = methods.elements(); en.hasMoreElements();) {
 						DMMethod next = (DMMethod) en.nextElement();
 						MethodReference methodReference = new MethodReference(next.getSignature(), next.getSimplifiedSignature(),
-								// (next.getReturnType()!=null?next.getReturnType().getName():next.getUnresolvedReturnType().getValue()+"<unloaded>"));
+						// (next.getReturnType()!=null?next.getReturnType().getName():next.getUnresolvedReturnType().getValue()+"<unloaded>"));
 								next.getReturnType().getStringRepresentation(), next.getReturnType().getSimplifiedStringRepresentation()
-								+ (next.getType().isResolved() ? "" : "<unloaded>"));
+										+ (next.getType().isResolved() ? "" : "<unloaded>"));
 						_methods.add(methodReference);
 						if (entity != null && entity.getDeclaredMethod(next.getSignature()) != null) {
 							addToSelectedObjects(methodReference);

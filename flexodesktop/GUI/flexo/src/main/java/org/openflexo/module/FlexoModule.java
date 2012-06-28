@@ -284,7 +284,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		boolean selectDefaultObject = false;
 		if (getDefaultObjectToSelect() != null
 				&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
-				.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
+						.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
 			if (getFlexoController() instanceof SelectionManagingController) {
 				if (((SelectionManagingController) getFlexoController()).getSelectionManager().getFocusedObject() == null) {
 					selectDefaultObject = true;
@@ -300,9 +300,9 @@ public abstract class FlexoModule implements DataFlexoObserver {
 				logger.fine("Module " + getName() + " is loosing focus : reseting selection");
 			}
 			((SelectionManagingController) getFlexoController()).getSelectionManager()
-			.setSelectedObjects(
-					new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
-							.getSelection()));
+					.setSelectedObjects(
+							new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
+									.getSelection()));
 		}
 	}
 

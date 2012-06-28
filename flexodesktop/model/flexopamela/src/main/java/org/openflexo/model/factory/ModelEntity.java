@@ -46,18 +46,15 @@ public class ModelEntity<I> extends ProxyFactory {
 	private Class<? super I> superImplementedInterface;
 	private ModelEntity<? super I> superEntity;
 
-	protected ModelEntity(Class<I> implementedInterface,
-			ModelFactory modelFactory) throws ModelDefinitionException {
+	protected ModelEntity(Class<I> implementedInterface, ModelFactory modelFactory) throws ModelDefinitionException {
 		// System.out.println("CREATED ModelEntity for "+implementedInterface.getSimpleName());
 
 		declaredModelProperties = new Hashtable<String, ModelProperty<I>>();
 
 		this.modelFactory = modelFactory;
 		this.implementedInterface = implementedInterface;
-		entityAnnotation = implementedInterface
-				.getAnnotation(org.openflexo.model.annotations.ModelEntity.class);
-		implementationClass = implementedInterface
-				.getAnnotation(ImplementationClass.class);
+		entityAnnotation = implementedInterface.getAnnotation(org.openflexo.model.annotations.ModelEntity.class);
+		implementationClass = implementedInterface.getAnnotation(ImplementationClass.class);
 		xmlElement = implementedInterface.getAnnotation(XMLElement.class);
 		pastingPoints = implementedInterface.getAnnotation(PastingPoints.class);
 		this.isAbstract = entityAnnotation.isAbstract();
@@ -80,8 +77,7 @@ public class ModelEntity<I> extends ProxyFactory {
 				 * method.getAnnotation(Remover.class) != null;
 				 */
 
-				return Modifier.isAbstract(method.getModifiers())
-						|| method.getName().equals("toString")
+				return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
 						&& method.getParameterTypes().length == 0;
 			}
 		});
@@ -98,28 +94,17 @@ public class ModelEntity<I> extends ProxyFactory {
 	}
 
 	private void validateEntity() throws ModelDefinitionException {
-		if (getDeclaredDeleter() != null
-				&& !getDeclaredDeleter().getDeleter().deletedProperty()
-						.equals(Deleter.UNDEFINED)) {
-			ModelProperty<? super I> deletedProperty = getModelProperty(getDeclaredDeleter()
-					.getDeleter().deletedProperty());
+		if (getDeclaredDeleter() != null && !getDeclaredDeleter().getDeleter().deletedProperty().equals(Deleter.UNDEFINED)) {
+			ModelProperty<? super I> deletedProperty = getModelProperty(getDeclaredDeleter().getDeleter().deletedProperty());
 			if (deletedProperty == null) {
-				throw new ModelDefinitionException(
-						"Interface "
-								+ getImplementedInterface().getName()
-								+ " declares a deleter but the associated deletedProperty ("
-								+ getDeclaredDeleter().getDeleter()
-										.deletedProperty()
-								+ ") is not declared in hierarchy");
+				throw new ModelDefinitionException("Interface " + getImplementedInterface().getName()
+						+ " declares a deleter but the associated deletedProperty (" + getDeclaredDeleter().getDeleter().deletedProperty()
+						+ ") is not declared in hierarchy");
 			}
 			if (!TypeUtils.isBoolean(deletedProperty.getType())) {
-				throw new ModelDefinitionException(
-						"Interface "
-								+ getImplementedInterface().getName()
-								+ " declares a deleter but the associated deletedProperty ("
-								+ getDeclaredDeleter().getDeleter()
-										.deletedProperty()
-								+ ") is not of type boolean/Boolean");
+				throw new ModelDefinitionException("Interface " + getImplementedInterface().getName()
+						+ " declares a deleter but the associated deletedProperty (" + getDeclaredDeleter().getDeleter().deletedProperty()
+						+ ") is not of type boolean/Boolean");
 			}
 		}
 	}
@@ -142,12 +127,10 @@ public class ModelEntity<I> extends ProxyFactory {
 	// to reduce the refactoring that will occur when PAMELA
 	// will support multiple-inheritance.
 	@Deprecated
-	public ModelEntity<? super I> getSuperEntity()
-			throws ModelDefinitionException {
+	public ModelEntity<? super I> getSuperEntity() throws ModelDefinitionException {
 		if (superEntity == null) {
 			if (superImplementedInterface != null) {
-				superEntity = modelFactory
-						.getModelEntity(superImplementedInterface);
+				superEntity = modelFactory.getModelEntity(superImplementedInterface);
 			} else {
 				return null;
 			}
@@ -155,10 +138,8 @@ public class ModelEntity<I> extends ProxyFactory {
 		return superEntity;
 	}
 
-	public ModelProperty<I> getDeclaredModelProperty(String propertyIdentifier)
-			throws ModelDefinitionException {
-		ModelProperty<I> returned = declaredModelProperties
-				.get(propertyIdentifier);
+	public ModelProperty<I> getDeclaredModelProperty(String propertyIdentifier) throws ModelDefinitionException {
+		ModelProperty<I> returned = declaredModelProperties.get(propertyIdentifier);
 		if (returned == null && declaresModelProperty(propertyIdentifier)) {
 			returned = new ModelProperty<I>(propertyIdentifier, this);
 			declaredModelProperties.put(propertyIdentifier, returned);
@@ -166,8 +147,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		return returned;
 	}
 
-	public ModelProperty<? super I> getModelProperty(String propertyIdentifier)
-			throws ModelDefinitionException {
+	public ModelProperty<? super I> getModelProperty(String propertyIdentifier) throws ModelDefinitionException {
 		ModelProperty<I> returned = getDeclaredModelProperty(propertyIdentifier);
 		if (returned == null && getSuperEntity() != null) {
 			return getSuperEntity().getModelProperty(propertyIdentifier);
@@ -179,8 +159,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		return deleter;
 	}
 
-	public ModelDeleter<? super I> getModelDeleter()
-			throws ModelDefinitionException {
+	public ModelDeleter<? super I> getModelDeleter() throws ModelDefinitionException {
 		if (deleter != null) {
 			return deleter;
 		}
@@ -224,15 +203,11 @@ public class ModelEntity<I> extends ProxyFactory {
 		return isAbstract;
 	}
 
-	public I newInstance(Object... args) throws IllegalArgumentException,
-			NoSuchMethodException, InstantiationException,
-			IllegalAccessException, InvocationTargetException,
-			ModelDefinitionException {
+	public I newInstance(Object... args) throws IllegalArgumentException, NoSuchMethodException, InstantiationException,
+			IllegalAccessException, InvocationTargetException, ModelDefinitionException {
 		if (isAbstract()) {
-			throw new InstantiationException(
-					"Interface "
-							+ implementedInterface.getName()
-							+ " is declared as an abstract entity, cannot instantiate it");
+			throw new InstantiationException("Interface " + implementedInterface.getName()
+					+ " is declared as an abstract entity, cannot instantiate it");
 		}
 		ProxyMethodHandler<I> handler = new ProxyMethodHandler<I>(this);
 		I returned = (I) create(new Class<?>[0], new Object[0], handler);
@@ -242,8 +217,7 @@ public class ModelEntity<I> extends ProxyFactory {
 			for (int i = 0; i < args.length; i++) {
 				Object o = args[i];
 				if (getModelFactory().isProxyObject(o)) {
-					ModelEntity modelEntity = getModelFactory().getModelEntity(
-							o);
+					ModelEntity modelEntity = getModelFactory().getModelEntity(o);
 					types[i] = modelEntity.getImplementedInterface();
 				} else {
 					types[i] = args[i].getClass();
@@ -253,8 +227,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		return returned;
 	}
 
-	protected PastingPoint retrievePastingPoint(Class type)
-			throws ModelDefinitionException {
+	protected PastingPoint retrievePastingPoint(Class type) throws ModelDefinitionException {
 		if (pastingPoints != null) {
 			for (PastingPoint pp : pastingPoints.value()) {
 				if (TypeUtils.isTypeAssignableFrom(pp.type(), type)) {
@@ -301,8 +274,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		return declaredModelProperties.values().iterator();
 	}
 
-	public Iterator<ModelProperty<? super I>> getProperties()
-			throws ModelDefinitionException {
+	public Iterator<ModelProperty<? super I>> getProperties() throws ModelDefinitionException {
 		if (allProperties == null) {
 			allProperties = new ArrayList<ModelProperty<? super I>>();
 			ModelEntity<? super I> current = this;
@@ -319,15 +291,13 @@ public class ModelEntity<I> extends ProxyFactory {
 		return "ModelEntity[" + getImplementedInterface().getSimpleName() + "]";
 	}
 
-	public List<ModelEntity> getAllDescendantsAndMe()
-			throws ModelDefinitionException {
+	public List<ModelEntity> getAllDescendantsAndMe() throws ModelDefinitionException {
 		List<ModelEntity> returned = getAllDescendants();
 		returned.add(this);
 		return returned;
 	}
 
-	public List<ModelEntity> getAllDescendants()
-			throws ModelDefinitionException {
+	public List<ModelEntity> getAllDescendants() throws ModelDefinitionException {
 		List<ModelEntity> returned = new ArrayList<ModelEntity>();
 		Iterator<ModelEntity> i = getModelFactory().getEntities();
 		while (i.hasNext()) {
@@ -339,8 +309,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		return returned;
 	}
 
-	public boolean isAncestorOf(ModelEntity entity)
-			throws ModelDefinitionException {
+	public boolean isAncestorOf(ModelEntity entity) throws ModelDefinitionException {
 		if (entity == null) {
 			return false;
 		}
@@ -357,8 +326,7 @@ public class ModelEntity<I> extends ProxyFactory {
 	protected void exploreEntity() throws ModelDefinitionException {
 		// System.out.println("Explore properties for "+implementedInterface);
 		for (Field field : getImplementedInterface().getDeclaredFields()) {
-			StringConverter converter = field
-					.getAnnotation(StringConverter.class);
+			StringConverter converter = field.getAnnotation(StringConverter.class);
 			if (converter != null) {
 				try {
 					modelFactory.addConverter((Converter<?>) field.get(null));
@@ -366,21 +334,12 @@ public class ModelEntity<I> extends ProxyFactory {
 					// This should not happen since interfaces can only have
 					// static fields
 					// and we pass 'null'
-					throw new ModelDefinitionException(
-							"Field "
-									+ field
-									+ " is not static! Cannot use it as string converter.");
+					throw new ModelDefinitionException("Field " + field + " is not static! Cannot use it as string converter.");
 				} catch (IllegalAccessException e) {
-					throw new ModelDefinitionException(
-							"Illegal access to field " + field);
+					throw new ModelDefinitionException("Illegal access to field " + field);
 				} catch (ClassCastException e) {
-					throw new ModelDefinitionException(
-							"Field "
-									+ field.getName()
-									+ " is annotated with "
-									+ StringConverter.class.getName()
-									+ " but the value of the field is not an instance of "
-									+ Converter.class.getName());
+					throw new ModelDefinitionException("Field " + field.getName() + " is annotated with " + StringConverter.class.getName()
+							+ " but the value of the field is not an instance of " + Converter.class.getName());
 				}
 			}
 		}
@@ -413,8 +372,7 @@ public class ModelEntity<I> extends ProxyFactory {
 				if (deleter == null) {
 					deleter = new ModelDeleter<I>(this, m);
 				} else {
-					throw new ModelDefinitionException("Duplicate deleters "
-							+ deleter.getDeleterMethod() + " and " + m);
+					throw new ModelDefinitionException("Duplicate deleters " + deleter.getDeleterMethod() + " and " + m);
 				}
 			}
 		}

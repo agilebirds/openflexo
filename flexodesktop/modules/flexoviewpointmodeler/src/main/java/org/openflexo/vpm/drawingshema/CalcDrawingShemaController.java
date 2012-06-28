@@ -44,22 +44,18 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.vpm.controller.CEDController;
 
-public class CalcDrawingShemaController extends
-		SelectionManagingDrawingController<CalcDrawingShemaRepresentation>
-		implements GraphicalFlexoObserver {
+public class CalcDrawingShemaController extends SelectionManagingDrawingController<CalcDrawingShemaRepresentation> implements
+		GraphicalFlexoObserver {
 
-	private static final Logger logger = Logger
-			.getLogger(CalcDrawingShemaController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CalcDrawingShemaController.class.getPackage().getName());
 
 	private CEDController _controller;
 	private CommonPalette _commonPalette;
 	private CalcDrawingShemaModuleView _moduleView;
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
-	public CalcDrawingShemaController(CEDController controller,
-			ExampleDrawingShema shema, boolean readOnly) {
-		super(new CalcDrawingShemaRepresentation(shema, readOnly), controller
-				.getSelectionManager());
+	public CalcDrawingShemaController(CEDController controller, ExampleDrawingShema shema, boolean readOnly) {
+		super(new CalcDrawingShemaRepresentation(shema, readOnly), controller.getSelectionManager());
 
 		_controller = controller;
 
@@ -73,8 +69,7 @@ public class CalcDrawingShemaController extends
 			_contextualPalettes = new Hashtable<ViewPointPalette, ContextualPalette>();
 			if (shema.getCalc() != null) {
 				for (ViewPointPalette palette : shema.getCalc().getPalettes()) {
-					ContextualPalette contextualPalette = new ContextualPalette(
-							palette);
+					ContextualPalette contextualPalette = new ContextualPalette(palette);
 					_contextualPalettes.put(palette, contextualPalette);
 					registerPalette(contextualPalette);
 					activatePalette(contextualPalette);
@@ -84,21 +79,17 @@ public class CalcDrawingShemaController extends
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
-			public void performedDrawNewShape(
-					ShapeGraphicalRepresentation graphicalRepresentation,
+			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
 					GraphicalRepresentation parentGraphicalRepresentation) {
-				System.out.println("OK, perform draw new shape with "
-						+ graphicalRepresentation + " et parent: "
+				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
 
-				AddExampleDrawingShape action = AddExampleDrawingShape.actionType
-						.makeNewAction(getShema(), null, getCEDController()
-								.getEditor());
+				AddExampleDrawingShape action = AddExampleDrawingShape.actionType.makeNewAction(getShema(), null, getCEDController()
+						.getEditor());
 				action.graphicalRepresentation = graphicalRepresentation;
 				action.newShapeName = graphicalRepresentation.getText();
 				if (action.newShapeName == null) {
-					action.newShapeName = FlexoLocalization
-							.localizedForKey("shape");
+					action.newShapeName = FlexoLocalization.localizedForKey("shape");
 				}
 
 				action.doAction();
@@ -124,8 +115,7 @@ public class CalcDrawingShemaController extends
 	}
 
 	@Override
-	public DrawingView<CalcDrawingShemaRepresentation> makeDrawingView(
-			CalcDrawingShemaRepresentation drawing) {
+	public DrawingView<CalcDrawingShemaRepresentation> makeDrawingView(CalcDrawingShemaRepresentation drawing) {
 		return new CalcDrawingShemaView(drawing, this);
 	}
 
@@ -156,32 +146,26 @@ public class CalcDrawingShemaController extends
 	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
-			orderedPalettes = new Vector<ViewPointPalette>(
-					_contextualPalettes.keySet());
+			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
 			for (ViewPointPalette palette : orderedPalettes) {
-				paletteView.add(palette.getName(),
-						(_contextualPalettes.get(palette)).getPaletteView());
+				paletteView.add(palette.getName(), (_contextualPalettes.get(palette)).getPaletteView());
 			}
-			paletteView.add(FlexoLocalization.localizedForKey("Common",
-					getCommonPalette().getPaletteView()), getCommonPalette()
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
 					.getPaletteView());
 			paletteView.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if (paletteView.getSelectedIndex() < orderedPalettes.size()) {
-						activatePalette(_contextualPalettes.get(orderedPalettes
-								.elementAt(paletteView.getSelectedIndex())));
-					} else if (paletteView.getSelectedIndex() == orderedPalettes
-							.size()) {
+						activatePalette(_contextualPalettes.get(orderedPalettes.elementAt(paletteView.getSelectedIndex())));
+					} else if (paletteView.getSelectedIndex() == orderedPalettes.size()) {
 						activatePalette(getCommonPalette());
 					}
 				}
 			});
 			paletteView.setSelectedIndex(0);
 			if (orderedPalettes.size() > 0) {
-				activatePalette(_contextualPalettes.get(orderedPalettes
-						.firstElement()));
+				activatePalette(_contextualPalettes.get(orderedPalettes.firstElement()));
 			} else {
 				activatePalette(getCommonPalette());
 			}
@@ -190,27 +174,21 @@ public class CalcDrawingShemaController extends
 	}
 
 	@Override
-	public void update(FlexoObservable observable,
-			DataModification dataModification) {
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		logger.fine("dataModification=" + dataModification);
 		if (observable == getShema().getCalc()) {
 			if (dataModification instanceof CalcPaletteInserted) {
-				ViewPointPalette palette = ((CalcPaletteInserted) dataModification)
-						.newValue();
-				ContextualPalette newContextualPalette = new ContextualPalette(
-						palette);
+				ViewPointPalette palette = ((CalcPaletteInserted) dataModification).newValue();
+				ContextualPalette newContextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette, newContextualPalette);
 				registerPalette(newContextualPalette);
 				activatePalette(newContextualPalette);
-				paletteView.add(palette.getName(),
-						newContextualPalette.getPaletteView());
+				paletteView.add(palette.getName(), newContextualPalette.getPaletteView());
 				paletteView.revalidate();
 				paletteView.repaint();
 			} else if (dataModification instanceof CalcPaletteRemoved) {
-				ViewPointPalette palette = ((CalcPaletteRemoved) dataModification)
-						.oldValue();
-				ContextualPalette removedPalette = _contextualPalettes
-						.get(palette);
+				ViewPointPalette palette = ((CalcPaletteRemoved) dataModification).oldValue();
+				ContextualPalette removedPalette = _contextualPalettes.get(palette);
 				unregisterPalette(removedPalette);
 				_contextualPalettes.remove(palette);
 				paletteView.remove(removedPalette.getPaletteView());
@@ -220,13 +198,11 @@ public class CalcDrawingShemaController extends
 		}
 	}
 
-	protected void updatePalette(ViewPointPalette palette,
-			DrawingView<?> oldPaletteView) {
+	protected void updatePalette(ViewPointPalette palette, DrawingView<?> oldPaletteView) {
 		int index = paletteView.indexOfComponent(oldPaletteView);
 		paletteView.remove(oldPaletteView);
 		ContextualPalette cp = _contextualPalettes.get(palette);
-		paletteView.insertTab(palette.getName(), null, cp.getPaletteView(),
-				null, index);
+		paletteView.insertTab(palette.getName(), null, cp.getPaletteView(), null, index);
 		paletteView.revalidate();
 		paletteView.repaint();
 	}

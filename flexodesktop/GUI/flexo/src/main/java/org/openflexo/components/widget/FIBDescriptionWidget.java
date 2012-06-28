@@ -29,20 +29,16 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to represent/edit specific descriptions related to a
- * FlexoModelObject instance
+ * Widget allowing to represent/edit specific descriptions related to a FlexoModelObject instance
  * 
  * @author sguerin
  * 
  */
-public class FIBDescriptionWidget extends
-		DefaultFIBCustomComponent<FlexoModelObject> {
+public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoModelObject> {
 	@SuppressWarnings("hiding")
-	static final Logger logger = Logger.getLogger(FIBDescriptionWidget.class
-			.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBDescriptionWidget.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource(
-			"Fib/DescriptionWidget.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/DescriptionWidget.fib");
 
 	public FIBDescriptionWidget(FlexoModelObject editedObject) {
 		super(FIB_FILE, editedObject);
@@ -58,8 +54,7 @@ public class FIBDescriptionWidget extends
 		return new DescriptionWidgetFIBController(fibComponent);
 	}
 
-	public class DescriptionWidgetFIBController extends
-			FIBController<FlexoModelObject> {
+	public class DescriptionWidgetFIBController extends FIBController<FlexoModelObject> {
 
 		public DocType currentDocType;
 
@@ -69,18 +64,15 @@ public class FIBDescriptionWidget extends
 
 		public String getSpecificDescription() {
 			if (currentDocType != null && getEditedObject() != null) {
-				return getEditedObject().getSpecificDescriptionForKey(
-						currentDocType.getName());
+				return getEditedObject().getSpecificDescriptionForKey(currentDocType.getName());
 			}
 			return null;
 		}
 
 		public void setSpecificDescription(String specificDescription) {
 			if (currentDocType != null && getEditedObject() != null) {
-				System.out.println("For key " + currentDocType
-						+ " description=" + specificDescription);
-				getEditedObject().setSpecificDescriptionsForKey(
-						specificDescription, currentDocType.getName());
+				System.out.println("For key " + currentDocType + " description=" + specificDescription);
+				getEditedObject().setSpecificDescriptionsForKey(specificDescription, currentDocType.getName());
 			}
 		}
 

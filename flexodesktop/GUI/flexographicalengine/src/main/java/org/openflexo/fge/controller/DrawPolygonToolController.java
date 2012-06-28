@@ -34,16 +34,13 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Polygon;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 
-public class DrawPolygonToolController extends
-		DrawShapeToolController<FGEPolygon> {
+public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygon> {
 
-	private static final Logger logger = Logger
-			.getLogger(DrawPolygonToolController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DrawPolygonToolController.class.getPackage().getName());
 
 	private boolean isBuildingPoints;
 
-	public DrawPolygonToolController(DrawingController<?> controller,
-			DrawShapeAction control) {
+	public DrawPolygonToolController(DrawingController<?> controller, DrawShapeAction control) {
 		super(controller, control);
 		isBuildingPoints = true;
 	}
@@ -75,8 +72,7 @@ public class DrawPolygonToolController extends
 		logger.info("Handle mouseClicked()");
 		if (isBuildingPoints) {
 			FGEPoint newPoint = getPoint(e);
-			if (e.getClickCount() == 2 || e.isPopupTrigger()
-					|| e.getButton() == MouseEvent.BUTTON3) {
+			if (e.getClickCount() == 2 || e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
 				// System.out.println("Stopping point edition");
 				getShape().getPoints().lastElement().setX(newPoint.x);
 				getShape().getPoints().lastElement().setY(newPoint.y);
@@ -111,8 +107,8 @@ public class DrawPolygonToolController extends
 
 	@Override
 	public ShapeGraphicalRepresentation<?> buildShapeGraphicalRepresentation() {
-		ShapeGraphicalRepresentation returned = new ShapeGraphicalRepresentation(
-				ShapeType.CUSTOM_POLYGON, null, getController().getDrawing());
+		ShapeGraphicalRepresentation returned = new ShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON, null, getController()
+				.getDrawing());
 		returned.setBorder(new ShapeBorder(5, 5, 5, 5));
 		returned.setBackground(getController().getCurrentBackgroundStyle());
 		returned.setForeground(getController().getCurrentForegroundStyle());
@@ -125,12 +121,9 @@ public class DrawPolygonToolController extends
 		returned.setHeight(boundingBox.getHeight());
 		// System.out.println("Shape was: " + getPolygon());
 		// System.out.println("Bounding box is: " + boundingBox);
-		AffineTransform translateAT = AffineTransform.getTranslateInstance(
-				-boundingBox.getX(), -boundingBox.getY());
-		AffineTransform scaleAT = AffineTransform.getScaleInstance(
-				1 / boundingBox.getWidth(), 1 / boundingBox.getHeight());
-		FGEPolygon normalizedPolygon = getPolygon().transform(translateAT)
-				.transform(scaleAT);
+		AffineTransform translateAT = AffineTransform.getTranslateInstance(-boundingBox.getX(), -boundingBox.getY());
+		AffineTransform scaleAT = AffineTransform.getScaleInstance(1 / boundingBox.getWidth(), 1 / boundingBox.getHeight());
+		FGEPolygon normalizedPolygon = getPolygon().transform(translateAT).transform(scaleAT);
 		// System.out.println("Shape is now: " + normalizedPolygon);
 		returned.setShape(new Polygon(returned, normalizedPolygon));
 		return returned;

@@ -237,8 +237,8 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_diskLastModifiedDate)
 							+ "]"
 							+ " > lastWrittenOnDisk["
-							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(new Date(_lastWrittenOnDisk.getTime()
-									+ ACCEPTABLE_FS_DELAY)) + "]");
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(new Date(_lastWrittenOnDisk.getTime() + ACCEPTABLE_FS_DELAY))
+							+ "]");
 				}
 				// Since we are in this block (diskLastModified was null see the top 'if'), we consider that it is some kind of bug in the
 				// FS

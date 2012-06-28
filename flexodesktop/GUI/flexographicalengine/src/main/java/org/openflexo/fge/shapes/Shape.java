@@ -43,11 +43,9 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public abstract class Shape extends KVCObject implements XMLSerializable,
-		Cloneable {
+public abstract class Shape extends KVCObject implements XMLSerializable, Cloneable {
 
-	private static final Logger logger = Logger.getLogger(Shape.class
-			.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(Shape.class.getPackage().getName());
 
 	private transient ShapeGraphicalRepresentation graphicalRepresentation;
 
@@ -65,9 +63,9 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 
 	public static enum ShapeType {
 		RECTANGLE, SQUARE, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON/*
-																							 * ,
-																							 * CUSTOM_COMPLEX_SHAPE
-																							 */
+																								* ,
+																								* CUSTOM_COMPLEX_SHAPE
+																								*/
 	}
 
 	// *******************************************************************************
@@ -79,8 +77,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 		graphicalRepresentation = aGraphicalRepresentation;
 	}
 
-	public static Shape makeShape(ShapeType type,
-			ShapeGraphicalRepresentation aGraphicalRepresentation) {
+	public static Shape makeShape(ShapeType type, ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		if (type == ShapeType.SQUARE) {
 			return new Square(aGraphicalRepresentation);
 		} else if (type == ShapeType.RECTANGLE) {
@@ -134,8 +131,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 	public abstract FGEShape<?> getShape();
 
 	/**
-	 * Return outline for geometric shape of this shape (this is the shape
-	 * itself, but NOT filled)
+	 * Return outline for geometric shape of this shape (this is the shape itself, but NOT filled)
 	 * 
 	 * @return
 	 */
@@ -149,8 +145,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 		return graphicalRepresentation;
 	}
 
-	public final void setGraphicalRepresentation(
-			ShapeGraphicalRepresentation aGR) {
+	public final void setGraphicalRepresentation(ShapeGraphicalRepresentation aGR) {
 		if (aGR != graphicalRepresentation) {
 			// logger.info("Shape "+this+" changed GR from "+graphicalRepresentation+" to "+aGR);
 			graphicalRepresentation = aGR;
@@ -184,16 +179,14 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 
 		if (getShape().getControlPoints() != null) {
 			for (FGEPoint pt : getShape().getControlPoints()) {
-				_controlPoints.add(new ShapeResizingControlPoint(
-						getGraphicalRepresentation(), pt, null));
+				_controlPoints.add(new ShapeResizingControlPoint(getGraphicalRepresentation(), pt, null));
 			}
 		}
 		return _controlPoints;
 	}
 
 	/**
-	 * Return nearest point located on outline, asserting aPoint is related to
-	 * shape coordinates, and normalized to shape
+	 * Return nearest point located on outline, asserting aPoint is related to shape coordinates, and normalized to shape
 	 * 
 	 * @param aPoint
 	 * @return
@@ -203,8 +196,8 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 	}
 
 	/**
-	 * Return flag indicating if position represented is located inside shape,
-	 * asserting aPoint is related to shape coordinates, and normalized to shape
+	 * Return flag indicating if position represented is located inside shape, asserting aPoint is related to shape coordinates, and
+	 * normalized to shape
 	 * 
 	 * @param aPoint
 	 * @return
@@ -214,8 +207,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 	}
 
 	/**
-	 * Compute point where supplied line intersects with shape outline trying to
-	 * minimize distance from "from" point
+	 * Compute point where supplied line intersects with shape outline trying to minimize distance from "from" point
 	 * 
 	 * Returns null if no intersection was found
 	 * 
@@ -229,11 +221,9 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 	}
 
 	/**
-	 * Compute point where a line formed by current shape's center and "from"
-	 * point intersects with shape outline trying to minimize distance from
-	 * "from" point This implementation provide simplified computation with
-	 * outer bounds (relative coordinates (0,0)-(1,1)) and must be overriden
-	 * when required
+	 * Compute point where a line formed by current shape's center and "from" point intersects with shape outline trying to minimize
+	 * distance from "from" point This implementation provide simplified computation with outer bounds (relative coordinates (0,0)-(1,1))
+	 * and must be overriden when required
 	 * 
 	 * Returns null if no intersection was found
 	 * 
@@ -302,26 +292,20 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 	}
 
 	public final void paintShadow(FGEShapeGraphics g) {
-		double deep = getGraphicalRepresentation().getShadowStyle()
-				.getShadowDepth();
-		int blur = getGraphicalRepresentation().getShadowStyle()
-				.getShadowBlur();
+		double deep = getGraphicalRepresentation().getShadowStyle().getShadowDepth();
+		int blur = getGraphicalRepresentation().getShadowStyle().getShadowBlur();
 		double viewWidth = getGraphicalRepresentation().getViewWidth(1.0);
 		double viewHeight = getGraphicalRepresentation().getViewHeight(1.0);
-		AffineTransform shadowTranslation = AffineTransform
-				.getTranslateInstance(deep / viewWidth, deep / viewHeight);
+		AffineTransform shadowTranslation = AffineTransform.getTranslateInstance(deep / viewWidth, deep / viewHeight);
 
-		int darkness = getGraphicalRepresentation().getShadowStyle()
-				.getShadowDarkness();
+		int darkness = getGraphicalRepresentation().getShadowStyle().getShadowDarkness();
 
 		Graphics2D oldGraphics = g.cloneGraphics();
 
-		Area clipArea = new Area(new java.awt.Rectangle(0, 0,
-				getGraphicalRepresentation().getViewWidth(g.getScale()),
+		Area clipArea = new Area(new java.awt.Rectangle(0, 0, getGraphicalRepresentation().getViewWidth(g.getScale()),
 				getGraphicalRepresentation().getViewHeight(g.getScale())));
 		Area a = new Area(getGraphicalRepresentation().getShape().getShape());
-		a.transform(getGraphicalRepresentation()
-				.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
+		a.transform(getGraphicalRepresentation().convertNormalizedPointToViewCoordinatesAT(g.getScale()));
 		clipArea.subtract(a);
 		g.g2d.clip(clipArea);
 
@@ -329,8 +313,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 		ForegroundStyle foreground = ForegroundStyle.makeStyle(shadowColor);
 		foreground.setUseTransparency(true);
 		foreground.setTransparencyLevel(0.5f);
-		BackgroundStyle background = BackgroundStyle
-				.makeColoredBackground(shadowColor);
+		BackgroundStyle background = BackgroundStyle.makeColoredBackground(shadowColor);
 		background.setUseTransparency(true);
 		background.setTransparencyLevel(0.5f);
 		g.setDefaultForeground(foreground);
@@ -340,9 +323,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 			float transparency = 0.4f - i * 0.4f / blur;
 			foreground.setTransparencyLevel(transparency);
 			background.setTransparencyLevel(transparency);
-			AffineTransform at = AffineTransform.getScaleInstance(
-					(i + 1 + viewWidth) / viewWidth, (i + 1 + viewHeight)
-							/ viewHeight);
+			AffineTransform at = AffineTransform.getScaleInstance((i + 1 + viewWidth) / viewWidth, (i + 1 + viewHeight) / viewHeight);
 			at.concatenate(shadowTranslation);
 			getShape().transform(at).paint(g);
 		}
@@ -383,8 +364,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable,
 	public boolean equals(Object object) {
 		if (object instanceof Shape && getShape() != null) {
 			return getShape().equals(((Shape) object).getShape())
-					&& (areDimensionConstrained() == ((Shape) object)
-							.areDimensionConstrained());
+					&& (areDimensionConstrained() == ((Shape) object).areDimensionConstrained());
 		}
 		return super.equals(object);
 	}

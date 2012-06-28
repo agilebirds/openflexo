@@ -38,11 +38,9 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizationListener;
 
-public abstract class FIBView<M extends FIBComponent, J extends JComponent>
-		implements LocalizationListener {
+public abstract class FIBView<M extends FIBComponent, J extends JComponent> implements LocalizationListener {
 
-	private static final Logger logger = Logger.getLogger(FIBView.class
-			.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBView.class.getPackage().getName());
 
 	private M component;
 	private FIBController controller;
@@ -108,36 +106,30 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent>
 	public abstract void updateLanguage();
 
 	/**
-	 * Return the effective base component to be added to swing hierarchy This
-	 * component may be encapsulated in a JScrollPane
+	 * Return the effective base component to be added to swing hierarchy This component may be encapsulated in a JScrollPane
 	 * 
 	 * @return JComponent
 	 */
 	public abstract JComponent getJComponent();
 
 	/**
-	 * Return the dynamic JComponent, ie the component on which dynamic is
-	 * applied, and were actions are effective
+	 * Return the dynamic JComponent, ie the component on which dynamic is applied, and were actions are effective
 	 * 
 	 * @return J
 	 */
 	public abstract J getDynamicJComponent();
 
 	/**
-	 * Return the effective component to be added to swing hierarchy This
-	 * component may be the same as the one returned by {@link #getJComponent()}
-	 * or a encapsulation in a JScrollPane
+	 * Return the effective component to be added to swing hierarchy This component may be the same as the one returned by
+	 * {@link #getJComponent()} or a encapsulation in a JScrollPane
 	 * 
 	 * @return JComponent
 	 */
 	public JComponent getResultingJComponent() {
 		if (getComponent().getUseScrollBar()) {
 			if (scrolledComponent == null) {
-				scrolledComponent = new JScrollPane(
-						getJComponent(),
-						getComponent().getVerticalScrollbarPolicy().getPolicy(),
-						getComponent().getHorizontalScrollbarPolicy()
-								.getPolicy());
+				scrolledComponent = new JScrollPane(getJComponent(), getComponent().getVerticalScrollbarPolicy().getPolicy(),
+						getComponent().getHorizontalScrollbarPolicy().getPolicy());
 				scrolledComponent.setOpaque(false);
 				scrolledComponent.getViewport().setOpaque(false);
 				scrolledComponent.setBorder(BorderFactory.createEmptyBorder());
@@ -166,10 +158,8 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent>
 		}
 
 		boolean componentVisible = true;
-		if (getComponent().getVisible() != null
-				&& getComponent().getVisible().isSet()) {
-			Object isVisible = getComponent().getVisible().getBindingValue(
-					getController());
+		if (getComponent().getVisible() != null && getComponent().getVisible().isSet()) {
+			Object isVisible = getComponent().getVisible().getBindingValue(getController());
 			/*
 			 * if (debug) {
 			 * System.out.println("getComponent().getVisible()="+getComponent
@@ -207,8 +197,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent>
 					view.updateVisibility(false);
 				}
 				if (getResultingJComponent().getParent() instanceof JComponent) {
-					((JComponent) getResultingJComponent().getParent())
-							.revalidate();
+					((JComponent) getResultingJComponent().getParent()).revalidate();
 				} else {
 					getResultingJComponent().getParent().validate();
 				}
@@ -224,8 +213,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent>
 				// Becomes invisible
 				performSetIsVisible(false);
 				if (getResultingJComponent().getParent() instanceof JComponent) {
-					((JComponent) getResultingJComponent().getParent())
-							.revalidate();
+					((JComponent) getResultingJComponent().getParent()).revalidate();
 				} else if (getResultingJComponent().getParent() != null) {
 					getResultingJComponent().getParent().validate();
 				}
@@ -246,10 +234,8 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent>
 
 	public FIBComponentDynamicModel<?> createDynamicModel() {
 		if (getComponent().getDataType() != null) {
-			logger.fine("Create dynamic model " + this + " for "
-					+ getComponent());
-			return buildDynamicModel(TypeUtils.getBaseClass(getComponent()
-					.getDataType()));
+			logger.fine("Create dynamic model " + this + " for " + getComponent());
+			return buildDynamicModel(TypeUtils.getBaseClass(getComponent().getDataType()));
 		}
 		return null;
 	}
@@ -276,8 +262,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent>
 			if (view != null) {
 				view.updateDataObject(getDataObject());
 			} else {
-				logger.warning("Unexpected null view when retrieving view for "
-						+ c);
+				logger.warning("Unexpected null view when retrieving view for " + c);
 			}
 		}
 	}
@@ -303,8 +288,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent>
 	public abstract void updateFont();
 
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(
-				getController().getLocalizer(), key);
+		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
 	}
 
 	public boolean isSelectableComponent() {

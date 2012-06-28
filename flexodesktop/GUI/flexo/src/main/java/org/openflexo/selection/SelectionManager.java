@@ -39,25 +39,20 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.palette.PalettePanel;
 
 /**
- * Abstract selection manager: there is one SelectionManager for each
- * FlexoModule. This manager is responsible of:
+ * Abstract selection manager: there is one SelectionManager for each FlexoModule. This manager is responsible of:
  * <UL>
- * <LI>Selection management: it holds a list of all currently selected objects,
- * as FlexoModelObject instances</LI>
- * <LI>Synchonization of all components synchronized with itself objects, as
- * FlexoModelObject instances</LI>
+ * <LI>Selection management: it holds a list of all currently selected objects, as FlexoModelObject instances</LI>
+ * <LI>Synchonization of all components synchronized with itself objects, as FlexoModelObject instances</LI>
  * <LI>Focused and last selected objects management</LI>
  * <LI>Inspection management</LI>
- * <LI>Copy/Cut/Paste/SelectAll management by storing and managing a
- * {@link org.openflexo.selection.FlexoClipboard}</LI>
+ * <LI>Copy/Cut/Paste/SelectAll management by storing and managing a {@link org.openflexo.selection.FlexoClipboard}</LI>
  * </UL>
  * 
  * @author bmangez, sguerin
  */
 public abstract class SelectionManager extends Observable {
 
-	private static final Logger logger = Logger
-			.getLogger(SelectionManager.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SelectionManager.class.getPackage().getName());
 
 	protected FlexoClipboard _clipboard;
 
@@ -97,8 +92,7 @@ public abstract class SelectionManager extends Observable {
 		_selectionListeners = new Vector<SelectionListener>();
 
 		inspectionContext = new Hashtable<String, Object>();
-		inspectionContext.put(MODULE_KEY, getController().getModule()
-				.getModule().getClassName());
+		inspectionContext.put(MODULE_KEY, getController().getModule().getModule().getClassName());
 	}
 
 	public FlexoController getController() {
@@ -189,8 +183,7 @@ public abstract class SelectionManager extends Observable {
 	 */
 	public void resetSelection() {
 		_selection.clear();
-		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 			e.nextElement().fireResetSelection();
 		}
 		setLastSelectedObject(null);
@@ -227,19 +220,16 @@ public abstract class SelectionManager extends Observable {
 	 *            : the object to add to selection
 	 */
 	public void updateSelectionForMaster(SelectionSynchronizedComponent master) {
-		for (Enumeration<FlexoModelObject> en = getSelection().elements(); en
-				.hasMoreElements();) {
+		for (Enumeration<FlexoModelObject> en = getSelection().elements(); en.hasMoreElements();) {
 			FlexoModelObject obj = en.nextElement();
 			if (!master.mayRepresents(obj)) {
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Removing " + obj
-							+ " because master view is not able to show it");
+					logger.fine("Removing " + obj + " because master view is not able to show it");
 				}
 				internallyRemoveFromSelected(obj);
 			} else {
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Keeping " + obj
-							+ " because master view is able to show it");
+					logger.fine("Keeping " + obj + " because master view is able to show it");
 				}
 			}
 		}
@@ -256,18 +246,15 @@ public abstract class SelectionManager extends Observable {
 		if (objects == null || objects.isEmpty()) {
 			return;
 		}
-		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 			SelectionListener sl = e.nextElement();
 			sl.fireBeginMultipleSelection();
 		}
-		for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en
-				.hasMoreElements();) {
+		for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en.hasMoreElements();) {
 			FlexoModelObject nextObj = en.nextElement();
 			internallyAddToSelected(nextObj, objects.size() == 1);
 		}
-		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 			SelectionListener sl = e.nextElement();
 			sl.fireEndMultipleSelection();
 		}
@@ -278,21 +265,18 @@ public abstract class SelectionManager extends Observable {
 	 * Remove supplied objects from current selection
 	 * 
 	 * @param objects
-	 *            : objects to remove from selection, as a Vector of
-	 *            FlexoModelObject
+	 *            : objects to remove from selection, as a Vector of FlexoModelObject
 	 */
 	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) {
 		if (objects == null || objects.isEmpty()) {
 			return;
 		}
-		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 			SelectionListener sl = e.nextElement();
 			sl.fireBeginMultipleSelection();
 		}
 		internallyRemoveFromSelected(objects);
-		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 			SelectionListener sl = e.nextElement();
 			sl.fireEndMultipleSelection();
 		}
@@ -303,8 +287,7 @@ public abstract class SelectionManager extends Observable {
 	 * Sets supplied vector of FlexoModelObjects to be the current Selection
 	 * 
 	 * @param objects
-	 *            : the object to set for current selection, as a Vector of
-	 *            FlexoModelObject
+	 *            : the object to set for current selection, as a Vector of FlexoModelObject
 	 */
 	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
 		resetSelection();
@@ -336,26 +319,21 @@ public abstract class SelectionManager extends Observable {
 	}
 
 	/**
-	 * Request to all registered SelectionListener of this SelectionManager to
-	 * be back-synchronized with current selection
+	 * Request to all registered SelectionListener of this SelectionManager to be back-synchronized with current selection
 	 */
 	public void fireUpdateSelection() {
-		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 			SelectionListener sl = e.nextElement();
 			fireUpdateSelection(sl);
 		}
 	}
 
 	/**
-	 * Request to supplied SelectionListener of this SelectionManager to be
-	 * back-synchronized with current selection
+	 * Request to supplied SelectionListener of this SelectionManager to be back-synchronized with current selection
 	 */
-	public void fireUpdateSelection(
-			SelectionListener selectionListenerToSynchronize) {
+	public void fireUpdateSelection(SelectionListener selectionListenerToSynchronize) {
 		selectionListenerToSynchronize.fireResetSelection();
-		for (Enumeration<FlexoModelObject> e = getSelection().elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<FlexoModelObject> e = getSelection().elements(); e.hasMoreElements();) {
 			FlexoModelObject o = e.nextElement();
 			if (!o.isDeleted()) {
 				selectionListenerToSynchronize.fireObjectSelected(o);
@@ -406,8 +384,7 @@ public abstract class SelectionManager extends Observable {
 	 * @param object
 	 *            : the object to add to selection
 	 */
-	protected void internallyAddToSelected(FlexoModelObject object,
-			boolean isNewFocusedObject) {
+	protected void internallyAddToSelected(FlexoModelObject object, boolean isNewFocusedObject) {
 		if (!isSelectable(object)) {
 			return;
 		}
@@ -417,8 +394,7 @@ public abstract class SelectionManager extends Observable {
 		boolean selectionWasEmpty = (getSelectionSize() == 0);
 		if (!selectionContains(object)) {
 			_selection.add(object);
-			for (Enumeration<SelectionListener> e = _selectionListeners
-					.elements(); e.hasMoreElements();) {
+			for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 				SelectionListener sl = e.nextElement();
 				sl.fireObjectSelected(object);
 			}
@@ -453,8 +429,7 @@ public abstract class SelectionManager extends Observable {
 		}
 		if (selectionContains(object)) {
 			_selection.remove(object);
-			for (Enumeration<SelectionListener> e = _selectionListeners
-					.elements(); e.hasMoreElements();) {
+			for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 				SelectionListener sl = e.nextElement();
 				sl.fireObjectDeselected(object);
 			}
@@ -471,8 +446,7 @@ public abstract class SelectionManager extends Observable {
 	 * @param objects
 	 *            : the objects to remove from selection
 	 */
-	protected void internallyRemoveFromSelected(
-			Vector<? extends FlexoModelObject> objects) {
+	protected void internallyRemoveFromSelected(Vector<? extends FlexoModelObject> objects) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("internallyRemoveFromSelected with " + objects);
 		}
@@ -488,8 +462,7 @@ public abstract class SelectionManager extends Observable {
 			}
 			if (selectionContains(object)) {
 				_selection.remove(object);
-				for (Enumeration<SelectionListener> e = _selectionListeners
-						.elements(); e.hasMoreElements();) {
+				for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 					SelectionListener sl = e.nextElement();
 					sl.fireObjectDeselected(object);
 				}
@@ -504,11 +477,9 @@ public abstract class SelectionManager extends Observable {
 	@Override
 	public String toString() {
 		String returned = super.toString() + "\n";
-		for (Enumeration<FlexoModelObject> en = _selection.elements(); en
-				.hasMoreElements();) {
+		for (Enumeration<FlexoModelObject> en = _selection.elements(); en.hasMoreElements();) {
 			FlexoModelObject o = en.nextElement();
-			StringTokenizer st = new StringTokenizer(o.getClass().getName(),
-					".");
+			StringTokenizer st = new StringTokenizer(o.getClass().getName(), ".");
 			String className = "";
 			while (st.hasMoreTokens()) {
 				className = st.nextToken();
@@ -580,8 +551,7 @@ public abstract class SelectionManager extends Observable {
 	}
 
 	/**
-	 * override this method in your Module's selectionManager if you want to
-	 * specify another inspector for an object.
+	 * override this method in your Module's selectionManager if you want to specify another inspector for an object.
 	 */
 	/*
 	 * protected String getInspectorNameForObject(InspectableObject inspectable)
@@ -594,34 +564,25 @@ public abstract class SelectionManager extends Observable {
 			return;
 		}
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("setCurrentInspectedObject: " + countObservers()
-					+ " observers");
+			logger.fine("setCurrentInspectedObject: " + countObservers() + " observers");
 		}
 		if (_inspectedObject != null) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Inspected object was: "
-						+ _inspectedObject.getClass().getName()
-						+ " with "
-						+ ((FlexoModelObject) _inspectedObject)
-								.countObservers() + " observers");
+				logger.fine("Inspected object was: " + _inspectedObject.getClass().getName() + " with "
+						+ ((FlexoModelObject) _inspectedObject).countObservers() + " observers");
 			}
 		}
 		if (inspectable != null) {
-			if (_inspectedObject == null
-					|| !_inspectedObject.equals(inspectable)) {
+			if (_inspectedObject == null || !_inspectedObject.equals(inspectable)) {
 				_inspectedObject = inspectable;
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Inspected object is now: "
-							+ _inspectedObject.getClass().getName()
-							+ " with "
-							+ ((FlexoModelObject) _inspectedObject)
-									.countObservers() + " observers");
+					logger.fine("Inspected object is now: " + _inspectedObject.getClass().getName() + " with "
+							+ ((FlexoModelObject) _inspectedObject).countObservers() + " observers");
 				}
 				setChanged();
 				// Component focusOwner =
 				// KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-				notifyObservers(new UniqueSelection(_inspectedObject,
-						getInspectionContext()));
+				notifyObservers(new UniqueSelection(_inspectedObject, getInspectionContext()));
 				// this code seems to be the cause of the switch module bug
 				// if (focusOwner != null) {
 				// focusOwner.requestFocusInWindow();

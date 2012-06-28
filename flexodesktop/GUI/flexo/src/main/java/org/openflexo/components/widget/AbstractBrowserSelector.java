@@ -42,13 +42,10 @@ import org.openflexo.swing.TextFieldCustomPopup;
  * @author sguerin
  * 
  */
-public abstract class AbstractBrowserSelector<T extends FlexoModelObject>
-		extends TextFieldCustomPopup<T> implements
-		AbstractSelectorPanelOwner<T>,
-		FIBCustomComponent<T, TextFieldCustomPopup<T>> {
+public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extends TextFieldCustomPopup<T> implements
+		AbstractSelectorPanelOwner<T>, FIBCustomComponent<T, TextFieldCustomPopup<T>> {
 
-	static final Logger logger = Logger.getLogger(AbstractBrowserSelector.class
-			.getPackage().getName());
+	static final Logger logger = Logger.getLogger(AbstractBrowserSelector.class.getPackage().getName());
 
 	FlexoProject _project;
 	FlexoModelObject _rootObject = null;
@@ -63,13 +60,11 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject>
 	private Integer defaultWidth = null;
 	private Integer defaultHeight = null;
 
-	public AbstractBrowserSelector(FlexoProject project, T editedObject,
-			Class<T> selectableClass) {
+	public AbstractBrowserSelector(FlexoProject project, T editedObject, Class<T> selectableClass) {
 		this(project, editedObject, selectableClass, -1);
 	}
 
-	public AbstractBrowserSelector(FlexoProject project, T editedObject,
-			Class<T> selectableClass, int cols) {
+	public AbstractBrowserSelector(FlexoProject project, T editedObject, Class<T> selectableClass, int cols) {
 		super(editedObject, cols);
 		_project = project;
 		_revertValue = editedObject;
@@ -77,8 +72,7 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject>
 		setFocusable(true);
 		getTextField().setFocusable(true);
 		getTextField().setEditable(true);
-		getTextField().addMouseWheelListener(
-				new BrowserSelectorMouseWheelListener());
+		getTextField().addMouseWheelListener(new BrowserSelectorMouseWheelListener());
 		completionListKeyAdapter = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -97,9 +91,7 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject>
 						_selectorPanel.processDownPressed();
 						e.consume();
 					}
-				} else if ((!e.isActionKey())
-						&& (e.getKeyCode() != KeyEvent.VK_SHIFT)
-						&& (e.getKeyCode() != KeyEvent.VK_ENTER)
+				} else if ((!e.isActionKey()) && (e.getKeyCode() != KeyEvent.VK_SHIFT) && (e.getKeyCode() != KeyEvent.VK_ENTER)
 						&& (e.getKeyCode() != KeyEvent.VK_TAB)) {
 					getCustomPanel();
 					_selectorPanel._completionListModel.textWasChanged();
@@ -107,8 +99,7 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject>
 			}
 		};
 		getTextField().addKeyListener(completionListKeyAdapter);
-		_downButton
-				.addMouseWheelListener(new BrowserSelectorMouseWheelListener());
+		_downButton.addMouseWheelListener(new BrowserSelectorMouseWheelListener());
 	}
 
 	@Override
@@ -198,8 +189,7 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject>
 		return _selectableClass.isAssignableFrom(object.getClass());
 	}
 
-	private class BrowserSelectorMouseWheelListener implements
-			MouseWheelListener {
+	private class BrowserSelectorMouseWheelListener implements MouseWheelListener {
 
 		/**
          *
@@ -213,32 +203,23 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject>
 				return;
 			}
 			if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
-				if (_selectorPanel._browserView.getTreeScrollPane()
-						.getVerticalScrollBar() != null) {
+				if (_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar() != null) {
 					_selectorPanel._browserView
 							.getTreeScrollPane()
 							.getVerticalScrollBar()
 							.setValue(
-									_selectorPanel._browserView
-											.getTreeScrollPane()
-											.getVerticalScrollBar().getValue()
+									_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getValue()
 											+ e.getUnitsToScroll());
 				}
 			} else {
-				if (_selectorPanel._browserView.getTreeScrollPane()
-						.getVerticalScrollBar() != null) {
+				if (_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar() != null) {
 					_selectorPanel._browserView
 							.getTreeScrollPane()
 							.getVerticalScrollBar()
 							.setValue(
-									_selectorPanel._browserView
-											.getTreeScrollPane()
-											.getVerticalScrollBar().getValue()
+									_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getValue()
 											+ e.getWheelRotation()
-											* _selectorPanel._browserView
-													.getTreeScrollPane()
-													.getVerticalScrollBar()
-													.getBlockIncrement());
+											* _selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getBlockIncrement());
 				}
 			}
 		}

@@ -27,8 +27,7 @@ import org.openflexo.fib.view.FIBView;
 
 public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 
-	private static final Logger logger = Logger.getLogger(FIBTabView.class
-			.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBTabView.class.getPackage().getName());
 
 	private boolean wasSelected = false;
 
@@ -47,8 +46,7 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 	@Override
 	protected void performSetIsVisible(boolean isVisible) {
 
-		logger.info("Called performSetIsVisible " + isVisible
-				+ " on TabComponent " + getComponent().getTitle());
+		logger.info("Called performSetIsVisible " + isVisible + " on TabComponent " + getComponent().getTitle());
 
 		super.performSetIsVisible(isVisible);
 
@@ -58,28 +56,22 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 				int newIndex = 0;
 				for (FIBView v : getParentView().getSubViews()) {
 					if (v instanceof FIBTabView && v.isComponentVisible()) {
-						if (getComponent().getIndex() > ((FIBTabView<?>) v)
-								.getComponent().getIndex()) {
-							newIndex = parent.getJComponent().indexOfComponent(
-									v.getResultingJComponent()) + 1;
+						if (getComponent().getIndex() > ((FIBTabView<?>) v).getComponent().getIndex()) {
+							newIndex = parent.getJComponent().indexOfComponent(v.getResultingJComponent()) + 1;
 						}
 					}
 				}
 
-				logger.fine("********** Adding component "
-						+ getComponent().getTitle() + " at index " + newIndex);
+				logger.fine("********** Adding component " + getComponent().getTitle() + " at index " + newIndex);
 
-				parent.getJComponent().add(getResultingJComponent(),
-						getLocalized(getComponent().getTitle()), newIndex);
+				parent.getJComponent().add(getResultingJComponent(), getLocalized(getComponent().getTitle()), newIndex);
 				if (wasSelected) {
-					parent.getJComponent().setSelectedComponent(
-							getResultingJComponent());
+					parent.getJComponent().setSelectedComponent(getResultingJComponent());
 				}
 			} else {
 				wasSelected = (parent.getJComponent().getSelectedComponent() == getResultingJComponent());
 				parent.getJComponent().remove(getResultingJComponent());
-				logger.fine("********** Removing component "
-						+ getComponent().getTitle());
+				logger.fine("********** Removing component " + getComponent().getTitle());
 			}
 		}
 

@@ -252,7 +252,7 @@ public class FIBCustomColumn extends FIBTableColumn {
 			}
 			return null;
 		}
-		
+
 		@Override
 		public List<? extends FIBModelObject> getEmbeddedObjects() {
 			return null;

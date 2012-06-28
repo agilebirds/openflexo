@@ -92,11 +92,9 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.toolbox.StringUtils;
 
-public class FIBController<T> extends Observable implements
-		BindingEvaluationContext, Observer {
+public class FIBController<T> extends Observable implements BindingEvaluationContext, Observer {
 
-	private static final Logger logger = Logger.getLogger(FIBController.class
-			.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
 	private T dataObject;
 	private final FIBComponent rootComponent;
@@ -208,9 +206,8 @@ public class FIBController<T> extends Observable implements
 	}
 
 	/**
-	 * Force the whole underlying view hierarchy to be recomputed Beware of
-	 * using this method only when a strong structure modification raised, since
-	 * this execution is really costly
+	 * Force the whole underlying view hierarchy to be recomputed Beware of using this method only when a strong structure modification
+	 * raised, since this execution is really costly
 	 */
 	public void update() {
 		setDataObject(getDataObject(), true);
@@ -220,27 +217,20 @@ public class FIBController<T> extends Observable implements
 		FIBController returned = null;
 		if (fibComponent.getControllerClass() != null) {
 			try {
-				Constructor c = fibComponent.getControllerClass()
-						.getConstructor(FIBComponent.class);
+				Constructor c = fibComponent.getControllerClass().getConstructor(FIBComponent.class);
 				returned = (FIBController) c.newInstance(fibComponent);
 			} catch (SecurityException e) {
-				logger.warning("SecurityException: Could not instanciate "
-						+ fibComponent.getControllerClass());
+				logger.warning("SecurityException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (NoSuchMethodException e) {
-				logger.warning("NoSuchMethodException: Could not instanciate "
-						+ fibComponent.getControllerClass());
+				logger.warning("NoSuchMethodException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (IllegalArgumentException e) {
-				logger.warning("IllegalArgumentException: Could not instanciate "
-						+ fibComponent.getControllerClass());
+				logger.warning("IllegalArgumentException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (InstantiationException e) {
-				logger.warning("InstantiationException: Could not instanciate "
-						+ fibComponent.getControllerClass());
+				logger.warning("InstantiationException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (IllegalAccessException e) {
-				logger.warning("IllegalAccessException: Could not instanciate "
-						+ fibComponent.getControllerClass());
+				logger.warning("IllegalAccessException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (InvocationTargetException e) {
-				logger.warning("InvocationTargetException: Could not instanciate "
-						+ fibComponent.getControllerClass());
+				logger.warning("InvocationTargetException: Could not instanciate " + fibComponent.getControllerClass());
 			}
 		}
 		if (returned == null) {
@@ -253,21 +243,17 @@ public class FIBController<T> extends Observable implements
 		return makeView(fibComponent, instanciateController(fibComponent));
 	}
 
-	public static FIBView makeView(FIBComponent fibComponent,
-			FIBController controller) {
+	public static FIBView makeView(FIBComponent fibComponent, FIBController controller) {
 		return controller.buildView(fibComponent);
 	}
 
-	protected static void recursivelyAddEditorLauncher(
-			EditorLauncher editorLauncher,
+	protected static void recursivelyAddEditorLauncher(EditorLauncher editorLauncher,
 			FIBContainerView<? extends FIBContainer, JComponent> container) {
 		container.getJComponent().addMouseListener(editorLauncher);
 		for (FIBComponent c : container.getComponent().getSubComponents()) {
-			FIBView<FIBComponent, JComponent> subView = container
-					.getController().viewForComponent(c);
+			FIBView<FIBComponent, JComponent> subView = container.getController().viewForComponent(c);
 			if (subView instanceof FIBContainerView) {
-				recursivelyAddEditorLauncher(editorLauncher,
-						(FIBContainerView) subView);
+				recursivelyAddEditorLauncher(editorLauncher, (FIBContainerView) subView);
 			}
 		}
 	}
@@ -288,10 +274,8 @@ public class FIBController<T> extends Observable implements
 		FIBView returned = makeContainer(fibContainer);
 		if (returned != null && fibContainer.isRootComponent()) {
 			if (returned instanceof FIBContainerView && allowsFIBEdition()) {
-				EditorLauncher editorLauncher = new EditorLauncher(this,
-						fibContainer);
-				recursivelyAddEditorLauncher(editorLauncher,
-						(FIBContainerView) returned);
+				EditorLauncher editorLauncher = new EditorLauncher(this, fibContainer);
+				recursivelyAddEditorLauncher(editorLauncher, (FIBContainerView) returned);
 			}
 			return returned;
 		}
@@ -310,24 +294,20 @@ public class FIBController<T> extends Observable implements
 			public void mouseClicked(MouseEvent e) {
 				mouseEvent = e;
 				fireMouseClicked(returned.getDynamicModel(), e.getClickCount());
-				if (fibWidget.hasRightClickAction()
-						&& (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3)) {
+				if (fibWidget.hasRightClickAction() && (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3)) {
 					// Detected right-click associated with action
 					fibWidget.getRightClickAction().execute(FIBController.this);
 				} else if (fibWidget.hasClickAction() && e.getClickCount() == 1) {
 					// Detected click associated with action
 					fibWidget.getClickAction().execute(FIBController.this);
-				} else if (fibWidget.hasDoubleClickAction()
-						&& e.getClickCount() == 2) {
+				} else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
 					// Detected double-click associated with action
-					fibWidget.getDoubleClickAction()
-							.execute(FIBController.this);
+					fibWidget.getDoubleClickAction().execute(FIBController.this);
 				}
 			}
 		});
 		if (StringUtils.isNotEmpty(fibWidget.getTooltipText())) {
-			returned.getDynamicJComponent().setToolTipText(
-					fibWidget.getTooltipText());
+			returned.getDynamicJComponent().setToolTipText(fibWidget.getTooltipText());
 		}
 		returned.updateGraphicalProperties();
 		return returned;
@@ -427,13 +407,11 @@ public class FIBController<T> extends Observable implements
 	public void searchNewLocalizationEntries() {
 		logger.fine("Search new localization entries");
 		Language currentLanguage = FlexoLocalization.getCurrentLanguage();
-		getRootComponent().retrieveFIBLocalizedDictionary()
-				.beginSearchNewLocalizationEntries();
+		getRootComponent().retrieveFIBLocalizedDictionary().beginSearchNewLocalizationEntries();
 		for (Language language : Language.availableValues()) {
 			switchToLanguage(language);
 		}
-		getRootComponent().retrieveFIBLocalizedDictionary()
-				.endSearchNewLocalizationEntries();
+		getRootComponent().retrieveFIBLocalizedDictionary().endSearchNewLocalizationEntries();
 		getRootComponent().retrieveFIBLocalizedDictionary().refresh();
 		switchToLanguage(currentLanguage);
 		setChanged();
@@ -469,8 +447,7 @@ public class FIBController<T> extends Observable implements
 				newFocusedWidget.getJComponent().repaint();
 			}
 			if (newFocusedWidget.isSelectableComponent()) {
-				lastFocusedSelectable = newFocusedWidget
-						.getSelectableComponent();
+				lastFocusedSelectable = newFocusedWidget.getSelectableComponent();
 				if (lastFocusedSelectable.synchronizedWithSelection()) {
 					selectionLeader = newFocusedWidget.getSelectableComponent();
 					logger.info("Selection LEADER is now " + selectionLeader);
@@ -484,8 +461,7 @@ public class FIBController<T> extends Observable implements
 		return focusedWidget == widget;
 	}
 
-	public void updateSelection(FIBSelectable widget,
-			List<Object> oldSelection, List<Object> newSelection) {
+	public void updateSelection(FIBSelectable widget, List<Object> oldSelection, List<Object> newSelection) {
 		if (widget == selectionLeader) {
 			fireSelectionChanged(widget);
 			List<Object> objectsToRemoveFromSelection = new Vector<Object>();
@@ -503,20 +479,16 @@ public class FIBController<T> extends Observable implements
 			Enumeration<FIBView> en = getViews();
 			while (en.hasMoreElements()) {
 				FIBView v = en.nextElement();
-				if (v.isSelectableComponent()
-						&& v.getSelectableComponent() != selectionLeader
-						&& v.getSelectableComponent()
-								.synchronizedWithSelection()) {
+				if (v.isSelectableComponent() && v.getSelectableComponent() != selectionLeader
+						&& v.getSelectableComponent().synchronizedWithSelection()) {
 					for (Object o : objectsToAddToSelection) {
 						if (v.getSelectableComponent().mayRepresent(o)) {
-							v.getSelectableComponent()
-									.objectAddedToSelection(o);
+							v.getSelectableComponent().objectAddedToSelection(o);
 						}
 					}
 					for (Object o : objectsToRemoveFromSelection) {
 						if (v.getSelectableComponent().mayRepresent(o)) {
-							v.getSelectableComponent()
-									.objectRemovedFromSelection(o);
+							v.getSelectableComponent().objectRemovedFromSelection(o);
 						}
 					}
 				}
@@ -529,8 +501,7 @@ public class FIBController<T> extends Observable implements
 		Enumeration<FIBView> en = getViews();
 		while (en.hasMoreElements()) {
 			FIBView v = en.nextElement();
-			if (v.isSelectableComponent()
-					&& v.getSelectableComponent().synchronizedWithSelection()) {
+			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				if (v.getSelectableComponent().mayRepresent(o)) {
 					v.getSelectableComponent().objectAddedToSelection(o);
 					selectionLeader = v.getSelectableComponent();
@@ -546,8 +517,7 @@ public class FIBController<T> extends Observable implements
 		Enumeration<FIBView> en = getViews();
 		while (en.hasMoreElements()) {
 			FIBView v = en.nextElement();
-			if (v.isSelectableComponent()
-					&& v.getSelectableComponent().synchronizedWithSelection()) {
+			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				if (v.getSelectableComponent().mayRepresent(o)) {
 					v.getSelectableComponent().objectRemovedFromSelection(o);
 				}
@@ -560,8 +530,7 @@ public class FIBController<T> extends Observable implements
 		Enumeration<FIBView> en = getViews();
 		while (en.hasMoreElements()) {
 			FIBView v = en.nextElement();
-			if (v.isSelectableComponent()
-					&& v.getSelectableComponent().synchronizedWithSelection()) {
+			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				v.getSelectableComponent().selectionResetted();
 			}
 		}
@@ -604,11 +573,9 @@ public class FIBController<T> extends Observable implements
 			if (fibContainer instanceof FIBTab) {
 				return new FIBTabView((FIBTab) fibContainer, FIBController.this);
 			} else if (fibContainer instanceof FIBPanel) {
-				return new FIBPanelView((FIBPanel) fibContainer,
-						FIBController.this);
+				return new FIBPanelView((FIBPanel) fibContainer, FIBController.this);
 			} else if (fibContainer instanceof FIBTabPanel) {
-				return new FIBTabPanelView((FIBTabPanel) fibContainer,
-						FIBController.this);
+				return new FIBTabPanelView((FIBTabPanel) fibContainer, FIBController.this);
 			}
 			return null;
 		}
@@ -616,93 +583,71 @@ public class FIBController<T> extends Observable implements
 		@Override
 		public FIBWidgetView makeWidget(FIBWidget fibWidget) {
 			if (fibWidget instanceof FIBTextField) {
-				return new FIBTextFieldWidget((FIBTextField) fibWidget,
-						FIBController.this);
+				return new FIBTextFieldWidget((FIBTextField) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBTextArea) {
-				return new FIBTextAreaWidget((FIBTextArea) fibWidget,
-						FIBController.this);
+				return new FIBTextAreaWidget((FIBTextArea) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBHtmlEditor) {
-				return new FIBHtmlEditorWidget((FIBHtmlEditor) fibWidget,
-						FIBController.this);
+				return new FIBHtmlEditorWidget((FIBHtmlEditor) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBLabel) {
-				return new FIBLabelWidget((FIBLabel) fibWidget,
-						FIBController.this);
+				return new FIBLabelWidget((FIBLabel) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBImage) {
-				return new FIBImageWidget((FIBImage) fibWidget,
-						FIBController.this);
+				return new FIBImageWidget((FIBImage) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBCheckBox) {
-				return new FIBCheckBoxWidget((FIBCheckBox) fibWidget,
-						FIBController.this);
+				return new FIBCheckBoxWidget((FIBCheckBox) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBTable) {
-				return new FIBTableWidget((FIBTable) fibWidget,
-						FIBController.this);
+				return new FIBTableWidget((FIBTable) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBBrowser) {
-				return new FIBBrowserWidget((FIBBrowser) fibWidget,
-						FIBController.this);
+				return new FIBBrowserWidget((FIBBrowser) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBDropDown) {
-				return new FIBDropDownWidget((FIBDropDown) fibWidget,
-						FIBController.this);
+				return new FIBDropDownWidget((FIBDropDown) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBList) {
-				return new FIBListWidget((FIBList) fibWidget,
-						FIBController.this);
+				return new FIBListWidget((FIBList) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBNumber) {
 				FIBNumber w = (FIBNumber) fibWidget;
 				switch (w.getNumberType()) {
 				case ByteType:
-					return new FIBNumberWidget.FIBByteWidget(w,
-							FIBController.this);
+					return new FIBNumberWidget.FIBByteWidget(w, FIBController.this);
 				case ShortType:
-					return new FIBNumberWidget.FIBShortWidget(w,
-							FIBController.this);
+					return new FIBNumberWidget.FIBShortWidget(w, FIBController.this);
 				case IntegerType:
-					return new FIBNumberWidget.FIBIntegerWidget(w,
-							FIBController.this);
+					return new FIBNumberWidget.FIBIntegerWidget(w, FIBController.this);
 				case LongType:
-					return new FIBNumberWidget.FIBLongWidget(w,
-							FIBController.this);
+					return new FIBNumberWidget.FIBLongWidget(w, FIBController.this);
 				case FloatType:
-					return new FIBNumberWidget.FIBFloatWidget(w,
-							FIBController.this);
+					return new FIBNumberWidget.FIBFloatWidget(w, FIBController.this);
 				case DoubleType:
-					return new FIBNumberWidget.FIBDoubleWidget(w,
-							FIBController.this);
+					return new FIBNumberWidget.FIBDoubleWidget(w, FIBController.this);
 				default:
 					break;
 				}
 			}
 			if (fibWidget instanceof FIBColor) {
-				return new FIBColorWidget((FIBColor) fibWidget,
-						FIBController.this);
+				return new FIBColorWidget((FIBColor) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBFont) {
-				return new FIBFontWidget((FIBFont) fibWidget,
-						FIBController.this);
+				return new FIBFontWidget((FIBFont) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBFile) {
-				return new FIBFileWidget((FIBFile) fibWidget,
-						FIBController.this);
+				return new FIBFileWidget((FIBFile) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBButton) {
-				return new FIBButtonWidget((FIBButton) fibWidget,
-						FIBController.this);
+				return new FIBButtonWidget((FIBButton) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBRadioButtonList) {
-				return new FIBRadioButtonListWidget(
-						(FIBRadioButtonList) fibWidget, FIBController.this);
+				return new FIBRadioButtonListWidget((FIBRadioButtonList) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBCustom) {
-				return new FIBCustomWidget((FIBCustom) fibWidget,
-						FIBController.this);
+				return new FIBCustomWidget((FIBCustom) fibWidget, FIBController.this);
 			}
 			return null;
 		}
@@ -714,8 +659,7 @@ public class FIBController<T> extends Observable implements
 		private FIBController controller;
 
 		public EditorLauncher(FIBController controller, FIBComponent component) {
-			logger.fine("make EditorLauncher for component: "
-					+ component.getDefinitionFile());
+			logger.fine("make EditorLauncher for component: " + component.getDefinitionFile());
 			this.component = component;
 			this.controller = controller;
 		}
@@ -736,14 +680,12 @@ public class FIBController<T> extends Observable implements
 				logger.warning("Cannot find FIB file definition for component, aborting FIB edition");
 				return;
 			}
-			Class embeddedEditor = Class
-					.forName("org.openflexo.fib.editor.FIBEmbeddedEditor");
+			Class embeddedEditor = Class.forName("org.openflexo.fib.editor.FIBEmbeddedEditor");
 			Constructor c = embeddedEditor.getConstructors()[0];
 			Object[] args = new Object[2];
 			args[0] = fibFile;
 			args[1] = getDataObject();
-			logger.info("Opening FIB editor for "
-					+ component.getDefinitionFile());
+			logger.info("Opening FIB editor for " + component.getDefinitionFile());
 			c.newInstance(args);
 		} catch (ClassNotFoundException e) {
 			logger.warning("Cannot open FIB Editor, please add org.openflexo.fib.editor.FIBEmbeddedEditor in the class path");

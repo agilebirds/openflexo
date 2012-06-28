@@ -56,8 +56,7 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class MainInspectorController implements Observer, ChangeListener {
 
-	static final Logger logger = Logger.getLogger(MainInspectorController.class
-			.getPackage().getName());
+	static final Logger logger = Logger.getLogger(MainInspectorController.class.getPackage().getName());
 
 	private final JDialog inspectorDialog;
 	private final JPanel EMPTY_CONTENT;
@@ -83,18 +82,15 @@ public class MainInspectorController implements Observer, ChangeListener {
 		File inspectorsDir = new FileResource("Inspectors/COMMON");
 		loadDirectory(inspectorsDir);
 
-		inspectorDialog = new JDialog(flexoController.getFlexoFrame(),
-				"Inspector", false);
+		inspectorDialog = new JDialog(flexoController.getFlexoFrame(), "Inspector", false);
 		inspectorSync.addToSynchronizedWindows(inspectorDialog);
 		inspectorDialog.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		EMPTY_CONTENT = new JPanel(new BorderLayout());
 		EMPTY_CONTENT.setPreferredSize(new Dimension(400, 400));
-		EMPTY_CONTENT.add(new JLabel("No selection", SwingConstants.CENTER),
-				BorderLayout.CENTER);
+		EMPTY_CONTENT.add(new JLabel("No selection", SwingConstants.CENTER), BorderLayout.CENTER);
 		MULTIPLE_SELECTION_CONTENT = new JPanel(new BorderLayout());
 		MULTIPLE_SELECTION_CONTENT.setPreferredSize(new Dimension(400, 400));
-		MULTIPLE_SELECTION_CONTENT.add(new JLabel("Multiple selection",
-				SwingConstants.CENTER), BorderLayout.CENTER);
+		MULTIPLE_SELECTION_CONTENT.add(new JLabel("Multiple selection", SwingConstants.CENTER), BorderLayout.CENTER);
 
 		rootPane = new JPanel(new BorderLayout());
 		inspectorDialog.getContentPane().setLayout(new BorderLayout());
@@ -125,14 +121,12 @@ public class MainInspectorController implements Observer, ChangeListener {
 			}
 		})) {
 			// System.out.println("Read "+f.getAbsolutePath());
-			FIBInspector inspector = (FIBInspector) FIBLibrary.instance()
-					.retrieveFIBComponent(f);
+			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
 			if (inspector != null) {
 				if (inspector.getDataClass() != null) {
 					// try {
 					inspectors.put(inspector.getDataClass(), inspector);
-					logger.info("Loaded inspector: " + f.getName() + " for "
-							+ inspector.getDataClass());
+					logger.info("Loaded inspector: " + f.getName() + " for " + inspector.getDataClass());
 					/*
 					 * } catch (ClassNotFoundException e) {
 					 * logger.warning("Not found: " +
@@ -168,8 +162,7 @@ public class MainInspectorController implements Observer, ChangeListener {
 			 */
 
 			FIBView inspectorView = FIBController.makeView(inspector);
-			((FIBInspectorController) inspectorView.getController())
-					.setEditor(editor);
+			((FIBInspectorController) inspectorView.getController()).setEditor(editor);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			logger.info("Initialized inspector for " + inspector.getDataClass());
@@ -198,16 +191,12 @@ public class MainInspectorController implements Observer, ChangeListener {
 				switchToInspector(newInspector);
 			}
 			if (object instanceof FlexoModelObject) {
-				updateEditionPatternReferences(newInspector,
-						(FlexoModelObject) object);
+				updateEditionPatternReferences(newInspector, (FlexoModelObject) object);
 			}
-			if (object instanceof FlexoModelObject
-					&& (object instanceof ViewShape || object instanceof ViewConnector)
-					&& ((FlexoModelObject) object)
-							.getEditionPatternReferences().size() > 0) {
-				String newTitle = ((FlexoModelObject) object)
-						.getEditionPatternReferences().firstElement()
-						.getEditionPattern().getInspector().getInspectorTitle();
+			if (object instanceof FlexoModelObject && (object instanceof ViewShape || object instanceof ViewConnector)
+					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
+				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
+						.getInspector().getInspectorTitle();
 				inspectorDialog.setTitle(newTitle);
 			} else {
 				inspectorDialog.setTitle(newInspector.getParameter("title"));
@@ -216,13 +205,11 @@ public class MainInspectorController implements Observer, ChangeListener {
 		}
 	}
 
-	private void updateEditionPatternReferences(FIBInspector inspector,
-			FlexoModelObject object) {
+	private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
 		if (inspector.updateEditionPatternReferences(object)) {
 			FIBView view = viewForInspector(inspector);
 			FIBController controller = view.getController();
-			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller
-					.viewForComponent(inspector.getTabPanel());
+			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller.viewForComponent(inspector.getTabPanel());
 			tabPanelView.updateLayout();
 		} else {
 			// Nothing change: nice !!!
@@ -267,21 +254,15 @@ public class MainInspectorController implements Observer, ChangeListener {
 		if (view != null) {
 			currentInspectorView = view;
 			rootPane.removeAll();
-			rootPane.add(currentInspectorView.getResultingJComponent(),
-					BorderLayout.CENTER);
+			rootPane.add(currentInspectorView.getResultingJComponent(), BorderLayout.CENTER);
 			rootPane.validate();
 			rootPane.repaint();
 			currentInspector = newInspector;
 			// logger.info("reset title to "+newInspector.getParameter("title"));dsqqsd
 			// inspectorDialog.setTitle(newInspector.getParameter("title"));
-			tabPanelView = (FIBTabPanelView) currentInspectorView
-					.getController().viewForComponent(
-							currentInspector.getTabPanel());
-			if (lastInspectedTabIndex >= 0
-					&& lastInspectedTabIndex < tabPanelView.getJComponent()
-							.getTabCount()) {
-				tabPanelView.getJComponent().setSelectedIndex(
-						lastInspectedTabIndex);
+			tabPanelView = (FIBTabPanelView) currentInspectorView.getController().viewForComponent(currentInspector.getTabPanel());
+			if (lastInspectedTabIndex >= 0 && lastInspectedTabIndex < tabPanelView.getJComponent().getTabCount()) {
+				tabPanelView.getJComponent().setSelectedIndex(lastInspectedTabIndex);
 			}
 			tabPanelView.getJComponent().addChangeListener(this);
 			// System.out.println("addChangeListener for "+tabPanelView.getJComponent());
@@ -329,15 +310,13 @@ public class MainInspectorController implements Observer, ChangeListener {
 			} else if (inspectorSelection instanceof MultipleSelection) {
 				switchToMultipleSelection();
 			} else if (inspectorSelection instanceof UniqueSelection) {
-				inspectObject(((UniqueSelection) inspectorSelection)
-						.getInspectedObject());
+				inspectObject(((UniqueSelection) inspectorSelection).getInspectedObject());
 			}
 		}
 	}
 
 	/**
-	 * Called to update inspector window when something has happened (for
-	 * example if an inspection context has changed)
+	 * Called to update inspector window when something has happened (for example if an inspection context has changed)
 	 */
 	public void updateInspectorWindow() {
 		logger.info("OK, on remet a jour le bazar");
