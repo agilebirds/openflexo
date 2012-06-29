@@ -50,6 +50,7 @@ import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.toolbox.StringUtils;
@@ -135,6 +136,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 	private ModelObjectType modelObjectType = ModelObjectType.Process;
 	public FlexoProcess selectedProcess;
 	public ViewDefinition selectedView;
+	public ViewFolder selectedViewFolder;
 	public Role selectedRole;
 	public DMEntity selectedEntity;
 	public OperationComponentDefinition selectedOperationComponent;
@@ -165,6 +167,9 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 				break;
 			case View:
 				newEntry = getRepository().createViewSection(getTocEntryTitle(), selectedView, null);
+				break;
+			case ViewFolder:
+				newEntry = getRepository().createViewFolderSection(getTocEntryTitle(), selectedViewFolder, null);
 				break;
 			case Role:
 				newEntry = getRepository().createRoleSection(getTocEntryTitle(), selectedRole, null);

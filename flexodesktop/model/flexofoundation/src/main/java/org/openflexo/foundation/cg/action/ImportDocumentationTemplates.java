@@ -249,6 +249,7 @@ public class ImportDocumentationTemplates extends FlexoAction<ImportDocumentatio
 	}
 
 	private TOCRepository importTOC(File tocfile) throws FlexoException {
+		System.out.println("tocfile=" + tocfile.getAbsolutePath());
 		AddTOCRepository addToc = AddTOCRepository.actionType.makeNewEmbeddedAction(getProject().getTOCData(), null, this);
 		addToc.setTocTemplate(tocfile);
 		addToc.doAction();

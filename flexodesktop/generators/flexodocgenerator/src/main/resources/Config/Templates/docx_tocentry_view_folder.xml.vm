@@ -8,22 +8,22 @@
 * - objet: the view to generate
 *#
 
-#set($view = $object)
+#set($viewFolder = $object)
 
-#if($view)
+#if($viewFolder)
 
-${generator.log("Rendering view")}
-${generator.logO($view)}
+${generator.log("Rendering view folder")}
+${generator.logO($viewFolder)}
 
 <w:p>   
     <w:pPr>
         <w:pStyle w:val="Heading$level"/>
     </w:pPr>
-    #mkbookMark(${view.getFlexoID()} ${generator.getReference($view)})
+    #mkbookMark(${viewFolder.getFlexoID()} ${generator.getReference($viewFolder)})
     <w:r>
-        <w:t xml:space="preserve">View: </w:t>
+        <w:t xml:space="preserve">ViewFolder: </w:t>
     </w:r>
-    #renderName($view)
+    #renderName($viewFolder)
 </w:p>
 
 <w:p>
@@ -37,14 +37,14 @@ ${generator.logO($view)}
 	</w:r>
 </w:p>
 	
-#description($view)
+#description($viewFolder)
 
 
-	#renderScreenshotForObject($view)
+	##renderScreenshotForObject($view)
 
 ## Some dummy headers
 
-#set($headers = ["Name", "Description", "ID"])
+##set($headers = ["Name", "Description", "ID"])
 
 ## Some dummy content
 ###set($tableContents = ${generator.getNewVector()})
@@ -58,8 +58,8 @@ ${generator.logO($view)}
 
 #end
 
-${generator.log("End rendering view")}
+${generator.log("End rendering view folder")}
 
 
 ## macro is defined in docx_macro_library.vm: #macro(renderDocxTable $headersArray $contents)
-#renderDocxTable($headers $tableContents)
+##renderDocxTable($headers $tableContents)

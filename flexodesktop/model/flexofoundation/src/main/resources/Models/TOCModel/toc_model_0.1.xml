@@ -85,6 +85,9 @@
   <entity name="org.openflexo.foundation.toc.ViewSection" xmlTag="ViewSection">
   </entity>
 
+ <entity name="org.openflexo.foundation.toc.ViewFolderSection" xmlTag="ViewFolderSection">
+  </entity>
+
   <entity name="org.openflexo.foundation.toc.EntitySection" xmlTag="EntitySection">
   </entity>
 
