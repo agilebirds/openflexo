@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.toc.action.AddTOCEntry" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="700" height="500">
   <Label label="create_new_toc_entry" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" />
-  <RadioButtonList format="object.name" localize="true" manageDynamicModel="true" name="PaletteRadioButtonList" data="data.kindOfTocEntry" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" staticList="" iteratorClassName="org.openflexo.foundation.toc.action.AddTOCEntry$KindOfTocEntry" autoSelectFirstRow="true">
+  <RadioButtonList columns="1" hGap="0" vGap="-2" format="object.name" localize="true" manageDynamicModel="true" name="PaletteRadioButtonList" data="data.kindOfTocEntry" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" staticList="" iteratorClassName="org.openflexo.foundation.toc.action.AddTOCEntry$KindOfTocEntry" autoSelectFirstRow="true">
     <LocalizedDictionary />
   </RadioButtonList>
   <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="LucidaGrande,0,13" darkLevel="0" data="(data.kindOfTocEntry.name + &quot;_description&quot;)" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=10;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,11" name="KindOfEntryDescriptionPanel">
@@ -65,7 +65,7 @@
     <Label label="object_to_document" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)">
       <LocalizedDictionary />
     </Label>
-    <RadioButtonList localize="true" manageDynamicModel="true" name="AccessType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="select_a_given_object,use_expression" iteratorClassName="java.lang.String" autoSelectFirstRow="true">
+    <RadioButtonList columns="1" hGap="0" vGap="-2" localize="true" manageDynamicModel="true" name="AccessType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="select_a_given_object,use_expression" iteratorClassName="java.lang.String" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </RadioButtonList>
     <Label label="view" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.modelObjectType = &quot;View&quot;) &amp; (AccessType.selectedIndex = 0))" />
@@ -106,6 +106,8 @@
       <Assignment variable="component.bindable" value="data" />
       <Assignment variable="component.bindingDefinition" value="data.valueBindingDefinition" />
     </Custom>
+    <Label label="view_folder" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.modelObjectType = &quot;ViewFolder&quot;) &amp; (AccessType.selectedIndex = 0))" />
+    <Custom constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;ViewFolder&quot;) &amp; (AccessType.selectedIndex = 0))" localize="true" manageDynamicModel="true" />
   </Panel>
   <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 3)" name="ConditionalSectionPanel">
     <Label label="please_define_your_condition_here" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" font="LucidaGrande,0,11" />
@@ -193,12 +195,12 @@
     <Localized key="operation_component" lang="Dutch">Operation screen</Localized>
     <Localized key="er_diagram" lang="Dutch">ER Diagram</Localized>
     <Localized key="value" lang="Dutch">Value</Localized>
-    <Localized key="contents" lang="English">Contents</Localized>
-    <Localized key="kind_of_model_object" lang="English">Kind of model object</Localized>
-    <Localized key="kind_of_predefined_section" lang="English">Kind of predefined section</Localized>
+    <Localized key="contents" lang="English">contents</Localized>
+    <Localized key="kind_of_model_object" lang="English">Object to render</Localized>
+    <Localized key="kind_of_predefined_section" lang="English">kind_of_predefined_section</Localized>
     <Localized key="object_to_document" lang="English">Object to document</Localized>
     <Localized key="section_type" lang="English">Section type</Localized>
-    <Localized key="view" lang="English">View</Localized>
+    <Localized key="view" lang="English">view</Localized>
     <Localized key="select_a_given_object" lang="English">Select a given object</Localized>
     <Localized key="select_a_given_object" lang="French">Sélectionner un object donné</Localized>
     <Localized key="select_a_given_object" lang="Dutch">Select a given object</Localized>
@@ -228,9 +230,6 @@
     <Localized key="NormalSection" lang="English">Normal section</Localized>
     <Localized key="NormalSection" lang="French">Normal section</Localized>
     <Localized key="NormalSection" lang="Dutch">Normal section</Localized>
-    <Localized key="new_entry" lang="English">new_entry</Localized>
-    <Localized key="new_entry" lang="French">new_entry</Localized>
-    <Localized key="new_entry" lang="Dutch">new_entry</Localized>
     <Localized key="PredefinedSection" lang="English">Predefined section</Localized>
     <Localized key="PredefinedSection" lang="French">Predefined section</Localized>
     <Localized key="PredefinedSection" lang="Dutch">Predefined section_entry</Localized>
@@ -243,6 +242,172 @@
     <Localized key="IterationSection" lang="English">Iteration section</Localized>
     <Localized key="IterationSection" lang="French">Iteration section</Localized>
     <Localized key="IterationSection" lang="Dutch">Iteration section</Localized>
+    <Localized key="Normal section" lang="English">Normal section</Localized>
+    <Localized key="Normal section" lang="French">Normal section</Localized>
+    <Localized key="Normal section" lang="Dutch">Normal section</Localized>
+    <Localized key="Predefined section" lang="English">Predefined section</Localized>
+    <Localized key="Predefined section" lang="French">Predefined section</Localized>
+    <Localized key="Predefined section" lang="Dutch">Predefined section</Localized>
+    <Localized key="Model object section" lang="English">Model object section</Localized>
+    <Localized key="Model object section" lang="French">Model object section</Localized>
+    <Localized key="Model object section" lang="Dutch">Model object section</Localized>
+    <Localized key="Conditional section" lang="English">Conditional section</Localized>
+    <Localized key="Conditional section" lang="French">Conditional section</Localized>
+    <Localized key="Conditional section" lang="Dutch">Conditional section</Localized>
+    <Localized key="Iteration section" lang="English">Iteration section</Localized>
+    <Localized key="Iteration section" lang="French">Iteration section</Localized>
+    <Localized key="Iteration section" lang="Dutch">Iteration section</Localized>
+    <Localized key="PROCESSES" lang="English">PROCESSES</Localized>
+    <Localized key="PROCESSES" lang="French">PROCESSES</Localized>
+    <Localized key="PROCESSES" lang="Dutch">PROCESSES</Localized>
+    <Localized key="VIEWS" lang="English">VIEWS</Localized>
+    <Localized key="VIEWS" lang="French">VIEWS</Localized>
+    <Localized key="VIEWS" lang="Dutch">VIEWS</Localized>
+    <Localized key="ROLES" lang="English">ROLES</Localized>
+    <Localized key="ROLES" lang="French">ROLES</Localized>
+    <Localized key="ROLES" lang="Dutch">ROLES</Localized>
+    <Localized key="PURPOSE" lang="English">PURPOSE</Localized>
+    <Localized key="PURPOSE" lang="French">PURPOSE</Localized>
+    <Localized key="PURPOSE" lang="Dutch">PURPOSE</Localized>
+    <Localized key="OBJECTIVES" lang="English">OBJECTIVES</Localized>
+    <Localized key="OBJECTIVES" lang="French">OBJECTIVES</Localized>
+    <Localized key="OBJECTIVES" lang="Dutch">OBJECTIVES</Localized>
+    <Localized key="SCOPE" lang="English">SCOPE</Localized>
+    <Localized key="SCOPE" lang="French">SCOPE</Localized>
+    <Localized key="SCOPE" lang="Dutch">SCOPE</Localized>
+    <Localized key="STAKEHOLDERS" lang="English">STAKEHOLDERS</Localized>
+    <Localized key="STAKEHOLDERS" lang="French">STAKEHOLDERS</Localized>
+    <Localized key="STAKEHOLDERS" lang="Dutch">STAKEHOLDERS</Localized>
+    <Localized key="SCREENS" lang="English">SCREENS</Localized>
+    <Localized key="SCREENS" lang="French">SCREENS</Localized>
+    <Localized key="SCREENS" lang="Dutch">SCREENS</Localized>
+    <Localized key="DATA_MODEL" lang="English">DATA_MODEL</Localized>
+    <Localized key="DATA_MODEL" lang="French">DATA_MODEL</Localized>
+    <Localized key="DATA_MODEL" lang="Dutch">DATA_MODEL</Localized>
+    <Localized key="DEFINITIONS" lang="English">DEFINITIONS</Localized>
+    <Localized key="DEFINITIONS" lang="French">DEFINITIONS</Localized>
+    <Localized key="DEFINITIONS" lang="Dutch">DEFINITIONS</Localized>
+    <Localized key="READERS_GUIDE" lang="English">READERS_GUIDE</Localized>
+    <Localized key="READERS_GUIDE" lang="French">READERS_GUIDE</Localized>
+    <Localized key="READERS_GUIDE" lang="Dutch">READERS_GUIDE</Localized>
+    <Localized key="NOTES_QUESTIONS" lang="English">NOTES_QUESTIONS</Localized>
+    <Localized key="NOTES_QUESTIONS" lang="French">NOTES_QUESTIONS</Localized>
+    <Localized key="NOTES_QUESTIONS" lang="Dutch">NOTES_QUESTIONS</Localized>
+    <Localized key="PROJECT_CONTEXT" lang="English">PROJECT_CONTEXT</Localized>
+    <Localized key="PROJECT_CONTEXT" lang="French">PROJECT_CONTEXT</Localized>
+    <Localized key="PROJECT_CONTEXT" lang="Dutch">PROJECT_CONTEXT</Localized>
+    <Localized key="SIPOC_LEVEL2" lang="English">SIPOC_LEVEL2</Localized>
+    <Localized key="SIPOC_LEVEL2" lang="French">SIPOC_LEVEL2</Localized>
+    <Localized key="SIPOC_LEVEL2" lang="Dutch">SIPOC_LEVEL2</Localized>
+    <Localized key="SIPOC_LEVEL3" lang="English">SIPOC_LEVEL3</Localized>
+    <Localized key="SIPOC_LEVEL3" lang="French">SIPOC_LEVEL3</Localized>
+    <Localized key="SIPOC_LEVEL3" lang="Dutch">SIPOC_LEVEL3</Localized>
+    <Localized key="ER_DIAGRAM" lang="English">ER_DIAGRAM</Localized>
+    <Localized key="ER_DIAGRAM" lang="French">ER_DIAGRAM</Localized>
+    <Localized key="ER_DIAGRAM" lang="Dutch">ER_DIAGRAM</Localized>
+    <Localized key="RACI" lang="English">RACI</Localized>
+    <Localized key="RACI" lang="French">RACI</Localized>
+    <Localized key="RACI" lang="Dutch">RACI</Localized>
+    <Localized key="View" lang="English">View</Localized>
+    <Localized key="View" lang="French">View</Localized>
+    <Localized key="View" lang="Dutch">View</Localized>
+    <Localized key="ViewFolder" lang="English">View folder</Localized>
+    <Localized key="ViewFolder" lang="French">Répertoire de vues</Localized>
+    <Localized key="ViewFolder" lang="Dutch">ViewFolder</Localized>
+    <Localized key="Process" lang="English">Process</Localized>
+    <Localized key="Process" lang="French">Processus</Localized>
+    <Localized key="Process" lang="Dutch">Process</Localized>
+    <Localized key="Role" lang="English">Role</Localized>
+    <Localized key="Role" lang="French">Rôle</Localized>
+    <Localized key="Role" lang="Dutch">Role</Localized>
+    <Localized key="Entity" lang="English">Entity</Localized>
+    <Localized key="Entity" lang="French">Entité</Localized>
+    <Localized key="Entity" lang="Dutch">Entity</Localized>
+    <Localized key="OperationScreen" lang="English">OperationScreen</Localized>
+    <Localized key="OperationScreen" lang="French">OperationScreen</Localized>
+    <Localized key="OperationScreen" lang="Dutch">OperationScreen</Localized>
+    <Localized key="ERDiagram" lang="English">ERDiagram</Localized>
+    <Localized key="ERDiagram" lang="French">ERDiagram</Localized>
+    <Localized key="ERDiagram" lang="Dutch">ERDiagram</Localized>
+    <Localized key="Doc" lang="English">Doc</Localized>
+    <Localized key="Doc" lang="French">Doc</Localized>
+    <Localized key="Doc" lang="Dutch">Doc</Localized>
+    <Localized key="OperationTable" lang="English">OperationTable</Localized>
+    <Localized key="OperationTable" lang="French">OperationTable</Localized>
+    <Localized key="OperationTable" lang="Dutch">OperationTable</Localized>
+    <Localized key="RaciMatrix" lang="English">RaciMatrix</Localized>
+    <Localized key="RaciMatrix" lang="French">RaciMatrix</Localized>
+    <Localized key="RaciMatrix" lang="Dutch">RaciMatrix</Localized>
+    <Localized key="SIPOCLevel2" lang="English">SIPOCLevel2</Localized>
+    <Localized key="SIPOCLevel2" lang="French">SIPOCLevel2</Localized>
+    <Localized key="SIPOCLevel2" lang="Dutch">SIPOCLevel2</Localized>
+    <Localized key="SIPOCLevel3" lang="English">SIPOCLevel3</Localized>
+    <Localized key="SIPOCLevel3" lang="French">SIPOCLevel3</Localized>
+    <Localized key="SIPOCLevel3" lang="Dutch">SIPOCLevel3</Localized>
+    <Localized key="Select a given object" lang="English">Select a given object</Localized>
+    <Localized key="Select a given object" lang="French">Select a given object</Localized>
+    <Localized key="Select a given object" lang="Dutch">Select a given object</Localized>
+    <Localized key="Use an expression" lang="English">Use an expression</Localized>
+    <Localized key="Use an expression" lang="French">Use an expression</Localized>
+    <Localized key="Use an expression" lang="Dutch">Use an expression</Localized>
+    <Localized key="please_define_your_condition_here" lang="English">Please define your condition here</Localized>
+    <Localized key="please_define_your_condition_here" lang="French">Veuillez définir une condition ici</Localized>
+    <Localized key="please_define_your_condition_here" lang="Dutch">please_define_your_condition_here</Localized>
+    <Localized key="condition" lang="English">Condition</Localized>
+    <Localized key="condition" lang="French">Condition</Localized>
+    <Localized key="condition" lang="Dutch">Condition</Localized>
+    <Localized key="please_define_your_iteration_here" lang="English">Please define your condition here</Localized>
+    <Localized key="please_define_your_iteration_here" lang="French">Veuillez définir une itération ici</Localized>
+    <Localized key="please_define_your_iteration_here" lang="Dutch">please_define_your_iteration_here</Localized>
+    <Localized key="iterator_name" lang="English">iterator_name</Localized>
+    <Localized key="iterator_name" lang="French">iterator_name</Localized>
+    <Localized key="iterator_name" lang="Dutch">iterator_name</Localized>
+    <Localized key="iteration" lang="English">iteration</Localized>
+    <Localized key="iteration" lang="French">iteration</Localized>
+    <Localized key="iteration" lang="Dutch">iteration</Localized>
+    <Localized key="contents" lang="French">contents</Localized>
+    <Localized key="contents" lang="Dutch">contents</Localized>
+    <Localized key="kind_of_predefined_section" lang="French">kind_of_predefined_section</Localized>
+    <Localized key="kind_of_predefined_section" lang="Dutch">kind_of_predefined_section</Localized>
+    <Localized key="kind_of_model_object" lang="French">Objet dont il faut produire le rendu</Localized>
+    <Localized key="kind_of_model_object" lang="Dutch">kind_of_model_object</Localized>
+    <Localized key="section_type" lang="French">Type de section</Localized>
+    <Localized key="section_type" lang="Dutch">section_type</Localized>
+    <Localized key="Sélectionner un object donné" lang="English">Sélectionner un object donné</Localized>
+    <Localized key="Sélectionner un object donné" lang="French">Sélectionner un object donné</Localized>
+    <Localized key="Sélectionner un object donné" lang="Dutch">Sélectionner un object donné</Localized>
+    <Localized key="Définir une expression" lang="English">Définir une expression</Localized>
+    <Localized key="Définir une expression" lang="French">Définir une expression</Localized>
+    <Localized key="Définir une expression" lang="Dutch">Définir une expression</Localized>
+    <Localized key="view" lang="French">view</Localized>
+    <Localized key="view" lang="Dutch">view</Localized>
+    <Localized key="Predefined section_entry" lang="English">Predefined section_entry</Localized>
+    <Localized key="Predefined section_entry" lang="French">Predefined section_entry</Localized>
+    <Localized key="Predefined section_entry" lang="Dutch">Predefined section_entry</Localized>
+    <Localized key="Process_description" lang="English">Render a process</Localized>
+    <Localized key="Process_description" lang="French">Rendu d'un processus</Localized>
+    <Localized key="Process_description" lang="Dutch">new_entry</Localized>
+    <Localized key="View_description" lang="English">Render a view</Localized>
+    <Localized key="View_description" lang="French">Rendu d'une vue</Localized>
+    <Localized key="View_description" lang="Dutch">new_entry</Localized>
+    <Localized key="ViewFolder_description" lang="English">Render a view folder</Localized>
+    <Localized key="ViewFolder_description" lang="French">Rendu d'un répertoire de vues</Localized>
+    <Localized key="ViewFolder_description" lang="Dutch">new_entry</Localized>
+    <Localized key="Role_description" lang="English">Render a role</Localized>
+    <Localized key="Role_description" lang="French">Rendu d'un rôle</Localized>
+    <Localized key="Role_description" lang="Dutch">new_entry</Localized>
+    <Localized key="Entity_description" lang="English">Render an entity</Localized>
+    <Localized key="Entity_description" lang="French">Rendu d'une entité</Localized>
+    <Localized key="Entity_description" lang="Dutch">new_entry</Localized>
+    <Localized key="OperationScreen_description" lang="English">Render an OperationScreen</Localized>
+    <Localized key="OperationScreen_description" lang="French">Rendu d'un écran d'opération</Localized>
+    <Localized key="OperationScreen_description" lang="Dutch">new_entry</Localized>
+    <Localized key="ERDiagram_description" lang="English">Render an entity-relationship diagram</Localized>
+    <Localized key="ERDiagram_description" lang="French">Rendu d'un diagramme entités-relations</Localized>
+    <Localized key="ERDiagram_description" lang="Dutch">new_entry</Localized>
+    <Localized key="view_folder" lang="English">View folder</Localized>
+    <Localized key="view_folder" lang="French">Répertoire de vues</Localized>
+    <Localized key="view_folder" lang="Dutch">view_folder</Localized>
   </LocalizedDictionary>
 </Panel>
 

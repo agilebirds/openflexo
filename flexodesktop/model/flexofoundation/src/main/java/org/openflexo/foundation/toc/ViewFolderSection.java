@@ -1,32 +1,32 @@
 package org.openflexo.foundation.toc;
 
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
-public class ViewSection extends ModelObjectSection<ViewDefinition> {
+public class ViewFolderSection extends ModelObjectSection<ViewFolder> {
 
-	private static final String DOC_TEMPLATE = "docx_tocentry_view.xml.vm";
+	private static final String DOC_TEMPLATE = "docx_tocentry_view_folder.xml.vm";
 
-	public ViewSection(FlexoTOCBuilder builder) {
+	public ViewFolderSection(FlexoTOCBuilder builder) {
 		this(builder.tocData);
 		initializeDeserialization(builder);
 	}
 
-	public ViewSection(TOCData data) {
+	public ViewFolderSection(TOCData data) {
 		super(data);
 	}
 
 	@Override
 	public ModelObjectType getModelObjectType() {
-		return ModelObjectType.View;
+		return ModelObjectType.ViewFolder;
 	}
 
-	public ViewDefinition getViewDefinition() {
+	public ViewFolder getViewFolder() {
 		return getModelObject(true);
 	}
 
-	public void setViewDefinition(ViewDefinition view) {
-		setModelObject(view);
+	public void setViewFolder(ViewFolder viewFolder) {
+		setModelObject(viewFolder);
 	}
 
 	@Override

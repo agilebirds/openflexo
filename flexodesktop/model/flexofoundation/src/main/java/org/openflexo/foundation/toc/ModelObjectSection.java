@@ -22,6 +22,12 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 				return org.openflexo.foundation.view.ViewDefinition.class;
 			}
 		},
+		ViewFolder {
+			@Override
+			public Type getType() {
+				return org.openflexo.foundation.view.ViewFolder.class;
+			}
+		},
 		Process {
 			@Override
 			public Type getType() {
