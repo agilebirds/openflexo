@@ -41,6 +41,7 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.toc.ControlSection.ControlSectionBindingAttribute;
+import org.openflexo.foundation.toc.ModelObjectSection;
 import org.openflexo.foundation.toc.ModelObjectSection.ModelObjectSectionBindingAttribute;
 import org.openflexo.foundation.toc.ModelObjectSection.ModelObjectType;
 import org.openflexo.foundation.toc.PredefinedSection;
@@ -185,6 +186,9 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 				break;
 			default:
 				break;
+			}
+			if (newEntry != null && getValue() != null && getValue().isSet() && getValue().isValid()) {
+				((ModelObjectSection<?>) newEntry).setValue(new TOCDataBinding(getValue().toString()));
 			}
 			break;
 		case ConditionalSection:
@@ -338,7 +342,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 	@Override
 	public BindingModel getBindingModel() {
 		if (getFocusedObject() instanceof TOCEntry) {
-			return ((TOCEntry) getFocusedObject()).getBindingModel();
+			return ((TOCEntry) getFocusedObject()).getInferedBindingModel();
 		}
 		return null;
 	}

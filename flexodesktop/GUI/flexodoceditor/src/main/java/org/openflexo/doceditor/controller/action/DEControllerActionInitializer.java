@@ -57,7 +57,7 @@ public class DEControllerActionInitializer extends ControllerActionInitializer {
 		super.initializeActions();
 		new DESetPropertyInitializer(this).init();
 		new AddTOCRepositoryInitializer(this).init();
-		new DeprecatedAddTOCEntryInitializer(this).init();
+		// new DeprecatedAddTOCEntryInitializer(this).init();
 		new AddTOCEntryInitializer(this).init();
 		new MoveTOCEntryInitializer(this).init();
 		new AddDocTypeInitializer(this).init();
