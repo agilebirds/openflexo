@@ -26,9 +26,10 @@ import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.cg.action.ExportTOCAsTemplate;
+import org.openflexo.foundation.cg.CGObject;
+import org.openflexo.foundation.cg.DGRepository;
+import org.openflexo.foundation.cg.action.ExportDocumentationTemplates;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileUtils;
@@ -37,12 +38,12 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class ExportTOCAsTemplateInitializer extends ActionInitializer<ExportTOCAsTemplate, FlexoModelObject, FlexoModelObject> {
+public class ExportDocumentationTemplatesInitializer extends ActionInitializer<ExportDocumentationTemplates, DGRepository, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ExportTOCAsTemplateInitializer(DGControllerActionInitializer actionInitializer) {
-		super(ExportTOCAsTemplate.actionType, actionInitializer);
+	ExportDocumentationTemplatesInitializer(DGControllerActionInitializer actionInitializer) {
+		super(ExportDocumentationTemplates.actionType, actionInitializer);
 	}
 
 	@Override
@@ -51,25 +52,22 @@ public class ExportTOCAsTemplateInitializer extends ActionInitializer<ExportTOCA
 	}
 
 	@Override
-	protected FlexoActionInitializer<ExportTOCAsTemplate> getDefaultInitializer() {
-		return new FlexoActionInitializer<ExportTOCAsTemplate>() {
+	protected FlexoActionInitializer<ExportDocumentationTemplates> getDefaultInitializer() {
+		return new FlexoActionInitializer<ExportDocumentationTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, ExportTOCAsTemplate action) {
-				if (action.getDestinationFile() != null) {
-					return true;
-				}
+			public boolean run(ActionEvent e, ExportDocumentationTemplates action) {
 				FlexoFileChooser chooser = new FlexoFileChooser(FlexoFrame.getActiveFrame());
 				chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-				chooser.setDialogTitle(FlexoLocalization.localizedForKey("save_as_template"));
-
+				chooser.setDialogTitle(FlexoLocalization.localizedForKey("save_as_zip"));
+				chooser.setFileFilterAsString("*.zip");
 				int returnVal = chooser.showSaveDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					if (isValidProjectName(chooser.getSelectedFile().getName())) {
 						File dest = chooser.getSelectedFile();
-						if (!dest.getName().toLowerCase().endsWith(".toc.xml")) {
-							dest = new File(dest.getAbsolutePath() + ".toc.xml");
+						if (!dest.getName().toLowerCase().endsWith(".zip")) {
+							dest = new File(dest.getAbsolutePath() + ".zip");
 						}
-						action.setDestinationFile(dest);
+						action.setZipFile(dest);
 						return true;
 					} else {
 						if (logger.isLoggable(Level.WARNING)) {

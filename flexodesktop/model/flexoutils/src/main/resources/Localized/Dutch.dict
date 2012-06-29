@@ -1,5 +1,5 @@
 #Dutch
-#Fri Jun 01 00:59:09 CEST 2012
+#Fri Jun 29 12:15:44 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -2380,11 +2380,15 @@ explore_cvs_module=Explore CVS module
 explore_sub_modules=Explore sub-modules
 explored=Explored
 export=Export
+export_documentation_templates=Export as documentation templates
 export_internal_ws=Export internal service
 export_palette=Export palette
 export_toc_as_template=Export TOC as template
 export_widget_to_palette=Export widget to palette
 exporting=Exporting
+exporting_images=Exporting images
+exporting_templates=Exporting templates
+exporting_toc=Exporting table of content
 expression=Expression
 expression_is_valid_and_conform_to_required_type=Expression is valid and conform to required type
 expression_is_valid_but_not_conform_to_requested_type=Expression is valid but not conform to requested type
@@ -4377,6 +4381,7 @@ save_as=Save as
 save_as_image=Save as image...
 save_as_jpeg=Save as JPEG...
 save_as_operation_failed='Save as' operation failed
+save_as_zip=Save as zip
 save_before_close=Save your changes before closing ?
 save_before_exit=Save your changes before exiting ?
 save_before_generating=Save before generating

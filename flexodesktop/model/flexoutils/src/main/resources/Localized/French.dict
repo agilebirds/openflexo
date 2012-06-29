@@ -1,5 +1,5 @@
 #French
-#Fri Jun 01 00:59:09 CEST 2012
+#Fri Jun 29 12:15:44 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -2380,11 +2380,15 @@ explore_cvs_module=Exploration du module CVS
 explore_sub_modules=Exploration des sous-modules
 explored=Exploration de
 export=Export
+export_documentation_templates=Exporter comme templates de documentation
 export_internal_ws=Exporter un service interne
 export_palette=Exporter la palette
 export_toc_as_template=Exporter la table des mati\u00E8res
 export_widget_to_palette=Exporter l'\u00E9l\u00E9ment graphique dans la palette
 exporting=En train d'exporter
+exporting_images=Export des images
+exporting_templates=Export des templates
+exporting_toc=Export de la table des mati\u00E8res
 expression=Expression
 expression_is_valid_and_conform_to_required_type=L'expression est valide et conforme au type requis
 expression_is_valid_but_not_conform_to_requested_type=L'expression est valide mais non conforme au type requis
@@ -4378,6 +4382,7 @@ save_as=Sauver sous
 save_as_image=Sauvegarder comme une image
 save_as_jpeg=Enregistrer en jpeg...
 save_as_operation_failed=L'op\u00E9ration 'Sauver sous' a \u00E9chou\u00E9
+save_as_zip=Sauver comme zip
 save_before_close=Voulez-vous sauver les changements avant fermeture ?
 save_before_exit=Voulez vous sauvegarder vos modifications ?
 save_before_generating=Sauver avant de g\u00E9n\u00E9rer
