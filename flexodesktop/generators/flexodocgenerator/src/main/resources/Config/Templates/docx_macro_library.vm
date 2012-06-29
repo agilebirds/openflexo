@@ -765,8 +765,6 @@ if there is an associated screen make a hyperlink to the screen.
             </w:r>
         </w:p>
     #end
-    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
-    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
     #set($templateName = ${_entry.getDefaultTemplateName()})
     
     #if(${_entry.isIteration()})
