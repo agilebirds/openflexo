@@ -265,20 +265,14 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		}
 		FlexoModule moduleInstance = getModuleInstance(module);
 		if (moduleInstance != null) {
-			moduleInstance.activateModule();
-			return moduleInstance;
-		}
-		throw new ModuleLoadingException(module);
-	}
-
-	public void activateModule(FlexoModule m) {
-		if (activeModule != m) {
 			if (activeModule != null) {
 				activeModule.setAsInactive();
 			}
-			m.setAsActiveModule();
-			activeModule = m;
+			moduleInstance.setAsActiveModule();
+			activeModule = moduleInstance;
+			return moduleInstance;
 		}
+		throw new ModuleLoadingException(module);
 	}
 
 	/**

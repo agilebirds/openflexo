@@ -3016,6 +3016,65 @@
       </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelIE" primaryDocItemId="IE" identifier="IE">
         <description>No description</description>
+        <DocItem id="AbstractList" identifier="AbstractList" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="AbstractList-hasNewOption" identifier="AbstractList-hasNewOption" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-bindingSelection" identifier="AbstractList-bindingSelection" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-showLanguagePopup" identifier="AbstractList-showLanguagePopup" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-bindingDisplayString" identifier="AbstractList-bindingDisplayString" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-bindingItem" identifier="AbstractList-bindingItem" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-bindingList" identifier="AbstractList-bindingList" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-contentType" identifier="AbstractList-contentType" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-bindingNoSelectionString" identifier="AbstractList-bindingNoSelectionString" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-funcName" identifier="AbstractList-funcName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-submitForm" identifier="AbstractList-submitForm" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-exampleList" identifier="AbstractList-exampleList" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-value" identifier="AbstractList-value" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-domain" identifier="AbstractList-domain" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="AbstractList-dropdownType" identifier="AbstractList-dropdownType" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="AbstractList-bindingDisplayString" />
+        <DocItem idref="AbstractList-bindingItem" />
+        <DocItem idref="AbstractList-bindingList" />
+        <DocItem idref="AbstractList-bindingNoSelectionString" />
+        <DocItem idref="AbstractList-bindingSelection" />
+        <DocItem idref="AbstractList-contentType" />
+        <DocItem idref="AbstractList-domain" />
+        <DocItem idref="AbstractList-dropdownType" />
+        <DocItem idref="AbstractList-exampleList" />
+        <DocItem idref="AbstractList-funcName" />
+        <DocItem idref="AbstractList-hasNewOption" />
+        <DocItem idref="AbstractList-showLanguagePopup" />
+        <DocItem idref="AbstractList-submitForm" />
+        <DocItem idref="AbstractList-value" />
         <DocItem id="AbstractWidget" identifier="AbstractWidget" embedded="false" hidden="true">
           <description>No description</description>
           <InheritanceChildDocItem id="Widget" identifier="Widget" embedded="false" hidden="true">
@@ -4720,6 +4779,7 @@
                     <DocItemVersion idref="Hyperlink_1.0.1ENGLISH" />
                   </DocItemAction>
                 </InheritanceChildDocItem>
+                <InheritanceChildDocItem idref="AbstractList" />
                 <EmbeddingChildDocItem id="ControlWidget-isFilterForList" identifier="ControlWidget-isFilterForList" embedded="false" hidden="false">
                   <description>No description</description>
                   <title key="ENGLISH">isFilterForList</title>
@@ -12979,9 +13039,7 @@ forward to the next nodes.</description>
                     <EmbeddingChildDocItem id="DGFileModuleView-mark_as_merged" identifier="DGFileModuleView-mark_as_merged" embedded="false" hidden="false" />
                     <EmbeddingChildDocItem id="DGFileModuleView-force_regenerate_doc" identifier="DGFileModuleView-force_regenerate_doc" embedded="false" hidden="false" />
                     <EmbeddingChildDocItem id="DGFileModuleView-generate_doc_if_required" identifier="DGFileModuleView-generate_doc_if_required" embedded="false" hidden="false" />
-                    <EmbeddingChildDocItem id="DGFileModuleView-cancel_overriding" identifier="DGFileModuleView-cancel_overriding" embedded="false" hidden="true">
-                      <description />
-                    </EmbeddingChildDocItem>
+                    <EmbeddingChildDocItem id="DGFileModuleView-cancel_overriding" identifier="DGFileModuleView-cancel_overriding" embedded="false" hidden="true" />
                     <RelatedToDocItem idref="code_generation" />
                     <RelatedToDocItem idref="code_generation" />
                   </RelatedToDocItem>
@@ -15630,6 +15688,9 @@ forward to the next nodes.</description>
             <DocItemVersion idref="toggle-hide-show-right-panel_1.0.1ENGLISH" />
           </DocItemAction>
         </EmbeddingChildDocItem>
+        <EmbeddingChildDocItem id="close-module" identifier="close-module" embedded="false" hidden="true">
+          <description />
+        </EmbeddingChildDocItem>
         <title key="ENGLISH">Flexo Tool Set</title>
         <DocItemVersion id="FlexoToolSet_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
         <DocItemAction id="SUBMITTED_ON_FlexoToolSet_1.0.0ENGLISH" authorId="dsnyers" actionDate="HH:mm:ss dd/MM/yyyy,00:13:45 04/06/2007" actionType="SUBMITTED">
@@ -15642,6 +15703,7 @@ forward to the next nodes.</description>
       <DocItem idref="available-objects" />
       <DocItem idref="available-perspectives" />
       <DocItem idref="back" />
+      <DocItem idref="close-module" />
       <DocItem idref="forward" />
       <DocItem idref="minus" />
       <DocItem idref="options" />

@@ -180,7 +180,9 @@ public class IEController extends FlexoController implements ConsistencyChecking
 	@Override
 	public void setEditor(FlexoEditor projectEditor) {
 		super.setEditor(projectEditor);
-		_componentLibraryBrowser.setRootObject(projectEditor != null ? projectEditor.getProject().getFlexoComponentLibrary() : null);
+		_componentLibraryBrowser.setRootObject(getProject() != null ? getProject().getFlexoComponentLibrary() : null);
+		_menuEditorBrowser.setRootObject(getProject() != null ? getProject().getFlexoNavigationMenu().getRootMenu() : null);
+		_dkvEditorBrowser.setRootObject(getProject() != null ? getProject().getDKVModel() : null);
 	}
 
 	@Override
@@ -250,7 +252,6 @@ public class IEController extends FlexoController implements ConsistencyChecking
 
 	public void setSelectedDKVObject(DKVObject dkvObject) {
 		setCurrentEditedObjectAsModuleView(dkvObject.getDkvModel());
-
 	}
 
 	/**

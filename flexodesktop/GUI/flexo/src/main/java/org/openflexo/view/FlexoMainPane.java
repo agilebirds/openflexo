@@ -321,7 +321,12 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			}
 			FCH.setHelpItem((JComponent) _moduleView, FCH.getModuleViewItemFor(_controller.getModule(), _moduleView));
 		} else {
+			currentLocation = null;
 			_centerView = new JPanel();
+			if (_header != null) {
+				_controlPanel.centerPanel.remove(_header);
+				_controlPanel.validate();
+			}
 			if (_rightPaneIsSplitPane) {
 				JSplitPane splitPane = (JSplitPane) _rightPanel;
 				splitPane.setLeftComponent(_centerView);
@@ -482,9 +487,13 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					if (_moduleView != null && _moduleView.getRepresentedObject() != null) {
-						FlexoModelObject representedObject = _moduleView.getRepresentedObject();
-						_moduleView.deleteModuleView();
-						updateControlsForObjectRemovedFromHistory(representedObject);
+						// 0. Grab a reference on the view that will be closed/deleted
+						ModuleView<?> toDelete = _moduleView;
+						// 1. Remove the view from the main pane, the history and possibly go back in history
+						updateControlsForObjectRemovedFromHistory(toDelete.getRepresentedObject());
+						// 2. Delete the view.
+						toDelete.deleteModuleView();
+						// Do not switch those lines as this will prevent updateControlsForObjectRemovedFromHistory from properly working
 					}
 				}
 			});

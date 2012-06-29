@@ -33,8 +33,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.Inspectors.IEInspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
@@ -71,7 +69,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit,sylvain
  */
 
-public class FlexoComponentLibrary extends IECLObject implements XMLStorageResourceData, TreeNode, InspectableObject {
+public class FlexoComponentLibrary extends IECLObject implements XMLStorageResourceData, InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(FlexoComponentLibrary.class.getPackage().getName());
 
@@ -112,6 +110,11 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 		super(project);
 		_project = project;
 	}
+
+	@Override
+	public IEObject getParent() {
+		return null;
+	};
 
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
@@ -279,91 +282,6 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 		return null;
 	}
 
-	// ==========================================================================
-	// ============================= TreeNode ===================================
-	// ==========================================================================
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.tree.TreeNode#children()
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	public Enumeration children() {
-		Vector temp = new Vector();
-		temp.add(getRootFolder());
-		return temp.elements();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.tree.TreeNode#getAllowsChildren()
-	 */
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.tree.TreeNode#getChildAt(int)
-	 */
-	@Override
-	public TreeNode getChildAt(int arg0) {
-		if (arg0 == 0) {
-			return getRootFolder();
-		}
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.tree.TreeNode#getChildCount()
-	 */
-	@Override
-	public int getChildCount() {
-		return 1;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.tree.TreeNode#getIndex(javax.swing.tree.TreeNode)
-	 */
-	@Override
-	public int getIndex(TreeNode arg0) {
-		return 0;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.tree.TreeNode#getParent()
-	 */
-	@Override
-	public FlexoComponentLibrary getParent() {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.tree.TreeNode#isLeaf()
-	 */
-	@Override
-	public boolean isLeaf() {
-		return false;
-	}
-
-	// ==========================================================================
-	// ============================= Instance methods
-	// ===========================
-	// ==========================================================================
-
 	public void setRootFolder(FlexoComponentFolder rootFolder) {
 		_rootFolder = rootFolder;
 		_rootFolder.setComponentLibrary(this);
@@ -417,19 +335,6 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	@Override
 	public XMLMapping getXMLMapping() {
 		return getProject().getXmlMappings().getComponentLibraryMapping();
-	}
-
-	/**
-	 * @param value
-	 * @return
-	 */
-
-	public void delete(ComponentDefinition def) {
-		boolean b = _rootFolder.delete(def);
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Component removal " + (b ? "succeed" : "failed"));
-		}
-		notifyTreeStructureChanged();
 	}
 
 	public boolean isValidForANewComponentName(String value) {

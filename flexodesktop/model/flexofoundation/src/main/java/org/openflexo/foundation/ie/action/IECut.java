@@ -46,7 +46,7 @@ public class IECut extends FlexoUndoableAction<IECut, IEObject, IEObject> {
 		}
 
 		@Override
-		public boolean isVisibleForSelection(IEObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 

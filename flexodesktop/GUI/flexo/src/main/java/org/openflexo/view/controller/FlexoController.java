@@ -1377,10 +1377,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 																	// view!
 				map2.remove(aView.getRepresentedObject());
 			}
-			if (aView.getPerspective() != null
-					&& getLoadedViewsForPerspective(aView.getPerspective()).get(aView.getRepresentedObject()) == aView) {
-				getLoadedViewsForPerspective(aView.getPerspective()).remove(aView.getRepresentedObject());
-			}
 		}
 	}
 

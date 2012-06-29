@@ -170,7 +170,11 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	 */
 	@Override
 	public Color getBackground() {
-		return IEViewUtils.colorFromConceptualColor(FlexoConceptualColor.MAIN_COLOR, _model.getFlexoCSS());
+		if (_model != null) {
+			return IEViewUtils.colorFromConceptualColor(FlexoConceptualColor.MAIN_COLOR, _model.getFlexoCSS());
+		} else {
+			return super.getBackground();
+		}
 	}
 
 	@Override

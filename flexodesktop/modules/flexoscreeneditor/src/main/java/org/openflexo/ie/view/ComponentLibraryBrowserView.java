@@ -19,18 +19,12 @@
  */
 package org.openflexo.ie.view;
 
-import java.awt.Component;
-
-import javax.swing.JTree;
-
 import org.openflexo.ch.FCH;
-import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.components.browser.view.BrowserViewCellRenderer;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.ReusableComponentDefinition;
 import org.openflexo.ie.view.controller.IEController;
@@ -45,28 +39,7 @@ public class ComponentLibraryBrowserView extends BrowserView {
 
 	public ComponentLibraryBrowserView(IEController controller) {
 		super(controller.getComponentLibraryBrowser(), controller);
-		treeView.setCellRenderer(new BrowserViewCellRenderer() {
-			/**
-			 * Overrides getTreeCellRendererComponent
-			 * 
-			 * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object, boolean,
-			 *      boolean, boolean, int, boolean)
-			 */
-			@Override
-			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row,
-					boolean hasFocus) {
-				super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-				Object currentObject = getController().getCurrentModuleView().getRepresentedObject();
-				if (getController().getCurrentModuleView() != null
-						&& (((BrowserElement) value).getObject() == currentObject || currentObject instanceof ComponentInstance
-								&& ((ComponentInstance) currentObject).getComponentDefinition() == ((BrowserElement) value).getObject())) {
-					setBackground(getBackgroundSelectionColor());
-					setForeground(getTextSelectionColor());
-					selected = true;
-				}
-				return this;
-			}
-		});
+		treeView.setCellRenderer(new BrowserViewCellRenderer());
 		FCH.setHelpItem(this, "component-library-browser");
 	}
 
@@ -86,11 +59,7 @@ public class ComponentLibraryBrowserView extends BrowserView {
 		}
 		if (object instanceof ComponentDefinition && !(object instanceof ReusableComponentDefinition)) {
 			getController().setCurrentEditedObjectAsModuleView(((ComponentDefinition) object).getDummyComponentInstance());
-		}/*
-			    * else if (object instanceof FlexoComponentFolder){ if
-			    * (_controller.getCurrentPerspective()==_controller.EXAMPLE_VALUE_PERSPECTIVE)
-			    * _controller.setSelectedFolder((FlexoComponentFolder)object); }
-			    */
+		}
 	}
 
 }

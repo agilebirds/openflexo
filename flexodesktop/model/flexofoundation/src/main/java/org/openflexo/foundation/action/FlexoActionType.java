@@ -72,12 +72,26 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 
 	public Type getFocusedObjectType() {
 		Type superClass = getClass().getGenericSuperclass();
-		return ((ParameterizedType) superClass).getActualTypeArguments()[1];
+		while (!(superClass instanceof ParameterizedType) && superClass != null) {
+			superClass = ((Class<?>) superClass).getGenericSuperclass();
+		}
+		if (superClass != null) {
+			return ((ParameterizedType) superClass).getActualTypeArguments()[1];
+		} else {
+			return FlexoModelObject.class;
+		}
 	}
 
 	public Type getGlobalSelectionType() {
 		Type superClass = getClass().getGenericSuperclass();
-		return ((ParameterizedType) superClass).getActualTypeArguments()[2];
+		while (!(superClass instanceof ParameterizedType) && superClass != null) {
+			superClass = ((Class<?>) superClass).getGenericSuperclass();
+		}
+		if (superClass != null) {
+			return ((ParameterizedType) superClass).getActualTypeArguments()[2];
+		} else {
+			return FlexoModelObject.class;
+		}
 	}
 
 	/*protected FlexoActionType (String actionName, Icon icon)

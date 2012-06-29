@@ -19,17 +19,12 @@
  */
 package org.openflexo.ie.view.controller;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.ie.dm.TreeStructureChanged;
 
 /**
  * Browser for WKF module
@@ -37,7 +32,7 @@ import org.openflexo.foundation.ie.dm.TreeStructureChanged;
  * @author sguerin
  * 
  */
-public class ComponentLibraryBrowser extends ProjectBrowser implements FlexoObserver {
+public class ComponentLibraryBrowser extends ProjectBrowser {
 
 	protected static final Logger logger = Logger.getLogger(ComponentLibraryBrowser.class.getPackage().getName());
 
@@ -63,38 +58,7 @@ public class ComponentLibraryBrowser extends ProjectBrowser implements FlexoObse
 
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		if (getProject() == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("project is null !");
-			}
-			return null;
-		} else {
-			return getProject().getFlexoComponentLibrary();
-		}
-	}
-
-	@Override
-	public void setRootObject(FlexoModelObject aRootObject) {
-		if (getRootObject() != null) {
-			getRootObject().deleteObserver(this);
-		}
-		super.setRootObject(aRootObject);
-		if (getRootObject() != null) {
-			getRootObject().addObserver(this);
-		}
-	}
-
-	@Override
-	public void update(FlexoObservable o, DataModification arg) {
-		if (o.equals(getProject().getFlexoComponentLibrary())) {
-			if (arg instanceof TreeStructureChanged) {
-				update();
-			}
-		}
-	}
-
-	public void refreshTree() {
-		update();
+		return null;
 	}
 
 }

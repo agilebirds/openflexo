@@ -184,8 +184,8 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	protected JSplitPane getSplitPaneWithIEPaletteAndDocInspectorPanel() {
 		if (splitPaneWithIEPaletteAndDocInspectorPanel == null) {
 			currentPalette = getIEPalette(_controller.getProject());
-			splitPaneWithIEPaletteAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, currentPalette,
-					_controller.getDisconnectedDocInspectorPanel());
+			splitPaneWithIEPaletteAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, currentPalette != null ? currentPalette
+					: null, _controller.getDisconnectedDocInspectorPanel());
 			splitPaneWithIEPaletteAndDocInspectorPanel.setResizeWeight(0);
 			splitPaneWithIEPaletteAndDocInspectorPanel.setDividerLocation(IECst.PALETTE_DOC_SPLIT_LOCATION);
 			splitPaneWithIEPaletteAndDocInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
@@ -198,6 +198,9 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	}
 
 	public IEPalette getIEPalette(FlexoProject flexoProject) {
+		if (flexoProject == null) {
+			return null;
+		}
 		IEPalette palette = palettes.get(flexoProject);
 		if (palette == null) {
 			palettes.put(flexoProject, palette = new IEPalette(_controller, flexoProject));

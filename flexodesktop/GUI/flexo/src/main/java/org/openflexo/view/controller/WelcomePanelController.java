@@ -39,7 +39,7 @@ public class WelcomePanelController extends FlexoFIBController<ApplicationData> 
 	public void openModule(Module module) {
 		hide();
 		try {
-			getModuleLoader().activateModule(getModuleLoader().getModuleInstance(module));
+			getModuleLoader().getModuleInstance(module).activateModule();
 			validateAndDispose();
 		} catch (ModuleLoadingException e) {
 			e.printStackTrace();
@@ -57,7 +57,7 @@ public class WelcomePanelController extends FlexoFIBController<ApplicationData> 
 		}
 		hide();
 		try {
-			getModuleLoader().activateModule(getModuleLoader().getModuleInstance(module));
+			getModuleLoader().getModuleInstance(module).activateModule();
 			getProjectLoader().loadProject(projectDirectory);
 			validateAndDispose();
 		} catch (ProjectLoadingCancelledException e) {
@@ -82,7 +82,7 @@ public class WelcomePanelController extends FlexoFIBController<ApplicationData> 
 		}
 		hide();
 		try {
-			getModuleLoader().activateModule(getModuleLoader().getModuleInstance(module));
+			getModuleLoader().getModuleInstance(module).activateModule();
 			getProjectLoader().newProject(projectDirectory);
 			validateAndDispose();
 		} catch (ModuleLoadingException e) {
