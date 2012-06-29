@@ -251,14 +251,14 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 
 			if (_rightPaneIsSplitPane) {
 				JSplitPane splitPane = (JSplitPane) _rightPanel;
-				int dl = splitPane.getDividerLocation();
+				// int dl = splitPane.getDividerLocation();
 				splitPane.setLeftComponent(_centerView);
 				/*if (splitPane.getRightComponent() != null) {
 					splitPane.getRightComponent().setPreferredSize(splitPane.getRightComponent().getSize());
 				}
 				splitPane.revalidate();
 				splitPane.repaint();*/
-				splitPane.setDividerLocation(dl);
+				// splitPane.setDividerLocation(dl);
 				// logger.info("splitPane.setDividerLocation with " + dl);
 			} else {
 				_rightPanel.add(_centerView, BorderLayout.CENTER);
@@ -266,9 +266,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 
 			((JComponent) moduleView).validate();
 			((JComponent) moduleView).repaint();
-		}
-
-		if (moduleView != null) {
 			if (moduleView.getPerspective() == null) {
 				if (_controller.getDefaultPespective() != null) {
 					logger.warning("null perspective declared for " + moduleView.getClass().getName());
@@ -314,9 +311,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				_footer = moduleView.getPerspective().getFooter();
 
 			}
-		}
-
-		if (moduleView != null) {
 			try {
 				moduleView.willShow();
 			} catch (RuntimeException e) {
@@ -325,10 +319,17 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 					logger.severe("willShow call failed on " + moduleView);
 				}
 			}
-		}
-
-		if (_moduleView != null) {
 			FCH.setHelpItem((JComponent) _moduleView, FCH.getModuleViewItemFor(_controller.getModule(), _moduleView));
+		} else {
+			_centerView = new JPanel();
+			if (_rightPaneIsSplitPane) {
+				JSplitPane splitPane = (JSplitPane) _rightPanel;
+				splitPane.setLeftComponent(_centerView);
+			} else {
+				_rightPanel.add(_centerView, BorderLayout.CENTER);
+			}
+			_rightPanel.revalidate();
+			_rightPanel.repaint();
 		}
 
 		if (_controller.getFlexoFrame().isValid()) {
@@ -481,9 +482,9 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					if (_moduleView != null && _moduleView.getRepresentedObject() != null) {
-						ModuleView<?> previous = _moduleView;
-						updateControlsForObjectRemovedFromHistory(previous.getRepresentedObject());
-						previous.deleteModuleView();
+						FlexoModelObject representedObject = _moduleView.getRepresentedObject();
+						_moduleView.deleteModuleView();
+						updateControlsForObjectRemovedFromHistory(representedObject);
 					}
 				}
 			});
@@ -931,11 +932,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			if (canGoBackward()) {
 				goBackward();
 			} else {
-				if (_controller.getDefaultObjectToSelect(_controller.getProject()) != removedObject) {
-					_controller.setCurrentEditedObjectAsModuleView(_controller.getDefaultObjectToSelect(_controller.getProject()));
-				} else {
-					resetModuleView();
-				}
+				resetModuleView();
 			}
 		}
 		removeHistoryLocationWithObject(removedObject, previousHistory);

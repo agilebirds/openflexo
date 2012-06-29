@@ -426,7 +426,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (hl != null) {
 				setCurrentEditedObjectAsModuleView(hl.getObject(), hl.getPerspective());
 			} else {
-				setCurrentEditedObjectAsModuleView(getDefaultObjectToSelect(editor.getProject()));
+				FlexoModelObject defaultObjectToSelect = getDefaultObjectToSelect(editor.getProject());
+				if (defaultObjectToSelect != null) {
+					setCurrentEditedObjectAsModuleView(defaultObjectToSelect);
+				} else {
+					mainPane.resetModuleView();
+				}
 			}
 		}
 		consistencyCheckWindow = null;
@@ -1288,7 +1293,13 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (recalculateViewIfRequired) {
 				moduleView = createModuleViewForObjectAndPerspective(object, currentPerspective);
 				if (moduleView != null) {
-					projectViews.put(object, moduleView);
+					FlexoModelObject representedObject = moduleView.getRepresentedObject();
+					if (representedObject == null) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Module view: " + moduleView.getClass().getName() + " does not return its represented object");
+						}
+					}
+					projectViews.put(representedObject != null ? representedObject : object, moduleView);
 				}
 			}
 		}

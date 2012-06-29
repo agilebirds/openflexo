@@ -153,7 +153,7 @@ public class DiagramPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof AbstractViewObject;
+		return object instanceof View || object instanceof ViewDefinition;
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public class DiagramPerspective extends FlexoPerspective {
 		}
 		if (object instanceof ViewDefinition) {
 			ViewDefinition viewDefinition = (ViewDefinition) object;
-			View shema = viewDefinition.getShema();
+			View shema = viewDefinition.getView();
 			if (shema == null) {
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_view") + " " + viewDefinition.getName() + ". "
 						+ FlexoLocalization.localizedForKey("make_sure_you_have_the_view_point_with_uri") + " "
