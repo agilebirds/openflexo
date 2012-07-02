@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -74,12 +75,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public static final Dimension MINIMUM_SIZE = new Dimension(30, 25);
 
 	private final DynamicFormatter formatter;
+	private final DynamicEventListener eventListener;
 
 	private DependingObjects dependingObjects;
 
 	protected FIBWidgetView(M model, FIBController aController) {
 		super(model, aController);
 		formatter = new DynamicFormatter();
+		eventListener = new DynamicEventListener();
 	}
 
 	@Override
@@ -428,6 +431,21 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		return null;
 	}
 
+	public void applySingleClickAction(MouseEvent event) {
+		eventListener.setEvent(event);
+		getWidget().getClickAction().execute(eventListener);
+	}
+
+	public void applyDoubleClickAction(MouseEvent event) {
+		eventListener.setEvent(event);
+		getWidget().getDoubleClickAction().execute(eventListener);
+	}
+
+	public void applyRightClickAction(MouseEvent event) {
+		eventListener.setEvent(event);
+		getWidget().getRightClickAction().execute(eventListener);
+	}
+
 	@Override
 	public FIBComponentDynamicModel<T> createDynamicModel() {
 		if (getWidget().getManageDynamicModel()) {
@@ -506,6 +524,23 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		public Object getValue(BindingVariable variable) {
 			if (variable.getVariableName().equals("object")) {
 				return value;
+			} else {
+				return getController().getValue(variable);
+			}
+		}
+	}
+
+	protected class DynamicEventListener implements BindingEvaluationContext {
+		private MouseEvent mouseEvent;
+
+		private void setEvent(MouseEvent mouseEvent) {
+			this.mouseEvent = mouseEvent;
+		}
+
+		@Override
+		public Object getValue(BindingVariable variable) {
+			if (variable.getVariableName().equals("event")) {
+				return mouseEvent;
 			} else {
 				return getController().getValue(variable);
 			}
