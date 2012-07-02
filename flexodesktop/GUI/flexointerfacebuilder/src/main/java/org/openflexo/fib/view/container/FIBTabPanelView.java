@@ -121,6 +121,7 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 
 	}
 
+	// TODO: optimize it
 	@Override
 	public synchronized void updateLayout() {
 		int index = tabbedPane.getSelectedIndex();
