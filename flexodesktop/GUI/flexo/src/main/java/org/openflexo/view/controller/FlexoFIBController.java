@@ -148,6 +148,12 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		}
 	}
 
+	public void rightClick(FlexoModelObject object, MouseEvent e) {
+		if (getFlexoController() != null) {
+			getFlexoController().objectWasRightClicked(object, e);
+		}
+	}
+
 	public ImageIcon iconForObject(FlexoModelObject object) {
 		if (object instanceof WorkflowModelObject) {
 			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);

@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -1253,6 +1254,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					ModuleView<? extends O> view = createModuleViewForObjectAndPerspective(object,
 							(FlexoPerspective<O>) _currentPerspective);
 					if (view != null) {
+						logger.warning("???????????? Ici faut enregistrer plutot : " + view.getRepresentedObject());
 						getLoadedViewsForCurrentPerspective().put(object, view);
 					}
 				}
@@ -1350,7 +1352,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * @return an initialized ModuleView instance
 	 */
 	public final ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
-		// logger.info("************** setCurrentEditedObjectAsModuleView "+object);
+		logger.info("************** setCurrentEditedObjectAsModuleView " + object);
 		if (getCurrentDisplayedObjectAsModuleView() != object && getMainPane() != null) {
 			// Little block to change the currentPerspective if the
 			if (!hasViewForObjectAndPerspective(object, getCurrentPerspective())) {
@@ -1940,6 +1942,15 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	public void objectWasClicked(FlexoModelObject object) {
 		logger.info("Object was clicked: " + object);
+	}
+
+	public void objectWasRightClicked(FlexoModelObject object, MouseEvent e) {
+		logger.info("Object was right-clicked: " + object + "event=" + e);
+		if (this instanceof SelectionManagingController) {
+			((SelectionManagingController) this).getSelectionManager().getContextualMenuManager()
+					.showPopupMenuForObject(object, (Component) e.getSource(), e.getPoint());
+		}
+
 	}
 
 	public void objectWasDoubleClicked(FlexoModelObject object) {

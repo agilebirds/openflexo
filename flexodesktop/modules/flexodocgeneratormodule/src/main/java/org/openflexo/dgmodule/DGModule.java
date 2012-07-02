@@ -21,15 +21,11 @@ package org.openflexo.dgmodule;
 
 import java.util.logging.Logger;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
@@ -47,13 +43,15 @@ public class DGModule extends FlexoModule {
 		super(projectEditor);
 		setFlexoController(new DGController(projectEditor, this));
 		DGPreferences.init(getDGController());
-		if (getProject().getGeneratedDoc().getGeneratedRepositories().size() == 0) {
+		/*if (getProject().getGeneratedDoc().getGeneratedRepositories().size() == 0) {
 			getDGController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedDoc());
 			getDGController().selectAndFocusObject(getProject().getGeneratedDoc());
 		} else {
 			getDGController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedDoc().getGeneratedRepositories().firstElement());
 			getDGController().selectAndFocusObject(getProject().getGeneratedDoc().getGeneratedRepositories().firstElement());
-		}
+		}*/
+		getDGController().setCurrentEditedObjectAsModuleView(getProject().getTOCData());
+		getDGController().selectAndFocusObject(getProject().getTOCData());
 	}
 
 	@Override

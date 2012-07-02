@@ -20,7 +20,6 @@
 package org.openflexo.dgmodule.view;
 
 import org.openflexo.dgmodule.controller.DGController;
-import org.openflexo.dgmodule.controller.browser.DGBrowser;
 import org.openflexo.doceditor.view.DEMainPane;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
@@ -33,7 +32,7 @@ import org.openflexo.view.ModuleView;
  */
 public class DGMainPane extends DEMainPane {
 
-	private DGBrowserView dgBrowserView;
+	// private DGBrowserView dgBrowserView;
 
 	/**
 	 * @param moduleView
@@ -42,13 +41,13 @@ public class DGMainPane extends DEMainPane {
 	 */
 	public DGMainPane(DGController controller, ModuleView moduleView, FlexoFrame mainFrame) {
 		super(controller, moduleView, mainFrame);
-		dgBrowserView = new DGBrowserView(controller, new DGBrowser(controller));
-		setLeftView(dgBrowserView);
-		if (deBrowserView.getParent() != null) {
+		// dgBrowserView = new DGBrowserView(controller, new DGBrowser(controller));
+		// setLeftView(dgBrowserView);
+		/*if (deBrowserView.getParent() != null) {
 			deBrowserView.getParent().remove(deBrowserView);
 		}
 		deBrowserView.getBrowser().delete();
-		deBrowserView = null;
+		deBrowserView = null;*/
 	}
 
 	/**
@@ -69,8 +68,8 @@ public class DGMainPane extends DEMainPane {
 		return (DGController) _controller;
 	}
 
-	public DGBrowserView getDgBrowserView() {
+	/*public DGBrowserView getDgBrowserView() {
 		return dgBrowserView;
-	}
+	}*/
 
 }

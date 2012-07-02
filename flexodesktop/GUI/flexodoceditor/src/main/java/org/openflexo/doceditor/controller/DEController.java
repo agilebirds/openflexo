@@ -41,12 +41,10 @@ import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
@@ -61,7 +59,7 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 
 	protected static final Logger logger = Logger.getLogger(DEController.class.getPackage().getName());
 
-	public final FlexoPerspective<TOCObject> DOCEDITOR_PERSPECTIVE = new DocEditorPerspective();
+	public TOCPerspective TOC_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -98,7 +96,6 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	public DEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
 		super(projectEditor, module);
 
-		addToPerspectives(DOCEDITOR_PERSPECTIVE);
 		_generatorMenuBar = (DEMenuBar) createAndRegisterNewMenuBar();
 		_generatorKeyEventListener = new DEKeyEventListener(this);
 		_generatorFrame = new DEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _generatorKeyEventListener, _generatorMenuBar);
@@ -106,7 +103,8 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 		if (_selectionManager == null) {
 			_selectionManager = createSelectionManager();
 		}
-
+		TOC_PERSPECTIVE = new TOCPerspective(this);
+		addToPerspectives(TOC_PERSPECTIVE);
 	}
 
 	protected DESelectionManager createSelectionManager() {
