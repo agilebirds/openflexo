@@ -197,6 +197,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	protected FlexoController(InteractiveFlexoEditor projectEditor, FlexoModule module) {
 		super();
 		_loadedViews = new Hashtable<FlexoPerspective<?>, Hashtable<FlexoModelObject, ModuleView>>();
+		_alternativeObjectForView = new Hashtable<ModuleView, FlexoModelObject>();
 		_keyStrokeActionTable = new Hashtable<KeyStroke, AbstractAction>();
 		_perspectives = new Vector<FlexoPerspective<?>>();
 		lastEditedObjectsForPerspective = new Hashtable<FlexoPerspective<?>, FlexoModelObject>();
@@ -1087,6 +1088,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	// private ModuleView _currentModuleView;
 	private final Hashtable<FlexoPerspective<?>, Hashtable<FlexoModelObject, ModuleView>> _loadedViews;
+	private final Hashtable<ModuleView, FlexoModelObject> _alternativeObjectForView;
 
 	private FlexoMainPane _mainPane;
 
@@ -1254,8 +1256,15 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					ModuleView<? extends O> view = createModuleViewForObjectAndPerspective(object,
 							(FlexoPerspective<O>) _currentPerspective);
 					if (view != null) {
-						logger.warning("???????????? Ici faut enregistrer plutot : " + view.getRepresentedObject());
+
 						getLoadedViewsForCurrentPerspective().put(object, view);
+						if (object != view.getRepresentedObject()) {
+							// In this case, requesting to display object will be served by a module view
+							// representing an other object (eg scheme View/ViewDefinition), we need to
+							// store the initial requested object when closing the view
+							getLoadedViewsForCurrentPerspective().put(view.getRepresentedObject(), view);
+							_alternativeObjectForView.put(view, object);
+						}
 					}
 				}
 			}
@@ -1341,6 +1350,10 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					&& getLoadedViewsForPerspective(aView.getPerspective()).get(aView.getRepresentedObject()) == aView) {
 				getLoadedViewsForPerspective(aView.getPerspective()).remove(aView.getRepresentedObject());
 			}
+			FlexoModelObject alternativeObject = _alternativeObjectForView.get(aView);
+			if (alternativeObject != null) {
+				getLoadedViewsForCurrentPerspective().remove(alternativeObject);
+			}
 		}
 	}
 
@@ -1352,7 +1365,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 * @return an initialized ModuleView instance
 	 */
 	public final ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
-		logger.info("************** setCurrentEditedObjectAsModuleView " + object);
+		// logger.info("************** setCurrentEditedObjectAsModuleView " + object);
 		if (getCurrentDisplayedObjectAsModuleView() != object && getMainPane() != null) {
 			// Little block to change the currentPerspective if the
 			if (!hasViewForObjectAndPerspective(object, getCurrentPerspective())) {
