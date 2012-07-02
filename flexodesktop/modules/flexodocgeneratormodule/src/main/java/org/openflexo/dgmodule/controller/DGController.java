@@ -105,7 +105,7 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	@Override
 	public boolean useNewInspectorScheme() {
-		return false;
+		return true;
 	}
 
 	@Override

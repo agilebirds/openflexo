@@ -11,11 +11,9 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.DataPropertyStatement;
-import org.openflexo.foundation.ontology.DataRestrictionStatement;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IsAStatement;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
-import org.openflexo.foundation.ontology.ObjectRestrictionStatement;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
@@ -23,9 +21,8 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.OntologyRestrictionClass.RestrictionType;
 import org.openflexo.foundation.ontology.OntologyStatement;
-import org.openflexo.foundation.ontology.RestrictionStatement;
-import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty.SubDataPropertyOfProperty;
@@ -55,6 +52,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 	private SimpleBindingPathElementImpl uriNameProperty;
 	private SimpleBindingPathElementImpl uriProperty;
 	protected List<BindingPathElement> allProperties;
+
+	protected Vector<StatementPathElement> accessibleStatements;
 
 	@Override
 	public String toString() {
@@ -100,6 +99,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			}
 		};
 		allProperties.add(uriProperty);
+		accessibleStatements = new Vector<StatementPathElement>();
+		// searchProperties(getOntologicType());
 	}
 
 	public BindingPathElement getUriNameProperty() {
@@ -112,8 +113,38 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 	@Override
 	public List<BindingPathElement> getAllProperties() {
+		if (!propertiesFound) {
+			searchProperties(getOntologicType());
+		}
 		return allProperties;
 	}
+
+	boolean propertiesFound = false;
+
+	private void searchProperties(OntologyObject<?> ontologicType) {
+
+		if (ontologicType != null) {
+			// System.out.println("Properties = "
+			// + ((IndividualPatternRole) getPatternRole()).getOntologicType().getPropertiesTakingMySelfAsDomain());
+			for (final OntologyProperty property : ontologicType.getPropertiesTakingMySelfAsDomain()) {
+				StatementPathElement<?> propertyPathElement = null;
+				if (property instanceof OntologyObjectProperty) {
+					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
+							(OntologyObjectProperty) property, true, OntologyObjectPathElement.MAX_LEVELS);
+				} else if (property instanceof OntologyDataProperty) {
+					propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+				}
+				if (propertyPathElement != null) {
+					// System.out.println("add " + propertyPathElement);
+					accessibleStatements.add(propertyPathElement);
+					allProperties.add(propertyPathElement);
+				}
+			}
+			propertiesFound = true;
+		}
+	}
+
+	public abstract OntologyClass getOntologicType();
 
 	@Override
 	public abstract Type getType();
@@ -125,29 +156,37 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 		@Override
 		public Type getType() {
+			return SubClassOfClass.getSubClassOfClass(getOntologicType());
+		}
+
+		@Override
+		public OntologyClass getOntologicType() {
 			if (((ClassPatternRole) getPatternRole()).getOntologicType() != null) {
-				return SubClassOfClass.getSubClassOfClass(((ClassPatternRole) getPatternRole()).getOntologicType());
+				return ((ClassPatternRole) getPatternRole()).getOntologicType();
+			}
+			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
+				return getPatternRole().getViewPoint().getViewpointOntology().getThingConcept();
 			}
 			return null;
 		}
 	}
 
 	public static class OntologicIndividualPatternRolePathElement extends OntologicObjectPatternRolePathElement<OntologyIndividual> {
-		Vector<StatementPathElement> accessibleStatements;
+		// Vector<StatementPathElement> accessibleStatements;
 
 		public OntologicIndividualPatternRolePathElement(IndividualPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
-			accessibleStatements = new Vector<StatementPathElement>();
+			// accessibleStatements = new Vector<StatementPathElement>();
 			// System.out.println("For role " + aPatternRole + " hash=" + Integer.toHexString(hashCode()));
 			// System.out.println("Ontologic type = " + aPatternRole.getOntologicType());
-			if (aPatternRole.getOntologicType() != null) {
+			/*if (aPatternRole.getOntologicType() != null) {
 				searchProperties();
-			}
+			}*/
 		}
 
-		boolean propertiesFound = false;
+		// boolean propertiesFound = false;
 
-		private void searchProperties() {
+		/*private void searchProperties() {
 			// System.out.println("Properties = "
 			// + ((IndividualPatternRole) getPatternRole()).getOntologicType().getPropertiesTakingMySelfAsDomain());
 			for (final OntologyProperty property : ((IndividualPatternRole) getPatternRole()).getOntologicType()
@@ -166,9 +205,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				}
 			}
 			propertiesFound = true;
-		}
+		}*/
 
-		@Override
+		/*@Override
 		public List<BindingPathElement> getAllProperties() {
 			if (!propertiesFound && ((IndividualPatternRole) getPatternRole()).getOntologicType() != null) {
 				searchProperties();
@@ -176,12 +215,20 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			// System.out.println("For " + getPatternRole() + " hash=" + Integer.toHexString(hashCode()) + " of "
 			// + ((IndividualPatternRole) getPatternRole()).getOntologicType() + " have this " + super.getAllProperties());
 			return super.getAllProperties();
-		}
+		}*/
 
 		@Override
 		public Type getType() {
+			return IndividualOfClass.getIndividualOfClass(getOntologicType());
+		}
+
+		@Override
+		public OntologyClass getOntologicType() {
 			if (((IndividualPatternRole) getPatternRole()).getOntologicType() != null) {
-				return IndividualOfClass.getIndividualOfClass(((IndividualPatternRole) getPatternRole()).getOntologicType());
+				return ((IndividualPatternRole) getPatternRole()).getOntologicType();
+			}
+			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
+				return getPatternRole().getViewPoint().getViewpointOntology().getThingConcept();
 			}
 			return null;
 		}
@@ -204,10 +251,18 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		public Type getType() {
 			if (((DataPropertyPatternRole) getPatternRole()).getParentProperty() != null) {
 				return SubDataPropertyOfProperty.getSubPropertyOfProperty(((DataPropertyPatternRole) getPatternRole()).getParentProperty());
-			} else {
-				return getPatternRole().getAccessedClass();
 			}
+			return OntologyDataProperty.class;
 		}
+
+		@Override
+		public OntologyClass getOntologicType() {
+			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
+				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OntologyObject.OWL_DATA_PROPERTY_URI);
+			}
+			return null;
+		}
+
 	}
 
 	public static class OntologicObjectPropertyPatternRolePathElement extends
@@ -221,10 +276,18 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			if (((ObjectPropertyPatternRole) getPatternRole()).getParentProperty() != null) {
 				return SubObjectPropertyOfProperty.getSubPropertyOfProperty(((ObjectPropertyPatternRole) getPatternRole())
 						.getParentProperty());
-			} else {
-				return getPatternRole().getAccessedClass();
 			}
+			return OntologyObjectProperty.class;
 		}
+
+		@Override
+		public OntologyClass getOntologicType() {
+			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
+				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OntologyObject.OWL_OBJECT_PROPERTY_URI);
+			}
+			return null;
+		}
+
 	}
 
 	public static class OntologicStatementPatternRolePathElement<T extends OntologyStatement> extends PatternRolePathElement<T> {
@@ -257,7 +320,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					&& ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty() != null
 					&& ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty().getDomain() instanceof OntologyClass) {
 				subjectType = (OntologyClass) ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty().getDomain();
-				subject = new OntologyIndividualPathElement("subject", subjectType, this) {
+				subject = new OntologyIndividualPathElement("subject", subjectType, this, aPatternRole.getViewPoint()
+						.getViewpointOntology()) {
 					@Override
 					public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
 						if (target instanceof OntologyStatement) {
@@ -287,7 +351,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					&& ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty() != null
 					&& ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty().getDomain() instanceof OntologyClass) {
 				subjectType = (OntologyClass) ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty().getDomain();
-				subject = new OntologyIndividualPathElement("subject", subjectType, this) {
+				subject = new OntologyIndividualPathElement("subject", subjectType, this, aPatternRole.getViewPoint()
+						.getViewpointOntology()) {
 					@Override
 					public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
 						if (target instanceof OntologyStatement) {
@@ -314,7 +379,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					}
 				};
 			} else {
-				subject = new OntologyObjectPathElement("subject", this) {
+				subject = new OntologyObjectPathElement("subject", this, aPatternRole.getViewpointOntology()) {
 					@Override
 					public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
 						if (target instanceof OntologyStatement) {
@@ -345,7 +410,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 		public IsAStatementPatternRolePathElement(IsAStatementPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
-			parent = new OntologyObjectPathElement("parent", this) {
+			parent = new OntologyObjectPathElement("parent", this, aPatternRole.getViewpointOntology()) {
 				@Override
 				public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof IsAStatement) {
@@ -374,7 +439,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 		public ObjectPropertyStatementPatternRolePathElement(ObjectPropertyStatementPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
-			predicate = new OntologyObjectPropertyPathElement("predicate", this) {
+			predicate = new OntologyObjectPropertyPathElement("predicate", this, aPatternRole.getViewPoint().getViewpointOntology()) {
 				@Override
 				public OntologyObjectProperty getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof ObjectPropertyStatement) {
@@ -394,7 +459,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			if (aPatternRole.getObjectProperty() != null && aPatternRole.getObjectProperty().getRange() instanceof OntologyClass) {
 				objectType = (OntologyClass) aPatternRole.getObjectProperty().getRange();
 			}
-			object = new OntologyIndividualPathElement("object", objectType, this) {
+			object = new OntologyIndividualPathElement("object", objectType, this, aPatternRole.getViewPoint().getViewpointOntology()) {
 				@Override
 				public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof ObjectPropertyStatement) {
@@ -440,7 +505,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 		public DataPropertyStatementPatternRolePathElement(DataPropertyStatementPatternRole aPatternRole, E container) {
 			super(aPatternRole, container);
-			predicate = new OntologyDataPropertyPathElement("predicate", this) {
+			predicate = new OntologyDataPropertyPathElement("predicate", this, aPatternRole.getViewPoint().getViewpointOntology()) {
 				@Override
 				public OntologyDataProperty getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof DataPropertyStatement) {
@@ -481,7 +546,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 	}
 
-	public static class RestrictionStatementPatternRolePathElement extends OntologicStatementPatternRolePathElement<RestrictionStatement> {
+	public static class RestrictionStatementPatternRolePathElement extends OntologicStatementPatternRolePathElement<SubClassStatement> {
 		private OntologyPropertyPathElement property;
 		private OntologyClassPathElement object;
 		private SimpleBindingPathElementImpl<RestrictionType> restrictionType;
@@ -510,21 +575,23 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				}
 			};
 
-			property = new OntologyPropertyPathElement("property", this) {
+			property = new OntologyPropertyPathElement("property", this, aPatternRole.getViewPoint().getViewpointOntology()) {
 				@Override
 				public OntologyProperty getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof RestrictionStatement) {
+					/*if (target instanceof RestrictionStatement) {
 						return ((RestrictionStatement) target).getProperty();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
-					}
+					}*/
+					logger.warning("Not implemented: " + target);
+					return null;
 				}
 			};
-			object = new OntologyClassPathElement("object", this) {
+			object = new OntologyClassPathElement("object", this, aPatternRole.getViewPoint().getViewpointOntology()) {
 				@Override
 				public OntologyClass getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof ObjectRestrictionStatement) {
+					/*if (target instanceof ObjectRestrictionStatement) {
 						return ((ObjectRestrictionStatement) target).getObject();
 					} else if (target instanceof DataRestrictionStatement) {
 						logger.warning("object unavailable for DataPropertyStatement: " + target);
@@ -532,7 +599,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
-					}
+					}*/
+					logger.warning("Not implemented: " + target);
+					return null;
 				}
 
 				@Override
@@ -540,7 +609,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					// not relevant because not settable
 				}
 			};
-			restrictionType = new SimpleBindingPathElementImpl<RestrictionStatement.RestrictionType>("restrictionType",
+			/*restrictionType = new SimpleBindingPathElementImpl<RestrictionStatement.RestrictionType>("restrictionType",
 					RestrictionStatement.class, RestrictionType.class, true, "restriction_type") {
 				@Override
 				public RestrictionType getBindingValue(Object target, BindingEvaluationContext context) {
@@ -556,17 +625,19 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 				public void setBindingValue(RestrictionType value, Object target, BindingEvaluationContext context) {
 					// not relevant because not settable
 				}
-			};
-			cardinality = new SimpleBindingPathElementImpl<Integer>("cardinality", RestrictionStatement.class, Integer.class, true,
+			};*/
+			cardinality = new SimpleBindingPathElementImpl<Integer>("cardinality", SubClassStatement.class, Integer.class, true,
 					"cardinality_of_restriction") {
 				@Override
 				public Integer getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof RestrictionStatement) {
+					/*if (target instanceof RestrictionStatement) {
 						return ((RestrictionStatement) target).getCardinality();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
-					}
+					}*/
+					logger.warning("Not implemented: " + target);
+					return null;
 				}
 
 				@Override
@@ -574,11 +645,11 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					// not relevant because not settable
 				}
 			};
-			dataRange = new SimpleBindingPathElementImpl<OntologicDataType>("dataRange", RestrictionStatement.class,
-					OntologicDataType.class, true, "data_range_of_restriction") {
+			dataRange = new SimpleBindingPathElementImpl<OntologicDataType>("dataRange", SubClassStatement.class, OntologicDataType.class,
+					true, "data_range_of_restriction") {
 				@Override
 				public OntologicDataType getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof ObjectRestrictionStatement) {
+					/*if (target instanceof ObjectRestrictionStatement) {
 						logger.warning("dataRange unavailable for ObjectRestrictionStatement: " + target);
 						return null;
 					} else if (target instanceof DataRestrictionStatement) {
@@ -586,7 +657,9 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
-					}
+					}*/
+					logger.warning("Not implemented: " + target);
+					return null;
 				}
 
 				@Override
@@ -596,7 +669,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			};
 			allProperties.add(property);
 			allProperties.add(object);
-			allProperties.add(restrictionType);
+			// allProperties.add(restrictionType);
 			allProperties.add(cardinality);
 			allProperties.add(dataRange);
 		}

@@ -59,7 +59,7 @@ public class OverrideWithVersion extends MultipleFileGCAction<OverrideWithVersio
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			if ((file == null) || (file.getResource() == null)) {
+			if (file == null || file.getResource() == null) {
 				return false;
 			}
 			if (_source == ContentSourceType.PureGeneration) {
@@ -154,7 +154,7 @@ public class OverrideWithVersion extends MultipleFileGCAction<OverrideWithVersio
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Override with version " + getSourceType() + " for " + getFocusedObject());
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
 		pg.setAction(this);

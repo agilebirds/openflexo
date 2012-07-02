@@ -153,6 +153,12 @@ public abstract class FIBMultipleValues extends FIBWidget {
 				return true;
 			}
 		}
+		if (iteratorClass != null && iteratorClass.isEnum()) {
+			return true;
+		}
+		if (expectedIteratorClass != null && expectedIteratorClass.isEnum()) {
+			return true;
+		}
 		return false;
 	}
 

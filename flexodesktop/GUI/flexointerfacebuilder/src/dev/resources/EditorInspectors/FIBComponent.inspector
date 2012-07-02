@@ -6,6 +6,7 @@
 
 		<TabPanel name="Tab" constraints="border(location=center)">
 
+
 			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
 			
 				<Label name="dataLabel" label="data" constraints="twocols(location=left)"/>
@@ -31,6 +32,11 @@
 		
 		    </Tab>
 			
+			<Tab name="AdvancedTab" title="Advanced" index="1" layout="twocols" font="SansSerif,0,11" >
+				<Label label="index" constraints="twocols(location=left)"/>
+				<Number name="index" numberType="IntegerType" data="data.index" constraints="twocols(location=right)"/>
+			</Tab>
+
 			<Tab name="LayoutTab" title="Layout" index="3" layout="twocols" font="SansSerif,0,11" useScrollBar="true" >
 			
 				<Panel name="NoneConstraints" border="titled" borderTitle="free_location_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='none'"> 

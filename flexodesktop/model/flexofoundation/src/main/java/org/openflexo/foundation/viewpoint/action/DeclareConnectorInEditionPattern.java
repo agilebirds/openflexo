@@ -137,7 +137,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 			case CREATES_EDITION_PATTERN:
 
 				// Create new edition pattern
-				newEditionPattern = new EditionPattern();
+				newEditionPattern = new EditionPattern(null);
 				newEditionPattern.setName(getEditionPatternName());
 
 				// Find best URI base candidate
@@ -146,7 +146,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				// Create individual pattern role if required
 				IndividualPatternRole individualPatternRole = null;
 				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-					individualPatternRole = new IndividualPatternRole();
+					individualPatternRole = new IndividualPatternRole(null);
 					individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 					individualPatternRole.setOntologicType(getConcept());
 					newEditionPattern.addToPatternRoles(individualPatternRole);
@@ -156,7 +156,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				// Create individual pattern role if required
 				ObjectPropertyStatementPatternRole objectPropertyStatementPatternRole = null;
 				if (patternChoice == NewEditionPatternChoices.MAP_OBJECT_PROPERTY) {
-					objectPropertyStatementPatternRole = new ObjectPropertyStatementPatternRole();
+					objectPropertyStatementPatternRole = new ObjectPropertyStatementPatternRole(null);
 					objectPropertyStatementPatternRole.setPatternRoleName(getObjectPropertyStatementPatternRoleName());
 					objectPropertyStatementPatternRole.setObjectProperty(getObjectProperty());
 					newEditionPattern.addToPatternRoles(objectPropertyStatementPatternRole);
@@ -164,7 +164,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				}
 
 				// Create connector pattern role
-				newConnectorPatternRole = new ConnectorPatternRole();
+				newConnectorPatternRole = new ConnectorPatternRole(null);
 				newConnectorPatternRole.setPatternRoleName(getConnectorPatternRoleName());
 				if (mainPropertyDescriptor != null) {
 					newConnectorPatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
@@ -189,7 +189,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 							if (e.property instanceof OntologyObjectProperty) {
 								OntologyObject range = e.property.getRange();
 								if (range instanceof OntologyClass) {
-									IndividualPatternRole newPatternRole = new IndividualPatternRole();
+									IndividualPatternRole newPatternRole = new IndividualPatternRole(null);
 									newPatternRole.setPatternRoleName(e.property.getName());
 									newPatternRole.setOntologicType((OntologyClass) range);
 									newEditionPattern.addToPatternRoles(newPatternRole);
@@ -201,7 +201,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				}
 
 				// Create new link scheme
-				LinkScheme newLinkScheme = new LinkScheme();
+				LinkScheme newLinkScheme = new LinkScheme(null);
 				newLinkScheme.setName(getLinkSchemeName());
 				newLinkScheme.setFromTargetEditionPattern(fromEditionPattern);
 				newLinkScheme.setToTargetEditionPattern(toEditionPattern);
@@ -215,7 +215,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 							if (e.property instanceof OntologyDataProperty) {
 								switch (((OntologyDataProperty) e.property).getDataType()) {
 								case Boolean:
-									newParameter = new CheckboxParameter();
+									newParameter = new CheckboxParameter(null);
 									newParameter.setName(e.property.getName());
 									newParameter.setLabel(e.label);
 									break;
@@ -223,18 +223,18 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 								case Integer:
 								case Long:
 								case Short:
-									newParameter = new IntegerParameter();
+									newParameter = new IntegerParameter(null);
 									newParameter.setName(e.property.getName());
 									newParameter.setLabel(e.label);
 									break;
 								case Double:
 								case Float:
-									newParameter = new FloatParameter();
+									newParameter = new FloatParameter(null);
 									newParameter.setName(e.property.getName());
 									newParameter.setLabel(e.label);
 									break;
 								case String:
-									newParameter = new TextFieldParameter();
+									newParameter = new TextFieldParameter(null);
 									newParameter.setName(e.property.getName());
 									newParameter.setLabel(e.label);
 									break;
@@ -244,7 +244,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 							} else if (e.property instanceof OntologyObjectProperty) {
 								OntologyObject range = e.property.getRange();
 								if (range instanceof OntologyClass) {
-									newParameter = new IndividualParameter();
+									newParameter = new IndividualParameter(null);
 									newParameter.setName(e.property.getName());
 									newParameter.setLabel(e.label);
 									((IndividualParameter) newParameter).setConcept((OntologyClass) range);
@@ -256,7 +256,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 						}
 					}
 
-					URIParameter uriParameter = new URIParameter();
+					URIParameter uriParameter = new URIParameter(null);
 					uriParameter.setName("uri");
 					uriParameter.setLabel("uri");
 					if (mainPropertyDescriptor != null) {
@@ -266,14 +266,14 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 					// Declare pattern role
 					for (IndividualPatternRole r : otherRoles) {
-						DeclarePatternRole action = new DeclarePatternRole();
+						DeclarePatternRole action = new DeclarePatternRole(null);
 						action.setAssignation(new ViewPointDataBinding(r.getPatternRoleName()));
 						action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
 						newLinkScheme.addToActions(action);
 					}
 
 					// Add individual action
-					AddIndividual newAddIndividual = new AddIndividual();
+					AddIndividual newAddIndividual = new AddIndividual(null);
 					newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
 					newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
 					for (PropertyEntry e : propertyEntries) {
@@ -281,13 +281,13 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 							if (e.property instanceof OntologyObjectProperty) {
 								OntologyObject range = e.property.getRange();
 								if (range instanceof OntologyClass) {
-									ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion();
+									ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion(null);
 									propertyAssertion.setOntologyProperty(e.property);
 									propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
 									newAddIndividual.addToObjectAssertions(propertyAssertion);
 								}
 							} else if (e.property instanceof OntologyDataProperty) {
-								DataPropertyAssertion propertyAssertion = new DataPropertyAssertion();
+								DataPropertyAssertion propertyAssertion = new DataPropertyAssertion(null);
 								propertyAssertion.setOntologyProperty(e.property);
 								propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
 								newAddIndividual.addToDataAssertions(propertyAssertion);
@@ -298,7 +298,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				}
 
 				// Add connector action
-				AddConnector newAddConnector = new AddConnector();
+				AddConnector newAddConnector = new AddConnector(null);
 				newAddConnector.setAssignation(new ViewPointDataBinding(newConnectorPatternRole.getPatternRoleName()));
 				newAddConnector.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "."
 						+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
@@ -320,7 +320,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 								OntologyObject range = e.property.getRange();
 								if (range instanceof OntologyClass) {
 									InspectorEntry newInspectorEntry = null;
-									newInspectorEntry = new TextFieldInspectorEntry();
+									newInspectorEntry = new TextFieldInspectorEntry(null);
 									newInspectorEntry.setName(e.property.getName());
 									newInspectorEntry.setLabel(e.label);
 									newInspectorEntry.setIsReadOnly(true);
@@ -331,20 +331,20 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 								InspectorEntry newInspectorEntry = null;
 								switch (((OntologyDataProperty) e.property).getDataType()) {
 								case Boolean:
-									newInspectorEntry = new CheckboxInspectorEntry();
+									newInspectorEntry = new CheckboxInspectorEntry(null);
 									break;
 								case Byte:
 								case Integer:
 								case Long:
 								case Short:
-									newInspectorEntry = new IntegerInspectorEntry();
+									newInspectorEntry = new IntegerInspectorEntry(null);
 									break;
 								case Double:
 								case Float:
-									newInspectorEntry = new FloatInspectorEntry();
+									newInspectorEntry = new FloatInspectorEntry(null);
 									break;
 								case String:
-									newInspectorEntry = new TextFieldInspectorEntry();
+									newInspectorEntry = new TextFieldInspectorEntry(null);
 									break;
 								default:
 									logger.warning("Not handled: " + ((OntologyDataProperty) e.property).getDataType());

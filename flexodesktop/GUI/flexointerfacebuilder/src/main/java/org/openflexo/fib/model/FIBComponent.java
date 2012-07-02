@@ -135,6 +135,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		public abstract int getPolicy();
 	}
 
+	private int index = -1;
 	private DataBinding data;
 	private DataBinding visible;
 
@@ -748,6 +749,21 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		@Override
 		public String getMessage() {
 			return "DependancyLoopException: " + dependancies;
+		}
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.index, index);
+		if (notification != null) {
+			this.index = index;
+			hasChanged(notification);
+			if (getParent() != null) {
+				getParent().reorderComponents();
+			}
 		}
 	}
 

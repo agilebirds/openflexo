@@ -94,6 +94,6 @@ public abstract class OntologyStatement extends AbstractOntologyObject implement
 	}
 
 	public OntologyProperty getPredicate() {
-		return getOntologyLibrary().getProperty(_statement.getPredicate().getURI());
+		return getOntology().getProperty(_statement.getPredicate().getURI());
 	}
 }

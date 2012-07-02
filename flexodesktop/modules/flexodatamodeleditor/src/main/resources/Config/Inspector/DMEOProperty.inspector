@@ -1,4 +1,4 @@
-<inspector title = "EOProperty" inheritsfrom="DMProperty.inspector">
+<inspector title = "EOProperty" inspectedClassName="org.openflexo.foundation.dm.DMEOProperty" inheritsfrom="DMProperty.inspector">
 	<tab name="Basic" index="0">
 	</tab>
 	

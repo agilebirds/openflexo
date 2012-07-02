@@ -35,6 +35,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
@@ -114,6 +115,10 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		}
 	}
 
+	public FIBBrowser getBrowser() {
+		return _fibBrowser;
+	}
+
 	public FIBBrowserWidget getWidget() {
 		return _widget;
 	}
@@ -130,6 +135,15 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		if (getRoot() != rootCell) {
 			logger.fine("updateRootObject() with " + root + " rootCell=" + rootCell);
 			setRoot(rootCell);
+			if (!getBrowser().getRootVisible() && ((BrowserCell) getRoot()).getChildCount() == 1) {
+				// Only one cell and roots are hidden, expand this first cell
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						getWidget().getJTree().expandPath(getTreePath((BrowserCell) ((BrowserCell) getRoot()).getChildAt(0)));
+					}
+				});
+			}
 			return true;
 		}
 		return false;
@@ -291,12 +305,17 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		return returned;
 	}
 
+	public Multimap<Object, BrowserCell> getContents() {
+		return contents;
+	}
+
 	public Iterator<Object> retrieveContents() {
 		return contents.keys().iterator();
 	}
 
 	private BrowserCell retrieveBrowserCell(Object representedObject, BrowserCell parent) {
-		Collection<BrowserCell> cells = contents.get(representedObject);
+		ArrayList<BrowserCell> cells = new ArrayList<FIBBrowserModel.BrowserCell>(contents.get(representedObject));
+		// Collection<BrowserCell> cells = contents.get(representedObject);
 		if (cells != null) {
 			for (BrowserCell cell : cells) {
 				if (cell.getFather() == parent) {
@@ -457,7 +476,15 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				structureChanged = true;
 				if (oldChildren.size() == 0) {
 					// Special case, i don't undertand why (SGU)
-					nodeStructureChanged(this);
+					try {
+						nodeStructureChanged(this);
+					} catch (Exception e) {
+						// Might happen when a structural modification will call parent's nodeChanged()
+						// An Exception might be raised here
+						// We should investigate further, but since no real consequences are raised here, we just ignore exception
+						logger.warning("Unexpected " + e.getClass().getSimpleName()
+								+ " when refreshing browser, no severity but please investigate");
+					}
 				} else {
 					if (removedChildren.size() > 0) {
 						int[] childIndices = new int[removedChildren.size()];
@@ -497,7 +524,15 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Will reselect " + wasSelected);
 				}
-				nodeStructureChanged(this);
+				try {
+					nodeStructureChanged(this);
+				} catch (Exception e) {
+					// Might happen when a structural modification will call parent's nodeChanged()
+					// An Exception might be raised here
+					// We should investigate further, but since no real consequences are raised here, we just ignore exception
+					logger.warning("Unexpected " + e.getClass().getSimpleName()
+							+ " when refreshing browser, no severity but please investigate");
+				}
 				if (wasSelected != null) {
 					resetSelection();
 					addToSelection(wasSelected);

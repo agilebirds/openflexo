@@ -1,5 +1,5 @@
 #English
-#Tue May 29 14:24:47 CEST 2012
+#Thu Jun 21 12:35:29 CEST 2012
 apply=Apply
 arithmetic=Arithmetic
 boolean=Boolean
@@ -29,6 +29,7 @@ please_define_expression=Please define expression
 reset=Reset
 scientific=Scientific
 select=Select
+select_a_file=Select a file
 select_a_value=Select
 select_directory=Select a directory
 show_evaluation=Show evaluation

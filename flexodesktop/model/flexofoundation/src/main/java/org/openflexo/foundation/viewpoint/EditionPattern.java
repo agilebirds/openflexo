@@ -36,6 +36,7 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
@@ -73,7 +74,8 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return super.getDescription();
 	}
 
-	public EditionPattern() {
+	public EditionPattern(ViewPointBuilder builder) {
+		super(builder);
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
 	}
@@ -262,98 +264,98 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public PatternRole createShapePatternRole() {
-		ShapePatternRole newPatternRole = new ShapePatternRole();
+		ShapePatternRole newPatternRole = new ShapePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("shape"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ConnectorPatternRole createConnectorPatternRole() {
-		ConnectorPatternRole newPatternRole = new ConnectorPatternRole();
+		ConnectorPatternRole newPatternRole = new ConnectorPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("connector"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public DiagramPatternRole createDiagramPatternRole() {
-		DiagramPatternRole newPatternRole = new DiagramPatternRole();
+		DiagramPatternRole newPatternRole = new DiagramPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("diagram"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole() {
-		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole();
+		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("flexoObject"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public EditionPatternPatternRole createEditionPatternPatternRole() {
-		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole();
+		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("editionPattern"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ClassPatternRole createClassPatternRole() {
-		ClassPatternRole newPatternRole = new ClassPatternRole();
+		ClassPatternRole newPatternRole = new ClassPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("class"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public IndividualPatternRole createIndividualPatternRole() {
-		IndividualPatternRole newPatternRole = new IndividualPatternRole();
+		IndividualPatternRole newPatternRole = new IndividualPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("individual"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ObjectPropertyPatternRole createObjectPropertyPatternRole() {
-		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole();
+		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public DataPropertyPatternRole createDataPropertyPatternRole() {
-		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole();
+		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public IsAStatementPatternRole createIsAStatementPatternRole() {
-		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole();
+		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ObjectPropertyStatementPatternRole createObjectPropertyStatementPatternRole() {
-		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole();
+		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public DataPropertyStatementPatternRole createDataPropertyStatementPatternRole() {
-		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole();
+		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public RestrictionStatementPatternRole createRestrictionStatementPatternRole() {
-		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole();
+		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public PrimitivePatternRole createPrimitivePatternRole() {
-		PrimitivePatternRole newPatternRole = new PrimitivePatternRole();
+		PrimitivePatternRole newPatternRole = new PrimitivePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("primitive"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
@@ -491,35 +493,35 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public CreationScheme createCreationScheme() {
-		CreationScheme newCreationScheme = new CreationScheme();
+		CreationScheme newCreationScheme = new CreationScheme(null);
 		newCreationScheme.setName("creation");
 		addToEditionSchemes(newCreationScheme);
 		return newCreationScheme;
 	}
 
 	public DropScheme createDropScheme() {
-		DropScheme newDropScheme = new DropScheme();
+		DropScheme newDropScheme = new DropScheme(null);
 		newDropScheme.setName("drop");
 		addToEditionSchemes(newDropScheme);
 		return newDropScheme;
 	}
 
 	public LinkScheme createLinkScheme() {
-		LinkScheme newLinkScheme = new LinkScheme();
+		LinkScheme newLinkScheme = new LinkScheme(null);
 		newLinkScheme.setName("link");
 		addToEditionSchemes(newLinkScheme);
 		return newLinkScheme;
 	}
 
 	public ActionScheme createActionScheme() {
-		ActionScheme newActionScheme = new ActionScheme();
+		ActionScheme newActionScheme = new ActionScheme(null);
 		newActionScheme.setName("action");
 		addToEditionSchemes(newActionScheme);
 		return newActionScheme;
 	}
 
 	public NavigationScheme createNavigationScheme() {
-		NavigationScheme newNavigationScheme = new NavigationScheme();
+		NavigationScheme newNavigationScheme = new NavigationScheme(null);
 		newNavigationScheme.setName("navigation");
 		addToEditionSchemes(newNavigationScheme);
 		return newNavigationScheme;
@@ -544,7 +546,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public DeletionScheme generateDefaultDeletionScheme() {
-		DeletionScheme newDeletionScheme = new DeletionScheme();
+		DeletionScheme newDeletionScheme = new DeletionScheme(null);
 		newDeletionScheme.setName("deletion");
 		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
 		for (PatternRole pr : getPatternRoles()) {
@@ -578,7 +580,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 		});
 		for (PatternRole pr : rolesToDelete) {
-			DeleteAction a = new DeleteAction();
+			DeleteAction a = new DeleteAction(null);
 			a.setObject(new ViewPointDataBinding(pr.getPatternRoleName()));
 			newDeletionScheme.addToActions(a);
 		}

@@ -28,6 +28,7 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class ListParameter extends EditionSchemeParameter {
@@ -38,6 +39,10 @@ public class ListParameter extends EditionSchemeParameter {
 
 	private ListType listType;
 	private ViewPointDataBinding list;
+
+	public ListParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	private BindingDefinition LIST = new BindingDefinition("list", Object.class, BindingDefinitionType.GET, false) {
 		@Override

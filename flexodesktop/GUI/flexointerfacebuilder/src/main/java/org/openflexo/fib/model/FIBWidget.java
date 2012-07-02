@@ -53,6 +53,8 @@ public abstract class FIBWidget extends FIBComponent {
 			BindingDefinitionType.EXECUTE, false);
 	public static BindingDefinition RIGHT_CLICK_ACTION = new BindingDefinition("rightClickAction", Void.class,
 			BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition ENTER_PRESSED_ACTION = new BindingDefinition("enterPressedAction", Void.class,
+			BindingDefinitionType.EXECUTE, false);
 
 	public static enum Parameters implements FIBModelAttribute {
 		enable,
@@ -66,6 +68,7 @@ public abstract class FIBWidget extends FIBComponent {
 		clickAction,
 		doubleClickAction,
 		rightClickAction,
+		enterPressedAction,
 		valueChangedAction
 	}
 
@@ -82,6 +85,7 @@ public abstract class FIBWidget extends FIBComponent {
 	private DataBinding clickAction;
 	private DataBinding doubleClickAction;
 	private DataBinding rightClickAction;
+	private DataBinding enterPressedAction;
 	private DataBinding valueChangedAction;
 
 	private final FIBFormatter formatter;
@@ -410,6 +414,24 @@ public abstract class FIBWidget extends FIBComponent {
 		rightClickAction.setBindingAttribute(Parameters.rightClickAction);
 		rightClickAction.setBindingDefinition(RIGHT_CLICK_ACTION);
 		this.rightClickAction = rightClickAction;
+	}
+
+	public boolean hasEnterPressedAction() {
+		return (enterPressedAction != null && enterPressedAction.isValid());
+	}
+
+	public DataBinding getEnterPressedAction() {
+		if (enterPressedAction == null) {
+			enterPressedAction = new DataBinding(this, Parameters.enterPressedAction, ENTER_PRESSED_ACTION);
+		}
+		return enterPressedAction;
+	}
+
+	public void setEnterPressedAction(DataBinding enterPressedAction) {
+		enterPressedAction.setOwner(this);
+		enterPressedAction.setBindingAttribute(Parameters.enterPressedAction);
+		enterPressedAction.setBindingDefinition(ENTER_PRESSED_ACTION);
+		this.enterPressedAction = enterPressedAction;
 	}
 
 	public boolean isPaletteElement() {

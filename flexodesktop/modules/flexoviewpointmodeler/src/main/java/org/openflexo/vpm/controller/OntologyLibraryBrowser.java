@@ -23,6 +23,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 
+@Deprecated
 public class OntologyLibraryBrowser extends VPMBrowser {
 	public OntologyLibraryBrowser(VPMController controller) {
 		super(controller);

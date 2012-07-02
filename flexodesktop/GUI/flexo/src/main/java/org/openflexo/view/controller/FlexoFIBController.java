@@ -37,6 +37,8 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.ontology.OntologyFolder;
+import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
@@ -44,6 +46,7 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -72,6 +75,12 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	public static final ImageIcon ARROW_UP = UtilsIconLibrary.ARROW_UP_2;
 	public static final ImageIcon ARROW_BOTTOM = UtilsIconLibrary.ARROW_BOTTOM_2;
 	public static final ImageIcon ARROW_TOP = UtilsIconLibrary.ARROW_TOP_2;
+
+	public static final ImageIcon ONTOLOGY_CLASS_ICON = OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+	public static final ImageIcon ONTOLOGY_INDIVIDUAL_ICON = OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
+	public static final ImageIcon ONTOLOGY_DATA_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+	public static final ImageIcon ONTOLOGY_OBJECT_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
+	public static final ImageIcon ONTOLOGY_ANNOTATION_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_ANNOTATION_PROPERTY_ICON;
 
 	public FlexoFIBController(FIBComponent component) {
 		super(component);
@@ -149,6 +158,10 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
 		} else if (object instanceof AbstractViewObject) {
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
+		} else if (object instanceof OntologyLibrary) {
+			return OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON;
+		} else if (object instanceof OntologyFolder) {
+			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof AbstractOntologyObject) {
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
 		} else if (object instanceof TOCObject) {
@@ -200,6 +213,26 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 
 	public ImageIcon getArrowBottom() {
 		return ARROW_BOTTOM;
+	}
+
+	public ImageIcon getOntologyClassIcon() {
+		return ONTOLOGY_CLASS_ICON;
+	}
+
+	public ImageIcon getOntologyIndividualIcon() {
+		return ONTOLOGY_INDIVIDUAL_ICON;
+	}
+
+	public ImageIcon getOntologyDataPropertyIcon() {
+		return ONTOLOGY_DATA_PROPERTY_ICON;
+	}
+
+	public ImageIcon getOntologyObjectPropertyIcon() {
+		return ONTOLOGY_OBJECT_PROPERTY_ICON;
+	}
+
+	public ImageIcon getOntologyAnnotationPropertyIcon() {
+		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
 	}
 
 }

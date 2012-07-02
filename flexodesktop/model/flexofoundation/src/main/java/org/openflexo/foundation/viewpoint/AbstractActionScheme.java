@@ -23,6 +23,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
@@ -35,8 +36,8 @@ public abstract class AbstractActionScheme extends EditionScheme {
 
 	private ViewPointDataBinding conditional;
 
-	public AbstractActionScheme() {
-		super();
+	public AbstractActionScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);

@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
@@ -35,21 +36,13 @@ import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.vpm.view.OntologyPerspectiveBrowserView;
 import org.openflexo.vpm.view.OntologyView;
 
 public class OntologyPerspective extends FlexoPerspective {
 
 	private final VPMController _controller;
 
-	/*private OntologyLibraryBrowser _browser;
-	private OntologyBrowser ontologyBrowser;
-	private OEBrowserView _browserView;
-	private OEBrowserView shemaBrowserView;*/
-
-	// private JSplitPane splitPane;
-
-	private final OntologyPerspectiveBrowserView _ontologyPerspectiveBrowserView;
+	private final FIBOntologyLibraryBrowser ontologyLibraryBrowser;
 
 	private final JLabel infoLabel;
 
@@ -57,42 +50,16 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	/**
 	 * @param controller
-	 *            TODO
 	 * @param name
 	 */
 	public OntologyPerspective(VPMController controller) {
 		super("ontology_perspective");
 		_controller = controller;
-		_ontologyPerspectiveBrowserView = new OntologyPerspectiveBrowserView(controller);
+		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getBaseOntologyLibrary(), controller);
 
-		/*
-		_browser = new OntologyLibraryBrowser(controller);
-		_browserView = new OntologyPerspectiveBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
-			@Override
-			public void treeDoubleClick(FlexoModelObject object) {
-				super.treeDoubleClick(object);
-				if (object instanceof FlexoOntology) {
-		    		focusOnOntology((FlexoOntology)object);
-				}
-			}
-			
-		};
-		ontologyBrowser = new OntologyBrowser(controller);
-		shemaBrowserView = new OEBrowserView(ontologyBrowser, controller, SelectionPolicy.ForceSelection);
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,_browserView,shemaBrowserView);
-		splitPane.setDividerLocation(0.7);
-		splitPane.setResizeWeight(0.7);*/
 		infoLabel = new JLabel("Ontology perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
-
-	/*public void focusOnOntology(FlexoOntology ontology)
-	{
-		ontologyBrowser.deleteBrowserListener(_browserView); 		            
-		ontologyBrowser.setRepresentedOntology(ontology);
-		ontologyBrowser.update();
-		ontologyBrowser.addBrowserListener(_browserView); 		            
-	}*/
 
 	/**
 	 * Overrides getIcon
@@ -143,7 +110,7 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public JComponent getLeftView() {
-		return _ontologyPerspectiveBrowserView;
+		return ontologyLibraryBrowser;
 	}
 
 	@Override

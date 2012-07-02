@@ -39,6 +39,7 @@ import org.openflexo.inspector.widget.WidgetFocusListener;
  * @author sguerin
  * 
  */
+@Deprecated
 public class OntologyIndividualInspectorWidget extends CustomInspectorWidget<OntologyIndividual> {
 
 	protected static final Logger logger = Logger.getLogger(OntologyIndividualInspectorWidget.class.getPackage().getName());

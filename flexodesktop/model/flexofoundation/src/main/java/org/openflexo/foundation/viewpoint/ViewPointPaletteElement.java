@@ -28,6 +28,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
 public class ViewPointPaletteElement extends ViewPointObject {
@@ -47,7 +48,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	private boolean boundLabelToElementName = true;
 
 	// Represent graphical representation to be used as representation in the palette
-	private ShapeGraphicalRepresentation graphicalRepresentation;
+	private ShapeGraphicalRepresentation<?> graphicalRepresentation;
 
 	// Represent graphical representation to be used as overriding representation
 	private Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations;
@@ -57,7 +58,8 @@ public class ViewPointPaletteElement extends ViewPointObject {
 
 	private ViewPointPalette _palette;
 
-	public ViewPointPaletteElement() {
+	public ViewPointPaletteElement(ViewPointBuilder builder) {
+		super(builder);
 		overridingGraphicalRepresentations = new Vector<OverridingGraphicalRepresentation>();
 		parameters = new Vector<PaletteElementPatternParameter>();
 	}
@@ -137,7 +139,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		if (editionPattern != null) {
 			return editionPattern;
 		}
-		if ((_editionPatternId != null) && (getViewPoint() != null)) {
+		if (_editionPatternId != null && getViewPoint() != null) {
 			editionPattern = getViewPoint().getEditionPattern(_editionPatternId);
 			updateParameters();
 		}
@@ -155,12 +157,12 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		if (dropScheme != null) {
 			return dropScheme;
 		}
-		if ((_dropSchemeName != null) && (getEditionPattern() != null)
+		if (_dropSchemeName != null && getEditionPattern() != null
 				&& getEditionPattern().getEditionScheme(_dropSchemeName) instanceof DropScheme) {
 			dropScheme = (DropScheme) getEditionPattern().getEditionScheme(_dropSchemeName);
 			updateParameters();
 		}
-		if ((dropScheme == null) && (getEditionPattern() != null) && (getEditionPattern().getDropSchemes().size() > 0)) {
+		if (dropScheme == null && getEditionPattern() != null && getEditionPattern().getDropSchemes().size() > 0) {
 			dropScheme = getEditionPattern().getDropSchemes().firstElement();
 		}
 		return dropScheme;
@@ -285,11 +287,11 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		return Inspectors.VPM.CALC_PALETTE_ELEMENT_INSPECTOR;
 	}
 
-	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
+	public void setGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
 	}
 
@@ -318,11 +320,13 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		private String patternRoleName;
 
 		// Do not use, required for deserialization
-		public OverridingGraphicalRepresentation() {
+		public OverridingGraphicalRepresentation(ViewPointBuilder builder) {
+			super(builder);
 		}
 
 		// Do not use, required for deserialization
 		public OverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+			super(null);
 			patternRoleName = patternRole.getPatternRoleName();
 		}
 
@@ -359,30 +363,31 @@ public class ViewPointPaletteElement extends ViewPointObject {
 			this.patternRoleName = patternRoleName;
 		}
 
-		public abstract GraphicalRepresentation getGraphicalRepresentation();
+		public abstract GraphicalRepresentation<?> getGraphicalRepresentation();
 
 	}
 
 	public static class ShapeOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
 
-		private ShapeGraphicalRepresentation graphicalRepresentation;
+		private ShapeGraphicalRepresentation<?> graphicalRepresentation;
 
 		// Do not use, required for deserialization
-		public ShapeOverridingGraphicalRepresentation() {
+		public ShapeOverridingGraphicalRepresentation(ViewPointBuilder builder) {
+			super(builder);
 		}
 
 		// Do not use, required for deserialization
-		public ShapeOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ShapeGraphicalRepresentation gr) {
+		public ShapeOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ShapeGraphicalRepresentation<?> gr) {
 			super(patternRole);
 			graphicalRepresentation = gr;
 		}
 
 		@Override
-		public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+		public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 			return graphicalRepresentation;
 		}
 
-		public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
+		public void setGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
 
@@ -390,24 +395,25 @@ public class ViewPointPaletteElement extends ViewPointObject {
 
 	public static class ConnectorOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
 
-		private ConnectorGraphicalRepresentation graphicalRepresentation;
+		private ConnectorGraphicalRepresentation<?> graphicalRepresentation;
 
 		// Do not use, required for deserialization
-		public ConnectorOverridingGraphicalRepresentation() {
+		public ConnectorOverridingGraphicalRepresentation(ViewPointBuilder builder) {
+			super(builder);
 		}
 
 		// Do not use, required for deserialization
-		public ConnectorOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ConnectorGraphicalRepresentation gr) {
+		public ConnectorOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ConnectorGraphicalRepresentation<?> gr) {
 			super(patternRole);
 			graphicalRepresentation = gr;
 		}
 
 		@Override
-		public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
+		public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
 			return graphicalRepresentation;
 		}
 
-		public void setGraphicalRepresentation(ConnectorGraphicalRepresentation graphicalRepresentation) {
+		public void setGraphicalRepresentation(ConnectorGraphicalRepresentation<?> graphicalRepresentation) {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
 

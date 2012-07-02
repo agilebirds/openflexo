@@ -32,16 +32,7 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyObject.OntologyObjectConverter;
-import org.openflexo.foundation.ontology.dm.OntologyClassInserted;
-import org.openflexo.foundation.ontology.dm.OntologyClassRemoved;
-import org.openflexo.foundation.ontology.dm.OntologyDataPropertyInserted;
-import org.openflexo.foundation.ontology.dm.OntologyDataPropertyRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyImported;
-import org.openflexo.foundation.ontology.dm.OntologyIndividualInserted;
-import org.openflexo.foundation.ontology.dm.OntologyIndividualRemoved;
-import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyInserted;
-import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
-import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -68,39 +59,33 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	// public static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
 	// public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
-	public static final String RDFS_ONTOLOGY_URI = "http://www.w3.org/2000/01/rdf-schema";
-	public static final String RDF_ONTOLOGY_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns";
-	public static final String OWL_ONTOLOGY_URI = "http://www.w3.org/2002/07/owl";
 	public static final String FLEXO_CONCEPT_ONTOLOGY_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
-
-	public static final String OWL_THING_URI = OWL_ONTOLOGY_URI + "#Thing";
-	public static final String OWL_CLASS_URI = OWL_ONTOLOGY_URI + "#Class";
-	public static final String OWL_DATA_PROPERTY_URI = OWL_ONTOLOGY_URI + "#DatatypeProperty";
-	public static final String OWL_OBJECT_PROPERTY_URI = OWL_ONTOLOGY_URI + "#ObjectProperty";
 
 	public static final String OPENFLEXO_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#openflexoDescription";
 	public static final String BUSINESS_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#businessDescription";
 	public static final String TECHNICAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#technicalDescription";
 	public static final String USER_MANUAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#userManualDescription";
 
-	public static final String RDFS_LITERAL_URI = RDFS_ONTOLOGY_URI + "#Literal";
+	
 
-	public OntologyClass THING;
+	
+
+	// public OntologyClass THING;
 
 	// private FlexoProject _project;
 	protected Hashtable<String, FlexoOntology> ontologies;
 	private SimpleGraphMaker graphMaker;
 
-	private Hashtable<String, OntologyClass> classes;
+	/*private Hashtable<String, OntologyClass> classes;
 	private Hashtable<String, OntologyIndividual> individuals;
 	private Hashtable<String, OntologyDataProperty> dataProperties;
-	private Hashtable<String, OntologyObjectProperty> objectProperties;
+	private Hashtable<String, OntologyObjectProperty> objectProperties;*/
 
 	private Vector<FlexoOntology> _allOntologies;
-	private Vector<OntologyClass> _allClasses;
+	/*private Vector<OntologyClass> _allClasses;
 	private Vector<OntologyIndividual> _allIndividuals;
 	private Vector<OntologyObjectProperty> _allObjectProperties;
-	private Vector<OntologyDataProperty> _allDataProperties;
+	private Vector<OntologyDataProperty> _allDataProperties;*/
 
 	private FlexoResourceCenter resourceCenter;
 	private OntologyLibrary parentOntologyLibrary = null;
@@ -120,17 +105,17 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			this.parentOntologyLibrary = parentOntologyLibrary;
 			parentOntologyLibrary.addObserver(this);
 		}
-		ontologyObjectConverter = new OntologyObjectConverter(this);
+		ontologyObjectConverter = new OntologyObjectConverter(null/*this*/);
 		// INSTANCE = this;
 		// _project = project;
 		ontologies = new Hashtable<String, FlexoOntology>();
 		if (parentOntologyLibrary == null) {
 			graphMaker = new SimpleGraphMaker();
 		}
-		classes = new Hashtable<String, OntologyClass>();
+		/*classes = new Hashtable<String, OntologyClass>();
 		individuals = new Hashtable<String, OntologyIndividual>();
 		dataProperties = new Hashtable<String, OntologyDataProperty>();
-		objectProperties = new Hashtable<String, OntologyObjectProperty>();
+		objectProperties = new Hashtable<String, OntologyObjectProperty>();*/
 		// findOntologies(ONTOLOGY_LIBRARY_DIR, FLEXO_ONTOLOGY_ROOT_URI);
 
 		rootFolder = new OntologyFolder("root", null, this);
@@ -160,12 +145,12 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		getFlexoConceptOntology().loadWhenUnloaded();
 	}*/
 
-	public OntologyClass getRootClass() {
+	/*public OntologyClass getRootClass() {
 		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getRootClass();
 		}
 		return THING;
-	}
+	}*/
 
 	public Collection<FlexoOntology> getAllOntologies() {
 		if (_allOntologies == null) {
@@ -178,7 +163,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		return _allOntologies;
 	}
 
-	public Collection<OntologyDataProperty> getAllDataProperties() {
+	/*public Collection<OntologyDataProperty> getAllDataProperties() {
 		if (_allDataProperties == null) {
 			_allDataProperties = new Vector<OntologyDataProperty>();
 			_allDataProperties.addAll(dataProperties.values());
@@ -220,7 +205,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			}
 		}
 		return _allIndividuals;
-	}
+	}*/
 
 	public FlexoOntology getOntology(String ontologyUri) {
 		FlexoOntology returned = ontologies.get(ontologyUri);
@@ -235,15 +220,15 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	}
 
 	public FlexoOntology getRDFOntology() {
-		return getOntology(RDF_ONTOLOGY_URI);
+		return getOntology(RDFURIDefinitions.RDF_ONTOLOGY_URI);
 	}
 
 	public FlexoOntology getRDFSOntology() {
-		return getOntology(RDFS_ONTOLOGY_URI);
+		return getOntology(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
 	}
 
 	public FlexoOntology getOWLOntology() {
-		return getOntology(OWL_ONTOLOGY_URI);
+		return getOntology(OWL2URIDefinitions.OWL_ONTOLOGY_URI);
 	}
 
 	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile) {
@@ -374,6 +359,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	@Override
 	public boolean hasModel(String name) {
+		logger.info("hasModel " + name + " ? ");
 		if (ontologies.get(name) != null) {
 			return true;
 		}
@@ -413,11 +399,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		return _project;
 	}*/
 
-	public OntologyObject getOntologyObject(String objectURI) {
-		// System.out.println("Classes: "+classes.toString());
-		// System.out.println("Individuals: "+individuals.toString());
-		// System.out.println("ObjectProperties: "+objectProperties.toString());
-		// System.out.println("DataProperties: "+dataProperties.toString());
+	/*public OntologyObject getOntologyObject(String objectURI) {
 
 		if (objectURI == null) {
 			return null;
@@ -464,9 +446,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		}
 
 		return null;
-	}
+	}*/
 
-	public OntologyProperty getProperty(String objectURI) {
+	/*public OntologyProperty getProperty(String objectURI) {
 		OntologyProperty returned = getObjectProperty(objectURI);
 		if (returned != null) {
 			return returned;
@@ -481,7 +463,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		}
 
 		return null;
-	}
+	}*/
 
 	/**
 	 * Return true if URI is well formed and valid regarding its unicity (no one other object has same URI)
@@ -496,7 +478,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (StringUtils.isEmpty(conceptURI.trim())) {
 			return false;
 		}
-		return (conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && getOntologyObject(ontologyURI + "#" + conceptURI) == null);
+		return (conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI));
 	}
 
 	/**
@@ -506,10 +488,14 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	 * @return
 	 */
 	public boolean isDuplicatedURI(String ontologyURI, String conceptURI) {
-		return getOntologyObject(ontologyURI + "#" + conceptURI) != null;
+		FlexoOntology o = getOntology(ontologyURI);
+		if (o != null) {
+			return o.getOntologyObject(ontologyURI + "#" + conceptURI) != null;
+		}
+		return false;
 	}
 
-	public OntologyClass getClass(String classURI) {
+	/*public OntologyClass getClass(String classURI) {
 		if (classURI == null) {
 			return null;
 		}
@@ -687,14 +673,14 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		_allObjectProperties = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
 		return Inspectors.VE.ONTOLOGY_LIBRARY_INSPECTOR;
 	}
 
-	public Vector<OntologyObjectProperty> getRootObjectProperties() {
+	/*public Vector<OntologyObjectProperty> getRootObjectProperties() {
 		Vector<OntologyObjectProperty> topLevelProperties = new Vector<OntologyObjectProperty>();
 		for (String uri : objectProperties.keySet()) {
 			OntologyObjectProperty property = objectProperties.get(uri);
@@ -738,7 +724,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 				addTopLevelOntologyDataProperty((OntologyDataProperty) superProperty, topLevelProperties);
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
@@ -748,32 +734,81 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 					_allOntologies.clear();
 				}
 				_allOntologies = null;
-			} else if (dataModification instanceof OntologyClassInserted) {
+			} /*else if (dataModification instanceof OntologyClassInserted) {
 				if (_allClasses != null) {
 					_allClasses.clear();
 				}
 				_allClasses = null;
-			} else if (dataModification instanceof OntologyIndividualInserted) {
+				} else if (dataModification instanceof OntologyIndividualInserted) {
 				if (_allIndividuals != null) {
 					_allIndividuals.clear();
 				}
 				_allIndividuals = null;
-			} else if (dataModification instanceof OntologyDataPropertyInserted) {
+				} else if (dataModification instanceof OntologyDataPropertyInserted) {
 				if (_allDataProperties != null) {
 					_allDataProperties.clear();
 				}
 				_allDataProperties = null;
-			} else if (dataModification instanceof OntologyObjectPropertyInserted) {
+				} else if (dataModification instanceof OntologyObjectPropertyInserted) {
 				if (_allObjectProperties != null) {
 					_allObjectProperties.clear();
 				}
 				_allObjectProperties = null;
-			}
+				}*/
 		}
 	}
 
 	public OntologyFolder getRootFolder() {
 		return rootFolder;
 	}
+
+	/*public OntologyObject getOntologyObject(String objectURI) {
+
+		if (objectURI == null) {
+			return null;
+		}
+
+		if (objectURI.endsWith("#")) {
+			objectURI = objectURI.substring(0, objectURI.length() - 1);
+		}
+
+		OntologyObject returned = getOntology(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getClass(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getIndividual(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getObjectProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getDataProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+
+		if (returned == null && objectURI.indexOf("#") > 0) {
+			// Maybe required ontology is not loaded ???
+			// This is an other chance to get it
+			String ontologyURI = objectURI.substring(0, objectURI.indexOf("#"));
+			FlexoOntology o = getOntology(ontologyURI);
+			if (o != null && !o.isLoaded() && !o.isLoading()) {
+				o.loadWhenUnloaded();
+				return getOntologyObject(objectURI);
+			}
+		}
+
+		if (parentOntologyLibrary != null) {
+			return parentOntologyLibrary.getOntologyObject(objectURI);
+		}
+
+		return null;
+	}*/
 
 }

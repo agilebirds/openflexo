@@ -3,7 +3,7 @@
 		<layout name ="DEFAULT">
 			<param name="aLayoutParamName" value="aLayoutParamValue"/>
 		</layout>
-		<property name="newStatus" label="new_status" widget="DROPDOWN" constraint="7">
+		<property name="newStatus" label="new_status" widget="DROPDOWN" constraint="8">
 			<param name="dynamiclist" value="process.statusList.allAvailableStatus"/>
 			<param name="format" value="nameAndProcess"/>
 		</property>

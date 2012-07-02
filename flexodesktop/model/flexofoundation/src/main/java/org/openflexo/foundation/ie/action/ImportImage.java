@@ -65,6 +65,10 @@ public class ImportImage extends FlexoAction<ImportImage, FlexoModelObject, Flex
 		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
 	}
 
+	public static String getImageNameFor(String s) {
+		return FileUtils.lowerCaseExtension(FileUtils.removeNonASCIIAndPonctuationAndBadFileNameChars(s).replace('_', '-'));
+	}
+
 	public static boolean isValidImageFile(File file) {
 		String ext = file.getName().toLowerCase();
 		return ext.endsWith(".gif") || ext.endsWith(".png") || ext.endsWith(".jpg");
@@ -114,8 +118,8 @@ public class ImportImage extends FlexoAction<ImportImage, FlexoModelObject, Flex
 
 	private String getTargetImageName() {
 		if (targetImageName == null) {
-			targetImageName = FileUtils.lowerCaseExtension(FileUtils.removeNonASCIIAndPonctuationAndBadFileNameChars(
-					getImageName() != null ? getImageName() : getFileToImport().getName()).replace('_', '-'));
+			String s = getImageName() != null ? getImageName() : getFileToImport().getName();
+			targetImageName = getImageNameFor(s);
 		}
 		return targetImageName;
 	}

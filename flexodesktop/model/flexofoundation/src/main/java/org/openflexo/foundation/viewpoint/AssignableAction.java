@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -51,7 +52,8 @@ public abstract class AssignableAction extends EditionAction {
 		};
 	};
 
-	public AssignableAction() {
+	public AssignableAction(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public boolean isAssignationRequired() {

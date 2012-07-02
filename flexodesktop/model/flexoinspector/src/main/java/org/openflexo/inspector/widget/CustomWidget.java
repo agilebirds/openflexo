@@ -210,6 +210,10 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 		return getObjectValue();
 	}
 
+	public void setEditedValue(T newValue) {
+		setObjectValue(newValue);
+	}
+
 	public Color getColorForObject(T value) {
 		return Color.BLACK;
 	}

@@ -2001,9 +2001,15 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void objectWasClicked(FlexoModelObject object) {
+		logger.info("Object was clicked: " + object);
 	}
 
 	public void objectWasDoubleClicked(FlexoModelObject object) {
+		logger.info("Object was double-clicked: " + object);
+		if (getCurrentPerspective().hasModuleViewForObject(object)) {
+			// Try to display object in view
+			selectAndFocusObject(object);
+		}
 	}
 
 	public boolean displayInspectorTabForContext(String context) {

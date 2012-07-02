@@ -246,8 +246,8 @@ public class DataBinding implements StringConvertable<DataBinding> {
 		if (binding != null && !binding.isBindingValid()) {
 			if (!silentMode) {
 				logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
-						+ (getOwner() != null ? getOwner().getRootComponent() : null));
-				binding.debugIsBindingValid();
+						+ (getOwner() != null ? getOwner().getRootComponent() : null) + "reason=" + binding.invalidBindingReason());
+				// binding.debugIsBindingValid();
 				// Dev note: Uncomment following to get more informations
 				// logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
 				// + (getOwner() != null ? (getOwner()).getRootComponent() : null));
@@ -267,7 +267,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	}
 
 	protected void finalizeDeserialization() {
-		finalizeDeserialization(false);
+		finalizeDeserialization(true);
 		if (owner != null && hasBinding() && isValid()) {
 			owner.notifyBindingChanged(this);
 		}

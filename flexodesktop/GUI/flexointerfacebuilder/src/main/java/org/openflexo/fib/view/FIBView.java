@@ -185,10 +185,11 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	protected abstract boolean checkValidDataPath();
 
 	public final boolean isComponentVisible() {
-		/*boolean debug = false;
-		if (getComponent().getName() != null && getComponent().getName().equals("ColorBackgroundPanel")) {
-			debug=true;
-		}*/
+		/*
+		 * boolean debug = false; if (getComponent().getName() != null &&
+		 * getComponent().getName().equals("ColorBackgroundPanel")) {
+		 * debug=true; }
+		 */
 
 		if (getParentView() != null && !getParentView().isComponentVisible()) {
 			return false;
@@ -197,10 +198,12 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		boolean componentVisible = true;
 		if (getComponent().getVisible() != null && getComponent().getVisible().isSet()) {
 			Object isVisible = getComponent().getVisible().getBindingValue(getController());
-			/*if (debug) {
-				System.out.println("getComponent().getVisible()="+getComponent().getVisible());
-				System.out.println("Eh bien isVisible="+isVisible);
-			}*/
+			/*
+			 * if (debug) {
+			 * System.out.println("getComponent().getVisible()="+getComponent
+			 * ().getVisible());
+			 * System.out.println("Eh bien isVisible="+isVisible); }
+			 */
 			if (isVisible instanceof Boolean) {
 				componentVisible = (Boolean) isVisible;
 			}
@@ -209,12 +212,17 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 			return false;
 		}
 		// logger.info("Please look at this !!!");
-		// if (getParentView() != null) return getParentView().isComponentVisible();
+		// if (getParentView() != null) return
+		// getParentView().isComponentVisible();
 		return true;
 	}
 
 	public final boolean hasValue() {
 		return component.getData() != null && component.getData().isSet();
+	}
+
+	protected boolean isVisible() {
+		return visible;
 	}
 
 	private final void updateVisibility(boolean revalidateAndRepaint) {
@@ -301,14 +309,14 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		}
 	}
 
-	public FIBView getParentView() {
+	public FIBView<?, ?> getParentView() {
 		if (getComponent().getParent() != null) {
 			return getController().viewForComponent(getComponent().getParent());
 		}
 		return null;
 	}
 
-	protected Vector<FIBView> getSubViews() {
+	public Vector<FIBView> getSubViews() {
 		return subViews;
 	}
 

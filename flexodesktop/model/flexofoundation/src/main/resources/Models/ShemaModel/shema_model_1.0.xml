@@ -56,7 +56,7 @@
   </entity>
 
   <entity name="org.openflexo.foundation.ontology.EditionPatternReference$RestrictionStatementActorReference" xmlTag="RestrictionStatementActorReference">
-      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
+       <!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
       <property name="propertyURI" xmlTag="propertyURI" attribute="YES" description=""/>
       <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
   </entity>
@@ -238,7 +238,6 @@
   	 <property name="nPoints" xmlTag="nPoints" attribute="YES"/>
   	 <property name="startAngle" xmlTag="startAngle" attribute="YES"/>
    </entity>
-	
 	
    <entity name="org.openflexo.fge.shapes.Triangle" xmlTag="TriangleShape">
      <description>Triangle shape</description>

@@ -77,7 +77,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 		inspectorViews = new Hashtable<FIBInspector, FIBView<?, ?>>();
 
-		rebuildViews();
+		resetViews();
 
 		EMPTY_CONTENT = new JPanel(new BorderLayout());
 		EMPTY_CONTENT.add(new JLabel("No selection", SwingConstants.CENTER), BorderLayout.CENTER);
@@ -88,7 +88,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 	}
 
-	private void rebuildViews() {
+	private void resetViews() {
 
 		if (inspectorViews != null) {
 			for (FIBView<?, ?> v : inspectorViews.values()) {
@@ -97,16 +97,29 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 			inspectorViews.clear();
 		}
 
-		for (Class<?> c : inspectorController.getInspectors().keySet()) {
+		/*for (Class<?> c : inspectorController.getInspectors().keySet()) {
 			FIBInspector inspector = inspectorController.getInspectors().get(c);
 			FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Initialized view for inspector for " + inspector.getDataClass());
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Initialized view for inspector for " + inspector.getDataClass());
 			}
-		}
+		}*/
 
+	}
+
+	private FIBView<?, ?> buildViewFor(FIBInspector inspector) {
+
+		FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
+		// TODO: See with Sylvain the purpose of the next line.
+		// ((FIBInspectorController) inspectorView.getController()).setEditor(inspectorController.getFlexoController().getEditor());
+		FlexoLocalization.addToLocalizationListeners(inspectorView);
+		inspectorViews.put(inspector, inspectorView);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Initialized view for inspector for " + inspector.getDataClass());
+		}
+		return inspectorView;
 	}
 
 	public void delete() {
@@ -232,14 +245,18 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	}
 
 	private FIBView<?, ?> viewForInspector(FIBInspector inspector) {
-		return inspectorViews.get(inspector);
+		FIBView<?, ?> returned = inspectorViews.get(inspector);
+		if (returned == null) {
+			returned = buildViewFor(inspector);
+		}
+		return returned;
 	}
 
 	@Override
 	public void update(Observable o, Object notification) {
 		// logger.info("FIBInspectorController received: "+selection);
 		if (notification instanceof NewInspectorsLoaded) {
-			rebuildViews();
+			resetViews();
 		}
 		if (notification instanceof EmptySelectionActivated) {
 			switchToEmptyContent();

@@ -38,11 +38,9 @@ import org.openflexo.foundation.cg.dm.PostBuildStop;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.toc.PredefinedSection;
-import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCModification;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.localization.FlexoLocalization;
@@ -209,7 +207,7 @@ public class DGRepository extends GenerationRepository {
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
 		v.add(AddGeneratedCodeRepository.actionType);
-		v.add(DeprecatedAddTOCEntry.actionType);
+		// v.add(DeprecatedAddTOCEntry.actionType);
 		return v;
 	}
 

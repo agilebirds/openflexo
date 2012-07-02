@@ -32,6 +32,7 @@ import org.openflexo.vpm.controller.VPMController;
  * @author yourname
  * 
  */
+@Deprecated
 public class CEDBrowserView extends BrowserView {
 
 	private static final Logger logger = Logger.getLogger(CEDBrowserView.class.getPackage().getName());

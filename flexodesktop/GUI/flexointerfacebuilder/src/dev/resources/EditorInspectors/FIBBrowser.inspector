@@ -139,6 +139,12 @@
 							<Font data="ElementsTable.selected.font" visible="ElementsTable.selected.hasSpecificFont"/>
 						</Panel>
 
+            			<Label label="dynamic_font" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+          				<Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ElementsTable.selected.dynamicFont.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+							<Assignment variable="component.bindable" value="ElementsTable.selected.iterator"/>
+							<Assignment variable="component.bindingDefinition" value="ElementsTable.selected.DYNAMIC_FONT"/>
+      				    </Custom>
+
 				</Tab>
 
 				<Tab name="ChildrenTab" title="Children" index="2" layout="border" font="SansSerif,0,11" >

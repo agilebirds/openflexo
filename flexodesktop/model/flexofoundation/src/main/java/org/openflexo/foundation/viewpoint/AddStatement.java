@@ -26,13 +26,15 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public abstract class AddStatement extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
-	public AddStatement() {
+	public AddStatement(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public OntologyObject getPropertySubject(EditionSchemeAction action) {

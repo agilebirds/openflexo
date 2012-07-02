@@ -21,6 +21,8 @@ package org.openflexo.fib.controller;
 
 import java.awt.Component;
 import java.awt.Window;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -336,6 +338,15 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 				} else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
 					// Detected double-click associated with action
 					fibWidget.getDoubleClickAction().execute(FIBController.this);
+				}
+			}
+		});
+		returned.getDynamicJComponent().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (fibWidget.hasEnterPressedAction() && e.getKeyCode() == KeyEvent.VK_ENTER) {
+					// Detected double-click associated with action
+					fibWidget.getEnterPressedAction().execute(FIBController.this);
 				}
 			}
 		});

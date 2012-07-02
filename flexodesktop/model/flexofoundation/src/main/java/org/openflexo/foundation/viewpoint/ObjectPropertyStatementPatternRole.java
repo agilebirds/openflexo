@@ -5,8 +5,13 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ObjectPropertyStatementPatternRole extends StatementPatternRole {
+
+	public ObjectPropertyStatementPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {
@@ -40,8 +45,8 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());
+		if (getViewPoint().getViewpointOntology() != null) {
+			return getViewPoint().getViewpointOntology().getObjectProperty(_getObjectPropertyURI());
 		}
 		return null;
 	}

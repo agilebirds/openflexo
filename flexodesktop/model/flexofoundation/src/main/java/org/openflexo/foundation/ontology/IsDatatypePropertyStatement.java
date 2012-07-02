@@ -27,8 +27,6 @@ public class IsDatatypePropertyStatement extends IsAStatement {
 
 	private static final Logger logger = Logger.getLogger(IsDatatypePropertyStatement.class.getPackage().getName());
 
-	public static final String DATATYPE_PROPERTY_URI = "http://www.w3.org/2002/07/owl#DatatypeProperty";
-
 	public IsDatatypePropertyStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 	}

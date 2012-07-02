@@ -1,4 +1,4 @@
-<inspector title = "DocItemFolder">
+<inspector title = "DocItemFolder" inspectedClassName="org.openflexo.drm.DocItemFolder">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="identifier" label="identifier" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>

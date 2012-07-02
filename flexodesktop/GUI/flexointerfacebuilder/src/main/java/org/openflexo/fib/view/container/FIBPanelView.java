@@ -67,10 +67,10 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 	public void updateBorder() {
 		switch (getComponent().getBorder()) {
 		case empty:
-			panel.setBorder(BorderFactory.createEmptyBorder((getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0),
-					(getComponent().getBorderLeft() != null ? getComponent().getBorderLeft() : 0),
-					(getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0),
-					(getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0)));
+			panel.setBorder(BorderFactory.createEmptyBorder(getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0,
+					getComponent().getBorderLeft() != null ? getComponent().getBorderLeft() : 0,
+					getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0,
+					getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0));
 			break;
 		case etched:
 			panel.setBorder(BorderFactory.createEtchedBorder());
@@ -92,10 +92,10 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 			break;
 		case rounded3d:
 			panel.setBorder(new RoundedBorder(StringUtils.isNotEmpty(getComponent().getBorderTitle()) ? getLocalized(getComponent()
-					.getBorderTitle()) : null, (getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0), (getComponent()
-					.getBorderLeft() != null ? getComponent().getBorderLeft() : 0),
-					(getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0),
-					(getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0), getComponent().getTitleFont(),
+					.getBorderTitle()) : null, getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0, getComponent()
+					.getBorderLeft() != null ? getComponent().getBorderLeft() : 0,
+					getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0,
+					getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0, getComponent().getTitleFont(),
 					getComponent().retrieveValidForegroundColor(), getComponent().getDarkLevel()));
 			break;
 		default:
@@ -183,7 +183,7 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 			int i = 0;
 			for (FIBComponent subComponent : allSubComponents) {
-				(subComponent.getConstraints()).setIndexNoNotification(i);
+				subComponent.getConstraints().setIndexNoNotification(i);
 				i++;
 			}
 

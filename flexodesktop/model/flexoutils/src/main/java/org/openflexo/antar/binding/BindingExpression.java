@@ -667,6 +667,40 @@ public class BindingExpression extends AbstractBinding {
 	}
 
 	@Override
+	public String invalidBindingReason() {
+		if (expression == null) {
+			return "Binding " + this + " not valid because expression is null";
+		}
+
+		if (getAccessedType() == null) {
+			return "Binding " + this + " not valid because accessed type is null";
+		}
+
+		if (getBindingDefinition() == null) {
+			return "Binding " + this + " not valid because binding definition is null";
+		} else if (getBindingDefinition().getIsSettable()) {
+			return "Invalid binding because binding definition is declared as settable for an expression";
+		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
+			return "Invalid binding because binding definition is declared as executable for an expression";
+		}
+
+		for (Expression e : expression.getAllAtomicExpressions()) {
+			if (e instanceof BindingValueVariable && !((BindingValueVariable) e).isValid()) {
+				return "Binding " + this + " not valid because invalid part: ["
+						+ ((BindingValueVariable) e).getBindingValue().invalidBindingReason() + "]";
+			}
+			if (e instanceof BindingValueFunction && !((BindingValueFunction) e).getBindingValue().isBindingValid()) {
+				return "Binding " + this + " not valid because invalid function: ["
+						+ ((BindingValueFunction) e).getBindingValue().invalidBindingReason() + "]";
+			}
+		}
+
+		return "Binding " + this + " not valid because types are not matching: searched: " + getBindingDefinition().getType() + " have: "
+				+ getAccessedType();
+
+	}
+
+	@Override
 	public void setsWith(AbstractBinding aValue) {
 		super.setsWith(aValue);
 		if (aValue instanceof BindingExpression) {

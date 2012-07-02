@@ -27,8 +27,6 @@ public class IsClassStatement extends IsAStatement {
 
 	private static final Logger logger = Logger.getLogger(IsClassStatement.class.getPackage().getName());
 
-	public static final String CLASS_URI = "http://www.w3.org/2002/07/owl#Class";
-
 	public IsClassStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 	}

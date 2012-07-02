@@ -12,6 +12,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
@@ -19,6 +20,7 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.localization.FlexoLocalization;
@@ -33,12 +35,19 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	private SimpleBindingPathElementImpl uriProperty;
 
 	protected List<BindingPathElement> allProperties;
+	private Vector<StatementPathElement> accessibleStatements;
 
-	public OntologyObjectPathElement(String name, BindingPathElement aParentElement) {
+	private FlexoOntology viewpointOntology;
+
+	public static final int MAX_LEVELS = 3;
+
+	public OntologyObjectPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
 		super();
 		this.name = name;
 		parentElement = aParentElement;
+		this.viewpointOntology = viewpointOntology;
 		allProperties = new Vector<BindingPathElement>();
+		accessibleStatements = new Vector<StatementPathElement>();
 		uriNameProperty = new SimpleBindingPathElementImpl<String>(URINameChanged.URI_NAME_KEY, TypeUtils.getBaseClass(getType()),
 				String.class, true, "uri_name_as_supplied_in_ontology") {
 			@Override
@@ -78,7 +87,42 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	}
 
 	public List<BindingPathElement> getAllProperties() {
+		if (!propertiesFound) {
+			searchProperties(getOntologicType());
+		}
 		return allProperties;
+	}
+
+	boolean propertiesFound = false;
+
+	private void searchProperties(OntologyObject<?> ontologicType) {
+
+		if (ontologicType != null) {
+			// System.out.println("Properties = "
+			// + ((IndividualPatternRole) getPatternRole()).getOntologicType().getPropertiesTakingMySelfAsDomain());
+			for (final OntologyProperty property : ontologicType.getPropertiesTakingMySelfAsDomain()) {
+				StatementPathElement<?> propertyPathElement = null;
+				if (property instanceof OntologyObjectProperty) {
+					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
+							(OntologyObjectProperty) property, true, OntologyObjectPathElement.MAX_LEVELS);
+				} else if (property instanceof OntologyDataProperty) {
+					propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+				}
+				if (propertyPathElement != null) {
+					// System.out.println("add " + propertyPathElement);
+					accessibleStatements.add(propertyPathElement);
+					allProperties.add(propertyPathElement);
+				}
+			}
+			propertiesFound = true;
+		}
+	}
+
+	public OntologyClass getOntologicType() {
+		if (getViewpointOntology() != null) {
+			return getViewpointOntology().getThingConcept();
+		}
+		return null;
 	}
 
 	@Override
@@ -141,35 +185,28 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 		return getLabel();
 	}
 
-	public static class OntologyClassPathElement extends OntologyObjectPathElement<OntologyClass> {
-		public OntologyClassPathElement(String name, BindingPathElement aParentElement) {
-			super(name, aParentElement);
-		}
-
-		@Override
-		public Type getType() {
-			return OntologyClass.class;
-		}
+	public FlexoOntology getViewpointOntology() {
+		return viewpointOntology;
 	}
 
-	public static class OntologyIndividualPathElement extends OntologyObjectPathElement<OntologyIndividual> {
+	public static class OntologyClassPathElement extends OntologyObjectPathElement<OntologyClass> {
 		private OntologyClass ontologyType;
-		private Vector<StatementPathElement> accessibleStatements;
 
-		public OntologyIndividualPathElement(String name, BindingPathElement aParentElement) {
-			this(name, null, aParentElement);
+		public OntologyClassPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
+			this(name, viewpointOntology.getThingConcept(), aParentElement, viewpointOntology);
 		}
 
-		public OntologyIndividualPathElement(String name, OntologyClass ontologyType, BindingPathElement aParentElement) {
-			super(name, aParentElement);
+		public OntologyClassPathElement(String name, OntologyClass ontologyType, BindingPathElement aParentElement,
+				FlexoOntology viewpointOntology) {
+			super(name, aParentElement, viewpointOntology);
 			this.ontologyType = ontologyType;
-			accessibleStatements = new Vector<StatementPathElement>();
+			/*accessibleStatements = new Vector<StatementPathElement>();
 			if (ontologyType != null) {
 				for (final OntologyProperty property : ontologyType.getPropertiesTakingMySelfAsDomain()) {
 					StatementPathElement propertyPathElement = null;
 					if (property instanceof OntologyObjectProperty) {
 						propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
-								(OntologyObjectProperty) property, true);
+								(OntologyObjectProperty) property, true, MAX_LEVELS);
 					} else if (property instanceof OntologyDataProperty) {
 						propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
 					}
@@ -178,22 +215,85 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 						allProperties.add(propertyPathElement);
 					}
 				}
+			}*/
+		}
+
+		/*@Override
+		public Type getType() {
+			if (ontologyType != null) {
+				return SubClassOfClass.getSubClassOfClass(ontologyType);
 			}
+			return OntologyClass.class;
+		}*/
+
+		@Override
+		public Type getType() {
+			return SubClassOfClass.getSubClassOfClass(getOntologicType());
+		}
+
+		@Override
+		public OntologyClass getOntologicType() {
+			if (ontologyType != null) {
+				return ontologyType;
+			}
+			if (getViewpointOntology() != null) {
+				return getViewpointOntology().getThingConcept();
+			}
+			return null;
+		}
+
+	}
+
+	public static class OntologyIndividualPathElement extends OntologyObjectPathElement<OntologyIndividual> {
+		private OntologyClass ontologyType;
+
+		public OntologyIndividualPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
+			this(name, null, aParentElement, viewpointOntology);
+		}
+
+		public OntologyIndividualPathElement(String name, OntologyClass ontologyType, BindingPathElement aParentElement,
+				FlexoOntology viewpointOntology) {
+			super(name, aParentElement, viewpointOntology);
+			this.ontologyType = ontologyType;
+			/*accessibleStatements = new Vector<StatementPathElement>();
+			if (ontologyType != null) {
+				for (final OntologyProperty property : ontologyType.getPropertiesTakingMySelfAsDomain()) {
+					StatementPathElement propertyPathElement = null;
+					if (property instanceof OntologyObjectProperty) {
+						propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
+								(OntologyObjectProperty) property, true, MAX_LEVELS);
+					} else if (property instanceof OntologyDataProperty) {
+						propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+					}
+					if (propertyPathElement != null) {
+						accessibleStatements.add(propertyPathElement);
+						allProperties.add(propertyPathElement);
+					}
+				}
+			}*/
 		}
 
 		@Override
 		public Type getType() {
+			return IndividualOfClass.getIndividualOfClass(getOntologicType());
+		}
+
+		@Override
+		public OntologyClass getOntologicType() {
 			if (ontologyType != null) {
-				return IndividualOfClass.getIndividualOfClass(ontologyType);
+				return ontologyType;
 			}
-			return OntologyIndividual.class;
+			if (getViewpointOntology() != null) {
+				return getViewpointOntology().getThingConcept();
+			}
+			return null;
 		}
 
 	}
 
 	public static abstract class OntologyPropertyPathElement<T extends OntologyProperty> extends OntologyObjectPathElement<T> {
-		public OntologyPropertyPathElement(String name, BindingPathElement aParentElement) {
-			super(name, aParentElement);
+		public OntologyPropertyPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
+			super(name, aParentElement, viewpointOntology);
 		}
 
 		@Override
@@ -204,8 +304,8 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	}
 
 	public static class OntologyDataPropertyPathElement extends OntologyPropertyPathElement<OntologyDataProperty> {
-		public OntologyDataPropertyPathElement(String name, BindingPathElement aParentElement) {
-			super(name, aParentElement);
+		public OntologyDataPropertyPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
+			super(name, aParentElement, viewpointOntology);
 		}
 
 		@Override
@@ -213,16 +313,32 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 			return OntologyDataProperty.class;
 		}
 
+		@Override
+		public OntologyClass getOntologicType() {
+			if (getViewpointOntology() != null) {
+				return getViewpointOntology().getClass(OntologyObject.OWL_DATA_PROPERTY_URI);
+			}
+			return null;
+		}
+
 	}
 
 	public static class OntologyObjectPropertyPathElement extends OntologyPropertyPathElement<OntologyObjectProperty> {
-		public OntologyObjectPropertyPathElement(String name, BindingPathElement aParentElement) {
-			super(name, aParentElement);
+		public OntologyObjectPropertyPathElement(String name, BindingPathElement aParentElement, FlexoOntology viewpointOntology) {
+			super(name, aParentElement, viewpointOntology);
 		}
 
 		@Override
 		public Type getType() {
 			return OntologyObjectProperty.class;
+		}
+
+		@Override
+		public OntologyClass getOntologicType() {
+			if (getViewpointOntology() != null) {
+				return getViewpointOntology().getClass(OntologyObject.OWL_OBJECT_PROPERTY_URI);
+			}
+			return null;
 		}
 
 	}

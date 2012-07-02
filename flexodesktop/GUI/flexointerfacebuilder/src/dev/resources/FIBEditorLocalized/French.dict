@@ -141,6 +141,7 @@ new=Nouveau
 new_interface=Nouveau composant
 no=Non
 no_description=Pas de description
+no_description_available=Pas de description disponible
 no_documentation=Pas de documentation
 no_selection=Pas de s\u00E9lection
 no_type=Pas de type

@@ -80,6 +80,16 @@ public class DMController extends FlexoController implements ConsistencyChecking
 	public final HierarchyPerspective HIERARCHY_PERSPECTIVE;
 	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
 
+	@Override
+	public boolean useNewInspectorScheme() {
+		return true;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return true;
+	}
+
 	/**
 	 * Default constructor
 	 * 

@@ -3,6 +3,7 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ShapePatternRole extends GraphicalElementPatternRole {
@@ -12,6 +13,10 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 	private Object _graphicalRepresentation;
 
 	private ShapePatternRole parentShapePatternRole;
+
+	public ShapePatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	protected void initDefaultSpecifications() {

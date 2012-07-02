@@ -29,6 +29,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.toolbox.StringUtils;
@@ -69,7 +70,8 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		conditional, baseURI, defaultValue, list, domainValue, rangeValue, parentClassValue, conceptValue
 	}
 
-	public EditionSchemeParameter() {
+	public EditionSchemeParameter(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

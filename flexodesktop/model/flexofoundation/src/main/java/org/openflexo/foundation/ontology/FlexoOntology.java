@@ -26,11 +26,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdom.Attribute;
@@ -56,9 +60,13 @@ import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.toolbox.StringUtils;
 
+import com.hp.hpl.jena.ontology.AnnotationProperty;
+import com.hp.hpl.jena.ontology.ComplementClass;
 import com.hp.hpl.jena.ontology.DatatypeProperty;
 import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.IntersectionClass;
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -66,6 +74,7 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.ontology.Restriction;
+import com.hp.hpl.jena.ontology.UnionClass;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -96,10 +105,17 @@ public abstract class FlexoOntology extends OntologyObject {
 	private final Hashtable<String, OntologyDataProperty> dataProperties;
 	private final Hashtable<String, OntologyObjectProperty> objectProperties;
 
+	private final Hashtable<OntClass, OntologyClass> _classes;
+	private final Hashtable<Individual, OntologyIndividual> _individuals;
+	private final Hashtable<OntProperty, OntologyDataProperty> _dataProperties;
+	private final Hashtable<OntProperty, OntologyObjectProperty> _objectProperties;
+
 	private final Vector<OntologyClass> orderedClasses;
 	private final Vector<OntologyIndividual> orderedIndividuals;
 	private final Vector<OntologyDataProperty> orderedDataProperties;
 	private final Vector<OntologyObjectProperty> orderedObjectProperties;
+
+	private OntologyClass THING_CONCEPT;
 
 	public FlexoOntology(String anURI, File owlFile, OntologyLibrary library) {
 		super(null, null);
@@ -115,11 +131,19 @@ public abstract class FlexoOntology extends OntologyObject {
 		}
 		alternativeLocalFile = owlFile;
 		_library = library;
+
 		importedOntologies = new Vector<FlexoOntology>();
+
 		classes = new Hashtable<String, OntologyClass>();
 		individuals = new Hashtable<String, OntologyIndividual>();
 		dataProperties = new Hashtable<String, OntologyDataProperty>();
 		objectProperties = new Hashtable<String, OntologyObjectProperty>();
+
+		_classes = new Hashtable<OntClass, OntologyClass>();
+		_individuals = new Hashtable<Individual, OntologyIndividual>();
+		_dataProperties = new Hashtable<OntProperty, OntologyDataProperty>();
+		_objectProperties = new Hashtable<OntProperty, OntologyObjectProperty>();
+
 		orderedClasses = new Vector<OntologyClass>();
 		orderedIndividuals = new Vector<OntologyIndividual>();
 		orderedDataProperties = new Vector<OntologyDataProperty>();
@@ -261,8 +285,87 @@ public abstract class FlexoOntology extends OntologyObject {
 		return alternativeLocalFile;
 	}
 
+	/**
+	 * Return a vector of all imported ontologies in the context of this ontology. This method is recursive. Ontologies are imported only
+	 * once. This ontology is also appened to returned list.
+	 * 
+	 * @return
+	 */
+	public Vector<FlexoOntology> getAllImportedOntologies() {
+		Vector<FlexoOntology> returned = new Vector<FlexoOntology>();
+		appendToAllImportedOntologies(this, returned);
+		return returned;
+	}
+
+	private static void appendToAllImportedOntologies(FlexoOntology o, Vector<FlexoOntology> v) {
+		if (!v.contains(o)) {
+			v.add(o);
+			for (FlexoOntology importedOntology : o.getImportedOntologies()) {
+				appendToAllImportedOntologies(importedOntology, v);
+			}
+		}
+	}
+
+	/**
+	 * Return a vector of imported ontologies in the context of this ontology
+	 * 
+	 * @return
+	 */
 	public Vector<FlexoOntology> getImportedOntologies() {
+		if (getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
+			// OWL ontology should at least import RDF and RDFS ontologies
+			if (!importedOntologies.contains(getOntologyLibrary().getRDFOntology())) {
+				importedOntologies.add(getOntologyLibrary().getRDFOntology());
+			}
+			if (!importedOntologies.contains(getOntologyLibrary().getRDFSOntology())) {
+				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
+			}
+		} else if (getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)) {
+			// RDF ontology should at least import RDFS ontology
+			if (!importedOntologies.contains(getOntologyLibrary().getRDFSOntology())) {
+				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
+			}
+		} else if (getURI().equals(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)) {
+			// RDFS ontology has no requirement
+			if (!importedOntologies.contains(getOntologyLibrary().getRDFOntology())) {
+				importedOntologies.add(getOntologyLibrary().getRDFOntology());
+			}
+		} else {
+			// All other ontologies should at least import OWL ontology
+			if (!importedOntologies.contains(getOntologyLibrary().getOWLOntology())) {
+				importedOntologies.add(getOntologyLibrary().getOWLOntology());
+			}
+		}
+
+		/*if (importedOntologies.size() == 0) {
+			if (getURI().equals(OntologyLibrary.OWL_ONTOLOGY_URI)) {
+				importedOntologies.add(getOntologyLibrary().getRDFOntology());
+				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
+			} else if (getURI().equals(OntologyLibrary.RDF_ONTOLOGY_URI)) {
+				importedOntologies.add(getOntologyLibrary().getRDFSOntology());
+			} else if (!getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+				importedOntologies.add(getOntologyLibrary().getOWLOntology());
+			}
+		}*/
 		return importedOntologies;
+	}
+
+	/**
+	 * Return the local vision of OWL Thing concept
+	 * 
+	 * @return
+	 */
+	public OntologyClass getThingConcept() {
+		return THING_CONCEPT;
+	}
+
+	/**
+	 * Return the root concept class, which is the local vision of OWL Thing concept
+	 * 
+	 * @return
+	 */
+	public OntologyClass getRootClass() {
+		return getThingConcept();
 	}
 
 	@Override
@@ -283,10 +386,18 @@ public abstract class FlexoOntology extends OntologyObject {
 		}
 	}
 
+	/**
+	 * Import ontology if supplied ontology is not yet imported in this ontology.<br>
+	 * Return a flag indicating if import was effective (otherwise, it was already done)
+	 * 
+	 * @param anOntology
+	 * @return
+	 * @throws OntologyNotFoundException
+	 */
 	public boolean importOntology(FlexoOntology anOntology) throws OntologyNotFoundException {
 		loadWhenUnloaded();
 
-		if (getImportedOntologies().contains(anOntology)) {
+		if (getAllImportedOntologies().contains(anOntology)) {
 			return false;
 		}
 
@@ -301,8 +412,8 @@ public abstract class FlexoOntology extends OntologyObject {
 				+ "@prefix owl:         <http://www.w3.org/2002/07/owl#>.\n" + "<" + getOntologyURI() + "> a owl:Ontology \n"
 				+ "   ; owl:imports <" + anOntology.getOntologyURI() + ">.\n";
 
-		System.out.println("About to load source ontology:");
-		System.out.println(SOURCE);
+		logger.fine("About to load source ontology:");
+		logger.fine(SOURCE);
 		ontModel.read(new StringReader(SOURCE), getOntologyURI(), "N3");
 
 		importedOntologies.add(anOntology);
@@ -320,133 +431,243 @@ public abstract class FlexoOntology extends OntologyObject {
 
 	};
 
+	private boolean isNamedClass(OntClass ontClass) {
+		return !ontClass.isComplementClass() && !ontClass.isUnionClass() && !ontClass.isIntersectionClass() && !ontClass.isRestriction()
+				&& !ontClass.isEnumeratedClass() && StringUtils.isNotEmpty(ontClass.getURI());
+	}
+
+	private boolean isNamedResourceOfThisOntology(OntResource ontResource) {
+		return StringUtils.isNotEmpty(ontResource.getURI()) && ontResource.getURI().startsWith(getURI());
+	}
+
 	private void createConceptsAndProperties() {
 		classes.clear();
 		individuals.clear();
 		dataProperties.clear();
 		objectProperties.clear();
-
-		// DescribeClass dc = new DescribeClass();
+		_classes.clear();
+		_individuals.clear();
+		_dataProperties.clear();
+		_objectProperties.clear();
 
 		for (Iterator i = getOntModel().listClasses(); i.hasNext();) {
 			OntClass ontClass = (OntClass) i.next();
-			// logger.info(">>>>> Load class "+ontClass);
-			if (ontClass.getURI() != null) {
-				if (_library.getClass(ontClass.getURI()) == null) {
-					// Concept not yet known, assume that this concept is declared in this ontology
-					makeNewClass(ontClass);
-				} else {
-					OntologyClass existingClass = _library.getClass(ontClass.getURI());
-					// In this case, ontClass is not the same than the one that was already declared as ontClass for OntologyClass:
-					// because new statements in loaded ontology refer to already existing class, so we have to update class with
-					// the new OntClass resource
-					existingClass.update(ontClass);
+			if (_classes.get(ontClass) == null && isNamedResourceOfThisOntology(ontClass)) {
+				// Only named classes will be appended
+				makeNewClass(ontClass);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Made class " + ontClass.getURI());
 				}
 			}
 		}
 
 		for (Iterator i = getOntModel().listIndividuals(); i.hasNext();) {
 			Individual individual = (Individual) i.next();
-			if (individual.getURI() != null) {
-				if (_library.getIndividual(individual.getURI()) == null) {
-					// Concept not yet known, assume that this concept is declared in this ontology
-					makeNewIndividual(individual);
-				} else {
-					OntologyIndividual existingIndividual = _library.getIndividual(individual.getURI());
-					// In this case, individual is not the same than the one that was already declared as Individual for OntologyIndividual:
-					// because new statements in loaded ontology refer to already existing class, so we have to update individual with
-					// the new Individual resource
-					existingIndividual.update(individual);
+			if (_individuals.get(individual) == null && isNamedResourceOfThisOntology(individual)) {
+				OntologyIndividual newIndividual = makeNewIndividual(individual);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Made individual " + individual.getURI());
 				}
 			}
 		}
 
 		for (Iterator i = getOntModel().listDatatypeProperties(); i.hasNext();) {
 			DatatypeProperty ontProperty = (DatatypeProperty) i.next();
-			if (ontProperty.getURI() != null) {
-				if (_library.getDataProperty(ontProperty.getURI()) == null) {
-					// Property not yet known, assume that this concept is declared in this ontology
-					makeNewDataProperty(ontProperty);
-				} else {
-					OntologyProperty existingProperty = _library.getDataProperty(ontProperty.getURI());
-					// In this case, ontProperty is not the same than the one that was already declared as ontProperty for DatatypeProperty:
-					// because new statements in loaded ontology refer to already existing class, so we have to update property with
-					// the new OntProperty resource
-					existingProperty.update(ontProperty);
+			if (_dataProperties.get(ontProperty) == null && isNamedResourceOfThisOntology(ontProperty)) {
+				makeNewDataProperty(ontProperty);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine(getURI() + ": made DataProperty" + ontProperty.getURI() + " in " + getURI());
 				}
 			}
 		}
 
 		for (Iterator i = getOntModel().listObjectProperties(); i.hasNext();) {
 			ObjectProperty ontProperty = (ObjectProperty) i.next();
-			if (ontProperty.getURI() != null) {
-				if (_library.getObjectProperty(ontProperty.getURI()) == null) {
-					// Property not yet known, assume that this concept is declared in this ontology
-					makeNewObjectProperty(ontProperty);
-				} else {
-					OntologyProperty existingProperty = _library.getObjectProperty(ontProperty.getURI());
-					// In this case, ontProperty is not the same than the one that was already declared as ontProperty for ObjectProperty:
-					// because new statements in loaded ontology refer to already existing class, so we have to update property with
-					// the new OntProperty resource
-					existingProperty.update(ontProperty);
+			if (_objectProperties.get(ontProperty) == null && isNamedResourceOfThisOntology(ontProperty)) {
+				makeNewObjectProperty(ontProperty);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine(getURI() + ": made ObjectProperty" + ontProperty.getURI() + " in " + getURI());
 				}
 			}
 		}
 
-		// I dont understand why, but on some ontologies, this is the only way to obtain those properties
+		// I dont understand why, but on some ontologies (RDF, RDFS and OWL), this is the only way to obtain those properties
 		for (Iterator i = ontModel.listAllOntProperties(); i.hasNext();) {
 			OntProperty ontProperty = (OntProperty) i.next();
-			if (dataProperties.get(ontProperty.getURI()) == null && objectProperties.get(ontProperty.getURI()) == null
-					&& _library.getObjectProperty(ontProperty.getURI()) == null) {
-				// Property not yet known, assume that this concept is declared in this ontology
-				if (ontProperty.getURI().startsWith(getURI())) {
+			// Do it if and only if property is not yet existant
+			if (getOntologyObject(ontProperty.getURI()) == null) {
+				if (ontProperty.canAs(ObjectProperty.class)) {
+					makeNewObjectProperty(ontProperty.as(ObjectProperty.class));
+				} else if (ontProperty.canAs(DatatypeProperty.class)) {
+					makeNewDataProperty(ontProperty.as(DatatypeProperty.class));
+				} else if (ontProperty.canAs(AnnotationProperty.class)) {
+					AnnotationProperty ap = ontProperty.as(AnnotationProperty.class);
+					if (ap.getRange() != null && ap.getRange().getURI().equals(RDFSURIDefinitions.RDFS_LITERAL_URI)) {
+						makeNewDataProperty(ontProperty);
+					} else if (ap.getRange() != null && ap.getRange().getURI().equals(RDFSURIDefinitions.RDFS_RESOURCE_URI)) {
+						makeNewObjectProperty(ontProperty);
+					}
+				} else {
+					// default behaviour: create object property
 					makeNewObjectProperty(ontProperty);
 				}
 			}
+
 		}
 
 		// I dont understand why, but on some ontologies, this is the only way to obtain those classes
 		for (NodeIterator i = ontModel.listObjects(); i.hasNext();) {
 			RDFNode node = i.nextNode();
 			if (node instanceof Resource && ((Resource) node).canAs(OntClass.class)) {
-				OntClass aClass = (OntClass) ((Resource) node).as(OntClass.class);
-				// System.out.println("Class: "+aClass);
-				if (aClass.getURI() != null && classes.get(aClass.getURI()) == null && _library.getObjectProperty(aClass.getURI()) == null) {
-					if (aClass.getURI().startsWith(getURI())) {
-						// Class not yet known, assume that this class is declared in this ontology
-						makeNewClass(aClass);
-					}
+				OntClass ontClass = ((Resource) node).as(OntClass.class);
+				if (_classes.get(ontClass) == null && isNamedResourceOfThisOntology(ontClass)) {
+					// Only named classes will be appended)
+					makeNewClass(ontClass);
+					// logger.info("Made class (2)" + ontClass.getURI());
 				}
 			}
 		}
 
-		for (OntologyClass aClass : classes.values()) {
-			aClass.init();
-		}
-		for (OntologyIndividual anIndividual : individuals.values()) {
-			anIndividual.init();
-		}
-		for (OntologyDataProperty property : dataProperties.values()) {
-			property.init();
-		}
-		for (OntologyObjectProperty property : objectProperties.values()) {
-			property.init();
-		}
-
-		/*for (StmtIterator j = individual.listProperties(); j.hasNext();) {
-			 Statement s = j.nextStatement();
-			 System.out.println("Hop: "+s.getClass().getSimpleName()+" "+s);
-			 System.out.println("Subject: "+s.getSubject().getClass().getSimpleName()+" "+s.getSubject());
-			 System.out.println("Predicate: "+s.getPredicate().getClass().getSimpleName()+" "+s.getPredicate());
-			 System.out.println("Object: "+s.getObject().getClass().getSimpleName()+" "+s.getObject());
-			 try {
-				 System.out.println("Resource: "+s.getResource().getClass().getSimpleName()+" "+s.getResource());
-			 }
-			 catch (ResourceRequiredException e) {
-				 System.out.println("Not a resource string="+s.getString());
-			 }
+		/*if (getURI().equals(OntologyLibrary.RDFS_ONTOLOGY_URI)) {
+			for (StmtIterator i = getOntModel().listStatements(); i.hasNext();) {
+				Statement s = i.nextStatement();
+				System.out.println("statement = " + s);
+			}
+			for (NodeIterator i = ontModel.listObjects(); i.hasNext();) {
+				RDFNode node = i.nextNode();
+				System.out.println("node = " + node);
+			}
+			for (NodeIterator i = ontModel.listObjects(); i.hasNext();) {
+				RDFNode node = i.nextNode();
+				if (node.canAs(Resource.class)) {
+					System.out.println("resource = " + node.as(Resource.class));
+				}
+			}
+			for (Iterator i = ontModel.listAllOntProperties(); i.hasNext();) {
+				OntProperty ontProperty = (OntProperty) i.next();
+				System.out.println("Property: " + ontProperty);
+				if (ontProperty.canAs(ObjectProperty.class)) {
+					System.out.println("ObjectProperty");
+				} else if (ontProperty.canAs(DatatypeProperty.class)) {
+					System.out.println("DataProperty");
+				} else if (ontProperty.canAs(AnnotationProperty.class)) {
+					AnnotationProperty ap = ontProperty.as(AnnotationProperty.class);
+					System.out.println("AnnotationProperty " + ap.getRange());
+				} else if (ontProperty.canAs(FunctionalProperty.class)) {
+					System.out.println("FunctionalProperty");
+				}
+			}
+			System.exit(-1);
 		}*/
 
+		if (!getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI) && !getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)
+				&& !getURI().equals(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)) {
+			// Following will not apply to RDF, RDFS and OWL ontologies
+			handleRedefinitionOfConceptsAndProperties();
+		}
+
+		// Special case for OWL ontology, register THING
+		if (getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
+			THING_CONCEPT = getClass(OWL2URIDefinitions.OWL_THING_URI);
+		}
+
+		if (!getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI) && !getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)
+				&& !getURI().equals(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)) {
+			// Following will not apply to RDF, RDFS and OWL ontologies
+			if (getOntologyLibrary().getOWLOntology() != null) {
+				if (!importedOntologies.contains(getOntologyLibrary().getOWLOntology())) {
+					importedOntologies.add(getOntologyLibrary().getOWLOntology());
+				}
+				THING_CONCEPT = makeThingConcept();
+			} else {
+				logger.warning("Could not find OWL ontology");
+			}
+		}
+
+		logger.info("Done created all concepts, now initialize them");
+
+		for (OntologyClass aClass : new ArrayList<OntologyClass>(classes.values())) {
+			aClass.init();
+		}
+		for (OntologyIndividual anIndividual : new ArrayList<OntologyIndividual>(individuals.values())) {
+			anIndividual.init();
+		}
+		for (OntologyDataProperty property : new ArrayList<OntologyDataProperty>(dataProperties.values())) {
+			property.init();
+		}
+		for (OntologyObjectProperty property : new ArrayList<OntologyObjectProperty>(objectProperties.values())) {
+			property.init();
+		}
+
+	}
+
+	private void handleRedefinitionOfConceptsAndProperties() {
+
+		Set<OntClass> redefinedClasses = new HashSet<OntClass>();
+		Set<Individual> redefinedIndividuals = new HashSet<Individual>();
+		Set<ObjectProperty> redefinedObjectProperties = new HashSet<ObjectProperty>();
+		Set<DatatypeProperty> redefinedDatatypeProperties = new HashSet<DatatypeProperty>();
+
+		for (StmtIterator i = getOntModel().listStatements(); i.hasNext();) {
+			Statement s = i.nextStatement();
+			if (getOntModel().isInBaseModel(s)) {
+				// This statement was asserted in this model, so may redefine an other concept defined in imported ontologies
+				RDFNode object = s.getObject();
+				RDFNode subject = s.getSubject();
+				if (object.canAs(OntClass.class)) {
+					redefinedClasses.add(object.as(OntClass.class));
+				}
+				if (subject.canAs(OntClass.class)) {
+					redefinedClasses.add(subject.as(OntClass.class));
+				}
+				if (object.canAs(Individual.class)) {
+					redefinedIndividuals.add(object.as(Individual.class));
+					// System.out.println("Redefine individual as object because of statement " + s);
+				}
+				if (subject.canAs(Individual.class)) {
+					redefinedIndividuals.add(subject.as(Individual.class));
+					// System.out.println("Redefine individual as subject because of statement " + s);
+				}
+				if (object.canAs(ObjectProperty.class)) {
+					redefinedObjectProperties.add(object.as(ObjectProperty.class));
+				}
+				if (subject.canAs(ObjectProperty.class)) {
+					redefinedObjectProperties.add(subject.as(ObjectProperty.class));
+				}
+				if (object.canAs(DatatypeProperty.class)) {
+					redefinedDatatypeProperties.add(object.as(DatatypeProperty.class));
+				}
+				if (subject.canAs(DatatypeProperty.class)) {
+					redefinedDatatypeProperties.add(subject.as(DatatypeProperty.class));
+				}
+			}
+		}
+		for (OntClass ontClass : redefinedClasses) {
+			// Thing and Class concepts are handled differently
+			if (StringUtils.isNotEmpty(ontClass.getURI()) && !OWL2URIDefinitions.OWL_THING_URI.equals(ontClass.getURI())
+					&& !OWL2URIDefinitions.OWL_CLASS_URI.equals(ontClass.getURI())
+					&& !ontClass.getURI().startsWith("http://www.w3.org/2001/XMLSchema#") && getDeclaredClass(ontClass.getURI()) == null) {
+				redefineClass(ontClass);
+			}
+		}
+
+		// TODO
+		/*for (Individual individual : redefinedIndividuals) {
+			System.out.println("Ontology " + getURI() + ", redefine individual " + individual);
+			redefineIndividual(individual);
+		}*/
+
+		for (ObjectProperty ontProperty : redefinedObjectProperties) {
+			if (StringUtils.isNotEmpty(ontProperty.getURI()) && getDeclaredObjectProperty(ontProperty.getURI()) == null) {
+				redefineObjectProperty(ontProperty);
+			}
+		}
+
+		for (DatatypeProperty ontProperty : redefinedDatatypeProperties) {
+			if (StringUtils.isNotEmpty(ontProperty.getURI()) && getDeclaredDataProperty(ontProperty.getURI()) == null) {
+				redefineDataProperty(ontProperty);
+			}
+		}
 	}
 
 	@Override
@@ -455,6 +676,9 @@ public abstract class FlexoOntology extends OntologyObject {
 	}
 
 	public void updateConceptsAndProperties() {
+		logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + ontologyURI);
+		logger.info("Update ontology " + ontologyURI);
+
 		for (OntologyClass aClass : classes.values()) {
 			aClass.update();
 		}
@@ -469,21 +693,47 @@ public abstract class FlexoOntology extends OntologyObject {
 		}
 	}
 
+	private OntologyClass makeThingConcept() {
+		logger.fine("makeThingConcept() in ontology " + this);
+		FlexoOntology owlOntology = getOntologyLibrary().getOWLOntology();
+		OntologyClass thingInOWLOntology = owlOntology.getClass(OWL2URIDefinitions.OWL_THING_URI);
+		THING_CONCEPT = makeNewClass(thingInOWLOntology.getOntResource());
+		THING_CONCEPT.setOriginalDefinition(thingInOWLOntology);
+		return THING_CONCEPT;
+	}
+
 	protected OntologyClass makeNewClass(OntClass ontClass) {
-		OntologyClass aClass = new OntologyClass(ontClass, this);
-		classes.put(ontClass.getURI(), aClass);
-		_library.registerNewClass(aClass);
-		logger.fine("Made new class for " + aClass.getName() + " in " + getOntologyURI());
-		aClass.init();
-		needsReordering = true;
-		setChanged();
-		notifyObservers(new OntologyClassInserted(aClass));
-		return aClass;
+		if (StringUtils.isNotEmpty(ontClass.getURI())) {
+			OntologyClass aClass = new OntologyClass(ontClass, this);
+			classes.put(ontClass.getURI(), aClass);
+			_classes.put(ontClass, aClass);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Made new class " + ontClass.getURI() + " in " + getOntologyURI());
+			}
+			// aClass.init();
+			needsReordering = true;
+			setChanged();
+			notifyObservers(new OntologyClassInserted(aClass));
+			return aClass;
+		} else {
+			logger.warning("Unexpected null URI for " + ontClass);
+			return null;
+		}
+	}
+
+	protected OntologyClass redefineClass(OntClass ontClass) {
+		OntologyClass originalDefinition = getClass(ontClass.getURI());
+		logger.info("###### REDEFINE class " + ontClass.getURI() + " originalDefinition=" + originalDefinition);
+		OntologyClass returned = makeNewClass(ontClass);
+		returned.setOriginalDefinition(originalDefinition);
+		logger.info("Declare class " + returned.getName() + " as a redefinition of class initially asserted in "
+				+ originalDefinition.getOntology());
+		return returned;
 	}
 
 	protected OntologyClass removeClass(OntologyClass aClass) {
 		classes.remove(aClass.getURI());
-		_library.unregisterClass(aClass);
+		_classes.remove(aClass.getOntResource());
 		needsReordering = true;
 		setChanged();
 		notifyObservers(new OntologyClassRemoved(aClass));
@@ -503,24 +753,37 @@ public abstract class FlexoOntology extends OntologyObject {
 		needsReordering = true;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
-		getOntologyLibrary().renameClass(object, oldURI, newURI);
 	}
 
 	protected OntologyIndividual makeNewIndividual(Individual individual) {
-		OntologyIndividual anIndividual = new OntologyIndividual(individual, this);
-		individuals.put(individual.getURI(), anIndividual);
-		_library.registerNewIndividual(anIndividual);
-		logger.fine("Made new individual for " + anIndividual.getName() + " in " + getOntologyURI());
-		anIndividual.init();
-		needsReordering = true;
-		setChanged();
-		notifyObservers(new OntologyIndividualInserted(anIndividual));
-		return anIndividual;
+		if (StringUtils.isNotEmpty(individual.getURI())) {
+			OntologyIndividual anIndividual = new OntologyIndividual(individual, this);
+			individuals.put(individual.getURI(), anIndividual);
+			_individuals.put(individual, anIndividual);
+			logger.fine("Made new individual for " + anIndividual.getName() + " in " + getOntologyURI());
+			// anIndividual.init();
+			needsReordering = true;
+			setChanged();
+			notifyObservers(new OntologyIndividualInserted(anIndividual));
+			return anIndividual;
+		} else {
+			logger.warning("Unexpected null URI for " + individual);
+			return null;
+		}
+	}
+
+	protected OntologyIndividual redefineIndividual(Individual individual) {
+		OntologyIndividual originalDefinition = getIndividual(individual.getURI());
+		OntologyIndividual returned = makeNewIndividual(individual);
+		returned.setOriginalDefinition(originalDefinition);
+		logger.info("Declare individual " + returned.getName() + " as a redefinition of individual initially asserted in "
+				+ originalDefinition.getOntology());
+		return returned;
 	}
 
 	protected OntologyIndividual removeIndividual(OntologyIndividual anIndividual) {
 		individuals.remove(anIndividual.getURI());
-		_library.unregisterIndividual(anIndividual);
+		_individuals.remove(anIndividual.getOntResource());
 		needsReordering = true;
 		setChanged();
 		notifyObservers(new OntologyIndividualRemoved(anIndividual));
@@ -540,24 +803,37 @@ public abstract class FlexoOntology extends OntologyObject {
 		needsReordering = true;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
-		getOntologyLibrary().renameIndividual(object, oldURI, newURI);
 	}
 
-	protected OntologyDataProperty makeNewDataProperty(DatatypeProperty ontProperty) {
-		OntologyDataProperty property = new OntologyDataProperty(ontProperty, this);
-		dataProperties.put(ontProperty.getURI(), property);
-		_library.registerNewDataProperty(property);
-		logger.fine("Made new data property for " + property.getName() + " in " + getOntologyURI());
-		property.init();
-		needsReordering = true;
-		setChanged();
-		notifyObservers(new OntologyDataPropertyInserted(property));
-		return property;
+	protected OntologyDataProperty makeNewDataProperty(OntProperty ontProperty) {
+		if (StringUtils.isNotEmpty(ontProperty.getURI())) {
+			OntologyDataProperty property = new OntologyDataProperty(ontProperty, this);
+			dataProperties.put(ontProperty.getURI(), property);
+			_dataProperties.put(ontProperty, property);
+			logger.fine("Made new data property for " + property.getName() + " in " + getOntologyURI());
+			// property.init();
+			needsReordering = true;
+			setChanged();
+			notifyObservers(new OntologyDataPropertyInserted(property));
+			return property;
+		} else {
+			logger.warning("Unexpected null URI for " + ontProperty);
+			return null;
+		}
+	}
+
+	protected OntologyDataProperty redefineDataProperty(OntProperty ontProperty) {
+		OntologyDataProperty originalDefinition = getDataProperty(ontProperty.getURI());
+		OntologyDataProperty returned = makeNewDataProperty(ontProperty);
+		returned.setOriginalDefinition(originalDefinition);
+		logger.info("Declare data property " + returned.getName() + " as a redefinition of data property initially asserted in "
+				+ originalDefinition.getOntology());
+		return returned;
 	}
 
 	protected OntologyDataProperty removeDataProperty(OntologyDataProperty aProperty) {
 		dataProperties.remove(aProperty.getURI());
-		_library.unregisterDataProperty(aProperty);
+		_dataProperties.remove(aProperty.getOntResource());
 		needsReordering = true;
 		setChanged();
 		notifyObservers(new OntologyDataPropertyRemoved(aProperty));
@@ -577,24 +853,37 @@ public abstract class FlexoOntology extends OntologyObject {
 		needsReordering = true;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
-		getOntologyLibrary().renameDataProperty(object, oldURI, newURI);
 	}
 
 	protected OntologyObjectProperty makeNewObjectProperty(OntProperty ontProperty) {
-		OntologyObjectProperty property = new OntologyObjectProperty(ontProperty, this);
-		objectProperties.put(ontProperty.getURI(), property);
-		_library.registerNewObjectProperty(property);
-		logger.fine("Made new object property for " + property.getName() + " in " + getOntologyURI());
-		property.init();
-		needsReordering = true;
-		setChanged();
-		notifyObservers(new OntologyObjectPropertyInserted(property));
-		return property;
+		if (StringUtils.isNotEmpty(ontProperty.getURI())) {
+			OntologyObjectProperty property = new OntologyObjectProperty(ontProperty, this);
+			objectProperties.put(ontProperty.getURI(), property);
+			_objectProperties.put(ontProperty, property);
+			logger.fine("Made new object property for " + property.getName() + " in " + getOntologyURI());
+			// property.init();
+			needsReordering = true;
+			setChanged();
+			notifyObservers(new OntologyObjectPropertyInserted(property));
+			return property;
+		} else {
+			logger.warning("Unexpected null URI for " + ontProperty);
+			return null;
+		}
+	}
+
+	protected OntologyObjectProperty redefineObjectProperty(OntProperty ontProperty) {
+		OntologyObjectProperty originalDefinition = getObjectProperty(ontProperty.getURI());
+		OntologyObjectProperty returned = makeNewObjectProperty(ontProperty);
+		returned.setOriginalDefinition(originalDefinition);
+		logger.info("Declare object property " + returned.getName() + " as a redefinition of object property initially asserted in "
+				+ originalDefinition.getOntology());
+		return returned;
 	}
 
 	protected OntologyObjectProperty removeObjectProperty(OntologyObjectProperty aProperty) {
 		objectProperties.remove(aProperty.getURI());
-		_library.unregisterObjectProperty(aProperty);
+		_objectProperties.remove(aProperty.getOntResource());
 		needsReordering = true;
 		setChanged();
 		notifyObservers(new OntologyObjectPropertyRemoved(aProperty));
@@ -614,7 +903,6 @@ public abstract class FlexoOntology extends OntologyObject {
 		needsReordering = true;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
-		getOntologyLibrary().renameObjectProperty(object, oldURI, newURI);
 	}
 
 	protected void renameObject(OntologyObject object, String oldURI, String newURI) {
@@ -631,6 +919,243 @@ public abstract class FlexoOntology extends OntologyObject {
 		}
 	}
 
+	protected OntologyObject<?> retrieveOntologyObject(Resource resource) {
+		// First try to lookup with resource URI
+		if (StringUtils.isNotEmpty(resource.getURI())) {
+			OntologyObject<?> returned = getOntologyObject(resource.getURI());
+			if (returned != null) {
+				return returned;
+			}
+		}
+		// Not found, may be we have to create this new concept
+		if (resource.canAs(OntClass.class)) {
+			return retrieveOntologyClass(resource.as(OntClass.class));
+		} else if (resource.canAs(Individual.class)) {
+			return retrieveOntologyIndividual(resource.as(Individual.class));
+		} else if (resource.canAs(ObjectProperty.class)) {
+			return retrieveOntologyObjectProperty(resource.as(ObjectProperty.class));
+		} else if (resource.canAs(DatatypeProperty.class)) {
+			return retrieveOntologyDataProperty(resource.as(DatatypeProperty.class));
+		} else {
+			logger.warning("Unexpected resource: " + resource);
+			return null;
+		}
+	}
+
+	protected OntologyProperty retrieveOntologyProperty(OntProperty property) {
+		if (property.canAs(ObjectProperty.class)) {
+			return retrieveOntologyObjectProperty(property.as(ObjectProperty.class));
+		} else if (property.canAs(DatatypeProperty.class)) {
+			return retrieveOntologyDataProperty(property.as(DatatypeProperty.class));
+		} else {
+			logger.warning("Unexpected property: " + property);
+			return null;
+		}
+	}
+
+	protected OntologyObjectProperty retrieveOntologyObjectProperty(ObjectProperty ontProperty) {
+
+		OntologyObjectProperty returned = _objectProperties.get(ontProperty);
+		if (returned != null)
+			return returned;
+
+		returned = makeNewObjectProperty(ontProperty);
+		returned.init();
+
+		return returned;
+	}
+
+	protected OntologyDataProperty retrieveOntologyDataProperty(DatatypeProperty ontProperty) {
+
+		OntologyDataProperty returned = _dataProperties.get(ontProperty);
+		if (returned != null)
+			return returned;
+
+		returned = makeNewDataProperty(ontProperty);
+		returned.init();
+
+		return returned;
+	}
+
+	protected OntologyIndividual retrieveOntologyIndividual(Individual individual) {
+
+		OntologyIndividual returned = _individuals.get(individual);
+		if (returned != null)
+			return returned;
+
+		// Special case for OWL, RDF and RDFS ontologies, don't create individuals !!!
+		if (!getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI) && !getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)
+				&& !getURI().equals(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)) {
+			// Following will not apply to RDF, RDFS and OWL ontologies
+			if (isNamedResourceOfThisOntology(individual)) {
+				returned = makeNewIndividual(individual);
+				returned.init();
+				return returned;
+			}
+		}
+
+		return null;
+	}
+
+	protected OntologyClass retrieveOntologyClass(OntClass resource) {
+
+		OntologyClass returned = _classes.get(resource);
+		if (returned != null)
+			return returned;
+
+		if (isNamedClass(resource) && StringUtils.isNotEmpty(resource.getURI())) {
+			returned = getClass(resource.getURI());
+			if (returned != null)
+				return returned;
+		}
+
+		if (isNamedResourceOfThisOntology(resource)) {
+			returned = makeNewClass(resource);
+			returned.init();
+		}
+
+		else if (resource.isRestriction()) {
+			return retrieveRestriction(resource.asRestriction());
+		}
+
+		else if (resource.canAs(ComplementClass.class)) {
+			returned = new OntologyComplementClass(resource.asComplementClass(), getOntology());
+		} else if (resource.canAs(UnionClass.class)) {
+			returned = new OntologyUnionClass(resource.asUnionClass(), getOntology());
+		} else if (resource.canAs(IntersectionClass.class)) {
+			returned = new OntologyIntersectionClass(resource.asIntersectionClass(), getOntology());
+		} else {
+			// logger.warning("Unexpected class: " + resource);
+			return null;
+		}
+
+		_classes.put(resource, returned);
+		return returned;
+
+	}
+
+	private OntologyRestrictionClass retrieveRestriction(Restriction restriction) {
+
+		OntologyRestrictionClass returned = (OntologyRestrictionClass) _classes.get(restriction);
+		if (returned != null)
+			return returned;
+
+		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
+		Property ON_CLASS = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.ON_CLASS);
+		Property ON_DATA_RANGE = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.ON_DATA_RANGE);
+		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.QUALIFIED_CARDINALITY);
+		Property MIN_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.MIN_QUALIFIED_CARDINALITY);
+		Property MAX_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.MAX_QUALIFIED_CARDINALITY);
+
+		if (restriction.isSomeValuesFromRestriction()) {
+			returned = new SomeValuesFromRestrictionClass(restriction.asSomeValuesFromRestriction(), getOntology());
+		} else if (restriction.isAllValuesFromRestriction()) {
+			returned = new AllValuesFromRestrictionClass(restriction.asAllValuesFromRestriction(), getOntology());
+		} else if (restriction.isHasValueRestriction()) {
+			returned = new HasValueRestrictionClass(restriction.asHasValueRestriction(), getOntology());
+		} else if (restriction.getProperty(ON_CLASS) != null || restriction.getProperty(ON_DATA_RANGE) != null) {
+			if (restriction.getProperty(QUALIFIED_CARDINALITY) != null) {
+				returned = new CardinalityRestrictionClass(restriction, getOntology());
+			} else if (restriction.getProperty(MIN_QUALIFIED_CARDINALITY) != null) {
+				returned = new MinCardinalityRestrictionClass(restriction, getOntology());
+			} else if (restriction.getProperty(MAX_QUALIFIED_CARDINALITY) != null) {
+				returned = new MaxCardinalityRestrictionClass(restriction, getOntology());
+			}
+		}
+
+		if (returned != null) {
+			_classes.put(restriction, returned);
+			return returned;
+		} else {
+			logger.warning("Unexpected restriction: " + restriction);
+			return null;
+		}
+
+	}
+
+	/**
+	 * Return all classes accessible in the context of this ontology.<br>
+	 * This means that classes are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<OntologyClass> getAccessibleClasses() {
+		List<OntologyClass> returned = new ArrayList<OntologyClass>();
+		for (FlexoOntology o : getAllImportedOntologies()) {
+			returned.addAll(o.getClasses());
+		}
+		removeOriginalFromRedefinedObjects(returned);
+		return returned;
+	}
+
+	/**
+	 * Return all individuals accessible in the context of this ontology.<br>
+	 * This means that individuals are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<OntologyIndividual> getAccessibleIndividuals() {
+		List<OntologyIndividual> returned = new ArrayList<OntologyIndividual>();
+		for (FlexoOntology o : getAllImportedOntologies()) {
+			returned.addAll(o.getIndividuals());
+		}
+		removeOriginalFromRedefinedObjects(returned);
+		return returned;
+	}
+
+	/**
+	 * Return all object properties accessible in the context of this ontology.<br>
+	 * This means that properties are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<OntologyObjectProperty> getAccessibleObjectProperties() {
+		List<OntologyObjectProperty> returned = new ArrayList<OntologyObjectProperty>();
+		for (FlexoOntology o : getAllImportedOntologies()) {
+			returned.addAll(o.getObjectProperties());
+		}
+		removeOriginalFromRedefinedObjects(returned);
+		return returned;
+	}
+
+	/**
+	 * Return all data properties accessible in the context of this ontology.<br>
+	 * This means that properties are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<OntologyDataProperty> getAccessibleDataProperties() {
+		List<OntologyDataProperty> returned = new ArrayList<OntologyDataProperty>();
+		for (FlexoOntology o : getAllImportedOntologies()) {
+			returned.addAll(o.getDataProperties());
+		}
+		removeOriginalFromRedefinedObjects(returned);
+		return returned;
+	}
+
+	/**
+	 * Remove originals from redefined classes<br>
+	 * Special case: original Thing definition is kept and redefinitions are excluded
+	 * 
+	 * @param list
+	 */
+	private void removeOriginalFromRedefinedObjects(List<? extends OntologyObject<?>> list) {
+		for (OntologyObject c : new ArrayList<OntologyObject>(list)) {
+			if (c.redefinesOriginalDefinition()) {
+				if (c instanceof OntologyClass && ((OntologyClass) c).isThing()) {
+					list.remove(c);
+				} else {
+					list.remove(c.getOriginalDefinition());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Return all classes explicitely defined in this ontology (strict mode)
+	 * 
+	 * @return
+	 */
 	public Vector<OntologyClass> getClasses() {
 		if (needsReordering) {
 			reorderConceptAndProperties();
@@ -638,6 +1163,11 @@ public abstract class FlexoOntology extends OntologyObject {
 		return orderedClasses;
 	}
 
+	/**
+	 * Return all individuals explicitely defined in this ontology (strict mode)
+	 * 
+	 * @return
+	 */
 	public Vector<OntologyIndividual> getIndividuals() {
 		if (needsReordering) {
 			reorderConceptAndProperties();
@@ -645,6 +1175,11 @@ public abstract class FlexoOntology extends OntologyObject {
 		return orderedIndividuals;
 	}
 
+	/**
+	 * Return all datatype properties explicitely defined in this ontology (strict mode)
+	 * 
+	 * @return
+	 */
 	public Vector<OntologyDataProperty> getDataProperties() {
 		if (needsReordering) {
 			reorderConceptAndProperties();
@@ -652,6 +1187,11 @@ public abstract class FlexoOntology extends OntologyObject {
 		return orderedDataProperties;
 	}
 
+	/**
+	 * Return all object properties explicitely defined in this ontology (strict mode)
+	 * 
+	 * @return
+	 */
 	public Vector<OntologyObjectProperty> getObjectProperties() {
 		if (needsReordering) {
 			reorderConceptAndProperties();
@@ -818,117 +1358,23 @@ public abstract class FlexoOntology extends OntologyObject {
 			e.printStackTrace();
 		}
 
-		// alternative:
-		/*FileInputStream fis;
-		try {
-			fis = new FileInputStream(alternativeLocalFile);
-			ontModel.read(fis,ontologyURI);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-
-		/*for (Iterator i = ontModel.listOntologies();  i.hasNext(); ) {
-			System.out.println("Hop1: "+i.next());
-		}
-		for (Iterator i = ontModel.listClasses();  i.hasNext(); ) {
-			System.out.println("Hop2: "+i.next());
-		}
-		for (Iterator i = ontModel.listComplementClasses();  i.hasNext(); ) {
-			System.out.println("Hop3: "+i.next());
-		}*/
-		/*for (Iterator i = ontModel.listAllOntProperties();  i.hasNext(); ) {
-			Object o = i.next();
-			System.out.println("Hop4-1: "+o+" is a "+o.getClass().getName());
-			if (o instanceof Resource) {
-				Resource resource = (Resource)o;
-				if (o instanceof Resource) { System.out.println("C'est aussi une resource uri="+resource.getURI());}
-				if (resource.canAs(DatatypeProperty.class)) {
-					System.out.println("C'est aussi une DatatypeProperty");
-				}
-				if (resource.canAs(ObjectProperty.class)) {
-					System.out.println("C'est aussi un ObjectProperty");
-				}
-				if (resource.canAs(FunctionalProperty.class)) {
-					System.out.println("C'est aussi un FunctionalProperty");
-				}
-				if (resource.canAs(AnnotationProperty.class)) {
-					System.out.println("C'est aussi un AnnotationProperty");
-				}
-			}
-		}*/
-		/*for (Iterator i = ontModel.listObjectProperties();  i.hasNext(); ) {
-			Object o = i.next();
-			System.out.println("Hop4-2: "+o+" is a "+o.getClass().getName());
-		}
-		for (Iterator i = ontModel.listDatatypeProperties();  i.hasNext(); ) {
-			Object o = i.next();
-			System.out.println("Hop4-3: "+o+" is a "+o.getClass().getName());
-		}
-		for (Iterator i = ontModel.listImportedModels();  i.hasNext(); ) {
-			System.out.println("Hop5: "+i.next());
-		}
-		for (Iterator i = ontModel.listAnnotationProperties();  i.hasNext(); ) {
-			System.out.println("Hop6: "+i.next());
-		}
-		for (Iterator i = ontModel.listHierarchyRootClasses();  i.hasNext(); ) {
-			System.out.println("Hop7: "+i.next());
-		}
-		for (Iterator i = ontModel.listNamedClasses();  i.hasNext(); ) {
-			System.out.println("Hop8: "+i.next());
-		}*/
-		/*for (Iterator i = ontModel.listObjects();  i.hasNext(); ) {
-			Object o = i.next();
-			System.out.println(">>>> Hop9: "+o+" is a "+o.getClass().getName());
-			if (o instanceof Resource) {
-				Resource resource = (Resource)o;
-				if (resource.canAs(OntClass.class)) {
-					OntClass aClass = (OntClass)resource.as(OntClass.class);
-					DescribeClass dc = new DescribeClass();
-					dc.describeClass(System.out, aClass);
-				}
-				if (resource.canAs(Individual.class)) {
-					Individual anIndividual = (Individual)resource.as(Individual.class);
-					System.out.println("Individual: "+anIndividual);
-				}
-				if (resource.canAs(DatatypeProperty.class)) {
-					DatatypeProperty aDatatypeProperty = (DatatypeProperty)resource.as(DatatypeProperty.class);
-					System.out.println("DatatypeProperty: "+aDatatypeProperty);
-				}
-				if (resource.canAs(ObjectProperty.class)) {
-					ObjectProperty anObjectProperty = (ObjectProperty)resource.as(ObjectProperty.class);
-					System.out.println("ObjectProperty: "+anObjectProperty);
-				}
-				if (resource.canAs(OntProperty.class)) {
-					OntProperty anObjectProperty = (OntProperty)resource.as(OntProperty.class);
-					System.out.println("OntProperty: "+anObjectProperty);
-				}
-			}
-		}*/
-
 		isLoaded = true;
 
 		for (Object o : ontModel.listImportedOntologyURIs()) {
 			FlexoOntology importedOnt = _library.getOntology((String) o);
+			logger.info("importedOnt= " + importedOnt);
 			if (importedOnt != null) {
 				importedOnt.loadWhenUnloaded();
 				importedOntologies.add(importedOnt);
 			}
 		}
 
-		logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
+		logger.info("For " + ontologyURI + " Imported ontologies = " + getImportedOntologies());
 
-		/*Map map = ontModel.getNsPrefixMap();
-		for (Object s : map.keySet()) {
-			System.out.println("key: "+s+" value "+map.get(s));
-		}*/
+		logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
 
 		for (FlexoOntology o : getImportedOntologies()) {
 			logger.info("Imported ontology: " + o);
-			/*Map map2 = o.getOntModel().getNsPrefixMap();
-			for (Object s : map2.keySet()) {
-				System.out.println("key: "+s+" value "+map2.get(s));
-			}*/
 		}
 
 		createConceptsAndProperties();
@@ -1129,7 +1575,9 @@ public abstract class FlexoOntology extends OntologyObject {
 		String uri = makeURI(name);
 		if (testValidURI(name)) {
 			Individual individual = ontModel.createIndividual(uri, father.getOntResource());
-			return makeNewIndividual(individual);
+			OntologyIndividual returned = makeNewIndividual(individual);
+			returned.init();
+			return returned;
 		} else {
 			throw new DuplicateURIException(uri);
 		}
@@ -1150,14 +1598,16 @@ public abstract class FlexoOntology extends OntologyObject {
 			if (father != null) {
 				aClass.addSuperClass(father.getOntResource());
 			}
-			return makeNewClass(aClass);
+			OntologyClass returned = makeNewClass(aClass);
+			returned.init();
+			return returned;
 		} else {
 			throw new DuplicateURIException(uri);
 		}
 	}
 
-	public ObjectRestrictionStatement createRestriction(OntologyClass subjectClass, OntologyProperty property,
-			RestrictionStatement.RestrictionType type, int cardinality, OntologyClass objectClass) {
+	public OntologyRestrictionClass createRestriction(OntologyClass subjectClass, OntologyProperty property,
+			OntologyRestrictionClass.RestrictionType type, int cardinality, OntologyClass objectClass) {
 		if (subjectClass != null) {
 			assumeOntologyImportForReference(subjectClass);
 		}
@@ -1205,9 +1655,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		}
 
 		if (restriction != null) {
-			subjectClass.getOntResource().addSuperClass(restriction);
-			subjectClass.updateOntologyStatements();
-			return subjectClass.getObjectRestrictionStatement(property, objectClass);
+			return getOntology().retrieveRestriction(restriction);
 		}
 
 		setIsModified();
@@ -1244,6 +1692,207 @@ public abstract class FlexoOntology extends OntologyObject {
 	@Override
 	public boolean isOntology() {
 		return true;
+	}
+
+	/**
+	 * Retrieve an ontology object from its URI, in the context of current ontology.<br>
+	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
+	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * 
+	 * @param objectURI
+	 * @return
+	 */
+	public OntologyObject<?> getOntologyObject(String objectURI) {
+
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("retrieve OntologyObject " + objectURI);
+		}
+
+		if (objectURI == null) {
+			return null;
+		}
+
+		if (objectURI.endsWith("#")) {
+			String potentialOntologyURI = objectURI.substring(0, objectURI.lastIndexOf("#"));
+			FlexoOntology returned = getOntologyLibrary().getOntology(ontologyURI);
+			if (returned != null) {
+				return returned;
+			}
+		}
+
+		if (objectURI.equals(getURI()))
+			return this;
+
+		OntologyObject<?> returned = null;
+
+		returned = getClass(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getIndividual(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getObjectProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getDataProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+
+		// logger.warning("Cannot find OntologyObject " + objectURI);
+		return null;
+	}
+
+	/**
+	 * Retrieve an class from its URI, in the context of current ontology.<br>
+	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
+	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * 
+	 * @param objectURI
+	 * @return
+	 */
+	public OntologyClass getClass(String classURI) {
+		if (classURI == null) {
+			return null;
+		}
+		OntologyClass returned = getDeclaredClass(classURI);
+		if (returned != null) {
+			return returned;
+		}
+
+		for (FlexoOntology o : getAllImportedOntologies()) {
+			returned = o.getDeclaredClass(classURI);
+			if (returned != null) {
+				return returned;
+			}
+		}
+		return null;
+	}
+
+	public OntologyClass getDeclaredClass(String classURI) {
+		if (classURI == null) {
+			return null;
+		}
+		return classes.get(classURI);
+	}
+
+	/**
+	 * Retrieve an individual from its URI, in the context of current ontology.<br>
+	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
+	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * 
+	 * @param objectURI
+	 * @return
+	 */
+	public OntologyIndividual getIndividual(String individualURI) {
+		if (individualURI == null) {
+			return null;
+		}
+		OntologyIndividual returned = getDeclaredIndividual(individualURI);
+		if (returned != null) {
+			return returned;
+		}
+		for (FlexoOntology o : getAllImportedOntologies()) {
+			returned = o.getDeclaredIndividual(individualURI);
+			if (returned != null) {
+				return returned;
+			}
+		}
+		return null;
+	}
+
+	public OntologyIndividual getDeclaredIndividual(String individualURI) {
+		if (individualURI == null) {
+			return null;
+		}
+		return individuals.get(individualURI);
+	}
+
+	/**
+	 * Retrieve an object property from its URI, in the context of current ontology.<br>
+	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
+	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * 
+	 * @param objectURI
+	 * @return
+	 */
+	public OntologyObjectProperty getObjectProperty(String propertyURI) {
+		if (propertyURI == null) {
+			return null;
+		}
+		OntologyObjectProperty returned = getDeclaredObjectProperty(propertyURI);
+		if (returned != null) {
+			return returned;
+		}
+		for (FlexoOntology o : getAllImportedOntologies()) {
+			returned = o.getDeclaredObjectProperty(propertyURI);
+			if (returned != null) {
+				return returned;
+			}
+		}
+		return null;
+	}
+
+	public OntologyObjectProperty getDeclaredObjectProperty(String propertyURI) {
+		if (propertyURI == null) {
+			return null;
+		}
+		return objectProperties.get(propertyURI);
+	}
+
+	/**
+	 * Retrieve a data property from its URI, in the context of current ontology.<br>
+	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
+	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * 
+	 * @param objectURI
+	 * @return
+	 */
+	public OntologyDataProperty getDataProperty(String propertyURI) {
+		if (propertyURI == null) {
+			return null;
+		}
+		OntologyDataProperty returned = getDeclaredDataProperty(propertyURI);
+		if (returned != null) {
+			return returned;
+		}
+		for (FlexoOntology o : getAllImportedOntologies()) {
+			returned = o.getDeclaredDataProperty(propertyURI);
+			if (returned != null) {
+				return returned;
+			}
+		}
+		return null;
+	}
+
+	public OntologyDataProperty getDeclaredDataProperty(String propertyURI) {
+		if (propertyURI == null) {
+			return null;
+		}
+		return dataProperties.get(propertyURI);
+	}
+
+	/**
+	 * Retrieve a property from its URI, in the context of current ontology.<br>
+	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other
+	 * ontologies. If you want to do this, try using method in OntologyLibrary.
+	 * 
+	 * @param objectURI
+	 * @return
+	 */
+	public OntologyProperty getProperty(String objectURI) {
+		OntologyProperty returned = getObjectProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		returned = getDataProperty(objectURI);
+		if (returned != null) {
+			return returned;
+		}
+		return null;
 	}
 
 }

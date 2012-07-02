@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project id="SYL_413" name="TestVE" projectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558" cssSheet="Contento" lastUniqueID="960" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 000" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
+<Project id="SYL_413" name="TestVE" projectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558" cssSheet="Contento" lastUniqueID="1257" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 000" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
   <resourcesCount>47</resourcesCount>
   No description
   <ComponentLibrary id="SYL_COMPONENT_LIBRARY.TestVE" userID="SYL" version="2.4" file="TestVE.wolib">
@@ -73,7 +73,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </GeneratedDoc>
-  <JAR id="SYL_JAR.DenaliConfigServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliConfigServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliConfigServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 317" userID="SYL" file="DataModel/DenaliConfigServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliConfigServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -82,7 +82,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliCore.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliCore.jar">
+  <JAR id="SYL_JAR.DenaliCore.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 383" userID="SYL" file="DataModel/DenaliCore.jar">
     <DependantResources id="SYL_JAR.DenaliCore.jar_DR">
       <JAR idref="SYL_JAR.JavaWebObjects.jar" />
       <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
@@ -100,7 +100,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliDBBusinessLogic.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliDBBusinessLogic.jar">
+  <JAR id="SYL_JAR.DenaliDBBusinessLogic.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 490" userID="SYL" file="DataModel/DenaliDBBusinessLogic.jar">
     <DependantResources id="SYL_JAR.DenaliDBBusinessLogic.jar_DR">
       <JAR idref="SYL_JAR.JavaEOControl.jar" />
       <JAR idref="SYL_JAR.DenaliCore.jar" />
@@ -110,7 +110,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliExceptionServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliExceptionServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliExceptionServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 314" userID="SYL" file="DataModel/DenaliExceptionServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaWebObjects.jar" />
@@ -119,7 +119,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliFileMimeTypeServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 171" userID="SYL" file="DataModel/DenaliFileMimeTypeServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -129,7 +129,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliLanguageServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliLanguageServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliLanguageServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 160" userID="SYL" file="DataModel/DenaliLanguageServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -138,7 +138,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliLocalizationServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliLocalizationServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliLocalizationServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 310" userID="SYL" file="DataModel/DenaliLocalizationServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -147,7 +147,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliMailServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliMailServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliMailServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 168" userID="SYL" file="DataModel/DenaliMailServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliMailServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -156,7 +156,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliResourcesAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliResourcesAPI.jar">
+  <JAR id="SYL_JAR.DenaliResourcesAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:50 28/06/2012 971" userID="SYL" file="DataModel/DenaliResourcesAPI.jar">
     <DependantResources id="SYL_JAR.DenaliResourcesAPI.jar_DR">
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
     </DependantResources>
@@ -164,7 +164,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliRoleServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliRoleServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliRoleServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 320" userID="SYL" file="DataModel/DenaliRoleServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliRoleServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -173,13 +173,13 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliServiceManager.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliServiceManager.jar">
+  <JAR id="SYL_JAR.DenaliServiceManager.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 164" userID="SYL" file="DataModel/DenaliServiceManager.jar">
     <DependantResources id="SYL_JAR.DenaliServiceManager.jar_DR" />
     <SynchronizedResources id="SYL_JAR.DenaliServiceManager.jar_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliUserInCookieServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliUserInCookieServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliUserInCookieServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:54 28/06/2012 465" userID="SYL" file="DataModel/DenaliUserInCookieServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliUserInCookieServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
@@ -189,7 +189,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliUserServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliUserServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliUserServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:54 28/06/2012 468" userID="SYL" file="DataModel/DenaliUserServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliUserServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaEOControl.jar" />
@@ -199,7 +199,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.JavaEOControl.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 000" userID="SYL" file="DataModel/JavaEOControl.jar">
+  <JAR id="SYL_JAR.JavaEOControl.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 436" userID="SYL" file="DataModel/JavaEOControl.jar">
     <DependantResources id="SYL_JAR.JavaEOControl.jar_DR">
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
     </DependantResources>
@@ -207,13 +207,13 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.JavaFoundation.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 000" userID="SYL" file="DataModel/JavaFoundation.jar">
+  <JAR id="SYL_JAR.JavaFoundation.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 153" userID="SYL" file="DataModel/JavaFoundation.jar">
     <DependantResources id="SYL_JAR.JavaFoundation.jar_DR" />
     <SynchronizedResources id="SYL_JAR.JavaFoundation.jar_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.JavaWebObjects.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/JavaWebObjects.jar">
+  <JAR id="SYL_JAR.JavaWebObjects.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,22:04:51 28/06/2012 308" userID="SYL" file="DataModel/JavaWebObjects.jar">
     <DependantResources id="SYL_JAR.JavaWebObjects.jar_DR">
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
       <JAR idref="SYL_JAR.JavaEOControl.jar" />

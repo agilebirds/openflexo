@@ -1,4 +1,4 @@
-<inspector title = "Entity-relationship diagram" inheritsfrom="DMObject.inspector">
+<inspector title = "Entity-relationship diagram" inspectedClassName="org.openflexo.foundation.dm.ERDiagram" inheritsfrom="DMObject.inspector">
 	<tab name="Basic" index="0">
 		<layout name ="DEFAULT">
 			<param name="aLayoutParamName" value="aLayoutParamValue"/>

@@ -34,13 +34,15 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddShape extends AddShemaElementAction {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
-	public AddShape() {
+	public AddShape(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
