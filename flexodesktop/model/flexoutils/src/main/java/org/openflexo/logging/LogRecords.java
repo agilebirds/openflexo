@@ -187,6 +187,18 @@ public class LogRecords extends KVCObject implements XMLSerializable, HasPropert
 		return records;
 	}
 
+	public void setRecords(List<LogRecord> records) {
+		this.records = records;
+	}
+
+	public void addToRecords(LogRecord record) {
+		records.add(record);
+	}
+
+	public void removeFromRecords(LogRecord record) {
+		records.remove(record);
+	}
+
 	public int getTotalLogs() {
 		return totalLogs;
 	}
