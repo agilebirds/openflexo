@@ -1,5 +1,5 @@
 #English
-#Tue Jul 03 18:21:43 CEST 2012
+#Wed Jul 04 09:20:56 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -92,6 +92,7 @@ component_validation=Component validation
 connector=connector
 create_example_drawing=Create example drawing
 create_new_palette=Create new palette
+create_view_point=Create view point
 data_model_editor=Data Model Editor
 declare_in_edition_pattern=Declare in edition pattern
 delete=Delete
@@ -161,6 +162,7 @@ ontology_individual=Ontology individual
 ontology_library=Ontology library
 open_interface=Open component
 open_recent=Open recent...
+opening_fib_editor=Opening FIB editor...
 palette=Palette
 pattern_role_must_define_a_valid_concept_class=Pattern role must define a valid concept class
 pattern_role_must_define_a_valid_concept_class_description=Pattern role must define a valid concept class description
@@ -189,6 +191,7 @@ square_root=Square root
 submit_documentation=Submit documentation
 substraction=substraction
 switch_to_language=Switch to language
+temporary_object=Temporary object
 test_interface=Test component
 toc_data=Tables of content
 tools=Tools

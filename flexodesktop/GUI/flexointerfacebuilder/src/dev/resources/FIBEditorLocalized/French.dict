@@ -1,5 +1,5 @@
 #French
-#Tue Jul 03 18:21:43 CEST 2012
+#Wed Jul 04 09:20:56 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required=\ Le lien 'URI base' est requis et doit \u00EAtre valide
@@ -92,6 +92,7 @@ component_validation=Validation du composant
 connector=connector
 create_example_drawing=Cr\u00E9er un exemple de dessin
 create_new_palette=Cr\u00E9er une nouvelle palette
+create_view_point=Cr\u00E9er un point de vue
 data_model_editor=Editeur de mod\u00E8les de donn\u00E9es
 declare_in_edition_pattern=D\u00E9clarer dans un Edition Pattern
 delete=Supprimer
@@ -161,6 +162,7 @@ ontology_individual=Individuel ontologique
 ontology_library=Biblioth\u00E8que d'ontologies
 open_interface=Ouvrir un composant
 open_recent=Ouvrir un composant r\u00E9cent...
+opening_fib_editor=Ouverture de l'\u00E9diteur d'interfaces...
 palette=Palette
 pattern_role_must_define_a_valid_concept_class=Le r\u00F4le doit d\u00E9finir une classe ontologique
 pattern_role_must_define_a_valid_concept_class_description=Le r\u00F4le doit d\u00E9finir une classe ontologique
@@ -189,6 +191,7 @@ square_root=Racine carr\u00E9e
 submit_documentation=Soumettre de la documentation
 substraction=soustraction
 switch_to_language=Basculer \u00E0 la langue...
+temporary_object=Objet temporaire
 test_interface=Tester le composant
 toc_data=Tables des mati\u00E8res
 tools=Outils
