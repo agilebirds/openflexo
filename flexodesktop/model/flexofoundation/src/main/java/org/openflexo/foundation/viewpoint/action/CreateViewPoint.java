@@ -91,7 +91,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	private ViewPointFolder _calcFolder;
 	private ViewPoint _newCalc;
 
-	public Vector<ImportedOntology> importedOntologies = new Vector<ImportedOntology>();
+	public Vector<FlexoOntology> importedOntologies = new Vector<FlexoOntology>();
 
 	// private boolean createsOntology = false;
 
@@ -133,7 +133,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
 		ImportedOntology newOntology = ImportedOntology.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
 				.getOntologyLibrary());
-		for (ImportedOntology importedOntology : importedOntologies) {
+		for (FlexoOntology importedOntology : importedOntologies) {
 			try {
 				newOntology.importOntology(importedOntology);
 			} catch (OntologyNotFoundException e) {
@@ -269,12 +269,12 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
 	}*/
 
-	public void addToImportedOntologies(ImportedOntology ontology) {
+	public void addToImportedOntologies(FlexoOntology ontology) {
 		System.out.println("import ontology " + ontology);
 		importedOntologies.add(ontology);
 	}
 
-	public void removeFromImportedOntologies(ImportedOntology ontology) {
+	public void removeFromImportedOntologies(FlexoOntology ontology) {
 		System.out.println("remove ontology " + ontology);
 		importedOntologies.remove(ontology);
 	}
