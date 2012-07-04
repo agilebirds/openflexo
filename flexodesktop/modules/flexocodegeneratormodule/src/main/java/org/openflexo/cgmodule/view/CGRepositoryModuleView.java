@@ -55,8 +55,8 @@ import org.openflexo.swing.JConsole;
 import org.openflexo.swing.JConsoleOutputStream;
 import org.openflexo.toolbox.LogListener;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * 

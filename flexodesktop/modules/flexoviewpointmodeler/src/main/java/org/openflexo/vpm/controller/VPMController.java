@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
-import javax.swing.SwingUtilities;
 
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
@@ -57,7 +56,6 @@ import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuBar;
@@ -72,7 +70,7 @@ import org.openflexo.vpm.view.menu.VPMMenuBar;
  * 
  * @author yourname
  */
-public class VPMController extends FlexoController implements ConsistencyCheckingController {
+public class VPMController extends FlexoController {
 
 	private static final Logger logger = Logger.getLogger(VPMController.class.getPackage().getName());
 
@@ -109,16 +107,6 @@ public class VPMController extends FlexoController implements ConsistencyCheckin
 
 		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
-
-		setDefaultPespective(VIEW_POINT_PERSPECTIVE);
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				switchToPerspective(getDefaultPespective());
-			}
-		});
-
 	}
 
 	@Override

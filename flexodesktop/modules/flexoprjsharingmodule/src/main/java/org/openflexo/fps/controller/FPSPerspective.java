@@ -6,9 +6,9 @@ package org.openflexo.fps.controller;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.view.CVSFileModuleView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public abstract class FPSPerspective extends FlexoPerspective {
 	/**

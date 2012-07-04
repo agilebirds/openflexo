@@ -29,9 +29,9 @@ import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.dkv.DKVEditorBrowserView;
 import org.openflexo.ie.view.dkv.DKVModelView;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 class DKVPerspective extends FlexoPerspective {
 
@@ -54,7 +54,7 @@ class DKVPerspective extends FlexoPerspective {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -64,7 +64,7 @@ class DKVPerspective extends FlexoPerspective {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

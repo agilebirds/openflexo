@@ -58,11 +58,10 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -70,7 +69,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author sguerin
  */
-public class DMController extends FlexoController implements ConsistencyCheckingController {
+public class DMController extends FlexoController {
 
 	@SuppressWarnings("hiding")
 	private static final Logger logger = Logger.getLogger(DMController.class.getPackage().getName());
@@ -274,16 +273,6 @@ public class DMController extends FlexoController implements ConsistencyChecking
 		}
 		// See above
 		return super.handleException(inspectable, propertyName, value, exception);
-	}
-
-	@Override
-	public FlexoPerspective getDefaultPespective() {
-		return getCurrentPerspective();
-	}
-
-	@Override
-	public FlexoPerspective getCurrentPerspective() {
-		return super.getCurrentPerspective();
 	}
 
 	@Override

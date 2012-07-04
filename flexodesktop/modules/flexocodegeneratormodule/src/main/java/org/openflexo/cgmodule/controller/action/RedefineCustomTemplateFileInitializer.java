@@ -33,7 +33,6 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GenerationRepository;
-import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.templates.action.AddCustomTemplateRepository;
@@ -76,7 +75,7 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 				String CHOOSE_EXISTING_REPOSITORY = FlexoLocalization.localizedForKey("choose_existing_repository");
 				String[] locationChoices = { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
 				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location", "location",
-						(templates.getCustomCodeRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY),
+						templates.getCustomCodeRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY,
 						locationChoices);
 				TextFieldParameter newRepositoryNameParam = new TextFieldParameter("name", "custom_template_repository_name",
 						templates.getNextGeneratedCodeRepositoryName());
@@ -86,9 +85,9 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 						"customRepository",
 						"custom_templates_repository",
 						templates.getCustomCodeRepositoriesVector(),
-						(getControllerActionInitializer().getGeneratorController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
+						getControllerActionInitializer().getGeneratorController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
 								.getGeneratorController().getLastEditedCGRepository().getPreferredTemplateRepository()
-								: null));
+								: null);
 				customRepositoryParam.setFormatter("name");
 				customRepositoryParam.setDepends("location");
 				customRepositoryParam.setConditional("location=" + '"' + CHOOSE_EXISTING_REPOSITORY + '"');
@@ -150,14 +149,12 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, RedefineCustomTemplateFile action) {
 				if (action.getNewTemplateFile() != null) {
-					if ((action.getInvoker() != null) && (action.getInvoker() instanceof CGTemplateFileModuleView)
-							&& (((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+					if (action.getInvoker() != null && action.getInvoker() instanceof CGTemplateFileModuleView
+							&& ((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 						CGTemplateFileModuleView invoker = (CGTemplateFileModuleView) action.getInvoker();
 						FlexoDialog dialog = (FlexoDialog) SwingUtilities.getAncestorOfClass(FlexoDialog.class, invoker);
 						dialog.getContentPane().remove(invoker);
-						CGTemplateFileModuleView newView = (CGTemplateFileModuleView) getControllerActionInitializer()
-								.getGeneratorController().createModuleViewForObjectAndPerspective((CGTemplate) action.getNewTemplateFile(),
-										null);
+						CGTemplateFileModuleView newView = new CGTemplateFileModuleView(action.getNewTemplateFile(), null);
 						newView.setOpenedInSeparateWindow(true);
 						dialog.getContentPane().add(newView, BorderLayout.CENTER);
 						dialog.validate();

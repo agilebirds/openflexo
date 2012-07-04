@@ -42,7 +42,7 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class DiagramPerspective extends DMPerspective<ERDiagram> {
+public class DiagramPerspective extends DMPerspective {
 
 	private final DMController _controller;
 
@@ -129,7 +129,7 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -139,7 +139,7 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

@@ -31,7 +31,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.ScenarioRecorder;
 
 /**
- * This class is intented to modelize preferences of Flexo application<br>
+ * This class is intended to model preferences of OpenFlexo application<br>
  * To be accessed through all the application, all methods are statically defined.
  * 
  * @author sguerin
@@ -108,9 +108,9 @@ public class FlexoProperties {
 
 	public Level getDefaultLoggingLevel() {
 		String returned = applicationProperties.getProperty(DEFAULT_LOG_LEVEL);
-		if (returned == null)
+		if (returned == null) {
 			return null;
-		else if (returned.equals("SEVERE")) {
+		} else if (returned.equals("SEVERE")) {
 			return Level.SEVERE;
 		} else if (returned.equals("WARNING")) {
 			return Level.WARNING;

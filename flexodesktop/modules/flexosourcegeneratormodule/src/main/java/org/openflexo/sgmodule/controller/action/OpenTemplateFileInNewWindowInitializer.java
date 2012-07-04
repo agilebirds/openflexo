@@ -66,8 +66,7 @@ public class OpenTemplateFileInNewWindowInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<OpenTemplateFileInNewWindow>() {
 			@Override
 			public boolean run(EventObject e, OpenTemplateFileInNewWindow action) {
-				CGTemplateFileModuleView view = (CGTemplateFileModuleView) getControllerActionInitializer().getSGController()
-						.createModuleViewForObjectAndPerspective(action.getFocusedObject(), null);
+				CGTemplateFileModuleView view = new CGTemplateFileModuleView(action.getFocusedObject(), null);
 				view.setOpenedInSeparateWindow(true);
 				final FlexoDialog dialog = new FlexoDialog(getControllerActionInitializer().getSGController().getFlexoFrame(), action
 						.getFocusedObject().getTemplateName(), false);

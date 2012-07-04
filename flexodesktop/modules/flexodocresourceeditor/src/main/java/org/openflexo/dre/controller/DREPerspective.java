@@ -15,9 +15,9 @@ import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.icon.DREIconLibrary;
 import org.openflexo.view.EmptyPanel;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 class DREPerspective extends FlexoPerspective {
 
@@ -39,7 +39,7 @@ class DREPerspective extends FlexoPerspective {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -49,7 +49,7 @@ class DREPerspective extends FlexoPerspective {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

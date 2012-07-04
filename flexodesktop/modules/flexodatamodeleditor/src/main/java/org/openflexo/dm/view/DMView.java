@@ -33,8 +33,8 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * Please comment this class
@@ -122,7 +122,7 @@ public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> 
 
 	@Override
 	public FlexoPerspective getPerspective() {
-		return getDMController().getDefaultPespective();
+		return getDMController().REPOSITORY_PERSPECTIVE;
 	}
 
 	/**

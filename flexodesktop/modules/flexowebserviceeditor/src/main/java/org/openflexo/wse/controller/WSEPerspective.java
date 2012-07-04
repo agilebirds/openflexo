@@ -22,9 +22,9 @@ import org.openflexo.foundation.ws.WSPortTypeFolder;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
 import org.openflexo.foundation.ws.WSService;
 import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wse.view.WSEDMEntityView;
 import org.openflexo.wse.view.WSEDMPackageView;
 import org.openflexo.wse.view.WSEDMRepositoryView;
@@ -50,7 +50,7 @@ public class WSEPerspective extends FlexoPerspective {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -60,7 +60,7 @@ public class WSEPerspective extends FlexoPerspective {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

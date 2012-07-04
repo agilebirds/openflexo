@@ -26,8 +26,8 @@ import org.openflexo.components.widget.FIBOntologyEditor;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.ve.controller.VEController;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * This class represent the module view for an ontology.<br>

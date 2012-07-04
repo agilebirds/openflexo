@@ -65,8 +65,8 @@ import org.openflexo.selection.SelectionListener;
 import org.openflexo.sgmodule.SGCst;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**

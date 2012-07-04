@@ -24,8 +24,8 @@ import java.awt.Graphics;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.roleeditor.DrawRoleSpecializationControl.DrawRoleSpecializationAction;
 
 public class RoleEditorView extends DrawingView<RoleListRepresentation> implements ModuleView<RoleList> {

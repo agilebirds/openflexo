@@ -66,11 +66,10 @@ import org.openflexo.print.PrintManagingController;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.action.WKFControllerActionInitializer;
@@ -92,8 +91,7 @@ import org.openflexo.wkf.view.menu.WKFMenuBar;
  * 
  * @author benoit, sylvain
  */
-public class WKFController extends FlexoController implements ConsistencyCheckingController, PrintManagingController,
-		PropertyChangeListener {
+public class WKFController extends FlexoController implements PrintManagingController, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(WKFController.class.getPackage().getName());
 
@@ -174,9 +172,9 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 	}
 
 	@Override
-	public void setEditor(FlexoEditor projectEditor) {
-		super.setEditor(projectEditor);
-		getWorkflowBrowser().setRootObject(projectEditor != null ? projectEditor.getProject() : null);
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		getWorkflowBrowser().setRootObject(to != null ? to.getProject() : null);
 	}
 
 	@Override
@@ -318,15 +316,14 @@ public class WKFController extends FlexoController implements ConsistencyCheckin
 	}
 
 	@Override
-	public ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
+	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
 		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
 			}
-			return null;
+			return;
 		}
-
-		return super.setCurrentEditedObjectAsModuleView(object, perspective);
+		super.setCurrentEditedObjectAsModuleView(object, perspective);
 	}
 
 	public void setCurrentImportedProcess(FlexoProcess subProcess) {

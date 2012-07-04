@@ -58,12 +58,11 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.action.EditionAction;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 import org.openflexo.view.menu.FlexoMenuBar;
 
@@ -73,7 +72,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * @author yourname
  */
 
-public class DREController extends FlexoController implements FlexoActionSource, ConsistencyCheckingController {
+public class DREController extends FlexoController implements FlexoActionSource {
 
 	static final Logger logger = Logger.getLogger(DREController.class.getPackage().getName());
 
@@ -91,7 +90,6 @@ public class DREController extends FlexoController implements FlexoActionSource,
 	public DREController(FlexoModule module) {
 		super(module);
 		addToPerspectives(DRE_PERSPECTIVE);
-		setDefaultPespective(DRE_PERSPECTIVE);
 		_browser = new DREBrowser(this);
 	}
 

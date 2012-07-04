@@ -66,8 +66,7 @@ public class OpenTemplateFileInNewWindowInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<OpenTemplateFileInNewWindow>() {
 			@Override
 			public boolean run(EventObject e, OpenTemplateFileInNewWindow action) {
-				DGTemplateFileModuleView view = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController()
-						.createModuleViewForObjectAndPerspective(action.getFocusedObject(), null);
+				DGTemplateFileModuleView view = new DGTemplateFileModuleView(action.getFocusedObject(), null);
 				view.setOpenedInSeparateWindow(true);
 				final FlexoDialog dialog = new FlexoDialog(getControllerActionInitializer().getDGController().getFlexoFrame(), action
 						.getFocusedObject().getTemplateName(), false);

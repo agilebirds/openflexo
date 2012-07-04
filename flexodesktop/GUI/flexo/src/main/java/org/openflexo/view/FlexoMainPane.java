@@ -27,13 +27,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.Vector;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.help.CSH;
+import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -55,20 +55,21 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.ObjectDeleted;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.MouseOverButton;
 import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
+import org.openflexo.view.controller.model.RootControllerModel;
 
 /**
  * Abstract view managing global layout of a FlexoModule
  * 
  * @author sguerin
  */
-public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObserver {
+public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObserver, PropertyChangeListener {
 
 	protected static final Logger logger = Logger.getLogger(FlexoMainPane.class.getPackage().getName());
 
@@ -83,16 +84,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 	private ControlPanel _controlPanel;
 
 	private JComponent _rightPanel;
-
-	protected Vector<FlexoModelObject> _availableObjects;
-
-	protected Stack<HistoryLocation> previousHistory;
-	protected Stack<HistoryLocation> nextHistory;
-	protected HistoryLocation currentLocation;
-
-	protected boolean isGoingForward = false;
-
-	protected boolean isGoingBackward = false;
 
 	private JComponent _leftView;
 
@@ -112,62 +103,31 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		new FlexoSplitPaneLocationSaver(_splitPane, controller.getModule().getShortName() + "MainSplitPane");
 		_controller = controller;
-		_availableObjects = new Vector<FlexoModelObject>();
-		previousHistory = new Stack<HistoryLocation>();
-		nextHistory = new Stack<HistoryLocation>();
+		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.PERSPECTIVES, this);
 		_leftView = null;
 		_rightView = null;
 		_splitPane.setLeftComponent(new JPanel());
 		_splitPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 3, 3));
 		if (rightPaneIsSplitPane) {
-			_rightPanel = new JSplitPane(!_verticalOrientation ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT) /* {
-																															@Override
-																															public void setDividerLocation(int location) {
-																															logger.info("********************* setDividerLocation with " + location + " total width=" + getSize().width);
-																															super.setDividerLocation(location);
-																															}
-
-																															@Override
-																															public void setRightComponent(Component comp) {
-																															logger.info("********************* setRightComponent with size " + comp.getPreferredSize());
-																															super.setRightComponent(comp);
-																															}
-																															} */;
+			_rightPanel = new JSplitPane(!_verticalOrientation ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT);
 			_rightPanel.setBorder(BorderFactory.createEmptyBorder());
 			new FlexoSplitPaneLocationSaver((JSplitPane) _rightPanel, controller.getModule().getShortName() + "RightSplitPane");
 			((JSplitPane) _rightPanel).setResizeWeight(1.0);
 		} else {
 			_rightPanel = new JPanel();
-			// _rightPanel.setBackground(ColorCst.GUI_BACK_COLOR);
 			_rightPanel.setLayout(new BorderLayout());
 		}
-		/* _rightPanel. */add(_controlPanel = new ControlPanel(), BorderLayout.NORTH);
+		add(_controlPanel = new ControlPanel(), BorderLayout.NORTH);
 		_splitPane.setRightComponent(_rightPanel);
 		add(_splitPane, BorderLayout.CENTER);
 	}
 
 	public void resetModuleView() {
-		// _moduleView = null;
 		setModuleView(null);
 	}
 
 	private JComponent _footer;
 	private JComponent _header;
-
-	public HistoryLocation getLastHistoryLocationForProject(FlexoProject project) {
-		// TODO: Check if this makes any sense
-		for (int i = previousHistory.size() - 1; i > -1; i--) {
-			if (previousHistory.get(i)._object.getProject() == project) {
-				return previousHistory.get(i);
-			}
-		}
-		for (HistoryLocation hl : nextHistory) {
-			if (hl._object.getProject() == project) {
-				return hl;
-			}
-		}
-		return null;
-	}
 
 	public void setModuleView(ModuleView<?> moduleView) {
 		if (logger.isLoggable(Level.FINE)) {
@@ -199,26 +159,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 
 		_moduleView = moduleView;
 		if (moduleView != null) {
-			if (moduleView.getRepresentedObject() != null) {
-				if (!_availableObjects.contains(moduleView.getRepresentedObject())) {
-					_availableObjects.add(moduleView.getRepresentedObject());
-					moduleView.getRepresentedObject().addObserver(this);
-				}
-				if (!isGoingForward && !isGoingBackward) {
-					// _history.add(moduleView.getRepresentedObject());
-					if (currentLocation == null || currentLocation.getObject() != moduleView.getRepresentedObject()) {
-						if (currentLocation != null) {
-							previousHistory.push(currentLocation);
-						}
-						nextHistory.clear();
-						currentLocation = new HistoryLocation(moduleView.getRepresentedObject(), moduleView.getPerspective());
-					}
-				}
-			}
-			if (_controlPanel != null) {
-				_controlPanel.update();
-			}
-
 			if (moduleView.isAutoscrolled()) {
 				_centerView = (JComponent) moduleView;
 			} else {
@@ -235,8 +175,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 					scrollPane.getHorizontalScrollBar().setUnitIncrement(10);
 					scrollPane.getHorizontalScrollBar().setBlockIncrement(50);
 				}
-
-				// _scrollPane.getViewport().setBackground(FlexoCst.GUI_BACK_COLOR);
 				scrollPane.getHorizontalScrollBar().setFocusable(false);
 				scrollPane.getVerticalScrollBar().setFocusable(false);
 
@@ -267,9 +205,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			((JComponent) moduleView).validate();
 			((JComponent) moduleView).repaint();
 			if (moduleView.getPerspective() == null) {
-				if (_controller.getDefaultPespective() != null) {
-					logger.warning("null perspective declared for " + moduleView.getClass().getName());
-				}
+				logger.warning("null perspective declared for " + moduleView.getClass().getName());
 			} else {
 
 				// What about left view ?
@@ -321,7 +257,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			}
 			FCH.setHelpItem((JComponent) _moduleView, FCH.getModuleViewItemFor(_controller.getModule(), _moduleView));
 		} else {
-			currentLocation = null;
 			_centerView = new JPanel();
 			if (_header != null) {
 				_controlPanel.centerPanel.remove(_header);
@@ -348,38 +283,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 
 	public ModuleView<?> getModuleView() {
 		return _moduleView;
-	}
-
-	public void goBackward() {
-		if (canGoBackward()) {
-			isGoingBackward = true;
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Back to " + previousHistory.peek());
-			}
-			HistoryLocation historyLocation = previousHistory.peek();
-			FlexoModelObject backObject = historyLocation.getObject();
-			switchToModuleViewForObjectAndPerspective(backObject, historyLocation.getPerspective());
-			nextHistory.push(currentLocation);
-			currentLocation = previousHistory.pop();
-			_controlPanel.update();
-			isGoingBackward = false;
-		}
-	}
-
-	public void goForward() {
-		if (canGoForward()) {
-			isGoingForward = true;
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Forward to " + nextHistory.peek());
-			}
-			HistoryLocation historyLocation = nextHistory.peek();
-			FlexoModelObject forwardObject = historyLocation.getObject();
-			switchToModuleViewForObjectAndPerspective(forwardObject, historyLocation.getPerspective());
-			previousHistory.push(currentLocation);
-			currentLocation = nextHistory.pop();
-			_controlPanel.update();
-			isGoingForward = false;
-		}
 	}
 
 	public void goUp() {
@@ -434,6 +337,21 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 					setSize(disabledIcon.getIconWidth(), disabledIcon.getIconHeight());
 				}
 			}
+		}
+
+		class AvailableObjectsModel extends AbstractListModel {
+
+			@Override
+			public int getSize() {
+				return getController().getControllerModel().getObjects().getSize();
+			}
+
+			@Override
+			public Object getElementAt(int index) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
 		}
 
 		public ControlPanel() {
@@ -509,12 +427,10 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				FCH.setHelpItem(collapseAllButton, "collapse-all");
 			}
 
-			if (_controller.getPerspectives().size() > 0) {
-				// _controller.getPerspectives()
-				availablePerspectives = new AvailablePerspectives(_controller);
-				availablePerspectives.setFocusable(false);
-				FCH.setHelpItem(availablePerspectives, "available-perspectives");
-			}
+			// _controller.getPerspectives()
+			availablePerspectives = new AvailablePerspectives(_controller);
+			availablePerspectives.setFocusable(false);
+			FCH.setHelpItem(availablePerspectives, "available-perspectives");
 
 			backwardButton = new NavigationButton(IconLibrary.NAVIGATION_BACKWARD_ICON, IconLibrary.NAVIGATION_DISABLED_BACKWARD_ICON);
 			backwardButton.setSize(IconLibrary.NAVIGATION_BACKWARD_ICON.getIconWidth(),
@@ -529,7 +445,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				 */
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					goBackward();
+					getController().getControllerModel().goBackward();
 				}
 			});
 
@@ -703,9 +619,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 			if (_moduleView != null) {
 				availableObjects.removeActionListener(availableObjectsActionListener);
 				availableObjects.setSelectedItem(_moduleView.getRepresentedObject());
-				if (availablePerspectives != null) {
-					availablePerspectives.refresh();
-				}
 				availableObjects.addActionListener(availableObjectsActionListener);
 				if (getParentObject(_moduleView.getRepresentedObject()) != null) {
 					upButton.setEnabled(true);
@@ -713,21 +626,16 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 					upButton.setEnabled(false);
 				}
 			}
+			if (availablePerspectives != null) {
+				availablePerspectives.refresh();
+			}
 			setupViewControlsPanel();
-			backwardButton.setEnabled(canGoBackward());
-			forwardButton.setEnabled(canGoForward());
+			backwardButton.setEnabled(getController().getControllerModel().canGoBackward());
+			forwardButton.setEnabled(getController().getControllerModel().canGoForward());
 
 			availableObjects.updateUI();
 		}
 
-	}
-
-	protected boolean canGoForward() {
-		return nextHistory.size() > 0;
-	}
-
-	protected boolean canGoBackward() {
-		return previousHistory.size() > 0;
 	}
 
 	public ControlPanel getControlPanel() {
@@ -958,16 +866,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		}
 	}
 
-	private void removeHistoryLocationWithObject(FlexoModelObject object, Stack<HistoryLocation> locations) {
-		Iterator<HistoryLocation> i = locations.iterator();
-		while (i.hasNext()) {
-			FlexoMainPane.HistoryLocation l = i.next();
-			if (l.getObject() == object) {
-				i.remove();
-			}
-		}
-	}
-
 	protected void switchToPerspective(FlexoPerspective perspective) {
 		_controller.switchToPerspective(perspective);
 	}
@@ -999,26 +897,6 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 		return _controller.moduleViewForObject(object);
 	}
 
-	public class HistoryLocation {
-		private final FlexoModelObject _object;
-
-		private final FlexoPerspective _perspective;
-
-		protected HistoryLocation(FlexoModelObject object, FlexoPerspective perspective) {
-			super();
-			_object = object;
-			_perspective = perspective;
-		}
-
-		public FlexoModelObject getObject() {
-			return _object;
-		}
-
-		public FlexoPerspective getPerspective() {
-			return _perspective;
-		}
-	}
-
 	public FlexoController getController() {
 		return _controller;
 	}
@@ -1040,6 +918,15 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 	public void performAutolayout() {
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Perform collapse all not implemented for: " + this);
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getController().getControllerModel()) {
+			if (evt.getPropertyName().equals(RootControllerModel.PERSPECTIVES)) {
+				getControlPanel().update();
+			}
 		}
 	}
 }

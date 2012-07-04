@@ -24,9 +24,9 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.sgmodule.SGCst;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * Please comment this class

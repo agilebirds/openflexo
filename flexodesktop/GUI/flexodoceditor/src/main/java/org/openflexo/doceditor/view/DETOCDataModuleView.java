@@ -38,8 +38,8 @@ import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**

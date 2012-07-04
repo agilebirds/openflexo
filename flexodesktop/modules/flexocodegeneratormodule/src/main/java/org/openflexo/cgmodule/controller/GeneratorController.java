@@ -85,9 +85,9 @@ import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -141,16 +141,16 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	}
 
 	@Override
-	public void setEditor(FlexoEditor projectEditor) {
-		if (getEditor() != null && getEditor().getProject() != null) {
-			getEditor().getProject().getGeneratedCode().setFactory(null);
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		if (from != null && from.getProject() != null) {
+			from.getProject().getGeneratedCode().setFactory(null);
 		}
-		super.setEditor(projectEditor);
-		if (getEditor() != null && getEditor().getResourceUpdateHandler() != null) {
-			getEditor().getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+		if (to != null && to.getResourceUpdateHandler() != null) {
+			to.getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		}
-		if (getEditor() != null && getEditor().getProject() != null) {
-			getEditor().getProject().getGeneratedCode().setFactory(this);
+		if (to != null && to.getProject() != null) {
+			to.getProject().getGeneratedCode().setFactory(this);
 		}
 	}
 

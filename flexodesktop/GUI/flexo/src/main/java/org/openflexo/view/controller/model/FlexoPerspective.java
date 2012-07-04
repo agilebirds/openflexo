@@ -17,13 +17,14 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.view;
+package org.openflexo.view.controller.model;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
 public abstract class FlexoPerspective {

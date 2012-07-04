@@ -688,6 +688,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return returned;
 	}
 
+	@Deprecated
 	public abstract FlexoModelObject getDefaultRootObject();
 
 	public abstract void configure();

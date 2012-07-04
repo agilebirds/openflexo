@@ -45,7 +45,6 @@ import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.view.FlexoRelativeWindow;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -124,7 +123,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		add(inspectorWindowItem = new InspectorWindowItem());
 		add(preferencesWindowItem = new PreferencesWindowItem());
 		windowFirstIndex = getItemCount();
-		if (controller instanceof ConsistencyCheckingController) {
+		if (controller.getDefaultValidationModel() != null) {
 			add(checkConsistencyWindowItem = new CheckConsistencyWindowItem());
 			windowFirstIndex = getItemCount();
 		}

@@ -43,7 +43,7 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class RepositoryPerspective extends DMPerspective<DMObject> {
+class RepositoryPerspective extends DMPerspective {
 
 	private final DMController _controller;
 	private final DMBrowser _browser;
@@ -79,7 +79,7 @@ class RepositoryPerspective extends DMPerspective<DMObject> {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -89,7 +89,7 @@ class RepositoryPerspective extends DMPerspective<DMObject> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

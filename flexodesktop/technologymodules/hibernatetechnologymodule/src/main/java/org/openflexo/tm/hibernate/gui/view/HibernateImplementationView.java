@@ -24,9 +24,9 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.tm.hibernate.gui.controller.HibernateImplementationController;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * Represents the main panel content when a HibernateImplementation is selected

@@ -27,8 +27,6 @@ package org.openflexo.ve.controller;
  */
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -71,19 +69,8 @@ public class VEController extends FlexoController {
 	 */
 	public VEController(FlexoModule module) {
 		super(module);
-
 		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
-
-		setDefaultPespective(DIAGRAM_PERSPECTIVE);
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				switchToPerspective(getDefaultPespective());
-			}
-		});
-
 	}
 
 	@Override
@@ -107,14 +94,15 @@ public class VEController extends FlexoController {
 	}
 
 	@Override
-	public void setEditor(FlexoEditor projectEditor) {
-		super.setEditor(projectEditor);
-		if (getProject() != null) {
-			getProject().getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
-			getProject().getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		FlexoProject project = to != null ? to.getProject() : null;
+		if (project != null) {
+			project.getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
+			project.getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
 		}
-		DIAGRAM_PERSPECTIVE.setProject(getProject());
-		ONTOLOGY_PERSPECTIVE.setProject(getProject());
+		DIAGRAM_PERSPECTIVE.setProject(project);
+		ONTOLOGY_PERSPECTIVE.setProject(project);
 	}
 
 	@Override

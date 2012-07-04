@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * @author gpolet
@@ -49,23 +50,13 @@ public class AvailablePerspectives extends JPanel {
 		super(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		this.controller = controller;
 		views = new Hashtable<FlexoPerspective, FlexoPerspectiveView>();
-
-		for (FlexoPerspective p : controller.getPerspectives()) {
-			FlexoPerspectiveView view = new FlexoPerspectiveView(controller, this, p);
-			add(view);
-			views.put(p, view);
-
-		}
-
-		validate();
-		repaint();
 	}
 
 	public void refresh() {
 		Vector<FlexoPerspective> displayedPerspective = new Vector<FlexoPerspective>();
 		removeAll();
 		add(new JLabel(IconLibrary.NAVIGATION_CLOSE_LEFT));
-		for (FlexoPerspective p : controller.getPerspectives()) {
+		for (FlexoPerspective p : controller.getControllerModel().getPerspectives()) {
 			FlexoPerspectiveView v = views.get(p);
 			if (v == null) {
 				views.put(p, v = new FlexoPerspectiveView(controller, this, p));
@@ -88,5 +79,7 @@ public class AvailablePerspectives extends JPanel {
 		} else {
 			setVisible(true);
 		}
+		revalidate();
+		repaint();
 	}
 }

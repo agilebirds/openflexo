@@ -25,8 +25,8 @@ import java.util.Vector;
 import org.openflexo.components.widget.FIBOntologyEditor;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.vpm.controller.VPMController;
 
 /**

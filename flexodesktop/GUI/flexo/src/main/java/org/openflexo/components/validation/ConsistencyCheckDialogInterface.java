@@ -19,11 +19,11 @@
  */
 package org.openflexo.components.validation;
 
-import org.openflexo.view.controller.ConsistencyCheckingController;
+import org.openflexo.view.controller.FlexoController;
 
 public interface ConsistencyCheckDialogInterface {
 
-	public ConsistencyCheckingController getController();
+	public FlexoController getController();
 
 	public void toFront();
 

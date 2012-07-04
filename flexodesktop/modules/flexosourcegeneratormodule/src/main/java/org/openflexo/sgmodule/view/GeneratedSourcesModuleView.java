@@ -38,8 +38,8 @@ import org.openflexo.foundation.sg.CreateSourceRepository;
 import org.openflexo.foundation.sg.implmodel.CreateImplementationModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.controller.SGController;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
