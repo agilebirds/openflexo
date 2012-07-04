@@ -44,9 +44,9 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 	public OntologyClass getOntologicType() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
-		}
-		if (getViewPoint().getViewpointOntology() != null) {
-			return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+			if (getViewPoint().getViewpointOntology() != null) {
+				return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+			}
 		}
 		return null;
 	}

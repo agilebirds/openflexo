@@ -35,9 +35,8 @@
     <Label label="ontologic_concept" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
       <LocalizedDictionary />
     </Label>
-    <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="conceptSelector" localize="true" manageDynamicModel="true">
-      <Assignment variable="component.ontologyLibrary" value="data.focusedObject.calc.ontologyLibrary" />
-      <Assignment variable="component.defaultHeight" value="200" />
+    <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="conceptSelector" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.context" value="data.focusedObject.viewPoint.viewpointOntology" />
     </Custom>
     <Label label="ontologic_property" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 1)">
       <LocalizedDictionary />

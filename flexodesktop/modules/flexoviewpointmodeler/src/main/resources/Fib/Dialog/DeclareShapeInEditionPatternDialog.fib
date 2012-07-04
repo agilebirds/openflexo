@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="gridbag" titleFont="LucidaGrande,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="LucidaGrande,0,11" width="600" height="650">
   <Label label="declare_shape_in_edition_pattern" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" />
-  <RadioButtonList format="object.name" localize="true" manageDynamicModel="true" name="PaletteRadioButtonList" data="data.primaryChoice" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,13" staticList="" iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareInEditionPattern$DeclareInEditionPatternChoices" autoSelectFirstRow="true">
+  <RadioButtonList columns="1" hGap="0" vGap="-2" format="object.name" localize="true" manageDynamicModel="true" name="PaletteRadioButtonList" data="data.primaryChoice" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,13" staticList="" iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareInEditionPattern$DeclareInEditionPatternChoices" autoSelectFirstRow="true">
     <LocalizedDictionary />
   </RadioButtonList>
   <Panel layout="twocols" border="rounded3d" borderColor="0,0,0" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="LucidaGrande,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 1)" width="170" height="150">
@@ -35,9 +35,8 @@
     <Label label="ontologic_concept" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
       <LocalizedDictionary />
     </Label>
-    <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="conceptSelector" localize="true" manageDynamicModel="true">
-      <Assignment variable="component.ontologyLibrary" value="data.focusedObject.calc.ontologyLibrary" />
-      <Assignment variable="component.defaultHeight" value="200" />
+    <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="conceptSelector" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.context" value="data.focusedObject.viewPoint.viewpointOntology" />
     </Custom>
     <Label label="new_edition_pattern_name" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />

@@ -78,6 +78,9 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		super(builder);
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
+		if (builder != null) {
+			setViewPoint(builder.getViewPoint());
+		}
 	}
 
 	@Override

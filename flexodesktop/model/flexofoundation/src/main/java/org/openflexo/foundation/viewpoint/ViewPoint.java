@@ -239,7 +239,15 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public static class ViewPointBuilder {
-		private final ImportedOntology viewPointOntology;
+		private ViewPoint viewPoint;
+		private ImportedOntology viewPointOntology;
+
+		public ViewPointBuilder(ViewPoint viewPoint) {
+			this.viewPoint = viewPoint;
+			if (viewPoint != null) {
+				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
+			}
+		}
 
 		public ViewPointBuilder(ImportedOntology viewPointOntology) {
 			this.viewPointOntology = viewPointOntology;
@@ -249,11 +257,22 @@ public class ViewPoint extends ViewPointObject {
 		public ImportedOntology getViewPointOntology() {
 			return viewPointOntology;
 		}
+
+		public ViewPoint getViewPoint() {
+			return viewPoint;
+		}
+
+		public void setViewPoint(ViewPoint viewPoint) {
+			this.viewPoint = viewPoint;
+		}
 	}
 
 	// Used during deserialization, do not use it
 	public ViewPoint(ViewPointBuilder builder) {
 		super(builder);
+		if (builder != null) {
+			builder.setViewPoint(this);
+		}
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
