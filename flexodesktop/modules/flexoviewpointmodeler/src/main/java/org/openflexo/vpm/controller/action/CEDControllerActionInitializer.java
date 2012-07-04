@@ -57,7 +57,7 @@ public class CEDControllerActionInitializer extends ControllerActionInitializer 
 		(new CEDSetPropertyInitializer(this)).init();
 
 		// CalcEditor perspective
-		(new CreateOntologyCalcInitializer(this)).init();
+		(new CreateViewPointInitializer(this)).init();
 		(new AddEditionPatternInitializer(this)).init();
 		(new DeleteEditionPatternInitializer(this)).init();
 		(new DuplicateEditionPatternInitializer(this)).init();

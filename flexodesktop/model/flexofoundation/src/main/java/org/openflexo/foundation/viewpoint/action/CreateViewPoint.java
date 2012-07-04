@@ -89,7 +89,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	private String _newCalcDescription;
 	private File _ontologyFile;
 	private ViewPointFolder _calcFolder;
-	private ViewPoint _newCalc;
+	private ViewPoint _newViewPoint;
 
 	public Vector<FlexoOntology> importedOntologies = new Vector<FlexoOntology>();
 
@@ -122,11 +122,11 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		}
 
 		// Instanciate new Calc
-		_newCalc = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary, getCalcFolder());
-		_newCalc.setDescription(getNewCalcDescription());
+		_newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary, getCalcFolder());
+		_newViewPoint.setDescription(getNewCalcDescription());
 
 		// And register it to the library
-		viewPointLibrary.registerViewPoint(_newCalc);
+		viewPointLibrary.registerViewPoint(_newViewPoint);
 	}
 
 	private ImportedOntology buildOntology() {
@@ -251,8 +251,8 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		return true;
 	}
 
-	public ViewPoint getNewCalc() {
-		return _newCalc;
+	public ViewPoint getNewViewPoint() {
+		return _newViewPoint;
 	}
 
 	private String getBaseName() {

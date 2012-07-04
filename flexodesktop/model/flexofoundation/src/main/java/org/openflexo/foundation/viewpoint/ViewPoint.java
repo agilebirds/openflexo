@@ -156,7 +156,10 @@ public class ViewPoint extends ViewPointObject {
 		ViewPoint viewpoint = new ViewPoint();
 		viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
-		viewpoint.init(baseName, viewpointDir, xmlFile, library, null, folder);
+
+		ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
+
+		viewpoint.init(baseName, viewpointDir, xmlFile, library, viewPointOntology, folder);
 		viewpoint.save();
 		return viewpoint;
 	}
@@ -172,7 +175,6 @@ public class ViewPoint extends ViewPointObject {
 
 		File owlFile = null;
 		String viewPointURI = null;
-		ImportedOntology viewpointOntology = null;
 
 		Document document;
 		try {
@@ -186,6 +188,17 @@ public class ViewPoint extends ViewPointObject {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		if (owlFile.exists()) {
+			return loadViewpointOntology(viewPointURI, owlFile, library);
+		}
+
+		return null;
+	}
+
+	private static ImportedOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
+
+		ImportedOntology viewpointOntology = null;
 
 		if (owlFile.exists()) {
 			logger.fine("Found " + owlFile);
