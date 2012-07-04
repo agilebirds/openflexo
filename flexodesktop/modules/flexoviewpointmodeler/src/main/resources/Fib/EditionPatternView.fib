@@ -47,7 +47,7 @@
         <AddAction method="data.createEditionPatternPatternRole" name="add_edition_pattern" />
       </Table>
       <TabPanel constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
-        <Tab index="0" title="data" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
+        <Tab title="data" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" index="0">
           <Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;Shape&quot;)" name="ShapePatternRole">
             <Label label="pattern_role" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=6;insetsRight=7;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)">
@@ -163,10 +163,10 @@
             <TextField columns="6" text="TextField" data="ObjectPropertyPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="parent_property" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="ObjectPropertyPatternRole.data.parentProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="true" />
-    <Assignment variable="component.selectDataProperties" value="false" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+              <Assignment variable="component.selectObjectProperties" value="true" />
+              <Assignment variable="component.selectDataProperties" value="false" />
+              <Assignment variable="component.selectAnnotationProperties" value="false" />
               <Assignment variable="component.ontologyLibrary" value="ObjectPropertyPatternRole.data.ontologyLibrary" />
               <Assignment variable="component.defaultHeight" value="200" />
             </Custom>
@@ -190,10 +190,10 @@
             <TextField columns="6" text="TextField" data="DataPropertyPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="parent_property" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="DataPropertyPatternRole.data.parentProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="false" />
-    <Assignment variable="component.selectDataProperties" value="true" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+              <Assignment variable="component.selectObjectProperties" value="false" />
+              <Assignment variable="component.selectDataProperties" value="true" />
+              <Assignment variable="component.selectAnnotationProperties" value="false" />
             </Custom>
             <Label label="domain" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="DataPropertyPatternRole.data.domain" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
@@ -223,10 +223,10 @@
             <TextField columns="6" text="TextField" data="ObjectPropertyStatementPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="property" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="ObjectPropertyStatementPatternRole.data.objectProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=6;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="true" />
-    <Assignment variable="component.selectDataProperties" value="false" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+              <Assignment variable="component.selectObjectProperties" value="true" />
+              <Assignment variable="component.selectDataProperties" value="false" />
+              <Assignment variable="component.selectAnnotationProperties" value="false" />
             </Custom>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;DataPropertyStatement&quot;)" name="DataPropertyStatementPatternRole">
@@ -241,9 +241,9 @@
             <Label label="property" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="DataPropertyStatementPatternRole.data.dataProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=6;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
               <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="false" />
-    <Assignment variable="component.selectDataProperties" value="true" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+              <Assignment variable="component.selectObjectProperties" value="false" />
+              <Assignment variable="component.selectDataProperties" value="true" />
+              <Assignment variable="component.selectAnnotationProperties" value="false" />
             </Custom>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;RestrictionStatement&quot;)" name="RestrictionStatementPatternRole">
@@ -297,7 +297,7 @@
           </Panel>
           <Panel layout="none" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=14;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0;x=0;y=0)" width="80" height="60" name="Spacer" />
         </Tab>
-        <Tab index="1" title="advanced" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
+        <Tab title="advanced" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" index="1">
           <Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.GraphicalElementPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((PatternRoleTable.selected.type = &quot;Shape&quot;) | (PatternRoleTable.selected.type = &quot;Connector&quot;))" name="GraphicalElementPatternRolePanel">
             <Table iteratorClassName="org.openflexo.foundation.viewpoint.GraphicalElementSpecification" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="GraphicalElementPatternRolePanel.data.grSpecifications" constraints="border(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
               <CheckBoxColumn data="iterator.mandatory" title="mandatory" columnWidth="20" resizable="false" displayTitle="false" name="checkbox" />
@@ -311,7 +311,7 @@
             </Table>
           </Panel>
         </Tab>
-        <Tab index="2" title="actions" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
+        <Tab title="actions" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" index="2">
           <Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.GraphicalElementPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((PatternRoleTable.selected.type = &quot;Shape&quot;) | (PatternRoleTable.selected.type = &quot;Connector&quot;))" name="GraphicalElementPatternRolePanel2">
             <Table iteratorClassName="org.openflexo.foundation.viewpoint.GraphicalElementAction" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="GraphicalElementPatternRolePanel2.data.actions" constraints="border(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
               <IconColumn data="controller.iconForObject(iterator.abstractActionScheme)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
@@ -327,13 +327,13 @@
             </Table>
           </Panel>
         </Tab>
-        <Tab index="4" title="description" layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" titleFont="SansSerif,0,11" darkLevel="0">
+        <Tab title="description" layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" titleFont="SansSerif,0,11" darkLevel="0" index="4">
           <TextArea columns="6" rows="2" data="PatternRoleTable.selected.description" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" localize="true" />
         </Tab>
       </TabPanel>
     </Panel>
     <TabPanel name="MainTabPanel" constraints="border(index=1;location=center)">
-      <Tab index="0" title="edition_schemes" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" constraints="border(index=1;location=center)" width="80" height="60" name="EditionSchemeTab">
+      <Tab title="edition_schemes" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="border(index=1;location=center)" width="80" height="60" name="EditionSchemeTab">
         <Panel layout="border" borderTitle="Panel" borderTop="9" borderBottom="15" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" constraints="border(index=0;location=north)">
           <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionScheme" visibleRowCount="6" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="EditionSchemeTable" data="data.editionSchemes" constraints="border(index=0;location=west)">
             <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
@@ -479,7 +479,7 @@
           </Panel>
         </Panel>
         <TabPanel name="EditionSchemePanel" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" constraints="border(index=0;location=center)">
-          <Tab index="0" title="parameters" layout="gridbag" hGap="5" vGap="5" cols="2" rows="1" borderTitle="Parameters" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)" name="ParametersPanel">
+          <Tab title="parameters" layout="gridbag" hGap="5" vGap="5" cols="2" rows="1" borderTitle="Parameters" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="border(index=0;location=north)" name="ParametersPanel">
             <Panel layout="gridbag" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=0;gridY=0;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
               <CheckBox selected="true" localize="true" name="checkbox" data="EditionSchemePanel.data.skipConfirmationPanel" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
               <Label label="skip_confirmation_panel_when_possible" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
@@ -554,10 +554,10 @@
               <Label label="parent_property" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((ParametersDetailsPanel.data.widget = &quot;OBJECT_PROPERTY&quot;) | (ParametersDetailsPanel.data.widget = &quot;DATA_PROPERTY&quot;))" />
               <Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" data="ParametersDetailsPanel.data" dataClassName="org.openflexo.foundation.viewpoint.PropertyParameter" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((ParametersDetailsPanel.data.widget = &quot;OBJECT_PROPERTY&quot;) | (ParametersDetailsPanel.data.widget = &quot;DATA_PROPERTY&quot;))" name="PropertyParameterPanel1">
                 <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="PropertyParameterPanel1.data.parentProperty" constraints="border(expandHorizontally=true;expandVertically=false;index=11;location=center)" localize="true" manageDynamicModel="true">
-             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="true" />
-    <Assignment variable="component.selectDataProperties" value="true" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+                  <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+                  <Assignment variable="component.selectObjectProperties" value="true" />
+                  <Assignment variable="component.selectDataProperties" value="true" />
+                  <Assignment variable="component.selectAnnotationProperties" value="false" />
                 </Custom>
               </Panel>
               <Label label="domain" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((ParametersDetailsPanel.data.widget = &quot;OBJECT_PROPERTY&quot;) | (ParametersDetailsPanel.data.widget = &quot;DATA_PROPERTY&quot;))" />
@@ -659,7 +659,7 @@
               </Panel>
             </Panel>
           </Tab>
-          <Tab index="0" title="edition_actions" layout="gridbag" borderTitle="Actions" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" constraints="border(index=1;location=center)" name="ActionsPanel">
+          <Tab title="edition_actions" layout="gridbag" borderTitle="Actions" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="border(index=1;location=center)" name="ActionsPanel">
             <Panel layout="gridbag" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="ActionDetailsPanel">
               <Panel layout="none" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(EditionActionBrowser.selected = null)" name="NoSelectedActionPanel" />
               <Panel layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" data="EditionActionBrowser.selected" dataClassName="org.openflexo.foundation.viewpoint.AddIndividual" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=15;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionActionBrowser.selected.editionActionType = &quot;AddIndividual&quot;)" name="AddIndividualPanel">
@@ -677,7 +677,7 @@
                 </Custom>
                 <Label label="ontology_class" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
                 <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="AddIndividualPanel.data.ontologyClass" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-                    <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+                  <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                   <Dependancy componentName="AddIndividualAssignationCC" />
                 </Custom>
                 <Label label="individual_name_(uri)" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -689,11 +689,11 @@
                 <Table iteratorClassName="org.openflexo.foundation.viewpoint.ObjectPropertyAssertion" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ObjectPropertyAssertionTable" data="AddIndividualPanel.data.objectAssertions" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
                   <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
                   <CustomColumn componentClassName="org.openflexo.components.widget.FIBPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.ontologyProperty" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
-              <ColumnAssignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <ColumnAssignment variable="component.selectObjectProperties" value="true" />
-    <ColumnAssignment variable="component.selectDataProperties" value="false" />
-    <ColumnAssignment variable="component.selectAnnotationProperties" value="false" />
-   <ColumnAssignment variable="component.domain" value="AddIndividualPanel.data.ontologyClass" />
+                    <ColumnAssignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+                    <ColumnAssignment variable="component.selectObjectProperties" value="true" />
+                    <ColumnAssignment variable="component.selectDataProperties" value="false" />
+                    <ColumnAssignment variable="component.selectAnnotationProperties" value="false" />
+                    <ColumnAssignment variable="component.domain" value="AddIndividualPanel.data.ontologyClass" />
                   </CustomColumn>
                   <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.object.binding" title="object" columnWidth="80" resizable="true" displayTitle="true" name="object">
                     <ColumnAssignment variable="component.bindable" value="AddIndividualPanel.data" />
@@ -710,11 +710,11 @@
                 <Table iteratorClassName="org.openflexo.foundation.viewpoint.DataPropertyAssertion" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DataPropertyAssertionTable" data="AddIndividualPanel.data.dataAssertions" constraints="twocols(expandHorizontally=true;expandVertically=true;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
                   <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
                   <CustomColumn componentClassName="org.openflexo.components.widget.FIBPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.ontologyProperty" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
-              <ColumnAssignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <ColumnAssignment variable="component.selectObjectProperties" value="false" />
-    <ColumnAssignment variable="component.selectDataProperties" value="true" />
-    <ColumnAssignment variable="component.selectAnnotationProperties" value="false" />
-   <ColumnAssignment variable="component.domain" value="AddIndividualPanel.data.ontologyClass" />
+                    <ColumnAssignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+                    <ColumnAssignment variable="component.selectObjectProperties" value="false" />
+                    <ColumnAssignment variable="component.selectDataProperties" value="true" />
+                    <ColumnAssignment variable="component.selectAnnotationProperties" value="false" />
+                    <ColumnAssignment variable="component.domain" value="AddIndividualPanel.data.ontologyClass" />
                   </CustomColumn>
                   <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value.binding" title="value" columnWidth="80" resizable="true" displayTitle="true" name="value">
                     <ColumnAssignment variable="component.bindable" value="AddIndividualPanel.data" />
@@ -823,10 +823,10 @@
                 </Custom>
                 <Label label="property" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
                 <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="AddObjectPropertyStatementPanel.data.objectProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="true" />
-    <Assignment variable="component.selectDataProperties" value="false" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+                  <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+                  <Assignment variable="component.selectObjectProperties" value="true" />
+                  <Assignment variable="component.selectDataProperties" value="false" />
+                  <Assignment variable="component.selectAnnotationProperties" value="false" />
                   <Dependancy componentName="AddObjectPropertyStatementAssignCC" />
                 </Custom>
                 <Label label="object" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -857,10 +857,10 @@
                 </Custom>
                 <Label label="property" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
                 <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="AddDataPropertyStatementPanel.data.dataProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="false" />
-    <Assignment variable="component.selectDataProperties" value="true" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+                  <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+                  <Assignment variable="component.selectObjectProperties" value="false" />
+                  <Assignment variable="component.selectDataProperties" value="true" />
+                  <Assignment variable="component.selectAnnotationProperties" value="false" />
                   <Dependancy componentName="AddDataPropertyStatementAssignCC" />
                 </Custom>
                 <Label label="object" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -1007,10 +1007,10 @@
                 </Custom>
                 <Label label="property" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
                 <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="AddRestrictionPanel.data.objectProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="true" />
-    <Assignment variable="component.selectDataProperties" value="true" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+                  <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+                  <Assignment variable="component.selectObjectProperties" value="true" />
+                  <Assignment variable="component.selectDataProperties" value="true" />
+                  <Assignment variable="component.selectAnnotationProperties" value="false" />
                 </Custom>
                 <Label label="restriction type" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
                 <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddRestrictionPanel.data.restrictionType.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
@@ -1166,7 +1166,7 @@
           </Tab>
         </TabPanel>
       </Tab>
-      <Tab index="1" title="inspector" layout="gridbag" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" width="80" height="60" name="InspectorTab">
+      <Tab title="inspector" layout="gridbag" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="1" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" width="80" height="60" name="InspectorTab">
         <Table iteratorClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" visibleRowCount="7" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InspectorPropertyTable" data="InspectorTab.data.entries" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
           <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
           <TextFieldColumn data="iterator.label" title="label" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
@@ -1205,7 +1205,7 @@
           <Label label="concept" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((EntryPanel.data.class.simpleName = &quot;ClassInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;IndividualInspectorEntry&quot;))" />
           <Panel layout="gridbag" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(EntryPanel.data.class.simpleName = &quot;ClassInspectorEntry&quot;)" name="OntologyClassInspectorEntryPanel">
             <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="OntologyClassInspectorEntryPanel.data.concept" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyClassInspectorEntryPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
-               <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
             <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <CheckBox selected="true" localize="true" name="checkbox" data="OntologyClassInspectorEntryPanel.data.isDynamicConceptValue" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -1216,7 +1216,7 @@
           </Panel>
           <Panel layout="gridbag" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(EntryPanel.data.class.simpleName = &quot;IndividualInspectorEntry&quot;)" name="OntologyIndividualInspectorEntryPanel">
             <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="OntologyIndividualInspectorEntryPanel.data.concept" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyIndividualInspectorEntryPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
-               <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
             <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <CheckBox selected="true" localize="true" name="checkbox" data="OntologyIndividualInspectorEntryPanel.data.isDynamicConceptValue" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -1228,10 +1228,10 @@
           <Label label="parent_property" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;DataPropertyInspectorEntry&quot;))" />
           <Panel layout="border" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;DataPropertyInspectorEntry&quot;))" name="OntologyPropertyInspectorEntryPanel1">
             <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="OntologyPropertyInspectorEntryPanel1.data.parentProperty" constraints="border(location=center)" localize="true" manageDynamicModel="true">
-             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
-     <Assignment variable="component.selectObjectProperties" value="true" />
-    <Assignment variable="component.selectDataProperties" value="true" />
-    <Assignment variable="component.selectAnnotationProperties" value="false" />
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+              <Assignment variable="component.selectObjectProperties" value="true" />
+              <Assignment variable="component.selectDataProperties" value="true" />
+              <Assignment variable="component.selectAnnotationProperties" value="false" />
             </Custom>
           </Panel>
           <Label label="domain" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;DataPropertyInspectorEntry&quot;))" />
@@ -1290,7 +1290,7 @@
           <LocalizedDictionary />
         </Panel>
       </Tab>
-      <Tab index="2" title="localization" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=1;location=center)" name="LocalizationTab">
+      <Tab title="localization" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="border(index=1;location=center)" name="LocalizationTab">
         <Table iteratorClassName="org.openflexo.foundation.viewpoint.LocalizedDictionary$DynamicEntry" visibleRowCount="5" rowHeight="16" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="LocalizedTable" data="data.calc.localizedDictionary.dynamicEntries" constraints="border(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
           <TextFieldColumn data="iterator.key" title="key" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
           <TextFieldColumn data="iterator.english" title="english" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
