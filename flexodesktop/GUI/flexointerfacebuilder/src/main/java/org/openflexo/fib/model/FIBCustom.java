@@ -104,7 +104,7 @@ public class FIBCustom extends FIBWidget {
 
 	@Override
 	public Type getDataType() {
-		if (getData() != null && getData().getBinding() != null) {
+		if (getData() != null && getData().isSet() && getData().isValid()) {
 			return getData().getBinding().getAccessedType();
 		}
 		return getDefaultDataClass();
@@ -115,9 +115,9 @@ public class FIBCustom extends FIBWidget {
 	public Type getDefaultDataClass() {
 		if (getComponentClass() != null && defaultDataClass == null) {
 			defaultDataClass = getDataClassForComponent(getComponentClass());
-			if (defaultDataClass != null) {
-				return defaultDataClass;
-			}
+		}
+		if (defaultDataClass != null) {
+			return defaultDataClass;
 		}
 		return Object.class;
 	}
@@ -386,7 +386,7 @@ public class FIBCustom extends FIBWidget {
 	private static Class<?> getDataClassForComponent(Class<?> componentClass) {
 		Class<?> returned = DATA_CLASS_FOR_COMPONENT.get(componentClass);
 		if (returned == null) {
-			logger.fine("Searching dataClass for " + componentClass);
+			logger.info("Searching dataClass for " + componentClass);
 			FIBCustomComponent customComponent = null;
 			for (Constructor constructor : componentClass.getConstructors()) {
 				if (constructor.getGenericParameterTypes().length == 1) {
@@ -414,9 +414,11 @@ public class FIBCustom extends FIBWidget {
 					}
 				}
 			}
+			logger.info("customComponent=" + customComponent);
 			if (customComponent != null) {
 				returned = customComponent.getRepresentedType();
 				DATA_CLASS_FOR_COMPONENT.put(componentClass, returned);
+				logger.info("Found " + returned);
 				return returned;
 			}
 			return Object.class;

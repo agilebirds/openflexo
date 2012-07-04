@@ -249,6 +249,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				if (childrenObjects != null) {
 					returned.addAll(childrenObjects);
 				}
+				// System.out.println("For " + object + " of " + object.getClass().getSimpleName() + " children=" + children.getData()
+				// + " values=" + object);
 			} else {
 				// System.out.println("add children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
 				// System.out.println("Obtain "+getChildrenFor(children, object));
@@ -258,6 +260,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				if (childrenObject != null) {
 					returned.add(childrenObject);
 				}
+				// System.out.println("For " + object + " of " + object.getClass().getSimpleName() + " children=" + children.getData()
+				// + " value=" + childrenObject);
 			}
 		}
 		return returned;

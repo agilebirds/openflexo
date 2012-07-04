@@ -468,24 +468,32 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 		FIBBrowserElement element = _fibBrowser.elementForClass(object.getClass());
 
 		// logger.info("Set model with "+model);
-		for (FIBBrowserAction action : _addActions.get(element).keySet()) {
-			FIBBrowserActionListener actionListener = _addActions.get(element).get(action);
-			actionListener.setModel(object);
+		if (element != null) {
+			if (_addActions != null && _addActions.get(element) != null) {
+				for (FIBBrowserAction action : _addActions.get(element).keySet()) {
+					FIBBrowserActionListener actionListener = _addActions.get(element).get(action);
+					actionListener.setModel(object);
+				}
+			}
+			if (_removeActions != null && _removeActions.get(element) != null) {
+				for (FIBBrowserAction action : _removeActions.get(element).keySet()) {
+					FIBBrowserActionListener actionListener = _removeActions.get(element).get(action);
+					actionListener.setModel(object);
+				}
+			}
+			if (_otherActions != null && _otherActions.get(element) != null) {
+				for (FIBBrowserAction action : _otherActions.get(element).keySet()) {
+					FIBBrowserActionListener actionListener = _otherActions.get(element).get(action);
+					actionListener.setModel(object);
+				}
+			}
+			handleSelectionChanged(element);
+			/* for (Enumeration en = _controls.elements(); en.hasMoreElements();) {
+			      FIBTableActionListener actionListener = (FIBTableActionListener) en.nextElement();
+			  	actionListener.setModel(model);
+			  }
+			  updateControls(null);*/
 		}
-		for (FIBBrowserAction action : _removeActions.get(element).keySet()) {
-			FIBBrowserActionListener actionListener = _removeActions.get(element).get(action);
-			actionListener.setModel(object);
-		}
-		for (FIBBrowserAction action : _otherActions.get(element).keySet()) {
-			FIBBrowserActionListener actionListener = _otherActions.get(element).get(action);
-			actionListener.setModel(object);
-		}
-		handleSelectionChanged(element);
-		/* for (Enumeration en = _controls.elements(); en.hasMoreElements();) {
-		      FIBTableActionListener actionListener = (FIBTableActionListener) en.nextElement();
-		  	actionListener.setModel(model);
-		  }
-		  updateControls(null);*/
 	}
 
 	public FIBController getController() {

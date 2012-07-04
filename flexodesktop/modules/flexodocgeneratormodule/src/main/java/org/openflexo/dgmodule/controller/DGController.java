@@ -52,6 +52,7 @@ import org.openflexo.dgmodule.view.DGMainPane;
 import org.openflexo.dgmodule.view.listener.DGKeyEventListener;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.controller.DESelectionManager;
+import org.openflexo.doceditor.view.listener.DEKeyEventListener;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -101,9 +102,9 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	protected static final Logger logger = Logger.getLogger(DGController.class.getPackage().getName());
 
-	public final FlexoPerspective<FlexoModelObject> CODE_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
-
-	public final FlexoPerspective<FlexoModelObject> VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
+	public final DocGeneratorPerspective DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
+	public final TemplatesPerspective TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this);
+	public final VersionningPerspective VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -113,6 +114,18 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	@Override
 	public boolean useOldInspectorScheme() {
 		return true;
+	}
+
+	@Override
+	public void switchToPerspective(FlexoPerspective perspective) {
+		logger.info("================== > Switch to perspective: " + perspective);
+		super.switchToPerspective(perspective);
+	}
+
+	@Override
+	protected void setCurrentPerspective(FlexoPerspective<?> perspective) {
+		logger.info("================== > Change to perspective: " + perspective);
+		super.setCurrentPerspective(perspective);
 	}
 
 	// ==========================================================================
@@ -144,10 +157,11 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
 		ProjectLoader.instance().getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		createFooter();
-		addToPerspectives(CODE_GENERATOR_PERSPECTIVE);
+		// addToPerspectives(TOC_PERSPECTIVE);
+		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE);
+		addToPerspectives(TEMPLATES_PERSPECTIVE);
 		addToPerspectives(VERSIONNING_PERSPECTIVE);
-		setDefaultPespective(CODE_GENERATOR_PERSPECTIVE);
-		removeFromPerspectives(DOCEDITOR_PERSPECTIVE);
+		setDefaultPespective(TOC_PERSPECTIVE);
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
 		_generatorMenuBar = (DGMenuBar) createAndRegisterNewMenuBar();
 		_generatorKeyEventListener = new DGKeyEventListener(this);
@@ -156,7 +170,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		init(_generatorFrame, _generatorKeyEventListener, _generatorMenuBar);
 
 		if (_selectionManager == null) {
-			_selectionManager = new DGSelectionManager(this);
+			_selectionManager = createSelectionManager();
 		}
 
 		_generatorPanels = new Hashtable();
@@ -294,8 +308,8 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	}
 
 	@Override
-	public DGKeyEventListener getKeyEventListener() {
-		return (DGKeyEventListener) _generatorKeyEventListener;
+	public DEKeyEventListener getKeyEventListener() {
+		return _generatorKeyEventListener;
 	}
 
 	@Override

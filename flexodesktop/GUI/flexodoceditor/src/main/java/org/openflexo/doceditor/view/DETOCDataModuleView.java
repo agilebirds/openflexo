@@ -48,7 +48,7 @@ import org.openflexo.view.listener.FlexoActionButton;
 public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, FlexoObserver, FlexoActionSource {
 	private TOCData _gc;
 	private DEController _controller;
-	private JComponent component;
+	private JComponent addTOCRepositoryButton;
 	private JPanel topPanel;
 	private JPanel panel;
 
@@ -67,14 +67,11 @@ public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, 
 	}
 
 	private void updateView() {
-		if (component != null) {
-			panel.remove(component);
+		if (addTOCRepositoryButton != null) {
+			panel.remove(addTOCRepositoryButton);
 		}
-		if (_gc.getRepositories().size() == 0) {
-			panel.add(component = new FlexoActionButton(AddTOCRepository.actionType, this, _controller.getEditor()));
-		} else {
-			panel.add(component = new JLabel(FlexoLocalization.localizedForKey("please_select_a_repository"), SwingConstants.CENTER));
-		}
+		panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType, this, _controller.getEditor()),
+				BorderLayout.CENTER);
 		panel.validate();
 		panel.repaint();
 	}
@@ -87,13 +84,13 @@ public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, 
 	@Override
 	public void deleteModuleView() {
 		_controller.removeModuleView(this);
-		component = null;
+		addTOCRepositoryButton = null;
 		panel = null;
 	}
 
 	@Override
-	public FlexoPerspective getPerspective() {
-		return _controller.getCurrentPerspective();
+	public FlexoPerspective<FlexoModelObject> getPerspective() {
+		return _controller.TOC_PERSPECTIVE;
 	}
 
 	@Override

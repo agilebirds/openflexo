@@ -227,6 +227,8 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 			if (((IndividualPatternRole) getPatternRole()).getOntologicType() != null) {
 				return ((IndividualPatternRole) getPatternRole()).getOntologicType();
 			}
+			System.out.println("pr=" + getPatternRole());
+			System.out.println("vp=" + getPatternRole().getViewPoint());
 			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
 				return getPatternRole().getViewPoint().getViewpointOntology().getThingConcept();
 			}

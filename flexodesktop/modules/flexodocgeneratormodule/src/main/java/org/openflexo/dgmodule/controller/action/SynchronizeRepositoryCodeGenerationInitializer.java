@@ -27,7 +27,7 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.dgmodule.DGPreferences;
-import org.openflexo.dgmodule.view.DGMainPane;
+import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -49,6 +49,11 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 	}
 
 	@Override
+	public DGController getController() {
+		return (DGController) super.getController();
+	}
+
+	@Override
 	protected DGControllerActionInitializer getControllerActionInitializer() {
 		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
@@ -58,7 +63,7 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 		return new FlexoActionInitializer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean run(ActionEvent e, SynchronizeRepositoryCodeGeneration action) {
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().setHoldStructure();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -74,8 +79,8 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 		return new FlexoActionFinalizer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean run(ActionEvent e, SynchronizeRepositoryCodeGeneration action) {
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				if (DGPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
@@ -90,8 +95,8 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 		return new FlexoExceptionHandler<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean handleException(FlexoException exception, SynchronizeRepositoryCodeGeneration action) {
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				if (exception instanceof PermissionDeniedException) {
 					if (action.getRepository().getDirectory() != null && !action.getRepository().getDirectory().exists()) {
 						if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + " "

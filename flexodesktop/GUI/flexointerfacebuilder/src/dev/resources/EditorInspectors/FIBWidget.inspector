@@ -32,19 +32,19 @@
 			
 				<Label label="click_action" constraints="twocols(location=left)"/>
 				<Custom data="data.clickAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindable" value="data.eventListener"/>
 					<Assignment variable="component.bindingDefinition" value="data.CLICK_ACTION"/>
 				</Custom>
 
 				<Label label="double_click_action" constraints="twocols(location=left)"/>
 				<Custom data="data.doubleClickAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindable" value="data.eventListener"/>
 					<Assignment variable="component.bindingDefinition" value="data.DOUBLE_CLICK_ACTION"/>
 				</Custom>
 
 				<Label label="right_click_action" constraints="twocols(location=left)"/>
 				<Custom data="data.rightClickAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindable" value="data.eventListener"/>
 					<Assignment variable="component.bindingDefinition" value="data.RIGHT_CLICK_ACTION"/>
 				</Custom>
 

@@ -20,6 +20,7 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -35,10 +36,23 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.action.FlexoAction;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
@@ -227,6 +241,66 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 	@Override
 	public String getDeletedProperty() {
 		return null;
+	}
+
+	// test purposes
+	public static FlexoEditor loadProject(File prjDir) {
+		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+		FlexoEditor editor = null;
+		try {
+			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
+		} catch (ProjectLoadingCancelledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProjectInitializerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		editor.getProject().setResourceCenter(getFlexoResourceCenterService().getFlexoResourceCenter());
+		if (editor == null) {
+			System.exit(-1);
+		}
+		return editor;
+	}
+
+	// test purposes
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
+
+	// test purposes
+	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+		@Override
+		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
+			return new FlexoTestEditor(project);
+		}
+	};
+
+	// test purposes
+	public static class FlexoTestEditor extends DefaultFlexoEditor {
+		public FlexoTestEditor(FlexoProject project) {
+			super(project);
+		}
+
+		@Override
+		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
+				FlexoActionType<A, T1, T2> actionType) {
+			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
+
+				@Override
+				public boolean run(ActionEvent event, A action) {
+					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
+							FlexoTestEditor.this);
+					if (!reply) {
+						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
+								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
+					}
+					return reply;
+				}
+
+			};
+			return init;
+		}
 	}
 
 }

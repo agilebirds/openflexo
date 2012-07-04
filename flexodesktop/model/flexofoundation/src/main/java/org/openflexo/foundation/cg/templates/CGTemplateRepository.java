@@ -20,8 +20,10 @@
 package org.openflexo.foundation.cg.templates;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.foundation.TargetType;
@@ -79,6 +81,12 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 
 	public Enumeration<TargetSpecificCGTemplateSet> getTargetSpecificTemplates() {
 		return targetSpecificTemplates.elements();
+	}
+
+	public List<TargetSpecificCGTemplateSet> getTargetSpecificTemplateSets() {
+		List<TargetSpecificCGTemplateSet> returned = new ArrayList<TargetSpecificCGTemplateSet>();
+		returned.addAll(targetSpecificTemplates.values());
+		return returned;
 	}
 
 	public CGTemplate getTemplateWithRelativePath(String relativePath) {

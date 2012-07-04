@@ -320,7 +320,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	protected Object _editedRowObject;
 
 	protected void setEditedRowObject(Object anObject) {
-		logger.info("setEditedRowObject with " + anObject);
+		// logger.info("setEditedRowObject with " + anObject);
 		_editedRowObject = anObject;
 
 		for (FIBCustomAssignment assign : getColumnModel().getAssignments()) {

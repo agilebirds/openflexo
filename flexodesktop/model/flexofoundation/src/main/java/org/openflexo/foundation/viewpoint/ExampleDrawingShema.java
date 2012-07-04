@@ -126,6 +126,9 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 
 	public ExampleDrawingShema(ViewPointBuilder builder) {
 		super(builder);
+		if (builder != null) {
+			_viewpoint = builder.getViewPoint();
+		}
 	}
 
 	private boolean initialized = false;

@@ -19,8 +19,18 @@
  */
 package org.openflexo.icon;
 
+import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.cg.templates.ApplicationDGTemplateRepository;
+import org.openflexo.foundation.cg.templates.CGDocTemplates;
+import org.openflexo.foundation.cg.templates.CGTemplate;
+import org.openflexo.foundation.cg.templates.CGTemplateFolder;
+import org.openflexo.foundation.cg.templates.CGTemplateObject;
+import org.openflexo.foundation.cg.templates.CommonCGTemplateSet;
+import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
+import org.openflexo.foundation.cg.templates.TargetSpecificCGTemplateSet;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -31,6 +41,8 @@ import org.openflexo.toolbox.ImageIconResource;
  */
 public class DGIconLibrary extends GeneratorIconLibrary {
 
+	static final Logger logger = Logger.getLogger(DGIconLibrary.class.getPackage().getName());
+
 	// Module icons
 	public static final ImageIcon DG_SMALL_ICON = new ImageIconResource("Icons/DG/module-dg-16.png");
 	public static final ImageIcon DG_MEDIUM_ICON = new ImageIconResource("Icons/DG/module-dg-32.png");
@@ -38,6 +50,8 @@ public class DGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon DG_BIG_ICON = new ImageIconResource("Icons/DG/module-dg-hover-64.png");
 
 	// Perspective icons
+	public static final ImageIcon DG_TEMPLATES_ACTIVE_ICON = new ImageIconResource("Icons/DG/TemplatesPerspective_A.png");
+	public static final ImageIcon DG_TEMPLATES_SELECTED_ICON = new ImageIconResource("Icons/DG/TemplatesPerspective_S.png");
 	public static final ImageIcon DG_VP_ACTIVE_ICON = new ImageIconResource("Icons/DG/VersionningPerspective_A.gif");
 	public static final ImageIcon DG_VP_SELECTED_ICON = new ImageIconResource("Icons/DG/VersionningPerspective_S.gif");
 	public static final ImageIcon DG_DGP_SELECTED_ICON = new ImageIconResource("Icons/DG/DGPerspective_S.gif");
@@ -54,5 +68,25 @@ public class DGIconLibrary extends GeneratorIconLibrary {
 
 	public static final ImageIcon SYMBOLIC_FOLDER_ICON = new ImageIconResource("Icons/DG/prj_obj.gif");
 	public static final ImageIcon TARGET_FOLDER_ICON = new ImageIconResource("Icons/DG/TargetFolder.gif");
+
+	public static ImageIcon iconForObject(CGTemplateObject object) {
+		if (object instanceof CGDocTemplates) {
+			return GENERATED_DOC_ICON;
+		} else if (object instanceof ApplicationDGTemplateRepository) {
+			return FOLDER_ICON;
+		} else if (object instanceof CustomCGTemplateRepository) {
+			return FOLDER_ICON;
+		} else if (object instanceof CommonCGTemplateSet) {
+			return FOLDER_ICON;
+		} else if (object instanceof TargetSpecificCGTemplateSet) {
+			return TARGET_FOLDER_ICON;
+		} else if (object instanceof CGTemplateFolder) {
+			return FOLDER_ICON;
+		} else if (object instanceof CGTemplate) {
+			return getIconForTemplate((CGTemplate) object);
+		}
+		logger.warning("iconForObject(CGTemplateObject) not implemented yet");
+		return null;
+	}
 
 }

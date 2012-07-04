@@ -20,10 +20,12 @@
 package org.openflexo.foundation.cg.templates;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -168,6 +170,13 @@ public abstract class CGTemplateSet extends CGTemplateObject {
 		Vector<CGTemplate> sortedTemplates = new Vector<CGTemplate>(templates.values());
 		Collections.sort(sortedTemplates, new CGTemplate.CGTemplateComparator());
 		return sortedTemplates.elements();
+	}
+
+	// TODO: optimize this
+	public List<CGTemplate> getTemplateList() {
+		List<CGTemplate> sortedTemplates = new ArrayList<CGTemplate>(templates.values());
+		Collections.sort(sortedTemplates, new CGTemplate.CGTemplateComparator());
+		return sortedTemplates;
 	}
 
 	public CGTemplateRepository getRepository() {

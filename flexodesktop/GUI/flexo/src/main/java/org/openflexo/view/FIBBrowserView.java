@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
@@ -78,6 +79,25 @@ public abstract class FIBBrowserView<O extends FlexoModelObject> extends Selecti
 	protected FIBBrowserView(O representedObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar,
 			FlexoProgress progress) {
 		super(representedObject, controller, fibComponent, addScrollBar, progress);
+	}
+
+	@Override
+	protected void initializeFIBComponent() {
+		super.initializeFIBComponent();
+		FIBBrowser browser = retrieveFIBBrowser(getFIBComponent());
+		if (browser == null) {
+			logger.warning("Could not retrieve FIBBrowser for component " + getFIBComponent());
+			return;
+		}
+		if (!browser.getClickAction().isSet() || !browser.getClickAction().isValid()) {
+			browser.setClickAction(new DataBinding("controller.singleClick(" + browser.getName() + ".selected)"));
+		}
+		if (!browser.getDoubleClickAction().isSet() || !browser.getDoubleClickAction().isValid()) {
+			browser.setDoubleClickAction(new DataBinding("controller.doubleClick(" + browser.getName() + ".selected)"));
+		}
+		if (!browser.getRightClickAction().isSet() || !browser.getRightClickAction().isValid()) {
+			browser.setRightClickAction(new DataBinding("controller.rightClick(" + browser.getName() + ".selected,event)"));
+		}
 	}
 
 	public FIBBrowser getFIBBrowser(FIBComponent component) {

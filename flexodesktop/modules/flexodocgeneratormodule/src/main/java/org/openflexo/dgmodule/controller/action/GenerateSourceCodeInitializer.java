@@ -28,7 +28,7 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.dgmodule.DGPreferences;
-import org.openflexo.dgmodule.view.DGMainPane;
+import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -64,10 +64,15 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().setHoldStructure();
 				return true;
 			}
 		};
+	}
+
+	@Override
+	public DGController getController() {
+		return (DGController) super.getController();
 	}
 
 	@Override
@@ -81,8 +86,8 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
 				}
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				return true;
 			}
 		};
@@ -94,8 +99,8 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 			@Override
 			public boolean handleException(FlexoException exception, GenerateSourceCode action) {
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				if (exception instanceof GenerationException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
 							+ ((GenerationException) exception).getLocalizedMessage());

@@ -106,6 +106,8 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 
 	private final JCheckBox openPostBuildFileCheckBox;
 
+	private FlexoPerspective<? super DGRepository> declaredPerspective;
+
 	public class ConsolePanel extends JPanel {
 		protected JButton clearButton;
 
@@ -133,11 +135,13 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	 * @param _process
 	 * 
 	 */
-	public DGRepositoryModuleView(DGRepository repository, DGController ctrl) {
+	public DGRepositoryModuleView(DGRepository repository, DGController ctrl, FlexoPerspective<? super DGRepository> perspective) {
 		super(new BorderLayout());
 		codeRepository = repository;
 		repository.addObserver(this);
 		this.controller = ctrl;
+
+		declaredPerspective = perspective;
 
 		console = new JConsole();
 		consolePanel = new ConsolePanel(console);
@@ -370,8 +374,8 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	 * @see org.openflexo.view.ModuleView#getPerspective()
 	 */
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
-		return controller.CODE_GENERATOR_PERSPECTIVE;
+	public FlexoPerspective<? super DGRepository> getPerspective() {
+		return declaredPerspective;
 	}
 
 	public JPanel getButtonPanel() {

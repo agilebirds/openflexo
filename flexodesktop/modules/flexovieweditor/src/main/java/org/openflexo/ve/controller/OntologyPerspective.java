@@ -59,7 +59,7 @@ public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 		_controller = controller;
 		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getProject().getProjectOntologyLibrary(), controller);
 
-		infoLabel = new JLabel("Info label");
+		infoLabel = new JLabel("Ontology perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
 
