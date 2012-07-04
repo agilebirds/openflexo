@@ -33,9 +33,6 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> 
 	private DGBrowser browser;
 	private DGBrowserView dgBrowserView;
 
-	/**
-	 * 
-	 */
 	private final DGController dgController;
 
 	/**
@@ -92,7 +89,7 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> 
 
 	@Override
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
-		System.out.println("Proposed object in DOCGeneratorPerspective: " + proposedObject);
+		// System.out.println("Proposed object in DOCGeneratorPerspective: " + proposedObject);
 		/*if (proposedObject instanceof TOCEntry) {
 			return ((TOCEntry) proposedObject).getRepository();
 		} else {*/
@@ -109,9 +106,11 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> 
 	@Override
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof GeneratedDoc) {
-			return new GeneratedDocModuleView((GeneratedDoc) object, (DGController) controller);
+			return new GeneratedDocModuleView((GeneratedDoc) object, (DGController) controller,
+					((DGController) controller).DOCUMENTATION_GENERATOR_PERSPECTIVE);
 		} else if (object instanceof DGRepository) {
-			return new DGRepositoryModuleView((DGRepository) object, (DGController) controller);
+			return new DGRepositoryModuleView((DGRepository) object, (DGController) controller,
+					((DGController) controller).DOCUMENTATION_GENERATOR_PERSPECTIVE);
 		} else if (object instanceof CGFile) {
 			return new DGFileModuleView((CGFile) object, (DGController) controller);
 		} else if (object instanceof CGTemplate) {

@@ -1,5 +1,5 @@
 #French
-#Wed Jun 13 14:59:08 CEST 2012
+#Tue Jul 03 18:21:43 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required=\ Le lien 'URI base' est requis et doit \u00EAtre valide
@@ -32,6 +32,8 @@
 ARITHMETIC_FLOAT=[FLOTTANT]
 ARITHMETIC_INTEGER=[ENTIER]
 BOOLEAN=BOOLEEN
+Business=Business
+COMMON=COMMUN
 CUSTOM_POLYGON=CUSTOM_POLYGON
 Common=Common
 DATE=[DATE]
@@ -43,6 +45,8 @@ French=Fran\u00E7ais
 LITERAL=[LITTERAL]
 RECTANGLE=RECTANGLE
 STRING=[CHAINE DE CARACTERES]
+Technical=Technique
+UserManual=Cas d'utilisation
 access_to_the_current_process_instance=Acc\u00E8s \u00E0 l'instance courante de l'instance du processus.
 actions=Actions
 activity=activit\u00E9
@@ -71,6 +75,7 @@ add_shape_action_must_have_a_valid_container=add_shape_action_must_have_a_valid_
 add_shape_action_must_have_a_valid_container_description=add_shape_action_must_have_a_valid_container_description
 add_toc_entry=Ajouter une entr\u00E9e \u00E0 la table des mati\u00E8res
 addition=ajout
+application_templates=Templates par d\u00E9faut
 bold=Gras
 bold_italic=Gras italique
 calc_drawing_connector=Connecteur
@@ -121,6 +126,7 @@ hide_palette=Cacher la palette
 import_documentation_templates=import_documentation_templates
 information=Information
 inspect=Inspecter
+inspector=Inspecteur
 instanciation_parameters_of_edition_scheme=instanciation_parameters_of_edition_scheme
 interface_editor=Editeur d'interfaces
 is_a_statement=is_a_statement
@@ -184,6 +190,7 @@ submit_documentation=Soumettre de la documentation
 substraction=soustraction
 switch_to_language=Basculer \u00E0 la langue...
 test_interface=Tester le composant
+toc_data=Tables des mati\u00E8res
 tools=Outils
 trigonometric_arc_cosinus=Arc-cosinus
 trigonometric_arc_sinus=Arc-sinus

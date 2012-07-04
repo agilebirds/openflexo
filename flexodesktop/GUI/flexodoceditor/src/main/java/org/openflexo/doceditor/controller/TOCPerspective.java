@@ -13,8 +13,8 @@ import javax.swing.JLabel;
 import org.openflexo.FlexoCst;
 import org.openflexo.doceditor.controller.browser.FIBTOCBrowser;
 import org.openflexo.doceditor.view.DERepositoryModuleView;
-import org.openflexo.doceditor.view.DETOCDataModuleView;
 import org.openflexo.doceditor.view.DETOCEntryModuleView;
+import org.openflexo.doceditor.view.TOCDataView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -73,7 +73,7 @@ public class TOCPerspective extends FlexoPerspective<FlexoModelObject> {
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
-		return DEIconLibrary.DE_DE_ACTIVE_ICON;
+		return DEIconLibrary.DE_TOC_ACTIVE_ICON;
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class TOCPerspective extends FlexoPerspective<FlexoModelObject> {
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
-		return DEIconLibrary.DE_DE_SELECTED_ICON;
+		return DEIconLibrary.DE_TOC_SELECTED_ICON;
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class TOCPerspective extends FlexoPerspective<FlexoModelObject> {
 		if (object instanceof TOCRepository) {
 			return new DERepositoryModuleView((TOCRepository) object, (DEController) controller, this);
 		} else if (object instanceof TOCData) {
-			return new DETOCDataModuleView((TOCData) object, (DEController) controller);
+			return new TOCDataView((TOCData) object, (DEController) controller);
 		} else if (object instanceof TOCEntry) {
 			return new DETOCEntryModuleView((TOCEntry) object, (DEController) controller, this);
 		}

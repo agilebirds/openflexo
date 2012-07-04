@@ -3,12 +3,17 @@
   <Browser root="data" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" font="LucidaGrande,0,11" name="OntologyLibraryBrowser" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(OntologyLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(OntologyLibraryBrowser.selected)">
     <BrowserElement dataClassName="org.openflexo.foundation.toc.TOCData" label="&quot;Tables of contents&quot;" icon="controller.iconForObject(tocData)" isEditable="false" filtered="false" defaultVisible="true" name="tocData">
       <Children data="tocData.repositories" name="repositories" />
+      <Children data="tocData.project.generatedDoc" name="docTypes" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.toc.TOCRepository" label="tocRepository.name" icon="controller.iconForObject(tocRepository)" isEditable="false" filtered="false" defaultVisible="true" name="tocRepository">
       <Children data="tocRepository.tocEntries" name="tocEntries" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.toc.TOCEntry" label="tocEntry.name" icon="controller.iconForObject(tocEntry)" isEditable="false" filtered="false" defaultVisible="true" name="tocEntry">
       <Children data="tocEntry.tocEntries" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.DocType" label="docType.name" icon="controller.iconForObject(docType)" isEditable="false" filtered="false" defaultVisible="true" name="docType" />
+    <BrowserElement dataClassName="org.openflexo.foundation.cg.GeneratedDoc" label="&quot;Documentation types&quot;" imageIconFile="../../../../../../GUI/flexo/src/main/resources/Icons/Common/Folder.gif" isEditable="false" filtered="false" defaultVisible="true" name="docTypes">
+      <Children data="docTypes.project.docTypes" name="docTypes" />
     </BrowserElement>
   </Browser>
   <LocalizedDictionary />

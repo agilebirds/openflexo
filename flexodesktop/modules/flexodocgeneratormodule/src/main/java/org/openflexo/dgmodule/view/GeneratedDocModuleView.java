@@ -48,8 +48,11 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 	private JComponent addDGRepositoryButton;
 	private JPanel panel;
 
-	public GeneratedDocModuleView(GeneratedDoc gd, DGController controller) {
+	private FlexoPerspective<? super GeneratedDoc> declaredPerspective;
+
+	public GeneratedDocModuleView(GeneratedDoc gd, DGController controller, FlexoPerspective<? super GeneratedDoc> perspective) {
 		super(new BorderLayout());
+		declaredPerspective = perspective;
 		generatedDocumentation = gd;
 		_controller = controller;
 		generatedDocumentation.addObserver(this);
@@ -83,8 +86,8 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
-		return _controller.DOCUMENTATION_GENERATOR_PERSPECTIVE;
+	public FlexoPerspective<? super GeneratedDoc> getPerspective() {
+		return declaredPerspective;
 	}
 
 	@Override

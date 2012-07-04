@@ -103,6 +103,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	protected static final Logger logger = Logger.getLogger(DGController.class.getPackage().getName());
 
 	public final DocGeneratorPerspective DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
+	public final TemplatesPerspective TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this);
 	public final VersionningPerspective VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
 
 	@Override
@@ -158,7 +159,8 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		createFooter();
 		// addToPerspectives(TOC_PERSPECTIVE);
 		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE);
-		// addToPerspectives(VERSIONNING_PERSPECTIVE);
+		addToPerspectives(TEMPLATES_PERSPECTIVE);
+		addToPerspectives(VERSIONNING_PERSPECTIVE);
 		setDefaultPespective(TOC_PERSPECTIVE);
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
 		_generatorMenuBar = (DGMenuBar) createAndRegisterNewMenuBar();

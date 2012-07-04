@@ -30,10 +30,12 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
@@ -44,7 +46,9 @@ import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
+import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.DEIconLibrary;
+import org.openflexo.icon.DGIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
@@ -175,6 +179,10 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
 		} else if (object instanceof TOCObject) {
 			return DEIconLibrary.iconForObject((TOCObject) object);
+		} else if (object instanceof CGTemplateObject) {
+			return DGIconLibrary.iconForObject((CGTemplateObject) object);
+		} else if (object instanceof DocType) {
+			return CGIconLibrary.TARGET_ICON;
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;

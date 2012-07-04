@@ -57,8 +57,8 @@ public class DEIconLibrary extends IconLibrary {
 	public static final ImageIcon DE_BIG_ICON = new ImageIconResource("Icons/DG/module-dg-hover-64.png");
 
 	// Perspective icons
-	public static final ImageIcon DE_DE_ACTIVE_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_A.png");
-	public static final ImageIcon DE_DE_SELECTED_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_S.png");
+	public static final ImageIcon DE_TOC_ACTIVE_ICON = new ImageIconResource("Icons/GUI/ListPerspective_A.gif");
+	public static final ImageIcon DE_TOC_SELECTED_ICON = new ImageIconResource("Icons/GUI/ListPerspective_S.gif");
 
 	// Model icons
 
@@ -119,6 +119,7 @@ public class DEIconLibrary extends IconLibrary {
 		} else if (object instanceof TOCEntry) {
 			return DEPRECATED_TOC_ENTRY_ICON;
 		}
+
 		logger.warning("iconForObject(TOCObject) not implemented yet");
 		return null;
 	}
