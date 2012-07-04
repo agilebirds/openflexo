@@ -49,35 +49,36 @@ import org.openflexo.view.controller.FlexoFIBController;
  * @author sguerin
  * 
  */
-public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, HasPropertyChangeSupport, PropertyChangeListener {
+public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasPropertyChangeSupport, PropertyChangeListener {
 	static final Logger logger = Logger.getLogger(FlexoFIBView.class.getPackage().getName());
 
-	private O dataObject;
+	private Object dataObject;
 	private FlexoController controller;
 	private FIBView fibView;
-	private FlexoFIBController<O> fibController;
+	private FlexoFIBController fibController;
 	private FIBComponent fibComponent;
 
 	private PropertyChangeSupport pcSupport;
 
-	public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
+	public FlexoFIBView(Object representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
 		this(representedObject, controller, fibFile, false, progress);
 	}
 
-	public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar, FlexoProgress progress) {
+	public FlexoFIBView(Object representedObject, FlexoController controller, File fibFile, boolean addScrollBar, FlexoProgress progress) {
 		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, progress);
 	}
 
-	public FlexoFIBView(O representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress) {
+	public FlexoFIBView(Object representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress) {
 		this(representedObject, controller, fibResourcePath, false, progress);
 	}
 
-	public FlexoFIBView(O representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar,
+	public FlexoFIBView(Object representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar,
 			FlexoProgress progress) {
 		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibResourcePath), addScrollBar, progress);
 	}
 
-	protected FlexoFIBView(O dataObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar, FlexoProgress progress) {
+	protected FlexoFIBView(Object dataObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar,
+			FlexoProgress progress) {
 		super(new BorderLayout());
 		this.dataObject = dataObject;
 		this.controller = controller;
@@ -132,7 +133,7 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 	 * @param controller
 	 * @return the newly created FlexoFIBController
 	 */
-	protected FlexoFIBController<O> createFibController(FIBComponent fibComponent, FlexoController controller) {
+	protected FlexoFIBController createFibController(FIBComponent fibComponent, FlexoController controller) {
 		FIBController returned = FIBController.instanciateController(fibComponent, FlexoLocalization.getMainLocalizer());
 		if (returned instanceof FlexoFIBController) {
 			((FlexoFIBController) returned).setFlexoController(controller);
@@ -140,7 +141,7 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 		} else if (fibComponent.getControllerClass() != null) {
 			logger.warning("Controller for component " + fibComponent + " is not an instanceof FlexoFIBController");
 		}
-		return fibController = new FlexoFIBController<O>(fibComponent, controller);
+		return fibController = new FlexoFIBController(fibComponent, controller);
 	}
 
 	public FlexoController getFlexoController() {
@@ -166,11 +167,11 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 		logger.info("propertyChange in FlexoFIBView: " + evt);
 	}
 
-	public O getDataObject() {
+	public Object getDataObject() {
 		return dataObject;
 	}
 
-	public void setDataObject(O object) {
+	public void setDataObject(Object object) {
 		dataObject = object;
 		fibController.setDataObject(object, true);
 	}
@@ -183,7 +184,7 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 		return fibView;
 	}
 
-	public FlexoFIBController<O> getFIBController() {
+	public FlexoFIBController getFIBController() {
 		return fibController;
 	}
 

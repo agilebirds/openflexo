@@ -114,12 +114,12 @@ public class FIBDialog<T> extends JDialog {
 		getController().setDataObject(data);
 	}
 
-	public FIBController<T> getController() {
+	public FIBController getController() {
 		return view.getController();
 	}
 
 	public T getData() {
-		return getController().getDataObject();
+		return (T) getController().getDataObject();
 	}
 
 	public Status getStatus() {

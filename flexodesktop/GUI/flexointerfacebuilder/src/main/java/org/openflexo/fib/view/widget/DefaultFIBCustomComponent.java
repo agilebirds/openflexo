@@ -49,7 +49,7 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 
 	private FIBComponent fibComponent;
 	private FIBView<?, ?> fibView;
-	private FIBController<T> controller;
+	private FIBController controller;
 
 	private PropertyChangeSupport pcSupport;
 
@@ -137,7 +137,7 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 		return fibComponent;
 	}
 
-	public FIBController<T> getController() {
+	public FIBController getController() {
 		return controller;
 	}
 

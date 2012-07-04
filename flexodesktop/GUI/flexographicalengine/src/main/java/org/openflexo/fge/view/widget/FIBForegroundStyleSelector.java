@@ -183,7 +183,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 			fibView = null;
 		}
 
-		public class CustomFIBController extends FIBController<ForegroundStyle> {
+		public class CustomFIBController extends FIBController {
 			public CustomFIBController(FIBComponent component) {
 				super(component);
 			}

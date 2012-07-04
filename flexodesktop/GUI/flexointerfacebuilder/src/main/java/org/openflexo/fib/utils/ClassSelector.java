@@ -144,7 +144,7 @@ public class ClassSelector extends TextFieldCustomPopup<Class> implements FIBCus
 			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
 		}
 
-		public class CustomFIBController extends FIBController<LoadedClassesInfo> {
+		public class CustomFIBController extends FIBController {
 			public CustomFIBController(FIBComponent component) {
 				super(component);
 			}

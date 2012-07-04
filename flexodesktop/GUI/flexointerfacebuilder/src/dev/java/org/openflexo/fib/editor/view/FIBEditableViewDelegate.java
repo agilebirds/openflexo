@@ -130,9 +130,9 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	}
 
 	private boolean isComponentRootComponentForAnyFIBView(Component c) {
-		Enumeration<FIBView> en = getController().getViews();
+		Enumeration<FIBView<?, ?>> en = getController().getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.getResultingJComponent() == c) {
 				return true;
 			}

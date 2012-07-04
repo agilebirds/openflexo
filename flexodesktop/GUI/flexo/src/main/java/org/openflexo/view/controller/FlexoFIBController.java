@@ -65,7 +65,7 @@ import org.openflexo.selection.SelectionManager;
  * 
  * @param <T>
  */
-public class FlexoFIBController<T> extends FIBController<T> implements GraphicalFlexoObserver {
+public class FlexoFIBController extends FIBController implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(FlexoFIBController.class.getPackage().getName());
 
@@ -118,7 +118,7 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	}
 
 	@Override
-	public void setDataObject(T anObject) {
+	public void setDataObject(Object anObject) {
 		if (anObject != getDataObject()) {
 			if (getDataObject() instanceof FlexoObservable) {
 				((FlexoObservable) getDataObject()).deleteObserver(this);

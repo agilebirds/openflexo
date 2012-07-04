@@ -15,7 +15,7 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author Nicolas Daniels
  */
-public class HibernateModelController extends HibernateFibController<HibernateModel> {
+public class HibernateModelController extends HibernateFibController {
 
 	public HibernateModelController(FIBComponent component, FlexoController controller) {
 		super(component, controller);
@@ -29,21 +29,25 @@ public class HibernateModelController extends HibernateFibController<HibernateMo
 	public HibernateEntity performCreateEntity() {
 
 		try {
-			HibernateEntity entity = new HibernateEntity(getDataObject().getImplementationModel());
-			entity.setName("Entity" + (getDataObject().getEntities().size() > 0 ? getDataObject().getEntities().size() : ""));
+			if (getDataObject() instanceof HibernateModel) {
+				HibernateModel dataObject = (HibernateModel) getDataObject();
+				HibernateEntity entity = new HibernateEntity(dataObject.getImplementationModel());
+				entity.setName("Entity" + (dataObject.getEntities().size() > 0 ? dataObject.getEntities().size() : ""));
 
-			getDataObject().addToEntities(entity);
+				dataObject.addToEntities(entity);
 
-			// Create default primary key
-			HibernateAttribute attribute = new HibernateAttribute(entity.getImplementationModel());
-			attribute.setName("id");
-			attribute.setType(HibernateAttributeType.LONG);
-			attribute.setPrimaryKey(true);
-			attribute.setNotNull(true);
-			attribute.setUnique(true);
-			entity.addToAttributes(attribute);
+				// Create default primary key
+				HibernateAttribute attribute = new HibernateAttribute(entity.getImplementationModel());
+				attribute.setName("id");
+				attribute.setType(HibernateAttributeType.LONG);
+				attribute.setPrimaryKey(true);
+				attribute.setNotNull(true);
+				attribute.setUnique(true);
+				entity.addToAttributes(attribute);
 
-			return entity;
+				return entity;
+			}
+			throw new RuntimeException("Data object is not a Hibernate Model");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

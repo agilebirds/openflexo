@@ -15,7 +15,7 @@ import org.openflexo.view.controller.FlexoFIBController;
  * 
  * @author Nicolas Daniels
  */
-public class HibernateFibController<O extends TechnologyModelObject> extends FlexoFIBController<O> {
+public class HibernateFibController extends FlexoFIBController {
 
 	public HibernateFibController(FIBComponent component, FlexoController controller) {
 		super(component, controller);

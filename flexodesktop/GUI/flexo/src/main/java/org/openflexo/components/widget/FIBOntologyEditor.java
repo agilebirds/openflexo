@@ -50,9 +50,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public class FIBOntologyEditor /*extends DefaultFIBCustomComponent<FIBOntologyEditor> implements
-SelectionSynchronizedModuleView<FlexoOntology>*/
-extends SelectionSynchronizedFIBView<FIBOntologyEditor> {
+public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBOntologyEditor.class.getPackage().getName());
 

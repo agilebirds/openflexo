@@ -174,7 +174,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			fibView = null;
 		}
 
-		public class CustomFIBController extends FIBController<TextStyle> {
+		public class CustomFIBController extends FIBController {
 			public CustomFIBController(FIBComponent component) {
 				super(component);
 			}

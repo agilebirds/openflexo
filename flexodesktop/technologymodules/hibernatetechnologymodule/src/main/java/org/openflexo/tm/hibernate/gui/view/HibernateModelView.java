@@ -57,7 +57,7 @@ public class HibernateModelView extends FIBModuleView<HibernateModel> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected FlexoFIBController<HibernateModel> createFibController(FIBComponent fibComponent, FlexoController controller) {
+	protected FlexoFIBController createFibController(FIBComponent fibComponent, FlexoController controller) {
 		return new HibernateModelController(fibComponent, controller);
 	}
 }

@@ -38,8 +38,7 @@ public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumConta
 
 	private FlexoPerspective declaredPerspective;
 
-	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller,
-			FlexoPerspective perspective) {
+	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller, FlexoPerspective perspective) {
 		super(hibernateEnumContainer, controller, HIBERNATE_ENUM_CONTAINER_VIEW_FIB_RESOURCE_PATH);
 		declaredPerspective = perspective;
 	}
@@ -58,7 +57,7 @@ public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumConta
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected FlexoFIBController<HibernateEnumContainer> createFibController(FIBComponent fibComponent, FlexoController controller) {
+	protected FlexoFIBController createFibController(FIBComponent fibComponent, FlexoController controller) {
 		return new HibernateEnumContainerController(fibComponent, controller);
 	}
 }

@@ -171,7 +171,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			fibView = null;
 		}
 
-		public class CustomFIBController extends FIBController<ShadowStyle> {
+		public class CustomFIBController extends FIBController {
 			public CustomFIBController(FIBComponent component) {
 				super(component);
 			}

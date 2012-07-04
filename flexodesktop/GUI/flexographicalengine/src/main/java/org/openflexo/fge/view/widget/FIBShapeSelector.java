@@ -310,7 +310,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 			shapeFactory = null;
 		}
 
-		public class CustomFIBController extends FIBController<ShapeFactory> {
+		public class CustomFIBController extends FIBController {
 			public CustomFIBController(FIBComponent component) {
 				super(component);
 			}

@@ -40,11 +40,11 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  * @author sguerin
  * 
  */
-public abstract class FIBModuleView<O extends FlexoModelObject> extends SelectionSynchronizedFIBView<O> implements
+public abstract class FIBModuleView<O extends FlexoModelObject> extends SelectionSynchronizedFIBView implements
 		SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver, FIBSelectionListener {
 	static final Logger logger = Logger.getLogger(FIBModuleView.class.getPackage().getName());
 
-	// private O representedObject;
+	// private Object representedObject;
 	// private FlexoController controller;
 	// private FIBView fibView;
 
@@ -108,6 +108,6 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 
 	@Override
 	public O getRepresentedObject() {
-		return getDataObject();
+		return (O) getDataObject();
 	}
 }

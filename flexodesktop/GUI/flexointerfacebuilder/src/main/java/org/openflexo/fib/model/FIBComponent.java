@@ -162,7 +162,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	private final Vector<FIBComponent> mayAlters;
 
 	private Class dataClass;
-	private Class controllerClass;
+	private Class<? extends FIBController> controllerClass;
 
 	private FIBContainer parent;
 
@@ -822,14 +822,13 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	}
 
-	// IMPORTANT do NOT use generics here, as Class<?> getDataClass() will not be recognized as getter of setDataClass(Class)
-	@SuppressWarnings("rawtypes")
-	public Class/*<?>*/getDataClass() {
+	public Class<?> getDataClass() {
 		return dataClass;
 	}
 
-	public void setDataClass(Class dataClass) {
-		FIBAttributeNotification<Class> notification = requireChange(Parameters.dataClass, dataClass);
+	@SuppressWarnings("rawtypes")
+	public void setDataClass(Class<?> dataClass) {
+		FIBAttributeNotification<Class> notification = requireChange(Parameters.dataClass, (Class) dataClass);
 		if (notification != null) {
 			this.dataClass = dataClass;
 			updateBindingModel();
@@ -837,12 +836,12 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	public Class getControllerClass() {
+	public Class<? extends FIBController> getControllerClass() {
 		return controllerClass;
 	}
 
-	public void setControllerClass(Class controllerClass) {
-		FIBAttributeNotification<Class> notification = requireChange(Parameters.controllerClass, controllerClass);
+	public void setControllerClass(Class<? extends FIBController> controllerClass) {
+		FIBAttributeNotification<Class> notification = requireChange(Parameters.controllerClass, (Class) controllerClass);
 		if (notification != null) {
 			this.controllerClass = controllerClass;
 			updateBindingModel();
@@ -1123,7 +1122,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		if (p.name.equals("controllerClassName")) {
 			try {
 				Class<?> myControllerClass = Class.forName(p.value);
-				setControllerClass(myControllerClass);
+				if (FIBController.class.isAssignableFrom(myControllerClass)) {
+					setControllerClass((Class<? extends FIBController>) myControllerClass);
+				}
 			} catch (ClassNotFoundException e) {
 				logger.warning("Could not find class " + p.value);
 			}
@@ -1142,7 +1143,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefinePreferredDimensions(boolean definePreferredDimensions) {
 		if (definePreferredDimensions) {
-			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
+			FIBView<?, ?> v = FIBController.makeView(this, (LocalizedDelegate) null);
 			Dimension p = v.getJComponent().getPreferredSize();
 			setWidth(p.width);
 			setHeight(p.height);
@@ -1159,7 +1160,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefineMaxDimensions(boolean defineMaxDimensions) {
 		if (defineMaxDimensions) {
-			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
+			FIBView<?, ?> v = FIBController.makeView(this, (LocalizedDelegate) null);
 			setMaxWidth(1024);
 			setMaxHeight(1024);
 			v.delete();
@@ -1175,7 +1176,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefineMinDimensions(boolean defineMinDimensions) {
 		if (defineMinDimensions) {
-			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
+			FIBView<?, ?> v = FIBController.makeView(this, (LocalizedDelegate) null);
 			Dimension p = v.getJComponent().getMinimumSize();
 			setMinWidth(p.width);
 			setMinHeight(p.height);

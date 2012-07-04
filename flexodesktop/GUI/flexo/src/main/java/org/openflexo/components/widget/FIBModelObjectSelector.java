@@ -473,7 +473,7 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		}
 	}
 
-	public static class SelectorFIBController extends FlexoFIBController<FIBModelObjectSelector> {
+	public static class SelectorFIBController extends FlexoFIBController {
 		private final FIBModelObjectSelector selector;
 
 		public SelectorFIBController(FIBComponent component, FIBModelObjectSelector selector) {

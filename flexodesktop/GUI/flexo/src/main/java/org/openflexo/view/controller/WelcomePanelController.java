@@ -15,10 +15,15 @@ import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
 
-public class WelcomePanelController extends FlexoFIBController<ApplicationData> {
+public class WelcomePanelController extends FlexoFIBController {
 
 	public WelcomePanelController(FIBComponent component) {
 		super(component);
+	}
+
+	@Override
+	public ApplicationData getDataObject() {
+		return (ApplicationData) super.getDataObject();
 	}
 
 	private ModuleLoader getModuleLoader() {

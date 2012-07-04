@@ -173,7 +173,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
 		if (inspector.updateEditionPatternReferences(object)) {
 			FIBView<?, ?> view = viewForInspector(inspector);
-			FIBController<?> controller = view.getController();
+			FIBController controller = view.getController();
 			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller.viewForComponent(inspector.getTabPanel());
 			tabPanelView.updateLayout();
 		} else {
@@ -205,7 +205,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 		if (updateEPTabs) {
 			FIBView<?, ?> view = viewForInspector(newInspector);
-			FIBController<?> controller = view.getController();
+			FIBController controller = view.getController();
 			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller.viewForComponent(newInspector.getTabPanel());
 			tabPanelView.updateLayout();
 		}
