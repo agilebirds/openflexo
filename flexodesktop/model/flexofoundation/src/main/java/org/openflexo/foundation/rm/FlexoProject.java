@@ -207,6 +207,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	private static final String PROCESS_SNAPSHOT_IMPORTED_DIRECTORY = "ProcessSnapshotImported";
 	private static final String PROJECT_DOCUMENTATION_CSS_FILE = "FlexoDocumentationMasterStyle.css";
 
+	public static final File INITIAL_IMAGES_DIR = new FileResource("Config/InitialImages");
+
 	private boolean computeDiff = true;
 
 	private boolean timestampsHaveBeenLoaded = false;
@@ -1828,14 +1830,14 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public static void importInitialImages(FlexoProject project, FlexoEditor editor) {
-		File initialImagesDir = new FileResource("Config/InitialImages");
-		if (!initialImagesDir.exists()) {
+
+		if (!INITIAL_IMAGES_DIR.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find intial images.");
 			}
 			return;
 		}
-		File[] files = initialImagesDir.listFiles(new java.io.FileFilter() {
+		File[] files = INITIAL_IMAGES_DIR.listFiles(new java.io.FileFilter() {
 
 			@Override
 			public boolean accept(File pathname) {

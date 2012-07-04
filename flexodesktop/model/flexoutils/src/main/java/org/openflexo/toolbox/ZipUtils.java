@@ -57,7 +57,7 @@ public class ZipUtils {
 	}
 
 	public static final void unzip(File zip, File outputDir, IProgress progress) throws ZipException, IOException {
-		Enumeration entries;
+		Enumeration<? extends ZipEntry> entries;
 		outputDir = outputDir.getCanonicalFile();
 		if (!outputDir.exists()) {
 			boolean b = outputDir.mkdirs();
@@ -75,9 +75,12 @@ public class ZipUtils {
 			progress.resetSecondaryProgress(zipFile.size());
 		}
 		while (entries.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) entries.nextElement();
+			ZipEntry entry = entries.nextElement();
 			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("unzipping") + " " + entry.getName());
+			}
+			if (entry.getName().startsWith("__MACOSX")) {
+				continue;
 			}
 			if (entry.isDirectory()) {
 				// Assume directories are stored parents first then
@@ -286,8 +289,10 @@ public class ZipUtils {
 
 	public static void main(String[] args) {
 		try {
-			File zip = new File("C:\\Documents and Settings\\gpolet.DENALI\\Desktop\\DeepStageGate.prj.zip");
-			createEmptyZip(zip);
+			File zip = new File("C:\\Users\\Guillaume\\Desktop\\SEPELDocumentationTemplates2.zip");
+			File tmp = FileUtils.createTempDirectory("Hello", "Something");
+			unzip(zip, tmp);
+			FileUtils.deleteDir(tmp);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
