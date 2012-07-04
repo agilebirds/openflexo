@@ -134,9 +134,8 @@
             <Label label="role_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <TextField columns="6" text="TextField" data="IndividualPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="ontologic_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="IndividualPatternRole.data.ontologicType" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="IndividualPatternRole.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="IndividualPatternRole.data.ontologicType" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ClassPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;Class&quot;)" name="ClassPatternRole">
@@ -149,9 +148,8 @@
             <Label label="role_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <TextField columns="6" text="TextField" data="ClassPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="ontologic_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="ClassPatternRole.data.ontologicType" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="ClassPatternRole.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="ClassPatternRole.data.ontologicType" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;ObjectProperty&quot;)" name="ObjectPropertyPatternRole">
@@ -164,19 +162,21 @@
             <Label label="role_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <TextField columns="6" text="TextField" data="ObjectPropertyPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="parent_property" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="ObjectPropertyPatternRole.data.parentProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+            <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="ObjectPropertyPatternRole.data.parentProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="true" />
+    <Assignment variable="component.selectDataProperties" value="false" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
               <Assignment variable="component.ontologyLibrary" value="ObjectPropertyPatternRole.data.ontologyLibrary" />
               <Assignment variable="component.defaultHeight" value="200" />
             </Custom>
             <Label label="domain" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="ObjectPropertyPatternRole.data.domain" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="ObjectPropertyPatternRole.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="ObjectPropertyPatternRole.data.domain" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
             <Label label="range" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="ObjectPropertyPatternRole.data.range" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="ObjectPropertyPatternRole.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="ObjectPropertyPatternRole.data.range" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;DataProperty&quot;)" name="DataPropertyPatternRole">
@@ -189,14 +189,15 @@
             <Label label="role_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <TextField columns="6" text="TextField" data="DataPropertyPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="parent_property" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="DataPropertyPatternRole.data.parentProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="DataPropertyPatternRole.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="DataPropertyPatternRole.data.parentProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="false" />
+    <Assignment variable="component.selectDataProperties" value="true" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
             </Custom>
             <Label label="domain" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="DataPropertyPatternRole.data.domain" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="DataPropertyPatternRole.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="DataPropertyPatternRole.data.domain" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=7;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
             <Label label="range" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <DropDown showReset="true" localize="true" name="dropdown" data="DataPropertyPatternRole.data.dataType" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" width="200" height="29" staticList="" iteratorClassName="org.openflexo.foundation.ontology.OntologicDataType" autoSelectFirstRow="false" />
@@ -221,10 +222,11 @@
             <Label label="role_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <TextField columns="6" text="TextField" data="ObjectPropertyStatementPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="property" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="ObjectPropertyStatementPatternRole.data.objectProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=6;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
-              <Assignment variable="component.hierarchicalMode" value="false" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="ObjectPropertyStatementPatternRole.data.objectProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=6;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="true" />
+    <Assignment variable="component.selectDataProperties" value="false" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
             </Custom>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;DataPropertyStatement&quot;)" name="DataPropertyStatementPatternRole">
@@ -237,10 +239,11 @@
             <Label label="role_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <TextField columns="6" text="TextField" data="DataPropertyStatementPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
             <Label label="property" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="DataPropertyStatementPatternRole.data.dataProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=6;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
-              <Assignment variable="component.hierarchicalMode" value="false" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="DataPropertyStatementPatternRole.data.dataProperty" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=6;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="false" />
+    <Assignment variable="component.selectDataProperties" value="true" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
             </Custom>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;RestrictionStatement&quot;)" name="RestrictionStatementPatternRole">
@@ -526,9 +529,8 @@
                 <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(expandHorizontally=true;expandVertically=false;index=11;location=center)">
                   <CheckBox selected="true" localize="true" name="IndividualParameterDynConceptValueCB" data="IndividualParameterPanel.data.isDynamicConceptValue" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
                   <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-                  <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="IndividualParameterPanel.data.concept" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(IndividualParameterPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
-                    <Assignment variable="component.ontologyLibrary" value="ParametersDetailsPanel.data.ontologyLibrary" />
-                    <Assignment variable="component.defaultHeight" value="200" />
+                  <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="IndividualParameterPanel.data.concept" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(IndividualParameterPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
+                    <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                   </Custom>
                   <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="IndividualParameterPanel.data.conceptValue.binding" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="IndividualParameterPanel.data.isDynamicConceptValue" localize="true" manageDynamicModel="true">
                     <Assignment variable="component.bindingDefinition" value="IndividualParameterPanel.data.conceptValueBindingDefinition" />
@@ -540,9 +542,8 @@
                 <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(expandHorizontally=true;expandVertically=false;index=11;location=center)">
                   <CheckBox selected="true" localize="true" name="ClassParameterDynConceptValueCB" data="ClassParameterPanel.data.isDynamicConceptValue" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
                   <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-                  <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="ClassParameterPanel.data.concept" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(ClassParameterPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
-                    <Assignment variable="component.ontologyLibrary" value="ParametersDetailsPanel.data.ontologyLibrary" />
-                    <Assignment variable="component.defaultHeight" value="200" />
+                  <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="ClassParameterPanel.data.concept" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(ClassParameterPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
+                    <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                   </Custom>
                   <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ClassParameterPanel.data.conceptValue.binding" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="ClassParameterPanel.data.isDynamicConceptValue" localize="true" manageDynamicModel="true">
                     <Assignment variable="component.bindingDefinition" value="ClassParameterPanel.data.conceptValueBindingDefinition" />
@@ -552,9 +553,11 @@
               </Panel>
               <Label label="parent_property" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((ParametersDetailsPanel.data.widget = &quot;OBJECT_PROPERTY&quot;) | (ParametersDetailsPanel.data.widget = &quot;DATA_PROPERTY&quot;))" />
               <Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" data="ParametersDetailsPanel.data" dataClassName="org.openflexo.foundation.viewpoint.PropertyParameter" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((ParametersDetailsPanel.data.widget = &quot;OBJECT_PROPERTY&quot;) | (ParametersDetailsPanel.data.widget = &quot;DATA_PROPERTY&quot;))" name="PropertyParameterPanel1">
-                <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="PropertyParameterPanel1.data.parentProperty" constraints="border(expandHorizontally=true;expandVertically=false;index=11;location=center)" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.ontologyLibrary" value="ParametersDetailsPanel.data.ontologyLibrary" />
-                  <Assignment variable="component.defaultHeight" value="200" />
+                <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="PropertyParameterPanel1.data.parentProperty" constraints="border(expandHorizontally=true;expandVertically=false;index=11;location=center)" localize="true" manageDynamicModel="true">
+             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="true" />
+    <Assignment variable="component.selectDataProperties" value="true" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
                 </Custom>
               </Panel>
               <Label label="domain" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((ParametersDetailsPanel.data.widget = &quot;OBJECT_PROPERTY&quot;) | (ParametersDetailsPanel.data.widget = &quot;DATA_PROPERTY&quot;))" />
@@ -567,9 +570,8 @@
                     <Assignment variable="component.bindingDefinition" value="PropertyParameterPanel2.data.domainValueBindingDefinition" />
                     <Dependancy componentName="ObjectPropertyDynValueCB" />
                   </Custom>
-                  <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="PropertyParameterPanel2.data.domain" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(PropertyParameterPanel2.data.isDynamicDomainValue))" localize="true" manageDynamicModel="true">
-                    <Assignment variable="component.ontologyLibrary" value="ParametersDetailsPanel.data.ontologyLibrary" />
-                    <Assignment variable="component.defaultHeight" value="200" />
+                  <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="PropertyParameterPanel2.data.domain" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(PropertyParameterPanel2.data.isDynamicDomainValue))" localize="true" manageDynamicModel="true">
+                    <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                     <Dependancy componentName="ObjectPropertyDynValueCB" />
                   </Custom>
                 </Panel>
@@ -577,9 +579,8 @@
               <Label label="range" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(ParametersDetailsPanel.data.widget = &quot;OBJECT_PROPERTY&quot;)" />
               <Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" data="ParametersDetailsPanel.data" dataClassName="org.openflexo.foundation.viewpoint.ObjectPropertyParameter" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(ParametersDetailsPanel.data.widget = &quot;OBJECT_PROPERTY&quot;)" name="ObjectPropertyParameterPanel">
                 <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(expandHorizontally=true;expandVertically=false;index=11;location=center)">
-                  <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="ObjectPropertyParameterPanel.data.range" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(ObjectPropertyParameterPanel.data.isDynamicRangeValue))" localize="true" manageDynamicModel="true">
-                    <Assignment variable="component.ontologyLibrary" value="ParametersDetailsPanel.data.ontologyLibrary" />
-                    <Assignment variable="component.defaultHeight" value="200" />
+                  <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="ObjectPropertyParameterPanel.data.range" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(ObjectPropertyParameterPanel.data.isDynamicRangeValue))" localize="true" manageDynamicModel="true">
+                    <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                     <Dependancy componentName="ObjectPropertyRangeDynValueCB" />
                   </Custom>
                   <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -675,9 +676,8 @@
                   <Assignment variable="component.bindingDefinition" value="AddIndividualPanel.data.conditionalBindingDefinition" />
                 </Custom>
                 <Label label="ontology_class" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="AddIndividualPanel.data.ontologyClass" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.ontologyLibrary" value="AddIndividualPanel.data.ontologyLibrary" />
-                  <Assignment variable="component.defaultHeight" value="200" />
+                <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="AddIndividualPanel.data.ontologyClass" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+                    <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                   <Dependancy componentName="AddIndividualAssignationCC" />
                 </Custom>
                 <Label label="individual_name_(uri)" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -688,10 +688,12 @@
                 <Label label="object_assertions" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
                 <Table iteratorClassName="org.openflexo.foundation.viewpoint.ObjectPropertyAssertion" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ObjectPropertyAssertionTable" data="AddIndividualPanel.data.objectAssertions" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
                   <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
-                  <CustomColumn componentClassName="org.openflexo.components.widget.OntologyPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.ontologyProperty" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
-                    <ColumnAssignment variable="component.ontologyLibrary" value="iterator.ontologyLibrary" />
-                    <ColumnAssignment variable="component.defaultHeight" value="200" />
-                    <ColumnAssignment variable="component.hierarchicalMode" value="false" />
+                  <CustomColumn componentClassName="org.openflexo.components.widget.FIBPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.ontologyProperty" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
+              <ColumnAssignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <ColumnAssignment variable="component.selectObjectProperties" value="true" />
+    <ColumnAssignment variable="component.selectDataProperties" value="false" />
+    <ColumnAssignment variable="component.selectAnnotationProperties" value="false" />
+   <ColumnAssignment variable="component.domain" value="AddIndividualPanel.data.ontologyClass" />
                   </CustomColumn>
                   <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.object.binding" title="object" columnWidth="80" resizable="true" displayTitle="true" name="object">
                     <ColumnAssignment variable="component.bindable" value="AddIndividualPanel.data" />
@@ -707,10 +709,12 @@
                 <Label label="data_assertions" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)" />
                 <Table iteratorClassName="org.openflexo.foundation.viewpoint.DataPropertyAssertion" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DataPropertyAssertionTable" data="AddIndividualPanel.data.dataAssertions" constraints="twocols(expandHorizontally=true;expandVertically=true;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
                   <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
-                  <CustomColumn componentClassName="org.openflexo.components.widget.OntologyPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.ontologyProperty" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
-                    <ColumnAssignment variable="component.ontologyLibrary" value="iterator.ontologyLibrary" />
-                    <ColumnAssignment variable="component.defaultHeight" value="200" />
-                    <ColumnAssignment variable="component.hierarchicalMode" value="false" />
+                  <CustomColumn componentClassName="org.openflexo.components.widget.FIBPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.ontologyProperty" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
+              <ColumnAssignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <ColumnAssignment variable="component.selectObjectProperties" value="false" />
+    <ColumnAssignment variable="component.selectDataProperties" value="true" />
+    <ColumnAssignment variable="component.selectAnnotationProperties" value="false" />
+   <ColumnAssignment variable="component.domain" value="AddIndividualPanel.data.ontologyClass" />
                   </CustomColumn>
                   <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value.binding" title="value" columnWidth="80" resizable="true" displayTitle="true" name="value">
                     <ColumnAssignment variable="component.bindable" value="AddIndividualPanel.data" />
@@ -740,9 +744,8 @@
                   <Assignment variable="component.bindingDefinition" value="AddClassPanel.data.conditionalBindingDefinition" />
                 </Custom>
                 <Label label="ontologic_class" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="AddClassPanel.data.ontologyClass" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.ontologyLibrary" value="AddClassPanel.data.ontologyLibrary" />
-                  <Assignment variable="component.defaultHeight" value="200" />
+                <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="AddClassPanel.data.ontologyClass" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+                  <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                   <Dependancy componentName="AddClassAssignationCC" />
                 </Custom>
                 <Label label="new_class_name_(uri)" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -819,10 +822,11 @@
                   <Assignment variable="component.bindingDefinition" value="AddObjectPropertyStatementPanel.data.subjectBindingDefinition" />
                 </Custom>
                 <Label label="property" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="AddObjectPropertyStatementPanel.data.objectProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.ontologyLibrary" value="AddObjectPropertyStatementPanel.data.ontologyLibrary" />
-                  <Assignment variable="component.defaultHeight" value="200" />
-                  <Assignment variable="component.hierarchicalMode" value="false" />
+                <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="AddObjectPropertyStatementPanel.data.objectProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="true" />
+    <Assignment variable="component.selectDataProperties" value="false" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
                   <Dependancy componentName="AddObjectPropertyStatementAssignCC" />
                 </Custom>
                 <Label label="object" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -852,10 +856,11 @@
                   <Assignment variable="component.bindingDefinition" value="AddDataPropertyStatementPanel.data.subjectBindingDefinition" />
                 </Custom>
                 <Label label="property" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="AddDataPropertyStatementPanel.data.dataProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.ontologyLibrary" value="AddDataPropertyStatementPanel.data.ontologyLibrary" />
-                  <Assignment variable="component.defaultHeight" value="200" />
-                  <Assignment variable="component.hierarchicalMode" value="false" />
+                <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="AddDataPropertyStatementPanel.data.dataProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="false" />
+    <Assignment variable="component.selectDataProperties" value="true" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
                   <Dependancy componentName="AddDataPropertyStatementAssignCC" />
                 </Custom>
                 <Label label="object" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -1001,10 +1006,11 @@
                   <Assignment variable="component.bindingDefinition" value="AddRestrictionPanel.data.objectBindingDefinition" />
                 </Custom>
                 <Label label="property" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="AddRestrictionPanel.data.objectProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.ontologyLibrary" value="AddRestrictionPanel.data.ontologyLibrary" />
-                  <Assignment variable="component.defaultHeight" value="200" />
-                  <Assignment variable="component.hierarchicalMode" value="false" />
+                <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="AddRestrictionPanel.data.objectProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="true" />
+    <Assignment variable="component.selectDataProperties" value="true" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
                 </Custom>
                 <Label label="restriction type" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
                 <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddRestrictionPanel.data.restrictionType.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
@@ -1198,9 +1204,8 @@
           </Custom>
           <Label label="concept" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((EntryPanel.data.class.simpleName = &quot;ClassInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;IndividualInspectorEntry&quot;))" />
           <Panel layout="gridbag" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(EntryPanel.data.class.simpleName = &quot;ClassInspectorEntry&quot;)" name="OntologyClassInspectorEntryPanel">
-            <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="OntologyClassInspectorEntryPanel.data.concept" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyClassInspectorEntryPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="OntologyClassInspectorEntryPanel.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="OntologyClassInspectorEntryPanel.data.concept" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyClassInspectorEntryPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
+               <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
             <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <CheckBox selected="true" localize="true" name="checkbox" data="OntologyClassInspectorEntryPanel.data.isDynamicConceptValue" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -1210,9 +1215,8 @@
             </Custom>
           </Panel>
           <Panel layout="gridbag" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(EntryPanel.data.class.simpleName = &quot;IndividualInspectorEntry&quot;)" name="OntologyIndividualInspectorEntryPanel">
-            <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="OntologyIndividualInspectorEntryPanel.data.concept" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyIndividualInspectorEntryPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="OntologyIndividualInspectorEntryPanel.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="OntologyIndividualInspectorEntryPanel.data.concept" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyIndividualInspectorEntryPanel.data.isDynamicConceptValue))" localize="true" manageDynamicModel="true">
+               <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
             </Custom>
             <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <CheckBox selected="true" localize="true" name="checkbox" data="OntologyIndividualInspectorEntryPanel.data.isDynamicConceptValue" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -1223,17 +1227,18 @@
           </Panel>
           <Label label="parent_property" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;DataPropertyInspectorEntry&quot;))" />
           <Panel layout="border" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;DataPropertyInspectorEntry&quot;))" name="OntologyPropertyInspectorEntryPanel1">
-            <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="OntologyPropertyInspectorEntryPanel1.data.parentProperty" constraints="border(location=center)" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="OntologyPropertyInspectorEntryPanel1.data.ontologyLibrary" />
-              <Assignment variable="component.defaultHeight" value="200" />
+            <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" data="OntologyPropertyInspectorEntryPanel1.data.parentProperty" constraints="border(location=center)" localize="true" manageDynamicModel="true">
+             <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
+     <Assignment variable="component.selectObjectProperties" value="true" />
+    <Assignment variable="component.selectDataProperties" value="true" />
+    <Assignment variable="component.selectAnnotationProperties" value="false" />
             </Custom>
           </Panel>
           <Label label="domain" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;DataPropertyInspectorEntry&quot;))" />
           <Panel layout="border" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;) | (EntryPanel.data.class.simpleName = &quot;DataPropertyInspectorEntry&quot;))" name="OntologyPropertyInspectorEntryPanel2">
             <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=center)">
-              <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="OntologyPropertyInspectorEntryPanel2.data.domain" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyPropertyInspectorEntryPanel2.data.isDynamicDomainValue))" localize="true" manageDynamicModel="true">
-                <Assignment variable="component.ontologyLibrary" value="OntologyPropertyInspectorEntryPanel2.data.ontologyLibrary" />
-                <Assignment variable="component.defaultHeight" value="200" />
+              <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="OntologyPropertyInspectorEntryPanel2.data.domain" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyPropertyInspectorEntryPanel2.data.isDynamicDomainValue))" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                 <Dependancy componentName="InspectorPropertyDynDomainCB" />
               </Custom>
               <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -1248,9 +1253,8 @@
           <Label label="range" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;)" />
           <Panel layout="border" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(EntryPanel.data.class.simpleName = &quot;ObjectPropertyInspectorEntry&quot;)" name="OntologyObjectPropertyInspectorEntryPanel">
             <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=center)">
-              <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="OntologyObjectPropertyInspectorEntryPanel.data.range" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyObjectPropertyInspectorEntryPanel.data.isDynamicRangeValue))" localize="true" manageDynamicModel="true">
-                <Assignment variable="component.ontologyLibrary" value="OntologyObjectPropertyInspectorEntryPanel.data.ontologyLibrary" />
-                <Assignment variable="component.defaultHeight" value="200" />
+              <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="OntologyObjectPropertyInspectorEntryPanel.data.range" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(OntologyObjectPropertyInspectorEntryPanel.data.isDynamicRangeValue))" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.context" value="data.viewPoint.viewpointOntology" />
                 <Dependancy componentName="InspectorPropertyDynRangeCB" />
               </Custom>
               <Label label="dynamic" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />

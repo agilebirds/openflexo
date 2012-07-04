@@ -50,10 +50,11 @@
     <Table iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern$PropertyEntry" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DataPropertyAssertionTable" data="data.propertyEntries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=8;insetsBottom=0;insetsLeft=4;insetsRight=4;insetsTop=2;location=right)" visible="(patternChoice.selectedIndex = 0)" font="LucidaGrande,0,11">
       <CheckBoxColumn data="iterator.selectEntry" title="" columnWidth="25" resizable="false" displayTitle="false" name="checkbox" />
       <IconColumn data="controller.iconForObject(iterator.property)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
-      <CustomColumn componentClassName="org.openflexo.components.widget.OntologyPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.property" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
-        <ColumnAssignment variable="component.ontologyLibrary" value="data.focusedObject.calc.ontologyLibrary" />
-        <ColumnAssignment variable="component.defaultHeight" value="200" />
-        <ColumnAssignment variable="component.hierarchicalMode" value="false" />
+      <CustomColumn componentClassName="org.openflexo.components.widget.FIBPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.property" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
+        <ColumnAssignment variable="component.context" value="data.focusedObject.viewPoint.viewpointOntology" />
+        <ColumnAssignment variable="component.selectObjectProperties" value="$true" />
+        <ColumnAssignment variable="component.selectDataProperties" value="$true" />
+        <ColumnAssignment variable="component.selectAnnotationProperties" value="$false" />
       </CustomColumn>
       <LabelColumn data="iterator.range" title="range" columnWidth="80" resizable="true" displayTitle="true" name="label" />
       <TextFieldColumn data="iterator.label" title="label" columnWidth="150" resizable="true" displayTitle="true" name="textfield" />
