@@ -1,5 +1,5 @@
 #Dutch
-#Wed Jul 04 09:20:56 CEST 2012
+#Wed Jul 04 12:25:29 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -90,8 +90,12 @@ code_generator=Code Generator
 component_localization=Component localization
 component_validation=Component validation
 connector=connector
+create_class=Create class
+create_data_property=Create data property
 create_example_drawing=Create example drawing
+create_individual=Create individual
 create_new_palette=Create new palette
+create_object_property=Create object property
 create_view_point=Create view point
 data_model_editor=Data Model Editor
 declare_in_edition_pattern=Declare in edition pattern
@@ -112,6 +116,7 @@ edition_pattern_should_have_roles_description=edition_pattern_should_have_roles_
 english=English
 equals_operator=Equals operator
 euler_number_raised_to_power=euler number raised to power
+example_diagram=example_diagram
 example_drawing=example_drawing
 field_javadoc=Internal field used to store value for property
 file=File
@@ -211,6 +216,8 @@ updating=Updating
 updating_classes=Updating classes
 updating_classes_done=Updating classes done
 updating_repository=Updating repository
+uri_is_not_valid_please_choose_another_class_name=URI is not valid, please choose an other name
+uri_is_well_formed_and_valid_regarding_its_unicity=URI is well formed and valid regarding its unicity
 validate_component=Validate component
 value_to_set=Value to set
 ve_module_name=View Editor

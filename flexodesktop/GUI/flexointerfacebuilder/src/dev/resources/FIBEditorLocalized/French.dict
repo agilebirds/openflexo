@@ -1,5 +1,5 @@
 #French
-#Wed Jul 04 09:20:56 CEST 2012
+#Wed Jul 04 12:25:29 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required=\ Le lien 'URI base' est requis et doit \u00EAtre valide
@@ -90,8 +90,12 @@ code_generator=G\u00E9n\u00E9rateur de code
 component_localization=Localisation du composant
 component_validation=Validation du composant
 connector=connector
+create_class=Cr\u00E9er une classe
+create_data_property=Cr\u00E9er une propri\u00E9t\u00E9 donn\u00E9e
 create_example_drawing=Cr\u00E9er un exemple de dessin
+create_individual=Cr\u00E9er un individuel
 create_new_palette=Cr\u00E9er une nouvelle palette
+create_object_property=Cr\u00E9er une propri\u00E9t\u00E9 objet
 create_view_point=Cr\u00E9er un point de vue
 data_model_editor=Editeur de mod\u00E8les de donn\u00E9es
 declare_in_edition_pattern=D\u00E9clarer dans un Edition Pattern
@@ -112,6 +116,7 @@ edition_pattern_should_have_roles_description=edition_pattern_should_have_roles_
 english=Anglais
 equals_operator=Operator '\u00E9gal'
 euler_number_raised_to_power=nombre de Euler \u00E9lev\u00E9 \u00E0 la puissance
+example_diagram=example_diagram
 example_drawing=example_drawing
 field_javadoc=Internal field used to store value for property
 file=Fichier
@@ -211,6 +216,8 @@ updating=En train de mette a jour
 updating_classes=Mise \u00E0 jour des classes
 updating_classes_done=Fin de la mise \u00E0 jour des classes
 updating_repository=En train de mettre \u00E0 jour la biblioth\u00E8que
+uri_is_not_valid_please_choose_another_class_name=Cette URI n'est pas valide. Veuillez choisir un autre nom.
+uri_is_well_formed_and_valid_regarding_its_unicity=Cette URI est bien form\u00E9e et valide
 validate_component=Valider le composant
 value_to_set=Value to set
 ve_module_name=Editeur de vues
