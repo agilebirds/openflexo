@@ -20,7 +20,7 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -84,9 +84,9 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPoint> {
 	 * Return all viewpoints of this library
 	 */
 	@Override
-	protected Enumeration<ViewPoint> getAllSelectableValues() {
+	protected Collection<ViewPoint> getAllSelectableValues() {
 		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().getViewPoints().elements();
+			return getViewPointLibrary().getViewPoints();
 		}
 		return null;
 	}

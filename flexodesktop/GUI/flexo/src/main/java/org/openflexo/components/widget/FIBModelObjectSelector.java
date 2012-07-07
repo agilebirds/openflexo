@@ -29,10 +29,11 @@ import java.awt.image.RGBImageFilter;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -281,24 +282,34 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	}
 
 	private void updateMatchingValues() {
-		List<T> oldMatchingValues = new ArrayList<T>(getMatchingValues());
+		final List<T> oldMatchingValues = new ArrayList<T>(getMatchingValues());
 		// System.out.println("updateMatchingValues() with " + getFilteredName());
 		matchingValues.clear();
 		if (getAllSelectableValues() != null && getFilteredName() != null) {
 			isFiltered = true;
-			Enumeration<T> enumeration = getAllSelectableValues();
-			while (enumeration.hasMoreElements()) {
-				T next = enumeration.nextElement();
+			for (T next : getAllSelectableValues()) {
 				if (isAcceptableValue(next) && matches(next, getFilteredName())) {
 					matchingValues.add(next);
 				}
 			}
 		}
-		// System.out.println("Objects matching with " + getFilteredName() + " found " + matchingValues.size() + " values");
-		pcSupport.firePropertyChange("matchingValues", oldMatchingValues, getMatchingValues());
+		System.out.println("Objects matching with " + getFilteredName() + " found " + matchingValues.size() + " values");
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				pcSupport.firePropertyChange("matchingValues", oldMatchingValues, getMatchingValues());
+				if (matchingValues.size() == 1) {
+					setSelectedValue(matchingValues.get(0));
+				}
+			}
+		});
+
+		/*pcSupport.firePropertyChange("matchingValues", oldMatchingValues, getMatchingValues());
+		
 		if (matchingValues.size() == 1) {
 			setSelectedValue(matchingValues.get(0));
-		}
+		}*/
 	}
 
 	private void clearMatchingValues() {
@@ -323,12 +334,8 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	 * 
 	 * Override when required
 	 */
-	protected Enumeration<T> getAllSelectableValues() {
-		Vector<T> listByExploringTree = ((SelectorDetailsPanel) getCustomPanel()).getAllSelectableValues();
-		if (listByExploringTree != null) {
-			return listByExploringTree.elements();
-		}
-		return null;
+	protected Collection<T> getAllSelectableValues() {
+		return ((SelectorDetailsPanel) getCustomPanel()).getAllSelectableValues();
 	}
 
 	/**
@@ -433,8 +440,8 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		public void delete() {
 		}
 
-		protected Vector<T> getAllSelectableValues() {
-			Vector<T> returned = new Vector<T>();
+		protected Set<T> getAllSelectableValues() {
+			Set<T> returned = new HashSet<T>();
 			FIBBrowserWidget browserWidget = retrieveFIBBrowserWidget();
 			if (browserWidget == null) {
 				return null;
