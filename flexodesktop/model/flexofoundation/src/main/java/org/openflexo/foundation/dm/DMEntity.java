@@ -32,7 +32,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -227,7 +226,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	 */
 	@Override
 	public String getInspectorName() {
-		if ((getRepository() == null) || getRepository().isReadOnly()) {
+		if (getRepository() == null || getRepository().isReadOnly()) {
 			return Inspectors.DM.DM_RO_ENTITY_INSPECTOR;
 		} else {
 			return Inspectors.DM.DM_ENTITY_INSPECTOR;
@@ -257,16 +256,16 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public final String getFullQualifiedName() {
-		return ((getPackage() == null) || getPackage().isDefaultPackage() ? getEntityClassName() : getPackage().getName() + "."
-				+ getEntityClassName());
+		return getPackage() == null || getPackage().isDefaultPackage() ? getEntityClassName() : getPackage().getName() + "."
+				+ getEntityClassName();
 	}
 
 	@Override
 	public void setName(String newName) throws InvalidNameException {
-		if (!isDeserializing() && ((newName == null) || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
+		if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 			throw new InvalidNameException(newName + " is not a valid name.");
 		}
-		if ((name == null) || (!name.equals(newName))) {
+		if (name == null || !name.equals(newName)) {
 			String oldName = name;
 			name = newName;
 			setChanged();
@@ -294,7 +293,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (this.equals(getDMModel().getProcessBusinessDataRepository().getProcessBusinessDataEntity())) {
 			return false;
 		}
-		return !isDeleted() && (getRepository() != null) && !getRepository().isReadOnly();
+		return !isDeleted() && getRepository() != null && !getRepository().isReadOnly();
 	}
 
 	public String getEntityClassName() {
@@ -320,16 +319,16 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		     updateTypeObject(null,newEntityClassName);
 		     return;
 		 }*/
-		if (!isDeserializing() && ((newEntityClassName == null) || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newEntityClassName).matches())) {
+		if (!isDeserializing() && (newEntityClassName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newEntityClassName).matches())) {
 			logger.warning("Invalid name: " + newEntityClassName);
 			throw new InvalidNameException();
 		}
-		if ((entityClassName == null) || (!entityClassName.equals(newEntityClassName))) {
-			if (!isDeserializing() && (getDMModel().getDMEntity(getEntityPackageName(), newEntityClassName) != null)) {
+		if (entityClassName == null || !entityClassName.equals(newEntityClassName)) {
+			if (!isDeserializing() && getDMModel().getDMEntity(getEntityPackageName(), newEntityClassName) != null) {
 				throw new DuplicateClassNameException(getEntityPackageName() + "." + newEntityClassName);
 			}
 			DMRepository containerRepository = getRepository();
-			if ((containerRepository != null) && (entityClassName != null)) {
+			if (containerRepository != null && entityClassName != null) {
 				containerRepository.unregisterEntity(this, false);
 			}
 			String oldEntityClassName = entityClassName;
@@ -344,7 +343,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public boolean isInDefaultPackage() {
-		return (getEntityPackageName() != null) && getEntityPackageName().equals(getRepository().getDefaultPackage().getName())
+		return getEntityPackageName() != null && getEntityPackageName().equals(getRepository().getDefaultPackage().getName())
 				&& !isPrimitiveType();
 	}
 
@@ -364,13 +363,13 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 
 	public void setEntityPackageName(String anEntityPackageName) {
 		String oldEntityPackageName = entityPackageName;
-		if ((oldEntityPackageName == null) && (anEntityPackageName == null)) {
+		if (oldEntityPackageName == null && anEntityPackageName == null) {
 			return;
 		}
-		if ((entityPackageName != null) && entityPackageName.equals(DMPackage.DEFAULT_PACKAGE_NAME) && (anEntityPackageName == null)) {
+		if (entityPackageName != null && entityPackageName.equals(DMPackage.DEFAULT_PACKAGE_NAME) && anEntityPackageName == null) {
 			return;
 		}
-		if ((oldEntityPackageName == null) || (anEntityPackageName == null) || !oldEntityPackageName.equals(anEntityPackageName)) {
+		if (oldEntityPackageName == null || anEntityPackageName == null || !oldEntityPackageName.equals(anEntityPackageName)) {
 			entityPackageName = anEntityPackageName;
 			setChanged();
 			notifyObservers(new DMAttributeDataModification("entityPackageName", oldEntityPackageName, entityPackageName));
@@ -380,13 +379,13 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	public void moveToPackage(String anEntityPackageName) {
 		String oldEntityPackageName = entityPackageName;
 		String oldFullyQualifiedName = getFullyQualifiedName();
-		if ((oldEntityPackageName == null) && (anEntityPackageName == null)) {
+		if (oldEntityPackageName == null && anEntityPackageName == null) {
 			return;
 		}
-		if ((entityPackageName != null) && entityPackageName.equals(DMPackage.DEFAULT_PACKAGE_NAME) && (anEntityPackageName == null)) {
+		if (entityPackageName != null && entityPackageName.equals(DMPackage.DEFAULT_PACKAGE_NAME) && anEntityPackageName == null) {
 			return;
 		}
-		if ((oldEntityPackageName == null) || (anEntityPackageName == null) || !oldEntityPackageName.equals(anEntityPackageName)) {
+		if (oldEntityPackageName == null || anEntityPackageName == null || !oldEntityPackageName.equals(anEntityPackageName)) {
 			// logger.info("Package change from "+oldEntityPackageName+" to "+anEntityPackageName+" count="+count);
 			if (!isDeserializing()) {
 				getPackage().unregisterEntity(this);
@@ -441,7 +440,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setParentType in " + name + " with " + (parentType == null ? "null" : parentType.getStringRepresentation()));
 		}
-		if (((parentType == null) && (_parentType != null)) || ((parentType != null) && !parentType.equals(_parentType))) {
+		if (parentType == null && _parentType != null || parentType != null && !parentType.equals(_parentType)) {
 			DMType oldParentType = _parentType;
 			if (oldParentType != null) {
 				oldParentType.removeFromTypedWithThisType(this);
@@ -530,7 +529,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification instanceof TypeResolved) && (((TypeResolved) dataModification).getType() == _parentType)) {
+		if (dataModification instanceof TypeResolved && ((TypeResolved) dataModification).getType() == _parentType) {
 			DMEntity newParentEntity = _parentType.getBaseEntity();
 			if (newParentEntity != null) {
 				if (logger.isLoggable(Level.FINE)) {
@@ -538,13 +537,12 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 				}
 				newParentEntity.addToChildEntities(this);
 			}
-		} else if ((dataModification instanceof EntityDeleted) && (getParentType() != null)
-				&& (observable == getParentType().getBaseEntity())) {
+		} else if (dataModification instanceof EntityDeleted && getParentType() != null && observable == getParentType().getBaseEntity()) {
 			DMEntity parent = getParentBaseEntity();
-			while ((parent != null) && parent.isDeleted()) {
+			while (parent != null && parent.isDeleted()) {
 				parent = parent.getParentBaseEntity();
 			}
-			if ((parent != this) && (parent != null)) {
+			if (parent != this && parent != null) {
 				setParentType(DMType.makeResolvedDMType(parent));
 			} else {
 				setParentType(null);
@@ -581,7 +579,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public boolean getIsReadOnly() {
-		return readOnly || ((getRepository() != null) && getRepository().isReadOnly());
+		return readOnly || getRepository() != null && getRepository().isReadOnly();
 	}
 
 	public void setIsReadOnly(boolean readOnly) {
@@ -622,8 +620,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public void setMethodForKey(DMMethod method, String methodSignature) {
-		if ((method._getRegisteredWithSignature() != null) && !method._getRegisteredWithSignature().equals(methodSignature)
-				&& (methods.get(method._getRegisteredWithSignature()) != null)) {
+		if (method._getRegisteredWithSignature() != null && !method._getRegisteredWithSignature().equals(methodSignature)
+				&& methods.get(method._getRegisteredWithSignature()) != null) {
 			removeMethodWithKey(method._getRegisteredWithSignature());
 		}
 		method.setEntity(this);
@@ -743,7 +741,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	 */
 	public DMMethod getMethod(String methodSignature) {
 		DMMethod returned = getDeclaredMethod(methodSignature);
-		if ((returned == null) && (getParentBaseEntity() != null)) {
+		if (returned == null && getParentBaseEntity() != null) {
 			return getParentBaseEntity().getMethod(methodSignature);
 		} else {
 			return returned;
@@ -923,7 +921,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	 */
 	public DMProperty getProperty(String propertyName) {
 		DMProperty returned = getDeclaredProperty(propertyName);
-		if ((returned == null) && (getParentBaseEntity() != null)) {
+		if (returned == null && getParentBaseEntity() != null) {
 			return getParentBaseEntity().getProperty(propertyName);
 		} else {
 			return returned;
@@ -946,7 +944,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (entity == this) {
 			return true;
 		}
-		if ((this == getDMModel().getDMEntity(Object.class))/* && (!(entity instanceof JDKPrimitive))*/) {
+		if (this == getDMModel().getDMEntity(Object.class)/* && (!(entity instanceof JDKPrimitive))*/) {
 			return true;
 		}
 		if (entity.getParentBaseEntity() != null) {
@@ -976,7 +974,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (entity == this) {
 			return DMType.makeResolvedDMType(entity);
 		}
-		if ((this == getDMModel().getDMEntity(Object.class))/* && (!(entity instanceof JDKPrimitive))*/) {
+		if (this == getDMModel().getDMEntity(Object.class)/* && (!(entity instanceof JDKPrimitive))*/) {
 			return DMType.makeResolvedDMType(getDMModel().getDMEntity(Object.class));
 		}
 		;
@@ -1197,7 +1195,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 				for (Enumeration en = currentParent.getAccessibleMethods().elements(); en.hasMoreElements();) {
 					DMMethod method = (DMMethod) en.nextElement();
 					boolean isOverriding = false;
-					for (int i = 0; ((i < accessibleMethods.size()) && (!isOverriding)); i++) {
+					for (int i = 0; i < accessibleMethods.size() && !isOverriding; i++) {
 						DMMethod temp = accessibleMethods.elementAt(i);
 						if (temp.overrides(method)) {
 							// if (logger.isLoggable(Level.INFO)) logger.info
@@ -1245,7 +1243,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 				for (Enumeration en = currentParent.getAccessibleProperties().elements(); en.hasMoreElements();) {
 					DMProperty property = (DMProperty) en.nextElement();
 					boolean isOverriding = false;
-					for (int i = 0; ((i < accessibleProperties.size()) && (!isOverriding)); i++) {
+					for (int i = 0; i < accessibleProperties.size() && !isOverriding; i++) {
 						DMProperty temp = accessibleProperties.elementAt(i);
 						if (temp.overrides(property)) {
 							// if (logger.isLoggable(Level.INFO)) logger.info
@@ -1284,7 +1282,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		public int compare(DMProperty o1, DMProperty o2) {
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;
@@ -1314,7 +1312,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 
 			String s1 = o1.getSignature();
 			String s2 = o2.getSignature();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;
@@ -1323,19 +1321,9 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public DMObject getParent() {
 		return getPackage();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	@Override
@@ -1403,7 +1391,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		super.setIsModified();
 		// Do this to reset dependant resources cache, in order to get up-to_date
 		// needsGeneration information on generated resources
-		if ((getXMLResourceData() != null) && (getXMLResourceData().getFlexoResource() != null)) {
+		if (getXMLResourceData() != null && getXMLResourceData().getFlexoResource() != null) {
 			getXMLResourceData().getFlexoResource().notifyResourceStatusChanged();
 		}
 	}
@@ -1418,7 +1406,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		DMProperty p = null;
 		while (en.hasMoreElements()) {
 			p = en.nextElement();
-			if ((p.getType() != null) && !(p.getType().getBaseEntity() instanceof DMEOEntity)) {
+			if (p.getType() != null && !(p.getType().getBaseEntity() instanceof DMEOEntity)) {
 				reply.add(p);
 			}
 		}
@@ -1431,7 +1419,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		DMProperty p = null;
 		while (en.hasMoreElements()) {
 			p = en.nextElement();
-			if ((p.getType() != null) && (p.getType().getBaseEntity() instanceof DMEOEntity)) {
+			if (p.getType() != null && p.getType().getBaseEntity() instanceof DMEOEntity) {
 				reply.add(p);
 			}
 		}
@@ -1439,14 +1427,14 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public boolean isVoid() {
-		return (this == getDMModel().getEntityNamed("void"));
+		return this == getDMModel().getEntityNamed("void");
 	}
 
 	public String getNiceRelationshipNameToMe() {
 		StringBuffer reply = new StringBuffer();
 		boolean isPrefixRemoved = false;
 		for (int i = 0; i < getName().length(); i++) {
-			if (!isPrefixRemoved && (i + 1 < getName().length())) {
+			if (!isPrefixRemoved && i + 1 < getName().length()) {
 				if (Character.isUpperCase(getName().charAt(i + 1))) {
 					// switch this char
 				} else {
@@ -1473,7 +1461,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public boolean isPrimitiveType() {
-		return getPackage().isDefaultPackage() && (getRepository() == getDMModel().getJDKRepository());
+		return getPackage().isDefaultPackage() && getRepository() == getDMModel().getJDKRepository();
 	}
 
 	public boolean isBooleanType() {
@@ -1487,7 +1475,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	 */
 	@Override
 	public boolean isNameValid() {
-		return (getName() != null) && getName().matches(IERegExp.JAVA_CLASS_NAME_REGEXP);
+		return getName() != null && getName().matches(IERegExp.JAVA_CLASS_NAME_REGEXP);
 	}
 
 	// ===================================================================
@@ -1529,11 +1517,11 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public boolean isTypeVariableAddable(DMTypeVariable typeVariable) {
-		return (!getIsReadOnly());
+		return !getIsReadOnly();
 	}
 
 	public boolean isTypeVariableDeletable(DMTypeVariable typeVariable) {
-		return (!getIsReadOnly());
+		return !getIsReadOnly();
 	}
 
 	public String getTypesVariablesAsString() {
@@ -1597,8 +1585,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 			}
 
 			// Description
-			if (((getDescription() == null) && (typeVariable.getDescription() != null))
-					|| (!getDescription().equals(typeVariable.getDescription()))) {
+			if (getDescription() == null && typeVariable.getDescription() != null
+					|| !getDescription().equals(typeVariable.getDescription())) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update description");
 				}
@@ -1647,13 +1635,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		}
 
 		@Override
-		public TreeNode getParent() {
+		public DMEntity getParent() {
 			return getEntity();
-		}
-
-		@Override
-		public boolean getAllowsChildren() {
-			return false;
 		}
 
 		/**
@@ -1737,11 +1720,11 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public boolean isImplementedTypeAddable(DMType type) {
-		return (!getIsReadOnly());
+		return !getIsReadOnly();
 	}
 
 	public boolean isImplementedTypeDeletable(DMType type) {
-		return (!getIsReadOnly());
+		return !getIsReadOnly();
 	}
 
 	// Used while serializing
@@ -1829,7 +1812,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (className.startsWith("java.lang")) {
 			return false;
 		}
-		return (getPackage() == null) || getPackage().isDefaultPackage()
+		return getPackage() == null || getPackage().isDefaultPackage()
 				|| !getPackage().getName().equals(className.substring(0, className.lastIndexOf('.')));
 	}
 

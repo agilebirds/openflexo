@@ -33,7 +33,7 @@ public class DataPropertyStatement extends PropertyStatement {
 
 	public DataPropertyStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
-		property = getOntologyLibrary().getDataProperty(s.getPredicate().getURI());
+		property = getOntology().getDataProperty(s.getPredicate().getURI());
 		if (s.getObject() instanceof Literal) {
 			literal = (Literal) s.getObject();
 		} else {

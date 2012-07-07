@@ -92,7 +92,7 @@ public class ForceRegenerateSourceCode extends MultipleFileGCAction<ForceRegener
 	}
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException {
+	protected void doImpl(Object context) throws GenerationException, SaveResourceException {
 		logger.info("Force regenerate source code for " + getFocusedObject());
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();

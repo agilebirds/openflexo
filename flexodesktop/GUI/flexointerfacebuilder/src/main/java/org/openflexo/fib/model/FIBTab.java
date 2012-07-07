@@ -22,22 +22,9 @@ package org.openflexo.fib.model;
 public class FIBTab extends FIBPanel {
 
 	private String title;
-	private int index;
 
 	public static enum Parameters implements FIBModelAttribute {
-		title, index
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.index, index);
-		if (notification != null) {
-			this.index = index;
-			hasChanged(notification);
-		}
+		title
 	}
 
 	@Override

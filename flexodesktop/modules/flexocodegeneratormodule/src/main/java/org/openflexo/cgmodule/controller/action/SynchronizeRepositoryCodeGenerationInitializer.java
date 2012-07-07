@@ -19,16 +19,17 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.util.EventObject;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorPreferences;
+import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.cgmodule.view.CGRepositoryModuleView;
-import org.openflexo.cgmodule.view.GeneratorMainPane;
+import org.openflexo.cgmodule.view.GeneratorBrowserView;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -54,6 +55,10 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
+	protected GeneratorBrowserView getBrowserView() {
+		return ((GeneratorController) getController()).getBrowserView();
+	}
+
 	@Override
 	protected FlexoActionInitializer<SynchronizeRepositoryCodeGeneration> getDefaultInitializer() {
 		return new FlexoActionInitializer<SynchronizeRepositoryCodeGeneration>() {
@@ -75,13 +80,13 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 				}
 				action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
 
-				ModuleView cgRepositoryView = getController().moduleViewForObject(action.getRepository());
+				ModuleView<?> cgRepositoryView = getController().moduleViewForObject(action.getRepository());
 				if (cgRepositoryView != null && cgRepositoryView instanceof CGRepositoryModuleView) {
 					((CGRepositoryModuleView) cgRepositoryView).getConsole().clear();
 				}
 
 				action.getProjectGenerator().startHandleLogs();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().setHoldStructure();
+				getBrowserView().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -100,8 +105,8 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 							action.getEditor()).doAction();
 				}
 
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+				getBrowserView().getBrowser().resetHoldStructure();
+				getBrowserView().getBrowser().update();
 				return true;
 			}
 		};
@@ -112,8 +117,8 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 		return new FlexoExceptionHandler<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean handleException(FlexoException exception, SynchronizeRepositoryCodeGeneration action) {
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+				getBrowserView().getBrowser().resetHoldStructure();
+				getBrowserView().getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 				exception.printStackTrace();

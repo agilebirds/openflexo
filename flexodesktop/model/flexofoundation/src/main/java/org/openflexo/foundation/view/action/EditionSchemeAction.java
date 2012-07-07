@@ -42,8 +42,8 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.RestrictionStatement;
-import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
+import org.openflexo.foundation.ontology.OntologyRestrictionClass;
+import org.openflexo.foundation.ontology.OntologyRestrictionClass.RestrictionType;
 import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
@@ -247,7 +247,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			assignedObject = statement;
 		} else if (action instanceof AddRestrictionStatement) {
 			logger.info("Add restriction " + action);
-			RestrictionStatement statement = performAddRestriction((AddRestrictionStatement) action);
+			SubClassStatement statement = performAddRestriction((AddRestrictionStatement) action);
 			assignedObject = statement;
 		} else if (action instanceof DeclarePatternRole) {
 			logger.info("Declare object " + action);
@@ -644,7 +644,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return subClassStatement;
 	}*/
 
-	protected RestrictionStatement performAddRestriction(AddRestrictionStatement action) {
+	protected SubClassStatement performAddRestriction(AddRestrictionStatement action) {
 		// System.out.println("Add restriction");
 
 		OntologyProperty property = action.getObjectProperty();
@@ -660,10 +660,17 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		if (subject instanceof OntologyClass && object instanceof OntologyClass) {
 			RestrictionType restrictionType = action.getRestrictionType(this);
 			int cardinality = action.getCardinality(this);
-			RestrictionStatement restriction = getProject().getProjectOntology().createRestriction((OntologyClass) subject, property,
+			OntologyRestrictionClass restriction = getProject().getProjectOntology().createRestriction((OntologyClass) subject, property,
 					restrictionType, cardinality, (OntologyClass) object);
 
-			return restriction;
+			if (subject instanceof OntologyClass) {
+				if (subject instanceof OntologyClass) {
+					((OntologyClass) subject).getOntResource().addSuperClass(restriction.getOntResource());
+				}
+				subject.updateOntologyStatements();
+				return subject.getSubClassStatement(restriction);
+			}
+
 		}
 
 		return null;

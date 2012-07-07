@@ -24,9 +24,9 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.tm.hibernate.gui.controller.HibernateEnumContainerController;
 import org.openflexo.tm.hibernate.impl.HibernateEnumContainer;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * Represents the main panel content when a HibernateModel is selected
@@ -38,8 +38,7 @@ public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumConta
 
 	private FlexoPerspective declaredPerspective;
 
-	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller,
-			FlexoPerspective perspective) {
+	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller, FlexoPerspective perspective) {
 		super(hibernateEnumContainer, controller, HIBERNATE_ENUM_CONTAINER_VIEW_FIB_RESOURCE_PATH);
 		declaredPerspective = perspective;
 	}
@@ -58,7 +57,7 @@ public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumConta
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected FlexoFIBController<HibernateEnumContainer> createFibController(FIBComponent fibComponent, FlexoController controller) {
+	protected FlexoFIBController createFibController(FIBComponent fibComponent, FlexoController controller) {
 		return new HibernateEnumContainerController(fibComponent, controller);
 	}
 }

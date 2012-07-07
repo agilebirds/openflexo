@@ -61,6 +61,7 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 		new AddGeneratedCodeRepositoryInitializer(this);
 		new RemoveGeneratedCodeRepositoryInitializer(this);
 		new ImportDocumentationTemplateInitializer(this);
+		new ExportDocumentationTemplatesInitializer(this);
 		new DGSetPropertyInitializer(this);
 		new OpenFileInExplorerInitializer(this);
 		new CompareTemplatesInNewWindowInitializer(this);

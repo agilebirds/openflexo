@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.view;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFGroup;
@@ -55,12 +54,10 @@ public class WKFMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 		hideLeftView();
 	}
 
-	@Override
 	public boolean isCollapseEnabled() {
 		return true;
 	}
 
-	@Override
 	public void performCollapseAll() {
 		if (getController().getCurrentModuleView() != null
 				&& getController().getCurrentModuleView().getRepresentedObject() instanceof FlexoProcess) {
@@ -92,20 +89,10 @@ public class WKFMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 		}
 	}
 
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof FlexoProcess) {
-			return ((FlexoProcess) object).getParentProcess();
-		}
-		return null;
-	}
-
-	@Override
 	public boolean isAutoLayoutEnabled() {
 		return getController().getCurrentModuleView() instanceof SwimmingLaneView;
 	}
 
-	@Override
 	public void performAutolayout() {
 		if (getController().getCurrentModuleView() instanceof SwimmingLaneView) {
 			SwimmingLaneView view = (SwimmingLaneView) getController().getCurrentModuleView();

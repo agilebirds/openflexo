@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="flow" hGap="20" vGap="5" flowAlignment="CENTER" titleFont="Lucida Grande,0,13" darkLevel="0">
+  <Label label="label3" localize="true" constraints="flow(index=0)">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="label4" localize="true" constraints="flow(index=1)">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="label5" localize="true" constraints="flow(index=2)">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="label1" localize="true" index="3" constraints="flow(index=3)">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="label2" localize="true" index="4" constraints="flow(index=4)">
+    <LocalizedDictionary />
+  </Label>
+  <LocalizedDictionary />
+</Panel>
+

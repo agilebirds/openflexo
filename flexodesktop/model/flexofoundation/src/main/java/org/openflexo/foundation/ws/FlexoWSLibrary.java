@@ -26,8 +26,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.dkv.EmptyStringException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -499,24 +497,14 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		return null;
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public WSObject getParent() {
 		return null;
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-
-	@Override
-	public Vector getOrderedChildren() {
-		Vector a = new Vector();
+	public Vector<WSObject> getOrderedChildren() {
+		Vector<WSObject> a = new Vector<WSObject>();
 		a.add(externalWSServiceList);
 		a.add(internalWSServiceList);
 		return a;

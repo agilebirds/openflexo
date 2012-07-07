@@ -33,7 +33,6 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GenerationRepository;
-import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.templates.action.AddCustomTemplateRepository;
@@ -155,8 +154,7 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 						DGTemplateFileModuleView invoker = (DGTemplateFileModuleView) action.getInvoker();
 						FlexoDialog dialog = (FlexoDialog) SwingUtilities.getAncestorOfClass(FlexoDialog.class, invoker);
 						dialog.getContentPane().remove(invoker);
-						DGTemplateFileModuleView newView = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController()
-								.createModuleViewForObjectAndPerspective((CGTemplate) action.getNewTemplateFile(), null);
+						DGTemplateFileModuleView newView = new DGTemplateFileModuleView(action.getNewTemplateFile(), null);
 						newView.setOpenedInSeparateWindow(true);
 						dialog.getContentPane().add(newView, BorderLayout.CENTER);
 						dialog.validate();

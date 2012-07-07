@@ -26,10 +26,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEMonitoringScreen;
+import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEOperationComponent;
 import org.openflexo.foundation.ie.IEPopupComponent;
 import org.openflexo.foundation.ie.IETabComponent;
@@ -46,34 +46,35 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
  * @author gpolet
  * 
  */
-public class DuplicateComponentAction extends FlexoAction {
+public class DuplicateComponentAction extends FlexoAction<DuplicateComponentAction, IEObject, IEObject> {
 
 	protected static final Logger logger = Logger.getLogger(DuplicateComponentAction.class.getPackage().getName());
 
-	public static FlexoActionType actionType = new FlexoActionType("duplicate_component", FlexoActionType.defaultGroup) {
+	public static FlexoActionType<DuplicateComponentAction, IEObject, IEObject> actionType = new FlexoActionType<DuplicateComponentAction, IEObject, IEObject>(
+			"duplicate_component", FlexoActionType.defaultGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public DuplicateComponentAction makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 			return new DuplicateComponentAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return object instanceof TopComponentContainer || object instanceof OperationComponentDefinition
 					|| object instanceof PopupComponentDefinition || object instanceof TabComponentDefinition;
 		}
 
 	};
 
-	protected DuplicateComponentAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	protected DuplicateComponentAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

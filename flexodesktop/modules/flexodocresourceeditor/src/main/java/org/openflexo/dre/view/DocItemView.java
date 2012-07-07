@@ -23,8 +23,8 @@ import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.controller.DREController;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class DocItemView extends AbstractDocItemView implements ModuleView<DocItem> {
 

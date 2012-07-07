@@ -27,7 +27,6 @@ package org.openflexo.fps.view;
  */
 import javax.swing.JSplitPane;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.view.FlexoMainPane;
@@ -40,7 +39,7 @@ import org.openflexo.view.FlexoMainPane;
 public class FPSMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
 	public FPSMainPane(FPSController controller) {
-		super(controller, true, false);
+		super(controller);
 
 		setLeftView(new JSplitPane(JSplitPane.VERTICAL_SPLIT, new CVSRepositoryBrowserView(controller), new SharedProjectBrowserView(
 				controller)));
@@ -54,17 +53,6 @@ public class FPSMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 
 	public void hideBrowser() {
 		hideLeftView();
-	}
-
-	@Override
-	public void showRightView() {
-		super.showRightView();
-	}
-
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		// Implements it if required
-		return null;
 	}
 
 }

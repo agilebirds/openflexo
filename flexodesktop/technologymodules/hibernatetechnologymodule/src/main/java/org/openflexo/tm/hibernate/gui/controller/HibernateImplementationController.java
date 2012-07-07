@@ -15,7 +15,7 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author Nicolas Daniels
  */
-public class HibernateImplementationController extends HibernateFibController<HibernateImplementation> {
+public class HibernateImplementationController extends HibernateFibController {
 
 	public HibernateImplementationController(FIBComponent component, FlexoController controller) {
 		super(component, controller);
@@ -23,8 +23,8 @@ public class HibernateImplementationController extends HibernateFibController<Hi
 
 	public void performCreateModel() {
 		Vector<HibernateImplementation> globalSelection = new Vector<HibernateImplementation>();
-		globalSelection.add(getDataObject());
-		FlexoAction<?, ?, ?> action = CreateHibernateModelAction.actionType.makeNewAction(getDataObject(), globalSelection, getEditor());
+		FlexoAction<?, ?, ?> action = CreateHibernateModelAction.actionType.makeNewAction((HibernateImplementation) getDataObject(),
+				globalSelection, getEditor());
 		action.doAction();
 	}
 }

@@ -23,7 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.dm.DMModel;
@@ -84,7 +83,7 @@ public class DMEOPrototype extends DMEOAttribute {
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMEORepository getParent() {
 		return getDMEORepository();
 	}
 

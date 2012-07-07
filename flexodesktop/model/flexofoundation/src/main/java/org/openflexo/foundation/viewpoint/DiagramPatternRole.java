@@ -1,12 +1,17 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DiagramPatternRole extends PatternRole {
 
 	private ViewPoint viewpoint;
 	private String viewpointURI;
+
+	public DiagramPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {

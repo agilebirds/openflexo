@@ -24,9 +24,9 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.sgmodule.SGCst;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * Please comment this class
@@ -38,8 +38,7 @@ public class ImplementationModelView extends FIBModuleView<ImplementationModel> 
 
 	private FlexoPerspective declaredPerspective;
 
-	public ImplementationModelView(ImplementationModel implementationModel, SGController controller,
-			FlexoPerspective perspective) {
+	public ImplementationModelView(ImplementationModel implementationModel, SGController controller, FlexoPerspective perspective) {
 		super(implementationModel, controller, SGCst.IMPLEMENTATION_MODEL_VIEW_FIB, true);
 		declaredPerspective = perspective;
 	}
@@ -58,7 +57,7 @@ public class ImplementationModelView extends FIBModuleView<ImplementationModel> 
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected FlexoFIBController<ImplementationModel> createFibController(FIBComponent fibComponent, FlexoController controller) {
+	protected FlexoFIBController createFibController(FIBComponent fibComponent, FlexoController controller) {
 		return new ImplementationModelFibController(fibComponent, controller);
 	}
 }

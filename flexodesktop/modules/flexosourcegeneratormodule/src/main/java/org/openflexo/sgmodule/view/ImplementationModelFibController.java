@@ -16,7 +16,7 @@ import org.openflexo.view.controller.FlexoFIBController;
  * 
  * @author Nicolas Daniels
  */
-public class ImplementationModelFibController extends FlexoFIBController<ImplementationModel> {
+public class ImplementationModelFibController extends FlexoFIBController {
 
 	public ImplementationModelFibController(FIBComponent component, FlexoController controller) {
 		super(component, controller);
@@ -24,9 +24,8 @@ public class ImplementationModelFibController extends FlexoFIBController<Impleme
 
 	public void performAddTechnologyModule() {
 		Vector<ImplementationModel> globalSelection = new Vector<ImplementationModel>();
-		globalSelection.add(getDataObject());
-		FlexoAction<?, ?, ?> action = CreateTechnologyModuleImplementation.actionType.makeNewAction(getDataObject(), globalSelection,
-				getEditor());
+		FlexoAction<?, ?, ?> action = CreateTechnologyModuleImplementation.actionType.makeNewAction((ImplementationModel) getDataObject(),
+				globalSelection, getEditor());
 		action.doAction();
 	}
 }

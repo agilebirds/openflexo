@@ -37,8 +37,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TargetType;
@@ -1421,19 +1419,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		_classLibrary = null;
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public DMObject getParent() {
 		return null;
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	/**

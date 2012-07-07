@@ -19,23 +19,25 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.util.EventObject;
 import java.io.File;
-import java.io.IOException;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.cg.action.ExportTOCAsTemplate;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class ExportTOCAsTemplateInitializer extends ActionInitializer {
+public class ExportTOCAsTemplateInitializer extends ActionInitializer<ExportTOCAsTemplate, FlexoModelObject, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -53,22 +55,22 @@ public class ExportTOCAsTemplateInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<ExportTOCAsTemplate>() {
 			@Override
 			public boolean run(EventObject e, ExportTOCAsTemplate action) {
-
-				JFileChooser chooser = new JFileChooser();
-				chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-				chooser.setDialogTitle(FlexoLocalization.localizedForKey("save_as_image", chooser));
-
-				File dest = null;
-				int returnVal = chooser.showSaveDialog(null);
-				if (returnVal == JFileChooser.CANCEL_OPTION) {
-					return false;
+				if (action.getDestinationFile() != null) {
+					return true;
 				}
+				FlexoFileChooser chooser = new FlexoFileChooser(FlexoFrame.getActiveFrame());
+				chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+				chooser.setDialogTitle(FlexoLocalization.localizedForKey("save_as_template"));
+
+				int returnVal = chooser.showSaveDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					if (isValidProjectName(chooser.getSelectedFile().getName())) {
-						dest = chooser.getSelectedFile();
+						File dest = chooser.getSelectedFile();
 						if (!dest.getName().toLowerCase().endsWith(".toc.xml")) {
 							dest = new File(dest.getAbsolutePath() + ".toc.xml");
 						}
+						action.setDestinationFile(dest);
+						return true;
 					} else {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Invalid file name. The following characters are not allowed: "
@@ -76,22 +78,8 @@ public class ExportTOCAsTemplateInitializer extends ActionInitializer {
 						}
 						FlexoController.notify(FlexoLocalization.localizedForKey("file_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
 					}
-				} else {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("No project specified !");
-					}
 				}
-
-				if (!dest.exists()) {
-					try {
-						FileUtils.createNewFile(dest);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-						return false;
-					}
-				}
-				action.setDestinationFile(dest);
-				return true;
+				return false;
 			}
 
 			private boolean isValidProjectName(String absolutePath) {

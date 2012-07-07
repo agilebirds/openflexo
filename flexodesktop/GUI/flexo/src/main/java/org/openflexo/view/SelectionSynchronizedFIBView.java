@@ -40,33 +40,32 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends FlexoFIBView<O> implements SelectionListener,
-		GraphicalFlexoObserver, FIBSelectionListener {
+public class SelectionSynchronizedFIBView extends FlexoFIBView implements SelectionListener, GraphicalFlexoObserver, FIBSelectionListener {
 	static final Logger logger = Logger.getLogger(SelectionSynchronizedFIBView.class.getPackage().getName());
 
-	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile) {
-		this(representedObject, controller, fibFile, false, controller.willLoad(fibFile));
+	public SelectionSynchronizedFIBView(Object representedObject, FlexoController controller, File fibFile) {
+		this(representedObject, controller, fibFile, false, controller != null ? controller.willLoad(fibFile) : null);
 	}
 
-	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
+	public SelectionSynchronizedFIBView(Object representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
 		this(representedObject, controller, fibFile, false, progress);
 	}
 
-	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar,
+	public SelectionSynchronizedFIBView(Object representedObject, FlexoController controller, File fibFile, boolean addScrollBar,
 			FlexoProgress progress) {
 		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, progress);
 	}
 
-	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress) {
+	public SelectionSynchronizedFIBView(Object representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress) {
 		this(representedObject, controller, fibResourcePath, false, progress);
 	}
 
-	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar,
+	public SelectionSynchronizedFIBView(Object representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar,
 			FlexoProgress progress) {
 		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibResourcePath), addScrollBar, progress);
 	}
 
-	protected SelectionSynchronizedFIBView(O representedObject, FlexoController controller, FIBComponent fibComponent,
+	protected SelectionSynchronizedFIBView(Object representedObject, FlexoController controller, FIBComponent fibComponent,
 			boolean addScrollBar, FlexoProgress progress) {
 		super(representedObject, controller, fibComponent, addScrollBar, progress);
 		getFIBView().getController().addSelectionListener(this);

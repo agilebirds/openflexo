@@ -45,8 +45,8 @@ import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.view.FlexoRelativeWindow;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.RootControllerModel;
 
 /**
  * Automatic builded 'Windows' menu for modules
@@ -124,7 +124,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		add(inspectorWindowItem = new InspectorWindowItem());
 		add(preferencesWindowItem = new PreferencesWindowItem());
 		windowFirstIndex = getItemCount();
-		if (controller instanceof ConsistencyCheckingController) {
+		if (controller.getDefaultValidationModel() != null) {
 			add(checkConsistencyWindowItem = new CheckConsistencyWindowItem());
 			windowFirstIndex = getItemCount();
 		}
@@ -552,11 +552,13 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 	public class PaletteItem extends FlexoMenuItem {
 		public PaletteItem() {
 			super(new PaletteAction(), getHidePaletteString(), null, getController(), true);
-			((PaletteAction) getAction()).setItem(this);
+			updateText();
+			getController().getControllerModel().getPropertyChangeSupport()
+					.addPropertyChangeListener(RootControllerModel.RIGHT_VIEW_VISIBLE, this);
 		}
 
-		public void updateText(boolean showed) {
-			if (!showed) {
+		public void updateText() {
+			if (!getController().getControllerModel().isRightViewVisible()) {
 				setText(FlexoLocalization.localizedForKey(getShowPaletteString()));
 			} else {
 				setText(FlexoLocalization.localizedForKey(getHidePaletteString()));
@@ -566,28 +568,14 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 	}
 
 	public class PaletteAction extends AbstractAction {
-		private PaletteItem _item;
-		private boolean isShowed;
 
 		public PaletteAction() {
 			super();
 		}
 
-		public void setItem(PaletteItem item) {
-			_item = item;
-		}
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			isShowed = getController().rightViewIsVisible();
-			if (isShowed) {
-				getController().hideRightView();
-				isShowed = false;
-			} else {
-				getController().showRightView();
-				isShowed = true;
-			}
-			_item.updateText(isShowed);
+			getController().getControllerModel().setRightViewVisible(!getController().getControllerModel().isRightViewVisible());
 		}
 
 	}
@@ -600,11 +588,22 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 	public class BrowserItem extends FlexoMenuItem {
 		public BrowserItem() {
 			super(new BrowserAction(), "hide_browser", null, getController(), true);
-			((BrowserAction) getAction()).setItem(this);
+			updateText();
+			getController().getControllerModel().getPropertyChangeSupport()
+					.addPropertyChangeListener(RootControllerModel.LEFT_VIEW_VISIBLE, this);
 		}
 
-		public void updateText(boolean showed) {
-			if (!showed) {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(RootControllerModel.LEFT_VIEW_VISIBLE)) {
+				updateText();
+			} else {
+				super.propertyChange(evt);
+			}
+		}
+
+		private void updateText() {
+			if (!getController().getControllerModel().isLeftViewVisible()) {
 				setText(FlexoLocalization.localizedForKey("show_browser"));
 			} else {
 				setText(FlexoLocalization.localizedForKey("hide_browser"));
@@ -617,29 +616,14 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 	}
 
 	public class BrowserAction extends AbstractAction {
-		private boolean isShowed;
-
-		private BrowserItem _item;
 
 		public BrowserAction() {
 			super();
 		}
 
-		public void setItem(BrowserItem item) {
-			_item = item;
-		}
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			isShowed = getController().leftViewIsVisible();
-			if (isShowed) {
-				getController().hideLeftView();
-				isShowed = false;
-			} else {
-				getController().showLeftView();
-				isShowed = true;
-			}
-			_item.updateText(isShowed);
+			getController().getControllerModel().setLeftViewVisible(!getController().getControllerModel().isLeftViewVisible());
 		}
 
 	}

@@ -19,7 +19,6 @@
  */
 package org.openflexo.sgmodule.view;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.FlexoMainPane;
@@ -41,12 +40,6 @@ public class SGMainPane extends FlexoMainPane implements GraphicalFlexoObserver 
 
 	public void hideBrowser() {
 		hideLeftView();
-	}
-
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		// Implements it if required
-		return null;
 	}
 
 }

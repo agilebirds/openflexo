@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.AbstractMessageDefinition;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
@@ -38,9 +37,9 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wse.controller.action.WSEControllerActionInitializer;
 import org.openflexo.wse.view.WSEMainPane;
@@ -51,7 +50,7 @@ import org.openflexo.wse.view.menu.WSEMenuBar;
  * 
  * @author yourname
  */
-public class WSEController extends FlexoController {// , ConsistencyCheckingController {
+public class WSEController extends FlexoController {
 
 	static final Logger logger = Logger.getLogger(WSEController.class.getPackage().getName());
 
@@ -69,7 +68,6 @@ public class WSEController extends FlexoController {// , ConsistencyCheckingCont
 	public WSEController(FlexoModule module) {
 		super(module);
 		addToPerspectives(WSE_PERSPECTIVE);
-		setDefaultPespective(WSE_PERSPECTIVE);
 		_browser = new WSEBrowser(this);
 	}
 
@@ -91,11 +89,6 @@ public class WSEController extends FlexoController {// , ConsistencyCheckingCont
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new WSEMenuBar(this);
-	}
-
-	public ValidationModel getDefaultValidationModel() {
-		// If there is a ValidationModel associated to this module, put it here
-		return null;
 	}
 
 	public void showBrowser() {

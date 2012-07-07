@@ -24,6 +24,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
@@ -40,6 +41,10 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", OntologyClass.class, BindingDefinitionType.GET, false);
 
+	public ObjectPropertyInspectorEntry(ViewPointBuilder builder) {
+		super(builder);
+	}
+
 	@Override
 	public Class getDefaultDataClass() {
 		return OntologyObjectProperty.class;
@@ -47,7 +52,7 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	@Override
 	public String getWidgetName() {
-		return "OntologyPropertySelector";
+		return "ObjectPropertySelector";
 	}
 
 	public String _getRangeURI() {
@@ -60,7 +65,7 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	public OntologyClass getRange() {
 		getViewPoint().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getRangeURI());
+		return getViewPoint().getViewpointOntology().getClass(_getRangeURI());
 	}
 
 	public void setRange(OntologyClass c) {

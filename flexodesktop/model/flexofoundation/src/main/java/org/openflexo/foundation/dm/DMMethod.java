@@ -26,8 +26,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
@@ -1189,13 +1187,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMEntity getParent() {
 		return getEntity();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return false;
 	}
 
 	@Override
@@ -1426,13 +1419,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		}
 
 		@Override
-		public TreeNode getParent() {
+		public DMMethod getParent() {
 			return getMethod();
-		}
-
-		@Override
-		public boolean getAllowsChildren() {
-			return false;
 		}
 
 		/**

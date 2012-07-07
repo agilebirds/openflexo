@@ -31,6 +31,8 @@ import org.openflexo.foundation.cg.DocTypeAdded;
 import org.openflexo.foundation.cg.DocTypeRemoved;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.cg.dm.LongOperationStarted;
+import org.openflexo.foundation.cg.dm.LongOperationStopped;
 import org.openflexo.foundation.toc.TOCRepository;
 
 public class GeneratedDocElement extends DGBrowserElement {
@@ -73,6 +75,14 @@ public class GeneratedDocElement extends DGBrowserElement {
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof LongOperationStarted) {
+			_browser.setHoldStructure();
+			return;
+		} else if (dataModification instanceof LongOperationStopped) {
+			_browser.resetHoldStructure();
+			refreshWhenPossible();
+			return;
+		}
 		if (observable == getProject()) {
 			if (dataModification instanceof DocTypeAdded || dataModification instanceof DocTypeRemoved) {
 				if (_browser != null) {

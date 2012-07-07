@@ -42,7 +42,7 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class DiagramPerspective extends DMPerspective<ERDiagram> {
+public class DiagramPerspective extends DMPerspective {
 
 	private final DMController _controller;
 
@@ -112,9 +112,8 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 		};
 		diagramBrowser = new DiagramBrowser(controller);
 		diagramBrowserView = new DMBrowserView(diagramBrowser, controller);
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, diagramBrowserView);
-		splitPane.setDividerLocation(0.7);
-		splitPane.setResizeWeight(0.7);
+		setTopLeftView(_browserView);
+		setBottomLetfView(diagramBrowserView);
 		infoLabel = new JLabel("ALT-drag to define inheritance, CTRL-drag to define properties");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
@@ -129,7 +128,7 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -139,7 +138,7 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
@@ -174,16 +173,6 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return splitPane;
-	}
-
-	@Override
 	public JComponent getHeader() {
 		if (getCurrentDiagramView() != null) {
 			return getCurrentDiagramView().getController().getScalePanel();
@@ -194,11 +183,6 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	@Override
 	public JComponent getFooter() {
 		return infoLabel;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return false;
 	}
 
 	/*@Override
@@ -222,28 +206,6 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 		}
 		return returned;
 	}
-
-	/**
-	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
-	 * 
-	 * @return
-	 */
-	/*protected JSplitPane getSplitPaneWithRolePaletteAndDocInspectorPanel()
-	{
-		if (splitPaneWithRolePaletteAndDocInspectorPanel == null) {
-			splitPaneWithRolePaletteAndDocInspectorPanel = new JSplitPane(
-					JSplitPane.VERTICAL_SPLIT,
-					getRoleEditorController().getPalette().getPaletteView(),
-					_controller.getDisconnectedDocInspectorPanel());
-			splitPaneWithRolePaletteAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithRolePaletteAndDocInspectorPanel.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION);
-		}
-		if (splitPaneWithRolePaletteAndDocInspectorPanel.getBottomComponent() == null) {
-			splitPaneWithRolePaletteAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithRolePaletteAndDocInspectorPanel,"RolePaletteAndDocInspectorPanel");
-		return splitPaneWithRolePaletteAndDocInspectorPanel;
-	}*/
 
 	protected class DiagramBrowser extends DMBrowser {
 		private ERDiagram representedDiagram = null;

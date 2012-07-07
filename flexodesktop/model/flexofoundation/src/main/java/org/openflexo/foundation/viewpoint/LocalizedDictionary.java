@@ -27,6 +27,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -41,7 +42,8 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	private final Hashtable<Language, Hashtable<String, String>> _values;
 	private Vector<DynamicEntry> dynamicEntries = null;
 
-	public LocalizedDictionary() {
+	public LocalizedDictionary(ViewPointBuilder builder) {
+		super(builder);
 		_entries = new Vector<LocalizedEntry>();
 		_values = new Hashtable<Language, Hashtable<String, String>>();
 	}

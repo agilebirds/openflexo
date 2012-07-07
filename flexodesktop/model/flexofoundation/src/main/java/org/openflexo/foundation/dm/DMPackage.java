@@ -29,8 +29,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
@@ -168,7 +166,7 @@ public class DMPackage extends DMObject {
 			}
 		}
 
-		return ((getRepository() != null) && (!getRepository().isReadOnly()));
+		return getRepository() != null && !getRepository().isReadOnly();
 	}
 
 	public DMRepository getRepository() {
@@ -323,7 +321,7 @@ public class DMPackage extends DMObject {
 		public int compare(DMEntity o1, DMEntity o2) {
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;
@@ -340,19 +338,9 @@ public class DMPackage extends DMObject {
 		super.update(observable, dataModification);
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public DMRepository getParent() {
 		return repository;
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	@Override

@@ -66,6 +66,7 @@ import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.RootControllerModel;
 
 /**
  * Abstract main frame used in the context of an application module
@@ -194,7 +195,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		_controller = controller;
 		_relativeWindows = new Vector<FlexoRelativeWindow>();
 		_displayedRelativeWindows = new Vector<FlexoRelativeWindow>();
-		_controller.getPropertyChangeSupport().addPropertyChangeListener(FlexoController.EDITOR, this);
+		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_EDITOR, this);
+		_controller.getControllerModel().getPropertyChangeSupport()
+				.addPropertyChangeListener(RootControllerModel.CURRENT_PERPSECTIVE, this);
 		if (defaultFrame != null) {
 			disposeDefaultFrameWhenPossible();
 		}
@@ -348,7 +351,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(FlexoController.EDITOR)) {
+		if (evt.getPropertyName().equals(RootControllerModel.CURRENT_EDITOR)) {
 			FlexoEditor old = (FlexoEditor) evt.getOldValue();
 			FlexoEditor newValue = (FlexoEditor) evt.getNewValue();
 			if (old != null && old.getProject() != null) {

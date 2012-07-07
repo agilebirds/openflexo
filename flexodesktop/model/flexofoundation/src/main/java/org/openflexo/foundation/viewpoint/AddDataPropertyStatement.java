@@ -36,6 +36,7 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -45,8 +46,8 @@ public class AddDataPropertyStatement extends AddStatement {
 
 	private String dataPropertyURI = null;
 
-	public AddDataPropertyStatement() {
-		super();
+	public AddDataPropertyStatement(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -84,8 +85,8 @@ public class AddDataPropertyStatement extends AddStatement {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(dataPropertyURI)) {
-			if (getOntologyLibrary() != null) {
-				return getOntologyLibrary().getDataProperty(dataPropertyURI);
+			if (getViewPoint().getViewpointOntology() != null) {
+				return getViewPoint().getViewpointOntology().getDataProperty(dataPropertyURI);
 			}
 		} else {
 			if (getPatternRole() != null) {

@@ -28,14 +28,12 @@ public class InverseOfStatement extends OntologyStatement {
 
 	private static final Logger logger = Logger.getLogger(InverseOfStatement.class.getPackage().getName());
 
-	public static final String INVERSE_OF_URI = "http://www.w3.org/2002/07/owl#inverseOf";
-
 	private OntologyObject inverseProperty;
 
 	public InverseOfStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			inverseProperty = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			inverseProperty = getOntology().retrieveOntologyObject((Resource) s.getObject());
 		} else {
 			logger.warning("SubPropertyStatement: object is not a Resource !");
 		}

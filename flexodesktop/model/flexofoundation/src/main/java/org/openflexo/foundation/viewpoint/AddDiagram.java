@@ -27,13 +27,15 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddDiagram extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
-	public AddDiagram() {
+	public AddDiagram(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

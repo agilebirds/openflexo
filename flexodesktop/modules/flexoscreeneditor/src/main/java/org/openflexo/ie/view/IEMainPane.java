@@ -19,11 +19,9 @@
  */
 package org.openflexo.ie.view;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 
 /**
  * Represents the main pane for IE module
@@ -42,43 +40,6 @@ public class IEMainPane extends FlexoMainPane implements GraphicalFlexoObserver 
 
 	public void hideBrowser() {
 		hideLeftView();
-	}
-
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		return null;
-	}
-
-	@Override
-	public void setModuleView(ModuleView<?> moduleView) {
-		super.setModuleView(moduleView);
-		if (moduleView == null) {
-			return;
-		}
-		/* if (moduleView instanceof IEModuleView) {
-		     if (tabbedPane != null) {
-		         tabbedPane.removeChangeListener(browserTabbedPaneListener);
-		         switch (((IEModuleView) moduleView).getBrowserTab()) {
-		         case ComponentLibary:
-		             tabbedPane.setSelectedComponent(browser);
-		             break;
-		         case DKV:
-		             tabbedPane.setSelectedComponent(_dkvEditorBrowserView);
-		             break;
-		         case Menu:
-		             tabbedPane.setSelectedComponent(_menuEditorBrowserView);
-		             break;
-		         }
-		         tabbedPane.addChangeListener(browserTabbedPaneListener);
-		     }
-		 } else {
-		     if (logger.isLoggable(Level.SEVERE))
-		         logger.severe("The current view does not implement IEModuleView!!!" + moduleView.getClass().getName());
-		 }*/
-		if (moduleView instanceof IEWOComponentView) {
-			// Listen for component rename
-			((IEWOComponentView) moduleView).getModel().getComponentDefinition().addObserver(this);
-		}
 	}
 
 }

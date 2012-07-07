@@ -22,22 +22,22 @@
 		<layout name ="DEFAULT">
 			<param name="aLayoutParamName" value="aLayoutParamValue"/>
 		</layout>
-		<property name="businessDataVariableName" label="variable_name" widget="TEXT_FIELD" constraint="1">
+		<property name="businessDataVariableName" label="variable_name" widget="TEXT_FIELD" constraint="2">
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
 			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
 		</property>
-		<property name="businessDataType" label="variable_type" widget="CUSTOM" constraint="2">
-			<param name="className" value="org.openflexo.components.widget.DMEntityInspectorWidget"/>
+		<property name="businessDataVariableType" label="variable_type" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
 			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
 		</property>
 	</tab>
 	<tab name="Doc" index="2">
-	    <property name="graphicalPropertyForKey('preferredRepresentation')" label="preferred_representation" widget="DROPDOWN" constraint="-1">
+	    <property name="preferredRepresentation" label="preferred_representation" widget="DROPDOWN" constraint="0">
 	        <param name="type" value="org.openflexo.wkf.WKFModule$ProcessRepresentation"/>
 	    </property>
-		<property name="index" label="index" widget="INTEGER" constraint="0" depends="processNode.parentFolder" conditional="processNode.parentFolder=null"/>
-		<property name="vectorIndex" label="index" widget="INTEGER" constraint="0" depends="processNode.parentFolder" conditional="processNode.parentFolder!=null"/>
+		<property name="index" label="index" widget="INTEGER" constraint="1" depends="processNode.parentFolder" conditional="processNode.parentFolder=null"/>
+		<property name="vectorIndex" label="index" widget="INTEGER" constraint="2" depends="processNode.parentFolder" conditional="processNode.parentFolder!=null"/>
 	</tab>
 	
 	<tab name="Status" index="4">
@@ -90,32 +90,11 @@
 	</tab>
 	
 	<tab name="Graphics_BPE" index="20" layout="DEFAULT" visibilityContext="BPE">
-		<property name="width('bpe')" label="width" widget="DOUBLE" constraint="2">
-			<param name="columns" value="10"/>
-		</property>
-		<property name="height('bpe')" label="height" widget="DOUBLE" constraint="3">
-			<param name="columns" value="10"/>
-		</property>
-		<property name="textColor('bpe')" label="text_color" widget="COLOR" constraint="4">
-			<param name="columns" value="10"/>
-		</property>
-		<property name="bgColor('bpe')" label="back_color" widget="COLOR" constraint="5">
-			<param name="columns" value="10"/>
-		</property>
 		<property name="isAlignedOnGrid('bpe')" label="aligned_on_grid" widget="CHECKBOX" constraint="6"/>
 		<property name="gridSize('bpe')" label="grid_size" widget="INTEGER" constraint="7"/>
 	</tab>
 
 	<tab name="Graphics_SWL" index="21" layout="DEFAULT" visibilityContext="SWL">
-		<property name="width('swl')" label="width" widget="DOUBLE" constraint="2">
-			<param name="columns" value="10"/>
-		</property>
-		<property name="textColor('swl')" label="text_color" widget="COLOR" constraint="4">
-			<param name="columns" value="10"/>
-		</property>
-		<property name="bgColor('swl')" label="back_color" widget="COLOR" constraint="5">
-			<param name="columns" value="10"/>
-		</property>
 	</tab>
 
     <tab name="Process Metrics" index="8" layout="DEFAULT" visibilityContext="METRICS">

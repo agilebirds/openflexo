@@ -30,8 +30,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -420,19 +418,9 @@ public abstract class DMRepository extends DMObject {
 
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public DMRepositoryFolder getParent() {
 		return getRepositoryFolder(); // getDMModel();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	@Override

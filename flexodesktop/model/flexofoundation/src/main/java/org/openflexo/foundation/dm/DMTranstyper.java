@@ -24,8 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
@@ -155,11 +153,6 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return false;
-	}
-
-	@Override
 	public Vector<DMObject> getEmbeddedDMObjects() {
 		return EMPTY_VECTOR;
 	}
@@ -170,7 +163,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMEntity getParent() {
 		return declaringEntity;
 	}
 
@@ -529,13 +522,8 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		}
 
 		@Override
-		public TreeNode getParent() {
+		public DMTranstyper getParent() {
 			return getTranstyper();
-		}
-
-		@Override
-		public boolean getAllowsChildren() {
-			return false;
 		}
 
 		/**
@@ -693,13 +681,8 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		}
 
 		@Override
-		public TreeNode getParent() {
+		public DMTranstyper getParent() {
 			return getTranstyper();
-		}
-
-		@Override
-		public boolean getAllowsChildren() {
-			return false;
 		}
 
 		/**

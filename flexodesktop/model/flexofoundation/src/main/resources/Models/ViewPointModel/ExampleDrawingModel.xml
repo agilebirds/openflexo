@@ -2,7 +2,7 @@
 
 <!-- Mapping model for drawing editor -->
 
-<model handlesReferences="yes" serializationMode="pseudoTree"> 
+<model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder"  handlesReferences="yes" serializationMode="pseudoTree"> 
 
   <entity name="org.openflexo.foundation.viewpoint.ExampleDrawingObject" abstract="YES" finalizer="finalizeDeserialization" contexts="Contained">
     <property name="childs" type="vector" contains="org.openflexo.foundation.viewpoint.ExampleDrawingObject" primary="yes" context="Contained"/>

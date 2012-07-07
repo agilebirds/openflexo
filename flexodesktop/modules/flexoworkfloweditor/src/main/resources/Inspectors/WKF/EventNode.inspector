@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.EventNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.EventNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="representation_role" localize="true" name="RoleLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="(data.isInRootPetriGraph = true)" />
-      <DropDown format="object.name" localize="true" name="Role" data="data.role" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" visible="(data.isInRootPetriGraph = true)" list="data.project.workflow.allRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="representation_role" localize="true" name="RoleLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="(data.isInRootPetriGraph = true)" />
+      <DropDown showReset="true" format="object.name" localize="true" name="Role" index="5" data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" visible="(data.isInRootPetriGraph = true)" list="data.project.workflow.allRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="docUrl" localize="true" name="DocumentationUrlLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" visible="(data.isStartOrEnd = true)" />
-      <TextField passwd="false" localize="true" name="DocumentationUrl" data="data.documentationUrl" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="(data.isStartOrEnd = true)" />
-      <Label label="trigger_process" localize="true" name="LinkedProcessLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="(data.isStartOrEnd = true)" />
-      <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" data="data.linkedProcess" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" visible="(data.isStartOrEnd = true)" name="LinkedProcess" localize="true" manageDynamicModel="true">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="docUrl" localize="true" name="DocumentationUrlLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="(data.isStartOrEnd = true)" />
+      <TextField passwd="false" index="7" data="data.documentationUrl" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" visible="(data.isStartOrEnd = true)" name="DocumentationUrl" localize="true" />
+      <Label label="trigger_process" localize="true" name="LinkedProcessLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.isStartOrEnd = true)" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" index="9" data="data.linkedProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" visible="(data.isStartOrEnd = true)" name="LinkedProcess" localize="true" manageDynamicModel="true">
         <Assignment variable="component.project" value="data.project" />
       </Custom>
-      <Label label="from" localize="true" name="FromAddressLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="(data.isMessageSent = true)" />
-      <TextField columns="10" passwd="false" localize="true" name="FromAddress" data="data.fromAddress" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(data.isMessageSent = true)" />
-      <Label label="date" localize="true" name="DateBindingLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="(data.isTriggerTimer = true)" />
-      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.dateBinding" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(data.isTriggerTimer = true)" name="DateBinding" localize="true" manageDynamicModel="true">
+      <Label label="date" localize="true" name="DateBindingLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.isTriggerTimer = true)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" index="11" data="data.dateBinding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" visible="(data.isTriggerTimer = true)" name="DateBinding" localize="true" manageDynamicModel="true">
         <Assignment variable="component.bindingDefinition" value="data.dateBindingDefinition" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Custom>
-      <Label label="to" localize="true" name="ToAddressLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.isMessageSent = true)" />
-      <TextField columns="10" passwd="false" localize="true" name="ToAddress" data="data.toAddress" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" visible="(data.isMessageSent = true)" />
-      <Label label="new_status" localize="true" name="NewStatusLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.nameAndProcess" localize="true" name="NewStatus" data="data.newStatus" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" />
-      <Label label="subject" localize="true" name="MailSubjectLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" visible="(data.isMessageSent = true)" />
-      <TextField columns="10" passwd="false" localize="true" name="MailSubject" data="data.mailSubject" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=false)" visible="(data.isMessageSent = true)" />
-      <Label label="body" localize="true" name="MailBodyLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" visible="(data.isMessageSent = true)" />
-      <TextArea rows="8" data="data.mailBody" constraints="twocols(location=right;index=17;expandHorizontally=true;expandVertically=true)" visible="(data.isMessageSent = true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="MailBody" localize="true" />
+      <Label label="delay" localize="true" name="DelayLabel" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="(data.isTriggerTimer = true)" />
+      <Custom componentClassName="org.openflexo.fib.utils.DurationSelector" index="13" data="data.delay" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" visible="(data.isTriggerTimer = true)" name="Delay" localize="true" manageDynamicModel="true" />
+      <Label label="new_status" localize="true" name="NewStatusLabel" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.nameAndProcess" localize="true" name="NewStatus" index="15" data="data.newStatus" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
+      <Label label="from" localize="true" name="FromAddressLabel" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" visible="(data.isMessageSent = true)" />
+      <TextField columns="10" passwd="false" index="21" data="data.fromAddress" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;location=right)" visible="(data.isMessageSent = true)" name="FromAddress" localize="true" />
+      <Label label="to" localize="true" name="ToAddressLabel" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" visible="(data.isMessageSent = true)" />
+      <TextField columns="10" passwd="false" index="23" data="data.toAddress" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;location=right)" visible="(data.isMessageSent = true)" name="ToAddress" localize="true" />
+      <Label label="subject" localize="true" name="MailSubjectLabel" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" visible="(data.isMessageSent = true)" />
+      <TextField columns="10" passwd="false" index="25" data="data.mailSubject" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;location=right)" visible="(data.isMessageSent = true)" name="MailSubject" localize="true" />
+      <Label label="body" localize="true" name="MailBodyLabel" index="26" constraints="twocols(expandHorizontally=false;expandVertically=false;index=16;insetsTop=5;location=left)" visible="(data.isMessageSent = true)" />
+      <TextArea rows="8" index="27" data="data.mailBody" constraints="twocols(expandHorizontally=true;expandVertically=true;index=17;location=right)" visible="(data.isMessageSent = true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="MailBody" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -42,18 +44,21 @@
     <Localized key="trigger_process" lang="English">Trigger process</Localized>
     <Localized key="trigger_process" lang="French">Déclenche le processus</Localized>
     <Localized key="trigger_process" lang="Dutch">Trigger process</Localized>
-    <Localized key="from" lang="English">From</Localized>
-    <Localized key="from" lang="French">De</Localized>
-    <Localized key="from" lang="Dutch">From</Localized>
     <Localized key="date" lang="English">Date</Localized>
     <Localized key="date" lang="French">Date</Localized>
     <Localized key="date" lang="Dutch">Date</Localized>
-    <Localized key="to" lang="English">To</Localized>
-    <Localized key="to" lang="French">À</Localized>
-    <Localized key="to" lang="Dutch">To</Localized>
+    <Localized key="delay" lang="English">Delay</Localized>
+    <Localized key="delay" lang="French">Délais</Localized>
+    <Localized key="delay" lang="Dutch">Delay</Localized>
     <Localized key="new_status" lang="English">New status</Localized>
     <Localized key="new_status" lang="French">Nouveau statut</Localized>
     <Localized key="new_status" lang="Dutch">New status</Localized>
+    <Localized key="from" lang="English">From</Localized>
+    <Localized key="from" lang="French">De</Localized>
+    <Localized key="from" lang="Dutch">From</Localized>
+    <Localized key="to" lang="English">To</Localized>
+    <Localized key="to" lang="French">À</Localized>
+    <Localized key="to" lang="Dutch">To</Localized>
     <Localized key="subject" lang="English">Subject</Localized>
     <Localized key="subject" lang="French">Sujet</Localized>
     <Localized key="subject" lang="Dutch">Subject</Localized>

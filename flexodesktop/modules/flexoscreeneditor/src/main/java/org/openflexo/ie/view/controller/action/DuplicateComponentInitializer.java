@@ -54,9 +54,9 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 				IEWOComponent c;
 				if (action.getFocusedObject() instanceof ComponentDefinition) {
 					c = ((ComponentDefinition) action.getFocusedObject()).getWOComponent();
-				} else if (action.getFocusedObject() instanceof IEWOComponent) {
+				} /*else if (action.getFocusedObject() instanceof IEWOComponent) {
 					c = (IEWOComponent) action.getFocusedObject();
-				} else {
+					}*/else {
 					return false;
 				}
 				String componentName = null;
@@ -68,9 +68,9 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 							IERegExp.JAVA_CLASS_NAME_PATTERN,
 							FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
 				} while (componentName != null && getProject().getFlexoComponentLibrary().getComponentNamed(componentName) != null);
-				(action).setNewComponentName(componentName);
-				(action).setComponent(c);
-				return (componentName != null && componentName.trim().length() > 0);
+				action.setNewComponentName(componentName);
+				action.setComponent(c);
+				return componentName != null && componentName.trim().length() > 0;
 			}
 		};
 	}

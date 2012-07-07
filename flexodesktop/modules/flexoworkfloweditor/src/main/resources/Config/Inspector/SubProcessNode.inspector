@@ -8,7 +8,7 @@
 			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
 			<param name = "format" value="name"/>
 		</property>-->
-		<property name="subProcess" label="sub_process" widget="CUSTOM" constraint="3">
+		<property name="subProcess" label="sub_process" widget="CUSTOM" constraint="2">
 			<param name="className" value="org.openflexo.components.widget.ProcessInspectorWidget"/>
 			<param name="isSelectable" value="isAcceptableAsSubProcess"/>
 		</property>

@@ -2,6 +2,7 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ConnectorPatternRole extends GraphicalElementPatternRole {
@@ -14,6 +15,10 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 	// But you can assert graphical representation here are a org.openflexo.fge.ShapeGraphicalRepresentation.
 	private Object artifactFromGraphicalRepresentation;
 	private Object artifactToGraphicalRepresentation;
+
+	public ConnectorPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	protected void initDefaultSpecifications() {

@@ -2,10 +2,15 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ObjectPropertyPatternRole extends PropertyPatternRole {
 
 	private String rangeURI;
+
+	public ObjectPropertyPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {
@@ -44,7 +49,7 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 
 	public OntologyClass getRange() {
 		getViewPoint().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getRangeURI());
+		return getViewPoint().getViewpointOntology().getClass(_getRangeURI());
 	}
 
 	public void setRange(OntologyClass c) {

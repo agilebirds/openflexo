@@ -24,6 +24,7 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 
+@Deprecated
 public class OntologyBrowser extends VPMBrowser {
 	private FlexoOntology representedOntology = null;
 

@@ -2,7 +2,7 @@
 
 <!-- Mapping model for calc palette -->
 
-<model handlesReferences="yes" serializationMode="pseudoTree"> 
+<model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
 
   <entity name="org.openflexo.foundation.viewpoint.ViewPointPalette" xmlTag="Palette"> 
     <property name="index" xmlTag="index" attribute="YES"/> 
@@ -186,7 +186,6 @@
   	 <property name="nPoints" xmlTag="nPoints" attribute="YES"/>
   	 <property name="startAngle" xmlTag="startAngle" attribute="YES"/>
    </entity>
-	
 	
    <entity name="org.openflexo.fge.shapes.Triangle" xmlTag="TriangleShape">
      <description>Triangle shape</description>

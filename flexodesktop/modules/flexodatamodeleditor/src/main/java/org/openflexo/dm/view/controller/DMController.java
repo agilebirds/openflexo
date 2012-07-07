@@ -19,7 +19,6 @@
  */
 package org.openflexo.dm.view.controller;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -58,11 +57,10 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -70,7 +68,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author sguerin
  */
-public class DMController extends FlexoController implements ConsistencyCheckingController {
+public class DMController extends FlexoController {
 
 	@SuppressWarnings("hiding")
 	private static final Logger logger = Logger.getLogger(DMController.class.getPackage().getName());
@@ -79,6 +77,16 @@ public class DMController extends FlexoController implements ConsistencyChecking
 	public final PackagePerspective PACKAGE_PERSPECTIVE;
 	public final HierarchyPerspective HIERARCHY_PERSPECTIVE;
 	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
+
+	@Override
+	public boolean useNewInspectorScheme() {
+		return true;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return true;
+	}
 
 	/**
 	 * Default constructor
@@ -130,13 +138,6 @@ public class DMController extends FlexoController implements ConsistencyChecking
 		return project.getDataModel();
 	}
 
-	public void loadRelativeWindows() {
-		if (getDocInspectorPanel() != null) {
-			getDocInspectorPanel().setPreferredSize(new Dimension(300, 300));
-			getMainPane().setRightView(getDocInspectorPanel());
-		}
-	}
-
 	public DMModel getDataModel() {
 		return getProject().getDataModel();
 	}
@@ -146,18 +147,6 @@ public class DMController extends FlexoController implements ConsistencyChecking
 		return getProject().getDMValidationModel();
 	}
 
-	public void showDataModelBrowser() {
-		if (getMainPane() != null) {
-			getMainPane().showDataModelBrowser();
-		}
-	}
-
-	public void hideDataModelBrowser() {
-		if (getMainPane() != null) {
-			getMainPane().hideDataModelBrowser();
-		}
-	}
-
 	public void setCurrentEditedObject(DMObject object) {
 		if (object != getCurrentDisplayedObjectAsModuleView()) {
 			setCurrentEditedObjectAsModuleView(object);
@@ -165,7 +154,6 @@ public class DMController extends FlexoController implements ConsistencyChecking
 	}
 
 	public DMObject getCurrentEditedObject() {
-		// return _currentEditedObject;
 		return (DMObject) getCurrentDisplayedObjectAsModuleView();
 	}
 
@@ -264,16 +252,6 @@ public class DMController extends FlexoController implements ConsistencyChecking
 		}
 		// See above
 		return super.handleException(inspectable, propertyName, value, exception);
-	}
-
-	@Override
-	public FlexoPerspective getDefaultPespective() {
-		return getCurrentPerspective();
-	}
-
-	@Override
-	public FlexoPerspective getCurrentPerspective() {
-		return super.getCurrentPerspective();
 	}
 
 	@Override

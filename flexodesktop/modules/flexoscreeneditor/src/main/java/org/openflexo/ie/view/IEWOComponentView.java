@@ -40,8 +40,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -105,11 +103,11 @@ import org.openflexo.ie.view.widget.IETextFieldWidgetView;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.ie.view.widget.IEWysiwygWidgetView;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver, IEViewManaging,
-		SelectionSynchronizedModuleView<ComponentInstance>, ChangeListener {
+		SelectionSynchronizedModuleView<ComponentInstance> {
 
 	public JLabel title;
 	private Hashtable<IEObject, IEWidgetView<?>> _widgetViews;
@@ -516,12 +514,6 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 			}
 		}
 		return answer;
-	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		revalidate();
-		repaint();
 	}
 
 	@Override

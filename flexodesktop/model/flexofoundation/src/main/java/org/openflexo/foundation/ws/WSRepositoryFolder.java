@@ -23,8 +23,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.dm.WSDLRepository;
 import org.openflexo.localization.FlexoLocalization;
@@ -87,21 +85,14 @@ public class WSRepositoryFolder extends WSObject {
 	// ==========================================================================
 
 	@Override
-	public TreeNode getParent() {
+	public WSService getParent() {
 		return parentGroup;
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	@Override
 	public Vector<WSDLRepository> getOrderedChildren() {
 		Vector<WSDLRepository> v = new Vector<WSDLRepository>();
-		java.util.Enumeration en = getWSRepositories().elements();
-		while (en.hasMoreElements()) {
-			WSRepository element = (WSRepository) en.nextElement();
+		for (WSRepository element : getWSRepositories()) {
 			v.add(element.getWSDLRepository());
 		}
 		return v;

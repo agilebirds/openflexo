@@ -45,6 +45,7 @@ import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.action.RemoveTOCEntry;
 import org.openflexo.foundation.toc.action.RemoveTOCRepository;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
@@ -425,6 +426,14 @@ public class TOCRepository extends TOCEntry {
 		ViewSection reply = new ViewSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(view);
+		reply.setValue(value);
+		return reply;
+	}
+
+	public ViewFolderSection createViewFolderSection(String title, ViewFolder folder, TOCDataBinding value) {
+		ViewFolderSection reply = new ViewFolderSection(getData());
+		reply.setTitle(title);
+		reply.setModelObject(folder);
 		reply.setValue(value);
 		return reply;
 	}

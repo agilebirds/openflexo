@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.dm.DMMethod" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="CodeTab">
+      <Label label="access_modifier" localize="true" name="VisibilityModifierLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.localizedName" localize="true" name="VisibilityModifier" index="3" data="data.visibilityModifier" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" list="data.visibilityModifier.availableValues" iteratorClassName="org.openflexo.foundation.dm.DMVisibilityType" autoSelectFirstRow="false" />
+      <Label label="abstract_modifier" localize="true" name="IsAbstractLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.isStatic = false)" />
+      <CheckBox selected="false" localize="true" name="IsAbstract" index="5" data="data.isAbstract" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.isStatic = false)" />
+      <Label label="static_modifier" localize="true" name="IsStaticLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.isAbstract = false)" />
+      <CheckBox selected="false" localize="true" name="IsStatic" index="7" data="data.isStatic" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="(data.isAbstract = false)" />
+      <Label label="synchronized_modifier" localize="true" name="IsSynchronizedLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="IsSynchronized" index="9" data="data.isSynchronized" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="statically_defined_in_template" localize="true" name="IsStaticallyDefinedInTemplateLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <CheckBox selected="false" readOnly="true" tooltipText="Set to true if this property was statically defined in template during last model reinjection" localize="true" name="IsStaticallyDefinedInTemplate" index="1" data="data.isStaticallyDefinedInTemplate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
+    </Tab>
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="NameLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" />
+      <Label label="return_type" localize="true" name="ReturnTypeLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" index="5" data="data.returnType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="ReturnType" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.project" value="data.project" />
+        <Assignment variable="component.owner" value="data" />
+      </Custom>
+      <Label label="parameters" align="center" localize="true" name="ParametersLabel" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.dm.DMMethod$DMMethodParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Parameters" index="7" data="data.parameters" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;location=right)">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="180" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.owner" value="iterator" />
+        </CustomColumn>
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="150" resizable="true" displayTitle="true" />
+        <AddAction method="data.createNewParameter" name="new" />
+        <RemoveAction method="data.deleteParameter(selected)" isAvailable="data.isParameterDeletable(selected)" name="delete" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="access_modifier" lang="English">Access modifiers</Localized>
+    <Localized key="access_modifier" lang="French">Modifieurs d'acces</Localized>
+    <Localized key="access_modifier" lang="Dutch">Access modifiers</Localized>
+    <Localized key="abstract_modifier" lang="English">&lt;html&gt;&lt;tt&gt;abstract&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="abstract_modifier" lang="French">&lt;html&gt;&lt;tt&gt;abstract&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="abstract_modifier" lang="Dutch">&lt;html&gt;&lt;tt&gt;abstract&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="static_modifier" lang="English">&lt;html&gt;&lt;tt&gt;static&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="static_modifier" lang="French">&lt;html&gt;&lt;tt&gt;static&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="static_modifier" lang="Dutch">&lt;html&gt;&lt;tt&gt;static&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="synchronized_modifier" lang="English">&lt;html&gt;&lt;tt&gt;synchronized&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="synchronized_modifier" lang="French">&lt;html&gt;&lt;tt&gt;synchronized&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="synchronized_modifier" lang="Dutch">&lt;html&gt;&lt;tt&gt;synchronized&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="statically_defined_in_template" lang="English">Statically defined in template</Localized>
+    <Localized key="statically_defined_in_template" lang="French">Défini statiquement dans le template</Localized>
+    <Localized key="statically_defined_in_template" lang="Dutch">Statically defined in template</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="return_type" lang="English">Return type</Localized>
+    <Localized key="return_type" lang="French">Type retourné</Localized>
+    <Localized key="return_type" lang="Dutch">Return type</Localized>
+    <Localized key="parameters" lang="English">Parameters</Localized>
+    <Localized key="parameters" lang="French">Paramètres</Localized>
+    <Localized key="parameters" lang="Dutch">Parameters</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Method" />
+</Panel>
+

@@ -45,9 +45,9 @@ import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.palette.IEPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.utils.FlexoSplitPaneLocationSaver;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 
@@ -75,7 +75,7 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -85,7 +85,7 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

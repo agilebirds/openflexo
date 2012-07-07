@@ -94,7 +94,7 @@ public class GenerateSourceCode extends MultipleFileGCAction<GenerateSourceCode>
 	}
 	 */
 	@Override
-	protected void doAction(Object context) throws FlexoException {
+	protected void doImpl(Object context) throws FlexoException {
 		logger.info("Generate source code for " + getFocusedObject());
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();

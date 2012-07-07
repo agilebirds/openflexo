@@ -59,6 +59,7 @@ public class FIBBrowserElement extends FIBModelObject {
 		isEditable,
 		editableLabel,
 		font,
+		dynamicFont,
 		filtered,
 		defaultVisible,
 		children,
@@ -72,6 +73,7 @@ public class FIBBrowserElement extends FIBModelObject {
 	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
 	public static BindingDefinition EDITABLE_LABEL = new BindingDefinition("editableLabel", String.class, BindingDefinitionType.GET_SET,
 			false);
+	public static BindingDefinition DYNAMIC_FONT = new BindingDefinition("dynamicFont", Font.class, BindingDefinitionType.GET, false);
 
 	private Class dataClass;
 
@@ -85,6 +87,7 @@ public class FIBBrowserElement extends FIBModelObject {
 	private ImageIcon imageIcon;
 	private boolean isEditable = false;
 	private DataBinding editableLabel;
+	private DataBinding dynamicFont;
 
 	private boolean filtered = false;
 	private boolean defaultVisible = true;
@@ -322,6 +325,22 @@ public class FIBBrowserElement extends FIBModelObject {
 		} else {
 			setFont(null);
 		}
+	}
+
+	public DataBinding getDynamicFont() {
+		if (dynamicFont == null) {
+			dynamicFont = new DataBinding(this, Parameters.dynamicFont, DYNAMIC_FONT);
+		}
+		return dynamicFont;
+	}
+
+	public void setDynamicFont(DataBinding dynamicFont) {
+		if (dynamicFont != null) {
+			dynamicFont.setOwner(iterator);
+			dynamicFont.setBindingAttribute(Parameters.dynamicFont);
+			dynamicFont.setBindingDefinition(DYNAMIC_FONT);
+		}
+		this.dynamicFont = dynamicFont;
 	}
 
 	public File getImageIconFile() {

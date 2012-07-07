@@ -55,7 +55,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
@@ -422,13 +421,9 @@ public class FileMenu extends FlexoMenu {
 				if (goOn) {
 					ValidationReport report = project.getImportedObjectValidationModel().validate(project.getWorkflow());
 					if (report.getErrorNb() != 0 || report.getWarningNb() != 0) {
-						if (getController() instanceof ConsistencyCheckingController) {
-							getController().getConsistencyCheckWindow(true).setValidationReport(report);
-							getController().getConsistencyCheckWindow(true).setModal(true);
-							getController().getConsistencyCheckWindow(true).setVisible(true);
-						} else {
-							FlexoController.notify(report.errorAsString() + report.warningAsString());
-						}
+						getController().getConsistencyCheckWindow(true).setValidationReport(report);
+						getController().getConsistencyCheckWindow(true).setModal(true);
+						getController().getConsistencyCheckWindow(true).setVisible(true);
 					}
 				}
 			case JOptionPane.NO_OPTION:

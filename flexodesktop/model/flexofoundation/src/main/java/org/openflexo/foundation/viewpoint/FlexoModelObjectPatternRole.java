@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -17,6 +18,10 @@ public class FlexoModelObjectPatternRole extends PatternRole {
 	}
 
 	private FlexoModelObjectType flexoModelObjectType;
+
+	public FlexoModelObjectPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {

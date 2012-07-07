@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Palette id="1" index="1" name="People">
+  <description>This palette contains all people elements</description>
+  <PaletteElement id="2" name="CEO" editionPattern="Employee">
+    <Parameter id="3" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="4" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="5" name="isManager" value="true" />
+    <Parameter id="6" name="isHeadOfOrganization" value="true" />
+    <Parameter id="7" name="assignPerson" value="false" />
+    <Parameter id="8" name="employeeFirstName" value="" />
+    <Parameter id="9" name="employeeLastName" value="" />
+    <Parameter id="10" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="11" className="org.openflexo.vpm.palette.PaletteElementGR" x="32.0" y="5.0" width="57.941513783094166" height="55.99237699237702" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="CEO" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="15.708819132854561" absoluteTextY="10.285744596082354" textAlignment="CENTER">
+      <ForegroundStyle id="12" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="13" imageFile="CEO.png" scaleX="0.8520810850455024" scaleY="0.8483693483693487" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="14" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="15" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="16" isRounded="false" arcSize="30.0" />
+      <TextStyle id="17" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="18" name="Marketing executive" editionPattern="Employee">
+    <Parameter id="19" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="20" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="21" name="isManager" value="true" />
+    <Parameter id="22" name="isHeadOfOrganization" value="false" />
+    <Parameter id="23" name="assignPerson" value="false" />
+    <Parameter id="24" name="employeeFirstName" value="" />
+    <Parameter id="25" name="employeeLastName" value="" />
+    <Parameter id="26" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="27" className="org.openflexo.vpm.palette.PaletteElementGR" x="148.0" y="22.0" width="48.531746031746025" height="33.80647740903639" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Marketing executive" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="30.0" absoluteTextY="-8.0" textAlignment="CENTER">
+      <ForegroundStyle id="28" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="29" imageFile="MarketingExecutive.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="30" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="31" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="32" isRounded="false" arcSize="30.0" />
+      <TextStyle id="33" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="34" name="Account" editionPattern="Employee">
+    <Parameter id="35" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="36" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="37" name="isManager" value="false" />
+    <Parameter id="38" name="isHeadOfOrganization" value="false" />
+    <Parameter id="39" name="assignPerson" value="false" />
+    <Parameter id="40" name="employeeFirstName" value="" />
+    <Parameter id="41" name="employeeLastName" value="" />
+    <Parameter id="42" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="43" className="org.openflexo.vpm.palette.PaletteElementGR" x="100.0" y="236.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Account" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="42.0" textAlignment="CENTER">
+      <ForegroundStyle id="44" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="45" imageFile="Account.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="46" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="47" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="48" isRounded="false" arcSize="30.0" />
+      <TextStyle id="49" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="50" name="Author" editionPattern="Employee">
+    <Parameter id="51" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="52" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="53" name="isManager" value="false" />
+    <Parameter id="54" name="isHeadOfOrganization" value="false" />
+    <Parameter id="55" name="assignPerson" value="false" />
+    <Parameter id="56" name="employeeFirstName" value="" />
+    <Parameter id="57" name="employeeLastName" value="" />
+    <Parameter id="58" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="59" className="org.openflexo.vpm.palette.PaletteElementGR" x="36.0" y="239.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Author" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="20.0" absoluteTextY="39.0" textAlignment="CENTER">
+      <ForegroundStyle id="60" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="61" imageFile="Author.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="62" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="63" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="64" isRounded="false" arcSize="30.0" />
+      <TextStyle id="65" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="66" name="Manager" editionPattern="Employee">
+    <Parameter id="67" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="68" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="69" name="isManager" value="true" />
+    <Parameter id="70" name="isHeadOfOrganization" value="false" />
+    <Parameter id="71" name="assignPerson" value="false" />
+    <Parameter id="72" name="employeeFirstName" value="" />
+    <Parameter id="73" name="employeeLastName" value="" />
+    <Parameter id="74" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="75" className="org.openflexo.vpm.palette.PaletteElementGR" x="170.984375" y="120.0" width="38.234375" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Manager" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="47.0" textAlignment="CENTER">
+      <ForegroundStyle id="76" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="77" imageFile="ManagerBlue.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="78" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="79" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="80" isRounded="false" arcSize="30.0" />
+      <TextStyle id="81" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="82" name="Manager" editionPattern="Employee">
+    <Parameter id="83" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="84" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="85" name="isManager" value="true" />
+    <Parameter id="86" name="isHeadOfOrganization" value="false" />
+    <Parameter id="87" name="assignPerson" value="false" />
+    <Parameter id="88" name="employeeFirstName" value="" />
+    <Parameter id="89" name="employeeLastName" value="" />
+    <Parameter id="90" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="91" className="org.openflexo.vpm.palette.PaletteElementGR" x="100.0" y="120.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Manager" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="46.0" textAlignment="CENTER">
+      <ForegroundStyle id="92" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="93" imageFile="ManagerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="94" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="95" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="96" isRounded="false" arcSize="30.0" />
+      <TextStyle id="97" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="98" name="Manager" editionPattern="Employee">
+    <Parameter id="99" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="100" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="101" name="isManager" value="true" />
+    <Parameter id="102" name="isHeadOfOrganization" value="false" />
+    <Parameter id="103" name="assignPerson" value="false" />
+    <Parameter id="104" name="employeeFirstName" value="" />
+    <Parameter id="105" name="employeeLastName" value="" />
+    <Parameter id="106" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="107" className="org.openflexo.vpm.palette.PaletteElementGR" x="32.0" y="120.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Manager" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="45.0" textAlignment="CENTER">
+      <ForegroundStyle id="108" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="109" imageFile="ManagerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="110" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="111" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="112" isRounded="false" arcSize="30.0" />
+      <TextStyle id="113" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="114" name="Manager Delivery" editionPattern="Employee">
+    <Parameter id="115" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="116" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="117" name="isManager" value="true" />
+    <Parameter id="118" name="isHeadOfOrganization" value="false" />
+    <Parameter id="119" name="assignPerson" value="false" />
+    <Parameter id="120" name="employeeFirstName" value="" />
+    <Parameter id="121" name="employeeLastName" value="" />
+    <Parameter id="122" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="123" className="org.openflexo.vpm.palette.PaletteElementGR" x="163.0" y="76.99788017125687" width="39.21875" height="35.967495959271986" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Manager Delivery" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="32.0" absoluteTextY="-5.0" textAlignment="CENTER">
+      <ForegroundStyle id="124" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="125" imageFile="ManagerDelivery.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="126" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="127" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="128" isRounded="false" arcSize="30.0" />
+      <TextStyle id="129" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="130" name="Manager Operation" editionPattern="Employee">
+    <Parameter id="131" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="132" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="133" name="isManager" value="true" />
+    <Parameter id="134" name="isHeadOfOrganization" value="false" />
+    <Parameter id="135" name="assignPerson" value="false" />
+    <Parameter id="136" name="employeeFirstName" value="" />
+    <Parameter id="137" name="employeeLastName" value="" />
+    <Parameter id="138" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="139" className="org.openflexo.vpm.palette.PaletteElementGR" x="54.0" y="77.99717356167582" width="39.21875" height="34.96820256885303" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Manager Operation" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="24.0" absoluteTextY="-7.0" textAlignment="CENTER">
+      <ForegroundStyle id="140" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="141" imageFile="ManagerOperation.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="142" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="143" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="144" isRounded="false" arcSize="30.0" />
+      <TextStyle id="145" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="146" name="Receptionist" editionPattern="Employee">
+    <Parameter id="147" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="148" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="149" name="isManager" value="false" />
+    <Parameter id="150" name="isHeadOfOrganization" value="false" />
+    <Parameter id="151" name="assignPerson" value="false" />
+    <Parameter id="152" name="employeeFirstName" value="" />
+    <Parameter id="153" name="employeeLastName" value="" />
+    <Parameter id="154" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="155" className="org.openflexo.vpm.palette.PaletteElementGR" x="178.0" y="239.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Receptionist" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="39.0" textAlignment="CENTER">
+      <ForegroundStyle id="156" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="157" imageFile="Receptionist.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="158" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="159" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="160" isRounded="false" arcSize="30.0" />
+      <TextStyle id="161" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="162" name="Worker" editionPattern="Employee">
+    <Parameter id="163" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="164" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="165" name="isManager" value="false" />
+    <Parameter id="166" name="isHeadOfOrganization" value="false" />
+    <Parameter id="167" name="assignPerson" value="false" />
+    <Parameter id="168" name="employeeFirstName" value="" />
+    <Parameter id="169" name="employeeLastName" value="" />
+    <Parameter id="170" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="171" className="org.openflexo.vpm.palette.PaletteElementGR" x="169.0" y="183.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="36.0" textAlignment="CENTER">
+      <ForegroundStyle id="172" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="173" imageFile="WorkerBlue.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="174" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="175" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="176" isRounded="false" arcSize="30.0" />
+      <TextStyle id="177" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="178" name="Worker" editionPattern="Employee">
+    <Parameter id="179" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="180" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="181" name="isManager" value="false" />
+    <Parameter id="182" name="isHeadOfOrganization" value="false" />
+    <Parameter id="183" name="assignPerson" value="false" />
+    <Parameter id="184" name="employeeFirstName" value="" />
+    <Parameter id="185" name="employeeLastName" value="" />
+    <Parameter id="186" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="187" className="org.openflexo.vpm.palette.PaletteElementGR" x="99.0" y="183.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="28.0" absoluteTextY="35.0" textAlignment="CENTER">
+      <ForegroundStyle id="188" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="189" imageFile="WorkerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="190" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="191" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="192" isRounded="false" arcSize="30.0" />
+      <TextStyle id="193" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="194" name="Worker" editionPattern="Employee">
+    <Parameter id="195" name="roleName" value="&lt; Takes palette element label &gt;" />
+    <Parameter id="196" name="employeeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="197" name="isManager" value="false" />
+    <Parameter id="198" name="isHeadOfOrganization" value="false" />
+    <Parameter id="199" name="assignPerson" value="false" />
+    <Parameter id="200" name="employeeFirstName" value="" />
+    <Parameter id="201" name="employeeLastName" value="" />
+    <Parameter id="202" name="personURI" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="203" className="org.openflexo.vpm.palette.PaletteElementGR" x="36.0" y="183.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER">
+      <ForegroundStyle id="204" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="205" imageFile="WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="206" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="207" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="208" isRounded="false" arcSize="30.0" />
+      <TextStyle id="209" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <DrawingGraphicalRepresentation id="210" className="org.openflexo.vpm.palette.PaletteGR" width="260.0" height="300.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <TextStyle id="211" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+</Palette>
+

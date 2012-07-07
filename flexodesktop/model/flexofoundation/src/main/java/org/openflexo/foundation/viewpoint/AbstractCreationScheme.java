@@ -19,11 +19,12 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public abstract class AbstractCreationScheme extends EditionScheme {
 
-	public AbstractCreationScheme() {
-		super();
+	public AbstractCreationScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 }

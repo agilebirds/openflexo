@@ -32,9 +32,9 @@ import org.openflexo.sgmodule.view.CGTemplateFileModuleView;
 import org.openflexo.sgmodule.view.GeneratedSourcesModuleView;
 import org.openflexo.sgmodule.view.ParsedCGFileModuleView;
 import org.openflexo.sgmodule.view.SourceRepositoryModuleView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class ModelReinjectionPerspective extends FlexoPerspective {
 	private final SGController _controller;

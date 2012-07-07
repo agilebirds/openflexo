@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.dm.eo;
 
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +36,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public abstract class DeleteRuleType extends FlexoObject implements StringConvertable, ChoiceList {
+public abstract class DeleteRuleType extends FlexoObject implements StringConvertable<DeleteRuleType>, ChoiceList {
 
 	private static final Logger logger = Logger.getLogger(DeleteRuleType.class.getPackage().getName());
 
@@ -149,8 +148,7 @@ public abstract class DeleteRuleType extends FlexoObject implements StringConver
 		if (deleteRuleName == null) {
 			return null;
 		}
-		for (Enumeration e = NULLIFY.getAvailableValues().elements(); e.hasMoreElements();) {
-			DeleteRuleType temp = (DeleteRuleType) e.nextElement();
+		for (DeleteRuleType temp : NULLIFY.getAvailableValues()) {
 			if (temp.getName().equals(deleteRuleName)) {
 				return temp;
 			}
@@ -166,8 +164,7 @@ public abstract class DeleteRuleType extends FlexoObject implements StringConver
 		if (deleteRuleEOEcode == null) {
 			return null;
 		}
-		for (Enumeration e = NULLIFY.getAvailableValues().elements(); e.hasMoreElements();) {
-			DeleteRuleType temp = (DeleteRuleType) e.nextElement();
+		for (DeleteRuleType temp : NULLIFY.getAvailableValues()) {
 			if (temp.getEOCode().equals(deleteRuleEOEcode)) {
 				return temp;
 			}
@@ -182,7 +179,7 @@ public abstract class DeleteRuleType extends FlexoObject implements StringConver
 	private Vector<DeleteRuleType> _availableValues = null;
 
 	@Override
-	public Vector getAvailableValues() {
+	public Vector<DeleteRuleType> getAvailableValues() {
 		if (_availableValues == null) {
 			_availableValues = new Vector<DeleteRuleType>();
 			_availableValues.add(NULLIFY);
@@ -194,11 +191,11 @@ public abstract class DeleteRuleType extends FlexoObject implements StringConver
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter() {
+	public StringEncoder.Converter<DeleteRuleType> getConverter() {
 		return deleteRuleTypeConverter;
 	}
 
-	public static Vector availableValues() {
+	public static Vector<DeleteRuleType> availableValues() {
 		return NULLIFY.getAvailableValues();
 	}
 

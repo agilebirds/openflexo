@@ -19,7 +19,13 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+
 public abstract class OntologicObjectPatternRole extends PatternRole {
+
+	public OntologicObjectPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	public boolean getIsPrimaryConceptRole() {
 		if (getEditionPattern() == null) {

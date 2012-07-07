@@ -52,8 +52,8 @@ import org.openflexo.ie.view.controller.IESelectionManager;
 import org.openflexo.ie.view.dkv.model.DKVDomainTableModel;
 import org.openflexo.ie.view.dkv.model.DKVKeyTableModel;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * @author gpolet

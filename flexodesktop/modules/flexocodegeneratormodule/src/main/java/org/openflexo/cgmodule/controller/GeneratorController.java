@@ -41,8 +41,10 @@ import javax.swing.SwingConstants;
 import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorPreferences;
 import org.openflexo.cgmodule.controller.action.GeneratorControllerActionInitializer;
+import org.openflexo.cgmodule.controller.browser.GeneratorBrowser;
 import org.openflexo.cgmodule.menu.GeneratorMenuBar;
 import org.openflexo.cgmodule.view.CGFileVersionPopup;
+import org.openflexo.cgmodule.view.GeneratorBrowserView;
 import org.openflexo.cgmodule.view.GeneratorMainPane;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
@@ -85,9 +87,9 @@ import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -109,10 +111,7 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 
 	protected CGFooter _footer;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+	private GeneratorBrowserView browserView;
 
 	/**
 	 * Default constructor
@@ -123,11 +122,16 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	public GeneratorController(FlexoModule module) {
 		super(module);
 		_CGGeneratedResourceModifiedHook = new CGGeneratedResourceModifiedHook();
+		browserView = new GeneratorBrowserView(this, new GeneratorBrowser(this));
 		createFooter();
 		addToPerspectives(CODE_GENERATOR_PERSPECTIVE);
 		addToPerspectives(VERSIONNING_PERSPECTIVE);
 		addToPerspectives(MODEL_REINJECTION_PERSPECTIVE);
 		_projectGenerators = new Hashtable<GenerationRepository, ProjectGenerator>();
+	}
+
+	public GeneratorBrowserView getBrowserView() {
+		return browserView;
 	}
 
 	@Override
@@ -141,16 +145,16 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	}
 
 	@Override
-	public void setEditor(FlexoEditor projectEditor) {
-		if (getEditor() != null && getEditor().getProject() != null) {
-			getEditor().getProject().getGeneratedCode().setFactory(null);
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		if (from != null && from.getProject() != null) {
+			from.getProject().getGeneratedCode().setFactory(null);
 		}
-		super.setEditor(projectEditor);
-		if (getEditor() != null && getEditor().getResourceUpdateHandler() != null) {
-			getEditor().getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+		if (to != null && to.getResourceUpdateHandler() != null) {
+			to.getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		}
-		if (getEditor() != null && getEditor().getProject() != null) {
-			getEditor().getProject().getGeneratedCode().setFactory(this);
+		if (to != null && to.getProject() != null) {
+			to.getProject().getGeneratedCode().setFactory(this);
 		}
 	}
 

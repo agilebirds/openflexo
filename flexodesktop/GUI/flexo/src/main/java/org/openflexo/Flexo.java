@@ -165,15 +165,7 @@ public class Flexo {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				initFlexo(args);
-			}
-		});
-	}
-
-	protected static void initFlexo(String[] args) {
+		ToolBox.setPlatform();
 		String userTypeName = null;
 		boolean noSplash = false;
 		if (args.length > 0) {
@@ -192,7 +184,9 @@ public class Flexo {
 				}
 			}
 		}
-		ToolBox.setPlatform();
+		final boolean noSplash2 = noSplash;
+		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
+		UserType.setCurrentUserType(userTypeNamed);
 
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -202,6 +196,18 @@ public class Flexo {
 			getResourcePath();
 		}
 
+		FlexoProperties.load();
+		initializeLoggingManager();
+		FlexoApplication.installEventQueue();
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				initFlexo(noSplash2);
+			}
+		});
+	}
+
+	protected static void initFlexo(boolean noSplash) {
 		remapStandardOuputs(isDev);
 		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		try {
@@ -211,10 +217,6 @@ public class Flexo {
 				logger.log(Level.WARNING, "Could not insert security provider", e);
 			}
 		}
-		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
-		UserType.setCurrentUserType(userTypeNamed);
-		FlexoProperties.load();
-		initializeLoggingManager();
 		initUILAF();
 		final ApplicationContext applicationContext = new ApplicationContext() {
 
@@ -239,11 +241,11 @@ public class Flexo {
 		};
 		FlexoApplication.initialize(applicationContext.getModuleLoader());
 		if (ToolBox.getFrame(null) != null) {
-			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
+			ToolBox.getFrame(null).setIconImage(UserType.getCurrentUserType().getIconImage().getImage());
 		}
 		SplashWindow splashWindow = null;
 		if (!noSplash) {
-			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed);
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
 		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
@@ -495,7 +497,7 @@ public class Flexo {
 
 	public static FlexoLoggingManager initializeLoggingManager() {
 		try {
-			FlexoProperties properties = FlexoProperties.load();
+			FlexoProperties properties = FlexoProperties.instance();
 			logger.info("Default logging config file " + System.getProperty("java.util.logging.config.file"));
 			return FlexoLoggingManager.initialize(
 					properties.getMaxLogCount(),

@@ -28,7 +28,7 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to select a ViewPoint
+ * Widget allowing to select a ViewPoint while browsing in ViewPoint library
  * 
  * @author sguerin
  * 

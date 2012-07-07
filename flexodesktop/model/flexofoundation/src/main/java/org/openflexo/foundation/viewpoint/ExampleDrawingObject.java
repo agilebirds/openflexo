@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
@@ -54,8 +55,8 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	/**
 	 * Never use this constructor except for ComponentLibrary
 	 */
-	public ExampleDrawingObject() {
-		super();
+	public ExampleDrawingObject(ViewPointBuilder builder) {
+		super(builder);
 		childs = new Vector<ExampleDrawingObject>();
 	}
 

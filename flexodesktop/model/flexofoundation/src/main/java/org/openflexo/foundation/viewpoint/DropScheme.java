@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
@@ -30,8 +31,8 @@ public class DropScheme extends AbstractCreationScheme {
 	private String target;
 	private ShapePatternRole targetPatternRole;
 
-	public DropScheme() {
-		super();
+	public DropScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

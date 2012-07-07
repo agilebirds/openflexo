@@ -22,7 +22,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>**/*/TestOntologies.java</exclude>
+<!--                          <exclude>**/*/TestOntologies.java</exclude> -->
                     </excludes>
                 </configuration>
 			</plugin>

@@ -39,8 +39,8 @@ import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.foundation.ws.WSObject;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wse.controller.WSEController;
 
 /**

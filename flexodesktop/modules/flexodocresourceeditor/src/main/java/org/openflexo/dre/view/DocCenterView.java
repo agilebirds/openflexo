@@ -37,8 +37,8 @@ import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class DocCenterView extends JPanel implements SelectionSynchronizedModuleView<DocItemFolder> {
 

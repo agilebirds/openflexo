@@ -1,4 +1,4 @@
-<inspector title = "Method" inheritsfrom="DMObject.inspector">
+<inspector title = "Method" inspectedClassName="org.openflexo.foundation.dm.DMMethod" inheritsfrom="DMObject.inspector">
 	<tab name="Basic" index="0">
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
 			<param name="columns" value="10"/>

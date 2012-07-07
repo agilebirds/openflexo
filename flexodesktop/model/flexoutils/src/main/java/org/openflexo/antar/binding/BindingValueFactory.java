@@ -236,7 +236,7 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 		}
 	}
 
-	private boolean debug = false;
+	public boolean debug = false;
 
 	@Override
 	public BindingValue convertFromString(String value) {
@@ -397,10 +397,10 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 						logger.info("Je mets le bindable " + bindable);
 					}
 					if (debug) {
-						logger.info("Et c'est bon ? " + returned.isBindingValidWithoutBindingDefinition());
+						logger.info("Et c'est bon ? " + returned.isBindingValidWithoutBindingDefinition(true));
 					}
 
-					if (returned.isBindingValidWithoutBindingDefinition()) {
+					if (returned.isBindingValidWithoutBindingDefinition(false)) {
 						returned._isConnected = true;
 						return returned;
 					} else {

@@ -27,9 +27,10 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.RestrictionStatement;
-import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
+import org.openflexo.foundation.ontology.OntologyRestrictionClass.RestrictionType;
+import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddRestrictionStatement extends AddStatement {
@@ -38,7 +39,8 @@ public class AddRestrictionStatement extends AddStatement {
 
 	private String propertyURI;
 
-	public AddRestrictionStatement() {
+	public AddRestrictionStatement(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -61,7 +63,7 @@ public class AddRestrictionStatement extends AddStatement {
 
 	public OntologyProperty getObjectProperty() {
 		getViewPoint().loadWhenUnloaded();
-		return getOntologyLibrary().getObjectProperty(_getPropertyURI());
+		return getViewPoint().getViewpointOntology().getObjectProperty(_getPropertyURI());
 	}
 
 	public void setObjectProperty(OntologyProperty p) {
@@ -167,7 +169,7 @@ public class AddRestrictionStatement extends AddStatement {
 
 	@Override
 	public Type getAssignableType() {
-		return RestrictionStatement.class;
+		return SubClassStatement.class;
 	}
 
 }

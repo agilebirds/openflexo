@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import org.openflexo.ch.FCH;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * @author gpolet

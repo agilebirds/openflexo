@@ -28,15 +28,17 @@ import org.openflexo.components.widget.DMEntitySelector;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoPerspective;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public abstract class DMPerspective<O extends FlexoModelObject> extends FlexoPerspective {
+public abstract class DMPerspective extends FlexoPerspective {
 
 	protected JPanel searchPanel;
 	private DMEntity searchedEntity = null;
+	private DMController controller;
 
 	public DMPerspective(String name, final DMController controller) {
 		super(name);
+		this.controller = controller;
 
 		searchPanel = new JPanel(new BorderLayout());
 		searchPanel.add(new JLabel(FlexoLocalization.localizedForKey("search")), BorderLayout.WEST);
@@ -52,6 +54,10 @@ public abstract class DMPerspective<O extends FlexoModelObject> extends FlexoPer
 				controller.getSelectionManager().setSelectedObject(entity);
 			}
 		}, BorderLayout.CENTER);
+	}
+
+	public DMController getController() {
+		return controller;
 	}
 
 	protected class PropertiesBrowser extends DMBrowser {

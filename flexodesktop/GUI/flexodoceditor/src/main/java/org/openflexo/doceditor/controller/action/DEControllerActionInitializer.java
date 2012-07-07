@@ -54,7 +54,7 @@ public class DEControllerActionInitializer extends ControllerActionInitializer {
 		super.initializeActions();
 		new DESetPropertyInitializer(this);
 		new AddTOCRepositoryInitializer(this);
-		new DeprecatedAddTOCEntryInitializer(this);
+		// new DeprecatedAddTOCEntryInitializer(this);
 		new AddTOCEntryInitializer(this);
 		new MoveTOCEntryInitializer(this);
 		new AddDocTypeInitializer(this);
@@ -64,6 +64,7 @@ public class DEControllerActionInitializer extends ControllerActionInitializer {
 		new RemoveDocTypeInitializer(this);
 		new RepairTocEntryInitializer(this);
 		new ImportImageInitializer(this);
+
 	}
 
 }

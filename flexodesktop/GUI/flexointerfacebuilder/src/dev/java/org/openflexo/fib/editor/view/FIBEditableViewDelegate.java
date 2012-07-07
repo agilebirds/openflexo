@@ -46,15 +46,16 @@ import org.openflexo.fib.editor.notifications.SelectedObjectChange;
 import org.openflexo.fib.model.FIBAddingNotification;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRemovingNotification;
 import org.openflexo.fib.model.FIBWidget;
+import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.container.FIBPanelView;
-import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.logging.FlexoLogger;
 
 public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponent> implements Observer, MouseListener, FocusListener {
@@ -129,9 +130,9 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	}
 
 	private boolean isComponentRootComponentForAnyFIBView(Component c) {
-		Enumeration<FIBView> en = getController().getViews();
+		Enumeration<FIBView<?, ?>> en = getController().getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.getResultingJComponent() == c) {
 				return true;
 			}
@@ -329,6 +330,15 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 			}
 		}
 
+		if (o instanceof FIBContainer) {
+			if (dataModification instanceof FIBAttributeNotification) {
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBContainer.Parameters.subComponents && view instanceof FIBContainerView) {
+					((FIBContainerView) view).updateLayout();
+				}
+			}
+		}
+
 		if (o instanceof FIBComponent) {
 			if (dataModification instanceof FIBAttributeNotification) {
 				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
@@ -341,11 +351,8 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 						|| n.getAttribute() == FIBComponent.Parameters.verticalScrollbarPolicy) {
 					FIBView parentView = view.getParentView();
 					FIBEditorController controller = getEditorController();
-					if (parentView instanceof FIBPanelView) {
-						((FIBPanelView) parentView).updateLayout();
-					}
-					if (parentView instanceof FIBTabPanelView) {
-						((FIBTabPanelView) parentView).updateLayout();
+					if (parentView instanceof FIBContainerView) {
+						((FIBContainerView) parentView).updateLayout();
 					}
 					controller.notifyFocusedAndSelectedObject();
 				} else if (n.getAttribute() == FIBComponent.Parameters.data) {

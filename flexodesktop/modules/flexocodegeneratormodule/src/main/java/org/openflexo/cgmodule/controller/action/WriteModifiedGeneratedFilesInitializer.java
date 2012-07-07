@@ -28,7 +28,8 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorPreferences;
-import org.openflexo.cgmodule.view.GeneratorMainPane;
+import org.openflexo.cgmodule.controller.GeneratorController;
+import org.openflexo.cgmodule.view.GeneratorBrowserView;
 import org.openflexo.cgmodule.view.popups.SelectFilesPopup;
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.foundation.FlexoException;
@@ -61,6 +62,10 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_D, FlexoCst.META_MASK);
 	}
 
+	protected GeneratorBrowserView getBrowserView() {
+		return ((GeneratorController) getController()).getBrowserView();
+	}
+
 	@Override
 	protected FlexoActionInitializer<WriteModifiedGeneratedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<WriteModifiedGeneratedFiles>() {
@@ -86,7 +91,7 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 				}
 				action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().setHoldStructure();
+				getBrowserView().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -97,8 +102,8 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<WriteModifiedGeneratedFiles>() {
 			@Override
 			public boolean run(EventObject e, WriteModifiedGeneratedFiles action) {
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+				getBrowserView().getBrowser().resetHoldStructure();
+				getBrowserView().getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;
@@ -111,8 +116,8 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 		return new FlexoExceptionHandler<WriteModifiedGeneratedFiles>() {
 			@Override
 			public boolean handleException(FlexoException exception, WriteModifiedGeneratedFiles action) {
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+				getBrowserView().getBrowser().resetHoldStructure();
+				getBrowserView().getBrowser().update();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("file_writing_failed") + ":\n"

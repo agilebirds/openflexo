@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements ModuleView<O> {
 

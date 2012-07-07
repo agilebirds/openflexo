@@ -23,8 +23,6 @@ import java.awt.AWTEvent;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -90,8 +88,8 @@ public class FlexoApplication {
 
 	public static boolean DEMO = false;
 
-	public static void flushPendingEvents(boolean blockUserEvents) {
-		eventProcessor.flushPendingEvents(blockUserEvents);
+	public static void installEventQueue() {
+		eventProcessor = new EventProcessor();
 	}
 
 	public static void initialize(ModuleLoader moduleLoader) {
@@ -105,7 +103,6 @@ public class FlexoApplication {
 
 		boolean isMacOS = ToolBox.getPLATFORM().equals(ToolBox.MACOS);
 		JEditTextArea.DIALOG_FACTORY = FlexoDialog.DIALOG_FACTORY;
-		eventProcessor = new EventProcessor();
 		try {
 			if (isMacOS) {
 				application = Class.forName("com.apple.eawt.Application").newInstance();
@@ -182,21 +179,6 @@ public class FlexoApplication {
 
 		private synchronized void resetIsReportingBug() {
 			isReportingBug = false;
-		}
-
-		public void flushPendingEvents(boolean blockUserEvents) {
-			while (peekEvent() != null) {
-				try {
-					AWTEvent event = getNextEvent();
-					if (blockUserEvents && (event instanceof InputEvent || event instanceof ActionEvent)) {
-						continue;
-					}
-					dispatchEvent(event);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					return;
-				}
-			}
 		}
 
 		@Override

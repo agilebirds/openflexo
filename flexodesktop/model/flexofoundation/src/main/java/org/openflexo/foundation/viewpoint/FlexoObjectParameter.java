@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -37,6 +38,10 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 	}
 
 	private FlexoObjectType flexoObjectType;
+
+	public FlexoObjectParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public Type getType() {

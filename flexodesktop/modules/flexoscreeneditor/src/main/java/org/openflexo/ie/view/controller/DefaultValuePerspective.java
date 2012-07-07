@@ -28,9 +28,9 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.ie.view.IEExampleValuesView;
 import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 class DefaultValuePerspective extends FlexoPerspective {
 
@@ -52,7 +52,7 @@ class DefaultValuePerspective extends FlexoPerspective {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -62,7 +62,7 @@ class DefaultValuePerspective extends FlexoPerspective {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {

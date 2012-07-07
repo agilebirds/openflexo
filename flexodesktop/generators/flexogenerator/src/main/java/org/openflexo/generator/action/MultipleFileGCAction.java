@@ -190,9 +190,17 @@ public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> ex
 	}
 
 	@Override
-	protected void doAction(Object context) throws FlexoException {
-		// TODO : explain why there is nothing here
+	protected final void doAction(Object context) throws FlexoException {
+		GenerationRepository repository = getRepository();
+		repository.notifyLongOperationStarted();
+		try {
+			doImpl(context);
+		} finally {
+			repository.notifyLongOperationStopped();
+		}
 	}
+
+	protected abstract void doImpl(Object context) throws FlexoException;
 
 	// public abstract void performActionOnFile(AbstractCGFile file);
 

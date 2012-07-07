@@ -87,7 +87,7 @@ import org.openflexo.module.GeneratedResourceModifiedChoice;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -105,7 +105,7 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	@Override
 	public boolean useNewInspectorScheme() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -136,22 +136,21 @@ public class DGController extends DEController implements FlexoObserver, Project
 		createFooter();
 		addToPerspectives(CODE_GENERATOR_PERSPECTIVE);
 		addToPerspectives(VERSIONNING_PERSPECTIVE);
-		setDefaultPespective(CODE_GENERATOR_PERSPECTIVE);
-		removeFromPerspectives(DOCEDITOR_PERSPECTIVE);
+		getControllerModel().removeFromPerspectives(DOCEDITOR_PERSPECTIVE);
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
 	}
 
 	@Override
-	public void setEditor(FlexoEditor projectEditor) {
-		if (getEditor() != null && getEditor().getProject() != null) {
-			getEditor().getProject().getGeneratedCode().setFactory(null);
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		if (from != null && from.getProject() != null) {
+			from.getProject().getGeneratedCode().setFactory(null);
 		}
-		super.setEditor(projectEditor);
-		if (getEditor() != null && getEditor().getResourceUpdateHandler() != null) {
-			getEditor().getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+		if (to != null && to.getResourceUpdateHandler() != null) {
+			to.getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		}
-		if (getEditor() != null && getEditor().getProject() != null) {
-			getEditor().getProject().getGeneratedCode().setFactory(this);
+		if (to != null && getEditor().getProject() != null) {
+			to.getProject().getGeneratedCode().setFactory(this);
 		}
 	}
 

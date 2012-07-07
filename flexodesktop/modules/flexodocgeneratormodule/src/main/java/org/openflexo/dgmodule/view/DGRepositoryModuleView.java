@@ -68,8 +68,8 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.swing.JConsole;
 import org.openflexo.toolbox.LogListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**

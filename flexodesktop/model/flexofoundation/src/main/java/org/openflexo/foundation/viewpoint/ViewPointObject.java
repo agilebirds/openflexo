@@ -25,12 +25,17 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
+import org.openflexo.antar.binding.BindingValue;
+import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
@@ -44,7 +49,21 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 	private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
 
-	public abstract ViewPoint getViewPoint();
+	private ImportedOntology viewPointOntology = null;
+
+	public ViewPointObject(ViewPointBuilder builder) {
+		if (builder != null) {
+			// System.out.println("BEGIN deserialisation for " + getClass().getSimpleName());
+			initializeDeserialization(builder);
+			viewPointOntology = builder.getViewPointOntology();
+		}
+	}
+
+	/*@Override
+	public void finalizeDeserialization(Object builder) {
+		System.out.println("END deserialisation for " + getClass().getSimpleName());
+		super.finalizeDeserialization(builder);
+	}*/
 
 	@Override
 	public ViewPointLibrary getViewPointLibrary() {
@@ -100,6 +119,16 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 		return getViewPoint().getLocalizedDictionary();
 	}
 
+	public abstract ViewPoint getViewPoint();
+
+	public FlexoOntology getViewpointOntology() {
+		if (isDeserializing() || getViewPoint() == null) {
+			return viewPointOntology;
+		} else {
+			return getViewPoint().getViewpointOntology();
+		}
+	}
+
 	@Deprecated
 	public ViewPoint getCalc() {
 		return getViewPoint();
@@ -146,7 +175,7 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 					logger.info("Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName() + ". Reason follows.");
 					getBinding(object).getBinding().debugIsBindingValid();
 					DeleteBinding<C> deleteBinding = new DeleteBinding<C>(this);
-					return new ValidationError(this, object, BindingMustBeValid.this.getNameKey(), deleteBinding);
+					return new ValidationError<BindingMustBeValid<C>, C>(this, object, BindingMustBeValid.this.getNameKey(), deleteBinding);
 				}
 			}
 			return null;
@@ -154,9 +183,9 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 		protected static class DeleteBinding<C extends ViewPointObject> extends FixProposal<BindingMustBeValid<C>, C> {
 
-			private BindingMustBeValid rule;
+			private BindingMustBeValid<C> rule;
 
-			public DeleteBinding(BindingMustBeValid rule) {
+			public DeleteBinding(BindingMustBeValid<C> rule) {
 				super("delete_this_binding");
 				this.rule = rule;
 			}
@@ -182,11 +211,32 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 		@Override
 		public ValidationIssue<BindingIsRequiredAndMustBeValid<C>, C> applyValidation(C object) {
 			if (getBinding(object) == null || !getBinding(object).isSet()) {
-				return new ValidationError(this, object, BindingIsRequiredAndMustBeValid.this.getNameKey());
+				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
+						BindingIsRequiredAndMustBeValid.this.getNameKey());
 			} else if (!getBinding(object).isValid()) {
-				logger.info("Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName() + ". Reason follows.");
+				logger.info(getClass().getName() + ": Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName()
+						+ ". Reason: " + getBinding(object).getBinding().invalidBindingReason());
 				getBinding(object).getBinding().debugIsBindingValid();
-				return new ValidationError(this, object, BindingIsRequiredAndMustBeValid.this.getNameKey());
+				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
+						BindingIsRequiredAndMustBeValid.this.getNameKey());
+			}
+			return null;
+		}
+
+		public String retrieveIssueDetails(C object) {
+			if (getBinding(object) == null || !getBinding(object).isSet()) {
+				return "Binding not set";
+			} else if (!getBinding(object).isValid()) {
+				if (getBinding(object).getBinding() instanceof BindingExpression) {
+					System.out.println("**** J'essaie d'en faire un BV");
+					object.getBindingFactory().getBindingValueFactory().debug = true;
+					BindingValue bv = object.getBindingFactory().getBindingValueFactory()
+							.convertFromString(getBinding(object).getUnparsedBinding(), object);
+					object.getBindingFactory().getBindingValueFactory().debug = false;
+					System.out.println("**** j'ai reussi a en faire un BV: " + bv);
+				}
+
+				return "Binding not valid [" + getBinding(object) + "], reason: " + getBinding(object).getBinding().invalidBindingReason();
 			}
 			return null;
 		}

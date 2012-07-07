@@ -97,10 +97,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.apple.common</groupId>
 			<artifactId>ui_simulation</artifactId>
 			<scope>provided</scope>

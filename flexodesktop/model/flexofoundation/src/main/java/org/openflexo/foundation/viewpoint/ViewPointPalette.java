@@ -35,6 +35,8 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
+import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 import org.openflexo.module.ModuleLoadingException;
@@ -78,8 +80,9 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(paletteFile.getParentFile());
 				inputStream = new FileInputStream(paletteFile);
 				logger.info("Loading file " + paletteFile.getAbsolutePath());
+				ViewPointBuilder builder = new ViewPointBuilder((ImportedOntology) calc.getViewpointOntology());
 				ViewPointPalette returned = (ViewPointPalette) XMLDecoder.decodeObjectWithMapping(inputStream, calc.getViewPointLibrary()
-						.get_VIEW_POINT_PALETTE_MODEL(), null, new StringEncoder(StringEncoder.getDefaultInstance(),
+						.get_VIEW_POINT_PALETTE_MODEL(), builder, new StringEncoder(StringEncoder.getDefaultInstance(),
 						relativePathFileConverter));
 				logger.info("Loaded file " + paletteFile.getAbsolutePath());
 				returned.init(calc, paletteFile);
@@ -129,7 +132,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	public static ViewPointPalette newCalcPalette(ViewPoint calc, File paletteFile, Object graphicalRepresentation) {
-		ViewPointPalette palette = new ViewPointPalette();
+		ViewPointPalette palette = new ViewPointPalette(null);
 		palette.setIndex(calc.getPalettes().size());
 		palette.setGraphicalRepresentation(graphicalRepresentation);
 		palette.init(calc, paletteFile);
@@ -137,8 +140,8 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	// Used during deserialization, do not use it
-	public ViewPointPalette() {
-		super();
+	public ViewPointPalette(ViewPointBuilder builder) {
+		super(builder);
 		_elements = new Vector<ViewPointPaletteElement>();
 	}
 
@@ -309,9 +312,9 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	public ViewPointPaletteElement addPaletteElement(String name, Object graphicalRepresentation) {
-		ViewPointPaletteElement newElement = new ViewPointPaletteElement();
+		ViewPointPaletteElement newElement = new ViewPointPaletteElement(null);
 		newElement.setName(name);
-		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation) graphicalRepresentation);
+		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation<?>) graphicalRepresentation);
 		addToElements(newElement);
 		return newElement;
 	}

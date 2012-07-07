@@ -175,6 +175,20 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 		return null;
 	}
 
+	private void performAssignments() {
+		for (FIBCustomAssignment assign : getWidget().getAssignments()) {
+			DataBinding variableDB = assign.getVariable();
+			DataBinding valueDB = assign.getValue();
+			if (valueDB != null && valueDB.getBinding() != null && valueDB.getBinding().isBindingValid()) {
+				Object value = valueDB.getBinding().getBindingValue(getController());
+				if (variableDB.getBinding().isBindingValid()) {
+					// System.out.println("Assignment "+assign+" set value with "+value);
+					variableDB.getBinding().setBindingValue(value, this);
+				}
+			}
+		}
+	}
+
 	@Override
 	public boolean updateWidgetFromModel() {
 		// We need here to "force" update while some assignments may be required
@@ -187,6 +201,8 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 		if (customComponent != null) {
 
+			// performAssignments();
+
 			try {
 				customComponent.setEditedObject(getValue());
 			} catch (ClassCastException e) {
@@ -194,6 +210,10 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 				logger.warning("Unexpected ClassCastException in " + customComponent + ": " + e.getMessage());
 				// e.printStackTrace();
 			}
+
+			// Perform assignement AFTER the edited value was set !!!
+			// Tried to to it before raised to severe issues
+			performAssignments();
 
 			try {
 				customComponent.setRevertValue(getValue());
@@ -203,17 +223,6 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 				// e.printStackTrace();
 			}
 
-			for (FIBCustomAssignment assign : getWidget().getAssignments()) {
-				DataBinding variableDB = assign.getVariable();
-				DataBinding valueDB = assign.getValue();
-				if (valueDB != null && valueDB.getBinding() != null && valueDB.getBinding().isBindingValid()) {
-					Object value = valueDB.getBinding().getBindingValue(getController());
-					if (variableDB.getBinding().isBindingValid()) {
-						// System.out.println("Assignment "+assign+" set value with "+value);
-						variableDB.getBinding().setBindingValue(value, this);
-					}
-				}
-			}
 		}
 		return true;
 		// }

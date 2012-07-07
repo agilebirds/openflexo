@@ -22,8 +22,6 @@ package org.openflexo.dgmodule.view;
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.dgmodule.controller.browser.DGBrowser;
 import org.openflexo.doceditor.view.DEMainPane;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.cg.CGFile;
 
 /**
  * @author gpolet
@@ -49,22 +47,9 @@ public class DGMainPane extends DEMainPane {
 		deBrowserView = null;
 	}
 
-	/**
-	 * Overrides getParentObject
-	 * 
-	 * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
-	 */
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof CGFile) {
-			return ((CGFile) object).getRepository();
-		}
-		return super.getParentObject(object);
-	}
-
 	@Override
 	public DGController getController() {
-		return (DGController) _controller;
+		return (DGController) super.getController();
 	}
 
 	public DGBrowserView getDgBrowserView() {

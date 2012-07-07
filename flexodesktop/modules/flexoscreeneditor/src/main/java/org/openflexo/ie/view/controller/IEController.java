@@ -87,7 +87,6 @@ import org.openflexo.selection.SelectionManager;
 import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuBar;
@@ -98,8 +97,8 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * @author benoit, sylvain
  */
 
-public class IEController extends FlexoController implements ConsistencyCheckingController, Serializable, FlexoObserver,
-		ExternalIEController, PrintManagingController, PropertyChangeListener {
+public class IEController extends FlexoController implements Serializable, FlexoObserver, ExternalIEController, PrintManagingController,
+		PropertyChangeListener {
 
 	protected static final Logger logger = Logger.getLogger(IEController.class.getPackage().getName());
 
@@ -178,11 +177,12 @@ public class IEController extends FlexoController implements ConsistencyChecking
 	}
 
 	@Override
-	public void setEditor(FlexoEditor projectEditor) {
-		super.setEditor(projectEditor);
-		_componentLibraryBrowser.setRootObject(getProject() != null ? getProject().getFlexoComponentLibrary() : null);
-		_menuEditorBrowser.setRootObject(getProject() != null ? getProject().getFlexoNavigationMenu().getRootMenu() : null);
-		_dkvEditorBrowser.setRootObject(getProject() != null ? getProject().getDKVModel() : null);
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		FlexoProject project = to != null ? to.getProject() : null;
+		_componentLibraryBrowser.setRootObject(project != null ? project.getFlexoComponentLibrary() : null);
+		_menuEditorBrowser.setRootObject(project != null ? project.getFlexoNavigationMenu().getRootMenu() : null);
+		_dkvEditorBrowser.setRootObject(project != null ? project.getDKVModel() : null);
 	}
 
 	@Override

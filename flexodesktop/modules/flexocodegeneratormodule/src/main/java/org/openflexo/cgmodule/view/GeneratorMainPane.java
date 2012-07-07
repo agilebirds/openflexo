@@ -20,10 +20,6 @@
 package org.openflexo.cgmodule.view;
 
 import org.openflexo.cgmodule.controller.GeneratorController;
-import org.openflexo.cgmodule.controller.browser.GeneratorBrowser;
-import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.view.FlexoMainPane;
 
 /**
@@ -32,8 +28,6 @@ import org.openflexo.view.FlexoMainPane;
  */
 public class GeneratorMainPane extends FlexoMainPane {
 
-	private BrowserView browserView;
-
 	/**
 	 * @param moduleView
 	 * @param mainFrame
@@ -41,25 +35,6 @@ public class GeneratorMainPane extends FlexoMainPane {
 	 */
 	public GeneratorMainPane(GeneratorController controller) {
 		super(controller);
-		browserView = new GeneratorBrowserView(controller, new GeneratorBrowser(controller));
-		setLeftView(browserView);
-	}
-
-	/**
-	 * Overrides getParentObject
-	 * 
-	 * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
-	 */
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof CGFile) {
-			return ((CGFile) object).getRepository();
-		}
-		return null;
-	}
-
-	public BrowserView getBrowserView() {
-		return browserView;
 	}
 
 }

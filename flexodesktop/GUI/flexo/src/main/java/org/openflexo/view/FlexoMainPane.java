@@ -20,212 +20,111 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.Vector;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.help.CSH;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.GeneralPreferences;
+import org.jdesktop.swingx.JXMultiSplitPane;
+import org.jdesktop.swingx.MultiSplitLayout;
+import org.jdesktop.swingx.MultiSplitLayout.Divider;
+import org.jdesktop.swingx.MultiSplitLayout.Leaf;
+import org.jdesktop.swingx.MultiSplitLayout.Node;
+import org.jdesktop.swingx.MultiSplitLayout.Split;
 import org.openflexo.ch.FCH;
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.ObjectDeleted;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.prefs.FlexoPreferences;
-import org.openflexo.swing.MouseOverButton;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.RootControllerModel;
 
 /**
  * Abstract view managing global layout of a FlexoModule
  * 
  * @author sguerin
  */
-public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObserver {
+public abstract class FlexoMainPane extends JPanel implements PropertyChangeListener {
 
 	protected static final Logger logger = Logger.getLogger(FlexoMainPane.class.getPackage().getName());
 
-	protected JSplitPane _splitPane;
+	public static final String LEFT = "left";
+	public static final String CENTER = "center";
+	public static final String RIGHT = "right";
 
-	protected FlexoController _controller;
+	public static final String TOP = "top";
+	public static final String MIDDLE = "middle";
+	public static final String BOTTOM = "bottom";
 
-	private JComponent _centerView;
+	private FlexoController controller;
 
-	protected ModuleView<?> _moduleView;
+	private ModuleView<?> moduleView;
 
-	private ControlPanel _controlPanel;
+	private MainPaneTopBar topBar;
 
-	private JComponent _rightPanel;
+	private JXMultiSplitPane centralPanel;
 
-	protected Vector<FlexoModelObject> _availableObjects;
+	private JComponent footer;
 
-	protected Stack<HistoryLocation> previousHistory;
-	protected Stack<HistoryLocation> nextHistory;
-	protected HistoryLocation currentLocation;
-
-	protected boolean isGoingForward = false;
-
-	protected boolean isGoingBackward = false;
-
-	private JComponent _leftView;
-
-	private JComponent _rightView;
-
-	final private boolean _rightPaneIsSplitPane;
-	final private boolean _verticalOrientation;
+	private MultiSplitLayout centralLayout;
 
 	public FlexoMainPane(FlexoController controller) {
-		this(controller, false, true);
-	}
-
-	public FlexoMainPane(FlexoController controller, boolean rightPaneIsSplitPane, boolean verticalOrientation) {
 		super(new BorderLayout());
-		_rightPaneIsSplitPane = rightPaneIsSplitPane;
-		_verticalOrientation = verticalOrientation;
-		_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		new FlexoSplitPaneLocationSaver(_splitPane, controller.getModule().getShortName() + "MainSplitPane");
-		_controller = controller;
-		_availableObjects = new Vector<FlexoModelObject>();
-		previousHistory = new Stack<HistoryLocation>();
-		nextHistory = new Stack<HistoryLocation>();
-		_leftView = null;
-		_rightView = null;
-		_splitPane.setLeftComponent(new JPanel());
-		_splitPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 3, 3));
-		if (rightPaneIsSplitPane) {
-			_rightPanel = new JSplitPane(!_verticalOrientation ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT) /* {
-																															@Override
-																															public void setDividerLocation(int location) {
-																															logger.info("********************* setDividerLocation with " + location + " total width=" + getSize().width);
-																															super.setDividerLocation(location);
-																															}
-
-																															@Override
-																															public void setRightComponent(Component comp) {
-																															logger.info("********************* setRightComponent with size " + comp.getPreferredSize());
-																															super.setRightComponent(comp);
-																															}
-																															} */;
-			_rightPanel.setBorder(BorderFactory.createEmptyBorder());
-			new FlexoSplitPaneLocationSaver((JSplitPane) _rightPanel, controller.getModule().getShortName() + "RightSplitPane");
-			((JSplitPane) _rightPanel).setResizeWeight(1.0);
-		} else {
-			_rightPanel = new JPanel();
-			// _rightPanel.setBackground(ColorCst.GUI_BACK_COLOR);
-			_rightPanel.setLayout(new BorderLayout());
-		}
-		/* _rightPanel. */add(_controlPanel = new ControlPanel(), BorderLayout.NORTH);
-		_splitPane.setRightComponent(_rightPanel);
-		add(_splitPane, BorderLayout.CENTER);
+		this.controller = controller;
+		this.centralLayout = new MultiSplitLayout(false);
+		this.controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.PERSPECTIVES, this);
+		add(topBar = new MainPaneTopBar(controller.getControllerModel()), BorderLayout.NORTH);
+		add(centralPanel = new JXMultiSplitPane(centralLayout));
 	}
 
 	public void resetModuleView() {
-		// _moduleView = null;
 		setModuleView(null);
-	}
-
-	private JComponent _footer;
-	private JComponent _header;
-
-	public HistoryLocation getLastHistoryLocationForProject(FlexoProject project) {
-		// TODO: Check if this makes any sense
-		for (int i = previousHistory.size() - 1; i > -1; i--) {
-			if (previousHistory.get(i)._object.getProject() == project) {
-				return previousHistory.get(i);
-			}
-		}
-		for (HistoryLocation hl : nextHistory) {
-			if (hl._object.getProject() == project) {
-				return hl;
-			}
-		}
-		return null;
 	}
 
 	public void setModuleView(ModuleView<?> moduleView) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setModuleView() with " + moduleView + " perspective " + moduleView.getPerspective());
 		}
+		saveLayout();
 		try {
-			if (_moduleView != null) {
-				_moduleView.willHide();
+			if (this.moduleView != null) {
+				this.moduleView.willHide();
 			}
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("willHide call failed on " + _moduleView);
+				logger.severe("willHide call failed on " + moduleView);
 			}
 		}
-		if (_centerView != null) {
-			_rightPanel.remove(_centerView);
-			// _middlePane.setLeftComponent(null);
-		}
 
-		if (_moduleView != null && _moduleView instanceof SelectionSynchronizedModuleView) {
-			_controller.getSelectionManager().removeFromSelectionListeners(
-					((SelectionSynchronizedModuleView<?>) _moduleView).getSelectionListeners());
+		if (this.moduleView != null && this.moduleView instanceof SelectionSynchronizedModuleView) {
+			controller.getSelectionManager().removeFromSelectionListeners(
+					((SelectionSynchronizedModuleView<?>) this.moduleView).getSelectionListeners());
 		}
+		this.moduleView = moduleView;
 		if (moduleView != null && moduleView instanceof SelectionSynchronizedModuleView) {
-			_controller.getSelectionManager().addToSelectionListeners(
+			controller.getSelectionManager().addToSelectionListeners(
 					((SelectionSynchronizedModuleView<?>) moduleView).getSelectionListeners());
 		}
 
-		_moduleView = moduleView;
-		if (moduleView != null) {
-			if (moduleView.getRepresentedObject() != null) {
-				if (!_availableObjects.contains(moduleView.getRepresentedObject())) {
-					_availableObjects.add(moduleView.getRepresentedObject());
-					moduleView.getRepresentedObject().addObserver(this);
-				}
-				if (!isGoingForward && !isGoingBackward) {
-					// _history.add(moduleView.getRepresentedObject());
-					if (currentLocation == null || currentLocation.getObject() != moduleView.getRepresentedObject()) {
-						if (currentLocation != null) {
-							previousHistory.push(currentLocation);
-						}
-						nextHistory.clear();
-						currentLocation = new HistoryLocation(moduleView.getRepresentedObject(), moduleView.getPerspective());
-					}
-				}
-			}
-			if (_controlPanel != null) {
-				_controlPanel.update();
-			}
+		JComponent newTopLeftView = getController().getCurrentPerspective().getTopLeftView();
+		JComponent newTopRightView = getController().getCurrentPerspective().getTopRightView();
+		JComponent newBottomLeftView = getController().getCurrentPerspective().getBottomLetfView();
+		JComponent newBottomRightView = getController().getCurrentPerspective().getBottomRightView();
+		JComponent newTopCentraltView = getController().getCurrentPerspective().getTopCentralView();
+		JComponent newBottomCentralView = getController().getCurrentPerspective().getBottomCentralView();
+		JComponent newCentralView = null;
 
+		if (moduleView != null) {
 			if (moduleView.isAutoscrolled()) {
-				_centerView = (JComponent) moduleView;
+				newCentralView = (JComponent) moduleView;
 			} else {
 				JScrollPane scrollPane = new JScrollPane((JComponent) moduleView, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 						ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 				scrollPane.setBorder(BorderFactory.createEmptyBorder());
-
 				if (scrollPane.getVerticalScrollBar() != null) {
 					scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 					scrollPane.getVerticalScrollBar().setBlockIncrement(50);
@@ -235,81 +134,13 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 					scrollPane.getHorizontalScrollBar().setUnitIncrement(10);
 					scrollPane.getHorizontalScrollBar().setBlockIncrement(50);
 				}
-
-				// _scrollPane.getViewport().setBackground(FlexoCst.GUI_BACK_COLOR);
 				scrollPane.getHorizontalScrollBar().setFocusable(false);
 				scrollPane.getVerticalScrollBar().setFocusable(false);
 
 				if (moduleView instanceof ChangeListener) {
 					scrollPane.getViewport().addChangeListener((ChangeListener) moduleView);
 				}
-
-				_centerView = scrollPane;
-			}
-
-			_centerView.setFocusable(false);
-
-			if (_rightPaneIsSplitPane) {
-				JSplitPane splitPane = (JSplitPane) _rightPanel;
-				// int dl = splitPane.getDividerLocation();
-				splitPane.setLeftComponent(_centerView);
-				/*if (splitPane.getRightComponent() != null) {
-					splitPane.getRightComponent().setPreferredSize(splitPane.getRightComponent().getSize());
-				}
-				splitPane.revalidate();
-				splitPane.repaint();*/
-				// splitPane.setDividerLocation(dl);
-				// logger.info("splitPane.setDividerLocation with " + dl);
-			} else {
-				_rightPanel.add(_centerView, BorderLayout.CENTER);
-			}
-
-			((JComponent) moduleView).validate();
-			((JComponent) moduleView).repaint();
-			if (moduleView.getPerspective() == null) {
-				if (_controller.getDefaultPespective() != null) {
-					logger.warning("null perspective declared for " + moduleView.getClass().getName());
-				}
-			} else {
-
-				// What about left view ?
-				if (moduleView.getPerspective().doesPerspectiveControlLeftView()) {
-					// logger.info("Set left view with "+moduleView.getPerspective().getLeftView());
-					setLeftView(moduleView.getPerspective().getLeftView());
-				}
-
-				// What about right view ?
-				if (moduleView.getPerspective().doesPerspectiveControlRightView()) {
-					// logger.info("Set right view with "+moduleView.getPerspective().getRightView());
-					setRightView(moduleView.getPerspective().getRightView());
-				}
-
-				// Do job for header
-				if (_header != moduleView.getPerspective().getHeader()) {
-					if (_header != null) {
-						_controlPanel.centerPanel.remove(_header);
-						_controlPanel.validate();
-					}
-					if (moduleView.getPerspective().getHeader() != null) {
-						_controlPanel.centerPanel.add(moduleView.getPerspective().getHeader(), BorderLayout.EAST);
-						_controlPanel.validate();
-					}
-				}
-				_header = moduleView.getPerspective().getHeader();
-
-				// Do job for footer
-				if (_footer != moduleView.getPerspective().getFooter()) {
-					if (_footer != null) {
-						remove(_footer);
-						validate();
-					}
-					if (moduleView.getPerspective().getFooter() != null) {
-						add(moduleView.getPerspective().getFooter(), BorderLayout.SOUTH);
-						validate();
-					}
-				}
-				_footer = moduleView.getPerspective().getFooter();
-
+				newCentralView = scrollPane;
 			}
 			try {
 				moduleView.willShow();
@@ -319,727 +150,130 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 					logger.severe("willShow call failed on " + moduleView);
 				}
 			}
-			FCH.setHelpItem((JComponent) _moduleView, FCH.getModuleViewItemFor(_controller.getModule(), _moduleView));
+			FCH.setHelpItem((JComponent) moduleView, FCH.getModuleViewItemFor(controller.getModule(), moduleView));
 		} else {
-			currentLocation = null;
-			_centerView = new JPanel();
-			if (_header != null) {
-				_controlPanel.centerPanel.remove(_header);
-				_controlPanel.validate();
-			}
-			if (_rightPaneIsSplitPane) {
-				JSplitPane splitPane = (JSplitPane) _rightPanel;
-				splitPane.setLeftComponent(_centerView);
-			} else {
-				_rightPanel.add(_centerView, BorderLayout.CENTER);
-			}
-			_rightPanel.revalidate();
-			_rightPanel.repaint();
+			newCentralView = new JPanel();
 		}
 
-		if (_controller.getFlexoFrame().isValid()) {
-			FCH.validateWindow(_controller.getFlexoFrame());
-		}
+		restoreLayout();
 
-		_controller.getFlexoFrame().updateTitle();
+		updateComponent(newTopLeftView, TOP + LEFT);
+		updateComponent(newTopRightView, TOP + RIGHT);
+		updateComponent(newBottomLeftView, BOTTOM + LEFT);
+		updateComponent(newBottomRightView, BOTTOM + RIGHT);
+		updateComponent(newTopCentraltView, CENTER + RIGHT);
+		updateComponent(newBottomCentralView, CENTER + LEFT);
+		updateComponent(newCentralView, CENTER + MIDDLE);
+
+		centralPanel.revalidate();
+
+		if (controller.getFlexoFrame().isValid()) {
+			FCH.validateWindow(controller.getFlexoFrame());
+		}
+		if (moduleView != null) {
+			topBar.setHeader(controller.getCurrentPerspective().getHeader());
+		} else {
+			topBar.setHeader(null);
+		}
+		if (footer != controller.getCurrentPerspective().getFooter()) {
+			if (footer != null) {
+				remove(footer);
+			}
+			if (controller.getCurrentPerspective().getFooter() != null) {
+				add(controller.getCurrentPerspective().getFooter(), BorderLayout.SOUTH);
+			}
+			footer = controller.getCurrentPerspective().getFooter();
+		}
+		controller.getFlexoFrame().updateTitle();
 		revalidate();
 		repaint();
 	}
 
+	private void updateComponent(JComponent next, String name) {
+		JComponent previous = getComponentForName(name);
+		if (previous != next) {
+			if (previous != null) {
+				centralPanel.remove(previous);
+			}
+			centralLayout.displayNode(name, next != null);
+			if (next != null) {
+				centralPanel.add(next, name);
+			}
+		}
+	}
+
+	private void saveLayout() {
+		getController().getControllerModel().setLayoutForPerspective(controller.getCurrentPerspective(), centralLayout.getModel());
+	}
+
+	private void restoreLayout() {
+		Node layoutModel = getController().getControllerModel().getLayoutForPerspective(controller.getCurrentPerspective());
+		if (layoutModel == null) {
+			layoutModel = getDefaultLayout();
+			controller.getCurrentPerspective().setupDefaultLayout(layoutModel);
+		}
+		centralLayout.setModel(layoutModel);
+		centralPanel.revalidate();
+	}
+
+	private Split getDefaultLayout() {
+		Split root = new Split();
+		root.setName("ROOT");
+		Split left = getVerticalSplit(LEFT, 0.5, 0.5);
+		left.setWeight(0);
+		left.setName(LEFT);
+		Split center = new Split();
+		Leaf top = new Leaf();
+		top.setName(TOP + CENTER);
+		Leaf middle = new Leaf();
+		middle.setName(MIDDLE + CENTER);
+		middle.setWeight(1.0);
+		Leaf bottom = new Leaf();
+		middle.setName(BOTTOM + CENTER);
+		center.setRowLayout(false);
+		center.setChildren(top, new Divider(), middle, new Divider(), bottom);
+		center.setWeight(1.0);
+		center.setName(CENTER);
+		Split right = getVerticalSplit(RIGHT, 0.5, 0.5);
+		right.setWeight(0);
+		right.setName(RIGHT);
+		root.setChildren(left, new Divider(), center, new Divider(), right);
+		return root;
+	}
+
+	private Split getVerticalSplit(String name, double topWeight, double bottomWeight) {
+		Split split = new Split();
+		split.setRowLayout(false);
+		Leaf top = new Leaf(TOP + name);
+		top.setWeight(topWeight);
+		Leaf bottom = new Leaf(BOTTOM + name);
+		bottom.setWeight(bottomWeight);
+		split.setChildren(top, new Divider(), bottom);
+		return split;
+	}
+
+	protected JComponent getComponentForName(String name) {
+		return (JComponent) centralLayout.getComponentForNode(centralLayout.getNodeForName(name));
+	}
+
 	public ModuleView<?> getModuleView() {
-		return _moduleView;
-	}
-
-	public void goBackward() {
-		if (canGoBackward()) {
-			isGoingBackward = true;
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Back to " + previousHistory.peek());
-			}
-			HistoryLocation historyLocation = previousHistory.peek();
-			FlexoModelObject backObject = historyLocation.getObject();
-			switchToModuleViewForObjectAndPerspective(backObject, historyLocation.getPerspective());
-			nextHistory.push(currentLocation);
-			currentLocation = previousHistory.pop();
-			_controlPanel.update();
-			isGoingBackward = false;
-		}
-	}
-
-	public void goForward() {
-		if (canGoForward()) {
-			isGoingForward = true;
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Forward to " + nextHistory.peek());
-			}
-			HistoryLocation historyLocation = nextHistory.peek();
-			FlexoModelObject forwardObject = historyLocation.getObject();
-			switchToModuleViewForObjectAndPerspective(forwardObject, historyLocation.getPerspective());
-			previousHistory.push(currentLocation);
-			currentLocation = nextHistory.pop();
-			_controlPanel.update();
-			isGoingForward = false;
-		}
-	}
-
-	public void goUp() {
-		switchToParentModuleViewForObject(getCurrentEditedObject());
-	}
-
-	public class ControlPanel extends JPanel {
-		private final JLabel backwardButton;
-
-		private final JLabel forwardButton;
-
-		private final JLabel upButton;
-
-		protected JLabel closeModuleViewButton;
-		protected JLabel collapseAllButton;
-		protected JLabel autoLayoutButton;
-
-		protected JComboBox availableObjects;
-
-		protected AvailablePerspectives availablePerspectives;
-
-		protected ActionListener availableObjectsActionListener;
-
-		private final JPanel centerPanel;
-
-		private final JPanel viewControlsPanel;
-
-		private final ModuleBar moduleBar;
-
-		private class NavigationButton extends JLabel {
-			private final Icon enabledIcon;
-
-			private final Icon disabledIcon;
-
-			protected NavigationButton(Icon enabled, Icon disabled) {
-				this.enabledIcon = enabled;
-				this.disabledIcon = disabled;
-			}
-
-			/**
-			 * Overrides setEnabled
-			 * 
-			 * @see javax.swing.JComponent#setEnabled(boolean)
-			 */
-			@Override
-			public void setEnabled(boolean enabled) {
-				if (enabled) {
-					setIcon(enabledIcon);
-					setSize(enabledIcon.getIconWidth(), enabledIcon.getIconHeight());
-				} else {
-					setIcon(disabledIcon);
-					setSize(disabledIcon.getIconWidth(), disabledIcon.getIconHeight());
-				}
-			}
-		}
-
-		public ControlPanel() {
-			super();
-			moduleBar = new ModuleBar(getController().getModuleLoader());
-			setLayout(new BorderLayout());
-
-			centerPanel = new JPanel(new BorderLayout());
-
-			availableObjects = new JComboBox(_availableObjects);
-			availableObjectsActionListener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					switchToModuleViewForObjectAndPerspective((FlexoModelObject) availableObjects.getSelectedItem(),
-							_controller.getCurrentPerspective());
-				}
-			};
-			availableObjects.addActionListener(availableObjectsActionListener);
-			availableObjects.setFocusable(false);
-			availableObjects.setRenderer(new DefaultListCellRenderer() {
-				@Override
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-					JLabel returned = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-					if (value != null && !((FlexoModelObject) value).isDeleted()) {
-						String title = _controller.getWindowTitleforObject((FlexoModelObject) value);
-						if (title == null) {
-							logger.warning("Unexpected object " + value + " asked for controller " + _controller + " perspective="
-									+ _controller.getCurrentPerspective());
-							title = "???";
-						}
-						returned.setText(title);
-						returned.setPreferredSize(new Dimension(returned.getFontMetrics(returned.getFont()).stringWidth(title) + 15,
-								returned.getFontMetrics(returned.getFont()).getHeight()));
-					} else {
-						if (value == null) {
-							returned.setText(FlexoLocalization.localizedForKey("no_selection"));
-						} else {
-							returned.setText(FlexoLocalization.localizedForKey("deleted"));
-						}
-					}
-					setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 2));
-					return returned;
-				}
-			});
-			FCH.setHelpItem(availableObjects, "available-objects");
-
-			closeModuleViewButton = new JLabel(IconLibrary.CLOSE_ICON);
-			closeModuleViewButton.addMouseListener(new MouseAdapter() {
-
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					super.mouseClicked(e);
-					if (_moduleView != null && _moduleView.getRepresentedObject() != null) {
-						// 0. Grab a reference on the view that will be closed/deleted
-						ModuleView<?> toDelete = _moduleView;
-						// 1. Remove the view from the main pane, the history and possibly go back in history
-						updateControlsForObjectRemovedFromHistory(toDelete.getRepresentedObject());
-						// 2. Delete the view.
-						toDelete.deleteModuleView();
-						// Do not switch those lines as this will prevent updateControlsForObjectRemovedFromHistory from properly working
-					}
-				}
-			});
-			FCH.setHelpItem(closeModuleViewButton, "close-module");
-			if (isCollapseEnabled()) {
-				collapseAllButton = new JLabel(IconLibrary.COLLAPSE_ALL_ICON);
-				collapseAllButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						performCollapseAll();
-					}
-				});
-				FCH.setHelpItem(collapseAllButton, "collapse-all");
-			}
-
-			if (_controller.getPerspectives().size() > 0) {
-				// _controller.getPerspectives()
-				availablePerspectives = new AvailablePerspectives(_controller);
-				availablePerspectives.setFocusable(false);
-				FCH.setHelpItem(availablePerspectives, "available-perspectives");
-			}
-
-			backwardButton = new NavigationButton(IconLibrary.NAVIGATION_BACKWARD_ICON, IconLibrary.NAVIGATION_DISABLED_BACKWARD_ICON);
-			backwardButton.setSize(IconLibrary.NAVIGATION_BACKWARD_ICON.getIconWidth(),
-					IconLibrary.NAVIGATION_BACKWARD_ICON.getIconHeight());
-			backwardButton.setEnabled(false);
-			backwardButton.setFocusable(false);
-			backwardButton.addMouseListener(new MouseAdapter() {
-				/**
-				 * Overrides mouseClicked
-				 * 
-				 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
-				 */
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					goBackward();
-				}
-			});
-
-			FCH.setHelpItem(backwardButton, "back");
-
-			forwardButton = new NavigationButton(IconLibrary.NAVIGATION_FORWARD_ICON, IconLibrary.NAVIGATION_DISABLED_FORWARD_ICON);
-			forwardButton.setSize(27, 19);
-			forwardButton.setEnabled(false);
-			forwardButton.addMouseListener(new MouseAdapter() {
-				/**
-				 * Overrides mouseClicked
-				 * 
-				 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
-				 */
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					goForward();
-				}
-			});
-			forwardButton.setFocusable(false);
-
-			FCH.setHelpItem(forwardButton, "forward");
-
-			upButton = new NavigationButton(IconLibrary.NAVIGATION_UP_ICON, IconLibrary.NAVIGATION_DISABLED_UP_ICON);
-			upButton.setSize(22, 19);
-			upButton.setEnabled(false);
-			upButton.setFocusable(false);
-			upButton.addMouseListener(new MouseAdapter() {
-				/**
-				 * Overrides mouseClicked
-				 * 
-				 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
-				 */
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					goUp();
-				}
-			});
-
-			FCH.setHelpItem(upButton, "up");
-
-			JPanel commonButtonsPanel = new JPanel(new FlowLayout());
-			JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-			buttonPanel.add(backwardButton);
-			buttonPanel.add(upButton);
-			buttonPanel.add(forwardButton);
-			if (availablePerspectives != null) {
-				commonButtonsPanel.add(availablePerspectives);
-			}
-
-			viewControlsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-
-			setupViewControlsPanel();
-
-			commonButtonsPanel.add(availableObjects);
-			commonButtonsPanel.add(viewControlsPanel);
-			commonButtonsPanel.add(buttonPanel);
-			centerPanel.add(moduleBar, BorderLayout.WEST);
-			centerPanel.add(commonButtonsPanel, BorderLayout.CENTER);
-
-			if (_controller.getCustomActionPanel() != null) {
-				centerPanel.add(_controller.getCustomActionPanel(), BorderLayout.EAST);
-			}
-
-			toggleHideShowLeftPanel = new MouseOverButton();
-			// toggleHideShowLeftPanel.setBackground(FlexoCst.GUI_BACK_COLOR);
-			toggleHideShowLeftPanel.setBorder(BorderFactory.createEmptyBorder());
-			toggleHideShowLeftPanel.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (leftViewIsVisible()) {
-						_controller.hideLeftView();
-					} else {
-						_controller.showLeftView();
-					}
-				}
-			});
-			FCH.setHelpItem(toggleHideShowLeftPanel, "toggle-hide-show-left-panel");
-
-			updateToggleHideShowLeftPanelButton(leftViewIsVisible());
-
-			toggleHideShowRightPanel = new MouseOverButton();
-			// toggleHideShowRightPanel.setBackground(FlexoCst.GUI_BACK_COLOR);
-			toggleHideShowRightPanel.setBorder(BorderFactory.createEmptyBorder());
-			toggleHideShowRightPanel.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (rightViewIsVisible()) {
-						_controller.hideRightView();
-					} else {
-						_controller.showRightView();
-					}
-				}
-			});
-			FCH.setHelpItem(toggleHideShowRightPanel, "toggle-hide-show-right-panel");
-
-			updateToggleHideShowRightPanelButton(rightViewIsVisible());
-			CSH.setHelpIDString(toggleHideShowRightPanel, "OperatorIFNode");
-
-			add(centerPanel, BorderLayout.CENTER);
-
-			// setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		}
-
-		private void setupViewControlsPanel() {
-			if (isAutoLayoutEnabled()) {
-				autoLayoutButton = new JLabel(IconLibrary.AUTO_LAYOUT_ICON);
-				autoLayoutButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						performAutolayout();
-					}
-				});
-				FCH.setHelpItem(autoLayoutButton, "auto-layout");
-			} else {
-				autoLayoutButton = null;
-			}
-
-			viewControlsPanel.removeAll();
-			viewControlsPanel.add(new JLabel(IconLibrary.NAVIGATION_CLOSE_LEFT));
-			viewControlsPanel.add(closeModuleViewButton);
-
-			if (collapseAllButton != null) {
-				viewControlsPanel.add(new JLabel(IconLibrary.NAVIGATION_SPACER));
-				viewControlsPanel.add(collapseAllButton);
-			}
-
-			if (autoLayoutButton != null) {
-				viewControlsPanel.add(new JLabel(IconLibrary.NAVIGATION_SPACER));
-				viewControlsPanel.add(autoLayoutButton);
-			}
-			viewControlsPanel.add(new JLabel(IconLibrary.NAVIGATION_CLOSE_RIGHT));
-			viewControlsPanel.validate();
-
-		}
-
-		private void updateToggleHideShowLeftPanelButton(boolean status) {
-			if (!status) { // Hide
-				toggleHideShowLeftPanel.setNormalIcon(IconLibrary.TOGGLE_ARROW_TOP_ICON);
-				toggleHideShowLeftPanel.setMouseOverIcon(IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-				toggleHideShowLeftPanel.setToolTipText(FlexoLocalization.localizedForKey("show_browser"));
-			} else { // Show
-				toggleHideShowLeftPanel.setNormalIcon(IconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
-				toggleHideShowLeftPanel.setMouseOverIcon(IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-				toggleHideShowLeftPanel.setToolTipText(FlexoLocalization.localizedForKey("hide_browser"));
-			}
-		}
-
-		private void updateToggleHideShowRightPanelButton(boolean status) {
-			if (!status) { // Hide
-				toggleHideShowRightPanel.setNormalIcon(IconLibrary.TOGGLE_ARROW_TOP_ICON);
-				toggleHideShowRightPanel.setMouseOverIcon(IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-				toggleHideShowRightPanel.setToolTipText(FlexoLocalization.localizedForKey("show_palette"));
-			} else { // Show
-				toggleHideShowRightPanel.setNormalIcon(IconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
-				toggleHideShowRightPanel.setMouseOverIcon(IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-				toggleHideShowRightPanel.setToolTipText(FlexoLocalization.localizedForKey("hide_palette"));
-			}
-		}
-
-		protected MouseOverButton toggleHideShowLeftPanel;
-
-		protected MouseOverButton toggleHideShowRightPanel;
-
-		protected void update() {
-			/*
-			 * System.out.println ("History:"); for (int i=0; i<_history.size();
-			 * i++) { System.out.println (((i==_historyPosition)?"*":"
-			 * ")+((FlexoProcess)_history.get(i)).toString()); }
-			 */
-			if (_moduleView != null) {
-				availableObjects.removeActionListener(availableObjectsActionListener);
-				availableObjects.setSelectedItem(_moduleView.getRepresentedObject());
-				if (availablePerspectives != null) {
-					availablePerspectives.refresh();
-				}
-				availableObjects.addActionListener(availableObjectsActionListener);
-				if (getParentObject(_moduleView.getRepresentedObject()) != null) {
-					upButton.setEnabled(true);
-				} else {
-					upButton.setEnabled(false);
-				}
-			}
-			setupViewControlsPanel();
-			backwardButton.setEnabled(canGoBackward());
-			forwardButton.setEnabled(canGoForward());
-
-			availableObjects.updateUI();
-		}
-
-	}
-
-	protected boolean canGoForward() {
-		return nextHistory.size() > 0;
-	}
-
-	protected boolean canGoBackward() {
-		return previousHistory.size() > 0;
-	}
-
-	public ControlPanel getControlPanel() {
-		return _controlPanel;
+		return moduleView;
 	}
 
 	public void showControlPanel() {
-		if (_controlPanel != null) {
-			_controlPanel.setVisible(true);
-		}
+		topBar.setVisible(true);
 	}
 
 	public void hideControlPanel() {
-		if (_controlPanel != null) {
-			_controlPanel.setVisible(false);
-		}
-	}
-
-	public JComponent getLeftView() {
-		return _leftView;
-	}
-
-	public void setLeftView(JComponent leftView) {
-		if (_leftView != leftView) {
-			FCH.setHelpItem(leftView, FCH.getLeftViewItemFor(_controller.getModule()));
-			_leftView = leftView;
-			_controlPanel.add(_controlPanel.toggleHideShowLeftPanel, BorderLayout.WEST);
-			if (_controller.getFlexoFrame().isValid()) {
-				FCH.validateWindow(_controller.getFlexoFrame());
-			}
-			revalidate();
-			repaint();
-		}
-		updateLeftViewVisibilityWithPreferences();
-	}
-
-	/**
-	 *
-	 */
-	public void updateLeftViewVisibilityWithPreferences() {
-		if (GeneralPreferences.getShowLeftView(getController().getModule().getShortName())) {
-			_controller.showLeftView();
-		} else {
-			_controller.hideLeftView();
-		}
-	}
-
-	public boolean leftViewIsVisible() {
-		if (_leftView == null) {
-			return false;
-		}
-		return _leftView.getParent() != null;
-	}
-
-	public void showLeftView() {
-		if (_leftView != null) {
-			_splitPane.setLeftComponent(_leftView);
-			_controlPanel.updateToggleHideShowLeftPanelButton(true);
-			_splitPane.resetToPreferredSizes();
-			revalidate();
-			repaint();
-			if (GeneralPreferences.getShowLeftView(getController().getModule().getShortName()) == false) {
-				GeneralPreferences.setShowLeftView(getController().getModule().getShortName(), true);
-				FlexoPreferences.savePreferences(true);
-			}
-		}
-	}
-
-	public void hideLeftView() {
-		if (_leftView != null) {
-			_splitPane.setLeftComponent(null);
-			_controlPanel.updateToggleHideShowLeftPanelButton(false);
-			revalidate();
-			repaint();
-			if (GeneralPreferences.getShowLeftView(getController().getModule().getShortName()) == true) {
-				GeneralPreferences.setShowLeftView(getController().getModule().getShortName(), false);
-				FlexoPreferences.savePreferences(true);
-			}
-		}
-	}
-
-	public JComponent getRightView() {
-		return _rightView;
-	}
-
-	public void setRightView(JComponent rightView) {
-		if (_rightView != rightView) {
-
-			if (rightView.getParent() != null && rightView.getParent() != _rightPanel) {
-				rightView.getParent().remove(rightView);
-			}
-			FCH.setHelpItem(rightView, FCH.getRightViewItemFor(_controller.getModule()));
-			if (_rightView != null) {
-				_rightPanel.remove(_rightView);
-			}
-			_rightView = rightView;
-			if (_rightPaneIsSplitPane) {
-				((JSplitPane) _rightPanel).setRightComponent(_rightView);
-				validate();
-			} else {
-				_rightPanel.add(_rightView, BorderLayout.EAST);
-			}
-			_controlPanel.add(_controlPanel.toggleHideShowRightPanel, BorderLayout.EAST);
-			if (_controller.getFlexoFrame().isValid()) {
-				FCH.validateWindow(_controller.getFlexoFrame());
-			}
-		}
-		updateRightViewVisibilityWithPreferences();
-	}
-
-	/**
-	 *
-	 */
-	public void updateRightViewVisibilityWithPreferences() {
-		if (GeneralPreferences.getShowRightView(getController().getModule().getShortName())) {
-			_controller.showRightView();
-		} else {
-			_controller.hideRightView();
-		}
-	}
-
-	public JComponent getBottomView() {
-		return getRightView();
-	}
-
-	public void setBottomView(JComponent bottomView) {
-		setRightView(bottomView);
-	}
-
-	public boolean rightViewIsVisible() {
-		if (_rightView == null) {
-			return false;
-		}
-		return _rightView.isVisible();
-	}
-
-	public void showRightView() {
-		if (_rightView != null) {
-			_rightView.setVisible(true);
-			_controlPanel.updateToggleHideShowRightPanelButton(true);
-			if (_rightPaneIsSplitPane && defaultDL > -1) {
-				JSplitPane splitPane = (JSplitPane) _rightPanel;
-				splitPane.setDividerLocation(defaultDL);
-				// logger.info("Sets dividerLocation to "+defaultDL);
-			}
-			revalidate();
-			repaint();
-			logger.fine("_rightView.getSize()=" + _rightView.getSize());
-			/*
-			 * _middlePane.resetToPreferredSizes(); _middlePane.revalidate();
-			 * _middlePane.repaint();
-			 */
-			if (GeneralPreferences.getShowRightView(getController().getModule().getShortName()) == false) {
-				GeneralPreferences.setShowRightView(getController().getModule().getShortName(), true);
-				FlexoPreferences.savePreferences(true);
-			}
-		}
-	}
-
-	private int defaultDL = -1;
-
-	public void hideRightView() {
-		if (_rightView != null) {
-			if (_rightPaneIsSplitPane) {
-				JSplitPane splitPane = (JSplitPane) _rightPanel;
-				defaultDL = splitPane.getDividerLocation();
-				// logger.info("DividerLocation is "+defaultDL);
-			}
-			_rightView.setVisible(false);
-			_controlPanel.updateToggleHideShowRightPanelButton(false);
-			revalidate();
-			repaint();
-			if (GeneralPreferences.getShowRightView(getController().getModule().getShortName()) == true) {
-				GeneralPreferences.setShowRightView(getController().getModule().getShortName(), false);
-				FlexoPreferences.savePreferences(true);
-			}
-			/*
-			 * _middlePane.revalidate(); _middlePane.repaint();
-			 */
-		}
-	}
-
-	/**
-	 * Overrides
-	 * 
-	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-	 *      org.openflexo.foundation.DataModification)
-	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-	 *      org.openflexo.foundation.DataModification)
-	 */
-	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof ObjectDeleted) {
-			FlexoModelObject removedObject = ((ObjectDeleted) dataModification).getDeletedObject();
-			updateControlsForObjectRemovedFromHistory(removedObject);
-		} else if (dataModification instanceof NameChanged) {
-			if (_controlPanel != null) {
-				_controlPanel.update();
-			}
-		}
-	}
-
-	/**
-	 * @param removedObject
-	 */
-	protected void updateControlsForObjectRemovedFromHistory(FlexoModelObject removedObject) {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Synchronize control panel for Object deletion with " + removedObject + " of " + removedObject.getClass().getName());
-		}
-		if (removedObject == getCurrentEditedObject()) {
-			if (canGoBackward()) {
-				goBackward();
-			} else {
-				resetModuleView();
-			}
-		}
-		removeHistoryLocationWithObject(removedObject, previousHistory);
-		removeHistoryLocationWithObject(removedObject, nextHistory);
-		while (_availableObjects.indexOf(removedObject) > -1) {
-			int removedIndex = _availableObjects.indexOf(removedObject);
-			_availableObjects.remove(removedIndex);
-		}
-		if (_controlPanel != null) {
-			_controlPanel.update();
-		}
-		if (removedObject != null) {
-			removedObject.deleteObserver(this);
-		}
-	}
-
-	private void removeHistoryLocationWithObject(FlexoModelObject object, Stack<HistoryLocation> locations) {
-		Iterator<HistoryLocation> i = locations.iterator();
-		while (i.hasNext()) {
-			FlexoMainPane.HistoryLocation l = i.next();
-			if (l.getObject() == object) {
-				i.remove();
-			}
-		}
-	}
-
-	protected void switchToPerspective(FlexoPerspective perspective) {
-		_controller.switchToPerspective(perspective);
-	}
-
-	protected void switchToModuleViewForObject(FlexoModelObject object) {
-		_controller.setCurrentEditedObjectAsModuleView(object);
-	}
-
-	protected void switchToModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Switch to object " + object + " and perspective " + perspective);
-		}
-		_controller.setCurrentEditedObjectAsModuleView(object, perspective);
-	}
-
-	protected void switchToParentModuleViewForObject(FlexoModelObject object) {
-		if (getParentObject(object) != null) {
-			switchToModuleViewForObject(getParentObject(object));
-		}
-	}
-
-	protected abstract FlexoModelObject getParentObject(FlexoModelObject object);
-
-	protected FlexoModelObject getCurrentEditedObject() {
-		return _controller.getCurrentDisplayedObjectAsModuleView();
-	}
-
-	protected ModuleView<?> getModuleViewForObject(FlexoModelObject object) {
-		return _controller.moduleViewForObject(object);
-	}
-
-	public class HistoryLocation {
-		private final FlexoModelObject _object;
-
-		private final FlexoPerspective _perspective;
-
-		protected HistoryLocation(FlexoModelObject object, FlexoPerspective perspective) {
-			super();
-			_object = object;
-			_perspective = perspective;
-		}
-
-		public FlexoModelObject getObject() {
-			return _object;
-		}
-
-		public FlexoPerspective getPerspective() {
-			return _perspective;
-		}
+		topBar.setVisible(false);
 	}
 
 	public FlexoController getController() {
-		return _controller;
+		return controller;
 	}
 
-	public boolean isCollapseEnabled() {
-		return false;
-	}
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
 
-	public void performCollapseAll() {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Perform collapse all not implemented for: " + this);
-		}
-	}
-
-	public boolean isAutoLayoutEnabled() {
-		return false;
-	}
-
-	public void performAutolayout() {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Perform collapse all not implemented for: " + this);
-		}
 	}
 }

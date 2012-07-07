@@ -28,13 +28,15 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IsAStatement;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddIsAStatement extends AddStatement {
 
 	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
 
-	public AddIsAStatement() {
+	public AddIsAStatement(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

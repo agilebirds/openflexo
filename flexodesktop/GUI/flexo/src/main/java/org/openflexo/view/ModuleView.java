@@ -20,6 +20,7 @@
 package org.openflexo.view;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * This interface is implemented by all views that will be displayed as a top-level view of a module. This abstract representation is used

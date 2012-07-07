@@ -62,6 +62,12 @@ public class ViewShape extends ViewElement {
 	}
 
 	@Override
+	public void setDescription(String description) {
+		System.out.println("Sets description for shape: " + description);
+		super.setDescription(description);
+	}
+
+	@Override
 	public void delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);

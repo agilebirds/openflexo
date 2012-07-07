@@ -27,8 +27,6 @@ package org.openflexo.dm.view;
  */
 
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.view.FlexoMainPane;
 
 /**
@@ -52,14 +50,6 @@ public class DMMainPane extends FlexoMainPane {
 	@Override
 	public DMController getController() {
 		return (DMController) super.getController();
-	}
-
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof DMObject) {
-			return (DMObject) ((DMObject) object).getParent();
-		}
-		return null;
 	}
 
 }

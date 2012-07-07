@@ -135,14 +135,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 				case BLANK_EDITION_PATTERN:
 
 					// Create new edition pattern
-					newEditionPattern = new EditionPattern();
+					newEditionPattern = new EditionPattern(null);
 					newEditionPattern.setName(getEditionPatternName());
 
 					// Find best URI base candidate
 					PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
 
 					// Create individual pattern role
-					IndividualPatternRole individualPatternRole = new IndividualPatternRole();
+					IndividualPatternRole individualPatternRole = new IndividualPatternRole(null);
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 						individualPatternRole.setOntologicType(getConcept());
@@ -158,7 +158,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
 						if (entry.getSelectThis()) {
 							if (entry.graphicalObject instanceof ExampleDrawingShape) {
-								ShapePatternRole newShapePatternRole = new ShapePatternRole();
+								ShapePatternRole newShapePatternRole = new ShapePatternRole(null);
 								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
 								if (mainPropertyDescriptor != null && entry.isMainEntry()) {
 									newShapePatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
@@ -200,7 +200,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								if (e.property instanceof OntologyObjectProperty) {
 									OntologyObject range = e.property.getRange();
 									if (range instanceof OntologyClass) {
-										IndividualPatternRole newPatternRole = new IndividualPatternRole();
+										IndividualPatternRole newPatternRole = new IndividualPatternRole(null);
 										newPatternRole.setPatternRoleName(e.property.getName());
 										newPatternRole.setOntologicType((OntologyClass) range);
 										newEditionPattern.addToPatternRoles(newPatternRole);
@@ -212,7 +212,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					}
 
 					// Create new drop scheme
-					DropScheme newDropScheme = new DropScheme();
+					DropScheme newDropScheme = new DropScheme(null);
 					newDropScheme.setName(getDropSchemeName());
 					newDropScheme.setTopTarget(isTopLevel);
 					if (!isTopLevel) {
@@ -228,7 +228,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								if (e.property instanceof OntologyDataProperty) {
 									switch (((OntologyDataProperty) e.property).getDataType()) {
 									case Boolean:
-										newParameter = new CheckboxParameter();
+										newParameter = new CheckboxParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										break;
@@ -236,18 +236,18 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									case Integer:
 									case Long:
 									case Short:
-										newParameter = new IntegerParameter();
+										newParameter = new IntegerParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										break;
 									case Double:
 									case Float:
-										newParameter = new FloatParameter();
+										newParameter = new FloatParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										break;
 									case String:
-										newParameter = new TextFieldParameter();
+										newParameter = new TextFieldParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										break;
@@ -257,7 +257,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								} else if (e.property instanceof OntologyObjectProperty) {
 									OntologyObject range = e.property.getRange();
 									if (range instanceof OntologyClass) {
-										newParameter = new IndividualParameter();
+										newParameter = new IndividualParameter(null);
 										newParameter.setName(e.property.getName());
 										newParameter.setLabel(e.label);
 										((IndividualParameter) newParameter).setConcept((OntologyClass) range);
@@ -269,7 +269,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 							}
 						}
 
-						URIParameter uriParameter = new URIParameter();
+						URIParameter uriParameter = new URIParameter(null);
 						uriParameter.setName("uri");
 						uriParameter.setLabel("uri");
 						if (mainPropertyDescriptor != null) {
@@ -279,14 +279,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 						// Declare pattern role
 						for (IndividualPatternRole r : otherRoles) {
-							DeclarePatternRole action = new DeclarePatternRole();
+							DeclarePatternRole action = new DeclarePatternRole(null);
 							action.setAssignation(new ViewPointDataBinding(r.getPatternRoleName()));
 							action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
 							newDropScheme.addToActions(action);
 						}
 
 						// Add individual action
-						AddIndividual newAddIndividual = new AddIndividual();
+						AddIndividual newAddIndividual = new AddIndividual(null);
 						newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
 						newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
 						for (PropertyEntry e : propertyEntries) {
@@ -294,13 +294,13 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								if (e.property instanceof OntologyObjectProperty) {
 									OntologyObject range = e.property.getRange();
 									if (range instanceof OntologyClass) {
-										ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion();
+										ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion(null);
 										propertyAssertion.setOntologyProperty(e.property);
 										propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
 										newAddIndividual.addToObjectAssertions(propertyAssertion);
 									}
 								} else if (e.property instanceof OntologyDataProperty) {
-									DataPropertyAssertion propertyAssertion = new DataPropertyAssertion();
+									DataPropertyAssertion propertyAssertion = new DataPropertyAssertion(null);
 									propertyAssertion.setOntologyProperty(e.property);
 									propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
 									newAddIndividual.addToDataAssertions(propertyAssertion);
@@ -315,7 +315,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					for (GraphicalElementPatternRole graphicalElementPatternRole : newGraphicalElementPatternRoles.values()) {
 						if (graphicalElementPatternRole instanceof ShapePatternRole) {
 							// Add shape action
-							AddShape newAddShape = new AddShape();
+							AddShape newAddShape = new AddShape(null);
 							newAddShape.setAssignation(new ViewPointDataBinding(graphicalElementPatternRole.getPatternRoleName()));
 							if (mainPatternRole) {
 								if (isTopLevel) {
@@ -343,7 +343,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									OntologyObject range = e.property.getRange();
 									if (range instanceof OntologyClass) {
 										InspectorEntry newInspectorEntry = null;
-										newInspectorEntry = new TextFieldInspectorEntry();
+										newInspectorEntry = new TextFieldInspectorEntry(null);
 										newInspectorEntry.setName(e.property.getName());
 										newInspectorEntry.setLabel(e.label);
 										newInspectorEntry.setIsReadOnly(true);
@@ -354,20 +354,20 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									InspectorEntry newInspectorEntry = null;
 									switch (((OntologyDataProperty) e.property).getDataType()) {
 									case Boolean:
-										newInspectorEntry = new CheckboxInspectorEntry();
+										newInspectorEntry = new CheckboxInspectorEntry(null);
 										break;
 									case Byte:
 									case Integer:
 									case Long:
 									case Short:
-										newInspectorEntry = new IntegerInspectorEntry();
+										newInspectorEntry = new IntegerInspectorEntry(null);
 										break;
 									case Double:
 									case Float:
-										newInspectorEntry = new FloatInspectorEntry();
+										newInspectorEntry = new FloatInspectorEntry(null);
 										break;
 									case String:
-										newInspectorEntry = new TextFieldInspectorEntry();
+										newInspectorEntry = new TextFieldInspectorEntry(null);
 										break;
 									default:
 										logger.warning("Not handled: " + ((OntologyDataProperty) e.property).getDataType());

@@ -149,6 +149,7 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 		return new SGMenuBar(this);
 	}
 
+	@Override
 	public ValidationModel getDefaultValidationModel() {
 		// If there is a ValidationModel associated to this module, put it here
 		return null;
@@ -250,16 +251,16 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 	}
 
 	@Override
-	public void setEditor(FlexoEditor projectEditor) {
-		if (getEditor() != null && getEditor().getProject() != null) {
-			getEditor().getProject().getGeneratedCode().setFactory(null);
+	public void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		if (from != null && from.getProject() != null) {
+			from.getProject().getGeneratedCode().setFactory(null);
 		}
-		super.setEditor(projectEditor);
-		if (getEditor() != null && getEditor().getResourceUpdateHandler() != null) {
-			getEditor().getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+		if (to != null && to.getResourceUpdateHandler() != null) {
+			to.getResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		}
-		if (getEditor() != null && getEditor().getProject() != null) {
-			getEditor().getProject().getGeneratedCode().setFactory(this);
+		if (to != null && to.getProject() != null) {
+			to.getProject().getGeneratedCode().setFactory(this);
 		}
 	}
 

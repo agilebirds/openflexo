@@ -29,6 +29,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
@@ -52,14 +53,14 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	private BindingModel _bindingModel;
 
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep) {
-		EditionPatternInspector returned = new EditionPatternInspector();
+		EditionPatternInspector returned = new EditionPatternInspector(null);
 		returned.setInspectorTitle(ep.getName());
 		ep.setInspector(returned);
 		return returned;
 	}
 
-	public EditionPatternInspector() {
-		super();
+	public EditionPatternInspector(ViewPointBuilder builder) {
+		super(builder);
 		entries = new Vector<InspectorEntry>();
 	}
 
@@ -121,7 +122,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public TextFieldInspectorEntry createNewTextField() {
-		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
+		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry(null);
 		newEntry.setName("textfield");
 		// newEntry.setLabel("textfield");
 		addToEntries(newEntry);
@@ -129,7 +130,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public TextAreaInspectorEntry createNewTextArea() {
-		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
+		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry(null);
 		newEntry.setName("textarea");
 		// newEntry.setLabel("textarea");
 		addToEntries(newEntry);
@@ -137,7 +138,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public IntegerInspectorEntry createNewInteger() {
-		IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
+		IntegerInspectorEntry newEntry = new IntegerInspectorEntry(null);
 		newEntry.setName("integer");
 		// newEntry.setLabel("integer");
 		addToEntries(newEntry);
@@ -145,7 +146,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public CheckboxInspectorEntry createNewCheckbox() {
-		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
+		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry(null);
 		newEntry.setName("checkbox");
 		// newEntry.setLabel("checkbox");
 		addToEntries(newEntry);
@@ -153,7 +154,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public IndividualInspectorEntry createNewIndividual() {
-		IndividualInspectorEntry newEntry = new IndividualInspectorEntry();
+		IndividualInspectorEntry newEntry = new IndividualInspectorEntry(null);
 		newEntry.setName("individual");
 		// newEntry.setLabel("individual");
 		addToEntries(newEntry);
@@ -161,7 +162,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public ClassInspectorEntry createNewClass() {
-		ClassInspectorEntry newEntry = new ClassInspectorEntry();
+		ClassInspectorEntry newEntry = new ClassInspectorEntry(null);
 		newEntry.setName("class");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -169,7 +170,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public ObjectPropertyInspectorEntry createNewObjectProperty() {
-		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry();
+		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry(null);
 		newEntry.setName("property");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -177,7 +178,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public DataPropertyInspectorEntry createNewDataProperty() {
-		DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry();
+		DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry(null);
 		newEntry.setName("property");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -185,7 +186,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public FlexoObjectInspectorEntry createNewFlexoObject() {
-		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry();
+		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry(null);
 		newEntry.setName("flexoObject");
 		// newEntry.setLabel("flexoObject");
 		addToEntries(newEntry);

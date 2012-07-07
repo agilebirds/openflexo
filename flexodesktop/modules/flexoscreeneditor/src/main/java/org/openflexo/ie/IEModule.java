@@ -56,7 +56,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 	public IEModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
 		IEPreferences.init();
-		getIEController().initMainPane();
 	}
 
 	@Override

@@ -208,6 +208,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private static final String PROCESS_SNAPSHOT_IMPORTED_DIRECTORY = "ProcessSnapshotImported";
 	private static final String PROJECT_DOCUMENTATION_CSS_FILE = "FlexoDocumentationMasterStyle.css";
 
+	public static final File INITIAL_IMAGES_DIR = new FileResource("Config/InitialImages");
+
 	private boolean computeDiff = true;
 
 	private boolean timestampsHaveBeenLoaded = false;
@@ -1833,14 +1835,14 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public static void importInitialImages(FlexoProject project, FlexoEditor editor) {
-		File initialImagesDir = new FileResource("Config/InitialImages");
-		if (!initialImagesDir.exists()) {
+
+		if (!INITIAL_IMAGES_DIR.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find intial images.");
 			}
 			return;
 		}
-		File[] files = initialImagesDir.listFiles(new java.io.FileFilter() {
+		File[] files = INITIAL_IMAGES_DIR.listFiles(new java.io.FileFilter() {
 
 			@Override
 			public boolean accept(File pathname) {
@@ -4141,7 +4143,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public void resolvePendingEditionPatternReferences() {
 		ArrayList<String> allKeys = new ArrayList<String>(pendingEditionPatternReferences.keySet());
 		for (String conceptURI : allKeys) {
-			OntologyObject oo = getProjectOntologyLibrary().getOntologyObject(conceptURI);
+			OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
 			if (oo != null) {
 				_retrievePendingEditionPatternReferences(oo);
 			}

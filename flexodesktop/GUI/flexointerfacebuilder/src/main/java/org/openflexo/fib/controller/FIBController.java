@@ -21,6 +21,8 @@ package org.openflexo.fib.controller;
 
 import java.awt.Component;
 import java.awt.Window;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -105,17 +107,17 @@ import org.openflexo.toolbox.StringUtils;
  * 
  * @param <T>
  */
-public class FIBController<T> extends Observable implements BindingEvaluationContext, Observer {
+public class FIBController extends Observable implements BindingEvaluationContext, Observer {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
-	private T dataObject;
+	private Object dataObject;
 	private final FIBComponent rootComponent;
 	private final Hashtable<FIBComponent, FIBView<?, ?>> views;
 	private FIBSelectable selectionLeader;
 	private FIBSelectable lastFocusedSelectable;
 
-	private FIBWidgetView focusedWidget;
+	private FIBWidgetView<?, ?, ?> focusedWidget;
 
 	private LocalizedDelegate parentLocalizer = null;
 
@@ -220,11 +222,11 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		return viewForComponent(getRootComponent());
 	}
 
-	public T getDataObject() {
+	public Object getDataObject() {
 		return dataObject;
 	}
 
-	public void setDataObject(T anObject) {
+	public void setDataObject(Object anObject) {
 		setDataObject(anObject, false);
 	}
 
@@ -232,7 +234,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		setDataObject(null, true);
 	}
 
-	public void setDataObject(T anObject, boolean forceUpdate) {
+	public void setDataObject(Object anObject, boolean forceUpdate) {
 		if (forceUpdate || anObject != dataObject) {
 			if (dataObject instanceof Observable) {
 				((Observable) dataObject).deleteObserver(this);
@@ -249,8 +251,8 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		FIBController returned = null;
 		if (fibComponent.getControllerClass() != null) {
 			try {
-				Constructor c = fibComponent.getControllerClass().getConstructor(FIBComponent.class);
-				returned = (FIBController) c.newInstance(fibComponent);
+				Constructor<? extends FIBController> c = fibComponent.getControllerClass().getConstructor(FIBComponent.class);
+				returned = c.newInstance(fibComponent);
 			} catch (SecurityException e) {
 				logger.warning("SecurityException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (NoSuchMethodException e) {
@@ -284,7 +286,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			FIBContainerView<? extends FIBContainer, JComponent> container) {
 		container.getJComponent().addMouseListener(editorLauncher);
 		for (FIBComponent c : container.getComponent().getSubComponents()) {
-			FIBView<FIBComponent, JComponent> subView = container.getController().viewForComponent(c);
+			FIBView<?, ?> subView = container.getController().viewForComponent(c);
 			if (subView instanceof FIBContainerView) {
 				recursivelyAddEditorLauncher(editorLauncher, (FIBContainerView) subView);
 			}
@@ -336,6 +338,15 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 				} else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
 					// Detected double-click associated with action
 					fibWidget.getDoubleClickAction().execute(FIBController.this);
+				}
+			}
+		});
+		returned.getDynamicJComponent().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (fibWidget.hasEnterPressedAction() && e.getKeyCode() == KeyEvent.VK_ENTER) {
+					// Detected double-click associated with action
+					fibWidget.getEnterPressedAction().execute(FIBController.this);
 				}
 			}
 		});

@@ -12,7 +12,7 @@
 
 #if($view)
 
-${generator.log("rendu d'une view")}
+${generator.log("Rendering view")}
 ${generator.logO($view)}
 
 <w:p>   
@@ -58,7 +58,7 @@ ${generator.logO($view)}
 
 #end
 
-${generator.log("fin du rendu d'une view")}
+${generator.log("End rendering view")}
 
 
 ## macro is defined in docx_macro_library.vm: #macro(renderDocxTable $headersArray $contents)

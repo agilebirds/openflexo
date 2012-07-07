@@ -26,6 +26,8 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.openflexo.drm.DocItem;
+import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
@@ -344,17 +346,14 @@ public enum BrowserElementType {
 			"generated_code_file_intermediate_version",
 			CGFileIntermediateVersion.class,
 			FilesIconLibrary.SMALL_MISC_FILE_ICON),
-	DOC_ITEM_FOLDER("doc_item_folder", null/*Used outside this scope*/, DREIconLibrary.DOC_FOLDER_ICON),
-	UNDOCUMENTED_DOC_ITEM("undocumented_doc_item", null/*Used outside this scope*/, DREIconLibrary.UNDOCUMENTED_DOC_ITEM_ICON),
-	APPROVING_PENDING_DOC_ITEM(
-			"approving_pending_doc_item",
-			null/*Used outside this scope*/,
-			DREIconLibrary.APPROVING_PENDING_DOC_ITEM_ICON),
+	DOC_ITEM_FOLDER("doc_item_folder", DocItemFolder.class, DREIconLibrary.DOC_FOLDER_ICON),
+	UNDOCUMENTED_DOC_ITEM("undocumented_doc_item", DocItem.class, DREIconLibrary.UNDOCUMENTED_DOC_ITEM_ICON),
+	APPROVING_PENDING_DOC_ITEM("approving_pending_doc_item", DocItem.class, DREIconLibrary.APPROVING_PENDING_DOC_ITEM_ICON),
 	AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM(
 			"available_new_version_pending_doc_item",
-			null/*Used outside this scope*/,
+			DocItem.class,
 			DREIconLibrary.AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM_ICON),
-	UP_TO_DATE_DOC_ITEM("available_uptodate_doc_item", null/*Used outside this scope*/, DREIconLibrary.DOC_ITEM_ICON),
+	UP_TO_DATE_DOC_ITEM("available_uptodate_doc_item", DocItem.class, DREIconLibrary.DOC_ITEM_ICON),
 	TOC_DATA("toc_data", TOCData.class, DGIconLibrary.GENERATED_DOC_ICON),
 	DOC_TYPE("doc_type", DocType.class, CGIconLibrary.TARGET_ICON),
 	TOC_ENTRY("toc_entry", TOCEntry.class, DEIconLibrary.TOC_ENTRY_ICON),

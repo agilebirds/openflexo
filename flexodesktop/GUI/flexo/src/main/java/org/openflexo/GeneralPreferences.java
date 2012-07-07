@@ -93,6 +93,8 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	public static final String STATE_FOR_FRAME = "StateForFrame_";
 
+	public static final String LAYOUT_FOR = "LayoutFor_";
+
 	public static final String AUTO_SAVE_ENABLED = "AutoSaveEnabled";
 
 	public static final String AUTO_SAVE_INTERVAL = "AutoSaveInterval";
@@ -440,6 +442,17 @@ public final class GeneralPreferences extends ContextPreferences {
 		getPreferences().setIntegerProperty(STATE_FOR_FRAME + id, extendedState);
 	}
 
+	public static String getLayoutFor(String id) {
+		return getPreferences().getProperty(LAYOUT_FOR + id);
+	}
+
+	/**
+	 * @param extendedState
+	 */
+	public static void setLayoutFor(String layout, String id) {
+		getPreferences().setProperty(LAYOUT_FOR + id, layout);
+	}
+
 	public static boolean getAutoSaveEnabled() {
 		Boolean autoSaveEnabled = getPreferences().getBooleanProperty(AUTO_SAVE_ENABLED);
 		if (autoSaveEnabled == null) {
@@ -447,7 +460,6 @@ public final class GeneralPreferences extends ContextPreferences {
 			autoSaveEnabled = Boolean.TRUE;
 		}
 		return autoSaveEnabled;
-		// return false;
 	}
 
 	public static boolean isAutoSavedEnabled() {

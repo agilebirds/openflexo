@@ -25,7 +25,6 @@ package org.openflexo.vpm.view;
  * Flexo Application Suite
  * (c) Denali 2003-2006
  */
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.vpm.controller.VPMController;
@@ -47,12 +46,6 @@ public class CEDMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 
 	public void hideBrowser() {
 		hideLeftView();
-	}
-
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		// Implements it if required
-		return null;
 	}
 
 }

@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
@@ -32,17 +33,16 @@ import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.view.OntologyPerspectiveBrowserView;
 import org.openflexo.ve.view.OntologyView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class OntologyPerspective extends FlexoPerspective {
 
 	private final VEController _controller;
 
-	private final OntologyPerspectiveBrowserView _ontologyPerspectiveBrowserView;
+	private final FIBOntologyLibraryBrowser ontologyLibraryBrowser;
 
 	private final JLabel infoLabel;
 
@@ -56,7 +56,7 @@ public class OntologyPerspective extends FlexoPerspective {
 	public OntologyPerspective(VEController controller) {
 		super("ontology_perspective");
 		_controller = controller;
-		_ontologyPerspectiveBrowserView = new OntologyPerspectiveBrowserView(controller);
+		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getProject().getProjectOntologyLibrary(), controller);
 
 		infoLabel = new JLabel("Info label");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
@@ -65,7 +65,7 @@ public class OntologyPerspective extends FlexoPerspective {
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
@@ -75,7 +75,7 @@ public class OntologyPerspective extends FlexoPerspective {
 	/**
 	 * Overrides getSelectedIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
@@ -111,7 +111,7 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public JComponent getLeftView() {
-		return _ontologyPerspectiveBrowserView;
+		return ontologyLibraryBrowser;
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class OntologyPerspective extends FlexoPerspective {
 	}
 
 	public void setProject(FlexoProject project) {
-		_ontologyPerspectiveBrowserView.setProject(project);
+
 	}
 
 }

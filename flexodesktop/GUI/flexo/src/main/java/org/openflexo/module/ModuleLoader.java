@@ -65,6 +65,8 @@ import org.openflexo.view.menu.ToolsMenu;
  */
 public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
+	public static final String ACTIVE_MODULE = "activeModule";
+
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
 	public static final String MODULE_LOADED = "moduleLoaded";
@@ -130,7 +132,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	 * @return Vector
 	 */
 	public List<Module> unloadedButAvailableModules() {
-		List<Module> returned = new ArrayList<Module>(Modules.getInstance().getAvailableModules());
+		List<Module> returned = new ArrayList<Module>(getAvailableModules());
 		for (Enumeration<FlexoModule> e = loadedModules(); e.hasMoreElements();) {
 			returned.remove(e.nextElement().getModule());
 		}
@@ -195,7 +197,11 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	}
 
 	public boolean isAvailable(Module module) {
-		return Modules.getInstance().getAvailableModules().contains(module);
+		return getAvailableModules().contains(module);
+	}
+
+	public List<Module> getAvailableModules() {
+		return Modules.getInstance().getAvailableModules();
 	}
 
 	public boolean isLoaded(Module module) {
@@ -265,11 +271,13 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		}
 		FlexoModule moduleInstance = getModuleInstance(module);
 		if (moduleInstance != null) {
+			FlexoModule old = activeModule;
 			if (activeModule != null) {
 				activeModule.setAsInactive();
 			}
 			moduleInstance.setAsActiveModule();
 			activeModule = moduleInstance;
+			getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
 			return moduleInstance;
 		}
 		throw new ModuleLoadingException(module);

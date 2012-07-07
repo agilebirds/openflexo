@@ -74,9 +74,9 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -181,6 +181,7 @@ public class FPSController extends FlexoController {
 		return new FPSMenuBar(this);
 	}
 
+	@Override
 	public ValidationModel getDefaultValidationModel() {
 		// If there is a ValidationModel associated to this module, put it here
 		return null;
@@ -415,11 +416,6 @@ public class FPSController extends FlexoController {
 		}
 		getSelectionManager().setSelectedObjects(selection);
 		// logger.info("Selection="+getSelectionManager().getSelection());
-	}
-
-	@Override
-	public FlexoPerspective getCurrentPerspective() {
-		return super.getCurrentPerspective();
 	}
 
 	@Override
