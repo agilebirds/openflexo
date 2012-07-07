@@ -27,7 +27,6 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 
 public class CalcViewEDITOR {
@@ -62,11 +61,7 @@ public class CalcViewEDITOR {
 		editor.launch();
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
 	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
+		return FlexoResourceCenterService.getInstance();
 	}
 }

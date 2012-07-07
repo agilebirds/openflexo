@@ -27,7 +27,6 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.action.CreateDataProperty;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.ve.VECst;
 
 public class CreateDataPropertyDialogEDITOR {
@@ -52,11 +51,7 @@ public class CreateDataPropertyDialogEDITOR {
 		editor.launch();
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
 	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
+		return FlexoResourceCenterService.getInstance();
 	}
 }

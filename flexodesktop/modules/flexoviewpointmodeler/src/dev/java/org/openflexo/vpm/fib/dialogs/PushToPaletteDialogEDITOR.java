@@ -29,28 +29,25 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.PushToPalette;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
-
 
 public class PushToPaletteDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
-			public Object[] getData() 
-			{
+			public Object[] getData() {
 				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
+				ViewPoint calc1 = calcLibrary
+						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
 				ExampleDrawingShema shema = calc1.getShemas().firstElement();
-				ExampleDrawingShape shape = (ExampleDrawingShape)shema.getChilds().firstElement();
-				PushToPalette action = PushToPalette.actionType.makeNewAction(shape, null,null);
+				ExampleDrawingShape shape = (ExampleDrawingShape) shema.getChilds().firstElement();
+				PushToPalette action = PushToPalette.actionType.makeNewAction(shape, null, null);
 				return makeArray(action);
 			}
+
 			@Override
 			public File getFIBFile() {
 				return CEDCst.PUSH_TO_PALETTE_DIALOG_FIB;
@@ -59,11 +56,7 @@ public class PushToPaletteDialogEDITOR {
 		editor.launch();
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
-
-    private static FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.getInstance();
+	}
 }

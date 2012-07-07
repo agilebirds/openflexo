@@ -21,23 +21,43 @@ package org.openflexo.vpm.fib.dialogs;
 
 import java.io.File;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.VPMModule;
 import org.openflexo.vpm.controller.VPMController;
 
-
 public class SaveViewPointModelerDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData() 
-			{
+			@Override
+			public Object[] getData() {
 				VPMController controller = null;
 				try {
-					VPMModule module = new VPMModule();
+					VPMModule module = new VPMModule(new ApplicationContext() {
+
+						@Override
+						public FlexoEditor makeFlexoEditor(FlexoProject project) {
+							// TODO Auto-generated method stub
+							return null;
+						}
+
+						@Override
+						public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+							// TODO Auto-generated method stub
+							return null;
+						}
+
+						@Override
+						public FlexoEditor createApplicationEditor() {
+							// TODO Auto-generated method stub
+							return null;
+						}
+					});
 					controller = module.getCEDController();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -45,6 +65,8 @@ public class SaveViewPointModelerDialogEDITOR {
 				}
 				return makeArray(controller);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return CEDCst.SAVE_VPM_DIALOG_FIB;
 			}

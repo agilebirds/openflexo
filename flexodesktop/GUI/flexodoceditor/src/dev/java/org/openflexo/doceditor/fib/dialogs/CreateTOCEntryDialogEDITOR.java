@@ -28,8 +28,6 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
-import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.FileResource;
 
 public class CreateTOCEntryDialogEDITOR extends ProjectDialogEDITOR {
@@ -52,11 +50,4 @@ public class CreateTOCEntryDialogEDITOR extends ProjectDialogEDITOR {
 		editor.launch();
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
 }

@@ -25,7 +25,6 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 
 public class CalcLibraryViewEDITOR {
@@ -47,11 +46,7 @@ public class CalcLibraryViewEDITOR {
 		editor.launch();
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
 	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
+		return FlexoResourceCenterService.getInstance();
 	}
 }

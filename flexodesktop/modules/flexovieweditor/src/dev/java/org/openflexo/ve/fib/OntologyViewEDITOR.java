@@ -26,7 +26,6 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.ve.VECst;
 
 public class OntologyViewEDITOR {
@@ -57,11 +56,7 @@ public class OntologyViewEDITOR {
 		editor.launch();
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
 	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
+		return FlexoResourceCenterService.getInstance();
 	}
 }

@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.bindings;
 
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -57,37 +56,34 @@ import org.openflexo.antar.java.JavaExpressionParser;
 import org.openflexo.antar.java.JavaExpressionPrettyPrinter;
 import org.openflexo.antar.java.JavaGrammar;
 
-
 public class BindingExpressionPanelQuiMarche extends JPanel implements FocusListener {
 
 	Expression _expression;
-	
-	public BindingExpressionPanelQuiMarche(Expression expression)
-	{
+
+	public BindingExpressionPanelQuiMarche(Expression expression) {
 		super();
 		setLayout(new BorderLayout());
 		_expression = expression;
 		init();
 	}
-	
+
 	private JTextArea expressionTA;
 	private JPanel controls;
 	private ExpressionInnerPanel rootExpressionPanel;
-	
+
 	void expressionEdited() {
 		try {
-			Expression newExpression = parser.parse(expressionTA.getText());
+			Expression newExpression = parser.parse(expressionTA.getText(), null);
 			_expression = newExpression;
 			rootExpressionPanel.setRepresentedExpression(_expression);
 			update();
 		} catch (ParseException e) {
-			System.out.println("ERROR: cannot parse "+expressionTA.getText());
+			System.out.println("ERROR: cannot parse " + expressionTA.getText());
 		}
 	}
-	
-	private void init()
-	{
-		expressionTA = new JTextArea(3,50);
+
+	private void init() {
+		expressionTA = new JTextArea(3, 50);
 		expressionTA.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -99,21 +95,23 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 				}
 			}
 		});
-		expressionTA.addFocusListener(new FocusAdapter(){
+		expressionTA.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusLost(FocusEvent e) {
 				expressionEdited();
 			}
 		});
 
-		add(expressionTA,BorderLayout.NORTH);
+		add(expressionTA, BorderLayout.NORTH);
 		rootExpressionPanel = new ExpressionInnerPanel(_expression) {
+			@Override
 			public void representedExpressionChanged(Expression newExpression) {
 				_expression = newExpression;
 				update();
 			}
 		};
 		focusReceiver = rootExpressionPanel;
-		add(rootExpressionPanel,BorderLayout.CENTER);
+		add(rootExpressionPanel, BorderLayout.CENTER);
 		controls = new JPanel();
 		controls.setLayout(new FlowLayout());
 		for (final BinaryOperator o : grammar.getAllSupportedBinaryOperators()) {
@@ -125,6 +123,7 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 			}
 			controls.add(b);
 			b.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					appendBinaryOperator(o);
 				}
@@ -139,241 +138,242 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 			}
 			controls.add(b);
 			b.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					appendUnaryOperator(o);
 				}
 			});
 		}
-		add(controls,BorderLayout.SOUTH);
+		add(controls, BorderLayout.SOUTH);
 		update();
 	}
-	
+
 	private JavaExpressionPrettyPrinter pp = new JavaExpressionPrettyPrinter();
 	JavaExpressionParser parser = new JavaExpressionParser();
-	
-	void update()
-	{
+
+	void update() {
 		updateExpressionTA();
 		revalidate();
 		repaint();
 	}
-	
-	void updateExpressionTA()
-	{
+
+	void updateExpressionTA() {
 		expressionTA.setText(pp.getStringRepresentation(_expression));
 	}
-	
-	protected static enum KindOfExpression { BASIC, BINARY_OPERATOR, UNARY_OPERATOR };
-	
-	protected abstract class ExpressionInnerPanel extends JPanel
-	{
-		
+
+	protected static enum KindOfExpression {
+		BASIC, BINARY_OPERATOR, UNARY_OPERATOR
+	};
+
+	protected abstract class ExpressionInnerPanel extends JPanel {
+
 		Expression _representedExpression;
-		
+
 		private JTextField variableOrConstantTextField;
 		JComboBox currentOperatorCB;
 
-		//private int depth;
-		
-		protected ExpressionInnerPanel(Expression expression/*, int depth*/)
-		{
+		// private int depth;
+
+		protected ExpressionInnerPanel(Expression expression/*, int depth*/) {
 			super();
-			//this.depth = depth;
+			// this.depth = depth;
 			_representedExpression = expression;
 			update();
 			addFocusListeners();
 		}
-		
+
 		/*protected Color getDepthColor()
 		{
 			int grayLevel = 255-depth*10;
 			return new Color(grayLevel,grayLevel,grayLevel);
 		}*/
-		
-		private void addFocusListeners()
-		{
-			addFocusListenersToAllComponentsOf(this);			
+
+		private void addFocusListeners() {
+			addFocusListenersToAllComponentsOf(this);
 		}
-		
-		private void addFocusListenersToAllComponentsOf(Component c)
-		{
+
+		private void addFocusListenersToAllComponentsOf(Component c) {
 			c.addFocusListener(BindingExpressionPanelQuiMarche.this);
 			if (c instanceof Container) {
-				Container container = (Container)c;
-				for (Component c2 : container.getComponents()) addFocusListenersToAllComponentsOf(c2);
+				Container container = (Container) c;
+				for (Component c2 : container.getComponents())
+					addFocusListenersToAllComponentsOf(c2);
 			}
 		}
-		
-		void textChanged()
-		{
-			System.out.println("Text has changed for "+variableOrConstantTextField.getText());
+
+		void textChanged() {
+			System.out.println("Text has changed for " + variableOrConstantTextField.getText());
 			try {
-				Expression newExpression = parser.parse(variableOrConstantTextField.getText());
+				Expression newExpression = parser.parse(variableOrConstantTextField.getText(), null);
 				setRepresentedExpression(newExpression);
 			} catch (ParseException e) {
-				System.out.println("ERROR: cannot parse "+variableOrConstantTextField.getText());
+				System.out.println("ERROR: cannot parse " + variableOrConstantTextField.getText());
 			}
 		}
-		
-		private void addBinaryExpressionVerticalLayout()
-		{
+
+		private void addBinaryExpressionVerticalLayout() {
 			setLayout(new BorderLayout());
 
-			BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
+			BinaryOperatorExpression exp = (BinaryOperatorExpression) _representedExpression;
 			JPanel operatorPanel = new JPanel();
 			operatorPanel.setLayout(new BorderLayout());
-			//operatorPanel.setOpaque(true);
-			//operatorPanel.setBackground(getDepthColor());
-			//System.out.println("Color is "+getDepthColor());
+			// operatorPanel.setOpaque(true);
+			// operatorPanel.setBackground(getDepthColor());
+			// System.out.println("Color is "+getDepthColor());
 			currentOperatorCB = new JComboBox(grammar.getAllSupportedBinaryOperators());
 			currentOperatorCB.setSelectedItem(exp.getOperator());
 			currentOperatorCB.setRenderer(new ListCellRenderer() {
+				@Override
 				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 					try {
-						return new JLabel(grammar.getSymbol((BinaryOperator)value));
+						return new JLabel(grammar.getSymbol((BinaryOperator) value));
 					} catch (OperatorNotSupportedException e) {
 						return new JLabel("?");
 					}
-				}			
+				}
 			});
 			currentOperatorCB.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
-					BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
-					exp.setOperator((BinaryOperator)currentOperatorCB.getSelectedItem());
+					BinaryOperatorExpression exp = (BinaryOperatorExpression) _representedExpression;
+					exp.setOperator((BinaryOperator) currentOperatorCB.getSelectedItem());
 					BindingExpressionPanelQuiMarche.this.update();
-				}			
+				}
 			});
-			operatorPanel.add(currentOperatorCB,BorderLayout.CENTER);
-			add(operatorPanel,BorderLayout.WEST);
+			operatorPanel.add(currentOperatorCB, BorderLayout.CENTER);
+			add(operatorPanel, BorderLayout.WEST);
 			operatorPanel.setBorder(BorderFactory.createEtchedBorder());
 			JPanel argsPanel = new JPanel();
-			
+
 			GridBagLayout gridbag = new GridBagLayout();
 			GridBagConstraints c = new GridBagConstraints();
-		
+
 			argsPanel.setLayout(gridbag);
-			
-			ExpressionInnerPanel leftArg = new ExpressionInnerPanel(exp.getLeftArgument()/*,depth+1*/){
+
+			ExpressionInnerPanel leftArg = new ExpressionInnerPanel(exp.getLeftArgument()/*,depth+1*/) {
+				@Override
 				public void representedExpressionChanged(Expression newExpression) {
 					if (_representedExpression instanceof BinaryOperatorExpression) {
-						((BinaryOperatorExpression)_representedExpression).setLeftArgument(newExpression);
+						((BinaryOperatorExpression) _representedExpression).setLeftArgument(newExpression);
 					}
 				}
 			};
-			
-			c.weightx = 1.0;               
-			c.weighty = 1.0;               
-			//c.gridwidth = 1;               
-	        //c.gridheight = 1;
+
+			c.weightx = 1.0;
+			c.weighty = 1.0;
+			// c.gridwidth = 1;
+			// c.gridheight = 1;
 			c.anchor = GridBagConstraints.NORTH;
-	        c.fill = GridBagConstraints.BOTH;
+			c.fill = GridBagConstraints.BOTH;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			gridbag.setConstraints(leftArg, c);
 			argsPanel.add(leftArg);
 
-			ExpressionInnerPanel rightArg = new ExpressionInnerPanel(exp.getRightArgument()/*,depth+1*/){
+			ExpressionInnerPanel rightArg = new ExpressionInnerPanel(exp.getRightArgument()/*,depth+1*/) {
+				@Override
 				public void representedExpressionChanged(Expression newExpression) {
 					if (_representedExpression instanceof BinaryOperatorExpression) {
-						((BinaryOperatorExpression)_representedExpression).setRightArgument(newExpression);
+						((BinaryOperatorExpression) _representedExpression).setRightArgument(newExpression);
 					}
 				}
 			};
-			
-			c.weightx = 1.0;               
-			c.weighty = 1.0;               
-			//c.gridwidth = 1;               
-	        //c.gridheight = 1;
+
+			c.weightx = 1.0;
+			c.weighty = 1.0;
+			// c.gridwidth = 1;
+			// c.gridheight = 1;
 			c.anchor = GridBagConstraints.NORTH;
-	        c.fill = GridBagConstraints.BOTH;
+			c.fill = GridBagConstraints.BOTH;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			gridbag.setConstraints(rightArg, c);
 			argsPanel.add(rightArg);
 
-			add(argsPanel,BorderLayout.CENTER);
-			
+			add(argsPanel, BorderLayout.CENTER);
+
 			isHorizontal = false;
 		}
-		
+
 		private boolean isHorizontal = true;
-		
-		private void addBinaryExpressionHorizontalLayout()
-		{
+
+		private void addBinaryExpressionHorizontalLayout() {
 			GridBagLayout gridbag = new GridBagLayout();
 			GridBagConstraints c = new GridBagConstraints();
-		
+
 			setLayout(gridbag);
 
-			BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
+			BinaryOperatorExpression exp = (BinaryOperatorExpression) _representedExpression;
 
 			currentOperatorCB = new JComboBox(grammar.getAllSupportedBinaryOperators());
 			currentOperatorCB.setSelectedItem(exp.getOperator());
 			currentOperatorCB.setRenderer(new ListCellRenderer() {
+				@Override
 				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 					try {
-						return new JLabel(grammar.getSymbol((BinaryOperator)value));
+						return new JLabel(grammar.getSymbol((BinaryOperator) value));
 					} catch (OperatorNotSupportedException e) {
 						return new JLabel("?");
 					}
-				}			
+				}
 			});
 			currentOperatorCB.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
-					BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
-					exp.setOperator((BinaryOperator)currentOperatorCB.getSelectedItem());
+					BinaryOperatorExpression exp = (BinaryOperatorExpression) _representedExpression;
+					exp.setOperator((BinaryOperator) currentOperatorCB.getSelectedItem());
 					BindingExpressionPanelQuiMarche.this.update();
-				}			
+				}
 			});
-				
-			
-			ExpressionInnerPanel leftArg = new ExpressionInnerPanel(exp.getLeftArgument()){
+
+			ExpressionInnerPanel leftArg = new ExpressionInnerPanel(exp.getLeftArgument()) {
+				@Override
 				public void representedExpressionChanged(Expression newExpression) {
 					if (_representedExpression instanceof BinaryOperatorExpression) {
-						((BinaryOperatorExpression)_representedExpression).setLeftArgument(newExpression);
+						((BinaryOperatorExpression) _representedExpression).setLeftArgument(newExpression);
 					}
 				}
 			};
-			
-			c.weightx = 1.0;               
-			c.weighty = 1.0;               
-			//c.gridwidth = 1;               
-	        //c.gridheight = 1;
+
+			c.weightx = 1.0;
+			c.weighty = 1.0;
+			// c.gridwidth = 1;
+			// c.gridheight = 1;
 			c.anchor = GridBagConstraints.NORTH;
-	        c.fill = GridBagConstraints.BOTH;
+			c.fill = GridBagConstraints.BOTH;
 			gridbag.setConstraints(leftArg, c);
 			add(leftArg);
 
-			c.weightx = 0.0;               
-			c.weighty = 1.0;               
-			//c.gridwidth = 1;               
-	        //c.gridheight = 1;
+			c.weightx = 0.0;
+			c.weighty = 1.0;
+			// c.gridwidth = 1;
+			// c.gridheight = 1;
 			c.anchor = GridBagConstraints.NORTH;
-	        c.fill = GridBagConstraints.VERTICAL;
+			c.fill = GridBagConstraints.VERTICAL;
 			gridbag.setConstraints(currentOperatorCB, c);
 			add(currentOperatorCB);
 
-			ExpressionInnerPanel rightArg = new ExpressionInnerPanel(exp.getRightArgument()){
+			ExpressionInnerPanel rightArg = new ExpressionInnerPanel(exp.getRightArgument()) {
+				@Override
 				public void representedExpressionChanged(Expression newExpression) {
 					if (_representedExpression instanceof BinaryOperatorExpression) {
-						((BinaryOperatorExpression)_representedExpression).setRightArgument(newExpression);
+						((BinaryOperatorExpression) _representedExpression).setRightArgument(newExpression);
 					}
 				}
 			};
-			
-			c.weightx = 1.0;               
-			c.weighty = 1.0;               
-			//c.gridwidth = 1;               
-	        //c.gridheight = 1;
+
+			c.weightx = 1.0;
+			c.weighty = 1.0;
+			// c.gridwidth = 1;
+			// c.gridheight = 1;
 			c.anchor = GridBagConstraints.NORTH;
-	        c.fill = GridBagConstraints.BOTH;
+			c.fill = GridBagConstraints.BOTH;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			gridbag.setConstraints(rightArg, c);
 			add(rightArg);
 
 		}
-		
-		private void update()
-		{
-			ExpressionInnerPanel parent = (ExpressionInnerPanel)SwingUtilities.getAncestorOfClass(ExpressionInnerPanel.class, this);
+
+		private void update() {
+			ExpressionInnerPanel parent = (ExpressionInnerPanel) SwingUtilities.getAncestorOfClass(ExpressionInnerPanel.class, this);
 			if (parent != null && parent.isHorizontal && parent._representedExpression.getDepth() > 1) {
 				System.out.println("Le parent doit etre remis bien");
 				parent.update();
@@ -383,105 +383,104 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 			if (_representedExpression instanceof Variable || _representedExpression instanceof Constant) {
 				setLayout(new BorderLayout());
 				variableOrConstantTextField = new JTextField();
-				variableOrConstantTextField.addActionListener(new ActionListener(){
+				variableOrConstantTextField.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						textChanged();
 					}
 				});
-				variableOrConstantTextField.addFocusListener(new FocusAdapter(){
+				variableOrConstantTextField.addFocusListener(new FocusAdapter() {
+					@Override
 					public void focusLost(FocusEvent e) {
 						textChanged();
 					}
 				});
-				add(variableOrConstantTextField,BorderLayout.CENTER);
+				add(variableOrConstantTextField, BorderLayout.CENTER);
 				if (_representedExpression instanceof Variable) {
-					variableOrConstantTextField.setText(((Variable)_representedExpression).getName());
+					variableOrConstantTextField.setText(((Variable) _representedExpression).getName());
+				} else if (_representedExpression instanceof Constant) {
+					variableOrConstantTextField.setText(((Constant) _representedExpression).toString());
 				}
-				else if (_representedExpression instanceof Constant) {
-					variableOrConstantTextField.setText(((Constant)_representedExpression).toString());
-				}
-			}
-			else if (_representedExpression instanceof BinaryOperatorExpression) {
-				
+			} else if (_representedExpression instanceof BinaryOperatorExpression) {
+
 				if (_representedExpression.getDepth() > 1) {
-				
-				addBinaryExpressionVerticalLayout();
-				
-				/*BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
-				JPanel operatorPanel = new JPanel();
-				operatorPanel.setLayout(new BorderLayout());
-				//operatorPanel.setOpaque(true);
-				//operatorPanel.setBackground(getDepthColor());
-				//System.out.println("Color is "+getDepthColor());
-				currentOperatorCB = new JComboBox(grammar.getAllSupportedBinaryOperators());
-				currentOperatorCB.setSelectedItem(exp.getOperator());
-				currentOperatorCB.setRenderer(new ListCellRenderer() {
-					public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-						try {
-							return new JLabel(grammar.getSymbol((BinaryOperator)value));
-						} catch (OperatorNotSupportedException e) {
-							return new JLabel("?");
-						}
-					}			
-				});
-				currentOperatorCB.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
-						exp.setOperator((BinaryOperator)currentOperatorCB.getSelectedItem());
-					}			
-				});
-				operatorPanel.add(currentOperatorCB,BorderLayout.CENTER);
-				add(operatorPanel,BorderLayout.WEST);
-				operatorPanel.setBorder(BorderFactory.createEtchedBorder());
-				JPanel argsPanel = new JPanel();
-				
-				GridBagLayout gridbag = new GridBagLayout();
-				GridBagConstraints c = new GridBagConstraints();
-			
-				argsPanel.setLayout(gridbag);
-				
-				ExpressionInnerPanel leftArg = new ExpressionInnerPanel(exp.getLeftArgument()){
-					public void representedExpressionChanged(Expression newExpression) {
-						if (_representedExpression instanceof BinaryOperatorExpression) {
-							((BinaryOperatorExpression)_representedExpression).setLeftArgument(newExpression);
-						}
-					}
-				};
-				
-				c.weightx = 1.0;               
-				c.weighty = 1.0;               
-				//c.gridwidth = 1;               
-		        //c.gridheight = 1;
-				c.anchor = GridBagConstraints.NORTH;
-		        c.fill = GridBagConstraints.BOTH;
-				c.gridwidth = GridBagConstraints.REMAINDER;
-				gridbag.setConstraints(leftArg, c);
-				argsPanel.add(leftArg);
 
-				ExpressionInnerPanel rightArg = new ExpressionInnerPanel(exp.getRightArgument()){
-					public void representedExpressionChanged(Expression newExpression) {
-						if (_representedExpression instanceof BinaryOperatorExpression) {
-							((BinaryOperatorExpression)_representedExpression).setRightArgument(newExpression);
-						}
-					}
-				};
-				
-				c.weightx = 1.0;               
-				c.weighty = 1.0;               
-				//c.gridwidth = 1;               
-		        //c.gridheight = 1;
-				c.anchor = GridBagConstraints.NORTH;
-		        c.fill = GridBagConstraints.BOTH;
-				c.gridwidth = GridBagConstraints.REMAINDER;
-				gridbag.setConstraints(rightArg, c);
-				argsPanel.add(rightArg);
+					addBinaryExpressionVerticalLayout();
 
-				add(argsPanel,BorderLayout.CENTER);*/
-			}
-				else {
+					/*BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
+					JPanel operatorPanel = new JPanel();
+					operatorPanel.setLayout(new BorderLayout());
+					//operatorPanel.setOpaque(true);
+					//operatorPanel.setBackground(getDepthColor());
+					//System.out.println("Color is "+getDepthColor());
+					currentOperatorCB = new JComboBox(grammar.getAllSupportedBinaryOperators());
+					currentOperatorCB.setSelectedItem(exp.getOperator());
+					currentOperatorCB.setRenderer(new ListCellRenderer() {
+						public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+							try {
+								return new JLabel(grammar.getSymbol((BinaryOperator)value));
+							} catch (OperatorNotSupportedException e) {
+								return new JLabel("?");
+							}
+						}			
+					});
+					currentOperatorCB.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
+							exp.setOperator((BinaryOperator)currentOperatorCB.getSelectedItem());
+						}			
+					});
+					operatorPanel.add(currentOperatorCB,BorderLayout.CENTER);
+					add(operatorPanel,BorderLayout.WEST);
+					operatorPanel.setBorder(BorderFactory.createEtchedBorder());
+					JPanel argsPanel = new JPanel();
 					
+					GridBagLayout gridbag = new GridBagLayout();
+					GridBagConstraints c = new GridBagConstraints();
+					
+					argsPanel.setLayout(gridbag);
+					
+					ExpressionInnerPanel leftArg = new ExpressionInnerPanel(exp.getLeftArgument()){
+						public void representedExpressionChanged(Expression newExpression) {
+							if (_representedExpression instanceof BinaryOperatorExpression) {
+								((BinaryOperatorExpression)_representedExpression).setLeftArgument(newExpression);
+							}
+						}
+					};
+					
+					c.weightx = 1.0;               
+					c.weighty = 1.0;               
+					//c.gridwidth = 1;               
+					//c.gridheight = 1;
+					c.anchor = GridBagConstraints.NORTH;
+					c.fill = GridBagConstraints.BOTH;
+					c.gridwidth = GridBagConstraints.REMAINDER;
+					gridbag.setConstraints(leftArg, c);
+					argsPanel.add(leftArg);
+
+					ExpressionInnerPanel rightArg = new ExpressionInnerPanel(exp.getRightArgument()){
+						public void representedExpressionChanged(Expression newExpression) {
+							if (_representedExpression instanceof BinaryOperatorExpression) {
+								((BinaryOperatorExpression)_representedExpression).setRightArgument(newExpression);
+							}
+						}
+					};
+					
+					c.weightx = 1.0;               
+					c.weighty = 1.0;               
+					//c.gridwidth = 1;               
+					//c.gridheight = 1;
+					c.anchor = GridBagConstraints.NORTH;
+					c.fill = GridBagConstraints.BOTH;
+					c.gridwidth = GridBagConstraints.REMAINDER;
+					gridbag.setConstraints(rightArg, c);
+					argsPanel.add(rightArg);
+
+					add(argsPanel,BorderLayout.CENTER);*/
+				} else {
+
 					addBinaryExpressionHorizontalLayout();
-					
+
 					/*
 					BinaryOperatorExpression exp = (BinaryOperatorExpression)_representedExpression;
 
@@ -505,7 +504,7 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 						
 					GridBagLayout gridbag = new GridBagLayout();
 					GridBagConstraints c = new GridBagConstraints();
-				
+					
 					setLayout(gridbag);
 					
 					ExpressionInnerPanel leftArg = new ExpressionInnerPanel(exp.getLeftArgument()){
@@ -519,18 +518,18 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 					c.weightx = 1.0;               
 					c.weighty = 1.0;               
 					//c.gridwidth = 1;               
-			        //c.gridheight = 1;
+					//c.gridheight = 1;
 					c.anchor = GridBagConstraints.NORTH;
-			        c.fill = GridBagConstraints.BOTH;
+					c.fill = GridBagConstraints.BOTH;
 					gridbag.setConstraints(leftArg, c);
 					add(leftArg);
 
 					c.weightx = 0.0;               
 					c.weighty = 1.0;               
 					//c.gridwidth = 1;               
-			        //c.gridheight = 1;
+					//c.gridheight = 1;
 					c.anchor = GridBagConstraints.NORTH;
-			        c.fill = GridBagConstraints.VERTICAL;
+					c.fill = GridBagConstraints.VERTICAL;
 					gridbag.setConstraints(currentOperatorCB, c);
 					add(currentOperatorCB);
 
@@ -545,9 +544,9 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 					c.weightx = 1.0;               
 					c.weighty = 1.0;               
 					//c.gridwidth = 1;               
-			        //c.gridheight = 1;
+					//c.gridheight = 1;
 					c.anchor = GridBagConstraints.NORTH;
-			        c.fill = GridBagConstraints.BOTH;
+					c.fill = GridBagConstraints.BOTH;
 					c.gridwidth = GridBagConstraints.REMAINDER;
 					gridbag.setConstraints(rightArg, c);
 					add(rightArg);
@@ -555,8 +554,7 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 					*/
 				}
 			}
-			
-				
+
 			revalidate();
 			repaint();
 		}
@@ -571,19 +569,19 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 			update();
 			BindingExpressionPanelQuiMarche.this.updateExpressionTA();
 		}
-		
+
 		public abstract void representedExpressionChanged(Expression newExpression);
 	}
-	
-	//private JTextField variableOrConstantTextField;
-	
-	//private JPanel operatorControl;
-	//private JComboBox binaryOperatorsCB;
-	//private JComboBox unaryOperatorsCB;
-	//private JButton deleteButton;
-	
+
+	// private JTextField variableOrConstantTextField;
+
+	// private JPanel operatorControl;
+	// private JComboBox binaryOperatorsCB;
+	// private JComboBox unaryOperatorsCB;
+	// private JButton deleteButton;
+
 	JavaGrammar grammar = new JavaGrammar();
-	
+
 	/*private void update()
 	{
 		removeAll();
@@ -662,26 +660,27 @@ public class BindingExpressionPanelQuiMarche extends JPanel implements FocusList
 		revalidate();
 		repaint();
 	}*/
-	
-	void appendBinaryOperator(BinaryOperator operator) 
-	{
-		System.out.println("appendBinaryOperator "+operator);
+
+	void appendBinaryOperator(BinaryOperator operator) {
+		System.out.println("appendBinaryOperator " + operator);
 		if (focusReceiver != null) {
-			Expression newExpression = new BinaryOperatorExpression(operator,focusReceiver.getRepresentedExpression(),new Variable(""));
+			Expression newExpression = new BinaryOperatorExpression(operator, focusReceiver.getRepresentedExpression(), new Variable(""));
 			focusReceiver.setRepresentedExpression(newExpression);
 		}
 	}
 
-	void appendUnaryOperator(UnaryOperator operator) 
-	{
+	void appendUnaryOperator(UnaryOperator operator) {
 	}
-	
+
 	private ExpressionInnerPanel focusReceiver = null;
-	
+
+	@Override
 	public void focusGained(FocusEvent e) {
-		focusReceiver = (ExpressionInnerPanel)SwingUtilities.getAncestorOfClass(ExpressionInnerPanel.class, (Component)e.getSource());
-		System.out.println("Focus gained by expression "+focusReceiver.getRepresentedExpression());
+		focusReceiver = (ExpressionInnerPanel) SwingUtilities.getAncestorOfClass(ExpressionInnerPanel.class, (Component) e.getSource());
+		System.out.println("Focus gained by expression " + focusReceiver.getRepresentedExpression());
 	}
+
+	@Override
 	public void focusLost(FocusEvent e) {
 		// Dont care
 	}

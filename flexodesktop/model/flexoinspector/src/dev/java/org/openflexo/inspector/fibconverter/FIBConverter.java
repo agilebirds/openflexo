@@ -32,6 +32,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Vector;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.antar.binding.KeyValueProperty;
@@ -410,12 +411,12 @@ public class FIBConverter {
 							// hackDeLaMort = ToolBox.replaceStringByStringInString("!=", " != ", hackDeLaMort);
 							// hackDeLaMort = ToolBox.replaceStringByStringInString("=", " = ", hackDeLaMort);
 							// System.out.println("Converted "+pm.conditional+" to "+hackDeLaMort);
-							Expression condition = parser.parse(hackDeLaMort);
+							Expression condition = parser.parse(hackDeLaMort, null);
 							// System.out.println("Expression="+condition);
 							conditional = condition.evaluate(new EvaluationContext(parser.getConstantFactory(),
 									new org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory() {
 										@Override
-										public Expression makeVariable(Word value) {
+										public Expression makeVariable(Word value, Bindable bindable) {
 											if (tm.getPropertyNamed(value.getValue()) != null)
 												return new Variable("data." + value.getValue());
 											else {
@@ -428,7 +429,7 @@ public class FIBConverter {
 													return new Variable('"' + value.getValue() + '"');
 											}
 										}
-									}, parser.getFunctionFactory()));
+									}, parser.getFunctionFactory()), null);
 							// System.out.println("conditional="+conditional);
 							// System.out.println("conditional="+conditional);
 							widget.setVisible(new DataBinding(conditional.toString()));
