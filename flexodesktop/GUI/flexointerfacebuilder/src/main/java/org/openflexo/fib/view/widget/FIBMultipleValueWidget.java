@@ -32,6 +32,7 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBMultipleValuesDynamicModel;
 import org.openflexo.fib.model.FIBModelObject;
@@ -329,6 +330,14 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				getLocalized(s);
 			}
 		}
+	}
+
+	@Override
+	public List<AbstractBinding> getDependencyBindings() {
+		List<AbstractBinding> returned = super.getDependencyBindings();
+		appendToDependingObjects(getWidget().getList(), returned);
+		appendToDependingObjects(getWidget().getArray(), returned);
+		return returned;
 	}
 
 }
