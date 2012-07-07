@@ -42,8 +42,7 @@ public class CreateOntologyClassDialogEDITOR {
 						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
 
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology = ontologyLibrary
-						.getOntology("http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl");
+				FlexoOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
 				ontology.loadWhenUnloaded();
 				CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, null);
 				return makeArray(action);
