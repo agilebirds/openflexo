@@ -268,11 +268,28 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 	}
 
-	public static abstract class OntologicPropertyPatternRolePathElement<T extends OntologyProperty> extends
+	public static class OntologicPropertyPatternRolePathElement<T extends OntologyProperty> extends
 			OntologicObjectPatternRolePathElement<T> {
 		public OntologicPropertyPatternRolePathElement(PropertyPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
 		}
+
+		@Override
+		public Type getType() {
+			if (((PropertyPatternRole) getPatternRole()).getParentProperty() != null) {
+				return SubDataPropertyOfProperty.getSubPropertyOfProperty(((PropertyPatternRole) getPatternRole()).getParentProperty());
+			}
+			return OntologyProperty.class;
+		}
+
+		@Override
+		public OntologyClass getOntologicType() {
+			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
+				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OntologyObject.RDF_PROPERTY_URI);
+			}
+			return null;
+		}
+
 	}
 
 	public static class OntologicDataPropertyPatternRolePathElement extends OntologicPropertyPatternRolePathElement<OntologyDataProperty> {

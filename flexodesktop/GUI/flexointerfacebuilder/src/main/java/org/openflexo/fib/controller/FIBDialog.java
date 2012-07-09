@@ -166,6 +166,8 @@ public class FIBDialog<T> extends JDialog {
 	}
 
 	public void showDialog() {
+		validate();
+		pack();
 		center();
 		setVisible(true);
 		toFront();

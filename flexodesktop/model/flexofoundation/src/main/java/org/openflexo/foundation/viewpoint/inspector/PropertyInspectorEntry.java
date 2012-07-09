@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
  * @author sylvain
  * 
  */
-public abstract class PropertyInspectorEntry extends InspectorEntry {
+public class PropertyInspectorEntry extends InspectorEntry {
 
 	private String parentPropertyURI;
 	private String domainURI;
@@ -43,6 +43,16 @@ public abstract class PropertyInspectorEntry extends InspectorEntry {
 
 	public PropertyInspectorEntry(ViewPointBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public Class getDefaultDataClass() {
+		return OntologyProperty.class;
+	}
+
+	@Override
+	public String getWidgetName() {
+		return "PropertySelector";
 	}
 
 	public String _getParentPropertyURI() {

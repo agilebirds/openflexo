@@ -49,6 +49,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		DROPDOWN,
 		INDIVIDUAL,
 		CLASS,
+		PROPERTY,
 		OBJECT_PROPERTY,
 		DATA_PROPERTY,
 		FLEXO_OBJECT,

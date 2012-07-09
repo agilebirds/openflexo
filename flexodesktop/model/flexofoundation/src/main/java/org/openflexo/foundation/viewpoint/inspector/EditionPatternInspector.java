@@ -169,6 +169,14 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 		return newEntry;
 	}
 
+	public PropertyInspectorEntry createNewProperty() {
+		PropertyInspectorEntry newEntry = new PropertyInspectorEntry(null);
+		newEntry.setName("property");
+		// newEntry.setLabel("class");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
 	public ObjectPropertyInspectorEntry createNewObjectProperty() {
 		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry(null);
 		newEntry.setName("property");
