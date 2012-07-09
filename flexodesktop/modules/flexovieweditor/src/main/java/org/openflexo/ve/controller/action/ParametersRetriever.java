@@ -242,11 +242,11 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
 				cbList.setVGap(-2);
 			}
-			/*cbList.setUseScrollBar(true);
+			cbList.setUseScrollBar(true);
 			cbList.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			cbList.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
-			cbList.setHeight(300);*/
-			panel.addToSubComponents(cbList, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+
+			panel.addToSubComponents(cbList, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true, index));
 			return cbList;
 		} else if (parameter instanceof FlexoObjectParameter) {
 			FlexoObjectParameter foParameter = (FlexoObjectParameter) parameter;
