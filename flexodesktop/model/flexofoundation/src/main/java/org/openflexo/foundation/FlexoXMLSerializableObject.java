@@ -66,7 +66,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 	public abstract XMLMapping getXMLMapping();
 
 	@Override
-	public final Object instanciateNewBuilder() {
+	public Object instanciateNewBuilder() {
 		return getXMLResourceData().getFlexoXMLFileResource().instanciateNewBuilder();
 	}
 
