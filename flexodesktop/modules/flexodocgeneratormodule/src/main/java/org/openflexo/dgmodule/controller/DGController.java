@@ -89,7 +89,6 @@ import org.openflexo.module.GeneratedResourceModifiedChoice;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -101,9 +100,9 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	protected static final Logger logger = Logger.getLogger(DGController.class.getPackage().getName());
 
-	public final FlexoPerspective CODE_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
-
-	public final FlexoPerspective VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
+	public final DocGeneratorPerspective DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
+	public final TemplatesPerspective TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this);
+	public final VersionningPerspective VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -139,10 +138,11 @@ public class DGController extends DEController implements FlexoObserver, Project
 		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
 		dgBrowserView = new DGBrowserView(this, new DGBrowser(this));
 		createFooter();
-		addToPerspectives(CODE_GENERATOR_PERSPECTIVE);
+		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE);
+		addToPerspectives(TEMPLATES_PERSPECTIVE);
 		addToPerspectives(VERSIONNING_PERSPECTIVE);
-		getControllerModel().removeFromPerspectives(DOCEDITOR_PERSPECTIVE);
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
+
 	}
 
 	public DGBrowserView getDgBrowserView() {

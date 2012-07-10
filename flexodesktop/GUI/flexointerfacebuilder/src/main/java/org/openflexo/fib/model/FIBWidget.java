@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+import java.awt.event.MouseEvent;
 import java.lang.reflect.Type;
 import java.util.Enumeration;
 import java.util.List;
@@ -89,10 +90,12 @@ public abstract class FIBWidget extends FIBComponent {
 	private DataBinding valueChangedAction;
 
 	private final FIBFormatter formatter;
+	private final FIBEventListener eventListener;
 
 	public FIBWidget() {
 		super();
 		formatter = new FIBFormatter();
+		eventListener = new FIBEventListener();
 	}
 
 	@Override
@@ -161,6 +164,7 @@ public abstract class FIBWidget extends FIBComponent {
 	@Override
 	public void finalizeDeserialization() {
 		super.finalizeDeserialization();
+		getEventListener().createEventListenerBindingModel();
 		if (enable != null) {
 			enable.finalizeDeserialization();
 		}
@@ -172,6 +176,18 @@ public abstract class FIBWidget extends FIBComponent {
 		}
 		if (tooltip != null) {
 			tooltip.finalizeDeserialization();
+		}
+		if (clickAction != null) {
+			clickAction.finalizeDeserialization();
+		}
+		if (doubleClickAction != null) {
+			doubleClickAction.finalizeDeserialization();
+		}
+		if (rightClickAction != null) {
+			rightClickAction.finalizeDeserialization();
+		}
+		if (enterPressedAction != null) {
+			enterPressedAction.finalizeDeserialization();
 		}
 		if (valueChangedAction != null) {
 			valueChangedAction.finalizeDeserialization();
@@ -348,6 +364,56 @@ public abstract class FIBWidget extends FIBComponent {
 		}
 	}
 
+	@Override
+	public void updateBindingModel() {
+		super.updateBindingModel();
+		getEventListener().createEventListenerBindingModel();
+	}
+
+	public FIBEventListener getEventListener() {
+		return eventListener;
+	}
+
+	private class FIBEventListener extends FIBModelObject implements Bindable {
+		private BindingModel eventListenerBindingModel = null;
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (eventListenerBindingModel == null) {
+				createEventListenerBindingModel();
+			}
+			return eventListenerBindingModel;
+		}
+
+		private void createEventListenerBindingModel() {
+			eventListenerBindingModel = new BindingModel(FIBWidget.this.getBindingModel());
+			eventListenerBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "event", MouseEvent.class));
+		}
+
+		@Override
+		public FIBComponent getRootComponent() {
+			return FIBWidget.this.getRootComponent();
+		}
+
+		@Override
+		public String toString() {
+			return "FIBEventListener[" + FIBWidget.this + "]";
+		}
+
+		@Override
+		public void notifyBindingChanged(DataBinding binding) {
+			if (binding == getClickAction() || binding == getDoubleClickAction() || binding == getRightClickAction()) {
+				FIBWidget.this.notifyBindingChanged(binding);
+			}
+			super.notifyBindingChanged(binding);
+		}
+
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
+	}
+
 	public DataBinding getValueChangedAction() {
 		if (valueChangedAction == null) {
 			valueChangedAction = new DataBinding(this, Parameters.valueChangedAction, VALUE_CHANGED_ACTION);
@@ -366,15 +432,15 @@ public abstract class FIBWidget extends FIBComponent {
 		return clickAction != null && clickAction.isValid();
 	}
 
-	public DataBinding getClickAction() {
+	public final DataBinding getClickAction() {
 		if (clickAction == null) {
-			clickAction = new DataBinding(this, Parameters.clickAction, CLICK_ACTION);
+			clickAction = new DataBinding(eventListener, Parameters.clickAction, CLICK_ACTION);
 		}
 		return clickAction;
 	}
 
-	public void setClickAction(DataBinding clickAction) {
-		clickAction.setOwner(this);
+	public final void setClickAction(DataBinding clickAction) {
+		clickAction.setOwner(eventListener);
 		clickAction.setBindingAttribute(Parameters.clickAction);
 		clickAction.setBindingDefinition(CLICK_ACTION);
 		this.clickAction = clickAction;
@@ -386,13 +452,13 @@ public abstract class FIBWidget extends FIBComponent {
 
 	public DataBinding getDoubleClickAction() {
 		if (doubleClickAction == null) {
-			doubleClickAction = new DataBinding(this, Parameters.doubleClickAction, DOUBLE_CLICK_ACTION);
+			doubleClickAction = new DataBinding(eventListener, Parameters.doubleClickAction, DOUBLE_CLICK_ACTION);
 		}
 		return doubleClickAction;
 	}
 
 	public void setDoubleClickAction(DataBinding doubleClickAction) {
-		doubleClickAction.setOwner(this);
+		doubleClickAction.setOwner(eventListener);
 		doubleClickAction.setBindingAttribute(Parameters.doubleClickAction);
 		doubleClickAction.setBindingDefinition(DOUBLE_CLICK_ACTION);
 		this.doubleClickAction = doubleClickAction;
@@ -404,20 +470,20 @@ public abstract class FIBWidget extends FIBComponent {
 
 	public DataBinding getRightClickAction() {
 		if (rightClickAction == null) {
-			rightClickAction = new DataBinding(this, Parameters.rightClickAction, RIGHT_CLICK_ACTION);
+			rightClickAction = new DataBinding(eventListener, Parameters.rightClickAction, RIGHT_CLICK_ACTION);
 		}
 		return rightClickAction;
 	}
 
 	public void setRightClickAction(DataBinding rightClickAction) {
-		rightClickAction.setOwner(this);
+		rightClickAction.setOwner(eventListener);
 		rightClickAction.setBindingAttribute(Parameters.rightClickAction);
 		rightClickAction.setBindingDefinition(RIGHT_CLICK_ACTION);
 		this.rightClickAction = rightClickAction;
 	}
 
 	public boolean hasEnterPressedAction() {
-		return (enterPressedAction != null && enterPressedAction.isValid());
+		return enterPressedAction != null && enterPressedAction.isValid();
 	}
 
 	public DataBinding getEnterPressedAction() {

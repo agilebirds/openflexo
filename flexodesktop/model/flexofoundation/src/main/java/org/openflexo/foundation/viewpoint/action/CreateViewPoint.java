@@ -89,9 +89,9 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	private String _newCalcDescription;
 	private File _ontologyFile;
 	private ViewPointFolder _calcFolder;
-	private ViewPoint _newCalc;
+	private ViewPoint _newViewPoint;
 
-	public Vector<ImportedOntology> importedOntologies = new Vector<ImportedOntology>();
+	public Vector<FlexoOntology> importedOntologies = new Vector<FlexoOntology>();
 
 	// private boolean createsOntology = false;
 
@@ -122,18 +122,18 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		}
 
 		// Instanciate new Calc
-		_newCalc = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary, getCalcFolder());
-		_newCalc.setDescription(getNewCalcDescription());
+		_newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary, getCalcFolder());
+		_newViewPoint.setDescription(getNewCalcDescription());
 
 		// And register it to the library
-		viewPointLibrary.registerViewPoint(_newCalc);
+		viewPointLibrary.registerViewPoint(_newViewPoint);
 	}
 
 	private ImportedOntology buildOntology() {
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
 		ImportedOntology newOntology = ImportedOntology.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
 				.getOntologyLibrary());
-		for (ImportedOntology importedOntology : importedOntologies) {
+		for (FlexoOntology importedOntology : importedOntologies) {
 			try {
 				newOntology.importOntology(importedOntology);
 			} catch (OntologyNotFoundException e) {
@@ -251,8 +251,8 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		return true;
 	}
 
-	public ViewPoint getNewCalc() {
-		return _newCalc;
+	public ViewPoint getNewViewPoint() {
+		return _newViewPoint;
 	}
 
 	private String getBaseName() {
@@ -269,12 +269,12 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
 	}*/
 
-	public void addToImportedOntologies(ImportedOntology ontology) {
+	public void addToImportedOntologies(FlexoOntology ontology) {
 		System.out.println("import ontology " + ontology);
 		importedOntologies.add(ontology);
 	}
 
-	public void removeFromImportedOntologies(ImportedOntology ontology) {
+	public void removeFromImportedOntologies(FlexoOntology ontology) {
 		System.out.println("remove ontology " + ontology);
 		importedOntologies.remove(ontology);
 	}

@@ -32,9 +32,11 @@ import org.openflexo.foundation.toc.OperationScreenSection;
 import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.toc.ProcessSection;
 import org.openflexo.foundation.toc.RoleSection;
+import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
+import org.openflexo.foundation.toc.ViewFolderSection;
 import org.openflexo.foundation.toc.ViewSection;
 import org.openflexo.toolbox.ImageIconResource;
 
@@ -55,8 +57,8 @@ public class DEIconLibrary extends IconLibrary {
 	public static final ImageIcon DE_BIG_ICON = new ImageIconResource("Icons/DG/module-dg-hover-64.png");
 
 	// Perspective icons
-	public static final ImageIcon DE_DE_ACTIVE_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_A.png");
-	public static final ImageIcon DE_DE_SELECTED_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_S.png");
+	public static final ImageIcon DE_TOC_ACTIVE_ICON = new ImageIconResource("Icons/GUI/ListPerspective_A.gif");
+	public static final ImageIcon DE_TOC_SELECTED_ICON = new ImageIconResource("Icons/GUI/ListPerspective_S.gif");
 
 	// Model icons
 
@@ -66,6 +68,7 @@ public class DEIconLibrary extends IconLibrary {
 
 	public static final IconMarker PROCESS_SECTION_ICON_MARKER = new IconMarker(WKFIconLibrary.PROCESS_ICON, 5, 5);
 	public static final IconMarker VIEW_SECTION_ICON_MARKER = new IconMarker(VEIconLibrary.VIEW_ICON, 5, 5);
+	public static final IconMarker VIEW_FOLDER_SECTION_ICON_MARKER = new IconMarker(VEIconLibrary.FOLDER_ICON, 5, 5);
 	public static final IconMarker ROLE_SECTION_ICON_MARKER = new IconMarker(WKFIconLibrary.ROLE_ICON, 5, 5);
 	public static final IconMarker ENTITY_SECTION_ICON_MARKER = new IconMarker(DMEIconLibrary.DM_ENTITY_ICON, 5, 5);
 	public static final IconMarker ER_DIAGRAM_SECTION_ICON_MARKER = new IconMarker(DMEIconLibrary.DIAGRAM_ICON, 5, 5);
@@ -75,6 +78,7 @@ public class DEIconLibrary extends IconLibrary {
 
 	public static final ImageIcon PROCESS_SECTION_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, PROCESS_SECTION_ICON_MARKER);
 	public static final ImageIcon VIEW_SECTION_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, VIEW_SECTION_ICON_MARKER);
+	public static final ImageIcon VIEW_FOLDER_SECTION_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, VIEW_FOLDER_SECTION_ICON_MARKER);
 	public static final ImageIcon ROLE_SECTION_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, ROLE_SECTION_ICON_MARKER);
 	public static final ImageIcon ENTITY_SECTION_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, ENTITY_SECTION_ICON_MARKER);
 	public static final ImageIcon ER_DIAGRAM_SECTION_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, ER_DIAGRAM_SECTION_ICON_MARKER);
@@ -86,7 +90,9 @@ public class DEIconLibrary extends IconLibrary {
 	public static final ImageIcon DEPRECATED_TOC_ENTRY_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, IconLibrary.WARNING);
 
 	public static ImageIcon iconForObject(TOCObject object) {
-		if (object instanceof TOCRepository) {
+		if (object instanceof TOCData) {
+			return DGIconLibrary.GENERATED_DOC_ICON;
+		} else if (object instanceof TOCRepository) {
 			return TOC_REPOSITORY_ICON;
 		} else if (object instanceof NormalSection) {
 			return TOC_ENTRY_ICON;
@@ -96,6 +102,8 @@ public class DEIconLibrary extends IconLibrary {
 			return PROCESS_SECTION_ICON;
 		} else if (object instanceof ViewSection) {
 			return VIEW_SECTION_ICON;
+		} else if (object instanceof ViewFolderSection) {
+			return VIEW_FOLDER_SECTION_ICON;
 		} else if (object instanceof RoleSection) {
 			return ROLE_SECTION_ICON;
 		} else if (object instanceof EntitySection) {
@@ -111,6 +119,7 @@ public class DEIconLibrary extends IconLibrary {
 		} else if (object instanceof TOCEntry) {
 			return DEPRECATED_TOC_ENTRY_ICON;
 		}
+
 		logger.warning("iconForObject(TOCObject) not implemented yet");
 		return null;
 	}

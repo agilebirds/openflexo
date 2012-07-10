@@ -23,6 +23,7 @@ import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.action.CreateObjectProperty;
@@ -35,10 +36,13 @@ public class CreateObjectPropertyDialogEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+				FlexoResourceCenter resourceCenter = LocalResourceCenterImplementation
+						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
+
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				FlexoOntology ontology = ontologyLibrary
-						.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
+						.getOntology("http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl");
+				ontology.loadWhenUnloaded();
 				CreateObjectProperty action = CreateObjectProperty.actionType.makeNewAction(ontology, null, null);
 				return makeArray(action);
 			}
@@ -51,7 +55,4 @@ public class CreateObjectPropertyDialogEDITOR {
 		editor.launch();
 	}
 
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.getInstance();
-	}
 }

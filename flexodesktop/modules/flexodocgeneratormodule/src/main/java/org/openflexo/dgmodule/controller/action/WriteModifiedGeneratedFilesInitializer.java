@@ -53,13 +53,13 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer<Wr
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() {
-		return (DGControllerActionInitializer) super.getControllerActionInitializer();
+	public DGController getController() {
+		return (DGController) super.getController();
 	}
 
 	@Override
-	public DGController getController() {
-		return (DGController) super.getController();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer<Wr
 					// 1 occurence, continue without confirmation
 				}
 				action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
-				getController().getDgBrowserView().getBrowser().setHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -98,8 +98,8 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer<Wr
 		return new FlexoActionFinalizer<WriteModifiedGeneratedFiles>() {
 			@Override
 			public boolean run(EventObject e, WriteModifiedGeneratedFiles action) {
-				getController().getDgBrowserView().getBrowser().resetHoldStructure();
-				getController().getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				return true;
 			}
 		};
@@ -110,14 +110,14 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer<Wr
 		return new FlexoExceptionHandler<WriteModifiedGeneratedFiles>() {
 			@Override
 			public boolean handleException(FlexoException exception, WriteModifiedGeneratedFiles action) {
-				getController().getDgBrowserView().getBrowser().resetHoldStructure();
-				getController().getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("file_writing_failed") + ":\n"
 						+ exception.getLocalizedMessage());
-				getController().getDgBrowserView().getBrowser().resetHoldStructure();
-				getController().getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				return true;
 			}
 		};

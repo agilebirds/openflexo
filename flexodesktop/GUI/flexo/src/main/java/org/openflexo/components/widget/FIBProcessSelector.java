@@ -20,7 +20,7 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -56,9 +56,9 @@ public class FIBProcessSelector extends FIBModelObjectSelector<FlexoProcess> {
 	 * Override when required
 	 */
 	@Override
-	protected Enumeration<FlexoProcess> getAllSelectableValues() {
+	protected Collection<FlexoProcess> getAllSelectableValues() {
 		if (getProject() != null) {
-			return getProject().getWorkflow().getSortedProcesses();
+			return getProject().getWorkflow().getAllFlexoProcesses();
 		}
 		return null;
 	}

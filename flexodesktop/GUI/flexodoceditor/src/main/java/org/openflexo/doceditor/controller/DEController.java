@@ -23,9 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
-import org.openflexo.doceditor.controller.browser.DEBrowser;
 import org.openflexo.doceditor.menu.DEMenuBar;
-import org.openflexo.doceditor.view.DEBrowserView;
 import org.openflexo.doceditor.view.DEMainPane;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObserver;
@@ -44,7 +42,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -56,9 +53,7 @@ public class DEController extends FlexoController implements FlexoObserver {
 
 	protected static final Logger logger = Logger.getLogger(DEController.class.getPackage().getName());
 
-	public final FlexoPerspective DOCEDITOR_PERSPECTIVE;
-
-	private final DEBrowserView deBrowserView;
+	public TOCPerspective TOC_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -78,12 +73,7 @@ public class DEController extends FlexoController implements FlexoObserver {
 	 */
 	public DEController(FlexoModule module) {
 		super(module);
-		deBrowserView = new DEBrowserView(this, new DEBrowser(this));
-		addToPerspectives(DOCEDITOR_PERSPECTIVE = new DocEditorPerspective(this));
-	}
-
-	public DEBrowserView getDeBrowserView() {
-		return deBrowserView;
+		addToPerspectives(TOC_PERSPECTIVE = new TOCPerspective(this));
 	}
 
 	@Override

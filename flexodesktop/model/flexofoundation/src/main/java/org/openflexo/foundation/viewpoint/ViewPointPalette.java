@@ -64,7 +64,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	private String description;
 	private Vector<ViewPointPaletteElement> _elements;
 
-	private ViewPoint _calc;
+	private ViewPoint _viewPoint;
 
 	private File _paletteFile;
 	private RelativePathFileConverter relativePathFileConverter;
@@ -143,6 +143,9 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	public ViewPointPalette(ViewPointBuilder builder) {
 		super(builder);
 		_elements = new Vector<ViewPointPaletteElement>();
+		if (builder != null) {
+			_viewPoint = builder.getViewPoint();
+		}
 	}
 
 	private boolean initialized = false;
@@ -151,7 +154,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		if (StringUtils.isEmpty(name)) {
 			name = paletteFile.getName().substring(0, paletteFile.getName().length() - 8);
 		}
-		_calc = calc;
+		_viewPoint = calc;
 		_paletteFile = paletteFile;
 		logger.info("Registering calc palette for calc " + calc.getName());
 		relativePathFileConverter = new RelativePathFileConverter(calc.getViewPointDirectory());
@@ -213,7 +216,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	@Override
 	public ViewPoint getViewPoint() {
-		return _calc;
+		return _viewPoint;
 	}
 
 	@Override

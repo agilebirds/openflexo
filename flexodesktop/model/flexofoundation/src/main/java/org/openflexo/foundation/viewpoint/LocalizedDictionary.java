@@ -46,6 +46,9 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		super(builder);
 		_entries = new Vector<LocalizedEntry>();
 		_values = new Hashtable<Language, Hashtable<String, String>>();
+		if (builder != null) {
+			_calc = builder.getViewPoint();
+		}
 	}
 
 	@Override

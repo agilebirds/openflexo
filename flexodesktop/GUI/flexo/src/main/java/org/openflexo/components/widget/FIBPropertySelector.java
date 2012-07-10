@@ -20,7 +20,6 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.util.Enumeration;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -105,16 +104,6 @@ public class FIBPropertySelector extends FIBModelObjectSelector<OntologyProperty
 			return editedObject.getName();
 		}
 		return "";
-	}
-
-	/**
-	 * This method must be implemented if we want to implement completion<br>
-	 * Completion will be performed on that selectable values<br>
-	 * Return all viewpoints of this library
-	 */
-	@Override
-	protected Enumeration<OntologyProperty> getAllSelectableValues() {
-		return super.getAllSelectableValues();
 	}
 
 	public FlexoOntology getContext() {

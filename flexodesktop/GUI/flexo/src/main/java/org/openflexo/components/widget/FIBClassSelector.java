@@ -20,7 +20,6 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.util.Enumeration;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -85,16 +84,6 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 			return editedObject.getName();
 		}
 		return "";
-	}
-
-	/**
-	 * This method must be implemented if we want to implement completion<br>
-	 * Completion will be performed on that selectable values<br>
-	 * Return all viewpoints of this library
-	 */
-	@Override
-	protected Enumeration<OntologyClass> getAllSelectableValues() {
-		return super.getAllSelectableValues();
 	}
 
 	public String getContextOntologyURI() {
@@ -248,7 +237,8 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				// "http://www.cpmf.org/ontologies/cpmfInstance");
 				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
-						"http://www.w3.org/2002/07/owl");
+				// "http://www.w3.org/2002/07/owl");
+						"http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
 				// "http://www.w3.org/2000/01/rdf-schema");
 				o.loadWhenUnloaded();
 

@@ -24,7 +24,7 @@ import java.awt.Image;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.io.File;
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
@@ -66,9 +66,9 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 	 * Override when required
 	 */
 	@Override
-	protected Enumeration<Role> getAllSelectableValues() {
+	protected Collection<Role> getAllSelectableValues() {
 		if (getProject() != null) {
-			return getProject().getWorkflow().getRoleList().getSortedRoles();
+			return getProject().getWorkflow().getRoleList().getRoles();
 		}
 		return null;
 	}

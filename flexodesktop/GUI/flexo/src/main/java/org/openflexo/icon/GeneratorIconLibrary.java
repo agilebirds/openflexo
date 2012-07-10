@@ -21,7 +21,6 @@ package org.openflexo.icon;
 
 import java.util.Vector;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.cg.templates.CGTemplate;
@@ -127,7 +126,7 @@ public class GeneratorIconLibrary extends IconLibrary {
 	 * 
 	 * @return the calculated icon.
 	 */
-	public static Icon getIconForTemplate(CGTemplate template) {
+	public static ImageIcon getIconForTemplate(CGTemplate template) {
 		ImageIcon returned = FilesIconLibrary.smallIconForFileFormat(template.getFileFormat());
 
 		Vector<IconMarker> markers = new Vector<IconMarker>();

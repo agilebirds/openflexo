@@ -27,10 +27,7 @@ import org.openflexo.view.FlexoMainPane;
  * 
  */
 public class DGMainPane extends FlexoMainPane {
-
 	/**
-	 * @param moduleView
-	 * @param mainFrame
 	 * @param controller
 	 */
 	public DGMainPane(DGController controller) {

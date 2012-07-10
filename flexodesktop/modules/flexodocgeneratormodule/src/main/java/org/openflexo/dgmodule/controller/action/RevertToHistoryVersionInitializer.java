@@ -82,7 +82,7 @@ public class RevertToHistoryVersionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, RevertToHistoryVersion action) {
 				getControllerActionInitializer().getDGController().switchToPerspective(
-						getControllerActionInitializer().getDGController().CODE_GENERATOR_PERSPECTIVE);
+						getControllerActionInitializer().getDGController().DOCUMENTATION_GENERATOR_PERSPECTIVE);
 				getControllerActionInitializer().getDGController().selectAndFocusObject(action.getCGFile());
 				return true;
 			}

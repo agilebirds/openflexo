@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" border="empty" protectContent="false" dataClassName="org.openflexo.foundation.ontology.action.CreateOntologyClass" controllerClassName="org.openflexo.view.controller.FlexoFIBController" >
-  <Label label="creates_new_ontologic_class" align="center" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=20;insetsBottom=20;weightY=0.0;weightX=1.0;fill=horizontal)" font="Lucida Grande,1,15" readOnly="false" manageDynamicModel="false" />
-  <Label label="class_name" align="right" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" readOnly="false" manageDynamicModel="false" />
-  <TextField validateOnReturn="false" columns="40" passwd="false" text="TextField" data="data.newOntologyClassName" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" name="URITextField" readOnly="false" manageDynamicModel="false">
+<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.ontology.action.CreateOntologyClass" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Label label="creates_new_ontologic_class" localize="true" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" />
+  <Label label="class_name" align="right" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <TextField columns="40" text="TextField" data="data.newOntologyClassName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="URITextField" localize="true">
     <Dependancy componentName="OntologyFileSelector" />
   </TextField>
-  <Label label="class_uri" align="right" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=3;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" readOnly="false" manageDynamicModel="false" />
-  <TextField validateOnReturn="false" columns="6" passwd="false" text="TextField" data="((data.ontology.uRI + &quot;#&quot;) + data.newOntologyClassName)" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=4;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" font="Lucida Grande,0,11" readOnly="true" manageDynamicModel="false">
+  <Label label="class_uri" align="right" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <TextField columns="6" text="TextField" data="((data.ontology.uRI + &quot;#&quot;) + data.newOntologyClassName)" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,0,11" readOnly="true" localize="true">
     <Dependancy componentName="OntologyFileSelector" />
   </TextField>
-  <Panel layout="none" border="empty" borderTitle="Panel" protectContent="false" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
-  <Label label="" align="left" data="data.validURILabel" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=0;insetsBottom=6;weightY=0.0;fill=horizontal;weightX=1.0)" font="Lucida Grande,2,10" readOnly="false" manageDynamicModel="false">
+  <Panel layout="none" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <Label label="" localize="true" data="data.validURILabel" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=6;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,2,10">
     <Dependancy componentName="URITextField" />
     <LocalizedDictionary />
   </Label>
-  <Label label="parent_class" align="right" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=north_east;gridY=-1;gridX=-1;index=7;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" readOnly="false" manageDynamicModel="false" />
-  <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="data.fatherClass" dataClassName="" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=8;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=1.0)" readOnly="false" manageDynamicModel="false">
-    <Assignment variable="component.ontologyLibrary" value="data.ontology.ontologyLibrary" />
+  <Label label="parent_class" align="right" localize="true" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" data="data.fatherClass" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+    <Assignment variable="component.context" value="data.ontology" />
   </Custom>
-  <Label label="Description" align="right" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=north_east;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" readOnly="false" manageDynamicModel="false" />
-  <TextArea validateOnReturn="false" columns="6" rows="4" text="TextArea" data="data.description" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=10;gridWidth=0;insetsTop=0;insetsBottom=20;weightY=1.0;weightX=1.0;fill=both)" readOnly="false" manageDynamicModel="false" />
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" border="empty" borderTitle="Panel" protectContent="false" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=both;weightX=1.0)">
-    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" constraints="flow(index=0)" readOnly="false" enable="data.isValid" manageDynamicModel="false">
+  <Label label="Description" align="right" localize="true" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <TextArea columns="6" rows="4" text="TextArea" data="data.description" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=20;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" localize="true" />
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" constraints="flow(index=0)" localize="true" enable="data.isValid">
       <Dependancy componentName="URITextField" />
     </Button>
-    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" readOnly="false" manageDynamicModel="false" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
   </Panel>
+  <Image imageFile="../../../../../../../GUI/flexo/src/main/resources/Icons/Model/OE/64x64/OntologyClass.png" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
   <LocalizedDictionary>
     <Localized key="class_name" lang="English">Class name</Localized>
     <Localized key="validate" lang="English">Validate</Localized>

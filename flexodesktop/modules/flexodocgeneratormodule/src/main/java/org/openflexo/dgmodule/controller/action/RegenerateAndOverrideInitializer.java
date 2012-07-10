@@ -43,13 +43,13 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer<Regenera
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() {
-		return (DGControllerActionInitializer) super.getControllerActionInitializer();
+	public DGController getController() {
+		return (DGController) super.getController();
 	}
 
 	@Override
-	public DGController getController() {
-		return (DGController) super.getController();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer<Regenera
 		return new FlexoActionInitializer<RegenerateAndOverride>() {
 			@Override
 			public boolean run(EventObject e, RegenerateAndOverride action) {
-				getController().getDgBrowserView().getBrowser().setHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().setHoldStructure();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -72,8 +72,8 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer<Regenera
 		return new FlexoActionFinalizer<RegenerateAndOverride>() {
 			@Override
 			public boolean run(EventObject e, RegenerateAndOverride action) {
-				getController().getDgBrowserView().getBrowser().resetHoldStructure();
-				getController().getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				return true;
 			}
 		};
@@ -84,8 +84,8 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer<Regenera
 		return new FlexoExceptionHandler<RegenerateAndOverride>() {
 			@Override
 			public boolean handleException(FlexoException exception, RegenerateAndOverride action) {
-				getController().getDgBrowserView().getBrowser().resetHoldStructure();
-				getController().getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("code_generation_synchronization_for_repository_failed")

@@ -43,15 +43,6 @@ public class DGModule extends FlexoModule {
 	public DGModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
 		DGPreferences.init();
-		/*
-		if (getProject().getGeneratedDoc().getGeneratedRepositories().size() == 0) {
-			getDGController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedDoc());
-			getDGController().selectAndFocusObject(getProject().getGeneratedDoc());
-		} else {
-			getDGController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedDoc().getGeneratedRepositories().firstElement());
-			getDGController().selectAndFocusObject(getProject().getGeneratedDoc().getGeneratedRepositories().firstElement());
-		}
-		*/
 	}
 
 	@Override

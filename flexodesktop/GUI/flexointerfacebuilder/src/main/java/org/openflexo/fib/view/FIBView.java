@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -301,7 +302,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				if (view != null) {
 					view.updateDataObject(getDataObject());
 				} else {
-					logger.warning("Unexpected null view when retrieving view for " + c);
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Unexpected null view when retrieving view for " + c);
+					}
 				}
 			}
 		} else {

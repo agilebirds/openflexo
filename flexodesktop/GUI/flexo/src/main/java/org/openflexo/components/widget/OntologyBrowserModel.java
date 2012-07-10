@@ -45,8 +45,11 @@ import org.openflexo.toolbox.StringUtils;
  * 
  * Developers note: this model is shared by many widgets. Please modify it with caution.
  * 
- * @author sguerin
+ * @see FIBClassSelector
+ * @see FIBIndividualSelector
+ * @see FIBPropertySelector
  * 
+ * @author sguerin
  */
 public class OntologyBrowserModel {
 

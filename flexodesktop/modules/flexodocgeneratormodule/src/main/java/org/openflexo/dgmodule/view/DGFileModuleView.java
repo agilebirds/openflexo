@@ -584,7 +584,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 
 	@Override
 	public FlexoPerspective getPerspective() {
-		return _controller.CODE_GENERATOR_PERSPECTIVE;
+		return _controller.DOCUMENTATION_GENERATOR_PERSPECTIVE;
 	}
 
 	@Override

@@ -156,7 +156,10 @@ public class ViewPoint extends ViewPointObject {
 		ViewPoint viewpoint = new ViewPoint();
 		viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
-		viewpoint.init(baseName, viewpointDir, xmlFile, library, null, folder);
+
+		ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
+
+		viewpoint.init(baseName, viewpointDir, xmlFile, library, viewPointOntology, folder);
 		viewpoint.save();
 		return viewpoint;
 	}
@@ -172,7 +175,6 @@ public class ViewPoint extends ViewPointObject {
 
 		File owlFile = null;
 		String viewPointURI = null;
-		ImportedOntology viewpointOntology = null;
 
 		Document document;
 		try {
@@ -186,6 +188,17 @@ public class ViewPoint extends ViewPointObject {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		if (owlFile.exists()) {
+			return loadViewpointOntology(viewPointURI, owlFile, library);
+		}
+
+		return null;
+	}
+
+	private static ImportedOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
+
+		ImportedOntology viewpointOntology = null;
 
 		if (owlFile.exists()) {
 			logger.fine("Found " + owlFile);
@@ -226,7 +239,15 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public static class ViewPointBuilder {
-		private final ImportedOntology viewPointOntology;
+		private ViewPoint viewPoint;
+		private ImportedOntology viewPointOntology;
+
+		public ViewPointBuilder(ViewPoint viewPoint) {
+			this.viewPoint = viewPoint;
+			if (viewPoint != null) {
+				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
+			}
+		}
 
 		public ViewPointBuilder(ImportedOntology viewPointOntology) {
 			this.viewPointOntology = viewPointOntology;
@@ -236,11 +257,22 @@ public class ViewPoint extends ViewPointObject {
 		public ImportedOntology getViewPointOntology() {
 			return viewPointOntology;
 		}
+
+		public ViewPoint getViewPoint() {
+			return viewPoint;
+		}
+
+		public void setViewPoint(ViewPoint viewPoint) {
+			this.viewPoint = viewPoint;
+		}
 	}
 
 	// Used during deserialization, do not use it
 	public ViewPoint(ViewPointBuilder builder) {
 		super(builder);
+		if (builder != null) {
+			builder.setViewPoint(this);
+		}
 		editionPatterns = new Vector<EditionPattern>();
 	}
 

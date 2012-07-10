@@ -28,6 +28,8 @@ import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -37,11 +39,11 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 
-public class CreateOntologyCalcInitializer extends ActionInitializer {
+public class CreateViewPointInitializer extends ActionInitializer<CreateViewPoint, ViewPointLibraryObject, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateOntologyCalcInitializer(CEDControllerActionInitializer actionInitializer) {
+	CreateViewPointInitializer(CEDControllerActionInitializer actionInitializer) {
 		super(CreateViewPoint.actionType, actionInitializer);
 	}
 
@@ -67,7 +69,7 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateViewPoint>() {
 			@Override
 			public boolean run(EventObject e, CreateViewPoint action) {
-				((VPMController) getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
+				((VPMController) getController()).selectAndFocusObject(action.getNewViewPoint());
 				return true;
 			}
 		};

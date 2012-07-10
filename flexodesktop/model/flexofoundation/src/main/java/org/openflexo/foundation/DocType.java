@@ -52,6 +52,10 @@ public class DocType extends TargetType implements ChoiceList, Serializable, Str
 		}
 	}
 
+	public static class DocTypeList {
+
+	}
+
 	private String name;
 
 	private FlexoProject project;

@@ -32,6 +32,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -513,11 +514,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, initialOption);
 	}
 
-	// ==========================================================================
-	// ============================= Instance methods
-	// ===========================
-	// ==========================================================================
-
 	public void showInspector() {
 		if (useOldInspectorScheme()) {
 			/*
@@ -616,38 +612,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	// ==========================================================================
-	// ============================= Inspector
-	// ==================================
-	// ==========================================================================
-
-	/**
-	 * The selection manager manages the inspector, but we can "force" the inspector with this method
-	 * 
-	 * @deprecated
-	 */
-	/*
-	 * public void setCurrentInspectedObject(InspectableObject inspectable) {
-	 * logger.warning("deprecated feature !"); if (this instanceof
-	 * SelectionManagingController) {
-	 * ((SelectionManagingController)this).getSelectionManager().setCurrentInspectedObject(inspectable); } }
-	 */
-
-	/**
-	 * Reset inspector
-	 * 
-	 * @deprecated
-	 */
-	/*
-	 * public void resetCurrentInspectedObject() { logger.warning("deprecated
-	 * feature !"); if (this instanceof SelectionManagingController) {
-	 * ((SelectionManagingController)this).getSelectionManager().setCurrentInspectedObjectToNone(); } }
-	 */
-
-	// ==========================================================================
-	// =================== Inspectable Exceptions handling
-	// ======================
-	// ==========================================================================
 	/**
 	 * Tries to handle an exception raised during object inspection.<br>
 	 * 
@@ -738,11 +702,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 		return false;
 	}
-
-	// ==========================================================================
-	// ====================== Consistency check utilities
-	// =======================
-	// ==========================================================================
 
 	public ConsistencyCheckDialog getConsistencyCheckWindow() {
 		return getConsistencyCheckWindow(true);
@@ -1671,6 +1630,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public void objectWasClicked(FlexoModelObject object) {
 		logger.info("Object was clicked: " + object);
+	}
+
+	public void objectWasRightClicked(FlexoModelObject object, MouseEvent e) {
+		logger.info("Object was right-clicked: " + object + "event=" + e);
+		getSelectionManager().getContextualMenuManager().showPopupMenuForObject(object, (Component) e.getSource(), e.getPoint());
 	}
 
 	public void objectWasDoubleClicked(FlexoModelObject object) {

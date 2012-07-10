@@ -70,7 +70,7 @@ public class GenerateSourceCodeInitializer extends ActionInitializer<GenerateSou
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
-				getController().getDgBrowserView().getBrowser().setHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -87,8 +87,8 @@ public class GenerateSourceCodeInitializer extends ActionInitializer<GenerateSou
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
 				}
-				getController().getDgBrowserView().getBrowser().resetHoldStructure();
-				getController().getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				return true;
 			}
 		};
@@ -100,8 +100,8 @@ public class GenerateSourceCodeInitializer extends ActionInitializer<GenerateSou
 			@Override
 			public boolean handleException(FlexoException exception, GenerateSourceCode action) {
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
-				getController().getDgBrowserView().getBrowser().resetHoldStructure();
-				getController().getDgBrowserView().getBrowser().update();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().resetHoldStructure();
+				getController().DOCUMENTATION_GENERATOR_PERSPECTIVE.getBrowser().update();
 				if (exception instanceof GenerationException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
 							+ ((GenerationException) exception).getLocalizedMessage());

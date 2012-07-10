@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.toc.NormalSection" controllerClassName="org.openflexo.doceditor.controller.DEFIBController" name="main">
+  <Image imageFile="../../../../../flexo/src/main/resources/Icons/DG/NormalSection.png" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <Label label="normal_section" localize="true" index="1" constraints="gridbag(anchor=south_west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,16" />
+  <CheckBox selected="true" localize="true" name="checkbox" index="2" data="data.renderSectionTitle" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <Label label="display_title" localize="true" enable="data.renderSectionTitle" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <TextField columns="7" text="TextField" data="data.title" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" enable="data.renderSectionTitle" />
+  <TabPanel constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" width="100" height="60">
+    <Tab title="contents" layout="border" titleFont="Lucida Grande,0,13" darkLevel="0" index="1">
+      <HTMLEditor data="data.content" constraints="border(location=center)" width="200" height="100" localize="true">
+        <Line1Option index="0" name="SourcePanel" />
+        <Line1Option index="1" name="SourcePanel.SourceButton" />
+        <Line1Option index="1" name="EditPanel" />
+        <Line1Option index="3" name="EditPanel.CutButton" />
+        <Line1Option index="4" name="EditPanel.CopyButton" />
+        <Line1Option index="5" name="EditPanel.PasteButton" />
+        <Line1Option index="6" name="EditPanel.PasteAsTextButton" />
+        <Line1Option index="2" name="ToolsPanel" />
+        <Line1Option index="8" name="ToolsPanel.PrintButton" />
+        <Line1Option index="9" name="ToolsPanel.SpellcheckButton" />
+        <Line1Option index="3" name="UndoRedoPanel" />
+        <Line1Option index="11" name="UndoRedoPanel.UndoButton" />
+        <Line1Option index="12" name="UndoRedoPanel.RedoButton" />
+        <Line1Option index="4" name="SearchPanel" />
+        <Line1Option index="14" name="SearchPanel.FindButton" />
+        <Line1Option index="15" name="SearchPanel.ReplaceButton" />
+        <Line1Option index="5" name="FormatPanel" />
+        <Line1Option index="17" name="FormatPanel.SelectAllButton" />
+        <Line1Option index="18" name="FormatPanel.ClearFormattingButton" />
+        <Line2Option index="0" name="TextEffectPanel" />
+        <Line2Option index="1" name="TextEffectPanel.BoldButton" />
+        <Line2Option index="2" name="TextEffectPanel.ItalicButton" />
+        <Line2Option index="3" name="TextEffectPanel.UnderlineButton" />
+        <Line2Option index="4" name="TextEffectPanel.StrikethroughButton" />
+        <Line2Option index="1" name="SubSuperScriptPanel" />
+        <Line2Option index="6" name="SubSuperScriptPanel.SubscriptButton" />
+        <Line2Option index="7" name="SubSuperScriptPanel.SuperscriptButton" />
+        <Line2Option index="2" name="ListPanel" />
+        <Line2Option index="9" name="ListPanel.InsertRemoveNumberedListButton" />
+        <Line2Option index="10" name="ListPanel.InsertRemoveBulletedListButton" />
+        <Line2Option index="3" name="BlockPanel" />
+        <Line2Option index="12" name="BlockPanel.DecreaseIndentButton" />
+        <Line2Option index="13" name="BlockPanel.IncreaseIndentButton" />
+        <Line2Option index="14" name="BlockPanel.BlockQuoteButton" />
+        <Line2Option index="15" name="BlockPanel.CreateDivButton" />
+        <Line2Option index="16" name="BlockPanel.CreateParagraphButton" />
+        <Line2Option index="4" name="JustificationPanel" />
+        <Line2Option index="18" name="JustificationPanel.LeftJustifyButton" />
+        <Line2Option index="19" name="JustificationPanel.CenterJustifyButton" />
+        <Line2Option index="20" name="JustificationPanel.RightJustifyButton" />
+        <Line2Option index="21" name="JustificationPanel.BlockJustifyButton" />
+        <Line2Option index="5" name="LinkPanel" />
+        <Line2Option index="23" name="LinkPanel.LinkButton" />
+        <Line2Option index="24" name="LinkPanel.UnlinkButton" />
+        <Line2Option index="25" name="LinkPanel.AnchorButton" />
+        <Line3Option index="0" name="ParagraphFormatComboBox" />
+        <Line3Option index="1" name="FontComboBox" />
+        <Line3Option index="2" name="FontSizeComboBox" />
+        <Line3Option index="3" name="ColorPanel" />
+        <Line3Option index="4" name="ColorPanel.TextColorButton" />
+        <Line3Option index="5" name="ColorPanel.BackgroundColorButton" />
+        <Line3Option index="4" name="MiscPanel" />
+        <Line3Option index="7" name="MiscPanel.InsertImage" />
+        <Line3Option index="8" name="MiscPanel.InsertTableButton" />
+        <Line3Option index="9" name="MiscPanel.InsertHorizontalLineButton" />
+        <Line3Option index="10" name="MiscPanel.InsertSpecialCharButton" />
+      </HTMLEditor>
+    </Tab>
+    <Tab title="variables" layout="border" titleFont="Lucida Grande,0,13" darkLevel="0" index="1" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="normal_section" lang="English">Normal section</Localized>
+    <Localized key="normal_section" lang="French">Section normale</Localized>
+    <Localized key="normal_section" lang="Dutch">normal_section</Localized>
+    <Localized key="title" lang="English">Title</Localized>
+    <Localized key="title" lang="French">Titre</Localized>
+    <Localized key="title" lang="Dutch">Title</Localized>
+    <Localized key="title_of_section" lang="English">Title of section</Localized>
+    <Localized key="title_of_section" lang="French">Titre de la section</Localized>
+    <Localized key="title_of_section" lang="Dutch">title_of_section</Localized>
+    <Localized key="contents" lang="English">Contents</Localized>
+    <Localized key="contents" lang="French">Contenu</Localized>
+    <Localized key="contents" lang="Dutch">contents</Localized>
+    <Localized key="variables" lang="English">Variables</Localized>
+    <Localized key="variables" lang="French">Variables</Localized>
+    <Localized key="variables" lang="Dutch">variables</Localized>
+    <Localized key="display_title" lang="English">Display title</Localized>
+    <Localized key="display_title" lang="French">Afficher le titre</Localized>
+    <Localized key="display_title" lang="Dutch">display_title</Localized>
+  </LocalizedDictionary>
+</Panel>
+

@@ -331,13 +331,16 @@ public class FIBController extends Observable implements BindingEvaluationContex
 				fireMouseClicked(returned.getDynamicModel(), e.getClickCount());
 				if (fibWidget.hasRightClickAction() && (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3)) {
 					// Detected right-click associated with action
-					fibWidget.getRightClickAction().execute(FIBController.this);
+					returned.applyRightClickAction(e);
+					// fibWidget.getRightClickAction().execute(FIBController.this);
 				} else if (fibWidget.hasClickAction() && e.getClickCount() == 1) {
 					// Detected click associated with action
-					fibWidget.getClickAction().execute(FIBController.this);
+					returned.applySingleClickAction(e);
+					// fibWidget.getClickAction().execute(FIBController.this);
 				} else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
 					// Detected double-click associated with action
-					fibWidget.getDoubleClickAction().execute(FIBController.this);
+					returned.applyDoubleClickAction(e);
+					// fibWidget.getDoubleClickAction().execute(FIBController.this);
 				}
 			}
 		});
