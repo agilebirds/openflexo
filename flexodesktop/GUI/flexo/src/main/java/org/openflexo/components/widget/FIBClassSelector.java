@@ -20,23 +20,14 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Widget allowing to select an OntologyClass<br>
