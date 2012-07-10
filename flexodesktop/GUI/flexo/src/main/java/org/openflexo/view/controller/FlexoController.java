@@ -1308,6 +1308,20 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public abstract String getWindowTitleforObject(FlexoModelObject object);
 
+	public String getWindowTitle() {
+		String projectTitle = getProject() != null ? " - " + getProject().getProjectName() + " - "
+				+ getProjectDirectory().getAbsolutePath() : "";
+		if (getCurrentModuleView() != null) {
+			return getModule().getName() + " : " + getWindowTitleforObject(getCurrentDisplayedObjectAsModuleView()) + projectTitle;
+		} else {
+			if (getModule() == null) {
+				return FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + projectTitle;
+			} else {
+				return FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + " - " + getModule().getName() + projectTitle;
+			}
+		}
+	}
+
 	public void cancelCurrentAction() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Escape was pressed but the current controller does not do anything about it");

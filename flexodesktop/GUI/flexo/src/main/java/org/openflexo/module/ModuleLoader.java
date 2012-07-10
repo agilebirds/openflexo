@@ -325,6 +325,8 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		} else {
 			if (FlexoController.confirm(FlexoLocalization.localizedForKey("really_quit"))) {
 				proceedQuitWithoutConfirmation();
+			} else {
+				throw new ProjectExitingCancelledException();
 			}
 		}
 	}

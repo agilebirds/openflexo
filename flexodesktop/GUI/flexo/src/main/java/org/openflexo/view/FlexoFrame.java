@@ -198,6 +198,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_EDITOR, this);
 		_controller.getControllerModel().getPropertyChangeSupport()
 				.addPropertyChangeListener(RootControllerModel.CURRENT_PERPSECTIVE, this);
+		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_OBJECT, this);
 		if (defaultFrame != null) {
 			disposeDefaultFrameWhenPossible();
 		}
@@ -278,6 +279,15 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		}
 		_relativeWindows.clear();
 		if (_controller != null) {
+			_controller.getControllerModel().getPropertyChangeSupport()
+					.removePropertyChangeListener(RootControllerModel.CURRENT_EDITOR, this);
+			_controller.getControllerModel().getPropertyChangeSupport()
+					.removePropertyChangeListener(RootControllerModel.CURRENT_PERPSECTIVE, this);
+			_controller.getControllerModel().getPropertyChangeSupport()
+					.removePropertyChangeListener(RootControllerModel.CURRENT_OBJECT, this);
+			if (_controller.getProject() != null) {
+				_controller.getProject().deleteObserver(this);
+			}
 			_controller = null;
 		}
 		if (windowListener != null) {
@@ -462,21 +472,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 	}
 
 	public void updateTitle() {
-		String projectTitle = _controller.getProject() != null ? " - " + _controller.getProject().getProjectName() + " - "
-				+ _controller.getProjectDirectory().getAbsolutePath() : "";
-		if (getController().getCurrentModuleView() != null && getModule() != null) {
-			setTitle(getModule().getName() + " : " + getViewTitle() + projectTitle);
-		} else {
-			if (getModule() == null) {
-				setTitle(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + projectTitle);
-			} else {
-				setTitle(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + " - " + getModule().getName() + projectTitle);
-			}
-		}
-	}
-
-	public String getViewTitle() {
-		return getController().getWindowTitleforObject(getController().getCurrentModuleView().getRepresentedObject());
+		setTitle(getController().getWindowTitle());
 	}
 
 	public List<FlexoRelativeWindow> getRelativeWindows() {

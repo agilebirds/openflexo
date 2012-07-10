@@ -128,7 +128,7 @@ public class MainPaneTopBar extends JPanel {
 	}
 
 	private void initPerspectives() {
-		right.add(perspectives = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)));
+		right.add(perspectives = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)), 0);
 		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.PERSPECTIVES, new PropertyChangeListener() {
 
 			@Override
@@ -149,14 +149,8 @@ public class MainPaneTopBar extends JPanel {
 
 	private void insertPerspective(final FlexoPerspective p) {
 		final JButton button = new JButton(p.getActiveIcon());
-		button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 4, button.getIcon().getIconHeight() + 4));
-		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateIconForButtonPerspective(button, p);
-			}
-		}, model);
+		int size = Math.max(button.getIcon().getIconWidth() + 8, button.getIcon().getIconHeight() + 4);
+		button.setPreferredSize(new Dimension(size, size));
 		button.addActionListener(new ActionListener() {
 
 			@Override
@@ -164,10 +158,14 @@ public class MainPaneTopBar extends JPanel {
 				model.setCurrentPerspective(p);
 			}
 		});
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateIconForButtonPerspective(button, p);
+			}
+		}, model);
 		updateIconForButtonPerspective(button, p);
-		if (perspectives.getComponentCount() > 0) {
-			perspectives.add(new JLabel(IconLibrary.NAVIGATION_SPACER));
-		}
 		perspectives.add(button);
 	}
 
@@ -228,7 +226,7 @@ public class MainPaneTopBar extends JPanel {
 	private JButton getToggleVisibilityButton() {
 		final JButton button = new JButton(IconLibrary.TOGGLE_ARROW_TOP_ICON);
 		button.setRolloverIcon(IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-		button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 2, button.getIcon().getIconHeight() + 12));
+		button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 2, button.getIcon().getIconHeight() + 20));
 		return button;
 	}
 

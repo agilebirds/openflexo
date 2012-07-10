@@ -15688,8 +15688,30 @@ forward to the next nodes.</description>
             <DocItemVersion idref="toggle-hide-show-right-panel_1.0.1ENGLISH" />
           </DocItemAction>
         </EmbeddingChildDocItem>
-        <EmbeddingChildDocItem id="close-module" identifier="close-module" embedded="false" hidden="true">
+        <EmbeddingChildDocItem id="close-module" identifier="close-module" embedded="false" hidden="true" />
+        <EmbeddingChildDocItem id="workflow-browser" identifier="workflow-browser" embedded="false" hidden="true">
           <description />
+          <EmbeddingChildDocItem id="workflow-browser-plus" identifier="workflow-browser-plus" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="workflow-browser-minus" identifier="workflow-browser-minus" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="workflow-browser-options" identifier="workflow-browser-options" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
+        </EmbeddingChildDocItem>
+        <EmbeddingChildDocItem id="process-browser" identifier="process-browser" embedded="false" hidden="true">
+          <description />
+          <EmbeddingChildDocItem id="process-browser-plus" identifier="process-browser-plus" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="process-browser-minus" identifier="process-browser-minus" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="process-browser-options" identifier="process-browser-options" embedded="false" hidden="true">
+            <description />
+          </EmbeddingChildDocItem>
         </EmbeddingChildDocItem>
         <title key="ENGLISH">Flexo Tool Set</title>
         <DocItemVersion id="FlexoToolSet_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -15708,9 +15730,17 @@ forward to the next nodes.</description>
       <DocItem idref="minus" />
       <DocItem idref="options" />
       <DocItem idref="plus" />
+      <DocItem idref="process-browser" />
+      <DocItem idref="process-browser-minus" />
+      <DocItem idref="process-browser-options" />
+      <DocItem idref="process-browser-plus" />
       <DocItem idref="toggle-hide-show-left-panel" />
       <DocItem idref="toggle-hide-show-right-panel" />
       <DocItem idref="up" />
+      <DocItem idref="workflow-browser" />
+      <DocItem idref="workflow-browser-minus" />
+      <DocItem idref="workflow-browser-options" />
+      <DocItem idref="workflow-browser-plus" />
     </DocItemFolder>
     <DocItem id="FlexoDocResourceCenter" identifier="FlexoDocResourceCenter" embedded="false" hidden="false">
       <description>No description</description>

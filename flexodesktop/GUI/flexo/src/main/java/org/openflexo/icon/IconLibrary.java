@@ -96,9 +96,9 @@ public class IconLibrary {
 	public static final Icon NAVIGATION_CLOSE_LEFT = new ImageIconResource("Icons/GUI/PerspectiveLeft.gif");
 	public static final Icon NAVIGATION_CLOSE_RIGHT = new ImageIconResource("Icons/GUI/PerspectiveRight.gif");
 
-	public static final ImageIcon DEFAULT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/DefaultPerspective_A.gif");
+	public static final ImageIcon DEFAULT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/DefaultPerspective_A.png");
 	public static final ImageIcon DEFAULT_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/GUI/DefaultPerspective_S.gif");
-	public static final ImageIcon LIST_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/ListPerspective_A.gif");
+	public static final ImageIcon LIST_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/ListPerspective_A.png");
 	public static final ImageIcon LIST_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/GUI/ListPerspective_S.gif");
 
 	public static final ImageIcon BROWSER_PLUS_ICON = new ImageIconResource("Icons/GUI/Browser/BrowserPlus.gif");

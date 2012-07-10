@@ -244,16 +244,28 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 	private void updateComponent(JComponent next, LayoutPosition position) {
 		JComponent previous = getComponentForPosition(position);
+		JComponent toAdd = next != null ? next : new JPanel();
 		if (previous != next) {
 			if (previous != null) {
 				centerPanel.remove(previous);
 			}
-			if (next != null) {
-				centerPanel.add(next, position.name());
-			} else {
-				centerPanel.add(new JPanel(), position.name());
-			}
+			centerPanel.add(toAdd, position.name());
 			centerLayout.displayNode(position.name(), next != null);
+			Node node = centerLayout.getNodeForName(position.name());
+			Split parent = node.getParent();
+			if (parent != centerLayout.getNodeForName(LayoutColumns.CENTER.name())) {
+				int visibleChildren = 0;
+				for (Node child : parent.getChildren()) {
+					if (!(child instanceof Divider) && child.isVisible()) {
+						visibleChildren++;
+					}
+				}
+				for (Node child : parent.getChildren()) {
+					if (!(child instanceof Divider) && child.isVisible()) {
+						child.setWeight(1.0 / visibleChildren);
+					}
+				}
+			}
 			centerPanel.revalidate();
 		}
 	}

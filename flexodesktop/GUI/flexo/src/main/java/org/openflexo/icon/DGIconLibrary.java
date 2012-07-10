@@ -52,10 +52,10 @@ public class DGIconLibrary extends GeneratorIconLibrary {
 	// Perspective icons
 	public static final ImageIcon DG_TEMPLATES_ACTIVE_ICON = new ImageIconResource("Icons/DG/TemplatesPerspective_A.png");
 	public static final ImageIcon DG_TEMPLATES_SELECTED_ICON = new ImageIconResource("Icons/DG/TemplatesPerspective_S.png");
-	public static final ImageIcon DG_VP_ACTIVE_ICON = new ImageIconResource("Icons/DG/VersionningPerspective_A.gif");
+	public static final ImageIcon DG_VP_ACTIVE_ICON = new ImageIconResource("Icons/DG/VersionningPerspective_A.png");
 	public static final ImageIcon DG_VP_SELECTED_ICON = new ImageIconResource("Icons/DG/VersionningPerspective_S.gif");
 	public static final ImageIcon DG_DGP_SELECTED_ICON = new ImageIconResource("Icons/DG/DGPerspective_S.gif");
-	public static final ImageIcon DG_DGP_ACTIVE_ICON = new ImageIconResource("Icons/DG/DGPerspective_A.gif");
+	public static final ImageIcon DG_DGP_ACTIVE_ICON = new ImageIconResource("Icons/DG/DGPerspective_A.png");
 
 	public static final ImageIcon GENERATED_DOC_ICON = new ImageIconResource("Icons/DG/GeneratedDoc.gif");
 	public static final ImageIcon GENERATE_PDF = new ImageIconResource("Icons/DG/GeneratePDF.gif");
