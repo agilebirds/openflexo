@@ -19,7 +19,6 @@
  */
 package org.openflexo.ie.view;
 
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.view.FlexoMainPane;
 
@@ -28,18 +27,10 @@ import org.openflexo.view.FlexoMainPane;
  * 
  * @author sguerin
  */
-public class IEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class IEMainPane extends FlexoMainPane {
 
 	public IEMainPane(IEController controller) {
 		super(controller);
-	}
-
-	public void showBrowser() {
-		showLeftView();
-	}
-
-	public void hideBrowser() {
-		hideLeftView();
 	}
 
 }

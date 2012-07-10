@@ -144,7 +144,10 @@ public class DMController extends FlexoController {
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		return getProject().getDMValidationModel();
+		if (getProject() != null) {
+			return getProject().getDMValidationModel();
+		}
+		return null;
 	}
 
 	public void setCurrentEditedObject(DMObject object) {

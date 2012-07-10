@@ -141,18 +141,6 @@ public class VPMController extends FlexoController {
 
 	}
 
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((CEDMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((CEDMainPane) getMainPane()).hideBrowser();
-		}
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
 		return new CEDMainPane(this);

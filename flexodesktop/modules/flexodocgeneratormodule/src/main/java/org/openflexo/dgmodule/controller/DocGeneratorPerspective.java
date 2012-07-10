@@ -71,11 +71,6 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public JPanel getFooter() {
 		return this.dgController._footer;
 	}
@@ -91,9 +86,9 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile)
-				|| (object instanceof DGScreenshotFile) || (object instanceof CGTemplate) || (object instanceof TOCEntry)
-				|| (object instanceof TOCRepository) || (object instanceof TOCData));
+		return object instanceof GeneratedDoc || object instanceof DGRepository || object instanceof DGLatexFile
+				|| object instanceof DGScreenshotFile || object instanceof CGTemplate || object instanceof TOCEntry
+				|| object instanceof TOCRepository || object instanceof TOCData;
 	}
 
 	@Override

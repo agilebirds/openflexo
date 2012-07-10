@@ -42,6 +42,7 @@ public class ModelReinjectionPerspective extends FlexoPerspective {
 	public ModelReinjectionPerspective(SGController controller) {
 		super("model_reinjection");
 		_controller = controller;
+		setTopLeftView(_controller.getBrowserView());
 	}
 
 	@Override
@@ -69,7 +70,8 @@ public class ModelReinjectionPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedSources) || (object instanceof SourceRepository) || (object instanceof CGFile) || (object instanceof CGTemplate));
+		return object instanceof GeneratedSources || object instanceof SourceRepository || object instanceof CGFile
+				|| object instanceof CGTemplate;
 	}
 
 	@Override

@@ -20,7 +20,6 @@
 package org.openflexo.ie.view.controller;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
@@ -48,6 +47,8 @@ class MenuPerspective extends FlexoPerspective {
 		_controller = controller;
 		_menuEditorBrowserView = new MenuEditorBrowserView(controller);
 		_menuEditorBrowserView.setName(FlexoLocalization.localizedForKey("Menu", _menuEditorBrowserView));
+		setTopLeftView(_menuEditorBrowserView);
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	/**
@@ -98,32 +99,8 @@ class MenuPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 		_controller.getSelectionManager().setSelectedObject(moduleView.getRepresentedObject());
 	}
 
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _menuEditorBrowserView;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return _controller.getDisconnectedDocInspectorPanel();
-	}
 }

@@ -19,25 +19,18 @@
  */
 package org.openflexo.wkf.controller;
 
-import java.beans.PropertyChangeListener;
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
-import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessView;
 
@@ -45,11 +38,6 @@ public class ProcessPerspective extends FlexoPerspective {
 	static final Logger logger = Logger.getLogger(ProcessPerspective.class.getPackage().getName());
 
 	private final WKFController _controller;
-
-	private final Hashtable<FlexoProcess, ProcessEditorController> _controllerForProcess;
-	private final Hashtable<ProcessEditorController, JSplitPane> _splitPaneForProcess;
-
-	// private JSplitPane splitPaneWithWKFPalettesAndDocInspectorPanel;
 
 	/**
 	 * @param controller
@@ -59,22 +47,18 @@ public class ProcessPerspective extends FlexoPerspective {
 	public ProcessPerspective(WKFController controller) {
 		super("process_edition");
 		_controller = controller;
-		_controllerForProcess = new Hashtable<FlexoProcess, ProcessEditorController>();
-		_splitPaneForProcess = new Hashtable<ProcessEditorController, JSplitPane>();
+		setTopLeftView(_controller.getWkfBrowserView());
+		setBottomLeftView(_controller.getProcessBrowserView());
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
-	public ProcessEditorController getControllerForProcess(FlexoProcess process) {
-		ProcessEditorController returned = _controllerForProcess.get(process);
-		if (returned == null) {
-			returned = new ProcessEditorController(_controller, process);
-			_controllerForProcess.put(process, returned);
+	@Override
+	public JComponent getTopRightView() {
+		if (getCurrentProcessView() != null) {
+			return getCurrentProcessView().getController().getPaletteView();
+		} else {
+			return null;
 		}
-		return returned;
-	}
-
-	public void removeProcessController(ProcessEditorController controller) {
-		_controllerForProcess.remove(controller.getDrawing().getFlexoProcess());
-		_splitPaneForProcess.remove(controller);
 	}
 
 	/**
@@ -98,11 +82,6 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
@@ -118,33 +97,10 @@ public class ProcessPerspective extends FlexoPerspective {
 	@Override
 	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
 		if (process instanceof FlexoProcess) {
-			return getControllerForProcess((FlexoProcess) process).getDrawingView();
+			return new ProcessEditorController(_controller, (FlexoProcess) process).getDrawingView();
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _controller.getWorkflowProcessBrowserViews();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		if (getCurrentProcessView() == null) {
-			return new JPanel();
-		}
-		return getSplitPaneWithWKFPalettesAndDocInspectorPanel();
 	}
 
 	public ProcessView getCurrentProcessView() {
@@ -154,34 +110,6 @@ public class ProcessPerspective extends FlexoPerspective {
 		return null;
 	}
 
-	/**
-	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
-	 * 
-	 * @return
-	 */
-	protected JSplitPane getSplitPaneWithWKFPalettesAndDocInspectorPanel() {
-		JSplitPane splitPaneWithWKFPalettesAndDocInspectorPanel = _splitPaneForProcess.get(getCurrentProcessView().getController());
-		if (splitPaneWithWKFPalettesAndDocInspectorPanel == null) {
-			splitPaneWithWKFPalettesAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, getCurrentProcessView()
-					.getController().getPaletteView(), _controller.getDisconnectedDocInspectorPanel());
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION);
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
-			_splitPaneForProcess.put(getCurrentProcessView().getController(), splitPaneWithWKFPalettesAndDocInspectorPanel);
-		}
-		if (splitPaneWithWKFPalettesAndDocInspectorPanel.getBottomComponent() == null) {
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-		}
-		PropertyChangeListener[] listeners = splitPaneWithWKFPalettesAndDocInspectorPanel.getPropertyChangeListeners();
-		for (PropertyChangeListener listener : listeners) {
-			if (listener instanceof FlexoSplitPaneLocationSaver) {
-				splitPaneWithWKFPalettesAndDocInspectorPanel.removePropertyChangeListener(listener);
-			}
-		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithWKFPalettesAndDocInspectorPanel, "WKFPaletteAndDocInspectorPanel");
-		return splitPaneWithWKFPalettesAndDocInspectorPanel;
-	}
-
 	@Override
 	public JComponent getHeader() {
 		if (getCurrentProcessView() != null) {
@@ -189,9 +117,6 @@ public class ProcessPerspective extends FlexoPerspective {
 		}
 		return null;
 	}
-
-	// SGU: dynamic handling now
-	// private ProcessView currentProcessView = null;
 
 	@Override
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {

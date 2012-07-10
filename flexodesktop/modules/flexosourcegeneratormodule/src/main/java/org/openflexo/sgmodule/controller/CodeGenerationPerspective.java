@@ -50,6 +50,7 @@ public class CodeGenerationPerspective extends FlexoPerspective {
 	public CodeGenerationPerspective(SGController controller) {
 		super("code_generation");
 		_controller = controller;
+		setTopLeftView(_controller.getBrowserView());
 	}
 
 	@Override
@@ -78,8 +79,8 @@ public class CodeGenerationPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedSources) || (object instanceof SourceRepository) || (object instanceof CGFile)
-				|| (object instanceof CGTemplate) || (object instanceof ImplementationModel) || (object instanceof TechnologyModelObject));
+		return object instanceof GeneratedSources || object instanceof SourceRepository || object instanceof CGFile
+				|| object instanceof CGTemplate || object instanceof ImplementationModel || object instanceof TechnologyModelObject;
 	}
 
 	@Override
@@ -96,8 +97,8 @@ public class CodeGenerationPerspective extends FlexoPerspective {
 			return new ImplementationModelView((ImplementationModel) object, (SGController) controller, this);
 		} else if (object instanceof TechnologyModelObject) {
 
-			TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule
-					.getTechnologyModuleGUIFactory((((TechnologyModelObject) object).getTechnologyModuleImplementation()).getClass());
+			TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule.getTechnologyModuleGUIFactory(((TechnologyModelObject) object)
+					.getTechnologyModuleImplementation().getClass());
 			if (technologyModuleGUIFactory != null) {
 				ModuleView<? extends FlexoModelObject> view = technologyModuleGUIFactory.createModelView((TechnologyModelObject) object,
 						(SGController) controller, this);

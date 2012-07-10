@@ -19,14 +19,12 @@
  */
 package org.openflexo.ie.view.controller;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JSplitPane;
 
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DataModification;
@@ -39,12 +37,10 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.ie.IECst;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.palette.IEPalette;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -52,7 +48,6 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 
 	private final IEController _controller;
-	private JSplitPane splitPaneWithIEPaletteAndDocInspectorPanel;
 
 	private Map<FlexoProject, IEPalette> palettes;
 	private IEPalette currentPalette;
@@ -65,11 +60,10 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	public ComponentPerspective(IEController controller) {
 		super("component_editor_perspective");
 		_controller = controller;
-		palettes = new Hashtable<FlexoProject, IEPalette>();
-	}
-
-	public IEPalette getCurrentPalette() {
-		return currentPalette;
+		palettes = new HashMap<FlexoProject, IEPalette>();
+		setTopLeftView(controller.getComponentLibraryBrowserView());
+		setBottomLeftView(controller.getComponentBrowserView());
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	/**
@@ -140,11 +134,6 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 		if (moduleView instanceof IEWOComponentView) {
 			ComponentInstance ci = ((IEWOComponentView) moduleView).getRepresentedObject();
@@ -156,45 +145,13 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 		}
 	}
 
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
+	public IEPalette getCurrentPalette() {
+		return currentPalette;
 	}
 
 	@Override
-	public JComponent getLeftView() {
-		return _controller.getSplitPaneWithBrowsers();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return getSplitPaneWithIEPaletteAndDocInspectorPanel();
-	}
-
-	/**
-	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
-	 * 
-	 * @return
-	 */
-	protected JSplitPane getSplitPaneWithIEPaletteAndDocInspectorPanel() {
-		if (splitPaneWithIEPaletteAndDocInspectorPanel == null) {
-			currentPalette = getIEPalette(_controller.getProject());
-			splitPaneWithIEPaletteAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, currentPalette != null ? currentPalette
-					: null, _controller.getDisconnectedDocInspectorPanel());
-			splitPaneWithIEPaletteAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithIEPaletteAndDocInspectorPanel.setDividerLocation(IECst.PALETTE_DOC_SPLIT_LOCATION);
-			splitPaneWithIEPaletteAndDocInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
-		}
-		if (splitPaneWithIEPaletteAndDocInspectorPanel.getBottomComponent() == null) {
-			splitPaneWithIEPaletteAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithIEPaletteAndDocInspectorPanel, "IEPaletteAndDocInspectorPanel");
-		return splitPaneWithIEPaletteAndDocInspectorPanel;
+	public JComponent getTopRightView() {
+		return currentPalette = getIEPalette(_controller.getProject());
 	}
 
 	public IEPalette getIEPalette(FlexoProject flexoProject) {

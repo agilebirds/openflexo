@@ -6,6 +6,7 @@ package org.openflexo.dre.controller;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
+import org.openflexo.dre.view.DREBrowserView;
 import org.openflexo.dre.view.DocCenterView;
 import org.openflexo.dre.view.DocFolderView;
 import org.openflexo.dre.view.DocItemView;
@@ -24,16 +25,17 @@ class DREPerspective extends FlexoPerspective {
 	/**
 	 * 
 	 */
-	private final DREController dreController;
+	private final DREController controller;
 
 	/**
 	 * @param dreController
 	 *            TODO
 	 * @param name
 	 */
-	public DREPerspective(DREController dreController) {
+	public DREPerspective(DREController controller) {
 		super("docresourceeditor_perspective");
-		this.dreController = dreController;
+		this.controller = controller;
+		setTopLeftView(new DREBrowserView(controller));
 	}
 
 	/**
@@ -76,12 +78,12 @@ class DREPerspective extends FlexoPerspective {
 			}
 		} else if (object instanceof DocItem) {
 
-			if (this.dreController.docItemView == null) {
-				this.dreController.docItemView = new DocItemView((DocItem) object, (DREController) controller);
+			if (this.controller.docItemView == null) {
+				this.controller.docItemView = new DocItemView((DocItem) object, (DREController) controller);
 			} else {
-				this.dreController.docItemView.setDocItem((DocItem) object);
+				this.controller.docItemView.setDocItem((DocItem) object);
 			}
-			return this.dreController.docItemView;
+			return this.controller.docItemView;
 		} else {
 			return new EmptyPanel<FlexoModelObject>(controller, this, object);
 		}
@@ -89,6 +91,6 @@ class DREPerspective extends FlexoPerspective {
 
 	@Override
 	public JComponent getHeader() {
-		return this.dreController.getAdditionalActionPanel();
+		return this.controller.getAdditionalActionPanel();
 	}
 }

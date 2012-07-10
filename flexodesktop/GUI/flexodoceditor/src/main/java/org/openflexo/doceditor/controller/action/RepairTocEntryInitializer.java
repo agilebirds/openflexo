@@ -31,6 +31,8 @@ import org.openflexo.foundation.param.DMEOEntityParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ProcessParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
+import org.openflexo.foundation.toc.TOCEntry;
+import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.action.RepairTOCEntry;
 import org.openflexo.foundation.toc.action.RepairTOCEntry.FixProposal;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -39,7 +41,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class RepairTocEntryInitializer extends ActionInitializer {
+public class RepairTocEntryInitializer extends ActionInitializer<RepairTOCEntry, TOCEntry, TOCObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

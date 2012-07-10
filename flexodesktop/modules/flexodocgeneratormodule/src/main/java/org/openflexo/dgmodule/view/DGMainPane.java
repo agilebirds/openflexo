@@ -20,16 +20,13 @@
 package org.openflexo.dgmodule.view;
 
 import org.openflexo.dgmodule.controller.DGController;
-import org.openflexo.dgmodule.controller.browser.DGBrowser;
-import org.openflexo.doceditor.view.DEMainPane;
+import org.openflexo.view.FlexoMainPane;
 
 /**
  * @author gpolet
  * 
  */
-public class DGMainPane extends DEMainPane {
-
-	private DGBrowserView dgBrowserView;
+public class DGMainPane extends FlexoMainPane {
 
 	/**
 	 * @param moduleView
@@ -38,22 +35,6 @@ public class DGMainPane extends DEMainPane {
 	 */
 	public DGMainPane(DGController controller) {
 		super(controller);
-		dgBrowserView = new DGBrowserView(controller, new DGBrowser(controller));
-		setLeftView(dgBrowserView);
-		if (deBrowserView.getParent() != null) {
-			deBrowserView.getParent().remove(deBrowserView);
-		}
-		deBrowserView.getBrowser().delete();
-		deBrowserView = null;
-	}
-
-	@Override
-	public DGController getController() {
-		return (DGController) super.getController();
-	}
-
-	public DGBrowserView getDgBrowserView() {
-		return dgBrowserView;
 	}
 
 }

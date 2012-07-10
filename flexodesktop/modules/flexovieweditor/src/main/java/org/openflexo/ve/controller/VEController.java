@@ -123,18 +123,6 @@ public class VEController extends FlexoController {
 
 	}
 
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((VEMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((VEMainPane) getMainPane()).hideBrowser();
-		}
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
 		return new VEMainPane(this);

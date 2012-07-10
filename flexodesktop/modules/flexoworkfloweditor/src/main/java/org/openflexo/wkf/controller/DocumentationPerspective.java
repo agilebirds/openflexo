@@ -20,7 +20,6 @@
 package org.openflexo.wkf.controller;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -46,6 +45,9 @@ public class DocumentationPerspective extends FlexoPerspective {
 	public DocumentationPerspective(WKFController controller, String name) {
 		super(name);
 		_controller = controller;
+		setTopLeftView(_controller.getWkfBrowserView());
+		setBottomLeftView(_controller.getProcessBrowserView());
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	/**
@@ -69,11 +71,6 @@ public class DocumentationPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
@@ -93,26 +90,6 @@ public class DocumentationPerspective extends FlexoPerspective {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _controller.getWorkflowProcessBrowserViews();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return _controller.getDisconnectedDocInspectorPanel();
 	}
 
 }

@@ -45,7 +45,9 @@ import org.openflexo.dg.html.ProjectDocHTMLGenerator;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
 import org.openflexo.dgmodule.DGPreferences;
 import org.openflexo.dgmodule.controller.action.DGControllerActionInitializer;
+import org.openflexo.dgmodule.controller.browser.DGBrowser;
 import org.openflexo.dgmodule.menu.DGMenuBar;
+import org.openflexo.dgmodule.view.DGBrowserView;
 import org.openflexo.dgmodule.view.DGFileVersionPopup;
 import org.openflexo.dgmodule.view.DGMainPane;
 import org.openflexo.doceditor.controller.DEController;
@@ -119,6 +121,8 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	protected DGFooter _footer;
 
+	private final DGBrowserView dgBrowserView;
+
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
@@ -133,11 +137,16 @@ public class DGController extends DEController implements FlexoObserver, Project
 	public DGController(FlexoModule module) {
 		super(module);
 		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
+		dgBrowserView = new DGBrowserView(this, new DGBrowser(this));
 		createFooter();
 		addToPerspectives(CODE_GENERATOR_PERSPECTIVE);
 		addToPerspectives(VERSIONNING_PERSPECTIVE);
 		getControllerModel().removeFromPerspectives(DOCEDITOR_PERSPECTIVE);
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
+	}
+
+	public DGBrowserView getDgBrowserView() {
+		return dgBrowserView;
 	}
 
 	@Override

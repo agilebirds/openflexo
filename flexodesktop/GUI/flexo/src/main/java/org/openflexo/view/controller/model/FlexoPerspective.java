@@ -19,29 +19,72 @@
  */
 package org.openflexo.view.controller.model;
 
+import java.beans.PropertyChangeSupport;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
+import org.jdesktop.swingx.MultiSplitLayout.Node;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public abstract class FlexoPerspective {
+public abstract class FlexoPerspective implements HasPropertyChangeSupport {
 
-	private String _name;
+	private PropertyChangeSupport propertyChangeSupport;
+
+	private String name;
+
+	public static final String HEADER = "header";
+	public static final String FOOTER = "footer";
+
+	public static final String TOP_LEFT_VIEW = "topLeftView";
+	public static final String TOP_RIGHT_VIEW = "topRightView";
+	public static final String TOP_CENTER_VIEW = "topCenterView";
+
+	public static final String MIDDLE_LEFT_VIEW = "middleLeftView";
+	public static final String MIDDLE_RIGHT_VIEW = "middleRightView";
+
+	public static final String BOTTOM_LEFT_VIEW = "bottomLeftView";
+	public static final String BOTTOM_RIGHT_VIEW = "bottomRightView";
+	public static final String BOTTOM_CENTER_VIEW = "bottomCenterView";
+
+	public static final String[] PROPERTIES = { HEADER, FOOTER, TOP_LEFT_VIEW, TOP_RIGHT_VIEW, TOP_CENTER_VIEW, MIDDLE_LEFT_VIEW,
+			MIDDLE_RIGHT_VIEW, BOTTOM_LEFT_VIEW, BOTTOM_RIGHT_VIEW, BOTTOM_CENTER_VIEW };
+
+	private JComponent topLeftView;
+	private JComponent topRightView;
+	private JComponent middleLeftView;
+	private JComponent middleRightView;
+	private JComponent bottomLeftView;
+	private JComponent bottomRightView;
+	private JComponent topCenterView;
+	private JComponent bottomCenterView;
+
+	private JComponent header;
+	private JComponent footer;
 
 	public FlexoPerspective(String name) {
 		super();
-		_name = name;
+		this.name = name;
+		propertyChangeSupport = new PropertyChangeSupport(this);
 	}
 
-	public boolean isAlwaysVisible() {
-		return false;
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
 	}
 
 	public String getName() {
-		return _name;
+		return name;
 	}
 
 	public String getLocalizedName() {
@@ -53,59 +96,12 @@ public abstract class FlexoPerspective {
 		return getName();
 	}
 
+	public void setupDefaultLayout(Node layout) {
+	}
+
 	public abstract ImageIcon getActiveIcon();
 
 	public abstract ImageIcon getSelectedIcon();
-
-	/**
-	 * Return a flag indicating if perspective control left view. When set to true, use component supplied by #getLeftView()
-	 * 
-	 * @return
-	 * @see #getLeftView()
-	 */
-	public boolean doesPerspectiveControlLeftView() {
-		return false;
-	}
-
-	/**
-	 * Return view to be used as left view controlled by this perspective Default is to return null. Override this method as required.
-	 * 
-	 * @return
-	 * @see #doesPerspectiveControlLeftView()
-	 */
-	public JComponent getLeftView() {
-		return null;
-	}
-
-	/**
-	 * Return a flag indicating if perspective control right view. When set to true, use component supplied by #getRightView()
-	 * 
-	 * @return
-	 * @see #getRightView()
-	 */
-	public boolean doesPerspectiveControlRightView() {
-		return false;
-	}
-
-	/**
-	 * Return view to be used as right view controlled by this perspective Default is to return null. Override this method as required.
-	 * 
-	 * @return
-	 * @see #doesPerspectiveControlRightView()
-	 */
-	public JComponent getRightView() {
-		return null;
-	}
-
-	// Override when required
-	public JComponent getHeader() {
-		return null;
-	}
-
-	// Override when required
-	public JComponent getFooter() {
-		return null;
-	}
 
 	public abstract <O extends FlexoModelObject> ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
 
@@ -113,7 +109,107 @@ public abstract class FlexoPerspective {
 
 	public abstract FlexoModelObject getDefaultObject(FlexoModelObject proposedObject);
 
+	public JComponent getHeader() {
+		return header;
+	}
+
+	public void setHeader(JComponent header) {
+		JComponent old = this.header;
+		this.header = header;
+		getPropertyChangeSupport().firePropertyChange(HEADER, old, header);
+	}
+
+	public JComponent getFooter() {
+		return footer;
+	}
+
+	public void setFooter(JComponent footer) {
+		JComponent old = this.footer;
+		this.footer = footer;
+		getPropertyChangeSupport().firePropertyChange(FOOTER, old, footer);
+	}
+
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 
+	}
+
+	public JComponent getTopLeftView() {
+		return topLeftView;
+	}
+
+	public void setTopLeftView(JComponent topLetfView) {
+		JComponent old = this.topLeftView;
+		this.topLeftView = topLetfView;
+		getPropertyChangeSupport().firePropertyChange(TOP_LEFT_VIEW, old, topLetfView);
+	}
+
+	public JComponent getTopRightView() {
+		return topRightView;
+	}
+
+	public void setTopRightView(JComponent topRightView) {
+		JComponent old = this.topRightView;
+		this.topRightView = topRightView;
+		getPropertyChangeSupport().firePropertyChange(TOP_RIGHT_VIEW, old, topRightView);
+	}
+
+	public JComponent getBottomLeftView() {
+		return bottomLeftView;
+	}
+
+	public void setBottomLeftView(JComponent bottomLetfView) {
+		JComponent old = this.bottomLeftView;
+		this.bottomLeftView = bottomLetfView;
+		getPropertyChangeSupport().firePropertyChange(BOTTOM_LEFT_VIEW, old, bottomLetfView);
+	}
+
+	public JComponent getBottomRightView() {
+		return bottomRightView;
+	}
+
+	public void setBottomRightView(JComponent bottomRightView) {
+		JComponent old = this.bottomRightView;
+		this.bottomRightView = bottomRightView;
+		getPropertyChangeSupport().firePropertyChange(BOTTOM_RIGHT_VIEW, old, bottomRightView);
+	}
+
+	public JComponent getTopCenterView() {
+		return topCenterView;
+	}
+
+	public void setTopCenterView(JComponent topCentralView) {
+		JComponent old = this.topCenterView;
+		this.topCenterView = topCentralView;
+		getPropertyChangeSupport().firePropertyChange(TOP_CENTER_VIEW, old, topCentralView);
+	}
+
+	public JComponent getBottomCenterView() {
+		return bottomCenterView;
+	}
+
+	public void setBottomCenterView(JComponent bottomCentralView) {
+		JComponent old = this.bottomCenterView;
+		this.bottomCenterView = bottomCentralView;
+		getPropertyChangeSupport().firePropertyChange(BOTTOM_CENTER_VIEW, old, bottomCentralView);
+	}
+
+	public JComponent getMiddleLeftView() {
+		return middleLeftView;
+	}
+
+	public void setMiddleLeftView(JComponent middleLeftView) {
+		JComponent old = this.middleLeftView;
+		this.middleLeftView = middleLeftView;
+		getPropertyChangeSupport().firePropertyChange(MIDDLE_LEFT_VIEW, old, middleLeftView);
+	}
+
+	public JComponent getMiddleRightView() {
+		return middleRightView;
+	}
+
+	public void setMiddleRightView(JComponent middleRightView) {
+		JComponent old = this.middleRightView;
+		this.middleRightView = middleRightView;
+		getPropertyChangeSupport().firePropertyChange(MIDDLE_RIGHT_VIEW, old, middleRightView);
 	}
 }

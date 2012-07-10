@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.view;
 
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFGroup;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
@@ -40,18 +39,10 @@ import org.openflexo.wkf.swleditor.SwimmingLaneView;
  * 
  * @author yourname
  */
-public class WKFMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class WKFMainPane extends FlexoMainPane {
 
 	public WKFMainPane(WKFController controller) {
 		super(controller);
-	}
-
-	public void showProcessBrowser() {
-		showLeftView();
-	}
-
-	public void hideProcessBrowser() {
-		hideLeftView();
 	}
 
 	public boolean isCollapseEnabled() {

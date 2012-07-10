@@ -108,7 +108,6 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			if (getDrawingView() != null && _moduleView != null) {
 				_controller.removeModuleView(_moduleView);
 			}
-			_controller.VIEW_POINT_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
 		getDrawing().delete();

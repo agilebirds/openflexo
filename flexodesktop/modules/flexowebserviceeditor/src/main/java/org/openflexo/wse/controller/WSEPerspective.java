@@ -25,6 +25,7 @@ import org.openflexo.icon.WSEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
+import org.openflexo.wse.view.WSEBrowserView;
 import org.openflexo.wse.view.WSEDMEntityView;
 import org.openflexo.wse.view.WSEDMPackageView;
 import org.openflexo.wse.view.WSEDMRepositoryView;
@@ -43,8 +44,9 @@ public class WSEPerspective extends FlexoPerspective {
 	/**
 	 * @param name
 	 */
-	public WSEPerspective() {
+	public WSEPerspective(WSEController controller) {
 		super("webserviceeditor_perspective");
+		setTopLeftView(new WSEBrowserView(controller));
 	}
 
 	/**

@@ -19,7 +19,6 @@
  */
 package org.openflexo.sgmodule.view;
 
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.FlexoMainPane;
 
@@ -28,18 +27,10 @@ import org.openflexo.view.FlexoMainPane;
  * 
  * @author sylvain
  */
-public class SGMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class SGMainPane extends FlexoMainPane {
 
 	public SGMainPane(SGController controller) {
 		super(controller);
-	}
-
-	public void showBrowser() {
-		showLeftView();
-	}
-
-	public void hideBrowser() {
-		hideLeftView();
 	}
 
 }

@@ -40,6 +40,7 @@ import org.jdesktop.swingx.MultiSplitLayout.Node;
 import org.jdesktop.swingx.MultiSplitLayout.Split;
 import org.openflexo.ch.FCH;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.controller.model.RootControllerModel;
 
 /**
@@ -51,13 +52,13 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 	protected static final Logger logger = Logger.getLogger(FlexoMainPane.class.getPackage().getName());
 
-	public static final String LEFT = "left";
-	public static final String CENTER = "center";
-	public static final String RIGHT = "right";
+	public static enum LayoutPosition {
+		TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT, TOP_CENTER, MIDDLE_CENTER, BOTTOM_CENTER, TOP_RIGHT, MIDDLE_RIGHT, BOTTOM_RIGHT;
+	}
 
-	public static final String TOP = "top";
-	public static final String MIDDLE = "middle";
-	public static final String BOTTOM = "bottom";
+	public static enum LayoutColumns {
+		LEFT, CENTER, RIGHT;
+	}
 
 	private FlexoController controller;
 
@@ -65,26 +66,34 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 	private MainPaneTopBar topBar;
 
-	private JXMultiSplitPane centralPanel;
+	private JXMultiSplitPane centerPanel;
 
 	private JComponent footer;
 
-	private MultiSplitLayout centralLayout;
+	private MultiSplitLayout centerLayout;
 
 	public FlexoMainPane(FlexoController controller) {
 		super(new BorderLayout());
 		this.controller = controller;
-		this.centralLayout = new MultiSplitLayout(false);
-		this.controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.PERSPECTIVES, this);
+		this.centerLayout = new MultiSplitLayout(false);
+		this.controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_OBJECT, this);
+		this.controller.getControllerModel().getPropertyChangeSupport()
+				.addPropertyChangeListener(RootControllerModel.CURRENT_PERPSECTIVE, this);
+		this.controller.getControllerModel().getPropertyChangeSupport()
+				.addPropertyChangeListener(RootControllerModel.LEFT_VIEW_VISIBLE, this);
+		this.controller.getControllerModel().getPropertyChangeSupport()
+				.addPropertyChangeListener(RootControllerModel.RIGHT_VIEW_VISIBLE, this);
 		add(topBar = new MainPaneTopBar(controller.getControllerModel()), BorderLayout.NORTH);
-		add(centralPanel = new JXMultiSplitPane(centralLayout));
+		add(centerPanel = new JXMultiSplitPane(centerLayout));
+		updateLeftViewVisibility();
+		updateRightViewVisibility();
 	}
 
 	public void resetModuleView() {
 		setModuleView(null);
 	}
 
-	public void setModuleView(ModuleView<?> moduleView) {
+	private void setModuleView(ModuleView<?> moduleView) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setModuleView() with " + moduleView + " perspective " + moduleView.getPerspective());
 		}
@@ -110,17 +119,11 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 					((SelectionSynchronizedModuleView<?>) moduleView).getSelectionListeners());
 		}
 
-		JComponent newTopLeftView = getController().getCurrentPerspective().getTopLeftView();
-		JComponent newTopRightView = getController().getCurrentPerspective().getTopRightView();
-		JComponent newBottomLeftView = getController().getCurrentPerspective().getBottomLetfView();
-		JComponent newBottomRightView = getController().getCurrentPerspective().getBottomRightView();
-		JComponent newTopCentraltView = getController().getCurrentPerspective().getTopCentralView();
-		JComponent newBottomCentralView = getController().getCurrentPerspective().getBottomCentralView();
-		JComponent newCentralView = null;
+		JComponent newCenterView = null;
 
 		if (moduleView != null) {
 			if (moduleView.isAutoscrolled()) {
-				newCentralView = (JComponent) moduleView;
+				newCenterView = (JComponent) moduleView;
 			} else {
 				JScrollPane scrollPane = new JScrollPane((JComponent) moduleView, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 						ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -140,7 +143,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				if (moduleView instanceof ChangeListener) {
 					scrollPane.getViewport().addChangeListener((ChangeListener) moduleView);
 				}
-				newCentralView = scrollPane;
+				newCenterView = scrollPane;
 			}
 			try {
 				moduleView.willShow();
@@ -152,29 +155,74 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			}
 			FCH.setHelpItem((JComponent) moduleView, FCH.getModuleViewItemFor(controller.getModule(), moduleView));
 		} else {
-			newCentralView = new JPanel();
+			newCenterView = new JPanel();
 		}
 
 		restoreLayout();
 
-		updateComponent(newTopLeftView, TOP + LEFT);
-		updateComponent(newTopRightView, TOP + RIGHT);
-		updateComponent(newBottomLeftView, BOTTOM + LEFT);
-		updateComponent(newBottomRightView, BOTTOM + RIGHT);
-		updateComponent(newTopCentraltView, CENTER + RIGHT);
-		updateComponent(newBottomCentralView, CENTER + LEFT);
-		updateComponent(newCentralView, CENTER + MIDDLE);
+		updateTopLeftView();
+		updateTopRightView();
+		updateTopCenterView();
+		updateMiddleLeftView();
+		updateMiddleRightView();
+		updateBottomLeftView();
+		updateBottomRightView();
+		updateBottomCenterView();
+		updateHeader();
+		updateFooter();
 
-		centralPanel.revalidate();
+		updateComponent(newCenterView, LayoutPosition.MIDDLE_CENTER);
+		centerPanel.revalidate();
 
 		if (controller.getFlexoFrame().isValid()) {
 			FCH.validateWindow(controller.getFlexoFrame());
 		}
-		if (moduleView != null) {
-			topBar.setHeader(controller.getCurrentPerspective().getHeader());
-		} else {
-			topBar.setHeader(null);
-		}
+		controller.getFlexoFrame().updateTitle();
+		revalidate();
+		repaint();
+	}
+
+	private void updateBottomCenterView() {
+		JComponent newBottomCenterView = getController().getCurrentPerspective().getBottomCenterView();
+		updateComponent(newBottomCenterView, LayoutPosition.BOTTOM_CENTER);
+	}
+
+	private void updateBottomRightView() {
+		JComponent newBottomRightView = getController().getCurrentPerspective().getBottomRightView();
+		updateComponent(newBottomRightView, LayoutPosition.BOTTOM_RIGHT);
+	}
+
+	private void updateBottomLeftView() {
+		JComponent newBottomLeftView = getController().getCurrentPerspective().getBottomLeftView();
+		updateComponent(newBottomLeftView, LayoutPosition.BOTTOM_LEFT);
+	}
+
+	private void updateMiddleRightView() {
+		JComponent newMiddleRightView = getController().getCurrentPerspective().getMiddleRightView();
+		updateComponent(newMiddleRightView, LayoutPosition.MIDDLE_RIGHT);
+	}
+
+	private void updateMiddleLeftView() {
+		JComponent newMiddleLeftView = getController().getCurrentPerspective().getMiddleLeftView();
+		updateComponent(newMiddleLeftView, LayoutPosition.MIDDLE_LEFT);
+	}
+
+	private void updateTopCenterView() {
+		JComponent newTopCenterView = getController().getCurrentPerspective().getTopCenterView();
+		updateComponent(newTopCenterView, LayoutPosition.TOP_CENTER);
+	}
+
+	private void updateTopRightView() {
+		JComponent newTopRightView = getController().getCurrentPerspective().getTopRightView();
+		updateComponent(newTopRightView, LayoutPosition.TOP_RIGHT);
+	}
+
+	private void updateTopLeftView() {
+		JComponent newTopLeftView = getController().getCurrentPerspective().getTopLeftView();
+		updateComponent(newTopLeftView, LayoutPosition.TOP_LEFT);
+	}
+
+	private void updateFooter() {
 		if (footer != controller.getCurrentPerspective().getFooter()) {
 			if (footer != null) {
 				remove(footer);
@@ -184,26 +232,36 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			}
 			footer = controller.getCurrentPerspective().getFooter();
 		}
-		controller.getFlexoFrame().updateTitle();
-		revalidate();
-		repaint();
 	}
 
-	private void updateComponent(JComponent next, String name) {
-		JComponent previous = getComponentForName(name);
+	private void updateHeader() {
+		if (moduleView != null) {
+			topBar.setHeader(controller.getCurrentPerspective().getHeader());
+		} else {
+			topBar.setHeader(null);
+		}
+	}
+
+	private void updateComponent(JComponent next, LayoutPosition position) {
+		JComponent previous = getComponentForPosition(position);
 		if (previous != next) {
 			if (previous != null) {
-				centralPanel.remove(previous);
+				centerPanel.remove(previous);
 			}
-			centralLayout.displayNode(name, next != null);
 			if (next != null) {
-				centralPanel.add(next, name);
+				centerPanel.add(next, position.name());
+			} else {
+				centerPanel.add(new JPanel(), position.name());
 			}
+			centerLayout.displayNode(position.name(), next != null);
+			centerPanel.revalidate();
 		}
 	}
 
 	private void saveLayout() {
-		getController().getControllerModel().setLayoutForPerspective(controller.getCurrentPerspective(), centralLayout.getModel());
+		if (controller.getCurrentPerspective() != null) {
+			getController().getControllerModel().setLayoutForPerspective(controller.getCurrentPerspective(), centerLayout.getModel());
+		}
 	}
 
 	private void restoreLayout() {
@@ -212,48 +270,41 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			layoutModel = getDefaultLayout();
 			controller.getCurrentPerspective().setupDefaultLayout(layoutModel);
 		}
-		centralLayout.setModel(layoutModel);
-		centralPanel.revalidate();
+		centerLayout.setModel(layoutModel);
+		centerPanel.revalidate();
 	}
 
 	private Split getDefaultLayout() {
 		Split root = new Split();
 		root.setName("ROOT");
-		Split left = getVerticalSplit(LEFT, 0.5, 0.5);
+		Split left = getVerticalSplit(LayoutPosition.TOP_LEFT, LayoutPosition.MIDDLE_LEFT, LayoutPosition.BOTTOM_LEFT);
 		left.setWeight(0);
-		left.setName(LEFT);
-		Split center = new Split();
-		Leaf top = new Leaf();
-		top.setName(TOP + CENTER);
-		Leaf middle = new Leaf();
-		middle.setName(MIDDLE + CENTER);
-		middle.setWeight(1.0);
-		Leaf bottom = new Leaf();
-		middle.setName(BOTTOM + CENTER);
-		center.setRowLayout(false);
-		center.setChildren(top, new Divider(), middle, new Divider(), bottom);
-		center.setWeight(1.0);
-		center.setName(CENTER);
-		Split right = getVerticalSplit(RIGHT, 0.5, 0.5);
+		left.setName(LayoutColumns.LEFT.name());
+		Split center = getVerticalSplit(LayoutPosition.TOP_CENTER, LayoutPosition.MIDDLE_CENTER, LayoutPosition.BOTTOM_CENTER);
+		center.setWeight(0);
+		center.setName(LayoutColumns.CENTER.name());
+		Split right = getVerticalSplit(LayoutPosition.TOP_RIGHT, LayoutPosition.MIDDLE_RIGHT, LayoutPosition.BOTTOM_RIGHT);
 		right.setWeight(0);
-		right.setName(RIGHT);
+		right.setName(LayoutColumns.RIGHT.name());
 		root.setChildren(left, new Divider(), center, new Divider(), right);
 		return root;
 	}
 
-	private Split getVerticalSplit(String name, double topWeight, double bottomWeight) {
+	private Split getVerticalSplit(LayoutPosition position1, LayoutPosition position2, LayoutPosition position3) {
 		Split split = new Split();
 		split.setRowLayout(false);
-		Leaf top = new Leaf(TOP + name);
-		top.setWeight(topWeight);
-		Leaf bottom = new Leaf(BOTTOM + name);
-		bottom.setWeight(bottomWeight);
-		split.setChildren(top, new Divider(), bottom);
+		Leaf l1 = new Leaf(position1.name());
+		l1.setWeight(0);
+		Leaf l2 = new Leaf(position2.name());
+		l2.setWeight(1);
+		Leaf l3 = new Leaf(position3.name());
+		l3.setWeight(0);
+		split.setChildren(l1, new Divider(), l2, new Divider(), l3);
 		return split;
 	}
 
-	protected JComponent getComponentForName(String name) {
-		return (JComponent) centralLayout.getComponentForNode(centralLayout.getNodeForName(name));
+	private JComponent getComponentForPosition(LayoutPosition position) {
+		return (JComponent) centerLayout.getComponentForNode(centerLayout.getNodeForName(position.name()));
 	}
 
 	public ModuleView<?> getModuleView() {
@@ -268,12 +319,85 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		topBar.setVisible(false);
 	}
 
+	private void updateLeftViewVisibility() {
+		centerLayout.displayNode(LayoutColumns.LEFT.name(), controller.getControllerModel().isLeftViewVisible());
+	}
+
+	private void updateRightViewVisibility() {
+		centerLayout.displayNode(LayoutColumns.RIGHT.name(), controller.getControllerModel().isRightViewVisible());
+	}
+
 	public FlexoController getController() {
 		return controller;
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == controller.getControllerModel()) {
+			if (evt.getPropertyName().equals(RootControllerModel.CURRENT_PERPSECTIVE)) {
+				FlexoPerspective previous = (FlexoPerspective) evt.getOldValue();
+				FlexoPerspective next = (FlexoPerspective) evt.getNewValue();
+				updatePropertyChangeListener(previous, next);
+				updateLayoutForPerspective();
+			} else if (evt.getPropertyName().equals(RootControllerModel.LEFT_VIEW_VISIBLE)) {
+				updateLeftViewVisibility();
+			} else if (evt.getPropertyName().equals(RootControllerModel.RIGHT_VIEW_VISIBLE)) {
+				updateRightViewVisibility();
+			} else if (evt.getPropertyName().equals(RootControllerModel.CURRENT_OBJECT)) {
+				setModuleView(controller.moduleViewForObject(controller.getControllerModel().getCurrentObject()));
+			}
+		} else if (evt.getSource() == controller.getCurrentPerspective()) {
+			if (evt.getPropertyName().equals(FlexoPerspective.HEADER)) {
+				updateHeader();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.FOOTER)) {
+				updateFooter();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.TOP_LEFT_VIEW)) {
+				updateTopLeftView();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.TOP_RIGHT_VIEW)) {
+				updateTopRightView();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.TOP_CENTER_VIEW)) {
+				updateTopCenterView();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.MIDDLE_LEFT_VIEW)) {
+				updateMiddleLeftView();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.MIDDLE_RIGHT_VIEW)) {
+				updateMiddleRightView();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.BOTTOM_LEFT_VIEW)) {
+				updateBottomLeftView();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.BOTTOM_RIGHT_VIEW)) {
+				updateBottomRightView();
+			} else if (evt.getPropertyName().equals(FlexoPerspective.BOTTOM_CENTER_VIEW)) {
+				updateBottomCenterView();
+			}
+		}
+	}
+
+	private void updateLayoutForPerspective() {
+		restoreLayout();
+
+		updateTopLeftView();
+		updateTopRightView();
+		updateTopCenterView();
+		updateMiddleLeftView();
+		updateMiddleRightView();
+		updateBottomLeftView();
+		updateBottomRightView();
+		updateBottomCenterView();
+		updateHeader();
+		updateFooter();
+
+	}
+
+	private void updatePropertyChangeListener(FlexoPerspective previous, FlexoPerspective next) {
+		if (previous != null) {
+			for (String property : FlexoPerspective.PROPERTIES) {
+				previous.getPropertyChangeSupport().removePropertyChangeListener(property, this);
+			}
+		}
+		if (next != null) {
+			for (String property : FlexoPerspective.PROPERTIES) {
+				next.getPropertyChangeSupport().addPropertyChangeListener(property, this);
+			}
+		}
 
 	}
 }

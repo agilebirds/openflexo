@@ -20,7 +20,6 @@
 package org.openflexo.ie.view.controller;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.ComponentInstance;
@@ -47,6 +46,9 @@ class DefaultValuePerspective extends FlexoPerspective {
 	public DefaultValuePerspective(IEController controller) {
 		super("default_values_perspective");
 		_controller = controller;
+		setTopLeftView(controller.getComponentLibraryBrowserView());
+		setBottomLeftView(controller.getComponentBrowserView());
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	/**
@@ -92,11 +94,6 @@ class DefaultValuePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 		if (moduleView instanceof IEWOComponentView) {
 			ComponentInstance ci = ((IEWOComponentView) moduleView).getRepresentedObject();
@@ -106,26 +103,6 @@ class DefaultValuePerspective extends FlexoPerspective {
 			_controller.getComponentBrowser().setCurrentComponent(component);
 			_controller.getComponentBrowser().focusOn(component);
 		}
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _controller.getSplitPaneWithBrowsers();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return _controller.getDisconnectedDocInspectorPanel();
 	}
 
 }

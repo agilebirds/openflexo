@@ -22,7 +22,6 @@ package org.openflexo.wkf.roleeditor;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.wkf.RoleList;
-import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.wkf.controller.WKFController;
 
@@ -32,16 +31,11 @@ public class RoleEditorController extends SelectionManagingDrawingController<Rol
 	private WKFController _controller;
 	private RolePalette _palette;
 
-	public RoleEditorController(RoleList roleList, WKFController controller, SelectionManager selectionManager) {
-		super(new RoleListRepresentation(roleList, controller), selectionManager);
+	public RoleEditorController(RoleList roleList, WKFController controller) {
+		super(new RoleListRepresentation(roleList, controller), controller != null ? controller.getSelectionManager() : null);
 		_palette = new RolePalette();
 		registerPalette(_palette);
 		activatePalette(_palette);
-	}
-
-	public RoleEditorController(WKFController controller) {
-		this(controller.getProject().getWorkflow().getRoleList(), controller, controller.getSelectionManager());
-		_controller = controller;
 	}
 
 	@Override
@@ -50,7 +44,6 @@ public class RoleEditorController extends SelectionManagingDrawingController<Rol
 			if (getDrawingView() != null) {
 				_controller.removeModuleView(getDrawingView());
 			}
-			_controller.ROLE_EDITOR_PERSPECTIVE.removeFromRoleController(this);
 		}
 		super.delete();
 		getDrawing().delete();

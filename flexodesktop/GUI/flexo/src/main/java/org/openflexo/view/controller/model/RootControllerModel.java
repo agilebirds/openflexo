@@ -20,6 +20,12 @@ import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.ws.MessageEntry;
+import org.openflexo.foundation.wkf.ws.ServiceInterface;
+import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
+import org.openflexo.foundation.wkf.ws.ServiceOperation;
+import org.openflexo.foundation.ws.WSObject;
+import org.openflexo.foundation.ws.WSPortType;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
@@ -132,7 +138,7 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 		if (this.currentPerspective != currentPerspective) {
 			FlexoModelObject newEditedObject = getCurrentObject();
 
-			if (currentPerspective == null || !currentPerspective.hasModuleViewForObject(getCurrentObject())) {
+			if (currentPerspective == null || getCurrentObject() != null && !currentPerspective.hasModuleViewForObject(getCurrentObject())) {
 				newEditedObject = null;
 			}
 			if (logger.isLoggable(Level.FINE)) {
@@ -154,6 +160,9 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 	public void addToPerspectives(FlexoPerspective perspective) {
 		perspectives.add(perspective);
 		getPropertyChangeSupport().firePropertyChange(PERSPECTIVES, null, perspective);
+		if (currentPerspective == null) {
+			setCurrentPerspective(perspective);
+		}
 	}
 
 	public void removeFromPerspectives(FlexoPerspective perspective) {
@@ -181,7 +190,7 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 			if (hl != null) {
 				setCurrentObjectAndPerspective(hl.getObject(), hl.getPerspective());
 			} else {
-				setCurrentEditor(null);
+				setCurrentObject(null);
 			}
 		}
 		getPropertyChangeSupport().firePropertyChange(CURRENT_EDITOR, old, projectEditor);
@@ -231,7 +240,7 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 						HistoryLocation old = currentLocation;
 						currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
 						getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
-						getPropertyChangeSupport().firePropertyChange(CURRENT_EDITOR, old != null ? old.getObject() : null, currentObject);
+						getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, old != null ? old.getObject() : null, currentObject);
 					}
 				}
 			}
@@ -265,6 +274,20 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 			} else {
 				((TOCEntry) object).getRepository();
 			}
+		} else if (object instanceof WSObject) {
+			return ((WSObject) object).getParent();
+		} else if (object instanceof ServiceInterface) {
+			WSPortType proc = ((ServiceInterface) object).getProject().getFlexoWSLibrary()
+					.getWSPortTypeNamed(((ServiceInterface) object).getName());
+			if (proc != null) {
+				return proc.getWSService().getWSPortTypeFolder();
+			}
+		} else if (object instanceof ServiceOperation) {
+			return ((ServiceOperation) object).getServiceInterface();
+		} else if (object instanceof ServiceMessageDefinition) {
+			return ((ServiceMessageDefinition) object).getOperation();
+		} else if (object instanceof MessageEntry) {
+			return ((MessageEntry) object).getMessage();
 		}
 		return null;
 	}

@@ -53,7 +53,6 @@ public class DMModule extends FlexoModule implements ExternalDMModule {
 
 	public DMModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
-		getDMController().loadRelativeWindows();
 		DMPreferences.init();
 	}
 

@@ -20,7 +20,6 @@
 package org.openflexo.doceditor.view;
 
 import org.openflexo.doceditor.controller.DEController;
-import org.openflexo.doceditor.controller.browser.DEBrowser;
 import org.openflexo.view.FlexoMainPane;
 
 /**
@@ -29,9 +28,6 @@ import org.openflexo.view.FlexoMainPane;
  */
 public class DEMainPane extends FlexoMainPane {
 
-	// This variable can be null!
-	protected DEBrowserView deBrowserView;
-
 	/**
 	 * @param moduleView
 	 * @param mainFrame
@@ -39,13 +35,6 @@ public class DEMainPane extends FlexoMainPane {
 	 */
 	public DEMainPane(DEController controller) {
 		super(controller);
-		deBrowserView = new DEBrowserView(controller, new DEBrowser(controller));
-		setLeftView(deBrowserView);
-	}
-
-	@Override
-	public DEController getController() {
-		return (DEController) super.getController();
 	}
 
 }

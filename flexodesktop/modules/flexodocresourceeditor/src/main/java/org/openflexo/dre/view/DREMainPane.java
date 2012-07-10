@@ -26,7 +26,6 @@ package org.openflexo.dre.view;
  * (c) Denali 2003-2006
  */
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.view.FlexoMainPane;
 
 /**
@@ -34,19 +33,10 @@ import org.openflexo.view.FlexoMainPane;
  * 
  * @author yourname
  */
-public class DREMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class DREMainPane extends FlexoMainPane {
 
 	public DREMainPane(DREController controller) {
 		super(controller);
-		setLeftView(new DREBrowserView(controller));
-	}
-
-	public void showBrowser() {
-		showLeftView();
-	}
-
-	public void hideBrowser() {
-		hideLeftView();
 	}
 
 }

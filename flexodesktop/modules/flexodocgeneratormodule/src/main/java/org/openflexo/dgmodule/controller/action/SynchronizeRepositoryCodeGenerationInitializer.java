@@ -19,19 +19,21 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.util.EventObject;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.dgmodule.DGPreferences;
-import org.openflexo.dgmodule.view.DGMainPane;
+import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.cg.CGObject;
+import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
 import org.openflexo.generator.exception.PermissionDeniedException;
@@ -40,12 +42,18 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitializer {
+public class SynchronizeRepositoryCodeGenerationInitializer extends
+		ActionInitializer<SynchronizeRepositoryCodeGeneration, GenerationRepository, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
 	SynchronizeRepositoryCodeGenerationInitializer(DGControllerActionInitializer actionInitializer) {
 		super(SynchronizeRepositoryCodeGeneration.actionType, actionInitializer);
+	}
+
+	@Override
+	public DGController getController() {
+		return (DGController) super.getController();
 	}
 
 	@Override
@@ -58,7 +66,7 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 		return new FlexoActionInitializer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean run(EventObject e, SynchronizeRepositoryCodeGeneration action) {
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
+				getController().getDgBrowserView().getBrowser().setHoldStructure();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -74,8 +82,8 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 		return new FlexoActionFinalizer<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean run(EventObject e, SynchronizeRepositoryCodeGeneration action) {
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().getDgBrowserView().getBrowser().resetHoldStructure();
+				getController().getDgBrowserView().getBrowser().update();
 				if (DGPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
@@ -90,8 +98,8 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 		return new FlexoExceptionHandler<SynchronizeRepositoryCodeGeneration>() {
 			@Override
 			public boolean handleException(FlexoException exception, SynchronizeRepositoryCodeGeneration action) {
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().getDgBrowserView().getBrowser().resetHoldStructure();
+				getController().getDgBrowserView().getBrowser().update();
 				if (exception instanceof PermissionDeniedException) {
 					if (action.getRepository().getDirectory() != null && !action.getRepository().getDirectory().exists()) {
 						if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + " "

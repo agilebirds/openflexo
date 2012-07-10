@@ -25,17 +25,6 @@ package org.openflexo.wse.view;
  * Flexo Application Suite
  * (c) Denali 2003-2006
  */
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.dm.DMObject;
-import org.openflexo.foundation.dm.DMRepository;
-import org.openflexo.foundation.wkf.ws.MessageEntry;
-import org.openflexo.foundation.wkf.ws.ServiceInterface;
-import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
-import org.openflexo.foundation.wkf.ws.ServiceOperation;
-import org.openflexo.foundation.ws.WSObject;
-import org.openflexo.foundation.ws.WSPortType;
-import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.wse.controller.WSEController;
 
@@ -44,52 +33,10 @@ import org.openflexo.wse.controller.WSEController;
  * 
  * @author yourname
  */
-public class WSEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class WSEMainPane extends FlexoMainPane {
 
 	public WSEMainPane(WSEController controller) {
 		super(controller);
-		setLeftView(new WSEBrowserView(controller));
-	}
-
-	public void showBrowser() {
-		showLeftView();
-	}
-
-	public void hideBrowser() {
-		hideLeftView();
-	}
-
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		// Implements it if required
-
-		if (object instanceof WSObject) {
-			return (WSObject) ((WSObject) object).getParent();
-		}
-
-		else if (object instanceof DMRepository) {
-			WSRepository rep = ((DMRepository) object).getProject().getFlexoWSLibrary()
-					.getWSRepositoryNamed(((DMRepository) object).getName());
-			if (rep != null) {
-				return rep.getWSService().getWSRepositoryFolder();
-			}
-		} else if (object instanceof DMObject) {
-			return (DMObject) ((DMObject) object).getParent();
-		} else if (object instanceof ServiceInterface) {
-			WSPortType proc = ((ServiceInterface) object).getProject().getFlexoWSLibrary()
-					.getWSPortTypeNamed(((ServiceInterface) object).getName());
-			if (proc != null) {
-				return proc.getWSService().getWSPortTypeFolder();
-			}
-		} else if (object instanceof ServiceOperation) {
-			return ((ServiceOperation) object).getServiceInterface();
-		} else if (object instanceof ServiceMessageDefinition) {
-			return ((ServiceMessageDefinition) object).getOperation();
-		} else if (object instanceof MessageEntry) {
-			return ((MessageEntry) object).getMessage();
-		}
-
-		return null;
 	}
 
 }

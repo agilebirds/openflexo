@@ -85,9 +85,4 @@ public abstract class DMPerspective extends FlexoPerspective {
 
 	protected abstract void changeBrowserFiltersFor(DMEntity entity);
 
-	@Override
-	public final boolean isAlwaysVisible() {
-		return true;
-	}
-
 }

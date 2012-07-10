@@ -22,7 +22,6 @@ package org.openflexo.vpm.controller;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
@@ -46,8 +45,6 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	private final JLabel infoLabel;
 
-	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
-
 	/**
 	 * @param controller
 	 * @param name
@@ -56,9 +53,9 @@ public class OntologyPerspective extends FlexoPerspective {
 		super("ontology_perspective");
 		_controller = controller;
 		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getBaseOntologyLibrary(), controller);
-
 		infoLabel = new JLabel("Ontology perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
+		setTopLeftView(ontologyLibraryBrowser);
 	}
 
 	/**
@@ -91,7 +88,7 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoOntology);
+		return object instanceof FlexoOntology;
 	}
 
 	@Override
@@ -104,33 +101,8 @@ public class OntologyPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return ontologyLibraryBrowser;
-	}
-
-	@Override
 	public JComponent getFooter() {
 		return infoLabel;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return EMPTY_RIGHT_VIEW;
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
 	}
 
 	public String getWindowTitleforObject(FlexoModelObject object) {

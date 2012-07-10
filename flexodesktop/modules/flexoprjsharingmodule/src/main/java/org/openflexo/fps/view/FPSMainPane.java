@@ -25,9 +25,6 @@ package org.openflexo.fps.view;
  * Flexo Application Suite
  * (c) Denali 2003-2006
  */
-import javax.swing.JSplitPane;
-
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.view.FlexoMainPane;
 
@@ -36,23 +33,10 @@ import org.openflexo.view.FlexoMainPane;
  * 
  * @author yourname
  */
-public class FPSMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class FPSMainPane extends FlexoMainPane {
 
 	public FPSMainPane(FPSController controller) {
 		super(controller);
-
-		setLeftView(new JSplitPane(JSplitPane.VERTICAL_SPLIT, new CVSRepositoryBrowserView(controller), new SharedProjectBrowserView(
-				controller)));
-		((JSplitPane) getLeftView()).setResizeWeight(0.5);
-		setBottomView(controller.getConsoleView());
-	}
-
-	public void showBrowser() {
-		showLeftView();
-	}
-
-	public void hideBrowser() {
-		hideLeftView();
 	}
 
 }

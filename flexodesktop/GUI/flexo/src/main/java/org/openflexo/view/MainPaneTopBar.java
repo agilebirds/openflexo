@@ -1,13 +1,13 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -25,6 +25,9 @@ import org.openflexo.view.controller.model.RootControllerModel;
 
 public class MainPaneTopBar extends JPanel {
 
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(MainPaneTopBar.class.getPackage()
+			.getName());
+
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
 	private RootControllerModel model;
@@ -39,18 +42,20 @@ public class MainPaneTopBar extends JPanel {
 
 	private JButton rightViewToggle;
 
+	private JPanel perspectives;
+
 	public MainPaneTopBar(RootControllerModel model) {
 		this.model = model;
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		setLayout(new BorderLayout());
 		add(left = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)), BorderLayout.WEST);
-		add(center = new JPanel());
-		add(right = new JPanel(), BorderLayout.EAST);
+		add(center = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)));
+		add(right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)), BorderLayout.EAST);
+		initLeftRightViewVisibilityControls();
 		initModules();
 		initNavigationControls();
 		initModuleViewTabHeaders();
 		initPerspectives();
-		initLeftRightViewVisibilityControls();
 	}
 
 	public void delete() {
@@ -60,6 +65,8 @@ public class MainPaneTopBar extends JPanel {
 	private void initModules() {
 		for (final Module module : model.getModuleLoader().getAvailableModules()) {
 			final JButton button = new JButton(module.getMediumIcon());
+			button.setEnabled(true);
+			button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 4, button.getIcon().getIconHeight() + 4));
 			button.addActionListener(new ActionListener() {
 
 				@Override
@@ -77,7 +84,7 @@ public class MainPaneTopBar extends JPanel {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					button.setIcon(model.getModuleLoader().isLoaded(module) ? module.getMediumIconWithHover() : module.getMediumIcon());
-					button.setEnabled(model.getModuleLoader().isActive(module));
+					button.setSelected(model.getModuleLoader().isActive(module));
 				}
 			};
 			registrationManager.new PropertyChangeListenerRegistration(ModuleLoader.ACTIVE_MODULE, listener, model.getModuleLoader());
@@ -121,33 +128,62 @@ public class MainPaneTopBar extends JPanel {
 	}
 
 	private void initPerspectives() {
-		right.add(new JLabel(IconLibrary.NAVIGATION_CLOSE_LEFT));
-		boolean needSpacer = false;
-		for (final FlexoPerspective p : model.getPerspectives()) {
-			final JLabel button = new JLabel(p.getActiveIcon());
-			registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, new PropertyChangeListener() {
+		right.add(perspectives = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)));
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.PERSPECTIVES, new PropertyChangeListener() {
 
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					updateIconForButtonPerspective(button, p);
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getNewValue() != null) {
+					insertPerspective((FlexoPerspective) evt.getNewValue());
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Perspective removal not supported by top bar.");
+					}
 				}
-			}, model);
-			updateIconForButtonPerspective(button, p);
-			if (needSpacer) {
-				right.add(new JLabel(IconLibrary.NAVIGATION_SPACER));
 			}
-			right.add(button);
-			needSpacer = true;
+		}, model);
+		for (final FlexoPerspective p : model.getPerspectives()) {
+			insertPerspective(p);
 		}
-		right.add(new JLabel(IconLibrary.NAVIGATION_CLOSE_RIGHT));
 	}
 
-	protected void updateIconForButtonPerspective(final JLabel buttonPerspective, final FlexoPerspective p) {
-		buttonPerspective.setIcon(model.getCurrentPerspective() == p ? p.getSelectedIcon() : p.getActiveIcon());
+	private void insertPerspective(final FlexoPerspective p) {
+		final JButton button = new JButton(p.getActiveIcon());
+		button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 4, button.getIcon().getIconHeight() + 4));
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateIconForButtonPerspective(button, p);
+			}
+		}, model);
+		button.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.setCurrentPerspective(p);
+			}
+		});
+		updateIconForButtonPerspective(button, p);
+		if (perspectives.getComponentCount() > 0) {
+			perspectives.add(new JLabel(IconLibrary.NAVIGATION_SPACER));
+		}
+		perspectives.add(button);
+	}
+
+	protected void updateIconForButtonPerspective(JButton buttonPerspective, FlexoPerspective p) {
+		buttonPerspective.setSelected(model.getCurrentPerspective() == p);
 	}
 
 	private void initLeftRightViewVisibilityControls() {
 		leftViewToggle = getToggleVisibilityButton();
+		leftViewToggle.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.setLeftViewVisible(!model.isLeftViewVisible());
+			}
+		});
 		left.add(leftViewToggle, 0);
 		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.LEFT_VIEW_VISIBLE, new PropertyChangeListener() {
 
@@ -158,6 +194,13 @@ public class MainPaneTopBar extends JPanel {
 		}, model);
 		updateLeftViewToggleIcon();
 		rightViewToggle = getToggleVisibilityButton();
+		rightViewToggle.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.setRightViewVisible(!model.isRightViewVisible());
+			}
+		});
 		right.add(rightViewToggle);
 		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.RIGHT_VIEW_VISIBLE, new PropertyChangeListener() {
 
@@ -172,33 +215,20 @@ public class MainPaneTopBar extends JPanel {
 
 	protected void updateLeftViewToggleIcon() {
 		leftViewToggle.setIcon(model.isLeftViewVisible() ? IconLibrary.TOGGLE_ARROW_TOP_ICON : IconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
+		leftViewToggle.setRolloverIcon(model.isLeftViewVisible() ? IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON
+				: IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
 	}
 
 	protected void updateRightViewToggleIcon() {
 		rightViewToggle.setIcon(model.isRightViewVisible() ? IconLibrary.TOGGLE_ARROW_TOP_ICON : IconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
+		rightViewToggle.setRolloverIcon(model.isRightViewVisible() ? IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON
+				: IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
 	}
 
 	private JButton getToggleVisibilityButton() {
 		final JButton button = new JButton(IconLibrary.TOGGLE_ARROW_TOP_ICON);
-		button.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				if (button.getIcon() == IconLibrary.TOGGLE_ARROW_TOP_ICON) {
-					button.setIcon(IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-				} else {
-					button.setIcon(IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-				}
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				if (button.getIcon() == IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON) {
-					button.setIcon(IconLibrary.TOGGLE_ARROW_TOP_ICON);
-				} else {
-					button.setIcon(IconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
-				}
-			}
-		});
+		button.setRolloverIcon(IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
+		button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 2, button.getIcon().getIconHeight() + 12));
 		return button;
 	}
 

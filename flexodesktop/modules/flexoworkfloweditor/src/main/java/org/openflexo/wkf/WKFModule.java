@@ -287,7 +287,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		public DrawingController<? extends Drawing<? extends FlexoModelObject>> call() {
 			DrawingController<? extends Drawing<? extends FlexoModelObject>> screenshotController = null;
 			if (target instanceof RoleList) {
-				screenshotController = new RoleEditorController((RoleList) target, null, null);
+				screenshotController = new RoleEditorController((RoleList) target, null);
 			} else if (target instanceof WKFObject) {
 				screenshotController = getProcessRepresentationController((WKFObject) target, showAll);
 			} else {

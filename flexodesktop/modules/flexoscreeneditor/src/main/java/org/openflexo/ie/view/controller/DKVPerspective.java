@@ -20,7 +20,6 @@
 package org.openflexo.ie.view.controller;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.DKVModel;
@@ -49,6 +48,8 @@ class DKVPerspective extends FlexoPerspective {
 		_controller = controller;
 		_dkvEditorBrowserView = new DKVEditorBrowserView(controller);
 		_dkvEditorBrowserView.setName(FlexoLocalization.localizedForKey("Key-Value", _dkvEditorBrowserView));
+		setTopLeftView(_dkvEditorBrowserView);
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	/**
@@ -97,33 +98,8 @@ class DKVPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 		_controller.getSelectionManager().setSelectedObject(moduleView.getRepresentedObject());
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _dkvEditorBrowserView;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return _controller.getDisconnectedDocInspectorPanel();
 	}
 
 }

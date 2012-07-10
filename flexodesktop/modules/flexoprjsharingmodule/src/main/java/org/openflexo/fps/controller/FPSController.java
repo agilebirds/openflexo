@@ -50,7 +50,6 @@ import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepository.ConnectionType;
@@ -61,8 +60,10 @@ import org.openflexo.fps.action.FlexoUnknownHostException;
 import org.openflexo.fps.controller.action.FPSControllerActionInitializer;
 import org.openflexo.fps.controller.browser.CVSRepositoriesBrowser;
 import org.openflexo.fps.controller.browser.SharedProjectBrowser;
+import org.openflexo.fps.view.CVSRepositoryBrowserView;
 import org.openflexo.fps.view.ConsoleView;
 import org.openflexo.fps.view.FPSMainPane;
+import org.openflexo.fps.view.SharedProjectBrowserView;
 import org.openflexo.fps.view.menu.FPSMenuBar;
 import org.openflexo.icon.FPSIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -113,6 +114,10 @@ public class FPSController extends FlexoController {
 
 	private static FPSController _instance = null;
 
+	private SharedProjectBrowserView sharedProjectBrowserView;
+
+	private CVSRepositoryBrowserView cvsRepositoryBrowserView;
+
 	public static FPSController getInstance() {
 		return _instance;
 	}
@@ -122,11 +127,14 @@ public class FPSController extends FlexoController {
 	 */
 	public FPSController(FlexoModule module) {
 		super(module);
-
 		_instance = this;
 		logger.info("Create CVSRepositoryList");
 		_repositories = new CVSRepositoryList();
 		_sharedProject = null;
+		_repositoriesBrowser = new CVSRepositoriesBrowser(this);
+		_sharedProjectBrowser = new SharedProjectBrowser(this);
+		cvsRepositoryBrowserView = new CVSRepositoryBrowserView(this);
+		sharedProjectBrowserView = new SharedProjectBrowserView(this);
 
 		createFooter();
 		addToPerspectives(ALL_FILES_PERSPECTIVE);
@@ -134,9 +142,6 @@ public class FPSController extends FlexoController {
 		addToPerspectives(LOCALLY_MODIFIED_PERSPECTIVE);
 		addToPerspectives(REMOTELY_MODIFIED_PERSPECTIVE);
 		addToPerspectives(CONFLICTING_FILES_PERSPECTIVE);
-
-		_repositoriesBrowser = new CVSRepositoriesBrowser(this);
-		_sharedProjectBrowser = new SharedProjectBrowser(this);
 
 		_consoleView = new ConsoleView();
 		_repositories.loadStoredRepositoryLocation(FileUtils.getApplicationDataDirectory());
@@ -146,6 +151,14 @@ public class FPSController extends FlexoController {
 			((FPSPerspective) getCurrentPerspective()).setFilters();
 			getSharedProjectBrowser().update();
 		}
+	}
+
+	public SharedProjectBrowserView getSharedProjectBrowserView() {
+		return sharedProjectBrowserView;
+	}
+
+	public CVSRepositoryBrowserView getCvsRepositoryBrowserView() {
+		return cvsRepositoryBrowserView;
 	}
 
 	@Override
@@ -179,24 +192,6 @@ public class FPSController extends FlexoController {
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new FPSMenuBar(this);
-	}
-
-	@Override
-	public ValidationModel getDefaultValidationModel() {
-		// If there is a ValidationModel associated to this module, put it here
-		return null;
-	}
-
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((FPSMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((FPSMainPane) getMainPane()).hideBrowser();
-		}
 	}
 
 	@Override

@@ -25,8 +25,9 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.DefaultDrawing;
+import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -46,7 +47,7 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -161,23 +162,12 @@ public class DropWKFElementInitializer extends ActionInitializer {
 						}
 					}
 				}
-
-				SelectionManagingDrawingController<? extends DefaultDrawing<?>> controller = null;
-				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
-						.getWKFController().PROCESS_EDITOR_PERSPECTIVE) {
-					controller = getControllerActionInitializer().getWKFController().PROCESS_EDITOR_PERSPECTIVE
-							.getControllerForProcess(action.getProcess());
-				} else if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
-						.getWKFController().SWIMMING_LANE_PERSPECTIVE) {
-					controller = getControllerActionInitializer().getWKFController().SWIMMING_LANE_PERSPECTIVE
-							.getControllerForProcess(action.getProcess());
-				} else {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Drop in WKF but current perspective is neither BPE or SWL");
-					}
+				ModuleView<?> moduleView = getController().moduleViewForObject(action.getProcess(), false);
+				if (!(moduleView instanceof DrawingView<?>)) {
 					return true;
 				}
-				DefaultDrawing<?> drawing = controller.getDrawing();
+				DrawingView<?> drawingView = (DrawingView<?>) moduleView;
+				Drawing<?> drawing = drawingView.getDrawing();
 				ShapeGraphicalRepresentation<?> newNodeGR = (ShapeGraphicalRepresentation<?>) drawing.getGraphicalRepresentation(action
 						.getObject());
 				if (newNodeGR == null) {
@@ -186,7 +176,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					}
 					return true;
 				}
-				final ShapeView<?> view = controller.getDrawingView().shapeViewForObject(newNodeGR);
+				final ShapeView<?> view = drawingView.shapeViewForObject(newNodeGR);
 				if (view == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Cannot build view for newly created node insertion");

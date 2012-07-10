@@ -19,7 +19,6 @@
  */
 package org.openflexo.ve.view;
 
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.FlexoMainPane;
 
@@ -28,18 +27,10 @@ import org.openflexo.view.FlexoMainPane;
  * 
  * @author sylvain
  */
-public class VEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class VEMainPane extends FlexoMainPane {
 
 	public VEMainPane(VEController controller) {
 		super(controller);
-	}
-
-	public void showBrowser() {
-		showLeftView();
-	}
-
-	public void hideBrowser() {
-		hideLeftView();
 	}
 
 }

@@ -22,9 +22,7 @@ package org.openflexo.dm.view.controller;
 import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 import org.openflexo.components.browser.ProjectBrowser.DMViewMode;
 import org.openflexo.components.browser.ProjectBrowser.ObjectAddedToSelectionEvent;
@@ -46,7 +44,6 @@ class HierarchyPerspective extends DMPerspective {
 	private final PropertiesBrowser propertiesBrowser;
 	private final DMBrowserView _browserView;
 	private final DMBrowserView propertiesBrowserView;
-	private final JPanel leftView;
 
 	/**
 	 * @param controller
@@ -72,22 +69,11 @@ class HierarchyPerspective extends DMPerspective {
 		};
 		propertiesBrowser = new PropertiesBrowser(controller);
 		propertiesBrowserView = new DMBrowserView(propertiesBrowser, controller);
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, propertiesBrowserView);
-		splitPane.setDividerLocation(0.7);
-		splitPane.setResizeWeight(0.7);
-		leftView = new JPanel(new BorderLayout());
-		leftView.add(splitPane, BorderLayout.CENTER);
-		leftView.add(searchPanel, BorderLayout.NORTH);
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return leftView;
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(searchPanel, BorderLayout.NORTH);
+		panel.add(_browserView);
+		setTopLeftView(panel);
+		setBottomLeftView(propertiesBrowserView);
 	}
 
 	/**
@@ -121,7 +107,7 @@ class HierarchyPerspective extends DMPerspective {
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
 		// Only DMProperty or Diagrams objects have no module view representation
-		return !(object instanceof DMProperty) && !(object instanceof ERDiagram);
+		return object instanceof DMProperty || object instanceof ERDiagram;
 	}
 
 	@Override

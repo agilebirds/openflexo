@@ -104,7 +104,6 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			if (getDrawingView() != null) {
 				_controller.removeModuleView(getDrawingView());
 			}
-			_controller.PROCESS_EDITOR_PERSPECTIVE.removeProcessController(this);
 		}
 		// We created the ProcessRepresentation, so we delete it as well.
 		super.delete();

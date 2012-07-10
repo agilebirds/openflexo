@@ -47,7 +47,6 @@ import org.openflexo.foundation.sg.SourceRepository;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
-import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.action.AcceptDiskUpdate;
 import org.openflexo.generator.action.GCAction.ProjectGeneratorFactory;
@@ -125,8 +124,10 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 			}
 
 		};
-		getMainPane().setLeftView(_browserView);
-		switchToPerspective(CODE_GENERATION_PERSPECTIVE);
+	}
+
+	public SGBrowserView getBrowserView() {
+		return _browserView;
 	}
 
 	@Override
@@ -147,24 +148,6 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new SGMenuBar(this);
-	}
-
-	@Override
-	public ValidationModel getDefaultValidationModel() {
-		// If there is a ValidationModel associated to this module, put it here
-		return null;
-	}
-
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((SGMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((SGMainPane) getMainPane()).hideBrowser();
-		}
 	}
 
 	@Override

@@ -25,8 +25,9 @@ public class DocEditorPerspective extends FlexoPerspective {
 	/**
 	 * @param name
 	 */
-	public DocEditorPerspective() {
+	public DocEditorPerspective(DEController controller) {
 		super("doc_editor");
+		setTopLeftView(controller.getDeBrowserView());
 	}
 
 	/**
@@ -50,16 +51,10 @@ public class DocEditorPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
 	public TOCObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof TOCObject && hasModuleViewForObject(proposedObject)) {
 			return (TOCObject) proposedObject;
 		}
-
 		return null;
 	}
 

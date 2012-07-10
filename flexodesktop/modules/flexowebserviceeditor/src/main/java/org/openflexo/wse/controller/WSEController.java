@@ -54,7 +54,7 @@ public class WSEController extends FlexoController {
 
 	static final Logger logger = Logger.getLogger(WSEController.class.getPackage().getName());
 
-	public final FlexoPerspective WSE_PERSPECTIVE = new WSEPerspective();
+	public final FlexoPerspective WSE_PERSPECTIVE;
 
 	private WSEBrowser _browser;
 
@@ -67,8 +67,8 @@ public class WSEController extends FlexoController {
 	 */
 	public WSEController(FlexoModule module) {
 		super(module);
-		addToPerspectives(WSE_PERSPECTIVE);
 		_browser = new WSEBrowser(this);
+		addToPerspectives(WSE_PERSPECTIVE = new WSEPerspective(this));
 	}
 
 	@Override
@@ -89,18 +89,6 @@ public class WSEController extends FlexoController {
 	@Override
 	protected FlexoMenuBar createNewMenuBar() {
 		return new WSEMenuBar(this);
-	}
-
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((WSEMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((WSEMainPane) getMainPane()).hideBrowser();
-		}
 	}
 
 	@Override

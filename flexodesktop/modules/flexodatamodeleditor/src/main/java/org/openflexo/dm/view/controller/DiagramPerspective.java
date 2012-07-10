@@ -24,7 +24,6 @@ import java.util.Hashtable;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JSplitPane;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.BrowserElementType;
@@ -51,11 +50,7 @@ public class DiagramPerspective extends DMPerspective {
 	private final DMBrowserView _browserView;
 	private final DMBrowserView diagramBrowserView;
 
-	private final JSplitPane splitPane;
-
 	private final Hashtable<ERDiagram, ERDiagramController> _controllers;
-
-	private JSplitPane splitPaneWithRolePaletteAndDocInspectorPanel;
 
 	private final JLabel infoLabel;
 
@@ -99,21 +94,11 @@ public class DiagramPerspective extends DMPerspective {
 				}
 			}
 
-			/*  public void objectAddedToSelection(ObjectAddedToSelectionEvent event)
-			  {
-			  	if (event.getAddedObject() instanceof ERDiagram) {
-			  		diagramBrowser.deleteBrowserListener(this); 		            
-			  		diagramBrowser.setRepresentedDiagram((ERDiagram)event.getAddedObject());
-			  		diagramBrowser.update();
-			  		diagramBrowser.addBrowserListener(this); 		            
-			  	}
-			  	super.objectAddedToSelection(event);
-			  }			*/
 		};
 		diagramBrowser = new DiagramBrowser(controller);
 		diagramBrowserView = new DMBrowserView(diagramBrowser, controller);
 		setTopLeftView(_browserView);
-		setBottomLetfView(diagramBrowserView);
+		setBottomLeftView(diagramBrowserView);
 		infoLabel = new JLabel("ALT-drag to define inheritance, CTRL-drag to define properties");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
@@ -184,12 +169,6 @@ public class DiagramPerspective extends DMPerspective {
 	public JComponent getFooter() {
 		return infoLabel;
 	}
-
-	/*@Override
-	public JComponent getRightView() 
-	{
-		return getSplitPaneWithRolePaletteAndDocInspectorPanel();
-	}*/
 
 	public DiagramView getCurrentDiagramView() {
 		if (_controller != null && _controller.getCurrentModuleView() instanceof DiagramView) {

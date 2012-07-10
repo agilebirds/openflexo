@@ -33,9 +33,7 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import javax.swing.JSplitPane;
 
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -64,7 +62,6 @@ import org.openflexo.module.UserType;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -137,9 +134,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	protected BufferedImage capturedDraggedNodeImage;
 
-	private final JSplitPane _workflowProcessBrowserViews;
-	private final WorkflowBrowserView _wkfBrowserView;
-	private final ProcessBrowserView _processBrowserView;
+	private final WorkflowBrowserView wkfBrowserView;
+	private final ProcessBrowserView processBrowserView;
 	private RoleListBrowserView roleListBrowserView;
 
 	/**
@@ -152,11 +148,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		_workflowBrowser = new WorkflowBrowser(this);
 		_roleListBrowser = new RoleListBrowser(this);
 
-		_wkfBrowserView = new WorkflowBrowserView(this);
-		_processBrowserView = new ProcessBrowserView(_processBrowser, this);
-		_workflowProcessBrowserViews = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _wkfBrowserView, _processBrowserView);
-		_workflowProcessBrowserViews.setBorder(BorderFactory.createEmptyBorder());
-		new FlexoSplitPaneLocationSaver(_workflowProcessBrowserViews, "WKFBrowsersSplitPane", 1.0);
+		wkfBrowserView = new WorkflowBrowserView(this);
+		processBrowserView = new ProcessBrowserView(_processBrowser, this);
 		setRoleListBrowserView(new RoleListBrowserView(_roleListBrowser, this));
 
 		addToPerspectives(PROCESS_EDITOR_PERSPECTIVE = new ProcessPerspective(this));
@@ -168,7 +161,14 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		}
 		initWithWKFPreferences();
 		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
+	}
 
+	public WorkflowBrowserView getWkfBrowserView() {
+		return wkfBrowserView;
+	}
+
+	public ProcessBrowserView getProcessBrowserView() {
+		return processBrowserView;
 	}
 
 	@Override
@@ -256,7 +256,10 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		return getProject().getWKFValidationModel();
+		if (getProject() != null) {
+			return getProject().getWKFValidationModel();
+		}
+		return null;
 	}
 
 	public WorkflowBrowserWindow getWorkflowBrowserWindow() {
@@ -265,18 +268,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	public ProcessBrowserWindow getProcessBrowserWindow() {
 		return _processBrowserWindow;
-	}
-
-	public void showProcessBrowser() {
-		if (getMainPane() != null) {
-			getMainPane().showProcessBrowser();
-		}
-	}
-
-	public void hideProcessBrowser() {
-		if (getMainPane() != null) {
-			getMainPane().hideProcessBrowser();
-		}
 	}
 
 	@Override
@@ -660,10 +651,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 				((ProcessView) view).getDrawingGraphicalRepresentation().setShowGrid(WKFPreferences.getShowGrid());
 			}
 		}
-	}
-
-	public JSplitPane getWorkflowProcessBrowserViews() {
-		return _workflowProcessBrowserViews;
 	}
 
 	public RoleListBrowserView getRoleListBrowserView() {

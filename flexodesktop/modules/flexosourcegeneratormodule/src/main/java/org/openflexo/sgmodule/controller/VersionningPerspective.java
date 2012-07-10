@@ -45,6 +45,7 @@ public class VersionningPerspective extends FlexoPerspective {
 	public VersionningPerspective(SGController controller) {
 		super("versionning");
 		_controller = controller;
+		setTopLeftView(_controller.getBrowserView());
 	}
 
 	@Override
@@ -72,7 +73,8 @@ public class VersionningPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedOutput) || (object instanceof GenerationRepository) || (object instanceof CGFile) || (object instanceof CGTemplate));
+		return object instanceof GeneratedOutput || object instanceof GenerationRepository || object instanceof CGFile
+				|| object instanceof CGTemplate;
 	}
 
 	@Override

@@ -123,18 +123,6 @@ public class DREController extends FlexoController implements FlexoActionSource 
 		return null;
 	}
 
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((DREMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((DREMainPane) getMainPane()).hideBrowser();
-		}
-	}
-
 	protected DocItemView docItemView;
 
 	@Override

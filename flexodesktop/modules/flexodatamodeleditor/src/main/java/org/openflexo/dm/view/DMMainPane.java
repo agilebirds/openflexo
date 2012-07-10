@@ -19,13 +19,6 @@
  */
 package org.openflexo.dm.view;
 
-/*
- * MainScrollPane.java
- * Project WorkflowEditor
- * 
- * Created by benoit on Mar 10, 2004
- */
-
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.view.FlexoMainPane;
 
@@ -37,19 +30,6 @@ import org.openflexo.view.FlexoMainPane;
 public class DMMainPane extends FlexoMainPane {
 	public DMMainPane(DMController controller) {
 		super(controller);
-	}
-
-	public void showDataModelBrowser() {
-		showLeftView();
-	}
-
-	public void hideDataModelBrowser() {
-		hideLeftView();
-	}
-
-	@Override
-	public DMController getController() {
-		return (DMController) super.getController();
 	}
 
 }

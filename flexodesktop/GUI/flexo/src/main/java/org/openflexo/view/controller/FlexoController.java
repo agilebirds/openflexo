@@ -194,12 +194,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 */
 	protected FlexoController(FlexoModule module) {
 		super();
-		getProjectLoader().getPropertyChangeSupport().addPropertyChangeListener(ProjectLoader.EDITOR_ADDED, this);
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("init_module_controller"));
+		this.module = module;
 		loadedViews = new Hashtable<FlexoPerspective, Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>>();
 		controllerModel = new RootControllerModel(module.getApplicationContext(), module);
+		getProjectLoader().getPropertyChangeSupport().addPropertyChangeListener(ProjectLoader.EDITOR_ADDED, this);
 		controllerModel.getPropertyChangeSupport().addPropertyChangeListener(this);
-		this.module = module;
 		flexoFrame = createFrame();
 		controllerActionInitializer = createControllerActionInitializer();
 		registerShortcuts(controllerActionInitializer);
@@ -1095,21 +1095,21 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * flag indicates if this view must be build if not already existent.
 	 * 
 	 * @param object
-	 * @param recalculateViewIfRequired
+	 * @param createViewIfRequired
 	 * @return an initialized ModuleView instance
 	 */
-	public ModuleView<?> moduleViewForObject(FlexoModelObject object, boolean recalculateViewIfRequired) {
+	public ModuleView<?> moduleViewForObject(FlexoModelObject object, boolean createViewIfRequired) {
 		if (object == null) {
 			return null;
 		}
-		Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> perpsectiveViews = loadedViews.get(getCurrentPerspective());
+		Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> perpsectiveViews = getLoadedViewsForPerspective(getCurrentPerspective());
 		Map<FlexoModelObject, ModuleView<?>> projectViews = perpsectiveViews.get(object.getProject());
 		if (projectViews == null) {
 			perpsectiveViews.put(object.getProject(), projectViews = new HashMap<FlexoModelObject, ModuleView<?>>());
 		}
 		ModuleView<?> moduleView = projectViews.get(object);
 		if (moduleView == null) {
-			if (recalculateViewIfRequired) {
+			if (createViewIfRequired) {
 				moduleView = createModuleViewForObjectAndPerspective(object, controllerModel.getCurrentPerspective());
 				if (moduleView != null) {
 					FlexoModelObject representedObject = moduleView.getRepresentedObject();
@@ -1246,7 +1246,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 */
 	public void removeModuleView(ModuleView<?> aView) {
 		if (aView.getRepresentedObject() != null && aView.getRepresentedObject().getProject() != null) {
-			Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = loadedViews.get(aView.getPerspective());
+			Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = getLoadedViewsForPerspective(aView.getPerspective());
 			Map<FlexoModelObject, ModuleView<?>> map2 = map.get(aView.getRepresentedObject().getProject());
 			if (map2.get(aView.getRepresentedObject()) == aView) {// Let's make sure we remove the proper
 																	// view!
@@ -1256,7 +1256,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	protected Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> getLoadedViewsForPerspective(FlexoPerspective p) {
-		return loadedViews.get(p);
+		Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = loadedViews.get(p);
+		if (map == null) {
+			loadedViews.put(p, map = new HashMap<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>());
+		}
+		return map;
 	}
 
 	protected Collection<ModuleView<?>> getAllLoadedViewsForPerspective(FlexoPerspective p) {
@@ -1277,7 +1281,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 		List<E> views = new ArrayList<E>();
 		if (perspective != null) {
-			Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = loadedViews.get(perspective);
+			Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = getLoadedViewsForPerspective(perspective);
 			appendViews(map, views, project, moduleViewType);
 		} else {
 			for (Map.Entry<FlexoPerspective, Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>> e : loadedViews.entrySet()) {

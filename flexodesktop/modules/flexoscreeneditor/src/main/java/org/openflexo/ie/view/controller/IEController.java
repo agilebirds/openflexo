@@ -30,9 +30,7 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JSplitPane;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -84,7 +82,6 @@ import org.openflexo.module.external.ExternalIEController;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -110,28 +107,23 @@ public class IEController extends FlexoController implements Serializable, Flexo
 
 	private static final Cursor dropKO = Toolkit.getDefaultToolkit().createCustomCursor(DROP_KO_IMAGE, new Point(16, 16), "Drop KO");
 
-	private ComponentLibraryBrowser _componentLibraryBrowser;
+	private ComponentLibraryBrowser componentLibraryBrowser;
 
-	private ComponentBrowser _componentBrowser;
+	private ComponentBrowser componentBrowser;
 
-	private MenuEditorBrowser _menuEditorBrowser;
+	private MenuEditorBrowser menuEditorBrowser;
 
-	private DKVEditorBrowser _dkvEditorBrowser;
+	private DKVEditorBrowser dkvEditorBrowser;
 
-	private IEContainer _currentlyDroppingTarget;
+	private IEContainer currentlyDroppingTarget;
 
 	public final ComponentPerspective COMPONENT_EDITOR_PERSPECTIVE;
 	public final DefaultValuePerspective EXAMPLE_VALUE_PERSPECTIVE;
 	public final MenuPerspective MENU_EDITOR_PERSPECTIVE;
 	public final DKVPerspective DKV_EDITOR_PERSPECTIVE;
 
-	private ComponentLibraryBrowserView _componentLibraryBrowserView;
-	private ComponentBrowserView _componentBrowserView;
-	private JSplitPane splitPaneWithBrowsers;
-
-	// ==========================================================
-	// =================== Perspectives =========================
-	// ==========================================================
+	private ComponentLibraryBrowserView componentLibraryBrowserView;
+	private ComponentBrowserView componentBrowserView;
 
 	/**
 	 * Default constructor
@@ -141,17 +133,13 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	 */
 	public IEController(FlexoModule module) {
 		super(module);
-		_componentLibraryBrowser = new ComponentLibraryBrowser(this);
-		_componentBrowser = new ComponentBrowser(this);
-		_menuEditorBrowser = new MenuEditorBrowser(this);
-		_dkvEditorBrowser = new DKVEditorBrowser(this);
+		componentLibraryBrowser = new ComponentLibraryBrowser(this);
+		componentBrowser = new ComponentBrowser(this);
+		menuEditorBrowser = new MenuEditorBrowser(this);
+		dkvEditorBrowser = new DKVEditorBrowser(this);
 		IEPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(IEPreferences.SHOW_BINDINGVALUE_KEY, this);
-		_componentLibraryBrowserView = new ComponentLibraryBrowserView(this);// new
-		_componentBrowserView = new ComponentBrowserView(this);// new
-		splitPaneWithBrowsers = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _componentLibraryBrowserView, _componentBrowserView);
-		new FlexoSplitPaneLocationSaver(splitPaneWithBrowsers, "IEBrowsersLeftSplitPane", 0.5d);
-		splitPaneWithBrowsers.setBorder(BorderFactory.createEmptyBorder());
-		splitPaneWithBrowsers.setName(FlexoLocalization.localizedForKey("Library", splitPaneWithBrowsers));
+		componentLibraryBrowserView = new ComponentLibraryBrowserView(this);// new
+		componentBrowserView = new ComponentBrowserView(this);// new
 
 		addToPerspectives(COMPONENT_EDITOR_PERSPECTIVE = new ComponentPerspective(this));
 		EXAMPLE_VALUE_PERSPECTIVE = new DefaultValuePerspective(this);
@@ -160,6 +148,14 @@ public class IEController extends FlexoController implements Serializable, Flexo
 		}
 		addToPerspectives(MENU_EDITOR_PERSPECTIVE = new MenuPerspective(this));
 		addToPerspectives(DKV_EDITOR_PERSPECTIVE = new DKVPerspective(this));
+	}
+
+	public ComponentLibraryBrowserView getComponentLibraryBrowserView() {
+		return componentLibraryBrowserView;
+	}
+
+	public ComponentBrowserView getComponentBrowserView() {
+		return componentBrowserView;
 	}
 
 	@Override
@@ -180,9 +176,9 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	public void updateEditor(FlexoEditor from, FlexoEditor to) {
 		super.updateEditor(from, to);
 		FlexoProject project = to != null ? to.getProject() : null;
-		_componentLibraryBrowser.setRootObject(project != null ? project.getFlexoComponentLibrary() : null);
-		_menuEditorBrowser.setRootObject(project != null ? project.getFlexoNavigationMenu().getRootMenu() : null);
-		_dkvEditorBrowser.setRootObject(project != null ? project.getDKVModel() : null);
+		componentLibraryBrowser.setRootObject(project != null ? project.getFlexoComponentLibrary() : null);
+		menuEditorBrowser.setRootObject(project != null ? project.getFlexoNavigationMenu().getRootMenu() : null);
+		dkvEditorBrowser.setRootObject(project != null ? project.getDKVModel() : null);
 	}
 
 	@Override
@@ -192,13 +188,9 @@ public class IEController extends FlexoController implements Serializable, Flexo
 
 	@Override
 	public void dispose() {
-		_componentLibraryBrowser.setRootObject(null);
+		componentLibraryBrowser.setRootObject(null);
 		COMPONENT_EDITOR_PERSPECTIVE.disposePalettes();
 		super.dispose();
-	}
-
-	public JSplitPane getSplitPaneWithBrowsers() {
-		return splitPaneWithBrowsers;
 	}
 
 	@Override
@@ -208,10 +200,13 @@ public class IEController extends FlexoController implements Serializable, Flexo
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		if (getMainPane() != null && getMainPane().getModuleView() instanceof DKVModelView) {
-			return getProject().getDKVValidationModel();
+		if (getProject() != null) {
+			if (getMainPane() != null && getMainPane().getModuleView() instanceof DKVModelView) {
+				return getProject().getDKVValidationModel();
+			}
+			return getProject().getIEValidationModel();
 		}
-		return getProject().getIEValidationModel();
+		return null;
 	}
 
 	/**
@@ -225,15 +220,15 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	}
 
 	public ComponentLibraryBrowser getComponentLibraryBrowser() {
-		return _componentLibraryBrowser;
+		return componentLibraryBrowser;
 	}
 
 	public ComponentBrowser getComponentBrowser() {
-		return _componentBrowser;
+		return componentBrowser;
 	}
 
 	public MenuEditorBrowser getMenuEditorBrowser() {
-		return _menuEditorBrowser;
+		return menuEditorBrowser;
 	}
 
 	@Override
@@ -359,7 +354,7 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	}
 
 	public DKVEditorBrowser getDkvEditorBrowser() {
-		return _dkvEditorBrowser;
+		return dkvEditorBrowser;
 	}
 
 	/**
@@ -410,22 +405,22 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	}
 
 	public IEContainer getCurrentlyDroppingTarget() {
-		return _currentlyDroppingTarget;
+		return currentlyDroppingTarget;
 	}
 
 	public void setCurrentlyDroppingTarget(IEContainer droppingTarget) {
 		if (droppingTarget == null) {
-			if (_currentlyDroppingTarget == null) {
+			if (currentlyDroppingTarget == null) {
 				return;
 			}
 			_currentDropTargetAsChanged = true;
 		} else {
-			if (droppingTarget.equals(_currentlyDroppingTarget)) {
+			if (droppingTarget.equals(currentlyDroppingTarget)) {
 				return;
 			}
 			_currentDropTargetAsChanged = true;
 		}
-		_currentlyDroppingTarget = droppingTarget;
+		currentlyDroppingTarget = droppingTarget;
 	}
 
 	private boolean _currentDropTargetAsChanged = false;
@@ -439,8 +434,8 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	}
 
 	public Cursor getCurrentDragCursor(IEDSWidget _model) {
-		if (_currentlyDroppingTarget != null
-				&& IEDTListener.isValidTargetClassForDropTargetContainer(_currentlyDroppingTarget.getContainerModel(),
+		if (currentlyDroppingTarget != null
+				&& IEDTListener.isValidTargetClassForDropTargetContainer(currentlyDroppingTarget.getContainerModel(),
 						_model.getTargetClassModel(), _model.isTopComponent())) {
 			return dropOK;
 		} else {
@@ -450,8 +445,8 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	}
 
 	public Cursor getCurrentDragCursor(IEWidget _model) {
-		if (_currentlyDroppingTarget != null
-				&& IEDTListener.isValidTargetClassForDropTargetContainer(_currentlyDroppingTarget.getContainerModel(), _model.getClass(),
+		if (currentlyDroppingTarget != null
+				&& IEDTListener.isValidTargetClassForDropTargetContainer(currentlyDroppingTarget.getContainerModel(), _model.getClass(),
 						_model.isTopComponent())) {
 			return dropOK;
 		} else {

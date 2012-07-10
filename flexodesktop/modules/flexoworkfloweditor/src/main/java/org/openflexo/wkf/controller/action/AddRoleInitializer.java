@@ -43,16 +43,17 @@ import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.roleeditor.RoleEditorController;
 import org.openflexo.wkf.roleeditor.RoleEditorView;
 
-public class AddRoleInitializer extends ActionInitializer {
+public class AddRoleInitializer extends ActionInitializer<AddRole, WorkflowModelObject, WorkflowModelObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -122,10 +123,9 @@ public class AddRoleInitializer extends ActionInitializer {
 				// getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newRole);
 				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
 						.getWKFController().ROLE_EDITOR_PERSPECTIVE) {
-					RoleEditorController controller = getControllerActionInitializer().getWKFController().ROLE_EDITOR_PERSPECTIVE
-							.getRoleEditorController();
-					if (controller != null) {
-						RoleEditorView drawing = controller.getDrawingView();
+					ModuleView<?> moduleView = getController().moduleViewForObject(newRole.getRoleList(), false);
+					if (moduleView instanceof RoleEditorView) {
+						RoleEditorView drawing = (RoleEditorView) moduleView;
 						if (drawing != null) {
 							ShapeGraphicalRepresentation<?> roleGR = (ShapeGraphicalRepresentation<?>) drawing.getDrawing()
 									.getGraphicalRepresentation(newRole);
