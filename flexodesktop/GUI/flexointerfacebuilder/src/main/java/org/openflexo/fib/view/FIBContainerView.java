@@ -51,6 +51,9 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 
 	@Override
 	public void delete() {
+		if (isDeleted()) {
+			return;
+		}
 		subComponents.clear();
 		constraints.clear();
 		subComponents = null;
