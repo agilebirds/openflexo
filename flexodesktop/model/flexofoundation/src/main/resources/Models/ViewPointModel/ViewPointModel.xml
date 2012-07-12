@@ -79,7 +79,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry" abstract="yes">
+		name="org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry" xmlTag="Property">
 		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
 		<property name="domainURI" xmlTag="domain" attribute="YES" />
 		<property name="domainValue" xmlTag="domainValue" attribute="YES" />
@@ -153,7 +153,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.OntologicObjectPatternRole" abstract="yes">
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.PropertyPatternRole" abstract="yes">
+	<entity name="org.openflexo.foundation.viewpoint.PropertyPatternRole" xmlTag="PropertyPatternRole">
 		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
 		<property name="domainURI" xmlTag="domain" attribute="YES" />
 	</entity>
@@ -305,7 +305,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.viewpoint.PropertyParameter" abstract="yes">
+		name="org.openflexo.foundation.viewpoint.PropertyParameter" xmlTag="PropertyParameter">
 		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
 		<property name="domainURI" xmlTag="domain" attribute="YES" />
 		<property name="domainValue" xmlTag="domainValue" attribute="YES" />

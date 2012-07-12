@@ -27,6 +27,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -34,7 +35,7 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 public class ListParameter extends EditionSchemeParameter {
 
 	public enum ListType {
-		String, ObjectProperty, DataProperty
+		String, Property, ObjectProperty, DataProperty
 	}
 
 	private ListType listType;
@@ -63,6 +64,8 @@ public class ListParameter extends EditionSchemeParameter {
 		switch (getListType()) {
 		case String:
 			return new ParameterizedTypeImpl(List.class, String.class);
+		case Property:
+			return new ParameterizedTypeImpl(List.class, OntologyProperty.class);
 		case ObjectProperty:
 			return new ParameterizedTypeImpl(List.class, OntologyObjectProperty.class);
 		case DataProperty:

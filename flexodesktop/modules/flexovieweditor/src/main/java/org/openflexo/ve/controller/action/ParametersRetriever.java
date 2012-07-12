@@ -62,6 +62,7 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
@@ -234,12 +235,18 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				cbList.setShowIcon(true);
 				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
 				cbList.setVGap(-2);
+			} else if (listParameter.getListType() == ListType.Property) {
+				cbList.setIteratorClass(OntologyProperty.class);
+				cbList.setFormat(new DataBinding("object.name + \" (\"+object.domain.name+\")\""));
+				cbList.setShowIcon(true);
+				cbList.setIcon(new DataBinding("controller.iconForObject(object)"));
+				cbList.setVGap(-2);
 			}
-			/*cbList.setUseScrollBar(true);
+			cbList.setUseScrollBar(true);
 			cbList.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			cbList.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
-			cbList.setHeight(300);*/
-			panel.addToSubComponents(cbList, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+
+			panel.addToSubComponents(cbList, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true, index));
 			return cbList;
 		} else if (parameter instanceof FlexoObjectParameter) {
 			FlexoObjectParameter foParameter = (FlexoObjectParameter) parameter;

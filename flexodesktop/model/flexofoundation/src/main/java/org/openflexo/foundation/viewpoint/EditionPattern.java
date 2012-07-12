@@ -315,6 +315,13 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newPatternRole;
 	}
 
+	public PropertyPatternRole createPropertyPatternRole() {
+		PropertyPatternRole newPatternRole = new PropertyPatternRole(null);
+		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+
 	public ObjectPropertyPatternRole createObjectPropertyPatternRole() {
 		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));

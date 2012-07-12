@@ -10,6 +10,8 @@ public interface RDFURIDefinitions {
 
 	public static final String RDF_ONTOLOGY_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns";
 
+	public static final String RDF_PROPERTY_URI = RDF_ONTOLOGY_URI + "#Property";
+
 	public static final String TYPE_URI = RDF_ONTOLOGY_URI + "#type";
 	public static final String VALUE_URI = RDF_ONTOLOGY_URI + "#value";
 	public static final String PREDICATE_URI = RDF_ONTOLOGY_URI + "#predicate";

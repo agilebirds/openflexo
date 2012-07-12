@@ -835,6 +835,10 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		return returned;
 	}
 
+	public Vector<OntologyProperty> getPropertiesTakingMySelfAsDomain(OntologyObject<?> range) {
+		return getPropertiesTakingMyselfAsDomain(true, true, false, false, null, null, getOntology());
+	}
+
 	private Vector<OntologyProperty> getPropertiesTakingMyselfAsDomain(boolean includeDataProperties, boolean includeObjectProperties,
 			boolean includeAnnotationProperties, boolean includeBaseOntologies, OntologyObject<?> range, OntologicDataType dataType,
 			FlexoOntology... ontologies) {

@@ -126,7 +126,40 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		if (ontologicType != null) {
 			// System.out.println("Properties = "
 			// + ((IndividualPatternRole) getPatternRole()).getOntologicType().getPropertiesTakingMySelfAsDomain());
-			for (final OntologyProperty property : ontologicType.getPropertiesTakingMySelfAsDomain()) {
+			OntologyProperty[] array = ontologicType.getPropertiesTakingMySelfAsDomain().toArray(
+					new OntologyProperty[ontologicType.getPropertiesTakingMySelfAsDomain().size()]);
+
+			// Big trick here
+			// A property may shadow another one relatively from its name
+			// We try to detect such shadowing, and we put the most specialized property first
+			// TODO: This should be properly rewritten in OWLObject
+
+			List<Integer> i1 = new Vector<Integer>();
+			List<Integer> i2 = new Vector<Integer>();
+			for (int i = 0; i < array.length; i++) {
+				for (int j = i + 1; j < array.length; j++) {
+					if (array[i].getName().equals(array[j].getName())) {
+						// Detected name based shadowing between array[i] and array[j]
+						// System.out.println("Detected name based shadowing between " + array[i] + " and " + array[j]);
+						if (array[i].getOntology().getAllImportedOntologies().contains(array[j].getOntology())) {
+							// array[i] appears to be the most specialized, don't do anything
+						} else if (array[j].getOntology().getAllImportedOntologies().contains(array[i].getOntology())) {
+							// array[j] appears to be the most specialized, we need to swap
+							i1.add(i);
+							i2.add(j);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < i1.size(); i++) {
+				OntologyProperty p1 = array[i1.get(i)];
+				OntologyProperty p2 = array[i2.get(i)];
+				array[i1.get(i)] = p2;
+				array[i2.get(i)] = p1;
+				// Swapping p1 and p2
+			}
+
+			for (final OntologyProperty property : array) {
 				StatementPathElement<?> propertyPathElement = null;
 				if (property instanceof OntologyObjectProperty) {
 					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
@@ -235,11 +268,28 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 
 	}
 
-	public static abstract class OntologicPropertyPatternRolePathElement<T extends OntologyProperty> extends
+	public static class OntologicPropertyPatternRolePathElement<T extends OntologyProperty> extends
 			OntologicObjectPatternRolePathElement<T> {
 		public OntologicPropertyPatternRolePathElement(PropertyPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
 		}
+
+		@Override
+		public Type getType() {
+			if (((PropertyPatternRole) getPatternRole()).getParentProperty() != null) {
+				return SubDataPropertyOfProperty.getSubPropertyOfProperty(((PropertyPatternRole) getPatternRole()).getParentProperty());
+			}
+			return OntologyProperty.class;
+		}
+
+		@Override
+		public OntologyClass getOntologicType() {
+			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
+				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OntologyObject.RDF_PROPERTY_URI);
+			}
+			return null;
+		}
+
 	}
 
 	public static class OntologicDataPropertyPatternRolePathElement extends OntologicPropertyPatternRolePathElement<OntologyDataProperty> {

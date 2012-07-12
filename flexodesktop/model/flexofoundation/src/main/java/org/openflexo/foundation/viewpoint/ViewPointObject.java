@@ -59,6 +59,11 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 		}
 	}
 
+	@Override
+	public final Object instanciateNewBuilder() {
+		return new ViewPointBuilder(getViewPoint());
+	}
+
 	/*@Override
 	public void finalizeDeserialization(Object builder) {
 		System.out.println("END deserialisation for " + getClass().getSimpleName());

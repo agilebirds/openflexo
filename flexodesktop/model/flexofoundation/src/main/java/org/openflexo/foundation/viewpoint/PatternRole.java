@@ -40,6 +40,7 @@ public abstract class PatternRole extends EditionPatternObject {
 		Connector,
 		Individual,
 		Class,
+		Property,
 		ObjectProperty,
 		DataProperty,
 		IsAStatement,

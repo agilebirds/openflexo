@@ -1,13 +1,18 @@
 package org.openflexo.components.widget;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.FlexoFIBController;
 
 public class FIBOntologyBrowserEDITOR {
 
@@ -45,7 +50,7 @@ public class FIBOntologyBrowserEDITOR {
 		selector.setStrictMode(false);
 		// selector.setRootClass(transformationRule);
 
-		/*FIBAbstractEditor editor = new FIBAbstractEditor() {
+		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
 				return makeArray(selector);
@@ -61,7 +66,7 @@ public class FIBOntologyBrowserEDITOR {
 				return new FlexoFIBController<FIBViewPointSelector>(component);
 			}
 		};
-		editor.launch();*/
+		editor.launch();
 	}
 
 	/*public static void main2(String[] args) {

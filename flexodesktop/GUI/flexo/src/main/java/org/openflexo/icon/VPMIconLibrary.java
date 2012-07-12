@@ -61,6 +61,7 @@ import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
+import org.openflexo.foundation.viewpoint.PropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -233,6 +234,8 @@ public class VPMIconLibrary extends IconLibrary {
 			return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
 		} else if (object instanceof DataPropertyPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+		} else if (object instanceof PropertyPatternRole) {
+			return OntologyIconLibrary.ONTOLOGY_PROPERTY_ICON;
 		} else if (object instanceof StatementPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
 		} else if (object instanceof LocalizedDictionary) {

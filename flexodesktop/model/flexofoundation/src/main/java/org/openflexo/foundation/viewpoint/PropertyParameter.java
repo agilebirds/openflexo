@@ -29,7 +29,7 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public abstract class PropertyParameter extends EditionSchemeParameter {
+public class PropertyParameter extends EditionSchemeParameter {
 
 	private String domainURI;
 	private String parentPropertyURI;
@@ -40,6 +40,11 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 
 	public PropertyParameter(ViewPointBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public WidgetType getWidget() {
+		return WidgetType.PROPERTY;
 	}
 
 	@Override

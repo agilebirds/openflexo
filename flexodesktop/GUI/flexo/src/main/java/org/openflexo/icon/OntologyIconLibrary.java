@@ -43,6 +43,7 @@ public class OntologyIconLibrary {
 	public static final ImageIconResource ONTOLOGY_INDIVIDUAL_ICON = new ImageIconResource("Icons/Model/OE/OntologyIndividual.png");
 	public static final ImageIconResource ONTOLOGY_OBJECT_PROPERTY_ICON = new ImageIconResource("Icons/Model/OE/OntologyObjectProperty.png");
 	public static final ImageIconResource ONTOLOGY_DATA_PROPERTY_ICON = new ImageIconResource("Icons/Model/OE/OntologyDataProperty.png");
+	public static final ImageIconResource ONTOLOGY_PROPERTY_ICON = new ImageIconResource("Icons/Model/OE/OntologyProperty.png");
 	public static final ImageIconResource ONTOLOGY_ANNOTATION_PROPERTY_ICON = new ImageIconResource(
 			"Icons/Model/OE/OntologyAnnotationProperty.png");
 	public static final ImageIconResource ONTOLOGY_STATEMENT_ICON = new ImageIconResource("Icons/Model/OE/OntologyStatement.png");
