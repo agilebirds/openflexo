@@ -191,10 +191,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		_browser.setLeadingView(this);
 		setLayout(new BorderLayout());
 		setBackground(Color.WHITE);
-		northPanel = new JPanel();
-		FlowLayout flowLayout = new FlowLayout();
-		northPanel.setBorder(BorderFactory.createEmptyBorder());
-		flowLayout.setHgap(2);
+		northPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		add(northPanel, BorderLayout.NORTH);
 
 		treeView = createTreeView(browser);
@@ -275,7 +272,6 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		treeScrollPane.setAutoscrolls(true);
 		treeScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		treeScrollPane.getVerticalScrollBar().setBlockIncrement(50);
-
 		controlPanel = new BrowserFooter(this);
 
 		add(treeScrollPane, BorderLayout.CENTER);
@@ -286,8 +282,6 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 		setMinimumSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH, FlexoCst.MINIMUM_BROWSER_VIEW_HEIGHT));
 		// setPreferredSize(new Dimension(FlexoCst.PREFERRED_BROWSER_VIEW_WIDTH, FlexoCst.PREFERRED_BROWSER_VIEW_HEIGHT));
-		setBorder(BorderFactory.createEmptyBorder());
-
 		validate();
 	}
 

@@ -120,12 +120,9 @@ public class IconLibrary {
 	public static final Icon TOGGLE_ARROW_RIGHT_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowRight.png");
 	public static final Icon TOGGLE_ARROW_RIGHT_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowRightSelected.png");
 
-	public static final Icon NAVIGATION_BACKWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_01.gif");
-	public static final Icon NAVIGATION_FORWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_03.gif");
-	public static final Icon NAVIGATION_UP_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_02.gif");
-	public static final Icon NAVIGATION_DISABLED_BACKWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_01_NA.gif");
-	public static final Icon NAVIGATION_DISABLED_FORWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_03_NA.gif");
-	public static final Icon NAVIGATION_DISABLED_UP_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_02_NA.gif");
+	public static final Icon NAVIGATION_BACKWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_01.png");
+	public static final Icon NAVIGATION_FORWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_03.png");
+	public static final Icon NAVIGATION_UP_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_02.png");
 
 	public static final Icon COLLAPSE_ALL_ICON = new ImageIconResource("Icons/GUI/Actions/CollapseAll.png");
 	public static final Icon AUTO_LAYOUT_ICON = new ImageIconResource("Icons/GUI/Actions/AutoLayout.png");

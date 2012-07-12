@@ -139,7 +139,11 @@ public class DMController extends FlexoController {
 	}
 
 	public DMModel getDataModel() {
-		return getProject().getDataModel();
+		if (getProject() != null) {
+			return getProject().getDataModel();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

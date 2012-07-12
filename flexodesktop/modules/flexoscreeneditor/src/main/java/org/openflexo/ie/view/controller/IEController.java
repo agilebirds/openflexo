@@ -285,6 +285,7 @@ public class IEController extends FlexoController implements Serializable, Flexo
 			setSelectedComponent((ComponentInstance) object);
 			getSelectionManager().setSelectedObject(object);
 		} else {
+			super.selectAndFocusObject(object);
 			getSelectionManager().setSelectedObject(object);
 		}
 	}

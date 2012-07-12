@@ -51,6 +51,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.view.controller.action.AddFlexoPropertyActionizer;
 import org.openflexo.view.controller.action.DeleteFlexoPropertyActionizer;
 import org.openflexo.view.controller.action.HelpActionizer;
+import org.openflexo.view.controller.action.InspectActionizer;
 import org.openflexo.view.controller.action.RefreshImportedProcessesActionInitializer;
 import org.openflexo.view.controller.action.RefreshImportedRolesActionInitializer;
 import org.openflexo.view.controller.action.SortFlexoPropertiesActionizer;
@@ -113,6 +114,7 @@ public class ControllerActionInitializer implements EditorProvider {
 	}
 
 	public void initializeActions() {
+		new InspectActionizer(this);
 		new HelpActionizer(this);
 		new SubmitDocumentationActionizer(this);
 		new RefreshImportedRolesActionInitializer(this);

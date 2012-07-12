@@ -19,7 +19,12 @@
  */
 package org.openflexo.view.controller.action;
 
+import java.util.Vector;
+
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.SortFlexoProperties;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -30,4 +35,14 @@ public class SortFlexoPropertiesActionizer extends ActionInitializer<SortFlexoPr
 		super(SortFlexoProperties.actionType, actionInitializer);
 	}
 
+	@Override
+	protected FlexoActionVisibleCondition<SortFlexoProperties, FlexoModelObject, FlexoModelObject> getVisibleCondition() {
+		return new FlexoActionVisibleCondition<SortFlexoProperties, FlexoModelObject, FlexoModelObject>() {
+			@Override
+			public boolean isVisible(FlexoActionType<SortFlexoProperties, FlexoModelObject, FlexoModelObject> actionType,
+					FlexoModelObject object, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+				return false;
+			}
+		};
+	}
 }

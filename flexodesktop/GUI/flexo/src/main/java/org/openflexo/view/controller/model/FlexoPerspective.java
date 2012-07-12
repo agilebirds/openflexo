@@ -24,9 +24,9 @@ import java.beans.PropertyChangeSupport;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-import org.jdesktop.swingx.MultiSplitLayout.Node;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;

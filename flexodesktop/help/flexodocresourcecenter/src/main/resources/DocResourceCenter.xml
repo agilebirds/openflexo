@@ -15690,26 +15690,36 @@ forward to the next nodes.</description>
         </EmbeddingChildDocItem>
         <EmbeddingChildDocItem id="close-module" identifier="close-module" embedded="false" hidden="true" />
         <EmbeddingChildDocItem id="workflow-browser" identifier="workflow-browser" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="workflow-browser-plus" identifier="workflow-browser-plus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="workflow-browser-minus" identifier="workflow-browser-minus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="workflow-browser-options" identifier="workflow-browser-options" embedded="false" hidden="true" />
+        </EmbeddingChildDocItem>
+        <EmbeddingChildDocItem id="process-browser" identifier="process-browser" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="process-browser-plus" identifier="process-browser-plus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="process-browser-minus" identifier="process-browser-minus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="process-browser-options" identifier="process-browser-options" embedded="false" hidden="true" />
+        </EmbeddingChildDocItem>
+        <EmbeddingChildDocItem id="component-library-browser" identifier="component-library-browser" embedded="false" hidden="true">
           <description />
-          <EmbeddingChildDocItem id="workflow-browser-plus" identifier="workflow-browser-plus" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="component-library-browser-plus" identifier="component-library-browser-plus" embedded="false" hidden="true">
             <description />
           </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="workflow-browser-minus" identifier="workflow-browser-minus" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="component-library-browser-minus" identifier="component-library-browser-minus" embedded="false" hidden="true">
             <description />
           </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="workflow-browser-options" identifier="workflow-browser-options" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="component-library-browser-options" identifier="component-library-browser-options" embedded="false" hidden="true">
             <description />
           </EmbeddingChildDocItem>
         </EmbeddingChildDocItem>
-        <EmbeddingChildDocItem id="process-browser" identifier="process-browser" embedded="false" hidden="true">
+        <EmbeddingChildDocItem id="component-browser" identifier="component-browser" embedded="false" hidden="true">
           <description />
-          <EmbeddingChildDocItem id="process-browser-plus" identifier="process-browser-plus" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="component-browser-plus" identifier="component-browser-plus" embedded="false" hidden="true">
             <description />
           </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="process-browser-minus" identifier="process-browser-minus" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="component-browser-minus" identifier="component-browser-minus" embedded="false" hidden="true">
             <description />
           </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="process-browser-options" identifier="process-browser-options" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="component-browser-options" identifier="component-browser-options" embedded="false" hidden="true">
             <description />
           </EmbeddingChildDocItem>
         </EmbeddingChildDocItem>
@@ -15726,6 +15736,14 @@ forward to the next nodes.</description>
       <DocItem idref="available-perspectives" />
       <DocItem idref="back" />
       <DocItem idref="close-module" />
+      <DocItem idref="component-browser" />
+      <DocItem idref="component-browser-minus" />
+      <DocItem idref="component-browser-options" />
+      <DocItem idref="component-browser-plus" />
+      <DocItem idref="component-library-browser" />
+      <DocItem idref="component-library-browser-minus" />
+      <DocItem idref="component-library-browser-options" />
+      <DocItem idref="component-library-browser-plus" />
       <DocItem idref="forward" />
       <DocItem idref="minus" />
       <DocItem idref="options" />

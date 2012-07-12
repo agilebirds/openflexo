@@ -40,6 +40,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -106,7 +108,7 @@ import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver, IEViewManaging,
+public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver, IEViewManaging, ChangeListener,
 		SelectionSynchronizedModuleView<ComponentInstance> {
 
 	public JLabel title;
@@ -566,6 +568,27 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 			}
 		}
 
+	}
+
+	@Override
+	public void addNotify() {
+		super.addNotify();
+		if (getParent() instanceof JViewport) {
+			((JViewport) getParent()).addChangeListener(this);
+		}
+	}
+
+	@Override
+	public void removeNotify() {
+		if (getParent() instanceof JViewport) {
+			((JViewport) getParent()).removeChangeListener(this);
+		}
+		super.removeNotify();
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		revalidate();
 	}
 
 }

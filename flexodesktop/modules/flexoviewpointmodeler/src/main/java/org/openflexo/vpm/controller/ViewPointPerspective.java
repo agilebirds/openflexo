@@ -71,7 +71,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	private final JLabel infoLabel;
 
-	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
+	private final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	/**
 	 * @param controller

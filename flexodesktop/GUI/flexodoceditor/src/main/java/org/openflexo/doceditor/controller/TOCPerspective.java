@@ -49,11 +49,7 @@ public class TOCPerspective extends FlexoPerspective {
 		tocBrowser = new FIBTOCBrowser(deController.getProject().getTOCData(), deController);
 		infoLabel = new JLabel("Table of contents perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
-	}
-
-	@Override
-	public FIBTOCBrowser getTopLeftView() {
-		return tocBrowser;
+		setTopLeftView(tocBrowser);
 	}
 
 	/**

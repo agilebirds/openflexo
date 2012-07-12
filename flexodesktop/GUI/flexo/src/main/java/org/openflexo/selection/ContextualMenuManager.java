@@ -322,11 +322,7 @@ public abstract class ContextualMenuManager {
 		private final Hashtable<ActionMenu, ContextualSubMenu> _subMenus = new Hashtable<ActionMenu, ContextualSubMenu>();
 
 		public Enumeration<ContextualMenuGroup> orderedGroups() {
-			Vector<ContextualMenuGroup> orderedGroups = new Vector<ContextualMenuGroup>();
-			for (Enumeration<ContextualMenuGroup> en = elements(); en.hasMoreElements();) {
-				ContextualMenuGroup menuGroup = en.nextElement();
-				orderedGroups.add(menuGroup);
-			}
+			Vector<ContextualMenuGroup> orderedGroups = new Vector<ContextualMenuGroup>(values());
 			Collections.sort(orderedGroups, new Comparator<ContextualMenuGroup>() {
 				@Override
 				public int compare(ContextualMenuGroup o1, ContextualMenuGroup o2) {
@@ -481,6 +477,7 @@ public abstract class ContextualMenuManager {
 			}
 			EditionAction<A, T1, T2> action = new EditionAction<A, T1, T2>(actionType, (T1) focusedObject, globalSelection, getEditor());
 			JMenuItem item = menu.add(action);
+			item.setText(actionType.getLocalizedName());
 			if (getEditor().getKeyStrokeFor(actionType) != null) {
 				item.setAccelerator(getEditor().getKeyStrokeFor(actionType));
 			}
@@ -504,6 +501,7 @@ public abstract class ContextualMenuManager {
 			EditionAction<A, T1, T2> action = new EditionAction<A, T1, T2>(actionType, focusedObject,
 					_selectionManager != null ? (Vector<T2>) _selectionManager.getSelection() : null, getEditor());
 			JMenuItem item = menu.add(action);
+			item.setText(actionType.getLocalizedName());
 			if (getEditor().getKeyStrokeFor(actionType) != null) {
 				item.setAccelerator(getEditor().getKeyStrokeFor(actionType));
 			}
@@ -555,7 +553,7 @@ public abstract class ContextualMenuManager {
 			while (c != null && !(c instanceof BrowserView)) {
 				c = c.getParent();
 			}
-			if (c != null && c instanceof BrowserView) {
+			if (c instanceof BrowserView) {
 				TreePath path = ((BrowserView) c).getTreeView().getClosestPathForLocation(e.getX(), e.getY());
 				if (path != null) {
 					return ((BrowserElement) path.getLastPathComponent()).getObject();

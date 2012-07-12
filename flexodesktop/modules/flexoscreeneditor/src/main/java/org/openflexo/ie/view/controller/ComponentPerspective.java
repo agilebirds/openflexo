@@ -25,6 +25,7 @@ import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DataModification;
@@ -52,6 +53,8 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	private Map<FlexoProject, IEPalette> palettes;
 	private IEPalette currentPalette;
 
+	private JPanel topRightDummy;
+
 	/**
 	 * @param controller
 	 *            TODO
@@ -60,6 +63,7 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	public ComponentPerspective(IEController controller) {
 		super("component_editor_perspective");
 		_controller = controller;
+		topRightDummy = new JPanel();
 		palettes = new HashMap<FlexoProject, IEPalette>();
 		setTopLeftView(controller.getComponentLibraryBrowserView());
 		setBottomLeftView(controller.getComponentBrowserView());
@@ -151,7 +155,12 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 
 	@Override
 	public JComponent getTopRightView() {
-		return currentPalette = getIEPalette(_controller.getProject());
+		currentPalette = getIEPalette(_controller.getProject());
+		if (currentPalette != null) {
+			return currentPalette;
+		} else {
+			return topRightDummy;
+		}
 	}
 
 	public IEPalette getIEPalette(FlexoProject flexoProject) {

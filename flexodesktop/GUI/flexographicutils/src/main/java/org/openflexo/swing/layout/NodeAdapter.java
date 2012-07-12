@@ -1,13 +1,14 @@
 package org.openflexo.swing.layout;
+
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jdesktop.swingx.MultiSplitLayout.Divider;
-import org.jdesktop.swingx.MultiSplitLayout.Leaf;
-import org.jdesktop.swingx.MultiSplitLayout.Node;
-import org.jdesktop.swingx.MultiSplitLayout.Split;
+import org.openflexo.swing.layout.MultiSplitLayout.Divider;
+import org.openflexo.swing.layout.MultiSplitLayout.Leaf;
+import org.openflexo.swing.layout.MultiSplitLayout.Node;
+import org.openflexo.swing.layout.MultiSplitLayout.Split;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

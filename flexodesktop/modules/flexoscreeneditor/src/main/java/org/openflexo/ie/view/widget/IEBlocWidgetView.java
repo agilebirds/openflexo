@@ -213,7 +213,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		} else if (modif instanceof ContentSizeChanged) {
 			handleContentResize();
 		} else if (modif instanceof StyleSheetFolderChanged) {
-			_topTitle.updateBackgroundColor();
+			_topTitle.updateColor();
 			setDefaultBorder();
 			repaint();
 		} else {
@@ -360,15 +360,9 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		labelEditing = false;
 		_topTitle.removeTextField(_jLabelTextField);
 		_topTitle.addLabel(topTitleLabel());
-		// layoutComponent();
 		_topTitle.revalidate();
 		_topTitle.repaint();
 	}
-
-	// ==========================================================================
-	// ============================= TopTitle
-	// ===================================
-	// ==========================================================================
 
 	private class TopTitle extends JPanel {
 
@@ -387,9 +381,11 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			labelPane.add(_label);
 			add(labelPane, BorderLayout.CENTER);
 			initButtonPane();
+			updateColor();
 		}
 
-		public void updateBackgroundColor() {
+		public void updateColor() {
+			_label.setForeground(getTextColor());
 			setBackground(getMainColor());
 			repaint();
 		}

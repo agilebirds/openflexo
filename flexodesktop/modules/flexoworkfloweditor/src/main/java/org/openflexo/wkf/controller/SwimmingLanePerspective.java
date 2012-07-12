@@ -23,6 +23,7 @@ import java.util.Hashtable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import org.openflexo.foundation.FlexoModelObject;
@@ -43,6 +44,8 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 
 	private final Hashtable<SwimmingLaneEditorController, JSplitPane> _splitPaneForProcess;
 
+	private JPanel topRightDummy;
+
 	/**
 	 * @param controller
 	 *            TODO
@@ -53,6 +56,7 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		_controller = controller;
 		_controllerForProcess = new Hashtable<FlexoProcess, SwimmingLaneEditorController>();
 		_splitPaneForProcess = new Hashtable<SwimmingLaneEditorController, JSplitPane>();
+		topRightDummy = new JPanel();
 		setTopLeftView(_controller.getWkfBrowserView());
 		setBottomLeftView(_controller.getProcessBrowserView());
 		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
@@ -63,7 +67,7 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		if (getCurrentProcessView() != null) {
 			return getCurrentProcessView().getController().getPaletteView();
 		}
-		return super.getTopRightView();
+		return topRightDummy;
 	}
 
 	public SwimmingLaneEditorController getControllerForProcess(FlexoProcess process) {
@@ -142,8 +146,8 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 		// currentProcessView = (SwimmingLaneView) moduleView;
 		if (moduleView instanceof SwimmingLaneView) {
 			FlexoProcess process = ((SwimmingLaneView) moduleView).getRepresentedObject();
-			_controller.getProcessBrowser().setCurrentProcess(process);
-			_controller.getExternalProcessBrowser().setCurrentProcess(process);
+			_controller.getProcessBrowser().setRootObject(process);
+			_controller.getExternalProcessBrowser().setRootObject(process);
 			_controller.getWorkflowBrowser().focusOn(process);
 			_controller.getSelectionManager().setSelectedObject(process);
 		}

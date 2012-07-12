@@ -37,6 +37,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.UserType;
@@ -47,6 +48,7 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author sguerin
  */
+@Deprecated
 public abstract class FlexoPalette extends JPanel implements ChangeListener {
 	private FlexoController _controller;
 
@@ -56,9 +58,12 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 
 	protected JPanel controlPanel = null;
 
-	protected FlexoPalette(FlexoController controller) {
+	private final FlexoProject project;
+
+	protected FlexoPalette(FlexoController controller, FlexoProject project) {
 		super();
 		_controller = controller;
+		this.project = project;
 		setLayout(new BorderLayout());
 		// setBackground(FlexoCst.GUI_BACK_COLOR);
 
@@ -90,7 +95,10 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 
 		// logger.info("Sets preferred size to be "+preferredSize);
 		// setPreferredSize(preferredSize);
+	}
 
+	public FlexoProject getProject() {
+		return project;
 	}
 
 	public void selectTab(int tabIndex) {

@@ -11,7 +11,6 @@ import java.util.logging.Level;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.icon.IconLibrary;
@@ -96,9 +95,33 @@ public class MainPaneTopBar extends JPanel {
 	}
 
 	private void initNavigationControls() {
-		final JLabel backwardButton = new JLabel(IconLibrary.NAVIGATION_BACKWARD_ICON);
-		final JLabel forwardButton = new JLabel(IconLibrary.NAVIGATION_FORWARD_ICON);
-		final JLabel upButton = new JLabel(IconLibrary.NAVIGATION_UP_ICON);
+		final JButton backwardButton = new JButton(IconLibrary.NAVIGATION_BACKWARD_ICON);
+		backwardButton.setPreferredSize(new Dimension(24, 24));
+		backwardButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.historyBack();
+			}
+		});
+		final JButton forwardButton = new JButton(IconLibrary.NAVIGATION_FORWARD_ICON);
+		forwardButton.setPreferredSize(new Dimension(24, 24));
+		forwardButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.historyForward();
+			}
+		});
+		final JButton upButton = new JButton(IconLibrary.NAVIGATION_UP_ICON);
+		upButton.setPreferredSize(new Dimension(24, 24));
+		upButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.goUp();
+			}
+		});
 		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, new PropertyChangeListener() {
 
 			@Override
@@ -107,18 +130,14 @@ public class MainPaneTopBar extends JPanel {
 			}
 
 		}, model);
-		left.add(new JLabel(IconLibrary.NAVIGATION_CLOSE_LEFT));
 		left.add(backwardButton);
-		left.add(new JLabel(IconLibrary.NAVIGATION_SPACER));
 		left.add(upButton);
-		left.add(new JLabel(IconLibrary.NAVIGATION_SPACER));
 		left.add(forwardButton);
-		left.add(new JLabel(IconLibrary.NAVIGATION_CLOSE_RIGHT));
 		updateNavigationControlState(backwardButton, forwardButton, upButton);
 	}
 
-	protected void updateNavigationControlState(final JLabel backwardButton, final JLabel forwardButton, final JLabel upButton) {
-		backwardButton.setEnabled(model.canGoBackward());
+	protected void updateNavigationControlState(final JButton backwardButton, final JButton forwardButton, final JButton upButton) {
+		backwardButton.setEnabled(model.canGoBack());
 		forwardButton.setEnabled(model.canGoForward());
 		upButton.setEnabled(model.canGoUp());
 	}

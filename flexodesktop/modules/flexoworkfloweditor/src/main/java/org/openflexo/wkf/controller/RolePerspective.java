@@ -22,6 +22,7 @@ package org.openflexo.wkf.controller;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.RoleList;
@@ -38,6 +39,8 @@ public class RolePerspective extends FlexoPerspective {
 
 	private final WKFController _controller;
 
+	private JPanel topRightDummy;
+
 	/**
 	 * @param controller
 	 *            TODO
@@ -46,6 +49,7 @@ public class RolePerspective extends FlexoPerspective {
 	public RolePerspective(WKFController controller) {
 		super("role_editor");
 		_controller = controller;
+		topRightDummy = new JPanel();
 		setTopLeftView(_controller.getRoleListBrowserView());
 		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 		setFooter(infoLabel);
@@ -63,7 +67,7 @@ public class RolePerspective extends FlexoPerspective {
 		if (getCurrentRoleListView() != null) {
 			return getCurrentRoleListView().getController().getPalette().getPaletteView();
 		}
-		return super.getTopRightView();
+		return topRightDummy;
 	}
 
 	/**

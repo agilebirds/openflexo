@@ -44,12 +44,7 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 		super("doc_generation");
 		this.dgController = dgController;
 		browser = new DGBrowser(dgController);
-		dgBrowserView = new DGBrowserView(dgController, browser);
-	}
-
-	@Override
-	public DGBrowserView getTopLeftView() {
-		return dgBrowserView;
+		setTopLeftView(dgBrowserView = new DGBrowserView(dgController, browser));
 	}
 
 	/**

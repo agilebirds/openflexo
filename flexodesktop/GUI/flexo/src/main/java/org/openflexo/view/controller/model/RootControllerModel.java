@@ -10,7 +10,6 @@ import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Level;
 
-import org.jdesktop.swingx.MultiSplitLayout.Node;
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
@@ -30,6 +29,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.FlexoPreferences;
+import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.swing.layout.MultiSplitLayoutTypeAdapterFactory;
 
 import com.google.gson.Gson;
@@ -253,7 +253,7 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 		return nextHistory.size() > 0;
 	}
 
-	public boolean canGoBackward() {
+	public boolean canGoBack() {
 		return previousHistory.size() > 0;
 	}
 
@@ -292,8 +292,8 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 		return null;
 	}
 
-	public void goBackward() {
-		if (canGoBackward()) {
+	public void historyBack() {
+		if (canGoBack()) {
 			isGoingBackward = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Back to " + previousHistory.peek());
@@ -306,7 +306,7 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 		}
 	}
 
-	public void goForward() {
+	public void historyForward() {
 		if (canGoForward()) {
 			isGoingForward = true;
 			if (logger.isLoggable(Level.FINE)) {
@@ -391,10 +391,8 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 
 	public void setLeftViewVisible(boolean leftViewVisible) {
 		this.leftViewVisible = leftViewVisible;
-		if (GeneralPreferences.getShowLeftView(getModule().getShortName())) {
-			GeneralPreferences.setShowLeftView(getModule().getShortName(), true);
-			FlexoPreferences.savePreferences(true);
-		}
+		GeneralPreferences.setShowLeftView(getModule().getShortName(), leftViewVisible);
+		FlexoPreferences.savePreferences(true);
 		getPropertyChangeSupport().firePropertyChange(LEFT_VIEW_VISIBLE, !leftViewVisible, leftViewVisible);
 	}
 
@@ -404,10 +402,8 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 
 	public void setRightViewVisible(boolean rightViewVisible) {
 		this.rightViewVisible = rightViewVisible;
-		if (GeneralPreferences.getShowRightView(getModule().getShortName())) {
-			GeneralPreferences.setShowRightView(getModule().getShortName(), true);
-			FlexoPreferences.savePreferences(true);
-		}
+		GeneralPreferences.setShowRightView(getModule().getShortName(), rightViewVisible);
+		FlexoPreferences.savePreferences(true);
 		getPropertyChangeSupport().firePropertyChange(RIGHT_VIEW_VISIBLE, !rightViewVisible, rightViewVisible);
 	}
 }

@@ -45,6 +45,7 @@ import org.openflexo.view.palette.FlexoPalette;
  * 
  * @author benoit
  */
+@Deprecated
 public class IEPalette extends FlexoPalette implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(IEPalette.class.getPackage().getName());
@@ -55,8 +56,6 @@ public class IEPalette extends FlexoPalette implements FlexoObserver {
 	private IEPalettePanel customImagePalette;
 	private IEPalettePanel birtPanel;
 
-	private FlexoProject project;
-
 	/**
 	 * Create a palette.
 	 * 
@@ -64,8 +63,7 @@ public class IEPalette extends FlexoPalette implements FlexoObserver {
 	 * @throws java.awt.HeadlessException
 	 */
 	public IEPalette(IEController controller, FlexoProject project) {
-		super(controller);
-		this.project = project;
+		super(controller, project);
 		project.addObserver(this);
 		setPreferredSize(new Dimension(IECst.DEFAULT_PALETTE_WIDTH, IECst.DEFAULT_PALETTE_HEIGHT));
 		FCH.setHelpItem(currentTabbedPane, "ie-palette");
@@ -90,10 +88,9 @@ public class IEPalette extends FlexoPalette implements FlexoObserver {
 		if (birtPanel != null) {
 			birtPanel.delete();
 		}
-		if (project != null) {
-			project.deleteObserver(this);
+		if (getProject() != null) {
+			getProject().deleteObserver(this);
 		}
-		project = null;
 	}
 
 	/**
@@ -101,7 +98,7 @@ public class IEPalette extends FlexoPalette implements FlexoObserver {
 	 */
 	private IEPalettePanel getCustomImagePalette() {
 		if (customImagePalette == null) {
-			customImagePalette = new IEImagePalettePanel(this, project.getCustomImagePalette(), "images");
+			customImagePalette = new IEImagePalettePanel(this, getProject().getCustomImagePalette(), "images");
 		}
 		return customImagePalette;
 	}
@@ -111,7 +108,7 @@ public class IEPalette extends FlexoPalette implements FlexoObserver {
 	 */
 	private IEPalettePanel getCustomWidgetPalette() {
 		if (customWidgetPalette == null) {
-			customWidgetPalette = new IEPalettePanel(this, project.getCustomWidgetPalette(), "widgets");
+			customWidgetPalette = new IEPalettePanel(this, getProject().getCustomWidgetPalette(), "widgets");
 		}
 		return customWidgetPalette;
 	}
@@ -121,7 +118,7 @@ public class IEPalette extends FlexoPalette implements FlexoObserver {
 	 */
 	private IEPalettePanel getBasicPalette() {
 		if (basicPalette == null) {
-			basicPalette = new IEPalettePanel(this, project.getBasicPalette(), "basic");
+			basicPalette = new IEPalettePanel(this, getProject().getBasicPalette(), "basic");
 		}
 		return basicPalette;
 	}
@@ -131,14 +128,14 @@ public class IEPalette extends FlexoPalette implements FlexoObserver {
 	 */
 	private IEPalettePanel getImagePalette() {
 		if (imagePalette == null) {
-			imagePalette = new IEPalettePanel(this, project.getImagePalette(), "icons");
+			imagePalette = new IEPalettePanel(this, getProject().getImagePalette(), "icons");
 		}
 		return imagePalette;
 	}
 
 	private IEPalettePanel getBIRTPalette() {
 		if (birtPanel == null) {
-			birtPanel = new IEPalettePanel(this, project.getBIRTPalette(), "Dashboards");
+			birtPanel = new IEPalettePanel(this, getProject().getBIRTPalette(), "Dashboards");
 		}
 		return birtPanel;
 	}
@@ -174,7 +171,7 @@ public class IEPalette extends FlexoPalette implements FlexoObserver {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == project) {
+		if (observable == getProject()) {
 			if (dataModification instanceof StyleSheetFolderChanged) {
 				switchCSS();
 			} else if (dataModification instanceof ProjectClosedNotification) {

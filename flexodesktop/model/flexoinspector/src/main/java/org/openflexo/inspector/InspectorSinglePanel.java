@@ -20,6 +20,7 @@
 package org.openflexo.inspector;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,6 +56,7 @@ public class InspectorSinglePanel extends JPanel implements InspectingWidget {
 		_controller = controller;
 		_tabModelView = new TabModelView(tabModel, null, controller);
 		setTabPanelToNone();
+		setMinimumSize(new Dimension(300, 300));
 	}
 
 	protected void updateTabPanel() {

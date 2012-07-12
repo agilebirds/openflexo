@@ -1,9 +1,10 @@
 package org.openflexo.swing.layout;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.jdesktop.swingx.MultiSplitLayout.Node;
+import org.openflexo.swing.layout.MultiSplitLayout.Node;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

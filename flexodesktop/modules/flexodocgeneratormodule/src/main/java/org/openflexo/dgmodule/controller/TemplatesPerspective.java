@@ -45,11 +45,7 @@ public class TemplatesPerspective extends FlexoPerspective {
 		templatesBrowser = new FIBTemplatesBrowser(dgController.getProject().getGeneratedDoc().getTemplates(), dgController);
 		infoLabel = new JLabel("Templates perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
-	}
-
-	@Override
-	public FIBTemplatesBrowser getTopLeftView() {
-		return templatesBrowser;
+		setTopLeftView(templatesBrowser);
 	}
 
 	/**

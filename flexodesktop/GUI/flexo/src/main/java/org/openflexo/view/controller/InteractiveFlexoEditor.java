@@ -512,6 +512,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 			} else {
 				return false;
 			}
+		} else {
+			return false;
 		}
 		return true;
 	}
@@ -529,6 +531,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 			} else {
 				return false;
 			}
+		} else {
+			return false;
 		}
 		return true;
 	}

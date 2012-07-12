@@ -382,7 +382,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	protected void updateEditor(FlexoEditor from, FlexoEditor to) {
-
+		if (from instanceof InteractiveFlexoEditor) {
+			((InteractiveFlexoEditor) from).unregisterControllerActionInitializer(getControllerActionInitializer());
+		}
+		if (to instanceof InteractiveFlexoEditor) {
+			((InteractiveFlexoEditor) to).registerControllerActionInitializer(getControllerActionInitializer());
+		}
 	}
 
 	public abstract FlexoModelObject getDefaultObjectToSelect(FlexoProject project);
@@ -522,7 +527,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			 */
 
 			getInspectorWindow().setVisible(true);
-			getInspectorWindow().toFront();
 		}
 
 		if (useNewInspectorScheme()) {

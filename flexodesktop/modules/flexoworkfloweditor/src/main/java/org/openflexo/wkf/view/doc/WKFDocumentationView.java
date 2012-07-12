@@ -150,7 +150,7 @@ public class WKFDocumentationView extends JPanel implements SelectionSynchronize
 
 	public ProjectBrowser makeBrowser(FlexoModelObject rootObject, FlexoController controller) {
 		ProcessBrowser returned = new ProcessBrowser((WKFController) controller);
-		returned.setCurrentProcess((FlexoProcess) rootObject);
+		returned.setRootObject(rootObject);
 		return returned;
 	}
 

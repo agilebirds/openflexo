@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -39,6 +40,8 @@ public class ProcessPerspective extends FlexoPerspective {
 
 	private final WKFController _controller;
 
+	private JComponent topRightDummy;
+
 	/**
 	 * @param controller
 	 *            TODO
@@ -47,6 +50,7 @@ public class ProcessPerspective extends FlexoPerspective {
 	public ProcessPerspective(WKFController controller) {
 		super("process_edition");
 		_controller = controller;
+		topRightDummy = new JPanel();
 		setTopLeftView(_controller.getWkfBrowserView());
 		setBottomLeftView(_controller.getProcessBrowserView());
 		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
@@ -57,7 +61,7 @@ public class ProcessPerspective extends FlexoPerspective {
 		if (getCurrentProcessView() != null) {
 			return getCurrentProcessView().getController().getPaletteView();
 		} else {
-			return null;
+			return topRightDummy;
 		}
 	}
 
@@ -123,8 +127,8 @@ public class ProcessPerspective extends FlexoPerspective {
 		// currentProcessView = (ProcessView) moduleView;
 		if (moduleView instanceof ProcessView) {
 			FlexoProcess process = ((ProcessView) moduleView).getRepresentedObject();
-			_controller.getProcessBrowser().setCurrentProcess(process);
-			_controller.getExternalProcessBrowser().setCurrentProcess(process);
+			_controller.getProcessBrowser().setRootObject(process);
+			_controller.getExternalProcessBrowser().setRootObject(process);
 			_controller.getWorkflowBrowser().focusOn(process);
 			_controller.getSelectionManager().setSelectedObject(process);
 		}

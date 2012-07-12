@@ -1,9 +1,10 @@
 package org.openflexo.swing.layout;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jdesktop.swingx.MultiSplitLayout.Node;
+import org.openflexo.swing.layout.MultiSplitLayout.Node;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

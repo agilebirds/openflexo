@@ -275,8 +275,8 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			if (activeModule != null) {
 				activeModule.setAsInactive();
 			}
-			moduleInstance.setAsActiveModule();
 			activeModule = moduleInstance;
+			moduleInstance.setAsActiveModule();
 			getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
 			return moduleInstance;
 		}

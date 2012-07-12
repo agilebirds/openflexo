@@ -70,6 +70,8 @@ public class DiagramPerspective extends FlexoPerspective {
 
 	private final JScrollPane inspectorPanelScrollPane;
 
+	private JComponent bottomRightDummy;
+
 	/**
 	 * @param controller
 	 *            TODO
@@ -81,6 +83,7 @@ public class DiagramPerspective extends FlexoPerspective {
 		_controller = controller;
 		_controllers = new Hashtable<View, VEShemaController>();
 		_rightPanels = new Hashtable<VEShemaController, JSplitPane>();
+		bottomRightDummy = new JPanel();
 		_browser = new ShemaLibraryBrowser(controller);
 		_browserView = new VEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
 			@Override
@@ -125,7 +128,7 @@ public class DiagramPerspective extends FlexoPerspective {
 	@Override
 	public JComponent getBottomRightView() {
 		if (getCurrentShemaModuleView() == null) {
-			return null;
+			return bottomRightDummy;
 		}
 		return inspectorPanelScrollPane;
 	}

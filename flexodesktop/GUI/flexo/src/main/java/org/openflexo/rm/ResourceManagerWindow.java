@@ -103,7 +103,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 					if (_storageResourcesPanel.getSelectedResource() != null) {
 						try {
 							((FlexoStorageResource) _storageResourcesPanel.getSelectedResource()).saveResourceData();
-							toFront();
 						} catch (SaveResourceException e1) {
 							// Warns about the exception
 							if (logger.isLoggable(Level.WARNING)) {
@@ -130,7 +129,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 							((FlexoGeneratedResource) resourceToLoad).getGeneratedResourceData();
 						}
 						getActivePanel().getRMModel().fireTableDataChanged();
-						toFront();
 					} catch (FlexoException exception) {
 						// Warns about the exception
 						if (logger.isLoggable(Level.WARNING)) {
@@ -148,7 +146,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 				if (getActivePanel().getSelectedResource() != null) {
 					getActivePanel().getSelectedResource().delete();
 					getActivePanel().getRMModel().fireTableDataChanged();
-					toFront();
 				}
 			}
 		});
@@ -177,7 +174,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 					}
 				}
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
-				toFront();
 			}
 		});
 
@@ -193,7 +189,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_generatedResourcesPanel.getRMModel().fireTableDataChanged();
-				toFront();
 			}
 		});
 
@@ -206,7 +201,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_generatedResourcesPanel.getRMModel().fireTableDataChanged();
-				toFront();
 			}
 		});
 

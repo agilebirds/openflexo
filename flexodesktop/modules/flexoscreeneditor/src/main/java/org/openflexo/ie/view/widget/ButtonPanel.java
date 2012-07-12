@@ -68,11 +68,11 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	public ButtonPanel(IEController ieController, ButtonedWidgetInterface model, IEWOComponentView componentView) {
 		super(ieController);
 		_componentView = componentView;
-		setLayout(new IETDFlowLayout(FlowLayout.LEFT, 3, 1, SwingConstants.CENTER));
+		setLayout(new IETDFlowLayout(FlowLayout.LEFT, 1, 0, SwingConstants.CENTER));
 		this._model = model;
 		this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, new IEDTListener(ieController, this, (IEObject) model), true));
 		Enumeration<IEWidget> en = model.getSequenceWidget().elements();
-		IEWidgetView view;
+		IEWidgetView<?> view;
 		while (en.hasMoreElements()) {
 			IEWidget w = en.nextElement();
 			view = _componentView.getViewForWidget(w, true);
@@ -130,7 +130,7 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 		}
 		Component[] comp = getComponents();
 		for (int i = 0; i < comp.length; i++) {
-			((IEWidgetView) comp[i]).delete();
+			((IEWidgetView<?>) comp[i]).delete();
 		}
 		removeAll();
 		if (getParent() != null) {
@@ -180,7 +180,7 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	@Override
 	public void update(FlexoObservable observable, DataModification modif) {
 		if (modif instanceof ButtonAdded) {
-			IEWidgetView view = findViewForModel((IEWidget) modif.newValue());
+			IEWidgetView<?> view = findViewForModel((IEWidget) modif.newValue());
 			if (view == null) {
 				if (modif.newValue() instanceof IEHyperlinkWidget) {
 					// the view must be created
@@ -204,21 +204,21 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 				}
 				super.add(view);
 
-				Enumeration en = removedComponent.elements();
+				Enumeration<Component> en = removedComponent.elements();
 				while (en.hasMoreElements()) {
-					super.add((Component) en.nextElement());
+					super.add(en.nextElement());
 				}
 
 			}
 		} else if (modif instanceof WidgetRemovedFromSequence && observable == getButtonedWidgetModel().getSequenceWidget()) {
-			IEWidgetView view = findViewForModel((IEWidget) modif.oldValue());
+			IEWidgetView<?> view = findViewForModel((IEWidget) modif.oldValue());
 			if (view != null) {
 				remove(view);
 				revalidate();
 				repaint();
 			}
 		} else if (modif instanceof WidgetAddedToSequence && observable == getButtonedWidgetModel().getSequenceWidget()) {
-			IEWidgetView view = _componentView.getViewForWidget((IEWidget) modif.newValue(), true);
+			IEWidgetView<?> view = _componentView.getViewForWidget((IEWidget) modif.newValue(), true);
 			if (view != null) {
 				add(view, ((WidgetAddedToSequence) modif).getIndex());
 				revalidate();
@@ -230,10 +230,10 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 
 	}
 
-	public IEWidgetView findViewForModel(IEWidget button) {
+	public IEWidgetView<?> findViewForModel(IEWidget button) {
 		for (int i = 0; i < getComponents().length; i++) {
-			if (((IEWidgetView) getComponent(i)).getModel().equals(button)) {
-				return (IEWidgetView) getComponent(i);
+			if (((IEWidgetView<?>) getComponent(i)).getModel().equals(button)) {
+				return (IEWidgetView<?>) getComponent(i);
 			}
 		}
 		return null;
