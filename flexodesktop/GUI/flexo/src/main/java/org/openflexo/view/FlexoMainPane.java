@@ -21,6 +21,8 @@ package org.openflexo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Point;
@@ -68,6 +70,12 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		LEFT, CENTER, RIGHT;
 	}
 
+	private class EmptyPanel extends JPanel {
+		@Override
+		protected final void addImpl(Component comp, Object constraints, int index) {
+		}
+	}
+
 	private FlexoController controller;
 
 	private ModuleView<?> moduleView;
@@ -94,7 +102,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		super(new BorderLayout());
 		this.controller = controller;
 		this.centerLayout = new MultiSplitLayout(false);
-		this.centerLayout.setLayoutMode(MultiSplitLayout.DEFAULT_LAYOUT);
+		this.centerLayout.setLayoutMode(MultiSplitLayout.NO_MIN_SIZE_LAYOUT);
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_OBJECT, this,
 				controller.getControllerModel());
@@ -112,6 +120,9 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 			@Override
 			protected void doPaint(Graphics2D g, Divider divider, int width, int height) {
+				if (!divider.isVisible()) {
+					return;
+				}
 				if (divider.isVertical()) {
 					int x = (width - KNOB_SIZE) / 2;
 					int y = (height - DIVIDER_KNOB_SIZE) / 2;
@@ -282,11 +293,12 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 	private void updateComponent(JComponent next, LayoutPosition position) {
 		JComponent previous = getComponentForPosition(position);
-		JComponent toAdd = next != null ? next : new JPanel();
+		JComponent toAdd = next != null ? next : new EmptyPanel();
 		if (previous != toAdd) {
 			if (previous != null) {
 				centerPanel.remove(previous);
 			}
+			toAdd.setPreferredSize(new Dimension(0, 0));
 			centerPanel.add(toAdd, position.name());
 			centerLayout.displayNode(position.name(), next != null);
 			Node node = centerLayout.getNodeForName(position.name());
@@ -409,14 +421,32 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 	private void updateLeftViewVisibility() {
 		Node left = getNodeForName(centerLayout.getModel(), LayoutColumns.LEFT.name());
-		left.setVisible(controller.getControllerModel().isLeftViewVisible());
+		updateVisibility(left, controller.getControllerModel().isLeftViewVisible());
 		centerPanel.revalidate();
 	}
 
 	private void updateRightViewVisibility() {
 		Node right = getNodeForName(centerLayout.getModel(), LayoutColumns.RIGHT.name());
-		right.setVisible(controller.getControllerModel().isRightViewVisible());
+		updateVisibility(right, controller.getControllerModel().isRightViewVisible());
 		centerPanel.revalidate();
+	}
+
+	private void updateVisibility(Node root, boolean visible) {
+		if (root instanceof Leaf) {
+			Component componentForNode = centerLayout.getComponentForNode(root);
+			if (componentForNode instanceof EmptyPanel) {
+				// EmptyPanel means that there is nothing to display/hide here
+			} else {
+				centerLayout.displayNode(((Leaf) root).getName(), visible);
+			}
+		} else if (root instanceof Split) {
+			centerLayout.displayNode(((Split) root).getName(), visible);
+			for (Node child : ((Split) root).getChildren()) {
+				updateVisibility(child, visible);
+			}
+		}
+		centerPanel.revalidate();
+		centerPanel.repaint();
 	}
 
 	public FlexoController getController() {

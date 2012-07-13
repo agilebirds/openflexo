@@ -564,7 +564,9 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		Node node = getNodeForName(name);
 		if (node != null) {
 			Component comp = getComponentForNode(node);
-			comp.setVisible(visible);
+			if (comp != null) {
+				comp.setVisible(visible);
+			}
 			node.setVisible(visible);
 
 			MultiSplitLayout.Split p = node.getParent();
@@ -1097,6 +1099,9 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	 * as needed.
 	 */
 	private void layout2(Node root, Rectangle bounds) {
+		if (!root.isVisible()) {
+			return;
+		}
 		if (root instanceof Leaf) {
 			Component child = childForNode(root);
 			if (child != null) {

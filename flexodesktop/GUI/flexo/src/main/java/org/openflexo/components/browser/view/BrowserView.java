@@ -23,7 +23,6 @@ import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -57,7 +56,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ExpansionSynchronizedElement;
@@ -279,9 +277,6 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			add(controlPanel, BorderLayout.SOUTH);
 		}
 		browser.addBrowserListener(this);
-
-		setMinimumSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH, FlexoCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-		// setPreferredSize(new Dimension(FlexoCst.PREFERRED_BROWSER_VIEW_WIDTH, FlexoCst.PREFERRED_BROWSER_VIEW_HEIGHT));
 		validate();
 	}
 

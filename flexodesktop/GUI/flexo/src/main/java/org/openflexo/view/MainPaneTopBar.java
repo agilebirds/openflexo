@@ -233,15 +233,15 @@ public class MainPaneTopBar extends JPanel {
 	}
 
 	protected void updateLeftViewToggleIcon() {
-		leftViewToggle.setIcon(model.isLeftViewVisible() ? IconLibrary.TOGGLE_ARROW_TOP_ICON : IconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
-		leftViewToggle.setRolloverIcon(model.isLeftViewVisible() ? IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON
-				: IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
+		leftViewToggle.setIcon(model.isLeftViewVisible() ? IconLibrary.TOGGLE_ARROW_BOTTOM_ICON : IconLibrary.TOGGLE_ARROW_TOP_ICON);
+		leftViewToggle.setRolloverIcon(model.isLeftViewVisible() ? IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON
+				: IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
 	}
 
 	protected void updateRightViewToggleIcon() {
-		rightViewToggle.setIcon(model.isRightViewVisible() ? IconLibrary.TOGGLE_ARROW_TOP_ICON : IconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
-		rightViewToggle.setRolloverIcon(model.isRightViewVisible() ? IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON
-				: IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
+		rightViewToggle.setIcon(model.isRightViewVisible() ? IconLibrary.TOGGLE_ARROW_BOTTOM_ICON : IconLibrary.TOGGLE_ARROW_TOP_ICON);
+		rightViewToggle.setRolloverIcon(model.isRightViewVisible() ? IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON
+				: IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
 	}
 
 	private JButton getToggleVisibilityButton() {
