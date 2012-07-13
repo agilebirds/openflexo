@@ -21,7 +21,6 @@ package org.openflexo.module;
 
 import java.awt.Frame;
 import java.util.Enumeration;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -154,8 +153,9 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 			if (selectDefaultObject) {
 				getFlexoController().setCurrentEditedObjectAsModuleView(defaultObjectToSelect);
 			} else {
-				getFlexoController().getSelectionManager().setSelectedObjects(
-						new Vector<FlexoModelObject>(getFlexoController().getSelectionManager().getSelection()));
+				if (getFlexoController().getSelectionManager().getFocusedObject() == null) {
+					getFlexoController().setCurrentEditedObjectAsModuleView(null);
+				}
 			}
 			getFlexoController().getSelectionManager().fireUpdateSelection();
 		}

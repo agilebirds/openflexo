@@ -51,4 +51,13 @@ public class PropertyChangeListenerRegistrationManager {
 		}
 	}
 
+	public void removeListener(String property, PropertyChangeListener listener, HasPropertyChangeSupport next) {
+		for (PropertyChangeListenerRegistration r : registrations) {
+			if (r.hasPropertyChangeSupport == next
+					&& (r.propertyName == null && property == null || property != null && property.equals(r.propertyName))) {
+				r.removeListener();
+			}
+		}
+	}
+
 }

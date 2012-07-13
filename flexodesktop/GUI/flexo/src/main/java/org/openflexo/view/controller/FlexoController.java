@@ -1441,6 +1441,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 		}
 		GeneralPreferences.getPreferences().deleteObserver(this);
+		mainPane.dispose();
 		if (consistencyCheckWindow != null && !consistencyCheckWindow.isDisposed()) {
 			consistencyCheckWindow.dispose();
 		}

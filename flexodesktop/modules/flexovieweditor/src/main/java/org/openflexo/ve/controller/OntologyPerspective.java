@@ -53,7 +53,7 @@ public class OntologyPerspective extends FlexoPerspective {
 	public OntologyPerspective(VEController controller) {
 		super("ontology_perspective");
 		_controller = controller;
-		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getProject().getProjectOntologyLibrary(), controller);
+		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(null, controller);
 		infoLabel = new JLabel("Ontology perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 		setTopLeftView(ontologyLibraryBrowser);
@@ -117,6 +117,11 @@ public class OntologyPerspective extends FlexoPerspective {
 	}
 
 	public void setProject(FlexoProject project) {
+		if (project != null) {
+			ontologyLibraryBrowser.setDataObject(project.getProjectOntologyLibrary());
+		} else {
+			ontologyLibraryBrowser.setDataObject(null);
+		}
 
 	}
 

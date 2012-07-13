@@ -122,14 +122,16 @@ public class MainPaneTopBar extends JPanel {
 				model.goUp();
 			}
 		});
-		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, new PropertyChangeListener() {
+		PropertyChangeListener listener = new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				updateNavigationControlState(backwardButton, forwardButton, upButton);
 			}
 
-		}, model);
+		};
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, listener, model);
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_EDITOR, listener, model);
 		left.add(backwardButton);
 		left.add(upButton);
 		left.add(forwardButton);

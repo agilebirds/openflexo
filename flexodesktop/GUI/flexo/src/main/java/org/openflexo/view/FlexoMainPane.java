@@ -22,6 +22,10 @@ package org.openflexo.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Point;
+import java.awt.RadialGradientPaint;
+import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
@@ -32,8 +36,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.ch.FCH;
@@ -44,6 +46,7 @@ import org.openflexo.swing.layout.MultiSplitLayout.Divider;
 import org.openflexo.swing.layout.MultiSplitLayout.Leaf;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.swing.layout.MultiSplitLayout.Split;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.controller.model.RootControllerModel;
@@ -77,41 +80,63 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 	private MultiSplitLayout centerLayout;
 
+	private PropertyChangeListenerRegistrationManager registrationManager;
+
+	private static final int KNOB_SIZE = 5;
+	private static final int KNOB_SPACE = 2;
+	private static final int DIVIDER_SIZE = KNOB_SIZE + 2 * KNOB_SPACE;
+	private static final int DIVIDER_KNOB_SIZE = 3 * KNOB_SIZE + 2 * KNOB_SPACE;
+
+	private static final Paint KNOB_PAINTER = new RadialGradientPaint(new Point((KNOB_SIZE - 1) / 2, (KNOB_SIZE - 1) / 2),
+			(KNOB_SIZE - 1) / 2, new float[] { 0.0f, 1.0f }, new Color[] { Color.GRAY, Color.LIGHT_GRAY });
+
 	public FlexoMainPane(FlexoController controller) {
 		super(new BorderLayout());
 		this.controller = controller;
 		this.centerLayout = new MultiSplitLayout(false);
 		this.centerLayout.setLayoutMode(MultiSplitLayout.DEFAULT_LAYOUT);
-		this.controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_OBJECT, this);
-		this.controller.getControllerModel().getPropertyChangeSupport()
-				.addPropertyChangeListener(RootControllerModel.CURRENT_PERPSECTIVE, this);
-		this.controller.getControllerModel().getPropertyChangeSupport()
-				.addPropertyChangeListener(RootControllerModel.LEFT_VIEW_VISIBLE, this);
-		this.controller.getControllerModel().getPropertyChangeSupport()
-				.addPropertyChangeListener(RootControllerModel.RIGHT_VIEW_VISIBLE, this);
+		registrationManager = new PropertyChangeListenerRegistrationManager();
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_OBJECT, this,
+				controller.getControllerModel());
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_PERPSECTIVE, this,
+				controller.getControllerModel());
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.LEFT_VIEW_VISIBLE, this,
+				controller.getControllerModel());
+		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.RIGHT_VIEW_VISIBLE, this,
+				controller.getControllerModel());
+
 		add(topBar = new MainPaneTopBar(controller.getControllerModel()), BorderLayout.NORTH);
 		add(centerPanel = new JXMultiSplitPane(centerLayout));
-		centerPanel.setDividerSize(11);
+		centerPanel.setDividerSize(DIVIDER_SIZE);
 		centerPanel.setDividerPainter(new DividerPainter() {
-
-			private Border border = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 
 			@Override
 			protected void doPaint(Graphics2D g, Divider divider, int width, int height) {
 				if (divider.isVertical()) {
-					int y1 = (height - 20) / 2;
-					int y2 = (height + 20) / 2;
+					int x = (width - KNOB_SIZE) / 2;
+					int y = (height - DIVIDER_KNOB_SIZE) / 2;
 					for (int i = 0; i < 3; i++) {
-						int x1 = 1 + (i + 1) * 3;
-						g.setColor(Color.GRAY.brighter());
-						g.drawLine(x1, y1, x1, y2);
-						g.setColor(Color.GRAY.darker());
-						g.drawLine(x1 + 1, y1, x1 + 1, y2);
+						Graphics2D graph = (Graphics2D) g.create(x, y + i * (KNOB_SIZE + KNOB_SPACE), KNOB_SIZE + 1, KNOB_SIZE + 1);
+						graph.setPaint(KNOB_PAINTER);
+						graph.fillOval(0, 0, KNOB_SIZE, KNOB_SIZE);
 					}
-
+				} else {
+					int x = (width - DIVIDER_KNOB_SIZE) / 2;
+					int y = (height - KNOB_SIZE) / 2;
+					for (int i = 0; i < 3; i++) {
+						Graphics2D graph = (Graphics2D) g.create(x + i * (KNOB_SIZE + KNOB_SPACE), y, KNOB_SIZE + 1, KNOB_SIZE + 1);
+						graph.setPaint(KNOB_PAINTER);
+						graph.fillOval(0, 0, KNOB_SIZE, KNOB_SIZE);
+					}
 				}
+
 			}
 		});
+	}
+
+	public void dispose() {
+		saveLayout();
+		registrationManager.delete();
 	}
 
 	public void resetModuleView() {
@@ -182,16 +207,11 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		} else {
 			newCenterView = new JPanel();
 		}
-
 		restoreLayout();
-
 		updateLayoutForPerspective();
-
 		updateComponent(newCenterView, LayoutPosition.MIDDLE_CENTER);
 		centerPanel.revalidate();
-
 		controller.getCurrentPerspective().notifyModuleViewDisplayed(moduleView);
-
 		if (controller.getFlexoFrame().isValid()) {
 			FCH.validateWindow(controller.getFlexoFrame());
 		}
@@ -294,27 +314,44 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		}
 	}
 
-	private void restoreLayout() {
+	public void restoreLayout() {
 		Node layoutModel = getController().getControllerModel().getLayoutForPerspective(controller.getCurrentPerspective());
 		if (layoutModel == null) {
 			layoutModel = getDefaultLayout();
 			controller.getCurrentPerspective().setupDefaultLayout(layoutModel);
+			/*Rectangle bounds = centerPanel.getParent().getBounds();
+			bounds.x = 0;
+			bounds.y = 0;
+			setBoundsForModel(layoutModel, bounds);*/
 		}
 		centerLayout.setModel(layoutModel);
 		centerPanel.revalidate();
+	}
+
+	private void setBoundsForModel(Node root, Rectangle bounds) {
+		if (root instanceof Leaf) {
+			root.setBounds(bounds);
+		} else if (root instanceof Split) {
+			Split split = (Split) root;
+			Rectangle childBounds = null;
+			int divSize = centerLayout.getDividerSize();
+			boolean initSplit = false;
+			for (Node node : split.getChildren()) {
+			}
+		}
 	}
 
 	private Split getDefaultLayout() {
 		Split root = new Split();
 		root.setName("ROOT");
 		Split left = getVerticalSplit(LayoutPosition.TOP_LEFT, LayoutPosition.MIDDLE_LEFT, LayoutPosition.BOTTOM_LEFT);
-		left.setWeight(0);
+		left.setWeight(0.2);
 		left.setName(LayoutColumns.LEFT.name());
 		Split center = getVerticalSplit(LayoutPosition.TOP_CENTER, LayoutPosition.MIDDLE_CENTER, LayoutPosition.BOTTOM_CENTER);
-		center.setWeight(1.0);
+		center.setWeight(0.6);
 		center.setName(LayoutColumns.CENTER.name());
 		Split right = getVerticalSplit(LayoutPosition.TOP_RIGHT, LayoutPosition.MIDDLE_RIGHT, LayoutPosition.BOTTOM_RIGHT);
-		right.setWeight(0);
+		right.setWeight(0.2);
 		right.setName(LayoutColumns.RIGHT.name());
 		root.setChildren(left, new Divider(), center, new Divider(), right);
 		return root;
@@ -324,11 +361,11 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		Split split = new Split();
 		split.setRowLayout(false);
 		Leaf l1 = new Leaf(position1.name());
-		l1.setWeight(0);
+		l1.setWeight(0.2);
 		Leaf l2 = new Leaf(position2.name());
-		l2.setWeight(1);
+		l2.setWeight(0.6);
 		Leaf l3 = new Leaf(position3.name());
-		l3.setWeight(0);
+		l3.setWeight(0.2);
 		split.setChildren(l1, new Divider(), l2, new Divider(), l3);
 		return split;
 	}
@@ -447,12 +484,12 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 	private void updatePropertyChangeListener(FlexoPerspective previous, FlexoPerspective next) {
 		if (previous != null) {
 			for (String property : FlexoPerspective.PROPERTIES) {
-				previous.getPropertyChangeSupport().removePropertyChangeListener(property, this);
+				registrationManager.removeListener(property, this, next);
 			}
 		}
 		if (next != null) {
 			for (String property : FlexoPerspective.PROPERTIES) {
-				next.getPropertyChangeSupport().addPropertyChangeListener(property, this);
+				registrationManager.new PropertyChangeListenerRegistration(property, this, next);
 			}
 		}
 

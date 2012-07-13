@@ -125,7 +125,7 @@ public class FlexoCst extends ColorCst {
 	public static final Color OPEN_BLUE_COLOR = new Color(65, 91, 116);
 
 	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;
-	public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
+	public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 300;
 	public static final int PREFERRED_BROWSER_VIEW_WIDTH = 200;
 	public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 200;
 	public static final int MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT = 50;

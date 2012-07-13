@@ -15700,28 +15700,17 @@ forward to the next nodes.</description>
           <EmbeddingChildDocItem id="process-browser-options" identifier="process-browser-options" embedded="false" hidden="true" />
         </EmbeddingChildDocItem>
         <EmbeddingChildDocItem id="component-library-browser" identifier="component-library-browser" embedded="false" hidden="true">
-          <description />
-          <EmbeddingChildDocItem id="component-library-browser-plus" identifier="component-library-browser-plus" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="component-library-browser-minus" identifier="component-library-browser-minus" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="component-library-browser-options" identifier="component-library-browser-options" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="component-library-browser-plus" identifier="component-library-browser-plus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="component-library-browser-minus" identifier="component-library-browser-minus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="component-library-browser-options" identifier="component-library-browser-options" embedded="false" hidden="true" />
         </EmbeddingChildDocItem>
         <EmbeddingChildDocItem id="component-browser" identifier="component-browser" embedded="false" hidden="true">
+          <EmbeddingChildDocItem id="component-browser-plus" identifier="component-browser-plus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="component-browser-minus" identifier="component-browser-minus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="component-browser-options" identifier="component-browser-options" embedded="false" hidden="true" />
+        </EmbeddingChildDocItem>
+        <EmbeddingChildDocItem id="ie-palette" identifier="ie-palette" embedded="false" hidden="true">
           <description />
-          <EmbeddingChildDocItem id="component-browser-plus" identifier="component-browser-plus" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="component-browser-minus" identifier="component-browser-minus" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="component-browser-options" identifier="component-browser-options" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
         </EmbeddingChildDocItem>
         <title key="ENGLISH">Flexo Tool Set</title>
         <DocItemVersion id="FlexoToolSet_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -15745,6 +15734,7 @@ forward to the next nodes.</description>
       <DocItem idref="component-library-browser-options" />
       <DocItem idref="component-library-browser-plus" />
       <DocItem idref="forward" />
+      <DocItem idref="ie-palette" />
       <DocItem idref="minus" />
       <DocItem idref="options" />
       <DocItem idref="plus" />

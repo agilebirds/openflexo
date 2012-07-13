@@ -181,7 +181,17 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	}
 
 	public void setDataObject(Object object) {
+		if (this.dataObject instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) this.dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
+		} else if (this.dataObject instanceof FlexoObservable) {
+			((FlexoObservable) this.dataObject).deleteObserver(this);
+		}
 		dataObject = object;
+		if (dataObject instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().addPropertyChangeListener(this);
+		} else if (dataObject instanceof FlexoObservable) {
+			((FlexoObservable) dataObject).addObserver(this);
+		}
 		fibController.setDataObject(object, true);
 	}
 
