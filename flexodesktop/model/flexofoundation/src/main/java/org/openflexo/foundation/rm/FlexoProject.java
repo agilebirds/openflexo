@@ -3777,7 +3777,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return reply;
 	}
 
-	// public static final String ONTOLOGY_URI = "urn:www.denali.be/ontology/PPM.owl";
 	public static final String ONTOLOGY_URI = "http://www.agilebirds.com/projects";
 
 	public String getProjectVersionURI() {

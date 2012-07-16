@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openflexo.packaging</groupId>
         <artifactId>exec</artifactId>
-        <version>1.4.5-SNAPSHOT</version>
+        <version>1.5-SNAPSHOT</version>
     </parent>
     <artifactId>flexosemanticsplus</artifactId>
     <properties>

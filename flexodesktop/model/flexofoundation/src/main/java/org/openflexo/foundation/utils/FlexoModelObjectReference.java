@@ -35,8 +35,8 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class FlexoModelObjectReference<O extends FlexoModelObject> extends FlexoObject implements StringConvertable,
-		ResourceLoadingListener, PropertyChangeListener {
+public class FlexoModelObjectReference<O extends FlexoModelObject> extends FlexoObject implements
+		StringConvertable<FlexoModelObjectReference<O>>, ResourceLoadingListener, PropertyChangeListener {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoModelObjectReference.class.getPackage().getName());
 

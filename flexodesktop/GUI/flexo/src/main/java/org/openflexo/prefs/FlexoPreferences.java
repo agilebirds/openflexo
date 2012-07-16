@@ -261,11 +261,23 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	public static File getLogDirectory() {
 		File outputDir = new File(System.getProperty("user.home") + "/Library/Logs/OpenFlexo");
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			boolean ok = false;
 			String appData = System.getenv("LOCALAPPDATA");
 			if (appData != null) {
 				File f = new File(appData);
 				if (f.isDirectory() && f.canWrite()) {
 					outputDir = new File(f, "OpenFlexo/Logs");
+					ok = true;
+				}
+				if (!ok) {
+					appData = System.getenv("APPDATA");
+					if (appData != null) {
+						f = new File(appData);
+						if (f.isDirectory() && f.canWrite()) {
+							outputDir = new File(f, "OpenFlexo/Logs");
+							ok = true;
+						}
+					}
 				}
 			}
 		} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {
