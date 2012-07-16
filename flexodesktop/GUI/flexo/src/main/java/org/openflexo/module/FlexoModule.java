@@ -170,11 +170,11 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 	/*
 	 * This method is used to request the closing of module (either because it has been hit in the menu or the red-cross of the current
 	 * window has been pressed. To perform the real closing of the module, closeWithoutConfirmation() must be called. Once
-	 * closeWithoutConfirmation has been called, there are no way back. Therefore any call to closeWithoutConfirmation() must be followed by
+	 * closeWithoutConfirmation has been called, there is no way back. Therefore any call to closeWithoutConfirmation() must be followed by
 	 * a "return true"
 	 */
 	{
-		boolean isLastModule = !getModuleLoader().isLastLoadedModule(getModule());
+		boolean isLastModule = getModuleLoader().isLastLoadedModule(getModule());
 		if (isLastModule) {
 			try {
 				getModuleLoader().quit(true);

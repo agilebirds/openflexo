@@ -33,6 +33,7 @@ public class RoleEditorController extends SelectionManagingDrawingController<Rol
 
 	public RoleEditorController(RoleList roleList, WKFController controller) {
 		super(new RoleListRepresentation(roleList, controller), controller != null ? controller.getSelectionManager() : null);
+		_controller = controller;
 		_palette = new RolePalette();
 		registerPalette(_palette);
 		activatePalette(_palette);

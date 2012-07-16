@@ -34,16 +34,14 @@ public class DMToolsMenu extends ToolsMenu {
 
 	public CheckDataModelConsistencyItem checkDataModelItem;
 
-	protected DMController _controller;
-
 	public DMToolsMenu(DMController controller) {
 		super(controller);
-		_controller = controller;
 
 	}
 
-	public DMController getDMController() {
-		return _controller;
+	@Override
+	public DMController getController() {
+		return getController();
 	}
 
 	@Override
@@ -55,8 +53,8 @@ public class DMToolsMenu extends ToolsMenu {
 	public class CheckDataModelConsistencyItem extends FlexoMenuItem {
 
 		public CheckDataModelConsistencyItem() {
-			super(new CheckDMConsistencyAction(), "check_datamodel_consistency", null, getDMController(), true);
-			_controller.getControllerModel().getPropertyChangeSupport()
+			super(new CheckDMConsistencyAction(), "check_datamodel_consistency", null, getController(), true);
+			getController().getControllerModel().getPropertyChangeSupport()
 					.addPropertyChangeListener(RootControllerModel.CURRENT_EDITOR, new PropertyChangeListener() {
 
 						@Override
@@ -68,7 +66,7 @@ public class DMToolsMenu extends ToolsMenu {
 		}
 
 		protected void updateState() {
-			setEnabled(_controller.getProject() != null);
+			setEnabled(getController().getProject() != null);
 		}
 
 	}
@@ -80,8 +78,8 @@ public class DMToolsMenu extends ToolsMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if (getDMController().getDataModel() != null) {
-				getDMController().consistencyCheck(getDMController().getDataModel());
+			if (getController().getDataModel() != null) {
+				getController().consistencyCheck(getController().getDataModel());
 			}
 		}
 

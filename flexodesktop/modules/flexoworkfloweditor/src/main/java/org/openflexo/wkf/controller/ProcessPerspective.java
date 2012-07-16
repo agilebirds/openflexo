@@ -89,8 +89,11 @@ public class ProcessPerspective extends FlexoPerspective {
 	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
+		} else if (_controller.getProject() != null) {
+			return _controller.getProject().getRootFlexoProcess();
+		} else {
+			return null;
 		}
-		return _controller.getProject().getRootFlexoProcess();
 	}
 
 	@Override

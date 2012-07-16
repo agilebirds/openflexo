@@ -175,6 +175,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public void updateEditor(FlexoEditor from, FlexoEditor to) {
 		super.updateEditor(from, to);
 		getWorkflowBrowser().setRootObject(to != null ? to.getProject() : null);
+		_roleListBrowser.setRootObject(to != null && to.getProject() != null ? to.getProject().getWorkflow().getRoleList() : null);
 	}
 
 	@Override

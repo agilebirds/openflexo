@@ -11,13 +11,16 @@ import java.util.logging.Level;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
+import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.controller.model.RootControllerModel;
@@ -26,6 +29,10 @@ public class MainPaneTopBar extends JPanel {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(MainPaneTopBar.class.getPackage()
 			.getName());
+
+	public static interface FlexoModelObjectRenderer {
+		public String render(FlexoModelObject object);
+	}
 
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
@@ -43,10 +50,46 @@ public class MainPaneTopBar extends JPanel {
 
 	private JPanel perspectives;
 
-	public MainPaneTopBar(RootControllerModel model) {
+	protected FlexoModelObjectRenderer renderer;
+
+	private boolean forcePreferredSize;
+
+	private class ViewTabHeader extends JPanel implements PropertyChangeListener {
+		private final FlexoModelObject object;
+
+		private JLabel text;
+		private JButton close;
+
+		public ViewTabHeader(FlexoModelObject object) {
+			super(new BorderLayout());
+			this.object = object;
+			text = new JLabel();
+			close = new JButton(IconLibrary.CLOSE_ICON);
+			close.setRolloverIcon(IconLibrary.CLOSE_HOVER_ICON);
+			updateText();
+			registrationManager.new PropertyChangeListenerRegistration(this, object);
+			add(text);
+		}
+
+		protected void updateText() {
+			text.setText(renderer.render(object));
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(FlexoModelObject.DELETED_PROPERTY)) {
+				getParent().remove(this);
+			}
+			updateText();
+		}
+	}
+
+	public MainPaneTopBar(RootControllerModel model, FlexoModelObjectRenderer renderer) {
 		this.model = model;
+		this.renderer = renderer;
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		setLayout(new BorderLayout());
+		this.forcePreferredSize = ToolBox.getPLATFORM() == ToolBox.MACOS;
 		add(left = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)), BorderLayout.WEST);
 		add(center = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)));
 		add(right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)), BorderLayout.EAST);
@@ -65,6 +108,7 @@ public class MainPaneTopBar extends JPanel {
 		for (final Module module : model.getModuleLoader().getAvailableModules()) {
 			final JButton button = new JButton(module.getMediumIcon());
 			button.setEnabled(true);
+			button.setFocusable(false);
 			button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 4, button.getIcon().getIconHeight() + 4));
 			button.addActionListener(new ActionListener() {
 

@@ -141,17 +141,24 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 	}
 
 	public void setCurrentPerspective(FlexoPerspective currentPerspective) {
+		setCurrentPerspective(currentPerspective, true);
+	}
+
+	private void setCurrentPerspective(FlexoPerspective currentPerspective, boolean switchCurrentObjectIfNeeded) {
 		if (this.currentPerspective != currentPerspective) {
 			FlexoModelObject newEditedObject = getCurrentObject();
 
 			if (currentPerspective == null || getCurrentObject() != null && !currentPerspective.hasModuleViewForObject(getCurrentObject())) {
 				newEditedObject = null;
 			}
+
+			if (newEditedObject == null || switchCurrentObjectIfNeeded) {
+				newEditedObject = currentPerspective.getDefaultObject(getCurrentObject());
+			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("switchToPerspective " + currentPerspective + " with object " + newEditedObject
 						+ (newEditedObject != null ? " of " + newEditedObject.getClass().getSimpleName() : ""));
 			}
-
 			FlexoPerspective oldValue = this.currentPerspective;
 			this.currentPerspective = currentPerspective;
 			getPropertyChangeSupport().firePropertyChange(CURRENT_PERPSECTIVE, oldValue, currentPerspective);
@@ -207,7 +214,7 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 	}
 
 	private void setCurrentObjectAndPerspective(FlexoModelObject currentObject, FlexoPerspective perspective) {
-		setCurrentPerspective(perspective);
+		setCurrentPerspective(perspective, false);
 		setCurrentObject(currentObject);
 	}
 

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
@@ -80,7 +81,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	/**
 	 * Hashtable where are stored Module instances (instance of FlexoModule associated to a Module instance key.
 	 */
-	private Hashtable<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
+	private Map<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
 
 	private final ApplicationContext applicationContext;
 
@@ -430,7 +431,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	}
 
 	public boolean isLastLoadedModule(Module module) {
-		return false;
+		return _modules.size() == 1 && _modules.containsKey(module);
 	}
 
 }

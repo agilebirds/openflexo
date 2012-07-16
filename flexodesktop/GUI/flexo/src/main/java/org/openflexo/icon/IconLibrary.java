@@ -81,8 +81,8 @@ public class IconLibrary {
 	public static final ImageIcon PRINT_ICON = new ImageIconResource("Icons/Actions/Print.png");
 	public static final ImageIcon SAVE_ICON = new ImageIconResource("Icons/Actions/Save.png");
 	public static final ImageIcon SAVE_DISABLED_ICON = new ImageIconResource("Icons/Actions/Save-disabled.png");
-	// public static final ImageIcon SAVE_ALL_ICON = new ImageIconResource("Icons/Actions/SaveAll.gif");
-	// public static final ImageIcon SAVE_AS_ICON = new ImageIconResource("Icons/Actions/SaveAs.gif");
+	public static final ImageIcon CLOSE_ICON = new ImageIconResource("Icons/Actions/Close.png");
+	public static final ImageIcon CLOSE_HOVER_ICON = new ImageIconResource("Icons/Actions/CloseHover.png");
 	public static final ImageIcon NETWORK_ICON = new ImageIconResource("Icons/Actions/Network.png");
 	public static final ImageIcon INFO_ICON = new ImageIconResource("Icons/Actions/Info.png");
 	public static final ImageIcon INSPECT_ICON = new ImageIconResource("Icons/Actions/Inspect.png");
@@ -126,7 +126,6 @@ public class IconLibrary {
 
 	public static final Icon COLLAPSE_ALL_ICON = new ImageIconResource("Icons/GUI/Actions/CollapseAll.png");
 	public static final Icon AUTO_LAYOUT_ICON = new ImageIconResource("Icons/GUI/Actions/AutoLayout.png");
-	public static final Icon CLOSE_ICON = new ImageIconResource("Icons/GUI/Actions/Close.png");
 
 	// Markers
 	public static final IconMarker POSITIVE_MARKER = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Plus.png"), 0, 0);
