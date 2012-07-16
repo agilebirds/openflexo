@@ -680,6 +680,10 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			return;
 		}*/
 
+		if (!getController().getDrawShapeToolController().editionHasBeenStarted()) {
+			return;
+		}
+
 		getController().getDrawShapeToolController().paintCurrentEditedShape(graphics);
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
