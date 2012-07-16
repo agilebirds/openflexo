@@ -41,7 +41,7 @@ public class DMToolsMenu extends ToolsMenu {
 
 	@Override
 	public DMController getController() {
-		return getController();
+		return (DMController) super.getController();
 	}
 
 	@Override
