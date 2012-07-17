@@ -49,11 +49,13 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.DataPropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
@@ -367,6 +369,33 @@ public class FIBInspector extends FIBPanel {
 							}
 						}, true));
 			}
+			if (propertyEntry instanceof ObjectPropertyInspectorEntry) {
+				OntologyClass rangeClass = null;
+				if (propertyEntry.getIsDynamicDomainValue()) {
+					// domainClass = propertyEntry.evaluateDomainValue(action);
+					// TODO: implement proper scheme with new binding support
+					logger.warning("Please implement me !!!!!!!!!");
+				} else {
+					rangeClass = ((ObjectPropertyInspectorEntry) propertyEntry).getRange();
+				}
+				if (rangeClass != null) {
+					propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.rangeClassURI"),
+							new DataBinding('"' + rangeClass.getURI() + '"') {
+								@Override
+								public BindingFactory getBindingFactory() {
+									return entry.getBindingFactory();
+								}
+							}, true));
+				}
+			}
+			if (propertyEntry instanceof ObjectPropertyInspectorEntry) {
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
+						"component.selectDataProperties"), new DataBinding("false"), true));
+			} else if (propertyEntry instanceof DataPropertyInspectorEntry) {
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
+						"component.selectObjectProperties"), new DataBinding("false"), true));
+			}
+
 			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
 			/*propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
 					new DataBinding('"' + ((PropertyInspectorEntry) entry)._getDomainURI() + '"') {

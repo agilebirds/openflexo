@@ -67,6 +67,7 @@ import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
 import org.openflexo.foundation.viewpoint.ClassParameter;
+import org.openflexo.foundation.viewpoint.DataPropertyParameter;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FlexoObjectParameter;
@@ -74,6 +75,7 @@ import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
 import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.foundation.viewpoint.ListParameter.ListType;
+import org.openflexo.foundation.viewpoint.ObjectPropertyParameter;
 import org.openflexo.foundation.viewpoint.PropertyParameter;
 import org.openflexo.foundation.viewpoint.TextAreaParameter;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
@@ -436,6 +438,33 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 							}
 						}, true));
 			}
+
+			if (propertyParameter instanceof ObjectPropertyParameter) {
+				OntologyClass rangeClass = null;
+				if (propertyParameter.getIsDynamicDomainValue()) {
+					rangeClass = ((ObjectPropertyParameter) propertyParameter).evaluateRangeValue(action);
+				} else {
+					rangeClass = ((ObjectPropertyParameter) propertyParameter).getRange();
+				}
+				if (rangeClass != null) {
+					propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.rangeClassURI"),
+							new DataBinding('"' + rangeClass.getURI() + '"') {
+								@Override
+								public BindingFactory getBindingFactory() {
+									return parameter.getBindingFactory();
+								}
+							}, true));
+				}
+			}
+
+			if (propertyParameter instanceof ObjectPropertyParameter) {
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
+						"component.selectDataProperties"), new DataBinding("false"), true));
+			} else if (propertyParameter instanceof DataPropertyParameter) {
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
+						"component.selectObjectProperties"), new DataBinding("false"), true));
+			}
+
 			propertySelector.setData(new DataBinding("parameters." + parameter.getName()) {
 				@Override
 				public BindingFactory getBindingFactory() {
