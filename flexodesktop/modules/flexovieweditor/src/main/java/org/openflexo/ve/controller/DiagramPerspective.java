@@ -215,8 +215,12 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	}
 
 	public void removeFromControllers(VEShemaController shemaController) {
-		_controllers.remove(shemaController.getDrawing().getShema());
-		_rightPanels.remove(shemaController);
+		if (shemaController != null) {
+			if (shemaController.getDrawing() != null && shemaController.getDrawing().getShema() != null) {
+				_controllers.remove(shemaController.getDrawing().getShema());
+			}
+			_rightPanels.remove(shemaController);
+		}
 	}
 
 	@Override
