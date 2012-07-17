@@ -94,6 +94,11 @@ public final class ModuleLoader implements IModuleLoader {
 	private Hashtable<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
 
 	/**
+	 * Hashtable where are stored loading status for modules
+	 */
+	private Hashtable<Module, Boolean> _loadingModules = new Hashtable<Module, Boolean>();
+
+	/**
 	 * Vector of Module instance representing all available modules
 	 */
 	private ArrayList<Module> _availableModules = new ArrayList<Module>();
@@ -357,9 +362,6 @@ public final class ModuleLoader implements IModuleLoader {
 
 		@Override
 		public FlexoModule call() throws Exception {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Loading module " + module.getName());
-			}
 			Object[] params;
 			if (module.requireProject()) {
 				params = new Object[1];
@@ -367,7 +369,9 @@ public final class ModuleLoader implements IModuleLoader {
 			} else {
 				params = new Object[0];
 			}
+			startLoadModule(module);
 			FlexoModule flexoModule = (FlexoModule) module.getConstructor().newInstance(params);
+			endLoadModule(module);
 			FCH.ensureHelpEntryForModuleHaveBeenCreated(flexoModule);
 			return flexoModule;
 		}
@@ -385,6 +389,18 @@ public final class ModuleLoader implements IModuleLoader {
 
 	public boolean isLoaded(Module module) {
 		return _modules.get(module) != null;
+	}
+
+	public boolean isLoading(Module module) {
+		return _loadingModules.get(module) != null && _loadingModules.get(module);
+	}
+
+	private void startLoadModule(Module module) {
+		_loadingModules.put(module, true);
+	}
+
+	private void endLoadModule(Module module) {
+		_loadingModules.remove(module);
 	}
 
 	public boolean isActive(Module module) {
@@ -406,7 +422,7 @@ public final class ModuleLoader implements IModuleLoader {
 							"Cannot currently switch project for a loaded module. Close the module first and then load it with the chosen project.");
 				}
 				return flexoModule;
-			} else {
+			} else if (!isLoading(module)) {
 				if (module.requireProject() && project == null) {
 					throw new IllegalArgumentException("Module " + module.getName() + " needs a project. project cannot be null");
 				}
@@ -416,6 +432,11 @@ public final class ModuleLoader implements IModuleLoader {
 					e.printStackTrace();
 					throw new ModuleLoadingException(module);
 				}
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Sorry, module " + module.getName() + " already loading.");
+				}
+				return null;
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
