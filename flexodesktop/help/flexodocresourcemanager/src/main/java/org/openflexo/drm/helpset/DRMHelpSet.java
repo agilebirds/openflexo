@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.DocType;
+import org.jdom2.DocType;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.drm.Language;
@@ -314,7 +314,7 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 		if (progress != null) {
 			progress.setSecondaryProgress(FlexoLocalization.localizedForKey("indexing_helpset"));
 		}
-		(new JHIndexer(helpSetDirectory)).generate();
+		new JHIndexer(helpSetDirectory).generate();
 		if (progress != null) {
 			progress.setSecondaryProgress(FlexoLocalization.localizedForKey("copying_images"));
 		}

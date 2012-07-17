@@ -13,10 +13,6 @@
 	<name>ExternalModel :: FlexoDocxParser</name>
 	<dependencies>
 		<dependency>
-			<groupId>jaxen</groupId>
-			<artifactId>jaxen</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>ooxml-schemas</artifactId>
 		</dependency>

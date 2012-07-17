@@ -39,8 +39,6 @@ import org.apache.poi.openxml4j.opc.PackagePartName;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.openxml4j.opc.PackagingURIHelper;
 import org.dom4j.Element;
-import org.jaxen.JaxenException;
-import org.jaxen.dom4j.Dom4jXPath;
 import org.openflexo.docxparser.dto.ParsedHtml;
 import org.openflexo.docxparser.dto.ParsedHtmlResource;
 import org.openflexo.toolbox.HTMLUtils;
@@ -370,10 +368,7 @@ public class OpenXml2Html {
 		ParsedHtml parsedHtml = new ParsedHtml();
 
 		try {
-			Dom4jXPath xpath = new Dom4jXPath("descendant::a:blip");
-			xpath.addNamespace(DocxXmlUtil.NAMESPACE_DRAWINGMAIN.getPrefix(), DocxXmlUtil.NAMESPACE_DRAWINGMAIN.getURI());
-
-			Element ablipElement = (Element) xpath.selectSingleNode(element);
+			Element ablipElement = (Element) element.selectSingleNode("descendant::a:blip");
 			if (ablipElement == null) {
 				logger.warning("Cannot handle drawing tag: a:blip element not found");
 				return parsedHtml;
@@ -434,9 +429,6 @@ public class OpenXml2Html {
 			return new ParsedHtml();
 		} catch (IOException e) {
 			logger.log(Level.WARNING, "Cannot handle drawing tag: IOException catched", e);
-			return new ParsedHtml();
-		} catch (JaxenException e) {
-			logger.log(Level.WARNING, "Cannot handle drawing tag: JaxenException catched", e);
 			return new ParsedHtml();
 		}
 	}

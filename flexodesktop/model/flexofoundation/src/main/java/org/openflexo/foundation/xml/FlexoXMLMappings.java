@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.dkv.DKVModel;

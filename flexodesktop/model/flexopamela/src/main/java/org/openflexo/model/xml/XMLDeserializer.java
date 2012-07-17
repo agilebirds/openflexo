@@ -9,13 +9,12 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.filter.ElementFilter;
-import org.jdom.filter.Filter;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.input.SAXBuilder;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.factory.ModelDefinitionException;
 import org.openflexo.model.factory.ModelEntity;
@@ -271,18 +270,19 @@ public class XMLDeserializer {
 		return reply;
 	}
 
-	static private class ElementWithIDFilter implements Filter {
+	static private class ElementWithIDFilter extends ElementFilter {
 
 		public ElementWithIDFilter() {
 			super();
 		}
 
 		@Override
-		public boolean matches(Object arg0) {
-			if (arg0 instanceof Element) {
-				return ((Element) arg0).getAttributeValue("id") != null;
+		public Element filter(Object arg0) {
+			Element element = super.filter(arg0);
+			if (element != null && element.getAttributeValue("id") != null) {
+				return element;
 			}
-			return false;
+			return null;
 		}
 
 	}

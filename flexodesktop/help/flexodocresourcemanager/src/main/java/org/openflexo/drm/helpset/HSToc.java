@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.DocType;
+import org.jdom2.DocType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
@@ -107,7 +107,7 @@ public class HSToc extends FlexoObject implements XMLSerializable {
 			for (Enumeration en = docItem.getOrderedEmbeddingChildItems().elements(); en.hasMoreElements();) {
 				DocItem next = (DocItem) en.nextElement();
 				if (next.isIncluded(configuration)) {
-					if ((!next.getIsEmbedded()) && (next.isPublished()) && (next.getFolder() == folder)) {
+					if (!next.getIsEmbedded() && next.isPublished() && next.getFolder() == folder) {
 						childs.add(new HSTocEntry(next));
 					}
 				}
@@ -115,7 +115,7 @@ public class HSToc extends FlexoObject implements XMLSerializable {
 			for (Enumeration en = folder.getOrderedItems().elements(); en.hasMoreElements();) {
 				DocItem next = (DocItem) en.nextElement();
 				if (next.isIncluded(configuration)) {
-					if ((next.getEmbeddingParentItem() == null) && (next != folder.getPrimaryDocItem()) && (next.isPublished())) {
+					if (next.getEmbeddingParentItem() == null && next != folder.getPrimaryDocItem() && next.isPublished()) {
 						childs.add(new HSTocEntry(next));
 					}
 				}
@@ -142,7 +142,7 @@ public class HSToc extends FlexoObject implements XMLSerializable {
 			for (Enumeration en = item.getOrderedEmbeddingChildItems().elements(); en.hasMoreElements();) {
 				DocItem next = (DocItem) en.nextElement();
 				if (next.isIncluded(configuration)) {
-					if ((!next.getIsEmbedded()) && (next.isPublished())) {
+					if (!next.getIsEmbedded() && next.isPublished()) {
 						childs.add(new HSTocEntry(next));
 					}
 				}

@@ -32,8 +32,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.Document;
-import org.jdom.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.netbeans.lib.cvsclient.admin.Entry;
 import org.netbeans.lib.cvsclient.command.CommandAbortedException;
 import org.netbeans.lib.cvsclient.command.CommandException;
@@ -194,7 +194,7 @@ public class CVSFile extends CVSAbstractFile {
 	public Date getLocalFileLastModifiedTruncated() {
 		Date date = getLocalFileLastModified();
 		long ms = date.getTime();
-		date.setTime(ms - (ms % 1000));
+		date.setTime(ms - ms % 1000);
 		return date;
 	}
 
@@ -241,14 +241,14 @@ public class CVSFile extends CVSAbstractFile {
 		if (getLastModified() == null || getLastModified().equals(new Date(0))) {
 			return FlexoLocalization.localizedForKey("never");
 		}
-		return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(getLastModified());
+		return new SimpleDateFormat("dd/MM HH:mm:ss").format(getLastModified());
 	}
 
 	public String getStickyDateAsString() {
 		if (getStickyDate() == null || getStickyDate().equals(new Date(0))) {
 			return FlexoLocalization.localizedForKey("never");
 		}
-		return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(getStickyDate());
+		return new SimpleDateFormat("dd/MM HH:mm:ss").format(getStickyDate());
 	}
 
 	public String getStatusAsString() {
@@ -257,7 +257,7 @@ public class CVSFile extends CVSAbstractFile {
 
 	@Override
 	public boolean isEnabled() {
-		return (!getStatus().isIgnored());
+		return !getStatus().isIgnored();
 	}
 
 	private ResourceType _resourceType;
@@ -380,7 +380,7 @@ public class CVSFile extends CVSAbstractFile {
 	private FileContentEditor _editor;
 
 	public boolean isEdited() {
-		return (_editor != null);
+		return _editor != null;
 	}
 
 	public void edit(FileContentEditor editor) {
@@ -443,7 +443,7 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	public boolean hasVersionOnDisk() {
-		return (getContentOnDisk() != null);
+		return getContentOnDisk() != null;
 	}
 
 	private String _contentOnDiskBeforeMerge;
@@ -455,7 +455,7 @@ public class CVSFile extends CVSAbstractFile {
 			File[] allPossibleFiles = getFile().getParentFile().listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File pathname) {
-					return (pathname.getName().indexOf(".#" + getFile().getName()) == 0);
+					return pathname.getName().indexOf(".#" + getFile().getName()) == 0;
 				}
 			});
 			File choosenFile = null;
@@ -505,7 +505,7 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	public synchronized boolean isReceivingContentOnRepository() {
-		return (_contentOnRepositoryRevisionRetriever != null);
+		return _contentOnRepositoryRevisionRetriever != null;
 	}
 
 	private synchronized String retrieveContentOnRepository(RevisionRetrieverListener listener) {
@@ -714,7 +714,7 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	public synchronized boolean isReceivingOriginalContent() {
-		return (_originalContentRevisionRetriever != null);
+		return _originalContentRevisionRetriever != null;
 	}
 
 	private synchronized String retrieveOriginalContent(RevisionRetrieverListener listener) {

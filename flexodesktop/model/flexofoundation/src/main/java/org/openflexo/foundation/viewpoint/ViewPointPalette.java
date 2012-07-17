@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;

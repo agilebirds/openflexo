@@ -4156,4 +4156,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public void setModuleLoader(IModuleLoader moduleLoader) {
 		this.moduleLoader = moduleLoader;
 	}
+
+	public FlexoProject loadProject(String serializationRepresentation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

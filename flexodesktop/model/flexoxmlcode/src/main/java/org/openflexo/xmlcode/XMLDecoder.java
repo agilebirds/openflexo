@@ -35,14 +35,14 @@ import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.Attribute;
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Text;
-import org.jdom.filter.Filter;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
 
 /**
@@ -814,18 +814,19 @@ public class XMLDecoder {
 		return reply;
 	}
 
-	static private class ElementWithIDFilter implements Filter {
+	static private class ElementWithIDFilter extends ElementFilter {
 
 		public ElementWithIDFilter() {
 			super();
 		}
 
 		@Override
-		public boolean matches(Object arg0) {
-			if (arg0 instanceof Element) {
-				return ((Element) arg0).getAttributeValue("id") != null;
+		public Element filter(Object arg0) {
+			Element element = filter(arg0);
+			if (element != null && element.getAttributeValue("id") != null) {
+				return element;
 			}
-			return false;
+			return null;
 		}
 
 	}
@@ -1520,7 +1521,7 @@ public class XMLDecoder {
 		return node.getContent(new MultipleNameFilter(modelProperty.getXmlTags(), node)).iterator();
 	}
 
-	private class MultipleNameFilter implements Filter {
+	private class MultipleNameFilter extends ElementFilter {
 		private String[] _tags;
 		private Element _parent;
 
@@ -1531,18 +1532,18 @@ public class XMLDecoder {
 		}
 
 		@Override
-		public boolean matches(Object arg0) {
-			if (!(arg0 instanceof Element)) {
-				return false;
-			}
-			if (_parent.equals(((Element) arg0).getParentElement())) {
-				for (int i = 0; i < _tags.length; i++) {
-					if (((Element) arg0).getName().equals(_tags[i])) {
-						return true;
+		public Element filter(Object content) {
+			Element element = super.filter(content);
+			if (element != null) {
+				if (_parent.equals(element.getParentElement())) {
+					for (int i = 0; i < _tags.length; i++) {
+						if (element.getName().equals(_tags[i])) {
+							return element;
+						}
 					}
 				}
 			}
-			return false;
+			return null;
 		}
 	}
 
@@ -1690,25 +1691,6 @@ public class XMLDecoder {
 
 	public boolean implementsCustomIdMappingScheme() {
 		return xmlMapping.implementsCustomIdMappingScheme();
-	}
-
-	private class IDFilter implements Filter {
-
-		private String _searchedID;
-
-		public IDFilter(String searchedID) {
-			super();
-			_searchedID = searchedID;
-		}
-
-		@Override
-		public boolean matches(Object arg0) {
-			if (arg0 instanceof Element) {
-				return _searchedID.equals(((Element) arg0).getAttributeValue(XMLMapping.idLabel));
-			}
-			return false;
-		}
-
 	}
 
 }

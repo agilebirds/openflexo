@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;

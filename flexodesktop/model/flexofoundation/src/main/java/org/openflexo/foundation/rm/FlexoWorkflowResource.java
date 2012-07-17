@@ -24,8 +24,8 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.Document;
-import org.jdom.Element;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -174,7 +174,7 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 				root_Element = _document.getRootElement();
 				Element newWorkflowElement = new Element("flexoworkflow");
 				newWorkflowElement.setAttribute("workflowName", getName());
-				newWorkflowElement.setContent((Element) root_Element.clone());
+				newWorkflowElement.setContent(root_Element.clone());
 				_document.setRootElement(newWorkflowElement);
 				FileWritingLock lock = willWriteOnDisk();
 				if (logger.isLoggable(Level.INFO)) {

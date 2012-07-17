@@ -25,9 +25,9 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.filter.ElementFilter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -267,7 +267,7 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 			}
 			Iterator menuElementIterator = document.getDescendants(new ElementFilter("FlexoItemMenu"));
 			if (menuElementIterator.hasNext()) {
-				Element rootMenuItemElement = (Element) ((Element) menuElementIterator.next()).clone();
+				Element rootMenuItemElement = ((Element) menuElementIterator.next()).clone();
 				Element navigationMenuElement = new Element("FlexoNavigationMenu");
 				navigationMenuElement.setAttribute("id", "1");
 				navigationMenuElement.addContent(rootMenuItemElement);

@@ -37,12 +37,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.filter.ElementFilter;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.input.SAXBuilder;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.FlexoOntology;
@@ -62,7 +62,6 @@ import org.openflexo.foundation.ontology.dm.OntologyIndividualRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyInserted;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
-import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass.RestrictionType;
 import org.openflexo.foundation.ontology.owl.action.CreateDataProperty;
 import org.openflexo.foundation.ontology.owl.action.CreateObjectProperty;
 import org.openflexo.foundation.ontology.owl.action.CreateOntologyClass;
@@ -167,9 +166,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			document = readXMLFile(aFile);
 			Element root = getElement(document, "RDF");
 			if (root != null) {
-				Iterator it = root.getAttributes().iterator();
+				Iterator<Attribute> it = root.getAttributes().iterator();
 				while (it.hasNext()) {
-					Attribute at = (Attribute) it.next();
+					Attribute at = it.next();
 					if (at.getName().equals("base")) {
 						logger.fine("Returned " + at.getValue());
 						return at.getValue();
@@ -205,9 +204,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 					if (title != null) {
 						return title.getValue();
 					}
-					List l = ontology.getAttributes();
+					List<Attribute> l = ontology.getAttributes();
 					for (int i = 0; i < l.size(); i++) {
-						Attribute a = (Attribute) l.get(i);
+						Attribute a = l.get(i);
 						if (a.getName().equals("title")) {
 							return a.getValue();
 						}
@@ -464,8 +463,8 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		_dataProperties.clear();
 		_objectProperties.clear();
 
-		for (Iterator i = getOntModel().listClasses(); i.hasNext();) {
-			OntClass ontClass = (OntClass) i.next();
+		for (Iterator<OntClass> i = getOntModel().listClasses(); i.hasNext();) {
+			OntClass ontClass = i.next();
 			if (_classes.get(ontClass) == null && isNamedResourceOfThisOntology(ontClass)) {
 				// Only named classes will be appended
 				makeNewClass(ontClass);
@@ -475,8 +474,8 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			}
 		}
 
-		for (Iterator i = getOntModel().listIndividuals(); i.hasNext();) {
-			Individual individual = (Individual) i.next();
+		for (Iterator<Individual> i = getOntModel().listIndividuals(); i.hasNext();) {
+			Individual individual = i.next();
 			if (_individuals.get(individual) == null && isNamedResourceOfThisOntology(individual)) {
 				OntologyIndividual newIndividual = makeNewIndividual(individual);
 				if (logger.isLoggable(Level.FINE)) {
@@ -485,8 +484,8 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			}
 		}
 
-		for (Iterator i = getOntModel().listDatatypeProperties(); i.hasNext();) {
-			DatatypeProperty ontProperty = (DatatypeProperty) i.next();
+		for (Iterator<DatatypeProperty> i = getOntModel().listDatatypeProperties(); i.hasNext();) {
+			DatatypeProperty ontProperty = i.next();
 			if (_dataProperties.get(ontProperty) == null && isNamedResourceOfThisOntology(ontProperty)) {
 				makeNewDataProperty(ontProperty);
 				if (logger.isLoggable(Level.FINE)) {
@@ -495,8 +494,8 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			}
 		}
 
-		for (Iterator i = getOntModel().listObjectProperties(); i.hasNext();) {
-			ObjectProperty ontProperty = (ObjectProperty) i.next();
+		for (Iterator<ObjectProperty> i = getOntModel().listObjectProperties(); i.hasNext();) {
+			ObjectProperty ontProperty = i.next();
 			if (_objectProperties.get(ontProperty) == null && isNamedResourceOfThisOntology(ontProperty)) {
 				makeNewObjectProperty(ontProperty);
 				if (logger.isLoggable(Level.FINE)) {
@@ -970,8 +969,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	protected OWLObjectProperty retrieveOntologyObjectProperty(ObjectProperty ontProperty) {
 
 		OWLObjectProperty returned = _objectProperties.get(ontProperty);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		returned = makeNewObjectProperty(ontProperty);
 		returned.init();
@@ -982,8 +982,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	protected OWLDataProperty retrieveOntologyDataProperty(DatatypeProperty ontProperty) {
 
 		OWLDataProperty returned = _dataProperties.get(ontProperty);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		returned = makeNewDataProperty(ontProperty);
 		returned.init();
@@ -994,8 +995,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	protected OWLIndividual retrieveOntologyIndividual(Individual individual) {
 
 		OWLIndividual returned = _individuals.get(individual);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		// Special case for OWL, RDF and RDFS ontologies, don't create individuals !!!
 		if (!getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI) && !getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)
@@ -1014,13 +1016,15 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	protected OWLClass retrieveOntologyClass(OntClass resource) {
 
 		OWLClass returned = _classes.get(resource);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		if (isNamedClass(resource) && StringUtils.isNotEmpty(resource.getURI())) {
 			returned = getClass(resource.getURI());
-			if (returned != null)
+			if (returned != null) {
 				return returned;
+			}
 		}
 
 		if (isNamedResourceOfThisOntology(resource)) {
@@ -1051,8 +1055,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	private OntologyRestrictionClass retrieveRestriction(Restriction restriction) {
 
 		OntologyRestrictionClass returned = (OntologyRestrictionClass) _classes.get(restriction);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.ON_CLASS);
@@ -1292,16 +1297,16 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 		String ontologyURI = "file:/tmp/UML2.owl";
 		ontModel.read(ontologyURI);
-		for (Iterator i = ontModel.listClasses(); i.hasNext();) {
-			OntClass aClass = (OntClass) i.next();
+		for (Iterator<OntClass> i = ontModel.listClasses(); i.hasNext();) {
+			OntClass aClass = i.next();
 			handleResource(aClass, renamedResources, renamedURI);
 		}
-		for (Iterator i = ontModel.listObjectProperties(); i.hasNext();) {
-			OntProperty aProperty = (OntProperty) i.next();
+		for (Iterator<ObjectProperty> i = ontModel.listObjectProperties(); i.hasNext();) {
+			ObjectProperty aProperty = i.next();
 			handleResource(aProperty, renamedResources, renamedURI);
 		}
-		for (Iterator i = ontModel.listDatatypeProperties(); i.hasNext();) {
-			OntProperty aProperty = (OntProperty) i.next();
+		for (Iterator<DatatypeProperty> i = ontModel.listDatatypeProperties(); i.hasNext();) {
+			DatatypeProperty aProperty = i.next();
 			handleResource(aProperty, renamedResources, renamedURI);
 		}
 
@@ -1393,17 +1398,17 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		DescribeClass dc = new DescribeClass();
 		DescribeDatatypeProperty dp = new DescribeDatatypeProperty();
 
-		for (Iterator i = getOntModel().listClasses(); i.hasNext();) {
-			dc.describeClass(System.out, (OntClass) i.next());
+		for (Iterator<OntClass> i = getOntModel().listClasses(); i.hasNext();) {
+			dc.describeClass(System.out, i.next());
 		}
 
-		for (Iterator i = getOntModel().listObjectProperties(); i.hasNext();) {
-			ObjectProperty property = (ObjectProperty) i.next();
+		for (Iterator<ObjectProperty> i = getOntModel().listObjectProperties(); i.hasNext();) {
+			ObjectProperty property = i.next();
 			System.out.println("Object Property: " + property.getLocalName());
 		}
 
-		for (Iterator i = getOntModel().listDatatypeProperties(); i.hasNext();) {
-			dp.describeProperty(System.out, (DatatypeProperty) i.next());
+		for (Iterator<DatatypeProperty> i = getOntModel().listDatatypeProperties(); i.hasNext();) {
+			dp.describeProperty(System.out, i.next());
 		}
 
 	}
@@ -1798,8 +1803,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			}
 		}
 
-		if (objectURI.equals(getURI()))
+		if (objectURI.equals(getURI())) {
 			return this;
+		}
 
 		OWLObject<?> returned = null;
 

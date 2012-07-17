@@ -33,9 +33,9 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.filter.ElementFilter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.widget.IESequenceTopComponent;
 import org.openflexo.foundation.ie.widget.IESequenceWidget;

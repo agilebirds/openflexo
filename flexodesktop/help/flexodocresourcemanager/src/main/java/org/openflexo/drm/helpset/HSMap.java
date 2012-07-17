@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.DocType;
+import org.jdom2.DocType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
@@ -72,7 +72,7 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 			_entries.add(new HSMapEntry(DRMHelpSet.TOP_LEVEL_FOLDER, DRMHelpSet.TOP_LEVEL_IMAGE));
 			for (DocItem next : _drc.getAllItems()) {
 				if (next.isIncluded(configuration)) {
-					if (!(next.getIsEmbedded()) && (next.isPublished())) {
+					if (!next.getIsEmbedded() && next.isPublished()) {
 						logger.fine("Generate map entry for " + next);
 						_entries.add(new HSMapEntry(next));
 					}

@@ -19,9 +19,9 @@
  */
 package org.openflexo.xml.diff3;
 
-import org.jdom.Content;
-import org.jdom.Element;
-import org.jdom.Text;
+import org.jdom2.Content;
+import org.jdom2.Element;
+import org.jdom2.Text;
 
 public class MergeElementAction extends MergeAction {
 
