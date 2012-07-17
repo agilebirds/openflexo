@@ -127,7 +127,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 
 	@Override
 	public ViewPoint getViewPoint() {
-		return getEditionPattern().getViewPoint();
+		return (getEditionPattern() != null ? getEditionPattern().getViewPoint() : null);
 	}
 
 	/**
