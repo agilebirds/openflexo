@@ -220,8 +220,6 @@ public class View extends ViewObject implements XMLStorageResourceData {
 
 	@Override
 	public void setDescription(String description) {
-		System.out.println("Set description with " + description);
-
 		if (getShemaDefinition() != null) {
 			getShemaDefinition().setDescription(description);
 		}
