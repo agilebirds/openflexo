@@ -331,7 +331,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	public WKFDocumentationView getCurrentWKFDocumentationView() {
-		ModuleView currentView = getCurrentModuleView();
+		ModuleView<?> currentView = getCurrentModuleView();
 		if (currentView instanceof WKFDocumentationView) {
 			return (WKFDocumentationView) getCurrentModuleView();
 		} else {
