@@ -20,10 +20,9 @@
 package org.openflexo.components.browser.ontology;
 
 import org.openflexo.components.browser.BrowserElement;
-import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyStatement;
 
 /**
  * Browser element representing the calc library
@@ -31,17 +30,18 @@ import org.openflexo.foundation.ontology.OntologyStatement;
  * @author sguerin
  * 
  */
+@Deprecated
 public class OntologyIndividualElement extends BrowserElement {
 
 	protected OntologyIndividualElement(OntologyIndividual concept, ProjectBrowser browser, BrowserElement parent) {
-		super(concept, BrowserElementType.ONTOLOGY_INDIVIDUAL, browser, parent);
+		super((FlexoModelObject) concept, null/*BrowserElementType.ONTOLOGY_INDIVIDUAL*/, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		for (OntologyStatement s : getOntologyIndividual().getStatements()) {
+		/*for (OntologyStatement s : getOntologyIndividual().getStatements()) {
 			addToChilds(s);
-		}
+		}*/
 	}
 
 	@Override

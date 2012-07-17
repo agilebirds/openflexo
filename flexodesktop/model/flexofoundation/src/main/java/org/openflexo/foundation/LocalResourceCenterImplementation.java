@@ -23,9 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -134,7 +134,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		}
 		for (File f : dir.listFiles()) {
 			if (f.isFile() && f.getName().endsWith(".owl")) {
-				String uri = FlexoOntology.findOntologyURI(f);
+				String uri = OWLOntology.findOntologyURI(f);
 				if (uri == null) {
 					uri = baseUri + "/" + f.getName();
 				}

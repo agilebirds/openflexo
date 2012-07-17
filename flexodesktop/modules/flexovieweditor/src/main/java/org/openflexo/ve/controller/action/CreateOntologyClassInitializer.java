@@ -28,7 +28,7 @@ import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.CreateOntologyClass;
+import org.openflexo.foundation.ontology.owl.action.CreateOntologyClass;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;

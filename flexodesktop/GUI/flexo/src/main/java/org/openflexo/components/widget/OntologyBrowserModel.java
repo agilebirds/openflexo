@@ -27,7 +27,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
@@ -35,9 +34,12 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.OntologyRestrictionClass;
-import org.openflexo.foundation.ontology.RDFSURIDefinitions;
-import org.openflexo.foundation.ontology.RDFURIDefinitions;
+import org.openflexo.foundation.ontology.OntologyUtils;
+import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
+import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
+import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
+import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -71,22 +73,22 @@ public class OntologyBrowserModel {
 	private boolean showClasses = true;
 	private boolean showIndividuals = true;
 
-	private Vector<OntologyObject<?>> roots = null;
-	private Hashtable<OntologyObject<?>, Vector<OntologyObject<?>>> structure = null;
+	private Vector<OntologyObject> roots = null;
+	private Hashtable<OntologyObject, Vector<OntologyObject>> structure = null;
 
 	public OntologyBrowserModel(FlexoOntology context) {
 		super();
 		setContext(context);
 	}
 
-	public List<OntologyObject<?>> getRoots() {
+	public List<OntologyObject> getRoots() {
 		if (roots == null) {
 			recomputeStructure();
 		}
 		return roots;
 	}
 
-	public List<OntologyObject<?>> getChildren(OntologyObject<?> father) {
+	public List<OntologyObject> getChildren(OntologyObject father) {
 		return structure.get(father);
 	}
 
@@ -214,7 +216,7 @@ public class OntologyBrowserModel {
 		this.dataType = dataType;
 	}
 
-	public boolean isDisplayable(OntologyObject<?> object) {
+	public boolean isDisplayable(OntologyObject object) {
 
 		if (object instanceof FlexoOntology) {
 			if ((object == object.getOntologyLibrary().getRDFOntology() || object == object.getOntologyLibrary().getRDFSOntology() || object == object
@@ -223,7 +225,7 @@ public class OntologyBrowserModel {
 			}
 			return true;
 		}
-		if (!getShowOWLAndRDFConcepts() && StringUtils.isNotEmpty(object.getURI()) && object.getOntology() != getContext()) {
+		if (!getShowOWLAndRDFConcepts() && StringUtils.isNotEmpty(object.getURI()) && object.getFlexoOntology() != getContext()) {
 			if (object.getURI().startsWith(RDFURIDefinitions.RDF_ONTOLOGY_URI)
 					|| object.getURI().startsWith(RDFSURIDefinitions.RDFS_ONTOLOGY_URI)
 					|| object.getURI().startsWith(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
@@ -316,7 +318,7 @@ public class OntologyBrowserModel {
 		return true;
 	}
 
-	private void appendOntologyContents(FlexoOntology o, OntologyObject<?> parent) {
+	private void appendOntologyContents(FlexoOntology o, OntologyObject parent) {
 		List<OntologyProperty> properties = new Vector<OntologyProperty>();
 		List<OntologyIndividual> individuals = new Vector<OntologyIndividual>();
 		Hashtable<OntologyProperty, List<OntologyClass>> storedProperties = new Hashtable<OntologyProperty, List<OntologyClass>>();
@@ -402,12 +404,12 @@ public class OntologyBrowserModel {
 		if (roots != null) {
 			roots.clear();
 		} else {
-			roots = new Vector<OntologyObject<?>>();
+			roots = new Vector<OntologyObject>();
 		}
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<OntologyObject<?>, Vector<OntologyObject<?>>>();
+			structure = new Hashtable<OntologyObject, Vector<OntologyObject>>();
 		}
 
 		if (getContext() == null) {
@@ -429,7 +431,7 @@ public class OntologyBrowserModel {
 		}
 	}
 
-	private void addPropertiesAsHierarchy(OntologyObject<?> parent, List<OntologyProperty> someProperties) {
+	private void addPropertiesAsHierarchy(OntologyObject parent, List<OntologyProperty> someProperties) {
 		for (OntologyProperty p : someProperties) {
 			if (!hasASuperPropertyDefinedInList(p, someProperties)) {
 				appendPropertyInHierarchy(parent, p, someProperties);
@@ -437,13 +439,13 @@ public class OntologyBrowserModel {
 		}
 	}
 
-	private void appendPropertyInHierarchy(OntologyObject<?> parent, OntologyProperty p, List<OntologyProperty> someProperties) {
+	private void appendPropertyInHierarchy(OntologyObject parent, OntologyProperty p, List<OntologyProperty> someProperties) {
 		if (parent == null) {
 			roots.add(p);
 		} else {
 			addChildren(parent, p);
 		}
-		for (OntologyProperty subProperty : p.getSubProperties()) {
+		for (OntologyProperty subProperty : p.getSubProperties(getContext())) {
 			if (someProperties.contains(subProperty)) {
 				appendPropertyInHierarchy(p, subProperty, someProperties);
 			}
@@ -464,9 +466,9 @@ public class OntologyBrowserModel {
 	}
 
 	private void addChildren(OntologyObject parent, OntologyObject child) {
-		Vector<OntologyObject<?>> v = structure.get(parent);
+		Vector<OntologyObject> v = structure.get(parent);
 		if (v == null) {
-			v = new Vector<OntologyObject<?>>();
+			v = new Vector<OntologyObject>();
 			structure.put(parent, v);
 		}
 		if (!v.contains(child)) {
@@ -481,12 +483,12 @@ public class OntologyBrowserModel {
 		if (roots != null) {
 			roots.clear();
 		} else {
-			roots = new Vector<OntologyObject<?>>();
+			roots = new Vector<OntologyObject>();
 		}
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<OntologyObject<?>, Vector<OntologyObject<?>>>();
+			structure = new Hashtable<OntologyObject, Vector<OntologyObject>>();
 		}
 
 		List<OntologyProperty> properties = new Vector<OntologyProperty>();
@@ -598,7 +600,7 @@ public class OntologyBrowserModel {
 			// Return the most specialized definition
 			OntologyClass c = (searchedOntology != null ? searchedOntology : getContext()).getClass(((OntologyClass) p.getDomain())
 					.getURI());
-			if (c != null && (searchedOntology == null || c.getOntology() == searchedOntology)) {
+			if (c != null && (searchedOntology == null || c.getFlexoOntology() == searchedOntology)) {
 				potentialStorageClasses.add(c);
 				return potentialStorageClasses;
 			}
@@ -609,7 +611,7 @@ public class OntologyBrowserModel {
 				for (OntologyClass superClass : c.getSuperClasses()) {
 					if (superClass instanceof OntologyRestrictionClass
 							&& ((OntologyRestrictionClass) superClass).getProperty().equalsToConcept(p)) {
-						if (searchedOntology == null || c.getOntology() == searchedOntology) {
+						if (searchedOntology == null || c.getFlexoOntology() == searchedOntology) {
 							potentialStorageClasses.add(c);
 						}
 					}
@@ -632,7 +634,7 @@ public class OntologyBrowserModel {
 	private OntologyClass getPreferredStorageLocation(OntologyIndividual i) {
 
 		// Return the first class which is not the Thing concept
-		for (OntologyClass c : i.getSuperClasses()) {
+		for (OntologyClass c : i.getTypes()) {
 			if (c.isNamedClass() && !c.isThing()) {
 				OntologyClass returned = getContext().getClass(c.getURI());
 				if (returned != null)
@@ -642,7 +644,7 @@ public class OntologyBrowserModel {
 		return getContext().getThingConcept();
 	}
 
-	private void addClassesAsHierarchy(OntologyObject<?> parent, List<OntologyClass> someClasses) {
+	private void addClassesAsHierarchy(OntologyObject parent, List<OntologyClass> someClasses) {
 		if (someClasses.contains(getContext().getThingConcept())) {
 			appendClassInHierarchy(parent, getContext().getThingConcept(), someClasses);
 		} else {
@@ -666,7 +668,7 @@ public class OntologyBrowserModel {
 		}
 	}
 
-	private void appendClassInHierarchy(OntologyObject<?> parent, OntologyClass c, List<OntologyClass> someClasses) {
+	private void appendClassInHierarchy(OntologyObject parent, OntologyClass c, List<OntologyClass> someClasses) {
 
 		List<OntologyClass> listByExcludingCurrentClass = new ArrayList<OntologyClass>(someClasses);
 		listByExcludingCurrentClass.remove(c);
@@ -726,12 +728,12 @@ public class OntologyBrowserModel {
 	 * 
 	 * @param list
 	 */
-	private void removeOriginalFromRedefinedObjects(List<? extends OntologyObject<?>> list) {
+	private void removeOriginalFromRedefinedObjects(List<? extends OntologyObject> list) {
 		for (OntologyObject c : new ArrayList<OntologyObject>(list)) {
-			if (c.redefinesOriginalDefinition()) {
-				list.remove(c.getOriginalDefinition());
+			if (c instanceof OWLObject<?> && ((OWLObject<?>) c).redefinesOriginalDefinition()) {
+				list.remove(((OWLObject<?>) c).getOriginalDefinition());
 			}
-			if (c instanceof OntologyClass && ((OntologyClass) c).isThing() && c.getOntology() != getContext()
+			if (c instanceof OntologyClass && ((OntologyClass) c).isThing() && c.getFlexoOntology() != getContext()
 					&& list.contains(getContext().getThingConcept())) {
 				list.remove(c);
 			}
@@ -744,7 +746,7 @@ public class OntologyBrowserModel {
 				for (int j = i + 1; j < someClasses.size(); j++) {
 					OntologyClass c1 = someClasses.get(i);
 					OntologyClass c2 = someClasses.get(j);
-					OntologyClass ancestor = OntologyClass.getFirstCommonAncestor(c1, c2);
+					OntologyClass ancestor = OntologyUtils.getFirstCommonAncestor(c1, c2);
 					if (ancestor != null) {
 						OntologyClass ancestorSeenFromContextOntology = getContext().getClass(ancestor.getURI());
 						if (ancestorSeenFromContextOntology != null) {
@@ -811,7 +813,7 @@ public class OntologyBrowserModel {
 	}
 
 	public Font getFont(OntologyObject object, Font baseFont) {
-		if (object.getOntology() != getContext()) {
+		if (object.getFlexoOntology() != getContext()) {
 			return baseFont.deriveFont(Font.ITALIC);
 		}
 		return baseFont;

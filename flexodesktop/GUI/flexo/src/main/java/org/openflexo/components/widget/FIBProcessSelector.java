@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.toolbox.FileResource;
@@ -61,11 +60,6 @@ public class FIBProcessSelector extends FIBModelObjectSelector<FlexoProcess> {
 			return getProject().getWorkflow().getAllFlexoProcesses();
 		}
 		return null;
-	}
-
-	@Override
-	protected boolean isAcceptableValue(FlexoModelObject o) {
-		return super.isAcceptableValue(o);
 	}
 
 	@Override

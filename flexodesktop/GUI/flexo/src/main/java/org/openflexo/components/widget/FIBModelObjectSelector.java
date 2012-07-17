@@ -72,8 +72,8 @@ import org.openflexo.view.controller.FlexoFIBController;
  * @author sguerin
  * 
  */
-public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends TextFieldCustomPopup<T> implements
-		FIBCustomComponent<T, FIBModelObjectSelector>, HasPropertyChangeSupport {
+public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> implements FIBCustomComponent<T, FIBModelObjectSelector>,
+		HasPropertyChangeSupport {
 	static final Logger logger = Logger.getLogger(FIBModelObjectSelector.class.getPackage().getName());
 
 	private static final String DELETED = "deleted";
@@ -85,7 +85,7 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	protected SelectorDetailsPanel _selectorPanel;
 
 	private FlexoProject project;
-	private FlexoModelObject selectedObject;
+	private Object selectedObject;
 	private T selectedValue;
 	private final List<T> matchingValues;
 	private T candidateValue;
@@ -246,13 +246,13 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		// updateMatchingValues();
 	}
 
-	public FlexoModelObject getSelectedObject() {
+	public Object getSelectedObject() {
 		return selectedObject;
 	}
 
-	public void setSelectedObject(FlexoModelObject selectedObject) {
+	public void setSelectedObject(Object selectedObject) {
 		// System.out.println("set selected object: "+selectedObject);
-		FlexoModelObject old = getSelectedObject();
+		Object old = getSelectedObject();
 		this.selectedObject = selectedObject;
 		pcSupport.firePropertyChange("selectedObject", old, selectedObject);
 		if (isAcceptableValue(selectedObject)) {
@@ -337,7 +337,11 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	 * Override when required
 	 */
 	protected boolean matches(T o, String filteredName) {
-		return o.getName() != null && o.getName().toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
+		if (o instanceof FlexoModelObject) {
+			return ((FlexoModelObject) o).getName() != null
+					&& ((FlexoModelObject) o).getName().toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
+		}
+		return false;
 	}
 
 	public List<T> getMatchingValues() {
@@ -640,13 +644,16 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		if (editedObject == null) {
 			return "";
 		}
-		return editedObject.getFullyQualifiedName();
+		if (editedObject instanceof FlexoModelObject) {
+			return ((FlexoModelObject) editedObject).getFullyQualifiedName();
+		}
+		return editedObject.toString();
 	}
 
 	/**
 	 * Override when required
 	 */
-	protected boolean isAcceptableValue(FlexoModelObject o) {
+	protected boolean isAcceptableValue(Object o) {
 		if (o == null) {
 			return false;
 		}

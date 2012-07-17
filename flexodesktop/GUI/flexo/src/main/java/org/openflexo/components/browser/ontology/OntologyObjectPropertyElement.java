@@ -26,10 +26,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.ProjectBrowser.OEViewMode;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.icon.IconFactory;
 
 /**
@@ -38,15 +36,16 @@ import org.openflexo.icon.IconFactory;
  * @author sguerin
  * 
  */
+@Deprecated
 public class OntologyObjectPropertyElement extends BrowserElement {
 
 	protected OntologyObjectPropertyElement(OntologyObjectProperty property, ProjectBrowser browser, BrowserElement parent) {
-		super(property, BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, browser, parent);
+		super((FlexoModelObject) property, null/*BrowserElementType.ONTOLOGY_OBJECT_PROPERTY*/, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
+		/*if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
 			for (OntologyProperty subProperty : getProperty().getSubProperties()) {
 				if (!getProjectBrowser().showOnlyAnnotationProperties() || subProperty.isAnnotationProperty()) {
 					addToChilds(subProperty);
@@ -66,7 +65,7 @@ public class OntologyObjectPropertyElement extends BrowserElement {
 
 		for (OntologyStatement s : getProperty().getStatements()) {
 			addToChilds(s);
-		}
+		}*/
 	}
 
 	@Override

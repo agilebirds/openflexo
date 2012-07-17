@@ -29,6 +29,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -80,9 +81,9 @@ public class OntologyPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoOntology getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof FlexoOntology) {
-			return (FlexoOntology) proposedObject;
+			return proposedObject;
 		}
 		return _controller.getProject().getProjectOntology();
 	}
@@ -94,9 +95,9 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
-		if (object instanceof FlexoOntology) {
-			((FlexoOntology) object).loadWhenUnloaded();
-			return new OntologyView((FlexoOntology) object, (VEController) controller, this);
+		if (object instanceof OWLOntology) {
+			((OWLOntology) object).loadWhenUnloaded();
+			return new OntologyView((OWLOntology) object, (VEController) controller, this);
 		}
 		return null;
 	}

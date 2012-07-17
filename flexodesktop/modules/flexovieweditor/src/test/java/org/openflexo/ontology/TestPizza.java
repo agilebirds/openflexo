@@ -26,8 +26,8 @@ import java.io.StringReader;
 import java.util.Iterator;
 
 import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.toolbox.FileResource;
@@ -48,7 +48,7 @@ public class TestPizza {
 		File myOntology = new FileResource("MyOntologies/MyPizza.owl");
 
 		System.out.println("Found: " + myOntology);
-		FlexoOntology hop = ontologyLibrary.importOntology("http://prout", myOntology);
+		OWLOntology hop = ontologyLibrary.importOntology("http://prout", myOntology);
 
 		// importedOntologyLibraries.debug();
 
@@ -81,7 +81,7 @@ public class TestPizza {
 		OntClass pipiClass = ontModel.createClass(URI + "#" + "pipi");
 		pipiClass.addSuperClass(cacaClass);
 
-		FlexoOntology flexoConceptsOntology = ontologyLibrary.getOntology(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
+		OWLOntology flexoConceptsOntology = (OWLOntology) ontologyLibrary.getOntology(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
 
 		ontModel.getDocumentManager().loadImport(flexoConceptsOntology.getOntModel(), OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
 		ontModel.getDocumentManager().addModel(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI, flexoConceptsOntology.getOntModel(), true);

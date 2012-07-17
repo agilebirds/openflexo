@@ -32,19 +32,21 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.OntologyRestrictionClass;
-import org.openflexo.foundation.ontology.OntologyRestrictionClass.RestrictionType;
-import org.openflexo.foundation.ontology.SubClassStatement;
+import org.openflexo.foundation.ontology.owl.OWLClass;
+import org.openflexo.foundation.ontology.owl.OWLIndividual;
+import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.OWLObjectProperty;
+import org.openflexo.foundation.ontology.owl.OWLProperty;
+import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
+import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass.RestrictionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewConnector;
@@ -235,19 +237,19 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			assignedObject = newClass;
 		} else if (action instanceof AddObjectPropertyStatement) {
 			logger.info("Add object property " + action);
-			ObjectPropertyStatement statement = performAddObjectPropertyStatement((org.openflexo.foundation.viewpoint.AddObjectPropertyStatement) action);
+			Object statement = performAddObjectPropertyStatement((org.openflexo.foundation.viewpoint.AddObjectPropertyStatement) action);
 			assignedObject = statement;
 		} else if (action instanceof AddDataPropertyStatement) {
 			logger.info("Add data property " + action);
-			DataPropertyStatement statement = performAddDataPropertyStatement((org.openflexo.foundation.viewpoint.AddDataPropertyStatement) action);
+			Object statement = performAddDataPropertyStatement((org.openflexo.foundation.viewpoint.AddDataPropertyStatement) action);
 			assignedObject = statement;
 		} else if (action instanceof AddIsAStatement) {
 			logger.info("Add isA property " + action);
-			SubClassStatement statement = performAddIsAProperty((AddIsAStatement) action);
+			Object statement = performAddIsAProperty((AddIsAStatement) action);
 			assignedObject = statement;
 		} else if (action instanceof AddRestrictionStatement) {
 			logger.info("Add restriction " + action);
-			SubClassStatement statement = performAddRestriction((AddRestrictionStatement) action);
+			Object statement = performAddRestriction((AddRestrictionStatement) action);
 			assignedObject = statement;
 		} else if (action instanceof DeclarePatternRole) {
 			logger.info("Declare object " + action);
@@ -458,7 +460,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 					OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
 					logger.info("Property=" + property);
 					Object value = dataPropertyAssertion.getValue(this);
-					newIndividual.addLiteral(property, value);
+					newIndividual.addPropertyStatement(property, value);
 				}
 			}
 			for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
@@ -466,14 +468,15 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 					// logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
 					OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
 					// logger.info("Property="+property);
-					if (property instanceof OntologyObjectProperty) {
-						if (((OntologyObjectProperty) property).isLiteralRange()) {
+					if (property instanceof OWLObjectProperty) {
+						if (((OWLObjectProperty) property).isLiteralRange()) {
 							Object value = objectPropertyAssertion.getValue(this);
-							newIndividual.addLiteral(property, value);
+							newIndividual.addPropertyStatement(property, value);
 						} else {
-							OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);
+							OWLObject<?> assertionObject = (OWLObject<?>) objectPropertyAssertion.getAssertionObject(this);
 							if (assertionObject != null) {
-								newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
+								((OWLIndividual) newIndividual).getOntResource().addProperty(
+										((OWLObjectProperty) property).getOntProperty(), assertionObject.getOntResource());
 							}
 						}
 					}
@@ -485,14 +488,18 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 						if (value instanceof OntologyObject) assertionObject = (OntologyObject)value;
 						if (assertionObject == null && getParent() instanceof OEShape) 
 							assertionObject = objectPropertyAssertion.getAssertionObject((OEShape)getParent(),editionPatternInstance);*/
-					if (assertionObject != null) {
-						newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
+					if (assertionObject != null && newIndividual instanceof OWLIndividual && property instanceof OWLProperty
+							&& assertionObject instanceof OWLObject) {
+						((OWLIndividual) newIndividual).getOntResource().addProperty(((OWLProperty) property).getOntProperty(),
+								((OWLObject) assertionObject).getOntResource());
 					} else {
 						// logger.info("assertion objet is null");
 					}
 				}
 			}
-			newIndividual.updateOntologyStatements();
+			if (newIndividual instanceof OWLIndividual) {
+				((OWLIndividual) newIndividual).updateOntologyStatements();
+			}
 
 			// Register reference
 			newIndividual.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
@@ -570,7 +577,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			return newClass;
 		}*/
 
-	protected ObjectPropertyStatement performAddObjectPropertyStatement(AddObjectPropertyStatement action) {
+	protected Object performAddObjectPropertyStatement(AddObjectPropertyStatement action) {
 		OntologyObjectProperty property = (OntologyObjectProperty) action.getObjectProperty();
 		OntologyObject subject = action.getPropertySubject(this);
 		OntologyObject object = action.getPropertyObject(this);
@@ -591,7 +598,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return newObjectPropertyStatement;
 	}*/
 
-	protected DataPropertyStatement performAddDataPropertyStatement(AddDataPropertyStatement action) {
+	protected Object performAddDataPropertyStatement(AddDataPropertyStatement action) {
 		OntologyDataProperty property = (OntologyDataProperty) action.getDataProperty();
 		OntologyObject subject = action.getPropertySubject(this);
 		Object value = action.getValue(this);
@@ -604,7 +611,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		if (value == null) {
 			return null;
 		}
-		return (DataPropertyStatement) subject.addLiteral(property, value);
+		return subject.addDataPropertyStatement(property, value);
 	}
 
 	/*protected DataPropertyStatement finalizePerformAddDataPropertyStatement(AddDataPropertyStatement action,
@@ -625,17 +632,15 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return object;
 	}*/
 
-	protected SubClassStatement performAddIsAProperty(AddIsAStatement action) {
+	protected Object performAddIsAProperty(AddIsAStatement action) {
 		OntologyObject subject = action.getPropertySubject(this);
 		OntologyObject father = action.getPropertyFather(this);
 		if (father instanceof OntologyClass) {
 			if (subject instanceof OntologyClass) {
-				((OntologyClass) subject).getOntResource().addSuperClass(((OntologyClass) father).getOntResource());
+				return ((OntologyClass) subject).addSuperClass((OntologyClass) father);
 			} else if (subject instanceof OntologyIndividual) {
-				((OntologyIndividual) subject).getOntResource().addOntClass(((OntologyClass) father).getOntResource());
+				return ((OntologyIndividual) subject).addType((OntologyClass) father);
 			}
-			subject.updateOntologyStatements();
-			return subject.getSubClassStatement(father);
 		}
 		return null;
 	}
@@ -644,7 +649,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return subClassStatement;
 	}*/
 
-	protected SubClassStatement performAddRestriction(AddRestrictionStatement action) {
+	protected Object performAddRestriction(AddRestrictionStatement action) {
 		// System.out.println("Add restriction");
 
 		OntologyProperty property = action.getObjectProperty();
@@ -657,18 +662,18 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		// System.out.println("restrictionType="+getParameterValues().get(action.getRestrictionType()));
 		// System.out.println("cardinality="+getParameterValues().get(action.getCardinality()));
 
-		if (subject instanceof OntologyClass && object instanceof OntologyClass) {
+		if (subject instanceof OWLClass && object instanceof OWLClass && property instanceof OWLProperty) {
 			RestrictionType restrictionType = action.getRestrictionType(this);
 			int cardinality = action.getCardinality(this);
-			OntologyRestrictionClass restriction = getProject().getProjectOntology().createRestriction((OntologyClass) subject, property,
-					restrictionType, cardinality, (OntologyClass) object);
+			OntologyRestrictionClass restriction = getProject().getProjectOntology().createRestriction((OWLClass) subject,
+					(OWLProperty) property, restrictionType, cardinality, (OWLClass) object);
 
-			if (subject instanceof OntologyClass) {
-				if (subject instanceof OntologyClass) {
-					((OntologyClass) subject).getOntResource().addSuperClass(restriction.getOntResource());
+			if (subject instanceof OWLClass) {
+				if (subject instanceof OWLClass) {
+					((OWLClass) subject).getOntResource().addSuperClass(restriction.getOntResource());
 				}
-				subject.updateOntologyStatements();
-				return subject.getSubClassStatement(restriction);
+				((OWLClass) subject).updateOntologyStatements();
+				return ((OWLClass) subject).getSubClassStatement(restriction);
 			}
 
 		}

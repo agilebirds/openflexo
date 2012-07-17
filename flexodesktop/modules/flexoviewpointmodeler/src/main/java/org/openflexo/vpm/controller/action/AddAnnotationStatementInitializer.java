@@ -26,7 +26,7 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.AddAnnotationStatement;
+import org.openflexo.foundation.ontology.owl.action.AddAnnotationStatement;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;

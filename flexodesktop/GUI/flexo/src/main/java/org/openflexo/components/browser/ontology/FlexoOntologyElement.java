@@ -23,6 +23,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.ProjectBrowser.OEViewMode;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
@@ -38,37 +39,37 @@ import org.openflexo.localization.FlexoLocalization;
 public abstract class FlexoOntologyElement extends BrowserElement {
 
 	protected FlexoOntologyElement(FlexoOntology ontology, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
-		super(ontology, elementType, browser, parent);
+		super((FlexoModelObject) ontology, elementType, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
 		if (getProjectBrowser().getOEViewMode() == OEViewMode.NoHierarchy) {
 			for (OntologyClass concept : getOntology().getClasses()) {
-				addToChilds(concept);
+				addToChilds((FlexoModelObject) concept);
 			}
 			for (OntologyProperty property : getOntology().getObjectProperties()) {
 				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
-					addToChilds(property);
+					addToChilds((FlexoModelObject) property);
 				}
 			}
 			for (OntologyProperty property : getOntology().getDataProperties()) {
 				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
-					addToChilds(property);
+					addToChilds((FlexoModelObject) property);
 				}
 			}
 			for (OntologyIndividual concept : getOntology().getIndividuals()) {
-				addToChilds(concept);
+				addToChilds((FlexoModelObject) concept);
 			}
 		}
 
 		if (getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy) {
-			for (OntologyClass concept : getOntology().getRootClasses()) {
-				addToChilds(concept);
+			/*for (OntologyClass concept : getOntology().getRootClasses()) {
+				addToChilds((FlexoModelObject)concept);
 			}
 			for (OntologyProperty concept : getOntology().getRootProperties()) {
-				addToChilds(concept);
-			}
+				addToChilds((FlexoModelObject)concept);
+			}*/
 			/*for (OntologyProperty property : getOntology().getDataProperties()) {
 				addToChilds(property);
 			}

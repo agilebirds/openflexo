@@ -25,6 +25,15 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
+import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
+import org.openflexo.foundation.ontology.owl.OWLClass;
+import org.openflexo.foundation.ontology.owl.OWLDataProperty;
+import org.openflexo.foundation.ontology.owl.OWLIndividual;
+import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.OWLObjectProperty;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
+import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.toolbox.FileResource;
@@ -59,54 +68,54 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test2AssertRDFSOntologyPresentAndLoaded() {
 		log("test2AssertRDFSOntologyPresentAndLoaded()");
-		FlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
+		OWLOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
 		assertNotNull(rdfsOntology);
 		assertTrue(rdfsOntology.isLoaded());
 
-		OntologyClass LITERAL = rdfsOntology.getClass(OntologyObject.RDFS_LITERAL_URI);
+		OWLClass LITERAL = rdfsOntology.getClass(OWLObject.RDFS_LITERAL_URI);
 		assertNotNull(LITERAL);
-		OntologyClass RESOURCE = rdfsOntology.getClass(OntologyObject.RDFS_RESOURCE_URI);
+		OWLClass RESOURCE = rdfsOntology.getClass(OWLObject.RDFS_RESOURCE_URI);
 		assertNotNull(RESOURCE);
-		OntologyClass CLASS = rdfsOntology.getClass(OntologyObject.RDFS_CLASS_URI);
+		OWLClass CLASS = rdfsOntology.getClass(OWLObject.RDFS_CLASS_URI);
 		assertNotNull(CLASS);
-		OntologyClass DATATYPE = rdfsOntology.getClass(OntologyObject.RDFS_DATATYPE_URI);
+		OWLClass DATATYPE = rdfsOntology.getClass(OWLObject.RDFS_DATATYPE_URI);
 		assertNotNull(DATATYPE);
-		OntologyClass CONTAINER = rdfsOntology.getClass(OntologyObject.RDFS_CONTAINER_URI);
+		OWLClass CONTAINER = rdfsOntology.getClass(OWLObject.RDFS_CONTAINER_URI);
 		assertNotNull(CONTAINER);
 
-		OntologyProperty DOMAIN = rdfsOntology.getProperty(OntologyObject.RDFS_DOMAIN_URI);
+		OntologyProperty DOMAIN = rdfsOntology.getProperty(OWLObject.RDFS_DOMAIN_URI);
 		assertNotNull(DOMAIN);
 		assertFalse(DOMAIN.isAnnotationProperty());
 
-		OntologyProperty RANGE = rdfsOntology.getProperty(OntologyObject.RDFS_RANGE_URI);
+		OntologyProperty RANGE = rdfsOntology.getProperty(OWLObject.RDFS_RANGE_URI);
 		assertNotNull(RANGE);
 		assertFalse(RANGE.isAnnotationProperty());
 
-		OntologyProperty SUB_CLASS = rdfsOntology.getProperty(OntologyObject.RDFS_SUB_CLASS_URI);
+		OntologyProperty SUB_CLASS = rdfsOntology.getProperty(OWLObject.RDFS_SUB_CLASS_URI);
 		assertNotNull(SUB_CLASS);
 		assertFalse(SUB_CLASS.isAnnotationProperty());
 
-		OntologyProperty SUB_PROPERTY = rdfsOntology.getProperty(OntologyObject.RDFS_SUB_PROPERTY_URI);
+		OntologyProperty SUB_PROPERTY = rdfsOntology.getProperty(OWLObject.RDFS_SUB_PROPERTY_URI);
 		assertNotNull(SUB_PROPERTY);
 		assertFalse(SUB_PROPERTY.isAnnotationProperty());
 
-		OntologyProperty MEMBER = rdfsOntology.getProperty(OntologyObject.RDFS_MEMBER_URI);
+		OntologyProperty MEMBER = rdfsOntology.getProperty(OWLObject.RDFS_MEMBER_URI);
 		assertNotNull(MEMBER);
 		assertFalse(MEMBER.isAnnotationProperty());
 
-		OntologyProperty SEE_ALSO = rdfsOntology.getProperty(OntologyObject.RDFS_SEE_ALSO_URI);
+		OntologyProperty SEE_ALSO = rdfsOntology.getProperty(OWLObject.RDFS_SEE_ALSO_URI);
 		assertNotNull(SEE_ALSO);
 		assertTrue(SEE_ALSO.isAnnotationProperty());
 
-		OntologyProperty IS_DEFINED_BY = rdfsOntology.getProperty(OntologyObject.RDFS_IS_DEFINED_BY_URI);
+		OntologyProperty IS_DEFINED_BY = rdfsOntology.getProperty(OWLObject.RDFS_IS_DEFINED_BY_URI);
 		assertNotNull(IS_DEFINED_BY);
 		assertTrue(IS_DEFINED_BY.isAnnotationProperty());
 
-		OntologyProperty LABEL = rdfsOntology.getProperty(OntologyObject.RDFS_LABEL_URI);
+		OntologyProperty LABEL = rdfsOntology.getProperty(OWLObject.RDFS_LABEL_URI);
 		assertNotNull(LABEL);
 		assertTrue(LABEL.isAnnotationProperty());
 
-		OntologyProperty COMMENT = rdfsOntology.getProperty(OntologyObject.RDFS_COMMENT_URI);
+		OntologyProperty COMMENT = rdfsOntology.getProperty(OWLObject.RDFS_COMMENT_URI);
 		assertNotNull(COMMENT);
 		assertTrue(COMMENT.isAnnotationProperty());
 
@@ -135,45 +144,44 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test5AssertFlexoConceptsOntologyIsCorrect() {
 		log("test5AssertFlexoConceptsOntologyIsCorrect()");
-		FlexoOntology flexoConceptsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology();
+		OWLOntology flexoConceptsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology();
 		assertNotNull(flexoConceptsOntology);
 		assertTrue(flexoConceptsOntology.isLoaded());
 		assertEquals(10, flexoConceptsOntology.getClasses().size());
 
 		assertNotNull(flexoConceptsOntology.getThingConcept());
 
-		OntologyClass flexoConcept = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoConcept");
+		OWLClass flexoConcept = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoConcept");
 		assertNotNull(flexoConcept);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
-		OntologyClass flexoModelObject = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
-				+ "FlexoModelObject");
+		OWLClass flexoModelObject = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoModelObject");
 		assertNotNull(flexoModelObject);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
-		OntologyClass flexoProcessFolder = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+		OWLClass flexoProcessFolder = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
 				+ "FlexoProcessFolder");
 		assertNotNull(flexoProcessFolder);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
-		OntologyClass flexoProcess = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoProcess");
+		OWLClass flexoProcess = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoProcess");
 		assertNotNull(flexoProcess);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
-		OntologyClass flexoRole = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoRole");
+		OWLClass flexoRole = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoRole");
 		assertNotNull(flexoRole);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
-		OntologyClass flexoProcessElement = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+		OWLClass flexoProcessElement = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
 				+ "FlexoProcessElement");
 		assertNotNull(flexoProcessElement);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
-		OntologyClass flexoActivity = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoActivity");
+		OWLClass flexoActivity = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoActivity");
 		assertNotNull(flexoActivity);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
-		OntologyClass flexoOperation = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoOperation");
+		OWLClass flexoOperation = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoOperation");
 		assertNotNull(flexoOperation);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
-		OntologyClass flexoEvent = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoEvent");
+		OWLClass flexoEvent = flexoConceptsOntology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoEvent");
 		assertNotNull(flexoEvent);
 		assertTrue(flexoConceptsOntology.getClasses().contains(flexoConcept));
 
-		OntologyClass classConcept = flexoConceptsOntology.getClass(OWL2URIDefinitions.OWL_CLASS_URI);
+		OWLClass classConcept = flexoConceptsOntology.getClass(OWL2URIDefinitions.OWL_CLASS_URI);
 		assertNotNull(classConcept);
 
 		assertFalse(flexoConcept.redefinesOriginalDefinition());
@@ -199,22 +207,22 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertSameList(flexoOperation.getSuperClasses(), flexoConceptsOntology.getThingConcept(), flexoProcessElement);
 
-		OntologyObjectProperty inRelationWithProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI
-				+ "#" + "inRelationWith");
+		OWLObjectProperty inRelationWithProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "inRelationWith");
 		assertNotNull(inRelationWithProperty);
-		OntologyObjectProperty linkedToModelProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI
-				+ "#" + "linkedToModel");
+		OWLObjectProperty linkedToModelProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+				+ "linkedToModel");
 		assertNotNull(linkedToModelProperty);
-		OntologyObjectProperty linkedToConceptProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI
+		OWLObjectProperty linkedToConceptProperty = flexoConceptsOntology.getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI
 				+ "#" + "linkedToConcept");
 		assertNotNull(linkedToConceptProperty);
-		OntologyDataProperty resourceNameProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+		OWLDataProperty resourceNameProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
 				+ "resourceName");
 		assertNotNull(resourceNameProperty);
-		OntologyDataProperty classNameProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+		OWLDataProperty classNameProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
 				+ "className");
 		assertNotNull(classNameProperty);
-		OntologyDataProperty flexoIDProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
+		OWLDataProperty flexoIDProperty = flexoConceptsOntology.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#"
 				+ "flexoID");
 		assertNotNull(flexoIDProperty);
 
@@ -231,11 +239,11 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test6TestMultiReferencesO3() {
 		log("test6TestMultiReferencesO3()");
-		FlexoOntology o1 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
+		OWLOntology o1 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
 		assertNotNull(o1);
-		FlexoOntology o2 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
+		OWLOntology o2 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
 		assertNotNull(o2);
-		FlexoOntology o3 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
+		OWLOntology o3 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
 		assertNotNull(o3);
 
 		o3.loadWhenUnloaded();
@@ -247,20 +255,20 @@ public class TestOntologies extends FlexoTestCase {
 		assertSameList(o3.getClasses(), o3.getThingConcept());
 		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
 
-		OntologyClass a2 = o2.getClass(o2.getURI() + "#A2");
+		OWLClass a2 = o2.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2);
-		OntologyClass b2 = o2.getClass(o2.getURI() + "#B2");
+		OWLClass b2 = o2.getClass(o2.getURI() + "#B2");
 		assertNotNull(b2);
-		OntologyClass c2 = o2.getClass(o2.getURI() + "#C2");
+		OWLClass c2 = o2.getClass(o2.getURI() + "#C2");
 		assertNotNull(c2);
 		assertEquals(4, o2.getClasses().size());
 		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
 
-		OntologyClass a1 = o1.getClass(o1.getURI() + "#A1");
+		OWLClass a1 = o1.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1);
-		OntologyClass b1 = o1.getClass(o1.getURI() + "#B1");
+		OWLClass b1 = o1.getClass(o1.getURI() + "#B1");
 		assertNotNull(b1);
-		OntologyClass c1 = o1.getClass(o1.getURI() + "#C1");
+		OWLClass c1 = o1.getClass(o1.getURI() + "#C1");
 		assertNotNull(c1);
 		assertEquals(4, o1.getClasses().size());
 		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
@@ -270,13 +278,13 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test7TestMultiReferencesO4() {
 		log("test7TestMultiReferencesO4()");
-		FlexoOntology o1 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
+		OWLOntology o1 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
 		assertNotNull(o1);
-		FlexoOntology o2 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
+		OWLOntology o2 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
 		assertNotNull(o2);
-		FlexoOntology o3 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
+		OWLOntology o3 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
 		assertNotNull(o3);
-		FlexoOntology o5 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O4.owl");
+		OWLOntology o5 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O4.owl");
 		assertNotNull(o5);
 
 		o3.loadWhenUnloaded();
@@ -288,20 +296,20 @@ public class TestOntologies extends FlexoTestCase {
 		assertSameList(o3.getClasses(), o3.getThingConcept());
 		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
 
-		OntologyClass a2 = o2.getClass(o2.getURI() + "#A2");
+		OWLClass a2 = o2.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2);
-		OntologyClass b2 = o2.getClass(o2.getURI() + "#B2");
+		OWLClass b2 = o2.getClass(o2.getURI() + "#B2");
 		assertNotNull(b2);
-		OntologyClass c2 = o2.getClass(o2.getURI() + "#C2");
+		OWLClass c2 = o2.getClass(o2.getURI() + "#C2");
 		assertNotNull(c2);
 		assertEquals(4, o2.getClasses().size());
 		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
 
-		OntologyClass a1 = o1.getClass(o1.getURI() + "#A1");
+		OWLClass a1 = o1.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1);
-		OntologyClass b1 = o1.getClass(o1.getURI() + "#B1");
+		OWLClass b1 = o1.getClass(o1.getURI() + "#B1");
 		assertNotNull(b1);
-		OntologyClass c1 = o1.getClass(o1.getURI() + "#C1");
+		OWLClass c1 = o1.getClass(o1.getURI() + "#C1");
 		assertNotNull(c1);
 		assertEquals(4, o1.getClasses().size());
 		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
@@ -310,11 +318,11 @@ public class TestOntologies extends FlexoTestCase {
 		o5.loadWhenUnloaded();
 		assertTrue(o5.isLoaded());
 
-		OntologyClass a1fromO4 = o5.getClass(o1.getURI() + "#A1");
+		OWLClass a1fromO4 = o5.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1fromO4);
 		assertEquals(a1, a1fromO4.getOriginalDefinition());
 
-		OntologyClass a2fromO4 = o5.getClass(o2.getURI() + "#A2");
+		OWLClass a2fromO4 = o5.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2fromO4);
 		assertEquals(a2, a2fromO4.getOriginalDefinition());
 
@@ -327,13 +335,13 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test8TestMultiReferencesO5() {
 		log("test8TestMultiReferencesO5()");
-		FlexoOntology o1 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
+		OWLOntology o1 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O1.owl");
 		assertNotNull(o1);
-		FlexoOntology o2 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
+		OWLOntology o2 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O2.owl");
 		assertNotNull(o2);
-		FlexoOntology o3 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
+		OWLOntology o3 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O3.owl");
 		assertNotNull(o3);
-		FlexoOntology o5 = testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O5.owl");
+		OWLOntology o5 = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology("http://www.openflexo.org/test/O5.owl");
 		assertNotNull(o5);
 
 		o3.loadWhenUnloaded();
@@ -345,20 +353,20 @@ public class TestOntologies extends FlexoTestCase {
 		assertSameList(o3.getClasses(), o3.getThingConcept());
 		assertEquals(o3.getOntologyLibrary().getOWLOntology().getThingConcept(), o3.getThingConcept().getOriginalDefinition());
 
-		OntologyClass a2 = o2.getClass(o2.getURI() + "#A2");
+		OWLClass a2 = o2.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2);
-		OntologyClass b2 = o2.getClass(o2.getURI() + "#B2");
+		OWLClass b2 = o2.getClass(o2.getURI() + "#B2");
 		assertNotNull(b2);
-		OntologyClass c2 = o2.getClass(o2.getURI() + "#C2");
+		OWLClass c2 = o2.getClass(o2.getURI() + "#C2");
 		assertNotNull(c2);
 		assertEquals(4, o2.getClasses().size());
 		assertSameList(o2.getClasses(), o2.getThingConcept(), a2, b2, c2);
 
-		OntologyClass a1 = o1.getClass(o1.getURI() + "#A1");
+		OWLClass a1 = o1.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1);
-		OntologyClass b1 = o1.getClass(o1.getURI() + "#B1");
+		OWLClass b1 = o1.getClass(o1.getURI() + "#B1");
 		assertNotNull(b1);
-		OntologyClass c1 = o1.getClass(o1.getURI() + "#C1");
+		OWLClass c1 = o1.getClass(o1.getURI() + "#C1");
 		assertNotNull(c1);
 		assertEquals(4, o1.getClasses().size());
 		assertSameList(o1.getClasses(), o1.getThingConcept(), a1, b1, c1);
@@ -367,11 +375,11 @@ public class TestOntologies extends FlexoTestCase {
 		o5.loadWhenUnloaded();
 		assertTrue(o5.isLoaded());
 
-		OntologyClass a1fromO5 = o5.getClass(o1.getURI() + "#A1");
+		OWLClass a1fromO5 = o5.getClass(o1.getURI() + "#A1");
 		assertNotNull(a1fromO5);
 		assertEquals(a1, a1fromO5.getOriginalDefinition());
 
-		OntologyClass a2fromO5 = o5.getClass(o2.getURI() + "#A2");
+		OWLClass a2fromO5 = o5.getClass(o2.getURI() + "#A2");
 		assertNotNull(a2fromO5);
 		assertEquals(a2, a2fromO5.getOriginalDefinition());
 
@@ -384,7 +392,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test9TestInstances() {
 		log("test9TestInstances()");
-		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+		OWLOntology ontology = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
 				"http://www.openflexo.org/test/TestInstances.owl");
 		assertNotNull(ontology);
 
@@ -393,20 +401,20 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertEquals(4, ontology.getIndividuals().size());
 
-		OntologyIndividual activity1 = ontology.getIndividual(ontology.getURI() + "#Activity1");
+		OWLIndividual activity1 = ontology.getIndividual(ontology.getURI() + "#Activity1");
 		assertNotNull(activity1);
-		OntologyIndividual activity2 = ontology.getIndividual(ontology.getURI() + "#Activity2");
+		OWLIndividual activity2 = ontology.getIndividual(ontology.getURI() + "#Activity2");
 		assertNotNull(activity2);
-		OntologyIndividual activity3 = ontology.getIndividual(ontology.getURI() + "#Activity3");
+		OWLIndividual activity3 = ontology.getIndividual(ontology.getURI() + "#Activity3");
 		assertNotNull(activity3);
-		OntologyIndividual untypedIndividual = ontology.getIndividual(ontology.getURI() + "#UntypedIndividual");
+		OWLIndividual untypedIndividual = ontology.getIndividual(ontology.getURI() + "#UntypedIndividual");
 		assertNotNull(untypedIndividual);
 
 		assertSameList(ontology.getIndividuals(), activity1, activity2, activity3, untypedIndividual);
 
-		OntologyClass redefinedFlexoActivity = ontology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoActivity");
+		OWLClass redefinedFlexoActivity = ontology.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoActivity");
 		assertNotNull(redefinedFlexoActivity);
-		OntologyClass flexoActivity = ontology.getOntologyLibrary().getFlexoConceptOntology()
+		OWLClass flexoActivity = ontology.getOntologyLibrary().getFlexoConceptOntology()
 				.getClass(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "FlexoActivity");
 		assertNotNull(flexoActivity);
 		assertTrue(redefinedFlexoActivity.redefinesOriginalDefinition());
@@ -419,7 +427,7 @@ public class TestOntologies extends FlexoTestCase {
 		assertTrue(ontology.getThingConcept().isSuperConceptOf(untypedIndividual));
 		assertTrue(ontology.getThingConcept().getOriginalDefinition().isSuperConceptOf(untypedIndividual));
 
-		OntologyDataProperty resourceNameProperty = ontology.getOntologyLibrary().getFlexoConceptOntology()
+		OWLDataProperty resourceNameProperty = ontology.getOntologyLibrary().getFlexoConceptOntology()
 				.getDataProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI + "#" + "resourceName");
 		assertNotNull(resourceNameProperty);
 
@@ -431,7 +439,7 @@ public class TestOntologies extends FlexoTestCase {
 
 	public void test10TestAnnotations() {
 		log("test10TestAnnotations()");
-		FlexoOntology ontology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+		OWLOntology ontology = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
 				"http://www.openflexo.org/test/TestInstances.owl");
 		assertNotNull(ontology);
 
@@ -440,16 +448,16 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertEquals(4, ontology.getIndividuals().size());
 
-		OntologyIndividual activity1 = ontology.getIndividual(ontology.getURI() + "#Activity1");
+		OWLIndividual activity1 = ontology.getIndividual(ontology.getURI() + "#Activity1");
 		assertNotNull(activity1);
-		OntologyIndividual activity2 = ontology.getIndividual(ontology.getURI() + "#Activity2");
+		OWLIndividual activity2 = ontology.getIndividual(ontology.getURI() + "#Activity2");
 		assertNotNull(activity2);
-		OntologyIndividual activity3 = ontology.getIndividual(ontology.getURI() + "#Activity3");
+		OWLIndividual activity3 = ontology.getIndividual(ontology.getURI() + "#Activity3");
 		assertNotNull(activity3);
 
 		assertEquals(4, activity1.getAnnotationStatements().size());
 
-		OntologyDataProperty COMMENT = ontology.getDataProperty(OntologyObject.RDFS_COMMENT_URI);
+		OWLDataProperty COMMENT = ontology.getDataProperty(OWLObject.RDFS_COMMENT_URI);
 		assertNotNull(COMMENT);
 		assertTrue(COMMENT.isAnnotationProperty());
 
@@ -472,7 +480,7 @@ public class TestOntologies extends FlexoTestCase {
 
 		assertEquals(1, activity1.getAnnotationObjectStatements().size());
 
-		OntologyObjectProperty SEE_ALSO = ontology.getObjectProperty(OntologyObject.RDFS_SEE_ALSO_URI);
+		OWLObjectProperty SEE_ALSO = ontology.getObjectProperty(OWLObject.RDFS_SEE_ALSO_URI);
 		assertNotNull(SEE_ALSO);
 		assertTrue(SEE_ALSO.isAnnotationProperty());
 
@@ -521,45 +529,45 @@ public class TestOntologies extends FlexoTestCase {
 	public void test15TestLoadSKOS() {
 		log("test15TestLoadSKOS()");
 		String SKOS_URI = "http://www.w3.org/2004/02/skos/core";
-		FlexoOntology skosOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(SKOS_URI);
+		OWLOntology skosOntology = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology(SKOS_URI);
 		assertNotNull(skosOntology);
 
 		skosOntology.loadWhenUnloaded();
 		assertTrue(skosOntology.isLoaded());
 
-		OntologyObjectProperty hasTopConceptProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "hasTopConcept");
+		OWLObjectProperty hasTopConceptProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "hasTopConcept");
 		assertNotNull(hasTopConceptProperty);
-		OntologyObjectProperty inSchemeProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "inScheme");
+		OWLObjectProperty inSchemeProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "inScheme");
 		assertNotNull(inSchemeProperty);
-		OntologyObjectProperty topConceptOfProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "topConceptOf");
+		OWLObjectProperty topConceptOfProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "topConceptOf");
 		assertNotNull(topConceptOfProperty);
-		OntologyObjectProperty skosMemberProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "member");
+		OWLObjectProperty skosMemberProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "member");
 		assertNotNull(skosMemberProperty);
-		OntologyObjectProperty memberListProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "memberList");
+		OWLObjectProperty memberListProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "memberList");
 		assertNotNull(memberListProperty);
-		OntologyObjectProperty semanticRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "semanticRelation");
+		OWLObjectProperty semanticRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "semanticRelation");
 		assertNotNull(semanticRelationProperty);
-		OntologyObjectProperty relatedProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "related");
+		OWLObjectProperty relatedProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "related");
 		assertNotNull(relatedProperty);
-		OntologyObjectProperty relatedMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "relatedMatch");
+		OWLObjectProperty relatedMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "relatedMatch");
 		assertNotNull(relatedMatchProperty);
-		OntologyObjectProperty mappingRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "mappingRelation");
+		OWLObjectProperty mappingRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "mappingRelation");
 		assertNotNull(mappingRelationProperty);
-		OntologyObjectProperty closeMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "closeMatch");
+		OWLObjectProperty closeMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "closeMatch");
 		assertNotNull(closeMatchProperty);
-		OntologyObjectProperty exactMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "exactMatch");
+		OWLObjectProperty exactMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "exactMatch");
 		assertNotNull(exactMatchProperty);
-		OntologyObjectProperty narrowMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowMatch");
+		OWLObjectProperty narrowMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowMatch");
 		assertNotNull(narrowMatchProperty);
-		OntologyObjectProperty broadMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broadMatch");
+		OWLObjectProperty broadMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broadMatch");
 		assertNotNull(broadMatchProperty);
-		OntologyObjectProperty broaderTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broaderTransitive");
+		OWLObjectProperty broaderTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broaderTransitive");
 		assertNotNull(broaderTransitiveProperty);
-		OntologyObjectProperty broaderProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broader");
+		OWLObjectProperty broaderProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broader");
 		assertNotNull(broaderProperty);
-		OntologyObjectProperty narrowerTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowerTransitive");
+		OWLObjectProperty narrowerTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowerTransitive");
 		assertNotNull(narrowerTransitiveProperty);
-		OntologyObjectProperty narrowerProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrower");
+		OWLObjectProperty narrowerProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrower");
 		assertNotNull(narrowerProperty);
 
 	}
@@ -567,175 +575,168 @@ public class TestOntologies extends FlexoTestCase {
 	public void test16TestAccessibleProperties() {
 		log("test16TestAccessibleProperties()");
 
-		FlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
+		OWLOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
 		assertNotNull(rdfOntology);
 		assertTrue(rdfOntology.isLoaded());
-		FlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
+		OWLOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
 		assertNotNull(rdfsOntology);
 		assertTrue(rdfsOntology.isLoaded());
-		FlexoOntology owlOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOWLOntology();
+		OWLOntology owlOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOWLOntology();
 		assertNotNull(owlOntology);
 		assertTrue(owlOntology.isLoaded());
 
-		OntologyObjectProperty valueProperty = rdfOntology.getObjectProperty(RDFURIDefinitions.RDF_ONTOLOGY_URI + "#" + "value");
+		OWLObjectProperty valueProperty = rdfOntology.getObjectProperty(RDFURIDefinitions.RDF_ONTOLOGY_URI + "#" + "value");
 		assertNotNull(valueProperty);
-		OntologyObjectProperty typeProperty = rdfOntology.getObjectProperty(RDFURIDefinitions.RDF_ONTOLOGY_URI + "#" + "type");
+		OWLObjectProperty typeProperty = rdfOntology.getObjectProperty(RDFURIDefinitions.RDF_ONTOLOGY_URI + "#" + "type");
 		assertNotNull(typeProperty);
 
-		OntologyDataProperty labelProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "label");
+		OWLDataProperty labelProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "label");
 		assertNotNull(labelProperty);
-		OntologyDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
+		OWLDataProperty commentProperty = rdfOntology.getDataProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "comment");
 		assertNotNull(commentProperty);
-		OntologyObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
-				+ "isDefinedBy");
+		OWLObjectProperty isDefinedByProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "isDefinedBy");
 		assertNotNull(isDefinedByProperty);
-		OntologyObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
+		OWLObjectProperty seeAlsoProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "seeAlso");
 		assertNotNull(seeAlsoProperty);
-		OntologyObjectProperty memberProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "member");
+		OWLObjectProperty memberProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "member");
 		assertNotNull(memberProperty);
-		OntologyObjectProperty domainProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "domain");
+		OWLObjectProperty domainProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "domain");
 		assertNotNull(domainProperty);
-		OntologyObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
+		OWLObjectProperty rangeProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "range");
 		assertNotNull(rangeProperty);
-		OntologyObjectProperty subClassOfProperty = rdfOntology
-				.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
+		OWLObjectProperty subClassOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#" + "subClassOf");
 		assertNotNull(subClassOfProperty);
-		OntologyObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
+		OWLObjectProperty subPropertyOfProperty = rdfOntology.getObjectProperty(RDFSURIDefinitions.RDFS_ONTOLOGY_URI + "#"
 				+ "subPropertyOf");
 		assertNotNull(subPropertyOfProperty);
 
-		OntologyObjectProperty topObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
-				+ "topObjectProperty");
+		OWLObjectProperty topObjectProperty = owlOntology
+				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topObjectProperty");
 		assertNotNull(topObjectProperty);
-		OntologyObjectProperty bottomObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty bottomObjectProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "bottomObjectProperty");
 		assertNotNull(bottomObjectProperty);
-		OntologyDataProperty bottomDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
-				+ "bottomDataProperty");
+		OWLDataProperty bottomDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "bottomDataProperty");
 		assertNotNull(bottomDataProperty);
-		OntologyDataProperty topDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topDataProperty");
+		OWLDataProperty topDataProperty = owlOntology.getDataProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "topDataProperty");
 		assertNotNull(topDataProperty);
 
-		OntologyObjectProperty annotatedPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty annotatedPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "annotatedProperty");
 		assertNotNull(annotatedPropertyProperty);
-		OntologyObjectProperty annotatedSourceProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty annotatedSourceProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "annotatedSource");
 		assertNotNull(annotatedSourceProperty);
-		OntologyObjectProperty annotatedTargetProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty annotatedTargetProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "annotatedTarget");
 		assertNotNull(annotatedTargetProperty);
-		OntologyObjectProperty datatypeComplementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty datatypeComplementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "datatypeComplementOf");
 		assertNotNull(datatypeComplementOfProperty);
-		OntologyObjectProperty deprecatedProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "deprecated");
+		OWLObjectProperty deprecatedProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "deprecated");
 		assertNotNull(deprecatedProperty);
-		OntologyObjectProperty equivalentClassProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty equivalentClassProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "equivalentClass");
 		assertNotNull(equivalentClassProperty);
-		OntologyObjectProperty equivalentPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty equivalentPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "equivalentProperty");
 		assertNotNull(equivalentPropertyProperty);
-		OntologyObjectProperty intersectionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty intersectionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "intersectionOf");
 		assertNotNull(intersectionOfProperty);
-		OntologyObjectProperty membersProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "members");
+		OWLObjectProperty membersProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "members");
 		assertNotNull(membersProperty);
-		OntologyObjectProperty onDatatypeProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "onDatatype");
+		OWLObjectProperty onDatatypeProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "onDatatype");
 		assertNotNull(onDatatypeProperty);
-		OntologyObjectProperty oneOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "oneOf");
+		OWLObjectProperty oneOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "oneOf");
 		assertNotNull(oneOfProperty);
-		OntologyObjectProperty propertyDisjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty propertyDisjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "propertyDisjointWith");
 		assertNotNull(propertyDisjointWithProperty);
-		OntologyObjectProperty unionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "unionOf");
+		OWLObjectProperty unionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "unionOf");
 		assertNotNull(unionOfProperty);
-		OntologyObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
-				+ "versionInfo");
+		OWLObjectProperty versionInfoProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "versionInfo");
 		assertNotNull(versionInfoProperty);
-		OntologyObjectProperty withRestrictionsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty withRestrictionsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "withRestrictions");
 		assertNotNull(withRestrictionsProperty);
-		OntologyObjectProperty differentFromProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
-				+ "differentFrom");
+		OWLObjectProperty differentFromProperty = owlOntology
+				.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "differentFrom");
 		assertNotNull(differentFromProperty);
-		OntologyObjectProperty sameAsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "sameAs");
+		OWLObjectProperty sameAsProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "sameAs");
 		assertNotNull(sameAsProperty);
-		OntologyObjectProperty distinctMembersProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty distinctMembersProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "distinctMembers");
 		assertNotNull(distinctMembersProperty);
-		OntologyObjectProperty hasKeyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "hasKey");
+		OWLObjectProperty hasKeyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "hasKey");
 		assertNotNull(hasKeyProperty);
-		OntologyObjectProperty disjointUnionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty disjointUnionOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "disjointUnionOf");
 		assertNotNull(disjointUnionOfProperty);
-		OntologyObjectProperty complementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
-				+ "complementOf");
+		OWLObjectProperty complementOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "complementOf");
 		assertNotNull(complementOfProperty);
-		OntologyObjectProperty disjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
-				+ "disjointWith");
+		OWLObjectProperty disjointWithProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "disjointWith");
 		assertNotNull(disjointWithProperty);
-		OntologyObjectProperty sourceIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty sourceIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "sourceIndividual");
 		assertNotNull(sourceIndividualProperty);
-		OntologyObjectProperty assertionPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty assertionPropertyProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "assertionProperty");
 		assertNotNull(assertionPropertyProperty);
-		OntologyObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
-				+ "targetValue");
+		OWLObjectProperty targetValueProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "targetValue");
 		assertNotNull(targetValueProperty);
-		OntologyObjectProperty targetIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty targetIndividualProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "targetIndividual");
 		assertNotNull(targetIndividualProperty);
-		OntologyObjectProperty propertyChainAxiomProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
+		OWLObjectProperty propertyChainAxiomProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#"
 				+ "propertyChainAxiom");
 		assertNotNull(propertyChainAxiomProperty);
-		OntologyObjectProperty inverseOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "inverseOf");
+		OWLObjectProperty inverseOfProperty = owlOntology.getObjectProperty(OWL2URIDefinitions.OWL_ONTOLOGY_URI + "#" + "inverseOf");
 		assertNotNull(inverseOfProperty);
 
 		String SKOS_URI = "http://www.w3.org/2004/02/skos/core";
-		FlexoOntology skosOntology = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(SKOS_URI);
+		OWLOntology skosOntology = (OWLOntology) testResourceCenter.retrieveBaseOntologyLibrary().getOntology(SKOS_URI);
 		assertNotNull(skosOntology);
 
 		skosOntology.loadWhenUnloaded();
 		assertTrue(skosOntology.isLoaded());
 
-		OntologyObjectProperty hasTopConceptProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "hasTopConcept");
+		OWLObjectProperty hasTopConceptProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "hasTopConcept");
 		assertNotNull(hasTopConceptProperty);
-		OntologyObjectProperty inSchemeProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "inScheme");
+		OWLObjectProperty inSchemeProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "inScheme");
 		assertNotNull(inSchemeProperty);
-		OntologyObjectProperty topConceptOfProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "topConceptOf");
+		OWLObjectProperty topConceptOfProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "topConceptOf");
 		assertNotNull(topConceptOfProperty);
-		OntologyObjectProperty skosMemberProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "member");
+		OWLObjectProperty skosMemberProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "member");
 		assertNotNull(skosMemberProperty);
-		OntologyObjectProperty memberListProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "memberList");
+		OWLObjectProperty memberListProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "memberList");
 		assertNotNull(memberListProperty);
-		OntologyObjectProperty semanticRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "semanticRelation");
+		OWLObjectProperty semanticRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "semanticRelation");
 		assertNotNull(semanticRelationProperty);
-		OntologyObjectProperty relatedProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "related");
+		OWLObjectProperty relatedProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "related");
 		assertNotNull(relatedProperty);
-		OntologyObjectProperty relatedMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "relatedMatch");
+		OWLObjectProperty relatedMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "relatedMatch");
 		assertNotNull(relatedMatchProperty);
-		OntologyObjectProperty mappingRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "mappingRelation");
+		OWLObjectProperty mappingRelationProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "mappingRelation");
 		assertNotNull(mappingRelationProperty);
-		OntologyObjectProperty closeMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "closeMatch");
+		OWLObjectProperty closeMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "closeMatch");
 		assertNotNull(closeMatchProperty);
-		OntologyObjectProperty exactMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "exactMatch");
+		OWLObjectProperty exactMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "exactMatch");
 		assertNotNull(exactMatchProperty);
-		OntologyObjectProperty narrowMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowMatch");
+		OWLObjectProperty narrowMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowMatch");
 		assertNotNull(narrowMatchProperty);
-		OntologyObjectProperty broadMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broadMatch");
+		OWLObjectProperty broadMatchProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broadMatch");
 		assertNotNull(broadMatchProperty);
-		OntologyObjectProperty broaderTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broaderTransitive");
+		OWLObjectProperty broaderTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broaderTransitive");
 		assertNotNull(broaderTransitiveProperty);
-		OntologyObjectProperty broaderProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broader");
+		OWLObjectProperty broaderProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "broader");
 		assertNotNull(broaderProperty);
-		OntologyObjectProperty narrowerTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowerTransitive");
+		OWLObjectProperty narrowerTransitiveProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrowerTransitive");
 		assertNotNull(narrowerTransitiveProperty);
-		OntologyObjectProperty narrowerProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrower");
+		OWLObjectProperty narrowerProperty = skosOntology.getObjectProperty(SKOS_URI + "#" + "narrower");
 		assertNotNull(narrowerProperty);
 
-		OntologyClass concept = skosOntology.getClass("http://www.w3.org/2004/02/skos/core#Concept");
+		OWLClass concept = skosOntology.getClass("http://www.w3.org/2004/02/skos/core#Concept");
 		System.out.println("concept super classes = " + concept.getSuperClasses());
 		System.out.println("concept super classes = " + concept.getSuperClasses().get(0).getPropertiesTakingMySelfAsDomain());
 		System.out.println("accessible properties = " + concept.getPropertiesTakingMySelfAsDomain());
@@ -747,10 +748,10 @@ public class TestOntologies extends FlexoTestCase {
 				hasKeyProperty, complementOfProperty, seeAlsoProperty, memberProperty, disjointUnionOfProperty, disjointWithProperty,
 				subClassOfProperty, valueProperty, typeProperty, commentProperty, isDefinedByProperty, labelProperty);
 
-		OntologyClass thingFromOWL = owlOntology.getThingConcept();
+		OWLClass thingFromOWL = owlOntology.getThingConcept();
 		System.out.println("thingFromOWL = " + thingFromOWL.getPropertiesTakingMySelfAsDomain());
 
-		OntologyClass thingFromSKOS = skosOntology.getThingConcept();
+		OWLClass thingFromSKOS = skosOntology.getThingConcept();
 		System.out.println("thingFromSKOS = " + thingFromSKOS.getPropertiesTakingMySelfAsDomain());
 
 	}

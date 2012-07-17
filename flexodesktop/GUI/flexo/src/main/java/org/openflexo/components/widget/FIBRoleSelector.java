@@ -33,7 +33,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -71,11 +70,6 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 			return getProject().getWorkflow().getRoleList().getRoles();
 		}
 		return null;
-	}
-
-	@Override
-	protected boolean isAcceptableValue(FlexoModelObject o) {
-		return super.isAcceptableValue(o);
 	}
 
 	@Override

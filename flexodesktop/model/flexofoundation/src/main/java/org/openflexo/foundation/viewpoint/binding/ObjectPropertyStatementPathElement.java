@@ -9,16 +9,19 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.PropertyStatement;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
+import org.openflexo.foundation.ontology.owl.OWLIndividual;
+import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.OWLProperty;
+import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
+import org.openflexo.foundation.ontology.owl.PropertyStatement;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 
@@ -182,8 +185,8 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
-			if (target instanceof OntologyIndividual) {
-				OntologyIndividual individual = (OntologyIndividual) target;
+			if (target instanceof OWLIndividual) {
+				OWLIndividual individual = (OWLIndividual) target;
 				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
 				if (statement == null) {
 					return null;
@@ -202,17 +205,18 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
-			if (target instanceof OntologyIndividual) {
-				OntologyIndividual individual = (OntologyIndividual) target;
-				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
+			if (target instanceof OWLIndividual && getOntologyProperty() instanceof OWLProperty && value instanceof OWLObject) {
+				OWLIndividual individual = (OWLIndividual) target;
+				OWLProperty property = (OWLProperty) getOntologyProperty();
+				PropertyStatement statement = individual.getPropertyStatement(property);
 				if (statement == null) {
-					individual.getOntResource().addProperty(getOntologyProperty().getOntProperty(), value.getOntResource());
+					individual.getOntResource().addProperty(property.getOntProperty(), ((OWLObject) value).getOntResource());
 					individual.updateOntologyStatements();
-					individual.getPropertyChangeSupport().firePropertyChange(getOntologyProperty().getName(), null, value);
+					individual.getPropertyChangeSupport().firePropertyChange(property.getName(), null, value);
 				} else if (statement instanceof ObjectPropertyStatement) {
 					Object oldValue = ((ObjectPropertyStatement) statement).getStatementObject();
-					((ObjectPropertyStatement) statement).setStatementObject(value);
-					individual.getPropertyChangeSupport().firePropertyChange(getOntologyProperty().getName(), oldValue, value);
+					((ObjectPropertyStatement) statement).setStatementObject((OWLObject) value);
+					individual.getPropertyChangeSupport().firePropertyChange(property.getName(), oldValue, value);
 				} else {
 					logger.warning("Unexpected statement " + statement + " while evaluating setBindingValue()");
 				}
@@ -406,8 +410,8 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public Object getBindingValue(Object target, BindingEvaluationContext context) {
-			if (target instanceof OntologyObject<?>) {
-				OntologyObject<?> object = (OntologyObject<?>) target;
+			if (target instanceof OntologyObject) {
+				OntologyObject object = (OntologyObject) target;
 				return object.getPropertyValue(getOntologyProperty());
 			} else {
 				logger.warning("Unexpected target " + target + " while evaluateBinding()");

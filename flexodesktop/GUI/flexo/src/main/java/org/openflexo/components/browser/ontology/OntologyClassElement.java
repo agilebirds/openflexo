@@ -26,11 +26,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.ProjectBrowser.OEViewMode;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.icon.IconFactory;
 
 /**
@@ -39,20 +36,21 @@ import org.openflexo.icon.IconFactory;
  * @author sguerin
  * 
  */
+@Deprecated
 public class OntologyClassElement extends BrowserElement {
 
 	protected OntologyClassElement(OntologyClass concept, ProjectBrowser browser, BrowserElement parent) {
-		super(concept, BrowserElementType.ONTOLOGY_CLASS, browser, parent);
+		super((FlexoModelObject) concept, null/*BrowserElementType.ONTOLOGY_CLASS*/, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
+		/*if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
 			for (OntologyClass subClass : getOntologyClass().getSubClasses()) {
-				addToChilds(subClass);
+				addToChilds((FlexoModelObject)subClass);
 			}
 			for (OntologyIndividual individual : getOntologyClass().getIndividuals()) {
-				addToChilds(individual);
+				addToChilds((FlexoModelObject)individual);
 			}
 		}
 
@@ -60,12 +58,12 @@ public class OntologyClassElement extends BrowserElement {
 			BrowserElement ontologyElement = findNearestAncestor(BrowserElementType.PROJECT_ONTOLOGY, BrowserElementType.IMPORTED_ONTOLOGY);
 			if (ontologyElement instanceof FlexoOntologyElement) {
 				FlexoOntology ontology = ((FlexoOntologyElement) ontologyElement).getOntology();
-				for (OntologyClass subClass : getOntologyClass().getSubClasses(ontology)) {
-					addToChilds(subClass);
+				for (OntologyClass subClass : getOntologyClass().getSubClasses((FlexoModelObject)ontology)) {
+					addToChilds((FlexoModelObject)subClass);
 				}
 				for (OntologyIndividual individual : getOntologyClass().getIndividuals()) {
 					if (individual.getFlexoOntology() == ontology) {
-						addToChilds(individual);
+						addToChilds((FlexoModelObject)individual);
 					}
 				}
 			}
@@ -78,7 +76,7 @@ public class OntologyClassElement extends BrowserElement {
 		for (OntologyStatement s : getOntologyClass().getStatements()) {
 			addToChilds(s);
 		}
-
+		*/
 	}
 
 	@Override

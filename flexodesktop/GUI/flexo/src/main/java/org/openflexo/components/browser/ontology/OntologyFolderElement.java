@@ -22,6 +22,7 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyFolder;
 
@@ -43,7 +44,7 @@ public class OntologyFolderElement extends BrowserElement {
 			addToChilds(subFolder);
 		}
 		for (FlexoOntology ontology : getFolder().getOntologies()) {
-			addToChilds(ontology);
+			addToChilds((FlexoModelObject) ontology);
 		}
 	}
 

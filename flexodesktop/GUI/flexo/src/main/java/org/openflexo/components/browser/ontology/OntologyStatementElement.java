@@ -20,9 +20,8 @@
 package org.openflexo.components.browser.ontology;
 
 import org.openflexo.components.browser.BrowserElement;
-import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.OntologyStatement;
+import org.openflexo.foundation.ontology.owl.OWLStatement;
 
 /**
  * Browser element representing the calc library
@@ -30,10 +29,11 @@ import org.openflexo.foundation.ontology.OntologyStatement;
  * @author sguerin
  * 
  */
+@Deprecated
 public class OntologyStatementElement extends BrowserElement {
 
-	protected OntologyStatementElement(OntologyStatement statement, ProjectBrowser browser, BrowserElement parent) {
-		super(statement, BrowserElementType.ONTOLOGY_STATEMENT, browser, parent);
+	protected OntologyStatementElement(OWLStatement statement, ProjectBrowser browser, BrowserElement parent) {
+		super(statement, null/*BrowserElementType.ONTOLOGY_STATEMENT*/, browser, parent);
 	}
 
 	@Override
@@ -45,8 +45,8 @@ public class OntologyStatementElement extends BrowserElement {
 		return getOntologyStatement().toString();
 	}
 
-	protected OntologyStatement getOntologyStatement() {
-		return (OntologyStatement) getObject();
+	protected OWLStatement getOntologyStatement() {
+		return (OWLStatement) getObject();
 	}
 
 }
