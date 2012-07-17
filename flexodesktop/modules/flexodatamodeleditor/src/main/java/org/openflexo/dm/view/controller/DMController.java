@@ -275,6 +275,9 @@ public class DMController extends FlexoController {
 	@Override
 	protected void updateEditor(FlexoEditor from, FlexoEditor to) {
 		super.updateEditor(from, to);
+		REPOSITORY_PERSPECTIVE.setProject(to != null ? to.getProject() : null);
+		PACKAGE_PERSPECTIVE.setProject(to != null ? to.getProject() : null);
+		HIERARCHY_PERSPECTIVE.setProject(to != null ? to.getProject() : null);
 		DIAGRAM_PERSPECTIVE.setProject(to != null ? to.getProject() : null);
 	}
 

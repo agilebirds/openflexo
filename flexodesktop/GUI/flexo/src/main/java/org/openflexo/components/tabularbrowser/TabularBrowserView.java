@@ -322,7 +322,11 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	@Override
 	public SelectionManager getSelectionManager() {
-		return _controller.getSelectionManager();
+		if (_controller != null) {
+			return _controller.getSelectionManager();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

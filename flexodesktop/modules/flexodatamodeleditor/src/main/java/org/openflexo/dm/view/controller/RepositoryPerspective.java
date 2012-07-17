@@ -38,6 +38,7 @@ import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
 import org.openflexo.foundation.dm.JDKRepository;
 import org.openflexo.foundation.dm.WORepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -62,6 +63,10 @@ class RepositoryPerspective extends DMPerspective {
 		leftView.add(_browserView, BorderLayout.CENTER);
 		leftView.add(searchPanel, BorderLayout.NORTH);
 		setTopLeftView(leftView);
+	}
+
+	public void setProject(FlexoProject project) {
+		_browser.setRootObject(project != null ? project.getDataModel() : null);
 	}
 
 	/**
