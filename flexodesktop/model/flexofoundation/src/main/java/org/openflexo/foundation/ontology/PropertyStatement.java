@@ -21,6 +21,7 @@ package org.openflexo.foundation.ontology;
 
 import java.util.Vector;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.localization.Language;
 import org.openflexo.toolbox.StringUtils;
 
@@ -28,6 +29,16 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 public abstract class PropertyStatement extends OntologyStatement {
+
+	public static final String AS_STRING = "asString";
+	public static final String AS_BOOLEAN = "asBoolean";
+	public static final String AS_INTEGER = "asInteger";
+	public static final String AS_BYTE = "asByte";
+	public static final String AS_SHORT = "asShort";
+	public static final String AS_LONG = "asLong";
+	public static final String AS_CHARACTER = "asCharacter";
+	public static final String AS_FLOAT = "asFloat";
+	public static final String AS_DOUBLE = "asDouble";
 
 	public PropertyStatement(OntologyObject subject, Statement s) {
 		super(subject, s);
@@ -47,16 +58,14 @@ public abstract class PropertyStatement extends OntologyStatement {
 
 	private Language language = null;
 	private String stringValue = null;
-
-	public final String getStringValue() {
-		if (getLiteral() == null) {
-			return null;
-		}
-		if (stringValue == null) {
-			stringValue = getLiteral().getString();
-		}
-		return stringValue;
-	}
+	private boolean booleanValue = false;
+	private int intValue = 0;
+	private byte byteValue = 0;
+	private short shortValue = 0;
+	private long longValue = 0;
+	private char charValue = 0;
+	private float floatValue = 0;
+	private double doubleValue = 0;
 
 	public final Language getLanguage() {
 		if (getLiteral() == null) {
@@ -100,6 +109,16 @@ public abstract class PropertyStatement extends OntologyStatement {
 		stringValue = aValue;
 	}
 
+	public final String getStringValue() {
+		if (getLiteral() == null) {
+			return null;
+		}
+		if (stringValue == null) {
+			stringValue = getLiteral().getString();
+		}
+		return stringValue;
+	}
+
 	/**
 	 * Creates a new Statement equals to this one with a new String value
 	 * 
@@ -109,6 +128,9 @@ public abstract class PropertyStatement extends OntologyStatement {
 		if (StringUtils.isSame(aValue, getStringValue())) {
 			return;
 		}
+
+		String oldValue = getStringValue();
+
 		// Take care to this point: this object will disappear and be replaced by a new one
 		// during updateOntologyStatements() !!!!!
 		if (getLanguage() != null) {
@@ -118,6 +140,9 @@ public abstract class PropertyStatement extends OntologyStatement {
 		}
 		getSubject().removePropertyStatement(this);
 		stringValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_STRING, oldValue, aValue));
 	}
 
 	public abstract boolean isAnnotationProperty();
@@ -126,4 +151,203 @@ public abstract class PropertyStatement extends OntologyStatement {
 		return Language.availableValues();
 	}
 
+	public final boolean getBooleanValue() {
+		if (getLiteral() == null) {
+			return false;
+		}
+		booleanValue = getLiteral().getBoolean();
+		return booleanValue;
+	}
+
+	public final void setBooleanValue(boolean aValue) {
+		if (aValue == getBooleanValue()) {
+			return;
+		}
+
+		boolean oldValue = getBooleanValue();
+
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().removePropertyStatement(this);
+		booleanValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_BOOLEAN, oldValue, aValue));
+	}
+
+	public final int getIntegerValue() {
+		if (getLiteral() == null) {
+			return 0;
+		}
+		intValue = getLiteral().getInt();
+		return intValue;
+	}
+
+	public final void setIntegerValue(int aValue) {
+		if (aValue == getIntegerValue()) {
+			return;
+		}
+
+		int oldValue = getIntegerValue();
+
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().removePropertyStatement(this);
+		intValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_INTEGER, oldValue, aValue));
+	}
+
+	public final byte getByteValue() {
+		if (getLiteral() == null) {
+			return 0;
+		}
+		byteValue = getLiteral().getByte();
+		return byteValue;
+	}
+
+	public final void setByteValue(byte aValue) {
+		if (aValue == getByteValue()) {
+			return;
+		}
+
+		byte oldValue = getByteValue();
+
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().removePropertyStatement(this);
+		byteValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_BYTE, oldValue, aValue));
+	}
+
+	public final short getShortValue() {
+		if (getLiteral() == null) {
+			return 0;
+		}
+		shortValue = getLiteral().getShort();
+		return shortValue;
+	}
+
+	public final void setShortValue(short aValue) {
+		if (aValue == getShortValue()) {
+			return;
+		}
+
+		short oldValue = getShortValue();
+
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().removePropertyStatement(this);
+		shortValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_SHORT, oldValue, aValue));
+	}
+
+	public final long getLongValue() {
+		if (getLiteral() == null) {
+			return 0;
+		}
+		longValue = getLiteral().getLong();
+		return longValue;
+	}
+
+	public final void setLongValue(long aValue) {
+		if (aValue == getLongValue()) {
+			return;
+		}
+
+		long oldValue = getLongValue();
+
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().removePropertyStatement(this);
+		longValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_LONG, oldValue, aValue));
+	}
+
+	public final float getFloatValue() {
+		if (getLiteral() == null) {
+			return 0;
+		}
+		floatValue = getLiteral().getFloat();
+		return floatValue;
+	}
+
+	public final void setFloatValue(float aValue) {
+		if (aValue == getFloatValue()) {
+			return;
+		}
+
+		float oldValue = getFloatValue();
+
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().removePropertyStatement(this);
+		floatValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_FLOAT, oldValue, aValue));
+	}
+
+	public final double getDoubleValue() {
+		if (getLiteral() == null) {
+			return 0;
+		}
+		doubleValue = getLiteral().getDouble();
+		return doubleValue;
+	}
+
+	public final void setDoubleValue(double aValue) {
+		if (aValue == getDoubleValue()) {
+			return;
+		}
+
+		double oldValue = getDoubleValue();
+
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().removePropertyStatement(this);
+		doubleValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_FLOAT, oldValue, aValue));
+	}
+
+	public final char getCharacterValue() {
+		if (getLiteral() == null) {
+			return 0;
+		}
+		charValue = getLiteral().getChar();
+		return charValue;
+	}
+
+	public final void setCharacterValue(char aValue) {
+		if (aValue == getCharacterValue()) {
+			return;
+		}
+
+		char oldValue = getCharacterValue();
+
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().removePropertyStatement(this);
+		charValue = aValue;
+		// System.out.println("Notify change " + getProperty().getName() + " from " + oldValue + " to " + aValue);
+		setChanged();
+		notifyObservers(new DataModification(AS_CHARACTER, oldValue, aValue));
+	}
 }
