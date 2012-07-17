@@ -40,6 +40,7 @@ import org.openflexo.dm.view.DMView;
 import org.openflexo.dm.view.EOPrototypeRepositoryView;
 import org.openflexo.dm.view.controller.action.DMControllerActionInitializer;
 import org.openflexo.dm.view.menu.DMMenuBar;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMModel;
@@ -180,11 +181,6 @@ public class DMController extends FlexoController {
 		return new DMMainPane(this);
 	}
 
-	@Override
-	public DMMainPane getMainPane() {
-		return (DMMainPane) super.getMainPane();
-	}
-
 	@SuppressWarnings("unchecked")
 	protected <O extends DMObject> DMView<O> createDMView(O object) {
 		// Not allowed anymore
@@ -274,6 +270,12 @@ public class DMController extends FlexoController {
 			return ((DMObject) object).getLocalizedName();
 		}
 		return null;
+	}
+
+	@Override
+	protected void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		DIAGRAM_PERSPECTIVE.setProject(to != null ? to.getProject() : null);
 	}
 
 }

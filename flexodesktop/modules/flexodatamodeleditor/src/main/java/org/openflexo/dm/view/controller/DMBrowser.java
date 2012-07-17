@@ -54,7 +54,7 @@ public class DMBrowser extends ProjectBrowser {
 
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		if (_controller != null) {
+		if (_controller != null && _controller.getDataModel() != null) {
 			if (getDMViewMode() == DMViewMode.Repositories) {
 				return _controller.getDataModel();
 			} else if (getDMViewMode() == DMViewMode.Packages) {

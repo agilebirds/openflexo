@@ -37,6 +37,7 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.ExternalRepository;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -66,24 +67,6 @@ public class DiagramPerspective extends DMPerspective {
 		_browser = new DMBrowser(controller, true);
 		_browser.setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
 		_browser.setFilterStatus(BrowserElementType.DM_EOENTITY, BrowserFilterStatus.HIDE);
-		if (controller.getDataModel().getJDKRepository().hasDiagrams()) {
-			_browser.setFilterStatus(BrowserElementType.JDK_REPOSITORY, BrowserFilterStatus.SHOW);
-		}
-		if (controller.getDataModel().getWORepository().hasDiagrams()) {
-			_browser.setFilterStatus(BrowserElementType.WO_REPOSITORY, BrowserFilterStatus.SHOW);
-		}
-		for (ExternalRepository rep : controller.getDataModel().getExternalRepositories()) {
-			if (rep.hasDiagrams()) {
-				_browser.setFilterStatus(BrowserElementType.EXTERNAL_REPOSITORY, BrowserFilterStatus.SHOW);
-			}
-		}
-		if (controller.getDataModel().getEOPrototypeRepository().hasDiagrams()) {
-			_browser.setFilterStatus(BrowserElementType.DM_EOPROTOTYPES_REPOSITORY, BrowserFilterStatus.SHOW);
-		}
-		if (controller.getDataModel().getExecutionModelRepository().hasDiagrams()) {
-			_browser.setFilterStatus(BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY, BrowserFilterStatus.SHOW);
-		}
-
 		_browser.setDMViewMode(DMViewMode.Diagrams);
 		_browserView = new DMBrowserView(_browser, _controller) {
 			@Override
@@ -222,6 +205,30 @@ public class DiagramPerspective extends DMPerspective {
 	protected void changeBrowserFiltersFor(DMEntity entity) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setProject(FlexoProject project) {
+		if (project != null) {
+			if (project.getDataModel().getJDKRepository().hasDiagrams()) {
+				_browser.setFilterStatus(BrowserElementType.JDK_REPOSITORY, BrowserFilterStatus.SHOW);
+			}
+			if (project.getDataModel().getWORepository().hasDiagrams()) {
+				_browser.setFilterStatus(BrowserElementType.WO_REPOSITORY, BrowserFilterStatus.SHOW);
+			}
+			for (ExternalRepository rep : project.getDataModel().getExternalRepositories()) {
+				if (rep.hasDiagrams()) {
+					_browser.setFilterStatus(BrowserElementType.EXTERNAL_REPOSITORY, BrowserFilterStatus.SHOW);
+				}
+			}
+			if (project.getDataModel().getEOPrototypeRepository().hasDiagrams()) {
+				_browser.setFilterStatus(BrowserElementType.DM_EOPROTOTYPES_REPOSITORY, BrowserFilterStatus.SHOW);
+			}
+			if (project.getDataModel().getExecutionModelRepository().hasDiagrams()) {
+				_browser.setFilterStatus(BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY, BrowserFilterStatus.SHOW);
+			}
+		} else {
+
+		}
 	}
 
 }
