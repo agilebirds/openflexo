@@ -26,9 +26,10 @@ import javax.swing.Icon;
 
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.CreateObjectProperty;
+import org.openflexo.foundation.ontology.owl.action.CreateObjectProperty;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
@@ -67,7 +68,7 @@ public class CreateObjectPropertyInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateObjectProperty>() {
 			@Override
 			public boolean run(EventObject e, CreateObjectProperty action) {
-				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
+				((VEController) getController()).getSelectionManager().setSelectedObject((FlexoModelObject) action.getNewProperty());
 				return true;
 			}
 		};

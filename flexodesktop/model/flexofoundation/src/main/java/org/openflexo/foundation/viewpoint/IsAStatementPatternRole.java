@@ -1,6 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.IsAStatement;
+import org.openflexo.foundation.ontology.owl.IsAStatement;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 

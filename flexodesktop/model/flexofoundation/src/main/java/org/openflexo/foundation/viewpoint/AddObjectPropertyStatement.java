@@ -27,10 +27,11 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -149,8 +150,9 @@ public class AddObjectPropertyStatement extends AddStatement {
 	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, true) {
 		@Override
 		public Type getType() {
-			if (getObjectProperty() != null && getObjectProperty().getRange() instanceof OntologyClass) {
-				return IndividualOfClass.getIndividualOfClass((OntologyClass) getObjectProperty().getRange());
+			if (getObjectProperty() instanceof OntologyObjectProperty
+					&& ((OntologyObjectProperty) getObjectProperty()).getRange() instanceof OntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((OntologyClass) ((OntologyObjectProperty) getObjectProperty()).getRange());
 			}
 			return OntologyObject.class;
 		}

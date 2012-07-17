@@ -28,7 +28,8 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.toolbox.FileUtils;
@@ -102,7 +103,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 
 		logger.info("Hop" + _project.getProjectOntology());
 
-		FlexoOntology flexoConceptsOntology = _project.getProjectOntologyLibrary().getFlexoConceptOntology();
+		OWLOntology flexoConceptsOntology = _project.getProjectOntologyLibrary().getFlexoConceptOntology();
 		flexoConceptsOntology.describe();
 
 	}
@@ -113,7 +114,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	public void test3ImportOntologies() {
 		log("test3ImportOntologies()");
 
-		FlexoOntology basicOrganizationTreeOntology = _project.getProjectOntologyLibrary().getOntology(
+		OWLOntology basicOrganizationTreeOntology = (OWLOntology) _project.getProjectOntologyLibrary().getOntology(
 				"http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl");
 		assertNotNull(basicOrganizationTreeOntology);
 

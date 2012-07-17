@@ -32,8 +32,9 @@ import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
 import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
@@ -122,7 +123,8 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		}
 
 		// Instanciate new Calc
-		_newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary, getCalcFolder());
+		_newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary,
+				getCalcFolder());
 		_newViewPoint.setDescription(getNewCalcDescription());
 
 		// And register it to the library
@@ -135,7 +137,11 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 				.getOntologyLibrary());
 		for (FlexoOntology importedOntology : importedOntologies) {
 			try {
-				newOntology.importOntology(importedOntology);
+				if (importedOntology instanceof OWLOntology) {
+					newOntology.importOntology((OWLOntology) importedOntology);
+				} else {
+					logger.warning("Could not import anything else than an OWL ontology");
+				}
 			} catch (OntologyNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -158,7 +164,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 
 	public String getNewCalcURI() {
 		if (StringUtils.isEmpty(_newCalcURI) && getOntologyFile() != null) {
-			return FlexoOntology.findOntologyURI(getOntologyFile());
+			return OWLOntology.findOntologyURI(getOntologyFile());
 		}
 		return _newCalcURI;
 	}
@@ -182,8 +188,8 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	public void setOntologyFile(File ontologyFile) {
 		this._ontologyFile = ontologyFile;
 		if (ontologyFile != null) {
-			String ontologyURI = FlexoOntology.findOntologyURI(getOntologyFile());
-			String ontologyName = ToolBox.getJavaClassName(FlexoOntology.findOntologyName(getOntologyFile()));
+			String ontologyURI = OWLOntology.findOntologyURI(getOntologyFile());
+			String ontologyName = ToolBox.getJavaClassName(OWLOntology.findOntologyName(getOntologyFile()));
 			if (ontologyName == null && ontologyFile != null && ontologyFile.getName().length() > 4) {
 				ontologyName = ontologyFile.getName().substring(0, ontologyFile.getName().length() - 4);
 			}

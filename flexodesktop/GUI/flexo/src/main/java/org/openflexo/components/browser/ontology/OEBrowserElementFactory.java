@@ -30,8 +30,8 @@ import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.ontology.owl.OWLStatement;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewDefinition;
@@ -70,8 +70,8 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 			return new OntologyDataPropertyElement((OntologyDataProperty) object, browser, parent);
 		} else if (object instanceof OntologyObjectProperty) {
 			return new OntologyObjectPropertyElement((OntologyObjectProperty) object, browser, parent);
-		} else if (object instanceof OntologyStatement) {
-			return new OntologyStatementElement((OntologyStatement) object, browser, parent);
+		} else if (object instanceof OWLStatement) {
+			return new OntologyStatementElement((OWLStatement) object, browser, parent);
 		} else if (object instanceof ViewPointLibrary) {
 			return new CalcLibraryElement((ViewPointLibrary) object, browser, parent);
 		} else if (object instanceof ViewPointFolder) {

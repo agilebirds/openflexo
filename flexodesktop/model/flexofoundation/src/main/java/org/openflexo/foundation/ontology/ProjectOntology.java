@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectOntologyResource;
@@ -45,7 +46,7 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
-public class ProjectOntology extends FlexoOntology implements StorageResourceData {
+public class ProjectOntology extends OWLOntology implements StorageResourceData {
 
 	private static final Logger logger = Logger.getLogger(FlexoOntology.class.getPackage().getName());
 

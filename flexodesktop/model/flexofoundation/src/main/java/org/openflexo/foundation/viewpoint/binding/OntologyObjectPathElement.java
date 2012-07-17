@@ -23,6 +23,7 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
+import org.openflexo.foundation.ontology.owl.OWLObject;
 import org.openflexo.localization.FlexoLocalization;
 
 public class OntologyObjectPathElement<T extends OntologyObject> implements SimplePathElement<T>, BindingVariable<T> {
@@ -95,7 +96,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 
 	boolean propertiesFound = false;
 
-	private void searchProperties(OntologyObject<?> ontologicType) {
+	private void searchProperties(OntologyObject ontologicType) {
 
 		if (ontologicType != null) {
 			// System.out.println("Properties = "
@@ -115,9 +116,9 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 					if (array[i].getName().equals(array[j].getName())) {
 						// Detected name based shadowing between array[i] and array[j]
 						// System.out.println("Detected name based shadowing between " + array[i] + " and " + array[j]);
-						if (array[i].getOntology().getAllImportedOntologies().contains(array[j].getOntology())) {
+						if (array[i].getFlexoOntology().getAllImportedOntologies().contains(array[j].getFlexoOntology())) {
 							// array[i] appears to be the most specialized, don't do anything
-						} else if (array[j].getOntology().getAllImportedOntologies().contains(array[i].getOntology())) {
+						} else if (array[j].getFlexoOntology().getAllImportedOntologies().contains(array[i].getFlexoOntology())) {
 							// array[j] appears to be the most specialized, we need to swap
 							i1.add(i);
 							i2.add(j);
@@ -349,7 +350,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 		@Override
 		public OntologyClass getOntologicType() {
 			if (getViewpointOntology() != null) {
-				return getViewpointOntology().getClass(OntologyObject.OWL_DATA_PROPERTY_URI);
+				return getViewpointOntology().getClass(OWLObject.OWL_DATA_PROPERTY_URI);
 			}
 			return null;
 		}
@@ -369,7 +370,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 		@Override
 		public OntologyClass getOntologicType() {
 			if (getViewpointOntology() != null) {
-				return getViewpointOntology().getClass(OntologyObject.OWL_OBJECT_PROPERTY_URI);
+				return getViewpointOntology().getClass(OWLObject.OWL_OBJECT_PROPERTY_URI);
 			}
 			return null;
 		}

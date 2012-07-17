@@ -27,7 +27,7 @@ import javax.swing.Icon;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.AddAnnotationStatement;
+import org.openflexo.foundation.ontology.owl.action.AddAnnotationStatement;
 import org.openflexo.foundation.param.AnnotationPropertyParameter;
 import org.openflexo.foundation.param.OntologyClassParameter;
 import org.openflexo.foundation.param.OntologyObjectParameter;

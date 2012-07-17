@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.components.widget.FIBOntologyEditor;
-import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -37,11 +37,11 @@ import org.openflexo.vpm.controller.VPMController;
  * 
  */
 @SuppressWarnings("serial")
-public class OntologyView extends FIBOntologyEditor implements SelectionSynchronizedModuleView<FlexoOntology> {
+public class OntologyView extends FIBOntologyEditor implements SelectionSynchronizedModuleView<OWLOntology> {
 
 	private FlexoPerspective declaredPerspective;
 
-	public OntologyView(FlexoOntology ontology, VPMController controller, FlexoPerspective perspective) {
+	public OntologyView(OWLOntology ontology, VPMController controller, FlexoPerspective perspective) {
 		super(ontology, controller);
 		declaredPerspective = perspective;
 		controller.manageResource(ontology);
@@ -79,8 +79,8 @@ public class OntologyView extends FIBOntologyEditor implements SelectionSynchron
 	}
 
 	@Override
-	public FlexoOntology getRepresentedObject() {
-		return getOntology();
+	public OWLOntology getRepresentedObject() {
+		return (OWLOntology) getOntology();
 	}
 
 }

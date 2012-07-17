@@ -37,8 +37,8 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
@@ -202,7 +202,7 @@ public class ViewPoint extends ViewPointObject {
 
 		if (owlFile.exists()) {
 			logger.fine("Found " + owlFile);
-			String ontologyURI = FlexoOntology.findOntologyURI(owlFile);
+			String ontologyURI = OWLOntology.findOntologyURI(owlFile);
 			if (StringUtils.isEmpty(ontologyURI)) {
 				ontologyURI = viewPointURI;
 			}
@@ -514,7 +514,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	@Override
-	public FlexoOntology getViewpointOntology() {
+	public OWLOntology getViewpointOntology() {
 		if (isDeserializing()) {
 			return super.getViewpointOntology();
 		}

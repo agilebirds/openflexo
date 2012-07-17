@@ -1,8 +1,8 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.owl.DataPropertyStatement;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;

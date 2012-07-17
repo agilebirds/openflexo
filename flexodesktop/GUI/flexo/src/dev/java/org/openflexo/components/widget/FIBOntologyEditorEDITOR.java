@@ -67,7 +67,7 @@ public class FIBOntologyEditorEDITOR {
 
 			@Override
 			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();
@@ -75,7 +75,7 @@ public class FIBOntologyEditorEDITOR {
 
 	public static void main2(String[] args) {
 		JFrame frame = new JFrame();
-		FlexoResourceCenter resourceCenter = FlexoResourceCenterService.instance().getFlexoResourceCenter();
+		FlexoResourceCenter resourceCenter = FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
 		// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
 		FlexoOntology o = resourceCenter.retrieveBaseOntologyLibrary().getOntology(
 		// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");

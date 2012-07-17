@@ -106,13 +106,8 @@ import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
 import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyFolder;
-import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
@@ -371,11 +366,11 @@ public enum BrowserElementType {
 	IMPORTED_ONTOLOGY("imported_ontology", ImportedOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	ONTOLOGY_LIBRARY("ontology_library", OntologyLibrary.class, OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON),
 	ONTOLOGY_FOLDER("ontology_folder", OntologyFolder.class, IconLibrary.FOLDER_ICON),
-	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
-	ONTOLOGY_INDIVIDUAL("ontology_individual", OntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
-	ONTOLOGY_DATA_PROPERTY("ontology_data_property", OntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
-	ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", OntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
-	ONTOLOGY_STATEMENT("ontology_statement", OntologyStatement.class, OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),
+	/*	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
+		ONTOLOGY_INDIVIDUAL("ontology_individual", OntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
+		ONTOLOGY_DATA_PROPERTY("ontology_data_property", OntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
+		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", OntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
+		ONTOLOGY_STATEMENT("ontology_statement", OntologyStatement.class, OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),*/
 	CALC_LIBRARY("calc_library", ViewPointLibrary.class, VPMIconLibrary.CALC_LIBRARY_ICON),
 	CALC_FOLDER("calc_folder", ViewPointFolder.class, IconLibrary.FOLDER_ICON),
 	ONTOLOGY_CALC("calc", ViewPoint.class, VPMIconLibrary.CALC_ICON),

@@ -43,17 +43,10 @@ public class DeleteOntologyObjectsDialogEDITOR {
 				FlexoOntology ontology = ontologyLibrary.getOntology(URI);
 				ontology.loadWhenUnloaded();
 				Vector<OntologyObject> selection = new Vector<OntologyObject>();
-<<<<<<< HEAD
-				selection.add(ontology.getOntologyObject(URI + "#Actor"));
-				selection.add(ontology.getOntologyObject(URI + "#Mission"));
-				selection.add(ontology.getOntologyObject(URI + "#hasMission"));
-				selection.add(ontology.getOntologyObject(URI + "#description"));
-=======
 				selection.add(ontologyLibrary.getOntologyObject(URI + "#Actor"));
 				selection.add(ontologyLibrary.getOntologyObject(URI + "#Mission"));
 				selection.add(ontologyLibrary.getOntologyObject(URI + "#hasMission"));
 				selection.add(ontologyLibrary.getOntologyObject(URI + "#description"));
->>>>>>> 1f9a24abb9a829f39257df504d397f3c69c28e6b
 				DeleteOntologyObjects action = DeleteOntologyObjects.actionType.makeNewAction(null, selection, null);
 				return makeArray(action);
 			}
@@ -66,16 +59,11 @@ public class DeleteOntologyObjectsDialogEDITOR {
 		editor.launch();
 	}
 
-<<<<<<< HEAD
 	private static ModuleLoader getModuleLoader() {
 		return ModuleLoader.instance();
 	}
 
 	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-=======
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
 		return FlexoResourceCenterService.getInstance();
->>>>>>> 1f9a24abb9a829f39257df504d397f3c69c28e6b
 	}
 }
