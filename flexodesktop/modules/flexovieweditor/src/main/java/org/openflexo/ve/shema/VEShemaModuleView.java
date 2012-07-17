@@ -55,7 +55,9 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View> {
 
 	@Override
 	public void deleteModuleView() {
-		getController().delete();
+		if (getController() != null) {
+			getController().delete();
+		}
 	}
 
 	@Override
