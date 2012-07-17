@@ -69,7 +69,7 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return getScheme().getEditionPattern();
+		return (getScheme() != null ? getScheme().getEditionPattern() : null);
 	}
 
 	@Override

@@ -106,7 +106,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return getPatternRole().getEditionPattern();
+		return (getPatternRole() != null ? getPatternRole().getEditionPattern() : null);
 	}
 
 	@Override
