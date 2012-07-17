@@ -225,7 +225,6 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		} else {
 			newCenterView = new JPanel();
 		}
-		restoreLayout();
 		updateLayoutForPerspective();
 		updateComponent(newCenterView, LayoutPosition.MIDDLE_CENTER);
 		centerPanel.revalidate();
@@ -240,44 +239,52 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		repaint();
 	}
 
-	private void updateBottomCenterView() {
+	private boolean updateBottomCenterView() {
 		JComponent newBottomCenterView = getController().getCurrentPerspective().getBottomCenterView();
 		updateComponent(newBottomCenterView, LayoutPosition.BOTTOM_CENTER);
+		return newBottomCenterView != null;
 	}
 
-	private void updateBottomRightView() {
+	private boolean updateBottomRightView() {
 		JComponent newBottomRightView = getController().getCurrentPerspective().getBottomRightView();
 		updateComponent(newBottomRightView, LayoutPosition.BOTTOM_RIGHT);
+		return newBottomRightView != null;
 	}
 
-	private void updateBottomLeftView() {
+	private boolean updateBottomLeftView() {
 		JComponent newBottomLeftView = getController().getCurrentPerspective().getBottomLeftView();
 		updateComponent(newBottomLeftView, LayoutPosition.BOTTOM_LEFT);
+		return newBottomLeftView != null;
 	}
 
-	private void updateMiddleRightView() {
+	private boolean updateMiddleRightView() {
 		JComponent newMiddleRightView = getController().getCurrentPerspective().getMiddleRightView();
 		updateComponent(newMiddleRightView, LayoutPosition.MIDDLE_RIGHT);
+		return newMiddleRightView != null;
 	}
 
-	private void updateMiddleLeftView() {
+	private boolean updateMiddleLeftView() {
 		JComponent newMiddleLeftView = getController().getCurrentPerspective().getMiddleLeftView();
 		updateComponent(newMiddleLeftView, LayoutPosition.MIDDLE_LEFT);
+		return newMiddleLeftView != null;
 	}
 
-	private void updateTopCenterView() {
+	private boolean updateTopCenterView() {
 		JComponent newTopCenterView = getController().getCurrentPerspective().getTopCenterView();
 		updateComponent(newTopCenterView, LayoutPosition.TOP_CENTER);
+		return newTopCenterView != null;
 	}
 
-	private void updateTopRightView() {
+	private boolean updateTopRightView() {
 		JComponent newTopRightView = getController().getCurrentPerspective().getTopRightView();
 		updateComponent(newTopRightView, LayoutPosition.TOP_RIGHT);
+		return newTopRightView != null;
 	}
 
-	private void updateTopLeftView() {
+	private boolean updateTopLeftView() {
 		JComponent newTopLeftView = getController().getCurrentPerspective().getTopLeftView();
 		updateComponent(newTopLeftView, LayoutPosition.TOP_LEFT);
+		return newTopLeftView != null;
 	}
 
 	private void updateFooter() {
@@ -488,18 +495,28 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 	private void updateLayoutForPerspective() {
 		restoreLayout();
 
-		updateTopLeftView();
-		updateTopRightView();
+		boolean hasLeftView = false;
+		boolean hasRightView = false;
+
+		hasLeftView |= updateTopLeftView();
+		hasRightView |= updateTopRightView();
 		updateTopCenterView();
-		updateMiddleLeftView();
-		updateMiddleRightView();
-		updateBottomLeftView();
-		updateBottomRightView();
+
+		hasLeftView |= updateMiddleLeftView();
+		hasRightView |= updateMiddleRightView();
+
+		hasLeftView |= updateBottomLeftView();
+		hasRightView |= updateBottomRightView();
 		updateBottomCenterView();
+
 		updateHeader();
 		updateFooter();
+
 		updateLeftViewVisibility();
 		updateRightViewVisibility();
+
+		topBar.setLeftViewToggle(hasLeftView);
+		topBar.setRightViewToggle(hasRightView);
 
 	}
 
