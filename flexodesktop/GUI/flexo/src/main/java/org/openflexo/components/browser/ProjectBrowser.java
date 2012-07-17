@@ -22,6 +22,9 @@ package org.openflexo.components.browser;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,22 +68,22 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	private FlexoModelObject _rootObject = null;
 
-	protected Hashtable<BrowserElementType, BrowserFilterStatus> _filterStatus;
+	protected Map<BrowserElementType, BrowserFilterStatus> _filterStatus;
 
-	protected Hashtable<BrowserElementType, Boolean> _filterDeepBrowsing;
+	protected Map<BrowserElementType, Boolean> _filterDeepBrowsing;
 
-	protected Hashtable<BrowserElementType, ElementTypeBrowserFilter> _filters;
+	protected Map<BrowserElementType, ElementTypeBrowserFilter> _filters;
 
 	// private Vector<ElementTypeBrowserFilter> _elementTypeFilters;
 
-	private Vector<CustomBrowserFilter> _customFilters;
+	private List<CustomBrowserFilter> _customFilters;
 
 	// hashtable where keys are FlexoModelObject objects while values are either
 	// BrowserElement
 	// or a Vector of BrowserElement
-	private Hashtable<FlexoModelObject, Object> _elements = null;
+	private Map<FlexoModelObject, Object> _elements = null;
 
-	private final Vector<ProjectBrowserListener> _browserListeners;
+	private final List<ProjectBrowserListener> _browserListeners;
 
 	private SelectionManager _selectionManager;
 
@@ -147,8 +150,10 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	@Deprecated
 	protected ProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager, boolean initNow) {
 		super(null);
-		_project = configuration.getProject();
-		_browserElementFactory = configuration.getBrowserElementFactory();
+		if (configuration != null) {
+			_project = configuration.getProject();
+			_browserElementFactory = configuration.getBrowserElementFactory();
+		}
 		_filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
 		_filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
 		_filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
@@ -507,21 +512,15 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_filterStatus.clear();
 		_filterDeepBrowsing.clear();
 		_filters.clear();
-		// _elementTypeFilters.clear();
 		_browserListeners.clear();
 		_selectionManager = null;
 	}
 
 	private void clearTree() {
-		// synchronized (getBrowserLock()) {
 		if (_rootElement != null) {
-
-			// _rootElement.recursiveDeleteChilds();
-
 			_rootElement.delete();
 		}
-		for (Enumeration<Object> e = _elements.elements(); e.hasMoreElements();) {
-			Object obj = e.nextElement();
+		for (Object obj : _elements.values()) {
 			if (obj instanceof BrowserElement) {
 				((BrowserElement) obj).delete();
 			} else if (obj instanceof Vector) {
@@ -536,7 +535,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_expansionSynchronizedElements.removeAllElements();
 		_expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
 		_elements = null;
-		// }
 	}
 
 	Vector<ExpansionSynchronizedElement> _expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
@@ -744,8 +742,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public synchronized void notifyListeners(BrowserEvent event) {
-		for (Enumeration<ProjectBrowserListener> e = _browserListeners.elements(); e.hasMoreElements();) {
-			ProjectBrowserListener l = e.nextElement();
+		for (ProjectBrowserListener l : _browserListeners) {
 			if (event instanceof OptionalFilterAddedEvent) {
 				l.optionalFilterAdded((OptionalFilterAddedEvent) event);
 			} else if (event instanceof ObjectAddedToSelectionEvent) {
@@ -1055,8 +1052,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	public Enumeration<FlexoModelObject> getAllObjects() {
-		return _elements.keys();
+	public Iterator<FlexoModelObject> getAllObjects() {
+		return _elements.keySet().iterator();
 	}
 
 	public SelectionController getSelectionController() {
@@ -1180,7 +1177,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return _elements != null && anObject != null && _elements.get(anObject) != null;
 	}
 
-	public Vector<CustomBrowserFilter> getCustomFilters() {
+	public List<CustomBrowserFilter> getCustomFilters() {
 		return _customFilters;
 	}
 

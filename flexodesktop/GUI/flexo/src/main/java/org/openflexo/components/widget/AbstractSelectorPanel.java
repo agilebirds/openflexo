@@ -30,7 +30,7 @@ import java.awt.event.MouseEvent;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -178,9 +178,9 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		};
 
 		sortedObjectList = new Vector<T>();
-		Enumeration en = _browser.getAllObjects();
-		while (en.hasMoreElements()) {
-			T o = (T) en.nextElement();
+		Iterator<FlexoModelObject> en = _browser.getAllObjects();
+		while (en.hasNext()) {
+			T o = (T) en.next();
 			if (_owner.isSelectable(o)) {
 				sortedObjectList.add(o);
 			}

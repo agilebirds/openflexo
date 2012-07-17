@@ -1,6 +1,7 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -68,6 +69,7 @@ public class MainPaneTopBar extends JPanel {
 			close.setRolloverIcon(IconLibrary.CLOSE_HOVER_ICON);
 			updateText();
 			registrationManager.new PropertyChangeListenerRegistration(this, object);
+			registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_OBJECT, this, model);
 			add(text);
 		}
 
@@ -77,10 +79,21 @@ public class MainPaneTopBar extends JPanel {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(FlexoModelObject.DELETED_PROPERTY)) {
-				getParent().remove(this);
+			if (evt.getSource() == model) {
+				if (evt.getPropertyName().equals(RootControllerModel.CURRENT_OBJECT)) {
+					if (evt.getNewValue() == object) {
+						Container container = getParent();
+						container.remove(this);
+						container.add(this, 0);
+					}
+				}
+			} else if (evt.getSource() == object) {
+				if (evt.getPropertyName().equals(FlexoModelObject.DELETED_PROPERTY)) {
+					getParent().remove(this);
+				} else {
+					updateText();
+				}
 			}
-			updateText();
 		}
 	}
 
@@ -89,7 +102,7 @@ public class MainPaneTopBar extends JPanel {
 		this.renderer = renderer;
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		setLayout(new BorderLayout());
-		this.forcePreferredSize = ToolBox.getPLATFORM() == ToolBox.MACOS;
+		this.forcePreferredSize = ToolBox.getPLATFORM() != ToolBox.MACOS;
 		add(left = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)), BorderLayout.WEST);
 		add(center = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)));
 		add(right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)), BorderLayout.EAST);
@@ -109,7 +122,9 @@ public class MainPaneTopBar extends JPanel {
 			final JButton button = new JButton(module.getMediumIcon());
 			button.setEnabled(true);
 			button.setFocusable(false);
-			button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 4, button.getIcon().getIconHeight() + 4));
+			if (forcePreferredSize) {
+				button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 4, button.getIcon().getIconHeight() + 4));
+			}
 			button.addActionListener(new ActionListener() {
 
 				@Override
@@ -140,7 +155,9 @@ public class MainPaneTopBar extends JPanel {
 
 	private void initNavigationControls() {
 		final JButton backwardButton = new JButton(IconLibrary.NAVIGATION_BACKWARD_ICON);
-		backwardButton.setPreferredSize(new Dimension(24, 24));
+		if (forcePreferredSize) {
+			backwardButton.setPreferredSize(new Dimension(24, 24));
+		}
 		backwardButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -149,7 +166,9 @@ public class MainPaneTopBar extends JPanel {
 			}
 		});
 		final JButton forwardButton = new JButton(IconLibrary.NAVIGATION_FORWARD_ICON);
-		forwardButton.setPreferredSize(new Dimension(24, 24));
+		if (forcePreferredSize) {
+			forwardButton.setPreferredSize(new Dimension(24, 24));
+		}
 		forwardButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -158,7 +177,9 @@ public class MainPaneTopBar extends JPanel {
 			}
 		});
 		final JButton upButton = new JButton(IconLibrary.NAVIGATION_UP_ICON);
-		upButton.setPreferredSize(new Dimension(24, 24));
+		if (forcePreferredSize) {
+			upButton.setPreferredSize(new Dimension(24, 24));
+		}
 		upButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -214,8 +235,10 @@ public class MainPaneTopBar extends JPanel {
 
 	private void insertPerspective(final FlexoPerspective p) {
 		final JButton button = new JButton(p.getActiveIcon());
-		int size = Math.max(button.getIcon().getIconWidth() + 8, button.getIcon().getIconHeight() + 4);
-		button.setPreferredSize(new Dimension(size, size));
+		if (forcePreferredSize) {
+			int size = Math.max(button.getIcon().getIconWidth() + 8, button.getIcon().getIconHeight() + 4);
+			button.setPreferredSize(new Dimension(size, size));
+		}
 		button.addActionListener(new ActionListener() {
 
 			@Override
@@ -291,7 +314,9 @@ public class MainPaneTopBar extends JPanel {
 	private JButton getToggleVisibilityButton() {
 		final JButton button = new JButton(IconLibrary.TOGGLE_ARROW_TOP_ICON);
 		button.setRolloverIcon(IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-		button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 2, button.getIcon().getIconHeight() + 20));
+		if (forcePreferredSize) {
+			button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 2, button.getIcon().getIconHeight() + 20));
+		}
 		return button;
 	}
 

@@ -21,7 +21,8 @@ package org.openflexo.cgmodule.view;
 
 import java.awt.Dimension;
 
-import org.openflexo.cgmodule.controller.browser.GeneratorBrowser;
+import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ConfigurableProjectBrowser;
 import org.openflexo.components.widget.AbstractBrowserSelector;
 import org.openflexo.components.widget.AbstractSelectorPanel;
@@ -100,7 +101,14 @@ public class CGVersionSelector extends AbstractBrowserSelector<AbstractCGFileVer
 
 	protected class CGVersionBrowser extends ConfigurableProjectBrowser {
 		protected CGVersionBrowser() {
-			super(GeneratorBrowser.makeBrowserConfigurationForFileHistory(file));
+			super(null);
+			setRootObject(file);
+		}
+
+		@Override
+		public void configure() {
+			super.configure();
+			setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.SHOW);
 		}
 
 	}

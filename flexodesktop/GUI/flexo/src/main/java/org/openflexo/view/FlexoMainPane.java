@@ -343,6 +343,9 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 	}
 
 	public void restoreLayout() {
+		if (controller.getCurrentPerspective() == null) {
+			return;
+		}
 		Node layoutModel = getController().getControllerModel().getLayoutForPerspective(controller.getCurrentPerspective());
 		if (layoutModel == null) {
 			layoutModel = getDefaultLayout();

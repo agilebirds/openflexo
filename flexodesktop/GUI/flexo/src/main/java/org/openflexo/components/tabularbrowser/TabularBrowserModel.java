@@ -32,7 +32,6 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * 
@@ -48,15 +47,12 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 
 	private int _rowHeight = -1;
 
-	private FlexoProject _project;
-
 	public TabularBrowserModel(BrowserConfiguration configuration, String browsableColumnName, int browsableColumnWidth) {
 		this(configuration, true, browsableColumnName, browsableColumnWidth);
 	}
 
 	public TabularBrowserModel(BrowserConfiguration configuration, boolean initNow, String browsableColumnName, int browsableColumnWidth) {
 		super(configuration, null, initNow);
-		_project = configuration.getProject();
 		_columns = new ArrayList<AbstractColumn<?, ?>>();
 		addToColumns(_browsableColumn = new TreeColumn(browsableColumnName, browsableColumnWidth));
 	}

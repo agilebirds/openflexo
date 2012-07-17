@@ -20,7 +20,8 @@
 package org.openflexo.cgmodule.view;
 
 import org.openflexo.cgmodule.controller.GeneratorController;
-import org.openflexo.cgmodule.controller.browser.GeneratorBrowser;
+import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
@@ -41,7 +42,8 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 	}
 
 	private static TabularBrowserModel makeTabularBrowserModel(CGFile cgFile) {
-		TabularBrowserModel model = new TabularBrowserModel(GeneratorBrowser.makeBrowserConfigurationForFileHistory(cgFile), " ", 300);
+		TabularBrowserModel model = new TabularBrowserModel(null, " ", 300);
+		model.setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.SHOW);
 		model.addToColumns(new StringColumn<CGObject>("kind", 150) {
 			@Override
 			public String getValue(CGObject object) {
