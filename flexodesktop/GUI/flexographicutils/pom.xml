@@ -31,6 +31,14 @@
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
+		<dependency>
+			 <groupId>org.swinglabs.swingx</groupId>
+ 			 <artifactId>swingx-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>	
 	</dependencies>
 </project>
 
