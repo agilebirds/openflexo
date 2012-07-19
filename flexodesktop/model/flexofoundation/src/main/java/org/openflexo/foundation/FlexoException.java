@@ -30,7 +30,7 @@ import org.openflexo.localization.FlexoLocalization;
 public class FlexoException extends Exception {
 
 	// key used for localized messages, in FlexoLocalization
-	private String _localizationKey;
+	protected String _localizationKey;
 
 	public FlexoException() {
 		super();

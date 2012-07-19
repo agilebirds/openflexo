@@ -83,7 +83,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 				DMObject lastDeletedParent = null;
 				DMObject lastDeleted = action.getObjectsToDelete().lastElement();
 				if (lastDeleted != null) {
-					lastDeletedParent = (DMObject) lastDeleted.getParent();
+					lastDeletedParent = lastDeleted.getParent();
 					action.setContext(lastDeletedParent);
 				}
 				// Is there something to ask about deletion ?
@@ -247,7 +247,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 
 	@Override
 	protected KeyStroke getShortcut() {
-		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
+		return KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0);
 	}
 
 }

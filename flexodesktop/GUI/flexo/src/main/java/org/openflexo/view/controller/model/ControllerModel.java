@@ -261,6 +261,11 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 					currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
 					getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 					getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, old != null ? old.getObject() : null, currentObject);
+				} else if (currentLocation.getPerspective() != currentPerspective) {
+					previousHistory.push(currentLocation);
+					HistoryLocation old = currentLocation;
+					currentLocation = new HistoryLocation(currentObject, getCurrentPerspective());
+					getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 				}
 			}
 		} else {

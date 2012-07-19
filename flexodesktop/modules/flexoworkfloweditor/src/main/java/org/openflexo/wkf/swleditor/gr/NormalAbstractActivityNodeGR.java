@@ -54,8 +54,8 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 		foreground.setLineWidth(0.2);
 		setForeground(foreground);
 
-		BackgroundStyle background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
-				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+		BackgroundStyle background = BackgroundStyle.makeColorGradientBackground(getOppositeBgColor(), getMainBgColor(),
+				ColorGradientDirection.NORTH_SOUTH);
 		setBackground(background);
 		// setDecorationPainter(new NodeDecorationPainter());
 	}

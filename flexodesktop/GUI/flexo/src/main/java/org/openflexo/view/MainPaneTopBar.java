@@ -75,11 +75,14 @@ public class MainPaneTopBar extends JPanel {
 			setEnabled(true);
 			setFocusable(false);
 			setContentAreaFilled(false);
+			setBorderPainted(ToolBox.getPLATFORM() != ToolBox.MACOS);
 			setRolloverEnabled(true);
 			addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					setContentAreaFilled(true);
+					if (isEnabled()) {
+						setContentAreaFilled(true);
+					}
 				}
 
 				@Override

@@ -467,6 +467,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			if (evt.getPropertyName().equals(ControllerModel.CURRENT_PERPSECTIVE)) {
 				FlexoPerspective previous = (FlexoPerspective) evt.getOldValue();
 				FlexoPerspective next = (FlexoPerspective) evt.getNewValue();
+				setModuleView(controller.moduleViewForObject(controller.getCurrentDisplayedObjectAsModuleView()));
 				updatePropertyChangeListener(previous, next);
 				updateLayoutForPerspective();
 			} else if (evt.getPropertyName().equals(ControllerModel.LEFT_VIEW_VISIBLE)) {

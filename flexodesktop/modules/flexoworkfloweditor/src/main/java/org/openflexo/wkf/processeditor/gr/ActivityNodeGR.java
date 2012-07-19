@@ -24,9 +24,7 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -39,10 +37,6 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 	private static final int MIN_SPACE = 5;
-
-	private ForegroundStyle foreground;
-	private BackgroundStyle background;
-	private boolean isInPalette = false;
 
 	public ActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);

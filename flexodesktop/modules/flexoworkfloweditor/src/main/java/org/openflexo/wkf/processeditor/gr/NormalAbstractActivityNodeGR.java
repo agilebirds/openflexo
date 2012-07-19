@@ -147,8 +147,8 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 	}
 
 	private void updateBackground() {
-		background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
-				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+		background = BackgroundStyle
+				.makeColorGradientBackground(getOppositeBgColor(), getMainBgColor(), ColorGradientDirection.NORTH_SOUTH);
 		setBackground(background);
 		updatePropertiesFromWKFPreferences();
 	}

@@ -77,21 +77,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 	private final class FlexoModuleWindowListener extends WindowAdapter {
 
 		@Override
-		public void windowDeiconified(WindowEvent e) {
-			activateModuleIfPossible(e);
-		}
-
-		@Override
-		public void windowGainedFocus(WindowEvent e) {
-			activateModuleIfPossible(e);
-		}
-
-		@Override
 		public void windowActivated(WindowEvent e) {
-			activateModuleIfPossible(e);
-		}
-
-		private void activateModuleIfPossible(WindowEvent e) {
 			if (!(e.getOppositeWindow() instanceof ProgressWindow) && getModuleLoader().isLoaded(getModule().getModule())) {
 				switchToModule();
 			}
