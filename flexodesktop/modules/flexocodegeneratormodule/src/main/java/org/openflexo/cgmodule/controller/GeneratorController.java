@@ -101,9 +101,9 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 
 	protected static final Logger logger = Logger.getLogger(GeneratorController.class.getPackage().getName());
 
-	public final FlexoPerspective CODE_GENERATOR_PERSPECTIVE;
-	public final FlexoPerspective VERSIONNING_PERSPECTIVE;
-	public final FlexoPerspective MODEL_REINJECTION_PERSPECTIVE;
+	public FlexoPerspective CODE_GENERATOR_PERSPECTIVE;
+	public FlexoPerspective VERSIONNING_PERSPECTIVE;
+	public FlexoPerspective MODEL_REINJECTION_PERSPECTIVE;
 
 	public static final FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);
 
@@ -122,13 +122,16 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	public GeneratorController(FlexoModule module) {
 		super(module);
 		_CGGeneratedResourceModifiedHook = new CGGeneratedResourceModifiedHook();
+		_projectGenerators = new Hashtable<GenerationRepository, ProjectGenerator>();
+	}
+
+	protected void initializePerspectives() {
 		browser = new GeneratorBrowser(this);
 		browserView = new GeneratorBrowserView(this, browser);
 		createFooter();
 		addToPerspectives(CODE_GENERATOR_PERSPECTIVE = new CodeGeneratorPerspective(this));
 		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
 		addToPerspectives(MODEL_REINJECTION_PERSPECTIVE = new ModelReinjectionPerspective(this));
-		_projectGenerators = new Hashtable<GenerationRepository, ProjectGenerator>();
 	}
 
 	public GeneratorBrowserView getBrowserView() {

@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.SwingUtilities;
 
 import org.openflexo.dm.view.DMEOEntityView;
 import org.openflexo.dm.view.DMEOModelView;
@@ -74,10 +73,10 @@ public class DMController extends FlexoController {
 	@SuppressWarnings("hiding")
 	private static final Logger logger = Logger.getLogger(DMController.class.getPackage().getName());
 
-	public final RepositoryPerspective REPOSITORY_PERSPECTIVE;
-	public final PackagePerspective PACKAGE_PERSPECTIVE;
-	public final HierarchyPerspective HIERARCHY_PERSPECTIVE;
-	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
+	public RepositoryPerspective REPOSITORY_PERSPECTIVE;
+	public PackagePerspective PACKAGE_PERSPECTIVE;
+	public HierarchyPerspective HIERARCHY_PERSPECTIVE;
+	public DiagramPerspective DIAGRAM_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -97,16 +96,13 @@ public class DMController extends FlexoController {
 	 */
 	public DMController(FlexoModule module) {
 		super(module);
+	}
+
+	protected void initializePerspectives() {
 		addToPerspectives(REPOSITORY_PERSPECTIVE = new RepositoryPerspective(this));
 		addToPerspectives(PACKAGE_PERSPECTIVE = new PackagePerspective(this));
 		addToPerspectives(HIERARCHY_PERSPECTIVE = new HierarchyPerspective(this));
 		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				switchToPerspective(REPOSITORY_PERSPECTIVE);
-			}
-		});
 	}
 
 	@Override

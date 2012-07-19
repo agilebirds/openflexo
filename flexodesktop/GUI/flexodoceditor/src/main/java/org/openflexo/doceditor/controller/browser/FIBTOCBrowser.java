@@ -38,8 +38,8 @@ public class FIBTOCBrowser extends FIBBrowserView<TOCData> {
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBTOCBrowser.fib");
 
-	public FIBTOCBrowser(TOCData tocData, DEController controller) {
-		super(tocData, controller, FIB_FILE);
+	public FIBTOCBrowser(DEController controller) {
+		super(null, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test

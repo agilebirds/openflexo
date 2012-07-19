@@ -164,7 +164,11 @@ public class DiagramPerspective extends FlexoPerspective {
 		if (proposedObject instanceof View) {
 			return (View) proposedObject;
 		}
-		return proposedObject.getProject().getShemaLibrary();
+		if (proposedObject != null) {
+			return proposedObject.getProject().getShemaLibrary();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

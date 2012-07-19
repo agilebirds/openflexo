@@ -38,8 +38,8 @@ public class FIBTemplatesBrowser extends FIBBrowserView<CGDocTemplates> {
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBTemplatesBrowser.fib");
 
-	public FIBTemplatesBrowser(CGDocTemplates templates, DEController controller) {
-		super(templates, controller, FIB_FILE);
+	public FIBTemplatesBrowser(DEController controller) {
+		super(null, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test

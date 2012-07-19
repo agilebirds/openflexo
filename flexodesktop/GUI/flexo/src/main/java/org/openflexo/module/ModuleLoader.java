@@ -21,7 +21,10 @@ package org.openflexo.module;
 
 import java.awt.Frame;
 import java.awt.Window;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -43,6 +46,7 @@ import org.openflexo.ch.FCH;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveProjectsDialog;
 import org.openflexo.drm.DocResourceManager;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
@@ -56,6 +60,7 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.menu.ToolsMenu;
 
 /**
@@ -77,6 +82,24 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	private boolean allowsDocSubmission;
 
 	private FlexoModule activeModule = null;
+
+	private WeakReference<FlexoEditor> lastActiveEditor;
+
+	private class ActiveEditorListener implements PropertyChangeListener {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
+				FlexoEditor newEditor = (FlexoEditor) evt.getNewValue();
+				if (newEditor != null) {
+					lastActiveEditor = new WeakReference<FlexoEditor>(newEditor);
+				}
+			}
+		}
+
+	}
+
+	private ActiveEditorListener activeEditorListener = new ActiveEditorListener();
 
 	/**
 	 * Hashtable where are stored Module instances (instance of FlexoModule associated to a Module instance key.
@@ -111,6 +134,13 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	public void setAllowsDocSubmission(boolean allowsDocSubmission) {
 		this.allowsDocSubmission = allowsDocSubmission;
 		SubmitDocumentationAction.actionType.setAllowsDocSubmission(allowsDocSubmission);
+	}
+
+	public FlexoEditor getLastActiveEditor() {
+		if (lastActiveEditor != null) {
+			return lastActiveEditor.get();
+		}
+		return null;
 	}
 
 	@Override
@@ -231,6 +261,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 				try {
 					return loadModule(module);
 				} catch (Exception e) {
+					ProgressWindow.hideProgressWindow();
 					e.printStackTrace();
 					throw new ModuleLoadingException(module);
 				}
@@ -274,10 +305,16 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		if (moduleInstance != null) {
 			FlexoModule old = activeModule;
 			if (activeModule != null) {
+				activeModule.getController().getControllerModel().getPropertyChangeSupport()
+						.removePropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
 				activeModule.setAsInactive();
 			}
 			activeModule = moduleInstance;
 			moduleInstance.setAsActiveModule();
+			if (activeModule.getModule().requireProject()) {
+				activeModule.getController().getControllerModel().getPropertyChangeSupport()
+						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
+			}
 			getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
 			return moduleInstance;
 		}

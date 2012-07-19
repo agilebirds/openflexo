@@ -20,6 +20,7 @@
 package org.openflexo.components.browser;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -280,6 +281,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	public ElementTypeBrowserFilter getFilterForElement(BrowserElement element) {
 		BrowserElementType elementType = element.getFilteredElementType();
+		if (elementType == null) {
+			return null;
+		}
 		if (_filters.get(elementType) == null) {
 			// first time we see this element type
 			ElementTypeBrowserFilter newBrowserFilter = element.newBrowserFilter(_filterStatus.get(elementType));
@@ -687,7 +691,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	@Deprecated
-	public abstract FlexoModelObject getDefaultRootObject();
+	public FlexoModelObject getDefaultRootObject() {
+		return null;
+	}
 
 	public abstract void configure();
 
@@ -742,7 +748,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public synchronized void notifyListeners(BrowserEvent event) {
-		for (ProjectBrowserListener l : _browserListeners) {
+		// TODO: Fix this. It seems that sole Listeners (BrowserView) are removing/adding themselves
+		// during the notification phase (for ExpansionNotificationEvent, for example)
+		for (ProjectBrowserListener l : new ArrayList<ProjectBrowserListener>(_browserListeners)) {
 			if (event instanceof OptionalFilterAddedEvent) {
 				l.optionalFilterAdded((OptionalFilterAddedEvent) event);
 			} else if (event instanceof ObjectAddedToSelectionEvent) {
@@ -751,14 +759,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 				l.objectRemovedFromSelection((ObjectRemovedFromSelectionEvent) event);
 			} else if (event instanceof SelectionClearedEvent) {
 				l.selectionCleared((SelectionClearedEvent) event);
-			}
-			/*
-			 * else if (event instanceof SaveSelectionEvent) {
-			 * l.selectionSaved((SaveSelectionEvent)event); } else if (event
-			 * instanceof RestoreSelectionEvent) {
-			 * l.selectionRestored((RestoreSelectionEvent)event); }
-			 */
-			else if (event instanceof ExpansionNotificationEvent) {
+			} else if (event instanceof ExpansionNotificationEvent) {
 				l.notifyExpansions((ExpansionNotificationEvent) event);
 			} else if (event instanceof EnableExpandingSynchronizationEvent) {
 				l.enableExpandingSynchronization((EnableExpandingSynchronizationEvent) event);
@@ -829,16 +830,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	/*
-	 * protected class SaveSelectionEvent extends BrowserEvent {
-	 *
-	 * protected SaveSelectionEvent() { super(); } }
-	 *
-	 * protected class RestoreSelectionEvent extends BrowserEvent {
-	 *
-	 * protected RestoreSelectionEvent() { super(); } }
-	 */
-
 	public class EnableExpandingSynchronizationEvent extends BrowserEvent {
 
 		protected EnableExpandingSynchronizationEvent() {
@@ -855,9 +846,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	public class ExpansionNotificationEvent extends BrowserEvent {
 
-		protected Vector<TreePath> _pathsToExpand;
+		protected List<TreePath> _pathsToExpand;
 
-		protected Vector<TreePath> _pathsToCollapse;
+		protected List<TreePath> _pathsToCollapse;
 
 		public ExpansionNotificationEvent() {
 			super();
@@ -888,8 +879,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 		public ExpansionNotificationEvent(BrowserElement[] elements, boolean expand) {
 			super();
-			_pathsToExpand = new Vector<TreePath>();
-			_pathsToCollapse = new Vector<TreePath>();
+			_pathsToExpand = new ArrayList<TreePath>();
+			_pathsToCollapse = new ArrayList<TreePath>();
 			for (int i = 0; i < elements.length; i++) {
 				BrowserElement element = elements[i];
 				TreePath path = element.getTreePath();
@@ -901,11 +892,11 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			}
 		}
 
-		public Vector<TreePath> pathsToExpand() {
+		public List<TreePath> pathsToExpand() {
 			return _pathsToExpand;
 		}
 
-		public Vector<TreePath> pathsToCollabse() {
+		public List<TreePath> pathsToCollapse() {
 			return _pathsToCollapse;
 		}
 	}

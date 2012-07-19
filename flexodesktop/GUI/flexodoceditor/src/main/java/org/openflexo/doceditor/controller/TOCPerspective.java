@@ -16,6 +16,7 @@ import org.openflexo.doceditor.view.DERepositoryModuleView;
 import org.openflexo.doceditor.view.DETOCEntryModuleView;
 import org.openflexo.doceditor.view.TOCDataView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -46,7 +47,7 @@ public class TOCPerspective extends FlexoPerspective {
 	public TOCPerspective(DEController deController) {
 		super("table_of_contents");
 		this.deController = deController;
-		tocBrowser = new FIBTOCBrowser(deController.getProject().getTOCData(), deController);
+		tocBrowser = new FIBTOCBrowser(deController);
 		infoLabel = new JLabel("Table of contents perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 		setTopLeftView(tocBrowser);
@@ -81,10 +82,12 @@ public class TOCPerspective extends FlexoPerspective {
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof TOCEntry) {
 			return ((TOCEntry) proposedObject).getRepository();
-		} else if (this.deController.getProject().getTOCData().getRepositories().size() > 0) {
+		} else if (this.deController.getProject() != null && this.deController.getProject().getTOCData().getRepositories().size() > 0) {
 			return this.deController.getProject().getTOCData().getRepositories().firstElement();
-		} else {
+		} else if (this.deController.getProject() != null) {
 			return this.deController.getProject().getTOCData();
+		} else {
+			return null;
 		}
 	}
 
@@ -106,6 +109,10 @@ public class TOCPerspective extends FlexoPerspective {
 			logger.info("No module view for object: " + object + " and perspective: " + this);
 		}
 		return null;
+	}
+
+	public void setProject(FlexoProject project) {
+		tocBrowser.setDataObject(project != null ? project.getTOCData() : null);
 	}
 
 }

@@ -226,7 +226,7 @@ public class Flexo {
 			}
 
 			@Override
-			public FlexoEditor createApplicationEditor() {
+			protected FlexoEditor createApplicationEditor() {
 				return new InteractiveFlexoEditor(this, null);
 			}
 

@@ -40,6 +40,6 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 
 	public abstract ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory);
 
-	public abstract FlexoEditor createApplicationEditor();
+	protected abstract FlexoEditor createApplicationEditor();
 
 }

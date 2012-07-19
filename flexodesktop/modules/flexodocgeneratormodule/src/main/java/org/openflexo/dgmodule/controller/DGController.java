@@ -25,8 +25,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -100,9 +101,9 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	protected static final Logger logger = Logger.getLogger(DGController.class.getPackage().getName());
 
-	public final DocGeneratorPerspective DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this);
-	public final TemplatesPerspective TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this);
-	public final VersionningPerspective VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
+	public DocGeneratorPerspective DOCUMENTATION_GENERATOR_PERSPECTIVE;
+	public TemplatesPerspective TEMPLATES_PERSPECTIVE;
+	public VersionningPerspective VERSIONNING_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -116,33 +117,33 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	public static final FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);
 
-	protected Hashtable<DGRepository, ProjectDocGenerator> _projectGenerators;
+	protected Map<DGRepository, ProjectDocGenerator> _projectGenerators;
 
 	protected DGFooter _footer;
 
-	private final DGBrowserView dgBrowserView;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+	private DGBrowserView dgBrowserView;
 
 	/**
 	 * Default constructor
 	 * 
-	 * @param workflowFile
 	 * @throws Exception
 	 */
 	public DGController(FlexoModule module) {
 		super(module);
-		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
-		dgBrowserView = new DGBrowserView(this, new DGBrowser(this));
-		createFooter();
-		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE);
-		addToPerspectives(TEMPLATES_PERSPECTIVE);
-		addToPerspectives(VERSIONNING_PERSPECTIVE);
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
 
+	}
+
+	@Override
+	protected void initializePerspectives() {
+		super.initializePerspectives();
+		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
+		browser = new DGBrowser(this);
+		dgBrowserView = new DGBrowserView(this, browser);
+		createFooter();
+		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this));
+		addToPerspectives(TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this));
+		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
 	}
 
 	public DGBrowserView getDgBrowserView() {
@@ -161,6 +162,7 @@ public class DGController extends DEController implements FlexoObserver, Project
 		if (to != null && getEditor().getProject() != null) {
 			to.getProject().getGeneratedCode().setFactory(this);
 		}
+		browser.setRootObject(to != null && to.getProject() != null ? to.getProject().getGeneratedDoc() : null);
 	}
 
 	@Override
@@ -251,8 +253,8 @@ public class DGController extends DEController implements FlexoObserver, Project
 		return returned;
 	}
 
-	public Enumeration<ProjectDocGenerator> getProjectGenerators() {
-		return _projectGenerators.elements();
+	public Collection<ProjectDocGenerator> getProjectGenerators() {
+		return _projectGenerators.values();
 	}
 
 	/**
@@ -504,6 +506,8 @@ public class DGController extends DEController implements FlexoObserver, Project
 	}
 
 	private DGGeneratedResourceModifiedHook _CGGeneratedResourceModifiedHook;
+
+	private DGBrowser browser;
 
 	public class DGGeneratedResourceModifiedHook implements GeneratedResourceModifiedHook {
 

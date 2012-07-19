@@ -88,23 +88,23 @@ import org.openflexo.view.menu.FlexoMenuBar;
 public class FPSController extends FlexoController {
 	static final Logger logger = Logger.getLogger(FPSController.class.getPackage().getName());
 
-	public final FlexoPerspective ALL_FILES_PERSPECTIVE = new AllFilesPerspective(this);
-	public final FlexoPerspective INTERESTING_FILES_PERSPECTIVE = new InterestingFilesPerspective(this);
-	public final FlexoPerspective LOCALLY_MODIFIED_PERSPECTIVE = new LocallyModifiedPerspective(this);
-	public final FlexoPerspective REMOTELY_MODIFIED_PERSPECTIVE = new RemotelyModifiedPerspective(this);
-	public final FlexoPerspective CONFLICTING_FILES_PERSPECTIVE = new ConflictingFilesPerspective(this);
+	public FlexoPerspective ALL_FILES_PERSPECTIVE = new AllFilesPerspective(this);
+	public FlexoPerspective INTERESTING_FILES_PERSPECTIVE = new InterestingFilesPerspective(this);
+	public FlexoPerspective LOCALLY_MODIFIED_PERSPECTIVE = new LocallyModifiedPerspective(this);
+	public FlexoPerspective REMOTELY_MODIFIED_PERSPECTIVE = new RemotelyModifiedPerspective(this);
+	public FlexoPerspective CONFLICTING_FILES_PERSPECTIVE = new ConflictingFilesPerspective(this);
 
 	// ================================================
 	// ============= Instance variables ===============
 	// ================================================
 
-	private final CVSRepositoriesBrowser _repositoriesBrowser;
-	private final SharedProjectBrowser _sharedProjectBrowser;
+	private CVSRepositoriesBrowser _repositoriesBrowser;
+	private SharedProjectBrowser _sharedProjectBrowser;
 
-	private final CVSRepositoryList _repositories;
+	private CVSRepositoryList _repositories;
 	private SharedProject _sharedProject;
 
-	private final ConsoleView _consoleView;
+	private ConsoleView _consoleView;
 
 	FPSFooter _footer;
 
@@ -128,25 +128,27 @@ public class FPSController extends FlexoController {
 	public FPSController(FlexoModule module) {
 		super(module);
 		_instance = this;
+	}
+
+	protected void initializePerspectives() {
 		logger.info("Create CVSRepositoryList");
 		_repositories = new CVSRepositoryList();
-		_sharedProject = null;
 		_repositoriesBrowser = new CVSRepositoriesBrowser(this);
 		_sharedProjectBrowser = new SharedProjectBrowser(this);
 		cvsRepositoryBrowserView = new CVSRepositoryBrowserView(this);
 		sharedProjectBrowserView = new SharedProjectBrowserView(this);
 
 		createFooter();
-		addToPerspectives(ALL_FILES_PERSPECTIVE);
-		addToPerspectives(INTERESTING_FILES_PERSPECTIVE);
-		addToPerspectives(LOCALLY_MODIFIED_PERSPECTIVE);
-		addToPerspectives(REMOTELY_MODIFIED_PERSPECTIVE);
-		addToPerspectives(CONFLICTING_FILES_PERSPECTIVE);
 
 		_consoleView = new ConsoleView();
 		_repositories.loadStoredRepositoryLocation(FileUtils.getApplicationDataDirectory());
 		_footer.refresh();
 
+		addToPerspectives(ALL_FILES_PERSPECTIVE);
+		addToPerspectives(INTERESTING_FILES_PERSPECTIVE);
+		addToPerspectives(LOCALLY_MODIFIED_PERSPECTIVE);
+		addToPerspectives(REMOTELY_MODIFIED_PERSPECTIVE);
+		addToPerspectives(CONFLICTING_FILES_PERSPECTIVE);
 		if (getCurrentPerspective() instanceof FPSPerspective) {
 			((FPSPerspective) getCurrentPerspective()).setFilters();
 			getSharedProjectBrowser().update();

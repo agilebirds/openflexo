@@ -25,6 +25,7 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
 import org.openflexo.doceditor.menu.DEMenuBar;
 import org.openflexo.doceditor.view.DEMainPane;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
@@ -73,6 +74,16 @@ public class DEController extends FlexoController implements FlexoObserver {
 	 */
 	public DEController(FlexoModule module) {
 		super(module);
+	}
+
+	@Override
+	protected void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		TOC_PERSPECTIVE.setProject(to != null ? to.getProject() : null);
+	}
+
+	@Override
+	protected void initializePerspectives() {
 		addToPerspectives(TOC_PERSPECTIVE = new TOCPerspective(this));
 	}
 

@@ -37,10 +37,10 @@ import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class RootControllerModel extends ControllerModelObject implements PropertyChangeListener {
+public class ControllerModel extends ControllerModelObject implements PropertyChangeListener {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(RootControllerModel.class
-			.getPackage().getName());
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(ControllerModel.class.getPackage()
+			.getName());
 
 	public static final String RIGHT_VIEW_VISIBLE = "rightViewVisible";
 
@@ -87,7 +87,7 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
-	public RootControllerModel(ApplicationContext context, FlexoModule module) {
+	public ControllerModel(ApplicationContext context, FlexoModule module) {
 		this.context = context;
 		this.module = module;
 		registrationManager = new PropertyChangeListenerRegistrationManager();
@@ -171,6 +171,9 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 	}
 
 	public void addToPerspectives(FlexoPerspective perspective) {
+		if (perspective == null) {
+			return;
+		}
 		perspectives.add(perspective);
 		getPropertyChangeSupport().firePropertyChange(PERSPECTIVES, null, perspective);
 		if (currentPerspective == null) {
@@ -240,6 +243,9 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 						// current perspective can handle this object
 						if (!getCurrentPerspective().hasModuleViewForObject(currentObject)) {
 							for (FlexoPerspective p : getPerspectives()) {
+								if (p == null) {
+									continue;
+								}
 								if (p.hasModuleViewForObject(currentObject)) {
 									setCurrentPerspective(p);
 									break;
@@ -314,10 +320,9 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Back to " + previousHistory.peek());
 				}
-				HistoryLocation historyLocation = previousHistory.peek();
-				setCurrentObjectAndPerspective(historyLocation.getObject(), historyLocation.getPerspective());
 				nextHistory.push(currentLocation);
-				currentLocation = previousHistory.pop();
+				HistoryLocation nextLocation = previousHistory.pop();
+				setCurrentObjectAndPerspective(nextLocation.getObject(), nextLocation.getPerspective());
 			} finally {
 				isGoingBackward = false;
 			}
@@ -331,10 +336,9 @@ public class RootControllerModel extends ControllerModelObject implements Proper
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Forward to " + nextHistory.peek());
 				}
-				HistoryLocation historyLocation = nextHistory.peek();
-				setCurrentObjectAndPerspective(historyLocation.getObject(), historyLocation.getPerspective());
 				previousHistory.push(currentLocation);
-				currentLocation = nextHistory.pop();
+				HistoryLocation nextLocation = nextHistory.pop();
+				setCurrentObjectAndPerspective(nextLocation.getObject(), nextLocation.getPerspective());
 			} finally {
 				isGoingForward = false;
 			}

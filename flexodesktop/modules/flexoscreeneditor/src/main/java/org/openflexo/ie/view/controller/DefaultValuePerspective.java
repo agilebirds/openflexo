@@ -100,8 +100,7 @@ class DefaultValuePerspective extends FlexoPerspective {
 			ComponentDefinition component = ci.getComponentDefinition();
 			_controller.getComponentLibraryBrowser().focusOn(component);
 			_controller.getSelectionManager().setSelectedObject(component.getWOComponent());
-			_controller.getComponentBrowser().setCurrentComponent(component);
-			_controller.getComponentBrowser().focusOn(component);
+			_controller.getComponentBrowser().setRootObject(component);
 		}
 	}
 

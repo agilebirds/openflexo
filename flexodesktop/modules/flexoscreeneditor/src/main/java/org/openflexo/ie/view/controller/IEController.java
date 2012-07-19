@@ -117,10 +117,10 @@ public class IEController extends FlexoController implements Serializable, Flexo
 
 	private IEContainer currentlyDroppingTarget;
 
-	public final ComponentPerspective COMPONENT_EDITOR_PERSPECTIVE;
-	public final DefaultValuePerspective EXAMPLE_VALUE_PERSPECTIVE;
-	public final MenuPerspective MENU_EDITOR_PERSPECTIVE;
-	public final DKVPerspective DKV_EDITOR_PERSPECTIVE;
+	public ComponentPerspective COMPONENT_EDITOR_PERSPECTIVE;
+	public DefaultValuePerspective EXAMPLE_VALUE_PERSPECTIVE;
+	public MenuPerspective MENU_EDITOR_PERSPECTIVE;
+	public DKVPerspective DKV_EDITOR_PERSPECTIVE;
 
 	private ComponentLibraryBrowserView componentLibraryBrowserView;
 	private ComponentBrowserView componentBrowserView;
@@ -133,6 +133,9 @@ public class IEController extends FlexoController implements Serializable, Flexo
 	 */
 	public IEController(FlexoModule module) {
 		super(module);
+	}
+
+	protected void initializePerspectives() {
 		componentLibraryBrowser = new ComponentLibraryBrowser(this);
 		componentBrowser = new ComponentBrowser(this);
 		menuEditorBrowser = new MenuEditorBrowser(this);

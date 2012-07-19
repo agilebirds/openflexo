@@ -658,8 +658,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	public void notifyExpansions(ExpansionNotificationEvent event) {
 		_browser.deleteBrowserListener(this);
 		treeView.removeTreeExpansionListener(this);
-		for (Enumeration<TreePath> e = event.pathsToExpand().elements(); e.hasMoreElements();) {
-			TreePath path = e.nextElement();
+		for (TreePath path : event.pathsToExpand()) {
 			if (treeView.isCollapsed(path)) {
 				treeView.expandPath(path);
 				if (logger.isLoggable(Level.FINE)) {
@@ -667,8 +666,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				}
 			}
 		}
-		for (Enumeration<TreePath> e = event.pathsToCollabse().elements(); e.hasMoreElements();) {
-			TreePath path = e.nextElement();
+		for (TreePath path : event.pathsToCollapse()) {
 			if (treeView.isExpanded(path)) {
 				treeView.collapsePath(path);
 				if (logger.isLoggable(Level.FINE)) {

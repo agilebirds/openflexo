@@ -28,8 +28,6 @@ import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -66,7 +64,7 @@ import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.model.RootControllerModel;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Abstract main frame used in the context of an application module
@@ -74,7 +72,7 @@ import org.openflexo.view.controller.model.RootControllerModel;
  * @author sguerin
  */
 
-public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, FocusListener, FlexoActionSource, PropertyChangeListener {
+public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, FlexoActionSource, PropertyChangeListener {
 
 	private final class FlexoModuleWindowListener extends WindowAdapter {
 
@@ -195,10 +193,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		_controller = controller;
 		_relativeWindows = new Vector<FlexoRelativeWindow>();
 		_displayedRelativeWindows = new Vector<FlexoRelativeWindow>();
-		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_EDITOR, this);
-		_controller.getControllerModel().getPropertyChangeSupport()
-				.addPropertyChangeListener(RootControllerModel.CURRENT_PERPSECTIVE, this);
-		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_OBJECT, this);
+		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_PERPSECTIVE, this);
+		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_OBJECT, this);
 		if (defaultFrame != null) {
 			disposeDefaultFrameWhenPossible();
 		}
@@ -214,7 +211,6 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		/**
 		 * Listeners
 		 */
-		addFocusListener(this);
 		addWindowListener(windowListener = new FlexoModuleWindowListener());
 		Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame");
 		if (bounds != null) {
@@ -282,12 +278,10 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		}
 		_relativeWindows.clear();
 		if (_controller != null) {
+			_controller.getControllerModel().getPropertyChangeSupport().removePropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
 			_controller.getControllerModel().getPropertyChangeSupport()
-					.removePropertyChangeListener(RootControllerModel.CURRENT_EDITOR, this);
-			_controller.getControllerModel().getPropertyChangeSupport()
-					.removePropertyChangeListener(RootControllerModel.CURRENT_PERPSECTIVE, this);
-			_controller.getControllerModel().getPropertyChangeSupport()
-					.removePropertyChangeListener(RootControllerModel.CURRENT_OBJECT, this);
+					.removePropertyChangeListener(ControllerModel.CURRENT_PERPSECTIVE, this);
+			_controller.getControllerModel().getPropertyChangeSupport().removePropertyChangeListener(ControllerModel.CURRENT_OBJECT, this);
 			if (_controller.getProject() != null) {
 				_controller.getProject().deleteObserver(this);
 			}
@@ -300,7 +294,6 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		if (mouseListener != null) {
 			removeMouseListener(mouseListener);
 		}
-		removeFocusListener(this);
 		setJMenuBar(null);
 		if (getContentPane() != null) {
 			getContentPane().removeAll();
@@ -364,7 +357,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(RootControllerModel.CURRENT_EDITOR)) {
+		if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
 			FlexoEditor old = (FlexoEditor) evt.getOldValue();
 			FlexoEditor newValue = (FlexoEditor) evt.getNewValue();
 			if (old != null && old.getProject() != null) {
@@ -374,17 +367,6 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 				newValue.getProject().addObserver(this);
 			}
 		}
-	}
-
-	@Override
-	public void focusGained(FocusEvent event) {
-		if (getModule() != null) {
-			getModule().activateModule();
-		}
-	}
-
-	@Override
-	public void focusLost(FocusEvent event) {
 	}
 
 	@Override

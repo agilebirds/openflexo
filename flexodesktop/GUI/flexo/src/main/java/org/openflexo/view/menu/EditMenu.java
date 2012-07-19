@@ -39,7 +39,7 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.model.RootControllerModel;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * 'Edit' menu
@@ -80,7 +80,7 @@ public class EditMenu extends FlexoMenu {
 		public UndoItem() {
 			super(new UndoAction(), "undo", KeyStroke.getKeyStroke(KeyEvent.VK_Z, FlexoCst.META_MASK), IconLibrary.UNDO_ICON,
 					getController());
-			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_EDITOR, this);
+			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
 		}
 
 		@Override
@@ -150,7 +150,7 @@ public class EditMenu extends FlexoMenu {
 		public RedoItem() {
 			super(new RedoAction(), "redo", KeyStroke.getKeyStroke(KeyEvent.VK_Y, FlexoCst.META_MASK), IconLibrary.REDO_ICON,
 					getController());
-			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_EDITOR, this);
+			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
 		}
 
 		@Override

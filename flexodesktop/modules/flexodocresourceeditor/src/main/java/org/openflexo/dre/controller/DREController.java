@@ -89,8 +89,11 @@ public class DREController extends FlexoController implements FlexoActionSource 
 	 */
 	public DREController(FlexoModule module) {
 		super(module);
-		addToPerspectives(DRE_PERSPECTIVE);
+	}
+
+	protected void initializePerspectives() {
 		_browser = new DREBrowser(this);
+		addToPerspectives(DRE_PERSPECTIVE);
 	}
 
 	@Override

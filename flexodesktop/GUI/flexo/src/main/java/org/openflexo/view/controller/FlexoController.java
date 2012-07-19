@@ -136,8 +136,8 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.WebServiceURLDialog.PPMWSClientParameter;
+import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.controller.model.FlexoPerspective;
-import org.openflexo.view.controller.model.RootControllerModel;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
@@ -180,7 +180,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	private ResourceManagerWindow rmWindow;
 
-	private RootControllerModel controllerModel;
+	private ControllerModel controllerModel;
 
 	private final List<FlexoMenuBar> registeredMenuBar = new ArrayList<FlexoMenuBar>();
 
@@ -198,7 +198,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("init_module_controller"));
 		this.module = module;
 		loadedViews = new Hashtable<FlexoPerspective, Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>>();
-		controllerModel = new RootControllerModel(module.getApplicationContext(), module);
+		controllerModel = new ControllerModel(module.getApplicationContext(), module);
 		getProjectLoader().getPropertyChangeSupport().addPropertyChangeListener(ProjectLoader.EDITOR_ADDED, this);
 		controllerModel.getPropertyChangeSupport().addPropertyChangeListener(this);
 		flexoFrame = createFrame();
@@ -217,17 +217,22 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 		});
 		mainPane = createMainPane();
-		if (mainPane != null) {
-			getFlexoFrame().getContentPane().add(mainPane, BorderLayout.CENTER);
-		}
+		getFlexoFrame().getContentPane().add(mainPane, BorderLayout.CENTER);
 		initInspectors();
-		GeneralPreferences.getPreferences().addObserver(this);
-		if (!module.getModule().requireProject()) {
-			setEditor(module.getApplicationContext().getApplicationEditor());
+		initializePerspectives();
+		if (getModule().getModule().requireProject()) {
+			if (getModuleLoader().getLastActiveEditor() != null) {
+				controllerModel.setCurrentEditor(getModuleLoader().getLastActiveEditor());
+			}
+		} else {
+			controllerModel.setCurrentEditor(getApplicationContext().getApplicationEditor());
 		}
+		GeneralPreferences.getPreferences().addObserver(this);
 	}
 
-	public final RootControllerModel getControllerModel() {
+	protected abstract void initializePerspectives();
+
+	public final ControllerModel getControllerModel() {
 		return controllerModel;
 	}
 
@@ -1712,7 +1717,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == getControllerModel()) {
-			if (evt.getPropertyName().equals(RootControllerModel.CURRENT_EDITOR)) {
+			if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
 				updateEditor((FlexoEditor) evt.getOldValue(), (FlexoEditor) evt.getNewValue());
 			}
 		} else if (evt.getSource() == getProjectLoader()) {

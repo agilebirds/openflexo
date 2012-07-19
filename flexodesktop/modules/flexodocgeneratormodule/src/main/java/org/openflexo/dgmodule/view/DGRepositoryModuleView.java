@@ -25,7 +25,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -459,9 +459,9 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	private void addConsoleListener() {
 		if (!isListening) {
 			if (projectGenerator == null) {
-				Enumeration<ProjectDocGenerator> en = controller.getProjectGenerators();
-				while (en.hasMoreElements() && projectGenerator == null) {
-					ProjectDocGenerator pdg = en.nextElement();
+				Iterator<ProjectDocGenerator> i = controller.getProjectGenerators().iterator();
+				while (i.hasNext() && projectGenerator == null) {
+					ProjectDocGenerator pdg = i.next();
 					if (pdg.getRepository() == codeRepository) {
 						projectGenerator = pdg;
 					}

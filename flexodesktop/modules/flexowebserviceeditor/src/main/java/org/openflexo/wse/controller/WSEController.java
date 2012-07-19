@@ -24,6 +24,7 @@ package org.openflexo.wse.controller;
  */
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -54,7 +55,7 @@ public class WSEController extends FlexoController {
 
 	static final Logger logger = Logger.getLogger(WSEController.class.getPackage().getName());
 
-	public final FlexoPerspective WSE_PERSPECTIVE;
+	public FlexoPerspective WSE_PERSPECTIVE;
 
 	private WSEBrowser _browser;
 
@@ -67,6 +68,10 @@ public class WSEController extends FlexoController {
 	 */
 	public WSEController(FlexoModule module) {
 		super(module);
+	}
+
+	@Override
+	protected void initializePerspectives() {
 		_browser = new WSEBrowser(this);
 		addToPerspectives(WSE_PERSPECTIVE = new WSEPerspective(this));
 	}
@@ -129,6 +134,12 @@ public class WSEController extends FlexoController {
 			return ((ServiceOperation) object).getName();
 		}
 		return null;
+	}
+
+	@Override
+	protected void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		_browser.setRootObject(to != null && to.getProject() != null ? to.getProject().getFlexoWSLibrary() : null);
 	}
 
 }

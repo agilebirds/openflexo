@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.logging.FlexoLogger;
 
@@ -41,16 +40,6 @@ public class DKVEditorBrowser extends ProjectBrowser {
 	 */
 	public DKVEditorBrowser(IEController controller) {
 		super(controller);
-	}
-
-	/**
-	 * Overrides getDefaultRootObject
-	 * 
-	 * @see org.openflexo.components.browser.ProjectBrowser#getDefaultRootObject()
-	 */
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return null;
 	}
 
 	/**

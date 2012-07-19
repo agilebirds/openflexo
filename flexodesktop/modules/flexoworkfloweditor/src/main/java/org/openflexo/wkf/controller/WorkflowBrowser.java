@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.controller.FlexoController;
 
@@ -92,11 +91,6 @@ public class WorkflowBrowser extends ProjectBrowser {
 	@Override
 	public boolean showRootNode() {
 		return false;
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return getProject();
 	}
 
 }

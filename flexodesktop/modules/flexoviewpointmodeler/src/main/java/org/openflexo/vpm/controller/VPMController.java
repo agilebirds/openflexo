@@ -74,12 +74,12 @@ public class VPMController extends FlexoController {
 
 	private static final Logger logger = Logger.getLogger(VPMController.class.getPackage().getName());
 
-	private final FlexoResourceCenter resourceCenter;
-	private final ViewPointLibrary viewPointLibrary;
-	private final OntologyLibrary baseOntologyLibrary;
+	private FlexoResourceCenter resourceCenter;
+	private ViewPointLibrary viewPointLibrary;
+	private OntologyLibrary baseOntologyLibrary;
 
-	public final ViewPointPerspective VIEW_POINT_PERSPECTIVE;
-	public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
+	public ViewPointPerspective VIEW_POINT_PERSPECTIVE;
+	public OntologyPerspective ONTOLOGY_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -91,15 +91,14 @@ public class VPMController extends FlexoController {
 		return false;
 	}
 
-	// ================================================
-	// ================ Constructor ===================
-	// ================================================
-
 	/**
 	 * Default constructor
 	 */
 	public VPMController(FlexoModule module) {
 		super(module);
+	}
+
+	protected void initializePerspectives() {
 		resourceCenter = FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
 		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
@@ -263,7 +262,7 @@ public class VPMController extends FlexoController {
 	// ============ Resources management ==============
 	// ================================================
 
-	private final List<ResourceSavingInfo> resourceSavingInfo;
+	private List<ResourceSavingInfo> resourceSavingInfo;
 
 	public void manageResource(FlexoModelObject o) {
 		boolean alreadyRegistered = false;

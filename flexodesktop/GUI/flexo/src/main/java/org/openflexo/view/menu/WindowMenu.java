@@ -46,7 +46,7 @@ import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.model.RootControllerModel;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Automatic builded 'Windows' menu for modules
@@ -554,7 +554,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 			super(new PaletteAction(), getHidePaletteString(), null, getController(), true);
 			updateText();
 			getController().getControllerModel().getPropertyChangeSupport()
-					.addPropertyChangeListener(RootControllerModel.RIGHT_VIEW_VISIBLE, this);
+					.addPropertyChangeListener(ControllerModel.RIGHT_VIEW_VISIBLE, this);
 		}
 
 		public void updateText() {
@@ -590,12 +590,12 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 			super(new BrowserAction(), "hide_browser", null, getController(), true);
 			updateText();
 			getController().getControllerModel().getPropertyChangeSupport()
-					.addPropertyChangeListener(RootControllerModel.LEFT_VIEW_VISIBLE, this);
+					.addPropertyChangeListener(ControllerModel.LEFT_VIEW_VISIBLE, this);
 		}
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(RootControllerModel.LEFT_VIEW_VISIBLE)) {
+			if (evt.getPropertyName().equals(ControllerModel.LEFT_VIEW_VISIBLE)) {
 				updateText();
 			} else {
 				super.propertyChange(evt);

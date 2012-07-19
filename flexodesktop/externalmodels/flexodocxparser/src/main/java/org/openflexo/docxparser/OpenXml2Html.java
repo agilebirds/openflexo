@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackagePartName;
@@ -225,7 +225,7 @@ public class OpenXml2Html {
 		parsedHtml.append("<table ");
 		Element captionElement = (Element) element.selectSingleNode("w:tblPr/w:tblCaption");
 		if (captionElement != null && captionElement.attributeValue("val") != null) {
-			parsedHtml.append("title=\"").append(StringEscapeUtils.escapeHtml(captionElement.attributeValue("val").toString()))
+			parsedHtml.append("title=\"").append(StringEscapeUtils.escapeHtml4(captionElement.attributeValue("val").toString()))
 					.append("\" ");
 		}
 		parsedHtml.append(">");
@@ -307,10 +307,10 @@ public class OpenXml2Html {
 
 			parsedHtml.append("<a href=\"" + href + "\"");
 			if (target != null) {
-				parsedHtml.append(" target=\"" + StringEscapeUtils.escapeHtml(target) + "\"");
+				parsedHtml.append(" target=\"" + StringEscapeUtils.escapeHtml4(target) + "\"");
 			}
 			if (title != null) {
-				parsedHtml.append(" title=\"" + StringEscapeUtils.escapeHtml(title) + "\"");
+				parsedHtml.append(" title=\"" + StringEscapeUtils.escapeHtml4(title) + "\"");
 			}
 
 			parsedHtml.append(">");
@@ -450,7 +450,7 @@ public class OpenXml2Html {
 
 		ParsedHtml parsedHtml = new ParsedHtml();
 
-		parsedHtml.append(StringEscapeUtils.escapeHtml(element.getText()));
+		parsedHtml.append(StringEscapeUtils.escapeHtml4(element.getText()));
 
 		return parsedHtml;
 	}

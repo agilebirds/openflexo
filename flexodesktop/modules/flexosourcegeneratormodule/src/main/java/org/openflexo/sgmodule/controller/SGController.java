@@ -19,8 +19,9 @@
  */
 package org.openflexo.sgmodule.controller;
 
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,13 +84,13 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 
 	private static final Logger logger = Logger.getLogger(SGController.class.getPackage().getName());
 
-	protected Hashtable<SourceRepository, ProjectGenerator> _projectGenerators;
+	protected Map<SourceRepository, ProjectGenerator> _projectGenerators;
 
 	protected SGFooter _footer;
 
-	public final CodeGenerationPerspective CODE_GENERATION_PERSPECTIVE;
-	public final VersionningPerspective VERSIONNING_PERSPECTIVE;
-	public final ModelReinjectionPerspective MODEL_REINJECTION_PERSPECTIVE;
+	public CodeGenerationPerspective CODE_GENERATION_PERSPECTIVE;
+	public VersionningPerspective VERSIONNING_PERSPECTIVE;
+	public ModelReinjectionPerspective MODEL_REINJECTION_PERSPECTIVE;
 
 	private SGBrowser _browser;
 	private SGBrowserView _browserView;
@@ -97,21 +98,16 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 	private SourceRepository _lastEditedCGRepository;
 	protected Vector<SourceRepository> observedRepositories = new Vector<SourceRepository>();
 
-	// ================================================
-	// ================ Constructor ===================
-	// ================================================
-
 	/**
 	 * Default constructor
 	 */
 	public SGController(FlexoModule module) {
 		super(module);
+	}
 
+	@Override
+	protected void initializePerspectives() {
 		createFooter();
-
-		addToPerspectives(CODE_GENERATION_PERSPECTIVE = new CodeGenerationPerspective(this));
-		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
-		addToPerspectives(MODEL_REINJECTION_PERSPECTIVE = new ModelReinjectionPerspective(this));
 
 		_browser = new SGBrowser(this);
 		_browserView = new SGBrowserView(this, _browser) {
@@ -124,6 +120,9 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 			}
 
 		};
+		addToPerspectives(CODE_GENERATION_PERSPECTIVE = new CodeGenerationPerspective(this));
+		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
+		addToPerspectives(MODEL_REINJECTION_PERSPECTIVE = new ModelReinjectionPerspective(this));
 	}
 
 	public SGBrowserView getBrowserView() {
@@ -229,8 +228,8 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 		return returned;
 	}
 
-	public Enumeration<ProjectGenerator> getProjectGenerators() {
-		return _projectGenerators.elements();
+	public Collection<ProjectGenerator> getProjectGenerators() {
+		return _projectGenerators.values();
 	}
 
 	@Override
@@ -245,6 +244,7 @@ public class SGController extends FlexoController implements ProjectGeneratorFac
 		if (to != null && to.getProject() != null) {
 			to.getProject().getGeneratedCode().setFactory(this);
 		}
+		_browser.setRootObject(to != null && to.getProject() != null ? to.getProject().getGeneratedSources() : null);
 	}
 
 	@Override

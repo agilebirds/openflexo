@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 
 /**
  * Browser in OntologyEditor module
@@ -80,11 +79,6 @@ public abstract class VEBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return null;
 	}
 
 }

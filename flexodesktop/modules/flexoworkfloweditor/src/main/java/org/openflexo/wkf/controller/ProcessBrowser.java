@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 
 /**
  * Browser for WKF module, browse only one process, with details
@@ -55,11 +54,6 @@ public class ProcessBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.OPERATION_NODE, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.BLOC, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.HIDE);
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return null;
 	}
 
 }

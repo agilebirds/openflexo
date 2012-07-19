@@ -108,18 +108,18 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	private ProcessBrowserWindow _processBrowserWindow;
 
 	// Browsers
-	private final ProcessBrowser _processBrowser;
-	private final WorkflowBrowser _workflowBrowser;
-	private final RoleListBrowser _roleListBrowser;
+	private ProcessBrowser _processBrowser;
+	private WorkflowBrowser _workflowBrowser;
+	private RoleListBrowser _roleListBrowser;
 
 	// External browser
-	private final ProcessBrowser _externalProcessBrowser;
+	private ProcessBrowser _externalProcessBrowser;
 
 	// public final OldProcessPerspective OLD_PROCESS_EDITOR_PERSPECTIVE;
-	public final ProcessPerspective PROCESS_EDITOR_PERSPECTIVE;
-	public final SwimmingLanePerspective SWIMMING_LANE_PERSPECTIVE;
-	public final RolePerspective ROLE_EDITOR_PERSPECTIVE;
-	public final DocumentationPerspective DOCUMENTATION_PERSPECTIVE;
+	public ProcessPerspective PROCESS_EDITOR_PERSPECTIVE;
+	public SwimmingLanePerspective SWIMMING_LANE_PERSPECTIVE;
+	public RolePerspective ROLE_EDITOR_PERSPECTIVE;
+	public DocumentationPerspective DOCUMENTATION_PERSPECTIVE;
 
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
@@ -134,8 +134,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	protected BufferedImage capturedDraggedNodeImage;
 
-	private final WorkflowBrowserView wkfBrowserView;
-	private final ProcessBrowserView processBrowserView;
+	private WorkflowBrowserView wkfBrowserView;
+	private ProcessBrowserView processBrowserView;
 	private RoleListBrowserView roleListBrowserView;
 
 	/**
@@ -143,6 +143,11 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	 */
 	public WKFController(FlexoModule module) {
 		super(module);
+		initWithWKFPreferences();
+		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
+	}
+
+	protected void initializePerspectives() {
 		_processBrowser = new ProcessBrowser(this);
 		_externalProcessBrowser = new ProcessBrowser(this);
 		_workflowBrowser = new WorkflowBrowser(this);
@@ -159,8 +164,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
-		initWithWKFPreferences();
-		WKFPreferences.getPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	public WorkflowBrowserView getWkfBrowserView() {

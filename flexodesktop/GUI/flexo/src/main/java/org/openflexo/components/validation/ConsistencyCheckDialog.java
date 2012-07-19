@@ -34,7 +34,7 @@ import org.openflexo.module.UserType;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.model.RootControllerModel;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Defines the window allowing to perform check consistency, edit validation report, and fix issues. This window is shared by all the
@@ -88,7 +88,7 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		_controller = controller;
 		if (controller != null && _validationModelViewer != null) {
 			_validationModelViewer.setValidationModel(controller.getDefaultValidationModel());
-			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(RootControllerModel.CURRENT_EDITOR, this);
+			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
 		}
 	}
 
@@ -146,7 +146,7 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (_controller != null && evt.getSource() == _controller.getControllerModel()) {
-			if (evt.getPropertyName().equals(RootControllerModel.CURRENT_EDITOR)) {
+			if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
 				dispose();
 			}
 		}

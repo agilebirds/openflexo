@@ -432,8 +432,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		// logger.info("**** notifyExpansions() with "+event);
 		_treeTableModel.deleteBrowserListener(this);
 		tree.removeTreeExpansionListener(this);
-		for (Enumeration e = event.pathsToExpand().elements(); e.hasMoreElements();) {
-			TreePath path = (TreePath) e.nextElement();
+		for (TreePath path : event.pathsToExpand()) {
 			if (tree.isCollapsed(path)) {
 				tree.expandPath(path);
 				if (logger.isLoggable(Level.FINE)) {
@@ -441,8 +440,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 				}
 			}
 		}
-		for (Enumeration e = event.pathsToCollabse().elements(); e.hasMoreElements();) {
-			TreePath path = (TreePath) e.nextElement();
+		for (TreePath path : event.pathsToCollapse()) {
 			if (tree.isExpanded(path)) {
 				tree.collapsePath(path);
 				if (logger.isLoggable(Level.FINE)) {

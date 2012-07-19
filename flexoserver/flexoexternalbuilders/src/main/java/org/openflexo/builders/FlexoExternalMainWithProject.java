@@ -47,7 +47,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			}
 
 			@Override
-			public FlexoEditor createApplicationEditor() {
+			protected FlexoEditor createApplicationEditor() {
 				return new DefaultFlexoEditor(null);
 			}
 

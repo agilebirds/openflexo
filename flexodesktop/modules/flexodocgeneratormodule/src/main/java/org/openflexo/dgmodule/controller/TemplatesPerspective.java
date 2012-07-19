@@ -42,7 +42,7 @@ public class TemplatesPerspective extends FlexoPerspective {
 	public TemplatesPerspective(DGController dgController) {
 		super("templates");
 		this.dgController = dgController;
-		templatesBrowser = new FIBTemplatesBrowser(dgController.getProject().getGeneratedDoc().getTemplates(), dgController);
+		templatesBrowser = new FIBTemplatesBrowser(dgController);
 		infoLabel = new JLabel("Templates perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 		setTopLeftView(templatesBrowser);
@@ -75,11 +75,12 @@ public class TemplatesPerspective extends FlexoPerspective {
 
 	@Override
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
-		System.out.println("Proposed object in TemplatesPerspective: " + proposedObject);
 		if (proposedObject instanceof CGTemplate) {
 			return proposedObject;
-		} else {
+		} else if (dgController.getProject() != null) {
 			return this.dgController.getProject().getGeneratedDoc().getTemplates();
+		} else {
+			return null;
 		}
 	}
 

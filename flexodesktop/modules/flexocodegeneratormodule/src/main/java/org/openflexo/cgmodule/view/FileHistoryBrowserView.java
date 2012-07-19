@@ -77,6 +77,7 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 				return object.getDescription();
 			}
 		});
+		model.setRootObject(cgFile);
 		return model;
 	}
 

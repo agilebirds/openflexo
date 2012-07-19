@@ -20,11 +20,14 @@
 package org.openflexo.foundation.action;
 
 import java.awt.Component;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -71,27 +74,23 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 	}
 
 	public Type getFocusedObjectType() {
-		Type superClass = getClass().getGenericSuperclass();
-		while (!(superClass instanceof ParameterizedType) && superClass != null) {
-			superClass = ((Class<?>) superClass).getGenericSuperclass();
+		Map<TypeVariable<?>, Type> typeArguments = TypeUtils.getTypeArguments(getClass(), FlexoActionType.class);
+		for (Entry<TypeVariable<?>, Type> e : typeArguments.entrySet()) {
+			if (e.getKey().getName().equals("T1") && e.getKey().getGenericDeclaration() == FlexoActionType.class) {
+				return e.getValue();
+			}
 		}
-		if (superClass != null) {
-			return ((ParameterizedType) superClass).getActualTypeArguments()[1];
-		} else {
-			return FlexoModelObject.class;
-		}
+		return FlexoModelObject.class;
 	}
 
 	public Type getGlobalSelectionType() {
-		Type superClass = getClass().getGenericSuperclass();
-		while (!(superClass instanceof ParameterizedType) && superClass != null) {
-			superClass = ((Class<?>) superClass).getGenericSuperclass();
+		Map<TypeVariable<?>, Type> typeArguments = TypeUtils.getTypeArguments(getClass(), FlexoActionType.class);
+		for (Entry<TypeVariable<?>, Type> e : typeArguments.entrySet()) {
+			if (e.getKey().getName().equals("T2") && e.getKey().getGenericDeclaration() == FlexoActionType.class) {
+				return e.getValue();
+			}
 		}
-		if (superClass != null) {
-			return ((ParameterizedType) superClass).getActualTypeArguments()[2];
-		} else {
-			return FlexoModelObject.class;
-		}
+		return FlexoModelObject.class;
 	}
 
 	/*protected FlexoActionType (String actionName, Icon icon)

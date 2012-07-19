@@ -51,8 +51,8 @@ public class VEController extends FlexoController {
 
 	private static final Logger logger = Logger.getLogger(VEController.class.getPackage().getName());
 
-	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
-	public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
+	public DiagramPerspective DIAGRAM_PERSPECTIVE;
+	public OntologyPerspective ONTOLOGY_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -69,6 +69,10 @@ public class VEController extends FlexoController {
 	 */
 	public VEController(FlexoModule module) {
 		super(module);
+	}
+
+	@Override
+	protected void initializePerspectives() {
 		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
 	}

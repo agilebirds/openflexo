@@ -25,6 +25,8 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.cgmodule.controller.GeneratorController;
+import org.openflexo.components.browser.BrowserElement;
+import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.CustomBrowserFilter;
@@ -34,7 +36,17 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.CGFolder;
 import org.openflexo.foundation.cg.CGPathElement;
+import org.openflexo.foundation.cg.CGSymbolicDirectory;
+import org.openflexo.foundation.cg.GeneratedOutput;
+import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.cg.templates.CGTemplate;
+import org.openflexo.foundation.cg.templates.CGTemplateRepository;
+import org.openflexo.foundation.cg.templates.CGTemplateSet;
+import org.openflexo.foundation.cg.templates.CGTemplates;
+import org.openflexo.foundation.cg.version.CGFileIntermediateVersion;
+import org.openflexo.foundation.cg.version.CGFileReleaseVersion;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
@@ -52,6 +64,41 @@ public class GeneratorBrowser extends ProjectBrowser implements FlexoObserver {
 	private static final Logger logger = Logger.getLogger(GeneratorBrowser.class.getPackage().getName());
 
 	private GeneratorController _controller;
+
+	class GeneratorBrowserConfigurationElementFactory implements BrowserElementFactory {
+
+		GeneratorBrowserConfigurationElementFactory() {
+			super();
+		}
+
+		@Override
+		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+			if (object instanceof GeneratedOutput) {
+				return new GeneratedCodeElement((GeneratedOutput) object, browser, parent);
+			} else if (object instanceof GenerationRepository) {
+				return new GeneratedCodeRepositoryElement((GenerationRepository) object, browser, parent);
+			} else if (object instanceof CGSymbolicDirectory) {
+				return new GeneratedCodeSymbDirElement((CGSymbolicDirectory) object, browser, parent);
+			} else if (object instanceof CGFolder) {
+				return new GeneratedCodeFolderElement((CGFolder) object, browser, parent);
+			} else if (object instanceof CGFile) {
+				return new GeneratedCodeFileElement((CGFile) object, browser, parent);
+			} else if (object instanceof CGFileReleaseVersion) {
+				return new FileReleaseVersionElement((CGFileReleaseVersion) object, browser, parent);
+			} else if (object instanceof CGFileIntermediateVersion) {
+				return new FileIntermediateVersionElement((CGFileIntermediateVersion) object, browser, parent);
+			} else if (object instanceof CGTemplates) {
+				return new CGTemplatesElement((CGTemplates) object, browser, parent);
+			} else if (object instanceof CGTemplateRepository) {
+				return new CGTemplateRepositoryElement((CGTemplateRepository) object, browser, parent);
+			} else if (object instanceof CGTemplateSet) {
+				return new CGTemplateSetElement((CGTemplateSet) object, browser, parent);
+			} else if (object instanceof CGTemplate) {
+				return new CGTemplateFileElement((CGTemplate) object, browser, parent);
+			}
+			return null;
+		}
+	}
 
 	protected abstract class CGFileFilter extends CustomBrowserFilter {
 		public CGFileFilter(String name, Icon icon, GenerationStatus... status) {
@@ -89,6 +136,7 @@ public class GeneratorBrowser extends ProjectBrowser implements FlexoObserver {
 
 	public GeneratorBrowser(GeneratorController controller) {
 		super(controller);
+		setBrowserElementFactory(new GeneratorBrowserConfigurationElementFactory());
 	}
 
 	@Override

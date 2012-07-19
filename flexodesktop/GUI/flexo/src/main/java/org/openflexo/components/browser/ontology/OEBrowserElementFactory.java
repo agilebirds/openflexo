@@ -19,19 +19,12 @@
  */
 package org.openflexo.components.browser.ontology;
 
+import java.util.logging.Level;
+
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyFolder;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.ontology.owl.OWLStatement;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewDefinition;
@@ -51,28 +44,14 @@ import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ConnectorOverr
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement.ShapeOverridingGraphicalRepresentation;
 
 public class OEBrowserElementFactory implements BrowserElementFactory {
+
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(OEBrowserElementFactory.class
+			.getPackage().getName());
+
 	@Override
 	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
 
-		if (object instanceof OntologyLibrary) {
-			return new OntologyLibraryElement((OntologyLibrary) object, browser, parent);
-		} else if (object instanceof OntologyFolder) {
-			return new OntologyFolderElement((OntologyFolder) object, browser, parent);
-		} else if (object instanceof ProjectOntology) {
-			return new ProjectOntologyElement((ProjectOntology) object, browser, parent);
-		} else if (object instanceof ImportedOntology) {
-			return new ImportedOntologyElement((ImportedOntology) object, browser, parent);
-		} else if (object instanceof OntologyClass) {
-			return new OntologyClassElement((OntologyClass) object, browser, parent);
-		} else if (object instanceof OntologyIndividual) {
-			return new OntologyIndividualElement((OntologyIndividual) object, browser, parent);
-		} else if (object instanceof OntologyDataProperty) {
-			return new OntologyDataPropertyElement((OntologyDataProperty) object, browser, parent);
-		} else if (object instanceof OntologyObjectProperty) {
-			return new OntologyObjectPropertyElement((OntologyObjectProperty) object, browser, parent);
-		} else if (object instanceof OWLStatement) {
-			return new OntologyStatementElement((OWLStatement) object, browser, parent);
-		} else if (object instanceof ViewPointLibrary) {
+		if (object instanceof ViewPointLibrary) {
 			return new CalcLibraryElement((ViewPointLibrary) object, browser, parent);
 		} else if (object instanceof ViewPointFolder) {
 			return new CalcFolderElement((ViewPointFolder) object, browser, parent);
@@ -106,6 +85,10 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 			return new OEShapeElement((ViewShape) object, browser, parent);
 		} else if (object instanceof ViewConnector) {
 			return new OEConnectorElement((ViewConnector) object, browser, parent);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Can't handle object of type " + object.getClass().getName());
+			}
 		}
 
 		return null;

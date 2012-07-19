@@ -6,10 +6,14 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 
+import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -23,8 +27,8 @@ import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.controller.model.FlexoPerspective;
-import org.openflexo.view.controller.model.RootControllerModel;
 
 public class MainPaneTopBar extends JPanel {
 
@@ -37,7 +41,7 @@ public class MainPaneTopBar extends JPanel {
 
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
-	private RootControllerModel model;
+	private ControllerModel model;
 
 	private JPanel left;
 	private JPanel center;
@@ -55,6 +59,57 @@ public class MainPaneTopBar extends JPanel {
 
 	private boolean forcePreferredSize;
 
+	@SuppressWarnings("unused")
+	private class BarButton extends JButton {
+		public BarButton(Action a) {
+			this();
+			setAction(a);
+		}
+
+		public BarButton(Icon icon) {
+			this(null, icon);
+		}
+
+		public BarButton(String text, Icon icon) {
+			super(text, icon);
+			setEnabled(true);
+			setFocusable(false);
+			setContentAreaFilled(false);
+			setRolloverEnabled(true);
+			addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					setContentAreaFilled(true);
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					setContentAreaFilled(false);
+				}
+			});
+		}
+
+		public BarButton(String text) {
+			this(text, null);
+		}
+
+		public BarButton() {
+			this(null, null);
+		}
+
+		@Override
+		public void setContentAreaFilled(boolean b) {
+			super.setContentAreaFilled(b || isSelected());
+		}
+
+		@Override
+		public void setSelected(boolean b) {
+			super.setSelected(b);
+			setContentAreaFilled(false);
+		}
+
+	}
+
 	private class ViewTabHeader extends JPanel implements PropertyChangeListener {
 		private final FlexoModelObject object;
 
@@ -65,11 +120,11 @@ public class MainPaneTopBar extends JPanel {
 			super(new BorderLayout());
 			this.object = object;
 			text = new JLabel();
-			close = new JButton(IconLibrary.CLOSE_ICON);
+			close = new BarButton(IconLibrary.CLOSE_ICON);
 			close.setRolloverIcon(IconLibrary.CLOSE_HOVER_ICON);
 			updateText();
 			registrationManager.new PropertyChangeListenerRegistration(this, object);
-			registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_OBJECT, this, model);
+			registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_OBJECT, this, model);
 			add(text);
 		}
 
@@ -80,7 +135,7 @@ public class MainPaneTopBar extends JPanel {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getSource() == model) {
-				if (evt.getPropertyName().equals(RootControllerModel.CURRENT_OBJECT)) {
+				if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
 					if (evt.getNewValue() == object) {
 						Container container = getParent();
 						container.remove(this);
@@ -97,7 +152,7 @@ public class MainPaneTopBar extends JPanel {
 		}
 	}
 
-	public MainPaneTopBar(RootControllerModel model, FlexoModelObjectRenderer renderer) {
+	public MainPaneTopBar(ControllerModel model, FlexoModelObjectRenderer renderer) {
 		this.model = model;
 		this.renderer = renderer;
 		registrationManager = new PropertyChangeListenerRegistrationManager();
@@ -119,7 +174,7 @@ public class MainPaneTopBar extends JPanel {
 
 	private void initModules() {
 		for (final Module module : model.getModuleLoader().getAvailableModules()) {
-			final JButton button = new JButton(module.getMediumIcon());
+			final JButton button = new BarButton(module.getMediumIcon());
 			button.setEnabled(true);
 			button.setFocusable(false);
 			if (forcePreferredSize) {
@@ -154,7 +209,7 @@ public class MainPaneTopBar extends JPanel {
 	}
 
 	private void initNavigationControls() {
-		final JButton backwardButton = new JButton(IconLibrary.NAVIGATION_BACKWARD_ICON);
+		final JButton backwardButton = new BarButton(IconLibrary.NAVIGATION_BACKWARD_ICON);
 		if (forcePreferredSize) {
 			backwardButton.setPreferredSize(new Dimension(24, 24));
 		}
@@ -165,7 +220,7 @@ public class MainPaneTopBar extends JPanel {
 				model.historyBack();
 			}
 		});
-		final JButton forwardButton = new JButton(IconLibrary.NAVIGATION_FORWARD_ICON);
+		final JButton forwardButton = new BarButton(IconLibrary.NAVIGATION_FORWARD_ICON);
 		if (forcePreferredSize) {
 			forwardButton.setPreferredSize(new Dimension(24, 24));
 		}
@@ -176,7 +231,7 @@ public class MainPaneTopBar extends JPanel {
 				model.historyForward();
 			}
 		});
-		final JButton upButton = new JButton(IconLibrary.NAVIGATION_UP_ICON);
+		final JButton upButton = new BarButton(IconLibrary.NAVIGATION_UP_ICON);
 		if (forcePreferredSize) {
 			upButton.setPreferredSize(new Dimension(24, 24));
 		}
@@ -195,8 +250,8 @@ public class MainPaneTopBar extends JPanel {
 			}
 
 		};
-		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, listener, model);
-		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_EDITOR, listener, model);
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_LOCATION, listener, model);
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_EDITOR, listener, model);
 		left.add(backwardButton);
 		left.add(upButton);
 		left.add(forwardButton);
@@ -215,7 +270,7 @@ public class MainPaneTopBar extends JPanel {
 
 	private void initPerspectives() {
 		right.add(perspectives = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)), 0);
-		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.PERSPECTIVES, new PropertyChangeListener() {
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.PERSPECTIVES, new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -234,7 +289,7 @@ public class MainPaneTopBar extends JPanel {
 	}
 
 	private void insertPerspective(final FlexoPerspective p) {
-		final JButton button = new JButton(p.getActiveIcon());
+		final JButton button = new BarButton(p.getActiveIcon());
 		if (forcePreferredSize) {
 			int size = Math.max(button.getIcon().getIconWidth() + 8, button.getIcon().getIconHeight() + 4);
 			button.setPreferredSize(new Dimension(size, size));
@@ -246,7 +301,7 @@ public class MainPaneTopBar extends JPanel {
 				model.setCurrentPerspective(p);
 			}
 		});
-		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.CURRENT_LOCATION, new PropertyChangeListener() {
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_LOCATION, new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -271,7 +326,7 @@ public class MainPaneTopBar extends JPanel {
 			}
 		});
 		left.add(leftViewToggle, 0);
-		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.LEFT_VIEW_VISIBLE, new PropertyChangeListener() {
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.LEFT_VIEW_VISIBLE, new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -288,7 +343,7 @@ public class MainPaneTopBar extends JPanel {
 			}
 		});
 		right.add(rightViewToggle);
-		registrationManager.new PropertyChangeListenerRegistration(RootControllerModel.RIGHT_VIEW_VISIBLE, new PropertyChangeListener() {
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.RIGHT_VIEW_VISIBLE, new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -312,7 +367,7 @@ public class MainPaneTopBar extends JPanel {
 	}
 
 	private JButton getToggleVisibilityButton() {
-		final JButton button = new JButton(IconLibrary.TOGGLE_ARROW_TOP_ICON);
+		final JButton button = new BarButton(IconLibrary.TOGGLE_ARROW_TOP_ICON);
 		button.setRolloverIcon(IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
 		if (forcePreferredSize) {
 			button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 2, button.getIcon().getIconHeight() + 20));

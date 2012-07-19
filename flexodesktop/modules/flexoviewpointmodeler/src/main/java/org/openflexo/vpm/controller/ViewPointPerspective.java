@@ -37,7 +37,6 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -227,7 +226,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (object instanceof ExampleDrawingShema) {
 			return new CalcDrawingShemaController(_controller, (ExampleDrawingShema) object, false).getModuleView();
 		}
-		return new EmptyPanel<FlexoModelObject>(controller, this, object);
+		return null;
 	}
 
 	@Override

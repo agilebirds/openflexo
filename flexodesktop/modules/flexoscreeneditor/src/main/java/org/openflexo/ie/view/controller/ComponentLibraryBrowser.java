@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 
 /**
  * Browser for WKF module
@@ -54,11 +53,6 @@ public class ComponentLibraryBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.SEQUENCE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.CONDITIONAL, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.REPETITION, BrowserFilterStatus.HIDE);
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return null;
 	}
 
 }

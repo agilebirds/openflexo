@@ -822,7 +822,7 @@ public class XMLDecoder {
 
 		@Override
 		public Element filter(Object arg0) {
-			Element element = filter(arg0);
+			Element element = super.filter(arg0);
 			if (element != null && element.getAttributeValue("id") != null) {
 				return element;
 			}

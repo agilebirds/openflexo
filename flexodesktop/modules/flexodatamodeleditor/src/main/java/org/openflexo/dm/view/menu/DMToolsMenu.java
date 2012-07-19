@@ -26,7 +26,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.view.controller.model.RootControllerModel;
+import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.view.menu.ToolsMenu;
 
@@ -55,7 +55,7 @@ public class DMToolsMenu extends ToolsMenu {
 		public CheckDataModelConsistencyItem() {
 			super(new CheckDMConsistencyAction(), "check_datamodel_consistency", null, getController(), true);
 			getController().getControllerModel().getPropertyChangeSupport()
-					.addPropertyChangeListener(RootControllerModel.CURRENT_EDITOR, new PropertyChangeListener() {
+					.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, new PropertyChangeListener() {
 
 						@Override
 						public void propertyChange(PropertyChangeEvent evt) {

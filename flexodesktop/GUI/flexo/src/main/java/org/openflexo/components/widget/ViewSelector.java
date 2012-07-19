@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.ViewDefinition;
 
@@ -110,11 +109,6 @@ public class ViewSelector extends AbstractBrowserSelector<ViewDefinition> {
 			setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
-		}
-
-		@Override
-		public FlexoModelObject getDefaultRootObject() {
-			return getProject().getShemaLibrary();
 		}
 
 		@Override
