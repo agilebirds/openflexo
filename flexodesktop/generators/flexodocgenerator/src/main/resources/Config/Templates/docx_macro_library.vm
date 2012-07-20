@@ -1921,7 +1921,6 @@ name of the template corresponding to the specific toc_entry.
   <w:tc>
     <w:tcPr>
       <w:tcW w:w="$colWidth" w:type="dxa" />
-      <w:textDirection w:val="btLr" />
       <w:vAlign w:val="center" />
     </w:tcPr>
     <w:p w:rsidR="00000A95" w:rsidRPr="00C343B9" w:rsidRDefault="00000A95"
