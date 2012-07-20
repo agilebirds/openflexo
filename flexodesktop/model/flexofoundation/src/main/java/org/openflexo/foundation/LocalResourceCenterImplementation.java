@@ -121,7 +121,15 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-		if (dir.listFiles().length == 0) {
+		boolean forceUpdate = dir.listFiles().length == 0;
+		if (!forceUpdate && baseOntologyLibrary != null && folder == baseOntologyLibrary.getRootFolder()) {
+			// This should fix issue OPENFLEXO-197 until we find a better solution.
+			forceUpdate |= baseOntologyLibrary.getRDFSOntology() == null;
+			forceUpdate |= baseOntologyLibrary.getRDFOntology() == null;
+			forceUpdate |= baseOntologyLibrary.getOWLOntology() == null;
+			forceUpdate |= baseOntologyLibrary.getFlexoConceptOntology() == null;
+		}
+		if (forceUpdate) {
 			copyOntologies(localDirectory, CopyStrategy.REPLACE);
 		}
 		for (File f : dir.listFiles()) {
