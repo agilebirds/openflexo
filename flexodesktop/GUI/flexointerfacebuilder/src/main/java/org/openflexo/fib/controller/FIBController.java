@@ -63,6 +63,7 @@ import org.openflexo.fib.model.FIBLocalizedDictionary;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
@@ -75,6 +76,7 @@ import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.container.FIBPanelView;
+import org.openflexo.fib.view.container.FIBSplitPanelView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.fib.view.container.FIBTabView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
@@ -668,6 +670,8 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 				return new FIBPanelView((FIBPanel) fibContainer, FIBController.this);
 			} else if (fibContainer instanceof FIBTabPanel) {
 				return new FIBTabPanelView((FIBTabPanel) fibContainer, FIBController.this);
+			} else if (fibContainer instanceof FIBSplitPanel) {
+				return new FIBSplitPanelView((FIBSplitPanel) fibContainer, FIBController.this);
 			}
 			return null;
 		}

@@ -57,7 +57,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	private static final Logger logger = Logger.getLogger(FIBBrowserWidget.class.getPackage().getName());
 
-	private static final int DEFAULT_WIDTH = 200;
+	private static final int DEFAULT_WIDTH = 50;
 
 	private JTree _tree;
 	private final JPanel _dynamicComponent;

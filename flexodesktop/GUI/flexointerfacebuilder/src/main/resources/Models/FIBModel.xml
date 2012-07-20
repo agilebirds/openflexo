@@ -82,6 +82,33 @@
   <entity name="org.openflexo.fib.model.FIBTabPanel" xmlTag="TabPanel"> 
   </entity>
    
+  <entity name="org.openflexo.fib.model.FIBSplitPanel" xmlTag="SplitPanel"> 
+    <property name="split" contains="org.openflexo.swing.layout.MultiSplitLayout$Split"/> 
+  </entity>
+ 
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$Node" abstract="yes"> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$Leaf" xmlTag="Leaf"> 
+    <property name="name" xmlTag="name" attribute="YES"/> 
+    <property name="weight" xmlTag="weight" attribute="YES"/> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$Divider" xmlTag="Divider"> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$Split" abstract="yes"> 
+    <property name="name" xmlTag="name" attribute="YES"/> 
+    <property name="weight" xmlTag="weight" attribute="YES"/> 
+    <property name="children" type="vector" contains="org.openflexo.swing.layout.MultiSplitLayout$Node"/> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$RowSplit" xmlTag="RowSplit"> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$ColSplit" xmlTag="ColSplit"> 
+  </entity> 
+   
   <entity name="org.openflexo.fib.model.FIBWidget" abstract="yes"> 
     <property name="readOnly" xmlTag="readOnly" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="format" xmlTag="format" attribute="YES"/> 
