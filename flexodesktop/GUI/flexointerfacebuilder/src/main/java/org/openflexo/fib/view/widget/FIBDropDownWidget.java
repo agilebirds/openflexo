@@ -194,6 +194,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 			if (!aNewMyComboBoxModel.equals(listModel)) {
 				listModel = aNewMyComboBoxModel;
 				jComboBox.setModel((MyComboBoxModel) listModel);
+				// This next line should trigger the invalidation of the cached
+				// preferred size of the combo box
+				jComboBox.setPrototypeDisplayValue(null);
 			}
 		}
 		return (MyComboBoxModel) listModel;
