@@ -415,6 +415,8 @@ public final class ModuleLoader implements IModuleLoader {
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new ModuleLoadingException(module);
+				} finally {
+					ProgressWindow.hideProgressWindow();
 				}
 			}
 		} else {
