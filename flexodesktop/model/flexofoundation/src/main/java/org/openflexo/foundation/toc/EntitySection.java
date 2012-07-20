@@ -34,4 +34,9 @@ public class EntitySection extends ModelObjectSection<DMEntity> {
 		return DOC_TEMPLATE;
 	}
 
+	@Override
+	public boolean isIndividualEntity() {
+		return true;
+	}
+
 }

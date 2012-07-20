@@ -87,4 +87,9 @@ public class ProcessSection extends ModelObjectSection<FlexoProcess> {
 		}
 		return null;
 	}
+
+	@Override
+	public boolean isProcessesSection() {
+		return true;
+	}
 }

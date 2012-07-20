@@ -35,6 +35,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.TOCRepositoryChanged;
+import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
@@ -262,6 +263,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			return EntitySection.DOC_TEMPLATE;
 		} else if (isIndividualComponentDefinition()) {
 			return OperationScreenSection.DOC_TEMPLATE;
+		} else if (isERDiagram()) {
+			return ERDiagramSection.DOC_TEMPLATE;
 		}
 		return null;
 	}
@@ -655,7 +658,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	@Deprecated
 	public boolean isIndividualProcessOrProcessFolder() {
-		return getIdentifier() == null && (getObject() instanceof FlexoProcess || getObject() instanceof ProcessFolder);
+		return isIndividualProcess() || isIndividualProcessFolder();
 	}
 
 	@Deprecated
@@ -826,9 +829,9 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	}
 
 	@Deprecated
-	public DMEOEntity getDocumentedDMEOEntity() {
+	public DMEntity getDocumentedDMEOEntity() {
 		if (isIndividualEntity()) {
-			return (DMEOEntity) getObject();
+			return (DMEntity) getObject();
 		}
 		return null;
 	}
