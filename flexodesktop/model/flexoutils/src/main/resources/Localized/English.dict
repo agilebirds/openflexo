@@ -1,5 +1,5 @@
 #English
-#Mon May 28 12:57:59 CEST 2012
+#Fri Jul 20 14:50:04 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -1279,6 +1279,7 @@ change_field_type_of_previous_text_field_and_link_date_assistant_with_it=Change 
 change_file=Change file
 change_flexo_action_($object.name)_into_display_action=change flexo action ($object.name) into display action
 change_name=Change name
+change_server=Change server
 check=Check
 check_again=Check again
 check_all_viewpoint_consistency=Check all viewpoint consistency
@@ -4484,6 +4485,7 @@ select_toc_template=Select TOC template
 selectedTab=Selected tab
 selected_file_does_not_exist=The selected file does not exist.
 selected_files=Selected files
+selected_server=Selected server
 selected_text=Selected text
 selecting_default_component_entity=Selecting default component entity
 selection_color=Selection color

@@ -1,5 +1,5 @@
 #French
-#Mon May 28 12:57:59 CEST 2012
+#Fri Jul 20 14:50:04 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1279,6 +1279,7 @@ change_field_type_of_previous_text_field_and_link_date_assistant_with_it=Changer
 change_file=Modifier
 change_flexo_action_($object.name)_into_display_action=changer la flexo action  ($object.name) en une display action
 change_name=Changer le nom
+change_server=Changer de serveur
 check=V\u00E9rification de
 check_again=Revalider
 check_all_viewpoint_consistency=Valider tous les points de vue
@@ -4481,6 +4482,7 @@ select_toc_template=S\u00E9lectionnez un template de TOC
 selectedTab=Onglet s\u00E9lectionn\u00E9
 selected_file_does_not_exist=Le fichier s\u00E9lectionn\u00E9 n'existe pas.
 selected_files=Fichiers s\u00E9lectionn\u00E9s
+selected_server=Serveur s\u00E9lectionn\u00E9
 selected_text=Texte s\u00E9lectionn\u00E9
 selecting_default_component_entity=S\u00E9lection d'une entit\u00E9 composant par d\u00E9faut
 selection_color=Couleur de s\u00E9lection
