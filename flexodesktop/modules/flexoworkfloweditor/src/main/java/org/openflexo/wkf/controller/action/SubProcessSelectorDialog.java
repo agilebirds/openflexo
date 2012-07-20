@@ -9,7 +9,6 @@ import org.openflexo.foundation.param.ParameterDefinition.ValueListener;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.ProcessParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
-import org.openflexo.foundation.param.ServiceInterfaceSelectorParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -62,7 +61,7 @@ public class SubProcessSelectorDialog {
 		final RadioButtonListParameter<String> insertModeSelector = new RadioButtonListParameter<String>("mode", "select_a_choice",
 				defaultValue, modes);
 		parameters[0] = insertModeSelector;
-		final ServiceInterfaceSelectorParameter processSelector = createProcessSelector(node, EXISTING_PROCESS);
+		final ProcessParameter processSelector = createProcessSelector(node, EXISTING_PROCESS);
 		parameters[1] = processSelector;
 
 		String baseName = FlexoLocalization.localizedForKey("new_process_name");
@@ -131,10 +130,10 @@ public class SubProcessSelectorDialog {
 			}
 
 		});
-		processSelector.addValueListener(new ValueListener<WKFObject>() {
+		processSelector.addValueListener(new ValueListener<FlexoProcess>() {
 
 			@Override
-			public void newValueWasSet(ParameterDefinition<WKFObject> param, WKFObject oldValue, WKFObject newValue) {
+			public void newValueWasSet(ParameterDefinition<FlexoProcess> param, FlexoProcess oldValue, FlexoProcess newValue) {
 				if (nodeNameParameter.getValue() == null || nodeNameParameter.getValue().trim().length() == 0 || oldValue != null
 						&& nodeNameParameter.getValue().equals(oldValue.getName()) || oldValue.getProcess() != null
 						&& nodeNameParameter.getValue().equals(oldValue.getProcess().getName())) {
@@ -274,9 +273,8 @@ public class SubProcessSelectorDialog {
 	 * @param existingProcessMode
 	 * @return
 	 */
-	private ServiceInterfaceSelectorParameter createProcessSelector(final SubProcessNode node, final String existingProcessMode) {
-		final ServiceInterfaceSelectorParameter processSelector = new ServiceInterfaceSelectorParameter("selectedProcess",
-				"process_to_bind", null);
+	private ProcessParameter createProcessSelector(final SubProcessNode node, final String existingProcessMode) {
+		final ProcessParameter processSelector = new ProcessParameter("selectedProcess", "process_to_bind", null);
 		// This widget is visible if and only if mode is EXISTING_PROCESS
 		processSelector.setDepends("mode");
 		processSelector.setConditional("mode=" + '"' + existingProcessMode + '"');
@@ -286,7 +284,7 @@ public class SubProcessSelectorDialog {
 		// "isAcceptableProcess(FlexoProcess)" method
 		// defined in ProcessParameter class
 		processSelector.addParameter("isSelectable", "params.selectedProcess.isAcceptableProcess");
-		processSelector.setProcessSelectingConditional(new ServiceInterfaceSelectorParameter.ProcessSelectingConditional() {
+		processSelector.setProcessSelectingConditional(new ProcessParameter.ProcessSelectingConditional() {
 			@Override
 			public boolean isSelectable(FlexoProcess aProcess) {
 				boolean returned = node.isAcceptableAsSubProcess(aProcess);
