@@ -158,8 +158,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		/*System.out.println("On me demande la valeur du parametre " + parameter.getName() + " a priori c'est "
 				+ parameterValues.get(parameter));*/
 		if (parameter instanceof URIParameter) {
-			if (parameterValues.get(parameter) == null
-					|| (parameterValues.get(parameter) instanceof String && StringUtils.isEmpty((String) parameterValues.get(parameter)))) {
+			if (parameterValues.get(parameter) == null || parameterValues.get(parameter) instanceof String
+					&& StringUtils.isEmpty((String) parameterValues.get(parameter))) {
 				return ((URIParameter) parameter).getDefaultValue(this);
 			}
 		}

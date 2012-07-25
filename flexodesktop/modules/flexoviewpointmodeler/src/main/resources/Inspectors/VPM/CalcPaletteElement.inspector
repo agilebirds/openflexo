@@ -107,6 +107,8 @@
           </Panel>
           <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
           <CheckBox selected="false" localize="true" name="IsVisible" data="GRTab.data.isVisible" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" />
+          <Label label="may_leave_bounds" localize="true" name="AllowToLeaveBoundsLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" />
+          <CheckBox selected="false" localize="true" name="AllowToLeaveBounds" data="GRTab.data.allowToLeaveBounds" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" />
         </Tab>
         <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
           <Label label="read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
