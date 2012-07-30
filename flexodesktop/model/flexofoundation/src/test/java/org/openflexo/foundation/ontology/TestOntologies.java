@@ -63,7 +63,7 @@ public class TestOntologies extends FlexoTestCase {
 		assertNotNull(rdfOntology);
 		assertTrue(rdfOntology.isLoaded());
 		assertTrue(rdfOntology.getImportedOntologies().size() == 1);
-		assertTrue(rdfOntology.getImportedOntologies().firstElement() == testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology());
+		assertTrue(rdfOntology.getImportedOntologies().get(0) == testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology());
 	}
 
 	public void test2AssertRDFSOntologyPresentAndLoaded() {
@@ -126,9 +126,9 @@ public class TestOntologies extends FlexoTestCase {
 		FlexoOntology rdfOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFOntology();
 		FlexoOntology rdfsOntology = testResourceCenter.retrieveBaseOntologyLibrary().getRDFSOntology();
 		assertTrue(rdfOntology.getImportedOntologies().size() == 1);
-		assertTrue(rdfOntology.getImportedOntologies().firstElement() == rdfsOntology);
+		assertTrue(rdfOntology.getImportedOntologies().get(0) == rdfsOntology);
 		assertTrue(rdfsOntology.getImportedOntologies().size() == 1);
-		assertTrue(rdfsOntology.getImportedOntologies().firstElement() == rdfOntology);
+		assertTrue(rdfsOntology.getImportedOntologies().get(0) == rdfOntology);
 	}
 
 	public void test4AssertOWLOntologyPresentAndLoaded() {
