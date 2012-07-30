@@ -116,6 +116,10 @@ public class IterationSection extends ControlSection {
 		return Object.class;
 	}
 
+	public ConditionalOwner getConditionalOwner() {
+		return conditionalOwner;
+	}
+
 	@Override
 	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned = super.buildInferedBindingModel();
