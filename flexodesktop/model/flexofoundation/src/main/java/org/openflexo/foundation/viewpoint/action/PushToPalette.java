@@ -79,7 +79,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return (shape != null && shape.getViewPoint().getPalettes().size() > 0);
+			return shape != null && shape.getViewPoint().getPalettes().size() > 0;
 		}
 
 	};
@@ -129,7 +129,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 				gr.setIsFloatingLabel(false);
 				graphicalRepresentation = gr;
 			} else {
-				GraphicalRepresentation gr = ((GraphicalRepresentation) getFocusedObject().getGraphicalRepresentation());
+				GraphicalRepresentation gr = (GraphicalRepresentation) getFocusedObject().getGraphicalRepresentation();
 				if (gr instanceof ShapeGraphicalRepresentation) {
 					graphicalRepresentation = new ShapeGraphicalRepresentation();
 					((ShapeGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
@@ -187,12 +187,13 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 		}
 
 		public boolean isMainEntry() {
-			return (graphicalObject == getFocusedObject());
+			return graphicalObject == getFocusedObject();
 		}
 
 		public boolean getSelectThis() {
-			if (isMainEntry())
+			if (isMainEntry()) {
 				return true;
+			}
 			return selectThis;
 		}
 
@@ -225,8 +226,9 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 	public int getSelectedEntriesCount() {
 		int returned = 0;
 		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
-			if (e.selectThis)
+			if (e.selectThis) {
 				returned++;
+			}
 		}
 		return returned;
 	}
@@ -283,7 +285,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 
 	public File saveScreenshot() {
 		File imageFile = new File(getFocusedObject().getViewPoint().getViewPointDirectory(), JavaUtils.getClassName(newElementName)
-				+ ".png");
+				+ ".palette-element" + ".png");
 		logger.info("Saving " + imageFile);
 		try {
 			ImageUtils.saveImageToFile(getScreenshot().image, imageFile, ImageType.PNG);
