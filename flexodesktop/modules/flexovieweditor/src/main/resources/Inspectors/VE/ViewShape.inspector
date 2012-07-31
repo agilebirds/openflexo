@@ -256,9 +256,9 @@
     <Localized key="absolute_text_y" lang="English">Absolute text Y</Localized>
     <Localized key="absolute_text_y" lang="French">texte y absolu</Localized>
     <Localized key="absolute_text_y" lang="Dutch">Absolute text Y</Localized>
-    <Localized key="relative_text_x" lang="English">Relative text y</Localized>
+    <Localized key="relative_text_x" lang="English">Relative text x</Localized>
     <Localized key="relative_text_x" lang="French">Text relatif à X</Localized>
-    <Localized key="relative_text_x" lang="Dutch">Relative text y</Localized>
+    <Localized key="relative_text_x" lang="Dutch">Relative text x</Localized>
     <Localized key="relative_text_y" lang="English">Relative text y</Localized>
     <Localized key="relative_text_y" lang="French">Text relatif à Y</Localized>
     <Localized key="relative_text_y" lang="Dutch">Relative text y</Localized>

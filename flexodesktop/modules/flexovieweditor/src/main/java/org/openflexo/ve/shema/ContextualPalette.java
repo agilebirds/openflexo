@@ -152,8 +152,6 @@ public class ContextualPalette extends DrawingPalette {
 					// boolean wasAllowedToLeaveBounds = getGraphicalRepresentation().getAllowToLeaveBounds();
 					// getGraphicalRepresentation().setAllowToLeaveBounds(true);
 
-					System.out.println("Avant " + getGraphicalRepresentation().getAllowToLeaveBounds());
-
 					shapeGR.setsWith(getGraphicalRepresentation());
 					// if (!wasAllowedToLeaveBounds) getGraphicalRepresentation().setAllowToLeaveBounds(false);
 					shapeGR.setIsSelectable(true);
@@ -167,7 +165,6 @@ public class ContextualPalette extends DrawingPalette {
 					shapeGR.setLocation(dropLocation);
 					shapeGR.setLayer(containerGR.getLayer() + 1);
 					// shapeGR.setAllowToLeaveBounds(true);
-					System.out.println("apres " + shapeGR.getAllowToLeaveBounds());
 
 					if (element.getEditionPattern() == null) {
 						// No associated edition pattern, just drop shape !
