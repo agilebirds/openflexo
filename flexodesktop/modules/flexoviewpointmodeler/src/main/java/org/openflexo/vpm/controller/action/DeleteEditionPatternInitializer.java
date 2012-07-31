@@ -19,16 +19,22 @@
  */
 package org.openflexo.vpm.controller.action;
 
+import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.DeleteEditionPattern;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
-public class DeleteEditionPatternInitializer extends ActionInitializer {
+public class DeleteEditionPatternInitializer extends ActionInitializer<DeleteEditionPattern, EditionPattern, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -39,6 +45,16 @@ public class DeleteEditionPatternInitializer extends ActionInitializer {
 	@Override
 	protected CEDControllerActionInitializer getControllerActionInitializer() {
 		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<DeleteEditionPattern> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeleteEditionPattern>() {
+			@Override
+			public boolean run(ActionEvent e, DeleteEditionPattern action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_edition_pattern"));
+			}
+		};
 	}
 
 	@Override
