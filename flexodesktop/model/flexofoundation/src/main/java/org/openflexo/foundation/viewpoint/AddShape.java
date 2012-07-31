@@ -41,6 +41,8 @@ public class AddShape extends AddShemaElementAction {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
+	private boolean extendParentBoundsToHostThisShape = false;
+
 	public AddShape(ViewPointBuilder builder) {
 		super(builder);
 	}
@@ -125,6 +127,14 @@ public class AddShape extends AddShemaElementAction {
 		}
 		this.container = container;
 		notifyBindingChanged(this.container);
+	}
+
+	public boolean getExtendParentBoundsToHostThisShape() {
+		return extendParentBoundsToHostThisShape;
+	}
+
+	public void setExtendParentBoundsToHostThisShape(boolean extendParentBoundsToHostThisShape) {
+		this.extendParentBoundsToHostThisShape = extendParentBoundsToHostThisShape;
 	}
 
 	@Override

@@ -363,6 +363,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.AddShape"
 		xmlTag="AddShape">
 		<property name="container" xmlTag="container" attribute="YES" />
+		<property name="extendParentBoundsToHostThisShape" xmlTag="extendParentBoundsToHostThisShape" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddConnector"

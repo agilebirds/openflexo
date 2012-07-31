@@ -91,6 +91,7 @@ public class MyDrawingPalette extends DrawingPalette {
 		// gr.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
 		gr.setBackground(BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
 		gr.setIsVisible(true);
+		gr.setAllowToLeaveBounds(false);
 
 		return makePaletteElement(gr, true, true, true, true);
 

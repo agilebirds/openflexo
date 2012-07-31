@@ -457,6 +457,66 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	// * Location management *
 	// *******************************************************************************
 
+	public void extendParentBoundsToHostThisShape() {
+		// System.out.println("parent=" + getParentGraphicalRepresentation());
+		if (getParentGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
+			ShapeGraphicalRepresentation<?> parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
+
+			// parent.updateRequiredBoundsForChildGRLocation(this, new FGEPoint(x, y));
+
+			boolean parentNeedsResize = false;
+			FGEDimension newDimension = new FGEDimension(parent.getWidth(), parent.getHeight());
+			boolean parentNeedsRelocate = false;
+			FGEPoint newPosition = new FGEPoint(parent.getX(), parent.getY());
+			double deltaX = 0;
+			double deltaY = 0;
+			if (x < 0) {
+				newPosition.x = newPosition.x + x;
+				parentNeedsRelocate = true;
+				deltaX = -x;
+			}
+			if (y < 0) {
+				newPosition.y = newPosition.y + y;
+				parentNeedsRelocate = true;
+				deltaY = -y;
+			}
+			if (parentNeedsRelocate) {
+				parent.setLocation(newPosition);
+				setLocation(new FGEPoint(getX() - deltaX, getY() - deltaY));
+				parentNeedsResize = true;
+				newDimension = new FGEDimension(parent.getWidth() + deltaX, parent.getHeight() + deltaY);
+			}
+
+			if (x + getWidth() > parent.getWidth()) {
+				newDimension.width = x + getWidth();
+				parentNeedsResize = true;
+			}
+			if (y + getHeight() > parent.getHeight()) {
+				newDimension.height = y + getHeight();
+				parentNeedsResize = true;
+			}
+			if (parentNeedsResize) {
+				parent.setSize(newDimension);
+			}
+
+			if (parentNeedsRelocate) {
+				for (GraphicalRepresentation<?> child : parent.getContainedGraphicalRepresentations()) {
+					if (child instanceof ShapeGraphicalRepresentation && child != this) {
+						ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+						c.setLocation(new FGEPoint(c.getX() + deltaX, c.getY() + deltaY));
+					}
+				}
+			}
+
+			if (parentNeedsRelocate || parentNeedsResize) {
+				FGEPoint oldLocation = new FGEPoint(x, y);
+				notifyObjectMoved(oldLocation);
+				notifyChange(Parameters.x, oldLocation.x, getX());
+				notifyChange(Parameters.y, oldLocation.y, getY());
+			}
+		}
+	}
+
 	public double getX() {
 		// SGU: in general case, this is NOT forbidden
 		if (!getAllowToLeaveBounds()) {
