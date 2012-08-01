@@ -663,17 +663,17 @@
                 <AddAction method="EditionSchemeTable.selected.createEditionPatternParameter" name="add_edition_pattern_parameter" />
                 <AddAction method="EditionSchemeTable.selected.createPropertyParameter" name="add_property_parameter" />
               </Table>
-              <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=east)">
-                <Button buttonType="Trigger" label="" buttonIcon="controller.arrowTop" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" clickAction="EditionSchemePanel.data.parameterFirst(ParametersTable.selected)">
+              <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=east)" name="ParametersOrderingPanel">
+                <Button action="EditionSchemePanel.data.parameterFirst(ParametersTable.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowTop" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))">
                   <LocalizedDictionary />
                 </Button>
-                <Button buttonType="Trigger" label="" buttonIcon="controller.arrowUp" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" clickAction="EditionSchemePanel.data.parameterUp(ParametersTable.selected)">
+                <Button action="EditionSchemePanel.data.parameterUp(ParametersTable.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowUp" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))">
                   <LocalizedDictionary />
                 </Button>
-                <Button buttonType="Trigger" label="" buttonIcon="controller.arrowDown" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))" clickAction="EditionSchemePanel.data.parameterDown(ParametersTable.selected)">
+                <Button action="EditionSchemePanel.data.parameterDown(ParametersTable.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowDown" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))">
                   <LocalizedDictionary />
                 </Button>
-                <Button buttonType="Trigger" label="" buttonIcon="controller.arrowBottom" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))" clickAction="EditionSchemePanel.data.parameterLast(ParametersTable.selected)">
+                <Button action="EditionSchemePanel.data.parameterLast(ParametersTable.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowBottom" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))">
                   <LocalizedDictionary />
                 </Button>
                 <LocalizedDictionary />
@@ -1113,16 +1113,16 @@
             </Panel>
             <Panel layout="border" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=west;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;weightX=0.3;weightY=1.0)" name="ActionBrowserPanel">
               <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=east)" name="ActionControlPanel">
-                <Button buttonType="Trigger" label="" buttonIcon="controller.arrowTop" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=north)" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &gt; 0))" clickAction="EditionSchemePanel.data.actionFirst(EditionActionBrowser.selected)">
+                <Button action="EditionSchemePanel.data.actionFirst(EditionActionBrowser.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowTop" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=north)" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &gt; 0))">
                   <LocalizedDictionary />
                 </Button>
-                <Button buttonType="Trigger" label="" buttonIcon="controller.arrowUp" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=south)" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &gt; 0))" clickAction="EditionSchemePanel.data.actionUp(EditionActionBrowser.selected)">
+                <Button action="EditionSchemePanel.data.actionUp(EditionActionBrowser.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowUp" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=south)" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &gt; 0))">
                   <LocalizedDictionary />
                 </Button>
-                <Button buttonType="Trigger" label="" buttonIcon="controller.arrowDown" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=east)" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &lt; (EditionSchemePanel.data.actions.size - 1)))" clickAction="EditionSchemePanel.data.actionDown(EditionActionBrowser.selected)">
+                <Button action="EditionSchemePanel.data.actionDown(EditionActionBrowser.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowDown" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=east)" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &lt; (EditionSchemePanel.data.actions.size - 1)))">
                   <LocalizedDictionary />
                 </Button>
-                <Button buttonType="Trigger" label="" buttonIcon="controller.arrowBottom" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=west)" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &lt; (EditionSchemePanel.data.actions.size - 1)))" clickAction="EditionSchemePanel.data.actionLast(EditionActionBrowser.selected)">
+                <Button action="EditionSchemePanel.data.actionLast(EditionActionBrowser.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowBottom" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=west)" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &lt; (EditionSchemePanel.data.actions.size - 1)))">
                   <LocalizedDictionary />
                 </Button>
                 <LocalizedDictionary />
@@ -1190,6 +1190,13 @@
         </TabPanel>
       </Tab>
       <Tab title="inspector" layout="gridbag" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="1" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" width="80" height="60" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="InspectorTab">
+        <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderTop="2" borderBottom="3" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+          <Label label="inspector_name" constraints="border(index=0;location=west)" font="Lucida Grande,0,13" localize="true">
+            <LocalizedDictionary />
+          </Label>
+          <TextField columns="7" text="TextField" data="InspectorTab.data.inspectorTitle" constraints="border(index=1;location=center)" localize="true" />
+          <LocalizedDictionary />
+        </Panel>
         <Table iteratorClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" visibleRowCount="7" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InspectorPropertyTable" data="InspectorTab.data.entries" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
           <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
           <TextFieldColumn data="iterator.label" title="label" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
@@ -1207,12 +1214,27 @@
           <AddAction method="data.inspector.createNewDataProperty" name="add_data_property" />
           <AddAction method="data.inspector.createNewProperty" name="add_property" />
         </Table>
-        <Panel layout="border" borderTitle="Simple property" titleFont="SansSerif,0,11" darkLevel="0" data="InspectorPropertyTable.selected" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(InspectorPropertyTable.selected = null)" name="EmptyPanel">
+        <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="gridbag(anchor=north;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=east;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="InspectorOrderingPanel">
+          <Button action="InspectorTab.data.entryFirst(InspectorPropertyTable.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowTop" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)" name="InspectorEntryFirst" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &gt; 0))">
+            <LocalizedDictionary />
+          </Button>
+          <Button action="InspectorTab.data.entryUp(InspectorPropertyTable.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowUp" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)" name="InspectorEntryUp" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &gt; 0))">
+            <LocalizedDictionary />
+          </Button>
+          <Button action="InspectorTab.data.entryDown(InspectorPropertyTable.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowDown" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)" name="InspectorEntryDown" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &lt; (InspectorTab.data.entries.size - 1)))">
+            <LocalizedDictionary />
+          </Button>
+          <Button action="InspectorTab.data.entryLast(InspectorPropertyTable.selected)" buttonType="Trigger" label="" buttonIcon="controller.arrowBottom" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)" name="InspectorEntryLast" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &lt; (InspectorTab.data.entries.size - 1)))">
+            <LocalizedDictionary />
+          </Button>
+          <LocalizedDictionary />
+        </Panel>
+        <Panel layout="border" borderTitle="Simple property" titleFont="SansSerif,0,11" darkLevel="0" data="InspectorPropertyTable.selected" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(InspectorPropertyTable.selected = null)" name="EmptyPanel">
           <Label label="please_select_an_entry" align="center" constraints="border(index=0;location=center)" localize="true">
             <LocalizedDictionary />
           </Label>
         </Panel>
-        <Panel layout="twocols" borderLeft="5" borderRight="3" titleFont="SansSerif,0,11" darkLevel="0" data="InspectorPropertyTable.selected" dataClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="InspectorPropertyTable.selected.isEditionPatternProperty" width="300" height="162" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EntryPanel">
+        <Panel layout="twocols" borderLeft="5" borderRight="3" titleFont="SansSerif,0,11" darkLevel="0" data="InspectorPropertyTable.selected" dataClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="InspectorPropertyTable.selected.isEditionPatternProperty" width="300" height="162" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EntryPanel">
           <Label label="name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
           <TextField columns="7" text="TextField" data="EntryPanel.data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="inspectorEntryName" localize="true" />
           <Label label="label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
@@ -1304,13 +1326,6 @@
             <DropDown data="FlexoObjectInspectorEntryPanel.data.flexoObjectType" constraints="border(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;x=0;y=0)" name="dropdown" localize="true" iteratorClassName="org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry$FlexoObjectType" autoSelectFirstRow="false" />
           </Panel>
           <TextArea columns="6" rows="2" text="TextArea" data="EntryPanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" localize="true" />
-          <LocalizedDictionary />
-        </Panel>
-        <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderTop="2" borderBottom="3" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-          <Label label="inspector_name" constraints="border(index=0;location=west)" font="Lucida Grande,0,13" localize="true">
-            <LocalizedDictionary />
-          </Label>
-          <TextField columns="7" text="TextField" data="InspectorTab.data.inspectorTitle" constraints="border(index=1;location=center)" localize="true" />
           <LocalizedDictionary />
         </Panel>
       </Tab>

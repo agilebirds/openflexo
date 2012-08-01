@@ -228,4 +228,42 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 		}
 	}
 
+	public void entryFirst(InspectorEntry p) {
+		entries.remove(p);
+		entries.insertElementAt(p, 0);
+		setChanged();
+		notifyObservers();
+		notifyChange("entries", null, entries);
+	}
+
+	public void entryUp(InspectorEntry p) {
+		int index = entries.indexOf(p);
+		if (index > 0) {
+			entries.remove(p);
+			entries.insertElementAt(p, index - 1);
+			setChanged();
+			notifyObservers();
+			notifyChange("entries", null, entries);
+		}
+	}
+
+	public void entryDown(InspectorEntry p) {
+		int index = entries.indexOf(p);
+		if (index > -1) {
+			entries.remove(p);
+			entries.insertElementAt(p, index + 1);
+			setChanged();
+			notifyObservers();
+			notifyChange("entries", null, entries);
+		}
+	}
+
+	public void entryLast(InspectorEntry p) {
+		entries.remove(p);
+		entries.add(p);
+		setChanged();
+		notifyObservers();
+		notifyChange("entries", null, entries);
+	}
+
 }
