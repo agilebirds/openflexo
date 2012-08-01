@@ -64,7 +64,8 @@ public class PaletteElement {
 	static final Logger logger = FlexoLogger.getLogger(PaletteElement.class.getPackage().getName());
 
 	private final FIBEditorPalette _palette;
-	private FIBComponent component;
+	private FIBComponent modelComponent;
+	private FIBComponent representationComponent;
 	private FIBView view;
 
 	private DragSource dragSource;
@@ -73,14 +74,15 @@ public class PaletteElement {
 	private int dragAction = DnDConstants.ACTION_COPY;
 	private Hashtable<JComponent, DragGestureRecognizer> dgr;
 
-	public PaletteElement(FIBComponent component, FIBEditorPalette palette) {
-		this.component = component;
+	public PaletteElement(FIBComponent modelComponent, FIBComponent representationComponent, FIBEditorPalette palette) {
+		this.modelComponent = modelComponent;
+		this.representationComponent = representationComponent;
 		_palette = palette;
 
-		int x = Integer.parseInt(component.getParameter("x"));
-		int y = Integer.parseInt(component.getParameter("y"));
+		int x = Integer.parseInt(representationComponent.getParameter("x"));
+		int y = Integer.parseInt(representationComponent.getParameter("y"));
 
-		view = FIBController.makeView(component, FIBAbstractEditor.LOCALIZATION);
+		view = FIBController.makeView(representationComponent, FIBAbstractEditor.LOCALIZATION);
 
 		Dimension size = view.getJComponent().getPreferredSize();
 		view.getJComponent().setBounds(x, y, size.width, size.height);
@@ -151,7 +153,7 @@ public class PaletteElement {
 	public boolean elementDragged(FIBDropTarget target, Point pt) {
 		logger.info("Element dragged with component: " + target.getFIBComponent() + " place holder: " + target.getPlaceHolder());
 
-		FIBComponent newComponent = (FIBComponent) Cloner.cloneObjectWithMapping(component, FIBLibrary.getFIBMapping());
+		FIBComponent newComponent = (FIBComponent) Cloner.cloneObjectWithMapping(modelComponent, FIBLibrary.getFIBMapping());
 		newComponent.setLocalizedDictionary(null);
 		newComponent.clearParameters();
 

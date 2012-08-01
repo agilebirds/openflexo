@@ -1,0 +1,3 @@
+<TabPanel width="100" height="60">
+	<Tab title="Tab1" index="1" layout="border"/>
+</TabPanel>
