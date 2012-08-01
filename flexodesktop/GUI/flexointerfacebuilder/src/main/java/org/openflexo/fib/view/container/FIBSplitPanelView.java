@@ -125,6 +125,11 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 
 	@Override
 	public synchronized void updateLayout() {
+
+		logger.info("relayout split panel " + getComponent());
+
+		layout.setModel(getComponent().getSplit());
+
 		if (getSubViews() != null) {
 			for (FIBView v : getSubViews()) {
 				v.delete();
@@ -134,6 +139,9 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 
 		buildSubComponents();
 		updateDataObject(getDataObject());
+
+		getJComponent().revalidate();
+		getJComponent().repaint();
 	}
 
 	/*@Override

@@ -92,7 +92,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	public void setVisibleRowCount(int rows) {
 		int height = _fibBrowser.getRowHeight() * _fibBrowser.getVisibleRowCount();
 		int width = _dynamicComponent.getPreferredSize().width; // DEFAULT_WIDTH;
-		_dynamicComponent.setMinimumSize(new Dimension(width, height));
+		// _dynamicComponent.setMinimumSize(new Dimension(width, height));
 		_dynamicComponent.setPreferredSize(new Dimension(width, height));
 		_dynamicComponent.revalidate();
 	}

@@ -29,6 +29,7 @@ import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
 import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.model.FIBAddingNotification;
+import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.model.FIBRemovingNotification;
@@ -165,6 +166,14 @@ public class FIBEditableSplitPanelView extends FIBSplitPanelView implements FIBE
 				updateLayout();
 			}
 		}
+
+		if (dataModification instanceof FIBAttributeNotification) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBSplitPanel.Parameters.split) {
+				updateLayout();
+			}
+		}
+
 		if (dataModification instanceof FIBModelNotification) {
 			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
 		}

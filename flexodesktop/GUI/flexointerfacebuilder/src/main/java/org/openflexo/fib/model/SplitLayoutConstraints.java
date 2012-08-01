@@ -19,9 +19,12 @@
  */
 package org.openflexo.fib.model;
 
+import java.util.List;
+
 import javax.swing.JComponent;
 
 import org.openflexo.fib.model.FIBPanel.Layout;
+import org.openflexo.swing.layout.MultiSplitLayout.Leaf;
 
 public class SplitLayoutConstraints extends ComponentConstraints {
 
@@ -61,6 +64,40 @@ public class SplitLayoutConstraints extends ComponentConstraints {
 
 	public void setSplitIdentifier(String splitIdentifier) {
 		setStringValue(SPLIT_IDENTIFIER, splitIdentifier);
+	}
+
+	public Leaf getSplitLeaf() {
+		if (getComponent() != null && getComponent().getParent() instanceof FIBSplitPanel) {
+			return ((FIBSplitPanel) getComponent().getParent()).getLeafNamed(getSplitIdentifier());
+		}
+		return null;
+	}
+
+	public void setSplitLeaf(Leaf aLeaf) {
+		if (getComponent() != null && getComponent().getParent() instanceof FIBSplitPanel) {
+			setSplitIdentifier(aLeaf.getName());
+		}
+	}
+
+	public List<Leaf> getAvailableLeaves() {
+		if (getComponent() != null && getComponent().getParent() instanceof FIBSplitPanel) {
+			return ((FIBSplitPanel) getComponent().getParent()).getAllLeaves();
+		}
+		return null;
+	}
+
+	public double getWeight() {
+		if (getSplitLeaf() != null) {
+			return getSplitLeaf().getWeight();
+		}
+		return 0;
+	}
+
+	public void setWeight(double weight) {
+		if (getSplitLeaf() != null) {
+			getSplitLeaf().setWeight(weight);
+			((FIBSplitPanel) getComponent().getParent()).notifySplitLayoutChange();
+		}
 	}
 
 }

@@ -257,13 +257,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	private ComponentConstraints _normalizeConstraintsWhenRequired(ComponentConstraints someConstraints) {
 		if (getParent() instanceof FIBSplitPanel) {
 			if (someConstraints == null) {
-				System.out.println("Je construit un nouveau SplitLayoutConstraints");
 				SplitLayoutConstraints returned = new SplitLayoutConstraints(((FIBSplitPanel) getParent()).getFirstEmptyPlaceHolder());
 				returned.setComponent(this);
 				return returned;
 			}
 			if (!(someConstraints instanceof SplitLayoutConstraints)) {
-				System.out.println("constraints=" + someConstraints);
 				return new SplitLayoutConstraints(someConstraints);
 			}
 			someConstraints.setComponent(this);
