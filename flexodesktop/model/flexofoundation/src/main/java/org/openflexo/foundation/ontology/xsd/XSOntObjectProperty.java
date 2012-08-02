@@ -7,7 +7,7 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 
-public class XSOntObjectProperty extends XSOntObject implements OntologyObjectProperty, XSOntologyURIDefinitions {
+public class XSOntObjectProperty extends XSOntProperty implements OntologyObjectProperty {
 
 	protected XSOntObjectProperty(XSOntology ontology, String name) {
 		super(ontology, name, XS_ONTOLOGY_URI + "#" + name);
@@ -15,20 +15,14 @@ public class XSOntObjectProperty extends XSOntObject implements OntologyObjectPr
 
 	@Override
 	public List<XSOntObjectProperty> getSuperProperties() {
-		// TODO Make sure it's always empty
+		// TODO if element specific properties are added
 		return new ArrayList<XSOntObjectProperty>();
 	}
 
 	@Override
 	public List<XSOntObjectProperty> getSubProperties(FlexoOntology context) {
-		// TODO Make sure it's always empty
+		// TODO if element specific properties are added
 		return new ArrayList<XSOntObjectProperty>();
-	}
-
-	@Override
-	public boolean isAnnotationProperty() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -47,6 +41,11 @@ public class XSOntObjectProperty extends XSOntObject implements OntologyObjectPr
 	public boolean isLiteralRange() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public String getDisplayableDescription() {
+		return getName();
 	}
 
 }

@@ -3,10 +3,15 @@ package org.openflexo.foundation.ontology.xsd;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
@@ -23,9 +28,11 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
+import org.w3c.dom.Document;
 
 import com.sun.xml.xsom.XSAttGroupDecl;
 import com.sun.xml.xsom.XSAttributeDecl;
+import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSDeclaration;
 import com.sun.xml.xsom.XSElementDecl;
@@ -36,7 +43,7 @@ import com.sun.xml.xsom.XSSimpleType;
 //TODO imported ontologies
 //TODO xml as ressources (Lundi/Mardi) XMLModelRessource (FlexoProjectOntologyResource)
 //TODO XSOntology implements Meta-Model, XMLIndividuals implements Model
-//TODO restrictions
+//TODO element restrictions
 
 public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
 
@@ -108,6 +115,10 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	@Override
 	public FlexoOntology getFlexoOntology() {
 		return this;
+	}
+
+	protected XSDeclarationsFetcher getFetcher() {
+		return fetcher;
 	}
 
 	@Override
@@ -197,7 +208,7 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	}
 
 	private XSOntDataProperty loadDataProperty(XSDeclaration declaration) {
-		String name = fetcher.getFullName(declaration);
+		String name = declaration.getName();
 		String uri = fetcher.getURI(declaration);
 		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri);
 		dataProperties.put(uri, xsDataProperty);
@@ -218,6 +229,7 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 		}
 		for (XSAttributeDecl attribute : fetcher.getAttributeDecls()) {
 			XSOntDataProperty xsDataProperty = loadDataProperty(attribute);
+			xsDataProperty.setIsFromAttribute(true);
 			xsDataProperty.setDataType(computeDataType(attribute.getType()));
 		}
 	}
@@ -233,7 +245,18 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	}
 
 	private void loadRestrictions() {
-		// TODO URGENT
+		// Attributes
+		for (XSOntClass xsClass : classes.values()) {
+			XSDeclaration declaration = fetcher.getDeclaration(xsClass.getURI());
+			if (fetcher.getAttributeUses(declaration) != null) {
+				for (XSAttributeUse attributeUse : fetcher.getAttributeUses(declaration)) {
+					XSOntAttributeRestriction restriction = new XSOntAttributeRestriction(this, attributeUse);
+					xsClass.addSuperClass(restriction);
+				}
+			}
+		}
+		// Elements
+		// TODO
 	}
 
 	private void loadIndividuals() {
@@ -281,16 +304,31 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 		return isLoading;
 	}
 
+	private Set<XSOntIndividual> getRootElements() {
+		Set<XSOntIndividual> result = new HashSet<XSOntIndividual>();
+		for (XSOntIndividual individual : this.getIndividuals()) {
+			if (individual.getParent() == null) {
+				result.add(individual);
+			}
+		}
+		return result;
+	}
+
+	public Document toXML() throws ParserConfigurationException {
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+		Document doc = docBuilder.newDocument();
+
+		for (XSOntIndividual individual : getRootElements()) {
+			doc.appendChild(individual.toXML(doc));
+		}
+
+		return doc;
+	}
+
 	@Override
 	public void save() throws SaveResourceException {
-		// TODO ... But should be easy
-		/* A hasELement B property translates directly to <A><B/></A>
-		 * A <dataProp> ??? translates to an attribute Value = "???" or an element (check uri to know?)
-		 * A hasAttributeMyAttribute ??? translates to an attribute MyAttribute = "???"
-		 * 
-		 * On a side note the name of the element is the one of the used type
-		 * keep that in mind for the document indivudal.
-		 */
+		// TODO
 	}
 
 	@Override
@@ -427,6 +465,7 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 			return null;
 		}
 		XSOntIndividual individual = new XSOntIndividual(this, name, uri);
+		individual.addType(type);
 		individuals.put(individual.getURI(), individual);
 		return individual;
 	}
@@ -492,18 +531,6 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	}
 
 	@Override
-	public Object getPropertyValue(OntologyProperty property) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setPropertyValue(OntologyProperty property, Object newValue) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public Object getAnnotationValue(OntologyDataProperty property, Language language) {
 		// TODO Auto-generated method stub
 		return null;
@@ -541,6 +568,16 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	@Override
 	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public Object getPropertyValue(OntologyProperty property) {
+		return null;
+	}
+
+	@Override
+	public void setPropertyValue(OntologyProperty property, Object newValue) {
+
 	}
 
 	@Override

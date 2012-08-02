@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
 
+import org.openflexo.toolbox.StringUtils;
+
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSAttContainer;
 import com.sun.xml.xsom.XSAttGroupDecl;
@@ -41,15 +43,23 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	private final Set<XSAttributeDecl> attributeDecls = new HashSet<XSAttributeDecl>();
 	private final Set<XSModelGroupDecl> modelGroupDecls = new HashSet<XSModelGroupDecl>();
 
+	private final Map<XSDeclaration, Set<XSAttributeUse>> attributeUses = new HashMap<XSDeclaration, Set<XSAttributeUse>>();
+
 	private final Stack<XSDeclaration> path = new Stack<XSDeclaration>();
 
 	private final Map<XSDeclaration, XSDeclaration> localOwners = new HashMap<XSDeclaration, XSDeclaration>();
 
-	private final Set<String> uris = new HashSet<String>();
+	private final Map<String, XSDeclaration> declarations = new HashMap<String, XSDeclaration>();
 
 	public void fetch(XSSchemaSet schemaSet) {
 		for (XSSchema schema : schemaSet.getSchemas()) {
-			schema.visit(this);
+			if (StringUtils.isNotEmpty(schema.getTargetNamespace())) {
+				schema.visit(this);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("A schema was ignored because of a lack of target namespace.");
+				}
+			}
 		}
 		log_uris();
 	}
@@ -57,6 +67,10 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	public void fetch(XSSchema schema) {
 		schema.visit(this);
 		log_uris();
+	}
+
+	public XSDeclaration getDeclaration(String uri) {
+		return declarations.get(uri);
 	}
 
 	public XSDeclaration getOwner(XSDeclaration declaration) {
@@ -87,23 +101,28 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return result.toString();
 	}
 
-	public void register(XSDeclaration decl) {
+	public Set<XSAttributeUse> getAttributeUses(XSDeclaration declaration) {
+		return attributeUses.get(declaration);
+	}
+
+	private void register(XSDeclaration decl) {
 		if (decl.isLocal()) {
 			localOwners.put(decl, path.lastElement());
 		}
 		String uri = getURI(decl);
-		if (uris.contains(uri)) {
+		if (declarations.containsKey(uri)) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Duplicate URI " + uri);
 			}
+		} else {
+			declarations.put(uri, decl);
 		}
-		uris.add(uri);
 	}
 
 	public void log_uris() {
 		if (logger.isLoggable(Level.INFO)) {
 			StringBuffer buffer = new StringBuffer("Registered URIs:\n");
-			for (String uri : uris) {
+			for (String uri : declarations.keySet()) {
 				buffer.append(uri);
 				buffer.append("\n");
 			}
@@ -190,6 +209,10 @@ public class XSDeclarationsFetcher implements XSVisitor {
 
 	@Override
 	public void attributeUse(XSAttributeUse attributeUse) {
+		if (attributeUses.containsKey(path.lastElement()) == false) {
+			attributeUses.put(path.lastElement(), new HashSet<XSAttributeUse>());
+		}
+		attributeUses.get(path.lastElement()).add(attributeUse);
 		attributeDecl(attributeUse.getDecl());
 	}
 

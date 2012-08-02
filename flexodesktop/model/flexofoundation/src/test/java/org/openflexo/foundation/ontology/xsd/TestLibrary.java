@@ -1,11 +1,15 @@
 package org.openflexo.foundation.ontology.xsd;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.FlexoTestCase;
 
 public class TestLibrary extends FlexoTestCase {
+
+	private static final String FILE_NAME = "library";
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(TestLibrary.class.getPackage()
 			.getName());
@@ -65,9 +69,27 @@ public class TestLibrary extends FlexoTestCase {
 		buffer.append("\n");
 	}
 
+	public static void attributeRestrictionListing(XSOntology lib, StringBuffer buffer) {
+		buffer.append("Attribute restrictions\n");
+		for (XSOntClass xsoClass : lib.getClasses()) {
+			Set<XSOntAttributeRestriction> attributeRestrictions = new HashSet<XSOntAttributeRestriction>();
+			for (XSOntClass superClass : xsoClass.getSuperClasses()) {
+				if (superClass instanceof XSOntAttributeRestriction) {
+					attributeRestrictions.add((XSOntAttributeRestriction) superClass);
+				}
+			}
+			if (attributeRestrictions.isEmpty() == false) {
+				xsoObject(xsoClass, buffer);
+				for (XSOntAttributeRestriction restriction : attributeRestrictions) {
+					buffer.append("    ").append(restriction.getDisplayableDescription()).append("\n");
+				}
+			}
+		}
+	}
+
 	public void testLibrary() {
 		StringBuffer buffer = new StringBuffer();
-		XSOntology lib = new XSOntology("http://www.openflexo.org/test/XSD/library.owl", openTestXSD("Library"), null);
+		XSOntology lib = new XSOntology("http://www.openflexo.org/test/XSD/library.owl", openTestXSD(FILE_NAME), null);
 		assertNotNull(lib);
 		lib.loadWhenUnloaded();
 		assertTrue(lib.isLoaded());
@@ -80,6 +102,7 @@ public class TestLibrary extends FlexoTestCase {
 			classListing(lib, buffer);
 			dataPropertyListing(lib, buffer);
 			objectPropertyListing(lib, buffer);
+			attributeRestrictionListing(lib, buffer);
 
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info(buffer.toString());

@@ -74,4 +74,10 @@ public class XSOntClass extends XSOntObject implements OntologyClass, XSOntology
 		return isNamedClass() && getURI().equals(XS_THING_URI);
 	}
 
+	@Override
+	public String getDisplayableDescription() {
+		// TODO tell where it's from (element/complex type)
+		return getName();
+	}
+
 }

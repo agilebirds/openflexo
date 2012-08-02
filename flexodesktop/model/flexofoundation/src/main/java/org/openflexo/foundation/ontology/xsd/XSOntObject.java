@@ -14,7 +14,7 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
 
-public class XSOntObject extends AbstractOntologyObject implements OntologyObject, XSOntologyURIDefinitions {
+public abstract class XSOntObject extends AbstractOntologyObject implements OntologyObject, XSOntologyURIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntObject.class.getPackage()
 			.getName());
@@ -84,20 +84,14 @@ public class XSOntObject extends AbstractOntologyObject implements OntologyObjec
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
+		// TODO How does the localization works?
 		return null;
 	}
 
 	@Override
 	public void setDescription(String aDescription) {
-		// TODO Auto-generated method stub
+		// TODO How does the localization works?
 
-	}
-
-	@Override
-	public String getDisplayableDescription() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
