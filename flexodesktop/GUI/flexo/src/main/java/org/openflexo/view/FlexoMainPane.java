@@ -167,9 +167,9 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setModuleView() with " + moduleView + " perspective " + moduleView.getPerspective());
 		}
-		saveLayout();
 		try {
 			if (this.moduleView != null) {
+				saveLayout();
 				this.moduleView.willHide();
 			}
 		} catch (RuntimeException e) {
@@ -414,7 +414,12 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 	}
 
 	private JComponent getComponentForPosition(LayoutPosition position) {
-		return (JComponent) centerLayout.getComponentForNode(centerLayout.getNodeForName(position.name()));
+		Node node = centerLayout.getNodeForName(position.name());
+		if (node != null) {
+			return (JComponent) centerLayout.getComponentForNode(node);
+		} else {
+			return null;
+		}
 	}
 
 	public ModuleView<?> getModuleView() {

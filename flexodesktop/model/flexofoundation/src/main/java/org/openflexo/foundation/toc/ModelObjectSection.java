@@ -127,7 +127,7 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 			modelObjectReference = null;
 		}
 		if (modelObject != null) {
-			modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(getProject(), modelObject);
+			modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(modelObject);
 		} else {
 			modelObjectReference = null;
 		}

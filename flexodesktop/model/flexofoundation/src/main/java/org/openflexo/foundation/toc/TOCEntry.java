@@ -100,7 +100,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	public TOCEntry(TOCData generatedCode, FlexoModelObject modelObject) {
 		this(generatedCode);
-		this.objectReference = new FlexoModelObjectReference<FlexoModelObject>(generatedCode.getProject(), modelObject);
+		this.objectReference = new FlexoModelObjectReference<FlexoModelObject>(modelObject);
 		this.objectReference.setSerializeClassName(true); // Even if the object is not loaded yet, we need to know its class name.
 		this.objectReference.setOwner(this);
 		isReadOnly = true;
@@ -611,7 +611,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			objectReference = null;
 		}
 		if (object != null) {
-			objectReference = new FlexoModelObjectReference<FlexoModelObject>(getProject(), object);
+			objectReference = new FlexoModelObjectReference<FlexoModelObject>(object);
 		} else {
 			objectReference = null;
 		}

@@ -68,7 +68,7 @@ public class MonitoringScreenDefinition extends ComponentDefinition implements S
 
 	public FlexoModelObjectReference<FlexoProcess> getProcessReference() {
 		if (getProcess() != null) {
-			return processReference = new FlexoModelObjectReference<FlexoProcess>(getProject(), getProcess());
+			return processReference = new FlexoModelObjectReference<FlexoProcess>(getProcess());
 		}
 		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("MonitoringScreen has no process!");

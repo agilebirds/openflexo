@@ -300,7 +300,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoModelObject> getRoleReference() {
 		if (getRole() != null) {
-			return new FlexoModelObjectReference<FlexoModelObject>(getProject(), getRole());
+			return new FlexoModelObjectReference<FlexoModelObject>(getRole());
 		} else {
 			return null;
 		}
@@ -334,8 +334,8 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	public FlexoProcess getLinkedProcess() {
 		if (linkedProcess == null) {
-			if (_deserializedReference != null && _deserializedReference.getObject(false) != null) {
-				setLinkedProcess(_deserializedReference.getObject(false));
+			if (_deserializedReference != null && _deserializedReference.getObject() != null) {
+				setLinkedProcess(_deserializedReference.getObject());
 			}
 		}
 		return linkedProcess;
@@ -348,7 +348,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoProcess> getLinkedProcessReference() {
 		if (getLinkedProcess() != null) {
-			return new FlexoModelObjectReference<FlexoProcess>(getProject(), getLinkedProcess());
+			return new FlexoModelObjectReference<FlexoProcess>(getLinkedProcess());
 		} else {
 			return _deserializedReference;
 		}

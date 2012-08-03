@@ -71,9 +71,9 @@ import org.openflexo.view.menu.ToolsMenu;
  */
 public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
-	public static final String ACTIVE_MODULE = "activeModule";
-
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
+
+	public static final String ACTIVE_MODULE = "activeModule";
 
 	public static final String MODULE_LOADED = "moduleLoaded";
 	public static final String MODULE_UNLOADED = "moduleUnloaded";
@@ -414,12 +414,12 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	}
 
 	@Override
-	public ExternalCEDModule getCEDModuleInstance() throws ModuleLoadingException {
+	public ExternalCEDModule getVPMModuleInstance() throws ModuleLoadingException {
 		return getCEDModule();
 	}
 
 	@Override
-	public ExternalOEModule getOEModuleInstance() throws ModuleLoadingException {
+	public ExternalOEModule getVEModuleInstance() throws ModuleLoadingException {
 		return getOEModule();
 	}
 

@@ -200,6 +200,8 @@ import org.openflexo.xmlcode.XMLMapping;
 public class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable,
 		Iterable<FlexoResource<? extends FlexoResourceData>> {
 
+	private static final String REVISION = "revision";
+	private static final String VERSION = "version";
 	private static final String FRAMEWORKS_DIRECTORY = "Frameworks";
 	private static final String HTML_DIRECTORY = "HTML";
 	private static final String DOCX_DIRECTORY = "Docx";
@@ -239,12 +241,14 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	protected TranstypedBindingStringConverter transtypedBindingConverter = new TranstypedBindingStringConverter(abstractBindingConverter);
 	protected BindingAssignmentStringConverter bindingAssignmentConverter = new BindingAssignment.BindingAssignmentStringConverter(this);
 	protected FlexoModelObjectReferenceConverter objectReferenceConverter = new FlexoModelObjectReferenceConverter();
-	// protected EditionPatternConverter editionPatternConverter = new EditionPatternConverter(this);
+	protected FlexoProjectReferenceConverter projectReferenceConverter = new FlexoProjectReferenceConverter();
+
 	private boolean lastUniqueIDHasBeenSet = false;
 	private long lastID = Integer.MIN_VALUE;
 
 	protected static final Logger logger = Logger.getLogger(FlexoProject.class.getPackage().getName());
 
+	// " | ? * [ ] / < > = { } & % # ~ \ _
 	public static final String BAD_CHARACTERS_REG_EXP = "[\"|\\?\\*\\[\\]/<>:{}&%#~\\\\_]";
 
 	public static final Pattern BAD_CHARACTERS_PATTERN = Pattern.compile(BAD_CHARACTERS_REG_EXP);
@@ -254,8 +258,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	protected String projectName;
 
 	protected File projectDirectory;
-
-	protected File _dataModelDirectory;
 
 	private FlexoCSS cssSheet;
 
@@ -272,6 +274,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private List<DocType> docTypes;
 
 	private ProjectStatistics statistics = null;
+
+	private String version;
+
+	private long revision = 0;
 
 	/**
 	 * Hashtable where all the known resources are stored, with associated key which is a String identifying the resource
@@ -294,7 +300,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private boolean holdObjectRegistration = false;
 
-	private ProjectLoadingHandler _loadingHandler;
+	private ProjectLoadingHandler loadingHandler;
+	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	public int getID() {
 		return id;
@@ -336,6 +343,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	}
 
+	public static interface FlexoProjectReferenceLoader {
+		public FlexoProject loadProject(FlexoProjectReference reference);
+	}
+
 	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoModelObjectReference> {
 
 		public FlexoModelObjectReferenceConverter() {
@@ -354,6 +365,22 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	}
 
+	private class FlexoProjectReferenceConverter extends Converter<FlexoProjectReference> {
+		public FlexoProjectReferenceConverter() {
+			super(FlexoProjectReference.class);
+		}
+
+		@Override
+		public String convertToString(FlexoProjectReference value) {
+			return value.getSerializationRepresentation();
+		}
+
+		@Override
+		public FlexoProjectReference convertFromString(String value) {
+			return new FlexoProjectReference(FlexoProject.this, value);
+		}
+	}
+
 	protected class FlexoProjectStringEncoder extends StringEncoder {
 		@Override
 		public void _initialize() {
@@ -365,6 +392,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			_addConverter(staticBindingConverter);
 			_addConverter(bindingAssignmentConverter);
 			_addConverter(objectReferenceConverter);
+			_addConverter(projectReferenceConverter);
 			_addConverter(imageFileConverter);
 			_addConverter(TOCDataBinding.CONVERTER);
 		}
@@ -408,7 +436,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		builder.project = this;
 		setResourceCenter(builder.resourceCenter);
 		setProjectDirectory(builder.projectDirectory);
-		_loadingHandler = builder.loadingHandler;
+		loadingHandler = builder.loadingHandler;
+		projectReferenceLoader = builder.projectReferenceLoader;
 		initializeDeserialization(builder);
 	}
 
@@ -849,6 +878,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 		} finally {
 			if (resourceSaved || getFlexoRMResource().isModified()) {
+				revision++;
 				// If at least one resource has been saved, let's try to save the RM so that the lastID is also saved, avoiding possible
 				// duplication of flexoID's.
 				writeDotVersion();
@@ -1765,9 +1795,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	// ==========================================================================
 
 	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress,
-			FlexoResourceCenter resourceCenter) {
+			FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenter resourceCenter) {
 		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
 		FlexoProject project = new FlexoProject(aProjectDirectory);
+		project.projectReferenceLoader = projectReferenceLoader;
 		project.setResourceCenter(resourceCenter);
 		FlexoEditor editor = editorFactory.makeFlexoEditor(project);
 		project.setLastUniqueID(0);
@@ -2397,7 +2428,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public ProjectLoadingHandler getLoadingHandler() {
-		return _loadingHandler;
+		return loadingHandler;
 	}
 
 	public List<DocType> getDocTypes() {
@@ -4157,8 +4188,47 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		this.moduleLoader = moduleLoader;
 	}
 
-	public FlexoProject loadProject(String serializationRepresentation) {
-		// TODO Auto-generated method stub
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		if (version != null) {
+			version = version.replace("~", "");
+		}
+		String old = this.version;
+		this.version = version;
+		setChanged();
+		notifyObservers(new DataModification(VERSION, old, version));
+	}
+
+	public long getRevision() {
+		return revision;
+	}
+
+	public void setRevision(long revision) {
+		long old = this.revision;
+		this.revision = revision;
+		setChanged();
+		notifyObservers(new DataModification(REVISION, old, revision));
+	}
+
+	public FlexoProject loadProject(FlexoProjectReference reference) {
+		if (projectReferenceLoader != null) {
+			projectReferenceLoader.loadProject(reference);
+		}
 		return null;
+	}
+
+	public FlexoProjectReferenceLoader getProjectReferenceLoader() {
+		return projectReferenceLoader;
+	}
+
+	public void setProjectReferenceLoader(FlexoProjectReferenceLoader projectReferenceLoader) {
+		this.projectReferenceLoader = projectReferenceLoader;
+	}
+
+	public Converter<FlexoProjectReference> getProjectReferenceConverter() {
+		return projectReferenceConverter;
 	}
 }
