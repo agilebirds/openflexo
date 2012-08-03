@@ -537,7 +537,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			object = o;
-			objectReference = new FlexoModelObjectReference(getProject(), o);
+			objectReference = new FlexoModelObjectReference(o);
 		}
 
 		// Constructor used during deserialization

@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -181,12 +182,13 @@ public class FlexoResourceManager {
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
 			FlexoResourceCenter resourceCenter) throws ProjectInitializerException, ProjectLoadingCancelledException {
-		return initializeExistingProject(aProjectDirectory, null, editorFactory, new DefaultProjectLoadingHandler(), resourceCenter);
+		// Here implement a default handler that attempts to retrieve properly
+		return initializeExistingProject(aProjectDirectory, null, editorFactory, new DefaultProjectLoadingHandler(), null, resourceCenter);
 	}
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
-			ProjectLoadingHandler loadingHandler, FlexoResourceCenter resourceCenter) throws ProjectInitializerException,
-			ProjectLoadingCancelledException {
+			ProjectLoadingHandler loadingHandler, FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenter resourceCenter)
+			throws ProjectInitializerException, ProjectLoadingCancelledException {
 		FlexoProject project = null;
 		if (!aProjectDirectory.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -209,7 +211,7 @@ public class FlexoResourceManager {
 			FlexoRMResource rmRes;
 			try {
 				rmRes = new FlexoRMResource(rmFile, aProjectDirectory);
-				project = rmRes.loadProject(progress, loadingHandler, resourceCenter);
+				project = rmRes.loadProject(progress, loadingHandler, projectReferenceLoader, resourceCenter);
 			} catch (RuntimeException e1) {
 				e1.printStackTrace();
 				throw new ProjectInitializerException(e1.getMessage(), aProjectDirectory);
@@ -229,7 +231,7 @@ public class FlexoResourceManager {
 		for (ProjectExternalRepository repository : project.getExternalRepositories()) {
 			if (!repository.isConnected()) {
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Found external repository " + repository + " DISCONNECTED, desactivate resources");
+					logger.fine("Found external repository " + repository + " DISCONNECTED, deactivate resources");
 				}
 				for (FlexoResource<?> resource : repository.getRelatedResources()) {
 					resource.desactivate();
@@ -243,12 +245,13 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
-			FlexoResourceCenter resourceCenter) {
+			FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenter resourceCenter) {
 		if (!aProjectDirectory.exists()) {
 			aProjectDirectory.mkdirs();
 		}
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
-		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, resourceCenter);
+		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, projectReferenceLoader,
+				resourceCenter);
 		FlexoProject project = returned.getProject();
 		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, returned.getResourceUpdateHandler());
 		resourceManager.startResourcePeriodicChecking();
@@ -260,7 +263,7 @@ public class FlexoResourceManager {
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
 			FlexoResourceCenter resourceCenter) {
-		return initializeNewProject(aProjectDirectory, null, editorFactory, resourceCenter);
+		return initializeNewProject(aProjectDirectory, null, editorFactory, null, resourceCenter);
 	}
 
 	public FlexoEditor getEditor() {

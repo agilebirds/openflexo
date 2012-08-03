@@ -274,7 +274,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// Used when serializing
 	public FlexoModelObjectReference<Role> getRoleReference() {
 		if (getRole() != null) {
-			return new FlexoModelObjectReference<Role>(getProject(), getRole());
+			return new FlexoModelObjectReference<Role>(getRole());
 		} else {
 			return null;
 		}
@@ -304,7 +304,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoModelObject> getLinkedProcessReference() {
 		if (getLinkedProcess() != null) {
-			return new FlexoModelObjectReference<FlexoModelObject>(getProject(), getLinkedProcess());
+			return new FlexoModelObjectReference<FlexoModelObject>(getLinkedProcess());
 		} else {
 			return null;
 		}
@@ -381,7 +381,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// Used when serializing
 	public FlexoModelObjectReference<Role> getRoleAReference() {
 		if (getRoleA() != null) {
-			return new FlexoModelObjectReference<Role>(getProject(), getRoleA());
+			return new FlexoModelObjectReference<Role>(getRoleA());
 		} else {
 			return null;
 		}
@@ -416,7 +416,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// Used when serializing
 	public FlexoModelObjectReference<Role> getRoleCReference() {
 		if (getRoleC() != null) {
-			return new FlexoModelObjectReference<Role>(getProject(), getRoleC());
+			return new FlexoModelObjectReference<Role>(getRoleC());
 		} else {
 			return null;
 		}
@@ -452,7 +452,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// Used when serializing
 	public FlexoModelObjectReference<Role> getRoleIReference() {
 		if (getRoleI() != null) {
-			return new FlexoModelObjectReference<Role>(getProject(), getRoleI());
+			return new FlexoModelObjectReference<Role>(getRoleI());
 		} else {
 			return null;
 		}
@@ -643,7 +643,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		if (getResponsibleRoles() != null && getResponsibleRoles().size() > 0) {
 			Vector<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
 			for (Role role : getResponsibleRoles()) {
-				roles.add(new FlexoModelObjectReference<Role>(getProject(), role));
+				roles.add(new FlexoModelObjectReference<Role>(role));
 			}
 			return roles;
 		}
@@ -668,7 +668,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		if (getAccountableRoles() != null && getAccountableRoles().size() > 0) {
 			Vector<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
 			for (Role role : getAccountableRoles()) {
-				roles.add(new FlexoModelObjectReference<Role>(getProject(), role));
+				roles.add(new FlexoModelObjectReference<Role>(role));
 			}
 			return roles;
 		}
@@ -693,7 +693,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		if (getConsultedRoles() != null && getConsultedRoles().size() > 0) {
 			Vector<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
 			for (Role role : getConsultedRoles()) {
-				roles.add(new FlexoModelObjectReference<Role>(getProject(), role));
+				roles.add(new FlexoModelObjectReference<Role>(role));
 			}
 			return roles;
 		}
@@ -718,7 +718,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		if (getInformedRoles() != null && getInformedRoles().size() > 0) {
 			Vector<FlexoModelObjectReference<Role>> roles = new Vector<FlexoModelObjectReference<Role>>();
 			for (Role role : getInformedRoles()) {
-				roles.add(new FlexoModelObjectReference<Role>(getProject(), role));
+				roles.add(new FlexoModelObjectReference<Role>(role));
 			}
 			return roles;
 		}

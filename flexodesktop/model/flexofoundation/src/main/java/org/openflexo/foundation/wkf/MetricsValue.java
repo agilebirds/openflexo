@@ -187,7 +187,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 			metricsDefinitionReference = null;
 		}
 		if (object != null) {
-			metricsDefinitionReference = new FlexoModelObjectReference<MetricsDefinition>(getProject(), object);
+			metricsDefinitionReference = new FlexoModelObjectReference<MetricsDefinition>(object);
 			metricsDefinitionReference.setOwner(this);
 		} else {
 			metricsDefinitionReference = null;
@@ -356,9 +356,9 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 		}
 		switch (getMetricsDefinition().getType()) {
 		case NUMBER:
-			return getIntValue().toString() + getUnit() != null ? (" " + getUnit()) : "";
+			return getIntValue().toString() + getUnit() != null ? " " + getUnit() : "";
 		case DOUBLE:
-			return getDoubleValue().toString() + getUnit() != null ? (" " + getUnit()) : "";
+			return getDoubleValue().toString() + getUnit() != null ? " " + getUnit() : "";
 		case TEXT:
 			return getStringValue();
 		case TIME:

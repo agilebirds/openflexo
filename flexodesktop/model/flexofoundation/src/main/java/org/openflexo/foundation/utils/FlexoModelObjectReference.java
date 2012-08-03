@@ -49,6 +49,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		public void objectDeleted(FlexoModelObjectReference<?> reference);
 
 		public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference);
+
+		public FlexoProject getProject();
 	}
 
 	public enum ReferenceStatus {
@@ -56,12 +58,14 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	private static final String SEPARATOR = "#";
+	private static final String PROJECT_SEPARATOR = "|";
 
 	/**
 	 * @return
 	 */
 	public static String getSerializationRepresentationForObject(FlexoModelObject modelObject, boolean serializeClassName) {
-		return modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier() + SEPARATOR
+		return modelObject.getProject().getURI() + PROJECT_SEPARATOR
+				+ modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier() + SEPARATOR
 				+ modelObject.getSerializationIdentifier() + (serializeClassName ? SEPARATOR + modelObject.getClass().getName() : "");
 	}
 
@@ -73,7 +77,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	private long flexoID;
 
-	private FlexoProject project;
+	/** The project of the referring object. */
+	private FlexoProject referringProject;
 
 	private ReferenceOwner owner;
 
@@ -85,8 +90,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	private FlexoXMLStorageResource resource;
 
-	public FlexoModelObjectReference(FlexoProject project, O object) {
-		this.project = project;
+	public FlexoModelObjectReference(O object) {
 		this.modelObject = object;
 		this.modelObject.addToReferencers(this);
 		this.status = ReferenceStatus.RESOLVED;
@@ -111,7 +115,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	public FlexoModelObjectReference(FlexoProject project, String modelObjectIdentifier) {
-		this.project = project;
+		this.referringProject = project;
 		try {
 			String[] s = modelObjectIdentifier.split(SEPARATOR);
 			this.resourceIdentifier = s[0];
@@ -143,7 +147,6 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		if (modelObject != null) {
 			modelObject.removeFromReferencers(this);
 		}
-		project = null;
 		owner = null;
 		modelObject = null;
 	}
@@ -197,7 +200,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	private O findObject(boolean force) {
-		if (project != null) {
+		if (getEnclosingProject() != null) {
 			try {
 				FlexoXMLStorageResource res = getResource();
 				if (res == null) {
@@ -211,7 +214,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 					}
 				}
 				if (res.isLoaded() && !res.getIsLoading()) {
-					return (O) project.findObject(userIdentifier, flexoID);
+					return (O) getEnclosingProject().findObject(userIdentifier, flexoID);
 				}
 			} catch (ClassCastException e) {
 				e.printStackTrace();
@@ -221,11 +224,11 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	public FlexoXMLStorageResource getResource() {
-		if (resourceIdentifier == null || project == null) {
+		if (resourceIdentifier == null || getEnclosingProject() == null) {
 			return null;
 		}
 		if (resource == null) {
-			resource = (FlexoXMLStorageResource) project.resourceForKey(resourceIdentifier);
+			resource = (FlexoXMLStorageResource) getEnclosingProject().resourceForKey(resourceIdentifier);
 			if (resource != null) {
 				resource.addResourceLoadingListener(this);
 				resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
@@ -236,10 +239,26 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	@Override
 	public Converter getConverter() {
-		if (project != null) {
-			return project.getObjectReferenceConverter();
+		if (getReferringProject() != null) {
+			return getReferringProject().getObjectReferenceConverter();
 		}
 		return null;
+	}
+
+	private FlexoProject getEnclosingProject() {
+		if (modelObject != null) {
+			return modelObject.getProject();
+		} else {
+			return null;
+		}
+	}
+
+	private FlexoProject getReferringProject() {
+		if (owner != null) {
+			return owner.getProject();
+		} else {
+			return referringProject;
+		}
 	}
 
 	public ReferenceOwner getOwner() {

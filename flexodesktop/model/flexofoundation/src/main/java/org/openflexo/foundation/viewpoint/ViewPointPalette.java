@@ -345,7 +345,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	private ScreenshotImage buildAndSaveScreenshotImage() {
 		ExternalCEDModule cedModule = null;
 		try {
-			cedModule = getProject().getModuleLoader() != null ? getProject().getModuleLoader().getCEDModuleInstance() : null;
+			cedModule = getProject().getModuleLoader() != null ? getProject().getModuleLoader().getVPMModuleInstance() : null;
 		} catch (ModuleLoadingException e) {
 			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
 			e.printStackTrace();

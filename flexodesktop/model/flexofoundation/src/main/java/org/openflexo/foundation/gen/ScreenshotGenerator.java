@@ -271,7 +271,7 @@ public class ScreenshotGenerator {
 				} else if (object instanceof ERDiagram) {
 					dmModule = project.getModuleLoader() != null ? project.getModuleLoader().getDMModuleInstance() : null;
 				} else if (object instanceof View || object instanceof ViewDefinition) {
-					oeModule = project.getModuleLoader() != null ? project.getModuleLoader().getOEModuleInstance() : null;
+					oeModule = project.getModuleLoader() != null ? project.getModuleLoader().getVEModuleInstance() : null;
 				}
 			} catch (ModuleLoadingException e) {
 				logger.warning("cannot load module (and so can't create screenshot)." + e.getMessage());

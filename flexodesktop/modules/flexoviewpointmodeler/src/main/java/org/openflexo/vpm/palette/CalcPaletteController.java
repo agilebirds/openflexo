@@ -81,8 +81,8 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
-			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
-					.getPaletteView());
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteViewInScrollPane()),
+					getCommonPalette().getPaletteViewInScrollPane());
 		}
 		return paletteView;
 	}
