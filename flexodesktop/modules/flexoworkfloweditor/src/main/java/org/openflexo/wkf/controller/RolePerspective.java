@@ -65,7 +65,7 @@ public class RolePerspective extends FlexoPerspective {
 	@Override
 	public JComponent getTopRightView() {
 		if (getCurrentRoleListView() != null) {
-			return getCurrentRoleListView().getController().getPalette().getPaletteView();
+			return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
 		}
 		return topRightDummy;
 	}
