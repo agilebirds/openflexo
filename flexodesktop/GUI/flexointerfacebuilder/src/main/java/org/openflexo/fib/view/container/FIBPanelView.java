@@ -21,9 +21,11 @@ package org.openflexo.fib.view.container;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
@@ -33,6 +35,8 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import org.openflexo.fib.controller.FIBController;
@@ -141,7 +145,53 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 	@Override
 	protected JPanel createJComponent() {
-		panel = new JPanel();
+		class ScrollablePanel extends JPanel implements Scrollable {
+
+			@Override
+			public Dimension getPreferredScrollableViewportSize() {
+				return getPreferredSize();
+			}
+
+			@Override
+			public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+				switch (orientation) {
+				case SwingConstants.VERTICAL:
+					return visibleRect.height / 10;
+				case SwingConstants.HORIZONTAL:
+					return visibleRect.width / 10;
+				default:
+					throw new IllegalArgumentException("Invalid orientation: " + orientation);
+				}
+			}
+
+			@Override
+			public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+				switch (orientation) {
+				case SwingConstants.VERTICAL:
+					return visibleRect.height;
+				case SwingConstants.HORIZONTAL:
+					return visibleRect.width;
+				default:
+					throw new IllegalArgumentException("Invalid orientation: " + orientation);
+				}
+			}
+
+			@Override
+			public boolean getScrollableTracksViewportWidth() {
+				System.err.println(getPreferredSize());
+				return FIBPanelView.this.getComponent().isTrackViewPortWidth() && getParent() != null
+						&& getParent().getWidth() > getPreferredSize().width;
+			}
+
+			@Override
+			public boolean getScrollableTracksViewportHeight() {
+				return FIBPanelView.this.getComponent().isTrackViewPortHeight() && getParent() != null
+						&& getParent().getHeight() > getPreferredSize().height;
+			}
+
+		}
+
+		panel = new ScrollablePanel();
 		updateGraphicalProperties();
 
 		_setPanelLayoutParameters();

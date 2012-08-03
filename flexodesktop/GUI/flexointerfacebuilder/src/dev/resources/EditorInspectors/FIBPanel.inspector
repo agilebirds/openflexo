@@ -35,6 +35,10 @@
 			
 					<CheckBox data="data.protectContent" constraints="twocols(location=left)"/>
 					<Label label="protect_content_against_modifications" constraints="twocols(location=right)"/>
+					<CheckBox data="data.trackViewPortWidth" constraints="twocols(location=left)"/>
+					<Label label="track_view_port_width" constraints="twocols(location=right)"/>
+					<CheckBox data="data.trackViewPortHeight" constraints="twocols(location=left)"/>
+					<Label label="track_view_port_height" constraints="twocols(location=right)"/>
 			</Tab>
 			
 			<Tab name="GraphicsTab" title="Graphics" index="4" layout="twocols" font="SansSerif,0,11" >
