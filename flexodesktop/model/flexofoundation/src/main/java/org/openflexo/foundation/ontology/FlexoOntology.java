@@ -1,7 +1,6 @@
 package org.openflexo.foundation.ontology;
 
 import java.util.List;
-import java.util.Vector;
 
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
@@ -41,42 +40,42 @@ public interface FlexoOntology extends OntologyObject {
 	 * 
 	 * @return
 	 */
-	public Vector<? extends FlexoOntology> getAllImportedOntologies();
+	public List<? extends FlexoOntology> getAllImportedOntologies();
 
 	/**
 	 * Return a vector of imported ontologies in the context of this ontology
 	 * 
 	 * @return
 	 */
-	public Vector<? extends FlexoOntology> getImportedOntologies();
+	public List<? extends FlexoOntology> getImportedOntologies();
 
 	/**
 	 * Return all classes explicitely defined in this ontology (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract Vector<? extends OntologyClass> getClasses();
+	public abstract List<? extends OntologyClass> getClasses();
 
 	/**
 	 * Return all individuals explicitely defined in this ontology (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract Vector<? extends OntologyIndividual> getIndividuals();
+	public abstract List<? extends OntologyIndividual> getIndividuals();
 
 	/**
 	 * Return all datatype properties explicitely defined in this ontology (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract Vector<? extends OntologyDataProperty> getDataProperties();
+	public abstract List<? extends OntologyDataProperty> getDataProperties();
 
 	/**
 	 * Return all object properties explicitely defined in this ontology (strict mode)
 	 * 
 	 * @return
 	 */
-	public abstract Vector<? extends OntologyObjectProperty> getObjectProperties();
+	public abstract List<? extends OntologyObjectProperty> getObjectProperties();
 
 	/**
 	 * Retrieve an ontology object from its URI, in the context of current ontology.<br>
