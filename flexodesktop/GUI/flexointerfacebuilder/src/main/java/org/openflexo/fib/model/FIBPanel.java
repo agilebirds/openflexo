@@ -52,6 +52,9 @@ public class FIBPanel extends FIBContainer {
 	private Font titleFont = null;
 	private int darkLevel = 0;
 
+	private boolean trackViewPortWidth = false;
+	private boolean trackViewPortHeight = false;
+
 	private boolean protectContent = false;
 
 	public static enum Parameters implements FIBModelAttribute {
@@ -71,7 +74,9 @@ public class FIBPanel extends FIBContainer {
 		borderRight,
 		titleFont,
 		darkLevel,
-		protectContent
+		protectContent,
+		trackViewPortWidth,
+		trackViewPortHeight;
 	}
 
 	public static enum Layout {
@@ -425,6 +430,30 @@ public class FIBPanel extends FIBContainer {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.darkLevel, darkLevel);
 		if (notification != null) {
 			this.darkLevel = darkLevel;
+			hasChanged(notification);
+		}
+	}
+
+	public boolean isTrackViewPortWidth() {
+		return trackViewPortWidth;
+	}
+
+	public void setTrackViewPortWidth(boolean trackViewPortWidth) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.trackViewPortWidth, trackViewPortWidth);
+		if (notification != null) {
+			this.trackViewPortWidth = trackViewPortWidth;
+			hasChanged(notification);
+		}
+	}
+
+	public boolean isTrackViewPortHeight() {
+		return trackViewPortHeight;
+	}
+
+	public void setTrackViewPortHeight(boolean trackViewPortHeight) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.trackViewPortHeight, trackViewPortHeight);
+		if (notification != null) {
+			this.trackViewPortHeight = trackViewPortHeight;
 			hasChanged(notification);
 		}
 	}
