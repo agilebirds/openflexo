@@ -178,15 +178,12 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 			@Override
 			public boolean getScrollableTracksViewportWidth() {
-				System.err.println(getPreferredSize());
-				return FIBPanelView.this.getComponent().isTrackViewPortWidth() && getParent() != null
-						&& getParent().getWidth() > getPreferredSize().width;
+				return FIBPanelView.this.getComponent().isTrackViewPortWidth();
 			}
 
 			@Override
 			public boolean getScrollableTracksViewportHeight() {
-				return FIBPanelView.this.getComponent().isTrackViewPortHeight() && getParent() != null
-						&& getParent().getHeight() > getPreferredSize().height;
+				return FIBPanelView.this.getComponent().isTrackViewPortHeight();
 			}
 
 		}
