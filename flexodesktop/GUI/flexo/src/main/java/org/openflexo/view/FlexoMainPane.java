@@ -91,6 +91,8 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
+	private boolean saveLayout = false;;
+
 	private static final int KNOB_SIZE = 5;
 	private static final int KNOB_SPACE = 2;
 	private static final int DIVIDER_SIZE = KNOB_SIZE + 2 * KNOB_SPACE;
@@ -167,9 +169,9 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setModuleView() with " + moduleView + " perspective " + moduleView.getPerspective());
 		}
+		saveLayout();
 		try {
 			if (this.moduleView != null) {
-				saveLayout();
 				this.moduleView.willHide();
 			}
 		} catch (RuntimeException e) {
@@ -345,7 +347,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 	}
 
 	private void saveLayout() {
-		if (controller.getCurrentPerspective() != null) {
+		if (saveLayout && controller.getCurrentPerspective() != null) {
 			getController().getControllerModel().setLayoutForPerspective(controller.getCurrentPerspective(), centerLayout.getModel());
 		}
 	}
@@ -360,6 +362,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			controller.getCurrentPerspective().setupDefaultLayout(layoutModel);
 		}
 		centerLayout.setModel(layoutModel);
+		saveLayout = true;
 		centerPanel.revalidate();
 	}
 
@@ -472,6 +475,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			if (evt.getPropertyName().equals(ControllerModel.CURRENT_PERPSECTIVE)) {
 				FlexoPerspective previous = (FlexoPerspective) evt.getOldValue();
 				FlexoPerspective next = (FlexoPerspective) evt.getNewValue();
+				saveLayout = false;
 				setModuleView(controller.moduleViewForObject(controller.getCurrentDisplayedObjectAsModuleView()));
 				updatePropertyChangeListener(previous, next);
 				updateLayoutForPerspective();
