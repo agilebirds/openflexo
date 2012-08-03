@@ -35,6 +35,7 @@ import org.openflexo.fib.editor.FIBGenericEditor;
 import org.openflexo.fib.editor.notifications.FocusedObjectChange;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
 import org.openflexo.fib.editor.view.container.FIBEditablePanelView;
+import org.openflexo.fib.editor.view.container.FIBEditableSplitPanelView;
 import org.openflexo.fib.editor.view.container.FIBEditableTabPanelView;
 import org.openflexo.fib.editor.view.container.FIBEditableTabView;
 import org.openflexo.fib.editor.view.widget.FIBEditableBrowserWidget;
@@ -73,6 +74,7 @@ import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
@@ -279,6 +281,8 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 				return new FIBEditablePanelView((FIBPanel) fibContainer, FIBEditorController.this);
 			} else if (fibContainer instanceof FIBTabPanel) {
 				return new FIBEditableTabPanelView((FIBTabPanel) fibContainer, FIBEditorController.this);
+			} else if (fibContainer instanceof FIBSplitPanel) {
+				return new FIBEditableSplitPanelView((FIBSplitPanel) fibContainer, FIBEditorController.this);
 			}
 			return null;
 		}

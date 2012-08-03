@@ -80,7 +80,7 @@ public class GraphicalElementAction extends EditionPatternObject {
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return getGraphicalElementPatternRole().getEditionPattern();
+		return (getGraphicalElementPatternRole() != null ? getGraphicalElementPatternRole().getEditionPattern() : null);
 	}
 
 	@Override

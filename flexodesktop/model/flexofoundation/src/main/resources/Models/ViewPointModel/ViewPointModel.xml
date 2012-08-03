@@ -363,6 +363,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.AddShape"
 		xmlTag="AddShape">
 		<property name="container" xmlTag="container" attribute="YES" />
+		<property name="extendParentBoundsToHostThisShape" xmlTag="extendParentBoundsToHostThisShape" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddConnector"
@@ -552,6 +553,7 @@
    	 <property name="maximalHeight" xmlTag="maximalHeight" attribute="YES"/>
      <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
      <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
+     <property name="lineWrap" xmlTag="lineWrap" attribute="YES"/>
   	 <property name="locationConstraints" xmlTag="locationConstraints" attribute="YES"/>
   	 <property name="dimensionConstraints" xmlTag="dimensionConstraints" attribute="YES"/>
    	 <property name="adjustMinimalWidthToLabelWidth" xmlTag="adjustMinimalWidthToLabelWidth" attribute="YES"/>
@@ -572,7 +574,6 @@
  	 <property name="shape" contains="org.openflexo.fge.shapes.Shape"/>
    	 <property name="shadowStyle" xmlTag="ShadowStyle"/>
      <property name="isFloatingLabel" xmlTag="isFloatingLabel" attribute="YES"/>
-     <property name="lineWrap" xmlTag="lineWrap" attribute="YES"/>
      <property name="allowToLeaveBounds" xmlTag="allowToLeaveBounds" attribute="YES"/>
  	 <property name="xConstraints" xmlTag="xConstraints" attribute="YES"/>
  	 <property name="yConstraints" xmlTag="yConstraints" attribute="YES"/>

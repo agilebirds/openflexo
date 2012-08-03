@@ -230,10 +230,12 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	private synchronized void updateDependingObjects() {
+
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
-		dependingObjects.refreshObserving(getController());
+		dependingObjects
+				.refreshObserving(getController() /*,getWidget().getName() != null && getWidget().getName().equals("InspectorPropertyTable")*/);
 	}
 
 	@Override
@@ -327,10 +329,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (getController() == null) {
 			return;
 		}
+		// logger.info("updateDependancies() for " + getWidget());
 		Iterator<FIBComponent> it = getWidget().getMayAltersIterator();
 		while (it.hasNext()) {
 			FIBComponent c = it.next();
-			logger.fine("###### Component " + getWidget() + ", has been updated, now update " + c);
+			// logger.info("###### Component " + getWidget() + ", has been updated, now update " + c);
 			FIBView v = getController().viewForComponent(c);
 			if (v != null) {
 				v.update();
@@ -338,6 +341,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				logger.warning("Cannot find FIBView for component " + c);
 			}
 		}
+		// logger.info("END updateDependancies() for " + getWidget());
 	}
 
 	@Override

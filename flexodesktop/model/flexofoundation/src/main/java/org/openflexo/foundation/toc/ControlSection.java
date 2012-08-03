@@ -8,7 +8,7 @@ public abstract class ControlSection extends TOCEntry {
 	// private String
 
 	public static enum ControlSectionBindingAttribute implements TOCBindingAttribute {
-		iteration, condition
+		iteration, condition, iterationCondition
 	}
 
 	public ControlSection(FlexoTOCBuilder builder) {

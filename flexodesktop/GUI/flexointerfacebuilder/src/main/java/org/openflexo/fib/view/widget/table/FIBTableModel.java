@@ -222,6 +222,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			// System.out.println("Row object "+evt.getSource()+" : propertyChange "+evt);
+			logger.info("table " + getTable().getName() + " propertyChange for " + rowObject + " source=" + evt.getSource() + " evt=" + evt);
 			updateRow();
 		}
 
@@ -244,6 +245,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	 * @see javax.swing.JTable#tableChanged(TableModelEvent)
 	 */
 	public void fireModelObjectHasChanged(List oldValues, List newValues) {
+		// logger.info("fireModelObjectHasChanged in " + getTable().getName() + " from " + oldValues + " to " + newValues);
 		fireTableChanged(new ModelObjectHasChanged(this, oldValues, newValues));
 	}
 

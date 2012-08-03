@@ -124,58 +124,111 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 		return super.isIncludedInPrimaryRepresentationRole();
 	}
 
-	public static GraphicalFeature<Double, ShapeGraphicalRepresentation<?>> POS_X_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation<?>>(
-			"x", ShapeGraphicalRepresentation.Parameters.x, Double.class) {
+	public static GraphicalFeature<Number, ShapeGraphicalRepresentation<?>> POS_X_FEATURE = new GraphicalFeature<Number, ShapeGraphicalRepresentation<?>>(
+			"x", ShapeGraphicalRepresentation.Parameters.x, Number.class) {
 		@Override
-		public Double retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+		public Number retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
 			return gr.getX();
 		}
 
 		@Override
-		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
-			gr.setX(value);
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Number value) {
+			gr.setX(value.doubleValue());
 		}
 	};
 
-	public static GraphicalFeature<Double, ShapeGraphicalRepresentation<?>> POS_Y_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation<?>>(
-			"y", ShapeGraphicalRepresentation.Parameters.y, Double.class) {
+	public static GraphicalFeature<Number, ShapeGraphicalRepresentation<?>> POS_Y_FEATURE = new GraphicalFeature<Number, ShapeGraphicalRepresentation<?>>(
+			"y", ShapeGraphicalRepresentation.Parameters.y, Number.class) {
 		@Override
-		public Double retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+		public Number retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
 			return gr.getY();
 		}
 
 		@Override
-		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
-			gr.setY(value);
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Number value) {
+			gr.setY(value.doubleValue());
 		}
 	};
 
-	public static GraphicalFeature<Double, ShapeGraphicalRepresentation<?>> WIDTH_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation<?>>(
-			"width", ShapeGraphicalRepresentation.Parameters.width, Double.class) {
+	public static GraphicalFeature<Number, ShapeGraphicalRepresentation<?>> WIDTH_FEATURE = new GraphicalFeature<Number, ShapeGraphicalRepresentation<?>>(
+			"width", ShapeGraphicalRepresentation.Parameters.width, Number.class) {
 		@Override
-		public Double retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+		public Number retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
 			return gr.getWidth();
 		}
 
 		@Override
-		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
-			gr.setWidth(value);
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Number value) {
+			gr.setWidth(value.doubleValue());
 		}
 	};
 
-	public static GraphicalFeature<Double, ShapeGraphicalRepresentation<?>> HEIGHT_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation<?>>(
-			"height", ShapeGraphicalRepresentation.Parameters.height, Double.class) {
+	public static GraphicalFeature<Number, ShapeGraphicalRepresentation<?>> HEIGHT_FEATURE = new GraphicalFeature<Number, ShapeGraphicalRepresentation<?>>(
+			"height", ShapeGraphicalRepresentation.Parameters.height, Number.class) {
 		@Override
-		public Double retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+		public Number retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
 			return gr.getHeight();
 		}
 
 		@Override
-		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
-			gr.setHeight(value);
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Number value) {
+			gr.setHeight(value.doubleValue());
 		}
 	};
 
-	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { POS_X_FEATURE, POS_Y_FEATURE, WIDTH_FEATURE, HEIGHT_FEATURE };
+	public static GraphicalFeature<Number, ShapeGraphicalRepresentation<?>> RELATIVE_TEXT_X_FEATURE = new GraphicalFeature<Number, ShapeGraphicalRepresentation<?>>(
+			"relativeTextX", ShapeGraphicalRepresentation.Parameters.x, Number.class) {
+		@Override
+		public Number retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+			return gr.getRelativeTextX();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Number value) {
+			gr.setRelativeTextX(value.doubleValue());
+		}
+	};
+
+	public static GraphicalFeature<Number, ShapeGraphicalRepresentation<?>> RELATIVE_TEXT_Y_FEATURE = new GraphicalFeature<Number, ShapeGraphicalRepresentation<?>>(
+			"relativeTextY", ShapeGraphicalRepresentation.Parameters.x, Number.class) {
+		@Override
+		public Number retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+			return gr.getRelativeTextY();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Number value) {
+			gr.setRelativeTextY(value.doubleValue());
+		}
+	};
+
+	public static GraphicalFeature<Number, ShapeGraphicalRepresentation<?>> ABSOLUTE_TEXT_X_FEATURE = new GraphicalFeature<Number, ShapeGraphicalRepresentation<?>>(
+			"absoluteTextX", ShapeGraphicalRepresentation.Parameters.x, Number.class) {
+		@Override
+		public Number retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+			return gr.getAbsoluteTextX();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Number value) {
+			gr.setAbsoluteTextX(value.doubleValue());
+		}
+	};
+
+	public static GraphicalFeature<Number, ShapeGraphicalRepresentation<?>> ABSOLUTE_TEXT_Y_FEATURE = new GraphicalFeature<Number, ShapeGraphicalRepresentation<?>>(
+			"absoluteTextY", ShapeGraphicalRepresentation.Parameters.x, Number.class) {
+		@Override
+		public Number retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+			return gr.getAbsoluteTextY();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Number value) {
+			gr.setAbsoluteTextY(value.doubleValue());
+		}
+	};
+
+	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { POS_X_FEATURE, POS_Y_FEATURE, WIDTH_FEATURE, HEIGHT_FEATURE,
+			RELATIVE_TEXT_X_FEATURE, RELATIVE_TEXT_Y_FEATURE, ABSOLUTE_TEXT_X_FEATURE, ABSOLUTE_TEXT_Y_FEATURE };
 
 }

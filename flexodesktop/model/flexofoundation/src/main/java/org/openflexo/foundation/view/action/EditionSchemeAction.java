@@ -344,6 +344,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		}
 
 		container.addToChilds(newShape);
+
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Added shape " + newShape + " under " + container);
 		}

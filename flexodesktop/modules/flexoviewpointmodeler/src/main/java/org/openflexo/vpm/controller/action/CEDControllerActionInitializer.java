@@ -61,7 +61,7 @@ public class CEDControllerActionInitializer extends ControllerActionInitializer 
 
 		// CalcDrawing edition
 		new CreateCalcDrawingShemaInitializer(this);
-		new DeleteCalcDrawingShemaInitializer(this);
+		new DeleteExampleDrawingInitializer(this);
 		new PushToPaletteInitializer(this);
 		new DeclareShapeInEditionPatternInitializer(this);
 		new DeclareConnectorInEditionPatternInitializer(this);

@@ -45,6 +45,9 @@ import java.util.Map;
 
 import javax.swing.UIManager;
 
+import org.openflexo.toolbox.StringUtils;
+import org.openflexo.xmlcode.XMLSerializable;
+
 /**
  * The MultiSplitLayout layout manager recursively arranges its components in row and column groups called "Splits". Elements of the layout
  * are separated by gaps called "Dividers". The overall layout is defined with a simple tree model whose nodes are instances of
@@ -1466,7 +1469,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Base class for the nodes that model a MultiSplitLayout.
 	 */
-	public static abstract class Node implements Serializable {
+	public static abstract class Node implements Serializable, XMLSerializable {
 		private Split parent = null;
 		private Rectangle bounds = new Rectangle();
 		private double weight = 0.0;
@@ -1638,6 +1641,11 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 
 		public Node previousVisibleSibling(boolean includeDivider) {
 			return visibleSiblingAtOffset(-1, includeDivider);
+		}
+
+		public abstract String getName();
+
+		public void setName(String name) {
 		}
 
 	}
@@ -1897,6 +1905,16 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 			}
 		}
 
+		public void addToChildren(Node child) {
+			children.add(child);
+			child.setParent(this);
+		}
+
+		public void removeFromChildren(Node child) {
+			child.setParent(null);
+			children.remove(child);
+		}
+
 		/**
 		 * Convenience method for setting the children of this Split node. The parent of each new child is set to this Split node, and the
 		 * parent of each old child (if any) is set to null. This method defensively copies the incoming array.
@@ -1938,7 +1956,11 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the name property.
 		 * @see #setName
 		 */
+		@Override
 		public String getName() {
+			if (StringUtils.isEmpty(name)) {
+				return getClass().getSimpleName();
+			}
 			return name;
 		}
 
@@ -1950,6 +1972,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @throws IllegalArgumentException
 		 *             if name is null
 		 */
+		@Override
 		public void setName(String name) {
 			if (name == null) {
 				throw new IllegalArgumentException("name is null");
@@ -2005,6 +2028,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the name property.
 		 * @see #setName
 		 */
+		@Override
 		public String getName() {
 			return name;
 		}
@@ -2017,6 +2041,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @throws IllegalArgumentException
 		 *             if name is null
 		 */
+		@Override
 		public void setName(String name) {
 			if (name == null) {
 				throw new IllegalArgumentException("name is null");
@@ -2042,6 +2067,12 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	 * Models a single vertical/horiztonal divider.
 	 */
 	public static class Divider extends Node {
+
+		@Override
+		public String getName() {
+			return "Divider";
+		}
+
 		/**
 		 * Convenience method, returns true if the Divider's parent is a Split row (a Split with isRowLayout() true), false otherwise. In
 		 * other words if this Divider's major axis is vertical, return true.

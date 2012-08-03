@@ -19,10 +19,16 @@
  */
 package org.openflexo.fge.controller;
 
+import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
+import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.controller.DrawingController.EditorTool;
@@ -42,12 +48,14 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 
 	public DrawPolygonToolController(DrawingController<?> controller, DrawShapeAction control) {
 		super(controller, control);
-		isBuildingPoints = true;
 	}
 
 	@Override
-	public FGEPolygon makeDefaultShape() {
-		return new FGEPolygon(Filling.NOT_FILLED, new FGEPoint(0, 0));
+	public FGEPolygon makeDefaultShape(MouseEvent e) {
+		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getController().getDrawingView());
+		FGEPoint newPoint = getController().getDrawingGraphicalRepresentation().convertRemoteViewCoordinatesToLocalNormalizedPoint(pt,
+				getController().getDrawingGraphicalRepresentation(), getController().getScale());
+		return new FGEPolygon(Filling.NOT_FILLED, newPoint, new FGEPoint(newPoint));
 	}
 
 	public FGEPolygon getPolygon() {
@@ -69,33 +77,51 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
-		logger.info("Handle mouseClicked()");
-		if (isBuildingPoints) {
-			FGEPoint newPoint = getPoint(e);
-			if (e.getClickCount() == 2 || e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
-				// System.out.println("Stopping point edition");
-				getShape().getPoints().lastElement().setX(newPoint.x);
-				getShape().getPoints().lastElement().setY(newPoint.y);
-				stopMouseEdition();
-			} else {
-				getShape().addToPoints(newPoint);
-			}
-			getCurrentEditedShapeGR().rebuildControlPoints();
-			geometryChanged();
+		logger.fine("Handle mouseClicked()");
+		// System.out.println("Mouse clicked");
+		if (!editionHasBeenStarted()) {
+			startMouseEdition(e);
 		} else {
-			// System.out.println("Done edited shape");
-			getController().setCurrentTool(EditorTool.SelectionTool);
+			// System.out.println("Edition started");
+			if (isBuildingPoints) {
+				FGEPoint newPoint = getPoint(e);
+				if (e.getClickCount() == 2 || e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
+					// System.out.println("Stopping point edition");
+					getShape().getPoints().lastElement().setX(newPoint.x);
+					getShape().getPoints().lastElement().setY(newPoint.y);
+					stopMouseEdition();
+					getController().setCurrentTool(EditorTool.SelectionTool);
+				} else {
+					// System.out.println("add point " + newPoint);
+					getShape().addToPoints(newPoint);
+				}
+				getCurrentEditedShapeGR().rebuildControlPoints();
+				geometryChanged();
+			} else {
+				// System.out.println("Done edited shape");
+				getController().setCurrentTool(EditorTool.SelectionTool);
+			}
 		}
 	}
 
-	private void stopMouseEdition() {
+	@Override
+	protected void startMouseEdition(MouseEvent e) {
+		super.startMouseEdition(e);
+		isBuildingPoints = true;
+	}
+
+	@Override
+	protected void stopMouseEdition() {
+		super.stopMouseEdition();
 		getShape().setIsFilled(true);
 		isBuildingPoints = false;
+		makeNewShape();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		super.mouseMoved(e);
+		// System.out.println("Shape=" + getShape());
 		if (isBuildingPoints && getShape().getPointsNb() > 0) {
 			FGEPoint newPoint = getPoint(e);
 			// logger.info("move last point to " + newPoint);
@@ -109,22 +135,29 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 	public ShapeGraphicalRepresentation<?> buildShapeGraphicalRepresentation() {
 		ShapeGraphicalRepresentation<?> returned = new ShapeGraphicalRepresentation<Object>(ShapeType.CUSTOM_POLYGON, null, getController()
 				.getDrawing());
-		returned.setBorder(new ShapeBorder(5, 5, 5, 5));
+		returned.setBorder(new ShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
+				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));
 		returned.setBackground(getController().getCurrentBackgroundStyle());
 		returned.setForeground(getController().getCurrentForegroundStyle());
 		returned.setTextStyle(getController().getCurrentTextStyle());
+		returned.setAllowToLeaveBounds(false);
 
 		FGERectangle boundingBox = getPolygon().getBoundingBox();
-		returned.setX(boundingBox.getX() - 5);
-		returned.setY(boundingBox.getY() - 5);
 		returned.setWidth(boundingBox.getWidth());
 		returned.setHeight(boundingBox.getHeight());
-		// System.out.println("Shape was: " + getPolygon());
-		// System.out.println("Bounding box is: " + boundingBox);
 		AffineTransform translateAT = AffineTransform.getTranslateInstance(-boundingBox.getX(), -boundingBox.getY());
+
 		AffineTransform scaleAT = AffineTransform.getScaleInstance(1 / boundingBox.getWidth(), 1 / boundingBox.getHeight());
 		FGEPolygon normalizedPolygon = getPolygon().transform(translateAT).transform(scaleAT);
-		// System.out.println("Shape is now: " + normalizedPolygon);
+		if (parentGR instanceof ShapeGraphicalRepresentation) {
+			FGEPoint pt = GraphicalRepresentation.convertNormalizedPoint(parentGR, new FGEPoint(0, 0), getController()
+					.getDrawingGraphicalRepresentation());
+			returned.setX(boundingBox.getX() - pt.x);
+			returned.setY(boundingBox.getY() - pt.y);
+		} else {
+			returned.setX(boundingBox.getX() - FGEConstants.DEFAULT_BORDER_SIZE);
+			returned.setY(boundingBox.getY() - FGEConstants.DEFAULT_BORDER_SIZE);
+		}
 		returned.setShape(new Polygon(returned, normalizedPolygon));
 		return returned;
 	}

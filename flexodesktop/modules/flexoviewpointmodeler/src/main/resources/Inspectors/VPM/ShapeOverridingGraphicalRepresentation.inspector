@@ -46,22 +46,22 @@
           <DropDown format="object.name.toLowerCase" localize="true" name="VTextAlignment" data="GRTab.data.verticalTextAlignment" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$VerticalTextAlignment" />
           <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
           <DropDown format="object.name.toLowerCase" localize="true" name="TextAlignment" data="GRTab.data.paragraphAlignment" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" />
-          <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(location=left;index=18;expandHorizontally=false;expandVertically=false)" />
-          <CheckBox selected="false" localize="true" name="IsFloating" data="GRTab.data.isFloatingLabel" constraints="twocols(location=right;index=19;expandHorizontally=false;expandVertically=false)" />
-          <Label label="floating_label" localize="true" name="LineWrapLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)"/>
-          <CheckBox selected="false" localize="true" name="LineWrap" data="GRTab.data.lineWrap" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)"/>
-          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextX" localize="true" />
-          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=24;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" />
-          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(location=right;index=25;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextY" localize="true" />
-          <Label label="relative_text_x" localize="true" name="RelativeTextXLabel" constraints="twocols(location=left;index=26;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" />
-          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextX" constraints="twocols(location=right;index=27;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextX" localize="true" />
-          <Label label="relative_text_y" localize="true" name="RelativeTextYLabel" constraints="twocols(location=left;index=28;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" />
-          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextY" constraints="twocols(location=right;index=29;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextY" localize="true" />
-          <CheckBox selected="false" localize="true" name="AdjustMinimalWidthToLabelWidth" data="GRTab.data.adjustMinimalWidthToLabelWidth" constraints="twocols(location=left;index=30;expandHorizontally=false;expandVertically=false)" />
-          <Label label="adjust_minimal_width_to_label_width" localize="true" name="AdjustMinimalWidthToLabelWidthLabel" constraints="twocols(location=right;index=31;expandHorizontally=false;expandVertically=false)" />
-          <CheckBox selected="false" localize="true" name="AdjustMinimalHeightToLabelHeight" data="GRTab.data.adjustMinimalHeightToLabelHeight" constraints="twocols(location=left;index=32;expandHorizontally=false;expandVertically=false)" />
-          <Label label="adjust_minimal_height_to_label_height" localize="true" name="AdjustMinimalHeightToLabelHeightLabel" constraints="twocols(location=right;index=33;expandHorizontally=false;expandVertically=false)" />
+          <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+          <CheckBox selected="false" localize="true" name="IsFloatingLabel" data="GRTab.data.isFloatingLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+          <Label label="line_wrap" localize="true" name="LineWrapLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)"/>
+          <CheckBox selected="false" localize="true" name="LineWrap" data="GRTab.data.lineWrap" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)"/>
+          <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = true)" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextX" localize="true" />
+          <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = true)" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="GRTab.data.absoluteTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = true)" name="AbsoluteTextY" localize="true" />
+          <Label label="relative_text_x" localize="true" name="RelativeTextXLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=26;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)" />
+          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=27;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextX" localize="true" />
+          <Label label="relative_text_y" localize="true" name="RelativeTextYLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=28;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isFloatingLabel = false)" />
+          <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="GRTab.data.relativeTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=29;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(GRTab.data.isFloatingLabel = false)" name="RelativeTextY" localize="true" />
+          <CheckBox selected="false" localize="true" name="AdjustMinimalWidthToLabelWidth" data="GRTab.data.adjustMinimalWidthToLabelWidth" constraints="twocols(expandHorizontally=false;expandVertically=false;index=30;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+          <Label label="adjust_minimal_width_to_label_width" localize="true" name="AdjustMinimalWidthToLabelWidthLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=31;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+          <CheckBox selected="false" localize="true" name="AdjustMinimalHeightToLabelHeight" data="GRTab.data.adjustMinimalHeightToLabelHeight" constraints="twocols(expandHorizontally=false;expandVertically=false;index=32;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+          <Label label="adjust_minimal_height_to_label_height" localize="true" name="AdjustMinimalHeightToLabelHeightLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=33;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
         </Tab>
         <Tab index="2" title="Location/Size" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="LocationSizeTab">
           <Label label="layer" localize="true" name="LayerLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
@@ -95,7 +95,9 @@
           </Panel>
           <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
           <CheckBox selected="false" localize="true" name="IsVisible" data="GRTab.data.isVisible" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" />
-        </Tab>
+          <Label label="may_leave_bounds" localize="true" name="AllowToLeaveBoundsLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" />
+          <CheckBox selected="false" localize="true" name="AllowToLeaveBounds" data="GRTab.data.allowToLeaveBounds" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" />
+         </Tab>
         <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
           <Label label="read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
           <CheckBox selected="false" localize="true" name="IsReadOnly" data="GRTab.data.isReadOnly" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
@@ -333,9 +335,9 @@
     <Localized key="absolute_text_y" lang="English">Absolute text Y</Localized>
     <Localized key="absolute_text_y" lang="French">texte y absolu</Localized>
     <Localized key="absolute_text_y" lang="Dutch">Absolute text Y</Localized>
-    <Localized key="relative_text_x" lang="English">Relative text y</Localized>
+    <Localized key="relative_text_x" lang="English">Relative text x</Localized>
     <Localized key="relative_text_x" lang="French">Text relatif à X</Localized>
-    <Localized key="relative_text_x" lang="Dutch">Relative text y</Localized>
+    <Localized key="relative_text_x" lang="Dutch">Relative text x</Localized>
     <Localized key="relative_text_y" lang="English">Relative text y</Localized>
     <Localized key="relative_text_y" lang="French">Text relatif à Y</Localized>
     <Localized key="relative_text_y" lang="Dutch">Relative text y</Localized>

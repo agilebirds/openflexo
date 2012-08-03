@@ -79,6 +79,10 @@
       </Panel>
       <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(location=left;index=20;expandVertically=false;expandHorizontally=false)" />
       <CheckBox selected="false" localize="true" name="IsVisible" data="data.isVisible" constraints="twocols(location=right;index=21;expandVertically=false;expandHorizontally=false)" />
+      <Label label="allows_to_leave_bounds" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
+      <CheckBox selected="true" localize="true" name="checkbox" data="data.allowToLeaveBounds" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+      <Label label="index" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
+      <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="3" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Integer" localize="true" />
     </Tab>
     <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" name="TextTab">
       <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(location=left;index=14;expandVertically=false;expandHorizontally=false)" />

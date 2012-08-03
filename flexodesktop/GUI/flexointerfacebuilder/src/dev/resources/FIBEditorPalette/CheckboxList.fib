@@ -1,5 +1,5 @@
 <CheckboxList name="CheckboxList" staticList="Item-1 ,Item-2 ,Item-3 " autoSelectFirstRow="true" font="LucidaGrande,0,11">
-	<Parameter name="x" value="280"/>
-	<Parameter name="y" value="10"/>
+	<Parameter name="x" value="400"/>
+	<Parameter name="y" value="78"/>
 	<Parameter name="isPaletteElement" value="true"/>
 </CheckboxList>

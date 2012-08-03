@@ -198,9 +198,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			logger.fine("Switch to tool " + aTool);
 			switch (aTool) {
 			case SelectionTool:
-				if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {
+				/*if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {
 					drawShapeToolController.makeNewShape();
-				}
+				}*/
 				break;
 			case DrawShapeTool:
 				// if (drawShapeAction != null) {

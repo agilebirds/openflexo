@@ -125,6 +125,8 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 		boolean returned = false;
 
+		// logger.info("----------> updateWidgetFromModel() for " + getTable().getName());
+
 		if (notEquals(getValue(), getTableModel().getValues())) {
 
 			returned = true;

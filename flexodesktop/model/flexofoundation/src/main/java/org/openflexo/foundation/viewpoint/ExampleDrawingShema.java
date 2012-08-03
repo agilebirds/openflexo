@@ -149,7 +149,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		if (getViewPoint() != null) {
 			getViewPoint().removeFromCalcShemas(this);
 		}
-		_drawingFile.delete();
+		_drawingFile.deleteOnExit();
 		super.delete();
 		deleteObservers();
 	}

@@ -201,7 +201,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return getScheme().getEditionPattern();
+		return (getScheme() != null ? getScheme().getEditionPattern() : null);
 	}
 
 	@Override

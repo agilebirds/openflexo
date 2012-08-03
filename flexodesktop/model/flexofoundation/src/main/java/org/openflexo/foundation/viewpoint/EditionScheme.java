@@ -203,7 +203,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	@Override
 	public void actionDown(EditionAction a) {
 		int index = actions.indexOf(a);
-		if (index > 0) {
+		if (index > -1) {
 			actions.remove(a);
 			actions.insertElementAt(a, index + 1);
 			setChanged();
@@ -252,18 +252,22 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	public void parameterUp(EditionSchemeParameter p) {
 		int index = parameters.indexOf(p);
-		parameters.remove(p);
-		parameters.insertElementAt(p, index - 1);
-		setChanged();
-		notifyObservers();
+		if (index > 0) {
+			parameters.remove(p);
+			parameters.insertElementAt(p, index - 1);
+			setChanged();
+			notifyObservers();
+		}
 	}
 
 	public void parameterDown(EditionSchemeParameter p) {
 		int index = parameters.indexOf(p);
-		parameters.remove(p);
-		parameters.insertElementAt(p, index + 1);
-		setChanged();
-		notifyObservers();
+		if (index > -1) {
+			parameters.remove(p);
+			parameters.insertElementAt(p, index + 1);
+			setChanged();
+			notifyObservers();
+		}
 	}
 
 	public void parameterLast(EditionSchemeParameter p) {

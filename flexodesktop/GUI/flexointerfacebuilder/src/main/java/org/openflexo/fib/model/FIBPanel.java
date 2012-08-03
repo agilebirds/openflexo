@@ -75,7 +75,7 @@ public class FIBPanel extends FIBContainer {
 	}
 
 	public static enum Layout {
-		none, flow, border, grid, box, twocols, gridbag
+		none, flow, border, grid, box, twocols, gridbag, split
 	}
 
 	public static enum FlowLayoutAlignment {

@@ -111,6 +111,8 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 			widgetUpdating = true;
 			if (getValue() != null) {
 				_editor.setDocument(getValue());
+			} else {
+				_editor.setDocument("");
 			}
 			widgetUpdating = false;
 			return true;

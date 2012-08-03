@@ -348,7 +348,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// System.out.println("**************> ViewElement " + this + " : receive notification " + o);
+		// System.out.println("**************> ViewElement " + this + " : receive notification " + arg + " observable=" + o);
 		update();
 	}
 

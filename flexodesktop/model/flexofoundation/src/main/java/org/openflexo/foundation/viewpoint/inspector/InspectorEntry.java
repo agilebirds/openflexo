@@ -142,6 +142,10 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 		return true;
 	}
 
+	public int getIndex() {
+		return getInspector().getEntries().indexOf(this);
+	}
+
 	@Override
 	public String getName() {
 		return name;

@@ -51,6 +51,9 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 
 	@Override
 	public void delete() {
+		if (isDeleted()) {
+			return;
+		}
 		subComponents.clear();
 		constraints.clear();
 		subComponents = null;
@@ -84,6 +87,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	protected abstract void retrieveContainedJComponentsAndConstraints();
 
 	protected void addJComponent(JComponent c) {
+		// logger.info("addJComponent constraints=" + c);
 		Object constraint = constraints.get(c);
 		logger.fine(getComponent() + ": addJComponent " + c + " constraint=" + constraint);
 		if (constraint == null) {

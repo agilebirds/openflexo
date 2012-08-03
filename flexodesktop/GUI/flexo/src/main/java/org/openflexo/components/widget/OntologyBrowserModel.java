@@ -478,6 +478,8 @@ public class OntologyBrowserModel {
 
 	private void computeHierarchicalStructure() {
 
+		System.out.println("computeHierarchicalStructure()");
+
 		logger.fine("computeHierarchicalStructure()");
 
 		if (roots != null) {
@@ -637,8 +639,9 @@ public class OntologyBrowserModel {
 		for (OntologyClass c : i.getTypes()) {
 			if (c.isNamedClass() && !c.isThing()) {
 				OntologyClass returned = getContext().getClass(c.getURI());
-				if (returned != null)
+				if (returned != null) {
 					return returned;
+				}
 			}
 		}
 		return getContext().getThingConcept();
@@ -741,25 +744,60 @@ public class OntologyBrowserModel {
 	}
 
 	private void appendParentClassesToStorageClasses(List<OntologyClass> someClasses) {
+		// System.out.println("appendParentClassesToStorageClasses with " + someClasses);
+
+		// First compute the list of all top-level classes
+		List<OntologyClass> topLevelClasses = new ArrayList<OntologyClass>();
+		for (OntologyClass c : someClasses) {
+			boolean requireAddInTopClasses = true;
+			List<OntologyClass> classesToRemove = new ArrayList<OntologyClass>();
+			for (OntologyClass tpC : topLevelClasses) {
+				if (tpC.isSuperClassOf(c)) {
+					requireAddInTopClasses = false;
+				}
+				if (c.isSuperClassOf(tpC)) {
+					classesToRemove.add(tpC);
+				}
+			}
+			if (requireAddInTopClasses) {
+				topLevelClasses.add(c);
+				for (OntologyClass c2r : classesToRemove) {
+					topLevelClasses.remove(c2r);
+				}
+			}
+		}
+
+		List<OntologyClass> classesToAdd = new ArrayList<OntologyClass>();
 		if (someClasses.size() > 1) {
-			for (int i = 0; i < someClasses.size(); i++) {
-				for (int j = i + 1; j < someClasses.size(); j++) {
-					OntologyClass c1 = someClasses.get(i);
-					OntologyClass c2 = someClasses.get(j);
+			for (int i = 0; i < topLevelClasses.size(); i++) {
+				for (int j = i + 1; j < topLevelClasses.size(); j++) {
+					// System.out.println("i=" + i + " j=" + j + " someClasses.size()=" + someClasses.size());
+					// System.out.println("i=" + i + " j=" + j + " someClasses.size()=" + someClasses.size() + " someClasses=" +
+					// someClasses);
+					OntologyClass c1 = topLevelClasses.get(i);
+					OntologyClass c2 = topLevelClasses.get(j);
 					OntologyClass ancestor = OntologyUtils.getFirstCommonAncestor(c1, c2);
-					if (ancestor != null) {
+					// System.out.println("Ancestor of " + c1 + " and " + c2 + " is " + ancestor);
+					if (ancestor != null /*&& !ancestor.isThing()*/) {
 						OntologyClass ancestorSeenFromContextOntology = getContext().getClass(ancestor.getURI());
 						if (ancestorSeenFromContextOntology != null) {
-							if (!someClasses.contains(ancestorSeenFromContextOntology)) {
-								/*System.out.println("Add parent " + ancestorSeenFromContextOntology + " because of c1=" + c1.getName()
-									+ " and c2=" + c2.getName());*/
-								someClasses.add(ancestorSeenFromContextOntology);
-								appendParentClassesToStorageClasses(someClasses);
-								return;
+							if (!someClasses.contains(ancestorSeenFromContextOntology)
+									&& !classesToAdd.contains(ancestorSeenFromContextOntology)) {
+								classesToAdd.add(ancestorSeenFromContextOntology);
+								// System.out.println("Add parent " + ancestorSeenFromContextOntology + " because of c1=" + c1.getName()
+								// + " and c2=" + c2.getName());
 							}
 						}
 					}
 				}
+			}
+			if (classesToAdd.size() > 0) {
+				for (OntologyClass c : classesToAdd) {
+					someClasses.add(c);
+				}
+
+				// Do it again whenever there are classes to add
+				appendParentClassesToStorageClasses(someClasses);
 			}
 		}
 	}

@@ -225,7 +225,12 @@ public class DiagramPerspective extends FlexoPerspective {
 	}
 
 	public void removeFromControllers(VEShemaController shemaController) {
-		_controllers.remove(shemaController.getDrawing().getShema());
+		if (shemaController != null) {
+			if (shemaController.getDrawing() != null && shemaController.getDrawing().getShema() != null) {
+				_controllers.remove(shemaController.getDrawing().getShema());
+			}
+			_rightPanels.remove(shemaController);
+		}
 	}
 
 	public String getWindowTitleforObject(FlexoModelObject object) {

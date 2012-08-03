@@ -19,26 +19,42 @@
  */
 package org.openflexo.vpm.controller.action;
 
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.action.DeleteExampleDrawing;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
-public class DeleteCalcDrawingShemaInitializer extends ActionInitializer {
+public class DeleteExampleDrawingInitializer extends ActionInitializer<DeleteExampleDrawing, ExampleDrawingShema, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteCalcDrawingShemaInitializer(CEDControllerActionInitializer actionInitializer) {
+	DeleteExampleDrawingInitializer(CEDControllerActionInitializer actionInitializer) {
 		super(DeleteExampleDrawing.actionType, actionInitializer);
 	}
 
 	@Override
 	protected CEDControllerActionInitializer getControllerActionInitializer() {
 		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<DeleteExampleDrawing> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeleteExampleDrawing>() {
+			@Override
+			public boolean run(EventObject e, DeleteExampleDrawing action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_example_diagram"));
+			}
+		};
 	}
 
 	@Override

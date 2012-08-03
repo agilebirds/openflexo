@@ -74,6 +74,7 @@ public class JXMultiSplitPane extends JPanel {
 		addMouseMotionListener(inputHandler);
 		addKeyListener(inputHandler);
 		setFocusable(true);
+		setOpaque(false);
 	}
 
 	/**

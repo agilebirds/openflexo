@@ -23,8 +23,6 @@ import org.openflexo.foundation.ontology.owl.OWLProperty;
 import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.owl.PropertyStatement;
 
-import com.hp.hpl.jena.rdf.model.Literal;
-
 public abstract class ObjectPropertyStatementPathElement<T> extends StatementPathElement<T> {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyStatementPathElement.class.getPackage().getName());
 
@@ -241,12 +239,12 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		public ObjectPropertyStatementAccessingLiteralPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty) {
 			super(aParent, anOntologyProperty);
 
-			asStringProperty = new SimpleBindingPathElementImpl<String>("asString", Object.class, String.class, true,
+			asStringProperty = new SimpleBindingPathElementImpl<String>(PropertyStatement.AS_STRING, Object.class, String.class, true,
 					"string_value_for_literal") {
 				@Override
 				public String getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getString();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getStringValue();
 					} else if (target instanceof String) {
 						return (String) target;
 					} else {
@@ -257,16 +255,22 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(String value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						System.out.println("sets value [" + value + "] for " + ((PropertyStatement) target).getProperty());
+						((PropertyStatement) target).setStringValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
+
 			};
 			allProperties.add(asStringProperty);
-			asBooleanProperty = new SimpleBindingPathElementImpl<Boolean>("asBoolean", Object.class, Boolean.class, true,
+			asBooleanProperty = new SimpleBindingPathElementImpl<Boolean>(PropertyStatement.AS_BOOLEAN, Object.class, Boolean.class, true,
 					"boolean_value_for_literal") {
 				@Override
 				public Boolean getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getBoolean();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getBooleanValue();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -275,16 +279,20 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(Boolean value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						((PropertyStatement) target).setBooleanValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
 			};
 			allProperties.add(asBooleanProperty);
-			asIntegerProperty = new SimpleBindingPathElementImpl<Integer>("asInteger", Object.class, Integer.class, true,
+			asIntegerProperty = new SimpleBindingPathElementImpl<Integer>(PropertyStatement.AS_INTEGER, Object.class, Integer.class, true,
 					"int_value_for_literal") {
 				@Override
 				public Integer getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getInt();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getIntegerValue();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -293,15 +301,20 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(Integer value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						((PropertyStatement) target).setIntegerValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
 			};
 			allProperties.add(asIntegerProperty);
-			asByteProperty = new SimpleBindingPathElementImpl<Byte>("asByte", Object.class, Byte.class, true, "byte_value_for_literal") {
+			asByteProperty = new SimpleBindingPathElementImpl<Byte>(PropertyStatement.AS_BYTE, Object.class, Byte.class, true,
+					"byte_value_for_literal") {
 				@Override
 				public Byte getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getByte();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getByteValue();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -310,15 +323,20 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(Byte value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						((PropertyStatement) target).setByteValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
 			};
 			allProperties.add(asByteProperty);
-			asShortProperty = new SimpleBindingPathElementImpl<Short>("asShort", Object.class, Short.class, true, "short_value_for_literal") {
+			asShortProperty = new SimpleBindingPathElementImpl<Short>(PropertyStatement.AS_SHORT, Object.class, Short.class, true,
+					"short_value_for_literal") {
 				@Override
 				public Short getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getShort();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getShortValue();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -327,15 +345,20 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(Short value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						((PropertyStatement) target).setShortValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
 			};
 			allProperties.add(asShortProperty);
-			asLongProperty = new SimpleBindingPathElementImpl<Long>("asLong", Object.class, Long.class, true, "long_value_for_literal") {
+			asLongProperty = new SimpleBindingPathElementImpl<Long>(PropertyStatement.AS_LONG, Object.class, Long.class, true,
+					"long_value_for_literal") {
 				@Override
 				public Long getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getLong();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getLongValue();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -344,16 +367,20 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(Long value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						((PropertyStatement) target).setLongValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
 			};
 			allProperties.add(asLongProperty);
-			asCharProperty = new SimpleBindingPathElementImpl<Character>("asChar", Object.class, Character.class, true,
-					"char_value_for_literal") {
+			asCharProperty = new SimpleBindingPathElementImpl<Character>(PropertyStatement.AS_CHARACTER, Object.class, Character.class,
+					true, "char_value_for_literal") {
 				@Override
 				public Character getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getChar();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getCharacterValue();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -362,15 +389,20 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(Character value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						((PropertyStatement) target).setCharacterValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
 			};
 			allProperties.add(asCharProperty);
-			asFloatProperty = new SimpleBindingPathElementImpl<Float>("asFloat", Object.class, Float.class, true, "float_value_for_literal") {
+			asFloatProperty = new SimpleBindingPathElementImpl<Float>(PropertyStatement.AS_FLOAT, Object.class, Float.class, true,
+					"float_value_for_literal") {
 				@Override
 				public Float getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getFloat();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getFloatValue();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -379,16 +411,20 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(Float value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						((PropertyStatement) target).setFloatValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
 			};
 			allProperties.add(asFloatProperty);
-			asDoubleProperty = new SimpleBindingPathElementImpl<Double>("asDouble", Object.class, Double.class, true,
+			asDoubleProperty = new SimpleBindingPathElementImpl<Double>(PropertyStatement.AS_DOUBLE, Object.class, Double.class, true,
 					"string_value_for_literal") {
 				@Override
 				public Double getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof Literal) {
-						return ((Literal) target).getDouble();
+					if (target instanceof PropertyStatement) {
+						return ((PropertyStatement) target).getDoubleValue();
 					} else {
 						logger.warning("Unexpected: " + target);
 						return null;
@@ -397,7 +433,11 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 				@Override
 				public void setBindingValue(Double value, Object target, BindingEvaluationContext context) {
-					logger.warning("not implemented");
+					if (target instanceof PropertyStatement) {
+						((PropertyStatement) target).setDoubleValue(value);
+					} else {
+						logger.warning("Unexpected: " + target);
+					}
 				}
 			};
 			allProperties.add(asDoubleProperty);
@@ -410,9 +450,10 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public Object getBindingValue(Object target, BindingEvaluationContext context) {
-			if (target instanceof OntologyObject) {
-				OntologyObject object = (OntologyObject) target;
-				return object.getPropertyValue(getOntologyProperty());
+			if (target instanceof OWLObject<?>) {
+				OWLObject<?> object = (OWLObject<?>) target;
+				System.out.println("Return statement " + object.getPropertyStatement(getOntologyProperty()));
+				return object.getPropertyStatement(getOntologyProperty());
 			} else {
 				logger.warning("Unexpected target " + target + " while evaluateBinding()");
 				return null;

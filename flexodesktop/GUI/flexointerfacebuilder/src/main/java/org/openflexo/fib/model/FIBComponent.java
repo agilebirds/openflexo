@@ -241,73 +241,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public ComponentConstraints getConstraints() {
 		constraints = _normalizeConstraintsWhenRequired(constraints);
 		return constraints;
-
-		// logger.info("getConstraints() for "+getName());
-		/*if (getParent() instanceof FIBPanel) {
-			// Init to default value when relevant but null
-			if (constraints == null) {
-				switch (((FIBPanel)getParent()).getLayout()) {
-				case none:
-					constraints = new NoneLayoutConstraints();
-					break;
-				case flow:
-					constraints = new FlowLayoutConstraints();
-					break;
-				case grid:
-					constraints = new GridLayoutConstraints();
-					break;
-				case box:
-					constraints = new BoxLayoutConstraints();
-					break;
-				case border:
-					constraints = new BorderLayoutConstraints();
-					break;
-				case twocols:
-					constraints = new TwoColsLayoutConstraints();
-					break;
-				case gridbag:
-					constraints = new GridBagLayoutConstraints();
-					break;
-
-				default:
-					constraints = new NoneLayoutConstraints();
-					break;
-				}
-				constraints.setComponent(this);
-			}
-			// Mutate to right type when necessary
-			switch (((FIBPanel)getParent()).getLayout()) {
-			case none:
-				if (!(constraints instanceof NoneLayoutConstraints)) constraints = new NoneLayoutConstraints(constraints);
-				break;
-			case flow:
-				if (!(constraints instanceof FlowLayoutConstraints)) constraints = new FlowLayoutConstraints(constraints);
-				break;
-			case grid:
-				if (!(constraints instanceof GridLayoutConstraints)) constraints = new GridLayoutConstraints(constraints);
-				break;
-			case box:
-				if (!(constraints instanceof BoxLayoutConstraints)) constraints = new BoxLayoutConstraints(constraints);
-				break;
-			case border:
-				if (!(constraints instanceof BorderLayoutConstraints)) constraints = new BorderLayoutConstraints(constraints);
-				break;
-			case twocols:
-				if (!(constraints instanceof TwoColsLayoutConstraints)) constraints = new TwoColsLayoutConstraints(constraints);
-				break;
-			case gridbag:
-				if (!(constraints instanceof GridBagLayoutConstraints)) constraints = new GridBagLayoutConstraints(constraints);
-				break;
-			default:
-				break;
-			}
-			//logger.info("Return "+constraints);
-			return constraints;
-		}
-		else {
-			// No constraints for a component which container is not custom layouted
-			return null;
-		}*/
 	}
 
 	public void setConstraints(ComponentConstraints someConstraints) {
@@ -322,7 +255,20 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	private ComponentConstraints _normalizeConstraintsWhenRequired(ComponentConstraints someConstraints) {
-		if (getParent() instanceof FIBPanel) {
+		if (getParent() instanceof FIBSplitPanel) {
+			if (someConstraints == null) {
+				System.out.println("Je construit un nouveau SplitLayoutConstraints");
+				SplitLayoutConstraints returned = new SplitLayoutConstraints(((FIBSplitPanel) getParent()).getFirstEmptyPlaceHolder());
+				returned.setComponent(this);
+				return returned;
+			}
+			if (!(someConstraints instanceof SplitLayoutConstraints)) {
+				System.out.println("constraints=" + someConstraints);
+				return new SplitLayoutConstraints(someConstraints);
+			}
+			someConstraints.setComponent(this);
+			return someConstraints;
+		} else if (getParent() instanceof FIBPanel) {
 			// Init to default value when relevant but null
 			if (someConstraints == null) {
 				ComponentConstraints returned;

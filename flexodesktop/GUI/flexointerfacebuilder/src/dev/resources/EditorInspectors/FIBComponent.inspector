@@ -183,6 +183,11 @@
   			     </Panel>
  		       </Panel>
 
+				<Panel name="SplitLayoutConstraints" border="titled" borderTitle="split_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='split'"> 
+					<Label label="identifier" constraints="twocols(location=left)"/>
+					<TextField data="SplitLayoutConstraints.data.splitIdentifier" constraints="twocols(location=right)"/>
+				</Panel>
+
 				<Panel name="ScrollBarPolicy" border="titled" borderTitle="scroll_bar_policy" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)"> 
 					<CheckBox data="data.useScrollBar" constraints="twocols(location=left)" />
 					<Label label="use_scrollbar" constraints="twocols(location=right)" />

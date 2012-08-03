@@ -211,6 +211,11 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		} else {
 			logger.warning("Inconsistant data: shape has not been created");
 		}
+
+		if (action.getExtendParentBoundsToHostThisShape()) {
+			((ShapeGraphicalRepresentation<?>) newShape.getGraphicalRepresentation()).extendParentBoundsToHostThisShape();
+		}
+
 		return newShape;
 	}
 

@@ -20,6 +20,7 @@
 
 package org.openflexo.foundation.toc.action;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Vector;
@@ -30,6 +31,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.FlexoEditor;
@@ -83,10 +85,6 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		}
 
 	};
-
-	AddTOCEntry(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
-		super(actionType, focusedObject, globalSelection, editor);
-	}
 
 	public static enum KindOfTocEntry {
 		NormalSection {
@@ -143,9 +141,52 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 	public OperationComponentDefinition selectedOperationComponent;
 	public ERDiagram selectedERDiagram;
 
-	public String iteratorName = "item";
+	private String iteratorName = "item";
+
+	private TOCDataBinding value;
+
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+		@Override
+		public Type getType() {
+			return getModelObjectType().getType();
+		};
+	};
+
+	private TOCDataBinding condition;
+
+	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, false);
+
+	private TOCDataBinding iteration;
+
+	private Type LIST_BINDING_TYPE = new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(Object.class));;
+
+	private BindingDefinition ITERATION = new BindingDefinition("iteration", LIST_BINDING_TYPE, BindingDefinitionType.GET, false);
+
+	private TOCDataBinding iterationCondition;
+
+	private BindingDefinition ITERATION_CONDITION = new BindingDefinition("iterationCondition", Boolean.class, BindingDefinitionType.GET,
+			false);
+
+	private ConditionalOwner conditionalOwner;
+
+	public class ConditionalOwner implements Bindable {
+		@Override
+		public BindingFactory getBindingFactory() {
+			return AddTOCEntry.this.getBindingFactory();
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getInferedBindingModel();
+		}
+	}
 
 	private ProcessSection.ProcessDocSectionSubType processDocSectionSubType = ProcessSection.ProcessDocSectionSubType.Doc;
+
+	AddTOCEntry(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+		conditionalOwner = new ConditionalOwner();
+	}
 
 	public TOCRepository getRepository() {
 		return ((TOCEntry) getFocusedObject()).getRepository();
@@ -198,7 +239,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		case IterationSection:
 			newEntry = getRepository().createIterationSection(
 					StringUtils.isNotEmpty(getTocEntryTitle()) ? getTocEntryTitle() : iteratorName + ":" + getIteration().toString(),
-					iteratorName, getIteration(), getCondition());
+					iteratorName, getIteration(), getIterationCondition());
 			break;
 
 		default:
@@ -258,15 +299,6 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		return newEntry;
 	}
 
-	private TOCDataBinding value;
-
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
-		@Override
-		public Type getType() {
-			return getModelObjectType().getType();
-		};
-	};
-
 	public BindingDefinition getValueBindingDefinition() {
 		return VALUE;
 	}
@@ -286,10 +318,6 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		}
 		this.value = value;
 	}
-
-	private TOCDataBinding condition;
-
-	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, false);
 
 	public BindingDefinition getConditionBindingDefinition() {
 		return CONDITION;
@@ -312,11 +340,14 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		}
 	}
 
-	private TOCDataBinding iteration;
+	public String getIteratorName() {
+		return iteratorName;
+	}
 
-	private Type LIST_BINDING_TYPE = new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(Object.class));;
-
-	private BindingDefinition ITERATION = new BindingDefinition("iteration", LIST_BINDING_TYPE, BindingDefinitionType.GET, false);
+	public void setIteratorName(String iteratorName) {
+		this.iteratorName = iteratorName;
+		inferedBindingModel = null;
+	}
 
 	public BindingDefinition getIterationBindingDefinition() {
 		return ITERATION;
@@ -339,6 +370,32 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		this.iteration = iteration;
 	}
 
+	public BindingDefinition getIterationConditionBindingDefinition() {
+		return ITERATION_CONDITION;
+	}
+
+	public TOCDataBinding getIterationCondition() {
+		if (iterationCondition == null && getFocusedObject() instanceof TOCEntry) {
+			iterationCondition = new TOCDataBinding(((TOCEntry) getFocusedObject()), ControlSectionBindingAttribute.condition,
+					getIterationConditionBindingDefinition());
+		}
+		return iterationCondition;
+	}
+
+	public void setIterationCondition(TOCDataBinding iterationCondition) {
+		if (iterationCondition != null && getFocusedObject() instanceof TOCEntry) {
+			iterationCondition.setOwner(((TOCEntry) getFocusedObject()));
+			iterationCondition.setBindingAttribute(ControlSectionBindingAttribute.iterationCondition);
+			iterationCondition.setBindingDefinition(getIterationConditionBindingDefinition());
+			this.iterationCondition = iterationCondition;
+			inferedBindingModel = null;
+		}
+	}
+
+	public ConditionalOwner getConditionalOwner() {
+		return conditionalOwner;
+	}
+
 	@Override
 	public BindingModel getBindingModel() {
 		if (getFocusedObject() instanceof TOCEntry) {
@@ -353,6 +410,36 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 			return ((TOCEntry) getFocusedObject()).getBindingFactory();
 		}
 		return null;
+	}
+
+	private BindingModel inferedBindingModel = null;
+
+	protected BindingModel getInferedBindingModel() {
+		if (inferedBindingModel == null && getFocusedObject() instanceof TOCEntry) {
+			inferedBindingModel = new BindingModel(getBindingModel());
+			inferedBindingModel.addToBindingVariables(new BindingVariableImpl(this, iteratorName, getItemType()) {
+				@Override
+				public Type getType() {
+					return getItemType();
+				}
+
+				@Override
+				public String getVariableName() {
+					return iteratorName;
+				}
+			});
+		}
+		return inferedBindingModel;
+	}
+
+	public Type getItemType() {
+		if (getIteration() != null && getIteration().hasBinding()) {
+			Type accessedType = getIteration().getBinding().getAccessedType();
+			if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
+				return ((ParameterizedType) accessedType).getActualTypeArguments()[0];
+			}
+		}
+		return Object.class;
 	}
 
 }
