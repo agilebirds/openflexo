@@ -19,10 +19,15 @@
  */
 package org.openflexo.view;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
+
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
@@ -40,7 +45,7 @@ import org.openflexo.view.controller.FlexoController;
  * 
  */
 public abstract class FIBModuleView<O extends FlexoModelObject> extends SelectionSynchronizedFIBView<O> implements
-		SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver, FIBSelectionListener {
+		SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver, FIBSelectionListener, Scrollable {
 	static final Logger logger = Logger.getLogger(FIBModuleView.class.getPackage().getName());
 
 	// private O representedObject;
@@ -109,4 +114,44 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 	public O getRepresentedObject() {
 		return getDataObject();
 	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return getPreferredSize();
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		switch (orientation) {
+		case SwingConstants.VERTICAL:
+			return visibleRect.height / 10;
+		case SwingConstants.HORIZONTAL:
+			return visibleRect.width / 10;
+		default:
+			throw new IllegalArgumentException("Invalid orientation: " + orientation);
+		}
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		switch (orientation) {
+		case SwingConstants.VERTICAL:
+			return visibleRect.height;
+		case SwingConstants.HORIZONTAL:
+			return visibleRect.width;
+		default:
+			throw new IllegalArgumentException("Invalid orientation: " + orientation);
+		}
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return true;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return true;
+	}
+
 }

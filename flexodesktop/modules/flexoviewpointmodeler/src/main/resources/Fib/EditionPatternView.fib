@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="SansSerif,0,11" name="main">
-  <Panel layout="border" borderTitle="Panel" borderTop="2" borderBottom="5" borderLeft="10" borderRight="13" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=north;padX=0;padY=0;weightX=1.0;weightY=0.0)" width="200" height="150">
-    <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderTop="2" borderBottom="3" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)">
-      <Label label="edition_pattern" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="SansSerif,1,13" localize="true" />
-      <TextField columns="6" text="TextField" data="data.name" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="SansSerif,0,13" localize="true" />
-      <Button action="data.save()" buttonType="Trigger" label="save" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=east;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-      <Image imageFile="../../../../../../GUI/flexointerfacebuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" data="controller.iconForObject(data).image" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-      <Label label="parent" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-      <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" data="data.parentEditionPattern" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-        <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
-        <Assignment variable="component.project" />
-        <Assignment variable="component.selectableCondition" />
-        <Assignment variable="component.viewPoint" value="data.viewPoint" />
+<Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="SansSerif,0,11" name="main">
+  <SplitPanel constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+    <ColSplit name="ColSplit" weight="0.0">
+      <RowSplit name="RowSplit" weight="0.20000000298023224">
+        <Leaf name="title" weight="0.5" />
+        <Divider />
+        <Leaf name="preview" weight="0.5" />
+      </RowSplit>
+      <Divider />
+      <Leaf name="declarations" weight="0.30000001192092896" />
+      <Divider />
+      <Leaf name="details" weight="0.5" />
+    </ColSplit>
+    <Panel layout="border" borderTitle="Panel" borderTop="2" borderBottom="5" borderLeft="10" borderRight="13" titleFont="SansSerif,0,11" darkLevel="0" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=north;padX=0;padY=0;splitIdentifier=title;weightX=1.0;weightY=0.0)">
+      <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderTop="2" borderBottom="3" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)">
+        <Label label="edition_pattern" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="SansSerif,1,13" localize="true" />
+        <TextField columns="6" text="TextField" data="data.name" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="SansSerif,0,13" localize="true" />
+        <Button action="data.save()" buttonType="Trigger" label="save" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=east;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+        <Image imageFile="../../../../../../GUI/flexointerfacebuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" data="controller.iconForObject(data).image" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+        <Label label="parent" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+        <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" data="data.parentEditionPattern" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+          <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
+          <Assignment variable="component.project" />
+          <Assignment variable="component.selectableCondition" />
+          <Assignment variable="component.viewPoint" value="data.viewPoint" />
+        </Custom>
+      </Panel>
+      <TextArea validateOnReturn="true" columns="6" rows="5" text="TextArea" data="data.description" constraints="border(index=1;location=center)" localize="true" />
+      <LocalizedDictionary />
+    </Panel>
+    <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;splitIdentifier=preview;weightX=1.0;weightY=0.0)">
+      <Custom componentClassName="org.openflexo.vpm.view.widget.EditionPatternPreviewComponent" data="data" constraints="border(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.selectionManager" value="controller.selectionManager" />
       </Custom>
     </Panel>
-    <TextArea validateOnReturn="true" columns="6" rows="5" text="TextArea" data="data.description" constraints="border(index=1;location=center)" localize="true" />
-    <LocalizedDictionary />
-  </Panel>
-  <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" width="200" height="150">
-    <Custom componentClassName="org.openflexo.vpm.view.widget.EditionPatternPreviewComponent" data="data" constraints="border(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-      <Assignment variable="component.selectionManager" value="controller.selectionManager" />
-    </Custom>
-  </Panel>
-  <Panel layout="border" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" width="80" height="60">
-    <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Roles" borderTop="0" borderBottom="5" borderRight="4" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)">
+    <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Roles" borderTop="0" borderBottom="5" borderRight="4" titleFont="SansSerif,0,11" darkLevel="0" constraints="split(index=0;location=north;splitIdentifier=declarations)">
       <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" visibleRowCount="7" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="PatternRoleTable" data="data.patternRoles" constraints="gridbag(anchor=west;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=10;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0;x=0;y=0)">
         <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
         <TextFieldColumn data="iterator.patternRoleName" title="pattern_role" columnWidth="100" resizable="true" displayTitle="true" />
@@ -352,7 +363,7 @@
         </Tab>
       </TabPanel>
     </Panel>
-    <TabPanel name="MainTabPanel" constraints="border(index=1;location=center)">
+    <TabPanel name="MainTabPanel" constraints="split(index=1;location=center;splitIdentifier=details)">
       <Tab title="edition_schemes" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="border(index=1;location=center)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionSchemeTab">
         <Panel layout="border" borderTitle="Panel" borderTop="9" borderBottom="15" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" constraints="border(index=0;location=north)">
           <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionScheme" visibleRowCount="6" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="EditionSchemeTable" data="data.editionSchemes" constraints="border(index=0;location=west)">
@@ -1347,7 +1358,7 @@
         </Panel>
       </Tab>
     </TabPanel>
-  </Panel>
+  </SplitPanel>
   <LocalizedDictionary>
     <Localized key="type" lang="English">Type</Localized>
     <Localized key="label" lang="English">Label</Localized>
