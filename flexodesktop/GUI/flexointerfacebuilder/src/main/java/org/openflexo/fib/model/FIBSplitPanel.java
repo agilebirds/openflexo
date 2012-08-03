@@ -54,7 +54,10 @@ public class FIBSplitPanel extends FIBContainer {
 	}
 
 	public String getFirstEmptyPlaceHolder() {
-		return "prout";
+		if (getAllLeaves().size() > 0) {
+			return getAllLeaves().get(0).getName();
+		}
+		return "leaf";
 	}
 
 	public Split getSplit() {

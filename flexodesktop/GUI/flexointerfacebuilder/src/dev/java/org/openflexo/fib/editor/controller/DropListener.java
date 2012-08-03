@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.fib.editor.controller.PaletteElement.PaletteElementDrag;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
 import org.openflexo.logging.FlexoLogger;
 
@@ -43,19 +42,16 @@ import org.openflexo.logging.FlexoLogger;
  * @see java.awt.dnd.DropTargetListener
  * @see java.awt.dnd.DropTarget
  */
-public class PaletteDropListener implements DropTargetListener {
+public class DropListener implements DropTargetListener {
 
-	static final Logger logger = FlexoLogger.getLogger(PaletteDropListener.class.getPackage().getName());
+	static final Logger logger = FlexoLogger.getLogger(DropListener.class.getPackage().getName());
 
-	private final FIBEditorPalette _fibEditorPalette;
-	private int acceptableActions = DnDConstants.ACTION_COPY;
+	private int acceptableActions = DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE;
 	private JComponent _dropContainer;
 	private FIBEditorController _controller;
 
-	public PaletteDropListener(FIBEditorPalette fibEditorPalette,
-			JComponent dropContainer, FIBEditorController controller) {
+	public DropListener(JComponent dropContainer, FIBEditorController controller) {
 		super();
-		_fibEditorPalette = fibEditorPalette;
 		_dropContainer = dropContainer;
 		_controller = controller;
 	}
@@ -69,7 +65,7 @@ public class PaletteDropListener implements DropTargetListener {
 	 */
 	private boolean isDragFlavorSupported(DropTargetDragEvent e) {
 		boolean ok = false;
-		if (e.isDataFlavorSupported(PaletteElementDrag.defaultFlavor())) {
+		if (e.isDataFlavorSupported(ElementDrag.defaultFlavor())) {
 			ok = true;
 		}
 		return ok;
@@ -83,9 +79,8 @@ public class PaletteDropListener implements DropTargetListener {
 	 * @return the chosen DataFlavor or null if none match
 	 */
 	private DataFlavor chooseDropFlavor(DropTargetDropEvent e) {
-		if (e.isLocalTransfer() == true
-				&& e.isDataFlavorSupported(PaletteElementDrag.defaultFlavor())) {
-			return PaletteElementDrag.defaultFlavor();
+		if (e.isLocalTransfer() == true && e.isDataFlavorSupported(ElementDrag.defaultFlavor())) {
+			return ElementDrag.defaultFlavor();
 		}
 		return null;
 	}
@@ -108,8 +103,7 @@ public class PaletteDropListener implements DropTargetListener {
 			return false;
 
 		try {
-			PaletteElement element = (PaletteElement) e.getTransferable()
-					.getTransferData(PaletteElementDrag.defaultFlavor());
+			FIBDraggable element = (FIBDraggable) e.getTransferable().getTransferData(ElementDrag.defaultFlavor());
 			if (element == null)
 				return false;
 			Object source = e.getSource();
@@ -133,16 +127,15 @@ public class PaletteDropListener implements DropTargetListener {
 	}
 
 	/**
-	 * start "drag under" feedback on component invoke acceptDrag or rejectDrag
-	 * based on isDragOk
+	 * start "drag under" feedback on component invoke acceptDrag or rejectDrag based on isDragOk
 	 * 
 	 * @param e
 	 */
+	@Override
 	public void dragEnter(DropTargetDragEvent e) {
 		if (e.getSource() instanceof FIBDropTarget) {
 			FIBDropTarget dt = (FIBDropTarget) e.getSource();
-			PaletteElementDrag drag = (PaletteElementDrag) _fibEditorPalette.getDragSourceContext()
-					.getTransferable();
+			ElementDrag<?> drag = (ElementDrag<?>) _controller.getDragSourceContext().getTransferable();
 			drag.setController(dt.getFIBEditorController());
 			drag.enterComponent(dt.getFIBComponent(), dt.getPlaceHolder(), e.getLocation());
 		}
@@ -154,11 +147,11 @@ public class PaletteDropListener implements DropTargetListener {
 	}
 
 	/**
-	 * continue "drag under" feedback on component invoke acceptDrag or
-	 * rejectDrag based on isDragOk
+	 * continue "drag under" feedback on component invoke acceptDrag or rejectDrag based on isDragOk
 	 * 
 	 * @param e
 	 */
+	@Override
 	public void dragOver(DropTargetDragEvent e) {
 		/*
 		 * if (isDragFlavorSupported(e))
@@ -166,22 +159,23 @@ public class PaletteDropListener implements DropTargetListener {
 		 * (e,_controller.getDrawingView().getActivePalette().getPaletteView());
 		 */
 		if (!isDragOk(e)) {
-			if (_fibEditorPalette.getDragSourceContext() == null) {
+			if (_controller.getDragSourceContext() == null) {
 				logger.warning("dragSourceContext should NOT be null ");
 			} else {
-				_fibEditorPalette.getDragSourceContext().setCursor(FIBEditorPalette.dropKO);
+				_controller.getDragSourceContext().setCursor(FIBEditorPalette.dropKO);
 			}
 			e.rejectDrag();
 			return;
 		}
-		if (_fibEditorPalette.getDragSourceContext() == null) {
+		if (_controller.getDragSourceContext() == null) {
 			logger.warning("dragSourceContext should NOT be null");
 		} else {
-			_fibEditorPalette.getDragSourceContext().setCursor(FIBEditorPalette.dropOK);
+			_controller.getDragSourceContext().setCursor(FIBEditorPalette.dropOK);
 		}
 		e.acceptDrag(e.getDropAction());
 	}
 
+	@Override
 	public void dropActionChanged(DropTargetDragEvent e) {
 		if (!isDragOk(e)) {
 			e.rejectDrag();
@@ -190,11 +184,11 @@ public class PaletteDropListener implements DropTargetListener {
 		e.acceptDrag(e.getDropAction());
 	}
 
+	@Override
 	public void dragExit(DropTargetEvent e) {
 		if (e.getSource() instanceof FIBDropTarget) {
 			FIBDropTarget dt = (FIBDropTarget) e.getSource();
-			PaletteElementDrag drag = (PaletteElementDrag) _fibEditorPalette.getDragSourceContext()
-					.getTransferable();
+			ElementDrag<?> drag = (ElementDrag<?>) _controller.getDragSourceContext().getTransferable();
 			// System.out.println("dragExit() from "+dt+" focused="+drag.getCurrentlyFocusedComponent()+
 			// " isPlaceHolder="+dt.isPlaceHolder());
 			drag.exitComponent(dt.getFIBComponent(), dt.getPlaceHolder());
@@ -204,14 +198,13 @@ public class PaletteDropListener implements DropTargetListener {
 	}
 
 	/**
-	 * perform action from getSourceActions on the transferrable invoke
-	 * acceptDrop or rejectDrop invoke dropComplete if its a local (same JVM)
-	 * transfer, use StringTransferable.localStringFlavor find a match for the
-	 * flavor check the operation get the transferable according to the chosen
-	 * flavor do the transfer
+	 * perform action from getSourceActions on the transferrable invoke acceptDrop or rejectDrop invoke dropComplete if its a local (same
+	 * JVM) transfer, use StringTransferable.localStringFlavor find a match for the flavor check the operation get the transferable
+	 * according to the chosen flavor do the transfer
 	 * 
 	 * @param e
 	 */
+	@Override
 	public void drop(DropTargetDropEvent e) {
 		try {
 			DataFlavor chosen = chooseDropFlavor(e);
@@ -241,24 +234,23 @@ public class PaletteDropListener implements DropTargetListener {
 
 				data = e.getTransferable().getTransferData(chosen);
 				if (logger.isLoggable(Level.FINE))
-					logger.fine("data is a "
-							+ data.getClass().getName());
+					logger.fine("data is a " + data.getClass().getName());
 				if (data == null)
 					throw new NullPointerException();
 			} catch (Throwable t) {
 				if (logger.isLoggable(Level.WARNING))
-					logger
-							.warning("Couldn't get transfer data: "
-									+ t.getMessage());
+					logger.warning("Couldn't get transfer data: " + t.getMessage());
 				t.printStackTrace();
 				e.dropComplete(false);
 				return;
 			}
 
-			if (data instanceof PaletteElement) {
+			System.out.println("Ma donnee c'est: " + data);
+
+			if (data instanceof FIBDraggable) {
 
 				try {
-					PaletteElement element = (PaletteElement) data;
+					FIBDraggable element = (FIBDraggable) data;
 					if (element == null) {
 						e.rejectDrop();
 						return;
@@ -266,8 +258,7 @@ public class PaletteDropListener implements DropTargetListener {
 					Object source = e.getSource();
 
 					// OK, let's got for the drop
-					if (source instanceof FIBDropTarget
-							&& element.acceptDragging((FIBDropTarget) source)) {
+					if (source instanceof FIBDropTarget && element.acceptDragging((FIBDropTarget) source)) {
 						Point pt = e.getLocation();
 						if (element.elementDragged((FIBDropTarget) source, pt)) {
 							e.acceptDrop(acceptableActions);

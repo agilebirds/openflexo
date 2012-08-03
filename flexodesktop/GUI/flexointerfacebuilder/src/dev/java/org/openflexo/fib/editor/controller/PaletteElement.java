@@ -23,9 +23,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
@@ -36,20 +33,17 @@ import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
-import java.io.IOException;
 import java.util.Hashtable;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
-import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.model.ComponentConstraints;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
@@ -60,7 +54,7 @@ import org.openflexo.fib.view.FIBView;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.Cloner;
 
-public class PaletteElement {
+public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 	static final Logger logger = FlexoLogger.getLogger(PaletteElement.class.getPackage().getName());
 
 	private final FIBEditorPalette _palette;
@@ -73,6 +67,8 @@ public class PaletteElement {
 	private DragSourceListener dsListener;
 	private int dragAction = DnDConstants.ACTION_COPY;
 	private Hashtable<JComponent, DragGestureRecognizer> dgr;
+
+	// private static final DataFlavor DATA_FLAVOR = new DataFlavor(PaletteElement.class, "PaletteElement");
 
 	public PaletteElement(FIBComponent modelComponent, FIBComponent representationComponent, FIBEditorPalette palette) {
 		this.modelComponent = modelComponent;
@@ -133,25 +129,53 @@ public class PaletteElement {
 		return view;
 	}
 
-	protected void enableDragging() {
+	@Override
+	public void enableDragging() {
 		for (JComponent j : dgr.keySet()) {
 			dgr.get(j).setComponent(j);
 		}
 	}
 
-	protected void disableDragging() {
+	@Override
+	public void disableDragging() {
 		for (JComponent j : dgr.keySet()) {
 			dgr.get(j).setComponent(null);
 		}
 	}
 
-	protected boolean acceptDragging(FIBDropTarget target) {
+	@Override
+	public boolean acceptDragging(FIBDropTarget target) {
 		logger.fine("acceptDragging ? for component: " + target.getFIBComponent() + " place holder: " + target.getPlaceHolder());
 		return true;
 	}
 
+	/*@Override
+	public DataFlavor[] getTransferDataFlavors() {
+		return new DataFlavor[] { DATA_FLAVOR };
+	}
+
+	@Override
+	public boolean isDataFlavorSupported(DataFlavor flavor) {
+		return true;
+	}
+
+	@Override
+	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+		return this;
+	}*/
+
+	@Override
 	public boolean elementDragged(FIBDropTarget target, Point pt) {
 		logger.info("Element dragged with component: " + target.getFIBComponent() + " place holder: " + target.getPlaceHolder());
+
+		if (target.getPlaceHolder() == null) {
+			boolean deleteIt = JOptionPane.showConfirmDialog(_palette.getEditorController().getEditor().getFrame(),
+					target.getFIBComponent() + ": really delete this component (undoable operation) ?", "information",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE) == JOptionPane.YES_OPTION;
+			if (!deleteIt) {
+				return false;
+			}
+		}
 
 		FIBComponent newComponent = (FIBComponent) Cloner.cloneObjectWithMapping(modelComponent, FIBLibrary.getFIBMapping());
 		newComponent.setLocalizedDictionary(null);
@@ -269,8 +293,9 @@ public class PaletteElement {
 			 * acceptDrop
 			 */
 			// this is the action selected by the drop target
-			if (e.getDropAction() == DnDConstants.ACTION_MOVE)
-				PaletteElement.this._palette.setName("");
+			if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
+				System.out.println("Coucou, que se passe-t-il par ici ?");
+			}
 
 		}
 
@@ -299,7 +324,7 @@ public class PaletteElement {
 		@Override
 		public void dragOver(DragSourceDragEvent e) {
 			// interface
-			_palette.setDragSourceContext(e.getDragSourceContext());
+			_palette.getEditorController().setDragSourceContext(e.getDragSourceContext());
 			DragSourceContext context = e.getDragSourceContext();
 			// System.out.println("dragOver() with "+context+" component="+e.getSource());
 		}
@@ -328,158 +353,6 @@ public class PaletteElement {
 			DragSourceContext context = e.getDragSourceContext();
 			context.setCursor(DragSource.DefaultCopyNoDrop);
 		}
-	}
-
-	public static class PaletteElementDrag implements Transferable {
-		private FIBEditorController _controller;
-		private static DataFlavor _defaultFlavor;
-
-		private PaletteElement _transferedData;
-
-		private Vector<FIBComponent> focusedComponentPath;
-
-		public PaletteElementDrag(PaletteElement element, Point dragOrigin) {
-			_transferedData = element;
-			focusedComponentPath = new Vector<FIBComponent>();
-		}
-
-		public void reset() {
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("Resetting drag");
-			int end = focusedComponentPath.size();
-			for (int i = 0; i < end; i++) {
-				FIBComponent c2 = focusedComponentPath.remove(focusedComponentPath.size() - 1);
-				FIBView v = getController().viewForComponent(c2);
-				if (v instanceof FIBEditableView) {
-					((FIBEditableView) v).getDelegate().setPlaceHoldersAreVisible(false);
-					((FIBEditableView) v).getDelegate().setFocused(false);
-				}
-			}
-		}
-
-		public FIBComponent getCurrentlyFocusedComponent() {
-			if (focusedComponentPath.size() > 0)
-				return focusedComponentPath.lastElement();
-			return null;
-		}
-
-		public void enterComponent(FIBComponent c, PlaceHolder ph, Point location) {
-			if (getController() == null)
-				return;
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("Drag enter in component " + c + " ph=" + ph);
-			Vector<FIBComponent> appendingPath = new Vector<FIBComponent>();
-			FIBComponent current = c;
-			while (current != null && !focusedComponentPath.contains(current)) {
-				appendingPath.insertElementAt(current, 0);
-				current = current.getParent();
-			}
-			for (FIBComponent c2 : appendingPath) {
-				focusedComponentPath.add(c2);
-				FIBView v = getController().viewForComponent(c2);
-				if (v instanceof FIBEditableView) {
-					((FIBEditableView) v).getDelegate().setPlaceHoldersAreVisible(true);
-
-					/* Some explanations required here
-					 * What may happen is that making place holders visible will
-					 * place current cursor location inside a newly displayed place
-					 * holder, and cause a subsequent exitComponent() event to the
-					 * current component, and then a big blinking. We test here that
-					 * case and ignore following exitComponent()
-					 * SGU/ I'm not sure this behaviour is platform independant
-					 * please check...
-					 * 
-					 */
-					if (ph == null && ((FIBEditableView<?, ?>) v).getPlaceHolders() != null) {
-						for (PlaceHolder ph2 : ((FIBEditableView<?, ?>) v).getPlaceHolders()) {
-							if (ph2.getBounds().contains(location)) {
-								temporaryDisable = true;
-							}
-						}
-					}
-				}
-			}
-
-			if (ph != null)
-				ph.setFocused(true);
-			else {
-				FIBView v = getController().viewForComponent(c);
-				if (v instanceof FIBEditableView) {
-					((FIBEditableView) v).getDelegate().setFocused(true);
-				}
-			}
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("focusedComponentPath=" + focusedComponentPath);
-		}
-
-		private boolean temporaryDisable = false;
-
-		public void exitComponent(FIBComponent c, PlaceHolder ph) {
-			if (getController() == null)
-				return;
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("Drag exit from component " + c + " ph=" + ph);
-			if (temporaryDisable) {
-				temporaryDisable = false;
-				return;
-			}
-			if (focusedComponentPath.contains(c)) {
-				int index = focusedComponentPath.indexOf(c);
-				int end = focusedComponentPath.size();
-				for (int i = index; i < end; i++) {
-					FIBComponent c2 = focusedComponentPath.remove(focusedComponentPath.size() - 1);
-					FIBView v = getController().viewForComponent(c2);
-					if (v instanceof FIBEditableView) {
-						((FIBEditableView) v).getDelegate().setPlaceHoldersAreVisible(false);
-						((FIBEditableView) v).getDelegate().setFocused(false);
-					}
-				}
-			} else {
-				// Weird....
-			}
-			if (ph != null)
-				ph.setFocused(false);
-			else {
-				FIBView v = getController().viewForComponent(c);
-				if (v instanceof FIBEditableView) {
-					((FIBEditableView) v).getDelegate().setFocused(false);
-				}
-			}
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("focusedComponentPath=" + focusedComponentPath);
-		}
-
-		@Override
-		public DataFlavor[] getTransferDataFlavors() {
-			return new DataFlavor[] { defaultFlavor() };
-		}
-
-		@Override
-		public boolean isDataFlavorSupported(DataFlavor flavor) {
-			return true;
-		}
-
-		@Override
-		public PaletteElement getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-			return _transferedData;
-		}
-
-		public static DataFlavor defaultFlavor() {
-			if (_defaultFlavor == null) {
-				_defaultFlavor = new DataFlavor(PaletteElementDrag.class, "PaletteElement");
-			}
-			return _defaultFlavor;
-		}
-
-		public FIBEditorController getController() {
-			return _controller;
-		}
-
-		public void setController(FIBEditorController controller) {
-			// System.out.println("Setting controller");
-			_controller = controller;
-		}
-
 	}
 
 }

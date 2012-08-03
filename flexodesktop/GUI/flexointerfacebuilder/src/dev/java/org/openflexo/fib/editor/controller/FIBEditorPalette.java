@@ -25,12 +25,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.dnd.DragSource;
-import java.awt.dnd.DragSourceContext;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -59,9 +57,7 @@ public class FIBEditorPalette extends JDialog {
 
 	private final JPanel paletteContent;
 
-	// public FIBEditorController controller;
-
-	private DragSourceContext dragSourceContext;
+	private FIBEditorController editorController;
 
 	public FIBEditorPalette(JFrame frame) {
 		super(frame, "Palette", false);
@@ -116,16 +112,12 @@ public class FIBEditorPalette extends JDialog {
 		return el;
 	}
 
-	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, FIBEditorController controller) {
-		return new PaletteDropListener(this, dropContainer, controller);
+	public FIBEditorController getEditorController() {
+		return editorController;
 	}
 
-	public DragSourceContext getDragSourceContext() {
-		return dragSourceContext;
-	}
-
-	public void setDragSourceContext(DragSourceContext dragSourceContext) {
-		this.dragSourceContext = dragSourceContext;
+	public void setEditorController(FIBEditorController editorController) {
+		this.editorController = editorController;
 	}
 
 }

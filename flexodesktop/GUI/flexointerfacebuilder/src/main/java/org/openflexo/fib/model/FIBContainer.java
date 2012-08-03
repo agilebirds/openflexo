@@ -110,6 +110,11 @@ public abstract class FIBContainer extends FIBComponent {
 		subComponents.remove(aComponent);
 	}
 
+	public void notifyComponentMoved(FIBComponent aComponent) {
+		setChanged();
+		notifyObservers(new FIBAttributeNotification<FIBComponent>(Parameters.subComponents, aComponent));
+	}
+
 	@Override
 	public Enumeration<FIBComponent> children() {
 		return getSubComponents().elements();

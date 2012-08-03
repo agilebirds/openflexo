@@ -74,6 +74,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public void delete() {
+
+		logger.info("@@@@@@@@@ Delete view for component " + getComponent());
+
 		if (isDeleted) {
 			return;
 		}

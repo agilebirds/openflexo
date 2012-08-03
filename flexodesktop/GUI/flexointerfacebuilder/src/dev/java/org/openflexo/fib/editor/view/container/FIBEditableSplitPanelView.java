@@ -87,6 +87,7 @@ public class FIBEditableSplitPanelView extends FIBSplitPanelView implements FIBE
 			PlaceHolder newPlaceHolder = new PlaceHolder(this, "<" + n.getName() + ">") {
 				@Override
 				public void insertComponent(FIBComponent newComponent) {
+					System.out.println("getComponent=" + FIBEditableSplitPanelView.this.getComponent());
 					FIBEditableSplitPanelView.this.getComponent().addToSubComponents(newComponent, splitLayoutConstraints);
 				}
 			};

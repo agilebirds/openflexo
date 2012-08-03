@@ -23,6 +23,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceContext;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
 import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -31,6 +40,7 @@ import java.awt.event.MouseListener;
 import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -39,7 +49,11 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.controller.DraggedFIBComponent;
+import org.openflexo.fib.editor.controller.ElementDrag;
+import org.openflexo.fib.editor.controller.ExistingElementDrag;
 import org.openflexo.fib.editor.controller.FIBEditorController;
+import org.openflexo.fib.editor.controller.FIBEditorPalette;
 import org.openflexo.fib.editor.notifications.FIBEditorNotification;
 import org.openflexo.fib.editor.notifications.FocusedObjectChange;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
@@ -70,6 +84,11 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 
 	private FIBEditableView<M, J> view;
 
+	private DragSource dragSource;
+	private MoveDGListener dgListener;
+	private MoveDSListener dsListener;
+	private int dragAction = DnDConstants.ACTION_MOVE;
+
 	public FIBEditableViewDelegate(FIBEditableView<M, J> view) {
 		this.view = view;
 
@@ -89,6 +108,13 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 				new FIBDropTarget(ph);
 			}
 		}
+
+		dragSource = DragSource.getDefaultDragSource();
+		dsListener = new MoveDSListener();
+		dgListener = new MoveDGListener();
+
+		DragGestureRecognizer newDGR = dragSource.createDefaultDragGestureRecognizer(view.getDynamicJComponent(), dragAction, dgListener);
+
 	}
 
 	public void delete() {
@@ -275,20 +301,30 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	}
 
 	public void receivedModelNotifications(Observable o, FIBModelNotification dataModification) {
-		// System.out.println("receivedModelNotifications o="+o+" dataModification="+dataModification);
+		System.out.println("receivedModelNotifications o=" + o + " dataModification=" + dataModification);
 
-		if (o instanceof FIBPanel && view instanceof FIBPanelView) {
+		if (o instanceof FIBContainer && view instanceof FIBContainerView) {
 			if (dataModification instanceof FIBAddingNotification) {
 				if (((FIBAddingNotification) dataModification).getAddedValue() instanceof FIBComponent) {
 					// addSubComponent((FIBComponent)((FIBAddingNotification)dataModification).getAddedValue());
-					((FIBPanelView) view).updateLayout();
+					((FIBContainerView) view).updateLayout();
 				}
 			} else if (dataModification instanceof FIBRemovingNotification) {
 				if (((FIBRemovingNotification) dataModification).getRemovedValue() instanceof FIBComponent) {
 					// addSubComponent((FIBComponent)((FIBAddingNotification)dataModification).getAddedValue());
-					((FIBPanelView) view).updateLayout();
+					((FIBContainerView) view).updateLayout();
 				}
 			} else if (dataModification instanceof FIBAttributeNotification) {
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBContainer.Parameters.subComponents) {
+					System.out.println("Hop, je refais le layout");
+					((FIBContainerView) view).updateLayout();
+				}
+			}
+		}
+
+		if (o instanceof FIBPanel && view instanceof FIBPanelView) {
+			if (dataModification instanceof FIBAttributeNotification) {
 				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
 				if (n.getAttribute() == FIBPanel.Parameters.border || n.getAttribute() == FIBPanel.Parameters.borderColor
 						|| n.getAttribute() == FIBPanel.Parameters.borderTitle || n.getAttribute() == FIBPanel.Parameters.borderTop
@@ -327,14 +363,14 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 			}
 		}
 
-		if (o instanceof FIBContainer) {
-			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-				if (n.getAttribute() == FIBContainer.Parameters.subComponents && view instanceof FIBContainerView) {
-					((FIBContainerView) view).updateLayout();
+		/*	if (o instanceof FIBContainer) {
+				if (dataModification instanceof FIBAttributeNotification) {
+					FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+					if (n.getAttribute() == FIBContainer.Parameters.subComponents && view instanceof FIBContainerView) {
+						((FIBContainerView) view).updateLayout();
+					}
 				}
-			}
-		}
+			}*/
 
 		if (o instanceof FIBComponent) {
 			if (dataModification instanceof FIBAttributeNotification) {
@@ -372,14 +408,14 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		private PlaceHolder placeHolder = null;
 
 		public FIBDropTarget(FIBEditableView editableView) {
-			super(editableView.getJComponent(), DnDConstants.ACTION_COPY, editableView.getEditorController().getPalette()
+			super(editableView.getJComponent(), DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE, editableView.getEditorController()
 					.buildPaletteDropListener(editableView.getJComponent(), editableView.getEditorController()), true);
 			this.editableView = editableView;
 			logger.fine("Made FIBDropTarget for " + getFIBComponent());
 		}
 
 		public FIBDropTarget(PlaceHolder placeHolder) {
-			super(placeHolder, DnDConstants.ACTION_COPY, placeHolder.getView().getEditorController().getPalette()
+			super(placeHolder, DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE, placeHolder.getView().getEditorController()
 					.buildPaletteDropListener(placeHolder, placeHolder.getView().getEditorController()), true);
 			this.placeHolder = placeHolder;
 			this.editableView = placeHolder.getView();
@@ -403,4 +439,140 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		}
 
 	}
+
+	/**
+	 * DGListener a listener that will start the drag. has access to top level's dsListener and dragSource
+	 * 
+	 * @see java.awt.dnd.DragGestureListener
+	 * @see java.awt.dnd.DragSource
+	 * @see java.awt.datatransfer.StringSelection
+	 */
+	class MoveDGListener implements DragGestureListener {
+		/**
+		 * Start the drag if the operation is ok. uses java.awt.datatransfer.StringSelection to transfer the label's data
+		 * 
+		 * @param e
+		 *            the event object
+		 */
+		@Override
+		public void dragGestureRecognized(DragGestureEvent e) {
+			logger.fine("dragGestureRecognized");
+
+			// if the action is ok we go ahead
+			// otherwise we punt
+			if ((e.getDragAction() & dragAction) == 0)
+				return;
+			// get the label's text and put it inside a Transferable
+			// Transferable transferable = new StringSelection(
+			// DragLabel.this.getText() );
+
+			ExistingElementDrag transferable = new ExistingElementDrag(new DraggedFIBComponent(view.getComponent()), e.getDragOrigin());
+
+			try {
+				// initial cursor, transferrable, dsource listener
+				e.startDrag(FIBEditorPalette.dropKO, transferable, dsListener);
+				logger.info("Starting existing element drag for " + view.getComponent());
+				// getDrawingView().captureDraggedNode(PaletteElementView.this, e);
+			} catch (Exception idoe) {
+				idoe.printStackTrace();
+				logger.warning("Unexpected exception " + idoe);
+			}
+		}
+
+	}
+
+	/**
+	 * DSListener a listener that will track the state of the DnD operation
+	 * 
+	 * @see java.awt.dnd.DragSourceListener
+	 * @see java.awt.dnd.DragSource
+	 * @see java.awt.datatransfer.StringSelection
+	 */
+	public class MoveDSListener implements DragSourceListener {
+
+		/**
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dragDropEnd(DragSourceDropEvent e) {
+
+			System.out.println("dragDropEnd in MoveDSListener");
+
+			if (e.getDragSourceContext().getTransferable() instanceof ElementDrag)
+				((ElementDrag) e.getDragSourceContext().getTransferable()).reset();
+
+			// getDrawingView().resetCapturedNode();
+			if (e.getDropSuccess() == false) {
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Dropping was not successful");
+				return;
+			}
+			/*
+			 * the dropAction should be what the drop target specified in
+			 * acceptDrop
+			 */
+			// this is the action selected by the drop target
+			if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
+				System.out.println("Tiens, que se passe-t-il donc ?");
+			}
+
+		}
+
+		/**
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dragEnter(DragSourceDragEvent e) {
+			DragSourceContext context = e.getDragSourceContext();
+			// System.out.println("dragEnter() with "+context+" component="+e.getSource());
+			// intersection of the users selected action, and the source and
+			// target actions
+			int myaction = e.getDropAction();
+			if ((myaction & dragAction) != 0) {
+				context.setCursor(DragSource.DefaultCopyDrop);
+			} else {
+				context.setCursor(DragSource.DefaultCopyNoDrop);
+			}
+		}
+
+		/**
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dragOver(DragSourceDragEvent e) {
+			// interface
+			getEditorController().setDragSourceContext(e.getDragSourceContext());
+			DragSourceContext context = e.getDragSourceContext();
+			// System.out.println("dragOver() with "+context+" component="+e.getSource());
+		}
+
+		/**
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dragExit(DragSourceEvent e) {
+			DragSourceContext context = e.getDragSourceContext();
+			// System.out.println("dragExit() with "+context+" component="+e.getSource());
+			// interface
+			if (e.getDragSourceContext().getTransferable() instanceof ElementDrag)
+				((ElementDrag) e.getDragSourceContext().getTransferable()).reset();
+		}
+
+		/**
+		 * for example, press shift during drag to change to a link action
+		 * 
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dropActionChanged(DragSourceDragEvent e) {
+			DragSourceContext context = e.getDragSourceContext();
+			context.setCursor(DragSource.DefaultCopyNoDrop);
+		}
+	}
+
 }
