@@ -113,7 +113,10 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}
 
 	public SelectionManager getSelectionManager() {
-		return getFlexoController().getSelectionManager();
+		if (getFlexoController() != null) {
+			return getFlexoController().getSelectionManager();
+		}
+		return null;
 	}
 
 	@Override
