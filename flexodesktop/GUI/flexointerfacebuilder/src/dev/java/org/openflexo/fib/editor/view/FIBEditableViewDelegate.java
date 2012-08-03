@@ -57,6 +57,7 @@ import org.openflexo.fib.editor.controller.FIBEditorPalette;
 import org.openflexo.fib.editor.notifications.FIBEditorNotification;
 import org.openflexo.fib.editor.notifications.FocusedObjectChange;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
+import org.openflexo.fib.editor.view.container.FIBEditableSplitPanelView;
 import org.openflexo.fib.model.FIBAddingNotification;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBComponent;
@@ -113,7 +114,10 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		dsListener = new MoveDSListener();
 		dgListener = new MoveDGListener();
 
-		DragGestureRecognizer newDGR = dragSource.createDefaultDragGestureRecognizer(view.getDynamicJComponent(), dragAction, dgListener);
+		if (!(view instanceof FIBEditableSplitPanelView)) {
+			DragGestureRecognizer newDGR = dragSource.createDefaultDragGestureRecognizer(view.getDynamicJComponent(), dragAction,
+					dgListener);
+		}
 
 	}
 
