@@ -149,7 +149,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 			newURI = newName;
 		}
 		logger.info("Rename object " + getURI() + " to " + newURI);
-		R returned = (ResourceUtils.renameResource(resource, newURI).as(resourceClass));
+		R returned = ResourceUtils.renameResource(resource, newURI).as(resourceClass);
 		_setOntResource(returned);
 		name = newName;
 		uri = newURI;
@@ -264,11 +264,11 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 
 			if (newStatement != null) {
 				_statements.add(newStatement);
-				if ((newStatement instanceof PropertyStatement) && ((PropertyStatement) newStatement).isAnnotationProperty()) {
+				if (newStatement instanceof PropertyStatement && ((PropertyStatement) newStatement).isAnnotationProperty()) {
 					if (((PropertyStatement) newStatement).hasLitteralValue()) {
-						_annotationStatements.add(((PropertyStatement) newStatement));
+						_annotationStatements.add((PropertyStatement) newStatement);
 					} else if (newStatement instanceof ObjectPropertyStatement) {
-						_annotationObjectsStatements.add(((ObjectPropertyStatement) newStatement));
+						_annotationObjectsStatements.add((ObjectPropertyStatement) newStatement);
 					}
 				} else {
 					_semanticStatements.add(newStatement);
@@ -485,7 +485,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	// TODO: need to handle multiple statements
 	public DataPropertyStatement getDataPropertyStatement(OntologyDataProperty property) {
 		for (OntologyStatement statement : getStatements()) {
-			if ((statement instanceof DataPropertyStatement) && (((DataPropertyStatement) statement).getProperty() == property)) {
+			if (statement instanceof DataPropertyStatement && ((DataPropertyStatement) statement).getProperty() == property) {
 				return (DataPropertyStatement) statement;
 			}
 		}
@@ -501,7 +501,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	// TODO: need to handle multiple statements
 	public ObjectPropertyStatement getObjectPropertyStatement(OntologyObjectProperty property) {
 		for (OntologyStatement statement : getStatements()) {
-			if ((statement instanceof ObjectPropertyStatement) && (((ObjectPropertyStatement) statement).getProperty() == property)) {
+			if (statement instanceof ObjectPropertyStatement && ((ObjectPropertyStatement) statement).getProperty() == property) {
 				return (ObjectPropertyStatement) statement;
 			}
 		}
@@ -517,7 +517,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	// TODO: need to handle multiple statements
 	public SubClassStatement getSubClassStatement(OntologyObject father) {
 		for (OntologyStatement statement : getStatements()) {
-			if ((statement instanceof SubClassStatement) && ((SubClassStatement) statement).getParent().equals(father)) {
+			if (statement instanceof SubClassStatement && ((SubClassStatement) statement).getParent().equals(father)) {
 				return (SubClassStatement) statement;
 			}
 		}
@@ -575,11 +575,11 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	}
 
 	public boolean isAnnotationAddable() {
-		return (!getIsReadOnly());
+		return !getIsReadOnly();
 	}
 
 	public boolean isAnnotationDeletable(PropertyStatement annotation) {
-		return (!getIsReadOnly());
+		return !getIsReadOnly();
 	}
 
 	/**
@@ -625,10 +625,10 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	public void setPropertyValue(OntologyProperty property, Object newValue) {
 		PropertyStatement s = getPropertyStatement(property);
 		if (s != null) {
-			if (s.hasLitteralValue() && (newValue instanceof String)) {
+			if (s.hasLitteralValue() && newValue instanceof String) {
 				s.setStringValue((String) newValue);
 				return;
-			} else if ((s instanceof ObjectPropertyStatement) && (newValue instanceof OntologyObject)) {
+			} else if (s instanceof ObjectPropertyStatement && newValue instanceof OntologyObject) {
 				((ObjectPropertyStatement) s).setStatementObject((OntologyObject) newValue);
 				return;
 			}
@@ -678,8 +678,9 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		List<ObjectPropertyStatement> annotations = getAnnotationObjectStatements(property);
 		for (ObjectPropertyStatement annotation : annotations) {
 			OntologyObject returned = annotation.getStatementObject();
-			if (returned != null)
+			if (returned != null) {
 				return returned;
+			}
 		}
 		return null;
 	}
@@ -758,7 +759,7 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	}
 
 	public boolean getIsReadOnly() {
-		return (getFlexoOntology().getIsReadOnly());
+		return getFlexoOntology().getIsReadOnly();
 	}
 
 	public boolean isOntology() {
@@ -845,13 +846,12 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 		Vector<OntologyProperty> allProperties = new Vector(getPropertiesTakingMySelfAsDomain());
 		Vector<OntologyProperty> returnedProperties = new Vector<OntologyProperty>();
 		for (OntologyProperty p : allProperties) {
-			boolean takeIt = (includeDataProperties && p instanceof OntologyDataProperty)
-					|| (includeObjectProperties && p instanceof OntologyObjectProperty)
-					|| (includeAnnotationProperties && p.isAnnotationProperty());
-			if (range != null && (p instanceof OntologyObjectProperty) && !((OntologyObjectProperty) p).getRange().isSuperConceptOf(range)) {
+			boolean takeIt = includeDataProperties && p instanceof OntologyDataProperty || includeObjectProperties
+					&& p instanceof OntologyObjectProperty || includeAnnotationProperties && p.isAnnotationProperty();
+			if (range != null && p instanceof OntologyObjectProperty && !((OntologyObjectProperty) p).getRange().isSuperConceptOf(range)) {
 				takeIt = false;
 			}
-			if (dataType != null && (p instanceof OntologyDataProperty) && ((OntologyDataProperty) p).getDataType() != dataType) {
+			if (dataType != null && p instanceof OntologyDataProperty && ((OntologyDataProperty) p).getDataType() != dataType) {
 				takeIt = false;
 			}
 			FlexoOntology containerOntology = p.getOntology();
@@ -951,6 +951,17 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 				domainProperties.add(p);
 			}*/
 		}
+
+		// TODO in 1.5: Manage this with inheritance
+		if (this instanceof OntologyClass) {
+			for (OntologyClass superClass : ((OntologyClass) this).getSuperClasses()) {
+				if (superClass instanceof OntologyRestrictionClass) {
+					OntologyProperty p = ((OntologyRestrictionClass) superClass).getProperty();
+					domainProperties.add(p);
+				}
+			}
+		}
+
 		for (FlexoOntology o : ontology.getImportedOntologies()) {
 			searchRangeAndDomains(rangeProperties, domainProperties, o, alreadyDone);
 		}
@@ -991,8 +1002,9 @@ public abstract class OntologyObject<R extends OntResource> extends AbstractOnto
 	 * @return
 	 */
 	public boolean equalsToConcept(OntologyObject o) {
-		if (o == null)
+		if (o == null) {
 			return false;
+		}
 		return StringUtils.isNotEmpty(getURI()) && getURI().equals(o.getURI());
 	}
 }
