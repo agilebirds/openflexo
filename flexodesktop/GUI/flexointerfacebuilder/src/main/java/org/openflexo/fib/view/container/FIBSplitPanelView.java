@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.view.container;
 
-import java.awt.Dimension;
 import java.util.logging.Logger;
 
 import org.openflexo.fib.controller.FIBController;
@@ -96,7 +95,9 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 		layout.setModel(getComponent().getSplit());
 
 		splitPane.setDividerPainter(new KnobDividerPainter());
-		splitPane.setPreferredSize(new Dimension(200, 200));
+		// splitPane.setPreferredSize(new Dimension(200, 200));
+
+		updateLayout();
 
 		return splitPane;
 	}
