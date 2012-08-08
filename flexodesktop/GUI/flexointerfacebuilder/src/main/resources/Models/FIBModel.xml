@@ -73,8 +73,8 @@
     <property name="titleFont" xmlTag="titleFont" attribute="YES"/> 
     <property name="darkLevel" xmlTag="darkLevel" attribute="YES"/> 
     <property name="protectContent" xmlTag="protectContent" attribute="YES" ignoreDefaultValue="false"/>
-    <property name="trackViewPortWidth" xmlTag="trackViewPortWidth" attribute="YES" ignoreDefaultValue="false"/>
-    <property name="trackViewPortHeight" xmlTag="trackViewPortHeight" attribute="YES" ignoreDefaultValue="false"/>
+    <property name="trackViewPortWidth" xmlTag="trackViewPortWidth" attribute="YES" ignoreDefaultValue="true"/>
+    <property name="trackViewPortHeight" xmlTag="trackViewPortHeight" attribute="YES" ignoreDefaultValue="true"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBTab" xmlTag="Tab"> 
