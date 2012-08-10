@@ -305,7 +305,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	}
 
 	public void receivedModelNotifications(Observable o, FIBModelNotification dataModification) {
-		System.out.println("receivedModelNotifications o=" + o + " dataModification=" + dataModification);
+		// System.out.println("receivedModelNotifications o=" + o + " dataModification=" + dataModification);
 
 		if (o instanceof FIBContainer && view instanceof FIBContainerView) {
 			if (dataModification instanceof FIBAddingNotification) {
