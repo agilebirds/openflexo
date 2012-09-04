@@ -24,10 +24,10 @@ import java.io.File;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.action.CreateObjectProperty;
-import org.openflexo.module.FlexoResourceCenterService;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.action.CreateObjectProperty;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
 public class CreateObjectPropertyDialogEDITOR {
@@ -40,7 +40,7 @@ public class CreateObjectPropertyDialogEDITOR {
 						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
 
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology = ontologyLibrary
+				OWLOntology ontology = (OWLOntology) ontologyLibrary
 						.getOntology("http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl");
 				ontology.loadWhenUnloaded();
 				CreateObjectProperty action = CreateObjectProperty.actionType.makeNewAction(ontology, null, null);

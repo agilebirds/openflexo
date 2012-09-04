@@ -24,10 +24,10 @@ import java.io.File;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.action.CreateOntologyClass;
-import org.openflexo.module.FlexoResourceCenterService;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.action.CreateOntologyClass;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
 public class CreateOntologyClassDialogEDITOR {
@@ -40,7 +40,8 @@ public class CreateOntologyClassDialogEDITOR {
 						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
 
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
+				OWLOntology ontology = (OWLOntology) ontologyLibrary
+						.getOntology("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
 				ontology.loadWhenUnloaded();
 				CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, null);
 				return makeArray(action);

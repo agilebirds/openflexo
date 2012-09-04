@@ -24,10 +24,10 @@ import java.util.Vector;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.action.DeleteOntologyObjects;
+import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.action.DeleteOntologyObjects;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.ve.VECst;
 
@@ -40,13 +40,13 @@ public class DeleteOntologyObjectsDialogEDITOR {
 				String URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl";
 				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology = ontologyLibrary.getOntology(URI);
+				OWLOntology ontology = (OWLOntology) ontologyLibrary.getOntology(URI);
 				ontology.loadWhenUnloaded();
-				Vector<OntologyObject> selection = new Vector<OntologyObject>();
-				selection.add(ontologyLibrary.getOntologyObject(URI + "#Actor"));
-				selection.add(ontologyLibrary.getOntologyObject(URI + "#Mission"));
-				selection.add(ontologyLibrary.getOntologyObject(URI + "#hasMission"));
-				selection.add(ontologyLibrary.getOntologyObject(URI + "#description"));
+				Vector<OWLObject> selection = new Vector<OWLObject>();
+				selection.add(ontology.getOntologyObject(URI + "#Actor"));
+				selection.add(ontology.getOntologyObject(URI + "#Mission"));
+				selection.add(ontology.getOntologyObject(URI + "#hasMission"));
+				selection.add(ontology.getOntologyObject(URI + "#description"));
 				DeleteOntologyObjects action = DeleteOntologyObjects.actionType.makeNewAction(null, selection, null);
 				return makeArray(action);
 			}
@@ -59,9 +59,9 @@ public class DeleteOntologyObjectsDialogEDITOR {
 		editor.launch();
 	}
 
-	private static ModuleLoader getModuleLoader() {
+	/*private static ModuleLoader getModuleLoader() {
 		return ModuleLoader.instance();
-	}
+	}*/
 
 	private static FlexoResourceCenterService getFlexoResourceCenterService() {
 		return FlexoResourceCenterService.getInstance();
