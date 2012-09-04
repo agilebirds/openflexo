@@ -1,5 +1,5 @@
 #English
-#Wed Jul 04 12:25:29 CEST 2012
+#Mon Sep 03 22:56:06 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -96,6 +96,7 @@ create_example_drawing=Create example drawing
 create_individual=Create individual
 create_new_palette=Create new palette
 create_object_property=Create object property
+create_view=Create view
 create_view_point=Create view point
 data_model_editor=Data Model Editor
 declare_in_edition_pattern=Declare in edition pattern
@@ -157,6 +158,8 @@ no_description_available=No description available
 no_documentation=No documentation
 no_selection=No selection
 no_type=No type
+no_view_point_selected=No view point selected
+no_view_title_defined=no_view_title_defined
 not_equals_operator='not equals' operator
 object_property_statement=object_property_statement
 oe_connector=OEConnector

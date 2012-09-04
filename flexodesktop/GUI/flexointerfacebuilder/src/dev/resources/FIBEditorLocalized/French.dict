@@ -1,5 +1,5 @@
 #French
-#Wed Jul 04 12:25:29 CEST 2012
+#Mon Sep 03 22:56:06 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required=\ Le lien 'URI base' est requis et doit \u00EAtre valide
@@ -96,6 +96,7 @@ create_example_drawing=Cr\u00E9er un exemple de dessin
 create_individual=Cr\u00E9er un individuel
 create_new_palette=Cr\u00E9er une nouvelle palette
 create_object_property=Cr\u00E9er une propri\u00E9t\u00E9 objet
+create_view=Cr\u00E9er une vue
 create_view_point=Cr\u00E9er un point de vue
 data_model_editor=Editeur de mod\u00E8les de donn\u00E9es
 declare_in_edition_pattern=D\u00E9clarer dans un Edition Pattern
@@ -157,6 +158,8 @@ no_description_available=Pas de description disponible
 no_documentation=Pas de documentation
 no_selection=Pas de s\u00E9lection
 no_type=Pas de type
+no_view_point_selected=Pas de point de vue s\u00E9lectionn\u00E9
+no_view_title_defined=no_view_title_defined
 not_equals_operator=Op\u00E9rateur 'diff\u00E9rent de'
 object_property_statement=object_property_statement
 oe_connector=connecteur OE
