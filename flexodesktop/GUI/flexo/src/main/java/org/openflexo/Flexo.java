@@ -401,12 +401,22 @@ public class Flexo {
 
 			outLogFile = getOutputFile(outString);
 			if (outLogFile != null) {
-				System.setOut(new PrintStream(new DoublePrintStream(new PrintStream(outLogFile), System.out)));
+				PrintStream ps1 = new PrintStream(outLogFile);
+				if (outputToConsole) {
+					System.setOut(new PrintStream(new DoublePrintStream(ps1, System.out)));
+				} else {
+					System.setOut(ps1);
+				}
 			}
 
 			errLogFile = getOutputFile(errString);
 			if (errLogFile != null) {
-				System.setErr(new PrintStream(new DoublePrintStream(new PrintStream(errLogFile), System.err)));
+				PrintStream ps1 = new PrintStream(errLogFile);
+				if (outputToConsole) {
+					System.setErr(new PrintStream(new DoublePrintStream(ps1, System.err)));
+				} else {
+					System.setErr(ps1);
+				}
 			}
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.SEVERE)) {
