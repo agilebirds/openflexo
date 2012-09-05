@@ -196,7 +196,9 @@ public class DiagramPerspective extends DMPerspective {
 
 	}
 
+	@Override
 	public void setProject(FlexoProject project) {
+		super.setProject(project);
 		if (project != null) {
 			if (project.getDataModel().getJDKRepository().hasDiagrams()) {
 				browser.setFilterStatus(BrowserElementType.JDK_REPOSITORY, BrowserFilterStatus.SHOW);

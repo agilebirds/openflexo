@@ -77,7 +77,9 @@ class HierarchyPerspective extends DMPerspective {
 		setBottomLeftView(propertiesBrowserView);
 	}
 
+	@Override
 	public void setProject(FlexoProject project) {
+		super.setProject(project);
 		_browser.setRootObject(project != null ? project.getDataModel() : null);
 	}
 
