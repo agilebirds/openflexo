@@ -77,6 +77,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	private long flexoID;
 
+	private String enclosingProjectIdentifier;
+
 	/** The project of the referring object. */
 	private FlexoProject referringProject;
 
@@ -117,6 +119,11 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	public FlexoModelObjectReference(FlexoProject project, String modelObjectIdentifier) {
 		this.referringProject = project;
 		try {
+			int indexOf = modelObjectIdentifier.indexOf(PROJECT_SEPARATOR);
+			if (indexOf > 0) {
+				enclosingProjectIdentifier = modelObjectIdentifier.substring(0, indexOf);
+				modelObjectIdentifier = modelObjectIdentifier.substring(indexOf + PROJECT_SEPARATOR.length());
+			}
 			String[] s = modelObjectIdentifier.split(SEPARATOR);
 			this.resourceIdentifier = s[0];
 			this.userIdentifier = s[1].substring(0, s[1].lastIndexOf(FlexoModelObject.ID_SEPARATOR));
@@ -201,23 +208,19 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	private O findObject(boolean force) {
 		if (getEnclosingProject() != null) {
-			try {
-				FlexoXMLStorageResource res = getResource();
-				if (res == null) {
-					return null;
+			FlexoXMLStorageResource res = getResource();
+			if (res == null) {
+				return null;
+			}
+			if (force && !res.isLoaded()) {
+				try {
+					res.loadResourceData();
+				} catch (FlexoException e) {
+					e.printStackTrace();
 				}
-				if (force && !res.isLoaded()) {
-					try {
-						res.loadResourceData();
-					} catch (FlexoException e) {
-						e.printStackTrace();
-					}
-				}
-				if (res.isLoaded() && !res.getIsLoading()) {
-					return (O) getEnclosingProject().findObject(userIdentifier, flexoID);
-				}
-			} catch (ClassCastException e) {
-				e.printStackTrace();
+			}
+			if (res.isLoaded() && !res.getIsLoading()) {
+				return (O) getEnclosingProject().findObject(userIdentifier, flexoID);
 			}
 		}
 		return null;
@@ -249,6 +252,13 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		if (modelObject != null) {
 			return modelObject.getProject();
 		} else {
+			if (enclosingProjectIdentifier != null) {
+				if (getReferringProject() != null) {
+					return getReferringProject().getProjectWithURI(enclosingProjectIdentifier);
+				}
+			} else {
+				return getReferringProject();
+			}
 			return null;
 		}
 	}
