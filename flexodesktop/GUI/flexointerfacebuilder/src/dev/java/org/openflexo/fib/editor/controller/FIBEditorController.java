@@ -20,10 +20,12 @@
 package org.openflexo.fib.editor.controller;
 
 import java.awt.BorderLayout;
+import java.awt.dnd.DragSourceContext;
 import java.io.File;
 import java.util.Observable;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
@@ -105,6 +107,8 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 	private ContextualMenu contextualMenu;
 
 	private FIBBrowserController browserController;
+
+	private DragSourceContext dragSourceContext;
 
 	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor) {
 		this(fibComponent, editor, null);
@@ -361,6 +365,18 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 			}
 			return null;
 		}
+	}
+
+	public DragSourceContext getDragSourceContext() {
+		return dragSourceContext;
+	}
+
+	public void setDragSourceContext(DragSourceContext dragSourceContext) {
+		this.dragSourceContext = dragSourceContext;
+	}
+
+	public DropListener buildPaletteDropListener(JComponent dropContainer, FIBEditorController controller) {
+		return new DropListener(dropContainer, controller);
 	}
 
 }

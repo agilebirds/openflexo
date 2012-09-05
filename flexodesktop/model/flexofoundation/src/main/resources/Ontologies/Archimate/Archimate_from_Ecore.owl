@@ -1,1044 +1,1902 @@
-<rdf:RDF
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-  xml:base="http://www.bolton.ac.uk/archimate">
-  <owl:Ontology rdf:about=""/>
-  <owl:Class rdf:ID="Node">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="TechnologyLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="AssociationRelationship">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Relationship"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="RealisationRelationship">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Relationship"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ApplicationFunction">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="ApplicationLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Gap">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="ImplementationMigrationElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ApplicationCollaboration">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ApplicationLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="SketchModelSticky">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Properties"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="TextContent"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="DiagramModelContainer"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="DiagramModelObject"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ApplicationComponent">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ApplicationLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ApplicationService">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ApplicationLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="AndJunction">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="JunctionElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="InfrastructureInterface">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="InterfaceElement"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#TechnologyLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ApplicationInteraction">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ApplicationLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Assessment">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="MotivationElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#JunctionElement">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="ArchimateElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="SketchModelActor">
-    <rdfs:subClassOf rdf:resource="#Properties"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Documentable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#DiagramModelObject"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessInterface">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#InterfaceElement"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="BusinessLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Identifier">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="id"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="BorderObject">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="borderColor"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModelConnection">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="text"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass>
-          <owl:Class rdf:about="#DiagramModelObject"/>
-        </owl:onClass>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:ID="target"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="type"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass>
-          <owl:Class rdf:about="#DiagramModelObject"/>
-        </owl:onClass>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:ID="source"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="lineWidth"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Documentable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Properties"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="lineColor"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="FontAttribute"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="DiagramModelComponent"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#FontAttribute">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="textPosition"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="textAlignment"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="fontColor"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="font"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#ArchimateElement">
-    <rdfs:subClassOf rdf:resource="#Properties"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Documentable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Nameable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Cloneable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Identifier"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="ArchimateModelElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Driver">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#MotivationElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#InterfaceElement">
-    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="interfaceType"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="FlowRelationship">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Relationship"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessProcess">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#BusinessLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Device">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#TechnologyLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Folder">
-    <rdfs:subClassOf rdf:resource="#Properties"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Documentable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Identifier"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Nameable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="FolderContainer"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ArchimateModelElement"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:about="#type"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModelImage">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="DiagramModelImageProvider"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#BorderObject"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#DiagramModelObject"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#DiagramModelImageProvider">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="imagePath"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ArchimateModel">
-    <rdfs:subClassOf rdf:resource="#Properties"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ArchimateModelElement"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Identifier"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Nameable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#FolderContainer"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="version"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="file"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="purpose"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="AccessRelationship">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Relationship"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="accessType"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="SystemSoftware">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#TechnologyLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessObject">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#BusinessLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#DiagramModelContainer">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#DiagramModelComponent"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Junction">
-    <rdfs:subClassOf rdf:resource="#JunctionElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Requirement">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#MotivationElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="AssignmentRelationship">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Relationship"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="TriggeringRelationship">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Relationship"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="InfluenceRelationship">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Relationship"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="InfrastructureFunction">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#TechnologyLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModelArchimateObject">
-    <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#DiagramModelObject"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:about="#type"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass rdf:resource="#ArchimateElement"/>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:ID="archimateElement"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#ImplementationMigrationElement">
-    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Product">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#BusinessLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModel">
-    <rdfs:subClassOf rdf:resource="#Properties"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Documentable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ArchimateModelElement"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="connectionRouterType"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="SketchModel">
-    <rdfs:subClassOf rdf:resource="#DiagramModel"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModelNote">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#TextContent"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#DiagramModelObject"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Stakeholder">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#MotivationElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Relationship">
-    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass rdf:resource="#ArchimateElement"/>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:about="#target"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass rdf:resource="#ArchimateElement"/>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:about="#source"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ApplicationInterface">
-    <rdfs:subClassOf rdf:resource="#InterfaceElement"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ApplicationLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Principle">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#MotivationElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessInteraction">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#BusinessLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#TextContent">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="content"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="WorkPackage">
-    <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessRole">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#BusinessLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessFunction">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#BusinessLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#MotivationElement">
-    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
-  </owl:Class>
-  <owl:Class rdf:about="#BusinessLayerElement">
-    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DataObject">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ApplicationLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="CompositionRelationship">
-    <rdfs:subClassOf rdf:resource="#Relationship"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Artifact">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#TechnologyLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#DiagramModelComponent">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Nameable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Adapter"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Cloneable"/>
-    <rdfs:subClassOf rdf:resource="#Identifier"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass rdf:resource="#DiagramModel"/>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:ID="diagramModel"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessEvent">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessService">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:about="#ArchimateModelElement">
-    <rdfs:subClassOf rdf:resource="#Adapter"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass rdf:resource="#ArchimateModel"/>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:ID="archimateModel"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Documentable">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="documentation"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Plateau">
-    <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessActivity">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:about="#DiagramModelObject">
-    <rdfs:subClassOf rdf:resource="#FontAttribute"/>
-    <rdfs:subClassOf rdf:resource="#DiagramModelComponent"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="fillColor"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass>
-          <owl:Class rdf:ID="Bounds"/>
-        </owl:onClass>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:ID="bounds"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Deliverable">
-    <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="InfrastructureService">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#TechnologyLayerElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Meaning">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Value">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Lockable">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="locked"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Property">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="value"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="key"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessActor">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModelArchimateConnection">
-    <rdfs:subClassOf rdf:resource="#DiagramModelConnection"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass rdf:resource="#Relationship"/>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:ID="relationship"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ArchimateDiagramModel">
-    <rdfs:subClassOf rdf:resource="#DiagramModel"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="viewpoint"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModelBendpoint">
-    <rdfs:subClassOf rdf:resource="#Cloneable"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="endY"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="endX"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="startY"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="startX"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#TechnologyLayerElement">
-    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Network">
-    <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModelGroup">
-    <rdfs:subClassOf rdf:resource="#Properties"/>
-    <rdfs:subClassOf rdf:resource="#Documentable"/>
-    <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
-    <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Nameable">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="name"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#Bounds">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="height"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="width"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="y"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:cardinality>
-        <owl:onProperty>
-          <owl:DatatypeProperty rdf:ID="x"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="CommunicationPath">
-    <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Location">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Contract">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Representation">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DiagramModelReference">
-    <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onClass rdf:resource="#DiagramModel"/>
-        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >1</owl:maxCardinality>
-        <owl:onProperty>
-          <owl:ObjectProperty rdf:ID="referencedModel"/>
-        </owl:onProperty>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="OrJunction">
-    <rdfs:subClassOf rdf:resource="#JunctionElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="BusinessCollaboration">
-    <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Goal">
-    <rdfs:subClassOf rdf:resource="#MotivationElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="AggregationRelationship">
-    <rdfs:subClassOf rdf:resource="#Relationship"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Constraint">
-    <rdfs:subClassOf rdf:resource="#MotivationElement"/>
-  </owl:Class>
-  <owl:Class rdf:about="#ApplicationLayerElement">
-    <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="SpecialisationRelationship">
-    <rdfs:subClassOf rdf:resource="#Relationship"/>
-  </owl:Class>
-  <owl:Class rdf:ID="UsedByRelationship">
-    <rdfs:subClassOf rdf:resource="#Relationship"/>
-  </owl:Class>
-  <owl:ObjectProperty rdf:ID="bendpoints">
-    <rdfs:range rdf:resource="#DiagramModelBendpoint"/>
-    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="properties">
-    <rdfs:range rdf:resource="#Property"/>
-    <rdfs:domain rdf:resource="#Properties"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#target">
-    <rdfs:range rdf:resource="#ArchimateElement"/>
-    <rdfs:domain rdf:resource="#Relationship"/>
-    <rdfs:range rdf:resource="#DiagramModelObject"/>
-    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#archimateElement">
-    <rdfs:range rdf:resource="#ArchimateElement"/>
-    <rdfs:domain rdf:resource="#DiagramModelArchimateObject"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#bounds">
-    <rdfs:range rdf:resource="#Bounds"/>
-    <rdfs:domain rdf:resource="#DiagramModelObject"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="children">
-    <rdfs:range rdf:resource="#DiagramModelObject"/>
-    <rdfs:domain rdf:resource="#DiagramModelContainer"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#relationship">
-    <rdfs:range rdf:resource="#Relationship"/>
-    <rdfs:domain rdf:resource="#DiagramModelArchimateConnection"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#source">
-    <rdfs:range rdf:resource="#DiagramModelObject"/>
-    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
-    <rdfs:range rdf:resource="#ArchimateElement"/>
-    <rdfs:domain rdf:resource="#Relationship"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="sourceConnections">
-    <rdfs:range rdf:resource="#DiagramModelConnection"/>
-    <rdfs:domain rdf:resource="#DiagramModelObject"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="elements">
-    <rdfs:domain rdf:resource="#Folder"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#diagramModel">
-    <rdfs:range rdf:resource="#DiagramModel"/>
-    <rdfs:domain rdf:resource="#DiagramModelComponent"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#archimateModel">
-    <rdfs:range rdf:resource="#ArchimateModel"/>
-    <rdfs:domain rdf:resource="#ArchimateModelElement"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="targetConnections">
-    <rdfs:range rdf:resource="#DiagramModelConnection"/>
-    <rdfs:domain rdf:resource="#DiagramModelObject"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="folders">
-    <rdfs:range rdf:resource="#Folder"/>
-    <rdfs:domain rdf:resource="#FolderContainer"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#referencedModel">
-    <rdfs:range rdf:resource="#DiagramModel"/>
-    <rdfs:domain rdf:resource="#DiagramModelReference"/>
-  </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:about="#startY">
-    <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#name">
-    <rdfs:domain rdf:resource="#Nameable"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#key">
-    <rdfs:domain rdf:resource="#Property"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#documentation">
-    <rdfs:domain rdf:resource="#Documentable"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#fontColor">
-    <rdfs:domain rdf:resource="#FontAttribute"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#lineWidth">
-    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#purpose">
-    <rdfs:domain rdf:resource="#ArchimateModel"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#accessType">
-    <rdfs:domain rdf:resource="#AccessRelationship"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#value">
-    <rdfs:domain rdf:resource="#Property"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#connectionRouterType">
-    <rdfs:domain rdf:resource="#DiagramModel"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#id">
-    <rdfs:domain rdf:resource="#Identifier"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#height">
-    <rdfs:domain rdf:resource="#Bounds"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#x">
-    <rdfs:domain rdf:resource="#Bounds"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#textAlignment">
-    <rdfs:domain rdf:resource="#FontAttribute"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#text">
-    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#file">
-    <rdfs:domain rdf:resource="#ArchimateModel"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#type">
-    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
-    <rdfs:domain rdf:resource="#Folder"/>
-    <rdfs:domain rdf:resource="#DiagramModelArchimateObject"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#content">
-    <rdfs:domain rdf:resource="#TextContent"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#borderColor">
-    <rdfs:domain rdf:resource="#BorderObject"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#endY">
-    <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#version">
-    <rdfs:domain rdf:resource="#ArchimateModel"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#textPosition">
-    <rdfs:domain rdf:resource="#FontAttribute"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#fillColor">
-    <rdfs:domain rdf:resource="#DiagramModelObject"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#startX">
-    <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#imagePath">
-    <rdfs:domain rdf:resource="#DiagramModelImageProvider"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#width">
-    <rdfs:domain rdf:resource="#Bounds"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#viewpoint">
-    <rdfs:domain rdf:resource="#ArchimateDiagramModel"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#font">
-    <rdfs:domain rdf:resource="#FontAttribute"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#locked">
-    <rdfs:domain rdf:resource="#Lockable"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#lineColor">
-    <rdfs:domain rdf:resource="#DiagramModelConnection"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#endX">
-    <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#y">
-    <rdfs:domain rdf:resource="#Bounds"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="#interfaceType">
-    <rdfs:domain rdf:resource="#InterfaceElement"/>
-  </owl:DatatypeProperty>
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY archimate "http://www.bolton.ac.uk/archimate#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.bolton.ac.uk/archimate#"
+     xml:base="http://www.bolton.ac.uk/archimate"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:archimate="http://www.bolton.ac.uk/archimate#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#archimateElement -->
+
+    <owl:ObjectProperty rdf:about="#archimateElement">
+        <rdfs:range rdf:resource="#ArchimateElement"/>
+        <rdfs:domain rdf:resource="#DiagramModelArchimateObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#archimateModel -->
+
+    <owl:ObjectProperty rdf:about="#archimateModel">
+        <rdfs:range rdf:resource="#ArchimateModel"/>
+        <rdfs:domain rdf:resource="#ArchimateModelElement"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#bendpoints -->
+
+    <owl:ObjectProperty rdf:about="#bendpoints">
+        <rdfs:range rdf:resource="#DiagramModelBendpoint"/>
+        <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#bounds -->
+
+    <owl:ObjectProperty rdf:about="#bounds">
+        <rdfs:range rdf:resource="#Bounds"/>
+        <rdfs:domain rdf:resource="#DiagramModelObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#children -->
+
+    <owl:ObjectProperty rdf:about="#children">
+        <rdfs:domain rdf:resource="#DiagramModelContainer"/>
+        <rdfs:range rdf:resource="#DiagramModelObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#diagramModel -->
+
+    <owl:ObjectProperty rdf:about="#diagramModel">
+        <rdfs:range rdf:resource="#DiagramModel"/>
+        <rdfs:domain rdf:resource="#DiagramModelComponent"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#elements -->
+
+    <owl:ObjectProperty rdf:about="#elements">
+        <rdfs:domain rdf:resource="#Folder"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#folders -->
+
+    <owl:ObjectProperty rdf:about="#folders">
+        <rdfs:range rdf:resource="#Folder"/>
+        <rdfs:domain rdf:resource="#FolderContainer"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#properties -->
+
+    <owl:ObjectProperty rdf:about="#properties">
+        <rdfs:domain rdf:resource="#Properties"/>
+        <rdfs:range rdf:resource="#Property"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#referencedModel -->
+
+    <owl:ObjectProperty rdf:about="#referencedModel">
+        <rdfs:range rdf:resource="#DiagramModel"/>
+        <rdfs:domain rdf:resource="#DiagramModelReference"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#relationship -->
+
+    <owl:ObjectProperty rdf:about="#relationship">
+        <rdfs:domain rdf:resource="#DiagramModelArchimateConnection"/>
+        <rdfs:range rdf:resource="#Relationship"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#source -->
+
+    <owl:ObjectProperty rdf:about="#source">
+        <rdfs:range rdf:resource="#ArchimateElement"/>
+        <rdfs:range rdf:resource="#DiagramModelObject"/>
+        <rdfs:domain rdf:resource="#Relationship"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#sourceConnections -->
+
+    <owl:ObjectProperty rdf:about="#sourceConnections">
+        <rdfs:range rdf:resource="#DiagramModelConnection"/>
+        <rdfs:domain rdf:resource="#DiagramModelObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#target -->
+
+    <owl:ObjectProperty rdf:about="#target">
+        <rdfs:range rdf:resource="#ArchimateElement"/>
+        <rdfs:range rdf:resource="#DiagramModelObject"/>
+        <rdfs:domain rdf:resource="#Relationship"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#targetConnections -->
+
+    <owl:ObjectProperty rdf:about="#targetConnections">
+        <rdfs:range rdf:resource="#DiagramModelConnection"/>
+        <rdfs:domain rdf:resource="#DiagramModelObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#accessType -->
+
+    <owl:DatatypeProperty rdf:about="#accessType">
+        <rdfs:domain rdf:resource="#AccessRelationship"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#annotation -->
+
+    <owl:DatatypeProperty rdf:about="#annotation">
+        <rdfs:domain rdf:resource="#Nameable"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#archimateModelPurpose -->
+
+    <owl:DatatypeProperty rdf:about="#archimateModelPurpose">
+        <rdfs:domain rdf:resource="#ArchimateModel"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#author -->
+
+    <owl:DatatypeProperty rdf:about="#author">
+        <rdfs:domain rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#borderColor -->
+
+    <owl:DatatypeProperty rdf:about="#borderColor">
+        <rdfs:domain rdf:resource="#BorderObject"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#connectionRouterType -->
+
+    <owl:DatatypeProperty rdf:about="#connectionRouterType">
+        <rdfs:domain rdf:resource="#DiagramModel"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#content -->
+
+    <owl:DatatypeProperty rdf:about="#content">
+        <rdfs:domain rdf:resource="#TextContent"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#documentation -->
+
+    <owl:DatatypeProperty rdf:about="#documentation">
+        <rdfs:domain rdf:resource="#Documentable"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#endX -->
+
+    <owl:DatatypeProperty rdf:about="#endX">
+        <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#endY -->
+
+    <owl:DatatypeProperty rdf:about="#endY">
+        <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#file -->
+
+    <owl:DatatypeProperty rdf:about="#file">
+        <rdfs:domain rdf:resource="#ArchimateModel"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#fillColor -->
+
+    <owl:DatatypeProperty rdf:about="#fillColor">
+        <rdfs:domain rdf:resource="#DiagramModelObject"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#font -->
+
+    <owl:DatatypeProperty rdf:about="#font">
+        <rdfs:domain rdf:resource="#FontAttribute"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#fontColor -->
+
+    <owl:DatatypeProperty rdf:about="#fontColor">
+        <rdfs:domain rdf:resource="#FontAttribute"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#height -->
+
+    <owl:DatatypeProperty rdf:about="#height">
+        <rdfs:domain rdf:resource="#Bounds"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#id -->
+
+    <owl:DatatypeProperty rdf:about="#id">
+        <rdfs:domain rdf:resource="#Identifier"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#imagePath -->
+
+    <owl:DatatypeProperty rdf:about="#imagePath">
+        <rdfs:domain rdf:resource="#DiagramModelImageProvider"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#interfaceType -->
+
+    <owl:DatatypeProperty rdf:about="#interfaceType">
+        <rdfs:domain rdf:resource="#InterfaceElement"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#key -->
+
+    <owl:DatatypeProperty rdf:about="#key">
+        <rdfs:domain rdf:resource="#Property"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#lineColor -->
+
+    <owl:DatatypeProperty rdf:about="#lineColor">
+        <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#lineWidth -->
+
+    <owl:DatatypeProperty rdf:about="#lineWidth">
+        <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#locked -->
+
+    <owl:DatatypeProperty rdf:about="#locked">
+        <rdfs:domain rdf:resource="#Lockable"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#name -->
+
+    <owl:DatatypeProperty rdf:about="#name">
+        <rdfs:domain rdf:resource="#Nameable"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#purpose -->
+
+    <owl:DatatypeProperty rdf:about="#purpose">
+        <rdfs:domain rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#startX -->
+
+    <owl:DatatypeProperty rdf:about="#startX">
+        <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#startY -->
+
+    <owl:DatatypeProperty rdf:about="#startY">
+        <rdfs:domain rdf:resource="#DiagramModelBendpoint"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#text -->
+
+    <owl:DatatypeProperty rdf:about="#text">
+        <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#textAlignment -->
+
+    <owl:DatatypeProperty rdf:about="#textAlignment">
+        <rdfs:domain rdf:resource="#FontAttribute"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#textPosition -->
+
+    <owl:DatatypeProperty rdf:about="#textPosition">
+        <rdfs:domain rdf:resource="#FontAttribute"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#type -->
+
+    <owl:DatatypeProperty rdf:about="#type">
+        <rdfs:domain rdf:resource="#DiagramModelArchimateObject"/>
+        <rdfs:domain rdf:resource="#DiagramModelConnection"/>
+        <rdfs:domain rdf:resource="#Folder"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#value -->
+
+    <owl:DatatypeProperty rdf:about="#value">
+        <rdfs:domain rdf:resource="#Property"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#version -->
+
+    <owl:DatatypeProperty rdf:about="#version">
+        <rdfs:domain rdf:resource="#ArchimateModel"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#viewpoint -->
+
+    <owl:DatatypeProperty rdf:about="#viewpoint">
+        <rdfs:domain rdf:resource="#ArchimateDiagramModel"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#viewpointTitle -->
+
+    <owl:DatatypeProperty rdf:about="#viewpointTitle">
+        <rdfs:domain rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#viewpointVersion -->
+
+    <owl:DatatypeProperty rdf:about="#viewpointVersion">
+        <rdfs:domain rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#width -->
+
+    <owl:DatatypeProperty rdf:about="#width">
+        <rdfs:domain rdf:resource="#Bounds"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#x -->
+
+    <owl:DatatypeProperty rdf:about="#x">
+        <rdfs:domain rdf:resource="#Bounds"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#y -->
+
+    <owl:DatatypeProperty rdf:about="#y">
+        <rdfs:domain rdf:resource="#Bounds"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#AccessRelationship -->
+
+    <owl:Class rdf:about="#AccessRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#accessType"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ActorCooperationViewPoint -->
+
+    <owl:Class rdf:about="#ActorCooperationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint focuses on the relationships of actors with each other and their environment.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Adapter -->
+
+    <owl:Class rdf:about="#Adapter"/>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#AggregationRelationship -->
+
+    <owl:Class rdf:about="#AggregationRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#AndJunction -->
+
+    <owl:Class rdf:about="#AndJunction">
+        <rdfs:subClassOf rdf:resource="#JunctionElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationBehaviourViewPoint -->
+
+    <owl:Class rdf:about="#ApplicationBehaviourViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint describes the internal behavior of an application; e.g., as it realizes one or more application services.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationCollaboration -->
+
+    <owl:Class rdf:about="#ApplicationCollaboration">
+        <rdfs:subClassOf rdf:resource="#ApplicationLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationComponent -->
+
+    <owl:Class rdf:about="#ApplicationComponent">
+        <rdfs:subClassOf rdf:resource="#ApplicationLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationCooperationViewPoint -->
+
+    <owl:Class rdf:about="#ApplicationCooperationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint describes the relationships between applications components in terms of the information flows between them, or in terms of the services they offer and use.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationFunction -->
+
+    <owl:Class rdf:about="#ApplicationFunction">
+        <rdfs:subClassOf rdf:resource="#ApplicationLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationInteraction -->
+
+    <owl:Class rdf:about="#ApplicationInteraction">
+        <rdfs:subClassOf rdf:resource="#ApplicationLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationInterface -->
+
+    <owl:Class rdf:about="#ApplicationInterface">
+        <rdfs:subClassOf rdf:resource="#ApplicationLayerElement"/>
+        <rdfs:subClassOf rdf:resource="#InterfaceElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationLayerElement -->
+
+    <owl:Class rdf:about="#ApplicationLayerElement">
+        <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationService -->
+
+    <owl:Class rdf:about="#ApplicationService">
+        <rdfs:subClassOf rdf:resource="#ApplicationLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationStructureViewPoint -->
+
+    <owl:Class rdf:about="#ApplicationStructureViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows the structure of one or more applications or components.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ApplicationUsageViewPoint -->
+
+    <owl:Class rdf:about="#ApplicationUsageViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint describes how applications are used to support one or more business processes, and how they are used by other applications.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ArchimateDiagramModel -->
+
+    <owl:Class rdf:about="#ArchimateDiagramModel">
+        <rdfs:subClassOf rdf:resource="#DiagramModel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#viewpoint"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ArchimateElement -->
+
+    <owl:Class rdf:about="#ArchimateElement">
+        <rdfs:subClassOf rdf:resource="#ArchimateModelElement"/>
+        <rdfs:subClassOf rdf:resource="#Cloneable"/>
+        <rdfs:subClassOf rdf:resource="#Documentable"/>
+        <rdfs:subClassOf rdf:resource="#Identifier"/>
+        <rdfs:subClassOf rdf:resource="#Nameable"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ArchimateExtensionViewPoint -->
+
+    <owl:Class rdf:about="#ArchimateExtensionViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ArchimateModel -->
+
+    <owl:Class rdf:about="#ArchimateModel">
+        <rdfs:subClassOf rdf:resource="#ArchimateModelElement"/>
+        <rdfs:subClassOf rdf:resource="#FolderContainer"/>
+        <rdfs:subClassOf rdf:resource="#Identifier"/>
+        <rdfs:subClassOf rdf:resource="#Nameable"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#version"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#file"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#archimateModelPurpose"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ArchimateModelElement -->
+
+    <owl:Class rdf:about="#ArchimateModelElement">
+        <rdfs:subClassOf rdf:resource="#Adapter"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#archimateModel"/>
+                <owl:onClass rdf:resource="#ArchimateModel"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ArchimateViewPoint -->
+
+    <owl:Class rdf:about="#ArchimateViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateModelElement"/>
+        <rdfs:subClassOf rdf:resource="#Cloneable"/>
+        <rdfs:subClassOf rdf:resource="#Documentable"/>
+        <rdfs:subClassOf rdf:resource="#Identifier"/>
+        <rdfs:subClassOf rdf:resource="#Nameable"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Artifact -->
+
+    <owl:Class rdf:about="#Artifact">
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Assessment -->
+
+    <owl:Class rdf:about="#Assessment">
+        <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#AssignmentRelationship -->
+
+    <owl:Class rdf:about="#AssignmentRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#AssociationRelationship -->
+
+    <owl:Class rdf:about="#AssociationRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BorderObject -->
+
+    <owl:Class rdf:about="#BorderObject">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#borderColor"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Bounds -->
+
+    <owl:Class rdf:about="#Bounds">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#width"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#x"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#y"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#height"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessActivity -->
+
+    <owl:Class rdf:about="#BusinessActivity">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessActor -->
+
+    <owl:Class rdf:about="#BusinessActor">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessCollaboration -->
+
+    <owl:Class rdf:about="#BusinessCollaboration">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessEvent -->
+
+    <owl:Class rdf:about="#BusinessEvent">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessFunction -->
+
+    <owl:Class rdf:about="#BusinessFunction">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessFunctionViewPoint -->
+
+    <owl:Class rdf:about="#BusinessFunctionViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows the main business functions of an organization and their relationships in terms of the flows of information, value, or goods between them.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessInteraction -->
+
+    <owl:Class rdf:about="#BusinessInteraction">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessInterface -->
+
+    <owl:Class rdf:about="#BusinessInterface">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+        <rdfs:subClassOf rdf:resource="#InterfaceElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessLayerElement -->
+
+    <owl:Class rdf:about="#BusinessLayerElement">
+        <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessObject -->
+
+    <owl:Class rdf:about="#BusinessObject">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessProcess -->
+
+    <owl:Class rdf:about="#BusinessProcess">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessProcessCooperationViewPoint -->
+
+    <owl:Class rdf:about="#BusinessProcessCooperationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows the relationships of one or more business processes with each other and/or with their environment.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessProcessViewPoint -->
+
+    <owl:Class rdf:about="#BusinessProcessViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows the high-level structure and composition of one or more business processes.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessRole -->
+
+    <owl:Class rdf:about="#BusinessRole">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#BusinessService -->
+
+    <owl:Class rdf:about="#BusinessService">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Cloneable -->
+
+    <owl:Class rdf:about="#Cloneable"/>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#CommunicationPath -->
+
+    <owl:Class rdf:about="#CommunicationPath">
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#CompositionRelationship -->
+
+    <owl:Class rdf:about="#CompositionRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Constraint -->
+
+    <owl:Class rdf:about="#Constraint">
+        <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Contract -->
+
+    <owl:Class rdf:about="#Contract">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DataObject -->
+
+    <owl:Class rdf:about="#DataObject">
+        <rdfs:subClassOf rdf:resource="#ApplicationLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Deliverable -->
+
+    <owl:Class rdf:about="#Deliverable">
+        <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Device -->
+
+    <owl:Class rdf:about="#Device">
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModel -->
+
+    <owl:Class rdf:about="#DiagramModel">
+        <rdfs:subClassOf rdf:resource="#ArchimateModelElement"/>
+        <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
+        <rdfs:subClassOf rdf:resource="#Documentable"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#connectionRouterType"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelArchimateConnection -->
+
+    <owl:Class rdf:about="#DiagramModelArchimateConnection">
+        <rdfs:subClassOf rdf:resource="#DiagramModelConnection"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#relationship"/>
+                <owl:onClass rdf:resource="#Relationship"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelArchimateObject -->
+
+    <owl:Class rdf:about="#DiagramModelArchimateObject">
+        <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
+        <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#type"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#archimateElement"/>
+                <owl:onClass rdf:resource="#ArchimateElement"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelBendpoint -->
+
+    <owl:Class rdf:about="#DiagramModelBendpoint">
+        <rdfs:subClassOf rdf:resource="#Cloneable"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#startY"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#startX"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#endX"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#endY"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelComponent -->
+
+    <owl:Class rdf:about="#DiagramModelComponent">
+        <rdfs:subClassOf rdf:resource="#Adapter"/>
+        <rdfs:subClassOf rdf:resource="#Cloneable"/>
+        <rdfs:subClassOf rdf:resource="#Identifier"/>
+        <rdfs:subClassOf rdf:resource="#Nameable"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#diagramModel"/>
+                <owl:onClass rdf:resource="#DiagramModel"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelConnection -->
+
+    <owl:Class rdf:about="#DiagramModelConnection">
+        <rdfs:subClassOf rdf:resource="#DiagramModelComponent"/>
+        <rdfs:subClassOf rdf:resource="#Documentable"/>
+        <rdfs:subClassOf rdf:resource="#FontAttribute"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#lineWidth"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#text"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#target"/>
+                <owl:onClass rdf:resource="#DiagramModelObject"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#type"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#lineColor"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#source"/>
+                <owl:onClass rdf:resource="#DiagramModelObject"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelContainer -->
+
+    <owl:Class rdf:about="#DiagramModelContainer">
+        <rdfs:subClassOf rdf:resource="#DiagramModelComponent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelGroup -->
+
+    <owl:Class rdf:about="#DiagramModelGroup">
+        <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
+        <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+        <rdfs:subClassOf rdf:resource="#Documentable"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelImage -->
+
+    <owl:Class rdf:about="#DiagramModelImage">
+        <rdfs:subClassOf rdf:resource="#BorderObject"/>
+        <rdfs:subClassOf rdf:resource="#DiagramModelImageProvider"/>
+        <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelImageProvider -->
+
+    <owl:Class rdf:about="#DiagramModelImageProvider">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#imagePath"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelNote -->
+
+    <owl:Class rdf:about="#DiagramModelNote">
+        <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+        <rdfs:subClassOf rdf:resource="#TextContent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelObject -->
+
+    <owl:Class rdf:about="#DiagramModelObject">
+        <rdfs:subClassOf rdf:resource="#DiagramModelComponent"/>
+        <rdfs:subClassOf rdf:resource="#FontAttribute"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#bounds"/>
+                <owl:onClass rdf:resource="#Bounds"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#fillColor"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#DiagramModelReference -->
+
+    <owl:Class rdf:about="#DiagramModelReference">
+        <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#referencedModel"/>
+                <owl:onClass rdf:resource="#DiagramModel"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Documentable -->
+
+    <owl:Class rdf:about="#Documentable">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#documentation"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Driver -->
+
+    <owl:Class rdf:about="#Driver">
+        <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#FlowRelationship -->
+
+    <owl:Class rdf:about="#FlowRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Folder -->
+
+    <owl:Class rdf:about="#Folder">
+        <rdfs:subClassOf rdf:resource="#ArchimateModelElement"/>
+        <rdfs:subClassOf rdf:resource="#Documentable"/>
+        <rdfs:subClassOf rdf:resource="#FolderContainer"/>
+        <rdfs:subClassOf rdf:resource="#Identifier"/>
+        <rdfs:subClassOf rdf:resource="#Nameable"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#type"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#FolderContainer -->
+
+    <owl:Class rdf:about="#FolderContainer"/>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#FontAttribute -->
+
+    <owl:Class rdf:about="#FontAttribute">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#font"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#fontColor"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#textAlignment"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#textPosition"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Gap -->
+
+    <owl:Class rdf:about="#Gap">
+        <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Goal -->
+
+    <owl:Class rdf:about="#Goal">
+        <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#GoalContributionViewPoint -->
+
+    <owl:Class rdf:about="#GoalContributionViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint allows a designer or analyst to model the influence relationships between goals and requirements.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#GoalRealizationViewPoint -->
+
+    <owl:Class rdf:about="#GoalRealizationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint allows a designer to model the refinement of (high-level) goals into more concrete goals, and the refinement of concrete goals into requirements or constraints that describe the properties that are needed to realize the goals.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Identifier -->
+
+    <owl:Class rdf:about="#Identifier">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#id"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ImplementationAndDeploymentViewPoint -->
+
+    <owl:Class rdf:about="#ImplementationAndDeploymentViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows how one or more applications are realized on the infrastructure.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ImplementationAndMigrationViewPoint -->
+
+    <owl:Class rdf:about="#ImplementationAndMigrationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint is used to relate programs and projects to the parts of the architecture that they implement.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ImplementationMigrationElement -->
+
+    <owl:Class rdf:about="#ImplementationMigrationElement">
+        <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#InfluenceRelationship -->
+
+    <owl:Class rdf:about="#InfluenceRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#InformationStructureViewPoint -->
+
+    <owl:Class rdf:about="#InformationStructureViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows the structure of the information used in the enterprise or in a specific business process or application, in terms of data types or (object-oriented) class structures.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#InfrastructureFunction -->
+
+    <owl:Class rdf:about="#InfrastructureFunction">
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#InfrastructureInterface -->
+
+    <owl:Class rdf:about="#InfrastructureInterface">
+        <rdfs:subClassOf rdf:resource="#InterfaceElement"/>
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#InfrastructureService -->
+
+    <owl:Class rdf:about="#InfrastructureService">
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#InfrastructureUsageViewPoint -->
+
+    <owl:Class rdf:about="#InfrastructureUsageViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows how applications are supported by the software and hardware infrastructure: the infrastructure services are delivered by the devices; system software and networks are provided to the applications.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#InfrastructureViewPoint -->
+
+    <owl:Class rdf:about="#InfrastructureViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint describes the software and hardware infrastructure elements supporting the application layer, such as physical devices, networks, or system software (e.g., operating systems, databases, and middleware).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#InterfaceElement -->
+
+    <owl:Class rdf:about="#InterfaceElement">
+        <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#interfaceType"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#IntroductoryViewPoint -->
+
+    <owl:Class rdf:about="#IntroductoryViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint uses a simplified notation to explain the essence of an architecture model to non-architects that require a simpler, more intuitive notation.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Junction -->
+
+    <owl:Class rdf:about="#Junction">
+        <rdfs:subClassOf rdf:resource="#JunctionElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#JunctionElement -->
+
+    <owl:Class rdf:about="#JunctionElement">
+        <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#LandscapeMapViewPoint -->
+
+    <owl:Class rdf:about="#LandscapeMapViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint uses a matrix to represent a three-dimensional co-ordinate system describing architectural relationships.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#LayeredViewPoint -->
+
+    <owl:Class rdf:about="#LayeredViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows several layers and aspects of an enterprise architecture in a single diagram.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Location -->
+
+    <owl:Class rdf:about="#Location">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Lockable -->
+
+    <owl:Class rdf:about="#Lockable">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#locked"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Meaning -->
+
+    <owl:Class rdf:about="#Meaning">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#MigrationViewPoint -->
+
+    <owl:Class rdf:about="#MigrationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint contains models and concepts that describe the transition from an existing architecture to a desired architecture.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#MotivationElement -->
+
+    <owl:Class rdf:about="#MotivationElement">
+        <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#MotivationViewPoint -->
+
+    <owl:Class rdf:about="#MotivationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint allows the designer or analyst to model the motivation aspect, without focusing on certain elements within this aspect.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Nameable -->
+
+    <owl:Class rdf:about="#Nameable">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#name"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Network -->
+
+    <owl:Class rdf:about="#Network">
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Node -->
+
+    <owl:Class rdf:about="#Node">
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#OrJunction -->
+
+    <owl:Class rdf:about="#OrJunction">
+        <rdfs:subClassOf rdf:resource="#JunctionElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#OrganizationViewPoint -->
+
+    <owl:Class rdf:about="#OrganizationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint focuses on the (internal) organization of a company, a department, a network of companies, or of another organizational entity.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Plateau -->
+
+    <owl:Class rdf:about="#Plateau">
+        <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Principle -->
+
+    <owl:Class rdf:about="#Principle">
+        <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#PrinciplesViewPoint -->
+
+    <owl:Class rdf:about="#PrinciplesViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint allows the analyst or designer to model the principles that are relevant to the design problem at hand, including the goals that motivate these principles.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Product -->
+
+    <owl:Class rdf:about="#Product">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ProductViewPoint -->
+
+    <owl:Class rdf:about="#ProductViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint describes the value that one or more products offer to the customers or other external parties involved and shows the composition of one or more products in terms of the constituting (business or application) services, and the associated contract(s) or other agreements.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ProjectViewPoint -->
+
+    <owl:Class rdf:about="#ProjectViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint is used to model the management of architecture change.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Properties -->
+
+    <owl:Class rdf:about="#Properties"/>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Property -->
+
+    <owl:Class rdf:about="#Property">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#value"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#key"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#RealisationRelationship -->
+
+    <owl:Class rdf:about="#RealisationRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Relationship -->
+
+    <owl:Class rdf:about="#Relationship">
+        <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#target"/>
+                <owl:onClass rdf:resource="#ArchimateElement"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#source"/>
+                <owl:onClass rdf:resource="#ArchimateElement"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Representation -->
+
+    <owl:Class rdf:about="#Representation">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Requirement -->
+
+    <owl:Class rdf:about="#Requirement">
+        <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#RequirementsRealizationViewPoint -->
+
+    <owl:Class rdf:about="#RequirementsRealizationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint allows the designer to model the realization of requirements by the core elements, such as business actors, business services, business processes, application services, application components, etc.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#ServiceRealizationViewPoint -->
+
+    <owl:Class rdf:about="#ServiceRealizationViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateViewPoint"/>
+        <rdfs:comment
+            >This viewpoint shows how one or more business services are realized by the underlying processes (and sometimes by application components).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#SketchModel -->
+
+    <owl:Class rdf:about="#SketchModel">
+        <rdfs:subClassOf rdf:resource="#DiagramModel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#SketchModelActor -->
+
+    <owl:Class rdf:about="#SketchModelActor">
+        <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+        <rdfs:subClassOf rdf:resource="#Documentable"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#SketchModelSticky -->
+
+    <owl:Class rdf:about="#SketchModelSticky">
+        <rdfs:subClassOf rdf:resource="#DiagramModelContainer"/>
+        <rdfs:subClassOf rdf:resource="#DiagramModelObject"/>
+        <rdfs:subClassOf rdf:resource="#Properties"/>
+        <rdfs:subClassOf rdf:resource="#TextContent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#SpecialisationRelationship -->
+
+    <owl:Class rdf:about="#SpecialisationRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Stakeholder -->
+
+    <owl:Class rdf:about="#Stakeholder">
+        <rdfs:subClassOf rdf:resource="#MotivationElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#StakeholderViewPoint -->
+
+    <owl:Class rdf:about="#StakeholderViewPoint">
+        <rdfs:subClassOf rdf:resource="#ArchimateExtensionViewPoint"/>
+        <rdfs:comment
+            >This viewpoint allows the analyst to model the stakeholders, the internal and external drivers for change, and the assessments (in terms of strengths, weaknesses, opportunities, and threats) of these drivers.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#SystemSoftware -->
+
+    <owl:Class rdf:about="#SystemSoftware">
+        <rdfs:subClassOf rdf:resource="#TechnologyLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#TechnologyLayerElement -->
+
+    <owl:Class rdf:about="#TechnologyLayerElement">
+        <rdfs:subClassOf rdf:resource="#ArchimateElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#TextContent -->
+
+    <owl:Class rdf:about="#TextContent">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#content"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#TriggeringRelationship -->
+
+    <owl:Class rdf:about="#TriggeringRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#UsedByRelationship -->
+
+    <owl:Class rdf:about="#UsedByRelationship">
+        <rdfs:subClassOf rdf:resource="#Relationship"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#Value -->
+
+    <owl:Class rdf:about="#Value">
+        <rdfs:subClassOf rdf:resource="#BusinessLayerElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bolton.ac.uk/archimate#WorkPackage -->
+
+    <owl:Class rdf:about="#WorkPackage">
+        <rdfs:subClassOf rdf:resource="#ImplementationMigrationElement"/>
+    </owl:Class>
 </rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

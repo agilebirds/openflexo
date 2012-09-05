@@ -1061,6 +1061,17 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 				domainProperties.add(p);
 			}*/
 		}
+
+		// TODO in 1.5: Manage this with inheritance
+		if (this instanceof OWLClass) {
+			for (OWLClass superClass : ((OWLClass) this).getSuperClasses()) {
+				if (superClass instanceof OntologyRestrictionClass) {
+					OWLProperty p = (OWLProperty) ((OntologyRestrictionClass) superClass).getProperty();
+					domainProperties.add(p);
+				}
+			}
+		}
+
 		for (OWLOntology o : ontology.getImportedOntologies()) {
 			searchRangeAndDomains(rangeProperties, domainProperties, o, alreadyDone);
 		}

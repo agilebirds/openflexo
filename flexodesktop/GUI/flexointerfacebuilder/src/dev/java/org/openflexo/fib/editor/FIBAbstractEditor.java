@@ -64,6 +64,8 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 
+//TODO: switch to the right editor controller when switching tab
+//	getPalette().setEditorController(editorController);
 public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBAbstractEditor.class.getPackage().getName());
@@ -383,6 +385,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		} else {
 			editorController = new FIBEditorController(fibComponent, this, getData()[0]);
 		}
+		getPalette().setEditorController(editorController);
 
 		frame.getContentPane().add(editorController.getEditorPanel());
 
