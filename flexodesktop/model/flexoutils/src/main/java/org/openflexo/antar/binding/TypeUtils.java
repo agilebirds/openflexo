@@ -687,6 +687,37 @@ public class TypeUtils {
 		return object;
 	}
 
+	public static Class getMostSpecializedClass(Collection<Class> someClasses) {
+
+		if (someClasses.size() == 0) {
+			return null;
+		}
+		if (someClasses.size() == 1) {
+			return someClasses.iterator().next();
+		}
+		Class[] array = someClasses.toArray(new Class[someClasses.size()]);
+
+		for (int i = 0; i < someClasses.size(); i++) {
+			for (int j = i + 1; j < someClasses.size(); j++) {
+				Class c1 = array[i];
+				Class c2 = array[j];
+				if (c1.isAssignableFrom(c2)) {
+					someClasses.remove(c1);
+					return getMostSpecializedClass(someClasses);
+				}
+				if (c2.isAssignableFrom(c1)) {
+					someClasses.remove(c2);
+					return getMostSpecializedClass(someClasses);
+				}
+			}
+		}
+
+		// No parent were found, take first item
+		logger.warning("Undefined specializing criteria between " + someClasses);
+		return someClasses.iterator().next();
+
+	}
+
 	// TESTS
 
 	public static interface ShouldFail {
