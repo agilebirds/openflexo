@@ -393,7 +393,7 @@ public class AdvancedPrefs extends ContextPreferences {
 				try {
 					noProxy = !ProxyUtils.isProxyEnabled();
 					if (logger.isLoggable(Level.INFO)) {
-						logger.info("This machine seems uses a proxy? " + !noProxy);
+						logger.info("This machine seems to use a proxy? " + !noProxy);
 					}
 				} catch (RuntimeException e) {
 					if (logger.isLoggable(Level.WARNING)) {
