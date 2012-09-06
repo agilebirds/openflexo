@@ -17,6 +17,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.openflexo.inspector.fibconverter.FIBConverter"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-d /Users/sylvain/GIT/openflexo/flexodesktop/GUI/flexo/src/main/resources/Config/Inspector -o /Users/sylvain/GIT/openflexo/flexodesktop/GUI/flexo/src/main/resources/Inspectors/COMMON -fib org.openflexo.inspector.FIBInspector"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="flexoenterprise"/>
-<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512M -Dapple.laf.useScreenMenuBar=true -Xdock:name=DrawingEditor -Djava.util.logging.config.file=${workspace_loc:flexoutils}/src/main/resources/Config/logging.properties"/>
 </launchConfiguration>
