@@ -22,6 +22,7 @@ package org.openflexo.fib.model;
 import java.awt.Color;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
 
 public class FIBBrowser extends FIBWidget {
@@ -371,6 +373,15 @@ public class FIBBrowser extends FIBWidget {
 			} else {
 				c = c.getSuperclass();
 			}
+		}
+		List<Class> matchingClasses = new Vector<Class>();
+		for (Class cl : elementsForClasses.keySet()) {
+			if (cl.isAssignableFrom(aClass)) {
+				matchingClasses.add(cl);
+			}
+		}
+		if (matchingClasses.size() > 0) {
+			return elementsForClasses.get(TypeUtils.getMostSpecializedClass(matchingClasses));
 		}
 		return null;
 	}
