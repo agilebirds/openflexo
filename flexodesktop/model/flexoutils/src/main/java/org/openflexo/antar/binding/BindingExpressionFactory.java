@@ -3,7 +3,7 @@
  */
 package org.openflexo.antar.binding;
 
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.openflexo.antar.binding.BindingExpression.BindingValueConstant;
@@ -103,7 +103,7 @@ public class BindingExpressionFactory extends StringEncoder.Converter<BindingExp
 		private final DefaultFunctionFactory functionFactory = new DefaultFunctionFactory();
 
 		@Override
-		public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+		public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
 			return new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable), bindable);
 		}
 	}

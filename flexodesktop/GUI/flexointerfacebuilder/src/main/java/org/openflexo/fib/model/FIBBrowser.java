@@ -364,14 +364,25 @@ public class FIBBrowser extends FIBWidget {
 		}
 	}
 
-	public FIBBrowserElement elementForClass(Class aClass) {
-		Class c = aClass;
-		while (c != null) {
-			FIBBrowserElement returned = elementsForClasses.get(c);
-			if (returned != null) {
-				return returned;
-			} else {
-				c = c.getSuperclass();
+	public FIBBrowserElement elementForClass(Class<?> aClass) {
+		FIBBrowserElement returned = elementsForClasses.get(aClass);
+		if (returned != null) {
+			return returned;
+		} else {
+			Class<?> superclass = aClass.getSuperclass();
+			if (superclass != null) {
+				returned = elementsForClasses.get(aClass);
+				if (returned != null) {
+					return returned;
+				} else {
+					for (Class<?> superInterface : aClass.getInterfaces()) {
+						returned = elementsForClasses.get(superInterface);
+						if (returned != null) {
+							return returned;
+						}
+					}
+					return elementForClass(superclass);
+				}
 			}
 		}
 		List<Class> matchingClasses = new Vector<Class>();

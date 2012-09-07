@@ -1330,8 +1330,8 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	 * 
 	 * @return a Vector of OperationNode
 	 */
-	public Vector<OperationNode> getAllOperationNodesWithComponent() {
-		Vector<OperationNode> retval = new Vector<OperationNode>();
+	public List<OperationNode> getAllOperationNodesWithComponent() {
+		List<OperationNode> retval = new Vector<OperationNode>();
 		for (OperationNode operation : getAllEmbeddedOperationNodes()) {
 			if (operation.hasWOComponent()) {
 				retval.add(operation);

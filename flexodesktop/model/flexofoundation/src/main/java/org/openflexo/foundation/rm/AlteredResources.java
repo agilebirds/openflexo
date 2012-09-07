@@ -61,7 +61,7 @@ public class AlteredResources extends ResourceList {
 	 */
 	@Override
 	public void update() {
-		for (FlexoResource resource : this) {
+		for (FlexoResource<FlexoResourceData> resource : this) {
 			resource.getDependentResources().update();
 		}
 		_resourceIncludingInactive.clear();
@@ -92,23 +92,23 @@ public class AlteredResources extends ResourceList {
 	 * scheme, do: update() then getResources(aBoolean,DependancyAlgorithmScheme.Optimistic).
 	 * 
 	 * @param includeInactiveResource
-	 * @param dependancyScheme
+	 * @param dependencyScheme
 	 * @return
 	 */
-	public Vector<FlexoResource<FlexoResourceData>> getResources(boolean includeInactiveResource, DependencyAlgorithmScheme dependancyScheme) {
+	public Vector<FlexoResource<FlexoResourceData>> getResources(boolean includeInactiveResource, DependencyAlgorithmScheme dependencyScheme) {
 		Vector<FlexoResource<FlexoResourceData>> returned = null;
 		if (includeInactiveResource) {
-			returned = _resourceIncludingInactive.get(dependancyScheme);
+			returned = _resourceIncludingInactive.get(dependencyScheme);
 			if (returned == null) {
-				returned = buildResources(includeInactiveResource, dependancyScheme);
-				_resourceIncludingInactive.put(dependancyScheme, returned);
+				returned = buildResources(includeInactiveResource, dependencyScheme);
+				_resourceIncludingInactive.put(dependencyScheme, returned);
 			}
 			return returned;
 		} else {
-			returned = _resourceExcludingInactive.get(dependancyScheme);
+			returned = _resourceExcludingInactive.get(dependencyScheme);
 			if (returned == null) {
-				returned = buildResources(includeInactiveResource, dependancyScheme);
-				_resourceExcludingInactive.put(dependancyScheme, returned);
+				returned = buildResources(includeInactiveResource, dependencyScheme);
+				_resourceExcludingInactive.put(dependencyScheme, returned);
 			}
 			return returned;
 		}

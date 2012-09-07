@@ -22,7 +22,7 @@ package org.openflexo.fib.model;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.model.FIBComponent.DependancyLoopException;
+import org.openflexo.fib.model.FIBComponent.DependencyLoopException;
 
 public class FIBDependancy extends FIBModelObject {
 
@@ -65,7 +65,7 @@ public class FIBDependancy extends FIBModelObject {
 			this.masterComponent = masterComponent;
 			try {
 				getOwner().declareDependantOf(masterComponent);
-			} catch (DependancyLoopException e) {
+			} catch (DependencyLoopException e) {
 				logger.warning("DependancyLoopException raised while applying explicit dependancy for " + getOwner() + " and "
 						+ getMasterComponent() + " message: " + e.getMessage());
 			}

@@ -33,7 +33,7 @@ import org.openflexo.foundation.cg.generator.GeneratedCopiedFile;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.rm.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
-import org.openflexo.foundation.rm.ResourceDependancyLoopException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.generator.FlexoResourceGenerator;
@@ -86,12 +86,12 @@ public class ResourceToCopyGenerator extends FlexoResourceGenerator<FlexoModelOb
 						e.printStackTrace();
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
-					} catch (ResourceDependancyLoopException e) {
+					} catch (ResourceDependencyLoopException e) {
 						e.printStackTrace();
 					}
 				}
 			}
-		} catch (ResourceDependancyLoopException e) {
+		} catch (ResourceDependencyLoopException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Resource dependency loop ", e);
 			}

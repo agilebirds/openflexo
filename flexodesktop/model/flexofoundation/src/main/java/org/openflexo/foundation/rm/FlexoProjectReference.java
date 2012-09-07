@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
@@ -79,7 +80,7 @@ public class FlexoProjectReference implements StringConvertable<FlexoProjectRefe
 		return status;
 	}
 
-	public FlexoProject getProject() {
+	public FlexoProject getProject() throws ProjectLoadingCancelledException {
 		if (referredProject == null && serializationRepresentation != null) {
 			referredProject = referringProject.loadProject(this);
 			if (referredProject != null) {

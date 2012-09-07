@@ -384,7 +384,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 		// + nameForOperation(getProject().getFlexoNavigationMenu().getRootMenu().getOperation());
 		if (getProject().getFlexoNavigationMenu().getRootMenu().getOperation() == null) {
 			if (getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().size() > 0) {
-				return getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().firstElement()
+				return getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().get(0)
 						.getStaticDirectActionUrl();
 			} else {
 				return "null";

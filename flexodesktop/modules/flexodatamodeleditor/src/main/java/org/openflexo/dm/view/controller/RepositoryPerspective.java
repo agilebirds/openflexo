@@ -65,7 +65,9 @@ class RepositoryPerspective extends DMPerspective {
 		setTopLeftView(leftView);
 	}
 
+	@Override
 	public void setProject(FlexoProject project) {
+		super.setProject(project);
 		_browser.setRootObject(project != null ? project.getDataModel() : null);
 	}
 

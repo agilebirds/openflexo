@@ -19,6 +19,8 @@
  */
 package org.openflexo.antar.expr;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.antar.binding.Bindable;
@@ -26,13 +28,12 @@ import org.openflexo.antar.binding.Bindable;
 public class Function extends Expression {
 
 	private String name;
-	private Vector<Expression> args;
+	private List<Expression> args;
 
-	public Function(String name, Vector<Expression> args) {
+	public Function(String name, List<Expression> args) {
 		super();
 		this.name = name;
-		this.args = new Vector<Expression>();
-		this.args.addAll(args);
+		this.args = new ArrayList<Expression>(args);
 	}
 
 	@Override
@@ -48,11 +49,11 @@ public class Function extends Expression {
 		this.name = name;
 	}
 
-	public Vector<Expression> getArgs() {
+	public List<Expression> getArgs() {
 		return args;
 	}
 
-	public void setArgs(Vector<Expression> args) {
+	public void setArgs(List<Expression> args) {
 		this.args = args;
 	}
 
@@ -67,7 +68,7 @@ public class Function extends Expression {
 	@Override
 	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 
-		Vector<Expression> evaluatedArgs = new Vector<Expression>();
+		List<Expression> evaluatedArgs = new ArrayList<Expression>();
 		for (Expression arg : getArgs()) {
 			evaluatedArgs.add(arg.evaluate(context, bindable));
 		}

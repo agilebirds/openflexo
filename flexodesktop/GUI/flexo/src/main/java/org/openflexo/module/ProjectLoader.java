@@ -19,8 +19,6 @@
  */
 package org.openflexo.module;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileFilter;
@@ -33,10 +31,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
@@ -44,7 +38,6 @@ import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.ch.FCH;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.param.CheckboxParameter;
@@ -53,8 +46,6 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.FileParameter;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
-import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
@@ -71,12 +62,11 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
-import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.xmlcode.KeyValueCoder;
 
-public final class ProjectLoader implements HasPropertyChangeSupport, FlexoProjectReferenceLoader {
+public final class ProjectLoader implements HasPropertyChangeSupport {
 
 	public static final String PROJECT_OPENED = "projectOpened";
 	public static final String PROJECT_CLOSED = "projectClosed";
@@ -153,42 +143,14 @@ public final class ProjectLoader implements HasPropertyChangeSupport, FlexoProje
 		final FlexoEditor editor;
 		try {
 			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-					applicationContext.getProjectLoadingHandler(projectDirectory), this, getResourceCenter());
+					applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
+					getResourceCenter());
 			newEditor(editor);
 		} finally {
 			ProgressWindow.hideProgressWindow();
 		}
 		ProgressWindow.hideProgressWindow();
 		return editor;
-	}
-
-	@Override
-	public FlexoProject loadProject(FlexoProjectReference reference) {
-		JPanel panel = new JPanel(new GridBagLayout());
-		JLabel name = new JLabel(FlexoLocalization.localizedForKey("project_name") + ":");
-		JTextField nameField = new JTextField(reference.getProjectName());
-		nameField.setEditable(false);
-		JLabel uri = new JLabel(FlexoLocalization.localizedForKey("project_uri") + ":");
-		JTextField uriField = new JTextField(reference.getProjectURI());
-		uriField.setEditable(false);
-		ProjectChooserComponent projectChooserComponent = new ProjectChooserComponent(null) {
-		};
-		projectChooserComponent.setOpenMode();
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		panel.add(name, gbc);
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		panel.add(nameField, gbc);
-		gbc.gridwidth = GridBagConstraints.RELATIVE;
-		panel.add(uri, gbc);
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		panel.add(uriField, gbc);
-		panel.add(projectChooserComponent.getComponent(), gbc);
-		FlexoDialog dialog = new FlexoDialog();
-		dialog.setModal(true);
-		dialog.add(panel);
-		dialog.setVisible(true);
-		return null;// projectChooserComponent.getSelectedFile();
 	}
 
 	public void reloadProject(FlexoProject project) throws ProjectLoadingCancelledException, ProjectInitializerException {
@@ -212,7 +174,7 @@ public final class ProjectLoader implements HasPropertyChangeSupport, FlexoProje
 
 		preInitialization(projectDirectory);
 		FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-				this, getResourceCenter());
+				applicationContext.getProjectReferenceLoader(), getResourceCenter());
 		newEditor(editor);
 		return editor;
 	}

@@ -19,6 +19,7 @@
  */
 package org.openflexo.inspector.model;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.antar.expr.DefaultExpressionParser;
@@ -43,10 +44,10 @@ public class PropertyListAction extends ParametersContainerModelObject {
 	private String isAvailable;
 
 	private Expression methodExpression;
-	private Vector<Expression> methodExpressionArgs;
+	private List<Expression> methodExpressionArgs;
 
 	private Expression isAvailableExpression;
-	private Vector<Expression> isAvailableExpressionArgs;
+	private List<Expression> isAvailableExpressionArgs;
 
 	private Vector<String> availableActionType;
 
@@ -108,7 +109,7 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		return method;
 	}
 
-	public Vector<Expression> getMethodExpressionArgs() {
+	public List<Expression> getMethodExpressionArgs() {
 		return methodExpressionArgs;
 	}
 
@@ -145,7 +146,7 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		return isAvailable;
 	}
 
-	public Vector<Expression> getIsAvailableExpressionArgs() {
+	public List<Expression> getIsAvailableExpressionArgs() {
 		return isAvailableExpressionArgs;
 	}
 

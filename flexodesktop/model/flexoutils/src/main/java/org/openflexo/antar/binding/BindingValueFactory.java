@@ -5,7 +5,9 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -109,7 +111,7 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 		tries[2] = "_" + callName;
 		tries[3] = "_get" + propertyNameWithFirstCharToUpperCase;
 
-		Vector<Method> possiblyMatchingMethods = new Vector<Method>();
+		List<Method> possiblyMatchingMethods = new ArrayList<Method>();
 		for (Method method : allMethods) {
 			if (method.getGenericParameterTypes().length == paramsAsString.size()) {
 				for (int i = 0; i < 4; i++) {
@@ -121,7 +123,7 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 		}
 		BindingValue.logger.fine("possiblyMatchingMethods=" + possiblyMatchingMethods);
 		// if (debug) System.out.println("possiblyMatchingMethods=" + possiblyMatchingMethods);
-		Vector<MethodCall> results = new Vector<MethodCall>();
+		List<MethodCall> results = new ArrayList<MethodCall>();
 		for (Method method : possiblyMatchingMethods) {
 			boolean successfull = true;
 			MethodCall methodCall = new MethodCall(owner, method, currentType);
@@ -177,12 +179,12 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 			}
 		}
 		if (results.size() == 1) {
-			return results.firstElement();
+			return results.get(0);
 		} else if (results.size() > 1) {
 			if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 				BindingValue.logger.warning("While decoding BindingValue '" + aValue + "' : found ambigous methods " + callName);
 			}
-			return results.firstElement();
+			return results.get(0);
 		}
 		if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 			BindingValue.logger.warning("Could not decode BindingValue : cannot find method call matching '" + aValue);

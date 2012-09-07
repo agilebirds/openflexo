@@ -75,7 +75,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 	private File projectDirectory;
 
-	private boolean requireDependanciesRebuild = false;
+	private boolean requireDependenciesRebuild = false;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -262,13 +262,19 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				progress.setProgress(FlexoLocalization.localizedForKey("loading_project"));
 				_loadProjectProgress = progress;
 			}
-			findAndSetRMVersion();
+			try {
+				findAndSetRMVersion();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			try {
 				_loadingHandler = loadingHandler;
 				projectDirectory = getFile().getParentFile();
 				performLoadWithPreviousVersion = false;
 				project = performLoadResourceData(progress, loadingHandler);
 				project.setXmlMappings(getXmlMappings());
+				project.setProjectReferenceLoader(projectReferenceLoader);
+				project.loadImportedProjects();
 				xmlMappings = null;
 			} catch (FlexoFileNotFoundException e) {
 				if (logger.isLoggable(Level.SEVERE)) {
@@ -377,15 +383,13 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				}
 			}
 
-			if (requireDependanciesRebuild) {
+			if (requireDependenciesRebuild) {
 				getProject().rebuildDependencies();
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Dependancies rebuilding has been performed. Save RM file.");
 				}
 			}
-			//
 			try {
-				// saveResourceData();
 				if (project.isModified()) {
 					project.getFlexoRMResource().saveResourceData();
 					// Et surtout pas saveResourceData() car cette resource est a oublier, ne l'oublions pas ;-)
@@ -409,7 +413,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			if (progress != null) {
 				progress.setProgress("Check ProcessInstance consistency");
 			}
-			getProject().getFlexoWorkflow().checkProcessDMEntitiesConsitency();
+			getProject().getFlexoWorkflow().checkProcessDMEntitiesConsistency();
 			_loadProjectProgress = null;
 			return project;
 		} catch (LoadXMLResourceException e) {
@@ -473,11 +477,12 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 	}
 
 	/**
-	 *
+	 * @throws IOException
+	 * 
 	 */
-	private void findAndSetRMVersion() {
+	private void findAndSetRMVersion() throws IOException {
 		try {
-			String s = new String(FileUtils.getBytes(getFile()), "UTF-8");
+			String s = FileUtils.fileContents(getFile());
 			String version = null;
 			Matcher m = RM_TAG_PATTERN.matcher(s);
 			if (m.find()) {
@@ -513,7 +518,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Will rebuild dependancies later");
 			}
-			requireDependanciesRebuild = true;
+			requireDependenciesRebuild = true;
 			return true;
 		}
 		if (v1.equals(new FlexoVersion("3.1")) && v2.equals(new FlexoVersion("3.2"))) {

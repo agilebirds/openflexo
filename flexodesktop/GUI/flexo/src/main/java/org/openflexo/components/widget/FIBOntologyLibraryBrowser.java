@@ -33,7 +33,6 @@ import org.openflexo.view.controller.FlexoController;
  * 
  */
 public class FIBOntologyLibraryBrowser extends FIBBrowserView<OntologyLibrary> {
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBOntologyLibraryBrowser.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBOntologyLibraryBrowser.fib");

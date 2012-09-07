@@ -1,6 +1,7 @@
 package org.openflexo.builders;
 
 import java.io.File;
+import java.util.logging.Level;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
@@ -12,6 +13,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
@@ -20,6 +22,9 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 
 public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
+
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(FlexoExternalMainWithProject.class
+			.getPackage().getName());
 
 	private static final int PROJECT_LOADING_FAILURE = -8;
 	private static final int PROJECT_CANCELED_FAILURE = -18;
@@ -53,6 +58,14 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
 			@Override
 			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				return null;
+			}
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Project reference loader is not implemented for external builders");
+				}
 				return null;
 			}
 		};

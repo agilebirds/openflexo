@@ -742,7 +742,7 @@ public class BindingExpression extends AbstractBinding {
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+			public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
 				// System.out.println("> makeFunction with "+functionName);
 				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable),
 						getOwner());
@@ -816,7 +816,7 @@ public class BindingExpression extends AbstractBinding {
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+			public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
 				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable),
 						getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
@@ -870,7 +870,7 @@ public class BindingExpression extends AbstractBinding {
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+			public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
 				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable),
 						getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);

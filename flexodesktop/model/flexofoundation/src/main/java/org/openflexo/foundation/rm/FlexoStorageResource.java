@@ -344,7 +344,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 		}
 		try {
 			update();
-		} catch (ResourceDependancyLoopException e1) {
+		} catch (ResourceDependencyLoopException e1) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e1);
 			}
@@ -426,7 +426,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 		return false;
 	}
 
-	public final void backwardSynchronizeWith(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, FlexoException,
+	public final void backwardSynchronizeWith(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, FlexoException,
 			FileNotFoundException {
 		if (!updatedResources.isEmpty()) {
 			if (logger.isLoggable(Level.FINE)) {
@@ -456,7 +456,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	}
 
 	@Override
-	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, FlexoException,
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, FlexoException,
 			LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException {
 		if (!isLoaded()) {
 			try {

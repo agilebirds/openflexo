@@ -236,7 +236,7 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 		}
 		Vector<OperationNode> v;
 		if (this.model.getProcess() != null) {
-			v = this.model.getProcess().getAllOperationNodesWithComponent();
+			v = new Vector<OperationNode>(this.model.getProcess().getAllOperationNodesWithComponent());
 		} else {
 			v = new Vector<OperationNode>();
 		}
@@ -293,11 +293,7 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 				JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				if (value != null) {
-					if (value == null) {
-						label.setText(FlexoLocalization.localizedForKey("no_selection", label));
-					} else {
-						label.setText(((IETabWidget) value).getTitle());
-					}
+					label.setText(((IETabWidget) value).getTitle());
 				}
 				FontMetrics fm = label.getFontMetrics(label.getFont());
 				label.setPreferredSize(new Dimension(fm.stringWidth(label.getText()) + 15, fm.getHeight()));

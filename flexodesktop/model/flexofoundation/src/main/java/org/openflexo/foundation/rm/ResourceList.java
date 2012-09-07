@@ -98,7 +98,7 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 		removeFromResources(resource);
 	}
 
-	public void addToResources(FlexoResource resource) {
+	public void addToResources(FlexoResource<FlexoResourceData> resource) {
 		if (resource.isDeleted()) {
 			return;
 		}
@@ -111,7 +111,7 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 		}
 	}
 
-	public void removeFromResources(FlexoResource resource) {
+	public void removeFromResources(FlexoResource<FlexoResourceData> resource) {
 		if (contains(resource)) {
 			remove(resource);
 			if (getRelatedResource() != null) {

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.bindings;
 
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -259,7 +260,7 @@ public class BindingExpression extends AbstractBinding {
 			private DefaultFunctionFactory functionFactory = new DefaultFunctionFactory();
 
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args, org.openflexo.antar.binding.Bindable bindable) {
+			public Expression makeFunction(String functionName, List<Expression> args, org.openflexo.antar.binding.Bindable bindable) {
 				return new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable), _bindable);
 			}
 		}

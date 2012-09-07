@@ -26,6 +26,7 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.antar.binding.Bindable;
@@ -500,12 +501,12 @@ public class ExpressionParser {
 	}
 
 	public static interface FunctionFactory {
-		public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable);
+		public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable);
 	}
 
 	public static class DefaultFunctionFactory implements FunctionFactory {
 		@Override
-		public Function makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+		public Function makeFunction(String functionName, List<Expression> args, Bindable bindable) {
 			return new Function(functionName, args);
 		}
 	}

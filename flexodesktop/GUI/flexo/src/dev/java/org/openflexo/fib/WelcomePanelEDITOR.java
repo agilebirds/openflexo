@@ -27,6 +27,7 @@ import org.openflexo.components.WelcomeDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -48,6 +49,11 @@ public class WelcomePanelEDITOR {
 					@Override
 					public FlexoEditor createApplicationEditor() {
 						return new InteractiveFlexoEditor(this, null);
+					}
+
+					@Override
+					protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+						return null;
 					}
 
 					@Override

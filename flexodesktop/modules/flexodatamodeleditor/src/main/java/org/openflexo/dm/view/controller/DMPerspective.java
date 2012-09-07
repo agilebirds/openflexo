@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import org.openflexo.components.widget.DMEntitySelector;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
@@ -35,6 +36,7 @@ public abstract class DMPerspective extends FlexoPerspective {
 	protected JPanel searchPanel;
 	private DMEntity searchedEntity = null;
 	private DMController controller;
+	private DMEntitySelector<DMEntity> entitySelector;
 
 	public DMPerspective(String name, final DMController controller) {
 		super(name);
@@ -42,7 +44,7 @@ public abstract class DMPerspective extends FlexoPerspective {
 
 		searchPanel = new JPanel(new BorderLayout());
 		searchPanel.add(new JLabel(FlexoLocalization.localizedForKey("search")), BorderLayout.WEST);
-		searchPanel.add(new DMEntitySelector<DMEntity>(controller.getProject(), searchedEntity, DMEntity.class) {
+		entitySelector = new DMEntitySelector<DMEntity>(controller.getProject(), searchedEntity, DMEntity.class) {
 			@Override
 			public void setEditedObject(DMEntity entity) {
 				if (!browserMayRepresent(entity)) {
@@ -53,7 +55,12 @@ public abstract class DMPerspective extends FlexoPerspective {
 				searchedEntity = entity;
 				controller.getSelectionManager().setSelectedObject(entity);
 			}
-		}, BorderLayout.CENTER);
+		};
+		searchPanel.add(entitySelector, BorderLayout.CENTER);
+	}
+
+	public void setProject(FlexoProject project) {
+		entitySelector.setRootObject(project.getDataModel());
 	}
 
 	public DMController getController() {
