@@ -273,6 +273,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				performLoadWithPreviousVersion = false;
 				project = performLoadResourceData(progress, loadingHandler);
 				project.setXmlMappings(getXmlMappings());
+				project.setProjectReferenceLoader(projectReferenceLoader);
+				project.loadImportedProjects();
 				xmlMappings = null;
 			} catch (FlexoFileNotFoundException e) {
 				if (logger.isLoggable(Level.SEVERE)) {

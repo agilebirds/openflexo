@@ -34,7 +34,7 @@ import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
 import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.fib.model.FIBComponent.DependancyLoopException;
+import org.openflexo.fib.model.FIBComponent.DependencyLoopException;
 import org.openflexo.fib.model.FIBModelObject.FIBModelAttribute;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
@@ -304,7 +304,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 									if (primitiveValue != null && primitiveValue.startsWith(data)) {
 										try {
 											component.declareDependantOf(next);
-										} catch (DependancyLoopException e) {
+										} catch (DependencyLoopException e) {
 											logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
 													+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
 													+ primitiveValue + " component: " + component + " dependancy: " + next + " data: "
@@ -328,7 +328,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 										&& primitiveValue.startsWith(next.getName())) {
 									try {
 										component.declareDependantOf(next);
-									} catch (DependancyLoopException e) {
+									} catch (DependencyLoopException e) {
 										logger.warning("DependancyLoopException raised while declaring dependancy (name lookup)"
 												+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
 												+ primitiveValue + " component: " + component + " dependancy: " + next + " message: "

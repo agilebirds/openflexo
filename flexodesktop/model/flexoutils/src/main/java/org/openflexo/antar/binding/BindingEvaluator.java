@@ -1,6 +1,6 @@
 package org.openflexo.antar.binding;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
@@ -63,7 +63,7 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 						}
 					}, new DefaultFunctionFactory() {
 						@Override
-						public Function makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+						public Function makeFunction(String functionName, List<Expression> args, Bindable bindable) {
 							if (!functionName.startsWith("object.")) {
 								return super.makeFunction("object." + functionName, args, bindable);
 							} else {

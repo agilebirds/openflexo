@@ -4270,6 +4270,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		notifyObservers(new DataModification(IMPORTED_PROJECTS, projectReference, null));
 	}
 
+	public void loadImportedProjects() throws ProjectLoadingCancelledException {
+		for (FlexoProjectReference ref : importedProjects) {
+			ref.getProject();
+		}
+	}
+
 	public FlexoProject getProjectWithURI(String projectURI) {
 		for (FlexoProjectReference ref : importedProjects) {
 			if (ref.getProjectURI().equals(projectURI)) {
@@ -4295,4 +4301,5 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
+
 }

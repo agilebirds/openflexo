@@ -21,6 +21,7 @@ package org.openflexo.antar.expr;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -202,7 +203,7 @@ public abstract class Expression {
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args, Bindable bindable) {
+			public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
 				StringBuffer key = new StringBuffer();
 				key.append(functionName + "(");
 				for (int i = 0; i < args.size(); i++) {

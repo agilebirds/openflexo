@@ -336,14 +336,16 @@ public class BindingValue extends AbstractBinding {
 
 	private boolean _checkBindingPathValid(boolean debug) {
 		if (_bindingVariable == null) {
-			if (debug)
+			if (debug) {
 				System.out.println("BindingVariable is null");
+			}
 			return false;
 		}
 		Type currentType = _bindingVariable.getType();
 		if (currentType == null) {
-			if (debug)
+			if (debug) {
 				System.out.println("currentType is null");
+			}
 			return false;
 		}
 
@@ -352,20 +354,23 @@ public class BindingValue extends AbstractBinding {
 			if (i > 0
 					&& (element.getDeclaringClass() == null || TypeUtils.getBaseClass(currentType) == null || !TypeUtils.isClassAncestorOf(
 							element.getDeclaringClass(), TypeUtils.getBaseClass(currentType)))) {
-				if (debug)
+				if (debug) {
 					System.out.println("Mismatched: " + element.getDeclaringClass() + " " + TypeUtils.getBaseClass(currentType)
 							+ " element is a " + element.getClass());
+				}
 				return false;
 			}
 			if (!element.isBindingValid()) {
-				if (debug)
+				if (debug) {
 					System.out.println("element.isBindingValid() = false");
+				}
 				return false;
 			}
 			currentType = _bindingPath.getResultingTypeAtIndex(i);
 			if (currentType == null) {
-				if (debug)
+				if (debug) {
 					System.out.println("currentType is null 2");
+				}
 				return false;
 			}
 		}
