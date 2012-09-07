@@ -361,7 +361,7 @@ public class FileUtils {
 
 	public static String fileContents(InputStream inputStream, String encoding) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, encoding != null ? encoding : "UTF-8"));
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		String line = null;
 		while ((line = br.readLine()) != null) {
 			sb.append(line);
@@ -390,16 +390,6 @@ public class FileUtils {
 		}
 	}
 
-	/**
-	 * @param file
-	 */
-	/*
-	 * public static void removeSystemFile(File file) { if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) try { Runtime.getRuntime().exec(
-	 * "attrib -S \"" + file.getAbsolutePath() + "\""); } catch (IOException e) { e.printStackTrace(); } catch (Exception e) {
-	 * e.printStackTrace(); }
-	 * 
-	 * }
-	 */
 	public static String convertBackslashesToSlash(String fileName) {
 		return fileName.replaceAll("\\\\", "/");
 	}
@@ -705,8 +695,9 @@ public class FileUtils {
 	 */
 	public static String[] getPathComponents(String canonicalPath) {
 		String regex = File.separator;
-		if (regex.equals("\\"))
+		if (regex.equals("\\")) {
 			regex = "\\\\";
+		}
 		return canonicalPath.split(regex);
 	}
 

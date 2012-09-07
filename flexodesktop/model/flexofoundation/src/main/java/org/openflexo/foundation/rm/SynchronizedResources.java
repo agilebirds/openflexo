@@ -87,10 +87,10 @@ public class SynchronizedResources extends ResourceList {
 	 * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource)
 	 */
 	@Override
-	public void setRelatedResource(FlexoResource relatedResource) {
+	public void setRelatedResource(FlexoResource<? extends FlexoResourceData> relatedResource) {
 		super.setRelatedResource(relatedResource);
-		for (Enumeration en = elements(); en.hasMoreElements();) {
-			FlexoResource next = (FlexoResource) en.nextElement();
+		for (Enumeration<FlexoResource<FlexoResourceData>> en = elements(); en.hasMoreElements();) {
+			FlexoResource<FlexoResourceData> next = en.nextElement();
 			if (!next.getSynchronizedResources().contains(getRelatedResource())) {
 				next.addToSynchronizedResources(getRelatedResource());
 			}

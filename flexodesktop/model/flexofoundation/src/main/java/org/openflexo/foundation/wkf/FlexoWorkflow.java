@@ -1505,10 +1505,10 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	/**
-	 * Recovery method use to detect and repair inconstencies in the model regarding Process and ProcessDMEntities.
+	 * Recovery method use to detect and repair inconsistencies in the model regarding Process and ProcessDMEntities.
 	 */
 
-	public void checkProcessDMEntitiesConsitency() {
+	public void checkProcessDMEntitiesConsistency() {
 		int processCount = getAllLocalFlexoProcesses().size();
 		int processDMEntityCount = getProject().getDataModel().getProcessInstanceRepository().getEntities().size();
 		if (processCount != processDMEntityCount) {

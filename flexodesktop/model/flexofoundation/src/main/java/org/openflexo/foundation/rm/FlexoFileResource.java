@@ -472,7 +472,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 			FlexoResource next = (FlexoResource) en.nextElement();
 			try {
 				next.update();
-			} catch (ResourceDependancyLoopException e) {
+			} catch (ResourceDependencyLoopException e) {
 				if (logger.isLoggable(Level.SEVERE)) {
 					logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
 				}

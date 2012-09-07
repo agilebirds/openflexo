@@ -21,11 +21,11 @@ package org.openflexo.foundation.rm;
 
 import java.util.Stack;
 
-public class ResourceDependancyLoopException extends Exception {
+public class ResourceDependencyLoopException extends Exception {
 
 	private Stack<FlexoResource> resourceStack;
 
-	public ResourceDependancyLoopException(FlexoResource involvedResource) {
+	public ResourceDependencyLoopException(FlexoResource involvedResource) {
 		resourceStack = new Stack<FlexoResource>();
 		if (involvedResource != null) {
 			resourceStack.push(involvedResource);

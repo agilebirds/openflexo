@@ -79,7 +79,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		for (FlexoResource<? extends FlexoResourceData> r : resources) {
 			try {
 				r.resolveOrder();
-			} catch (ResourceDependancyLoopException e) {
+			} catch (ResourceDependencyLoopException e) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Loop in dependancies found! Will continue but this should not happen.");
 				}
@@ -97,14 +97,14 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 
 	protected boolean resourceHasBeenSeen;
 
-	public int resolveOrder() throws ResourceDependancyLoopException {
+	public int resolveOrder() throws ResourceDependencyLoopException {
 		resourceHasBeenSeen = true;
 		try {
 			int highOrder = -1;
 			for (Iterator<FlexoResource<FlexoResourceData>> iter = getDependentResources().iterator(); iter.hasNext();) {
 				FlexoResource<FlexoResourceData> r = iter.next();
 				if (r.resourceHasBeenSeen) {
-					throw new ResourceDependancyLoopException(r);
+					throw new ResourceDependencyLoopException(r);
 				} else {
 					highOrder = Math.max(highOrder, r.resolveOrder());
 				}
@@ -440,6 +440,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		return DELETED_PROPERTY;
 	}
 
+	@Override
 	public boolean isDeleted() {
 		return isDeleted;
 	}
@@ -476,18 +477,18 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		}
 	}
 
-	private Vector<FlexoResource> getSimplePropagationTargets(RMNotification notification) {
-		Vector<FlexoResource> returned = new Vector<FlexoResource>();
-		Enumeration en = getSynchronizedResources().elements();
+	private Vector<FlexoResource<FlexoResourceData>> getSimplePropagationTargets(RMNotification notification) {
+		Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>();
+		Enumeration<FlexoResource<FlexoResourceData>> en = getSynchronizedResources().elements();
 		while (en.hasMoreElements()) {
-			FlexoResource temp = (FlexoResource) en.nextElement();
+			FlexoResource<FlexoResourceData> temp = en.nextElement();
 			if (notification.propagateToSynchronizedResource(this, temp)) {
 				returned.add(temp);
 			}
 		}
 		en = getAlteredResources().elements();
 		while (en.hasMoreElements()) {
-			FlexoResource temp = (FlexoResource) en.nextElement();
+			FlexoResource<FlexoResourceData> temp = en.nextElement();
 			if (notification.propagateToAlteredResource(this, temp)) {
 				returned.add(temp);
 			}
@@ -495,13 +496,13 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		return returned;
 	}
 
-	private Vector<FlexoResource> getDeepPropagationTargets(RMNotification notification) {
-		Vector<FlexoResource> returned = new Vector<FlexoResource>();
+	private Vector<FlexoResource<FlexoResourceData>> getDeepPropagationTargets(RMNotification notification) {
+		Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>();
 		addDeepPropagationTargets(returned, notification);
 		return returned;
 	}
 
-	private void addDeepPropagationTargets(Vector<FlexoResource> targetList, RMNotification notification) {
+	private void addDeepPropagationTargets(Vector<FlexoResource<FlexoResourceData>> targetList, RMNotification notification) {
 		Enumeration<FlexoResource<FlexoResourceData>> en = getSynchronizedResources().elements();
 		while (en.hasMoreElements()) {
 			FlexoResource<FlexoResourceData> res = en.nextElement();
@@ -539,9 +540,9 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * Note: Calling this method assert that NO MODIFICATION will be performed on the entire model
 	 * 
 	 * @return
-	 * @throws ResourceDependancyLoopException
+	 * @throws ResourceDependencyLoopException
 	 */
-	public final boolean needsUpdate() throws ResourceDependancyLoopException {
+	public final boolean needsUpdate() throws ResourceDependencyLoopException {
 		return _needsUpdate(makeSingleton());
 	}
 
@@ -556,13 +557,13 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * When returning, we are sure that the method is up-to-date.
 	 * 
 	 * @return a tree representing all resources that were updated
-	 * @throws ResourceDependancyLoopException
+	 * @throws ResourceDependencyLoopException
 	 * @throws FlexoException
 	 * @throws ProjectLoadingCancelledException
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
-	public final FlexoResourceTree update() throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException,
+	public final FlexoResourceTree update() throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException,
 			ProjectLoadingCancelledException, FlexoException {
 		return _update(makeSingleton());
 	}
@@ -573,12 +574,12 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @param updatedResources
 	 *            : supply a tree representing all resources that were updated below
-	 * @throws ResourceDependancyLoopException
+	 * @throws ResourceDependencyLoopException
 	 * @throws ProjectLoadingCancelledException
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
-	protected abstract void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException,
+	protected abstract void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException,
 			LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
 
 	/**
@@ -604,11 +605,11 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * Note2: we assert here that only current resource is requesting this data
 	 * 
 	 * @return a FlexoResourceTree representing all resources requiring to be updated
-	 * @throws ResourceDependancyLoopException
+	 * @throws ResourceDependencyLoopException
 	 *             if a loop was detected (loop in dependancies definition)
 	 */
-	private final FlexoResourceTree buildDependanciesTree() throws ResourceDependancyLoopException {
-		return buildDependanciesTree(makeSingleton());
+	private final FlexoResourceTree buildDependanciesTree() throws ResourceDependencyLoopException {
+		return buildDependencyTree(makeSingleton());
 	}
 
 	/**
@@ -620,24 +621,24 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param processedResources
 	 *            : a set of resources involved in this request
 	 * @return a FlexoResourceTree representing all resources requiring to be updated
-	 * @throws ResourceDependancyLoopException
+	 * @throws ResourceDependencyLoopException
 	 *             if a loop was detected (loop in dependancies definition)
 	 */
-	private final FlexoResourceTree buildDependanciesTree(List<FlexoResource<FlexoResourceData>> processedResources)
-			throws ResourceDependancyLoopException {
+	private final FlexoResourceTree buildDependencyTree(List<FlexoResource<FlexoResourceData>> processedResources)
+			throws ResourceDependencyLoopException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
 		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false, getProject().getDependancyScheme()); e
 				.hasMoreElements();) {
 			FlexoResource<FlexoResourceData> resource = e.nextElement();
 			if (processedResources.contains(resource)) {
-				throw new ResourceDependancyLoopException(resource);
+				throw new ResourceDependencyLoopException(resource);
 			}
 			List<FlexoResource<FlexoResourceData>> newProcessesResources = new ArrayList<FlexoResource<FlexoResourceData>>(
 					processedResources);
 			newProcessesResources.add(resource);
 			if (resource._needsUpdate(newProcessesResources) || requireUpdateBecauseOf(resource)) {
 				// Add this resource to dependancies tree
-				returned.add(resource.buildDependanciesTree(newProcessesResources));
+				returned.add(resource.buildDependencyTree(newProcessesResources));
 			}
 		}
 		return returned;
@@ -650,7 +651,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param processedResources
 	 *            : a set of resources involved in this request
 	 * @return a FlexoResourceTree representing all resources that were updated
-	 * @throws ResourceDependancyLoopException
+	 * @throws ResourceDependencyLoopException
 	 *             if a loop was detected (loop in dependancies definition)
 	 * @throws FlexoException
 	 * @throws ProjectLoadingCancelledException
@@ -658,14 +659,14 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws LoadResourceException
 	 */
 	protected final FlexoResourceTree performUpdateDependanciesModel(List<FlexoResource<FlexoResourceData>> processedResources)
-			throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
+			throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
 			FlexoException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
 		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false, getProject().getDependancyScheme()); e
 				.hasMoreElements();) {
 			FlexoResource<FlexoResourceData> resource = e.nextElement();
 			if (processedResources.contains(resource)) {
-				throw new ResourceDependancyLoopException(resource);
+				throw new ResourceDependencyLoopException(resource);
 			}
 			List<FlexoResource<FlexoResourceData>> newProcessesResources = new ArrayList<FlexoResource<FlexoResourceData>>(
 					processedResources);
@@ -677,9 +678,9 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 					returned.add(updatedResources);
 				} else if (requireUpdateBecauseOf(resource)) {
 					// Add this resource to dependancies tree
-					returned.add(resource.buildDependanciesTree(newProcessesResources));
+					returned.add(resource.buildDependencyTree(newProcessesResources));
 				}
-			} catch (ResourceDependancyLoopException e1) {
+			} catch (ResourceDependencyLoopException e1) {
 				e1.addToResourceStack(this);
 				throw e1;
 			}
@@ -700,10 +701,10 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * Internal method computing needsUpdate() given a vector of calling resources allowing to prevent from infinite loop
 	 * 
 	 * @return a flag indicating if this resource needs to be updated
-	 * @throws ResourceDependancyLoopException
+	 * @throws ResourceDependencyLoopException
 	 */
-	private final boolean _needsUpdate(List<FlexoResource<FlexoResourceData>> callingResources) throws ResourceDependancyLoopException {
-		FlexoResourceTree tree = buildDependanciesTree(callingResources);
+	private final boolean _needsUpdate(List<FlexoResource<FlexoResourceData>> callingResources) throws ResourceDependencyLoopException {
+		FlexoResourceTree tree = buildDependencyTree(callingResources);
 		if (!tree.isEmpty()) {
 			/*StringBuilder sb = new StringBuilder(this+" ").append('(').append(new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastUpdate())).append(") needs update because of ");
 			for (FlexoResourceTree node : tree.getChildNodes()) {
@@ -721,14 +722,14 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * Internal method computing update() given a vector of calling resources allowing to prevent from infinite loop
 	 * 
 	 * @return a tree representing all resources that were updated
-	 * @throws ResourceDependancyLoopException
+	 * @throws ResourceDependencyLoopException
 	 * @throws FlexoException
 	 * @throws ProjectLoadingCancelledException
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
 	private final FlexoResourceTree _update(List<FlexoResource<FlexoResourceData>> callingResources)
-			throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
+			throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
 			FlexoException {
 		// First update all dependancies model
 		FlexoResourceTree updatedResources = performUpdateDependanciesModel(callingResources);

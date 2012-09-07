@@ -137,6 +137,7 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectIDManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.FixProposal;
@@ -4212,11 +4213,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		notifyObservers(new DataModification(REVISION, old, revision));
 	}
 
-	public FlexoProject loadProject(FlexoProjectReference reference) {
+	public FlexoProject loadProject(FlexoProjectReference reference) throws ProjectLoadingCancelledException {
 		if (projectReferenceLoader != null) {
-			projectReferenceLoader.loadProject(reference);
+			return projectReferenceLoader.loadProject(reference);
 		}
-		return null;
+		throw new ProjectLoadingCancelledException(FlexoLocalization.localizedForKey("project_reference_loader_has_not_been_set"));
 	}
 
 	public FlexoProjectReferenceLoader getProjectReferenceLoader() {
@@ -4252,9 +4253,13 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public void removeFromImportedProjects(FlexoProject project) {
 		for (FlexoProjectReference ref : importedProjects) {
-			if (ref.getProject() == project) {
-				removeFromImportedProjects(ref);
-				break;
+			try {
+				if (ref.getProject() == project) {
+					removeFromImportedProjects(ref);
+					break;
+				}
+			} catch (ProjectLoadingCancelledException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -4268,13 +4273,24 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public FlexoProject getProjectWithURI(String projectURI) {
 		for (FlexoProjectReference ref : importedProjects) {
 			if (ref.getProjectURI().equals(projectURI)) {
-				return ref.getProject();
+				try {
+					return ref.getProject();
+				} catch (ProjectLoadingCancelledException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		for (FlexoProjectReference ref : importedProjects) {
-			FlexoProject projectWithURI = ref.getProject().getProjectWithURI(projectURI);
-			if (projectWithURI != null) {
-				return projectWithURI;
+			FlexoProject projectWithURI;
+			try {
+				projectWithURI = ref.getProject().getProjectWithURI(projectURI);
+				if (projectWithURI != null) {
+					return projectWithURI;
+				}
+			} catch (ProjectLoadingCancelledException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		return null;

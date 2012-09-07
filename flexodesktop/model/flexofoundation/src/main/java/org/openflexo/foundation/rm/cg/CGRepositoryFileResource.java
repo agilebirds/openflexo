@@ -47,7 +47,7 @@ import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.LoadResourceException;
-import org.openflexo.foundation.rm.ResourceDependancyLoopException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -477,7 +477,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 						+ getNeedsUpdateReason());
 			}
 			return returned;
-		} catch (ResourceDependancyLoopException e) {
+		} catch (ResourceDependencyLoopException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Loop found in dependant resources of " + this + "!", e);
 			}
@@ -605,7 +605,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	}
 
 	@Override
-	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, FlexoException,
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, FlexoException,
 			FileNotFoundException {
 		if (getGenerator() != null && (needsMemoryGeneration() || isForceRegenerate())) {
 			getGenerator().generate(isForceRegenerate());
@@ -638,7 +638,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Project loading cancel exception.", e);
 			}
-		} catch (ResourceDependancyLoopException e) {
+		} catch (ResourceDependencyLoopException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Loop in dependancies exception.", e);
 			}
