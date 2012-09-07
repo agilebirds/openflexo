@@ -15,6 +15,7 @@ import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.model.FIBTextArea;
@@ -45,6 +46,8 @@ public class FIBBrowserController extends FIBController implements Observer {
 			return FIBEditorIconLibrary.TABS_ICON;
 		} else if (component instanceof FIBPanel) {
 			return FIBEditorIconLibrary.PANEL_ICON;
+		} else if (component instanceof FIBSplitPanel) {
+			return FIBEditorIconLibrary.SPLIT_PANEL_ICON;
 		} else if (component instanceof FIBCheckBox) {
 			return FIBEditorIconLibrary.CHECKBOX_ICON;
 		} else if (component instanceof FIBLabel) {

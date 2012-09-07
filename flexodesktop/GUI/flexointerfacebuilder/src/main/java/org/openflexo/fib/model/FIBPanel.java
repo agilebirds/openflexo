@@ -52,8 +52,8 @@ public class FIBPanel extends FIBContainer {
 	private Font titleFont = null;
 	private int darkLevel = 0;
 
-	private boolean trackViewPortWidth = false;
-	private boolean trackViewPortHeight = false;
+	private boolean trackViewPortWidth = true;
+	private boolean trackViewPortHeight = true;
 
 	private boolean protectContent = false;
 

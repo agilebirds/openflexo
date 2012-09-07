@@ -57,7 +57,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	private static final Logger logger = Logger.getLogger(FIBBrowserWidget.class.getPackage().getName());
 
-	private static final int DEFAULT_WIDTH = 200;
+	// private static final int DEFAULT_WIDTH = 200;
 
 	private JTree _tree;
 	private final JPanel _dynamicComponent;
@@ -91,9 +91,10 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	public void setVisibleRowCount(int rows) {
 		int height = _fibBrowser.getRowHeight() * _fibBrowser.getVisibleRowCount();
-		int width = DEFAULT_WIDTH;
-		_dynamicComponent.setMinimumSize(new Dimension(width, height));
+		int width = _dynamicComponent.getPreferredSize().width; // DEFAULT_WIDTH;
+		// _dynamicComponent.setMinimumSize(new Dimension(width, height));
 		_dynamicComponent.setPreferredSize(new Dimension(width, height));
+		_dynamicComponent.revalidate();
 	}
 
 	public JTree getJTree() {

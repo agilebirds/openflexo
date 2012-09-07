@@ -1341,6 +1341,31 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		throw new InvalidLayoutException(msg, node);
 	}
 
+	/*public void normalizeSplitWeights() {
+		if (getModel() instanceof Split) {
+			normalizeSplitWeights((Split) getModel());
+		}
+	}*/
+
+	private void normalizeSplitWeights(Split split) {
+		float totalWeight = 0;
+		for (Node n : split.getChildren()) {
+			if (n.isVisible() && !(n instanceof Divider)) {
+				totalWeight += n.getWeight();
+			}
+		}
+		if (totalWeight > 1) {
+			for (Node n : split.getChildren()) {
+				if (n.isVisible() && !(n instanceof Divider)) {
+					n.setWeight(n.getWeight() / totalWeight);
+				}
+				if (n instanceof Split) {
+					normalizeSplitWeights((Split) n);
+				}
+			}
+		}
+	}
+
 	private void checkLayout(Node root) {
 		if (root instanceof Split) {
 			Split split = (Split) root;
@@ -1371,7 +1396,8 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 				checkLayout(splitChild);
 			}
 			if (weight > 1.0) {
-				throwInvalidLayout("Split children's total weight > 1.0", root);
+				normalizeSplitWeights(split);
+				// throwInvalidLayout("Split children's total weight > 1.0", root);
 			}
 		}
 	}

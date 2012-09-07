@@ -175,6 +175,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	@Override
 	public void delete() {
+
+		logger.info("//////////// DELETE " + this);
+
 		if (getParent() != null) {
 			getParent().removeFromSubComponents(this);
 		}
@@ -188,6 +191,24 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	@Override
 	public FIBContainer getParent() {
 		return parent;
+	}
+
+	/**
+	 * Return a boolean indicating if hierarchy is valid (no cycle was detected in hierarchy)
+	 * 
+	 * @return
+	 */
+	private boolean hasValidHierarchy() {
+		List<FIBComponent> ancestors = new Vector<FIBComponent>();
+		FIBComponent c = this;
+		while (c != null) {
+			if (ancestors.contains(c)) {
+				return false;
+			}
+			ancestors.add(c);
+			c = c.getParent();
+		}
+		return true;
 	}
 
 	/*public Hashtable<String,String> getLayoutConstraints() 
@@ -257,13 +278,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	private ComponentConstraints _normalizeConstraintsWhenRequired(ComponentConstraints someConstraints) {
 		if (getParent() instanceof FIBSplitPanel) {
 			if (someConstraints == null) {
-				System.out.println("Je construit un nouveau SplitLayoutConstraints");
 				SplitLayoutConstraints returned = new SplitLayoutConstraints(((FIBSplitPanel) getParent()).getFirstEmptyPlaceHolder());
 				returned.setComponent(this);
 				return returned;
 			}
 			if (!(someConstraints instanceof SplitLayoutConstraints)) {
-				System.out.println("constraints=" + someConstraints);
 				return new SplitLayoutConstraints(someConstraints);
 			}
 			someConstraints.setComponent(this);
@@ -816,7 +835,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public final Font retrieveValidFont() {
 		if (font == null) {
-			if (!isRootComponent()) {
+			if (!isRootComponent() && hasValidHierarchy()) {
 				return getParent().retrieveValidFont();
 			} else {
 				return new JLabel().getFont(); // Use system default
@@ -828,7 +847,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public final Color retrieveValidForegroundColor() {
 		if (foregroundColor == null) {
-			if (!isRootComponent()) {
+			if (!isRootComponent() && hasValidHierarchy()) {
 				return getParent().retrieveValidForegroundColor();
 			} else {
 				return Color.BLACK; // Use default
@@ -840,7 +859,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public final Color retrieveValidBackgroundColor() {
 		if (backgroundColor == null) {
-			if (!isRootComponent()) {
+			if (!isRootComponent() && hasValidHierarchy()) {
 				return getParent().retrieveValidBackgroundColor();
 			} else {
 				return Color.WHITE; // Use system default

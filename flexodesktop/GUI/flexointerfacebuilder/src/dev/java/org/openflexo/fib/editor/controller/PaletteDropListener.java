@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.fib.editor.controller.PaletteElement.PaletteElementDrag;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
 import org.openflexo.logging.FlexoLogger;
 
@@ -141,7 +140,7 @@ public class PaletteDropListener implements DropTargetListener {
 	public void dragEnter(DropTargetDragEvent e) {
 		if (e.getSource() instanceof FIBDropTarget) {
 			FIBDropTarget dt = (FIBDropTarget) e.getSource();
-			PaletteElementDrag drag = (PaletteElementDrag) _fibEditorPalette.getDragSourceContext().getTransferable();
+			PaletteElementDrag drag = (PaletteElementDrag) _controller.getDragSourceContext().getTransferable();
 			drag.setController(dt.getFIBEditorController());
 			drag.enterComponent(dt.getFIBComponent(), dt.getPlaceHolder(), e.getLocation());
 		}
@@ -165,18 +164,18 @@ public class PaletteDropListener implements DropTargetListener {
 		 * (e,_controller.getDrawingView().getActivePalette().getPaletteView());
 		 */
 		if (!isDragOk(e)) {
-			if (_fibEditorPalette.getDragSourceContext() == null) {
+			if (_controller.getDragSourceContext() == null) {
 				logger.warning("dragSourceContext should NOT be null ");
 			} else {
-				_fibEditorPalette.getDragSourceContext().setCursor(FIBEditorPalette.dropKO);
+				_controller.getDragSourceContext().setCursor(FIBEditorPalette.dropKO);
 			}
 			e.rejectDrag();
 			return;
 		}
-		if (_fibEditorPalette.getDragSourceContext() == null) {
+		if (_controller.getDragSourceContext() == null) {
 			logger.warning("dragSourceContext should NOT be null");
 		} else {
-			_fibEditorPalette.getDragSourceContext().setCursor(FIBEditorPalette.dropOK);
+			_controller.getDragSourceContext().setCursor(FIBEditorPalette.dropOK);
 		}
 		e.acceptDrag(e.getDropAction());
 	}
@@ -194,7 +193,7 @@ public class PaletteDropListener implements DropTargetListener {
 	public void dragExit(DropTargetEvent e) {
 		if (e.getSource() instanceof FIBDropTarget) {
 			FIBDropTarget dt = (FIBDropTarget) e.getSource();
-			PaletteElementDrag drag = (PaletteElementDrag) _fibEditorPalette.getDragSourceContext().getTransferable();
+			PaletteElementDrag drag = (PaletteElementDrag) _controller.getDragSourceContext().getTransferable();
 			// System.out.println("dragExit() from "+dt+" focused="+drag.getCurrentlyFocusedComponent()+
 			// " isPlaceHolder="+dt.isPlaceHolder());
 			drag.exitComponent(dt.getFIBComponent(), dt.getPlaceHolder());
