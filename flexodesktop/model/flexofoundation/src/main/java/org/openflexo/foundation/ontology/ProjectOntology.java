@@ -67,6 +67,7 @@ public class ProjectOntology extends OWLOntology implements StorageResourceData 
 		FlexoProjectFile ontologyFile = new FlexoProjectFile(owlFile, project);
 
 		ProjectOntology newProjectOntology = createProjectOntology(project.getURI(), owlFile, project.getProjectOntologyLibrary());
+		project.getProjectOntologyLibrary().registerOntology(newProjectOntology);
 
 		FlexoProjectOntologyResource ontologyRes;
 		try {

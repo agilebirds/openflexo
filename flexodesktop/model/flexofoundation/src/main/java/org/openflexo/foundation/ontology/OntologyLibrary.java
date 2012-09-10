@@ -242,13 +242,18 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		}
 		_allOntologies = null;
 		ImportedOntology newOntology = new ImportedOntology(ontologyUri, alternativeLocalFile, this);
-		ontologies.put(ontologyUri, newOntology);
+		registerOntology(newOntology);
+		// ontologies.put(ontologyUri, newOntology);
 		if (folder != null) {
 			folder.addToOntologies(newOntology);
 		}
 		setChanged();
 		notifyObservers(new OntologyImported(newOntology));
 		return newOntology;
+	}
+
+	public void registerOntology(FlexoOntology ontology) {
+		ontologies.put(ontology.getURI(), ontology);
 	}
 
 	protected Model description;
@@ -478,7 +483,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (StringUtils.isEmpty(conceptURI.trim())) {
 			return false;
 		}
-		return (conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI));
+		return conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI);
 	}
 
 	/**
