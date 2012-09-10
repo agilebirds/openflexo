@@ -69,7 +69,9 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 			boolean addScrollBar, FlexoProgress progress) {
 		super(representedObject, controller, fibComponent, addScrollBar, progress);
 		getFIBView().getController().addSelectionListener(this);
-		controller.getSelectionManager().addToSelectionListeners(this);
+		if (controller != null && controller.getSelectionManager() != null) {
+			controller.getSelectionManager().addToSelectionListeners(this);
+		}
 	}
 
 	@Override
