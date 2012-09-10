@@ -80,4 +80,9 @@ public class XSOntClass extends XSOntObject implements OntologyClass, XSOntology
 		return getName();
 	}
 
+	@Override
+	public boolean isOntologyClass() {
+		return true;
+	}
+
 }

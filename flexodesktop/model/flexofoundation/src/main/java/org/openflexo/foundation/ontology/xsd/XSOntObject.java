@@ -197,4 +197,30 @@ public abstract class XSOntObject extends AbstractOntologyObject implements Onto
 	public Object addDataPropertyStatement(OntologyDataProperty property, Object value) {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public boolean isOntology() {
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyClass() {
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyIndividual() {
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyObjectProperty() {
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyDataProperty() {
+		return false;
+	}
+
 }

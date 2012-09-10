@@ -162,7 +162,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 			newURI = newName;
 		}
 		logger.info("Rename object " + getURI() + " to " + newURI);
-		R returned = (ResourceUtils.renameResource(resource, newURI).as(resourceClass));
+		R returned = ResourceUtils.renameResource(resource, newURI).as(resourceClass);
 		_setOntResource(returned);
 		name = newName;
 		uri = newURI;
@@ -277,11 +277,11 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 
 			if (newStatement != null) {
 				_statements.add(newStatement);
-				if ((newStatement instanceof PropertyStatement) && ((PropertyStatement) newStatement).isAnnotationProperty()) {
+				if (newStatement instanceof PropertyStatement && ((PropertyStatement) newStatement).isAnnotationProperty()) {
 					if (((PropertyStatement) newStatement).hasLitteralValue()) {
-						_annotationStatements.add(((PropertyStatement) newStatement));
+						_annotationStatements.add((PropertyStatement) newStatement);
 					} else if (newStatement instanceof ObjectPropertyStatement) {
-						_annotationObjectsStatements.add(((ObjectPropertyStatement) newStatement));
+						_annotationObjectsStatements.add((ObjectPropertyStatement) newStatement);
 					}
 				} else {
 					_semanticStatements.add(newStatement);
@@ -514,7 +514,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	// TODO: need to handle multiple statements
 	public DataPropertyStatement getDataPropertyStatement(OntologyDataProperty property) {
 		for (OWLStatement statement : getStatements()) {
-			if ((statement instanceof DataPropertyStatement) && (((DataPropertyStatement) statement).getProperty() == property)) {
+			if (statement instanceof DataPropertyStatement && ((DataPropertyStatement) statement).getProperty() == property) {
 				return (DataPropertyStatement) statement;
 			}
 		}
@@ -530,7 +530,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	// TODO: need to handle multiple statements
 	public ObjectPropertyStatement getObjectPropertyStatement(OntologyObjectProperty property) {
 		for (OWLStatement statement : getStatements()) {
-			if ((statement instanceof ObjectPropertyStatement) && (((ObjectPropertyStatement) statement).getProperty() == property)) {
+			if (statement instanceof ObjectPropertyStatement && ((ObjectPropertyStatement) statement).getProperty() == property) {
 				return (ObjectPropertyStatement) statement;
 			}
 		}
@@ -546,7 +546,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	// TODO: need to handle multiple statements
 	public SubClassStatement getSubClassStatement(OntologyObject father) {
 		for (OWLStatement statement : getStatements()) {
-			if ((statement instanceof SubClassStatement) && ((SubClassStatement) statement).getParent().equals(father)) {
+			if (statement instanceof SubClassStatement && ((SubClassStatement) statement).getParent().equals(father)) {
 				return (SubClassStatement) statement;
 			}
 		}
@@ -606,11 +606,11 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	}
 
 	public boolean isAnnotationAddable() {
-		return (!getIsReadOnly());
+		return !getIsReadOnly();
 	}
 
 	public boolean isAnnotationDeletable(PropertyStatement annotation) {
-		return (!getIsReadOnly());
+		return !getIsReadOnly();
 	}
 
 	/**
@@ -665,10 +665,10 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 		if (property instanceof OWLProperty) {
 			PropertyStatement s = getPropertyStatement(property);
 			if (s != null) {
-				if (s.hasLitteralValue() && (newValue instanceof String)) {
+				if (s.hasLitteralValue() && newValue instanceof String) {
 					s.setStringValue((String) newValue);
 					return;
-				} else if ((s instanceof ObjectPropertyStatement) && (newValue instanceof OWLObject)) {
+				} else if (s instanceof ObjectPropertyStatement && newValue instanceof OWLObject) {
 					((ObjectPropertyStatement) s).setStatementObject((OWLObject<?>) newValue);
 					return;
 				}
@@ -723,8 +723,9 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 		List<ObjectPropertyStatement> annotations = getAnnotationObjectStatements(property);
 		for (ObjectPropertyStatement annotation : annotations) {
 			OntologyObject returned = annotation.getStatementObject();
-			if (returned != null)
+			if (returned != null) {
 				return returned;
+			}
 		}
 		return null;
 	}
@@ -779,12 +780,12 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 				getOntResource().addProperty(((OWLProperty) property).getOntProperty(), (String) value);
 				updateOntologyStatements();
 				getOntology().setChanged();
-				return getPropertyStatement(((OWLProperty) property), (String) value);
+				return getPropertyStatement((OWLProperty) property, (String) value);
 			} else {
 				getOntResource().addLiteral(((OWLProperty) property).getOntProperty(), value);
 				updateOntologyStatements();
 				getOntology().setChanged();
-				return getPropertyStatement((property), value);
+				return getPropertyStatement(property, value);
 			}
 		}
 		logger.warning("Property " + property + " is not a OWLProperty");
@@ -870,27 +871,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 
 	@Override
 	public boolean getIsReadOnly() {
-		return (getFlexoOntology().getIsReadOnly());
-	}
-
-	public boolean isOntology() {
-		return false;
-	}
-
-	public boolean isOntologyClass() {
-		return false;
-	}
-
-	public boolean isOntologyIndividual() {
-		return false;
-	}
-
-	public boolean isOntologyObjectProperty() {
-		return false;
-	}
-
-	public boolean isOntologyDataProperty() {
-		return false;
+		return getFlexoOntology().getIsReadOnly();
 	}
 
 	protected void updateDomainsAndRanges() {
@@ -955,13 +936,12 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 		Vector<OWLProperty> allProperties = new Vector(getPropertiesTakingMySelfAsDomain());
 		Vector<OWLProperty> returnedProperties = new Vector<OWLProperty>();
 		for (OWLProperty p : allProperties) {
-			boolean takeIt = (includeDataProperties && p instanceof OWLDataProperty)
-					|| (includeObjectProperties && p instanceof OWLObjectProperty)
-					|| (includeAnnotationProperties && p.isAnnotationProperty());
-			if (range != null && (p instanceof OWLObjectProperty) && !((OWLObjectProperty) p).getRange().isSuperConceptOf(range)) {
+			boolean takeIt = includeDataProperties && p instanceof OWLDataProperty || includeObjectProperties
+					&& p instanceof OWLObjectProperty || includeAnnotationProperties && p.isAnnotationProperty();
+			if (range != null && p instanceof OWLObjectProperty && !((OWLObjectProperty) p).getRange().isSuperConceptOf(range)) {
 				takeIt = false;
 			}
-			if (dataType != null && (p instanceof OWLDataProperty) && ((OWLDataProperty) p).getDataType() != dataType) {
+			if (dataType != null && p instanceof OWLDataProperty && ((OWLDataProperty) p).getDataType() != dataType) {
 				takeIt = false;
 			}
 			OWLOntology containerOntology = p.getOntology();
@@ -1117,8 +1097,9 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 	 */
 	@Override
 	public boolean equalsToConcept(OntologyObject o) {
-		if (o == null)
+		if (o == null) {
 			return false;
+		}
 		return StringUtils.isNotEmpty(getURI()) && getURI().equals(o.getURI());
 	}
 }

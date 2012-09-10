@@ -89,4 +89,15 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 
 	@Override
 	public abstract String getDisplayableDescription();
+
+	public abstract boolean isOntology();
+
+	public abstract boolean isOntologyClass();
+
+	public abstract boolean isOntologyIndividual();
+
+	public abstract boolean isOntologyObjectProperty();
+
+	public abstract boolean isOntologyDataProperty();
+
 }

@@ -48,4 +48,9 @@ public class XSOntObjectProperty extends XSOntProperty implements OntologyObject
 		return getName();
 	}
 
+	@Override
+	public boolean isOntologyObjectProperty() {
+		return true;
+	}
+
 }
