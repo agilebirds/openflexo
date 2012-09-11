@@ -395,7 +395,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		if (_library.getOntology(ontologyURI) == null) {
 			throw new OntologyNotFoundException();
 		} else {
-			return importOntology((OWLOntology) _library.getOntology(ontologyURI));
+			return importOntology(_library.getOntology(ontologyURI));
 		}
 	}
 
@@ -407,7 +407,12 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	 * @return
 	 * @throws OntologyNotFoundException
 	 */
-	public boolean importOntology(OWLOntology anOntology) throws OntologyNotFoundException {
+	public boolean importOntology(FlexoOntology anOntology) throws OntologyNotFoundException {
+		if (anOntology instanceof OWLOntology == false) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Tried to import a non-owl ontology to an owl ontology, this is not yet supported.");
+			}
+		}
 		loadWhenUnloaded();
 
 		if (getAllImportedOntologies().contains(anOntology)) {
@@ -429,7 +434,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		logger.fine(SOURCE);
 		ontModel.read(new StringReader(SOURCE), getOntologyURI(), "N3");
 
-		importedOntologies.add(anOntology);
+		importedOntologies.add((OWLOntology) anOntology);
 
 		setChanged();
 
