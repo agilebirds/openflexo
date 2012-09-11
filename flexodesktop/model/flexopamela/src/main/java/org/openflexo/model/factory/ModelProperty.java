@@ -90,7 +90,7 @@ public class ModelProperty<I> {
 					setterMethod = m;
 				}
 			}
-			if (anAdder != null && anAdder.id().equals(propertyIdentifier)) {
+			if (anAdder != null && anAdder.value().equals(propertyIdentifier)) {
 				if (adder != null) {
 					throw new ModelDefinitionException("Duplicate adder " + propertyIdentifier + " defined for interface "
 							+ modelEntity.getImplementedInterface());
@@ -99,7 +99,7 @@ public class ModelProperty<I> {
 					adderMethod = m;
 				}
 			}
-			if (aRemover != null && aRemover.id().equals(propertyIdentifier)) {
+			if (aRemover != null && aRemover.value().equals(propertyIdentifier)) {
 				if (remover != null) {
 					throw new ModelDefinitionException("Duplicate remover " + propertyIdentifier + " defined for interface "
 							+ modelEntity.getImplementedInterface());

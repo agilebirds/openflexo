@@ -37,12 +37,17 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 
 	private I object;
 
+	private boolean serializing = false;
+	private boolean deserializing = false;
+
 	private static Method PERFORM_SUPER_GETTER;
 	private static Method PERFORM_SUPER_SETTER;
 	private static Method PERFORM_SUPER_ADDER;
 	private static Method PERFORM_SUPER_REMOVER;
 	private static Method PERFORM_SUPER_DELETER;
 	private static Method PERFORM_SUPER_FINDER;
+	private static Method IS_SERIALIZING;
+	private static Method IS_DESERIALIZING;
 	private static Method CLONE_OBJECT;
 	private static Method CLONE_OBJECT_WITH_CONTEXT;
 	private static Method TO_STRING;
@@ -55,6 +60,8 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			PERFORM_SUPER_REMOVER = AccessibleProxyObject.class.getMethod("performSuperRemover", String.class, Object.class);
 			PERFORM_SUPER_DELETER = AccessibleProxyObject.class.getMethod("performSuperDeleter");
 			PERFORM_SUPER_FINDER = AccessibleProxyObject.class.getMethod("performSuperFinder", Object.class);
+			IS_SERIALIZING = AccessibleProxyObject.class.getMethod("isSerializing");
+			IS_DESERIALIZING = AccessibleProxyObject.class.getMethod("isDeserializing");
 			TO_STRING = Object.class.getMethod("toString");
 			CLONE_OBJECT = CloneableProxyObject.class.getMethod("cloneObject");
 			CLONE_OBJECT_WITH_CONTEXT = CloneableProxyObject.class.getMethod("cloneObject", Array.newInstance(Object.class, 0).getClass());
@@ -116,14 +123,14 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 
 		Adder adder = method.getAnnotation(Adder.class);
 		if (adder != null) {
-			String id = adder.id();
+			String id = adder.value();
 			internallyInvokeAdder(id, args);
 			return null;
 		}
 
 		Remover remover = method.getAnnotation(Remover.class);
 		if (remover != null) {
-			String id = remover.id();
+			String id = remover.value();
 			internallyInvokerRemover(id, args);
 			return null;
 		}
@@ -155,6 +162,10 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			return null;
 		} else if (method.equals(PERFORM_SUPER_FINDER)) {
 			internallyInvokeFinder(finder, args);
+			return null;
+		} else if (method.equals(IS_SERIALIZING)) {
+			return null;
+		} else if (method.equals(IS_DESERIALIZING)) {
 			return null;
 		} else if (method.equals(CLONE_OBJECT)) {
 			return cloneObject();
@@ -1232,6 +1243,22 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			}
 		}
 		return s;
+	}
+
+	public boolean isSerializing() {
+		return serializing;
+	}
+
+	public void setSerializing(boolean serializing) {
+		this.serializing = serializing;
+	}
+
+	public boolean isDeserializing() {
+		return deserializing;
+	}
+
+	public void setDeserializing(boolean deserializing) {
+		this.deserializing = deserializing;
 	}
 
 }

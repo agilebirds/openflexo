@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -30,17 +32,17 @@ public class XMLDeserializer {
 
 	private ModelFactory modelFactory;
 
-	private Hashtable<String, Element> _index;
+	private Map<String, Element> index;
 
 	/**
 	 * Stores already serialized objects where value is the serialized object and key is an object coding the unique identifier of the
 	 * object
 	 */
-	private Hashtable<Object, Object> alreadyDeserialized;
+	private Map<Object, Object> alreadyDeserialized;
 
 	public XMLDeserializer(ModelFactory factory) {
 		this.modelFactory = factory;
-		alreadyDeserialized = new Hashtable<Object, Object>();
+		alreadyDeserialized = new HashMap<Object, Object>();
 	}
 
 	private DefaultStringEncoder getStringEncoder() {
@@ -69,7 +71,7 @@ public class XMLDeserializer {
 		return buildObjectFromNodeAndModelEntity(node, modelEntity);
 	}
 
-	private Object buildObjectFromNodeAndModelEntity(Element node, ModelEntity modelEntity) throws InvalidXMLDataException,
+	private <I> Object buildObjectFromNodeAndModelEntity(Element node, ModelEntity<I> modelEntity) throws InvalidXMLDataException,
 			ModelDefinitionException {
 		Object currentDeserializedReference = null;
 
@@ -114,7 +116,7 @@ public class XMLDeserializer {
 
 		// I need to rebuild it
 
-		Object returned;
+		I returned;
 		String text = node.getText();
 		if (text != null && getStringEncoder().isConvertable(modelEntity.getImplementedInterface())) {
 			try {
@@ -149,71 +151,76 @@ public class XMLDeserializer {
 			alreadyDeserialized.put(currentDeserializedReference, returned);
 		}
 
-		ProxyMethodHandler handler = modelFactory.getHandler(returned);
-
-		Iterator<ModelProperty> properties = modelEntity.getProperties();
-		while (properties.hasNext()) {
-			ModelProperty p = properties.next();
-			if (p.getXMLAttribute() != null) {
-				Object value;
-				try {
-					value = getStringEncoder().fromString(p.getType(), node.getAttributeValue(p.getXMLTag()));
-					if (value != null) {
-						handler.invokeSetter(p, value);
-					}
-				} catch (InvalidDataException e) {
-					throw new InvalidXMLDataException(e.getMessage());
-				}
-			} else if (p.getXMLElement() != null) {
-				XMLElement propertyXMLElement = p.getXMLElement();
-				// System.out.println("Handle element "+p);
-				if (p.getAccessedEntity() != null) {
-					Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node, p);
-					switch (p.getCardinality()) {
-					case SINGLE:
-						if (matchingElements.hasNext()) {
-							MatchingElement matchingElement = matchingElements.next();
-							// System.out.println("SINGLE, "+matchingElement);
-							Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
+		ProxyMethodHandler<I> handler = modelFactory.getHandler(returned);
+		handler.setDeserializing(true);
+		try {
+			Iterator<ModelProperty<? super I>> properties = modelEntity.getProperties();
+			while (properties.hasNext()) {
+				ModelProperty<? super I> p = properties.next();
+				if (p.getXMLAttribute() != null) {
+					Object value;
+					try {
+						value = getStringEncoder().fromString(p.getType(), node.getAttributeValue(p.getXMLTag()));
+						if (value != null) {
 							handler.invokeSetter(p, value);
 						}
-						break;
-					case LIST:
-						while (matchingElements.hasNext()) {
-							MatchingElement matchingElement = matchingElements.next();
-							// System.out.println("LIST, "+matchingElement);
-							Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
-							handler.invokeAdder(p, value);
-						}
-						break;
-					case MAP:
-						throw new UnsupportedOperationException("Cannot deserialize maps for now");
-					default:
-						break;
+					} catch (InvalidDataException e) {
+						throw new InvalidXMLDataException(e.getMessage());
 					}
-				} else if (getStringEncoder().isConvertable(p.getType())) {
-					// TODO: deserialize string convertable elements.
-					List<Element> elements = node.getContent(new ElementFilter(p.getXMLElement().xmlTag()));
-					for (Element element : elements) {
-						Object value;
-						try {
-							value = getStringEncoder().fromString(p.getType(), element.getText());
-						} catch (InvalidDataException e) {
-							throw new InvalidXMLDataException("'" + element.getText() + "' cannot be converted to " + p.getType().getName());
-						}
+				} else if (p.getXMLElement() != null) {
+					XMLElement propertyXMLElement = p.getXMLElement();
+					// System.out.println("Handle element "+p);
+					if (p.getAccessedEntity() != null) {
+						Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node, p);
 						switch (p.getCardinality()) {
 						case SINGLE:
-							handler.invokeSetter(p, value);
+							if (matchingElements.hasNext()) {
+								MatchingElement matchingElement = matchingElements.next();
+								// System.out.println("SINGLE, "+matchingElement);
+								Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
+								handler.invokeSetter(p, value);
+							}
 							break;
 						case LIST:
-							handler.invokeAdder(p, value);
+							while (matchingElements.hasNext()) {
+								MatchingElement matchingElement = matchingElements.next();
+								// System.out.println("LIST, "+matchingElement);
+								Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
+								handler.invokeAdder(p, value);
+							}
 							break;
+						case MAP:
+							throw new UnsupportedOperationException("Cannot deserialize maps for now");
 						default:
 							break;
+						}
+					} else if (getStringEncoder().isConvertable(p.getType())) {
+						// TODO: deserialize string convertable elements.
+						List<Element> elements = node.getContent(new ElementFilter(p.getXMLElement().xmlTag()));
+						for (Element element : elements) {
+							Object value;
+							try {
+								value = getStringEncoder().fromString(p.getType(), element.getText());
+							} catch (InvalidDataException e) {
+								throw new InvalidXMLDataException("'" + element.getText() + "' cannot be converted to "
+										+ p.getType().getName());
+							}
+							switch (p.getCardinality()) {
+							case SINGLE:
+								handler.invokeSetter(p, value);
+								break;
+							case LIST:
+								handler.invokeAdder(p, value);
+								break;
+							default:
+								break;
+							}
 						}
 					}
 				}
 			}
+		} finally {
+			handler.setDeserializing(false);
 		}
 
 		return returned;
@@ -221,9 +228,9 @@ public class XMLDeserializer {
 
 	private class MatchingElement {
 		private Element element;
-		private ModelEntity modelEntity;
+		private ModelEntity<?> modelEntity;
 
-		private MatchingElement(Element element, ModelEntity modelEntity) {
+		private MatchingElement(Element element, ModelEntity<?> modelEntity) {
 			super();
 			this.element = element;
 			this.modelEntity = modelEntity;
@@ -240,7 +247,7 @@ public class XMLDeserializer {
 		ArrayList<MatchingElement> returned = new ArrayList<MatchingElement>();
 		String contextString = modelProperty.getXMLElement() != null ? modelProperty.getXMLElement().context() : "";
 		if (modelProperty.getAccessedEntity() != null) {
-			for (ModelEntity entity : modelProperty.getAccessedEntity().getAllDescendantsAndMe()) {
+			for (ModelEntity<?> entity : modelProperty.getAccessedEntity().getAllDescendantsAndMe()) {
 				if (entity.getXMLElement() != null || getStringEncoder().isConvertable(entity.getImplementedInterface())) { // Only consider
 					// "XML-concrete"
 					// entities and string
@@ -288,18 +295,18 @@ public class XMLDeserializer {
 	}
 
 	public Document makeIndex(Document doc) {
-		_index = new Hashtable<String, Element>();
+		index = new Hashtable<String, Element>();
 		Iterator<Element> it = doc.getDescendants(new ElementWithIDFilter());
 		Element e = null;
 		while (it.hasNext()) {
 			e = it.next();
-			_index.put(e.getAttributeValue("id"), e);
+			index.put(e.getAttributeValue("id"), e);
 		}
 		return doc;
 	}
 
 	private Element findElementWithId(String id) {
-		return _index.get(id);
+		return index.get(id);
 	}
 
 }

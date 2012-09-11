@@ -39,7 +39,7 @@ public interface FlexoProcess extends WKFObject {
 	@XMLAttribute(xmlTag = FOO)
 	public int getFoo();
 
-	@Setter(value = FOO)
+	@Setter(FOO)
 	public void setFoo(int foo);
 
 	@Getter(value = NODES, cardinality = Cardinality.LIST, inverse = WKFObject.PROCESS)
@@ -48,13 +48,13 @@ public interface FlexoProcess extends WKFObject {
 	@Embedded
 	public List<AbstractNode> getNodes();
 
-	@Setter(value = NODES)
+	@Setter(NODES)
 	public void setNodes(List<AbstractNode> nodes);
 
-	@Adder(id = NODES)
+	@Adder(NODES)
 	public void addToNodes(AbstractNode node);
 
-	@Remover(id = NODES)
+	@Remover(NODES)
 	public void removeFromNodes(AbstractNode node);
 
 	@Finder(attribute = AbstractNode.NAME, collection = NODES)

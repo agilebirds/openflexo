@@ -21,10 +21,10 @@ public interface WKFAnnotation extends FlexoModelObject {
 	@Initializer
 	public void init(@Parameter(TEXT) String text);
 
-	@Getter(value = TEXT)
+	@Getter(TEXT)
 	public String getText();
 
-	@Setter(value = TEXT)
+	@Setter(TEXT)
 	public void setText(String s);
 
 	@StringConverter

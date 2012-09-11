@@ -14,4 +14,8 @@ public interface AccessibleProxyObject {
 
 	public Object performSuperFinder(Object value);
 
+	public boolean isSerializing();
+
+	public boolean isDeserializing();
+
 }

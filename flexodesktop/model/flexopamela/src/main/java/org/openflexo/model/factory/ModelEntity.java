@@ -180,11 +180,11 @@ public class ModelEntity<I> extends ProxyFactory {
 				return true;
 			}
 			Adder anAdder = m.getAnnotation(Adder.class);
-			if (anAdder != null && anAdder.id().equals(propertyIdentifier)) {
+			if (anAdder != null && anAdder.value().equals(propertyIdentifier)) {
 				return true;
 			}
 			Remover aRemover = m.getAnnotation(Remover.class);
-			if (aRemover != null && aRemover.id().equals(propertyIdentifier)) {
+			if (aRemover != null && aRemover.value().equals(propertyIdentifier)) {
 				return true;
 			}
 		}
@@ -355,11 +355,11 @@ public class ModelEntity<I> extends ProxyFactory {
 				} else {
 					Adder anAdder = m.getAnnotation(Adder.class);
 					if (anAdder != null) {
-						propertyIdentifier = anAdder.id();
+						propertyIdentifier = anAdder.value();
 					} else {
 						Remover aRemover = m.getAnnotation(Remover.class);
 						if (aRemover != null) {
-							propertyIdentifier = aRemover.id();
+							propertyIdentifier = aRemover.value();
 						}
 					}
 				}

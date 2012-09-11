@@ -28,7 +28,7 @@ public interface FlexoModelObject extends AccessibleProxyObject, ObservableObjec
 	public String getFlexoID();
 
 	// @XMLProperty(id="flexoId",kind=Kind.SETTER)
-	@Setter(value = FLEXO_ID)
+	@Setter(FLEXO_ID)
 	public void setFlexoID(String flexoID);
 
 	@Getter(value = NAME, defaultValue = "???")
@@ -36,7 +36,7 @@ public interface FlexoModelObject extends AccessibleProxyObject, ObservableObjec
 	@CloningStrategy(value = StrategyType.FACTORY, factory = "deriveName()")
 	public String getName();
 
-	@Setter(value = NAME)
+	@Setter(NAME)
 	public void setName(String name);
 
 	public String deriveName();

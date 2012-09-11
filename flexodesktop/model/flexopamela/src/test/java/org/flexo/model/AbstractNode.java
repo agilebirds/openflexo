@@ -40,13 +40,13 @@ public interface AbstractNode extends WKFObject {
 	@Embedded({ @ClosureCondition(id = Edge.END_NODE) })
 	public List<Edge> getOutgoingEdges();
 
-	@Setter(value = OUTGOING_EDGES)
+	@Setter(OUTGOING_EDGES)
 	public void setOutgoingEdges(List<Edge> edges);
 
-	@Adder(id = OUTGOING_EDGES)
+	@Adder(OUTGOING_EDGES)
 	public void addToOutgoingEdges(Edge edge);
 
-	@Remover(id = OUTGOING_EDGES)
+	@Remover(OUTGOING_EDGES)
 	public void removeFromOutgoingEdges(Edge edge);
 
 	@Getter(value = INCOMING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.END_NODE)
@@ -55,36 +55,36 @@ public interface AbstractNode extends WKFObject {
 	@CloningStrategy(StrategyType.CLONE)
 	public List<Edge> getIncomingEdges();
 
-	@Setter(value = INCOMING_EDGES)
+	@Setter(INCOMING_EDGES)
 	public void setIncomingEdges(List<Edge> edges);
 
-	@Adder(id = INCOMING_EDGES)
+	@Adder(INCOMING_EDGES)
 	public void addToIncomingEdges(Edge edge);
 
-	@Remover(id = INCOMING_EDGES)
+	@Remover(INCOMING_EDGES)
 	public void removeFromIncomingEdges(Edge edge);
 
 	@Getter(value = PROCESS, inverse = FlexoProcess.NODES)
 	@Override
 	public FlexoProcess getProcess();
 
-	@Getter(value = MASTER_ANNOTATION)
+	@Getter(MASTER_ANNOTATION)
 	@XMLAttribute
 	public WKFAnnotation getMasterAnnotation();
 
-	@Setter(value = MASTER_ANNOTATION)
+	@Setter(MASTER_ANNOTATION)
 	public void setMasterAnnotation(WKFAnnotation a);
 
 	@Getter(value = OTHER_ANNOTATIONS, cardinality = Cardinality.LIST)
 	@XMLElement()
 	public List<WKFAnnotation> getOtherAnnotations();
 
-	@Setter(value = OTHER_ANNOTATIONS)
+	@Setter(OTHER_ANNOTATIONS)
 	public void setOtherAnnotations(List<WKFAnnotation> as);
 
-	@Adder(id = OTHER_ANNOTATIONS)
+	@Adder(OTHER_ANNOTATIONS)
 	public void addToOtherAnnotations(WKFAnnotation a);
 
-	@Remover(id = OTHER_ANNOTATIONS)
+	@Remover(OTHER_ANNOTATIONS)
 	public void removeFromOtherAnnotations(WKFAnnotation a);
 }
