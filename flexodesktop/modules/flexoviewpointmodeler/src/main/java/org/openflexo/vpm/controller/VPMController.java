@@ -35,7 +35,7 @@ import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
@@ -171,8 +171,8 @@ public class VPMController extends FlexoController {
 				if (cl.getViewPoints().size() > 0) {
 					getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
 				}
-			} else if (object instanceof ImportedOntology) {
-				ImportedOntology ontology = (ImportedOntology) object;
+			} else if (object instanceof ImportedOWLOntology) {
+				ImportedOWLOntology ontology = (ImportedOWLOntology) object;
 				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
 				if (ontology.getClasses().size() > 0) {
 					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
@@ -327,7 +327,7 @@ public class VPMController extends FlexoController {
 		}
 
 		public Icon getIcon() {
-			if (resource instanceof ImportedOntology) {
+			if (resource instanceof ImportedOWLOntology) {
 				return OntologyIconLibrary.ONTOLOGY_ICON;
 			} else if (resource instanceof ViewPoint) {
 				return VPMIconLibrary.CALC_ICON;
@@ -366,8 +366,8 @@ public class VPMController extends FlexoController {
 		public void saveModified() {
 			if (saveThisResource) {
 				try {
-					if (resource instanceof ImportedOntology) {
-						((ImportedOntology) resource).save();
+					if (resource instanceof ImportedOWLOntology) {
+						((ImportedOWLOntology) resource).save();
 					} else if (resource instanceof ViewPoint) {
 						((ViewPoint) resource).save();
 					} else if (resource instanceof ViewPointPalette) {

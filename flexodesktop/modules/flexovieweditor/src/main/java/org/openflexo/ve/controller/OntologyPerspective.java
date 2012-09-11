@@ -27,7 +27,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -85,7 +85,7 @@ public class OntologyPerspective extends FlexoPerspective {
 		if (proposedObject instanceof FlexoOntology) {
 			return proposedObject;
 		}
-		return _controller.getProject().getProjectOntology();
+		return (FlexoModelObject) _controller.getProject().getProjectOntology();
 	}
 
 	@Override
@@ -111,8 +111,8 @@ public class OntologyPerspective extends FlexoPerspective {
 		if (object instanceof ProjectOntology) {
 			return FlexoLocalization.localizedForKey("project_ontology");
 		}
-		if (object instanceof ImportedOntology) {
-			return ((ImportedOntology) object).getName();
+		if (object instanceof ImportedOWLOntology) {
+			return ((ImportedOWLOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

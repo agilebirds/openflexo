@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.FlexoOntology;
@@ -28,6 +29,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
+import org.openflexo.xmlcode.XMLMapping;
 import org.w3c.dom.Document;
 
 import com.sun.xml.xsom.XSAttGroupDecl;
@@ -41,11 +43,10 @@ import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
 
 //TODO imported ontologies
-//TODO xml as ressources (Lundi/Mardi) XMLModelRessource (FlexoProjectOntologyResource)
 //TODO XSOntology implements Meta-Model, XMLIndividuals implements Model
 //TODO element restrictions
 
-public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
+public class XSOntology extends AbstractOntologyObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
@@ -620,6 +621,60 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	@Override
 	public Object addPropertyStatement(OntologyProperty property, String value, Language language) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getInspectorName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isOntology() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyClass() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyIndividual() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyObjectProperty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyDataProperty() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

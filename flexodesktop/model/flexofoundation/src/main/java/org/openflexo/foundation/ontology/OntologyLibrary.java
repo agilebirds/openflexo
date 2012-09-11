@@ -231,17 +231,17 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		return (OWLOntology) getOntology(OWL2URIDefinitions.OWL_ONTOLOGY_URI);
 	}
 
-	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile) {
+	public ImportedOWLOntology importOntology(String ontologyUri, File alternativeLocalFile) {
 		return importOntology(ontologyUri, alternativeLocalFile, null);
 	}
 
-	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile, OntologyFolder folder) {
+	public ImportedOWLOntology importOntology(String ontologyUri, File alternativeLocalFile, OntologyFolder folder) {
 		logger.fine("Import ontology " + ontologyUri + " as " + alternativeLocalFile);
 		if (_allOntologies != null) {
 			_allOntologies.clear();
 		}
 		_allOntologies = null;
-		ImportedOntology newOntology = new ImportedOntology(ontologyUri, alternativeLocalFile, this);
+		ImportedOWLOntology newOntology = new ImportedOWLOntology(ontologyUri, alternativeLocalFile, this);
 		registerOntology(newOntology);
 		// ontologies.put(ontologyUri, newOntology);
 		if (folder != null) {
@@ -295,7 +295,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			return ((OWLOntology) ont).getOntModel();
 		}
 		if (!strict) {
-			ImportedOntology newOntology = new ImportedOntology(name, null, this);
+			ImportedOWLOntology newOntology = new ImportedOWLOntology(name, null, this);
 			newOntology.setOntModel(createFreshModel());
 			ontologies.put(name, newOntology);
 			setChanged();
@@ -324,7 +324,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			}
 			return createDefaultModel();
 		}
-		ImportedOntology newOntology = new ImportedOntology(name, null, this);
+		ImportedOWLOntology newOntology = new ImportedOWLOntology(name, null, this);
 		newOntology.setOntModel(createFreshModel());
 		ontologies.put(name, newOntology);
 		setChanged();

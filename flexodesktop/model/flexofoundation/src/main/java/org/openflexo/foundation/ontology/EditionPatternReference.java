@@ -324,14 +324,14 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public ObjectPropertyStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OWLObject<?> subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				OWLObject<?> subject = (OWLObject<?>) getProject().getProjectOntology().getOntologyObject(subjectURI);
 				if (subject == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find subject with URI " + subjectURI);
 					}
 					return null;
 				}
-				OWLObjectProperty property = getProject().getProjectOntology().getObjectProperty(objectPropertyURI);
+				OWLObjectProperty property = (OWLObjectProperty) getProject().getProjectOntology().getObjectProperty(objectPropertyURI);
 				statement = subject.getObjectPropertyStatement(property);
 				// logger.info("Found statement: "+statement);
 			}
@@ -391,8 +391,8 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public DataPropertyStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OWLObject<?> subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
-				OWLDataProperty property = getProject().getProjectOntology().getDataProperty(dataPropertyURI);
+				OWLObject<?> subject = (OWLObject<?>) getProject().getProjectOntology().getOntologyObject(subjectURI);
+				OWLDataProperty property = (OWLDataProperty) getProject().getProjectOntology().getDataProperty(dataPropertyURI);
 				statement = subject.getDataPropertyStatement(property);
 				// logger.info("Found statement: "+statement);
 			}
@@ -516,8 +516,8 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public SubClassStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OWLObject<?> subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
-				OWLObject<?> parent = getProject().getProjectOntology().getOntologyObject(parentURI);
+				OWLObject<?> subject = (OWLObject<?>) getProject().getProjectOntology().getOntologyObject(subjectURI);
+				OWLObject<?> parent = (OWLObject<?>) getProject().getProjectOntology().getOntologyObject(parentURI);
 				statement = subject.getSubClassStatement(parent);
 				logger.info("Found statement: " + statement);
 			}

@@ -37,6 +37,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
@@ -91,7 +92,7 @@ public class ViewPoint extends ViewPointObject {
 
 		if (xmlFile.exists()) {
 
-			ImportedOntology viewPointOntology = readViewpointOntology(xmlFile, library);
+			ImportedOWLOntology viewPointOntology = readViewpointOntology(xmlFile, library);
 
 			FileInputStream inputStream = null;
 			try {
@@ -157,14 +158,14 @@ public class ViewPoint extends ViewPointObject {
 		viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
 
-		ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
+		ImportedOWLOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
 
 		viewpoint.init(baseName, viewpointDir, xmlFile, library, viewPointOntology, folder);
 		viewpoint.save();
 		return viewpoint;
 	}
 
-	private static ImportedOntology readViewpointOntology(File viewPointFile, ViewPointLibrary library) {
+	private static ImportedOWLOntology readViewpointOntology(File viewPointFile, ViewPointLibrary library) {
 
 		if (viewPointFile == null || !viewPointFile.exists() || viewPointFile.length() == 0) {
 			if (viewPointFile.length() == 0) {
@@ -196,9 +197,9 @@ public class ViewPoint extends ViewPointObject {
 		return null;
 	}
 
-	private static ImportedOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
+	private static ImportedOWLOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
 
-		ImportedOntology viewpointOntology = null;
+		ImportedOWLOntology viewpointOntology = null;
 
 		if (owlFile.exists()) {
 			logger.fine("Found " + owlFile);
@@ -240,21 +241,21 @@ public class ViewPoint extends ViewPointObject {
 
 	public static class ViewPointBuilder {
 		private ViewPoint viewPoint;
-		private ImportedOntology viewPointOntology;
+		private ImportedOWLOntology viewPointOntology;
 
 		public ViewPointBuilder(ViewPoint viewPoint) {
 			this.viewPoint = viewPoint;
 			if (viewPoint != null) {
-				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
+				this.viewPointOntology = (ImportedOWLOntology) viewPoint.getViewpointOntology();
 			}
 		}
 
-		public ViewPointBuilder(ImportedOntology viewPointOntology) {
+		public ViewPointBuilder(ImportedOWLOntology viewPointOntology) {
 			this.viewPointOntology = viewPointOntology;
 			// viewPointOntology.loadWhenUnloaded();
 		}
 
-		public ImportedOntology getViewPointOntology() {
+		public ImportedOWLOntology getViewPointOntology() {
 			return viewPointOntology;
 		}
 
@@ -282,7 +283,7 @@ public class ViewPoint extends ViewPointObject {
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
-	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ImportedOntology ontology,
+	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ImportedOWLOntology ontology,
 			ViewPointFolder folder) {
 		logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
 
@@ -518,10 +519,10 @@ public class ViewPoint extends ViewPointObject {
 		if (isDeserializing()) {
 			return super.getViewpointOntology();
 		}
-		return viewpointOntology;
+		return (OWLOntology) viewpointOntology;
 	}
 
-	public void setViewpointOntology(ImportedOntology viewpointOntology) {
+	public void setViewpointOntology(ImportedOWLOntology viewpointOntology) {
 		this.viewpointOntology = viewpointOntology;
 	}
 

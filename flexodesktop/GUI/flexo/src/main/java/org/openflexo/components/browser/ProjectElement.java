@@ -20,6 +20,7 @@
 package org.openflexo.components.browser;
 
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ImportedObjectLibraryDeleted;
@@ -56,7 +57,7 @@ public class ProjectElement extends BrowserElement {
 		addToChilds(getProject().getFlexoNavigationMenu().getRootMenu());
 		addToChilds(getProject().getFlexoWSLibrary());
 		if (getProject().getProjectOntology(false) != null) {
-			addToChilds(getProject().getProjectOntology(false));
+			addToChilds((FlexoModelObject) getProject().getProjectOntology(false));
 		}
 		if (getProject().getShemaLibrary(false) != null) {
 			addToChilds(getProject().getShemaLibrary(false));

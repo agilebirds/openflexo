@@ -105,10 +105,10 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.ontology.ProjectOWLOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.SourceRepository;
@@ -362,8 +362,8 @@ public enum BrowserElementType {
 	SHARED_PROJECT("shared_project", null/*Used outside this scope*/, IconLibrary.PROJECT_ICON),
 	CVS_DIRECTORY("cvs_directory", null/*Used outside this scope*/, IconLibrary.FOLDER_ICON),
 	CVS_FILE("cvs_file", null/*Used outside this scope*/, FilesIconLibrary.SMALL_MISC_FILE_ICON),
-	PROJECT_ONTOLOGY("project_ontology", ProjectOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
-	IMPORTED_ONTOLOGY("imported_ontology", ImportedOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
+	PROJECT_ONTOLOGY("project_ontology", ProjectOWLOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
+	IMPORTED_ONTOLOGY("imported_ontology", ImportedOWLOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	ONTOLOGY_LIBRARY("ontology_library", OntologyLibrary.class, OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON),
 	ONTOLOGY_FOLDER("ontology_folder", OntologyFolder.class, IconLibrary.FOLDER_ICON),
 	/*	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),

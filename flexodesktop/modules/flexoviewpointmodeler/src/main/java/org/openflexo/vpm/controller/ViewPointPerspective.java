@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -98,8 +98,8 @@ public class ViewPointPerspective extends FlexoPerspective {
 				super.treeDoubleClick(object);
 				if (object instanceof ViewPointPalette) {
 					focusOnPalette((ViewPointPalette) object);
-				} else if (object instanceof ImportedOntology) {
-					focusOnOntology((ImportedOntology) object);
+				} else if (object instanceof ImportedOWLOntology) {
+					focusOnOntology((ImportedOWLOntology) object);
 				} else if (object instanceof EditionPattern) {
 					hideBottomBrowser();
 				}
@@ -108,7 +108,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			@Override
 			public void treeSingleClick(FlexoModelObject object) {
 				super.treeSingleClick(object);
-				if (!(object instanceof ViewPointPalette) && !(object instanceof ImportedOntology)) {
+				if (!(object instanceof ViewPointPalette) && !(object instanceof ImportedOWLOntology)) {
 					hideBottomBrowser();
 				}
 			}
@@ -157,7 +157,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		calcDrawingShemaBrowser.addBrowserListener(_browserView);
 	}
 
-	public void focusOnOntology(ImportedOntology ontology) {
+	public void focusOnOntology(ImportedOWLOntology ontology) {
 		setBottomLeftView(ontologyBrowserView);
 		ontologyBrowser.deleteBrowserListener(_browserView);
 		ontologyBrowser.setRepresentedOntology(ontology);
@@ -199,7 +199,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof ViewPointLibrary || object instanceof ImportedOntology || object instanceof ViewPointPalette
+		return object instanceof ViewPointLibrary || object instanceof ImportedOWLOntology || object instanceof ViewPointPalette
 				|| object instanceof ExampleDrawingShema || object instanceof ViewPoint || object instanceof EditionPattern;
 	}
 
@@ -208,9 +208,9 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (object instanceof ViewPointLibrary) {
 			return new CalcLibraryView((ViewPointLibrary) object, (VPMController) controller);
 		}
-		if (object instanceof ImportedOntology) {
-			((ImportedOntology) object).loadWhenUnloaded();
-			return new OntologyView((ImportedOntology) object, (VPMController) controller, this);
+		if (object instanceof ImportedOWLOntology) {
+			((ImportedOWLOntology) object).loadWhenUnloaded();
+			return new OntologyView((ImportedOWLOntology) object, (VPMController) controller, this);
 		}
 		if (object instanceof ViewPoint) {
 			((ViewPoint) object).loadWhenUnloaded();
