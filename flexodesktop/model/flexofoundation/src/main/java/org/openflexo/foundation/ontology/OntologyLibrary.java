@@ -33,10 +33,10 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.dm.OntologyImported;
 import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
+import org.openflexo.foundation.ontology.owl.OWLObject.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
 import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
-import org.openflexo.foundation.ontology.owl.OWLObject.OntologyObjectConverter;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -231,11 +231,11 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		return (OWLOntology) getOntology(OWL2URIDefinitions.OWL_ONTOLOGY_URI);
 	}
 
-	public ImportedOWLOntology importOntology(String ontologyUri, File alternativeLocalFile) {
+	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile) {
 		return importOntology(ontologyUri, alternativeLocalFile, null);
 	}
 
-	public ImportedOWLOntology importOntology(String ontologyUri, File alternativeLocalFile, OntologyFolder folder) {
+	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile, OntologyFolder folder) {
 		logger.fine("Import ontology " + ontologyUri + " as " + alternativeLocalFile);
 		if (_allOntologies != null) {
 			_allOntologies.clear();

@@ -677,4 +677,9 @@ public class XSOntology extends AbstractOntologyObject implements FlexoOntology,
 		return false;
 	}
 
+	public static String findOntologyURI(File f) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

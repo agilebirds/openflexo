@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.xsd.XSOntology;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -125,6 +126,19 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		return viewPointLibrary;
 	}
 
+	private static String findOntologyURI(File file, String baseUri) {
+		String uri = null;
+		if (file.getName().endsWith(".owl")) {
+			uri = OWLOntology.findOntologyURI(file);
+		} else if (file.getName().endsWith(".xsd")) {
+			uri = XSOntology.findOntologyURI(file);
+		}
+		if (uri == null) {
+			uri = baseUri + "/" + file.getName();
+		}
+		return uri;
+	}
+
 	private void findOntologies(File dir, String baseUri, OntologyFolder folder) {
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -133,11 +147,8 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			copyOntologies(localDirectory, CopyStrategy.REPLACE);
 		}
 		for (File f : dir.listFiles()) {
-			if (f.isFile() && f.getName().endsWith(".owl")) {
-				String uri = OWLOntology.findOntologyURI(f);
-				if (uri == null) {
-					uri = baseUri + "/" + f.getName();
-				}
+			if (f.isFile() && (f.getName().endsWith(".owl") || f.getName().endsWith(".xsd"))) {
+				String uri = findOntologyURI(f, baseUri);
 				baseOntologyLibrary.importOntology(uri, f, folder);
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
 				OntologyFolder newFolder = new OntologyFolder(f.getName(), folder, baseOntologyLibrary);

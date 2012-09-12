@@ -30,7 +30,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
+import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -49,7 +49,7 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 	private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
 
-	private ImportedOWLOntology viewPointOntology = null;
+	private ImportedOntology viewPointOntology = null;
 
 	public ViewPointObject(ViewPointBuilder builder) {
 		if (builder != null) {

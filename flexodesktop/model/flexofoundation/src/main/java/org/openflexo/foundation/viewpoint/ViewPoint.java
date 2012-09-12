@@ -93,7 +93,7 @@ public class ViewPoint extends ViewPointObject {
 
 		if (xmlFile.exists()) {
 
-			ImportedOWLOntology viewPointOntology = readViewpointOntology(xmlFile, library);
+			ImportedOntology viewPointOntology = readViewpointOntology(xmlFile, library);
 
 			FileInputStream inputStream = null;
 			try {
@@ -159,14 +159,14 @@ public class ViewPoint extends ViewPointObject {
 		viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
 
-		ImportedOWLOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
+		ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
 
 		viewpoint.init(baseName, viewpointDir, xmlFile, library, viewPointOntology, folder);
 		viewpoint.save();
 		return viewpoint;
 	}
 
-	private static ImportedOWLOntology readViewpointOntology(File viewPointFile, ViewPointLibrary library) {
+	private static ImportedOntology readViewpointOntology(File viewPointFile, ViewPointLibrary library) {
 
 		if (viewPointFile == null || !viewPointFile.exists() || viewPointFile.length() == 0) {
 			if (viewPointFile.length() == 0) {
@@ -198,9 +198,9 @@ public class ViewPoint extends ViewPointObject {
 		return null;
 	}
 
-	private static ImportedOWLOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
+	private static ImportedOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
 
-		ImportedOWLOntology viewpointOntology = null;
+		ImportedOntology viewpointOntology = null;
 
 		if (owlFile.exists()) {
 			logger.fine("Found " + owlFile);
@@ -242,7 +242,7 @@ public class ViewPoint extends ViewPointObject {
 
 	public static class ViewPointBuilder {
 		private ViewPoint viewPoint;
-		private ImportedOWLOntology viewPointOntology;
+		private ImportedOntology viewPointOntology;
 
 		public ViewPointBuilder(ViewPoint viewPoint) {
 			this.viewPoint = viewPoint;
@@ -251,12 +251,12 @@ public class ViewPoint extends ViewPointObject {
 			}
 		}
 
-		public ViewPointBuilder(ImportedOWLOntology viewPointOntology) {
+		public ViewPointBuilder(ImportedOntology viewPointOntology) {
 			this.viewPointOntology = viewPointOntology;
 			// viewPointOntology.loadWhenUnloaded();
 		}
 
-		public ImportedOWLOntology getViewPointOntology() {
+		public ImportedOntology getViewPointOntology() {
 			return viewPointOntology;
 		}
 
@@ -284,7 +284,7 @@ public class ViewPoint extends ViewPointObject {
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
-	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ImportedOWLOntology ontology,
+	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ImportedOntology ontology,
 			ViewPointFolder folder) {
 		logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
 
