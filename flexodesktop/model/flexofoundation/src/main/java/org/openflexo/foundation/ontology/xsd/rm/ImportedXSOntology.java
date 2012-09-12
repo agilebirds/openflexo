@@ -9,6 +9,9 @@ import org.openflexo.foundation.rm.SaveResourceException;
 
 public class ImportedXSOntology extends XSOntology implements ImportedOntology {
 
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(ImportedXSOntology.class
+			.getPackage().getName());
+
 	public ImportedXSOntology(String ontologyURI, File xsdFile, OntologyLibrary library) {
 		super(ontologyURI, xsdFile, library);
 		// TODO Auto-generated constructor stub
@@ -21,7 +24,7 @@ public class ImportedXSOntology extends XSOntology implements ImportedOntology {
 
 	@Override
 	public void save() throws SaveResourceException {
-		// TODO Auto-generated method stub
+		logger.warning("Imported ontologies are not supposed to be saved !!!");
 	}
 
 }
