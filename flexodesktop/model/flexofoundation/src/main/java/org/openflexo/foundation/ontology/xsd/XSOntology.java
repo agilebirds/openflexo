@@ -13,7 +13,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.FlexoOntology;
@@ -45,7 +44,7 @@ import com.sun.xml.xsom.XSSimpleType;
 //TODO XSOntology implements Meta-Model, XMLIndividuals implements Model
 //TODO element restrictions
 
-public abstract class XSOntology extends AbstractOntologyObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
+public abstract class XSOntology extends XSOntObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
@@ -69,6 +68,7 @@ public abstract class XSOntology extends AbstractOntologyObject implements Flexo
 	private final Map<String, XSOntIndividual> individuals = new HashMap<String, XSOntIndividual>();
 
 	public XSOntology(String ontologyURI, File xsdFile, OntologyLibrary library) {
+		super();
 		name = computeName(xsdFile);
 		this.ontologyURI = ontologyURI;
 		this.originalXsdFile = xsdFile;

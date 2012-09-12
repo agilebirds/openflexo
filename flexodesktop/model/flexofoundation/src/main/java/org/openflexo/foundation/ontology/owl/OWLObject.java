@@ -30,10 +30,10 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.dm.OntologyObjectStatementsChanged;
@@ -45,7 +45,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -58,25 +57,6 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 		StringConvertable<OntologyObject> {
 
 	private static final Logger logger = Logger.getLogger(OntologyObject.class.getPackage().getName());
-
-	public static class OntologyObjectConverter extends Converter<OntologyObject> {
-		private FlexoOntology _ontology;
-
-		public OntologyObjectConverter(FlexoOntology ontology) {
-			super(OntologyObject.class);
-			_ontology = ontology;
-		}
-
-		@Override
-		public OntologyObject convertFromString(String value) {
-			return _ontology.getOntologyObject(value);
-		}
-
-		@Override
-		public String convertToString(OntologyObject value) {
-			return value.getURI();
-		};
-	}
 
 	private final Vector<OWLStatement> _statements;
 	private final Vector<PropertyStatement> _annotationStatements;

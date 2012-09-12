@@ -33,7 +33,6 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.dm.OntologyImported;
 import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
-import org.openflexo.foundation.ontology.owl.OWLObject.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
 import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
