@@ -37,6 +37,7 @@ import org.openflexo.foundation.ontology.owl.OWLObject.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
 import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
+import org.openflexo.foundation.ontology.xsd.rm.ImportedXSOntology;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -241,7 +242,12 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			_allOntologies.clear();
 		}
 		_allOntologies = null;
-		ImportedOWLOntology newOntology = new ImportedOWLOntology(ontologyUri, alternativeLocalFile, this);
+		ImportedOntology newOntology = null;
+		if (alternativeLocalFile.getName().endsWith(".owl")) {
+			newOntology = new ImportedOWLOntology(ontologyUri, alternativeLocalFile, this);
+		} else if (alternativeLocalFile.getName().endsWith(".xsd")) {
+			newOntology = new ImportedXSOntology(ontologyUri, alternativeLocalFile, this);
+		}
 		registerOntology(newOntology);
 		// ontologies.put(ontologyUri, newOntology);
 		if (folder != null) {

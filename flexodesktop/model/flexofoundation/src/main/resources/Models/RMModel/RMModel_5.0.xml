@@ -107,6 +107,8 @@
   <entity name="org.openflexo.foundation.rm.FlexoEOModelResource" xmlTag="EOModel"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoProjectOntologyResource" xmlTag="ProjectOntology"/>
+  
+  <entity name="org.openflexo.foundation.rm.FlexoXMLModelResource" xmlTag="XMLModel"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoOEShemaLibraryResource" xmlTag="ShemaLibrary"/>
 

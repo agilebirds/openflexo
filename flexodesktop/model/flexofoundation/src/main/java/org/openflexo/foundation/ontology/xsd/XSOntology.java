@@ -26,7 +26,6 @@ import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
 import org.openflexo.xmlcode.XMLMapping;
@@ -46,7 +45,7 @@ import com.sun.xml.xsom.XSSimpleType;
 //TODO XSOntology implements Meta-Model, XMLIndividuals implements Model
 //TODO element restrictions
 
-public class XSOntology extends AbstractOntologyObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
+public abstract class XSOntology extends AbstractOntologyObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
@@ -105,6 +104,11 @@ public class XSOntology extends AbstractOntologyObject implements FlexoOntology,
 	}
 
 	@Override
+	public FlexoProject getProject() {
+		return getOntologyLibrary().getProject();
+	}
+
+	@Override
 	public boolean getIsReadOnly() {
 		return isReadOnly;
 	}
@@ -114,17 +118,17 @@ public class XSOntology extends AbstractOntologyObject implements FlexoOntology,
 	}
 
 	@Override
-	public FlexoOntology getFlexoOntology() {
+	public XSOntology getFlexoOntology() {
+		return this;
+	}
+
+	@Override
+	public XSOntology getOntology() {
 		return this;
 	}
 
 	protected XSDeclarationsFetcher getFetcher() {
 		return fetcher;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return getOntologyLibrary().getProject();
 	}
 
 	@Override
@@ -325,11 +329,6 @@ public class XSOntology extends AbstractOntologyObject implements FlexoOntology,
 		}
 
 		return doc;
-	}
-
-	@Override
-	public void save() throws SaveResourceException {
-		// TODO
 	}
 
 	@Override
