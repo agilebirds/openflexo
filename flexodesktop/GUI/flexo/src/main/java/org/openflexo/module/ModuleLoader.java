@@ -48,7 +48,7 @@ import org.openflexo.components.SaveProjectsDialog;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
-import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.module.external.ExternalDMModule;
@@ -326,10 +326,10 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	 * 
 	 * @param askConfirmation
 	 *            if flexo must ask confirmation to the user
-	 * @throws ProjectExitingCancelledException
+	 * @throws OperationCancelledException
 	 *             whenever user decide to not quit
 	 */
-	public void quit(boolean askConfirmation) throws ProjectExitingCancelledException {
+	public void quit(boolean askConfirmation) throws OperationCancelledException {
 		if (askConfirmation) {
 			proceedQuit();
 		} else {
@@ -337,35 +337,40 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		}
 	}
 
-	private void proceedQuit() throws ProjectExitingCancelledException {
+	private void proceedQuit() throws OperationCancelledException {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Exiting FLEXO Application Suite...");
 		}
 		if (applicationContext.getProjectLoader().someProjectsAreModified()) {
-			SaveProjectsDialog dialog = new SaveProjectsDialog(applicationContext.getProjectLoader().getModifiedProjects());
-			if (dialog.isOk()) {
-				try {
-					applicationContext.getProjectLoader().saveProjects(dialog.getSelectedProject());
+			try {
+				saveModifiedProjects();
+			} catch (SaveResourceExceptionList e) {
+				e.printStackTrace();
+				if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
+						+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"))) {
 					proceedQuitWithoutConfirmation();
-				} catch (SaveResourceExceptionList e) {
-					e.printStackTrace();
-					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-							+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"))) {
-						proceedQuitWithoutConfirmation();
-					}
 				}
-			} else { // CANCEL
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Exiting FLEXO Application Suite... CANCELLED");
-				}
-				throw new ProjectExitingCancelledException();
 			}
+
 		} else {
 			if (FlexoController.confirm(FlexoLocalization.localizedForKey("really_quit"))) {
 				proceedQuitWithoutConfirmation();
 			} else {
-				throw new ProjectExitingCancelledException();
+				throw new OperationCancelledException();
 			}
+		}
+	}
+
+	public void saveModifiedProjects() throws OperationCancelledException, SaveResourceExceptionList {
+		SaveProjectsDialog dialog = new SaveProjectsDialog(applicationContext.getProjectLoader().getModifiedProjects());
+		if (dialog.isOk()) {
+			applicationContext.getProjectLoader().saveProjects(dialog.getSelectedProject());
+			proceedQuitWithoutConfirmation();
+		} else { // CANCEL
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Exiting FLEXO Application Suite... CANCELLED");
+			}
+			throw new OperationCancelledException();
 		}
 	}
 

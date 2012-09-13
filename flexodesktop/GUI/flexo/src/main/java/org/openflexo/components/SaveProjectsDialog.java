@@ -58,7 +58,6 @@ public class SaveProjectsDialog {
 
 		public void setSelected(List<FlexoProject> selected) {
 			this.selected = selected;
-
 		}
 
 		public void selectAll() {

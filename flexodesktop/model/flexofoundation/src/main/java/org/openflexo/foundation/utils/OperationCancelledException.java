@@ -21,6 +21,6 @@ package org.openflexo.foundation.utils;
 
 import org.openflexo.foundation.FlexoException;
 
-public class ProjectExitingCancelledException extends FlexoException {
+public class OperationCancelledException extends FlexoException {
 
 }
