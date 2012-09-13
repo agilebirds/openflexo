@@ -65,10 +65,10 @@ public interface Node {
 	@Setter(CHILDREN)
 	public void setChildren(List<Node> children);
 
-	@Adder(id = CHILDREN)
+	@Adder(CHILDREN)
 	public void addChild(Node child);
 
-	@Remover(id = CHILDREN)
+	@Remover(CHILDREN)
 	public void removeChild(Node child);
 
 	@Getter(value = PARENT, inverse = CHILDREN)
