@@ -79,6 +79,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -151,6 +152,24 @@ public abstract class FlexoOntology extends OntologyObject {
 	}
 
 	public static String findOntologyURI(File aFile) {
+		String returned = findOntologyURIWithOntologyAboutMethod(aFile);
+		if (StringUtils.isNotEmpty(returned) && returned.endsWith("#")) {
+			returned = returned.substring(0, returned.lastIndexOf("#"));
+		}
+		if (StringUtils.isEmpty(returned)) {
+			returned = findOntologyURIWithRDFBaseMethod(aFile);
+		}
+		if (StringUtils.isNotEmpty(returned) && returned.endsWith("#")) {
+			returned = returned.substring(0, returned.lastIndexOf("#"));
+		}
+		if (StringUtils.isEmpty(returned)) {
+			logger.warning("Could not find URI for ontology stored in file " + aFile.getAbsolutePath());
+		}
+		return returned;
+
+	}
+
+	private static String findOntologyURIWithRDFBaseMethod(File aFile) {
 		Document document;
 		try {
 			logger.fine("Try to find URI for " + aFile);
@@ -173,6 +192,34 @@ public abstract class FlexoOntology extends OntologyObject {
 		}
 		logger.fine("Returned null");
 		return null;
+	}
+
+	private static String findOntologyURIWithOntologyAboutMethod(File aFile) {
+		Document document;
+		try {
+			logger.fine("Try to find URI for " + aFile);
+			document = readXMLFile(aFile);
+			Element root = getElement(document, "Ontology");
+			if (root != null) {
+				Iterator it = root.getAttributes().iterator();
+				while (it.hasNext()) {
+					Attribute at = (Attribute) it.next();
+					if (at.getName().equals("about")) {
+						logger.fine("Returned " + at.getValue());
+						String returned = at.getValue();
+						if (StringUtils.isNotEmpty(returned)) {
+							return returned;
+						}
+					}
+				}
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.fine("Returned null");
+		return findOntologyURIWithRDFBaseMethod(aFile);
 	}
 
 	public static String findOntologyName(File aFile) {
@@ -956,8 +1003,9 @@ public abstract class FlexoOntology extends OntologyObject {
 	protected OntologyObjectProperty retrieveOntologyObjectProperty(ObjectProperty ontProperty) {
 
 		OntologyObjectProperty returned = _objectProperties.get(ontProperty);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		returned = makeNewObjectProperty(ontProperty);
 		returned.init();
@@ -968,8 +1016,9 @@ public abstract class FlexoOntology extends OntologyObject {
 	protected OntologyDataProperty retrieveOntologyDataProperty(DatatypeProperty ontProperty) {
 
 		OntologyDataProperty returned = _dataProperties.get(ontProperty);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		returned = makeNewDataProperty(ontProperty);
 		returned.init();
@@ -980,8 +1029,9 @@ public abstract class FlexoOntology extends OntologyObject {
 	protected OntologyIndividual retrieveOntologyIndividual(Individual individual) {
 
 		OntologyIndividual returned = _individuals.get(individual);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		// Special case for OWL, RDF and RDFS ontologies, don't create individuals !!!
 		if (!getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI) && !getURI().equals(RDFURIDefinitions.RDF_ONTOLOGY_URI)
@@ -1000,13 +1050,15 @@ public abstract class FlexoOntology extends OntologyObject {
 	protected OntologyClass retrieveOntologyClass(OntClass resource) {
 
 		OntologyClass returned = _classes.get(resource);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		if (isNamedClass(resource) && StringUtils.isNotEmpty(resource.getURI())) {
 			returned = getClass(resource.getURI());
-			if (returned != null)
+			if (returned != null) {
 				return returned;
+			}
 		}
 
 		if (isNamedResourceOfThisOntology(resource)) {
@@ -1037,8 +1089,9 @@ public abstract class FlexoOntology extends OntologyObject {
 	private OntologyRestrictionClass retrieveRestriction(Restriction restriction) {
 
 		OntologyRestrictionClass returned = (OntologyRestrictionClass) _classes.get(restriction);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS = ResourceFactory.createProperty(OWL + OntologyRestrictionClass.ON_CLASS);
@@ -1433,7 +1486,11 @@ public abstract class FlexoOntology extends OntologyObject {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(aFile);
-			getOntModel().write(out, "RDF/XML-ABBREV", getOntologyURI()); // "RDF/XML-ABBREV"
+			RDFWriter writer = ontModel.getWriter("RDF/XML-ABBREV");
+			writer.setProperty("xmlbase", getOntologyURI());
+			writer.write(ontModel.getBaseModel(), out, getOntologyURI());
+			// getOntModel().setNsPrefix("base", getOntologyURI());
+			// getOntModel().write(out, "RDF/XML-ABBREV", getOntologyURI()); // "RDF/XML-ABBREV"
 			clearIsModified(true);
 			logger.info("Wrote " + aFile);
 		} catch (FileNotFoundException e) {
@@ -1720,8 +1777,9 @@ public abstract class FlexoOntology extends OntologyObject {
 			}
 		}
 
-		if (objectURI.equals(getURI()))
+		if (objectURI.equals(getURI())) {
 			return this;
+		}
 
 		OntologyObject<?> returned = null;
 
