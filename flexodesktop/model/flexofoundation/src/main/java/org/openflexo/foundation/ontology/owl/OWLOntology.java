@@ -88,6 +88,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -160,15 +161,33 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	}
 
 	public static String findOntologyURI(File aFile) {
+		String returned = findOntologyURIWithOntologyAboutMethod(aFile);
+		if (StringUtils.isNotEmpty(returned) && returned.endsWith("#")) {
+			returned = returned.substring(0, returned.lastIndexOf("#"));
+		}
+		if (StringUtils.isEmpty(returned)) {
+			returned = findOntologyURIWithRDFBaseMethod(aFile);
+		}
+		if (StringUtils.isNotEmpty(returned) && returned.endsWith("#")) {
+			returned = returned.substring(0, returned.lastIndexOf("#"));
+		}
+		if (StringUtils.isEmpty(returned)) {
+			logger.warning("Could not find URI for ontology stored in file " + aFile.getAbsolutePath());
+		}
+		return returned;
+
+	}
+
+	private static String findOntologyURIWithRDFBaseMethod(File aFile) {
 		Document document;
 		try {
 			logger.fine("Try to find URI for " + aFile);
 			document = readXMLFile(aFile);
 			Element root = getElement(document, "RDF");
 			if (root != null) {
-				Iterator<Attribute> it = root.getAttributes().iterator();
+				Iterator it = root.getAttributes().iterator();
 				while (it.hasNext()) {
-					Attribute at = it.next();
+					Attribute at = (Attribute) it.next();
 					if (at.getName().equals("base")) {
 						logger.fine("Returned " + at.getValue());
 						return at.getValue();
@@ -182,6 +201,34 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		}
 		logger.fine("Returned null");
 		return null;
+	}
+
+	private static String findOntologyURIWithOntologyAboutMethod(File aFile) {
+		Document document;
+		try {
+			logger.fine("Try to find URI for " + aFile);
+			document = readXMLFile(aFile);
+			Element root = getElement(document, "Ontology");
+			if (root != null) {
+				Iterator it = root.getAttributes().iterator();
+				while (it.hasNext()) {
+					Attribute at = (Attribute) it.next();
+					if (at.getName().equals("about")) {
+						logger.fine("Returned " + at.getValue());
+						String returned = at.getValue();
+						if (StringUtils.isNotEmpty(returned)) {
+							return returned;
+						}
+					}
+				}
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.fine("Returned null");
+		return findOntologyURIWithRDFBaseMethod(aFile);
 	}
 
 	public static String findOntologyName(File aFile) {
@@ -741,6 +788,10 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 
 	protected OWLClass redefineClass(OntClass ontClass) {
 		OWLClass originalDefinition = getClass(ontClass.getURI());
+		if (originalDefinition == null) {
+			logger.warning("Tried to redefine " + this + " with null originalDefinition");
+			return null;
+		}
 		logger.info("###### REDEFINE class " + ontClass.getURI() + " originalDefinition=" + originalDefinition);
 		OWLClass returned = makeNewClass(ontClass);
 		returned.setOriginalDefinition(originalDefinition);
@@ -792,6 +843,10 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 
 	protected OWLIndividual redefineIndividual(Individual individual) {
 		OWLIndividual originalDefinition = getIndividual(individual.getURI());
+		if (originalDefinition == null) {
+			logger.warning("Tried to redefine " + this + " with null originalDefinition");
+			return null;
+		}
 		OWLIndividual returned = makeNewIndividual(individual);
 		returned.setOriginalDefinition(originalDefinition);
 		logger.info("Declare individual " + returned.getName() + " as a redefinition of individual initially asserted in "
@@ -842,6 +897,10 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 
 	protected OWLDataProperty redefineDataProperty(OntProperty ontProperty) {
 		OWLDataProperty originalDefinition = getDataProperty(ontProperty.getURI());
+		if (originalDefinition == null) {
+			logger.warning("Tried to redefine " + this + " with null originalDefinition");
+			return null;
+		}
 		OWLDataProperty returned = makeNewDataProperty(ontProperty);
 		returned.setOriginalDefinition(originalDefinition);
 		logger.info("Declare data property " + returned.getName() + " as a redefinition of data property initially asserted in "
@@ -892,6 +951,10 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 
 	protected OWLObjectProperty redefineObjectProperty(OntProperty ontProperty) {
 		OWLObjectProperty originalDefinition = getObjectProperty(ontProperty.getURI());
+		if (originalDefinition == null) {
+			logger.warning("Tried to redefine " + this + " with null originalDefinition");
+			return null;
+		}
 		OWLObjectProperty returned = makeNewObjectProperty(ontProperty);
 		returned.setOriginalDefinition(originalDefinition);
 		logger.info("Declare object property " + returned.getName() + " as a redefinition of object property initially asserted in "
@@ -1449,7 +1512,11 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(aFile);
-			getOntModel().write(out, "RDF/XML-ABBREV", getOntologyURI()); // "RDF/XML-ABBREV"
+			RDFWriter writer = ontModel.getWriter("RDF/XML-ABBREV");
+			writer.setProperty("xmlbase", getOntologyURI());
+			writer.write(ontModel.getBaseModel(), out, getOntologyURI());
+			// getOntModel().setNsPrefix("base", getOntologyURI());
+			// getOntModel().write(out, "RDF/XML-ABBREV", getOntologyURI()); // "RDF/XML-ABBREV"
 			clearIsModified(true);
 			logger.info("Wrote " + aFile);
 		} catch (FileNotFoundException e) {

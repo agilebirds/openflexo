@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Shema id="1" name="Notation">
-  <DrawingGraphicalRepresentation id="2" className="org.openflexo.vpm.drawingshema.CalcDrawingShemaGR" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" identifier="root" layer="0" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-    <TextStyle id="3" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-  </DrawingGraphicalRepresentation>
-</Shema>
-

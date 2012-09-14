@@ -20,16 +20,22 @@
 package org.openflexo.foundation.ontology;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileUtils;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 
 public class ImportedOWLOntology extends OWLOntology implements ImportedOntology {
 
@@ -57,6 +63,52 @@ public class ImportedOWLOntology extends OWLOntology implements ImportedOntology
 	@Override
 	public String getDisplayableDescription() {
 		return "Ontology " + getName();
+	}
+
+	public static void main(String[] args) {
+		String uri = "http://this.is.a.test.owl";
+		Model base = ModelFactory.createDefaultModel();
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null, base);
+		// returned.ontModel.
+		// ontModel.setNsPrefix("base", uri);
+		ontModel.createOntology(uri);
+		ontModel.setDynamicImports(true);
+		File aFile = null;
+		try {
+			aFile = File.createTempFile("Zobi.owl", null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("File: " + aFile.getAbsolutePath());
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(aFile);
+			RDFWriter writer = ontModel.getWriter("RDF/XML-ABBREV");
+			writer.setProperty("xmlbase", uri);
+			writer.write(ontModel.getBaseModel(), out, uri);
+			// ontModel.write(out, "RDF/XML-ABBREV", uri); // "RDF/XML-ABBREV"
+			System.out.println("Wrote " + aFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			logger.warning("FileNotFoundException: " + e.getMessage());
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.warning("IOException: " + e.getMessage());
+			}
+		}
+
+		try {
+			System.out.println("Contents=\n" + FileUtils.fileContents(aFile));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public static ImportedOWLOntology createNewImportedOntology(String anURI, File owlFile, OntologyLibrary library) {

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shema id="1" name="Concepts and Relationships">
+  <DrawingGraphicalRepresentation id="2" className="org.openflexo.vpm.drawingshema.CalcDrawingShemaGR" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" identifier="root" layer="0" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+    <TextStyle id="3" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+  <ContainedShape id="4" name="Stakeholder">
+    <ShapeGraphicalRepresentation id="5" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="21.0" y="41.0" width="158.01257573374204" height="51.92898011079828" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="Stakeholder" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="6" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="7" color="255,150,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="8" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="9" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="10" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="11" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="12" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon id="13" className="org.openflexo.fge.shapes.RectangularOctogon">
+        <FGEPoint id="14" x="0.0" y="0.2" />
+        <FGEPoint id="15" x="0.0" y="0.8" />
+        <FGEPoint id="16" x="0.1" y="1.0" />
+        <FGEPoint id="17" x="0.9" y="1.0" />
+        <FGEPoint id="18" x="1.0" y="0.8" />
+        <FGEPoint id="19" x="1.0" y="0.2" />
+        <FGEPoint id="20" x="0.9" y="0.0" />
+        <FGEPoint id="21" x="0.1" y="0.0" />
+      </CustomPolygon>
+      <ShadowStyle id="22" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="23" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="24" name="icon">
+      <ShapeGraphicalRepresentation id="25" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="118.01257573374204" y="3.0" width="30.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" xConstraints="(parent.width - 40)" identifier="object_0_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="26" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="27" imageFile="Stakeholder_small.png" scaleX="0.7894736842105263" scaleY="0.9090909090909091" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="28" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="29" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="30" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="31" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="32" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="33" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="34" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="35" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedShape id="36" name="Driver">
+    <ShapeGraphicalRepresentation id="37" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="19.0" y="133.0" width="163.8251286024142" height="47.65910348644164" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" text="Driver" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="38" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="39" color="255,150,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="40" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="41" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="42" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="43" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="44" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon idref="13" />
+      <ShadowStyle id="45" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="46" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="47" name="icon">
+      <ShapeGraphicalRepresentation id="48" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="118.8251286024142" y="5.0" width="30.0" height="30.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" xConstraints="(parent.width - 45)" yConstraints="5" identifier="object_1_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="49" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="50" imageFile="Driver.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="51" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="52" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="53" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="54" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="55" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="56" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="57" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="58" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedShape id="59" name="Assessement">
+    <ShapeGraphicalRepresentation id="60" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="19.0" y="240.0" width="169.1207025215507" height="49.9305240214331" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_2" layer="1" hasText="true" text="Assessement" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="61" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="62" color="255,150,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="63" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="64" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="65" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="66" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="67" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon idref="13" />
+      <ShadowStyle id="68" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="69" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="70" name="icon">
+      <ShapeGraphicalRepresentation id="71" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="134.1207025215507" y="5.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" xConstraints="(parent.width - 35)" yConstraints="5" identifier="object_2_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="72" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="73" imageFile="Assessment.png" scaleX="0.8" scaleY="0.8" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="74" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="75" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="76" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="77" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="78" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="79" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="80" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="81" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedConnector id="82">
+    <ConnectorGraphicalRepresentation id="83" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_9" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="84" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="85" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="86" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="5" />
+      <EndShapeGraphicalRepresentation idref="37" />
+      <LineConnector id="87" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="88" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="4" />
+    <ToShape idref="36" />
+  </ContainedConnector>
+  <ContainedConnector id="89">
+    <ConnectorGraphicalRepresentation id="90" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_10" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="91" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="92" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="93" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="37" />
+      <EndShapeGraphicalRepresentation idref="60" />
+      <LineConnector id="94" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="95" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="36" />
+    <ToShape idref="59" />
+  </ContainedConnector>
+  <ContainedShape id="96" name="Goal">
+    <ShapeGraphicalRepresentation id="97" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="300.9964519217431" y="222.99290384348618" width="170.2197963405343" height="79.90736536191085" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_3" layer="1" hasText="true" text="Goal" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="98" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="99" color="175,175,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="100" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="101" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="102" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="103" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="104" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon idref="13" />
+      <ShadowStyle id="105" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="106" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="107" name="icon">
+      <ShapeGraphicalRepresentation id="108" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="135.2197963405343" y="5.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" xConstraints="(parent.width - 35)" yConstraints="5" identifier="object_3_0" layer="2" hasText="true" text="" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="109" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="110" imageFile="Goal.png" scaleX="0.8333333333333334" scaleY="0.8695652173913043" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="111" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="112" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="113" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="114" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="115" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="79" />
+        <ShadowStyle id="116" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="117" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedConnector id="118">
+    <ConnectorGraphicalRepresentation id="119" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_11" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="120" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="121" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="122" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="60" />
+      <EndShapeGraphicalRepresentation idref="97" />
+      <LineConnector id="123" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="124" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="59" />
+    <ToShape idref="96" />
+  </ContainedConnector>
+  <ContainedShape id="125" name="Requierement">
+    <ShapeGraphicalRepresentation id="126" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="308.0" y="419.0" width="172.0" height="79.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_4" layer="1" hasText="true" text="Requierement" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="127" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="128" color="175,175,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="129" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="130" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="131" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="132" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="133" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon idref="13" />
+      <ShadowStyle id="134" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="135" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="136" name="icon">
+      <ShapeGraphicalRepresentation id="137" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="127.0" y="5.0" width="30.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" xConstraints="(parent.width - 45)" yConstraints="5" identifier="object_4_0" layer="2" hasText="true" text="" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="138" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="139" imageFile="Requirement.png" scaleX="1.0" scaleY="1.1764705882352942" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="140" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="141" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="142" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="143" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="144" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="145" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="146" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="147" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedConnector id="148">
+    <ConnectorGraphicalRepresentation id="149" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_12" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="150" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="151" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="152" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="97" />
+      <EndShapeGraphicalRepresentation idref="126" />
+      <RectPolylinConnector id="153" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="SOUTH" endOrientation="NORTH" isRounded="true" arcSize="15" isStartingLocationFixed="false" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedEndLocation="0.39108224837789346,4.440892098500626E-16" />
+      <TextStyle id="154" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="96" />
+    <ToShape idref="125" />
+  </ContainedConnector>
+  <ContainedConnector id="155">
+    <ConnectorGraphicalRepresentation id="156" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_13" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="157" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="158" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="159" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="126" />
+      <EndShapeGraphicalRepresentation idref="97" />
+      <RectPolylinConnector id="160" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="NORTH" endOrientation="SOUTH" isRounded="true" arcSize="15" isStartingLocationFixed="false" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedEndLocation="0.6909557660408112,1.0" />
+      <TextStyle id="161" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="125" />
+    <ToShape idref="96" />
+  </ContainedConnector>
+  <ContainedConnector id="162">
+    <ConnectorGraphicalRepresentation id="163" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="PLAIN_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="20.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_14" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="164" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="DOTS_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="165" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="166" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="126" />
+      <EndShapeGraphicalRepresentation idref="97" />
+      <RectPolylinConnector id="167" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="NORTH" endOrientation="SOUTH" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedEndLocation="0.2070986708705576,1.0" />
+      <TextStyle id="168" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="125" />
+    <ToShape idref="96" />
+  </ContainedConnector>
+  <ContainedShape id="169" name="Principle">
+    <ShapeGraphicalRepresentation id="170" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="554.0" y="317.0" width="170.0" height="74.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_5" layer="1" hasText="true" text="Principle" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="171" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="172" color="175,175,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="173" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="174" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="175" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="176" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="177" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon idref="13" />
+      <ShadowStyle id="178" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="179" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="180" name="icon">
+      <ShapeGraphicalRepresentation id="181" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="125.0" y="5.0" width="25.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" xConstraints="(parent.width - 45)" yConstraints="5" identifier="object_5_0" layer="2" hasText="true" text="" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="182" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="183" imageFile="Principle.png" scaleX="1.0416666666666667" scaleY="0.8695652173913043" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="184" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="185" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="186" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="187" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="188" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="189" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="190" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="191" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedConnector id="192">
+    <ConnectorGraphicalRepresentation id="193" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_15" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="194" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="195" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="196" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="170" />
+      <EndShapeGraphicalRepresentation idref="126" />
+      <RectPolylinConnector id="197" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="WEST" endOrientation="NORTH" isRounded="true" arcSize="15" isStartingLocationFixed="true" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedStartLocation="0.04702996820519356,0.8940599364103867" fixedEndLocation="0.9660059218818506,0.1320118437637008" />
+      <TextStyle id="198" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="169" />
+    <ToShape idref="125" />
+  </ContainedConnector>
+  <ContainedConnector id="199">
+    <ConnectorGraphicalRepresentation id="200" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_16" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="201" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="202" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="203" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="126" />
+      <EndShapeGraphicalRepresentation idref="170" />
+      <RectPolylinConnector id="204" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="EAST" endOrientation="SOUTH" isRounded="true" arcSize="15" isStartingLocationFixed="true" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedStartLocation="1.0,0.40046371013570314" fixedEndLocation="0.18979284380795125,1.0" />
+      <TextStyle id="205" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="125" />
+    <ToShape idref="169" />
+  </ContainedConnector>
+  <ContainedConnector id="206">
+    <ConnectorGraphicalRepresentation id="207" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="PLAIN_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="20.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_17" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="208" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="DOTS_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="209" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="210" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="126" />
+      <EndShapeGraphicalRepresentation idref="170" />
+      <RectPolylinConnector id="211" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="EAST" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="true" isEndingLocationFixed="false" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedStartLocation="0.9671449834506045,0.8657100330987917" />
+      <TextStyle id="212" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="125" />
+    <ToShape idref="169" />
+  </ContainedConnector>
+  <ContainedConnector id="213">
+    <ConnectorGraphicalRepresentation id="214" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_18" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="215" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="216" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="217" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="97" />
+      <EndShapeGraphicalRepresentation idref="170" />
+      <RectPolylinConnector id="218" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="EAST" endOrientation="NORTH" isRounded="true" arcSize="15" isStartingLocationFixed="true" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedStartLocation="1.0,0.7431542120889043" fixedEndLocation="0.14854295299776066,0.0" />
+      <TextStyle id="219" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="96" />
+    <ToShape idref="169" />
+  </ContainedConnector>
+  <ContainedConnector id="220">
+    <ConnectorGraphicalRepresentation id="221" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_19" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="222" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="223" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="224" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="170" />
+      <EndShapeGraphicalRepresentation idref="97" />
+      <RectPolylinConnector id="225" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="NORTH" endOrientation="EAST" isRounded="true" arcSize="15" isStartingLocationFixed="true" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedStartLocation="0.25475065463497204,0.0" fixedEndLocation="1.0,0.49164939413353254" />
+      <TextStyle id="226" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="169" />
+    <ToShape idref="96" />
+  </ContainedConnector>
+  <ContainedConnector id="227">
+    <ConnectorGraphicalRepresentation id="228" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="PLAIN_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="20.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_20" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="229" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="DOTS_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="230" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="231" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="170" />
+      <EndShapeGraphicalRepresentation idref="97" />
+      <RectPolylinConnector id="232" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="NORTH" endOrientation="EAST" isRounded="true" arcSize="10" isStartingLocationFixed="true" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedStartLocation="0.8211917300334328,0.0" fixedEndLocation="0.9636907284615182,0.12738145692303632" />
+      <TextStyle id="233" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="169" />
+    <ToShape idref="96" />
+  </ContainedConnector>
+  <ContainedShape id="234" name="Goal">
+    <ShapeGraphicalRepresentation id="235" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="310.0283846260553" y="226.0035480782569" width="150.0" height="70.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_6" layer="1" hasText="true" text="Goal" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="236" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="237" color="175,175,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="238" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="239" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="240" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="241" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="242" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon idref="13" />
+      <ShadowStyle id="243" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="244" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="245" name="icon">
+      <ShapeGraphicalRepresentation id="246" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="115.0" y="5.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" xConstraints="(parent.width - 35)" yConstraints="5" identifier="object_6_0" layer="2" hasText="true" text="" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="247" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="248" imageFile="Goal.png" scaleX="0.8333333333333334" scaleY="0.8695652173913043" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="249" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="250" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="251" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="252" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="253" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="79" />
+        <ShadowStyle id="254" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="255" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedConnector id="256">
+    <ConnectorGraphicalRepresentation id="257" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_21" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="258" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="259" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="260" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="235" />
+      <EndShapeGraphicalRepresentation idref="97" />
+      <RectPolylinConnector id="261" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="NORTH" endOrientation="NORTH" isRounded="true" arcSize="15" isStartingLocationFixed="false" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedEndLocation="0.29569612004845003,-0.0" />
+      <TextStyle id="262" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="234" />
+    <ToShape idref="96" />
+  </ContainedConnector>
+  <ContainedShape id="263" name="Principle">
+    <ShapeGraphicalRepresentation id="264" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="554.0" y="317.0" width="170.0" height="74.9112251384979" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_7" layer="1" hasText="true" text="Principle" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="265" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="266" color="175,175,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="267" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="268" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="269" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="270" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="271" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon idref="13" />
+      <ShadowStyle id="272" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="273" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="274" name="icon">
+      <ShapeGraphicalRepresentation id="275" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="125.0" y="5.0" width="25.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" xConstraints="(parent.width - 45)" yConstraints="5" identifier="object_7_0" layer="2" hasText="true" text="" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="276" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="277" imageFile="Principle.png" scaleX="1.0416666666666667" scaleY="0.8695652173913043" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="278" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="279" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="280" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="281" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="282" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="189" />
+        <ShadowStyle id="283" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="284" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedConnector id="285">
+    <ConnectorGraphicalRepresentation id="286" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_22" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="287" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="288" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="289" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="170" />
+      <EndShapeGraphicalRepresentation idref="264" />
+      <RectPolylinConnector id="290" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="NORTH" endOrientation="NORTH" isRounded="true" arcSize="15" isStartingLocationFixed="true" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" fixedStartLocation="0.3294117647058824,-0.0" fixedEndLocation="0.6588235294117647,-0.0" />
+      <TextStyle id="291" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="169" />
+    <ToShape idref="263" />
+  </ContainedConnector>
+  <ContainedShape id="292" name="Requierement">
+    <ShapeGraphicalRepresentation id="293" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="308.0" y="419.0" width="172.0" height="79.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="true" identifier="object_8" layer="1" hasText="true" text="Requierement" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="294" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="295" color="175,175,255" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="296" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedColorBackgroundStyle id="297" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="298" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedColorBackgroundStyle id="299" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="300" top="20" bottom="20" left="20" right="20" />
+      <CustomPolygon idref="13" />
+      <ShadowStyle id="301" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="302" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="303" name="icon">
+      <ShapeGraphicalRepresentation id="304" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="127.0" y="5.0" width="30.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" lineWrap="false" allowToLeaveBounds="false" xConstraints="(parent.width - 45)" yConstraints="5" identifier="object_8_0" layer="2" hasText="true" text="" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="305" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="306" imageFile="Requirement.png" scaleX="1.0" scaleY="1.1764705882352942" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="307" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="308" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="309" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="310" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="311" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="145" />
+        <ShadowStyle id="312" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="313" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+  <ContainedConnector id="314">
+    <ConnectorGraphicalRepresentation id="315" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_23" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="316" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
+      <SelectedForegroundStyle id="317" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <FocusedForegroundStyle id="318" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="293" />
+      <EndShapeGraphicalRepresentation idref="126" />
+      <RectPolylinConnector id="319" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="SOUTH" endOrientation="SOUTH" isRounded="true" arcSize="15" isStartingLocationFixed="true" isEndingLocationFixed="true" isStartingLocationDraggable="true" isEndingLocationDraggable="true" crossedControlPoint="0.5962441314553991,1.1333333333333333" fixedStartLocation="0.627906976744186,0.9999999999999998" fixedEndLocation="0.3255813953488372,0.9999999999999998" />
+      <TextStyle id="320" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="292" />
+    <ToShape idref="125" />
+  </ContainedConnector>
+</Shema>
+
