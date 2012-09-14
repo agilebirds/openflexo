@@ -770,6 +770,10 @@ public abstract class FlexoOntology extends OntologyObject {
 
 	protected OntologyClass redefineClass(OntClass ontClass) {
 		OntologyClass originalDefinition = getClass(ontClass.getURI());
+		if (originalDefinition == null) {
+			logger.warning("Tried to redefine " + this + " with null originalDefinition");
+			return null;
+		}
 		logger.info("###### REDEFINE class " + ontClass.getURI() + " originalDefinition=" + originalDefinition);
 		OntologyClass returned = makeNewClass(ontClass);
 		returned.setOriginalDefinition(originalDefinition);
@@ -821,6 +825,10 @@ public abstract class FlexoOntology extends OntologyObject {
 
 	protected OntologyIndividual redefineIndividual(Individual individual) {
 		OntologyIndividual originalDefinition = getIndividual(individual.getURI());
+		if (originalDefinition == null) {
+			logger.warning("Tried to redefine " + this + " with null originalDefinition");
+			return null;
+		}
 		OntologyIndividual returned = makeNewIndividual(individual);
 		returned.setOriginalDefinition(originalDefinition);
 		logger.info("Declare individual " + returned.getName() + " as a redefinition of individual initially asserted in "
@@ -871,6 +879,10 @@ public abstract class FlexoOntology extends OntologyObject {
 
 	protected OntologyDataProperty redefineDataProperty(OntProperty ontProperty) {
 		OntologyDataProperty originalDefinition = getDataProperty(ontProperty.getURI());
+		if (originalDefinition == null) {
+			logger.warning("Tried to redefine " + this + " with null originalDefinition");
+			return null;
+		}
 		OntologyDataProperty returned = makeNewDataProperty(ontProperty);
 		returned.setOriginalDefinition(originalDefinition);
 		logger.info("Declare data property " + returned.getName() + " as a redefinition of data property initially asserted in "
@@ -921,6 +933,10 @@ public abstract class FlexoOntology extends OntologyObject {
 
 	protected OntologyObjectProperty redefineObjectProperty(OntProperty ontProperty) {
 		OntologyObjectProperty originalDefinition = getObjectProperty(ontProperty.getURI());
+		if (originalDefinition == null) {
+			logger.warning("Tried to redefine " + this + " with null originalDefinition");
+			return null;
+		}
 		OntologyObjectProperty returned = makeNewObjectProperty(ontProperty);
 		returned.setOriginalDefinition(originalDefinition);
 		logger.info("Declare object property " + returned.getName() + " as a redefinition of object property initially asserted in "
