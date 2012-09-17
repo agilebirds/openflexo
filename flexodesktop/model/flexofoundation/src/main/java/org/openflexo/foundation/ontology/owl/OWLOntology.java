@@ -649,6 +649,22 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			}
 		}
 
+		// SGU / Warning: entering hacking area !!!
+		// I don't know what, but i found this way to get some more classes not discovered
+		// by classical exploration. This is not satisfying.
+		// Please investigate and find the RIGHT way to browse all classes !!!
+		for (OWLClass aClass : new ArrayList<OWLClass>(classes.values())) {
+			for (Iterator<OntClass> scI = aClass.getOntResource().listSubClasses(); scI.hasNext();) {
+				OntClass subClass = scI.next();
+				// retrieveOntologyClass(subClass);
+				if (_classes.get(subClass) == null && isNamedResourceOfThisOntology(subClass)) {
+					// Only named classes will be appended)
+					makeNewClass(subClass);
+					// logger.info("Made class (3)" + ontClass.getURI());
+				}
+			}
+		}
+
 		logger.info("Done created all concepts, now initialize them");
 
 		for (OWLClass aClass : new ArrayList<OWLClass>(classes.values())) {
