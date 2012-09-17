@@ -811,4 +811,58 @@ public class TestOntologies extends FlexoTestCase {
 		}
 
 	}*/
+
+	/*public static void main(String[] args) {
+
+		ResourceLocator.init();
+		File rdfsOWLOntologyFile = new FileResource("Ontologies/www.w3.org/2000/01/rdf-schema.owl");
+
+		testResourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new FileResource(
+				"TestResourceCenter"));
+
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, testResourceCenter.retrieveBaseOntologyLibrary(), null);
+		for (FlexoOntology o : testResourceCenter.retrieveBaseOntologyLibrary().getAllOntologies()) {
+			try {
+				System.out.println("Onto: " + o.getURI() + " file " + o.getAlternativeLocalFile().toURL().toString());
+				ontModel.getDocumentManager().addAltEntry(o.getURI(), o.getAlternativeLocalFile().toURL().toString());
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		if (rdfsOWLOntologyFile != null) {
+			logger.fine("RDFS local file: " + rdfsOWLOntologyFile.getAbsolutePath());
+			try {
+				ontModel.getDocumentManager().addAltEntry(RDFSURIDefinitions.RDFS_ONTOLOGY_URI, rdfsOWLOntologyFile.toURL().toString());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// read the source document
+		try {
+			logger.info("BEGIN Read " + RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+			ontModel.read(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+			logger.info("END read " + RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+		} catch (Exception e) {
+			logger.warning("Unexpected exception while reading ontology " + RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+			logger.warning("Exception " + e.getMessage() + ". See logs for details");
+			e.printStackTrace();
+		}
+
+		for (NodeIterator i = ontModel.listObjects(); i.hasNext();) {
+			RDFNode node = i.nextNode();
+			System.out.println("Node " + node + " as " + node.getClass().getName());
+		}
+
+		for (NodeIterator i = ontModel.listObjects(); i.hasNext();) {
+			RDFNode node = i.nextNode();
+			if (node instanceof Resource && ((Resource) node).canAs(OntClass.class)) {
+				OntClass ontClass = ((Resource) node).as(OntClass.class);
+				System.out.println("> Class: " + ontClass);
+			}
+		}
+
+	}*/
 }
