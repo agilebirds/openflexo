@@ -375,10 +375,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 
 	@Override
 	public List<XSOntDataProperty> getDataProperties() {
-		System.out.println("Just got a call!");
-		for (StackTraceElement e : Thread.currentThread().getStackTrace()) {
-			System.out.println(e.getClassName() + "." + e.getMethodName());
-		}
 		return new ArrayList<XSOntDataProperty>(dataProperties.values());
 	}
 
