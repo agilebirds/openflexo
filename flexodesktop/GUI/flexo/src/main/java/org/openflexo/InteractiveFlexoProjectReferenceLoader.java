@@ -27,7 +27,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 	}
 
 	@Override
-	public FlexoProject loadProject(FlexoProjectReference reference) {
+	public FlexoProject loadProject(FlexoProjectReference reference) throws ProjectLoadingCancelledException {
 		JPanel panel = new JPanel(new GridBagLayout());
 		JLabel name = new JLabel(FlexoLocalization.localizedForKey("project_name") + ":");
 		JTextField nameField = new JTextField(reference.getProjectName());
@@ -66,6 +66,6 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 				e.printStackTrace();
 			}
 		}
-		return null;
+		throw new ProjectLoadingCancelledException("project_loading_cancelled_by_user");
 	}
 }

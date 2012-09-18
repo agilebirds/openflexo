@@ -105,6 +105,10 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		return null;
 	}
 
+	public FlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
+		return loadProject(projectDirectory, true);
+	}
+
 	/**
 	 * Loads the project located withing <code> projectDirectory </code>. The following method is the default methode to call when opening a
 	 * project from a GUI (Interactive mode) so that resource update handling is properly initialized. Additional small stuffs can be
@@ -117,7 +121,8 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 	 *             whenever the load procedure is interrupted by the user or by Flexo.
 	 * @throws ProjectInitializerException
 	 */
-	public FlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
+	public FlexoEditor loadProject(File projectDirectory, boolean addToRecentProjects) throws ProjectLoadingCancelledException,
+			ProjectInitializerException {
 		if (projectDirectory == null) {
 			throw new IllegalArgumentException("Project directory cannot be null");
 		}
@@ -139,7 +144,9 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Opening " + projectDirectory.getAbsolutePath());
 		}
-		preInitialization(projectDirectory);
+		if (addToRecentProjects) {
+			preInitialization(projectDirectory);
+		}
 		final FlexoEditor editor;
 		try {
 			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,

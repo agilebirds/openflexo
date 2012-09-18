@@ -136,9 +136,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		if (defaultFrame == null) {
 			defaultFrame = new FlexoFrame();
 			defaultFrame.setUndecorated(true);
-			defaultFrame.pack();
 			defaultFrame.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
 					Toolkit.getDefaultToolkit().getScreenSize().height / 2, 0, 0);
+			defaultFrame.setResizable(false);
 			defaultFrame.setVisible(true);
 		}
 		return defaultFrame;
@@ -352,6 +352,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 			if (newValue != null && newValue.getProject() != null) {
 				newValue.getProject().addObserver(this);
 			}
+			updateTitle();
 		}
 	}
 

@@ -125,7 +125,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.action.AddProcessMetricsValue;
-import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.action.AddServiceInterface;
 import org.openflexo.foundation.wkf.action.AddStatus;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
@@ -1007,7 +1006,6 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
 		returned.add(AddSubProcess.actionType);
-		returned.add(AddRole.actionType);
 		returned.add(AddStatus.actionType);
 		returned.add(AddServiceInterface.actionType);
 		returned.add(GenerateProcessScreenshot.actionType);

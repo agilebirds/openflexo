@@ -53,7 +53,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
-import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
@@ -145,7 +145,7 @@ public class Flexo {
 						try {
 							activeFrame.getController().getModuleLoader()
 									.quit(activeFrame.getController().getProjectLoader().someProjectsAreModified());
-						} catch (ProjectExitingCancelledException e) {
+						} catch (OperationCancelledException e) {
 							e.printStackTrace();
 						}
 					}

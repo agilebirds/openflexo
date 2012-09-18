@@ -677,7 +677,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		try {
 			Vector<FIBComponent> dependancies = new Vector<FIBComponent>();
 			dependancies.add(aComponent);
-			searchLoopInDependanciesWith(aComponent, dependancies);
+			searchLoopInDependenciesWith(aComponent, dependancies);
 		} catch (DependencyLoopException e) {
 			logger.warning("Forbidden loop in dependancies: " + e.getMessage());
 			throw e;
@@ -692,15 +692,15 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	private void searchLoopInDependanciesWith(FIBComponent aComponent, Vector<FIBComponent> dependancies) throws DependencyLoopException {
+	private void searchLoopInDependenciesWith(FIBComponent aComponent, Vector<FIBComponent> dependencies) throws DependencyLoopException {
 		for (FIBComponent c : aComponent.mayDepends) {
 			if (c == this) {
-				throw new DependencyLoopException(dependancies);
+				throw new DependencyLoopException(dependencies);
 			}
 			Vector<FIBComponent> newVector = new Vector<FIBComponent>();
-			newVector.addAll(dependancies);
+			newVector.addAll(dependencies);
 			newVector.add(c);
-			searchLoopInDependanciesWith(c, newVector);
+			searchLoopInDependenciesWith(c, newVector);
 		}
 	}
 

@@ -92,7 +92,7 @@ public class ImportImage extends FlexoAction<ImportImage, FlexoModelObject, Flex
 				 * makeFlexoProgress(FlexoLocalization.localizedForKey("import_image"), 2);
 				 * setProgress(FlexoLocalization.localizedForKey("copying_file_to_project"));
 				 */
-				FlexoResource res = getEditor().getProject().resourceForKey(ResourceType.WEBSERVER, getTargetImageName());
+				FlexoResource<?> res = getEditor().getProject().resourceForKey(ResourceType.WEBSERVER, getTargetImageName());
 				if (res != null) {
 					if (!overwrite) {
 						throw new DuplicateResourceException(res);

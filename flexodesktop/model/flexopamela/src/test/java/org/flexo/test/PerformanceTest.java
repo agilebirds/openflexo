@@ -79,19 +79,19 @@ public class PerformanceTest {
 		@Getter(value = PARENT, inverse = CHILDREN)
 		public ModelObject getParent();
 
-		@Setter(value = PARENT)
+		@Setter(PARENT)
 		public void setParent(ModelObject parent);
 
 		@Getter(value = CHILDREN, cardinality = Cardinality.LIST, inverse = PARENT)
 		public List<ModelObject> getChildren();
 
-		@Setter(value = CHILDREN)
+		@Setter(CHILDREN)
 		public void setChildren(List<ModelObject> children);
 
-		@Adder(id = CHILDREN)
+		@Adder(CHILDREN)
 		public void addToChildren(ModelObject child);
 
-		@Remover(id = CHILDREN)
+		@Remover(CHILDREN)
 		public void removeFromChildren(ModelObject child);
 	}
 

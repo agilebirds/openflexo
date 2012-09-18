@@ -44,7 +44,7 @@ public class VEShemaBuilder extends FlexoBuilder<FlexoOEShemaResource> {
 		super(resource);
 		this.shemaDefinition = def;
 		if (shemaDefinition.isLoaded()) {
-			shema = shemaDefinition.getShema();
+			shema = shemaDefinition.getView();
 		}
 	}
 

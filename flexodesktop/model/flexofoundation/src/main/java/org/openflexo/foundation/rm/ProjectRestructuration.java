@@ -314,6 +314,10 @@ public class ProjectRestructuration {
 		return new File(getExpectedOntologyDirectory(project.getProjectDirectory()), ontologyName + OWL_EXTENSION);
 	}
 
+	public static File getExpectedProjectDataFile(FlexoProject project) {
+		return new File(project.getProjectDirectory(), project.getName() + XML_EXTENSION);
+	}
+
 	public static String getShemaLibraryFileName(FlexoProject project) {
 		return project.getProjectName() + OELIB_EXTENSION;
 	}

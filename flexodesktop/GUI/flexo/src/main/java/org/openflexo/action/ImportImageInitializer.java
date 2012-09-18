@@ -32,6 +32,7 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.AskParametersDialog.ValidationCondition;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
@@ -49,7 +50,7 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class ImportImageInitializer extends ActionInitializer {
+public class ImportImageInitializer extends ActionInitializer<ImportImage, FlexoModelObject, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -86,12 +87,12 @@ public class ImportImageInitializer extends ActionInitializer {
 					}
 				});
 				chooser.setAcceptAllFileFilterUsed(false);
-				int returnVal = chooser.showOpenDialog((e != null && e.getSource() instanceof Component ? (Component) e.getSource()
-						: FlexoFrame.getActiveFrame()));
+				int returnVal = chooser.showOpenDialog(e != null && e.getSource() instanceof Component ? (Component) e.getSource()
+						: FlexoFrame.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					GeneralPreferences.setLastImageDirectory(chooser.getSelectedFile().getParentFile());
 					FlexoPreferences.savePreferences(true);
-					(action).setFileToImport(chooser.getSelectedFile());
+					action.setFileToImport(chooser.getSelectedFile());
 					return true;
 				}
 				return false;
@@ -100,7 +101,7 @@ public class ImportImageInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<? super ImportImage> getDefaultExceptionHandler() {
+	protected FlexoExceptionHandler<ImportImage> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<ImportImage>() {
 			@Override
 			public boolean handleException(FlexoException exception, ImportImage action) {

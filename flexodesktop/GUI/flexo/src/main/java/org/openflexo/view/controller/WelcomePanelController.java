@@ -6,7 +6,7 @@ import org.openflexo.ApplicationData;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
@@ -37,7 +37,7 @@ public class WelcomePanelController extends FlexoFIBController {
 	public void exit() {
 		try {
 			getModuleLoader().quit(false);
-		} catch (ProjectExitingCancelledException e) {
+		} catch (OperationCancelledException e) {
 		}
 	}
 
@@ -63,19 +63,19 @@ public class WelcomePanelController extends FlexoFIBController {
 		hide();
 		try {
 			getModuleLoader().getModuleInstance(module).activateModule();
-			getProjectLoader().loadProject(projectDirectory);
-			validateAndDispose();
-		} catch (ProjectLoadingCancelledException e) {
-			show();
 		} catch (ModuleLoadingException e) {
 			e.printStackTrace();
 			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
 			show();
+		}
+		try {
+			getProjectLoader().loadProject(projectDirectory);
+			validateAndDispose();
+		} catch (ProjectLoadingCancelledException e) {
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
 			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
 					+ e.getProjectDirectory().getAbsolutePath());
-			show();
 		}
 	}
 

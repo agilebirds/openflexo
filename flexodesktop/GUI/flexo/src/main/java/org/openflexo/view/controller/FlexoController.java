@@ -35,6 +35,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -127,6 +128,7 @@ import org.openflexo.prefs.PreferencesWindow;
 import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
@@ -147,12 +149,17 @@ import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
  * 
  * @author benoit, sylvain
  */
-public abstract class FlexoController implements FlexoObserver, InspectorNotFoundHandler, InspectorExceptionHandler, PropertyChangeListener {
+public abstract class FlexoController implements FlexoObserver, InspectorNotFoundHandler, InspectorExceptionHandler,
+		PropertyChangeListener, HasPropertyChangeSupport {
 
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
+	public static final String DISPOSED = "disposed";
+
 	public static boolean USE_NEW_INSPECTOR_SCHEME = false;
 	public static boolean USE_OLD_INSPECTOR_SCHEME = true;
+
+	public static final String MODULE_VIEWS = "moduleViews";
 
 	public boolean useNewInspectorScheme() {
 		return USE_NEW_INSPECTOR_SCHEME;
@@ -162,7 +169,13 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return USE_OLD_INSPECTOR_SCHEME;
 	}
 
+	private PropertyChangeSupport propertyChangeSupport;
+
+	private boolean disposed = false;
+
 	private final Map<FlexoPerspective, Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>> loadedViews;
+
+	private final List<ModuleView<?>> moduleViews;
 
 	private ConsistencyCheckDialog consistencyCheckWindow;
 
@@ -198,7 +211,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("init_module_controller"));
 		this.module = module;
 		loadedViews = new Hashtable<FlexoPerspective, Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>>>();
+		moduleViews = new ArrayList<ModuleView<?>>();
 		controllerModel = new ControllerModel(module.getApplicationContext(), module);
+		propertyChangeSupport = new PropertyChangeSupport(this);
 		getProjectLoader().getPropertyChangeSupport().addPropertyChangeListener(ProjectLoader.EDITOR_ADDED, this);
 		controllerModel.getPropertyChangeSupport().addPropertyChangeListener(this);
 		flexoFrame = createFrame();
@@ -878,10 +893,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				locationOnScreen.y = 0;
 			}
 			Dimension dim = new Dimension(locationOnScreen.x + window.getWidth() / 2, locationOnScreen.y + window.getHeight() / 2);
-			dialog.setLocation(dim.width - dialog.getSize().width / 2, dim.height - dialog.getSize().height / 2);
+			dialog.setLocation(Math.max(dim.width - dialog.getSize().width / 2, 0), Math.max(dim.height - dialog.getSize().height / 2, 0));
 		} else {
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			dialog.setLocation((dim.width - dialog.getSize().width) / 2, (dim.height - dialog.getSize().height) / 2);
+			dialog.setLocation(Math.max((dim.width - dialog.getSize().width) / 2, 0),
+					Math.max((dim.height - dialog.getSize().height) / 2, 0));
 		}
 		pane.selectInitialValue();
 		dialog.setVisible(true);
@@ -1088,6 +1104,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 						representedObject = object;
 					}
 					projectViews.put(representedObject, moduleView);
+					moduleViews.add(moduleView);
+					propertyChangeSupport.firePropertyChange(MODULE_VIEWS, null, moduleView);
 				}
 			}
 		}
@@ -1220,6 +1238,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 																	// view!
 				map2.remove(aView.getRepresentedObject());
 			}
+			while (moduleViews.remove(aView)) {
+				;
+			}
+			propertyChangeSupport.firePropertyChange(MODULE_VIEWS, aView, null);
 		}
 	}
 
@@ -1436,6 +1458,20 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	}
 
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return DISPOSED;
+	}
+
+	public boolean isDisposed() {
+		return disposed;
+	}
+
 	public void dispose() {
 		if (getSelectionManager() != null) {
 			if (getSharedInspectorController() != null) {
@@ -1478,7 +1514,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 		controllerModel.delete();
 		loadedViews.clear();
+		disposed = true;
+		if (propertyChangeSupport != null) {
+			propertyChangeSupport.firePropertyChange(DISPOSED, false, true);
+		}
 		setEditor(null);
+		propertyChangeSupport = null;
 		inspectorMenuBar = null;
 		docInspectorController = null;
 		consistencyCheckWindow = null;

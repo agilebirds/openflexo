@@ -703,9 +703,10 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		public FlexoJTree(ProjectBrowser browser) {
 			super(browser);
 			setRootVisible(browser.showRootNode());
-			if (!isRootVisible()) {
+			setShowsRootHandles(browser.isRootCollapsable());
+			/*if (!isRootVisible()) {
 				setShowsRootHandles(true);
-			}
+			}*/
 			setAutoscrolls(true);
 			ToolTipManager.sharedInstance().registerComponent(this);
 			setRowHeight(_browser.getRowHeight());

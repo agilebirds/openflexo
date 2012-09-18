@@ -80,6 +80,12 @@
   <entity name="org.openflexo.foundation.rm.FlexoStorageResource" abstract="YES">
   </entity>
   
+  <entity name="org.openflexo.foundation.rm.FlexoPamelaResource" xmlTag="PamelaResource">
+    <property name="resourceDataClass" xmlTag="class" attribute="YES"/>
+    <property name="name" xmlTag="name" attribute="YES"/>
+    <property name="resourceType" xmlTag="type" attribute="YES"/>
+  </entity>
+  
   <entity name="org.openflexo.foundation.rm.FlexoXMLStorageResource" abstract="YES">
 	<property name="xmlVersion" xmlTag="version" attribute="YES"/>
   </entity>

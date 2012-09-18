@@ -201,6 +201,10 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return true;
 	}
 
+	public boolean isRootCollapsable() {
+		return false;
+	}
+
 	public void setSelectionManager(SelectionManager aSelectionManager) {
 		_selectionManager = aSelectionManager;
 		_selectionManager.addToSelectionListeners(this);

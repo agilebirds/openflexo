@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 @Target(value = ElementType.METHOD)
 public @interface Finder {
 
+	public static final String NO_RECURSION = "---";
 	public static final String DEFAULT_VALUE = "name";
 
 	/**
@@ -33,4 +34,19 @@ public @interface Finder {
 	 * @return
 	 */
 	public boolean isMultiValued() default false;
+
+	/**
+	 * Whether this finder should try to perform recursive search. If yes, value should be a dot ('.') separated path to get from one object
+	 * to the corresponding collection.
+	 * 
+	 * @return
+	 */
+	public String recursion() default NO_RECURSION;
+
+	/**
+	 * In case of recursion, this flag indicates to search first in the immediate collection and then to go in depth by "recursing".
+	 * 
+	 * @return
+	 */
+	public boolean iterateFirstRecurseThen() default true;
 }

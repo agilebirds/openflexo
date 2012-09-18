@@ -322,8 +322,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	private IModuleLoader moduleLoader;
 
-	private List<FlexoProjectReference> importedProjects;
-
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
 			super();
@@ -349,7 +347,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public static interface FlexoProjectReferenceLoader {
-		public FlexoProject loadProject(FlexoProjectReference reference);
+		public FlexoProject loadProject(FlexoProjectReference reference) throws ProjectLoadingCancelledException;
 	}
 
 	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoModelObjectReference> {
@@ -426,7 +424,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		filesToDelete = new Vector<File>();
 		resources = new ResourceHashtable();
 		docTypes = new Vector<DocType>();
-		importedProjects = new ArrayList<FlexoProjectReference>();
 	}
 
 	/**
@@ -3901,6 +3898,45 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		OperationNode.deleteMetricsActionizer = null;
 	}
 
+	public FlexoPamelaResource<ProjectData> getProjectDataResource() {
+		return getProjectDataResource(false);
+	}
+
+	public FlexoPamelaResource<ProjectData> getProjectDataResource(boolean createIfNotExist) {
+		FlexoPamelaResource<ProjectData> returned = (FlexoPamelaResource<ProjectData>) resourceForKey(ResourceType.PROJECT_DATA,
+				getProjectName());
+		if (returned == null && createIfNotExist) {
+			File xml = ProjectRestructuration.getExpectedProjectDataFile(this);
+			FlexoProjectFile dataFile = new FlexoProjectFile(xml, this);
+
+			try {
+				returned = new FlexoPamelaResource<ProjectData>(this, "projectdata", ResourceType.PROJECT_DATA, ProjectData.class, dataFile);
+				registerResource(returned);
+			} catch (Exception e1) {
+				// Warns about the exception
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+				}
+				e1.printStackTrace();
+			}
+
+		}
+		return returned;
+	}
+
+	public ProjectData getProjectData() {
+		return getProjectData(false);
+	}
+
+	public ProjectData getProjectData(boolean createIfNotExist) {
+		FlexoPamelaResource<ProjectData> projectDataResource = getProjectDataResource(createIfNotExist);
+		if (projectDataResource != null) {
+			return projectDataResource.getResourceData();
+		} else {
+			return null;
+		}
+	}
+
 	public FlexoProjectOntologyResource getFlexoProjectOntologyResource() {
 		return getFlexoProjectOntologyResource(true);
 	}
@@ -4232,74 +4268,20 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return projectReferenceConverter;
 	}
 
-	public List<FlexoProjectReference> getImportedProjects() {
-		return importedProjects;
-	}
-
-	public void setImportedProjects(List<FlexoProjectReference> importedProjects) {
-		this.importedProjects = importedProjects;
-	}
-
-	public void addToImportedProjects(FlexoProject project) {
-
-		addToImportedProjects(new FlexoProjectReference(this, project));
-	}
-
-	public void addToImportedProjects(FlexoProjectReference projectReference) {
-		importedProjects.add(projectReference);
-		setChanged();
-		notifyObservers(new DataModification(IMPORTED_PROJECTS, null, projectReference));
-	}
-
-	public void removeFromImportedProjects(FlexoProject project) {
-		for (FlexoProjectReference ref : importedProjects) {
-			try {
-				if (ref.getProject() == project) {
-					removeFromImportedProjects(ref);
-					break;
-				}
-			} catch (ProjectLoadingCancelledException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void removeFromImportedProjects(FlexoProjectReference projectReference) {
-		importedProjects.remove(projectReference);
-		setChanged();
-		notifyObservers(new DataModification(IMPORTED_PROJECTS, projectReference, null));
-	}
-
 	public void loadImportedProjects() throws ProjectLoadingCancelledException {
-		for (FlexoProjectReference ref : importedProjects) {
-			ref.getProject();
+		if (getProject() != null && getProjectData() != null) {
+			for (FlexoProjectReference ref : getProjectData().getImportedProjects()) {
+				ref.getProject();
+			}
 		}
 	}
 
-	public FlexoProject getProjectWithURI(String projectURI) {
-		for (FlexoProjectReference ref : importedProjects) {
-			if (ref.getProjectURI().equals(projectURI)) {
-				try {
-					return ref.getProject();
-				} catch (ProjectLoadingCancelledException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+	public String canImportProject(FlexoProject project) {
+		if (getProjectData() == null) {
+			return null;
+		} else {
+			return getProjectData().canImportProject(project);
 		}
-		for (FlexoProjectReference ref : importedProjects) {
-			FlexoProject projectWithURI;
-			try {
-				projectWithURI = ref.getProject().getProjectWithURI(projectURI);
-				if (projectWithURI != null) {
-					return projectWithURI;
-				}
-			} catch (ProjectLoadingCancelledException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return null;
 	}
 
 }

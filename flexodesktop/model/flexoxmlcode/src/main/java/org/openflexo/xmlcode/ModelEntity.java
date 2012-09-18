@@ -150,7 +150,7 @@ public class ModelEntity {
 
 		isAbstract = false;
 
-		if (!(anEntityNode.getNodeName().equals(XMLMapping.entityLabel))) {
+		if (!anEntityNode.getNodeName().equals(XMLMapping.entityLabel)) {
 			throw new InvalidModelException("Invalid tag '" + anEntityNode.getNodeName() + "' found in model file");
 		} // end of if ()
 
@@ -164,9 +164,7 @@ public class ModelEntity {
 				xmlTagIsSpecified = true;
 				parseXMLTags(tempAttribute.getNodeValue());
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.abstractLabel)) {
-				if (tempAttribute.getNodeValue().equalsIgnoreCase("yes")) {
-					isAbstract = true;
-				}
+				isAbstract = tempAttribute.getNodeValue().equalsIgnoreCase("yes") || tempAttribute.getNodeValue().equalsIgnoreCase("true");
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.finalizerLabel)) {
 				finalizer = tempAttribute.getNodeValue();
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.contextsLabel)) {
@@ -191,7 +189,7 @@ public class ModelEntity {
 			tempNode = propertiesNodeList.item(i);
 			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
 				if (tempNode.getNodeName().equals(XMLMapping.descriptionLabel)) {
-					if ((tempNode.getChildNodes().getLength() == 1) && (tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE)) {
+					if (tempNode.getChildNodes().getLength() == 1 && tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE) {
 						setDescription(tempNode.getFirstChild().getNodeValue());
 					}
 				} else if (tempNode.getNodeName().equals(XMLMapping.propertyLabel)) {
@@ -222,7 +220,7 @@ public class ModelEntity {
 		if (!nameIsSpecified) {
 			throw new InvalidModelException("No attribute 'name' defined for tag 'entity' in model file");
 		}
-		if ((!xmlTagIsSpecified) && (!isAbstract())) {
+		if (!xmlTagIsSpecified && !isAbstract()) {
 			throw new InvalidModelException("No attribute 'xmlTag' defined for tag 'entity' in model file");
 		}
 
@@ -258,7 +256,7 @@ public class ModelEntity {
 			}
 
 			if (!model.serializeOnly) {
-				if ((!hasConstructorWithoutParameter()) && (!hasConstructorWithParameter()) && (!isAbstract())) {
+				if (!hasConstructorWithoutParameter() && !hasConstructorWithParameter() && !isAbstract()) {
 					if (!model.hasBuilderClass()) {
 						throw new InvalidModelException(
 								"Class "
@@ -289,7 +287,7 @@ public class ModelEntity {
 					boolean finalizerHasBeenFound = false;
 					Class currentClass = model.builderClass();
 					Class[] params = new Class[1];
-					while ((!finalizerHasBeenFound) && (currentClass != null)) {
+					while (!finalizerHasBeenFound && currentClass != null) {
 						try {
 							params[0] = currentClass;
 							finalizerWithParameter = relatedClass.getMethod(finalizer, params);
@@ -301,7 +299,7 @@ public class ModelEntity {
 
 				}
 
-				if ((!hasFinalizerWithoutParameter()) && (!hasFinalizerWithParameter())) {
+				if (!hasFinalizerWithoutParameter() && !hasFinalizerWithParameter()) {
 					throw new InvalidModelException("Class " + getName() + " does not implement specified decoding finalizing method : "
 							+ finalizer);
 				}
@@ -439,7 +437,7 @@ public class ModelEntity {
 	 */
 	public String getDefaultXmlTag() {
 
-		if ((definedXMLTags != null) && (definedXMLTags.length > 0)) {
+		if (definedXMLTags != null && definedXMLTags.length > 0) {
 			return definedXMLTags[0];
 		} else {
 			throw new InvalidModelException("No XML tag defined for entity '" + getName() + "' Is it an abstract entity ?");
@@ -482,7 +480,7 @@ public class ModelEntity {
 	 * @return a <code>String[]</code> value
 	 */
 	public String[] getXmlTags(String context) {
-		if ((getAvailableContexts().contains(context)) || (context == null)) {
+		if (getAvailableContexts().contains(context) || context == null) {
 			if (definedXMLTags == null) {
 				return null;
 			}
@@ -710,7 +708,7 @@ public class ModelEntity {
 	 * @return
 	 */
 	public boolean hasConstructorWithoutParameter() {
-		return (constructorWithoutParameter != null);
+		return constructorWithoutParameter != null;
 	}
 
 	/**
@@ -726,7 +724,7 @@ public class ModelEntity {
 	 * @return
 	 */
 	public boolean hasConstructorWithParameter() {
-		return (constructorWithParameter != null);
+		return constructorWithParameter != null;
 	}
 
 	/**
@@ -762,7 +760,7 @@ public class ModelEntity {
 	 */
 	public boolean hasFinalizerWithoutParameter() {
 		if (getParentEntity() != null) {
-			return ((finalizerWithoutParameter != null) || (getParentEntity().hasFinalizerWithoutParameter()));
+			return finalizerWithoutParameter != null || getParentEntity().hasFinalizerWithoutParameter();
 		}
 		return finalizerWithoutParameter != null;
 	}
@@ -773,7 +771,7 @@ public class ModelEntity {
 	 */
 	public boolean hasFinalizerWithParameter() {
 		if (getParentEntity() != null) {
-			return ((finalizerWithParameter != null) || (getParentEntity().hasFinalizerWithParameter()));
+			return finalizerWithParameter != null || getParentEntity().hasFinalizerWithParameter();
 		}
 		return finalizerWithParameter != null;
 	}
@@ -801,7 +799,7 @@ public class ModelEntity {
 	public ModelEntity getParentEntity() {
 		Class current = getRelatedClass().getSuperclass();
 		boolean parentIsFound = false;
-		while ((current != null) && (!parentIsFound)) {
+		while (current != null && !parentIsFound) {
 			if (model.entityWithClassName(current.getName()) != null) {
 				ModelEntity parentEntity = model.entityWithClassName(current.getName());
 				return parentEntity;
@@ -854,7 +852,7 @@ public class ModelEntity {
 		Class current = getRelatedClass().getSuperclass();
 		int nextLevel = level;
 		boolean parentIsFound = false;
-		while ((current != null) && (!parentIsFound)) {
+		while (current != null && !parentIsFound) {
 			if (model.entityWithClassName(current.getName()) != null) {
 				nextParentEntity = model.entityWithClassName(current.getName());
 				parentIsFound = true;

@@ -22,11 +22,13 @@ package org.openflexo.components.browser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ImportedObjectLibraryDeleted;
 import org.openflexo.foundation.rm.ImportedProcessLibraryCreated;
 import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.rm.ResourceAdded;
 import org.openflexo.foundation.rm.ResourceRemoved;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
 /**
  * Browser element representing the project
@@ -63,6 +65,16 @@ public class ProjectElement extends BrowserElement {
 		}
 		if (getProject().getImportedProcessLibrary() != null) {
 			addToChilds(getProject().getImportedProcessLibrary());
+		}
+		if (getProject().getProjectData() != null) {
+			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+				try {
+					addToChilds(ref.getProject());
+				} catch (ProjectLoadingCancelledException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}

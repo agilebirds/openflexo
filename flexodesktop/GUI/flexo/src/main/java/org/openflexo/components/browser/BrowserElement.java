@@ -306,11 +306,12 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 			boolean elementHasBeenAdded = false;
 			BrowserElement newElement = _browser.makeNewElement(modelObject, this);
 			if (newElement != null) {
+				boolean deepBrowsing = false;
 				if (_browser.activateBrowsingFor(newElement)) {
 					newElement._parent = this;
 					_childs.add(newElement);
 					elementHasBeenAdded = true;
-				} else if (_browser.requiresDeepBrowsing(newElement)) {
+				} else if (deepBrowsing = _browser.requiresDeepBrowsing(newElement)) {
 					Vector<BrowserElement> childrenToRemove = new Vector<BrowserElement>();
 					for (Enumeration<BrowserElement> e = newElement.children(); e.hasMoreElements();) {
 						BrowserElement newElement2 = e.nextElement();
@@ -323,7 +324,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 					}
 				}
 				// DVA April 06: if deepBrowsing is on, do not delete element and children...
-				if (!elementHasBeenAdded && !_browser.requiresDeepBrowsing(newElement)) {
+				if (!elementHasBeenAdded && !deepBrowsing) {
 					newElement.recursiveDeleteChilds();
 					newElement.delete();
 				}

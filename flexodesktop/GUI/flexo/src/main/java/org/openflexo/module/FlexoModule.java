@@ -33,7 +33,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.InspectorGroup;
-import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.module.external.IModule;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
@@ -179,7 +179,7 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 			try {
 				getModuleLoader().quit(true);
 				return true;
-			} catch (ProjectExitingCancelledException e) {
+			} catch (OperationCancelledException e) {
 				return false;
 			}
 		} else { // There are still other modules left
@@ -223,7 +223,7 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 			if (quitIfNoModuleLeft) {
 				try {
 					getModuleLoader().quit(false);
-				} catch (ProjectExitingCancelledException e) {
+				} catch (OperationCancelledException e) {
 				}
 			}
 		}

@@ -24,8 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
@@ -38,6 +38,8 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.action.ValidateProject;
 import org.openflexo.foundation.imported.action.RefreshImportedProcessAction;
 import org.openflexo.foundation.imported.action.RefreshImportedRoleAction;
@@ -46,7 +48,7 @@ import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
-import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.validation.ValidationReport;
@@ -95,6 +97,8 @@ public class FileMenu extends FlexoMenu {
 
 	protected FlexoController _controller;
 
+	private ImportProjectMenuItem importProject;
+
 	protected FileMenu(FlexoController controller) {
 		this(controller, true);
 	}
@@ -107,6 +111,7 @@ public class FileMenu extends FlexoMenu {
 			add(openProjectItem = new OpenProjectItem());
 			add(recentProjectMenu = new JMenu());
 			recentProjectMenu.setText(FlexoLocalization.localizedForKey("recent_projects", recentProjectMenu));
+			add(importProject = new ImportProjectMenuItem());
 			add(saveProjectItem = new SaveProjectItem());
 			add(saveAsProjectItem = new SaveAsProjectItem());
 			add(saveProjectForServerItem = new SaveProjectForServerItem());
@@ -184,7 +189,11 @@ public class FileMenu extends FlexoMenu {
 	public void quit() {
 		try {
 			getModuleLoader().quit(true);
-		} catch (ProjectExitingCancelledException e) {
+		} catch (OperationCancelledException e) {
+			// User pressed cancel.
+			if (logger.isLoggable(Level.FINEST)) {
+				logger.log(Level.FINEST, "Cancelled saving", e);
+			}
 		}
 	}
 
@@ -282,10 +291,29 @@ public class FileMenu extends FlexoMenu {
 		}
 	}
 
-	// ==========================================================================
-	// ============================= SaveProject
-	// ================================
-	// ==========================================================================
+	public class ImportProjectMenuItem extends FlexoMenuItem {
+
+		public ImportProjectMenuItem() {
+			super(new ImportProjectAction(), "import_project", null, getController(), true);
+			setIcon(IconLibrary.IMPORT_ICON);
+		}
+
+	}
+
+	public class ImportProjectAction extends AbstractAction {
+		public ImportProjectAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			FlexoEditor editor = getController().getEditor();
+			if (editor != null) {
+				editor.performActionType(ImportProject.actionType, editor.getProject(), null, e);
+			}
+		}
+
+	}
 
 	public class SaveProjectItem extends FlexoMenuItem {
 
@@ -299,8 +327,6 @@ public class FileMenu extends FlexoMenu {
 	public class SaveProjectAction extends AbstractAction {
 		public SaveProjectAction() {
 			super();
-			// _controller.registerActionForKeyStroke(this,KeyStroke.getKeyStroke(KeyEvent.VK_S,FlexoCst.META_MASK));
-
 		}
 
 		@Override
@@ -308,20 +334,21 @@ public class FileMenu extends FlexoMenu {
 			Cursor c = FileMenu.this._controller.getFlexoFrame().getCursor();
 			FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
 			try {
-				getProjectLoader().saveProjects(Arrays.asList(getController().getProject()));
+				getModuleLoader().saveModifiedProjects();
 			} catch (SaveResourceExceptionList e) {
 				e.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("errors_during_saving"),
 						FlexoLocalization.localizedForKey("errors_during_saving"));
+			} catch (OperationCancelledException e) {
+				// User pressed cancel.
+				if (logger.isLoggable(Level.FINEST)) {
+					logger.log(Level.FINEST, "Cancelled saving", e);
+				}
 			}
 			FileMenu.this._controller.getFlexoFrame().setCursor(c);
 		}
 
 	}
-
-	// ==========================================================================
-	// ============================= SaveAsProject =============================
-	// ==========================================================================
 
 	public class SaveAsProjectItem extends FlexoMenuItem {
 

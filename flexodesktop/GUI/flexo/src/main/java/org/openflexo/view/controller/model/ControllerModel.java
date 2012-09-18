@@ -275,6 +275,14 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 	}
 
+	public Stack<HistoryLocation> getNextHistory() {
+		return nextHistory;
+	}
+
+	public Stack<HistoryLocation> getPreviousHistory() {
+		return previousHistory;
+	}
+
 	public boolean canGoForward() {
 		return nextHistory.size() > 0;
 	}

@@ -31,6 +31,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoStorageResource.ResourceLoadingListener;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
@@ -254,7 +255,10 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		} else {
 			if (enclosingProjectIdentifier != null) {
 				if (getReferringProject() != null) {
-					return getReferringProject().getProjectWithURI(enclosingProjectIdentifier);
+					ProjectData data = getReferringProject().getProjectData();
+					if (data != null) {
+						return data.getImportedProjectWithURI(enclosingProjectIdentifier);
+					}
 				}
 			} else {
 				return getReferringProject();

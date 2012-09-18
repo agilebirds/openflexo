@@ -21,7 +21,6 @@ package org.openflexo.foundation.rm;
 
 import java.awt.Color;
 import java.io.Serializable;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -115,8 +114,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	};
 
 	public static ResourceType get(String typeName) {
-		for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
-			ResourceType temp = (ResourceType) e.nextElement();
+		for (ResourceType temp : availableValues()) {
 			if (temp.getName().equals(typeName)) {
 				return temp;
 			}
@@ -128,51 +126,53 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		return null;
 	}
 
-	private Vector<ResourceType> _availableValues = null;
+	private Vector<ResourceType> availableValues = null;
 
 	@Override
 	public Vector<ResourceType> getAvailableValues() {
-		if (_availableValues == null) {
-			_availableValues = new Vector<ResourceType>();
-			_availableValues.add(RM);
-			_availableValues.add(WORKFLOW);
-			_availableValues.add(COMPONENT_LIBRARY);
-			_availableValues.add(NAVIGATION_MENU);
-			_availableValues.add(PROCESS);
-			_availableValues.add(OPERATION_COMPONENT);
-			_availableValues.add(TAB_COMPONENT);
-			_availableValues.add(MONITORING_SCREEN);
-			_availableValues.add(CUSTOM_INSPECTORS);
-			_availableValues.add(GENERATED_CODE);
-			_availableValues.add(GENERATED_DOC);
-			_availableValues.add(TOC);
-			_availableValues.add(REUSABLE_COMPONENT);
-			_availableValues.add(POPUP_COMPONENT);
-			_availableValues.add(CUSTOM_TEMPLATES);
-			_availableValues.add(DATA_MODEL);
-			_availableValues.add(EOMODEL);
-			_availableValues.add(JAR);
-			_availableValues.add(DKV_MODEL);
-			_availableValues.add(SCREENSHOT);
-			_availableValues.add(WSDL);
-			_availableValues.add(WS_LIBRARY);
-			_availableValues.add(JAVA_FILE);
-			_availableValues.add(API_FILE);
-			_availableValues.add(WO_FILE);
-			_availableValues.add(RESOURCE_FILE);
-			_availableValues.add(LATEX_FILE);
-			_availableValues.add(HTML_FILE);
-			_availableValues.add(JS_FILE);
-			_availableValues.add(TEXT_FILE);
-			_availableValues.add(SYSTEM_FILE);
-			_availableValues.add(ANT_FILE);
-			_availableValues.add(PLIST_FILE);
-			_availableValues.add(WEBSERVER);
-			_availableValues.add(BPEL);
-			_availableValues.add(XSD);
-			_availableValues.add(CSS_FILE);
+		if (availableValues == null) {
+			availableValues = new Vector<ResourceType>();
+			availableValues.add(RM);
+			availableValues.add(WORKFLOW);
+			availableValues.add(COMPONENT_LIBRARY);
+			availableValues.add(NAVIGATION_MENU);
+			availableValues.add(PROCESS);
+			availableValues.add(OPERATION_COMPONENT);
+			availableValues.add(TAB_COMPONENT);
+			availableValues.add(MONITORING_SCREEN);
+			availableValues.add(CUSTOM_INSPECTORS);
+			availableValues.add(GENERATED_CODE);
+			availableValues.add(GENERATED_DOC);
+			availableValues.add(TOC);
+			availableValues.add(REUSABLE_COMPONENT);
+			availableValues.add(POPUP_COMPONENT);
+			availableValues.add(CUSTOM_TEMPLATES);
+			availableValues.add(DATA_MODEL);
+			availableValues.add(EOMODEL);
+			availableValues.add(JAR);
+			availableValues.add(DKV_MODEL);
+			availableValues.add(SCREENSHOT);
+			availableValues.add(WSDL);
+			availableValues.add(WS_LIBRARY);
+			availableValues.add(JAVA_FILE);
+			availableValues.add(API_FILE);
+			availableValues.add(WO_FILE);
+			availableValues.add(RESOURCE_FILE);
+			availableValues.add(LATEX_FILE);
+			availableValues.add(HTML_FILE);
+			availableValues.add(JS_FILE);
+			availableValues.add(TEXT_FILE);
+			availableValues.add(SYSTEM_FILE);
+			availableValues.add(ANT_FILE);
+			availableValues.add(PLIST_FILE);
+			availableValues.add(WEBSERVER);
+			availableValues.add(BPEL);
+			availableValues.add(XSD);
+			availableValues.add(CSS_FILE);
+			availableValues.add(PAMELA_RESOURCE);
+			availableValues.add(PROJECT_DATA);
 		}
-		return _availableValues;
+		return availableValues;
 	}
 
 	@Override
@@ -214,6 +214,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	public static final ResourceType GENERATED_CODE = new GeneratedCodeResourceType();
 
 	public static final ResourceType GENERATED_SOURCES = new GeneratedSourcesResourceType();
+
 	public static final ResourceType IMPLEMENTATION_MODEL = new ImplementationModelResourceType();
 
 	public static final ResourceType GENERATED_DOC = new GeneratedDocResourceType();
@@ -265,6 +266,10 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	public static final ResourceType FILE_RESOURCE = new FileResourceResourceType();
 
 	public static final ResourceType CG_TEMPLATES = new TemplatesResourceType();
+
+	public static final ResourceType PAMELA_RESOURCE = new PamelaResourceType();
+
+	public static final ResourceType PROJECT_DATA = new ProjectDataResourceType();
 
 	protected ResourceType() {
 		super();
@@ -1721,6 +1726,39 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		@Override
 		public XMLMapping getMapping(FlexoXMLMappings mappings) {
 			return null;
+		}
+	}
+
+	private static class PamelaResourceType extends ResourceType {
+		PamelaResourceType() {
+			super();
+		}
+
+		@Override
+		public String getName() {
+			return "PAMELA_RESOURCE";
+		}
+
+		@Override
+		public FileFormat getFormat() {
+			return FileFormat.XML;
+		}
+
+		@Override
+		public boolean isFlexoXMLStorageResource() {
+			return true;
+		}
+
+		@Override
+		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+			return null;
+		}
+	}
+
+	private static class ProjectDataResourceType extends PamelaResourceType {
+		@Override
+		public String getName() {
+			return "PROJECT_DATA";
 		}
 	}
 

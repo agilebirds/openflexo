@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.Flexo;
 import org.openflexo.components.AboutDialog;
-import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.PreferencesController;
 
@@ -74,7 +74,7 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 		}
 		try {
 			getModuleLoader().quit(true);
-		} catch (ProjectExitingCancelledException e) {
+		} catch (OperationCancelledException e) {
 		}
 	}
 

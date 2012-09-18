@@ -145,16 +145,6 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	private Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry> _lastSynchronizedForResources;
 
 	/**
-	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
-	 * 
-	 * @param builder
-	 */
-	public FlexoResource(FlexoProjectBuilder builder) {
-		this(builder.project);
-		builder.notifyResourceLoading(this);
-	}
-
-	/**
 	 * Default constructor
 	 * 
 	 * @param aProject

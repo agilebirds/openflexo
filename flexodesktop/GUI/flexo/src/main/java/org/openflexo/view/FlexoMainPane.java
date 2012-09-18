@@ -114,7 +114,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.RIGHT_VIEW_VISIBLE, this,
 				controller.getControllerModel());
 		perspective = controller.getCurrentPerspective();
-		add(topBar = new MainPaneTopBar(controller.getControllerModel(), new FlexoModelObjectRenderer() {
+		add(topBar = new MainPaneTopBar(controller, new FlexoModelObjectRenderer() {
 
 			@Override
 			public String render(FlexoModelObject object) {

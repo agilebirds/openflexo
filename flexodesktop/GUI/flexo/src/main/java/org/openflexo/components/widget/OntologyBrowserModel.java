@@ -23,6 +23,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -73,8 +74,8 @@ public class OntologyBrowserModel {
 	private boolean showClasses = true;
 	private boolean showIndividuals = true;
 
-	private Vector<OntologyObject> roots = null;
-	private Hashtable<OntologyObject, Vector<OntologyObject>> structure = null;
+	private List<OntologyObject> roots = null;
+	private Map<OntologyObject, List<OntologyObject>> structure = null;
 
 	public OntologyBrowserModel(FlexoOntology context) {
 		super();
@@ -409,7 +410,7 @@ public class OntologyBrowserModel {
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<OntologyObject, Vector<OntologyObject>>();
+			structure = new Hashtable<OntologyObject, List<OntologyObject>>();
 		}
 
 		if (getContext() == null) {
@@ -466,7 +467,7 @@ public class OntologyBrowserModel {
 	}
 
 	private void addChildren(OntologyObject parent, OntologyObject child) {
-		Vector<OntologyObject> v = structure.get(parent);
+		List<OntologyObject> v = structure.get(parent);
 		if (v == null) {
 			v = new Vector<OntologyObject>();
 			structure.put(parent, v);
@@ -490,7 +491,7 @@ public class OntologyBrowserModel {
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<OntologyObject, Vector<OntologyObject>>();
+			structure = new Hashtable<OntologyObject, List<OntologyObject>>();
 		}
 
 		List<OntologyProperty> properties = new Vector<OntologyProperty>();

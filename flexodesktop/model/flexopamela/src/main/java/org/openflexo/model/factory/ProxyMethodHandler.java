@@ -164,9 +164,9 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			internallyInvokeFinder(finder, args);
 			return null;
 		} else if (method.equals(IS_SERIALIZING)) {
-			return null;
+			return isSerializing();
 		} else if (method.equals(IS_DESERIALIZING)) {
-			return null;
+			return isDeserializing();
 		} else if (method.equals(CLONE_OBJECT)) {
 			return cloneObject();
 		} else if (method.equals(CLONE_OBJECT_WITH_CONTEXT)) {
