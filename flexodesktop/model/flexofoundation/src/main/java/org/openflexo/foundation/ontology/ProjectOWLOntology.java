@@ -120,7 +120,7 @@ public class ProjectOWLOntology extends OWLOntology implements ProjectOntology {
 		return returned;
 	}
 
-	protected ProjectOWLOntology(String anURI, File owlFile, ProjectOntologyLibrary ontologyLibrary) {
+	public ProjectOWLOntology(String anURI, File owlFile, ProjectOntologyLibrary ontologyLibrary) {
 		super(anURI, owlFile, ontologyLibrary);
 		_project = ontologyLibrary.getProject();
 	}

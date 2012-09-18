@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
+import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.toolbox.StringUtils;
 
-public class XSOntClass extends XSOntObject implements OntologyClass, XSOntologyURIDefinitions {
+public class XSOntClass extends AbstractXSOntObject implements OntologyClass, XSOntologyURIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntClass.class.getPackage()
 			.getName());
@@ -60,7 +61,6 @@ public class XSOntClass extends XSOntObject implements OntologyClass, XSOntology
 			return null;
 		}
 		superClasses.add((XSOntClass) aClass);
-		// TODO Make sure it's not needed to return something.
 		return null;
 	}
 
@@ -83,6 +83,20 @@ public class XSOntClass extends XSOntObject implements OntologyClass, XSOntology
 	@Override
 	public boolean isOntologyClass() {
 		return true;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "XSD_ontology_class";
+	}
+
+	@Override
+	public String getInspectorName() {
+		if (getIsReadOnly()) {
+			return Inspectors.VE.ONTOLOGY_CLASS_READ_ONLY_INSPECTOR;
+		} else {
+			return Inspectors.VE.ONTOLOGY_CLASS_INSPECTOR;
+		}
 	}
 
 }

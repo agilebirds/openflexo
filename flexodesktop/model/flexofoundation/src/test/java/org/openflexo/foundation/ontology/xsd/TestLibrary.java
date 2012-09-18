@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.ontology.xsd.rm.ImportedXSOntology;
 
 public class TestLibrary extends FlexoTestCase {
 
@@ -28,7 +27,7 @@ public class TestLibrary extends FlexoTestCase {
 		return result;
 	}
 
-	public static void xsoObject(XSOntObject obj, StringBuffer buffer) {
+	public static void xsoObject(AbstractXSOntObject obj, StringBuffer buffer) {
 		buffer.append("Name: ").append(obj.getName());
 		buffer.append(" URI: ").append(obj.getURI()).append("\n");
 	}

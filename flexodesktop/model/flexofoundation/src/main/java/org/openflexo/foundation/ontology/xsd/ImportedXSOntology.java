@@ -1,10 +1,10 @@
-package org.openflexo.foundation.ontology.xsd.rm;
+package org.openflexo.foundation.ontology.xsd;
 
 import java.io.File;
 
+import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.xsd.XSOntology;
 import org.openflexo.foundation.rm.SaveResourceException;
 
 public class ImportedXSOntology extends XSOntology implements ImportedOntology {
@@ -25,6 +25,17 @@ public class ImportedXSOntology extends XSOntology implements ImportedOntology {
 	@Override
 	public void save() throws SaveResourceException {
 		logger.warning("Imported ontologies are not supposed to be saved !!!");
+	}
+
+	@Override
+	public String getInspectorName() {
+		return Inspectors.VE.IMPORTED_ONTOLOGY_INSPECTOR;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
