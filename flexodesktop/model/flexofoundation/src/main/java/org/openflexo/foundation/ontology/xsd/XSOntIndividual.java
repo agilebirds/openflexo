@@ -115,4 +115,10 @@ public class XSOntIndividual extends XSOntObject implements OntologyIndividual, 
 		}
 		return element;
 	}
+
+	@Override
+	public boolean isOntologyIndividual() {
+		return true;
+	}
+
 }

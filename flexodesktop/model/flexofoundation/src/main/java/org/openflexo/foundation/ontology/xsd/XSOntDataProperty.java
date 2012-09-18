@@ -61,4 +61,9 @@ public class XSOntDataProperty extends XSOntProperty implements OntologyDataProp
 		return buffer.toString();
 	}
 
+	@Override
+	public boolean isOntologyDataProperty() {
+		return true;
+	}
+
 }

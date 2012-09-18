@@ -25,6 +25,7 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.VPMModule;
@@ -54,6 +55,12 @@ public class ReviewUnsavedViewPointModelerDialogEDITOR {
 
 						@Override
 						public FlexoEditor createApplicationEditor() {
+							// TODO Auto-generated method stub
+							return null;
+						}
+
+						@Override
+						protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
 							// TODO Auto-generated method stub
 							return null;
 						}

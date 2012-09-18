@@ -37,6 +37,8 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
@@ -245,7 +247,7 @@ public class ViewPoint extends ViewPointObject {
 		public ViewPointBuilder(ViewPoint viewPoint) {
 			this.viewPoint = viewPoint;
 			if (viewPoint != null) {
-				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
+				this.viewPointOntology = (ImportedOWLOntology) viewPoint.getViewpointOntology();
 			}
 		}
 
@@ -514,14 +516,14 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	@Override
-	public OWLOntology getViewpointOntology() {
+	public FlexoOntology getViewpointOntology() {
 		if (isDeserializing()) {
 			return super.getViewpointOntology();
 		}
 		return viewpointOntology;
 	}
 
-	public void setViewpointOntology(ImportedOntology viewpointOntology) {
+	public void setViewpointOntology(ImportedOWLOntology viewpointOntology) {
 		this.viewpointOntology = viewpointOntology;
 	}
 

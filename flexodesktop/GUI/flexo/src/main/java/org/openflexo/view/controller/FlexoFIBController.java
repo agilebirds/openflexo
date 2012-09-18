@@ -80,6 +80,7 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	public static final ImageIcon ARROW_BOTTOM = UtilsIconLibrary.ARROW_BOTTOM_2;
 	public static final ImageIcon ARROW_TOP = UtilsIconLibrary.ARROW_TOP_2;
 
+	public static final ImageIcon ONTOLOGY_ICON = OntologyIconLibrary.ONTOLOGY_ICON;
 	public static final ImageIcon ONTOLOGY_CLASS_ICON = OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
 	public static final ImageIcon ONTOLOGY_INDIVIDUAL_ICON = OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
 	public static final ImageIcon ONTOLOGY_DATA_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
@@ -230,6 +231,10 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 
 	public ImageIcon getArrowBottom() {
 		return ARROW_BOTTOM;
+	}
+
+	public ImageIcon getOntologyIcon() {
+		return ONTOLOGY_ICON;
 	}
 
 	public ImageIcon getOntologyClassIcon() {

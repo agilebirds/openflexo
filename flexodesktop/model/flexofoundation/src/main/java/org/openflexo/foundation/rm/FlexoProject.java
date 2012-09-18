@@ -123,6 +123,7 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.ProjectOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
@@ -3945,7 +3946,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		FlexoProjectOntologyResource returned = (FlexoProjectOntologyResource) resourceForKey(ResourceType.PROJECT_ONTOLOGY,
 				getProjectName());
 		if (returned == null && createIfNotExist) {
-			ProjectOntology.createNewProjectOntology(this);
+			ProjectOWLOntology.createNewProjectOntology(this);
 			return getFlexoProjectOntologyResource();
 		}
 		return returned;
@@ -3958,7 +3959,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	public ProjectOntology getProjectOntology(boolean createIfNotExist) {
 		if (getFlexoProjectOntologyResource(createIfNotExist) == null) {
 			if (createIfNotExist) {
-				ProjectOntology.createNewProjectOntology(this);
+				ProjectOWLOntology.createNewProjectOntology(this);
 			} else {
 				return null;
 			}

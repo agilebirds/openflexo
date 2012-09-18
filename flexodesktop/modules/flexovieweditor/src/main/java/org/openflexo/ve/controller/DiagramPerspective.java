@@ -33,7 +33,7 @@ import javax.swing.JSplitPane;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.AbstractViewObject;
@@ -249,8 +249,8 @@ public class DiagramPerspective extends FlexoPerspective {
 		if (object instanceof ProjectOntology) {
 			return FlexoLocalization.localizedForKey("project_ontology");
 		}
-		if (object instanceof ImportedOntology) {
-			return ((ImportedOntology) object).getName();
+		if (object instanceof ImportedOWLOntology) {
+			return ((ImportedOWLOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

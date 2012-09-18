@@ -25,9 +25,9 @@ import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
+import org.openflexo.xmlcode.XMLMapping;
 import org.w3c.dom.Document;
 
 import com.sun.xml.xsom.XSAttGroupDecl;
@@ -41,11 +41,10 @@ import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
 
 //TODO imported ontologies
-//TODO xml as ressources (Lundi/Mardi) XMLModelRessource (FlexoProjectOntologyResource)
 //TODO XSOntology implements Meta-Model, XMLIndividuals implements Model
 //TODO element restrictions
 
-public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
+public abstract class XSOntology extends XSOntObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
@@ -69,6 +68,7 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	private final Map<String, XSOntIndividual> individuals = new HashMap<String, XSOntIndividual>();
 
 	public XSOntology(String ontologyURI, File xsdFile, OntologyLibrary library) {
+		super();
 		name = computeName(xsdFile);
 		this.ontologyURI = ontologyURI;
 		this.originalXsdFile = xsdFile;
@@ -104,6 +104,11 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	}
 
 	@Override
+	public FlexoProject getProject() {
+		return getOntologyLibrary().getProject();
+	}
+
+	@Override
 	public boolean getIsReadOnly() {
 		return isReadOnly;
 	}
@@ -113,17 +118,17 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	}
 
 	@Override
-	public FlexoOntology getFlexoOntology() {
+	public XSOntology getFlexoOntology() {
+		return this;
+	}
+
+	@Override
+	public XSOntology getOntology() {
 		return this;
 	}
 
 	protected XSDeclarationsFetcher getFetcher() {
 		return fetcher;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return getOntologyLibrary().getProject();
 	}
 
 	@Override
@@ -324,11 +329,6 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 		}
 
 		return doc;
-	}
-
-	@Override
-	public void save() throws SaveResourceException {
-		// TODO
 	}
 
 	@Override
@@ -620,6 +620,65 @@ public class XSOntology implements FlexoOntology, XSOntologyURIDefinitions, W3UR
 	@Override
 	public Object addPropertyStatement(OntologyProperty property, String value, Language language) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getInspectorName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isOntology() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyClass() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyIndividual() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyObjectProperty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyDataProperty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public static String findOntologyURI(File f) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

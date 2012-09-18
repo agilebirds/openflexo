@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.ontology.xsd.rm.ImportedXSOntology;
 
 public class TestLibrary extends FlexoTestCase {
 
@@ -89,7 +90,7 @@ public class TestLibrary extends FlexoTestCase {
 
 	public void testLibrary() {
 		StringBuffer buffer = new StringBuffer();
-		XSOntology lib = new XSOntology("http://www.openflexo.org/test/XSD/library.owl", openTestXSD(FILE_NAME), null);
+		XSOntology lib = new ImportedXSOntology("http://www.openflexo.org/test/XSD/library.owl", openTestXSD(FILE_NAME), null);
 		assertNotNull(lib);
 		lib.loadWhenUnloaded();
 		assertTrue(lib.isLoaded());

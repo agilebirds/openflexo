@@ -39,4 +39,29 @@ public abstract class AbstractOWLObject extends AbstractOntologyObject implement
 	@Override
 	public abstract OWLOntology getFlexoOntology();
 
+	@Override
+	public boolean isOntology() {
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyClass() {
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyIndividual() {
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyObjectProperty() {
+		return false;
+	}
+
+	@Override
+	public boolean isOntologyDataProperty() {
+		return false;
+	}
+
 }

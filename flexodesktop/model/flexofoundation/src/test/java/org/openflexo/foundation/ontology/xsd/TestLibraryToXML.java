@@ -11,6 +11,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.ontology.DuplicateURIException;
+import org.openflexo.foundation.ontology.xsd.rm.ImportedXSOntology;
 
 public class TestLibraryToXML extends FlexoTestCase {
 
@@ -24,7 +25,7 @@ public class TestLibraryToXML extends FlexoTestCase {
 
 	public void testLibraryToXML() throws DuplicateURIException, ParserConfigurationException, TransformerException {
 		// StringBuffer buffer = new StringBuffer();
-		XSOntology lib = new XSOntology("http://www.openflexo.org/test/XSD/library.owl", TestLibrary.openTestXSD(FILE_NAME), null);
+		XSOntology lib = new ImportedXSOntology("http://www.openflexo.org/test/XSD/library.owl", TestLibrary.openTestXSD(FILE_NAME), null);
 		assertNotNull(lib);
 		lib.loadWhenUnloaded();
 		assertTrue(lib.isLoaded());

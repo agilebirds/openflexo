@@ -27,9 +27,8 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.EmptyPanel;
@@ -94,9 +93,9 @@ public class OntologyPerspective extends FlexoPerspective {
 
 	@Override
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
-		if (object instanceof OWLOntology) {
-			((OWLOntology) object).loadWhenUnloaded();
-			return new OntologyView((OWLOntology) object, (VPMController) controller, this);
+		if (object instanceof FlexoOntology) {
+			((FlexoOntology) object).loadWhenUnloaded();
+			return new OntologyView((FlexoOntology) object, (VPMController) controller, this);
 		}
 		return new EmptyPanel<FlexoModelObject>(controller, this, object);
 	}
@@ -110,8 +109,8 @@ public class OntologyPerspective extends FlexoPerspective {
 		if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
 		}
-		if (object instanceof ImportedOntology) {
-			return ((ImportedOntology) object).getName();
+		if (object instanceof ImportedOWLOntology) {
+			return ((ImportedOWLOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

@@ -48,7 +48,7 @@ public class TestPizza {
 		File myOntology = new FileResource("MyOntologies/MyPizza.owl");
 
 		System.out.println("Found: " + myOntology);
-		OWLOntology hop = ontologyLibrary.importOntology("http://prout", myOntology);
+		OWLOntology hop = (OWLOntology) ontologyLibrary.importOntology("http://prout", myOntology);
 
 		// importedOntologyLibraries.debug();
 

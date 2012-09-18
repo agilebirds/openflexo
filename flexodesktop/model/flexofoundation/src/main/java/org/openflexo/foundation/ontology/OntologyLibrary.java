@@ -36,7 +36,7 @@ import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
 import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
-import org.openflexo.foundation.ontology.owl.OWLObject.OntologyObjectConverter;
+import org.openflexo.foundation.ontology.xsd.rm.ImportedXSOntology;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -241,14 +241,24 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			_allOntologies.clear();
 		}
 		_allOntologies = null;
-		ImportedOntology newOntology = new ImportedOntology(ontologyUri, alternativeLocalFile, this);
-		ontologies.put(ontologyUri, newOntology);
+		ImportedOntology newOntology = null;
+		if (alternativeLocalFile.getName().endsWith(".owl")) {
+			newOntology = new ImportedOWLOntology(ontologyUri, alternativeLocalFile, this);
+		} else if (alternativeLocalFile.getName().endsWith(".xsd")) {
+			newOntology = new ImportedXSOntology(ontologyUri, alternativeLocalFile, this);
+		}
+		registerOntology(newOntology);
+		// ontologies.put(ontologyUri, newOntology);
 		if (folder != null) {
 			folder.addToOntologies(newOntology);
 		}
 		setChanged();
 		notifyObservers(new OntologyImported(newOntology));
 		return newOntology;
+	}
+
+	public void registerOntology(FlexoOntology ontology) {
+		ontologies.put(ontology.getURI(), ontology);
 	}
 
 	protected Model description;
@@ -290,7 +300,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			return ((OWLOntology) ont).getOntModel();
 		}
 		if (!strict) {
-			ImportedOntology newOntology = new ImportedOntology(name, null, this);
+			ImportedOWLOntology newOntology = new ImportedOWLOntology(name, null, this);
 			newOntology.setOntModel(createFreshModel());
 			ontologies.put(name, newOntology);
 			setChanged();
@@ -319,7 +329,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			}
 			return createDefaultModel();
 		}
-		ImportedOntology newOntology = new ImportedOntology(name, null, this);
+		ImportedOWLOntology newOntology = new ImportedOWLOntology(name, null, this);
 		newOntology.setOntModel(createFreshModel());
 		ontologies.put(name, newOntology);
 		setChanged();
@@ -478,7 +488,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (StringUtils.isEmpty(conceptURI.trim())) {
 			return false;
 		}
-		return (conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI));
+		return conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI);
 	}
 
 	/**
