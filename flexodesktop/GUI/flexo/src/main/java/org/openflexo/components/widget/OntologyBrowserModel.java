@@ -89,7 +89,7 @@ public class OntologyBrowserModel {
 		return roots;
 	}
 
-	public List<OntologyObject> getChildren(AbstractOntologyObject father) {
+	public List<OntologyObject> getChildren(OntologyObject father) {
 		return structure.get(father);
 	}
 
