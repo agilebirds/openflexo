@@ -7,13 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class XSOntIndividual extends XSOntObject implements OntologyIndividual, XSOntologyURIDefinitions {
+public class XSOntIndividual extends AbstractXSOntObject implements OntologyIndividual, XSOntologyURIDefinitions {
 
 	private XSOntClass type;
 	private Map<OntologyProperty, Object> values = new HashMap<OntologyProperty, Object>();
@@ -121,4 +122,17 @@ public class XSOntIndividual extends XSOntObject implements OntologyIndividual, 
 		return true;
 	}
 
+	@Override
+	public String getClassNameKey() {
+		return "XSD_ontology_individual";
+	}
+
+	@Override
+	public String getInspectorName() {
+		if (getIsReadOnly()) {
+			return Inspectors.VE.ONTOLOGY_INDIVIDUAL_READ_ONLY_INSPECTOR;
+		} else {
+			return Inspectors.VE.ONTOLOGY_INDIVIDUAL_INSPECTOR;
+		}
+	}
 }

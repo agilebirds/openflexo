@@ -36,7 +36,7 @@ import org.openflexo.foundation.ontology.owl.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.RDFSURIDefinitions;
 import org.openflexo.foundation.ontology.owl.RDFURIDefinitions;
-import org.openflexo.foundation.ontology.xsd.rm.ImportedXSOntology;
+import org.openflexo.foundation.ontology.xsd.ImportedXSOntology;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;

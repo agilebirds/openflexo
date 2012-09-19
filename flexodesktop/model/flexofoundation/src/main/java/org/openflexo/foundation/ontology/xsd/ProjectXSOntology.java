@@ -1,7 +1,8 @@
-package org.openflexo.foundation.ontology.xsd.rm;
+package org.openflexo.foundation.ontology.xsd;
 
 import java.io.File;
 
+import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.ProjectOntology;
@@ -10,7 +11,7 @@ import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundExcepti
 import org.openflexo.foundation.ontology.owl.OWLProperty;
 import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
 import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass.RestrictionType;
-import org.openflexo.foundation.ontology.xsd.XSOntology;
+import org.openflexo.foundation.ontology.xsd.rm.FlexoXMLModelResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -78,6 +79,16 @@ public class ProjectXSOntology extends XSOntology implements ProjectOntology {
 	public OntModel getOntModel() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getInspectorName() {
+		return Inspectors.VE.PROJECT_ONTOLOGY_INSPECTOR;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "XSD_project_ontology";
 	}
 
 }

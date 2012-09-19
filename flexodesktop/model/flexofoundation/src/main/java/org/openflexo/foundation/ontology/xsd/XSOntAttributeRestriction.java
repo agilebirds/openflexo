@@ -73,4 +73,9 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 		}
 		return buffer.toString();
 	}
+
+	@Override
+	public String getClassNameKey() {
+		return "XSD_ontology_attribute_restriction";
+	}
 }

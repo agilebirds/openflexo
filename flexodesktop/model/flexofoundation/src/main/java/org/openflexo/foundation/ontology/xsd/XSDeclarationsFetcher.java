@@ -80,25 +80,16 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return null;
 	}
 
-	public String getFullName(XSDeclaration declaration) {
+	public String getNamespace(XSDeclaration declaration) {
 		if (declaration.isLocal()) {
-			return getFullName(getOwner(declaration)) + "." + declaration.getName();
+			XSDeclaration owner = getOwner(declaration);
+			return getNamespace(getOwner(declaration)) + "/" + owner.getName();
 		}
-		return declaration.getName();
+		return declaration.getTargetNamespace();
 	}
 
 	public String getURI(XSDeclaration declaration) {
-		StringBuffer result = new StringBuffer();
-		if (declaration.isLocal()) {
-			XSDeclaration owner = getOwner(declaration);
-			result.append(getURI(owner));
-			result.append(".");
-		} else {
-			result.append(declaration.getTargetNamespace());
-			result.append("#");
-		}
-		result.append(declaration.getName());
-		return result.toString();
+		return getNamespace(declaration) + "#" + declaration.getName();
 	}
 
 	public Set<XSAttributeUse> getAttributeUses(XSDeclaration declaration) {
