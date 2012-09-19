@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
@@ -88,7 +89,7 @@ public class OntologyBrowserModel {
 		return roots;
 	}
 
-	public List<OntologyObject> getChildren(OntologyObject father) {
+	public List<OntologyObject> getChildren(AbstractOntologyObject father) {
 		return structure.get(father);
 	}
 
