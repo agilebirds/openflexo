@@ -1,5 +1,6 @@
 package org.openflexo.foundation.ontology.xsd;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -153,15 +154,15 @@ public class XSOntObject extends AbstractOntologyObject implements OntologyObjec
 	}
 
 	@Override
-	public Set<? extends OntologyProperty> getPropertiesTakingMySelfAsRange() {
+	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsRange() {
 		// TODO Auto-generated method stub
-		return null;
+		return new HashSet<XSOntProperty>();
 	}
 
 	@Override
-	public Set<? extends OntologyProperty> getPropertiesTakingMySelfAsDomain() {
+	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsDomain() {
 		// TODO Auto-generated method stub
-		return null;
+		return new HashSet<XSOntProperty>();
 	}
 
 	@Override
