@@ -247,7 +247,7 @@ public class ViewPoint extends ViewPointObject {
 		public ViewPointBuilder(ViewPoint viewPoint) {
 			this.viewPoint = viewPoint;
 			if (viewPoint != null) {
-				this.viewPointOntology = (ImportedOWLOntology) viewPoint.getViewpointOntology();
+				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
 			}
 		}
 
