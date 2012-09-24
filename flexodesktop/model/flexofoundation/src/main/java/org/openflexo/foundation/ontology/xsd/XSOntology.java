@@ -14,7 +14,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
@@ -25,9 +24,7 @@ import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.Language;
-import org.openflexo.xmlcode.XMLMapping;
 import org.w3c.dom.Document;
 
 import com.sun.xml.xsom.XSAttGroupDecl;
@@ -40,11 +37,7 @@ import com.sun.xml.xsom.XSModelGroupDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
 
-//TODO imported ontologies
-//TODO XSOntology implements Meta-Model, XMLIndividuals implements Model
-//TODO element restrictions
-
-public abstract class XSOntology extends XSOntObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
+public abstract class XSOntology extends AbstractXSOntObject implements FlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
@@ -158,7 +151,7 @@ public abstract class XSOntology extends XSOntObject implements FlexoOntology, X
 	}
 
 	private XSOntClass loadClass(XSDeclaration declaration) {
-		String name = fetcher.getFullName(declaration);
+		String name = declaration.getName();
 		String uri = fetcher.getURI(declaration);
 		XSOntClass xsClass = new XSOntClass(this, name, uri);
 		classes.put(uri, xsClass);
@@ -483,104 +476,6 @@ public abstract class XSOntology extends XSOntObject implements FlexoOntology, X
 	}
 
 	@Override
-	public Set<? extends OntologyProperty> getPropertiesTakingMySelfAsRange() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<? extends OntologyProperty> getPropertiesTakingMySelfAsDomain() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isSuperConceptOf(OntologyObject concept) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isSubConceptOf(OntologyObject concept) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setDescription(String aDescription) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getDisplayableDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getHTMLDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object getAnnotationValue(OntologyDataProperty property, Language language) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setAnnotationValue(Object value, OntologyDataProperty property, Language language) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Object getAnnotationObjectValue(OntologyObjectProperty property) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setAnnotationObjectValue(Object value, OntologyObjectProperty property, Language language) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean equalsToConcept(OntologyObject o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public Object getPropertyValue(OntologyProperty property) {
-		return null;
-	}
-
-	@Override
-	public void setPropertyValue(OntologyProperty property, Object newValue) {
-
-	}
-
-	@Override
 	public OntologyClass createOntologyClass(String name) throws DuplicateURIException {
 		throw new UnsupportedOperationException();
 	}
@@ -623,62 +518,18 @@ public abstract class XSOntology extends XSOntObject implements FlexoOntology, X
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean isOntology() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyClass() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyIndividual() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyObjectProperty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyDataProperty() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public static String findOntologyURI(File f) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getDisplayableDescription() {
+		return "Ontology " + getName();
 	}
 
 }

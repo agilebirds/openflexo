@@ -11,7 +11,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.xsd.rm.ImportedXSOntology;
 
 public class TestLibraryToXML extends FlexoTestCase {
 

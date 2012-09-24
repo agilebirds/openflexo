@@ -1,6 +1,6 @@
 package org.openflexo.foundation.ontology.xsd;
 
-public class XSOntRestriction extends XSOntClass {
+public abstract class XSOntRestriction extends XSOntClass {
 
 	protected XSOntRestriction(XSOntology ontology) {
 		super(ontology, null, null);

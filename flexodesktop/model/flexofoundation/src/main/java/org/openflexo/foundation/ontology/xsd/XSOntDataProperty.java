@@ -3,10 +3,10 @@ package org.openflexo.foundation.ontology.xsd;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.ontology.OntologyObject;
 
 public class XSOntDataProperty extends XSOntProperty implements OntologyDataProperty {
 
@@ -27,12 +27,6 @@ public class XSOntDataProperty extends XSOntProperty implements OntologyDataProp
 	public List<XSOntDataProperty> getSubProperties(FlexoOntology context) {
 		// TODO Make sure it's always empty
 		return new ArrayList<XSOntDataProperty>();
-	}
-
-	@Override
-	public OntologyObject getDomain() {
-		// TODO
-		return null;
 	}
 
 	public void setDataType(OntologicDataType dataType) {
@@ -64,6 +58,20 @@ public class XSOntDataProperty extends XSOntProperty implements OntologyDataProp
 	@Override
 	public boolean isOntologyDataProperty() {
 		return true;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "XSD_ontology_data_property";
+	}
+
+	@Override
+	public String getInspectorName() {
+		if (getIsReadOnly()) {
+			return Inspectors.VE.ONTOLOGY_DATA_PROPERTY_READ_ONLY_INSPECTOR;
+		} else {
+			return Inspectors.VE.ONTOLOGY_DATA_PROPERTY_INSPECTOR;
+		}
 	}
 
 }

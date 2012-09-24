@@ -3,6 +3,7 @@ package org.openflexo.foundation.ontology.xsd;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
@@ -26,12 +27,6 @@ public class XSOntObjectProperty extends XSOntProperty implements OntologyObject
 	}
 
 	@Override
-	public OntologyObject getDomain() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public OntologyObject getRange() {
 		// TODO Auto-generated method stub
 		return null;
@@ -51,6 +46,20 @@ public class XSOntObjectProperty extends XSOntProperty implements OntologyObject
 	@Override
 	public boolean isOntologyObjectProperty() {
 		return true;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "XSD_ontology_object_property";
+	}
+
+	@Override
+	public String getInspectorName() {
+		if (getIsReadOnly()) {
+			return Inspectors.VE.ONTOLOGY_OBJECT_PROPERTY_READ_ONLY_INSPECTOR;
+		} else {
+			return Inspectors.VE.ONTOLOGY_OBJECT_PROPERTY_INSPECTOR;
+		}
 	}
 
 }

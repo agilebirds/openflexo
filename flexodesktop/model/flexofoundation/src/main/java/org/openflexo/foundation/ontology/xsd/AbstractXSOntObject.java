@@ -1,12 +1,10 @@
 package org.openflexo.foundation.ontology.xsd;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
@@ -18,24 +16,24 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.Language;
 import org.openflexo.xmlcode.StringConvertable;
 
-public class XSOntObject extends AbstractOntologyObject implements OntologyObject, XSOntologyURIDefinitions, InspectableObject,
-		StringConvertable<OntologyObject> {
+public abstract class AbstractXSOntObject extends AbstractOntologyObject implements OntologyObject, XSOntologyURIDefinitions,
+		InspectableObject, StringConvertable<OntologyObject> {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntObject.class.getPackage()
-			.getName());
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntObject.class
+			.getPackage().getName());
 
 	private String uri;
 	private String name;
 	private XSOntology ontology;
 
-	protected XSOntObject(XSOntology ontology, String name, String uri) {
+	protected AbstractXSOntObject(XSOntology ontology, String name, String uri) {
 		this.name = name;
 		this.uri = uri;
 		this.ontology = ontology;
 	}
 
-	protected XSOntObject() {
-
+	protected AbstractXSOntObject() {
+		super();
 	}
 
 	@Override
@@ -49,9 +47,8 @@ public class XSOntObject extends AbstractOntologyObject implements OntologyObjec
 	}
 
 	@Override
-	public void setName(String aName) {
-		name = aName;
-		// TODO the following warning and check if read only?
+	public void setName(String name) {
+		this.name = name;
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("The ontology object name changed, renaming of the object URI not implemented yet");
 		}
@@ -59,12 +56,11 @@ public class XSOntObject extends AbstractOntologyObject implements OntologyObjec
 
 	@Override
 	public boolean getIsReadOnly() {
-		// TODO
-		return false;
+		return getFlexoOntology().getIsReadOnly();
 	}
 
 	@Override
-	public FlexoOntology getFlexoOntology() {
+	public XSOntology getFlexoOntology() {
 		return ontology;
 	}
 
@@ -88,87 +84,79 @@ public class XSOntObject extends AbstractOntologyObject implements OntologyObjec
 	}
 
 	@Override
+	public String getHTMLDescription() {
+		return getDisplayableDescription();
+	}
+
+	@Override
 	public boolean isSuperConceptOf(OntologyObject concept) {
-		// TODO Auto-generated method stub
+		// TODO Ask Sylvain
 		return false;
 	}
 
 	@Override
 	public boolean isSubConceptOf(OntologyObject concept) {
-		// TODO Auto-generated method stub
+		// TODO Ask Sylvain
 		return false;
 	}
 
 	@Override
-	public String getDescription() {
-		// TODO How does the localization works?
-		return null;
-	}
-
-	@Override
-	public void setDescription(String aDescription) {
-		// TODO How does the localization works?
-
-	}
-
-	@Override
-	public String getDisplayableDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getHTMLDescription() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean equalsToConcept(OntologyObject o) {
+		// TODO Ask Sylvain
+		return false;
 	}
 
 	@Override
 	public OntologyLibrary getOntologyLibrary() {
-		// TODO Auto-generated method stub
+		if (isOntology() == false) {
+			return getOntology().getOntologyLibrary();
+		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Ontology " + getName() + " is missing a library");
+		}
 		return null;
 	}
 
 	@Override
 	public Object getAnnotationValue(OntologyDataProperty property, Language language) {
-		// TODO Auto-generated method stub
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Annotations not yet supported by XSOntologies");
+		}
 		return null;
 	}
 
 	@Override
 	public void setAnnotationValue(Object value, OntologyDataProperty property, Language language) {
-		// TODO Auto-generated method stub
-
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Annotations not yet supported by XSOntologies");
+		}
 	}
 
 	@Override
 	public Object getAnnotationObjectValue(OntologyObjectProperty property) {
-		// TODO Auto-generated method stub
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Annotations not yet supported by XSOntologies");
+		}
 		return null;
 	}
 
 	@Override
 	public void setAnnotationObjectValue(Object value, OntologyObjectProperty property, Language language) {
-		// TODO Auto-generated method stub
-
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Annotations not yet supported by XSOntologies");
+		}
 	}
 
 	@Override
 	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsRange() {
 		// TODO Auto-generated method stub
-		return new HashSet<XSOntProperty>();
+		return null;
 	}
 
 	@Override
 	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsDomain() {
 		// TODO Auto-generated method stub
-		return new HashSet<XSOntProperty>();
-	}
-
-	@Override
-	public boolean equalsToConcept(OntologyObject o) {
-		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
@@ -184,41 +172,41 @@ public class XSOntObject extends AbstractOntologyObject implements OntologyObjec
 	}
 
 	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getClassNameKey() {
-		// TODO Auto-generated method stub
+	public Object addPropertyStatement(OntologyObjectProperty property, OntologyObject object) {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Statements aren't supported by XSOntology objects");
+		}
 		return null;
 	}
 
 	@Override
-	public Object addPropertyStatement(OntologyObjectProperty property, OntologyObject object) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public Object addPropertyStatement(OntologyProperty property, Object value) {
-		throw new UnsupportedOperationException();
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Statements aren't supported by XSOntology objects");
+		}
+		return null;
 	}
 
 	@Override
 	public Object addPropertyStatement(OntologyProperty property, String value, Language language) {
-		throw new UnsupportedOperationException();
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Statements aren't supported by XSOntology objects");
+		}
+		return null;
 	}
 
 	@Override
 	public Object addDataPropertyStatement(OntologyDataProperty property, Object value) {
-		throw new UnsupportedOperationException();
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Statements aren't supported by XSOntology objects");
+		}
+		return null;
 	}
 
 	@Override
