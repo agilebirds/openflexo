@@ -75,7 +75,7 @@ public class OntologyBrowserModel {
 	private boolean showIndividuals = true;
 
 	private Vector<OntologyObject> roots = null;
-	private Hashtable<OntologyObject, Vector<OntologyObject>> structure = null;
+	private Hashtable<AbstractOntologyObject, Vector<AbstractOntologyObject>> structure = null;
 
 	public OntologyBrowserModel(FlexoOntology context) {
 		super();
@@ -89,7 +89,7 @@ public class OntologyBrowserModel {
 		return roots;
 	}
 
-	public List<OntologyObject> getChildren(AbstractOntologyObject father) {
+	public List<AbstractOntologyObject> getChildren(AbstractOntologyObject father) {
 		return structure.get(father);
 	}
 
@@ -410,7 +410,7 @@ public class OntologyBrowserModel {
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<OntologyObject, Vector<OntologyObject>>();
+			structure = new Hashtable<AbstractOntologyObject, Vector<AbstractOntologyObject>>();
 		}
 
 		if (getContext() == null) {
@@ -467,13 +467,13 @@ public class OntologyBrowserModel {
 	}
 
 	private void addChildren(OntologyObject parent, OntologyObject child) {
-		Vector<OntologyObject> v = structure.get(parent);
+		Vector<AbstractOntologyObject> v = structure.get(parent);
 		if (v == null) {
-			v = new Vector<OntologyObject>();
-			structure.put(parent, v);
+			v = new Vector<AbstractOntologyObject>();
+			structure.put((AbstractOntologyObject) parent, v);
 		}
 		if (!v.contains(child)) {
-			v.add(child);
+			v.add((AbstractOntologyObject) child);
 		}
 	}
 
@@ -491,7 +491,7 @@ public class OntologyBrowserModel {
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<OntologyObject, Vector<OntologyObject>>();
+			structure = new Hashtable<AbstractOntologyObject, Vector<AbstractOntologyObject>>();
 		}
 
 		List<OntologyProperty> properties = new Vector<OntologyProperty>();

@@ -11,10 +11,10 @@ import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundExcepti
 import org.openflexo.foundation.ontology.owl.OWLProperty;
 import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
 import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass.RestrictionType;
-import org.openflexo.foundation.ontology.xsd.rm.FlexoXMLModelResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoXMLModelResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 
 import com.hp.hpl.jena.ontology.OntModel;
