@@ -1,8 +1,7 @@
-package org.openflexo.foundation.ontology.xsd.rm;
+package org.openflexo.foundation.rm;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.logging.Level;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,14 +12,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.IOUtils;
 import org.openflexo.foundation.ontology.xsd.ProjectXSOntology;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.LoadResourceException;
-import org.openflexo.foundation.rm.ResourceType;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
@@ -75,23 +68,16 @@ public class FlexoXMLModelResource extends FlexoStorageResource<ProjectXSOntolog
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new SaveResourceException(this);
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new SaveResourceException(this);
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new SaveResourceException(this);
 		} finally {
-			try {
-				if (out != null) {
-					out.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new SaveResourceException(this);
-			}
+			IOUtils.closeQuietly(out);
 		}
 
 		logger.info("Wrote " + getFile());
