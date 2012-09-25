@@ -1968,8 +1968,6 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	public void objectWasDoubleClicked(FlexoModelObject object) {
 		logger.info("Object was double-clicked: " + object + " class=" + object.getClass());
-		System.out.println("hop1=" + (this instanceof SelectionManagingController));
-		System.out.println("hop2=" + (getCurrentPerspective().hasModuleViewForObject(object)));
 		if (this instanceof SelectionManagingController && getCurrentPerspective().hasModuleViewForObject(object)) {
 			// Try to display object in view
 			((SelectionManagingController) this).selectAndFocusObject(object);

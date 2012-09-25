@@ -110,7 +110,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 	}
 
 	public AbstractBinding getBinding() {
-		if (binding == null) {
+		if (binding == null && !isDeserializing) {
 			finalizeDeserialization();
 		}
 		return binding;
@@ -128,7 +128,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				updateDependancies();
 				if (bindingAttribute != null) {
 					owner.notifyChange(bindingAttribute, oldValue, value);
@@ -141,7 +141,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				logger.info("Binding takes now value " + value);
 				updateDependancies();
 				if (bindingAttribute != null) {
@@ -185,10 +185,18 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		this.owner = owner;
 	}
 
+	private boolean isDeserializing = false;
+
 	protected void finalizeDeserialization() {
 		if (getUnparsedBinding() == null) {
 			return;
 		}
+
+		if (isDeserializing) {
+			return;
+		}
+
+		isDeserializing = true;
 
 		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getOwner() != null) {
@@ -211,6 +219,8 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		}
 
 		updateDependancies();
+
+		isDeserializing = false;
 	}
 
 	protected void updateDependancies() {

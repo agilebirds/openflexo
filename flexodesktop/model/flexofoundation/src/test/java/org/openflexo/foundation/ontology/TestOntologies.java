@@ -754,4 +754,115 @@ public class TestOntologies extends FlexoTestCase {
 		System.out.println("thingFromSKOS = " + thingFromSKOS.getPropertiesTakingMySelfAsDomain());
 
 	}
+
+	/*public static void main(String[] args) {
+			logger.info("Try to load ontology " + RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+
+			OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null, null);
+
+			// FIXES add strict to FALSE (XtoF)
+			// FIXES OPENFLEXO-39, OPENFLEXO-40, OPENFLEXO-41, OPENFLEXO-42, OPENFLEXO-43, OPENFLEXO-44
+			// ontModel.setStrictMode(false);
+
+			// we have a local copy of flexo concept ontology
+			if (alternativeLocalFile != null) {
+				logger.fine("Alternative local file: " + alternativeLocalFile.getAbsolutePath());
+				try {
+					ontModel.getDocumentManager().addAltEntry(ontologyURI, alternativeLocalFile.toURL().toString());
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			// read the source document
+			try {
+				logger.info("BEGIN Read " + ontologyURI);
+				ontModel.read(ontologyURI);
+				logger.info("END read " + ontologyURI);
+			} catch (Exception e) {
+				logger.warning("Unexpected exception while reading ontology " + ontologyURI);
+				logger.warning("Exception " + e.getMessage() + ". See logs for details");
+				e.printStackTrace();
+			}
+
+			isLoaded = true;
+
+			for (Object o : ontModel.listImportedOntologyURIs()) {
+				FlexoOntology importedOnt = _library.getOntology((String) o);
+				logger.info("importedOnt= " + importedOnt);
+				if (importedOnt != null) {
+					importedOnt.loadWhenUnloaded();
+					importedOntologies.add(importedOnt);
+				}
+			}
+
+			logger.info("For " + ontologyURI + " Imported ontologies = " + getImportedOntologies());
+
+			logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
+
+			for (FlexoOntology o : getImportedOntologies()) {
+				logger.info("Imported ontology: " + o);
+			}
+
+			createConceptsAndProperties();
+
+			logger.info("Finished loading ontology " + ontologyURI);
+
+		}
+
+	}*/
+
+	/*public static void main(String[] args) {
+
+		ResourceLocator.init();
+		File rdfsOWLOntologyFile = new FileResource("Ontologies/www.w3.org/2000/01/rdf-schema.owl");
+
+		testResourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new FileResource(
+				"TestResourceCenter"));
+
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, testResourceCenter.retrieveBaseOntologyLibrary(), null);
+		for (FlexoOntology o : testResourceCenter.retrieveBaseOntologyLibrary().getAllOntologies()) {
+			try {
+				System.out.println("Onto: " + o.getURI() + " file " + o.getAlternativeLocalFile().toURL().toString());
+				ontModel.getDocumentManager().addAltEntry(o.getURI(), o.getAlternativeLocalFile().toURL().toString());
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		if (rdfsOWLOntologyFile != null) {
+			logger.fine("RDFS local file: " + rdfsOWLOntologyFile.getAbsolutePath());
+			try {
+				ontModel.getDocumentManager().addAltEntry(RDFSURIDefinitions.RDFS_ONTOLOGY_URI, rdfsOWLOntologyFile.toURL().toString());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// read the source document
+		try {
+			logger.info("BEGIN Read " + RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+			ontModel.read(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+			logger.info("END read " + RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+		} catch (Exception e) {
+			logger.warning("Unexpected exception while reading ontology " + RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
+			logger.warning("Exception " + e.getMessage() + ". See logs for details");
+			e.printStackTrace();
+		}
+
+		for (NodeIterator i = ontModel.listObjects(); i.hasNext();) {
+			RDFNode node = i.nextNode();
+			System.out.println("Node " + node + " as " + node.getClass().getName());
+		}
+
+		for (NodeIterator i = ontModel.listObjects(); i.hasNext();) {
+			RDFNode node = i.nextNode();
+			if (node instanceof Resource && ((Resource) node).canAs(OntClass.class)) {
+				OntClass ontClass = ((Resource) node).as(OntClass.class);
+				System.out.println("> Class: " + ontClass);
+			}
+		}
+
+	}*/
 }
