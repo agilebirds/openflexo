@@ -1401,7 +1401,6 @@ public abstract class FlexoOntology extends OntologyObject {
 		logger.info("Try to load ontology " + ontologyURI);
 
 		ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, _library, null);
-
 		// FIXES add strict to FALSE (XtoF)
 		// FIXES OPENFLEXO-39, OPENFLEXO-40, OPENFLEXO-41, OPENFLEXO-42, OPENFLEXO-43, OPENFLEXO-44
 		// ontModel.setStrictMode(false);
@@ -1415,7 +1414,6 @@ public abstract class FlexoOntology extends OntologyObject {
 				e.printStackTrace();
 			}
 		}
-
 		// read the source document
 		try {
 			logger.info("BEGIN Read " + ontologyURI);

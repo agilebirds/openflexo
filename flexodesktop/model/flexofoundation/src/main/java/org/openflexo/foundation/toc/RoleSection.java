@@ -34,4 +34,8 @@ public class RoleSection extends ModelObjectSection<Role> {
 		return DOC_TEMPLATE;
 	}
 
+	@Override
+	public boolean isIndividualRole() {
+		return true;
+	}
 }

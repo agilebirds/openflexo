@@ -440,6 +440,8 @@ public final class ModuleLoader implements IModuleLoader {
 					e.printStackTrace();
 					ProgressWindow.hideProgressWindow();
 					throw new ModuleLoadingException(module);
+				} finally {
+					ProgressWindow.hideProgressWindow();
 				}
 			} else {
 				if (logger.isLoggable(Level.WARNING)) {

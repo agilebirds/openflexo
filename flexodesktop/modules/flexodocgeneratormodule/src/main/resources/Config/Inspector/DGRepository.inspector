@@ -3,6 +3,7 @@
 		<property name="format" label="format" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
 		<property name="docType" label="doc_type" widget="DROPDOWN" constraint="8">
 			<param name="format" value="name"/>
+			<param name="showReset" value="false"/>
 		</property>
 		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="9"/>
 		<property name="directory" label="source_directory" widget="DIRECTORY" constraint="10"/>

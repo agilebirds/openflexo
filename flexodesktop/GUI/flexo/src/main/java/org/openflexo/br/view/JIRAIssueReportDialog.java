@@ -282,13 +282,7 @@ public class JIRAIssueReportDialog {
 		try {
 			boolean submit = true;
 			while (submit) {
-				Thread t = new Thread(target);
-				t.start();
-				try {
-					t.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				target.run();
 				if (target.getException() != null) {
 					if (target.getException() instanceof SocketTimeoutException) {
 						submit = FlexoController.confirm(FlexoLocalization.localizedForKey("could_not_send_incident_so_far_keep_trying")

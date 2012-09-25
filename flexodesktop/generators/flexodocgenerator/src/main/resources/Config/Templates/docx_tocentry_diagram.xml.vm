@@ -1,1 +1,2 @@
-#renderScreenshotForObject( $object )
+#description($object)
+#renderScreenshotForObject($object)

@@ -955,8 +955,7 @@
  				<artifactId>swingx-core</artifactId>
 				<version>1.6.3</version>
  			</dependency>		
- 			</dependencies>
-
+ 		</dependencies>
 	</dependencyManagement>
 </project>
 
