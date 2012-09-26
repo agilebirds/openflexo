@@ -152,7 +152,8 @@ public class TestRoundTrip extends CGTestCase {
 		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
 		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
+		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY,
+				getNewResourceCenter(_projectIdentifier));
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 
