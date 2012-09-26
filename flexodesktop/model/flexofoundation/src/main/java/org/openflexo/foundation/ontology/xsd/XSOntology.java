@@ -170,8 +170,13 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
 				XSOntClass xsClass = loadClass(element);
-				XSOntClass superClass = classes.get(fetcher.getURI(element.getType()));
-				xsClass.addSuperClass(superClass);
+				try {
+					XSOntClass superClass = classes.get(fetcher.getURI(element.getType()));
+					xsClass.addSuperClass(superClass);
+				} catch (Exception e) {
+					
+				}
+				
 			}
 		}
 		for (XSAttGroupDecl attGroup : fetcher.getAttGroupDecls()) {
@@ -240,6 +245,15 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		objectProperties.put(isPartOfElement.getURI(), isPartOfElement);
 		// TODO have properties inheriting those two for all complex types and elements
 		// How to name to make sure its URI is valid?
+		
+		for (XSOntObjectProperty property : objectProperties.values()) {
+			for (XSElementDecl element : fetcher.getElementDecls()) {
+				if (mapsToClass(element)) {
+					String uri = fetcher.getURI(element);
+					classes.get(uri).addPropertyTakingMyselfAsRange(property);
+				}
+			}
+		}
 	}
 
 	private void loadRestrictions() {
@@ -261,6 +275,22 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		individuals.clear();
 	}
 
+	private void clearAllRangeAndDomain() {
+		clearPropertiesTakingMyselfAsRangeOrDomain();
+		for (AbstractXSOntObject o : classes.values()) {
+			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+		}
+		for (AbstractXSOntObject o : dataProperties.values()) {
+			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+		}
+		for (AbstractXSOntObject o : objectProperties.values()) {
+			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+		}
+		for (AbstractXSOntObject o : individuals.values()) {
+			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+		}
+	}
+	
 	public boolean load() {
 		// TODO Should I create a w3 ontology? possibly .owl?
 		// TODO Seems I should.
@@ -273,6 +303,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		if (schemaSet != null) {
 			fetcher = new XSDeclarationsFetcher();
 			fetcher.fetch(schemaSet);
+			clearAllRangeAndDomain();
 			loadClasses();
 			loadDataProperties();
 			loadObjectProperties();

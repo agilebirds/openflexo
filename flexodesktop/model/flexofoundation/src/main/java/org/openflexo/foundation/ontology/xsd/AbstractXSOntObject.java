@@ -1,5 +1,6 @@
 package org.openflexo.foundation.ontology.xsd;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -25,15 +26,22 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	private String uri;
 	private String name;
 	private XSOntology ontology;
-
-	protected AbstractXSOntObject(XSOntology ontology, String name, String uri) {
-		this.name = name;
-		this.uri = uri;
-		this.ontology = ontology;
-	}
+	
+	private final Set<XSOntProperty> propertiesTakingMySelfAsRange;
+	private final Set<XSOntProperty> propertiesTakingMySelfAsDomain;
 
 	protected AbstractXSOntObject() {
 		super();
+		
+		propertiesTakingMySelfAsRange = new HashSet<XSOntProperty>();
+		propertiesTakingMySelfAsDomain = new HashSet<XSOntProperty>();
+	}
+	
+	protected AbstractXSOntObject(XSOntology ontology, String name, String uri) {
+		this();
+		this.name = name;
+		this.uri = uri;
+		this.ontology = ontology;
 	}
 
 	@Override
@@ -147,16 +155,28 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 		}
 	}
 
+	public void clearPropertiesTakingMyselfAsRangeOrDomain() {
+		propertiesTakingMySelfAsRange.clear();
+		propertiesTakingMySelfAsDomain.clear();
+	}
+	
+	public void addPropertyTakingMyselfAsRange(XSOntProperty property) {
+		propertiesTakingMySelfAsRange.add(property);
+	}
+	
+	public void addPropertyTakingMyselfAsDomain(XSOntProperty property) {
+		propertiesTakingMySelfAsDomain.add(property);
+	}
+	
 	@Override
 	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsRange() {
-		// TODO Auto-generated method stub
-		return null;
+		return propertiesTakingMySelfAsRange;
 	}
 
 	@Override
 	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsDomain() {
 		// TODO Auto-generated method stub
-		return null;
+		return propertiesTakingMySelfAsDomain;
 	}
 
 	@Override

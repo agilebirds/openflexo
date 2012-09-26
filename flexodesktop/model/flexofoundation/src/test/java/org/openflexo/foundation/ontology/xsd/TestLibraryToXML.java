@@ -20,7 +20,7 @@ public class TestLibraryToXML extends FlexoTestCase {
 	private static final String FILE_NAME = "library";
 	private static final String LIBRARY_URI = "http://www.example.org/library#Library";
 	private static final String BOOK_URI = "http://www.example.org/library#Book";
-	private static final String BOOK_TITLE_URI = "http://www.example.org/library#Book.title";
+	private static final String BOOK_TITLE_URI = "http://www.example.org/library/Book#title";
 
 	public void testLibraryToXML() throws DuplicateURIException, ParserConfigurationException, TransformerException {
 		// StringBuffer buffer = new StringBuffer();
@@ -42,7 +42,9 @@ public class TestLibraryToXML extends FlexoTestCase {
 			library.addChild(book2);
 
 			if (logger.isLoggable(Level.INFO)) {
-				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				TransformerFactory transformerFactory = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+				System.out.println(transformerFactory.getClass().getName());
+				System.out.println(transformerFactory.getClass().getClassLoader());
 				Transformer transformer = transformerFactory.newTransformer();
 				DOMSource source = new DOMSource(lib.toXML());
 				StreamResult result = new StreamResult(System.out);

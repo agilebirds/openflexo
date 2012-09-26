@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
@@ -75,7 +76,7 @@ public class OntologyBrowserModel {
 	private boolean showIndividuals = true;
 
 	private List<OntologyObject> roots = null;
-	private Map<OntologyObject, List<OntologyObject>> structure = null;
+	private Map<AbstractOntologyObject, List<AbstractOntologyObject>> structure = null;
 
 	public OntologyBrowserModel(FlexoOntology context) {
 		super();
@@ -89,7 +90,7 @@ public class OntologyBrowserModel {
 		return roots;
 	}
 
-	public List<OntologyObject> getChildren(OntologyObject father) {
+	public List<AbstractOntologyObject> getChildren(AbstractOntologyObject father) {
 		return structure.get(father);
 	}
 
@@ -410,7 +411,7 @@ public class OntologyBrowserModel {
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<OntologyObject, List<OntologyObject>>();
+			structure = new Hashtable<AbstractOntologyObject, List<AbstractOntologyObject>>();
 		}
 
 		if (getContext() == null) {
@@ -467,13 +468,13 @@ public class OntologyBrowserModel {
 	}
 
 	private void addChildren(OntologyObject parent, OntologyObject child) {
-		List<OntologyObject> v = structure.get(parent);
+		List<AbstractOntologyObject> v = structure.get(parent);
 		if (v == null) {
-			v = new Vector<OntologyObject>();
-			structure.put(parent, v);
+			v = new Vector<AbstractOntologyObject>();
+			structure.put((AbstractOntologyObject) parent, v);
 		}
 		if (!v.contains(child)) {
-			v.add(child);
+			v.add((AbstractOntologyObject) child);
 		}
 	}
 
@@ -491,7 +492,7 @@ public class OntologyBrowserModel {
 		if (structure != null) {
 			structure.clear();
 		} else {
-			structure = new Hashtable<OntologyObject, List<OntologyObject>>();
+			structure = new Hashtable<AbstractOntologyObject, List<AbstractOntologyObject>>();
 		}
 
 		List<OntologyProperty> properties = new Vector<OntologyProperty>();

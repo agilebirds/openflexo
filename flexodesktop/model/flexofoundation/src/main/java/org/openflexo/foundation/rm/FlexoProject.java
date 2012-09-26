@@ -3938,16 +3938,23 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	public FlexoProjectOntologyResource getFlexoProjectOntologyResource() {
+	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource() {
 		return getFlexoProjectOntologyResource(true);
 	}
 
-	public FlexoProjectOntologyResource getFlexoProjectOntologyResource(boolean createIfNotExist) {
-		FlexoProjectOntologyResource returned = (FlexoProjectOntologyResource) resourceForKey(ResourceType.PROJECT_ONTOLOGY,
-				getProjectName());
+	private ProjectOntology createProjectOntology() {
+		// Temporary hack to select the type of the project ontology
+		// To be updated with model slots
+		return ProjectOWLOntology.createNewProjectOntology(this);
+		// return ProjectXSOntology.createNewProjectOntology(this);
+	}
+
+	@SuppressWarnings("unchecked")
+	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource(boolean createIfNotExist) {
+		FlexoStorageResource<ProjectOntology> returned = (FlexoStorageResource<ProjectOntology>) resourceForKey(
+				ResourceType.PROJECT_ONTOLOGY, getProjectName());
 		if (returned == null && createIfNotExist) {
-			ProjectOWLOntology.createNewProjectOntology(this);
-			return getFlexoProjectOntologyResource();
+			return createProjectOntology().getFlexoResource();
 		}
 		return returned;
 	}
@@ -3957,14 +3964,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public ProjectOntology getProjectOntology(boolean createIfNotExist) {
-		if (getFlexoProjectOntologyResource(createIfNotExist) == null) {
-			if (createIfNotExist) {
-				ProjectOWLOntology.createNewProjectOntology(this);
-			} else {
-				return null;
-			}
+		FlexoStorageResource<? extends ProjectOntology> resource = getFlexoProjectOntologyResource(createIfNotExist);
+		if (resource == null) {
+			return null;
 		}
-		return getFlexoProjectOntologyResource(createIfNotExist).getResourceData();
+		return resource.getResourceData();
 	}
 
 	private ProjectOntologyLibrary ontologyLibrary = null;
