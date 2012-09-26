@@ -10,6 +10,12 @@
 	<artifactId>flexodesktop</artifactId>
 	<name>FlexoDesktop</name>
 	<packaging>pom</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+		</dependency>
+	</dependencies>
 	<build>
 		<resources>
 			<resource>
