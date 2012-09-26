@@ -49,8 +49,8 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 		super(
 				browserConfiguration,
 				" ",
-				(browserConfiguration instanceof MultipleObjectSelector.TabularBrowserConfiguration ? ((MultipleObjectSelector.TabularBrowserConfiguration) browserConfiguration)
-						.getBrowsingColumnWidth() : 200));
+				browserConfiguration instanceof MultipleObjectSelector.TabularBrowserConfiguration ? ((MultipleObjectSelector.TabularBrowserConfiguration) browserConfiguration)
+						.getBrowsingColumnWidth() : 200);
 		_selectionColumn = new SelectionColumn(25);
 		insertColumnAtIndex(_selectionColumn, 0);
 		if (browserConfiguration instanceof MultipleObjectSelector.TabularBrowserConfiguration) {
@@ -122,7 +122,7 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 		@Override
 		public Boolean getBooleanValue(E object) {
 			if (!isSelectable(object)) {
-				return null;
+				return Boolean.FALSE;
 			}
 			Boolean returned = _hashSet.get(object);
 			if (returned == null) {

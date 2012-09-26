@@ -42,8 +42,6 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 
 	private static final Logger logger = Logger.getLogger(MouseSelectionManager.class.getPackage().getName());
 
-	protected FocusableView _focusedPanel;
-
 	private PastingGraphicalContext _pastingGraphicalContext;
 
 	// ==========================================================================
@@ -94,7 +92,7 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		processMousePressed(e);
-		if ((!e.isConsumed()) && (_contextualMenuManager != null)) {
+		if (!e.isConsumed() && _contextualMenuManager != null) {
 			_contextualMenuManager.processMousePressed(e);
 		}
 	}
@@ -102,7 +100,7 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		processMouseReleased(e);
-		if ((!e.isConsumed()) && (_contextualMenuManager != null)) {
+		if (!e.isConsumed() && _contextualMenuManager != null) {
 			_contextualMenuManager.processMouseReleased(e);
 		}
 	}
