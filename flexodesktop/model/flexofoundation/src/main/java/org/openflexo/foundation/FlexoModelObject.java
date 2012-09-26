@@ -119,8 +119,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public static void setCurrentUserIdentifier(String aUserIdentifier) {
 		if (aUserIdentifier != null && aUserIdentifier.indexOf('#') > -1) {
 			aUserIdentifier = aUserIdentifier.replace('#', '-');
+			FlexoModelObject.currentUserIdentifier = aUserIdentifier.intern();
 		}
-		FlexoModelObject.currentUserIdentifier = aUserIdentifier.intern();
 	}
 
 	private String userIdentifier;
@@ -136,7 +136,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (aUserIdentifier != null && aUserIdentifier.indexOf('#') > -1) {
 			aUserIdentifier = aUserIdentifier.replace('#', '-');
 		}
-		userIdentifier = aUserIdentifier.intern();
+		userIdentifier = aUserIdentifier != null ? aUserIdentifier.intern() : null;
 		if (!isDeserializing()) {
 			fireSerializationIdChanged();
 		}

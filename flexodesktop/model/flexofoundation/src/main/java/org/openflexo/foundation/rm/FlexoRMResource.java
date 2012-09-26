@@ -142,7 +142,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 	}
 
 	@Override
-	public Class getResourceDataClass() {
+	public Class<FlexoProject> getResourceDataClass() {
 		return FlexoProject.class;
 	}
 
@@ -554,9 +554,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 	private boolean convertFrom34To35() {
 		try {
 			Document document = XMLUtils.getJDOMDocument(getFile());
-			Iterator tableElementIterator = document.getDescendants(new ElementFilter("TextFileResource"));
+			Iterator<Element> tableElementIterator = document.getDescendants(new ElementFilter("TextFileResource"));
 			while (tableElementIterator.hasNext()) {
-				Element el = (Element) tableElementIterator.next();
+				Element el = tableElementIterator.next();
 				if (el.getAttribute("genericTypingClassName") != null && el.getAttribute("genericTypingClassName").getValue() != null
 						&& el.getAttribute("genericTypingClassName").getValue().equals("org.openflexo.generator.rm.PListFileResource")) {
 					el.setAttribute("genericTypingClassName", "org.openflexo.generator.rm.EOEntityPListFileResource");
@@ -564,7 +564,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			}
 			tableElementIterator = document.getDescendants(new ElementFilter("RMResource"));
 			while (tableElementIterator.hasNext()) {
-				((Element) tableElementIterator.next()).setAttribute("version", "3.5.0");
+				tableElementIterator.next().setAttribute("version", "3.5.0");
 			}
 			// saveResourceDataWithVersion(new Version("3.5.0"));
 

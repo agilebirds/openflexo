@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.dm;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -169,7 +170,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		return new DMType(entity);
 	}
 
-	public static DMType makeResolvedDMType(Class typeClass, FlexoProject project) {
+	public static DMType makeResolvedDMType(Class<?> typeClass, FlexoProject project) {
 		DMEntity accessedEntity = project.getDataModel().getDMEntity(typeClass, true);
 		if (accessedEntity != null) {
 			return makeResolvedDMType(accessedEntity);
@@ -888,16 +889,14 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		if (dataModification instanceof DMEntityClassNameChanged && observable == getBaseEntity()) {
 			// TODO: handle class name changed
 			// Then forward this notification to all Typed declared to have this type
-			Vector<Typed> typedWithThisTypeClone = (Vector<Typed>) typedWithThisType.clone();
-			for (Typed t : typedWithThisTypeClone) {
+			for (Typed t : new ArrayList<Typed>(typedWithThisType)) {
 				t.update(observable, dataModification);
 			}
 			clearStringRepresentationCache();
 		} else if (dataModification instanceof EntityDeleted && observable == getBaseEntity()) {
 			// TODO: handle entity deleted
 			// Then forward this notification to all Typed declared to have this type
-			Vector<Typed> typedWithThisTypeClone = (Vector<Typed>) typedWithThisType.clone();
-			for (Typed t : typedWithThisTypeClone) {
+			for (Typed t : new ArrayList<Typed>(typedWithThisType)) {
 				t.update(observable, dataModification);
 			}
 			clearStringRepresentationCache();
@@ -1369,7 +1368,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		return KindOfType.UNRESOLVED;
 	}
 
-	public enum KindOfType implements StringConvertable {
+	public enum KindOfType implements StringConvertable<KindOfType> {
 		UNRESOLVED, RESOLVED, RESOLVED_ARRAY, DKV, TYPE_VARIABLE, WILDCARD;
 
 		public String getUnlocalizedStringRepresentation() {
@@ -1488,7 +1487,6 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			return returned;
 		}
 
-		@SuppressWarnings("unchecked")
 		private void tryToDecodeTypes() {
 			Vector<DMType> decodedTypes = new Vector<DMType>();
 			Vector<DMType> typesToDecode = new Vector<DMType>(_pendingDeserializedTypes);
@@ -1704,8 +1702,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	// ===================== Utilities ==========================
 	// ==========================================================
 
-	public static int arrayDepth(Class c) {
-		Class current = c;
+	public static int arrayDepth(Class<?> c) {
+		Class<?> current = c;
 		int depth = 0;
 		current = current.getComponentType();
 		while (current != null) {
@@ -1953,7 +1951,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	// Retrieving type
 
 	@Override
-	public Class getTypeForKey(String key) {
+	public Class<?> getTypeForKey(String key) {
 		return KeyValueDecoder.getTypeForKey(this, key);
 	}
 

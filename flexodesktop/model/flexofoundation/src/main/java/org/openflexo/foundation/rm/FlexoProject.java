@@ -212,8 +212,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private static final String PROCESS_SNAPSHOT_IMPORTED_DIRECTORY = "ProcessSnapshotImported";
 	private static final String PROJECT_DOCUMENTATION_CSS_FILE = "FlexoDocumentationMasterStyle.css";
 
-	private static final String IMPORTED_PROJECTS = "importedProjects";
-
 	public static final File INITIAL_IMAGES_DIR = new FileResource("Config/InitialImages");
 
 	private boolean computeDiff = true;
@@ -4195,8 +4193,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
 				if (instance == null) {
 					logger.warning("Found null EditionPatternInstance, please investigate");
-				} else if (actorReference == null) {
-					logger.warning("Found null actorReference, please investigate");
 				} else if (actorReference.getPatternReference() == null) {
 					logger.warning("Found null actorReference.getPatternReference(), please investigate");
 				} else if (actorReference.getPatternReference().getEditionPattern() == null) {

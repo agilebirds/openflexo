@@ -233,7 +233,7 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 
 	public static String findOntologyName(File aFile) {
 		if (aFile == null || !aFile.exists() || aFile.length() == 0) {
-			if (aFile.length() == 0) {
+			if (aFile != null && aFile.length() == 0) {
 				aFile.delete();
 			}
 			return null;

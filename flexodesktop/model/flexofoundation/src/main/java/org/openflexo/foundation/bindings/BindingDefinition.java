@@ -21,7 +21,6 @@ package org.openflexo.foundation.bindings;
 
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -117,10 +116,22 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 					return false;
 				}
 			}
-			return ((_owner == bd._owner) && (_type == bd._type) && (_isMandatory == bd._isMandatory));
+			return _owner == bd._owner && _type == bd._type && _isMandatory == bd._isMandatory;
 		} else {
-			return super.equals(object);
+			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		if (getVariableName() != null) {
+			hash += getVariableName().hashCode();
+		}
+		if (getType() != null) {
+			hash += getType().hashCode();
+		}
+		return hash;
 	}
 
 	public boolean getIsMandatory() {
@@ -133,7 +144,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	}
 
 	public boolean getIsSettable() {
-		return (getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET);
+		return getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET;
 	}
 
 	public void setIsSettable(boolean settable) {
@@ -160,7 +171,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	@Override
 	public void setType(DMType type) {
 		logger.info("setType() with " + type);
-		if ((type == null && _type != null) || (type != null && !type.equals(_type))) {
+		if (type == null && _type != null || type != null && !type.equals(_type)) {
 			DMType oldType = _type;
 			if (oldType != null) {
 				oldType.removeFromTypedWithThisType(this);
@@ -269,7 +280,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 		public int compare(BindingDefinition o1, BindingDefinition o2) {
 			String s1 = o1.getVariableName();
 			String s2 = o2.getVariableName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;
@@ -321,8 +332,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 		if (depth == 1) {
 			return returned;
 		}
-		for (Enumeration en = currentType.getBaseEntity().getAccessibleProperties().elements(); en.hasMoreElements();) {
-			DMProperty nextProperty = (DMProperty) en.nextElement();
+		for (DMProperty nextProperty : currentType.getBaseEntity().getAccessibleProperties()) {
 			BindingValue newCurrent = current.clone();
 			newCurrent.addBindingPathElement(nextProperty);
 			returned.addAll(searchMatchingBindingValue(bindable, newCurrent, nextProperty.getType(), depth - 1));

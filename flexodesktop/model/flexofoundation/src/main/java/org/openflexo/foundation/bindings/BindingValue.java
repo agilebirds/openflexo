@@ -58,7 +58,6 @@ import org.openflexo.foundation.wkf.WKFObject;
  */
 public class BindingValue extends AbstractBinding {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
 
 	BindingVariable _bindingVariable;

@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -102,7 +101,7 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 		// Not allowed
 	}
 
-	public Class getResourceDataClass() {
+	public Class<EOModelResourceData> getResourceDataClass() {
 		return EOModelResourceData.class;
 	}
 
@@ -142,9 +141,8 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 
 	private EOModel createsEOModel(EOModelGroup modelGroup, DMEOAdaptorType adaptor, String username, String passwd,
 			String databaseServerURL, String plugin, String driver) throws InvalidEOModelFileException {
-		URL eoModelUrl;
 		try {
-			eoModelUrl = getFile().toURL();
+			getFile().toURI().toURL();
 		} catch (MalformedURLException e) {
 			throw new InvalidEOModelFileException(this);
 		}
@@ -158,29 +156,24 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 	}
 
 	public EOModel reloadEOModel() throws EOAccessException {
-		if (_resourceData == null) {
-			// GPO: Without the will to be too sarcastic but I am pretty sure that nobody has ever come into this block...
-			return _resourceData.getEOModel();
-		} else {
-			EOModel oldEOModel = _resourceData.getEOModel();
-			if (oldEOModel != null) {
-				getModelGroup().removeModel(oldEOModel);
-			}
-			_resourceData.setEOModel(null);
-			try {
-				EOModel eoModel = loadEOModel(getModelGroup());
-				_resourceData.setEOModel(eoModel);
-				notifyResourceStatusChanged();
-				return eoModel;
-			} catch (InvalidEOModelFileException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Invalid EOModel, remove resource !");
-				}
-				this.delete();
-			}
-			notifyResourceStatusChanged();
-			return null;
+		EOModel oldEOModel = _resourceData.getEOModel();
+		if (oldEOModel != null) {
+			getModelGroup().removeModel(oldEOModel);
 		}
+		_resourceData.setEOModel(null);
+		try {
+			EOModel eoModel = loadEOModel(getModelGroup());
+			_resourceData.setEOModel(eoModel);
+			notifyResourceStatusChanged();
+			return eoModel;
+		} catch (InvalidEOModelFileException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Invalid EOModel, remove resource !");
+			}
+			this.delete();
+		}
+		notifyResourceStatusChanged();
+		return null;
 	}
 
 	private EOModel loadEOModel(EOModelGroup modelGroup) throws InvalidEOModelFileException, EOAccessException {

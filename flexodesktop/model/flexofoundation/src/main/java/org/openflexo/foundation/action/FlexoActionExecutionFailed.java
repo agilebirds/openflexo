@@ -28,12 +28,12 @@ import org.openflexo.localization.FlexoLocalization;
  */
 public class FlexoActionExecutionFailed extends FlexoException {
 
-	private FlexoAction failedAction;
+	private FlexoAction<?, ?, ?> failedAction;
 
 	/**
 	 * @param addComponent
 	 */
-	public FlexoActionExecutionFailed(FlexoAction action) {
+	public FlexoActionExecutionFailed(FlexoAction<?, ?, ?> action) {
 		super();
 		this.failedAction = action;
 	}

@@ -541,7 +541,8 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		ComponentInstance oldComponentInstance = _componentInstance;
 		_componentInstance = null;
 		setChanged();
-		notifyObservers(new OperationComponentHasBeenRemoved("WOComponentName", oldComponentInstance.getComponentDefinition(), this));
+		notifyObservers(new OperationComponentHasBeenRemoved("WOComponentName",
+				oldComponentInstance != null ? oldComponentInstance.getComponentDefinition() : null, this));
 		notifyBindingsChanged();
 	}
 
@@ -654,7 +655,8 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		ComponentInstance oldComponentInstance = _tabComponentInstance;
 		_tabComponentInstance = null;
 		setChanged();
-		notifyObservers(new TabOperationComponentHasBeenRemoved("WOComponentName", oldComponentInstance.getComponentDefinition(), this));
+		notifyObservers(new TabOperationComponentHasBeenRemoved("WOComponentName",
+				oldComponentInstance != null ? oldComponentInstance.getComponentDefinition() : null, this));
 	}
 
 	@Override

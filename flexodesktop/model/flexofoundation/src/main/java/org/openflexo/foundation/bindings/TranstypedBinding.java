@@ -44,7 +44,6 @@ import org.openflexo.xmlcode.XMLMapping;
 
 public class TranstypedBinding extends AbstractBinding {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(TranstypedBinding.class.getPackage().getName());
 
 	private DMTranstyper transtyper;

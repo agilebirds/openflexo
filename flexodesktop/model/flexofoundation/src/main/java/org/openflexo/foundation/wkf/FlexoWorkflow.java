@@ -177,11 +177,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 */
 	public FlexoWorkflow(FlexoProject project) {
 		super(project);
-		if (project == null) {
-			logger.severe("No project for Workflow");
-		} else {
-			setProject(project);
-		}
+		setProject(project);
 		_topLevelNodeProcesses = new Vector<FlexoProcessNode>();
 		importedRootNodeProcesses = new Vector<FlexoProcessNode>();
 		processMetricsDefinitions = new Vector<MetricsDefinition>();

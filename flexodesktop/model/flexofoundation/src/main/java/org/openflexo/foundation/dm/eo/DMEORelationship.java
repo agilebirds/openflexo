@@ -114,9 +114,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		if (eoRelationship != null) {
 			// setName(eoRelationship.name());
 			name = eoRelationship.getName();
-		}
-		if (eoRelationship.getIsFlattened()) {
-			_isFlattenRelationship = true;
+			if (eoRelationship.getIsFlattened()) {
+				_isFlattenRelationship = true;
+			}
 		}
 	}
 

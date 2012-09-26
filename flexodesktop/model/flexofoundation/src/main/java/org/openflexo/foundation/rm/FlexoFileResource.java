@@ -22,7 +22,6 @@ package org.openflexo.foundation.rm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +40,7 @@ import org.openflexo.toolbox.FileUtils;
  * 
  * @author sguerin
  */
-public abstract class FlexoFileResource<RD extends FlexoResourceData> extends FlexoResource<RD> implements Serializable {
+public abstract class FlexoFileResource<RD extends FlexoResourceData> extends FlexoResource<RD> {
 
 	/**
 	 * This constant traduces the delay accepted for the File System to effectively write a file on disk after the date it was requested. If
