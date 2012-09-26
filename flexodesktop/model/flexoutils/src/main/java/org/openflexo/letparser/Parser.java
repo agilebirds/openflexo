@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
-import java.util.Enumeration;
 import java.util.Vector;
 
 /*
@@ -66,7 +65,7 @@ public class Parser {
 
 	private static Token parse(Reader rdr) throws ParseException {
 		ListOfToken unparsedList = parseLevel(initStreamTokenizer(rdr));
-		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token)) {
+		if (unparsedList.size() == 1 && unparsedList.firstElement() instanceof Token) {
 			return (Token) unparsedList.firstElement();
 		}
 		try {
@@ -92,7 +91,7 @@ public class Parser {
 			boolean levelSeemsToBeFinished = false;
 			boolean prefixedBy$ = false;
 
-			while ((!levelSeemsToBeFinished) && (input.nextToken() != StreamTokenizer.TT_EOF)) {
+			while (!levelSeemsToBeFinished && input.nextToken() != StreamTokenizer.TT_EOF) {
 				// System.out.println("currentInput="+currentInput+" input="+input);
 
 				if (input.ttype == StreamTokenizer.TT_WORD) {
@@ -183,9 +182,9 @@ public class Parser {
 		if (word.equals("")) {
 			return;
 		}
-		if ((word.equalsIgnoreCase("true")) || (word.equalsIgnoreCase("yes"))) {
+		if (word.equalsIgnoreCase("true") || word.equalsIgnoreCase("yes")) {
 			returned.add(new BooleanValue(true));
-		} else if ((word.equalsIgnoreCase("false")) || (word.equalsIgnoreCase("no"))) {
+		} else if (word.equalsIgnoreCase("false") || word.equalsIgnoreCase("no")) {
 			returned.add(new BooleanValue(false));
 		} else if (matchOperator(word) != null) {
 			returned.add(matchOperator(word));
@@ -195,10 +194,9 @@ public class Parser {
 	}
 
 	private static Operator matchOperator(String anInput) {
-		for (Enumeration en = Operator.getKnownOperators().elements(); en.hasMoreElements();) {
-			Operator next = (Operator) en.nextElement();
-			if ((anInput.toUpperCase().equals(next.getSymbol())) || (anInput.toUpperCase().equals(next.getAlternativeSymbol()))) {
-				return next;
+		for (Operator operator : Operator.getKnownOperators()) {
+			if (anInput.toUpperCase().equals(operator.getSymbol()) || anInput.toUpperCase().equals(operator.getAlternativeSymbol())) {
+				return operator;
 			}
 		}
 		return null;

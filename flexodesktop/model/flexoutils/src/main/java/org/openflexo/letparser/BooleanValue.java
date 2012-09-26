@@ -48,11 +48,16 @@ public class BooleanValue extends Value {
 	}
 
 	@Override
+	public int hashCode() {
+		return Boolean.valueOf(_value).hashCode();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof BooleanValue) {
-			return (getBooleanValue() == ((BooleanValue) obj).getBooleanValue());
+			return getBooleanValue() == ((BooleanValue) obj).getBooleanValue();
 		}
-		return super.equals(obj);
+		return false;
 	}
 
 }

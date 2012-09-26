@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
@@ -234,8 +235,9 @@ public class FlexoLocalization {
 				logger.warning("FlexoLocalization not initialized, returning key as localized key=" + key);
 				uninitalizedLocalizationWarningDone = true;
 			}
+		} else {
+			setLocalizedForKeyAndLanguage(mainLocalizer, key, value, language);
 		}
-		setLocalizedForKeyAndLanguage(mainLocalizer, key, value, language);
 	}
 
 	/**
@@ -245,7 +247,7 @@ public class FlexoLocalization {
 	 *            , value, language
 	 * @return localized String
 	 */
-	public static void setLocalizedForKeyAndLanguage(LocalizedDelegate delegate, String key, String value, Language language) {
+	public static void setLocalizedForKeyAndLanguage(@Nonnull LocalizedDelegate delegate, String key, String value, Language language) {
 		if (delegate.handleNewEntry(key, language)) {
 			delegate.registerNewEntry(key, language, value);
 		}
@@ -433,7 +435,7 @@ public class FlexoLocalization {
 	 */
 	private static String replaceAllParamsInString(String aString, String... params) {
 		if (logger.isLoggable(Level.FINER)) {
-			logger.finer("replaceAllParamsInString() with " + aString + " and " + params);
+			logger.finer("replaceAllParamsInString() with " + aString);
 		}
 		Pattern p = Pattern.compile("\\(\\$([0-9]*)\\)");
 		Matcher m = p.matcher(aString);

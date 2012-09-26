@@ -52,6 +52,12 @@ public class CharValue extends Value {
 		if (obj instanceof CharValue) {
 			return getStringValue().equals(((CharValue) obj).getStringValue());
 		}
-		return super.equals(obj);
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return _value;
+
 	}
 }
