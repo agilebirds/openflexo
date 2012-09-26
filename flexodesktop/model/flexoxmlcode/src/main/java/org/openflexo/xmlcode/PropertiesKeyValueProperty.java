@@ -44,7 +44,7 @@ public class PropertiesKeyValueProperty extends HashtableKeyValueProperty {
 	 * @exception InvalidKeyValuePropertyException
 	 *                if an error occurs
 	 */
-	public PropertiesKeyValueProperty(Class anObjectClass, String propertyName, boolean setMethodIsMandatory)
+	public PropertiesKeyValueProperty(Class<?> anObjectClass, String propertyName, boolean setMethodIsMandatory)
 			throws InvalidKeyValuePropertyException {
 
 		super(anObjectClass, propertyName, setMethodIsMandatory);

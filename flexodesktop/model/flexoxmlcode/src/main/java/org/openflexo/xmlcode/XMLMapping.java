@@ -28,6 +28,8 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -143,12 +145,12 @@ import org.xml.sax.SAXException;
 public class XMLMapping {
 
 	/** ModelEntity objects stored in a dictionary where the key is the xml tag */
-	protected Hashtable<String, ModelEntity> modelEntitiesStoredByXMLTag;
+	protected Map<String, ModelEntity> modelEntitiesStoredByXMLTag;
 
 	/**
 	 * ModelEntity objects stored in a dictionary where the key is the class name
 	 */
-	protected Hashtable<String, ModelEntity> modelEntitiesStoredByClassName;
+	protected Map<String, ModelEntity> modelEntitiesStoredByClassName;
 
 	/** Boolean indicating if references must be handled during encoding */
 	protected boolean handlesReferences;
@@ -495,7 +497,7 @@ public class XMLMapping {
 			tempNode = entitiesNodeList.item(i);
 			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
 				if (tempNode.getNodeName().equals(XMLMapping.descriptionLabel)) {
-					if ((tempNode.getChildNodes().getLength() == 1) && (tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE)) {
+					if (tempNode.getChildNodes().getLength() == 1 && tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE) {
 						setDescription(tempNode.getFirstChild().getNodeValue());
 					}
 				} else if (tempNode.getNodeName().equals(XMLMapping.entityLabel)) {
@@ -531,9 +533,8 @@ public class XMLMapping {
 	 *            a <code>ModelEntity</code> value
 	 */
 	private void updateAndRegisterNewModelEntity(ModelEntity aModelEntity) {
-
-		for (Enumeration e = modelEntitiesStoredByClassName.elements(); e.hasMoreElements();) {
-			ModelEntity tempModelEntity = (ModelEntity) e.nextElement();
+		for (Map.Entry<String, ModelEntity> e : modelEntitiesStoredByClassName.entrySet()) {
+			ModelEntity tempModelEntity = e.getValue();
 			if (tempModelEntity.inheritsFrom(aModelEntity)) {
 				tempModelEntity.takeParentUnderAccount(aModelEntity);
 				updateEntitiesStoredByXMLTags(tempModelEntity);
@@ -547,8 +548,8 @@ public class XMLMapping {
 	}
 
 	private void updateProperties() {
-		for (Enumeration e = modelEntitiesStoredByClassName.elements(); e.hasMoreElements();) {
-			ModelEntity tempModelEntity = (ModelEntity) e.nextElement();
+		for (Map.Entry<String, ModelEntity> e : modelEntitiesStoredByClassName.entrySet()) {
+			ModelEntity tempModelEntity = e.getValue();
 			tempModelEntity.updateProperties();
 		}
 
@@ -608,8 +609,8 @@ public class XMLMapping {
 	 */
 	public ModelProperty propertyWithXMLTag(String aTagName) {
 
-		for (Enumeration e = modelEntitiesStoredByXMLTag.elements(); e.hasMoreElements();) {
-			ModelEntity tempModelEntity = (ModelEntity) e.nextElement();
+		for (Map.Entry<String, ModelEntity> e : modelEntitiesStoredByXMLTag.entrySet()) {
+			ModelEntity tempModelEntity = e.getValue();
 			ModelProperty tempModelProperty = tempModelEntity.getModelPropertyWithXMLTag(aTagName);
 			if (tempModelProperty != null) {
 				return tempModelProperty;
@@ -641,11 +642,11 @@ public class XMLMapping {
 	 *            a <code>Class</code> value
 	 * @return a <code>ModelEntity</code> value
 	 */
-	public ModelEntity entityForClass(Class aClass) {
-		Class currentClass = aClass;
+	public ModelEntity entityForClass(Class<?> aClass) {
+		Class<?> currentClass = aClass;
 		ModelEntity returned = entityWithClassName(currentClass.getName());
 
-		while ((currentClass != null) && (currentClass.getSuperclass() != null) && (returned == null)) {
+		while (currentClass != null && currentClass.getSuperclass() != null && returned == null) {
 			currentClass = currentClass.getSuperclass();
 			returned = entityWithClassName(currentClass.getName());
 		}
@@ -669,10 +670,9 @@ public class XMLMapping {
 		}
 		returnedString += " " + serializationModeLabel + "=" + '"' + serializationMode + '"';
 		returnedString += ">\n";
-		ModelEntity tempModelEntity;
 
-		for (Enumeration e = modelEntitiesStoredByClassName.elements(); e.hasMoreElements();) {
-			tempModelEntity = (ModelEntity) e.nextElement();
+		for (Map.Entry<String, ModelEntity> e : modelEntitiesStoredByClassName.entrySet()) {
+			ModelEntity tempModelEntity = e.getValue();
 			returnedString += tempModelEntity.toString();
 		}
 		returnedString += "</model>\n";
@@ -682,22 +682,9 @@ public class XMLMapping {
 	/**
 	 * Returns all <code>ModelEntity</code> objects stored in an Enumeration
 	 */
-	protected Enumeration allModelEntities() {
-
+	public Iterator<ModelEntity> allModelEntities() {
 		if (modelEntitiesStoredByXMLTag != null) {
-			return modelEntitiesStoredByXMLTag.elements();
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * Returns all <code>ModelEntity</code> objects stored in an Enumeration
-	 */
-	public Enumeration<ModelEntity> getAllModelEntities() {
-
-		if (modelEntitiesStoredByXMLTag != null) {
-			return modelEntitiesStoredByClassName.elements();
+			return modelEntitiesStoredByXMLTag.values().iterator();
 		} else {
 			return null;
 		}
@@ -708,10 +695,10 @@ public class XMLMapping {
 	 * able to maps the two old mappings.
 	 */
 	public void appendXMLMapping(XMLMapping aMapping) {
-
-		if (aMapping.allModelEntities() != null) {
-			for (Enumeration e = aMapping.allModelEntities(); e.hasMoreElements();) {
-				storesNewModelEntity((ModelEntity) e.nextElement());
+		Iterator<ModelEntity> i = aMapping.allModelEntities();
+		if (i != null) {
+			while (i.hasNext()) {
+				storesNewModelEntity(i.next());
 			}
 		}
 	}
@@ -734,7 +721,7 @@ public class XMLMapping {
 	 * Return boolean indicating if a builder class has been defined for this model
 	 */
 	public boolean hasBuilderClass() {
-		return (builderClass != null);
+		return builderClass != null;
 	}
 
 	public String getDescription() {
@@ -796,7 +783,7 @@ public class XMLMapping {
 					int entLevel = ((Integer) potentialEntities.get(ent)).intValue();
 					// System.out.println ("I have "+ent.getName()+" with level
 					// "+entLevel);
-					if ((returned == null) || (entLevel < bestLevel)) {
+					if (returned == null || entLevel < bestLevel) {
 						returned = ent;
 						bestLevel = entLevel;
 					}

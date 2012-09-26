@@ -21,6 +21,7 @@ package org.openflexo.foundation.xml;
 
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
@@ -148,9 +149,9 @@ public class TestXMLMappings extends FlexoTestCase {
 	}
 
 	protected void checkXMLMapping(XMLMapping mapping) throws Exception {
-		Enumeration<ModelEntity> en = mapping.getAllModelEntities();
-		while (en.hasMoreElements()) {
-			ModelEntity me = en.nextElement();
+		Iterator<ModelEntity> i = mapping.allModelEntities();
+		while (i.hasNext()) {
+			ModelEntity me = i.next();
 			checkModelEntity(me);
 		}
 	}
