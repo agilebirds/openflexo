@@ -33,6 +33,7 @@ import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.dm.ProcessNodeInserted;
 import org.openflexo.foundation.wkf.dm.ProcessNodeRemoved;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -300,7 +301,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 
 	public void setFileName(String newFileName) {
 		String oldFileName = getFileName();
-		if (newFileName != oldFileName) {
+		if (!StringUtils.isSame(newFileName, oldFileName)) {
 			fileName = newFileName;
 			setChanged();
 			notifyObservers(new NameChanged(oldFileName, newFileName));

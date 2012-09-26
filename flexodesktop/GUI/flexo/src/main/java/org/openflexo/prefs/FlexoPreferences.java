@@ -121,22 +121,26 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 
 	public static FlexoPreferences instance() {
 		if (_instance == null) {
-			File prefsFile = getPrefsFile();
-			if (!prefsFile.exists()) {
-				File oldFile = getOldPrefsFile();
-				if (oldFile.exists()) {
-					try {
-						FileUtils.copyFileToFile(oldFile, prefsFile);
-					} catch (IOException e) {
-						// Let's log it, but too bad, he's gonna loose his prefs.
-						e.printStackTrace();
+			synchronized (FlexoPreferences.class) {
+				if (_instance == null) {
+					File prefsFile = getPrefsFile();
+					if (!prefsFile.exists()) {
+						File oldFile = getOldPrefsFile();
+						if (oldFile.exists()) {
+							try {
+								FileUtils.copyFileToFile(oldFile, prefsFile);
+							} catch (IOException e) {
+								// Let's log it, but too bad, he's gonna loose his prefs.
+								e.printStackTrace();
+							}
+						}
+					}
+					_instance = new FlexoPreferences(prefsFile);
+					FlexoLocalization.setCurrentLanguage(GeneralPreferences.getLanguage());
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Preferences have been loaded");
 					}
 				}
-			}
-			_instance = new FlexoPreferences(prefsFile);
-			FlexoLocalization.setCurrentLanguage(GeneralPreferences.getLanguage());
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Preferences have been loaded");
 			}
 		}
 		return _instance;

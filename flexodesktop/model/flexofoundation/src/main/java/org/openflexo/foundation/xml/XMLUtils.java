@@ -80,8 +80,7 @@ public class XMLUtils {
 	}
 
 	public static boolean saveXMLFile(Document document, File aFile) {
-		convertDOMToJDOM(document);
-		return saveXMLFile(document, aFile);
+		return saveXMLFile(convertDOMToJDOM(document), aFile);
 	}
 
 	public static boolean saveXMLFile(org.jdom2.Document document, File aFile) {

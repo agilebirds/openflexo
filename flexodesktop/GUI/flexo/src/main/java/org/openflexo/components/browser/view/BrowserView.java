@@ -444,7 +444,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			return;
 		}
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("BrowserView.objectAddedToSelection() " + event.getAddedObject() + " paths=" + paths);
+			logger.fine("BrowserView.objectAddedToSelection() " + event.getAddedObject());
 		}
 		superviseExpansion = true;
 		expansionSupervisedElements = new Vector<BrowserElement>();
@@ -473,7 +473,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				return;
 			}
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("BrowserView.objectRemovedFromSelection() " + event.getRemovedObject() + " paths=" + paths);
+				logger.fine("BrowserView.objectRemovedFromSelection() " + event.getRemovedObject());
 			}
 			treeView.removeTreeSelectionListener(this);
 			treeView.removeSelectionPaths(paths);
@@ -888,7 +888,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				pt.x -= offset.x;
 				pt.y -= offset.y;
 			}
-			if (rect2D != null && rect2D.getLocation().equals(pt)) {
+			if (rect2D.getLocation().equals(pt)) {
 				return;
 			}
 			paintImmediately(rect2D.getBounds());

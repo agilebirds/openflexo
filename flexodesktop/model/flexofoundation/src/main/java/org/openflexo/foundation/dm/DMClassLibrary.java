@@ -92,7 +92,7 @@ public class DMClassLibrary extends ClassLibrary {
 			}
 		}
 		if (_unresolvedClassName.contains(entity.getFullQualifiedName())) {
-			_unresolvedClassName.remove(_unresolvedClassName);
+			_unresolvedClassName.remove(entity.getFullQualifiedName());
 		}
 	}
 

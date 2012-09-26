@@ -670,7 +670,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public void declareDependantOf(FIBComponent aComponent) throws DependencyLoopException {
 		// logger.info("Component "+this+" depends of "+aComponent);
 		if (aComponent == this) {
-			logger.warning("Forbidden reflexive dependancies");
+			logger.warning("Forbidden reflexive dependencies");
 			return;
 		}
 		// Look if this dependancy may cause a loop in dependancies
@@ -679,7 +679,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			dependancies.add(aComponent);
 			searchLoopInDependenciesWith(aComponent, dependancies);
 		} catch (DependencyLoopException e) {
-			logger.warning("Forbidden loop in dependancies: " + e.getMessage());
+			logger.warning("Forbidden loop in dependencies: " + e.getMessage());
 			throw e;
 		}
 

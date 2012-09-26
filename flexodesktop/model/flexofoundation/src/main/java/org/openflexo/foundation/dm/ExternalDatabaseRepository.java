@@ -73,7 +73,6 @@ public class ExternalDatabaseRepository extends DMEORepository {
 	 * @return
 	 */
 	public static ExternalDatabaseRepository createNewExternalDatabaseRepository(DMModel dmModel, String repositoryName) {
-		Vector eoModelFiles = new Vector();
 		ExternalDatabaseRepository newExternalDatabaseRepository = new ExternalDatabaseRepository(dmModel);
 		newExternalDatabaseRepository.setName(repositoryName);
 		dmModel.addToExternalDatabaseRepositories(newExternalDatabaseRepository);

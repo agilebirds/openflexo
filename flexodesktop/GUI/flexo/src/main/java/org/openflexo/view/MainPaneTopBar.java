@@ -3,11 +3,13 @@ package org.openflexo.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,7 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.CubicCurve2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -88,23 +92,21 @@ public class MainPaneTopBar extends JMenuBar {
 			super(text, icon);
 			setEnabled(true);
 			setFocusable(false);
-			setContentAreaFilled(false);
 			setBorderPainted(ToolBox.getPLATFORM() != ToolBox.MACOS);
 			setRolloverEnabled(true);
+			setContentAreaFilled(false);
 			setOpaque(false);
 			addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					if (isEnabled()) {
 						setContentAreaFilled(true);
-						setOpaque(true);
 					}
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					setContentAreaFilled(false);
-					setOpaque(false);
 				}
 			});
 		}
@@ -119,14 +121,15 @@ public class MainPaneTopBar extends JMenuBar {
 
 		@Override
 		public void setContentAreaFilled(boolean b) {
-			super.setContentAreaFilled(b || isSelected());
+			b |= isSelected();
+			super.setContentAreaFilled(b);
+			setOpaque(b);
 		}
 
 		@Override
 		public void setSelected(boolean b) {
 			super.setSelected(b);
-			setContentAreaFilled(false);
-			setOpaque(true);
+			setContentAreaFilled(b);
 		}
 
 	}
@@ -135,13 +138,91 @@ public class MainPaneTopBar extends JMenuBar {
 
 		private Map<ModuleView<?>, ViewTabHeader> tabHeaders = new HashMap<ModuleView<?>, MainPaneTopBar.ViewTabHeader>();
 
+		private List<ViewTabHeader> headers = new ArrayList<MainPaneTopBar.ViewTabHeader>();
+
 		public TabHeaderContainer() {
 			registrationManager.new PropertyChangeListenerRegistration(FlexoController.MODULE_VIEWS, this, controller);
 			registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_OBJECT, this, model);
 			registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_PERPSECTIVE, this, model);
-			setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0) {
+			setLayout(new LayoutManager() {
 
+				@Override
+				public Dimension preferredLayoutSize(Container parent) {
+					synchronized (parent.getTreeLock()) {
+						Dimension dim = new Dimension(0, 0);
+						int nmembers = parent.getComponentCount();
+						for (int i = 0; i < nmembers; i++) {
+							Component m = parent.getComponent(i);
+							if (m.isVisible()) {
+								Dimension d = m.getPreferredSize();
+								dim.height = Math.max(dim.height, d.height);
+								dim.width += d.width;
+
+							}
+						}
+						Insets insets = parent.getInsets();
+						dim.width += insets.left + insets.right;
+						dim.height += insets.top + insets.bottom;
+						return dim;
+					}
+				}
+
+				@Override
+				public Dimension minimumLayoutSize(Container parent) {
+					return new Dimension(0, 0);
+				}
+
+				@Override
+				public void layoutContainer(Container target) {
+					synchronized (target.getTreeLock()) {
+						Insets insets = target.getInsets();
+						int maxwidth = target.getWidth() - (insets.left + insets.right);
+						int nmembers = target.getComponentCount();
+						int x = 0, y = insets.top;
+						int rowh = 0, start = 0;
+
+						boolean ltr = target.getComponentOrientation().isLeftToRight();
+
+						for (int i = 0; i < nmembers; i++) {
+							Component m = target.getComponent(i);
+							if (m.isVisible()) {
+								/*Dimension d = m.getPreferredSize();
+								m.setSize(d.width, d.height);
+								if (x == 0 || x + d.width <= maxwidth) {
+									x += d.width;
+									rowh = Math.max(rowh, d.height);
+								} else {
+									rowh = moveComponents(target, insets.left + hgap, y, maxwidth - x, rowh, start, i, ltr, useBaseline,
+											ascent, descent);
+									x = d.width;
+									y += vgap + rowh;
+									rowh = d.height;
+									start = i;
+								}*/
+							}
+						}
+						/*moveComponents(target, insets.left + hgap, y, maxwidth - x, rowh, start, nmembers, ltr, useBaseline, ascent,
+								descent);*/
+					}
+				}
+
+				@Override
+				public void addLayoutComponent(String name, Component comp) {
+
+				}
+
+				@Override
+				public void removeLayoutComponent(Component comp) {
+
+				}
 			});
+		}
+
+		@Override
+		public void remove(int index) {
+			Component c = getComponent(index);
+			headers.remove(c);
+			super.remove(index);
 		}
 
 		@Override
@@ -159,7 +240,10 @@ public class MainPaneTopBar extends JMenuBar {
 				}
 			} else if (evt.getSource() == model) {
 				if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
+					ModuleView<?> view = controller.moduleViewForObject(model.getCurrentObject());
+					if (view != null) {
 
+					}
 				}
 			}
 		}
@@ -240,7 +324,9 @@ public class MainPaneTopBar extends JMenuBar {
 		}
 
 		public void delete() {
-			getParent().remove(this);
+			JComponent parent = (JComponent) getParent();
+			parent.remove(this);
+			parent.revalidate();
 			registrationManager.removeListener(FlexoModelObject.DELETED_PROPERTY, this, object);
 		}
 	}
@@ -370,6 +456,7 @@ public class MainPaneTopBar extends JMenuBar {
 
 	private void initPerspectives() {
 		right.add(perspectives = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)), 0);
+		perspectives.setOpaque(false);
 		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.PERSPECTIVES, new PropertyChangeListener() {
 
 			@Override
@@ -490,13 +577,11 @@ public class MainPaneTopBar extends JMenuBar {
 	}
 
 	public void setLeftViewToggle(boolean visible) {
-		leftViewToggle.setVisible(visible);
-		left.revalidate();
+		leftViewToggle.setEnabled(visible);
 	}
 
 	public void setRightViewToggle(boolean visible) {
-		rightViewToggle.setVisible(visible);
-		right.revalidate();
+		rightViewToggle.setEnabled(visible);
 	}
 
 }

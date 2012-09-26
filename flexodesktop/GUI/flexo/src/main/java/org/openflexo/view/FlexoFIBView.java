@@ -255,6 +255,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 		FlexoEditor editor = null;
 		try {
 			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
+			editor.getProject().setResourceCenter(getFlexoResourceCenterService().getFlexoResourceCenter());
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -262,7 +263,6 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		editor.getProject().setResourceCenter(getFlexoResourceCenterService().getFlexoResourceCenter());
 		if (editor == null) {
 			System.exit(-1);
 		}

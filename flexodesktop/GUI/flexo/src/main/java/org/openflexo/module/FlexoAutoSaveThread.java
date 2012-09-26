@@ -394,7 +394,7 @@ public class FlexoAutoSaveThread extends Thread {
 
 		public String minutes() {
 			long offset = System.currentTimeMillis() - creationDate.getTime();
-			return String.valueOf(Math.round(offset / (60 * 1000)));
+			return String.valueOf(Math.round((float) offset / (60 * 1000)));
 		}
 
 		public String minutesOverHours() {
@@ -404,7 +404,7 @@ public class FlexoAutoSaveThread extends Thread {
 
 		public String hours() {
 			long offset = System.currentTimeMillis() - creationDate.getTime();
-			return String.valueOf(Math.round(offset / (60 * 60 * 1000)));
+			return String.valueOf(Math.round((float) offset / (60 * 60 * 1000)));
 		}
 
 		/**

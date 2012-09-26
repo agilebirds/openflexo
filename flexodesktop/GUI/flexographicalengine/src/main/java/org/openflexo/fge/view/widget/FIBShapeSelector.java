@@ -20,7 +20,6 @@
 package org.openflexo.fge.view.widget;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeSupport;
 import java.util.logging.Level;
@@ -63,9 +62,6 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	static final Logger logger = Logger.getLogger(FIBShapeSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ShapeSelectorPanel.fib");
-
-	private static final Color DEFAULT_COLOR1 = Color.RED;
-	private static final Color DEFAULT_COLOR2 = Color.WHITE;
 
 	private Shape _revertValue;
 
@@ -179,7 +175,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 		public void setShape(Shape shape) {
 			Shape oldShape = this.shape;
 			this.shape = shape;
-			pcSupport.firePropertyChange("shape", shape, shape);
+			pcSupport.firePropertyChange("shape", oldShape, shape);
 		}
 
 		public ShapeType getShapeType() {
@@ -270,7 +266,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 	public class ShapeDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView fibView;
+		private FIBView<FIBComponent, ?> fibView;
 		private CustomFIBController controller;
 		private ShapeFactory shapeFactory;
 
@@ -329,9 +325,9 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 				getFrontComponent().setShape(shapeFactory.getShape());
 				// getFrontComponent().update();
 
-				FIBView previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
+				FIBView<?, ?> previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
 				if (previewComponent instanceof FIBCustomWidget) {
-					JComponent customComponent = ((FIBCustomWidget) previewComponent).getJComponent();
+					JComponent customComponent = ((FIBCustomWidget<?, ?>) previewComponent).getJComponent();
 					if (customComponent instanceof ShapePreviewPanel) {
 						((ShapePreviewPanel) customComponent).setShape(shapeFactory.getShape());
 						// ((ShapePreviewPanel) customComponent).update();

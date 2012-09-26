@@ -91,8 +91,8 @@ public class NewProjectComponent extends ProjectChooserComponent {
 	 * @return
 	 */
 	public static boolean isValidProjectName(String fileName) {
-		String trimmed = fileName.trim();
-		boolean notEmpty = fileName != null && trimmed.length() > 0;
+		String trimmed = fileName != null ? fileName.trim() : "";
+		boolean notEmpty = trimmed.length() > 0;
 		if (!notEmpty) {
 			return false;
 		}

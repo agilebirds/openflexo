@@ -740,7 +740,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 									+ " : " + getUnresolvedTypes() + "</font></html>");
 						}
 						DMMethod.this.setChanged();
-						DMMethod.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("code", null, getCode()));
+						DMMethod.this
+								.notifyObserversAsReentrantModification(new DMAttributeDataModification("code", null, super.getCode()));
 					} catch (DuplicateMethodSignatureException e) {
 						setHasParseErrors(true);
 						setParseErrorWarning("<html><font color=\"red\">"

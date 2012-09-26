@@ -194,12 +194,8 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		if (arg1 instanceof PreferencesHaveChanged) {
 			// Nothing special for now
 		}
-
 		_preferencesWindow.setTabPanel(getInspectorTabPanel());
-
-		if (_preferencesWindow != null) {
-			_preferencesWindow.enableSaveAndRevertButtons();
-		}
+		_preferencesWindow.enableSaveAndRevertButtons();
 	}
 
 	public void update() {

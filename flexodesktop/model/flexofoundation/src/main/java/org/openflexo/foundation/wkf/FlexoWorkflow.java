@@ -93,6 +93,7 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 
@@ -306,7 +307,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public void setWorkflowName(String newName) {
-		if (newName != _workflowName) {
+		if (!StringUtils.isSame(newName, _workflowName)) {
 			String _oldName = _workflowName;
 			_workflowName = newName;
 			setChanged();

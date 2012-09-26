@@ -47,6 +47,7 @@ public class ImageUtils {
 		BufferedImage bi = new BufferedImage(componentToPrint.getWidth(), componentToPrint.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = bi.createGraphics();
 		componentToPrint.print(graphics);
+		graphics.dispose();
 		return bi;
 	}
 

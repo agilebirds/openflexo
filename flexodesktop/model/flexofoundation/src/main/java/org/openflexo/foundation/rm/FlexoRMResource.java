@@ -557,8 +557,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			Iterator tableElementIterator = document.getDescendants(new ElementFilter("TextFileResource"));
 			while (tableElementIterator.hasNext()) {
 				Element el = (Element) tableElementIterator.next();
-				if (el.getAttribute("genericTypingClassName") != null
-						&& el.getAttribute("genericTypingClassName").equals("org.openflexo.generator.rm.PListFileResource")) {
+				if (el.getAttribute("genericTypingClassName") != null && el.getAttribute("genericTypingClassName").getValue() != null
+						&& el.getAttribute("genericTypingClassName").getValue().equals("org.openflexo.generator.rm.PListFileResource")) {
 					el.setAttribute("genericTypingClassName", "org.openflexo.generator.rm.EOEntityPListFileResource");
 				}
 			}

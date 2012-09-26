@@ -133,7 +133,7 @@ public class HelpMenu extends FlexoMenu implements Observer {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					AboutDialog about = new AboutDialog();
+					new AboutDialog();
 				}
 
 			});

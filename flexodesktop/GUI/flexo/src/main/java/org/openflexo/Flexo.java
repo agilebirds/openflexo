@@ -96,6 +96,8 @@ public class Flexo {
 
 	private static String fileNameToOpen;
 
+	private static boolean demoMode = false;
+
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 
@@ -181,7 +183,7 @@ public class Flexo {
 				} else if (args[i].equalsIgnoreCase("DEV")) {
 					isDev = true;
 				} else if (args[i].equalsIgnoreCase("demo")) {
-
+					demoMode = true;
 				}
 			}
 		}

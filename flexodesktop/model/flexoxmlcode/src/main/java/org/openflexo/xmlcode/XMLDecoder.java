@@ -1020,11 +1020,11 @@ public class XMLDecoder {
 
 					// TODO: Throw here an error in future release but for backward compatibility we leave it for now.
 					Element idRefElement = findElementWithId(node.getDocument(), idrefAttribute.getValue());
-					if (xmlMapping.entityWithXMLTag(idRefElement.getName()) != modelEntity) {
-						System.err.println("SEVERE: Found a referencing object with a non-corresponding entity tag '"
-								+ idRefElement.getName() + "' than the referred object" + node.getName());
-					}
 					if (idRefElement != null) {
+						if (xmlMapping.entityWithXMLTag(idRefElement.getName()) != modelEntity) {
+							System.err.println("SEVERE: Found a referencing object with a non-corresponding entity tag '"
+									+ idRefElement.getName() + "' than the referred object" + node.getName());
+						}
 						return buildObjectFromNodeAndModelEntity(idRefElement, modelEntity);
 					}
 					throw new InvalidXMLDataException("No reference to object with identifier " + reference);

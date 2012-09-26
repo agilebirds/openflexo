@@ -368,7 +368,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 			return;
 		}
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("BrowserView.objectAddedToSelection() " + event.getAddedObject() + " paths=" + paths);
+			logger.fine("BrowserView.objectAddedToSelection() " + event.getAddedObject());
 		}
 		superviseExpansion = true;
 		expansionSupervisedElements = new Vector();
@@ -398,7 +398,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 				return;
 			}
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("BrowserView.objectRemovedFromSelection() " + event.getRemovedObject() + " paths=" + paths);
+				logger.fine("BrowserView.objectRemovedFromSelection() " + event.getRemovedObject());
 			}
 			tree.removeTreeSelectionListener(this);
 			tree.removeSelectionPaths(paths);

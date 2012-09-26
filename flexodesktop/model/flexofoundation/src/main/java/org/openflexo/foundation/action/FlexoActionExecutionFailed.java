@@ -35,6 +35,7 @@ public class FlexoActionExecutionFailed extends FlexoException {
 	 */
 	public FlexoActionExecutionFailed(FlexoAction action) {
 		super();
+		this.failedAction = action;
 	}
 
 	/**

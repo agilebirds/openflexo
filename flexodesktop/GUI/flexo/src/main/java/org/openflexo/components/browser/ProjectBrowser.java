@@ -151,17 +151,17 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	@Deprecated
 	protected ProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager, boolean initNow) {
 		super(null);
-		if (configuration != null) {
-			_project = configuration.getProject();
-			_browserElementFactory = configuration.getBrowserElementFactory();
-		}
 		_filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
 		_filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
 		_filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
 		// _elementTypeFilters = new Vector<ElementTypeBrowserFilter>();
 		_browserListeners = new Vector<ProjectBrowserListener>();
 		_customFilters = new Vector<CustomBrowserFilter>();
-		configuration.configure(this);
+		if (configuration != null) {
+			_project = configuration.getProject();
+			_browserElementFactory = configuration.getBrowserElementFactory();
+			configuration.configure(this);
+		}
 		if (selectionManager != null) {
 			_selectionManager = selectionManager;
 			_selectionManager.addToSelectionListeners(this);
