@@ -182,9 +182,9 @@ public class TestRoundTrip extends CGTestCase {
 
 		logger.info("Resources are WELL created and DEPENDANCIES checked");
 
-		for (FlexoResource resource : _project.getResources().values()) {
+		for (FlexoResource<?> resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource) resource);
+				assertNotModified((FlexoStorageResource<?>) resource);
 			}
 		}
 
