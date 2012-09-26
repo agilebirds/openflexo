@@ -96,7 +96,7 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return attributeUses.get(declaration);
 	}
 
-	private void register(XSDeclaration decl) {
+	private boolean register(XSDeclaration decl) {
 		if (decl.isLocal()) {
 			localOwners.put(decl, path.lastElement());
 		}
@@ -105,8 +105,10 @@ public class XSDeclarationsFetcher implements XSVisitor {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Duplicate URI " + uri);
 			}
+			return false;
 		} else {
 			declarations.put(uri, decl);
+			return true;
 		}
 	}
 
@@ -170,7 +172,9 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void simpleType(XSSimpleType simpleType) {
 		if (simpleType.isGlobal()) {
-			register(simpleType);
+			if (register(simpleType) == false) {
+				return;
+			}
 			simpleTypes.add(simpleType);
 		}
 	}
@@ -178,7 +182,9 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void complexType(XSComplexType complexType) {
 		if (complexType.isGlobal()) {
-			register(complexType);
+			if (register(complexType) == false) {
+				return;
+			}
 			complexTypes.add(complexType);
 			path.push(complexType);
 		}
@@ -210,14 +216,18 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void attributeDecl(XSAttributeDecl attributeDecl) {
 		// Careful, it can be local and not have a name
-		register(attributeDecl);
+		if (register(attributeDecl) == false) {
+			return;
+		}
 		attributeDecls.add(attributeDecl);
 	}
 
 	@Override
 	public void attGroupDecl(XSAttGroupDecl attGroupDecl) {
 		if (attGroupDecl.isGlobal()) {
-			register(attGroupDecl);
+			if (register(attGroupDecl) == false) {
+				return;
+			}
 			attGroupDecls.add(attGroupDecl);
 			path.push(attGroupDecl);
 		}
@@ -232,7 +242,9 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void modelGroupDecl(XSModelGroupDecl modelGroupDecl) {
 		if (modelGroupDecl.isGlobal()) {
-			register(modelGroupDecl);
+			if (register(modelGroupDecl) == false) {
+				return;
+			}
 			modelGroupDecls.add(modelGroupDecl);
 			path.push(modelGroupDecl);
 		}
@@ -254,7 +266,9 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void elementDecl(XSElementDecl elementDecl) {
 		// TODO Make sure there is no need to test if global first
-		register(elementDecl);
+		if (register(elementDecl) == false) {
+			return;
+		}
 		elementDecls.add(elementDecl);
 		path.push(elementDecl);
 
