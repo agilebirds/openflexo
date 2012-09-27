@@ -33,7 +33,6 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.modelslot.ModelSlot;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -56,8 +55,6 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	private FlexoOEShemaResource _resource;
 	private ViewDefinition _viewDefinition;
 	private ViewPoint _viewpoint;
-
-	private Map<ModelSlot<?>, ProjectOntology> models;
 
 	/**
 	 * Constructor invoked during deserialization
@@ -298,6 +295,14 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return "View[name=" + getName() + "/viewpoint=" + getCalc().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
 	}
 
+	public void createMissingRequiredModels() {
+		for (ModelSlot<?> modelSlot : getViewPoint().getModelSlots()) {
+			if (modelSlot.getIsRequired() && getProject().hasModel(modelSlot) == false) {
+				getProject().createModel(modelSlot);
+			}
+		}
+	}
+
 	// ==========================================================================
 	// ================================= Delete ===============================
 	// ==========================================================================
@@ -325,46 +330,6 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		setChanged();
 		notifyObservers(new ShemaDeleted(this.getShemaDefinition()));
 		deleteObservers();
-	}
-
-	public boolean hasModel(ModelSlot<?> modelSlot) {
-		return models.containsKey(modelSlot);
-	}
-
-	public ProjectOntology getModel(ModelSlot<?> modelSlot, boolean createIfDoesNotExist) {
-		if (hasModel(modelSlot) == false) {
-			if (createIfDoesNotExist == false) {
-				return null;
-			}
-			createModel(modelSlot);
-		}
-		return models.get(modelSlot);
-	}
-
-	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
-		return getModel(modelSlot, true);
-	}
-
-	public void setModel(ModelSlot<?> modelSlot, ProjectOntology ontology) {
-		models.put(modelSlot, ontology);
-	}
-
-	public void createModel(ModelSlot<?> modelSlot) {
-		if (hasModel(modelSlot)) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Model slot " + modelSlot.getName() + " already has a model");
-			}
-		} else {
-			setModel(modelSlot, (ProjectOntology) modelSlot.createEmptyModel());
-		}
-	}
-
-	public void createMissingRequiredModels() {
-		for (ModelSlot<?> modelSlot : getViewPoint().getModelSlots()) {
-			if (modelSlot.getIsRequired() && hasModel(modelSlot) == false) {
-				createModel(modelSlot);
-			}
-		}
 	}
 
 }

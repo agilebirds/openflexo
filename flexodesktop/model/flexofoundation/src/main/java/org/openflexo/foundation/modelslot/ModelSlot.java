@@ -41,5 +41,4 @@ public interface ModelSlot<Ontology extends FlexoOntology> {
 	 * @return an ontology
 	 */
 	public Ontology createEmptyModel();
-
 }

@@ -119,6 +119,7 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
+import org.openflexo.foundation.modelslot.ModelSlot;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
@@ -225,6 +226,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoResourceCenter resourceCenter;
 
 	private FlexoObjectIDManager objectIDManager;
+
+	private Map<ModelSlot<?>, ProjectOntology> models;
 
 	/**
 	 * These variable are here to replace old static references.
@@ -4282,6 +4285,38 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			return null;
 		} else {
 			return getProjectData().canImportProject(project);
+		}
+	}
+
+	public boolean hasModel(ModelSlot<?> modelSlot) {
+		return models.containsKey(modelSlot);
+	}
+
+	public ProjectOntology getModel(ModelSlot<?> modelSlot, boolean createIfDoesNotExist) {
+		if (hasModel(modelSlot) == false) {
+			if (createIfDoesNotExist == false) {
+				return null;
+			}
+			createModel(modelSlot);
+		}
+		return models.get(modelSlot);
+	}
+
+	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
+		return getModel(modelSlot, true);
+	}
+
+	public void setModel(ModelSlot<?> modelSlot, ProjectOntology ontology) {
+		models.put(modelSlot, ontology);
+	}
+
+	public void createModel(ModelSlot<?> modelSlot) {
+		if (hasModel(modelSlot)) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Model slot " + modelSlot.getName() + " already has a model");
+			}
+		} else {
+			setModel(modelSlot, (ProjectOntology) modelSlot.createEmptyModel());
 		}
 	}
 

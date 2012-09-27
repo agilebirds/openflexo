@@ -80,5 +80,4 @@ public class ModelSlotParameters extends AbstractModelSlot<FlexoOntology> {
 		}
 		return newModelSlot;
 	}
-
 }
