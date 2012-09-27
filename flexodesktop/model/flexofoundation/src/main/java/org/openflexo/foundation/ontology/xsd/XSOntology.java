@@ -210,19 +210,23 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		return result;
 	}
 
+	private void addDomainIfPossible(XSOntProperty property, String conceptUri) {
+		String ownerUri = fetcher.getOwnerUri(conceptUri);
+		if (ownerUri != null) {
+			XSOntClass owner = getClass(ownerUri);
+			if (owner != null) {
+				property.newDomainFound(owner);
+				owner.addPropertyTakingMyselfAsDomain(property);
+			}
+		}
+	}
+
 	private XSOntDataProperty loadDataProperty(XSDeclaration declaration) {
 		String name = declaration.getName();
 		String uri = fetcher.getUri(declaration);
 		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri);
 		dataProperties.put(uri, xsDataProperty);
-		String ownerUri = fetcher.getOwnerUri(xsDataProperty.getURI());
-		if (ownerUri != null) {
-			XSOntClass owner = getClass(ownerUri);
-			if (owner != null) {
-				xsDataProperty.newDomainFound(owner);
-				owner.addPropertyTakingMyselfAsDomain(xsDataProperty);
-			}
-		}
+		addDomainIfPossible(xsDataProperty, uri);
 		return xsDataProperty;
 	}
 
@@ -274,14 +278,24 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		}
 
 		for (XSComplexType complexType : fetcher.getComplexTypes()) {
-			loadPrefixedProperty(complexType, hasChild);
-			loadPrefixedProperty(complexType, hasParent);
+			XSOntClass c = getClass(fetcher.getUri(complexType));
+			XSOntObjectProperty cHasChild = loadPrefixedProperty(complexType, hasChild);
+			cHasChild.newRangeFound(c);
+			addDomainIfPossible(cHasChild, c.getURI());
+			XSOntObjectProperty cHasParent = loadPrefixedProperty(complexType, hasParent);
+			cHasParent.newRangeFound(c);
+			addDomainIfPossible(cHasParent, c.getURI());
 		}
 
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
-				loadPrefixedProperty(element, hasChild);
-				loadPrefixedProperty(element, hasParent);
+				XSOntClass c = getClass(fetcher.getUri(element));
+				XSOntObjectProperty cHasChild = loadPrefixedProperty(element, hasChild);
+				cHasChild.newRangeFound(c);
+				addDomainIfPossible(cHasChild, c.getURI());
+				XSOntObjectProperty cHasParent = loadPrefixedProperty(element, hasParent);
+				cHasParent.newRangeFound(c);
+				addDomainIfPossible(cHasParent, c.getURI());
 			}
 		}
 	}
