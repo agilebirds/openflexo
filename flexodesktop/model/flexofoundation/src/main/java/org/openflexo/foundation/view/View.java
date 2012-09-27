@@ -327,19 +327,42 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		deleteObservers();
 	}
 
-	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
+	public boolean hasModel(ModelSlot<?> modelSlot) {
+		return models.containsKey(modelSlot);
+	}
+
+	public ProjectOntology getModel(ModelSlot<?> modelSlot, boolean createIfDoesNotExist) {
+		if (hasModel(modelSlot) == false) {
+			if (createIfDoesNotExist == false) {
+				return null;
+			}
+			createModel(modelSlot);
+		}
 		return models.get(modelSlot);
+	}
+
+	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
+		return getModel(modelSlot, true);
 	}
 
 	public void setModel(ModelSlot<?> modelSlot, ProjectOntology ontology) {
 		models.put(modelSlot, ontology);
 	}
 
-	public void initModels() {
-		models.clear();
+	public void createModel(ModelSlot<?> modelSlot) {
+		if (hasModel(modelSlot)) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Model slot " + modelSlot.getName() + " already has a model");
+			}
+		} else {
+			setModel(modelSlot, (ProjectOntology) modelSlot.createEmptyModel());
+		}
+	}
+
+	public void createMissingRequiredModels() {
 		for (ModelSlot<?> modelSlot : getViewPoint().getModelSlots()) {
-			if (modelSlot.getIsRequired()) {
-				models.put(modelSlot, (ProjectOntology) modelSlot.createEmptyModel());
+			if (modelSlot.getIsRequired() && hasModel(modelSlot) == false) {
+				createModel(modelSlot);
 			}
 		}
 	}
