@@ -61,12 +61,12 @@ public class XSDeclarationsFetcher implements XSVisitor {
 				}
 			}
 		}
-		log_uris();
+		logUris();
 	}
 
 	public void fetch(XSSchema schema) {
 		schema.visit(this);
-		log_uris();
+		logUris();
 	}
 
 	public XSDeclaration getDeclaration(String uri) {
@@ -80,6 +80,15 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return null;
 	}
 
+	public String getOwnerUri(String uri) {
+		XSDeclaration declaration = getDeclaration(uri);
+		XSDeclaration declOwner = getOwner(declaration);
+		if (declOwner != null) {
+			return getUri(declOwner);
+		}
+		return null;
+	}
+
 	public String getNamespace(XSDeclaration declaration) {
 		if (declaration.isLocal()) {
 			XSDeclaration owner = getOwner(declaration);
@@ -88,7 +97,7 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return declaration.getTargetNamespace();
 	}
 
-	public String getURI(XSDeclaration declaration) {
+	public String getUri(XSDeclaration declaration) {
 		return getNamespace(declaration) + "#" + declaration.getName();
 	}
 
@@ -100,7 +109,7 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		if (decl.isLocal()) {
 			localOwners.put(decl, path.lastElement());
 		}
-		String uri = getURI(decl);
+		String uri = getUri(decl);
 		if (declarations.containsKey(uri)) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Duplicate URI " + uri);
@@ -112,7 +121,7 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		}
 	}
 
-	public void log_uris() {
+	public void logUris() {
 		if (logger.isLoggable(Level.INFO)) {
 			StringBuffer buffer = new StringBuffer("Registered URIs:\n");
 			for (String uri : declarations.keySet()) {

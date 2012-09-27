@@ -26,17 +26,17 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	private String uri;
 	private String name;
 	private XSOntology ontology;
-	
+
 	private final Set<XSOntProperty> propertiesTakingMySelfAsRange;
 	private final Set<XSOntProperty> propertiesTakingMySelfAsDomain;
 
 	protected AbstractXSOntObject() {
 		super();
-		
+
 		propertiesTakingMySelfAsRange = new HashSet<XSOntProperty>();
 		propertiesTakingMySelfAsDomain = new HashSet<XSOntProperty>();
 	}
-	
+
 	protected AbstractXSOntObject(XSOntology ontology, String name, String uri) {
 		this();
 		this.name = name;
@@ -115,6 +115,11 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	}
 
 	@Override
+	public XSOntology getOntology() {
+		return ontology;
+	}
+
+	@Override
 	public OntologyLibrary getOntologyLibrary() {
 		if (isOntology() == false) {
 			return getOntology().getOntologyLibrary();
@@ -159,15 +164,15 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 		propertiesTakingMySelfAsRange.clear();
 		propertiesTakingMySelfAsDomain.clear();
 	}
-	
+
 	public void addPropertyTakingMyselfAsRange(XSOntProperty property) {
 		propertiesTakingMySelfAsRange.add(property);
 	}
-	
+
 	public void addPropertyTakingMyselfAsDomain(XSOntProperty property) {
 		propertiesTakingMySelfAsDomain.add(property);
 	}
-	
+
 	@Override
 	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsRange() {
 		return propertiesTakingMySelfAsRange;
@@ -181,12 +186,6 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 
 	@Override
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
 		// TODO Auto-generated method stub
 
 	}

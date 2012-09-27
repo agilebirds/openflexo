@@ -8,8 +8,12 @@ public abstract class XSOntProperty extends AbstractXSOntObject implements Ontol
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntProperty.class.getPackage()
 			.getName());
 
+	private AbstractXSOntObject domain;
+	private boolean noDomainFoundYet = true;
+
 	protected XSOntProperty(XSOntology ontology, String name, String uri) {
 		super(ontology, name, uri);
+		domain = ontology.getThingConcept();
 	}
 
 	@Override
@@ -19,8 +23,16 @@ public abstract class XSOntProperty extends AbstractXSOntObject implements Ontol
 
 	@Override
 	public OntologyObject getDomain() {
-		// TODO Ask Sylvain
-		return null;
+		return domain;
+	}
+
+	public void newDomainFound(AbstractXSOntObject domain) {
+		if (noDomainFoundYet) {
+			this.domain = domain;
+			noDomainFoundYet = true;
+		} else {
+			this.domain = getOntology().getThingConcept();
+		}
 	}
 
 }

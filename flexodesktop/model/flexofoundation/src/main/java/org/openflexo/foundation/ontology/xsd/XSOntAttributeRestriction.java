@@ -11,7 +11,7 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 
 	protected XSOntAttributeRestriction(XSOntology ontology, XSAttributeUse attributeUse) {
 		super(ontology);
-		String propertyURI = ontology.getFetcher().getURI(attributeUse.getDecl());
+		String propertyURI = ontology.getFetcher().getUri(attributeUse.getDecl());
 		this.attributeProperty = ontology.getDataProperty(propertyURI);
 		this.attributeUse = attributeUse;
 	}
