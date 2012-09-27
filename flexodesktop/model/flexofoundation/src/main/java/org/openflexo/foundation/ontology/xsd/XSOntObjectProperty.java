@@ -10,26 +10,57 @@ import org.openflexo.foundation.ontology.OntologyObjectProperty;
 
 public class XSOntObjectProperty extends XSOntProperty implements OntologyObjectProperty {
 
+	private AbstractXSOntObject range;
+	private boolean noRangeFoundYet = true;
+
+	private List<XSOntObjectProperty> superProperties;
+
+	protected XSOntObjectProperty(XSOntology ontology, String name, String uri) {
+		super(ontology, name, uri);
+		range = ontology.getThingConcept();
+		superProperties = new ArrayList<XSOntObjectProperty>();
+	}
+
 	protected XSOntObjectProperty(XSOntology ontology, String name) {
-		super(ontology, name, XS_ONTOLOGY_URI + "#" + name);
+		this(ontology, name, XS_ONTOLOGY_URI + "#" + name);
+	}
+
+	public void addSuperProperty(XSOntObjectProperty parent) {
+		superProperties.add(parent);
+	}
+
+	public void clearSuperProperties() {
+		superProperties.clear();
 	}
 
 	@Override
 	public List<XSOntObjectProperty> getSuperProperties() {
-		// TODO if element specific properties are added
-		return new ArrayList<XSOntObjectProperty>();
+		return superProperties;
 	}
 
 	@Override
 	public List<XSOntObjectProperty> getSubProperties(FlexoOntology context) {
-		// TODO if element specific properties are added
+		// TODO
 		return new ArrayList<XSOntObjectProperty>();
 	}
 
 	@Override
 	public OntologyObject getRange() {
-		// TODO Auto-generated method stub
-		return null;
+		return range;
+	}
+
+	public void newRangeFound(AbstractXSOntObject range) {
+		if (noRangeFoundYet) {
+			this.range = range;
+			noRangeFoundYet = false;
+		} else {
+			this.range = getOntology().getThingConcept();
+		}
+	}
+
+	public void resetRange() {
+		this.range = getOntology().getThingConcept();
+		noRangeFoundYet = true;
 	}
 
 	@Override

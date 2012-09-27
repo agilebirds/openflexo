@@ -5,9 +5,6 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 
 public abstract class XSOntProperty extends AbstractXSOntObject implements OntologyProperty, XSOntologyURIDefinitions {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntProperty.class.getPackage()
-			.getName());
-
 	private AbstractXSOntObject domain;
 	private boolean noDomainFoundYet = true;
 
@@ -29,10 +26,15 @@ public abstract class XSOntProperty extends AbstractXSOntObject implements Ontol
 	public void newDomainFound(AbstractXSOntObject domain) {
 		if (noDomainFoundYet) {
 			this.domain = domain;
-			noDomainFoundYet = true;
+			noDomainFoundYet = false;
 		} else {
 			this.domain = getOntology().getThingConcept();
 		}
+	}
+
+	public void resetDomain() {
+		this.domain = getOntology().getThingConcept();
+		noDomainFoundYet = true;
 	}
 
 }

@@ -219,7 +219,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		if (ownerUri != null) {
 			XSOntClass owner = getClass(ownerUri);
 			if (owner != null) {
-				System.out.println(xsDataProperty.getName() + " has domain " + owner.getName());
 				xsDataProperty.newDomainFound(owner);
 				owner.addPropertyTakingMyselfAsDomain(xsDataProperty);
 			}
@@ -246,14 +245,22 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		}
 	}
 
+	private XSOntObjectProperty loadPrefixedProperty(XSDeclaration declaration, XSOntObjectProperty parent) {
+		String prefix = parent.getName();
+		String name = prefix + declaration.getName();
+		String uri = fetcher.getNamespace(declaration) + "#" + name;
+		XSOntObjectProperty property = new XSOntObjectProperty(this, name, uri);
+		property.addSuperProperty(parent);
+		objectProperties.put(property.getURI(), property);
+		return property;
+	}
+
 	private void loadObjectProperties() {
 		objectProperties.clear();
 		XSOntObjectProperty hasChild = new XSOntObjectProperty(this, XS_HASCHILD_PROPERTY_NAME);
 		objectProperties.put(hasChild.getURI(), hasChild);
 		XSOntObjectProperty hasParent = new XSOntObjectProperty(this, XS_HASPARENT_PROPERTY_NAME);
 		objectProperties.put(hasParent.getURI(), hasParent);
-		// TODO have properties inheriting those two for all complex types and elements
-		// How to name to make sure its URI is valid?
 
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
@@ -263,6 +270,18 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 				ontClass.addPropertyTakingMyselfAsDomain(hasChild);
 				ontClass.addPropertyTakingMyselfAsRange(hasParent);
 				ontClass.addPropertyTakingMyselfAsDomain(hasParent);
+			}
+		}
+
+		for (XSComplexType complexType : fetcher.getComplexTypes()) {
+			loadPrefixedProperty(complexType, hasChild);
+			loadPrefixedProperty(complexType, hasParent);
+		}
+
+		for (XSElementDecl element : fetcher.getElementDecls()) {
+			if (mapsToClass(element)) {
+				loadPrefixedProperty(element, hasChild);
+				loadPrefixedProperty(element, hasParent);
 			}
 		}
 	}
@@ -291,11 +310,15 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		for (AbstractXSOntObject o : classes.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
 		}
-		for (AbstractXSOntObject o : dataProperties.values()) {
+		for (XSOntDataProperty o : dataProperties.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+			o.resetDomain();
 		}
-		for (AbstractXSOntObject o : objectProperties.values()) {
+		for (XSOntObjectProperty o : objectProperties.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+			o.resetDomain();
+			o.resetRange();
+			o.clearSuperProperties();
 		}
 		for (AbstractXSOntObject o : individuals.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
