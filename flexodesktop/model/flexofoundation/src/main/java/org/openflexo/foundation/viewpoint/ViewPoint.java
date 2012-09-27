@@ -24,10 +24,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -37,6 +39,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.modelslot.ModelSlot;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
@@ -85,6 +88,8 @@ public class ViewPoint extends ViewPointObject {
 	private boolean isLoaded = false;
 	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
+
+	private Set<ModelSlot<?>> modelSlots;
 
 	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
 
@@ -135,14 +140,7 @@ public class ViewPoint extends ViewPointObject {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				try {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				IOUtils.closeQuietly(inputStream);
 			}
 			return null;
 		} else {
@@ -766,5 +764,17 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
+
+	public Set<ModelSlot<?>> getModelSlots() {
+		return modelSlots;
+	}
+
+	public void addModelSlot(ModelSlot<?> modelSlot) {
+		modelSlots.add(modelSlot);
+	}
+
+	public void removeModelSlot(ModelSlot<?> modelSlot) {
+		modelSlots.remove(modelSlot);
+	}
 
 }

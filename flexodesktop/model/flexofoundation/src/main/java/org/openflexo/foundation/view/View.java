@@ -30,8 +30,10 @@ import java.util.logging.Logger;
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.modelslot.ModelSlot;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -54,6 +56,8 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	private FlexoOEShemaResource _resource;
 	private ViewDefinition _viewDefinition;
 	private ViewPoint _viewpoint;
+
+	private Map<ModelSlot<?>, ProjectOntology> models;
 
 	/**
 	 * Constructor invoked during deserialization
@@ -321,6 +325,23 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		setChanged();
 		notifyObservers(new ShemaDeleted(this.getShemaDefinition()));
 		deleteObservers();
+	}
+
+	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
+		return models.get(modelSlot);
+	}
+
+	public void setModel(ModelSlot<?> modelSlot, ProjectOntology ontology) {
+		models.put(modelSlot, ontology);
+	}
+
+	public void initModels() {
+		models.clear();
+		for (ModelSlot<?> modelSlot : getViewPoint().getModelSlots()) {
+			if (modelSlot.getIsRequired()) {
+				models.put(modelSlot, (ProjectOntology) modelSlot.createEmptyModel());
+			}
+		}
 	}
 
 }
