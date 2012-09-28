@@ -2,9 +2,8 @@ package org.openflexo.foundation.modelslot;
 
 import java.util.logging.Level;
 
+import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.view.View;
 
 /**
  * <p>
@@ -13,35 +12,66 @@ import org.openflexo.foundation.view.View;
  * @author Luka Le Roux
  * 
  */
-public class ModelSlotParameters extends AbstractModelSlot<FlexoOntology> {
+public class ModelSlotParameters extends TemporaryFlexoModelObject {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(ModelSlotParameters.class
 			.getPackage().getName());
 
-	private TechnologicalSpace technologicalSpace;
+	private String modelSlotName;
+	private boolean modelSlotIsRequired;
+	private boolean modelSlotIsReadOnly;
+	private FlexoOntology modelSlotMetaModel;
+
+	private TechnologicalSpace modelSlotTechnologicalSpace;
 
 	/**
 	 * <p>
 	 * Creates a new ModelSlotParameters object with default values. </br>Note both name and meta-model don't have default values.
 	 */
 	public ModelSlotParameters() {
-		setTechnologicalSpace(TechnologicalSpace.OWL);
-		setIsReadOnly(true);
-		setIsRequired(true);
+		setModelSlotTechnologicalSpace(TechnologicalSpace.OWL);
+		setModelSlotIsReadOnly(true);
+		setModelSlotIsRequired(true);
 	}
 
-	@Override
-	public TechnologicalSpace getTechnologicalSpace() {
-		return technologicalSpace;
+	public String getModelSlotName() {
+		return modelSlotName;
 	}
 
-	public void setTechnologicalSpace(TechnologicalSpace technologicalSpace) {
-		this.technologicalSpace = technologicalSpace;
+	public void setModelSlotName(String modeSlotName) {
+		this.modelSlotName = modeSlotName;
 	}
 
-	@Override
-	public ProjectOntology createEmptyModel(View view) {
-		throw new UnsupportedOperationException("Can't create an empty model from a ModelSlotParameters object");
+	public boolean getModelSlotIsRequired() {
+		return modelSlotIsRequired;
+	}
+
+	public void setModelSlotIsRequired(boolean modelSlotIsRequired) {
+		this.modelSlotIsRequired = modelSlotIsRequired;
+	}
+
+	public boolean getModelSlotIsReadOnly() {
+		return modelSlotIsReadOnly;
+	}
+
+	public void setModelSlotIsReadOnly(boolean modelSlotIsReadOnly) {
+		this.modelSlotIsReadOnly = modelSlotIsReadOnly;
+	}
+
+	public FlexoOntology getModelSlotMetaModel() {
+		return modelSlotMetaModel;
+	}
+
+	public void setModelSlotMetaModel(FlexoOntology modelSlotMetaModel) {
+		this.modelSlotMetaModel = modelSlotMetaModel;
+	}
+
+	public TechnologicalSpace getModelSlotTechnologicalSpace() {
+		return modelSlotTechnologicalSpace;
+	}
+
+	public void setModelSlotTechnologicalSpace(TechnologicalSpace modeSlotTechnologicalSpace) {
+		this.modelSlotTechnologicalSpace = modeSlotTechnologicalSpace;
 	}
 
 	/**
@@ -51,7 +81,7 @@ public class ModelSlotParameters extends AbstractModelSlot<FlexoOntology> {
 	 * @return a boolean
 	 */
 	public boolean hasEnoughInformations() {
-		return getName() != null && getMetaModel() != null;
+		return getModelSlotName() != null && getModelSlotMetaModel() != null;
 	}
 
 	/**
@@ -71,11 +101,11 @@ public class ModelSlotParameters extends AbstractModelSlot<FlexoOntology> {
 		}
 
 		@SuppressWarnings("unchecked")
-		ModelSlot<FlexoOntology> newModelSlot = (ModelSlot<FlexoOntology>) technologicalSpace.newSlot();
-		newModelSlot.setName(this.getName());
-		newModelSlot.setMetaModel(this.getMetaModel());
-		newModelSlot.setIsReadOnly(this.getIsReadOnly());
-		newModelSlot.setIsRequired(this.getIsRequired());
+		ModelSlot<FlexoOntology> newModelSlot = (ModelSlot<FlexoOntology>) getModelSlotTechnologicalSpace().newSlot();
+		newModelSlot.setName(this.getModelSlotName());
+		newModelSlot.setMetaModel(this.getModelSlotMetaModel());
+		newModelSlot.setIsReadOnly(this.getModelSlotIsReadOnly());
+		newModelSlot.setIsRequired(this.getModelSlotIsRequired());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.warning("Created the ModelSlot " + newModelSlot.getName());
 		}

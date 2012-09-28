@@ -1,5 +1,6 @@
 package org.openflexo.foundation.modelslot;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.view.View;
 
@@ -11,7 +12,7 @@ import org.openflexo.foundation.view.View;
  * 
  * @param <Ontology>
  */
-public abstract class AbstractModelSlot<Ontology extends FlexoOntology> implements ModelSlot<Ontology> {
+public abstract class AbstractModelSlot<Ontology extends FlexoOntology> extends FlexoModelObject implements ModelSlot<Ontology> {
 
 	private String name;
 	private boolean isRequired;

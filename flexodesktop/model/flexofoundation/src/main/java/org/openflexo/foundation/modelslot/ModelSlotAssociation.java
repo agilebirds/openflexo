@@ -41,13 +41,12 @@ public class ModelSlotAssociation extends FlexoModelObject {
 
 	@Override
 	public String getFullyQualifiedName() {
-		// TODO It's not really fully qualified (unique)
-		return "ModelReference " + modelSlot.getName();
+		return getProject().getFullyQualifiedName() + "." + view.getShemaDefinition().getName() + "." + modelSlot.getName();
 	}
 
 	@Override
 	public String getClassNameKey() {
-		return "model_reference";
+		return "model_slot_association";
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package org.openflexo.foundation.modelslot;
 
-import org.openflexo.foundation.ontology.xsd.ProjectXSOntology;
 import org.openflexo.foundation.ontology.xsd.XSOntology;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.View;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * <p>
@@ -19,7 +20,31 @@ public class XSModelSlot extends AbstractModelSlot<XSOntology> {
 	}
 
 	@Override
-	public ProjectXSOntology createEmptyModel(View view) {
+	public XSOntology createEmptyModel(View view) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
 		// TODO Auto-generated method stub
 		return null;
 	}
