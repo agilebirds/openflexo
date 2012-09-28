@@ -33,6 +33,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.modelslot.ModelSlot;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -295,12 +296,17 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return "View[name=" + getName() + "/viewpoint=" + getCalc().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
 	}
 
-	public void createMissingRequiredModels() {
-		for (ModelSlot<?> modelSlot : getViewPoint().getModelSlots()) {
-			if (modelSlot.getIsRequired() && getProject().hasModel(modelSlot) == false) {
-				getProject().createModel(modelSlot);
-			}
+	public ProjectOntology getModel(ModelSlot<?> modelSlot, boolean createIfDoesNotExist) {
+		ProjectOntology model = getProject().getModel(this, modelSlot);
+		if (model == null) {
+			model = (ProjectOntology) modelSlot.createEmptyModel(this);
+			getProject().setModel(this, modelSlot, model);
 		}
+		return model;
+	}
+
+	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
+		return getModel(modelSlot, true);
 	}
 
 	// ==========================================================================

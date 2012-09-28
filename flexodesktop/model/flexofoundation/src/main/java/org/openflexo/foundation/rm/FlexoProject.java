@@ -120,6 +120,7 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.modelslot.ModelSlot;
+import org.openflexo.foundation.modelslot.ModelSlotAssociation;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
@@ -152,6 +153,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
@@ -226,8 +228,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoResourceCenter resourceCenter;
 
 	private FlexoObjectIDManager objectIDManager;
-
-	private Map<ModelSlot<?>, ProjectOntology> models;
 
 	/**
 	 * These variable are here to replace old static references.
@@ -323,6 +323,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoIEBIRTPalette birtPalette;
 
 	private IModuleLoader moduleLoader;
+
+	private List<ModelSlotAssociation> models;
+	private Map<View, Map<ModelSlot<?>, ModelSlotAssociation>> modelsCache; // Do not serialize this
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -4288,36 +4291,38 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	public boolean hasModel(ModelSlot<?> modelSlot) {
-		return models.containsKey(modelSlot);
-	}
-
-	public ProjectOntology getModel(ModelSlot<?> modelSlot, boolean createIfDoesNotExist) {
-		if (hasModel(modelSlot) == false) {
-			if (createIfDoesNotExist == false) {
-				return null;
+	public void setModels(List<ModelSlotAssociation> models) {
+		this.models = models;
+		modelsCache.clear();
+		for (ModelSlotAssociation association : models) {
+			if (modelsCache.containsKey(association.getView()) == false) {
+				modelsCache.put(association.getView(), new HashMap<ModelSlot<?>, ModelSlotAssociation>());
 			}
-			createModel(modelSlot);
-		}
-		return models.get(modelSlot);
-	}
-
-	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
-		return getModel(modelSlot, true);
-	}
-
-	public void setModel(ModelSlot<?> modelSlot, ProjectOntology ontology) {
-		models.put(modelSlot, ontology);
-	}
-
-	public void createModel(ModelSlot<?> modelSlot) {
-		if (hasModel(modelSlot)) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Model slot " + modelSlot.getName() + " already has a model");
-			}
-		} else {
-			setModel(modelSlot, (ProjectOntology) modelSlot.createEmptyModel());
+			modelsCache.get(association.getView()).put(association.getModelSlot(), association);
 		}
 	}
 
+	public List<ModelSlotAssociation> getModels() {
+		return models;
+	}
+
+	public ProjectOntology getModel(View view, ModelSlot<?> modelSlot) {
+		if (modelsCache.get(view) == null) {
+			return null;
+		}
+		return modelsCache.get(view).get(modelSlot).getModel();
+	}
+
+	public void setModel(View view, ModelSlot<?> modelSlot, ProjectOntology model) {
+		if (modelsCache.get(view) == null) {
+			modelsCache.put(view, new HashMap<ModelSlot<?>, ModelSlotAssociation>());
+		}
+		Map<ModelSlot<?>, ModelSlotAssociation> viewModels = modelsCache.get(view);
+		if (viewModels.get(modelSlot) == null) {
+			ModelSlotAssociation newAssociation = new ModelSlotAssociation(this, view, modelSlot);
+			viewModels.put(modelSlot, newAssociation);
+			models.add(newAssociation);
+		}
+		viewModels.get(modelSlot).setModel(model);
+	}
 }

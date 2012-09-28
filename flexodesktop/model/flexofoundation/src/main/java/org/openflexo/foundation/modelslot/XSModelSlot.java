@@ -2,6 +2,7 @@ package org.openflexo.foundation.modelslot;
 
 import org.openflexo.foundation.ontology.xsd.ProjectXSOntology;
 import org.openflexo.foundation.ontology.xsd.XSOntology;
+import org.openflexo.foundation.view.View;
 
 /**
  * <p>
@@ -18,7 +19,7 @@ public class XSModelSlot extends AbstractModelSlot<XSOntology> {
 	}
 
 	@Override
-	public ProjectXSOntology createEmptyModel() {
+	public ProjectXSOntology createEmptyModel(View view) {
 		// TODO Auto-generated method stub
 		return null;
 	}

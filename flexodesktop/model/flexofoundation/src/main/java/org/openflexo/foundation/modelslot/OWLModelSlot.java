@@ -2,6 +2,7 @@ package org.openflexo.foundation.modelslot;
 
 import org.openflexo.foundation.ontology.ProjectOWLOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.view.View;
 
 /**
  * <p>
@@ -18,7 +19,7 @@ public class OWLModelSlot extends AbstractModelSlot<OWLOntology> {
 	}
 
 	@Override
-	public ProjectOWLOntology createEmptyModel() {
+	public ProjectOWLOntology createEmptyModel(View view) {
 		// TODO Auto-generated method stub
 		return null;
 	}

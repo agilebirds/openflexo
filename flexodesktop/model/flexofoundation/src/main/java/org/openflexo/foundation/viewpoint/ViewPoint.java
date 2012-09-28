@@ -24,7 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,7 +89,7 @@ public class ViewPoint extends ViewPointObject {
 	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
 
-	private Set<ModelSlot<?>> modelSlots;
+	private List<ModelSlot<?>> modelSlots;
 
 	public static ViewPoint openViewPoint(File viewpointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
 
@@ -765,16 +765,12 @@ public class ViewPoint extends ViewPointObject {
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
 
-	public Set<ModelSlot<?>> getModelSlots() {
+	public void setModelSlots(List<ModelSlot<?>> modelSlots) {
+		this.modelSlots = modelSlots;
+	}
+
+	public List<ModelSlot<?>> getModelSlots() {
 		return modelSlots;
-	}
-
-	public void addModelSlot(ModelSlot<?> modelSlot) {
-		modelSlots.add(modelSlot);
-	}
-
-	public void removeModelSlot(ModelSlot<?> modelSlot) {
-		modelSlots.remove(modelSlot);
 	}
 
 }

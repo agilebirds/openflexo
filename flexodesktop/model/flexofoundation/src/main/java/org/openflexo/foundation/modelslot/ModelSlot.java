@@ -1,7 +1,7 @@
 package org.openflexo.foundation.modelslot;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.view.View;
 
 /**
  * <p>
@@ -36,9 +36,12 @@ public interface ModelSlot<Ontology extends FlexoOntology> {
 	/**
 	 * <p>
 	 * Returns an empty ontology to be used as model for this slot. </br>It matches the model slot's technological space. </br>The returned
-	 * ontology also implements {@link ProjectOntology}.
+	 * ontology also implements ProjectOntology.
+	 * 
+	 * @param view
 	 * 
 	 * @return an ontology
+	 * @see org.openflexo.foundation.ontology.ProjectOntology
 	 */
-	public Ontology createEmptyModel();
+	public Ontology createEmptyModel(View view);
 }

@@ -4,6 +4,7 @@ import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.view.View;
 
 /**
  * <p>
@@ -39,7 +40,7 @@ public class ModelSlotParameters extends AbstractModelSlot<FlexoOntology> {
 	}
 
 	@Override
-	public ProjectOntology createEmptyModel() {
+	public ProjectOntology createEmptyModel(View view) {
 		throw new UnsupportedOperationException("Can't create an empty model from a ModelSlotParameters object");
 	}
 
@@ -80,4 +81,5 @@ public class ModelSlotParameters extends AbstractModelSlot<FlexoOntology> {
 		}
 		return newModelSlot;
 	}
+
 }

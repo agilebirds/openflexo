@@ -1,6 +1,7 @@
 package org.openflexo.foundation.modelslot;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.view.View;
 
 /**
  * <p>
@@ -67,6 +68,6 @@ public abstract class AbstractModelSlot<Ontology extends FlexoOntology> implemen
 	}
 
 	@Override
-	public abstract Ontology createEmptyModel();
+	public abstract Ontology createEmptyModel(View view);
 
 }
