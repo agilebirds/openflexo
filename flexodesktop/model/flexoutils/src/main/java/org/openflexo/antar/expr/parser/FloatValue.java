@@ -39,7 +39,7 @@ public class FloatValue extends Value {
 
 	@Override
 	public String getStringValue() {
-		return "" + _value;
+		return String.valueOf(_value);
 	}
 
 	public String getSerializationValue() {
@@ -49,9 +49,13 @@ public class FloatValue extends Value {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof FloatValue) {
-			return (getDoubleValue() == ((FloatValue) obj).getDoubleValue());
+			return getDoubleValue() == ((FloatValue) obj).getDoubleValue();
 		}
 		return super.equals(obj);
 	}
 
+	@Override
+	public int hashCode() {
+		return Double.valueOf(_value).hashCode();
+	}
 }

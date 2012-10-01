@@ -21,13 +21,13 @@ package org.openflexo.antar.expr.parser;
 
 public class EnumValue extends Value {
 
-	private Enum _value;
+	private Enum<?> _value;
 
-	public static EnumValue createEnumValue(Enum value) {
+	public static EnumValue createEnumValue(Enum<?> value) {
 		return new EnumValue(value);
 	}
 
-	public EnumValue(Enum value) {
+	public EnumValue(Enum<?> value) {
 		super();
 		_value = value;
 	}
@@ -52,5 +52,10 @@ public class EnumValue extends Value {
 			return getStringValue().equals(((EnumValue) obj).getStringValue());
 		}
 		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return getStringValue().hashCode();
 	}
 }

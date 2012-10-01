@@ -91,13 +91,10 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 			return null;
 		}
 
-		Class typeClass = TypeUtils.getBaseClass(currentType);
+		Class<?> typeClass = TypeUtils.getBaseClass(currentType);
 
 		Method[] allMethods = typeClass.getMethods();
 
-		if (BindingValue.logger.isLoggable(Level.FINE)) {
-			BindingValue.logger.fine("allMethods=" + allMethods);
-		}
 		if (BindingValue.logger.isLoggable(Level.FINE)) {
 			BindingValue.logger.fine("paramsAsString=" + paramsAsString);
 		}

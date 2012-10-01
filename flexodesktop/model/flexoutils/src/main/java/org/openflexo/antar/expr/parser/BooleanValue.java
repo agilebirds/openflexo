@@ -39,7 +39,7 @@ public class BooleanValue extends Value {
 
 	@Override
 	public String getStringValue() {
-		return "" + _value;
+		return String.valueOf(_value);
 	}
 
 	public String getSerializationValue() {
@@ -49,9 +49,13 @@ public class BooleanValue extends Value {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof BooleanValue) {
-			return (getBooleanValue() == ((BooleanValue) obj).getBooleanValue());
+			return getBooleanValue() == ((BooleanValue) obj).getBooleanValue();
 		}
-		return super.equals(obj);
+		return false;
 	}
 
+	@Override
+	public int hashCode() {
+		return Boolean.valueOf(_value).hashCode();
+	}
 }

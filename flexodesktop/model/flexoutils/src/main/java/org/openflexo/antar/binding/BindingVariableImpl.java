@@ -74,7 +74,7 @@ public class BindingVariableImpl<T> extends Observable implements BindingVariabl
 
 	@Override
 	public String toString() {
-		return getVariableName() + "/" + (getType() instanceof Class ? ((Class) getType()).getSimpleName() : getType());
+		return getVariableName() + "/" + (getType() instanceof Class ? ((Class<?>) getType()).getSimpleName() : getType());
 	}
 
 	@Override
@@ -121,11 +121,16 @@ public class BindingVariableImpl<T> extends Observable implements BindingVariabl
 	}
 
 	@Override
+	public int hashCode() {
+		return (variableName == null ? 0 : variableName.hashCode()) + (type == null ? 0 : type.hashCode());
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof BindingVariable) {
-			return getContainer() != null && getContainer().equals(((BindingVariable) obj).getContainer()) && getVariableName() != null
-					&& getVariableName().equals(((BindingVariable) obj).getVariableName()) && getType() != null
-					&& getType().equals(((BindingVariable) obj).getType());
+			return getContainer() != null && getContainer().equals(((BindingVariable<?>) obj).getContainer()) && getVariableName() != null
+					&& getVariableName().equals(((BindingVariable<?>) obj).getVariableName()) && getType() != null
+					&& getType().equals(((BindingVariable<?>) obj).getType());
 		}
 		return super.equals(obj);
 	}

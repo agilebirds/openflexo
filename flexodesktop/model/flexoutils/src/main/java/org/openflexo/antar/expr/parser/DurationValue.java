@@ -59,4 +59,9 @@ public class DurationValue extends Value {
 		}
 		return super.equals(obj);
 	}
+
+	@Override
+	public int hashCode() {
+		return getDurationValue().hashCode();
+	}
 }

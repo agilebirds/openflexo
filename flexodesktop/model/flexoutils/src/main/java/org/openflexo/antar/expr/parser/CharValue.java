@@ -34,7 +34,7 @@ public class CharValue extends Value {
 
 	@Override
 	public String getStringValue() {
-		return "" + _value;
+		return String.valueOf(_value);
 	}
 
 	@Override
@@ -51,6 +51,11 @@ public class CharValue extends Value {
 		if (obj instanceof CharValue) {
 			return getStringValue().equals(((CharValue) obj).getStringValue());
 		}
-		return super.equals(obj);
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return _value;
 	}
 }
