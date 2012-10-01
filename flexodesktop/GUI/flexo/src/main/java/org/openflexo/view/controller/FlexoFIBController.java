@@ -159,7 +159,7 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		}
 	}
 
-	public ImageIcon iconForObject(FlexoModelObject object) {
+	public ImageIcon iconForObject(Object object) {
 		if (object instanceof WorkflowModelObject) {
 			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
 		} else if (object instanceof WKFObject) {
