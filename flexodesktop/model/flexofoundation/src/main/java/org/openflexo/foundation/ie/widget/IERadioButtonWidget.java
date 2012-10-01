@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ie.widget;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -55,7 +54,7 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
 /**
  * @author gpolet Created on 12 sept. 2005
  */
-public class IERadioButtonWidget extends IEControlWidget implements Serializable, IEWidgetWithValueList, IEWidgetWithMainBinding {
+public class IERadioButtonWidget extends IEControlWidget implements IEWidgetWithValueList, IEWidgetWithMainBinding {
 
 	/**
 	 *

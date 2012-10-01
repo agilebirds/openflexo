@@ -176,14 +176,18 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		} else {
 			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("building_new_project"));
 		}
-		// This will just create the .version in the project
-		FlexoProjectUtil.currentFlexoVersionIsSmallerThanLastVersion(projectDirectory);
+		try {
+			// This will just create the .version in the project
+			FlexoProjectUtil.currentFlexoVersionIsSmallerThanLastVersion(projectDirectory);
 
-		preInitialization(projectDirectory);
-		FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-				applicationContext.getProjectReferenceLoader(), getResourceCenter());
-		newEditor(editor);
-		return editor;
+			preInitialization(projectDirectory);
+			FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(), applicationContext,
+					applicationContext.getProjectReferenceLoader(), getResourceCenter());
+			newEditor(editor);
+			return editor;
+		} finally {
+			ProgressWindow.hideProgressWindow();
+		}
 	}
 
 	private void newEditor(FlexoEditor editor) {

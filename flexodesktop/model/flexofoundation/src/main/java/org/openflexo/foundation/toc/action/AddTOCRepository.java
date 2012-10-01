@@ -104,7 +104,7 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 				if (!addDocType.hasActionExecutionSucceeded()) {
 					throw new FlexoException(FlexoLocalization.localizedForKey("could_not_add_doc_type"));
 				}
-				docType = addDocType.getNewDocType();
+				this.docType = addDocType.getNewDocType();
 			}
 		}
 		getData().addToRepositories(newRepository);

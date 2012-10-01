@@ -22,7 +22,6 @@ package org.openflexo.foundation.ie.widget;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +32,6 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.util.HyperlinkType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
@@ -46,7 +44,7 @@ import org.openflexo.toolbox.ImageInfo;
  * 
  * @author bmangez
  */
-public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Serializable, IButton {
+public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, IButton {
 	/**
      *
      */
@@ -311,7 +309,7 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 			if (getFile() != null) {
 				if (maintainAspectRatio) {
 					if (getImageInformation() != null) {
-						this.heightPixel = (widthPixel * getImageInformation().getHeight()) / getImageInformation().getWidth();
+						this.heightPixel = widthPixel * getImageInformation().getHeight() / getImageInformation().getWidth();
 						setChanged();
 						notifyObservers(new IEDataModification("heightPixel", null, heightPixel));
 					}
@@ -347,7 +345,7 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 			if (getFile() != null) {
 				if (maintainAspectRatio) {
 					if (getImageInformation() != null) {
-						this.widthPixel = (heightPixel * getImageInformation().getWidth()) / getImageInformation().getHeight();
+						this.widthPixel = heightPixel * getImageInformation().getWidth() / getImageInformation().getHeight();
 						setChanged();
 						notifyObservers(new IEDataModification("widthPixel", null, widthPixel));
 					}
@@ -385,15 +383,15 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 		}
 
 		@Override
-		public ValidationIssue applyValidation(IEButtonWidget object) {
+		public ValidationIssue<EmailButtonMustBeOfTypeEmail, IEButtonWidget> applyValidation(IEButtonWidget object) {
 			IEButtonWidget button = object;
 			if (button.getFile() != null && button.getFile().getImageFile() != null
 					&& button.getFile().getImageName().toUpperCase().indexOf("EMAIL") > -1
 					&& (button.getHyperlinkType() == null || button.getHyperlinkType() != HyperlinkType.MAILTO)) {
-				ValidationWarning warning = new ValidationWarning<EmailButtonMustBeOfTypeEmail, IEButtonWidget>(this, object,
-						"this_kind_of_button_is_usually_a_mailto_link");
+				ValidationWarning<EmailButtonMustBeOfTypeEmail, IEButtonWidget> warning = new ValidationWarning<EmailButtonMustBeOfTypeEmail, IEButtonWidget>(
+						this, object, "this_kind_of_button_is_usually_a_mailto_link");
 
-				warning.addToFixProposals(new SetLinkTypeMailto(button));
+				warning.addToFixProposals(new SetLinkTypeMailto<IEButtonWidget.EmailButtonMustBeOfTypeEmail, IEButtonWidget>(button));
 
 				return warning;
 			}
@@ -402,20 +400,21 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 
 	}
 
-	public static class SearchButtonMustBeOfTypeSearch extends ValidationRule {
+	public static class SearchButtonMustBeOfTypeSearch extends ValidationRule<SearchButtonMustBeOfTypeSearch, IEButtonWidget> {
 		public SearchButtonMustBeOfTypeSearch() {
 			super(IEButtonWidget.class, "this_kind_of_button_is_usually_a_search_button");
 		}
 
 		@Override
-		public ValidationIssue applyValidation(final Validable object) {
-			final IEButtonWidget button = (IEButtonWidget) object;
+		public ValidationIssue<SearchButtonMustBeOfTypeSearch, IEButtonWidget> applyValidation(final IEButtonWidget object) {
+			final IEButtonWidget button = object;
 			if (button.getFile() != null && button.getFile().getImageFile() != null
 					&& button.getFile().getImageName().toUpperCase().indexOf("PREVIEWFILE") > -1 && button.isInSearchArea()
 					&& (button.getHyperlinkType() == null || button.getHyperlinkType() != HyperlinkType.SEARCH)) {
-				ValidationWarning warning = new ValidationWarning(this, object, "this_kind_of_button_is_usually_a_search_button");
+				ValidationWarning<SearchButtonMustBeOfTypeSearch, IEButtonWidget> warning = new ValidationWarning<SearchButtonMustBeOfTypeSearch, IEButtonWidget>(
+						this, object, "this_kind_of_button_is_usually_a_search_button");
 
-				warning.addToFixProposals(new SetLinkTypeSearch(button));
+				warning.addToFixProposals(new SetLinkTypeSearch<SearchButtonMustBeOfTypeSearch, IEButtonWidget>(button));
 
 				return warning;
 			}

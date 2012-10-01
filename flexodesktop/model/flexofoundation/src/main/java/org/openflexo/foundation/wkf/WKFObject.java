@@ -26,7 +26,6 @@ package org.openflexo.foundation.wkf;
  * Created by benoit on Mar 3, 2004
  */
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -69,7 +68,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author benoit, sylvain
  */
-public abstract class WKFObject extends RepresentableFlexoModelObject implements Validable, Serializable {
+public abstract class WKFObject extends RepresentableFlexoModelObject implements Validable {
 
 	private static final Logger logger = Logger.getLogger(WKFObject.class.getPackage().getName());
 
@@ -153,8 +152,8 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 			queue.add(object);
 		}
 		if (object.getAllEmbeddedWKFObjects() != null) {
-			Enumeration en = object.getAllEmbeddedWKFObjects().elements();
-			Object candidate = null;
+			Enumeration<? extends WKFObject> en = object.getAllEmbeddedWKFObjects().elements();
+			WKFObject candidate = null;
 			while (en.hasMoreElements()) {
 				candidate = en.nextElement();
 				if (candidate == null) {
@@ -165,8 +164,8 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 					continue;
 				}
 				if (!queue.contains(candidate)) {
-					queue.add((WKFObject) candidate);
-					processToAdditionOfEmbedded((WKFObject) candidate, queue);
+					queue.add(candidate);
+					processToAdditionOfEmbedded(candidate, queue);
 				}
 			}
 		}
@@ -210,7 +209,7 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	public void setObjectForKey(Object object, String key) {
 		Object oldValue = objectForKey(key);
 		super.setObjectForKey(object, key);
-		if (((oldValue != null) && (!oldValue.equals(object))) || ((oldValue == null) && (object != null))) {
+		if (oldValue != null && !oldValue.equals(object) || oldValue == null && object != null) {
 			// logger.info("Obj: "+getClass().getName()+" property: "+key+" was "+oldValue+" is now "+object);
 			notifyModification(key, oldValue, object);
 		}
@@ -268,7 +267,7 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	public boolean isContainedIn(WKFObject obj) {
 		// logger.warning
 		// ("Contains not IMPLEMENTED for "+getClass().getName()+" and "+obj.getClass().getName()+": default implementation returns true only if supplied object is the owner process: override in sub-classes !");
-		return (obj == getProcess());
+		return obj == getProcess();
 	}
 
 	public boolean contains(WKFObject obj) {
