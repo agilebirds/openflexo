@@ -21,6 +21,8 @@ package org.openflexo.foundation.view;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,6 @@ import java.util.logging.Logger;
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.modelslot.ModelSlot;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.ProjectOntology;
@@ -44,6 +45,7 @@ import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -56,6 +58,8 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	private FlexoOEShemaResource _resource;
 	private ViewDefinition _viewDefinition;
 	private ViewPoint _viewpoint;
+	private List<ModelSlotAssociation> modelSlotAssociations;
+	private Map<ModelSlot<?>, ProjectOntology> modelsMap = new HashMap<ModelSlot<?>, ProjectOntology>(); // Do not serialize this.
 
 	/**
 	 * Constructor invoked during deserialization
@@ -296,11 +300,56 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return "View[name=" + getName() + "/viewpoint=" + getCalc().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
 	}
 
+	// ==========================================================================
+	// ============================== Model Slots ===============================
+	// ==========================================================================
+
+	public void setModelSlotAssociations(List<ModelSlotAssociation> associations) {
+		this.modelSlotAssociations = associations;
+		modelsMap.clear();
+		for (ModelSlotAssociation model : associations) {
+			modelsMap.put(model.getModelSlot(), model.getModel());
+		}
+	}
+
+	public List<ModelSlotAssociation> getModelSlotAssociations() {
+		return modelSlotAssociations;
+	}
+
+	public void removeFromModelSlotAssociation(ModelSlotAssociation association) {
+		modelSlotAssociations.remove(association);
+		modelsMap.remove(association.getModelSlot());
+	}
+
+	public void addToModelSlotAssociations(ModelSlotAssociation association) {
+		Iterator<ModelSlotAssociation> it = modelSlotAssociations.iterator();
+		while (it.hasNext()) {
+			if (it.next().getModelSlot().equals(association.getModelSlot())) {
+				it.remove();
+			}
+		}
+		modelSlotAssociations.add(association);
+		modelsMap.put(association.getModelSlot(), association.getModel());
+	}
+
+	public void setModel(ModelSlot<?> modelSlot, ProjectOntology model) {
+		modelsMap.put(modelSlot, model);
+		for (ModelSlotAssociation association : modelSlotAssociations) {
+			if (association.getModelSlot().equals(modelSlot)) {
+				association.setModel(model);
+				return;
+			}
+		}
+		ModelSlotAssociation association = new ModelSlotAssociation(this, modelSlot);
+		association.setModel(model);
+		modelSlotAssociations.add(association);
+	}
+
 	public ProjectOntology getModel(ModelSlot<?> modelSlot, boolean createIfDoesNotExist) {
-		ProjectOntology model = getProject().getModel(this, modelSlot);
-		if (model == null) {
+		ProjectOntology model = modelsMap.get(modelSlot);
+		if (createIfDoesNotExist && model == null) {
 			model = (ProjectOntology) modelSlot.createEmptyModel(this);
-			getProject().setModel(this, modelSlot, model);
+			setModel(modelSlot, model);
 		}
 		return model;
 	}

@@ -1,8 +1,10 @@
-package org.openflexo.foundation.modelslot;
+package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.View;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * <p>
@@ -70,5 +72,17 @@ public abstract class AbstractModelSlot<Ontology extends FlexoOntology> extends 
 
 	@Override
 	public abstract Ontology createEmptyModel(View view);
+
+	@Override
+	public XMLMapping getXMLMapping() {
+		// Should not be needed, see ViewPointModel.xml
+		return null;
+	}
+
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		// Should not be needed, see ViewPointModel.xml
+		return null;
+	}
 
 }

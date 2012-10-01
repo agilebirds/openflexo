@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -39,7 +40,6 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.modelslot.ModelSlot;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
@@ -765,11 +765,33 @@ public class ViewPoint extends ViewPointObject {
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
 
+	// ==========================================================================
+	// ============================== Model Slots ===============================
+	// ==========================================================================
+
 	public void setModelSlots(List<ModelSlot<?>> modelSlots) {
 		this.modelSlots = modelSlots;
 	}
 
 	public List<ModelSlot<?>> getModelSlots() {
+		return modelSlots;
+	}
+
+	public void addToModelSlots(ModelSlot<?> modelSlot) {
+		modelSlots.add(modelSlot);
+	}
+
+	public void removeFromModelSlots(ModelSlot<?> modelSlot) {
+		modelSlots.remove(modelSlot);
+	}
+
+	public List<ModelSlot<?>> getRequiredModelSlots() {
+		List<ModelSlot<?>> requiredModelSlots = new ArrayList<ModelSlot<?>>();
+		for (ModelSlot<?> modelSlot : getModelSlots()) {
+			if (modelSlot.getIsRequired()) {
+				requiredModelSlots.add(modelSlot);
+			}
+		}
 		return modelSlots;
 	}
 

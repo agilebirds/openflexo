@@ -1,4 +1,4 @@
-package org.openflexo.foundation.modelslot;
+package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.view.View;

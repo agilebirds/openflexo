@@ -119,8 +119,6 @@ import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.modelslot.ModelSlot;
-import org.openflexo.foundation.modelslot.ModelSlotAssociation;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
@@ -153,10 +151,12 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.ModelSlotAssociation;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
+import org.openflexo.foundation.viewpoint.ModelSlot;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -325,7 +325,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private IModuleLoader moduleLoader;
 
 	private List<ModelSlotAssociation> models;
-	private Map<View, Map<ModelSlot<?>, ModelSlotAssociation>> modelsCache; // Do not serialize this
+	private Map<View, Map<ModelSlot<?>, ModelSlotAssociation>> modelsAssociationMap; // Do not serialize this
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -4291,38 +4291,4 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	public void setModels(List<ModelSlotAssociation> models) {
-		this.models = models;
-		modelsCache.clear();
-		for (ModelSlotAssociation association : models) {
-			if (modelsCache.containsKey(association.getView()) == false) {
-				modelsCache.put(association.getView(), new HashMap<ModelSlot<?>, ModelSlotAssociation>());
-			}
-			modelsCache.get(association.getView()).put(association.getModelSlot(), association);
-		}
-	}
-
-	public List<ModelSlotAssociation> getModels() {
-		return models;
-	}
-
-	public ProjectOntology getModel(View view, ModelSlot<?> modelSlot) {
-		if (modelsCache.get(view) == null) {
-			return null;
-		}
-		return modelsCache.get(view).get(modelSlot).getModel();
-	}
-
-	public void setModel(View view, ModelSlot<?> modelSlot, ProjectOntology model) {
-		if (modelsCache.get(view) == null) {
-			modelsCache.put(view, new HashMap<ModelSlot<?>, ModelSlotAssociation>());
-		}
-		Map<ModelSlot<?>, ModelSlotAssociation> viewModels = modelsCache.get(view);
-		if (viewModels.get(modelSlot) == null) {
-			ModelSlotAssociation newAssociation = new ModelSlotAssociation(this, view, modelSlot);
-			viewModels.put(modelSlot, newAssociation);
-			models.add(newAssociation);
-		}
-		viewModels.get(modelSlot).setModel(model);
-	}
 }

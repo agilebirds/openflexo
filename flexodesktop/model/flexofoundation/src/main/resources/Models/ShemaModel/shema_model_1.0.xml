@@ -77,6 +77,15 @@
   <entity name="org.openflexo.foundation.view.View" xmlTag="VEShema">
      <description>VEShema</description>
    	 <property name="graphicalRepresentation" xmlTag="DrawingGraphicalRepresentation"/>
+   	 <property name="modelSlotAssociations" xmlTag="modelSlotAssociations" type="vector" contains="org.openflexo.foundation.view.ModelSlotAssociation"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.view.ModelSlotAssociation"
+     xmlTag="modelSlotAssociation">
+     <description>Binds a model slot to a model within a given view</description>
+     <property name="view" xmlTag="view" attribute="YES"/>
+     <property name="modelSlot" xmlTag="modelSlot" attribute="YES"/>
+     <property name="model" xmlTag="model" attribute="YES"/>
   </entity>
 
   <entity name="org.openflexo.foundation.view.ViewElement" abstract="yes">

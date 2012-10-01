@@ -1,4 +1,4 @@
-package org.openflexo.foundation.modelslot;
+package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Level;
 

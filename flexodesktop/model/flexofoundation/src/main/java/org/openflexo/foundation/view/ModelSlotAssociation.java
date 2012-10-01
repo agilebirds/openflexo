@@ -1,10 +1,10 @@
-package org.openflexo.foundation.modelslot;
+package org.openflexo.foundation.view;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.ModelSlot;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
@@ -18,25 +18,23 @@ import org.openflexo.xmlcode.XMLMapping;
  */
 public class ModelSlotAssociation extends FlexoModelObject {
 
-	private FlexoProject project;
 	private View view;
 	private ModelSlot<?> modelSlot;
 	private ProjectOntology model;
 
-	public ModelSlotAssociation(FlexoProject project) {
-		super(project);
-		this.project = project;
+	public ModelSlotAssociation(View view) {
+		super(view.getProject());
+		this.view = view;
 	}
 
-	public ModelSlotAssociation(FlexoProject project, View view, ModelSlot<?> modelSlot) {
-		this(project);
-		this.view = view;
+	public ModelSlotAssociation(View view, ModelSlot<?> modelSlot) {
+		this(view);
 		this.modelSlot = modelSlot;
 	}
 
 	@Override
 	public FlexoProject getProject() {
-		return project;
+		return view.getProject();
 	}
 
 	@Override
