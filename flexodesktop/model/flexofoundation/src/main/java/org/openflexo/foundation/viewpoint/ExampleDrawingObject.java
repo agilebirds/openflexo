@@ -214,4 +214,9 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 		return getViewPoint().getBindingModel();
 	}
 
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
+	}
+
 }

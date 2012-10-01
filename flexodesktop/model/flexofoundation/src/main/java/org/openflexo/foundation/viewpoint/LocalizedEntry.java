@@ -91,4 +91,9 @@ public class LocalizedEntry extends ViewPointObject {
 		return getViewPoint().getBindingModel();
 	}
 
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
+	}
+
 }

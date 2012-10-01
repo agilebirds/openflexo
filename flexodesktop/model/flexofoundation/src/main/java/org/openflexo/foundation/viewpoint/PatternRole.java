@@ -141,6 +141,9 @@ public abstract class PatternRole extends EditionPatternObject {
 
 	public abstract void setIsPrimaryRole(boolean isPrimary);
 
+	// @Override
+	// public abstract String getLanguageRepresentation();
+
 	public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
 		public PatternRoleMustHaveAName() {
 			super(PatternRole.class, "pattern_role_must_have_a_name");

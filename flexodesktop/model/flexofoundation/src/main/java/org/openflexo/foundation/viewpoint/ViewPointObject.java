@@ -159,6 +159,8 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 		return null;
 	}
 
+	public abstract String getLanguageRepresentation();
+
 	@Override
 	public String getFullyQualifiedName() {
 		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#" + getClass().getSimpleName();

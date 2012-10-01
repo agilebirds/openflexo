@@ -371,6 +371,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	 */
 	@Override
 	public Vector<OWLOntology> getImportedOntologies() {
+
+		loadWhenUnloaded();
+
 		if (getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
 			// OWL ontology should at least import RDF and RDFS ontologies
 			if (!importedOntologies.contains(getOntologyLibrary().getRDFOntology())) {
