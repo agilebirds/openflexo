@@ -49,7 +49,6 @@ import org.openflexo.docxparser.flexotag.FlexoDescriptionTag;
 import org.openflexo.docxparser.flexotag.FlexoEPITag;
 import org.openflexo.docxparser.flexotag.FlexoNameTag;
 import org.openflexo.docxparser.flexotag.FlexoTitleTag;
-import org.openflexo.toolbox.StringUtils;
 
 public class DocxFileParser {
 	protected static final Logger logger = Logger.getLogger(DocxFileParser.class.getPackage().toString());
@@ -186,18 +185,18 @@ public class DocxFileParser {
 
 	public String extractTextContent(Element sdtContentElement) {
 		StringBuilder sb = new StringBuilder();
-		Iterator<?> iteratorWp = sdtContentElement.selectNodes("descendant::w:p").iterator();
+		/*Iterator<?> iteratorWp = sdtContentElement.selectNodes("descendant::w:p").iterator();
 		while (iteratorWp.hasNext()) {
-			Element wpElement = (Element) iteratorWp.next();
-			Iterator<?> iteratorWt = wpElement.selectNodes("descendant::w:t").iterator();
-			while (iteratorWt.hasNext()) {
-				Element textElement = (Element) iteratorWt.next();
-				sb.append(textElement.getText());
-			}
-			if (iteratorWp.hasNext()) {
-				sb.append(StringUtils.LINE_SEPARATOR);
-			}
+			Element wpElement = (Element) iteratorWp.next();*/
+		Iterator<?> iteratorWt = sdtContentElement.selectNodes("descendant::w:t").iterator();
+		while (iteratorWt.hasNext()) {
+			Element textElement = (Element) iteratorWt.next();
+			sb.append(textElement.getText());
 		}
+		/*if (iteratorWp.hasNext()) {
+			sb.append(StringUtils.LINE_SEPARATOR);
+		}
+		}*/
 		return sb.toString().trim();
 	}
 
