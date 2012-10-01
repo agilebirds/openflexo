@@ -43,7 +43,7 @@ public class ProjectXSOntology extends XSOntology implements ProjectOntology {
 	}
 
 	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
 		if (resource instanceof FlexoXMLModelResource) {
 			this.modelResource = (FlexoXMLModelResource) resource;
 		}

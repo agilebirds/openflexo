@@ -61,12 +61,12 @@ public class XSDeclarationsFetcher implements XSVisitor {
 				}
 			}
 		}
-		log_uris();
+		logUris();
 	}
 
 	public void fetch(XSSchema schema) {
 		schema.visit(this);
-		log_uris();
+		logUris();
 	}
 
 	public XSDeclaration getDeclaration(String uri) {
@@ -80,6 +80,15 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return null;
 	}
 
+	public String getOwnerUri(String uri) {
+		XSDeclaration declaration = getDeclaration(uri);
+		XSDeclaration declOwner = getOwner(declaration);
+		if (declOwner != null) {
+			return getUri(declOwner);
+		}
+		return null;
+	}
+
 	public String getNamespace(XSDeclaration declaration) {
 		if (declaration.isLocal()) {
 			XSDeclaration owner = getOwner(declaration);
@@ -88,7 +97,7 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return declaration.getTargetNamespace();
 	}
 
-	public String getURI(XSDeclaration declaration) {
+	public String getUri(XSDeclaration declaration) {
 		return getNamespace(declaration) + "#" + declaration.getName();
 	}
 
@@ -96,21 +105,23 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return attributeUses.get(declaration);
 	}
 
-	private void register(XSDeclaration decl) {
+	private boolean register(XSDeclaration decl) {
 		if (decl.isLocal()) {
 			localOwners.put(decl, path.lastElement());
 		}
-		String uri = getURI(decl);
+		String uri = getUri(decl);
 		if (declarations.containsKey(uri)) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Duplicate URI " + uri);
 			}
+			return false;
 		} else {
 			declarations.put(uri, decl);
+			return true;
 		}
 	}
 
-	public void log_uris() {
+	public void logUris() {
 		if (logger.isLoggable(Level.INFO)) {
 			StringBuffer buffer = new StringBuffer("Registered URIs:\n");
 			for (String uri : declarations.keySet()) {
@@ -170,7 +181,9 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void simpleType(XSSimpleType simpleType) {
 		if (simpleType.isGlobal()) {
-			register(simpleType);
+			if (register(simpleType) == false) {
+				return;
+			}
 			simpleTypes.add(simpleType);
 		}
 	}
@@ -178,7 +191,9 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void complexType(XSComplexType complexType) {
 		if (complexType.isGlobal()) {
-			register(complexType);
+			if (register(complexType) == false) {
+				return;
+			}
 			complexTypes.add(complexType);
 			path.push(complexType);
 		}
@@ -210,14 +225,18 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void attributeDecl(XSAttributeDecl attributeDecl) {
 		// Careful, it can be local and not have a name
-		register(attributeDecl);
+		if (register(attributeDecl) == false) {
+			return;
+		}
 		attributeDecls.add(attributeDecl);
 	}
 
 	@Override
 	public void attGroupDecl(XSAttGroupDecl attGroupDecl) {
 		if (attGroupDecl.isGlobal()) {
-			register(attGroupDecl);
+			if (register(attGroupDecl) == false) {
+				return;
+			}
 			attGroupDecls.add(attGroupDecl);
 			path.push(attGroupDecl);
 		}
@@ -232,7 +251,9 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void modelGroupDecl(XSModelGroupDecl modelGroupDecl) {
 		if (modelGroupDecl.isGlobal()) {
-			register(modelGroupDecl);
+			if (register(modelGroupDecl) == false) {
+				return;
+			}
 			modelGroupDecls.add(modelGroupDecl);
 			path.push(modelGroupDecl);
 		}
@@ -254,7 +275,9 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	@Override
 	public void elementDecl(XSElementDecl elementDecl) {
 		// TODO Make sure there is no need to test if global first
-		register(elementDecl);
+		if (register(elementDecl) == false) {
+			return;
+		}
 		elementDecls.add(elementDecl);
 		path.push(elementDecl);
 

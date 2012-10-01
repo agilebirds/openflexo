@@ -152,7 +152,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 
 	private XSOntClass loadClass(XSDeclaration declaration) {
 		String name = declaration.getName();
-		String uri = fetcher.getURI(declaration);
+		String uri = fetcher.getUri(declaration);
 		XSOntClass xsClass = new XSOntClass(this, name, uri);
 		classes.put(uri, xsClass);
 		return xsClass;
@@ -171,12 +171,12 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 			if (mapsToClass(element)) {
 				XSOntClass xsClass = loadClass(element);
 				try {
-					XSOntClass superClass = classes.get(fetcher.getURI(element.getType()));
+					XSOntClass superClass = classes.get(fetcher.getUri(element.getType()));
 					xsClass.addSuperClass(superClass);
 				} catch (Exception e) {
-					
+
 				}
-				
+
 			}
 		}
 		for (XSAttGroupDecl attGroup : fetcher.getAttGroupDecls()) {
@@ -210,11 +210,23 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		return result;
 	}
 
+	private void addDomainIfPossible(XSOntProperty property, String conceptUri) {
+		String ownerUri = fetcher.getOwnerUri(conceptUri);
+		if (ownerUri != null) {
+			XSOntClass owner = getClass(ownerUri);
+			if (owner != null) {
+				property.newDomainFound(owner);
+				owner.addPropertyTakingMyselfAsDomain(property);
+			}
+		}
+	}
+
 	private XSOntDataProperty loadDataProperty(XSDeclaration declaration) {
 		String name = declaration.getName();
-		String uri = fetcher.getURI(declaration);
+		String uri = fetcher.getUri(declaration);
 		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri);
 		dataProperties.put(uri, xsDataProperty);
+		addDomainIfPossible(xsDataProperty, uri);
 		return xsDataProperty;
 	}
 
@@ -237,21 +249,53 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		}
 	}
 
+	private XSOntObjectProperty loadPrefixedProperty(XSDeclaration declaration, XSOntObjectProperty parent) {
+		String prefix = parent.getName();
+		String name = prefix + declaration.getName();
+		String uri = fetcher.getNamespace(declaration) + "#" + name;
+		XSOntObjectProperty property = new XSOntObjectProperty(this, name, uri);
+		property.addSuperProperty(parent);
+		objectProperties.put(property.getURI(), property);
+		return property;
+	}
+
 	private void loadObjectProperties() {
 		objectProperties.clear();
-		XSOntObjectProperty hasElement = new XSOntObjectProperty(this, XS_HASCHILD_PROPERTY_NAME);
-		objectProperties.put(hasElement.getURI(), hasElement);
-		XSOntObjectProperty isPartOfElement = new XSOntObjectProperty(this, XS_HASPARENT_PROPERTY_NAME);
-		objectProperties.put(isPartOfElement.getURI(), isPartOfElement);
-		// TODO have properties inheriting those two for all complex types and elements
-		// How to name to make sure its URI is valid?
-		
-		for (XSOntObjectProperty property : objectProperties.values()) {
-			for (XSElementDecl element : fetcher.getElementDecls()) {
-				if (mapsToClass(element)) {
-					String uri = fetcher.getURI(element);
-					classes.get(uri).addPropertyTakingMyselfAsRange(property);
-				}
+		XSOntObjectProperty hasChild = new XSOntObjectProperty(this, XS_HASCHILD_PROPERTY_NAME);
+		objectProperties.put(hasChild.getURI(), hasChild);
+		XSOntObjectProperty hasParent = new XSOntObjectProperty(this, XS_HASPARENT_PROPERTY_NAME);
+		objectProperties.put(hasParent.getURI(), hasParent);
+
+		for (XSElementDecl element : fetcher.getElementDecls()) {
+			if (mapsToClass(element)) {
+				String uri = fetcher.getUri(element);
+				XSOntClass ontClass = getClass(uri);
+				ontClass.addPropertyTakingMyselfAsRange(hasChild);
+				ontClass.addPropertyTakingMyselfAsDomain(hasChild);
+				ontClass.addPropertyTakingMyselfAsRange(hasParent);
+				ontClass.addPropertyTakingMyselfAsDomain(hasParent);
+			}
+		}
+
+		for (XSComplexType complexType : fetcher.getComplexTypes()) {
+			XSOntClass c = getClass(fetcher.getUri(complexType));
+			XSOntObjectProperty cHasChild = loadPrefixedProperty(complexType, hasChild);
+			cHasChild.newRangeFound(c);
+			addDomainIfPossible(cHasChild, c.getURI());
+			XSOntObjectProperty cHasParent = loadPrefixedProperty(complexType, hasParent);
+			cHasParent.newRangeFound(c);
+			addDomainIfPossible(cHasParent, c.getURI());
+		}
+
+		for (XSElementDecl element : fetcher.getElementDecls()) {
+			if (mapsToClass(element)) {
+				XSOntClass c = getClass(fetcher.getUri(element));
+				XSOntObjectProperty cHasChild = loadPrefixedProperty(element, hasChild);
+				cHasChild.newRangeFound(c);
+				addDomainIfPossible(cHasChild, c.getURI());
+				XSOntObjectProperty cHasParent = loadPrefixedProperty(element, hasParent);
+				cHasParent.newRangeFound(c);
+				addDomainIfPossible(cHasParent, c.getURI());
 			}
 		}
 	}
@@ -280,17 +324,21 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		for (AbstractXSOntObject o : classes.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
 		}
-		for (AbstractXSOntObject o : dataProperties.values()) {
+		for (XSOntDataProperty o : dataProperties.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+			o.resetDomain();
 		}
-		for (AbstractXSOntObject o : objectProperties.values()) {
+		for (XSOntObjectProperty o : objectProperties.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+			o.resetDomain();
+			o.resetRange();
+			o.clearSuperProperties();
 		}
 		for (AbstractXSOntObject o : individuals.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
 		}
 	}
-	
+
 	public boolean load() {
 		// TODO Should I create a w3 ontology? possibly .owl?
 		// TODO Seems I should.
