@@ -305,9 +305,9 @@ public class DataBinding implements StringConvertable<DataBinding> {
 										try {
 											component.declareDependantOf(next);
 										} catch (DependencyLoopException e) {
-											logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
+											logger.warning("DependencyLoopException raised while declaring dependency (data lookup)"
 													+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
-													+ primitiveValue + " component: " + component + " dependancy: " + next + " data: "
+													+ primitiveValue + " component: " + component + " dependency: " + next + " data: "
 													+ data + " message: " + e.getMessage());
 										}
 									}
@@ -329,9 +329,9 @@ public class DataBinding implements StringConvertable<DataBinding> {
 									try {
 										component.declareDependantOf(next);
 									} catch (DependencyLoopException e) {
-										logger.warning("DependancyLoopException raised while declaring dependancy (name lookup)"
+										logger.warning("DependencyLoopException raised while declaring dependency (name lookup)"
 												+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
-												+ primitiveValue + " component: " + component + " dependancy: " + next + " message: "
+												+ primitiveValue + " component: " + component + " dependency: " + next + " message: "
 												+ e.getMessage());
 									}
 								}

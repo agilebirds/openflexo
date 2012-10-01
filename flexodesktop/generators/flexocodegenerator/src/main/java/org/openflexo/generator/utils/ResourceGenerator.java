@@ -107,8 +107,10 @@ public class ResourceGenerator extends MetaGenerator<FlexoModelObject, CGReposit
 		for (PackagedResourceToCopyGenerator generator : _eclipseFilesGenerator.values()) {
 			generator.generate(forceRegenerate);
 		}
-		for (Language lg : getProject().getDKVModel().getLanguages()) {
-			getGenerator(lg).generate(forceRegenerate);
+		if (getProject().getDKVModel(false) != null) {
+			for (Language lg : getProject().getDKVModel().getLanguages()) {
+				getGenerator(lg).generate(forceRegenerate);
+			}
 		}
 		if (!getRepository().includeReader()) {
 			getHelpGenerator().generate(forceRegenerate);
@@ -119,18 +121,20 @@ public class ResourceGenerator extends MetaGenerator<FlexoModelObject, CGReposit
 
 	@Override
 	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
-		Hashtable<Language, LocalizedFileGenerator> lgHash = new Hashtable<Language, LocalizedFileGenerator>();
-		for (Language lg : getProject().getDKVModel().getLanguages()) {
-			if ((lg.getIsoCode() != null) && lg.isoCodeIsUnique()) {
-				LocalizedFileGenerator generator = getGenerator(lg);
-				if (generator != null) {
-					lgHash.put(lg, generator);
-					generator.buildResourcesAndSetGenerators(repository, resources);
+		if (getProject().getDKVModel(false) != null) {
+			Hashtable<Language, LocalizedFileGenerator> lgHash = new Hashtable<Language, LocalizedFileGenerator>();
+			for (Language lg : getProject().getDKVModel().getLanguages()) {
+				if (lg.getIsoCode() != null && lg.isoCodeIsUnique()) {
+					LocalizedFileGenerator generator = getGenerator(lg);
+					if (generator != null) {
+						lgHash.put(lg, generator);
+						generator.buildResourcesAndSetGenerators(repository, resources);
+					}
 				}
 			}
+			_localizedGenerator.clear();
+			_localizedGenerator = lgHash;
 		}
-		_localizedGenerator.clear();
-		_localizedGenerator = lgHash;
 		if (!repository.includeReader()) {
 			getHelpGenerator().buildResourcesAndSetGenerators(repository, resources);
 		}
@@ -142,7 +146,7 @@ public class ResourceGenerator extends MetaGenerator<FlexoModelObject, CGReposit
 			if (drivers.length > 0) {
 				for (FileResource wsRes : drivers) {
 					PackagedResourceToCopyGenerator<CGRepository> generator = getGenerator(wsRes);
-					if ((wsRes == null) || !wsRes.exists()) {
+					if (wsRes == null || !wsRes.exists()) {
 						continue;
 					}
 					refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + wsRes.getName(), false);
@@ -170,7 +174,7 @@ public class ResourceGenerator extends MetaGenerator<FlexoModelObject, CGReposit
 			String s = PATTERNSET_FILE_NAMES[i];
 			FileResource orig = new FileResource("Config/Generator/Resources/" + s);
 			PackagedResourceToCopyGenerator<CGRepository> generator = getGeneratorForEclipseResource(orig);
-			if ((orig == null) || !orig.exists()) {
+			if (orig == null || !orig.exists()) {
 				continue;
 			}
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + orig.getName(), false);

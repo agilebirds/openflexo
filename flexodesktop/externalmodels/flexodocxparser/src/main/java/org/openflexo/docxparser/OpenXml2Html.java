@@ -38,13 +38,22 @@ import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackagePartName;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.openxml4j.opc.PackagingURIHelper;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.XPath;
 import org.openflexo.docxparser.dto.ParsedHtml;
 import org.openflexo.docxparser.dto.ParsedHtmlResource;
 import org.openflexo.toolbox.HTMLUtils;
 
+import com.google.common.collect.ImmutableMap;
+
 public class OpenXml2Html {
+
 	private static final Logger logger = Logger.getLogger(OpenXml2Html.class.getPackage().toString());
+
+	private static final String DRAWING_ML_NS_PREFIX = "a";
+	private static final Map<String, String> NAMESPACE_URIS = ImmutableMap.of(DRAWING_ML_NS_PREFIX,
+			"http://schemas.openxmlformats.org/drawingml/2006/main");
 
 	private Set<String> availableCssClasses;
 	private String resourcesDirectory;
@@ -368,7 +377,9 @@ public class OpenXml2Html {
 		ParsedHtml parsedHtml = new ParsedHtml();
 
 		try {
-			Element ablipElement = (Element) element.selectSingleNode("descendant::a:blip");
+			XPath xpath = DocumentHelper.createXPath("descendant::" + DRAWING_ML_NS_PREFIX + ":blip");
+			xpath.setNamespaceURIs(NAMESPACE_URIS);
+			Element ablipElement = (Element) xpath.selectSingleNode(element);
 			if (ablipElement == null) {
 				logger.warning("Cannot handle drawing tag: a:blip element not found");
 				return parsedHtml;

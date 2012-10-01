@@ -72,8 +72,6 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 
 	private FlexoNavigationMenuResource _resource;
 
-	private String name;
-
 	private FlexoItemMenu _rootMenu;
 
 	private boolean useDefaultImage = true;
@@ -103,7 +101,6 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 		initializeDeserialization(builder);
 		_resource = builder.resource;
 		builder.navigationMenu = this;
-		name = "menu";
 	}
 
 	/**
@@ -112,8 +109,6 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	public FlexoNavigationMenu(FlexoProject project) {
 		super(project);
 		_project = project;
-		_project.setFlexoNavigationMenu(this);
-		name = "menu";
 	}
 
 	/**
@@ -280,17 +275,6 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 		*/
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String aName) {
-		name = aName;
-		setChanged();
-	}
-
 	public void setRootMenu(FlexoItemMenu rootMenu) {
 		_rootMenu = rootMenu;
 		setChanged();
@@ -326,11 +310,6 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	public XMLStorageResourceData getXMLResourceData() {
 		return this;
 	}
-
-	// ==========================================================================
-	// ====================== Validable implementation
-	// ==========================
-	// ==========================================================================
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {

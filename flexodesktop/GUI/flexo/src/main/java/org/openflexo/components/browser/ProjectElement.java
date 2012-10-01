@@ -41,23 +41,43 @@ public class ProjectElement extends BrowserElement {
 
 	public ProjectElement(FlexoProject project, ProjectBrowser browser, BrowserElement parent) {
 		super(project, BrowserElementType.PROJECT, browser, parent);
-		project.getFlexoWorkflow().addObserver(this);
+		if (getProject().getFlexoWorkflow(false) != null) {
+			project.getFlexoWorkflow().addObserver(this);
+		} else {
+			project.addObserver(this);
+		}
 	}
 
 	@Override
 	public void delete() {
-		getProject().getFlexoWorkflow().deleteObserver(this);
+		getProject().deleteObserver(this);
+		if (getProject().getFlexoWorkflow(false) != null) {
+			getProject().getFlexoWorkflow().deleteObserver(this);
+		}
 		super.delete();
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		addToChilds(getProject().getFlexoWorkflow());
-		addToChilds(getProject().getDataModel());
-		addToChilds(getProject().getFlexoComponentLibrary());
-		addToChilds(getProject().getDKVModel());
-		addToChilds(getProject().getFlexoNavigationMenu().getRootMenu());
-		addToChilds(getProject().getFlexoWSLibrary());
+		if (getProject().getFlexoWorkflow(false) != null) {
+			addToChilds(getProject().getFlexoWorkflow());
+		}
+		if (getProject().getDataModel(false) != null) {
+			addToChilds(getProject().getDataModel());
+		}
+
+		if (getProject().getFlexoComponentLibrary(false) != null) {
+			addToChilds(getProject().getFlexoComponentLibrary());
+		}
+		if (getProject().getDKVModel(false) != null) {
+			addToChilds(getProject().getDKVModel());
+		}
+		if (getProject().getFlexoNavigationMenu(false) != null) {
+			addToChilds(getProject().getFlexoNavigationMenu().getRootMenu());
+		}
+		if (getProject().getFlexoWSLibrary(false) != null) {
+			addToChilds(getProject().getFlexoWSLibrary());
+		}
 		if (getProject().getProjectOntology(false) != null) {
 			addToChilds((FlexoModelObject) getProject().getProjectOntology(false));
 		}

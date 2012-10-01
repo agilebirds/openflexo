@@ -156,7 +156,9 @@ public class IEToolsMenu extends ToolsMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			getIEController().consistencyCheck(getIEController().getProject().getDKVModel());
+			if (getIEController().getProject() != null && getIEController().getProject().getDKVModel(false) != null) {
+				getIEController().consistencyCheck(getIEController().getProject().getDKVModel());
+			}
 		}
 
 	}

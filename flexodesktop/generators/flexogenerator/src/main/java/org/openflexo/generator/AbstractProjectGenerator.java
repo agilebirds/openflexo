@@ -162,8 +162,8 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification.propertyName() != null && (dataModification.propertyName().equals("targetType") || dataModification
-				.propertyName().equals("docType")))) {
+		if (dataModification.propertyName() != null
+				&& (dataModification.propertyName().equals("targetType") || dataModification.propertyName().equals("docType"))) {
 			getTemplateLocator().notifyTemplateModified();
 		}
 		if (dataModification instanceof TemplateFileNotification) {
@@ -198,79 +198,77 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 			FlexoObserver dmValidationObserver, FlexoObserver dkvValidationObserver) throws ModelValidationException {
 		ModelValidationException thrownException = null;
 
-		// We validate the component library model
-		IEValidationModel ieValidationModel = new IEValidationModel(getProject(), getTarget());
-		if (ieValidationObserver != null) {
-			ieValidationModel.addObserver(ieValidationObserver);
+		if (getProject().getFlexoComponentLibrary(false) != null) {
+			// We validate the component library model
+			IEValidationModel ieValidationModel = new IEValidationModel(getProject(), getTarget());
+			if (ieValidationObserver != null) {
+				ieValidationModel.addObserver(ieValidationObserver);
+			}
+			ValidationReport report = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
+			if (ieValidationObserver != null) {
+				ieValidationModel.deleteObserver(ieValidationObserver);
+			}
+			if (getAction() instanceof ValidateProject) {
+				((ValidateProject) getAction()).setIeValidationReport(report);
+			}
+			if (report.getErrorNb() > 0) {
+				thrownException = new ModelValidationException("Component library validation failed", "component_library_is_not_valid",
+						report);
+			}
 		}
-		ValidationReport report = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
-		if (ieValidationObserver != null) {
-			ieValidationModel.deleteObserver(ieValidationObserver);
+		if (getProject().getFlexoWorkflow(false) != null) {
+			// We validate the workflow model
+			WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), getTarget());
+			if (wkfValidationObserver != null) {
+				wkfValidationModel.addObserver(wkfValidationObserver);
+			}
+			ValidationReport report = getProject().getFlexoWorkflow().validate(wkfValidationModel);
+			if (wkfValidationObserver != null) {
+				wkfValidationModel.deleteObserver(wkfValidationObserver);
+			}
+			if (getAction() instanceof ValidateProject) {
+				((ValidateProject) getAction()).setWkfValidationReport(report);
+			}
+			if (report.getErrorNb() > 0) {
+				thrownException = new ModelValidationException("Workflow validation failed", "workflow_is_not_valid", report);
+			}
 		}
-
-		if (getAction() instanceof ValidateProject) {
-			((ValidateProject) getAction()).setIeValidationReport(report);
-		}
-
-		if (report.getErrorNb() > 0) {
-			thrownException = new ModelValidationException("Component library validation failed", "component_library_is_not_valid", report);
-		}
-
-		// We validate the workflow model
-		WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), getTarget());
-		if (wkfValidationObserver != null) {
-			wkfValidationModel.addObserver(wkfValidationObserver);
-		}
-		report = getProject().getFlexoWorkflow().validate(wkfValidationModel);
-		if (wkfValidationObserver != null) {
-			wkfValidationModel.deleteObserver(wkfValidationObserver);
-		}
-
-		if (getAction() instanceof ValidateProject) {
-			((ValidateProject) getAction()).setWkfValidationReport(report);
-		}
-
-		if (report.getErrorNb() > 0) {
-			thrownException = new ModelValidationException("Workflow validation failed", "workflow_is_not_valid", report);
-		}
-
-		// We validate the dkv model
-		DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), getTarget());
-		if (dkvValidationObserver != null) {
-			dkvValidationModel.addObserver(dkvValidationObserver);
-		}
-		report = getProject().getDKVModel().validate(dkvValidationModel);
-		if (dkvValidationObserver != null) {
-			dkvValidationModel.deleteObserver(dkvValidationObserver);
-		}
-
-		if (getAction() instanceof ValidateProject) {
-			((ValidateProject) getAction()).setDkvValidationReport(report);
-		}
-
-		if (report.getErrorNb() > 0) {
-			thrownException = new ModelValidationException("DKV validation failed", "domainkeyvalue_is_not_valid", report);
-		}
-
-		DMValidationModel dmValidationModel = new DMValidationModel(getProject(), getTarget());
-		if (dmValidationObserver != null) {
-			dmValidationModel.addObserver(dmValidationObserver);
-		}
-		report = getProject().getDataModel().validate(dmValidationModel);
-		if (dmValidationObserver != null) {
-			dmValidationModel.deleteObserver(dmValidationObserver);
+		if (getProject().getDKVModel(false) != null) {
+			// We validate the dkv model
+			DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), getTarget());
+			if (dkvValidationObserver != null) {
+				dkvValidationModel.addObserver(dkvValidationObserver);
+			}
+			ValidationReport report = getProject().getDKVModel().validate(dkvValidationModel);
+			if (dkvValidationObserver != null) {
+				dkvValidationModel.deleteObserver(dkvValidationObserver);
+			}
+			if (getAction() instanceof ValidateProject) {
+				((ValidateProject) getAction()).setDkvValidationReport(report);
+			}
+			if (report.getErrorNb() > 0) {
+				thrownException = new ModelValidationException("DKV validation failed", "domainkeyvalue_is_not_valid", report);
+			}
 		}
 
-		if (getAction() instanceof ValidateProject) {
-			((ValidateProject) getAction()).setDmValidationReport(report);
-		}
-
-		if (report.getErrorNb() > 0) {
-			thrownException = new ModelValidationException("Data model validation failed", "data_model_is_not_valid", report);
-		}
-
-		if (thrownException != null) {
-			throw thrownException;
+		if (getProject().getDataModel(false) != null) {
+			DMValidationModel dmValidationModel = new DMValidationModel(getProject(), getTarget());
+			if (dmValidationObserver != null) {
+				dmValidationModel.addObserver(dmValidationObserver);
+			}
+			ValidationReport report = getProject().getDataModel().validate(dmValidationModel);
+			if (dmValidationObserver != null) {
+				dmValidationModel.deleteObserver(dmValidationObserver);
+			}
+			if (getAction() instanceof ValidateProject) {
+				((ValidateProject) getAction()).setDmValidationReport(report);
+			}
+			if (report.getErrorNb() > 0) {
+				thrownException = new ModelValidationException("Data model validation failed", "data_model_is_not_valid", report);
+			}
+			if (thrownException != null) {
+				throw thrownException;
+			}
 		}
 
 		return true;
@@ -288,6 +286,7 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 		}
 	}
 
+	@Override
 	public void log(String log) {
 		for (LogListener l : logListeners) {
 			l.log(log);

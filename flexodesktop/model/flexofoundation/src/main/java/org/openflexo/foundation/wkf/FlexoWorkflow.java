@@ -220,7 +220,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 * @return a newly created workflow
 	 * @throws InvalidFileNameException
 	 */
-	public static FlexoWorkflow createNewWorkflow(FlexoProject project) throws InvalidFileNameException {
+	public static FlexoWorkflow createNewWorkflow(FlexoProject project) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BEGIN createNewWorkflow(), project=" + project);
 		}
@@ -228,7 +228,13 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 		File wkfFile = ProjectRestructuration.getExpectedWorkflowFile(project, project.getProjectName());
 		FlexoProjectFile workflowFile = new FlexoProjectFile(wkfFile, project);
-		FlexoWorkflowResource wkfRes = new FlexoWorkflowResource(project, newWorkflow, workflowFile);
+		FlexoWorkflowResource wkfRes = null;
+		try {
+			wkfRes = new FlexoWorkflowResource(project, newWorkflow, workflowFile);
+		} catch (InvalidFileNameException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		try {
 			project.registerResource(wkfRes);
 		} catch (DuplicateResourceException e) {

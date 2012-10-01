@@ -35,7 +35,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
-import javax.swing.text.Segment;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledDocument;
 
@@ -81,7 +80,6 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 		int wordStart = -1, wordEnd = -1;
 		String word;
 		DocumentWordTokenizer docTok;
-		Segment seg = new Segment();
 
 		docTok = new DocumentWordTokenizer(doc);
 		if (start > 0) {
@@ -165,7 +163,7 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 		int pos = pane.viewToModel(p);
 		DocumentWordTokenizer docTok;
 		String word;
-		java.util.List suggestions;
+		java.util.List<com.swabunga.spell.engine.Word> suggestions;
 		JPopupMenu popup;
 		ReplaceListener repList;
 
@@ -181,7 +179,7 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 				popup = new JPopupMenu();
 				repList = new ReplaceListener(docTok);
 				for (int i = 0; i < suggestions.size(); i++) {
-					com.swabunga.spell.engine.Word w = (com.swabunga.spell.engine.Word) suggestions.get(i);
+					com.swabunga.spell.engine.Word w = suggestions.get(i);
 					item = new JMenuItem(w.getWord());
 					item.setActionCommand(w.getWord());
 					item.addActionListener(repList);

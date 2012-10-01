@@ -1,20 +1,14 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.CubicCurve2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -23,20 +17,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.swing.BarButton;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
@@ -45,8 +37,6 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.controller.model.HistoryLocation;
 
 public class MainPaneTopBar extends JMenuBar {
-
-	private static final int ROUNDED_CORNER_SIZE = 5;
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(MainPaneTopBar.class.getPackage()
 			.getName());
@@ -76,63 +66,6 @@ public class MainPaneTopBar extends JMenuBar {
 	private boolean forcePreferredSize;
 
 	private FlexoController controller;
-
-	@SuppressWarnings("unused")
-	private class BarButton extends JButton {
-		public BarButton(Action a) {
-			this();
-			setAction(a);
-		}
-
-		public BarButton(Icon icon) {
-			this(null, icon);
-		}
-
-		public BarButton(String text, Icon icon) {
-			super(text, icon);
-			setEnabled(true);
-			setFocusable(false);
-			setBorderPainted(ToolBox.getPLATFORM() != ToolBox.MACOS);
-			setRolloverEnabled(true);
-			setContentAreaFilled(false);
-			setOpaque(false);
-			addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					if (isEnabled()) {
-						setContentAreaFilled(true);
-					}
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					setContentAreaFilled(false);
-				}
-			});
-		}
-
-		public BarButton(String text) {
-			this(text, null);
-		}
-
-		public BarButton() {
-			this(null, null);
-		}
-
-		@Override
-		public void setContentAreaFilled(boolean b) {
-			b |= isSelected();
-			super.setContentAreaFilled(b);
-			setOpaque(b);
-		}
-
-		@Override
-		public void setSelected(boolean b) {
-			super.setSelected(b);
-			setContentAreaFilled(b);
-		}
-
-	}
 
 	public class TabHeaderContainer extends JPanel implements PropertyChangeListener {
 
@@ -252,31 +185,6 @@ public class MainPaneTopBar extends JMenuBar {
 	private class ViewTabHeader extends JPanel implements PropertyChangeListener, ActionListener {
 		private final FlexoModelObject object;
 
-		private class TabHeaderBorder implements Border {
-
-			@Override
-			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-				g.setColor(Color.BLACK);
-				g.drawLine(0, ROUNDED_CORNER_SIZE, 0, height);
-				g.drawArc(ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, 90, 180);
-				CubicCurve2D.Double curve = new CubicCurve2D.Double(width - 4 * ROUNDED_CORNER_SIZE, 0, width - 2 * ROUNDED_CORNER_SIZE, 0,
-						width - 2 * ROUNDED_CORNER_SIZE, height, width, height);
-				((Graphics2D) g).draw(curve);
-				g.drawLine(ROUNDED_CORNER_SIZE, 0, width - 4 * ROUNDED_CORNER_SIZE, 0);
-			}
-
-			@Override
-			public Insets getBorderInsets(Component c) {
-				return new Insets(ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, 0, 4 * ROUNDED_CORNER_SIZE);
-			}
-
-			@Override
-			public boolean isBorderOpaque() {
-				return false;
-			}
-
-		}
-
 		private JLabel text;
 		private JButton close;
 		private final ModuleView<?> view;
@@ -287,14 +195,14 @@ public class MainPaneTopBar extends JMenuBar {
 			this.object = view.getRepresentedObject();
 			text = new JLabel();
 			text.setHorizontalTextPosition(JLabel.RIGHT);
-			close = new BarButton(IconLibrary.CLOSE_ICON);
-			close.setRolloverIcon(IconLibrary.CLOSE_HOVER_ICON);
+			/*close = new BarButton(IconLibrary.CLOSE_ICON);
+			close.setRolloverIcon(IconLibrary.CLOSE_HOVER_ICON);*/
 			close.addActionListener(this);
 			updateText();
 			registrationManager.new PropertyChangeListenerRegistration(FlexoModelObject.DELETED_PROPERTY, this, object);
 			add(text);
 			add(close, BorderLayout.EAST);
-			setBorder(new TabHeaderBorder());
+			// setBorder(new TabHeaderBorder());
 		}
 
 		@Override

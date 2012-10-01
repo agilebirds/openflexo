@@ -66,7 +66,7 @@ public class FIBDependancy extends FIBModelObject {
 			try {
 				getOwner().declareDependantOf(masterComponent);
 			} catch (DependencyLoopException e) {
-				logger.warning("DependancyLoopException raised while applying explicit dependancy for " + getOwner() + " and "
+				logger.warning("DependencyLoopException raised while applying explicit dependency for " + getOwner() + " and "
 						+ getMasterComponent() + " message: " + e.getMessage());
 			}
 			hasChanged(notification);
