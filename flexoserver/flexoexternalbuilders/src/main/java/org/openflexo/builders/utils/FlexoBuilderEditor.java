@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import org.openflexo.builders.FlexoExternalMain;
 import org.openflexo.builders.FlexoExternalMainWithProject;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.dg.ProjectDocGenerator;
@@ -121,6 +122,9 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 					if (!action.isEmbedded()) {
 						doNextTodo(action);
 					}
+					if (FlexoBuilderEditor.this.exception != null) {
+						externalMainWithProject.setExitCodeCleanUpAndExit(FlexoExternalMain.UNEXPECTED_EXCEPTION);
+					}
 				}
 			};
 			worker.execute();
@@ -130,6 +134,9 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 			} catch (FlexoException e) {
 				e.printStackTrace();
 				FlexoBuilderEditor.this.exception = e;
+				if (FlexoBuilderEditor.this.exception != null) {
+					externalMainWithProject.setExitCodeCleanUpAndExit(FlexoExternalMain.UNEXPECTED_EXCEPTION);
+				}
 			}
 			if (!action.isEmbedded()) {
 				doNextTodo(action);
