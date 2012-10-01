@@ -41,12 +41,16 @@ public class ProjectElement extends BrowserElement {
 
 	public ProjectElement(FlexoProject project, ProjectBrowser browser, BrowserElement parent) {
 		super(project, BrowserElementType.PROJECT, browser, parent);
-		project.getFlexoWorkflow().addObserver(this);
+		if (project.getFlexoWorkflow() != null) {
+			project.getFlexoWorkflow().addObserver(this);
+		}
 	}
 
 	@Override
 	public void delete() {
-		getProject().getFlexoWorkflow().deleteObserver(this);
+		if (getProject().getFlexoWorkflow() != null) {
+			getProject().getFlexoWorkflow().deleteObserver(this);
+		}
 		super.delete();
 	}
 

@@ -149,7 +149,7 @@ public class ProcessBusinessDataRepository extends DMRepository {
 					"ProcessBusinessData", null);
 			registerEntity(processBusinessDataEntity);
 
-			if (getDMModel().getWORepository().isWebObjectsAvailable()) {
+			if (getDMModel() != null && getDMModel().getWORepository() != null && getDMModel().getWORepository().isWebObjectsAvailable()) {
 				processBusinessDataEntity.setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.foundation.NSMutableDictionary")), true);
 			}
