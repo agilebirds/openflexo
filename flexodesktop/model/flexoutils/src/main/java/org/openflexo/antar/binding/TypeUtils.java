@@ -59,6 +59,16 @@ public class TypeUtils {
 				return null;
 			}
 		}
+		if (aType instanceof WildcardType) {
+			// System.out.println("WildcardType: " + aType);
+			Type[] upperBounds = ((WildcardType) aType).getUpperBounds();
+			Type[] lowerBounds = ((WildcardType) aType).getLowerBounds();
+			// System.out.println("upper=" + upperBounds + " size=" + upperBounds.length);
+			// System.out.println("lower=" + upperBounds + " size=" + lowerBounds.length);
+			if (upperBounds.length == 1 && lowerBounds.length == 0) {
+				return getBaseClass(upperBounds[0]);
+			}
+		}
 		logger.warning("Not handled: " + aType.getClass().getName());
 		return null;
 	}
