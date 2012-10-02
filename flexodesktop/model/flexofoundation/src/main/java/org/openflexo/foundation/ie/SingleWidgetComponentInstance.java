@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ie;
 
-import java.io.Serializable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -34,7 +33,7 @@ import org.openflexo.toolbox.EmptyVector;
  * @deprecated <B>Class Description</B>
  */
 @Deprecated
-public class SingleWidgetComponentInstance extends PartialComponentInstance implements DeletableObject, Serializable {
+public class SingleWidgetComponentInstance extends PartialComponentInstance implements DeletableObject {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(SingleWidgetComponentInstance.class.getPackage().getName());
