@@ -253,6 +253,11 @@ public class FIBCustom extends FIBWidget {
 
 		private boolean mandatory = true;
 
+		@Override
+		public String toString() {
+			return "assignement(" + variable + "=" + value + ")";
+		}
+
 		public FIBCustomAssignment() {
 		}
 
