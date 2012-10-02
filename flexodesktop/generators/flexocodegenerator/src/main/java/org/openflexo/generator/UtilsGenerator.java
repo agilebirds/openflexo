@@ -22,6 +22,8 @@ package org.openflexo.generator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
+
 import org.apache.cayenne.access.SQLGenerator;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.FlexoModelObject;
@@ -89,7 +91,7 @@ public class UtilsGenerator extends MetaGenerator<FlexoModelObject, CGRepository
 		return logger;
 	}
 
-	public UtilsGenerator(ProjectGenerator projectGenerator) {
+	public UtilsGenerator(@Nonnull ProjectGenerator projectGenerator) {
 		super(projectGenerator, null);
 
 		headerFooterGenerator = new HeaderFooterGenerator(projectGenerator);
@@ -108,8 +110,7 @@ public class UtilsGenerator extends MetaGenerator<FlexoModelObject, CGRepository
 		woApplicationGenerator = new WOApplicationGenerator(projectGenerator);
 		woDirectActionGenerator = new WODirectActionGenerator(projectGenerator);
 		woMainGenerator = new WOMainGenerator(projectGenerator);
-		if (projectGenerator != null && projectGenerator.getTarget() == CodeType.PROTOTYPE
-				&& !projectGenerator.getRepository().includeReader()) {
+		if (projectGenerator.getTarget() == CodeType.PROTOTYPE && !projectGenerator.getRepository().includeReader()) {
 			helpPopupGenerator = new HelpPopupGenerator(projectGenerator);
 		}
 		localizedStringGenerator = new LocalizedStringGenerator(projectGenerator);
@@ -117,7 +118,7 @@ public class UtilsGenerator extends MetaGenerator<FlexoModelObject, CGRepository
 		userServiceGenerator = new UserServiceGenerator(projectGenerator);
 		constantsGenerator = new ConstantsGenerator(projectGenerator);
 		antUserFrameworksGenerator = new AntUserFrameworks(projectGenerator);
-		if (projectGenerator != null && projectGenerator.getTarget() != CodeType.PROTOTYPE) {
+		if (projectGenerator.getTarget() != CodeType.PROTOTYPE) {
 			sqlGenerator = new SQLGenerator(projectGenerator, false);
 			sqlGenerator2 = new SQLGenerator(projectGenerator, true);
 		}
@@ -141,8 +142,8 @@ public class UtilsGenerator extends MetaGenerator<FlexoModelObject, CGRepository
 		woApplicationGenerator.buildResourcesAndSetGenerators(repository, resources); // A voir
 		woDirectActionGenerator.buildResourcesAndSetGenerators(repository, resources); // A voir
 		woMainGenerator.buildResourcesAndSetGenerators(repository, resources); // OK
-		if (projectGenerator != null && projectGenerator.getTarget() == CodeType.PROTOTYPE
-				&& !projectGenerator.getRepository().includeReader() && helpPopupGenerator != null) {
+		if (projectGenerator.getTarget() == CodeType.PROTOTYPE && !projectGenerator.getRepository().includeReader()
+				&& helpPopupGenerator != null) {
 			helpPopupGenerator.buildResourcesAndSetGenerators(repository, resources); // OK
 		}
 		localizedStringGenerator.buildResourcesAndSetGenerators(repository, resources); // OK

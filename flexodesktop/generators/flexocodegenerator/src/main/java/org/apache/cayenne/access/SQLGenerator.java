@@ -149,10 +149,10 @@ public class SQLGenerator extends MetaFileGenerator {
 			if (_dbAdapter instanceof FrontBaseAdapter) {
 				buf.append("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE, LOCKING PESSIMISTIC;\n\n");
 			}
-			Iterator it = dbGenerator.configuredStatements().iterator();
+			Iterator<String> it = dbGenerator.configuredStatements().iterator();
 			String batchTerminator = dbGenerator.getAdapter().getBatchTerminator();
 
-			String lineEnd = (batchTerminator != null) ? "\n" + batchTerminator + "\n\n" : "\n\n";
+			String lineEnd = batchTerminator != null ? "\n" + batchTerminator + "\n\n" : "\n\n";
 
 			while (it.hasNext()) {
 				buf.append(it.next()).append(lineEnd);
@@ -177,7 +177,7 @@ public class SQLGenerator extends MetaFileGenerator {
 	@Override
 	public void generate(boolean forceRegenerate) {
 		try {
-			if (forceRegenerate || (generatedCode == null)) {
+			if (forceRegenerate || generatedCode == null) {
 				startGeneration();
 				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
 				generateCode();
@@ -226,19 +226,19 @@ public class SQLGenerator extends MetaFileGenerator {
 	}
 
 	private void incorporatePrototypes() {
-		Iterator entityIterator = _map.getDbEntities().iterator();
+		Iterator<DbEntity> entityIterator = _map.getDbEntities().iterator();
 		DbEntity entity = null;
 		DbAttribute attribute = null;
 		DMEOPrototype prototype = null;
 		DMEOAttribute dmeoattribute = null;
 		while (entityIterator.hasNext()) {
-			entity = (DbEntity) entityIterator.next();
-			Iterator attributeIterator = entity.getAttributes().iterator();
+			entity = entityIterator.next();
+			Iterator<DbAttribute> attributeIterator = entity.getAttributes().iterator();
 			while (attributeIterator.hasNext()) {
-				attribute = (DbAttribute) attributeIterator.next();
+				attribute = attributeIterator.next();
 				dmeoattribute = matchingDMEOAttribute(entity, attribute);
-				attribute.setMandatory(!dmeoattribute.getAllowsNull());
 				if (dmeoattribute != null) {
+					attribute.setMandatory(!dmeoattribute.getAllowsNull());
 					prototype = dmeoattribute.getPrototype();
 					if (prototype != null) {
 						String externalType = prototype.getExternalType();
@@ -255,7 +255,7 @@ public class SQLGenerator extends MetaFileGenerator {
 							externalType = "INTEGER";
 						}
 						int sqlType = TypesMapping.getSqlTypeByName(externalType);
-						if ((attribute.getMaxLength() < 1) && (prototype.getWidth() > 0)) {
+						if (attribute.getMaxLength() < 1 && prototype.getWidth() > 0) {
 							attribute.setMaxLength(prototype.getWidth());
 						}
 						attribute.setType(sqlType);
@@ -281,7 +281,7 @@ public class SQLGenerator extends MetaFileGenerator {
 		DMEOAttribute candidate = null;
 		while (en.hasNext()) {
 			candidate = en.next();
-			if ((candidate.getColumnName() != null) && candidate.getColumnName().equals(attributeName)) {
+			if (candidate.getColumnName() != null && candidate.getColumnName().equals(attributeName)) {
 				return candidate;
 			}
 		}
@@ -297,7 +297,7 @@ public class SQLGenerator extends MetaFileGenerator {
 			Enumeration<DMEOEntity> en2 = model.getEntities().elements();
 			while (en2.hasMoreElements()) {
 				candidate = en2.nextElement();
-				if ((candidate.getExternalName() != null) && candidate.getExternalName().equals(entityName)) {
+				if (candidate.getExternalName() != null && candidate.getExternalName().equals(entityName)) {
 					return candidate;
 				}
 			}
