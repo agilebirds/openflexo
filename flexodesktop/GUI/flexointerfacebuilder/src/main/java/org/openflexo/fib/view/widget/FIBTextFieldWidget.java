@@ -60,7 +60,7 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 
 	public FIBTextFieldWidget(FIBTextField model, FIBController controller) {
 		super(model, controller);
-		if (model.passwd) {
+		if (model.isPasswd()) {
 			textField = new JPasswordField() {
 				@Override
 				public Dimension getMinimumSize() {
@@ -90,15 +90,15 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 			textField.setEditable(false);
 		}
 
-		validateOnReturn = model.validateOnReturn;
-		if (model.columns != null) {
-			textField.setColumns(model.columns);
+		validateOnReturn = model.isValidateOnReturn();
+		if (model.getColumns() != null) {
+			textField.setColumns(model.getColumns());
 		} else {
 			textField.setColumns(DEFAULT_COLUMNS);
 		}
 
-		if (model.text != null) {
-			textField.setText(model.text);
+		if (model.getText() != null) {
+			textField.setText(model.getText());
 		}
 		textField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override

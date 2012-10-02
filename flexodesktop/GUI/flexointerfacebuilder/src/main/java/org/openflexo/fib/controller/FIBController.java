@@ -316,7 +316,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 			}
 			return returned;
 		}
-		returned.updateGraphicalProperties();
+		if (returned != null) {
+			returned.updateGraphicalProperties();
+		}
 		return returned;
 	}
 
@@ -539,13 +541,13 @@ public class FIBController extends Observable implements BindingEvaluationContex
 			}
 			if (newFocusedWidget != null) {
 				newFocusedWidget.getJComponent().repaint();
-			}
-			if (newFocusedWidget.isSelectableComponent()) {
-				lastFocusedSelectable = newFocusedWidget.getSelectableComponent();
-				if (lastFocusedSelectable.synchronizedWithSelection()) {
-					selectionLeader = newFocusedWidget.getSelectableComponent();
-					logger.info("Selection LEADER is now " + selectionLeader);
-					fireSelectionChanged((FIBSelectable) newFocusedWidget);
+				if (newFocusedWidget.isSelectableComponent()) {
+					lastFocusedSelectable = newFocusedWidget.getSelectableComponent();
+					if (lastFocusedSelectable.synchronizedWithSelection()) {
+						selectionLeader = newFocusedWidget.getSelectableComponent();
+						logger.info("Selection LEADER is now " + selectionLeader);
+						fireSelectionChanged((FIBSelectable) newFocusedWidget);
+					}
 				}
 			}
 		}

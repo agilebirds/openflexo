@@ -42,12 +42,12 @@ public class FIBFile extends FIBWidget {
 		public abstract int getMode();
 	}
 
-	public FileMode mode;
-	public String filter;
-	public String title;
-	public boolean isDirectory = false;
-	public File defaultDirectory;
-	public Integer columns;
+	private FileMode mode;
+	private String filter;
+	private String title;
+	private boolean directory = false;
+	private File defaultDirectory;
+	private Integer columns;
 
 	public FIBFile() {
 	}
@@ -60,5 +60,89 @@ public class FIBFile extends FIBWidget {
 	@Override
 	public Type getDefaultDataClass() {
 		return File.class;
+	}
+
+	/**
+	 * @return the columns
+	 */
+	public Integer getColumns() {
+		return columns;
+	}
+
+	/**
+	 * @param columns the columns to set
+	 */
+	public void setColumns(Integer columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * @return the defaultDirectory
+	 */
+	public File getDefaultDirectory() {
+		return defaultDirectory;
+	}
+
+	/**
+	 * @param defaultDirectory the defaultDirectory to set
+	 */
+	public void setDefaultDirectory(File defaultDirectory) {
+		this.defaultDirectory = defaultDirectory;
+	}
+
+	/**
+	 * @return the filter
+	 */
+	public String getFilter() {
+		return filter;
+	}
+
+	/**
+	 * @param filter the filter to set
+	 */
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+
+	/**
+	 * @return the directory
+	 */
+	public boolean isDirectory() {
+		return directory;
+	}
+
+	/**
+	 * @param directory the directory to set
+	 */
+	public void setDirectory(boolean directory) {
+		this.directory = directory;
+	}
+
+	/**
+	 * @return the mode
+	 */
+	public FileMode getMode() {
+		return mode;
+	}
+
+	/**
+	 * @param mode the mode to set
+	 */
+	public void setMode(FileMode mode) {
+		this.mode = mode;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

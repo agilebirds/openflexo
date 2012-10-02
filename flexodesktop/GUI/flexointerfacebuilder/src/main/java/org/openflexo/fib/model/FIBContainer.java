@@ -173,7 +173,7 @@ public abstract class FIBContainer extends FIBComponent {
 				if (overridingComponent == null) {
 					c2.setParent(this);
 					Integer previousIndex = null;
-					if (subComponents != null && subComponents.size() > 0 && subComponents.firstElement().getConstraints() != null
+					if (subComponents.size() > 0 && subComponents.firstElement().getConstraints() != null
 							&& subComponents.firstElement().getConstraints().hasIndex()) {
 						previousIndex = subComponents.firstElement().getConstraints().getIndex();
 					}

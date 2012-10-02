@@ -152,11 +152,11 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	public String getMainColor() {
 		StringBuilder sb = new StringBuilder();
 		Color c = getProject().getCssSheet().getTextColor();
-		sb.append(Math.round(c.getRed() * 10000 / 255) / 10000d);
+		sb.append(Math.round(c.getRed() * 10000d / 255) / 10000d);
 		sb.append(',');
-		sb.append(Math.round(c.getGreen() * 10000 / 255) / 10000d);
+		sb.append(Math.round(c.getGreen() * 10000d / 255) / 10000d);
 		sb.append(',');
-		sb.append(Math.round(c.getBlue() * 10000d / 255d) / 10000d);
+		sb.append(Math.round(c.getBlue() * 10000d / 255) / 10000d);
 		return sb.toString();
 	}
 
@@ -552,7 +552,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 							InputStreamReader isr = new InputStreamReader(is);
 							BufferedReader reader = new BufferedReader(isr);
 							String line;
-							Vector<LogListener> listeners = (Vector<LogListener>) logListeners.clone();
+							List<LogListener> listeners = new ArrayList<LogListener>(logListeners);
 							try {
 								while ((line = reader.readLine()) != null) {
 									for (LogListener l : listeners) {
@@ -581,7 +581,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 							InputStreamReader isr = new InputStreamReader(errIs);
 							BufferedReader reader = new BufferedReader(isr);
 							String line;
-							Vector<LogListener> listeners = (Vector<LogListener>) logListeners.clone();
+							List<LogListener> listeners = new ArrayList<LogListener>(logListeners);
 							try {
 								while ((line = reader.readLine()) != null) {
 									for (LogListener l : listeners) {
@@ -660,7 +660,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 								InputStreamReader isr = new InputStreamReader(is);
 								BufferedReader reader = new BufferedReader(isr);
 								String line;
-								Vector<LogListener> listeners = (Vector<LogListener>) logListeners.clone();
+								List<LogListener> listeners = new ArrayList<LogListener>(logListeners);
 								try {
 									while ((line = reader.readLine()) != null) {
 										for (LogListener l : listeners) {
@@ -686,7 +686,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 								InputStreamReader isr = new InputStreamReader(errIs);
 								BufferedReader reader = new BufferedReader(isr);
 								String line;
-								Vector<LogListener> listeners = (Vector<LogListener>) logListeners.clone();
+								List<LogListener> listeners = new ArrayList<LogListener>(logListeners);
 								try {
 									while ((line = reader.readLine()) != null) {
 										for (LogListener l : listeners) {

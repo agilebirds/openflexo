@@ -24,10 +24,10 @@ import java.lang.reflect.Type;
 public class FIBTextField extends FIBWidget {
 
 	// TODO: handle font
-	public boolean validateOnReturn = false;
-	public Integer columns;
-	public boolean passwd = false;
-	public String text = null;
+	private boolean validateOnReturn = false;
+	private Integer columns;
+	private boolean passwd = false;
+	private String text = null;
 
 	public FIBTextField() {
 	}
@@ -40,6 +40,62 @@ public class FIBTextField extends FIBWidget {
 	@Override
 	public Type getDefaultDataClass() {
 		return String.class;
+	}
+
+	/**
+	 * @return the columns
+	 */
+	public Integer getColumns() {
+		return columns;
+	}
+
+	/**
+	 * @param columns the columns to set
+	 */
+	public void setColumns(Integer columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * @return the passwd
+	 */
+	public boolean isPasswd() {
+		return passwd;
+	}
+
+	/**
+	 * @param passwd the passwd to set
+	 */
+	public void setPasswd(boolean passwd) {
+		this.passwd = passwd;
+	}
+
+	/**
+	 * @return the text
+	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * @param text the text to set
+	 */
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	/**
+	 * @return the validateOnReturn
+	 */
+	public boolean isValidateOnReturn() {
+		return validateOnReturn;
+	}
+
+	/**
+	 * @param validateOnReturn the validateOnReturn to set
+	 */
+	public void setValidateOnReturn(boolean validateOnReturn) {
+		this.validateOnReturn = validateOnReturn;
 	}
 
 }

@@ -180,7 +180,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 					return parameter.getBindingFactory();
 				}
 			});
-			ta.validateOnReturn = true; // Avoid too many ontologies manipulations
+			ta.setValidateOnReturn(true); // Avoid too many ontologies manipulations
 			ta.setUseScrollBar(true);
 			ta.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			ta.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);

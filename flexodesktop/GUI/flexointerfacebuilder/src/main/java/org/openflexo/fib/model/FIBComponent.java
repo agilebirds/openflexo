@@ -1084,14 +1084,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	@Override
 	public void addToParameters(FIBParameter p) {
 		// Little hask to recover previously created fib
-		if (p.name.equals("controllerClassName")) {
+		if (p.getName().equals("controllerClassName")) {
 			try {
-				Class<?> myControllerClass = Class.forName(p.value);
+				Class<?> myControllerClass = Class.forName(p.getValue());
 				if (FIBController.class.isAssignableFrom(myControllerClass)) {
 					setControllerClass((Class<? extends FIBController>) myControllerClass);
 				}
 			} catch (ClassNotFoundException e) {
-				logger.warning("Could not find class " + p.value);
+				logger.warning("Could not find class " + p.getValue());
 			}
 
 		} else {

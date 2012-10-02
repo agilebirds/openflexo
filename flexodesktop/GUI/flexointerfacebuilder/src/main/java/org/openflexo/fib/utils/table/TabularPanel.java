@@ -30,6 +30,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -67,17 +68,15 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 		setVisibleRowCount(visibleRowCount);
 	}
 
-	public TabularPanel(AbstractModel model) {
+	public TabularPanel(@Nonnull AbstractModel model) {
 		super();
 		_model = model;
 
-		if (model != null) {
-			model.addTableModelListener(this);
-			if (model.getModel() != null) {
-				model.getModel().addObserver(this);
-			}
-			model.fireTableDataChanged();
+		model.addTableModelListener(this);
+		if (model.getModel() != null) {
+			model.getModel().addObserver(this);
 		}
+		model.fireTableDataChanged();
 
 		_table = new FlexoJTable(model);
 		// _table.setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
@@ -128,7 +127,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 				int col = _table.columnAtPoint(p);
 				int row = _table.rowAtPoint(p);
 
-				if ((col > -1) && (col < _model.getColumnCount()) && (row > -1) && (row < _model.getRowCount())) {
+				if (col > -1 && col < _model.getColumnCount() && row > -1 && row < _model.getRowCount()) {
 
 					if (e.getClickCount() == 2) {
 						if (_model.isCellEditable(row, col)) {
@@ -137,7 +136,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 									logger.fine("Double-click detected in a editable cell. Do nothing !");
 								}
 							}
-						} else if ((row > -1) && (row < _model.getRowCount())) {
+						} else if (row > -1 && row < _model.getRowCount()) {
 							if (logger.isLoggable(Level.FINE)) {
 								if (logger.isLoggable(Level.FINE)) {
 									logger.fine("Double-click detected in a NON-editable cell. Select !");
@@ -150,7 +149,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 								logger.fine("Simple-click detected !");
 							}
 						}
-						if ((_table.getEditingRow() > -1) && (_table.getEditingRow() != row)) {
+						if (_table.getEditingRow() > -1 && _table.getEditingRow() != row) {
 							if (logger.isLoggable(Level.INFO)) {
 								logger.info("Change row where edition was started, fire stop editing !");
 							}
