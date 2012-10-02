@@ -1119,7 +1119,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			}
 		} else {
 			if (selectedValue.getElement() instanceof SimplePathElement) {
-				if (selectedValue != bindingValue.getBindingPathElementAtIndex(index - 1)) {
+				// FIXED invalid type object comparison
+				if (selectedValue.getElement() != bindingValue.getBindingPathElementAtIndex(index - 1)) {
 					bindingValue.setBindingPathElementAtIndex(selectedValue.getElement(), index - 1);
 					setEditedObject(bindingValue);
 					fireEditedObjectChanged();
