@@ -133,7 +133,7 @@ public abstract class PatternRole extends EditionPatternObject {
 	public abstract Class<?> getAccessedClass();
 
 	@Override
-	public BindingModel getBindingModel() {
+	public final BindingModel getBindingModel() {
 		return getEditionPattern().getBindingModel();
 	}
 
