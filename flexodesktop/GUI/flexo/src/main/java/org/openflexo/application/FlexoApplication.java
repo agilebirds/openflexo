@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import org.openflexo.AdvancedPrefs;
+import org.openflexo.Flexo;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.br.view.JIRAIssueReportDialog;
@@ -85,8 +86,6 @@ public class FlexoApplication {
 	public static EventProcessor eventProcessor;
 
 	private static byte[] mem = new byte[1024 * 1024];
-
-	public static boolean DEMO = false;
 
 	public static void installEventQueue() {
 		eventProcessor = new EventProcessor();
@@ -316,7 +315,7 @@ public class FlexoApplication {
 		 * Determines if exception can be ignored.
 		 */
 		private boolean isIgnorable(Throwable exception) {
-			if (DEMO) {
+			if (Flexo.isDemoMode()) {
 				return true;
 			}
 			StringWriter sw = new StringWriter();

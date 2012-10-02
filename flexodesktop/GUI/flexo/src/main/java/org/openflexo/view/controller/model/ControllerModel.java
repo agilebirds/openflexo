@@ -216,7 +216,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		return editors;
 	}
 
-	private void setCurrentObjectAndPerspective(FlexoModelObject currentObject, FlexoPerspective perspective) {
+	public void setCurrentObjectAndPerspective(FlexoModelObject currentObject, FlexoPerspective perspective) {
 		setCurrentPerspective(perspective, false);
 		setCurrentObject(currentObject);
 	}

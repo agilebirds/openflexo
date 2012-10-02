@@ -309,10 +309,12 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 		protected ScalePanel() {
 			super(/* new FlowLayout(FlowLayout.LEFT, 10, 0) */);
+			setOpaque(false);
 			scaleTF = new JTextField(5);
 			int currentScale = (int) (getScale() * 100);
 			scaleTF.setText(currentScale + "%");
 			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
+			slider.setOpaque(false);
 			slider.setMajorTickSpacing(100);
 			slider.setMinorTickSpacing(20);
 			slider.setPaintTicks(false/* true */);
