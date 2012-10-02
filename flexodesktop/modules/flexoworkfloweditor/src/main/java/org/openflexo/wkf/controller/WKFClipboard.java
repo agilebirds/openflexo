@@ -293,9 +293,11 @@ public class WKFClipboard extends FlexoClipboard {
 				} else if (port instanceof InOutPort) {
 					action = AddPort.createInOutPort.makeNewAction(container, null, getWKFController().getEditor());
 				}
-				action.setNewPortName(port.getDefaultName());
-				action.setEditNodeLabel(false);
-				action.doAction();
+				if (action != null) {
+					action.setNewPortName(port.getDefaultName());
+					action.setEditNodeLabel(false);
+					action.doAction();
+				}
 			}
 		} else {
 			FlexoPetriGraph pg = null;

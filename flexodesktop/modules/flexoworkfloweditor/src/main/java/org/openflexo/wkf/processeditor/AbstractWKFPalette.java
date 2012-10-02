@@ -96,10 +96,12 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 						action = AddPort.createOutPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
 					} else if (object instanceof InOutPort) {
 						action = AddPort.createInOutPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
+					} else {
+						return false;
 					}
 					action.setNewPortName(((FlexoPort) object).getDefaultName());
 
-					action.setLocation((dropLocation.x), (dropLocation.y));
+					action.setLocation(dropLocation.x, dropLocation.y);
 					action.setEditNodeLabel(true);
 					action.setGraphicalContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 					action.doAction();
@@ -108,7 +110,7 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 					logger.warning("Unexpected container");
 					return false;
 				}
-			} else if (gr.getDrawable() instanceof AbstractActivityNode && (object instanceof EventNode)) {
+			} else if (gr.getDrawable() instanceof AbstractActivityNode && object instanceof EventNode) {
 				container = ((AbstractActivityNode) gr.getDrawable()).getProcess().getActivityPetriGraph();
 				((EventNode) object).setBoundaryOf((AbstractActivityNode) gr.getDrawable());
 				DropWKFElement action = createAndExecuteDropElementAction(dropLocation, container, null, true);
