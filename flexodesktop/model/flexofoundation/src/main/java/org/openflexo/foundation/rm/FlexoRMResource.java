@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -61,7 +60,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> implements Serializable {
+public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 
 	protected static final Logger logger = Logger.getLogger(FlexoRMResource.class.getPackage().getName());
 

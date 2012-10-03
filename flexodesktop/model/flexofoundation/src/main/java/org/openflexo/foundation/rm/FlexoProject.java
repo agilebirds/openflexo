@@ -3615,7 +3615,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		 * 
 		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
 		 */
-		@SuppressWarnings("unchecked")
 		@Override
 		public ValidationIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject> applyValidation(FlexoProject project) {
 			CompoundIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject> issues = null;

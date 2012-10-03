@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +30,7 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * 
  * @author sguerin
  */
-public class GeneratedDocResource extends FlexoGeneratedOutputResource<GeneratedDoc> implements Serializable {
+public class GeneratedDocResource extends FlexoGeneratedOutputResource<GeneratedDoc> {
 	protected static final Logger logger = Logger.getLogger(GeneratedDocResource.class.getPackage().getName());
 
 	/**

@@ -44,7 +44,6 @@
   </entity>
 
   <entity name="org.openflexo.foundation.rm.FlexoOperationComponentResource" xmlTag="OperationComponent">
-    <property name="thumbnailResources" xmlTag="ThumbnailComponent" type="vector"/> 	
   </entity>
 
   <entity name="org.openflexo.foundation.rm.FlexoPopupComponentResource" xmlTag="PopupComponent">

@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +44,7 @@ import org.openflexo.toolbox.FlexoVersion;
  * @author sguerin
  * 
  */
-public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow> implements Serializable {
+public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow> {
 
 	private static final Logger logger = Logger.getLogger(FlexoWorkflowResource.class.getPackage().getName());
 

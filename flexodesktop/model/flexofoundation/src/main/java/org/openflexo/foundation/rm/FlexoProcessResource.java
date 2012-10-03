@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +62,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> implements Serializable {
+public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> {
 
 	protected static final Logger logger = Logger.getLogger(FlexoProcessResource.class.getPackage().getName());
 
