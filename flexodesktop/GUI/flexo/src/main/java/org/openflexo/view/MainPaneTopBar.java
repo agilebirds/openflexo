@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.icon.IconLibrary;
@@ -22,7 +23,6 @@ import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.swing.BarButton;
 import org.openflexo.swing.TabbedPane;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -62,9 +62,10 @@ public class MainPaneTopBar extends JMenuBar {
 		this.tabbedPane = tabbedPane;
 		this.model = model;
 		this.renderer = renderer;
+		setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		setLayout(new BorderLayout());
-		this.forcePreferredSize = ToolBox.getPLATFORM() != ToolBox.MACOS;
+		this.forcePreferredSize = true/*ToolBox.getPLATFORM() != ToolBox.MACOS*/;
 		add(left = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)), BorderLayout.WEST);
 		add(center = new JPanel(new BorderLayout()));
 		add(right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)), BorderLayout.EAST);
