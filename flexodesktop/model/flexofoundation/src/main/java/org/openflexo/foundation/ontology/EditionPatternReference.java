@@ -30,7 +30,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ontology.owl.DataPropertyStatement;
-import org.openflexo.foundation.ontology.owl.OWLDataProperty;
 import org.openflexo.foundation.ontology.owl.OWLObject;
 import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
@@ -39,6 +38,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ModelSlot;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
@@ -168,12 +168,21 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 	public static abstract class ActorReference extends FlexoModelObject {
 		public String patternRole;
+		private ModelSlot<?> modelSlot;
 		private FlexoProject _project;
 		private EditionPatternReference _patternReference;
 
 		protected ActorReference(FlexoProject project) {
 			super(project);
 			_project = project;
+		}
+
+		public ModelSlot<?> getModelSlot() {
+			return modelSlot;
+		}
+
+		public void setModelSlot(ModelSlot<?> modelSlot) {
+			this.modelSlot = modelSlot;
 		}
 
 		@Override
@@ -249,8 +258,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public FlexoModelObject retrieveObject() {
 			if (object == null) {
-				getProject().getProjectOntology().loadWhenUnloaded();
-				object = getProject().getProjectOntology().getOntologyObject(objectURI);
+				object = getProject().retrieveOntologyObject(objectURI);
 			}
 			if (object == null) {
 				logger.warning("Could not retrieve object " + objectURI);
@@ -322,8 +330,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public ObjectPropertyStatement retrieveObject() {
 			if (statement == null) {
-				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
 				if (subject == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find subject with URI " + subjectURI);
@@ -336,9 +343,11 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 					}
 					return null;
 				}
-				OntologyObjectProperty property = getProject().getProjectOntology().getObjectProperty(objectPropertyURI);
-				statement = ((OWLObject<?>) subject).getObjectPropertyStatement(property);
-				// logger.info("Found statement: "+statement);
+				OntologyObjectProperty property = (OntologyObjectProperty) getProject().retrieveOntologyObject(objectPropertyURI);
+				if (property != null) {
+					statement = ((OWLObject<?>) subject).getObjectPropertyStatement(property);
+					// logger.info("Found statement: "+statement);
+				}
 			}
 			if (statement == null) {
 				logger.warning("Could not retrieve object " + objectURI);
@@ -395,17 +404,18 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public DataPropertyStatement retrieveObject() {
 			if (statement == null) {
-				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
 				if (subject instanceof OWLObject == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
 					return null;
 				}
-				OWLDataProperty property = (OWLDataProperty) getProject().getProjectOntology().getDataProperty(dataPropertyURI);
-				statement = ((OWLObject<?>) subject).getDataPropertyStatement(property);
-				// logger.info("Found statement: "+statement);
+				OntologyDataProperty property = (OntologyDataProperty) getProject().retrieveOntologyObject(dataPropertyURI);
+				if (property != null) {
+					statement = ((OWLObject<?>) subject).getDataPropertyStatement(property);
+					// logger.info("Found statement: "+statement);
+				}
 			}
 			if (statement == null) {
 				logger.warning("Could not retrieve object " + value);
@@ -462,10 +472,8 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public OntologyRestrictionClass retrieveObject() {
 			if (restriction == null) {
-				getProject().getProjectOntology().loadWhenUnloaded();
-				// OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
-				OntologyObject object = getProject().getProjectOntology().getOntologyObject(objectURI);
-				OntologyProperty property = getProject().getProjectOntology().getProperty(propertyURI);
+				OntologyObject object = getProject().retrieveOntologyObject(objectURI);
+				OntologyProperty property = (OntologyProperty) getProject().retrieveOntologyObject(propertyURI);
 				if (object instanceof OntologyClass) {
 					// restriction = subject.getObjectRestrictionStatement(property, (OntologyClass) object);
 					// logger.info("Found restriction: " + restriction);
@@ -526,15 +534,14 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		@Override
 		public SubClassStatement retrieveObject() {
 			if (statement == null) {
-				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				OntologyObject subject = getProject().retrieveOntologyObject(subjectURI);
 				if (subject instanceof OWLObject == false) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
 					}
 					return null;
 				}
-				OntologyObject parent = getProject().getProjectOntology().getOntologyObject(parentURI);
+				OntologyObject parent = getProject().retrieveOntologyObject(parentURI);
 				statement = ((OWLObject<?>) subject).getSubClassStatement(parent);
 				logger.info("Found statement: " + statement);
 			}

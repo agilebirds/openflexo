@@ -19,6 +19,8 @@
  */
 package org.openflexo.ve.controller;
 
+import java.util.Set;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -84,8 +86,13 @@ public class OntologyPerspective extends FlexoPerspective {
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof FlexoOntology) {
 			return proposedObject;
+		} else {
+			Set<ProjectOntology> allModels = _controller.getProject().getAllModels();
+			if (allModels.isEmpty() == false) {
+				return (FlexoModelObject) allModels.iterator().next();
+			}
 		}
-		return (FlexoModelObject) _controller.getProject().getProjectOntology();
+		return null;
 	}
 
 	@Override

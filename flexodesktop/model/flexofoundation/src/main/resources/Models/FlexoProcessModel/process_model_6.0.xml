@@ -40,6 +40,7 @@
 
   <entity name="org.openflexo.foundation.ontology.EditionPatternReference$ConceptActorReference" xmlTag="ConceptActorReference">
       <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
+      <property name="modelSlot" xmlTag="modelSlot" attribute="YES" description=""/>
   </entity>
 
   <entity name="org.openflexo.foundation.ontology.EditionPatternReference$ObjectPropertyStatementActorReference" xmlTag="ObjectPropertyStatementActorReference">

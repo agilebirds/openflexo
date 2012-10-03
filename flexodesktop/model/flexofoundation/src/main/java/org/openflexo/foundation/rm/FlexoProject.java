@@ -43,6 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -122,6 +123,7 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOWLOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
@@ -153,6 +155,7 @@ import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ModelSlotAssociation;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
@@ -4289,6 +4292,41 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		} else {
 			return getProjectData().canImportProject(project);
 		}
+	}
+
+	public Set<FlexoOntology> getAllMetaModels() {
+		Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
+		for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
+			allMetaModels.addAll(viewDefinition.getView().getAllMetaModels());
+		}
+		return allMetaModels;
+	}
+
+	public Set<ProjectOntology> getAllModels() {
+		Set<ProjectOntology> allModels = new HashSet<ProjectOntology>();
+		for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
+			allModels.addAll(viewDefinition.getView().getAllModels());
+		}
+		return allModels;
+	}
+
+	public Set<FlexoOntology> getAllOntologies() {
+		// TODO cache
+		Set<FlexoOntology> allOntologies = new HashSet<FlexoOntology>();
+		allOntologies.addAll(getAllMetaModels());
+		allOntologies.addAll(getAllModels());
+		return allOntologies;
+	}
+
+	public OntologyObject retrieveOntologyObject(String uri) {
+		for (FlexoOntology ontology : getAllOntologies()) {
+			ontology.loadWhenUnloaded();
+			OntologyObject object = ontology.getOntologyObject(uri);
+			if (object != null) {
+				return object;
+			}
+		}
+		return null;
 	}
 
 }

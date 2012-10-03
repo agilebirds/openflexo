@@ -55,7 +55,7 @@ public class ProjectOntologyLibrary extends OntologyLibrary {
 	 */
 	@Override
 	public boolean testValidURI(String ontologyURI, String conceptURI) {
-		getProject().getProjectOntology().loadWhenUnloaded();
+		loadWhenUnloaded();
 		return super.testValidURI(ontologyURI, conceptURI);
 	}
 
@@ -67,8 +67,14 @@ public class ProjectOntologyLibrary extends OntologyLibrary {
 	 */
 	@Override
 	public boolean isDuplicatedURI(String ontologyURI, String conceptURI) {
-		getProject().getProjectOntology().loadWhenUnloaded();
+		loadWhenUnloaded();
 		return super.isDuplicatedURI(ontologyURI, conceptURI);
+	}
+
+	public void loadWhenUnloaded() {
+		for (ProjectOntology model : getProject().getAllModels()) {
+			model.loadWhenUnloaded();
+		}
 	}
 
 }

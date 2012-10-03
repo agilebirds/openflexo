@@ -209,9 +209,8 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 	@Override
 	public void setProject(FlexoProject project) {
 		super.setProject(project);
-		if (project != null) {
-			setContext(project.getProjectOntology());
-		}
+		// With model slots, setContext has to be called explicitly
+		// if (project != null) {setContext(project.getProjectOntology());}
 	}
 
 	// Please uncomment this for a live test

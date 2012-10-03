@@ -22,10 +22,12 @@ package org.openflexo.foundation.view;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +36,7 @@ import javax.naming.InvalidNameException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
@@ -356,6 +359,26 @@ public class View extends ViewObject implements XMLStorageResourceData {
 
 	public ProjectOntology getModel(ModelSlot<?> modelSlot) {
 		return getModel(modelSlot, true);
+	}
+
+	public Set<FlexoOntology> getAllMetaModels() {
+		Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
+		for (ModelSlotAssociation association : getModelSlotAssociations()) {
+			if (association.getModelSlot() != null && association.getModelSlot().getMetaModel() != null) {
+				allMetaModels.add(association.getModelSlot().getMetaModel());
+			}
+		}
+		return allMetaModels;
+	}
+
+	public Set<ProjectOntology> getAllModels() {
+		Set<ProjectOntology> allModels = new HashSet<ProjectOntology>();
+		for (ModelSlotAssociation association : getModelSlotAssociations()) {
+			if (association.getModel() != null) {
+				allModels.add(association.getModel());
+			}
+		}
+		return allModels;
 	}
 
 	// ==========================================================================
