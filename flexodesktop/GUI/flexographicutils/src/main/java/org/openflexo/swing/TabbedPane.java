@@ -243,8 +243,7 @@ public class TabbedPane<J extends JComponent> {
 
 		public TabHeaders() {
 			setOpaque(false);
-			extraTabs = new JButton(UtilsIconLibrary.ARROW_DOWN);
-			extraTabs.setOpaque(false);
+			extraTabs = new BarButton(UtilsIconLibrary.ARROW_DOWN);
 			extraTabs.setSize(new Dimension(extraTabs.getIcon().getIconWidth(), extraTabs.getIcon().getIconHeight()));
 			extraTabs.addActionListener(this);
 			extraTabsPopup = new JPopupMenu();
