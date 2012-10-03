@@ -170,6 +170,13 @@ public class TabbedPane<J extends JComponent> {
 			}
 
 			@Override
+			protected void paintBorder(Graphics g) {
+				if (getParent() == TabHeaders.this) {
+					super.paintBorder(g);
+				}
+			}
+
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == close) {
 					TabbedPane.this.removeTab(tab);
@@ -278,30 +285,33 @@ public class TabbedPane<J extends JComponent> {
 				for (int i = 0; i < tabs.size(); i++) {
 					J tab = tabs.get(i);
 					TabHeader tabHeader = headerComponents.get(tab);
-					if (!selectedHeaderDone) {
-						if (tab != selectedTab && selectedTab != null) {
-							if (i + 2 == tabs.size()) { // in this case, we only need to put the current tab and the selected tab
-								moveToPopup = availableWidth - (tabHeader.getWidth() + selectedHeader.getWidth()) < 0;
-							} else {
-								moveToPopup = availableWidth - (tabHeader.getWidth() + selectedHeader.getWidth() + extraTabs.getWidth()) < 0;
+					if (!moveToPopup) {
+						if (!selectedHeaderDone) {
+							if (tab != selectedTab && selectedTab != null) {
+								if (i + 2 == tabs.size()) { // in this case, we only need to put the current tab and the selected tab
+									moveToPopup = availableWidth - (tabHeader.getWidth() + selectedHeader.getWidth()) < 0;
+								} else {
+									moveToPopup = availableWidth
+											- (tabHeader.getWidth() + selectedHeader.getWidth() + extraTabs.getWidth()) < 0;
+								}
 							}
-						}
-						if (moveToPopup) {
-							// There is not enough room to put the current tab header, the selected header and the extraTabs button
-							if (selectedHeader.getParent() != this) {
-								add(selectedHeader);
+							if (moveToPopup) {
+								// There is not enough room to put the current tab header, the selected header and the extraTabs button
+								if (selectedHeader.getParent() != this) {
+									add(selectedHeader);
+								}
+								tabs.remove(selectedTab);
+								tabs.add(i, selectedTab);
+								i++;
+								selectedHeader.setLocation(x, 0);
+								selectedHeaderDone = true;
 							}
-							tabs.remove(selectedTab);
-							tabs.add(i, selectedTab);
-							i++;
-							selectedHeader.setLocation(x, 0);
-							selectedHeaderDone = true;
-						}
-					} else {
-						if (i + 1 == tabs.size()) {
-							moveToPopup = availableWidth - tabHeader.getWidth() < 0;
 						} else {
-							moveToPopup = availableWidth - (tabHeader.getWidth() + extraTabs.getWidth()) < 0;
+							if (i + 1 == tabs.size()) {
+								moveToPopup = availableWidth - tabHeader.getWidth() < 0;
+							} else {
+								moveToPopup = availableWidth - (tabHeader.getWidth() + extraTabs.getWidth()) < 0;
+							}
 						}
 					}
 					if (moveToPopup) {
@@ -331,7 +341,7 @@ public class TabbedPane<J extends JComponent> {
 		}
 
 		public void selectTab(J tab) {
-			doLayout();
+			revalidate();
 			repaint();
 		}
 
@@ -352,12 +362,12 @@ public class TabbedPane<J extends JComponent> {
 				tabHeader.delete();
 				if (parent == this) {
 					revalidate();
+					repaint();
 				} else if (parent == extraTabsPopup) {
+					extraTabsPopup.revalidate();
 					extraTabsPopup.pack();
 				}
 			}
-			doLayout();
-			repaint();
 		}
 
 	}
@@ -523,6 +533,7 @@ public class TabbedPane<J extends JComponent> {
 		for (int i = 0; i < 20; i++) {
 			tabbedPane.addTab(new JLabel("Some label " + (i + 1)));
 		}
+		tabbedPane.getTabHeaders().doLayout();
 		frame.add(tabbedPane.getTabHeaders(), BorderLayout.NORTH);
 		frame.add(tabbedPane.getTabBody());
 		frame.setSize(800, 600);
