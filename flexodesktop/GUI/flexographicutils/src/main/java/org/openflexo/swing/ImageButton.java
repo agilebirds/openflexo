@@ -31,7 +31,7 @@ public class ImageButton extends JButton {
 
 	@Override
 	public void updateUI() {
-		updateUI();
+		super.updateUI();
 		setBorder(BorderFactory.createEmptyBorder());
 	}
 
