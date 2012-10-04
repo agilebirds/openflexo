@@ -19,6 +19,7 @@ public class BarButton extends JButton {
 
 	private boolean internallySelected = false;
 	private Color defaultBackgroundColor;
+
 	public BarButton(Action a) {
 		this();
 		setAction(a);
@@ -30,12 +31,6 @@ public class BarButton extends JButton {
 
 	public BarButton(String text, Icon icon) {
 		super(text, icon);
-		setEnabled(true);
-		setFocusable(false);
-		setBorderPainted(ToolBox.getPLATFORM() != ToolBox.MACOS);
-		setRolloverEnabled(true);
-		setContentAreaFilled(false);
-		setOpaque(false);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -49,6 +44,22 @@ public class BarButton extends JButton {
 				setContentAreaFilled(false);
 			}
 		});
+		updateInternalUI();
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		updateInternalUI();
+	}
+
+	private void updateInternalUI() {
+		setEnabled(true);
+		setFocusable(false);
+		setBorderPainted(ToolBox.isMacOSLaf());
+		setRolloverEnabled(true);
+		setContentAreaFilled(false);
+		setOpaque(false);
 		defaultBackgroundColor = getBackground();
 	}
 
@@ -70,8 +81,8 @@ public class BarButton extends JButton {
 	@Override
 	public void setSelected(boolean b) {
 		internallySelected = b;
-		if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
-			if(b) {
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			if (b) {
 				setBackground(defaultBackgroundColor.darker());
 			} else {
 				setBackground(defaultBackgroundColor);
@@ -91,9 +102,9 @@ public class BarButton extends JButton {
 				JMenuBar panel = new JMenuBar();
 				panel.setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
 				frame.add(panel);
-				for(int i=0;i<10;i++) {
+				for (int i = 0; i < 10; i++) {
 					BarButton bar = new BarButton(UtilsIconLibrary.UK_FLAG);
-					bar.setSelected(i==1);
+					bar.setSelected(i == 1);
 					panel.add(bar);
 				}
 				frame.pack();

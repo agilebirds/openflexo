@@ -15,7 +15,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
@@ -31,10 +30,6 @@ public class MainPaneTopBar extends JMenuBar {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(MainPaneTopBar.class.getPackage()
 			.getName());
-
-	public static interface FlexoModelObjectRenderer {
-		public String render(FlexoModelObject object);
-	}
 
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
@@ -52,16 +47,13 @@ public class MainPaneTopBar extends JMenuBar {
 
 	private JPanel perspectives;
 
-	protected FlexoModelObjectRenderer renderer;
-
 	private boolean forcePreferredSize;
 
 	private TabbedPane<JComponent> tabbedPane;
 
-	public MainPaneTopBar(TabbedPane<JComponent> tabbedPane, ControllerModel model, FlexoModelObjectRenderer renderer) {
+	public MainPaneTopBar(TabbedPane<JComponent> tabbedPane, ControllerModel model) {
 		this.tabbedPane = tabbedPane;
 		this.model = model;
-		this.renderer = renderer;
 		setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		setLayout(new BorderLayout());

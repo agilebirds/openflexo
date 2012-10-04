@@ -704,6 +704,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			super(browser);
 			setRootVisible(browser.showRootNode());
 			setShowsRootHandles(browser.isRootCollapsable());
+			if (!browser.isRootCollapsable()) {
+				expandRow(0);
+			}
 			/*if (!isRootVisible()) {
 				setShowsRootHandles(true);
 			}*/

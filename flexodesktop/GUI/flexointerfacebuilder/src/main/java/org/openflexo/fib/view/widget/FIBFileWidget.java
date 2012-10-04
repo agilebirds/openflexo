@@ -93,7 +93,7 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 		fileChooserPanel.add(currentDirectoryLabel, BorderLayout.CENTER);
 		fileChooserPanel.add(chooseButton, BorderLayout.EAST);
 		fileChooserPanel.addFocusListener(this);
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+		if (!ToolBox.isMacOSLaf()) {
 			fileChooserPanel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER,
 					BOTTOM_COMPENSATING_BORDER, RIGHT_COMPENSATING_BORDER));
 		}

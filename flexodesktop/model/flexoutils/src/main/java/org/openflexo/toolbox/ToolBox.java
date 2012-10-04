@@ -48,6 +48,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -1035,5 +1036,17 @@ public class ToolBox {
 			return list;
 		}
 		return null;
+	}
+
+	public static boolean isMacOSLaf() {
+		return UIManager.getLookAndFeel().getName().equals("Mac OS X");
+	}
+
+	public static boolean isWindowsLaf() {
+		return UIManager.getLookAndFeel().getName().startsWith("Windows");
+	}
+
+	public static boolean isNimbusLaf() {
+		return UIManager.getLookAndFeel().getName().equals("Nimbus");
 	}
 }

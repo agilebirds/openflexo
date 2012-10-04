@@ -41,7 +41,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.ch.FCH;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.swing.TabbedPane;
 import org.openflexo.swing.TabbedPane.TabHeaderRenderer;
 import org.openflexo.swing.layout.JXMultiSplitPane;
@@ -52,7 +51,6 @@ import org.openflexo.swing.layout.MultiSplitLayout.Leaf;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.swing.layout.MultiSplitLayout.Split;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
-import org.openflexo.view.MainPaneTopBar.FlexoModelObjectRenderer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.controller.model.FlexoPerspective;
@@ -157,13 +155,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				((ModuleView<?>) tab).deleteModuleView();
 			}
 		});
-		add(topBar = new MainPaneTopBar(tabbedPane, controller.getControllerModel(), new FlexoModelObjectRenderer() {
-
-			@Override
-			public String render(FlexoModelObject object) {
-				return FlexoMainPane.this.controller.getWindowTitleforObject(object);
-			}
-		}), BorderLayout.NORTH);
+		add(topBar = new MainPaneTopBar(tabbedPane, controller.getControllerModel()), BorderLayout.NORTH);
 		add(centerPanel = new JXMultiSplitPane(centerLayout));
 		centerPanel.setDividerSize(DIVIDER_SIZE);
 		centerPanel.setDividerPainter(new DividerPainter() {

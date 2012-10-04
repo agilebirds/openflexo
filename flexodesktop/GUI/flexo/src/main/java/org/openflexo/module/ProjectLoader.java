@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -105,6 +106,10 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		return null;
 	}
 
+	public FlexoEditor getEditorForProject(FlexoProject project) {
+		return editors.get(project);
+	}
+
 	public FlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
 		return loadProject(projectDirectory, true);
 	}
@@ -146,6 +151,11 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		}
 		if (addToRecentProjects) {
 			preInitialization(projectDirectory);
+		}
+		for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
+			if (e.getKey().getProjectDirectory().equals(projectDirectory)) {
+				return e.getValue();
+			}
 		}
 		final FlexoEditor editor;
 		try {

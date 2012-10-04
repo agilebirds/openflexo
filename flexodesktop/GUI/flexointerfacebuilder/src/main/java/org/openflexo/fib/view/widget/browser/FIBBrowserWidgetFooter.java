@@ -60,6 +60,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 	protected static final Logger logger = Logger.getLogger(FIBBrowserWidgetFooter.class.getPackage().getName());
 
+	@Deprecated
 	public static final Color GUI_BACK_COLOR = ToolBox.getPLATFORM() == ToolBox.MACOS ? null : Color.WHITE;
 
 	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;
@@ -594,7 +595,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	 */
 	protected Window getWindow(Component c) {
 		Component w = c;
-		while (!(w instanceof Window) && (w != null)) {
+		while (!(w instanceof Window) && w != null) {
 			w = w.getParent();
 		}
 		return (Window) w;
