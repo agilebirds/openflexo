@@ -30,33 +30,12 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.cg.templates.CGTemplateObject;
-import org.openflexo.foundation.dm.DMObject;
-import org.openflexo.foundation.ie.IEObject;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyFolder;
-import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.toc.TOCObject;
-import org.openflexo.foundation.view.AbstractViewObject;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
-import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.WorkflowModelObject;
-import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.icon.DEIconLibrary;
-import org.openflexo.icon.DGIconLibrary;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
-import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
-import org.openflexo.icon.VEIconLibrary;
-import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 
@@ -160,32 +139,9 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}
 
 	public ImageIcon iconForObject(FlexoModelObject object) {
-		if (object instanceof WorkflowModelObject) {
-			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
-		} else if (object instanceof WKFObject) {
-			return WKFIconLibrary.iconForObject((WKFObject) object);
-		} else if (object instanceof IEObject) {
-			return SEIconLibrary.iconForObject((IEObject) object);
-		} else if (object instanceof DMObject) {
-			return DMEIconLibrary.iconForObject((DMObject) object);
-		} else if (object instanceof ViewPointLibraryObject) {
-			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
-		} else if (object instanceof AbstractViewObject) {
-			return VEIconLibrary.iconForObject((AbstractViewObject) object);
-		} else if (object instanceof OntologyLibrary) {
-			return OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON;
-		} else if (object instanceof OntologyFolder) {
-			return IconLibrary.FOLDER_ICON;
-		} else if (object instanceof AbstractOntologyObject) {
-			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
-		} else if (object instanceof TOCObject) {
-			return DEIconLibrary.iconForObject((TOCObject) object);
-		} else if (object instanceof CGTemplateObject) {
-			return DGIconLibrary.iconForObject((CGTemplateObject) object);
-		} else if (object instanceof DocType) {
-			return CGIconLibrary.TARGET_ICON;
+		if (getFlexoController() != null) {
+			return getFlexoController().iconForObject(object);
 		}
-		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
 	}
 

@@ -264,8 +264,8 @@ public class TabbedPane<J extends JComponent> {
 					if (extraTabsPopup.isVisible()) {
 						extraTabsPopup.setVisible(false);
 					} else {
-						extraTabs.setVisible(true);
-						extraTabsPopup.show(extraTabs, extraTabs.getWidth() - extraTabsPopup.getWidth(), extraTabs.getHeight());
+						extraTabsPopup.setVisible(true);
+						extraTabsPopup.setLocation(extraTabs.getWidth() - extraTabsPopup.getWidth(), extraTabs.getHeight());
 					}
 				}
 			}

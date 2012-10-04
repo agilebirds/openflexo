@@ -273,6 +273,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, null, currentLocation);
 			getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, null, currentObject);
 		}
+		if (currentLocation != null) {
+
+		}
 	}
 
 	public Stack<HistoryLocation> getNextHistory() {

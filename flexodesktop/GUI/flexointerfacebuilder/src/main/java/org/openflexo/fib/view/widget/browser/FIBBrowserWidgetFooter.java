@@ -20,7 +20,6 @@
 package org.openflexo.fib.view.widget.browser;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -54,14 +53,11 @@ import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ToolBox;
+import org.openflexo.swing.ImageButton;
 
 public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, WindowListener {
 
 	protected static final Logger logger = Logger.getLogger(FIBBrowserWidgetFooter.class.getPackage().getName());
-
-	@Deprecated
-	public static final Color GUI_BACK_COLOR = ToolBox.getPLATFORM() == ToolBox.MACOS ? null : Color.WHITE;
 
 	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;
 
@@ -94,18 +90,15 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 		initializeActions(fibBrowser, browserModel);
 
 		setBorder(BorderFactory.createEmptyBorder());
-		setBackground(GUI_BACK_COLOR);
 		setLayout(new BorderLayout());
 		// setPreferredSize(new
 		// Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH,FlexoCst.MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT));
 		setPreferredSize(new Dimension(MINIMUM_BROWSER_VIEW_WIDTH, 20));
 
 		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		plusMinusPanel.setBackground(GUI_BACK_COLOR);
 		plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
 
-		plusButton = new JButton(FIBIconLibrary.BROWSER_PLUS_ICON);
-		plusButton.setBackground(GUI_BACK_COLOR);
+		plusButton = new ImageButton(FIBIconLibrary.BROWSER_PLUS_ICON);
 		plusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -116,7 +109,6 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 			}
 
 		});
-		plusButton.setBorder(BorderFactory.createEmptyBorder());
 		plusButton.setDisabledIcon(FIBIconLibrary.BROWSER_PLUS_DISABLED_ICON);
 		// plusButton.setSelectedIcon(FlexoCst.BROWSER_PLUS_SELECTED_ICON);
 		plusButton.addMouseListener(new MouseAdapter() {
@@ -142,8 +134,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 			}
 		});
 
-		minusButton = new JButton(FIBIconLibrary.BROWSER_MINUS_ICON);
-		minusButton.setBackground(GUI_BACK_COLOR);
+		minusButton = new ImageButton(FIBIconLibrary.BROWSER_MINUS_ICON);
 		minusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -154,7 +145,6 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 			}
 
 		});
-		minusButton.setBorder(BorderFactory.createEmptyBorder());
 		minusButton.setDisabledIcon(FIBIconLibrary.BROWSER_MINUS_DISABLED_ICON);
 		// minusButton.setSelectedIcon(FlexoCst.BROWSER_MINUS_SELECTED_ICON);
 		minusButton.addMouseListener(new MouseAdapter() {
@@ -185,8 +175,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 		add(plusMinusPanel, BorderLayout.WEST);
 
-		optionsButton = new JButton(FIBIconLibrary.BROWSER_OPTIONS_ICON);
-		optionsButton.setBorder(BorderFactory.createEmptyBorder());
+		optionsButton = new ImageButton(FIBIconLibrary.BROWSER_OPTIONS_ICON);
 		optionsButton.setDisabledIcon(FIBIconLibrary.BROWSER_OPTIONS_DISABLED_ICON);
 
 		optionsButton.addMouseListener(new MouseAdapter() {
@@ -208,8 +197,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 		});
 
-		filtersButton = new JButton(FIBIconLibrary.BROWSER_FILTERS_ICON);
-		filtersButton.setBorder(BorderFactory.createEmptyBorder());
+		filtersButton = new ImageButton(FIBIconLibrary.BROWSER_FILTERS_ICON);
 		filtersButton.setDisabledIcon(FIBIconLibrary.BROWSER_FILTERS_DISABLED_ICON);
 
 		filtersButton.addMouseListener(new MouseAdapter() {
@@ -234,7 +222,6 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 		filtersButton.setEnabled(hasFilters());
 
 		JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		optionsPanel.setBackground(GUI_BACK_COLOR);
 		optionsPanel.setBorder(BorderFactory.createEmptyBorder());
 		optionsPanel.add(optionsButton);
 		optionsPanel.add(filtersButton);
@@ -243,7 +230,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 		handleSelectionCleared();
 
-		validate();
+		revalidate();
 	}
 
 	private FIBBrowserElement currentElement;

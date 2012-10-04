@@ -122,6 +122,9 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 			@Override
 			public Icon getTabHeaderIcon(JComponent tab) {
+				if (tab instanceof ModuleView) {
+					return FlexoMainPane.this.controller.iconForObject(((ModuleView<?>) tab).getRepresentedObject());
+				}
 				return null;
 			}
 
@@ -522,8 +525,14 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				updateRightViewVisibility();
 			} else if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
 				ModuleView<?> moduleView = controller.moduleViewForObject(controller.getControllerModel().getCurrentObject());
-				setModuleView(moduleView);
-				tabbedPane.selectTab((JComponent) moduleView);
+				if (moduleView != null) {
+					setModuleView(moduleView);
+					tabbedPane.selectTab((JComponent) moduleView);
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not find module view for object " + controller.getControllerModel().getCurrentObject());
+					}
+				}
 			}
 		} else if (evt.getSource() == controller.getCurrentPerspective()) {
 			if (evt.getPropertyName().equals(FlexoPerspective.HEADER)) {
