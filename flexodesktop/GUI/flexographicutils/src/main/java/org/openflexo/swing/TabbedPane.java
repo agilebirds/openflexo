@@ -265,7 +265,7 @@ public class TabbedPane<J extends JComponent> {
 						extraTabsPopup.setVisible(false);
 					} else {
 						extraTabsPopup.setVisible(true);
-						extraTabsPopup.setLocation(extraTabs.getWidth() - extraTabsPopup.getWidth(), extraTabs.getHeight());
+						extraTabsPopup.show(extraTabs, extraTabs.getWidth() - extraTabsPopup.getWidth(), extraTabs.getHeight());
 					}
 				}
 			}
@@ -352,6 +352,7 @@ public class TabbedPane<J extends JComponent> {
 
 		public void addTab(J tab) {
 			headerComponents.put(tab, new TabHeader(tab));
+			doLayout();
 		}
 
 		public void removeTab(J tab) {
