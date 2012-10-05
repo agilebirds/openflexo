@@ -56,7 +56,7 @@ public class BarButton extends JButton {
 	private void updateInternalUI() {
 		setEnabled(true);
 		setFocusable(false);
-		setBorderPainted(ToolBox.isMacOSLaf());
+		setBorderPainted(false);
 		setRolloverEnabled(true);
 		setContentAreaFilled(false);
 		setOpaque(false);
@@ -81,7 +81,7 @@ public class BarButton extends JButton {
 	@Override
 	public void setSelected(boolean b) {
 		internallySelected = b;
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+		if (ToolBox.isMacOSLaf()) {
 			if (b) {
 				setBackground(defaultBackgroundColor.darker());
 			} else {
