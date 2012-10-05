@@ -83,6 +83,8 @@ public class TabbedPane<J extends JComponent> {
 	private static final Color TRANSPARENT = new Color(1.0f, 1.0f, 1.0f, 0.3f);
 	private static final Color LIGHT_BLUE = new Color(206, 231, 255, 255);
 
+	private static final int TAB_SPACING = 2;
+
 	private class TabHeaders extends JPanel implements ActionListener {
 
 		private class TabHeader extends JMenuBar implements ActionListener, MouseListener {
@@ -99,9 +101,6 @@ public class TabbedPane<J extends JComponent> {
 					g.drawLine(ROUNDED_CORNER_SIZE - 3, 0, width - ROUNDED_CORNER_SIZE + 3, 0);
 					g.drawArc(0, 0, ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, 90, 90);
 					g.drawArc(width - ROUNDED_CORNER_SIZE - 1, 0, ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, 0, 90);
-					if (selectedTab != tab) {
-						g.drawLine(0, height - 1, width, height - 1);
-					}
 				}
 
 				@Override
@@ -296,6 +295,8 @@ public class TabbedPane<J extends JComponent> {
 
 		private int xBorderStart = 0;
 
+		private int xBorderEnd = 0;
+
 		public TabHeaders() {
 			setOpaque(false);
 			extraTabs = new BarButton(UtilsIconLibrary.ARROW_DOWN);
@@ -307,6 +308,7 @@ public class TabbedPane<J extends JComponent> {
 				@Override
 				public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
 					g.setColor(Color.LIGHT_GRAY);
+					g.drawLine(0, height - 1, xBorderEnd, height - 1);
 					g.drawLine(xBorderStart, height - 1, width, height - 1);
 				}
 			});
@@ -357,7 +359,9 @@ public class TabbedPane<J extends JComponent> {
 								tabs.remove(selectedTab);
 								tabs.add(i, selectedTab);
 								i++;
-								selectedHeader.setLocation(x, 0);
+								selectedHeader.setBounds(x, 0, selectedHeader.getPreferredSize().width, getHeight());
+								xBorderEnd = x;
+								xBorderStart = x + selectedHeader.getWidth();
 								selectedHeaderDone = true;
 							}
 						} else {
@@ -380,13 +384,15 @@ public class TabbedPane<J extends JComponent> {
 						if (tabHeader.getParent() != this) {
 							add(tabHeader);
 						}
+						if (x > 0) {
+							x += TAB_SPACING;
+						}
 						tabHeader.setBounds(x, 0, tabHeader.getPreferredSize().width, getHeight());
 						x += tabHeader.getWidth();
 					}
 					availableWidth = getWidth() - x;
 					selectedHeaderDone |= tab == selectedTab;
 				}
-				xBorderStart = x;
 			}
 			if (!moveToPopup) {
 				if (extraTabs.getParent() == this) {
