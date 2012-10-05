@@ -103,8 +103,6 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 	private static final int DIVIDER_SIZE = KNOB_SIZE + 2 * KNOB_SPACE;
 	private static final int DIVIDER_KNOB_SIZE = 3 * KNOB_SIZE + 2 * KNOB_SPACE;
 
-	private static final int ROUNDED_CORNER_SIZE = 8;
-
 	private static final Paint KNOB_PAINTER = new RadialGradientPaint(new Point((KNOB_SIZE - 1) / 2, (KNOB_SIZE - 1) / 2),
 			(KNOB_SIZE - 1) / 2, new float[] { 0.0f, 1.0f }, new Color[] { Color.GRAY, Color.LIGHT_GRAY });
 
@@ -193,6 +191,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			}
 		});
 		moduleViewContainerPanel = new JPanel();
+		moduleViewContainerPanel.setBorder(BorderFactory.createEmptyBorder(centerPanel.getDividerSize(), 0, 0, 0));
 		moduleViewContainerPanel.setLayout(new BorderLayout());
 		moduleViewContainerPanel.add(tabbedPane.getTabHeaders(), BorderLayout.NORTH);
 	}

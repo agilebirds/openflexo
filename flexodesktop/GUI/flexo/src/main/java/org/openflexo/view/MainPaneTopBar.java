@@ -1,6 +1,7 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -9,13 +10,21 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
@@ -62,7 +71,8 @@ public class MainPaneTopBar extends JMenuBar {
 		right.setOpaque(false);
 		initLeftRightViewVisibilityControls();
 		initModules();
-		initNavigationControls();
+		initProjectSelector();
+		// initNavigationControls();
 		initPerspectives();
 	}
 
@@ -154,6 +164,60 @@ public class MainPaneTopBar extends JMenuBar {
 		left.add(upButton);
 		left.add(forwardButton);
 		updateNavigationControlState(backwardButton, forwardButton, upButton);
+	}
+
+	private void initProjectSelector() {
+		JLabel label = new JLabel();
+		label.setText(FlexoLocalization.localizedForKey("current_project", label));
+		label.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+		left.add(label);
+		final JComboBox projectSelector = new JComboBox();
+		projectSelector.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.setCurrentEditor((FlexoEditor) projectSelector.getSelectedItem());
+			}
+		});
+		projectSelector.setRenderer(new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+				Object passedValue = value;
+				FlexoProject project = null;
+				if (value instanceof FlexoEditor) {
+					project = ((FlexoEditor) value).getProject();
+					passedValue = project.getName();
+				}
+				super.getListCellRendererComponent(list, passedValue, index, isSelected, cellHasFocus);
+				if (project != null) {
+					setToolTipText(project.getProjectDirectory().getAbsolutePath());
+				}
+				return this;
+
+			}
+		});
+		left.add(projectSelector);
+		for (FlexoEditor editor : model.getEditors()) {
+			projectSelector.addItem(editor);
+		}
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.EDITORS, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getNewValue() != null) {
+					projectSelector.addItem(evt.getNewValue());
+				} else if (evt.getOldValue() != null) {
+					projectSelector.removeItem(evt.getOldValue());
+				}
+			}
+		}, model);
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_EDITOR, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				projectSelector.setSelectedItem(evt.getNewValue());
+			}
+		}, model);
 	}
 
 	protected void updateNavigationControlState(final JButton backwardButton, final JButton forwardButton, final JButton upButton) {

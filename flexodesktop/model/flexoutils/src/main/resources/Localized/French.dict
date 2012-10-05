@@ -1,5 +1,5 @@
 #French
-#Mon May 28 12:57:59 CEST 2012
+#Fri Oct 05 19:23:07 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1629,6 +1629,7 @@ ctrl=ctrl
 current_flexo_version_is_smaller_than_last_used_to_open_this_project=<html><b>La version courante de OpenFlexo que vous utilisez est ant\u00E9rieure \u00E0 celle qui ouvert le projet la derni\u00E8re fois.</b><br>Pour \u00E9viter d'endommager le projet, OpenFlexo ne va pas poursuivre cette op\u00E9ration<br><i>Si vous d\u00E9sirez vraiment ouvrir ce projet avec la version actuelle de version, veuillez \u00E9diter manuellement le fichier .version situ\u00E9 dans le r\u00E9pertoire .prj<br>Notez que cette op\u00E9ration peut se r\u00E9v\u00E9ler dangereuse pour vos donn\u00E9es\: n'oubliez pas de sauver votre projet avant \!</i></html>
 current_generation=G\u00E9n\u00E9ration courante
 current_node=Noeud en cours
+current_project=Projet en cours
 current_task=T\u00E2che courante
 current_version=Version courante
 curve=courbe
@@ -2843,6 +2844,7 @@ import_methods=Importer les m\u00E9thodes
 import_palette=Importer la palette
 import_processes=Importer les processes
 import_processes_from_ppm=Import\u00E9 des processes depuis le Portfolio
+import_project=Importer un projet
 import_rational_rose=Importer un fichier RationalRose (.mdl)
 import_roles=Importer des roles
 import_roles_from_ppm=Importer des roles depuis le Portfolio

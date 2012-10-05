@@ -195,13 +195,13 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	public void setCurrentEditor(FlexoEditor projectEditor) {
-		if (projectEditor == null && editors.size() > 0) {
-			projectEditor = editors.get(editors.size() - 1);
+		if (projectEditor == null && canGoBack()) {
+			historyBack();
+			return;
 		}
 		FlexoEditor old = currentEditor;
 		currentEditor = projectEditor;
 		if (currentEditor != null) {
-			editors.add(currentEditor);
 			HistoryLocation hl = getLastHistoryLocationForProject(currentEditor.getProject());
 			if (hl != null) {
 				setCurrentObjectAndPerspective(hl.getObject(), hl.getPerspective());
@@ -210,6 +210,16 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			}
 		}
 		getPropertyChangeSupport().firePropertyChange(CURRENT_EDITOR, old, projectEditor);
+	}
+
+	public void addToEditors(FlexoEditor editor) {
+		editors.add(editor);
+		getPropertyChangeSupport().firePropertyChange(EDITORS, null, editor);
+	}
+
+	public void removeFromEditors(FlexoEditor editor) {
+		editors.remove(editor);
+		getPropertyChangeSupport().firePropertyChange(EDITORS, editor, null);
 	}
 
 	public List<FlexoEditor> getEditors() {
@@ -274,7 +284,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, null, currentObject);
 		}
 		if (currentLocation != null) {
-
+			setCurrentEditor(context.getProjectLoader().getEditorForProject(currentLocation.getObject().getProject()));
 		}
 	}
 
@@ -381,9 +391,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == getProjectLoader()) {
 			if (evt.getPropertyName().equals(ProjectLoader.EDITOR_ADDED)) {
-				editors.add((FlexoEditor) evt.getNewValue());
+				addToEditors((FlexoEditor) evt.getNewValue());
 			} else if (evt.getPropertyName().equals(ProjectLoader.EDITOR_REMOVED)) {
-				editors.remove(getCurrentEditor());
+				removeFromEditors((FlexoEditor) evt.getOldValue());
 				if (getCurrentEditor() == evt.getOldValue()) {
 					setCurrentEditor(null);
 				}
@@ -446,7 +456,6 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		if (gsonLayout == null) {
 			GsonBuilder builder = new GsonBuilder().registerTypeAdapterFactory(new MultiSplitLayoutTypeAdapterFactory());
 			gsonLayout = builder.create();
-
 		}
 		return gsonLayout;
 	}
