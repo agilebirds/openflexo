@@ -340,7 +340,7 @@ public class TabbedPane<J extends JComponent> {
 		}
 
 		public void selectTab(J tab) {
-			revalidate();
+			doLayout();
 			repaint();
 		}
 
@@ -353,6 +353,7 @@ public class TabbedPane<J extends JComponent> {
 		public void addTab(J tab) {
 			headerComponents.put(tab, new TabHeader(tab));
 			doLayout();
+			repaint();
 		}
 
 		public void removeTab(J tab) {
@@ -361,7 +362,7 @@ public class TabbedPane<J extends JComponent> {
 				Container parent = tabHeader.getParent();
 				tabHeader.delete();
 				if (parent == this) {
-					revalidate();
+					doLayout();
 					repaint();
 				} else if (parent == extraTabsPopup) {
 					extraTabsPopup.revalidate();
