@@ -365,7 +365,6 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		SaveProjectsDialog dialog = new SaveProjectsDialog(applicationContext.getProjectLoader().getModifiedProjects());
 		if (dialog.isOk()) {
 			applicationContext.getProjectLoader().saveProjects(dialog.getSelectedProject());
-			proceedQuitWithoutConfirmation();
 		} else { // CANCEL
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Exiting FLEXO Application Suite... CANCELLED");
