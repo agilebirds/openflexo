@@ -70,7 +70,7 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 	private Color rectangleSelectingSelectionColor = Color.BLUE;
 	private Color focusColor = Color.RED;
 	private Color selectionColor = Color.BLUE;
-	private boolean drawWorkingArea = true;
+	private boolean drawWorkingArea = false;
 	private boolean isResizable = false;
 	protected DrawingDecorationPainter decorationPainter;
 

@@ -88,6 +88,8 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 	private JXMultiSplitPane centerPanel;
 
+	private JComponent moduleViewContainerPanel;
+
 	private JComponent footer;
 
 	private MultiSplitLayout centerLayout;
@@ -100,6 +102,8 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 	private static final int KNOB_SPACE = 2;
 	private static final int DIVIDER_SIZE = KNOB_SIZE + 2 * KNOB_SPACE;
 	private static final int DIVIDER_KNOB_SIZE = 3 * KNOB_SIZE + 2 * KNOB_SPACE;
+
+	private static final int ROUNDED_CORNER_SIZE = 8;
 
 	private static final Paint KNOB_PAINTER = new RadialGradientPaint(new Point((KNOB_SIZE - 1) / 2, (KNOB_SIZE - 1) / 2),
 			(KNOB_SIZE - 1) / 2, new float[] { 0.0f, 1.0f }, new Color[] { Color.GRAY, Color.LIGHT_GRAY });
@@ -158,7 +162,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				((ModuleView<?>) tab).deleteModuleView();
 			}
 		});
-		add(topBar = new MainPaneTopBar(tabbedPane, controller.getControllerModel()), BorderLayout.NORTH);
+		add(topBar = new MainPaneTopBar(controller.getControllerModel()), BorderLayout.NORTH);
 		add(centerPanel = new JXMultiSplitPane(centerLayout));
 		centerPanel.setDividerSize(DIVIDER_SIZE);
 		centerPanel.setDividerPainter(new DividerPainter() {
@@ -188,6 +192,9 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 
 			}
 		});
+		moduleViewContainerPanel = new JPanel();
+		moduleViewContainerPanel.setLayout(new BorderLayout());
+		moduleViewContainerPanel.add(tabbedPane.getTabHeaders(), BorderLayout.NORTH);
 	}
 
 	public FlexoController getController() {
@@ -269,8 +276,15 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		} else {
 			newCenterView = new JPanel();
 		}
+		newCenterView.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 		updateLayoutForPerspective();
-		updateComponent(newCenterView, LayoutPosition.MIDDLE_CENTER);
+		Component centerComponent = ((BorderLayout) moduleViewContainerPanel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+		if (centerComponent != null) {
+			moduleViewContainerPanel.remove(centerComponent);
+		}
+		moduleViewContainerPanel.add(newCenterView);
+		moduleViewContainerPanel.revalidate();
+		updateComponent(moduleViewContainerPanel, LayoutPosition.MIDDLE_CENTER);
 		centerPanel.revalidate();
 		if (moduleView != null) {
 			controller.getCurrentPerspective().notifyModuleViewDisplayed(moduleView);

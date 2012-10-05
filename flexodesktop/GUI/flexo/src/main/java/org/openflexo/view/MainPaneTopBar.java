@@ -20,7 +20,6 @@ import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.swing.BarButton;
-import org.openflexo.swing.TabbedPane;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
@@ -49,10 +48,7 @@ public class MainPaneTopBar extends JMenuBar {
 
 	private boolean forcePreferredSize;
 
-	private TabbedPane<JComponent> tabbedPane;
-
-	public MainPaneTopBar(TabbedPane<JComponent> tabbedPane, ControllerModel model) {
-		this.tabbedPane = tabbedPane;
+	public MainPaneTopBar(ControllerModel model) {
 		this.model = model;
 		setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
 		registrationManager = new PropertyChangeListenerRegistrationManager();
@@ -68,7 +64,6 @@ public class MainPaneTopBar extends JMenuBar {
 		initModules();
 		initNavigationControls();
 		initPerspectives();
-		center.add(tabbedPane.getTabHeaders());
 	}
 
 	public void delete() {

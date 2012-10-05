@@ -32,6 +32,8 @@ import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
@@ -52,9 +54,12 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 
 import org.openflexo.icon.UtilsIconLibrary;
@@ -80,10 +85,10 @@ public class TabbedPane<J extends JComponent> {
 
 	private class TabHeaders extends JPanel implements ActionListener {
 
-		private class TabHeader extends JPanel implements ActionListener, MouseListener {
-			private class TabHeaderBorder implements Border {
+		private class TabHeader extends JMenuBar implements ActionListener, MouseListener {
+			private static final int ROUNDED_CORNER_SIZE = 8;
 
-				private static final int ROUNDED_CORNER_SIZE = 8;
+			private class TabHeaderBorder implements Border {
 
 				@Override
 				public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
@@ -122,8 +127,12 @@ public class TabbedPane<J extends JComponent> {
 
 			private boolean hovered;
 
+			private java.awt.geom.Path2D.Double clip;
+
 			public TabHeader(J tab) {
-				super(new BorderLayout());
+				super();
+				setLayout(new BorderLayout());
+				setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
 				setOpaque(false);
 				this.tab = tab;
 				add(title = new JLabel());
@@ -142,6 +151,12 @@ public class TabbedPane<J extends JComponent> {
 				close.setPreferredSize(new Dimension(close.getIcon().getIconWidth() + close.getInsets().left + close.getInsets().right,
 						close.getIcon().getIconHeight() + close.getInsets().top + close.getInsets().bottom));
 				setBorder(new TabHeaderBorder());
+				addComponentListener(new ComponentAdapter() {
+					@Override
+					public void componentResized(ComponentEvent e) {
+						clip = null;
+					}
+				});
 				refresh();
 			}
 
@@ -161,12 +176,43 @@ public class TabbedPane<J extends JComponent> {
 
 			@Override
 			protected void paintComponent(Graphics g) {
-				if (tab == selectedTab) {
-					((Graphics2D) g).setPaint(new GradientPaint(new Point2D.Double(0, 0), TRANSPARENT, new Point2D.Double(0, getHeight()),
-							LIGHT_BLUE));
-					g.fillRect(0, 0, getWidth(), getHeight());
+				if (getParent() == TabHeaders.this) {
+					Graphics clippedG = g.create();
+					((Graphics2D) clippedG).clip(getClip());
+					super.paintComponent(clippedG);
+					clippedG.dispose();
+					if (tab == selectedTab) {
+						((Graphics2D) g).setPaint(new GradientPaint(new Point2D.Double(0, 0), TRANSPARENT, new Point2D.Double(0,
+								getHeight()), LIGHT_BLUE));
+						g.fillRect(0, 0, getWidth(), getHeight());
+					}
+				} else {
+					if (isOpaque()) {
+						g.setColor(getBackground());
+						g.fillRect(0, 0, getWidth(), getHeight());
+					}
 				}
-				super.paintComponent(g);
+			}
+
+			public java.awt.geom.Path2D.Double getClip() {
+				if (clip == null) {
+					clip = new java.awt.geom.Path2D.Double();
+					clip.moveTo(ROUNDED_CORNER_SIZE - 3, 0);
+					// Top border
+					clip.lineTo(getWidth() - ROUNDED_CORNER_SIZE + 3, 0);
+					// Top right rounded corner
+					clip.quadTo(getWidth(), 0, getWidth(), ROUNDED_CORNER_SIZE - 3);
+					// Right border
+					clip.lineTo(getWidth(), getHeight() - 1);
+					// Bottom border
+					clip.lineTo(0, getHeight() - 1);
+					// Left border
+					clip.lineTo(0, ROUNDED_CORNER_SIZE - 3);
+					// Top left rounder border
+					clip.quadTo(0, 0, ROUNDED_CORNER_SIZE - 3, 0);
+					clip.closePath();
+				}
+				return clip;
 			}
 
 			@Override
@@ -248,6 +294,8 @@ public class TabbedPane<J extends JComponent> {
 		private JButton extraTabs;
 		private JPopupMenu extraTabsPopup;
 
+		private int xBorderStart = 0;
+
 		public TabHeaders() {
 			setOpaque(false);
 			extraTabs = new BarButton(UtilsIconLibrary.ARROW_DOWN);
@@ -255,6 +303,13 @@ public class TabbedPane<J extends JComponent> {
 			extraTabs.addActionListener(this);
 			extraTabsPopup = new JPopupMenu();
 			extraTabsPopup.setInvoker(extraTabs);
+			setBorder(new AbstractBorder() {
+				@Override
+				public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+					g.setColor(Color.LIGHT_GRAY);
+					g.drawLine(xBorderStart, height - 1, width, height - 1);
+				}
+			});
 		}
 
 		@Override
@@ -331,12 +386,32 @@ public class TabbedPane<J extends JComponent> {
 					availableWidth = getWidth() - x;
 					selectedHeaderDone |= tab == selectedTab;
 				}
+				xBorderStart = x;
 			}
 			if (!moveToPopup) {
 				if (extraTabs.getParent() == this) {
 					remove(extraTabs);
 				}
 			}
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			Dimension prefSize = new Dimension();
+			for (TabHeader header : headerComponents.values()) {
+				Dimension headerPrefSize = header.getPreferredSize();
+				prefSize.width += headerPrefSize.getWidth();
+				prefSize.height = Math.max(prefSize.height, headerPrefSize.height);
+			}
+			return prefSize;
+		}
+
+		@Override
+		public Dimension getMinimumSize() {
+			if (selectedTab != null) {
+				return headerComponents.get(selectedTab).getPreferredSize();
+			}
+			return super.getMinimumSize();
 		}
 
 		public void selectTab(J tab) {
@@ -389,6 +464,7 @@ public class TabbedPane<J extends JComponent> {
 		tabListeners = new ArrayList<TabbedPane.TabListener<J>>();
 		tabHeaders = new TabHeaders();
 		tabBody = new JPanel(new BorderLayout());
+		tabBody.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 	}
 
 	public TabbedPane(TabHeaderRenderer<J> tabHeaderRenderer) {
@@ -506,6 +582,21 @@ public class TabbedPane<J extends JComponent> {
 	}
 
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		JFrame frame = new JFrame("Test tabbed panes");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		TabbedPane<JLabel> tabbedPane = new TabbedPane<JLabel>();
