@@ -42,8 +42,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
 
-	private String name;
-	private final String ontologyURI;
 	private final File originalXsdFile;
 	private final OntologyLibrary library;
 	private XSSchemaSet schemaSet;
@@ -61,9 +59,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	private final Map<String, XSOntIndividual> individuals = new HashMap<String, XSOntIndividual>();
 
 	public XSOntology(String ontologyURI, File xsdFile, OntologyLibrary library) {
-		super();
-		name = computeName(xsdFile);
-		this.ontologyURI = ontologyURI;
+		super(null, computeName(xsdFile), ontologyURI);
 		this.originalXsdFile = xsdFile;
 		this.library = library;
 	}
@@ -73,27 +69,8 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
-		// TODO
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("The ontology name changed, renaming of the ontology URI not implemented yet");
-		}
-	}
-
-	@Override
-	public String getURI() {
-		return getOntologyURI();
-	}
-
-	@Override
 	public String getOntologyURI() {
-		return ontologyURI;
+		return getURI();
 	}
 
 	@Override

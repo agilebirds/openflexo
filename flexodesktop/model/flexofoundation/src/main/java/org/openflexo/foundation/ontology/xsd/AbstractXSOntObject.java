@@ -30,18 +30,18 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	private final Set<XSOntProperty> propertiesTakingMySelfAsRange;
 	private final Set<XSOntProperty> propertiesTakingMySelfAsDomain;
 
-	protected AbstractXSOntObject() {
-		super();
-
-		propertiesTakingMySelfAsRange = new HashSet<XSOntProperty>();
-		propertiesTakingMySelfAsDomain = new HashSet<XSOntProperty>();
-	}
-
 	protected AbstractXSOntObject(XSOntology ontology, String name, String uri) {
-		this();
+		super();
+		
 		this.name = name;
 		this.uri = uri;
 		this.ontology = ontology;
+		propertiesTakingMySelfAsRange = new HashSet<XSOntProperty>();
+		propertiesTakingMySelfAsDomain = new HashSet<XSOntProperty>();
+	}
+	
+	protected AbstractXSOntObject() {
+		this(null, null, null);
 	}
 
 	@Override
