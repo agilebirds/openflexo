@@ -215,7 +215,18 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView<FIBOntologyE
 
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			model = new OntologyBrowserModel(getOntology());
+			model = new OntologyBrowserModel(getOntology()) {
+				@Override
+				public void recomputeStructure() {
+					super.recomputeStructure();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+						}
+					});
+				}
+			};
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());
