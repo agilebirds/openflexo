@@ -73,6 +73,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
+		updateListModelWhenRequired();
 		if (getWidget().getData() != null && notEquals(getValue(), _list.getSelectedValue())) {
 
 			if (logger.isLoggable(Level.FINE)) {
@@ -128,7 +129,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 			setListModel((FIBListModel) listModel);
 		} else {
 			FIBListModel newListModel = new FIBListModel();
-			if (!newListModel.equals(listModel)) {
+			if (!newListModel.equals(listModel) || didLastKnownValuesChange()) {
 				_list.getSelectionModel().removeListSelectionListener((FIBListModel) listModel);
 				listModel = newListModel;
 				setListModel((FIBListModel) listModel);
@@ -140,6 +141,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 	private FIBListModel oldListModel = null;
 
 	private void setListModel(FIBListModel aListModel) {
+		// logger.info("************* Updating GUI with " + aListModel);
 		widgetUpdating = true;
 		if (oldListModel != null) {
 			_list.getSelectionModel().removeListSelectionListener(oldListModel);
