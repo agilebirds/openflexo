@@ -21,6 +21,7 @@ package org.openflexo.foundation.ontology;
 
 import java.util.logging.Logger;
 
+import com.hp.hpl.jena.ontology.CardinalityRestriction;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.rdf.model.Literal;
@@ -39,7 +40,14 @@ public class CardinalityRestrictionClass extends OntologyRestrictionClass {
 	private int cardinality = -1;
 	private OntologicDataType dataRange;
 
+	@Deprecated
 	protected CardinalityRestrictionClass(Restriction aRestriction, FlexoOntology ontology) {
+		super(aRestriction, ontology);
+		this.restriction = aRestriction;
+		retrieveRestrictionInformations();
+	}
+
+	protected CardinalityRestrictionClass(CardinalityRestriction aRestriction, FlexoOntology ontology) {
 		super(aRestriction, ontology);
 		this.restriction = aRestriction;
 		retrieveRestrictionInformations();
@@ -48,6 +56,10 @@ public class CardinalityRestrictionClass extends OntologyRestrictionClass {
 	@Override
 	protected void retrieveRestrictionInformations() {
 		super.retrieveRestrictionInformations();
+
+		if (restriction instanceof CardinalityRestriction) {
+			cardinality = ((CardinalityRestriction) restriction).getCardinality();
+		}
 
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS_PROPERTY = ResourceFactory.createProperty(OWL + ON_CLASS);
@@ -101,6 +113,7 @@ public class CardinalityRestrictionClass extends OntologyRestrictionClass {
 				+ (getObject() != null ? getObject().getName() : getDataRange());
 	}
 
+	@Override
 	public OntologyClass getObject() {
 		return object;
 	}
@@ -109,6 +122,7 @@ public class CardinalityRestrictionClass extends OntologyRestrictionClass {
 		return cardinality;
 	}
 
+	@Override
 	public OntologicDataType getDataRange() {
 		return dataRange;
 	}

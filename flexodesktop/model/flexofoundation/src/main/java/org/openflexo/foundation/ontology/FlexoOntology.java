@@ -44,6 +44,8 @@ import org.jdom.JDOMException;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.SAXBuilder;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.action.CreateDataProperty;
 import org.openflexo.foundation.ontology.action.CreateObjectProperty;
 import org.openflexo.foundation.ontology.action.CreateOntologyClass;
@@ -151,6 +153,27 @@ public abstract class FlexoOntology extends OntologyObject {
 		orderedObjectProperties = new Vector<OntologyObjectProperty>();
 	}
 
+	public static void main(String[] args) {
+		File f = new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/Ontologies/www.bolton.ac.uk/Archimate_from_Ecore.owl");
+		String uri = findOntologyURI(f);
+		System.out.println("uri: " + uri);
+		System.out.println("uri: " + findOntologyName(f));
+		FlexoResourceCenter resourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new File(
+				"/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter"));
+		resourceCenter.retrieveBaseOntologyLibrary();
+		// ImportedOntology o = ImportedOntology.createNewImportedOntology(uri, f, resourceCenter.retrieveBaseOntologyLibrary());
+		// o.load();
+		/*try {
+			o.save();
+		} catch (SaveResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		/*System.out.println("ontologies:" + o.getImportedOntologies());
+		System.out.println("classes:" + o.getClasses());
+		System.out.println("properties:" + o.getObjectProperties());*/
+	}
+
 	public static String findOntologyURI(File aFile) {
 		String returned = findOntologyURIWithOntologyAboutMethod(aFile);
 		if (StringUtils.isNotEmpty(returned) && returned.endsWith("#")) {
@@ -256,6 +279,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return null;
 	}
 
@@ -1122,6 +1146,15 @@ public abstract class FlexoOntology extends OntologyObject {
 			returned = new AllValuesFromRestrictionClass(restriction.asAllValuesFromRestriction(), getOntology());
 		} else if (restriction.isHasValueRestriction()) {
 			returned = new HasValueRestrictionClass(restriction.asHasValueRestriction(), getOntology());
+		} else if (restriction.isCardinalityRestriction()) {
+			System.out.println("C'est une cardinality restriction !!!");
+			returned = new CardinalityRestrictionClass(restriction.asCardinalityRestriction(), getOntology());
+		} else if (restriction.isMinCardinalityRestriction()) {
+			System.out.println("C'est une min cardinality restriction !!!");
+			returned = new MinCardinalityRestrictionClass(restriction.asMinCardinalityRestriction(), getOntology());
+		} else if (restriction.isMaxCardinalityRestriction()) {
+			System.out.println("C'est une max cardinality restriction !!!");
+			returned = new MaxCardinalityRestrictionClass(restriction.asMaxCardinalityRestriction(), getOntology());
 		} else if (restriction.getProperty(ON_CLASS) != null || restriction.getProperty(ON_DATA_RANGE) != null) {
 			if (restriction.getProperty(QUALIFIED_CARDINALITY) != null) {
 				returned = new CardinalityRestrictionClass(restriction, getOntology());
@@ -1136,7 +1169,7 @@ public abstract class FlexoOntology extends OntologyObject {
 			_classes.put(restriction, returned);
 			return returned;
 		} else {
-			logger.warning("Unexpected restriction: " + restriction);
+			logger.warning("While reading " + getURI() + ": unexpected restriction: " + restriction);
 			return null;
 		}
 
@@ -1348,7 +1381,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main2(String[] args) {
 		Hashtable<OntResource, String> renamedResources = new Hashtable<OntResource, String>();
 		Hashtable<String, OntResource> renamedURI = new Hashtable<String, OntResource>();
 
@@ -1523,6 +1556,7 @@ public abstract class FlexoOntology extends OntologyObject {
 	}
 
 	public void save() throws SaveResourceException {
+
 		saveToFile(getAlternativeLocalFile());
 	}
 
