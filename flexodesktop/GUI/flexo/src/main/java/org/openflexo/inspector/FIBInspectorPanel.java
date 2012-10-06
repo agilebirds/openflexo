@@ -37,7 +37,6 @@ import javax.swing.event.ChangeListener;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.inspector.ModuleInspectorController.EmptySelectionActivated;
 import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
 import org.openflexo.inspector.ModuleInspectorController.InspectorSwitching;
@@ -170,7 +169,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		return true;
 	}*/
 
-	private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
+	/*private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
 		if (inspector.updateEditionPatternReferences(object)) {
 			FIBView<?, ?> view = viewForInspector(inspector);
 			FIBController<?> controller = view.getController();
@@ -179,7 +178,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		} else {
 			// Nothing change: nice !!!
 		}
-	}
+	}*/
 
 	private void switchToEmptyContent() {
 		currentInspectorView = null;
