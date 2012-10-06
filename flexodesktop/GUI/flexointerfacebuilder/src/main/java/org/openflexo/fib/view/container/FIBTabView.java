@@ -46,7 +46,7 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 	@Override
 	protected void performSetIsVisible(boolean isVisible) {
 
-		logger.info("Called performSetIsVisible " + isVisible + " on TabComponent " + getComponent().getTitle());
+		// logger.info("Called performSetIsVisible " + isVisible + " on TabComponent " + getComponent().getTitle());
 
 		super.performSetIsVisible(isVisible);
 
@@ -69,7 +69,7 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 					parent.getJComponent().setSelectedComponent(getResultingJComponent());
 				}
 			} else {
-				wasSelected = (parent.getJComponent().getSelectedComponent() == getResultingJComponent());
+				wasSelected = parent.getJComponent().getSelectedComponent() == getResultingJComponent();
 				parent.getJComponent().remove(getResultingJComponent());
 				logger.fine("********** Removing component " + getComponent().getTitle());
 			}

@@ -112,6 +112,7 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 		});
 
 		for (FIBTab tab : allTabs) {
+			// logger.info("!!!!!!!!!!!!!!!!!!!! Build view for tab " + tab);
 			FIBView subView = getController().buildView(tab);
 			if (subView != null) {
 				registerViewForComponent(subView, tab);
@@ -124,6 +125,7 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 	// TODO: optimize it
 	@Override
 	public synchronized void updateLayout() {
+
 		int index = tabbedPane.getSelectedIndex();
 		for (FIBView v : getSubViews()) {
 			v.delete();
