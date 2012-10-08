@@ -139,10 +139,7 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}
 
 	public ImageIcon iconForObject(Object object) {
-		if (getFlexoController() != null) {
-			return getFlexoController().iconForObject(object);
-		}
-		return null;
+		return FlexoController.iconForObject(object);
 	}
 
 	@Override
