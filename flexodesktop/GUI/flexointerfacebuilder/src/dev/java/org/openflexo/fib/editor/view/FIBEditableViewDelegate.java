@@ -129,9 +129,9 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	}
 
 	private void recursivelyAddListenersTo(Component c) {
-		for (MouseListener ml : c.getMouseListeners()) {
+		/*for (MouseListener ml : c.getMouseListeners()) {
 			c.removeMouseListener(ml);
-		}
+		}*/
 		c.addMouseListener(this);
 		c.addFocusListener(this);
 		// Listen to drag'n'drop events
