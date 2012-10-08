@@ -102,8 +102,8 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 	public String getParameter(String parameterName) {
 		for (FIBParameter p : parameters) {
-			if (parameterName.equals(p.name)) {
-				return p.value;
+			if (parameterName.equals(p.getName())) {
+				return p.getValue();
 			}
 		}
 		return null;
@@ -265,7 +265,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		performValidation(FIBModelObjectShouldHaveAUniqueName.class, report);
 	}
 
-	private static Hashtable<Class, ValidationRule> rules = new Hashtable<Class, ValidationRule>();
+	private static final Hashtable<Class<?>, ValidationRule<?, ?>> rules = new Hashtable<Class<?>, ValidationRule<?, ?>>();
 
 	private static <R extends ValidationRule<R, C>, C extends FIBModelObject> R getRule(Class<R> validationRuleClass) {
 		R returned = (R) rules.get(validationRuleClass);
@@ -273,6 +273,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 			Constructor<R> c = (Constructor<R>) validationRuleClass.getConstructors()[0];
 			try {
 				returned = c.newInstance(null);
+				rules.put(validationRuleClass, returned);
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			} catch (InstantiationException e) {
@@ -282,7 +283,6 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
-			rules.put(validationRuleClass, returned);
 		}
 		return returned;
 	}
@@ -330,8 +330,9 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		}
 		if (object.getEmbeddedObjects() != null) {
 			for (FIBModelObject o : object.getEmbeddedObjects()) {
-				if (isNameUsedInHierarchy(aName, o))
+				if (isNameUsedInHierarchy(aName, o)) {
 					return true;
+				}
 			}
 		}
 		return false;

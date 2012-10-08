@@ -92,8 +92,8 @@ class StaticBindingPanel extends JPanel {
 			}
 		});
 		add(selectStaticBindingCB);
-		if ((_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null)) {
+		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null) {
 			enterValueTF = new JTextField(10);
 			enterValueTF.setFont(SMALL_FONT);
 			add(enterValueTF);
@@ -234,9 +234,9 @@ class StaticBindingPanel extends JPanel {
 
 		}
 
-		if ((_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null)
-				|| (TypeUtils.isObject(_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType()))) {
+		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null
+				|| TypeUtils.isObject(_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType())) {
 			final String SELECT = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "select");
 			final String BOOLEAN = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "boolean");
 			final String INTEGER = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "integer");
@@ -272,25 +272,23 @@ class StaticBindingPanel extends JPanel {
 					}
 				}
 			});
-			if (typeCB != null) {
-				isUpdatingPanel = true;
-				if (currentType == EvaluationType.BOOLEAN) {
-					typeCB.setSelectedItem(BOOLEAN);
-				} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
-					typeCB.setSelectedItem(INTEGER);
-				} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
-					typeCB.setSelectedItem(FLOAT);
-				} else if (currentType == EvaluationType.STRING) {
-					typeCB.setSelectedItem(STRING);
-				} else if (currentType == EvaluationType.DATE) {
-					typeCB.setSelectedItem(DATE);
-				} else if (currentType == EvaluationType.DURATION) {
-					typeCB.setSelectedItem(DURATION);
-				} else if (currentType == EvaluationType.ENUM) {
-					typeCB.setSelectedItem(DKV);
-				}
-				isUpdatingPanel = false;
+			isUpdatingPanel = true;
+			if (currentType == EvaluationType.BOOLEAN) {
+				typeCB.setSelectedItem(BOOLEAN);
+			} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
+				typeCB.setSelectedItem(INTEGER);
+			} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
+				typeCB.setSelectedItem(FLOAT);
+			} else if (currentType == EvaluationType.STRING) {
+				typeCB.setSelectedItem(STRING);
+			} else if (currentType == EvaluationType.DATE) {
+				typeCB.setSelectedItem(DATE);
+			} else if (currentType == EvaluationType.DURATION) {
+				typeCB.setSelectedItem(DURATION);
+			} else if (currentType == EvaluationType.ENUM) {
+				typeCB.setSelectedItem(DKV);
 			}
+			isUpdatingPanel = false;
 
 			typeCB.setFont(SMALL_FONT);
 			add(typeCB);

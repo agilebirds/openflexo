@@ -53,4 +53,9 @@ public class StringValue extends Value {
 		}
 		return super.equals(obj);
 	}
+
+	@Override
+	public int hashCode() {
+		return getStringValue().hashCode();
+	}
 }

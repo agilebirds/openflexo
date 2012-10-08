@@ -328,7 +328,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 			private Class<?> _referencedClass;
 
 			public ClassReference(Class<?> aClass, boolean parseMethodsAndProperties, LoadableDMEntity entity) {
-				this(aClass, parseMethodsAndProperties, entity, entity.getRepository());
+				this(aClass, parseMethodsAndProperties, entity, entity != null ? entity.getRepository() : null);
 			}
 
 			public ClassReference(Class<?> aClass, boolean parseMethodsAndProperties, DMRepository repository) {

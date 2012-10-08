@@ -56,7 +56,7 @@ public class SpellCheckExample implements SpellCheckListener {
 				System.out.print("Enter text to spell check: ");
 				String line = in.readLine();
 
-				if (line.length() <= 0) {
+				if (line == null || line.length() <= 0) {
 					break;
 				}
 				spellCheck.checkSpelling(new StringWordTokenizer(line));

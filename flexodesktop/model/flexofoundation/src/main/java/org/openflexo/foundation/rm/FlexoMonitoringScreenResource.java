@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +30,7 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 
-public class FlexoMonitoringScreenResource extends FlexoComponentResource implements Serializable {
+public class FlexoMonitoringScreenResource extends FlexoComponentResource {
 
 	private static final Logger logger = Logger.getLogger(FlexoMonitoringScreenResource.class.getPackage().getName());
 

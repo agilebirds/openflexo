@@ -1,7 +1,9 @@
 package org.openflexo.builders;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,6 +11,7 @@ import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -128,28 +131,43 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 	 */
 	private ValidationReport[] checkConsistency(File projectDirectory, CodeType target) {
 		long start = System.currentTimeMillis();
+		FlexoProject project = editor.getProject();
 		try {
-			editor.getProject().setTargetType(target);
-			ValidationReport componentLibraryReport = editor.getProject().getFlexoComponentLibrary().validate();
-			ValidationReport workflowReport = editor.getProject().getFlexoWorkflow().validate();
-			ValidationReport datamodelReport = editor.getProject().getDataModel().validate();
-			ValidationReport dkvReport = editor.getProject().getDKVModel().validate();
+			project.setTargetType(target);
+			List<ValidationReport> reports = new ArrayList<ValidationReport>();
+			if (project.getFlexoComponentLibrary(false) != null) {
+				reports.add(project.getFlexoComponentLibrary().validate());
+			}
+			if (project.getFlexoWorkflow(false) != null) {
+				reports.add(project.getFlexoWorkflow().validate());
+			}
+			if (project.getDataModel(false) != null) {
+				reports.add(project.getDataModel().validate());
+			}
+			if (project.getDKVModel(false) != null) {
+				reports.add(project.getDKVModel().validate());
+			}
 			long end = System.currentTimeMillis();
-			boolean success = componentLibraryReport.getErrorNb() + workflowReport.getErrorNb() + datamodelReport.getErrorNb()
-					+ dkvReport.getErrorNb() == 0;
+			boolean success = true;
+			for (ValidationReport report : reports) {
+				success &= report.getErrorNb() == 0;
+				if (!success) {
+					break;
+				}
+			}
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Consistency checking took " + (end - start) / 1000 + " seconds for project located at: "
 						+ projectDirectory.getAbsolutePath() + "\nResult: " + (success ? "Success" : "Failure"));
 			}
 			printTOCRepositories(editor);
-			return new ValidationReport[] { workflowReport, componentLibraryReport, datamodelReport, dkvReport };
+			return reports.toArray(new ValidationReport[reports.size()]);
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
 			setExitCodeCleanUpAndExit(CORRUPTED_PROJECT_EXCEPTION);
 		} finally {
 			// Only executed if no error occur
 			if (editor != null) {
-				editor.getProject().close();
+				project.close();
 			}
 		}
 		return null;

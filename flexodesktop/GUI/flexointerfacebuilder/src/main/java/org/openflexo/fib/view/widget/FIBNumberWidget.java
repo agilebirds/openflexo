@@ -81,7 +81,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		JComponent editor = valueChooser.getEditor();
 		if (editor instanceof DefaultEditor) {
 			((DefaultEditor) editor).getTextField().setHorizontalAlignment(SwingConstants.LEFT);
-			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			if (!ToolBox.isMacOSLaf()) {
 				((DefaultEditor) editor).getTextField().setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 0));
 			}
 		}

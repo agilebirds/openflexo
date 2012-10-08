@@ -42,8 +42,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
 
-	private String name;
-	private final String ontologyURI;
 	private final File originalXsdFile;
 	private final OntologyLibrary library;
 	private XSSchemaSet schemaSet;
@@ -61,9 +59,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	private final Map<String, XSOntIndividual> individuals = new HashMap<String, XSOntIndividual>();
 
 	public XSOntology(String ontologyURI, File xsdFile, OntologyLibrary library) {
-		super();
-		name = computeName(xsdFile);
-		this.ontologyURI = ontologyURI;
+		super(null, computeName(xsdFile), ontologyURI);
 		this.originalXsdFile = xsdFile;
 		this.library = library;
 	}
@@ -73,27 +69,8 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
-		// TODO
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("The ontology name changed, renaming of the ontology URI not implemented yet");
-		}
-	}
-
-	@Override
-	public String getURI() {
-		return getOntologyURI();
-	}
-
-	@Override
 	public String getOntologyURI() {
-		return ontologyURI;
+		return getURI();
 	}
 
 	@Override
@@ -210,19 +187,23 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		return result;
 	}
 
+	private void addDomainIfPossible(XSOntProperty property, String conceptUri) {
+		String ownerUri = fetcher.getOwnerUri(conceptUri);
+		if (ownerUri != null) {
+			XSOntClass owner = getClass(ownerUri);
+			if (owner != null) {
+				property.newDomainFound(owner);
+				owner.addPropertyTakingMyselfAsDomain(property);
+			}
+		}
+	}
+
 	private XSOntDataProperty loadDataProperty(XSDeclaration declaration) {
 		String name = declaration.getName();
 		String uri = fetcher.getUri(declaration);
 		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri);
 		dataProperties.put(uri, xsDataProperty);
-		String ownerUri = fetcher.getOwnerUri(xsDataProperty.getURI());
-		if (ownerUri != null) {
-			XSOntClass owner = getClass(ownerUri);
-			if (owner != null) {
-				xsDataProperty.newDomainFound(owner);
-				owner.addPropertyTakingMyselfAsDomain(xsDataProperty);
-			}
-		}
+		addDomainIfPossible(xsDataProperty, uri);
 		return xsDataProperty;
 	}
 
@@ -274,14 +255,24 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 		}
 
 		for (XSComplexType complexType : fetcher.getComplexTypes()) {
-			loadPrefixedProperty(complexType, hasChild);
-			loadPrefixedProperty(complexType, hasParent);
+			XSOntClass c = getClass(fetcher.getUri(complexType));
+			XSOntObjectProperty cHasChild = loadPrefixedProperty(complexType, hasChild);
+			cHasChild.newRangeFound(c);
+			addDomainIfPossible(cHasChild, c.getURI());
+			XSOntObjectProperty cHasParent = loadPrefixedProperty(complexType, hasParent);
+			cHasParent.newRangeFound(c);
+			addDomainIfPossible(cHasParent, c.getURI());
 		}
 
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
-				loadPrefixedProperty(element, hasChild);
-				loadPrefixedProperty(element, hasParent);
+				XSOntClass c = getClass(fetcher.getUri(element));
+				XSOntObjectProperty cHasChild = loadPrefixedProperty(element, hasChild);
+				cHasChild.newRangeFound(c);
+				addDomainIfPossible(cHasChild, c.getURI());
+				XSOntObjectProperty cHasParent = loadPrefixedProperty(element, hasParent);
+				cHasParent.newRangeFound(c);
+				addDomainIfPossible(cHasParent, c.getURI());
 			}
 		}
 	}

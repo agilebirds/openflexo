@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -105,6 +106,10 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		return null;
 	}
 
+	public FlexoEditor getEditorForProject(FlexoProject project) {
+		return editors.get(project);
+	}
+
 	public FlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
 		return loadProject(projectDirectory, true);
 	}
@@ -147,6 +152,11 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		if (addToRecentProjects) {
 			preInitialization(projectDirectory);
 		}
+		for (Entry<FlexoProject, FlexoEditor> e : editors.entrySet()) {
+			if (e.getKey().getProjectDirectory().equals(projectDirectory)) {
+				return e.getValue();
+			}
+		}
 		final FlexoEditor editor;
 		try {
 			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
@@ -176,14 +186,18 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		} else {
 			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("building_new_project"));
 		}
-		// This will just create the .version in the project
-		FlexoProjectUtil.currentFlexoVersionIsSmallerThanLastVersion(projectDirectory);
+		try {
+			// This will just create the .version in the project
+			FlexoProjectUtil.currentFlexoVersionIsSmallerThanLastVersion(projectDirectory);
 
-		preInitialization(projectDirectory);
-		FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-				applicationContext.getProjectReferenceLoader(), getResourceCenter());
-		newEditor(editor);
-		return editor;
+			preInitialization(projectDirectory);
+			FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(), applicationContext,
+					applicationContext.getProjectReferenceLoader(), getResourceCenter());
+			newEditor(editor);
+			return editor;
+		} finally {
+			ProgressWindow.hideProgressWindow();
+		}
 	}
 
 	private void newEditor(FlexoEditor editor) {

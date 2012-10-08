@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.Component;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -191,6 +192,21 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		}
 
 		@Override
+		public int hashCode() {
+			int hashCode = 1;
+			if (list != null) {
+				for (Object e : list) {
+					hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+				}
+			} else if (array != null) {
+				for (Object e : array) {
+					hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+				}
+			}
+			return hashCode;
+		}
+
+		@Override
 		public boolean equals(Object object) {
 			if (object instanceof FIBMultipleValueWidget<?, ?, ?>.FIBMultipleValueModel) {
 				FIBMultipleValueModel object2 = (FIBMultipleValueModel) object;
@@ -204,7 +220,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 					if (object2.array == null) {
 						return false;
 					} else {
-						return array.equals(object2.array);
+						return Arrays.deepEquals(array, object2.array);
 					}
 				}
 			}

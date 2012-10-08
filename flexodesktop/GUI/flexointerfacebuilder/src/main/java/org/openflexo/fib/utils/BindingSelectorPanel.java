@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.StringTokenizer;
@@ -112,7 +113,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	JButton _createsButton;
 
-	private Hashtable<BindingPathElement, Hashtable<Type, BindingColumnListModel>> _listModels;
+	private Map<BindingPathElement, Hashtable<Type, BindingColumnListModel>> _listModels;
 
 	Vector<FilteredJList> _lists;
 
@@ -987,7 +988,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			binding.debugIsBindingValid();
 		}*/
 		if (binding != null && binding.isBindingValid()) {
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			if (ToolBox.isMacOSLaf()) {
 				_connectButton.setSelected(true);
 			}
 		}

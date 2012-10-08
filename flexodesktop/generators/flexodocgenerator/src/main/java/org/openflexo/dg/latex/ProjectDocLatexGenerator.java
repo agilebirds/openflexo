@@ -65,7 +65,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.PredefinedSection;
-import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -153,11 +152,11 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	public String getMainColor() {
 		StringBuilder sb = new StringBuilder();
 		Color c = getProject().getCssSheet().getTextColor();
-		sb.append(Math.round(c.getRed() * 10000 / 255) / 10000d);
+		sb.append(Math.round(c.getRed() * 10000d / 255) / 10000d);
 		sb.append(',');
-		sb.append(Math.round(c.getGreen() * 10000 / 255) / 10000d);
+		sb.append(Math.round(c.getGreen() * 10000d / 255) / 10000d);
 		sb.append(',');
-		sb.append(Math.round(c.getBlue() * 10000d / 255d) / 10000d);
+		sb.append(Math.round(c.getBlue() * 10000d / 255) / 10000d);
 		return sb.toString();
 	}
 
@@ -177,35 +176,52 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 		if (rootGenerator == null) {
 			rootGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), PROJECT_TEMPLATE_NAME);
 		}
-		if (workflowGenerator == null) {
+		if (workflowGenerator == null && getProject().getFlexoWorkflow(false) != null) {
 			workflowGenerator = new DGLatexGenerator<FlexoWorkflow>(this, getProject().getFlexoWorkflow(), WKF_TEMPLATE_NAME, getProject()
 					.getFlexoWorkflow().getFullyQualifiedName(),
 					DGGenerator.nameForObjectNoExt(getProject().getFlexoWorkflow(), repository), repository.getTocRepository()
 							.getTOCEntryWithID(PredefinedSection.PredefinedSectionType.PROCESSES));
 		}
-		if (clGenerator == null) {
+		if (clGenerator == null && getProject().getFlexoComponentLibrary(false) != null) {
 			clGenerator = new DGLatexGenerator<FlexoComponentLibrary>(this, getProject().getFlexoComponentLibrary(), CL_TEMPLATE_NAME);
 		}
-		if (dmGenerator == null) {
+		if (dmGenerator == null && getProject().getDataModel(false) != null) {
 			dmGenerator = new DGLatexGenerator<DMModel>(this, getProject().getDataModel(), DM_TEMPLATE_NAME);
 		}
-		if (dkvGenerator == null) {
+		if (dkvGenerator == null && getProject().getDKVModel(false) != null) {
 			dkvGenerator = new DGLatexGenerator<DKVModel>(this, getProject().getDKVModel(), DKV_TEMPLATE_NAME);
+			// The DKV
+			DKVModelLatexFileResource dkvRes = GeneratedFileResourceFactory.createNewDKVLatexFileResource(repository, dkvGenerator);
+			resources.add(dkvRes);
+			TOCEntry entry = dkvGenerator.getTOCEntry();
+			if (entry != null) {
+				associateEntryWithResource(entry, dkvRes);
+			}
 		}
-		if (menuGenerator == null) {
+		if (menuGenerator == null && getProject().getFlexoNavigationMenu(false) != null) {
 			menuGenerator = new DGLatexGenerator<FlexoNavigationMenu>(this, getProject().getFlexoNavigationMenu(), MENU_TEMPLATE_NAME);
+			// The Menu
+			MenuLatexFileResource menuRes = GeneratedFileResourceFactory.createNewMenuLatexFileResource(repository, menuGenerator);
+			resources.add(menuRes);
+			TOCEntry entry = menuGenerator.getTOCEntry();
+			if (entry != null) {
+				associateEntryWithResource(entry, menuRes);
+			}
 		}
 		if (readersGuideGenerator == null) {
 			readersGuideGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), READERS_TEMPLATE_NAME, "ReadersGuide",
-					DGGenerator.nameForReadersGuideNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.READERS_GUIDE));
+					DGGenerator.nameForReadersGuideNoExt(getRepository()), getRepository().getTOCEntryWithID(
+							PredefinedSection.PredefinedSectionType.READERS_GUIDE));
 		}
 		if (definitionsGenerator == null) {
 			definitionsGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), DEFINITIONS_TEMPLATE_NAME, "Definitions",
-					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.DEFINITIONS));
+					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(
+							PredefinedSection.PredefinedSectionType.DEFINITIONS));
 		}
 		if (rolesGenerator == null) {
 			rolesGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), ROLES_TEMPLATE_NAME, "Roles",
-					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.ROLES));
+					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(
+							PredefinedSection.PredefinedSectionType.ROLES));
 		}
 		if (stylesAndImagesGenerator == null) {
 			stylesAndImagesGenerator = new StylesAndImagesGenerator(this, getProject());
@@ -221,25 +237,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 
 		buildResourcesAndSetGeneratorsForDataModel(repository, resources);
 
-		// The DKV
-		DKVModelLatexFileResource dkvRes = GeneratedFileResourceFactory.createNewDKVLatexFileResource(repository, dkvGenerator);
-		resources.add(dkvRes);
-		TOCEntry entry = dkvGenerator.getTOCEntry();
-		if (entry != null) {
-			associateEntryWithResource(entry, dkvRes);
-		}
-
-		// The Menu
-		MenuLatexFileResource menuRes = GeneratedFileResourceFactory.createNewMenuLatexFileResource(repository, menuGenerator);
-		resources.add(menuRes);
-		entry = menuGenerator.getTOCEntry();
-		if (entry != null) {
-			associateEntryWithResource(entry, menuRes);
-		}
-
 		ReadersGuideLatexFileResource readersRes = GeneratedFileResourceFactory.createNewReadersGuideLatexFileResource(repository,
 				readersGuideGenerator);
-		entry = readersGuideGenerator.getTOCEntry();
+		TOCEntry entry = readersGuideGenerator.getTOCEntry();
 		if (entry != null) {
 			associateEntryWithResource(entry, readersRes);
 		}
@@ -265,44 +265,46 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	 */
 	private void buildResourcesAndSetGeneratorsForDataModel(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// The Datamodel itself
-		DMModelLatexFileResource dmRes = GeneratedFileResourceFactory.createNewDMModelLatexFileResource(repository, dmGenerator);
-		resources.add(dmRes);
-		TOCEntry entry = dmGenerator.getTOCEntry();
-		if (entry != null) {
-			associateEntryWithResource(entry, dmRes);
-		}
+		if (getProject().getDataModel(false) != null) {
+			DMModelLatexFileResource dmRes = GeneratedFileResourceFactory.createNewDMModelLatexFileResource(repository, dmGenerator);
+			resources.add(dmRes);
+			TOCEntry entry = dmGenerator.getTOCEntry();
+			if (entry != null) {
+				associateEntryWithResource(entry, dmRes);
+			}
 
-		Hashtable<DMEOEntity, DGLatexGenerator<DMEOEntity>> generators = new Hashtable<DMEOEntity, DGLatexGenerator<DMEOEntity>>();
-		// All the EOEntities
-		Enumeration<DMEORepository> en = getProject().getDataModel().getDMEORepositories().elements();
-		while (en.hasMoreElements()) {
-			DMEORepository eoRep = en.nextElement();
-			resetSecondaryProgressWindow(eoRep.getEntitiesForEOEntity().size());
-			Enumeration<DMEOEntity> en1 = eoRep.getEntitiesForEOEntity().elements();
-			while (en1.hasMoreElements()) {
-				DMEOEntity entity = en1.nextElement();
-				if (entity == null || entity.getDontGenerate()) {
-					continue;
-				}
-				DGLatexGenerator<DMEOEntity> generator = getEntityGenerator(entity);
-				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + entity.getName(), false);
-				if (generator != null) {
-					generators.put(entity, generator);
-					DMEOEntityLatexFileResource res = GeneratedFileResourceFactory
-							.createNewEOEntityLatexFileResource(repository, generator);
-					resources.add(res);
-					entry = generator.getTOCEntry();
-					if (entry != null) {
-						associateEntryWithResource(entry, res);
+			Hashtable<DMEOEntity, DGLatexGenerator<DMEOEntity>> generators = new Hashtable<DMEOEntity, DGLatexGenerator<DMEOEntity>>();
+			// All the EOEntities
+			Enumeration<DMEORepository> en = getProject().getDataModel().getDMEORepositories().elements();
+			while (en.hasMoreElements()) {
+				DMEORepository eoRep = en.nextElement();
+				resetSecondaryProgressWindow(eoRep.getEntitiesForEOEntity().size());
+				Enumeration<DMEOEntity> en1 = eoRep.getEntitiesForEOEntity().elements();
+				while (en1.hasMoreElements()) {
+					DMEOEntity entity = en1.nextElement();
+					if (entity == null || entity.getDontGenerate()) {
+						continue;
 					}
-				} else {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Could not instanciate EOEntityDocGenerator for " + entity.getName());
+					DGLatexGenerator<DMEOEntity> generator = getEntityGenerator(entity);
+					refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + entity.getName(), false);
+					if (generator != null) {
+						generators.put(entity, generator);
+						DMEOEntityLatexFileResource res = GeneratedFileResourceFactory.createNewEOEntityLatexFileResource(repository,
+								generator);
+						resources.add(res);
+						entry = generator.getTOCEntry();
+						if (entry != null) {
+							associateEntryWithResource(entry, res);
+						}
+					} else {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Could not instanciate EOEntityDocGenerator for " + entity.getName());
+						}
 					}
 				}
 			}
+			entityGenerators = generators;
 		}
-		entityGenerators = generators;
 	}
 
 	private static final Vector<FileResource> fileResourceToCopy = new Vector<FileResource>();
@@ -333,40 +335,42 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	 */
 	private void buildResourcesAndSetGeneratorsForComponentLibrary(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// The component library itself
-		ComponentLibraryLatexFileResource clRes = GeneratedFileResourceFactory.createNewComponentLibraryLatexFileResource(repository,
-				clGenerator);
-		resources.add(clRes);
-		TOCEntry entry = clGenerator.getTOCEntry();
-		if (entry != null) {
-			associateEntryWithResource(entry, clRes);
-		}
+		if (getProject().getFlexoComponentLibrary(false) != null) {
+			ComponentLibraryLatexFileResource clRes = GeneratedFileResourceFactory.createNewComponentLibraryLatexFileResource(repository,
+					clGenerator);
+			resources.add(clRes);
+			TOCEntry entry = clGenerator.getTOCEntry();
+			if (entry != null) {
+				associateEntryWithResource(entry, clRes);
+			}
 
-		Hashtable<ComponentDefinition, DGLatexGenerator<? extends ComponentDefinition>> generators = new Hashtable<ComponentDefinition, DGLatexGenerator<? extends ComponentDefinition>>();
-		// All the components
-		Vector<ComponentDefinition> components = getProject().getFlexoComponentLibrary().getRootFolder().getAllComponents();
-		resetSecondaryProgressWindow(components.size());
-		for (ComponentDefinition cd : components) {
-			if (cd == null || cd.getDontGenerate()) {
-				continue;
-			}
-			DGLatexGenerator<? extends ComponentDefinition> generator = getComponentGenerator(cd);
-			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + cd.getName(), false);
-			if (generator != null) {
-				generators.put(cd, generator);
-				ComponentLatexFileResource<? extends ComponentDefinition> res = GeneratedFileResourceFactory
-						.createNewComponentLatexFileResource(repository, generator);
-				resources.add(res);
-				entry = generator.getTOCEntry();
-				if (entry != null) {
-					associateEntryWithResource(entry, res);
+			Hashtable<ComponentDefinition, DGLatexGenerator<? extends ComponentDefinition>> generators = new Hashtable<ComponentDefinition, DGLatexGenerator<? extends ComponentDefinition>>();
+			// All the components
+			Vector<ComponentDefinition> components = getProject().getFlexoComponentLibrary().getRootFolder().getAllComponents();
+			resetSecondaryProgressWindow(components.size());
+			for (ComponentDefinition cd : components) {
+				if (cd == null || cd.getDontGenerate()) {
+					continue;
 				}
-			} else {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not instanciate ComponentDocGenerator for " + cd);
+				DGLatexGenerator<? extends ComponentDefinition> generator = getComponentGenerator(cd);
+				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + cd.getName(), false);
+				if (generator != null) {
+					generators.put(cd, generator);
+					ComponentLatexFileResource<? extends ComponentDefinition> res = GeneratedFileResourceFactory
+							.createNewComponentLatexFileResource(repository, generator);
+					resources.add(res);
+					entry = generator.getTOCEntry();
+					if (entry != null) {
+						associateEntryWithResource(entry, res);
+					}
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not instanciate ComponentDocGenerator for " + cd);
+					}
 				}
 			}
+			componentGenerators = generators;
 		}
-		componentGenerators = generators;
 	}
 
 	/**
@@ -375,40 +379,42 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	 */
 	private void buildResourcesAndSetGeneratorsForWorkflow(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// The Workflow itself
-		WorkflowLatexFileResource wkfResource = GeneratedFileResourceFactory.createNewWorkflowLatexFileResource(repository,
-				workflowGenerator);
-		resources.add(wkfResource);
-		TOCEntry entry = workflowGenerator.getTOCEntry();
-		if (entry != null) {
-			associateEntryWithResource(entry, wkfResource);
-		}
+		if (getProject().getFlexoWorkflow(false) != null) {
+			WorkflowLatexFileResource wkfResource = GeneratedFileResourceFactory.createNewWorkflowLatexFileResource(repository,
+					workflowGenerator);
+			resources.add(wkfResource);
+			TOCEntry entry = workflowGenerator.getTOCEntry();
+			if (entry != null) {
+				associateEntryWithResource(entry, wkfResource);
+			}
 
-		Hashtable<FlexoProcess, DGLatexGenerator<FlexoProcess>> generators = new Hashtable<FlexoProcess, DGLatexGenerator<FlexoProcess>>();
-		// All its processes
-		Vector<FlexoProcess> processes = getProject().getAllLocalFlexoProcesses();
-		resetSecondaryProgressWindow(processes.size());
-		for (FlexoProcess process : processes) {
-			if (process == null || process.getDontGenerate()) {
-				continue;
-			}
-			DGLatexGenerator<FlexoProcess> generator = getProcessGenerator(process);
-			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + process.getName(), false);
-			if (generator != null) {
-				generators.put(process, generator);
-				ProcessLatexFileResource res = GeneratedFileResourceFactory.createNewProcessLatexFileResource(repository, generator);
-				resources.add(res);
-				entry = generator.getTOCEntry();
-				if (entry != null) {
-					associateEntryWithResource(entry, res);
+			Hashtable<FlexoProcess, DGLatexGenerator<FlexoProcess>> generators = new Hashtable<FlexoProcess, DGLatexGenerator<FlexoProcess>>();
+			// All its processes
+			Vector<FlexoProcess> processes = getProject().getAllLocalFlexoProcesses();
+			resetSecondaryProgressWindow(processes.size());
+			for (FlexoProcess process : processes) {
+				if (process == null || process.getDontGenerate()) {
+					continue;
 				}
-			} else {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not instanciate ProcessDocGenerator for " + process);
+				DGLatexGenerator<FlexoProcess> generator = getProcessGenerator(process);
+				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + process.getName(), false);
+				if (generator != null) {
+					generators.put(process, generator);
+					ProcessLatexFileResource res = GeneratedFileResourceFactory.createNewProcessLatexFileResource(repository, generator);
+					resources.add(res);
+					entry = generator.getTOCEntry();
+					if (entry != null) {
+						associateEntryWithResource(entry, res);
+					}
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not instanciate ProcessDocGenerator for " + process);
+					}
 				}
+				buildResourcesAndSetGeneratorsForProcess(repository, resources, process);
 			}
-			buildResourcesAndSetGeneratorsForProcess(repository, resources, process);
+			processGenerators = generators;
 		}
-		processGenerators = generators;
 	}
 
 	/**
@@ -484,8 +490,8 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	}
 
 	public ProjectLatexFileResource getProjectDocResource() {
-		return ((ProjectLatexFileResource) getProject().resourceForKey(ResourceType.LATEX_FILE,
-				ProjectLatexFileResource.nameForRepositoryAndProject(this.getRepository(), getProject())));
+		return (ProjectLatexFileResource) getProject().resourceForKey(ResourceType.LATEX_FILE,
+				ProjectLatexFileResource.nameForRepositoryAndProject(this.getRepository(), getProject()));
 	}
 
 	/**
@@ -546,7 +552,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 							InputStreamReader isr = new InputStreamReader(is);
 							BufferedReader reader = new BufferedReader(isr);
 							String line;
-							Vector<LogListener> listeners = (Vector<LogListener>) logListeners.clone();
+							List<LogListener> listeners = new ArrayList<LogListener>(logListeners);
 							try {
 								while ((line = reader.readLine()) != null) {
 									for (LogListener l : listeners) {
@@ -575,7 +581,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 							InputStreamReader isr = new InputStreamReader(errIs);
 							BufferedReader reader = new BufferedReader(isr);
 							String line;
-							Vector<LogListener> listeners = (Vector<LogListener>) logListeners.clone();
+							List<LogListener> listeners = new ArrayList<LogListener>(logListeners);
 							try {
 								while ((line = reader.readLine()) != null) {
 									for (LogListener l : listeners) {
@@ -610,7 +616,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 								if (System.currentTimeMillis() - lastLogUpdate > getLatexTimeOutInMillis()) {
 									current.interrupt();
 									if (logger.isLoggable(Level.WARNING)) {
-										logger.warning("pdflatex timeout: no log for " + (getLatexTimeOutInMillis() / 1000) + " seconds.");
+										logger.warning("pdflatex timeout: no log for " + getLatexTimeOutInMillis() / 1000 + " seconds.");
 									}
 									return;
 								}
@@ -654,7 +660,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 								InputStreamReader isr = new InputStreamReader(is);
 								BufferedReader reader = new BufferedReader(isr);
 								String line;
-								Vector<LogListener> listeners = (Vector<LogListener>) logListeners.clone();
+								List<LogListener> listeners = new ArrayList<LogListener>(logListeners);
 								try {
 									while ((line = reader.readLine()) != null) {
 										for (LogListener l : listeners) {
@@ -680,7 +686,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 								InputStreamReader isr = new InputStreamReader(errIs);
 								BufferedReader reader = new BufferedReader(isr);
 								String line;
-								Vector<LogListener> listeners = (Vector<LogListener>) logListeners.clone();
+								List<LogListener> listeners = new ArrayList<LogListener>(logListeners);
 								try {
 									while ((line = reader.readLine()) != null) {
 										for (LogListener l : listeners) {
@@ -715,8 +721,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 									if (System.currentTimeMillis() - lastLogUpdate > getLatexTimeOutInMillis()) {
 										current.interrupt();
 										if (logger.isLoggable(Level.WARNING)) {
-											logger.warning("pdflatex timeout: no log for " + (getLatexTimeOutInMillis() / 1000)
-													+ " seconds.");
+											logger.warning("pdflatex timeout: no log for " + getLatexTimeOutInMillis() / 1000 + " seconds.");
 										}
 										return;
 									}

@@ -72,60 +72,70 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		Hashtable<FlexoCopiedResource, CopiedResourceGenerator> newGenerators = new Hashtable<FlexoCopiedResource, CopiedResourceGenerator>();
 		// First Workflow
-		FlexoCopiedResource wCopy = getResourceForFlexoModelObject(getProject().getWorkflow(), true);
-		resources.add(wCopy);
-		newGenerators.put(wCopy, (CopiedResourceGenerator) wCopy.getGenerator());
-		Enumeration<FlexoProcess> en = getProject().getAllLocalFlexoProcesses().elements(); // Processes
-		while (en.hasMoreElements()) {
-			FlexoProcess p = en.nextElement();
-			FlexoCopiedResource pCopy = getResourceForProcess(p, true);
-			resources.add(pCopy);
-			newGenerators.put(pCopy, (CopiedResourceGenerator) pCopy.getGenerator());
-			Enumeration<AbstractActivityNode> en1 = p.getAllEmbeddedAbstractActivityNodes().elements();
-			while (en1.hasMoreElements()) {
-				AbstractActivityNode a = en1.nextElement(); // Activities
-				FlexoCopiedResource aCopy = getResourceForActivity(a, true);
-				resources.add(aCopy);
-				newGenerators.put(aCopy, (CopiedResourceGenerator) aCopy.getGenerator());
-				Enumeration<OperationNode> en2 = a.getAllEmbeddedOperationNodes().elements();
-				while (en2.hasMoreElements()) {
-					OperationNode o = en2.nextElement(); // Operations
-					if (!o.hasWOComponent()) {
-						continue;
-					}
-					FlexoCopiedResource oCopy = getResourceForOperation(o, true);
-					resources.add(oCopy);
-					newGenerators.put(oCopy, (CopiedResourceGenerator) oCopy.getGenerator());
-				}
-			}
-
-			Enumeration<OperatorNode> enOperator = p.getAllEmbeddedOperatorNodes().elements();
-			while (enOperator.hasMoreElements()) {
-				OperatorNode operatorNode = enOperator.nextElement();
-				if (operatorNode instanceof LOOPOperator) {
-					FlexoCopiedResource aCopy = getResourceForFlexoModelObject(operatorNode, true);
+		if (getProject().getFlexoWorkflow(false) != null) {
+			FlexoCopiedResource wCopy = getResourceForFlexoModelObject(getProject().getWorkflow(), true);
+			resources.add(wCopy);
+			newGenerators.put(wCopy, (CopiedResourceGenerator) wCopy.getGenerator());
+			Enumeration<FlexoProcess> en = getProject().getAllLocalFlexoProcesses().elements(); // Processes
+			while (en.hasMoreElements()) {
+				FlexoProcess p = en.nextElement();
+				FlexoCopiedResource pCopy = getResourceForProcess(p, true);
+				resources.add(pCopy);
+				newGenerators.put(pCopy, (CopiedResourceGenerator) pCopy.getGenerator());
+				Enumeration<AbstractActivityNode> en1 = p.getAllEmbeddedAbstractActivityNodes().elements();
+				while (en1.hasMoreElements()) {
+					AbstractActivityNode a = en1.nextElement(); // Activities
+					FlexoCopiedResource aCopy = getResourceForActivity(a, true);
 					resources.add(aCopy);
 					newGenerators.put(aCopy, (CopiedResourceGenerator) aCopy.getGenerator());
+					Enumeration<OperationNode> en2 = a.getAllEmbeddedOperationNodes().elements();
+					while (en2.hasMoreElements()) {
+						OperationNode o = en2.nextElement(); // Operations
+						if (!o.hasWOComponent()) {
+							continue;
+						}
+						FlexoCopiedResource oCopy = getResourceForOperation(o, true);
+						resources.add(oCopy);
+						newGenerators.put(oCopy, (CopiedResourceGenerator) oCopy.getGenerator());
+					}
+				}
+
+				Enumeration<OperatorNode> enOperator = p.getAllEmbeddedOperatorNodes().elements();
+				while (enOperator.hasMoreElements()) {
+					OperatorNode operatorNode = enOperator.nextElement();
+					if (operatorNode instanceof LOOPOperator) {
+						FlexoCopiedResource aCopy = getResourceForFlexoModelObject(operatorNode, true);
+						resources.add(aCopy);
+						newGenerators.put(aCopy, (CopiedResourceGenerator) aCopy.getGenerator());
+					}
 				}
 			}
+
+			// Now the role list
+			FlexoCopiedResource roleListCopy = getResourceForFlexoModelObject(getProject().getFlexoWorkflow().getRoleList(), true);
+			newGenerators.put(roleListCopy, (CopiedResourceGenerator) roleListCopy.getGenerator());
+			resources.add(roleListCopy);
 		}
 
-		// Now the components
-		Enumeration<ComponentDefinition> en3 = getProject().getFlexoComponentLibrary().getAllComponentList().elements();
-		while (en3.hasMoreElements()) {
-			ComponentDefinition cd = en3.nextElement();
-			FlexoCopiedResource cdCopy = getResourceForComponent(cd, true);
-			resources.add(cdCopy);
-			newGenerators.put(cdCopy, (CopiedResourceGenerator) cdCopy.getGenerator());
+		if (getProject().getFlexoComponentLibrary(false) != null) {
+			// Now the components
+			Enumeration<ComponentDefinition> en3 = getProject().getFlexoComponentLibrary().getAllComponentList().elements();
+			while (en3.hasMoreElements()) {
+				ComponentDefinition cd = en3.nextElement();
+				FlexoCopiedResource cdCopy = getResourceForComponent(cd, true);
+				resources.add(cdCopy);
+				newGenerators.put(cdCopy, (CopiedResourceGenerator) cdCopy.getGenerator());
+			}
 		}
-
-		// Now the ERDiagrams
-		Enumeration<ERDiagram> en4 = getProject().getDataModel().getDiagrams().elements();
-		while (en4.hasMoreElements()) {
-			ERDiagram cd = en4.nextElement();
-			FlexoCopiedResource cdCopy = getResourceForDiagram(cd, true);
-			resources.add(cdCopy);
-			newGenerators.put(cdCopy, (CopiedResourceGenerator) cdCopy.getGenerator());
+		if (getProject().getDataModel(false) != null) {
+			// Now the ERDiagrams
+			Enumeration<ERDiagram> en4 = getProject().getDataModel().getDiagrams().elements();
+			while (en4.hasMoreElements()) {
+				ERDiagram cd = en4.nextElement();
+				FlexoCopiedResource cdCopy = getResourceForDiagram(cd, true);
+				resources.add(cdCopy);
+				newGenerators.put(cdCopy, (CopiedResourceGenerator) cdCopy.getGenerator());
+			}
 		}
 
 		// Now the OEShemas
@@ -139,10 +149,6 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 			}
 		}
 
-		// Now the role list
-		FlexoCopiedResource roleListCopy = getResourceForFlexoModelObject(getProject().getFlexoWorkflow().getRoleList(), true);
-		newGenerators.put(roleListCopy, (CopiedResourceGenerator) roleListCopy.getGenerator());
-		resources.add(roleListCopy);
 		generators.clear(); // Frees memory
 		generators = newGenerators;
 	}

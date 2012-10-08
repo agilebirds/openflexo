@@ -57,6 +57,12 @@ public class DateValue extends Value {
 		if (obj instanceof DateValue) {
 			return getDateValue().equals(((DateValue) obj).getDateValue());
 		}
-		return super.equals(obj);
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return super.hashCode();
 	}
 }

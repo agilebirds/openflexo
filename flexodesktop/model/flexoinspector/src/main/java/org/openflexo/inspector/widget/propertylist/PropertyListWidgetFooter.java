@@ -50,6 +50,7 @@ public class PropertyListWidgetFooter extends JPanel {
 
 	protected static final Logger logger = Logger.getLogger(PropertyListWidgetFooter.class.getPackage().getName());
 
+	@Deprecated
 	public static final Color GUI_BACK_COLOR = ToolBox.getPLATFORM() == ToolBox.MACOS ? null : Color.WHITE;
 
 	// deprecated: will be removed while inspector project will disappear

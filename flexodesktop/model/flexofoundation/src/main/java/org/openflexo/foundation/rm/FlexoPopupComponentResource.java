@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,7 +34,7 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
  * @author sguerin
  * 
  */
-public class FlexoPopupComponentResource extends FlexoComponentResource implements Serializable {
+public class FlexoPopupComponentResource extends FlexoComponentResource {
 
 	private static final Logger logger = Logger.getLogger(FlexoPopupComponentResource.class.getPackage().getName());
 

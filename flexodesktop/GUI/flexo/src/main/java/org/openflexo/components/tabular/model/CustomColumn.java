@@ -113,7 +113,7 @@ public abstract class CustomColumn<D extends FlexoModelObject, T> extends Abstra
 			D rowObject = elementAt(row);
 			if (isSelected && hasFocus) {
 				CustomPopup<T> returned = getViewSelector(rowObject, (T) value);
-				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+				if (ToolBox.isMacOSLaf()) {
 					setComponentBackground(returned, hasFocus, isSelected, row, column);
 				}
 				return returned;

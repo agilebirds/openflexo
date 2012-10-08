@@ -1300,10 +1300,10 @@ public class IEHyperlinkWidget extends IEControlWidget implements ComponentInsta
 		}
 	}
 
-	public static class SetLinkTypeSearch extends FixProposal<DateAssistantPopupMustBeLinkedWithADateTextField, IEHyperlinkWidget> {
+	public static class SetLinkTypeSearch<V extends ValidationRule<V, H>, H extends IEHyperlinkWidget> extends FixProposal<V, H> {
 		public IEHyperlinkWidget button;
 
-		public SetLinkTypeSearch(IEHyperlinkWidget bt) {
+		public SetLinkTypeSearch(H bt) {
 			super("set_link_type_search");
 			button = bt;
 		}
@@ -1314,10 +1314,10 @@ public class IEHyperlinkWidget extends IEControlWidget implements ComponentInsta
 		}
 	}
 
-	public static class SetLinkTypeMailto extends FixProposal<DateAssistantPopupMustBeLinkedWithADateTextField, IEHyperlinkWidget> {
+	public static class SetLinkTypeMailto<V extends ValidationRule<V, H>, H extends IEHyperlinkWidget> extends FixProposal<V, H> {
 		public IEHyperlinkWidget button;
 
-		public SetLinkTypeMailto(IEHyperlinkWidget bt) {
+		public SetLinkTypeMailto(H bt) {
 			super("set_link_type_mailto");
 			button = bt;
 		}

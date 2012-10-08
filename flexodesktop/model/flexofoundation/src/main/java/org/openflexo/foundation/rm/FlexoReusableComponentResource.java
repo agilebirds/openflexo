@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +37,7 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class FlexoReusableComponentResource extends FlexoComponentResource implements Serializable {
+public class FlexoReusableComponentResource extends FlexoComponentResource {
 
 	private static final Logger logger = Logger.getLogger(FlexoTabComponentResource.class.getPackage().getName());
 

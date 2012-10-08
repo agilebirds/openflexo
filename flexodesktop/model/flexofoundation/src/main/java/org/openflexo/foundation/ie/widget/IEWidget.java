@@ -533,7 +533,10 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 	}
 
 	public Vector<Domain> getAvailableDomains() {
-		return getProject().getDKVModel().getSortedDomains();
+		if (getProject().getDKVModel(false) != null) {
+			return getProject().getDKVModel().getSortedDomains();
+		}
+		return new Vector<Domain>();
 	}
 
 	public boolean getIsRootOfPartialComponent() {

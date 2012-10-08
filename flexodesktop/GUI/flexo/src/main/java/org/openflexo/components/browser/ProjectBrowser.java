@@ -499,6 +499,26 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 		_rootObject = aRootObject;
 		update();
+		if (_rootObject != null && !isRootCollapsable()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					if (showRootNode()) {
+						expand(_rootObject, false);
+					} else {
+						BrowserElement[] elements = elementForObject(_rootObject);
+						List<BrowserElement> children = new ArrayList<BrowserElement>();
+						for (BrowserElement el : elements) {
+							Enumeration<BrowserElement> en = el.children();
+							while (en.hasMoreElements()) {
+								children.add(en.nextElement());
+							}
+						}
+						notifyListeners(new ExpansionNotificationEvent(children.toArray(new BrowserElement[children.size()]), true));
+					}
+				}
+			});
+		}
 	}
 
 	public FlexoModelObject getRootObject() {

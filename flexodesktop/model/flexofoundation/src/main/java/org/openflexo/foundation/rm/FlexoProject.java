@@ -1257,15 +1257,28 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public FlexoWorkflowResource getFlexoWorkflowResource() {
-		return (FlexoWorkflowResource) resourceForKey(ResourceType.WORKFLOW, getProjectName());
+		return getFlexoWorkflowResource(true);
+	}
+
+	public FlexoWorkflowResource getFlexoWorkflowResource(boolean create) {
+		FlexoWorkflowResource wkfResource = (FlexoWorkflowResource) resourceForKey(ResourceType.WORKFLOW, getProjectName());
+		if (wkfResource == null && create) {
+			FlexoWorkflow.createNewWorkflow(this);
+			return getFlexoWorkflowResource(false);
+		}
+		return wkfResource;
 	}
 
 	public FlexoComponentLibraryResource getFlexoComponentLibraryResource() {
+		return getFlexoComponentLibraryResource(true);
+	}
+
+	public FlexoComponentLibraryResource getFlexoComponentLibraryResource(boolean create) {
 		FlexoComponentLibraryResource returned = (FlexoComponentLibraryResource) resourceForKey(ResourceType.COMPONENT_LIBRARY,
 				getProjectName());
-		if (returned == null) {
+		if (returned == null && create) {
 			FlexoComponentLibrary.createNewComponentLibrary(this);
-			return getFlexoComponentLibraryResource();
+			return getFlexoComponentLibraryResource(false);
 		}
 		return returned;
 	}
@@ -1278,43 +1291,59 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		FlexoOEShemaLibraryResource returned = (FlexoOEShemaLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
 		if (returned == null && createIfNotExist) {
 			ViewLibrary.createNewShemaLibrary(this);
-			return getFlexoShemaLibraryResource();
+			return getFlexoShemaLibraryResource(false);
 		}
 		return returned;
 	}
 
 	public FlexoNavigationMenuResource getFlexoNavigationMenuResource() {
+		return getFlexoNavigationMenuResource(true);
+	}
+
+	public FlexoNavigationMenuResource getFlexoNavigationMenuResource(boolean create) {
 		FlexoNavigationMenuResource returned = (FlexoNavigationMenuResource) resourceForKey(ResourceType.NAVIGATION_MENU, getProjectName());
-		if (returned == null) {
+		if (returned == null && create) {
 			FlexoNavigationMenu.createNewFlexoNavigationMenu(this);
-			return getFlexoNavigationMenuResource();
+			return getFlexoNavigationMenuResource(false);
 		}
 		return returned;
 	}
 
 	public FlexoDMResource getFlexoDMResource() {
+		return getFlexoDMResource(true);
+	}
+
+	public FlexoDMResource getFlexoDMResource(boolean create) {
 		FlexoDMResource returned = (FlexoDMResource) resourceForKey(ResourceType.DATA_MODEL, getProjectName());
 		if (returned == null && !dataModelIsBuilding) {
 			DMModel.createNewDMModel(this);
-			return getFlexoDMResource();
+			return getFlexoDMResource(false);
 		}
 		return returned;
 	}
 
 	public FlexoDKVResource getFlexoDKVResource() {
+		return getFlexoDKVResource(true);
+	}
+
+	public FlexoDKVResource getFlexoDKVResource(boolean create) {
 		FlexoDKVResource returned = (FlexoDKVResource) resourceForKey(ResourceType.DKV_MODEL, getProjectName());
-		if (returned == null) {
+		if (returned == null && create) {
 			DKVModel.createNewDKVModel(this);
-			return getFlexoDKVResource();
+			return getFlexoDKVResource(false);
 		}
 		return returned;
 	}
 
 	public FlexoWSLibraryResource getFlexoWSLibraryResource() {
+		return getFlexoWSLibraryResource(true);
+	}
+
+	public FlexoWSLibraryResource getFlexoWSLibraryResource(boolean create) {
 		FlexoWSLibraryResource returned = (FlexoWSLibraryResource) resourceForKey(ResourceType.WS_LIBRARY, getProjectName());
-		if (returned == null) {
+		if (returned == null && create) {
 			FlexoWSLibrary.createNewWSLibrary(this);
-			return getFlexoWSLibraryResource();
+			return getFlexoWSLibraryResource(false);
 		}
 		return returned;
 	}
@@ -1515,13 +1544,17 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public FlexoComponentLibrary getFlexoComponentLibrary() {
-		if (getFlexoComponentLibraryResource() == null) {
+		return getFlexoComponentLibrary(true);
+	}
+
+	public FlexoComponentLibrary getFlexoComponentLibrary(boolean create) {
+		if (getFlexoComponentLibraryResource(create) != null) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Create ComponentLibrary");
 			}
-			FlexoComponentLibrary.createNewComponentLibrary(this);
+			return getFlexoComponentLibraryResource(create).getResourceData();
 		}
-		return getFlexoComponentLibraryResource().getResourceData();
+		return null;
 	}
 
 	public ViewLibrary getShemaLibrary() {
@@ -1631,33 +1664,25 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public FlexoNavigationMenu getFlexoNavigationMenu() {
-		if (getFlexoNavigationMenuResource() == null) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Create NavigationMenu");
-			}
-			FlexoNavigationMenu.createNewFlexoNavigationMenu(this);
-		}
-		return getFlexoNavigationMenuResource().getResourceData();
+		return getFlexoNavigationMenu(true);
 	}
 
-	public void setFlexoNavigationMenu(FlexoNavigationMenu menu) {
-		try {
-			if (menu.getFlexoResource() != null) {
-				registerResource(menu.getFlexoResource());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	public FlexoNavigationMenu getFlexoNavigationMenu(boolean create) {
+		if (getFlexoNavigationMenuResource(create) != null) {
+			return getFlexoNavigationMenuResource().getResourceData();
 		}
+		return null;
 	}
 
 	public FlexoWSLibrary getFlexoWSLibrary() {
-		if (getFlexoWSLibraryResource() == null) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Create WSLibrary");
-			}
-			FlexoWSLibrary.createNewWSLibrary(this);
+		return getFlexoWSLibrary(true);
+	}
+
+	public FlexoWSLibrary getFlexoWSLibrary(boolean create) {
+		if (getFlexoWSLibraryResource(create) != null) {
+			return getFlexoWSLibraryResource().getWSLibrary();
 		}
-		return getFlexoWSLibraryResource().getWSLibrary();
+		return null;
 	}
 
 	private DMModel buildingDataModel = null;
@@ -1665,15 +1690,17 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private JarClassLoader jarClassLoader;
 
 	public DMModel getDataModel() {
-		if (dataModelIsBuilding) {
+		return getDataModel(true);
+	}
+
+	public DMModel getDataModel(boolean create) {
+		if (getBuildingDataModel() != null) {
 			return getBuildingDataModel();
 		}
-		if (getFlexoDMResource() == null) {
-			dataModelIsBuilding = true;
-			DMModel.createNewDMModel(this);
-			dataModelIsBuilding = false;
+		if (getFlexoDMResource(create) != null) {
+			return getFlexoDMResource().getResourceData();
 		}
-		return getFlexoDMResource().getResourceData();
+		return null;
 	}
 
 	public DMModel getBuildingDataModel() {
@@ -1696,7 +1723,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public DKVModel getDKVModel() {
-		return getFlexoDKVResource().getResourceData();
+		return getDKVModel(true);
+	}
+
+	public DKVModel getDKVModel(boolean create) {
+		if (getFlexoDKVResource(create) != null) {
+			return getFlexoDKVResource().getResourceData();
+		} else {
+			return null;
+		}
 	}
 
 	public FlexoWorkflow getWorkflow() {
@@ -1704,8 +1739,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public FlexoWorkflow getFlexoWorkflow() {
-		if (getFlexoWorkflowResource() != null) {
-			return getFlexoWorkflowResource().getResourceData();
+		return getFlexoWorkflow(true);
+	}
+
+	public FlexoWorkflow getFlexoWorkflow(boolean create) {
+		if (getFlexoWorkflowResource(create) != null) {
+			return getFlexoWorkflowResource(create).getResourceData();
 		}
 		return null;
 	}
@@ -1752,7 +1791,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @return a Vector with all local FlexoProcess.
 	 */
 	public Vector<FlexoProcess> getAllLocalFlexoProcesses() {
-		if (getFlexoWorkflow() != null) {
+		if (getFlexoWorkflow(false) != null) {
 			return getFlexoWorkflow().getAllLocalFlexoProcesses();
 		}
 		return null;
@@ -1813,17 +1852,17 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			project.setFlexoResource(rmResource);
 			project.registerResource(rmResource);
 			project.dataModelIsBuilding = true;
-			DMModel.createNewDMModel(project);
+			// DMModel.createNewDMModel(project);
 			project.dataModelIsBuilding = false;
-			FlexoComponentLibrary.createNewComponentLibrary(project);
-			FlexoWorkflow.createNewWorkflow(project);
-			FlexoNavigationMenu.createNewFlexoNavigationMenu(project);
-			DKVModel.createNewDKVModel(project);
+			// FlexoComponentLibrary.createNewComponentLibrary(project);
+			// FlexoWorkflow.createNewWorkflow(project);
+			// FlexoNavigationMenu.createNewFlexoNavigationMenu(project);
+			// DKVModel.createNewDKVModel(project);
 			TOCData tocData = project.getTOCData();
 			TOCRepository repository = TOCRepository.createTOCRepositoryForDocType(tocData, project.getDocTypes().get(0));
 			repository.setTitle(project.getName());
 			tocData.addToRepositories(repository);
-			GeneratedDoc.createNewGeneratedDoc(project);
+			// GeneratedDoc.createNewGeneratedDoc(project);
 			project.initJavaFormatter();
 			importInitialImages(project, editor);
 			// Eventually log the result
@@ -3576,7 +3615,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		 * 
 		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
 		 */
-		@SuppressWarnings("unchecked")
 		@Override
 		public ValidationIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject> applyValidation(FlexoProject project) {
 			CompoundIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject> issues = null;
@@ -3754,53 +3792,58 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public List<ValidationReport> checkModelConsistency(FlexoObserver ieValidationObserver, FlexoObserver wkfValidationObserver,
 			FlexoObserver dmValidationObserver, FlexoObserver dkvValidationObserver, CodeType generationTarget) {
-		Vector<ValidationReport> reply = new Vector<ValidationReport>();
-		// We validate the component library model
-		IEValidationModel ieValidationModel = new IEValidationModel(this, generationTarget);
-		if (ieValidationObserver != null) {
-			ieValidationModel.addObserver(ieValidationObserver);
-		}
-		ValidationReport report = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
-		if (ieValidationObserver != null) {
-			ieValidationModel.deleteObserver(ieValidationObserver);
+		List<ValidationReport> reply = new Vector<ValidationReport>();
+		if (getFlexoComponentLibrary(false) != null) {
+			// We validate the component library model
+			IEValidationModel ieValidationModel = new IEValidationModel(this, generationTarget);
+			if (ieValidationObserver != null) {
+				ieValidationModel.addObserver(ieValidationObserver);
+			}
+
+			ValidationReport report = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
+			if (ieValidationObserver != null) {
+				ieValidationModel.deleteObserver(ieValidationObserver);
+			}
+			reply.add(report);
 		}
 
-		reply.add(report);
-		// We validate the workflow model
-		WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), generationTarget);
-		if (wkfValidationObserver != null) {
-			wkfValidationModel.addObserver(wkfValidationObserver);
-		}
-		report = getProject().getFlexoWorkflow().validate(wkfValidationModel);
-		if (wkfValidationObserver != null) {
-			wkfValidationModel.deleteObserver(wkfValidationObserver);
-		}
-
-		reply.add(report);
-
-		// We validate the dkv model
-		DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), generationTarget);
-		if (dkvValidationObserver != null) {
-			dkvValidationModel.addObserver(dkvValidationObserver);
-		}
-		report = getProject().getDKVModel().validate(dkvValidationModel);
-		if (dkvValidationObserver != null) {
-			dkvValidationModel.deleteObserver(dkvValidationObserver);
+		if (getFlexoWorkflow(false) != null) {
+			// We validate the workflow model
+			WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), generationTarget);
+			if (wkfValidationObserver != null) {
+				wkfValidationModel.addObserver(wkfValidationObserver);
+			}
+			ValidationReport report = getProject().getFlexoWorkflow().validate(wkfValidationModel);
+			if (wkfValidationObserver != null) {
+				wkfValidationModel.deleteObserver(wkfValidationObserver);
+			}
+			reply.add(report);
 		}
 
-		reply.add(report);
-
-		DMValidationModel dmValidationModel = new DMValidationModel(getProject(), generationTarget);
-		if (dmValidationObserver != null) {
-			dmValidationModel.addObserver(dmValidationObserver);
+		if (getDKVModel(false) != null) {
+			// We validate the dkv model
+			DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), generationTarget);
+			if (dkvValidationObserver != null) {
+				dkvValidationModel.addObserver(dkvValidationObserver);
+			}
+			ValidationReport report = getProject().getDKVModel().validate(dkvValidationModel);
+			if (dkvValidationObserver != null) {
+				dkvValidationModel.deleteObserver(dkvValidationObserver);
+			}
+			reply.add(report);
 		}
-		report = getProject().getDataModel().validate(dmValidationModel);
-		if (dmValidationObserver != null) {
-			dmValidationModel.deleteObserver(dmValidationObserver);
+
+		if (getDataModel(false) != null) {
+			DMValidationModel dmValidationModel = new DMValidationModel(getProject(), generationTarget);
+			if (dmValidationObserver != null) {
+				dmValidationModel.addObserver(dmValidationObserver);
+			}
+			ValidationReport report = getProject().getDataModel().validate(dmValidationModel);
+			if (dmValidationObserver != null) {
+				dmValidationModel.deleteObserver(dmValidationObserver);
+			}
+			reply.add(report);
 		}
-
-		reply.add(report);
-
 		return reply;
 	}
 
@@ -3999,7 +4042,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 
 	public FlexoImportedProcessLibrary getImportedProcessLibrary() {
-		if (getWorkflow() == null) {
+		if (getFlexoWorkflow(false) == null) {
 			return null;
 		}
 		return getWorkflow().getImportedProcessLibrary();
@@ -4023,7 +4066,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public boolean getIsLocalized() {
-		return getDKVModel().getLanguages().size() > 1;
+		return getDKVModel(false) != null && getDKVModel().getLanguages().size() > 1;
 	}
 
 	private Map<String, Map<Long, EditionPatternInstance>> _editionPatternInstances;

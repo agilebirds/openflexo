@@ -1,5 +1,5 @@
-#English
-#Mon May 28 12:57:59 CEST 2012
+#Dutch
+#Fri Oct 05 19:23:07 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -1629,6 +1629,7 @@ ctrl=ctrl
 current_flexo_version_is_smaller_than_last_used_to_open_this_project=<html><b>The version of OpenFlexo you are using is older than the last one that opened this project.</b><br>To avoid damaging your project, OpenFlexo will not continue.<br><i>If you really want to continue, you may override .version file located in .prj directory, and put current software version.<br>Please note that this operation might be dangerous. Always save your project \!</i></html>
 current_generation=Current generation
 current_node=Current node
+current_project=Current project
 current_task=Current task
 current_version=Current version
 curve=Curve
@@ -2845,6 +2846,7 @@ import_methods=Import all methods
 import_palette=Import palette
 import_processes=Import processes
 import_processes_from_ppm=Import processes from Portfolio
+import_project=Import project
 import_rational_rose=Import RationalRose file (.mdl)
 import_roles=Import roles
 import_roles_from_ppm=Import roles from Portfolio

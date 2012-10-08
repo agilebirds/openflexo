@@ -331,7 +331,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			}
 			e1.printStackTrace();
 		}
-
+		project.setBuildingDataModel(null);
 		return newDMModel;
 	}
 

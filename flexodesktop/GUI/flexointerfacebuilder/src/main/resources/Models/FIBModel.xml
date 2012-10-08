@@ -225,7 +225,7 @@
     <property name="mode" xmlTag="mode" attribute="YES"/> 
     <property name="filter" xmlTag="filter" attribute="YES"/> 
     <property name="title" xmlTag="title" attribute="YES"/> 
-    <property name="isDirectory" xmlTag="isDirectory" attribute="YES"/> 
+    <property name="directory" xmlTag="isDirectory" attribute="YES"/> 
     <property name="defaultDirectory" xmlTag="defaultDirectory" attribute="YES"/> 
     <property name="columns" xmlTag="columns" attribute="YES"/> 
   </entity>

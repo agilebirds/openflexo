@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -61,7 +60,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> implements Serializable {
+public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 
 	protected static final Logger logger = Logger.getLogger(FlexoRMResource.class.getPackage().getName());
 
@@ -346,29 +345,30 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			loadingHandler.loadAndConvertAllOldResourcesToLatestVersion(project, progress);
 
 			// Load the data model
-			if (!project.getFlexoDMResource().isLoaded()) {
+			/*if (!project.getFlexoDMResource().isLoaded()) {
 				project.getFlexoDMResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the DKV
-			if (!project.getFlexoDKVResource().isLoaded()) {
+			/*if (!project.getFlexoDKVResource().isLoaded()) {
 				project.getFlexoDKVResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the component library
+			/*
 			if (!project.getFlexoComponentLibraryResource().isLoaded()) {
 				project.getFlexoComponentLibraryResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the workflow
-			if (!project.getFlexoWorkflowResource().isLoaded()) {
+			/*if (!project.getFlexoWorkflowResource().isLoaded()) {
 				project.getFlexoWorkflowResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the navigation menu
-			if (!project.getFlexoNavigationMenuResource().isLoaded()) {
+			/*if (!project.getFlexoNavigationMenuResource().isLoaded()) {
 				project.getFlexoNavigationMenuResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 			// Load the TOC's, it is loaded at the end so that it can resolve a maximum of model object reference.
-			if (!project.getTOCResource().isLoaded()) {
+			/*if (!project.getTOCResource().isLoaded()) {
 				project.getTOCResource().loadResourceData(progress, loadingHandler);
-			}
+			}*/
 
 			// After loading the resources, we clear the isModified flag on RMResource (since basically we haven't changed anything yet)
 			if (!project.hasBackwardSynchronizationBeenPerformed()) {
@@ -377,16 +377,16 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 			// Look-up observed object for screenshot resources
 			// (pas terrible comme technique, mais on verra plus tard)
-			for (ScreenshotResource resource : project.getResourcesOfClass(ScreenshotResource.class)) {
+			/*for (ScreenshotResource resource : project.getResourcesOfClass(ScreenshotResource.class)) {
 				if (resource.getSourceReference() == null) {
 					resource.delete();
 				}
-			}
+			}*/
 
 			if (requireDependenciesRebuild) {
 				getProject().rebuildDependencies();
 				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Dependancies rebuilding has been performed. Save RM file.");
+					logger.info("Dependencies rebuilding has been performed. Save RM file.");
 				}
 			}
 			try {
@@ -444,20 +444,6 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			}
 			_loadProjectProgress = null;
 			throw new RuntimeException(e.getMessage());
-		} catch (FlexoFileNotFoundException e) {
-			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-			}
-			e.printStackTrace();
-			// Exit application
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Exiting application...");
-			}
-			_loadProjectProgress = null;
-			throw new RuntimeException(e.getMessage());
-		} catch (ProjectLoadingCancelledException e) {
-			throw e;
 		} catch (FlexoException e) {
 			// Warns about the exception
 			logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");

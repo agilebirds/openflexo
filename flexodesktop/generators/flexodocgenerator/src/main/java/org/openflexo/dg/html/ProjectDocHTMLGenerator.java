@@ -110,11 +110,11 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	public String getMainColor() {
 		StringBuilder sb = new StringBuilder();
 		Color c = getProject().getCssSheet().getTextColor();
-		sb.append(Math.round(c.getRed() * 10000 / 255) / 10000d);
+		sb.append(Math.round(c.getRed() * 10000d / 255) / 10000d);
 		sb.append(',');
-		sb.append(Math.round(c.getGreen() * 10000 / 255) / 10000d);
+		sb.append(Math.round(c.getGreen() * 10000d / 255) / 10000d);
 		sb.append(',');
-		sb.append(Math.round(c.getBlue() * 10000d / 255d) / 10000d);
+		sb.append(Math.round(c.getBlue() * 10000d / 255) / 10000d);
 		return sb.toString();
 	}
 
@@ -225,8 +225,8 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	}
 
 	public ProjectHTMLFileResource getProjectDocResource() {
-		return ((ProjectHTMLFileResource) getProject().resourceForKey(ResourceType.HTML_FILE,
-				ProjectHTMLFileResource.nameForRepositoryAndProject(this.getRepository(), getProject())));
+		return (ProjectHTMLFileResource) getProject().resourceForKey(ResourceType.HTML_FILE,
+				ProjectHTMLFileResource.nameForRepositoryAndProject(this.getRepository(), getProject()));
 	}
 
 	protected long lastLogUpdate;
@@ -238,7 +238,7 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (((dataModification.propertyName() != null) && dataModification.propertyName().equals("docType"))) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("docType")) {
 			getTemplateLocator().notifyTemplateModified();
 		}
 		if (dataModification instanceof TemplateFileNotification) {

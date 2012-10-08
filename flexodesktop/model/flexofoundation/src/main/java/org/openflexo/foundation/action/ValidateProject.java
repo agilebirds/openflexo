@@ -85,29 +85,33 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 		makeFlexoProgress(FlexoLocalization.localizedForKey("check_model_consistency"), 5);
 		setProgress(FlexoLocalization.localizedForKey("loading_required_resources"));
 
-		// We validate the component library model
-		IEValidationModel ieValidationModel = new IEValidationModel(getProject(), CodeType.PROTOTYPE);
-		ieValidationModel.addObserver(ieValidationObserver);
-		ieValidationReport = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
-		ieValidationModel.deleteObserver(ieValidationObserver);
-
-		// We validate the workflow model
-		WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), CodeType.PROTOTYPE);
-		wkfValidationModel.addObserver(wkfValidationObserver);
-		wkfValidationReport = getProject().getFlexoWorkflow().validate(wkfValidationModel);
-		wkfValidationModel.deleteObserver(wkfValidationObserver);
-
-		// We validate the dkv model
-		DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), CodeType.PROTOTYPE);
-		dkvValidationModel.addObserver(dkvValidationObserver);
-		dkvValidationReport = getProject().getDKVModel().validate(dkvValidationModel);
-		dkvValidationModel.deleteObserver(dkvValidationObserver);
-
-		DMValidationModel dmValidationModel = new DMValidationModel(getProject(), CodeType.PROTOTYPE);
-		dmValidationModel.addObserver(dmValidationObserver);
-		dmValidationReport = getProject().getDataModel().validate(dmValidationModel);
-		dmValidationModel.deleteObserver(dmValidationObserver);
-
+		if (getProject().getFlexoComponentLibrary(false) != null) {
+			// We validate the component library model
+			IEValidationModel ieValidationModel = new IEValidationModel(getProject(), CodeType.PROTOTYPE);
+			ieValidationModel.addObserver(ieValidationObserver);
+			ieValidationReport = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
+			ieValidationModel.deleteObserver(ieValidationObserver);
+		}
+		if (getProject().getFlexoWorkflow(false) != null) {
+			// We validate the workflow model
+			WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), CodeType.PROTOTYPE);
+			wkfValidationModel.addObserver(wkfValidationObserver);
+			wkfValidationReport = getProject().getFlexoWorkflow().validate(wkfValidationModel);
+			wkfValidationModel.deleteObserver(wkfValidationObserver);
+		}
+		if (getProject().getDKVModel(false) != null) {
+			// We validate the dkv model
+			DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), CodeType.PROTOTYPE);
+			dkvValidationModel.addObserver(dkvValidationObserver);
+			dkvValidationReport = getProject().getDKVModel().validate(dkvValidationModel);
+			dkvValidationModel.deleteObserver(dkvValidationObserver);
+		}
+		if (getProject().getDataModel(false) != null) {
+			DMValidationModel dmValidationModel = new DMValidationModel(getProject(), CodeType.PROTOTYPE);
+			dmValidationModel.addObserver(dmValidationObserver);
+			dmValidationReport = getProject().getDataModel().validate(dmValidationModel);
+			dmValidationModel.deleteObserver(dmValidationObserver);
+		}
 		hideFlexoProgress();
 	}
 

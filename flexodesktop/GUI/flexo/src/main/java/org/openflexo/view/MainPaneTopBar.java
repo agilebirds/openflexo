@@ -1,59 +1,43 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.CubicCurve2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
-import javax.swing.Action;
-import javax.swing.Icon;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
+import javax.swing.UIManager;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.swing.BarButton;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.controller.model.FlexoPerspective;
-import org.openflexo.view.controller.model.HistoryLocation;
 
 public class MainPaneTopBar extends JMenuBar {
 
-	private static final int ROUNDED_CORNER_SIZE = 5;
-
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(MainPaneTopBar.class.getPackage()
 			.getName());
-
-	public static interface FlexoModelObjectRenderer {
-		public String render(FlexoModelObject object);
-	}
 
 	private PropertyChangeListenerRegistrationManager registrationManager;
 
@@ -71,283 +55,24 @@ public class MainPaneTopBar extends JMenuBar {
 
 	private JPanel perspectives;
 
-	protected FlexoModelObjectRenderer renderer;
-
 	private boolean forcePreferredSize;
 
-	private FlexoController controller;
-
-	@SuppressWarnings("unused")
-	private class BarButton extends JButton {
-		public BarButton(Action a) {
-			this();
-			setAction(a);
-		}
-
-		public BarButton(Icon icon) {
-			this(null, icon);
-		}
-
-		public BarButton(String text, Icon icon) {
-			super(text, icon);
-			setEnabled(true);
-			setFocusable(false);
-			setBorderPainted(ToolBox.getPLATFORM() != ToolBox.MACOS);
-			setRolloverEnabled(true);
-			setContentAreaFilled(false);
-			setOpaque(false);
-			addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					if (isEnabled()) {
-						setContentAreaFilled(true);
-					}
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					setContentAreaFilled(false);
-				}
-			});
-		}
-
-		public BarButton(String text) {
-			this(text, null);
-		}
-
-		public BarButton() {
-			this(null, null);
-		}
-
-		@Override
-		public void setContentAreaFilled(boolean b) {
-			b |= isSelected();
-			super.setContentAreaFilled(b);
-			setOpaque(b);
-		}
-
-		@Override
-		public void setSelected(boolean b) {
-			super.setSelected(b);
-			setContentAreaFilled(b);
-		}
-
-	}
-
-	public class TabHeaderContainer extends JPanel implements PropertyChangeListener {
-
-		private Map<ModuleView<?>, ViewTabHeader> tabHeaders = new HashMap<ModuleView<?>, MainPaneTopBar.ViewTabHeader>();
-
-		private List<ViewTabHeader> headers = new ArrayList<MainPaneTopBar.ViewTabHeader>();
-
-		public TabHeaderContainer() {
-			registrationManager.new PropertyChangeListenerRegistration(FlexoController.MODULE_VIEWS, this, controller);
-			registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_OBJECT, this, model);
-			registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_PERPSECTIVE, this, model);
-			setLayout(new LayoutManager() {
-
-				@Override
-				public Dimension preferredLayoutSize(Container parent) {
-					synchronized (parent.getTreeLock()) {
-						Dimension dim = new Dimension(0, 0);
-						int nmembers = parent.getComponentCount();
-						for (int i = 0; i < nmembers; i++) {
-							Component m = parent.getComponent(i);
-							if (m.isVisible()) {
-								Dimension d = m.getPreferredSize();
-								dim.height = Math.max(dim.height, d.height);
-								dim.width += d.width;
-
-							}
-						}
-						Insets insets = parent.getInsets();
-						dim.width += insets.left + insets.right;
-						dim.height += insets.top + insets.bottom;
-						return dim;
-					}
-				}
-
-				@Override
-				public Dimension minimumLayoutSize(Container parent) {
-					return new Dimension(0, 0);
-				}
-
-				@Override
-				public void layoutContainer(Container target) {
-					synchronized (target.getTreeLock()) {
-						Insets insets = target.getInsets();
-						int maxwidth = target.getWidth() - (insets.left + insets.right);
-						int nmembers = target.getComponentCount();
-						int x = 0, y = insets.top;
-						int rowh = 0, start = 0;
-
-						boolean ltr = target.getComponentOrientation().isLeftToRight();
-
-						for (int i = 0; i < nmembers; i++) {
-							Component m = target.getComponent(i);
-							if (m.isVisible()) {
-								/*Dimension d = m.getPreferredSize();
-								m.setSize(d.width, d.height);
-								if (x == 0 || x + d.width <= maxwidth) {
-									x += d.width;
-									rowh = Math.max(rowh, d.height);
-								} else {
-									rowh = moveComponents(target, insets.left + hgap, y, maxwidth - x, rowh, start, i, ltr, useBaseline,
-											ascent, descent);
-									x = d.width;
-									y += vgap + rowh;
-									rowh = d.height;
-									start = i;
-								}*/
-							}
-						}
-						/*moveComponents(target, insets.left + hgap, y, maxwidth - x, rowh, start, nmembers, ltr, useBaseline, ascent,
-								descent);*/
-					}
-				}
-
-				@Override
-				public void addLayoutComponent(String name, Component comp) {
-
-				}
-
-				@Override
-				public void removeLayoutComponent(Component comp) {
-
-				}
-			});
-		}
-
-		@Override
-		public void remove(int index) {
-			Component c = getComponent(index);
-			headers.remove(c);
-			super.remove(index);
-		}
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() == controller) {
-				if (evt.getPropertyName().equals(FlexoController.MODULE_VIEWS)) {
-					if (evt.getNewValue() != null) {// New Module view
-						tabHeaders.put((ModuleView<?>) evt.getNewValue(), new ViewTabHeader((ModuleView<?>) evt.getNewValue()));
-					} else if (evt.getOldValue() != null) { // Module view deleted
-						ViewTabHeader viewTabHeader = tabHeaders.get(evt.getOldValue());
-						if (viewTabHeader != null) {
-							viewTabHeader.delete();
-						}
-					}
-				}
-			} else if (evt.getSource() == model) {
-				if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
-					ModuleView<?> view = controller.moduleViewForObject(model.getCurrentObject());
-					if (view != null) {
-
-					}
-				}
-			}
-		}
-	}
-
-	private class ViewTabHeader extends JPanel implements PropertyChangeListener, ActionListener {
-		private final FlexoModelObject object;
-
-		private class TabHeaderBorder implements Border {
-
-			@Override
-			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-				g.setColor(Color.BLACK);
-				g.drawLine(0, ROUNDED_CORNER_SIZE, 0, height);
-				g.drawArc(ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, 90, 180);
-				CubicCurve2D.Double curve = new CubicCurve2D.Double(width - 4 * ROUNDED_CORNER_SIZE, 0, width - 2 * ROUNDED_CORNER_SIZE, 0,
-						width - 2 * ROUNDED_CORNER_SIZE, height, width, height);
-				((Graphics2D) g).draw(curve);
-				g.drawLine(ROUNDED_CORNER_SIZE, 0, width - 4 * ROUNDED_CORNER_SIZE, 0);
-			}
-
-			@Override
-			public Insets getBorderInsets(Component c) {
-				return new Insets(ROUNDED_CORNER_SIZE, ROUNDED_CORNER_SIZE, 0, 4 * ROUNDED_CORNER_SIZE);
-			}
-
-			@Override
-			public boolean isBorderOpaque() {
-				return false;
-			}
-
-		}
-
-		private JLabel text;
-		private JButton close;
-		private final ModuleView<?> view;
-
-		public ViewTabHeader(ModuleView<?> view) {
-			super(new BorderLayout());
-			this.view = view;
-			this.object = view.getRepresentedObject();
-			text = new JLabel();
-			text.setHorizontalTextPosition(JLabel.RIGHT);
-			close = new BarButton(IconLibrary.CLOSE_ICON);
-			close.setRolloverIcon(IconLibrary.CLOSE_HOVER_ICON);
-			close.addActionListener(this);
-			updateText();
-			registrationManager.new PropertyChangeListenerRegistration(FlexoModelObject.DELETED_PROPERTY, this, object);
-			add(text);
-			add(close, BorderLayout.EAST);
-			setBorder(new TabHeaderBorder());
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == close) {
-				view.deleteModuleView();
-			}
-		}
-
-		protected void updateText() {
-			text.setText(renderer.render(object));
-		}
-
-		public String getLabelText() {
-			return text.getText();
-		}
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() == object) {
-				if (evt.getPropertyName().equals(FlexoModelObject.DELETED_PROPERTY)) {
-					delete();
-				} else {
-					updateText();
-				}
-			}
-		}
-
-		public void delete() {
-			JComponent parent = (JComponent) getParent();
-			parent.remove(this);
-			parent.revalidate();
-			registrationManager.removeListener(FlexoModelObject.DELETED_PROPERTY, this, object);
-		}
-	}
-
-	public MainPaneTopBar(FlexoController controller, FlexoModelObjectRenderer renderer) {
-		this.controller = controller;
-		this.model = controller.getControllerModel();
-		this.renderer = renderer;
+	public MainPaneTopBar(ControllerModel model) {
+		this.model = model;
+		setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		setLayout(new BorderLayout());
-		this.forcePreferredSize = ToolBox.getPLATFORM() != ToolBox.MACOS;
+		this.forcePreferredSize = true/*ToolBox.getPLATFORM() != ToolBox.MACOS*/;
 		add(left = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)), BorderLayout.WEST);
-		add(center = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)));
+		add(center = new JPanel(new BorderLayout()));
 		add(right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)), BorderLayout.EAST);
 		left.setOpaque(false);
 		center.setOpaque(false);
 		right.setOpaque(false);
 		initLeftRightViewVisibilityControls();
 		initModules();
-		initNavigationControls();
-		initModuleViewTabHeaders();
+		initProjectSelector();
+		// initNavigationControls();
 		initPerspectives();
 	}
 
@@ -441,17 +166,64 @@ public class MainPaneTopBar extends JMenuBar {
 		updateNavigationControlState(backwardButton, forwardButton, upButton);
 	}
 
+	private void initProjectSelector() {
+		JLabel label = new JLabel();
+		label.setText(FlexoLocalization.localizedForKey("current_project", label));
+		label.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+		left.add(label);
+		final JComboBox projectSelector = new JComboBox();
+		projectSelector.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.setCurrentEditor((FlexoEditor) projectSelector.getSelectedItem());
+			}
+		});
+		projectSelector.setRenderer(new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+				Object passedValue = value;
+				FlexoProject project = null;
+				if (value instanceof FlexoEditor) {
+					project = ((FlexoEditor) value).getProject();
+					passedValue = project.getName();
+				}
+				super.getListCellRendererComponent(list, passedValue, index, isSelected, cellHasFocus);
+				if (project != null) {
+					setToolTipText(project.getProjectDirectory().getAbsolutePath());
+				}
+				return this;
+
+			}
+		});
+		left.add(projectSelector);
+		for (FlexoEditor editor : model.getEditors()) {
+			projectSelector.addItem(editor);
+		}
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.EDITORS, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getNewValue() != null) {
+					projectSelector.addItem(evt.getNewValue());
+				} else if (evt.getOldValue() != null) {
+					projectSelector.removeItem(evt.getOldValue());
+				}
+			}
+		}, model);
+		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_EDITOR, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				projectSelector.setSelectedItem(evt.getNewValue());
+			}
+		}, model);
+	}
+
 	protected void updateNavigationControlState(final JButton backwardButton, final JButton forwardButton, final JButton upButton) {
 		backwardButton.setEnabled(model.canGoBack());
 		forwardButton.setEnabled(model.canGoForward());
 		upButton.setEnabled(model.canGoUp());
-	}
-
-	private void initModuleViewTabHeaders() {
-
-		for (HistoryLocation hl : model.getPreviousHistory()) {
-
-		}
 	}
 
 	private void initPerspectives() {
@@ -570,6 +342,7 @@ public class MainPaneTopBar extends JMenuBar {
 			}
 			this.header = header;
 			if (header != null) {
+				header.setOpaque(false);
 				right.add(header, 0);
 				right.revalidate();
 			}

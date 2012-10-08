@@ -24,7 +24,7 @@ import java.lang.reflect.Type;
 
 public class FIBFont extends FIBWidget {
 
-	public String sampleText = "Sample for this font";
+	private String sampleText = "Sample for this font";
 
 	public FIBFont() {
 	}
@@ -37,5 +37,19 @@ public class FIBFont extends FIBWidget {
 	@Override
 	public Type getDefaultDataClass() {
 		return Font.class;
+	}
+
+	/**
+	 * @return the sampleText
+	 */
+	public String getSampleText() {
+		return sampleText;
+	}
+
+	/**
+	 * @param sampleText the sampleText to set
+	 */
+	public void setSampleText(String sampleText) {
+		this.sampleText = sampleText;
 	}
 }

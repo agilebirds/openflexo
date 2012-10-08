@@ -73,13 +73,16 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 					}), bindable);
 			return newExpression.toString();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TypeMismatchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return expression.toString();
+		if (expression != null) {
+			return expression.toString();
+		} else {
+			return "";
+		}
 	}
 
 	@Override

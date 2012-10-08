@@ -49,7 +49,6 @@ import org.openflexo.localization.FlexoLocalization;
  */
 public class ColorSelector extends CustomPopup<Color> implements ColorSelectionModel {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(ColorSelector.class.getPackage().getName());
 
 	private Color _revertValue;
@@ -82,12 +81,12 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 
 	@Override
 	protected ColorDetailsPanel createCustomPanel(Color editedObject) {
-		_selectorPanel = makeCustomPanel(editedObject);
+		_selectorPanel = makeCustomPanel();
 		return _selectorPanel;
 	}
 
-	protected ColorDetailsPanel makeCustomPanel(Color editedObject) {
-		return new ColorDetailsPanel(editedObject);
+	protected ColorDetailsPanel makeCustomPanel() {
+		return new ColorDetailsPanel();
 	}
 
 	@Override
@@ -108,12 +107,9 @@ public class ColorSelector extends CustomPopup<Color> implements ColorSelectionM
 		private JButton _cancelButton;
 		private JPanel _controlPanel;
 
-		protected ColorDetailsPanel(Color editedColor) {
+		protected ColorDetailsPanel() {
 			super();
 
-			if (editedColor == null) {
-				editedColor = Color.WHITE;
-			}
 			colorChooser = new JColorChooser(ColorSelector.this);
 
 			setLayout(new BorderLayout());

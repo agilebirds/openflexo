@@ -198,7 +198,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 				Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				if (returned instanceof JLabel) {
 					((JLabel) returned).setText(renderValue((T) value));
-					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+					if (ToolBox.isMacOSLaf()) {
 						((JLabel) returned).setForeground(getColorFor(value));
 					}
 					((JLabel) returned).setFont(CustomColumn.this.getFont());

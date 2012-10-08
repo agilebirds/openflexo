@@ -138,7 +138,7 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 				getFlexoFrame().toFront();
 			}
 		});
-		if (getEditor() != null) {
+		if (getEditor() != null && getController().getCurrentDisplayedObjectAsModuleView() == null) {
 			boolean selectDefaultObject = false;
 			FlexoModelObject defaultObjectToSelect = getController().getDefaultObjectToSelect(getEditor().getProject());
 			if (defaultObjectToSelect != null

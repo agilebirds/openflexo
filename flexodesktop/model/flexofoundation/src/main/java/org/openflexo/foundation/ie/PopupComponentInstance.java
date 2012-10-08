@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ie;
 
-import java.io.Serializable;
 import java.util.Vector;
 
 import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
@@ -30,7 +29,7 @@ import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class PopupComponentInstance extends ComponentInstance implements Serializable {
+public class PopupComponentInstance extends ComponentInstance {
 
 	public PopupComponentInstance(PopupComponentDefinition component, IEWOComponent container) {
 		super(component, container);

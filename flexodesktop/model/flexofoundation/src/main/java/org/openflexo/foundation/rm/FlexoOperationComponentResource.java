@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,12 +34,9 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * @author sguerin
  * 
  */
-public class FlexoOperationComponentResource extends FlexoComponentResource implements Serializable {
+public class FlexoOperationComponentResource extends FlexoComponentResource {
 
 	private static final Logger logger = Logger.getLogger(FlexoOperationComponentResource.class.getPackage().getName());
-
-	// Deprecated: kept for backward compatibility. Never use it !
-	protected Vector _thumbnailResources;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -55,13 +50,11 @@ public class FlexoOperationComponentResource extends FlexoComponentResource impl
 
 	public FlexoOperationComponentResource(FlexoProject aProject) {
 		super(aProject);
-		_thumbnailResources = new Vector();
 	}
 
 	public FlexoOperationComponentResource(FlexoProject aProject, String aName, FlexoComponentLibraryResource libResource,
 			FlexoProjectFile componentFile) throws InvalidFileNameException {
 		super(aProject, aName, libResource, componentFile);
-		_thumbnailResources = new Vector();
 	}
 
 	@Override
@@ -71,53 +64,6 @@ public class FlexoOperationComponentResource extends FlexoComponentResource impl
 
 	public IEOperationComponent getIEOperationComponent() {
 		return (IEOperationComponent) getResourceData();
-	}
-
-	/**
-	 * Deprecated: kept for backward compatibility. Never use it !
-	 * 
-	 * @deprecated
-	 * @return
-	 */
-	@Deprecated
-	public Vector getThumbnailResources() {
-		return _thumbnailResources;
-	}
-
-	/**
-	 * Deprecated: kept for backward compatibility. Never use it !
-	 * 
-	 * @deprecated
-	 * @return
-	 */
-	@Deprecated
-	public void setThumbnailResources(Vector resources) {
-		_thumbnailResources = resources;
-	}
-
-	/**
-	 * Deprecated: kept for backward compatibility. Never use it !
-	 * 
-	 * @deprecated
-	 * @return
-	 */
-	@Deprecated
-	public void addToThumbnailResources(FlexoTabComponentResource thumbnailComponentResource) {
-		_thumbnailResources.add(thumbnailComponentResource);
-		if (!getDependentResources().contains(thumbnailComponentResource)) {
-			addToDependentResources(thumbnailComponentResource);
-		}
-	}
-
-	/**
-	 * Deprecated: kept for backward compatibility. Never use it !
-	 * 
-	 * @deprecated
-	 * @return
-	 */
-	@Deprecated
-	public void removeFromThumbnailResources(FlexoTabComponentResource thumbnailComponentResource) {
-		_thumbnailResources.remove(thumbnailComponentResource);
 	}
 
 	private OperationComponentDefinition _componentDefinition;

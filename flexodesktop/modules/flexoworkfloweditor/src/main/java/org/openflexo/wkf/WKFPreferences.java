@@ -284,7 +284,7 @@ public final class WKFPreferences extends ModulePreferences {
 		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
 		if (returned == null) {
 			setActivityNodeFont(new FlexoFont(WKFCst.DEFAULT_ACTIVITY_NODE_LABEL_FONT));
-			return returned = FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
+			return FlexoFont.get(getPreferences().getProperty(ACTIVITY_NODE_FONT_KEY));
 		}
 		return returned;
 	}
@@ -297,7 +297,7 @@ public final class WKFPreferences extends ModulePreferences {
 		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
 		if (returned == null) {
 			setOperationNodeFont(new FlexoFont(WKFCst.DEFAULT_OPERATION_NODE_LABEL_FONT));
-			return returned = FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
+			return FlexoFont.get(getPreferences().getProperty(OPERATION_NODE_FONT_KEY));
 		}
 		return returned;
 	}
@@ -310,7 +310,7 @@ public final class WKFPreferences extends ModulePreferences {
 		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
 		if (returned == null) {
 			setActionNodeFont(new FlexoFont(WKFCst.DEFAULT_ACTION_NODE_LABEL_FONT));
-			return returned = FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
+			return FlexoFont.get(getPreferences().getProperty(ACTION_NODE_FONT_KEY));
 		}
 		return returned;
 	}
@@ -323,7 +323,7 @@ public final class WKFPreferences extends ModulePreferences {
 		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
 		if (returned == null) {
 			setEventNodeFont(new FlexoFont(WKFCst.DEFAULT_EVENT_NODE_LABEL_FONT));
-			return returned = FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
+			return FlexoFont.get(getPreferences().getProperty(EVENT_NODE_FONT_KEY));
 		}
 		return returned;
 	}
@@ -336,7 +336,7 @@ public final class WKFPreferences extends ModulePreferences {
 		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
 		if (returned == null) {
 			setRoleFont(new FlexoFont(WKFCst.DEFAULT_ROLE_LABEL_FONT));
-			return returned = FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
+			return FlexoFont.get(getPreferences().getProperty(ROLE_FONT_KEY));
 		}
 		return returned;
 	}
@@ -349,7 +349,7 @@ public final class WKFPreferences extends ModulePreferences {
 		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
 		if (returned == null) {
 			setEdgeFont(new FlexoFont(WKFCst.DEFAULT_EDGE_LABEL_FONT));
-			return returned = FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
+			return FlexoFont.get(getPreferences().getProperty(EDGE_FONT_KEY));
 		}
 		return returned;
 	}
@@ -362,7 +362,7 @@ public final class WKFPreferences extends ModulePreferences {
 		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
 		if (returned == null) {
 			setArtefactFont(new FlexoFont(WKFCst.DEFAULT_ARTEFACT_LABEL_FONT));
-			return returned = FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
+			return FlexoFont.get(getPreferences().getProperty(ARTEFACT_FONT_KEY));
 		}
 		return returned;
 	}
@@ -375,7 +375,7 @@ public final class WKFPreferences extends ModulePreferences {
 		FlexoFont returned = FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
 		if (returned == null) {
 			setComponentFont(new FlexoFont(WKFCst.DEFAULT_COMPONENT_LABEL_FONT));
-			return returned = FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
+			return FlexoFont.get(getPreferences().getProperty(COMPONENT_FONT_KEY));
 		}
 		return returned;
 	}

@@ -79,18 +79,18 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 	 * @return Vector a List of suggestions
 	 */
 	@Override
-	public List getSuggestions(String word, int threshold) {
+	public List<Word> getSuggestions(String word, int threshold) {
 
-		Hashtable nearmisscodes = new Hashtable();
+		Hashtable<String, String> nearmisscodes = new Hashtable<String, String>();
 		String code = getCode(word);
 
 		// add all words that have the same phonetics
 		nearmisscodes.put(code, code);
-		Vector phoneticList = getWordsFromCode(word, nearmisscodes);
+		Vector<Word> phoneticList = getWordsFromCode(word, nearmisscodes);
 
 		// do some tranformations to pick up more results
 		// interchange
-		nearmisscodes = new Hashtable();
+		nearmisscodes = new Hashtable<String, String>();
 		char[] charArray = word.toCharArray();
 		for (int i = 0; i < word.length() - 1; i++) {
 			char a = charArray[i];
@@ -157,7 +157,7 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 
 		nearmisscodes.remove(code); // already accounted for in phoneticList
 
-		Vector wordlist = getWordsFromCode(word, nearmisscodes);
+		Vector<Word> wordlist = getWordsFromCode(word, nearmisscodes);
 
 		if (wordlist.size() == 0 && phoneticList.size() == 0) {
 			addBestGuess(word, phoneticList);
@@ -184,7 +184,7 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 	 * @param wordList
 	 *            - the linked list that will get the best guess
 	 */
-	private void addBestGuess(String word, Vector wordList) {
+	private void addBestGuess(String word, Vector<Word> wordList) {
 		if (wordList.size() != 0) {
 			throw new InvalidParameterException("the wordList vector must be empty");
 		}
@@ -192,12 +192,12 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 		int bestScore = Integer.MAX_VALUE;
 
 		String code = getCode(word);
-		List simwordlist = getWords(code);
+		List<String> simwordlist = getWords(code);
 
-		LinkedList candidates = new LinkedList();
+		LinkedList<Word> candidates = new LinkedList<Word>();
 
-		for (Iterator j = simwordlist.iterator(); j.hasNext();) {
-			String similar = (String) j.next();
+		for (Iterator<String> j = simwordlist.iterator(); j.hasNext();) {
+			String similar = j.next();
 			int distance = EditDistance.getDistance(word, similar);
 			if (distance <= bestScore) {
 				bestScore = distance;
@@ -207,8 +207,8 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 		}
 
 		// now, only pull out the guesses that had the best score
-		for (Iterator iter = candidates.iterator(); iter.hasNext();) {
-			Word candidate = (Word) iter.next();
+		for (Iterator<Word> iter = candidates.iterator(); iter.hasNext();) {
+			Word candidate = iter.next();
 			if (candidate.getCost() == bestScore) {
 				wordList.add(candidate);
 			}
@@ -216,17 +216,17 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 
 	}
 
-	private Vector getWordsFromCode(String word, Hashtable codes) {
+	private Vector<Word> getWordsFromCode(String word, Hashtable<String, String> codes) {
 		Configuration config = Configuration.getConfiguration();
-		Vector result = new Vector();
+		Vector<Word> result = new Vector<Word>();
 		final int configDistance = config.getInteger(Configuration.SPELL_THRESHOLD);
 
-		for (Enumeration i = codes.keys(); i.hasMoreElements();) {
-			String code = (String) i.nextElement();
+		for (Enumeration<String> i = codes.keys(); i.hasMoreElements();) {
+			String code = i.nextElement();
 
-			List simwordlist = getWords(code);
-			for (Iterator iter = simwordlist.iterator(); iter.hasNext();) {
-				String similar = (String) iter.next();
+			List<String> simwordlist = getWords(code);
+			for (Iterator<String> iter = simwordlist.iterator(); iter.hasNext();) {
+				String similar = iter.next();
 				int distance = EditDistance.getDistance(word, similar);
 				if (distance < configDistance) {
 					Word w = new Word(similar, distance);
@@ -247,14 +247,14 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 	/**
 	 * Returns a list of words that have the same phonetic code.
 	 */
-	protected abstract List getWords(String phoneticCode);
+	protected abstract List<String> getWords(String phoneticCode);
 
 	/**
 	 * Returns true if the word is correctly spelled against the current word list.
 	 */
 	@Override
 	public boolean isCorrect(String word) {
-		List possible = getWords(getCode(word));
+		List<String> possible = getWords(getCode(word));
 		if (possible.contains(word)) {
 			return true;
 		} else if (possible.contains(word.toLowerCase())) {

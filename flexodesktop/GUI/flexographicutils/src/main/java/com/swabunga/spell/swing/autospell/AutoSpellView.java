@@ -98,6 +98,11 @@ public class AutoSpellView extends View implements AutoSpellConstants {
 		return view.equals(arg0);
 	}
 
+	@Override
+	public int hashCode() {
+		return view.hashCode();
+	}
+
 	/* (non-Javadoc)
 	 * @see javax.swing.text.View#getAlignment(int)
 	 */

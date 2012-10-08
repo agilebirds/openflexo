@@ -64,19 +64,19 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 		panel = new JPanel(new BorderLayout());
 		panel.setOpaque(false);
 		panel.add(textArea, BorderLayout.CENTER);
-		validateOnReturn = model.validateOnReturn;
-		if (model.columns != null && model.columns > 0) {
-			textArea.setColumns(model.columns);
+		validateOnReturn = model.isValidateOnReturn();
+		if (model.getColumns() != null && model.getColumns() > 0) {
+			textArea.setColumns(model.getColumns());
 		} else {
 			textArea.setColumns(DEFAULT_COLUMNS);
 		}
-		if (model.rows != null && model.rows > 0) {
-			textArea.setRows(model.rows);
+		if (model.getRows() != null && model.getRows() > 0) {
+			textArea.setRows(model.getRows());
 		} else {
 			textArea.setRows(DEFAULT_ROWS);
 		}
 		Border border;
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+		if (!ToolBox.isMacOSLaf()) {
 			border = BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
 					RIGHT_COMPENSATING_BORDER);
 		} else {
@@ -89,8 +89,8 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 				}*/
 
 		textArea.setEditable(!isReadOnly());
-		if (model.text != null) {
-			textArea.setText(model.text);
+		if (model.getText() != null) {
+			textArea.setText(model.getText());
 		}
 
 		textArea.getDocument().addDocumentListener(new DocumentListener() {

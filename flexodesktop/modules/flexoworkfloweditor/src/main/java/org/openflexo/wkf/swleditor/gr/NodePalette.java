@@ -43,7 +43,6 @@ import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.graphics.BackgroundStyle;
@@ -482,23 +481,12 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 		FGERectangle orRect = (FGERectangle) this.dataObjectRect.transform(at);
 		double arrowSize = 4/** drawingGraphics.getScale() */
 		;
-		FGERegularPolygon orPoly = new FGERegularPolygon(orRect.x + (PALETTE_WIDTH - ELEMENTS_HEIGHT) / 2, orRect.y, ELEMENTS_HEIGHT,
-				ELEMENTS_HEIGHT, Filling.FILLED, 4, 90);
-		/*FGEPoint northEast = orPoly.getSegments().get(0).getMiddle();
-		FGEPoint southEast = orPoly.getSegments().get(1).getMiddle();
-		FGEPoint southWest = orPoly.getSegments().get(2).getMiddle();
-		FGEPoint northWest = orPoly.getSegments().get(3).getMiddle();*/
+
 		FGERectangle andRect = (FGERectangle) this.dataSourceRect.transform(at);
 		AffineTransform translateAndResize = AffineTransform.getTranslateInstance(orRect.x + (PALETTE_WIDTH - ELEMENTS_HEIGHT) / 2,
 				orRect.y);
 		translateAndResize.concatenate(AffineTransform.getScaleInstance(ELEMENTS_HEIGHT, ELEMENTS_HEIGHT));
 		FGEPolygon dataObjectPoly = DataObjectGR.fileShape.transform(translateAndResize);
-
-		/*FGERegularPolygon andPoly = new FGERegularPolygon(andRect.x+(PALETTE_WIDTH-ELEMENTS_HEIGHT)/2,andRect.y,ELEMENTS_HEIGHT,ELEMENTS_HEIGHT,Filling.FILLED,4,90);
-		FGEPoint north = andPoly.getPointAt(0);
-		FGEPoint east = andPoly.getPointAt(1);
-		FGEPoint south = andPoly.getPointAt(2);
-		FGEPoint west = andPoly.getPointAt(3);*/
 
 		paletteRect.paint(drawingGraphics);
 

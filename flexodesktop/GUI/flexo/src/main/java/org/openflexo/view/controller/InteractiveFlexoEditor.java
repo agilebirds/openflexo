@@ -164,6 +164,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 
 	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A executeAction(
 			A action, EventObject event) {
+		boolean progressIsShowing = ProgressWindow.hasInstance();
 		boolean confirmDoAction = true;
 		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
 		FlexoActionInitializer<A> initializer = null;
@@ -212,7 +213,9 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 				}
 			}
 		}
-		ProgressWindow.hideProgressWindow();
+		if (!progressIsShowing) {
+			ProgressWindow.hideProgressWindow();
+		}
 		return action;
 	}
 

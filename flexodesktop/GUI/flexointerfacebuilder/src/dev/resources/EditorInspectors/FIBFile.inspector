@@ -17,7 +17,7 @@
 				<Label label="title" constraints="twocols(location=left;expandHorizontally=true)"/>
 				<TextField data="data.title" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
 
-				<CheckBox data="data.isDirectory" constraints="twocols(location=left;expandHorizontally=true)" columns="15"/>
+				<CheckBox data="data.directory" constraints="twocols(location=left;expandHorizontally=true)" columns="15"/>
 				<Label label="select_directories_only" constraints="twocols(location=right;expandHorizontally=true)"/>
 
 				<Label label="default_directory" constraints="twocols(location=left;expandHorizontally=true)"/>

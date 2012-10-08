@@ -121,7 +121,7 @@ class StaticBindingPanel extends JPanel {
 								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedKey));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedKey != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}
@@ -275,7 +275,7 @@ class StaticBindingPanel extends JPanel {
 								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedDate));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedDate != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}
@@ -309,7 +309,7 @@ class StaticBindingPanel extends JPanel {
 												.getEditedObject()));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedDuration != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}

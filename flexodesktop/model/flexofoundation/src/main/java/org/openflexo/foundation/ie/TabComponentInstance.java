@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ie;
 
-import java.io.Serializable;
 import java.util.Vector;
 
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
@@ -36,9 +35,7 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
  * 
  *         <B>Class Description</B>
  */
-public class TabComponentInstance extends PartialComponentInstance implements Serializable {
-
-	private IETabWidget _widget;
+public class TabComponentInstance extends PartialComponentInstance {
 
 	private OperationNode operationNode;
 

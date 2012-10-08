@@ -110,17 +110,9 @@ public class FlexoCst extends ColorCst {
 
 	public static boolean MODEL_EVENT_LISTENER_DEBUG = false;
 
-	public static Color DEFAULT_PROCESS_VIEW_BG_COLOR = Color.white;
-
-	public static Color SELECTION_COLOR = Color.GREEN;
-
-	public static Color WELCOME_BG_COLOR = Color.WHITE;
-
 	public static final Color DARK_BLUE_FLEXO_COLOR = new Color(245, 255, 246); // new Color(2,67,123);
 
 	public static final Color WELCOME_FLEXO_COLOR = new Color(62, 80, 100);
-
-	public static final Color WELCOME_FLEXO_BG_LIST_COLOR = ToolBox.getPLATFORM() == ToolBox.WINDOWS ? Color.WHITE : Color.WHITE;
 
 	public static final Color OPEN_BLUE_COLOR = new Color(65, 91, 116);
 
@@ -161,5 +153,4 @@ public class FlexoCst extends ColorCst {
 
 	public static final int LOADING_PROGRESS_STEPS = 26;
 
-	public static final Color ABOUT_DIALOG_BACKGROUND_COLOR = new Color(245, 255, 246);
 }

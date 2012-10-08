@@ -188,24 +188,14 @@ public class FlexoLocalization {
 		}
 	}
 
-	public static String localizedForKeyWithParams(String key, Object object) {
+	public static String localizedForKeyWithParams(String key, Object... object) {
 		String base = localizedForKey(key);
 		return replaceAllParamsInString(base, object);
 	}
 
-	public static String localizedForKeyWithParams(LocalizedDelegate delegate, String key, Object object) {
+	public static String localizedForKeyWithParams(LocalizedDelegate delegate, String key, Object... object) {
 		String base = localizedForKey(delegate, key);
 		return replaceAllParamsInString(base, object);
-	}
-
-	public static String localizedForKeyWithParams(String key, String... params) {
-		String base = localizedForKey(key);
-		return replaceAllParamsInString(base, params);
-	}
-
-	public static String localizedForKeyWithParams(LocalizedDelegate delegate, String key, String... params) {
-		String base = localizedForKey(delegate, key);
-		return replaceAllParamsInString(base, params);
 	}
 
 	/**
@@ -394,7 +384,7 @@ public class FlexoLocalization {
 	 * @param returned
 	 * @param object
 	 */
-	private static String replaceAllParamsInString(String aString, Object object) {
+	private static String replaceAllParamsInString(String aString, Object... object) {
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("replaceAllParamsInString() with " + aString + " and " + object);
 		}
@@ -402,71 +392,37 @@ public class FlexoLocalization {
 		// Pattern p = Pattern.compile("\\p{Punct}\\bJava(\\w*)\\p{Punct}");
 		// Pattern p = Pattern.compile("\\(\\bJava(\\w*)\\)");
 		// Pattern p = Pattern.compile("\\(\\$(\\w*)\\)");
-		Pattern p = Pattern.compile("\\(\\$([a-zA-Z[\\.]]*)\\)");
+		Pattern p = Pattern.compile("\\(\\$([_0-9a-zA-Z[\\.]]+)\\)");
 		Matcher m = p.matcher(aString);
-		String returned = "";
-		int lastIndex = 0;
+		StringBuffer returned = new StringBuffer();
 		while (m.find()) {
-			int nextIndex = m.start(0);
-			String foundPattern = m.group(0);
+			int nextIndex = m.start();
+			String foundPattern = m.group();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finest("Found '" + foundPattern + "' at position " + nextIndex);
 			}
-			if (m.start(1) < m.end(1)) {
-				String suffix = m.group(1);
-				if (logger.isLoggable(Level.FINE)) {
-					logger.finest("Suffix is " + suffix);
+			String suffix = m.group(1);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.finest("Suffix is " + suffix);
+			}
+			try {
+				int index = Integer.parseInt(suffix);
+				if (object.length > index) {
+					if (object[index] != null) {
+						m.appendReplacement(returned, object[index].toString());
+					} else {
+						m.appendReplacement(returned, "");
+					}
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Argument index " + index + " is greater than number of arguments");
+					}
 				}
-				String replacementString = valueForKeyAndObject(suffix, object);
-				returned += aString.substring(lastIndex, nextIndex) + replacementString;
-				lastIndex = nextIndex + foundPattern.length();
+			} catch (NumberFormatException e) {
+				m.appendReplacement(returned, valueForKeyAndObject(suffix, object));
 			}
 		}
-		returned += aString.substring(lastIndex, aString.length());
-		if (logger.isLoggable(Level.FINE)) {
-			logger.finer("Returning " + returned);
-		}
-		return returned;
-	}
-
-	/**
-	 * @param returned
-	 * @param object
-	 */
-	private static String replaceAllParamsInString(String aString, String... params) {
-		if (logger.isLoggable(Level.FINER)) {
-			logger.finer("replaceAllParamsInString() with " + aString);
-		}
-		Pattern p = Pattern.compile("\\(\\$([0-9]*)\\)");
-		Matcher m = p.matcher(aString);
-		StringBuilder returned = new StringBuilder();
-		int lastIndex = 0;
-		while (m.find()) {
-			int nextIndex = m.start(0);
-			String foundPattern = m.group(0);
-			if (logger.isLoggable(Level.FINEST)) {
-				logger.finest("Found '" + foundPattern + "' at position " + nextIndex);
-			}
-			if (m.start(1) < m.end(1)) {
-				String suffix = m.group(1);
-				if (logger.isLoggable(Level.FINE)) {
-					logger.finest("Suffix is " + suffix);
-				}
-				int suffixValue = -1;
-				try {
-					suffixValue = Integer.valueOf(suffix);
-					String replacementString = params[suffixValue];
-					returned.append(aString.substring(lastIndex, nextIndex)).append(replacementString);
-					lastIndex = nextIndex + foundPattern.length();
-				} catch (NumberFormatException e) {
-					logger.warning("Could not parse " + suffix + " as integer");
-				} catch (IndexOutOfBoundsException e) {
-					logger.warning("Could not access index " + suffixValue + " for " + aString + " : " + e.getMessage());
-				}
-
-			}
-		}
-		returned.append(aString.substring(lastIndex, aString.length()));
+		m.appendTail(returned);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("Returning " + returned);
 		}

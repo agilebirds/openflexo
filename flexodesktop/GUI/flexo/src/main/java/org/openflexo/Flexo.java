@@ -98,6 +98,10 @@ public class Flexo {
 
 	private static boolean demoMode = false;
 
+	public static boolean isDemoMode() {
+		return demoMode;
+	}
+
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 

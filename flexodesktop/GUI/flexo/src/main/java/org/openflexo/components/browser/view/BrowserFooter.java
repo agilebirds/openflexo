@@ -58,6 +58,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.selection.ContextualMenuManager;
+import org.openflexo.swing.ImageButton;
 
 public class BrowserFooter extends JPanel implements MouseListener, WindowListener {
 
@@ -85,7 +86,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
 
-		plusButton = new JButton(IconLibrary.BROWSER_PLUS_ICON);
+		plusButton = new ImageButton(IconLibrary.BROWSER_PLUS_ICON);
 		plusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -96,7 +97,6 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 			}
 
 		});
-		plusButton.setBorder(BorderFactory.createEmptyBorder());
 		plusButton.setDisabledIcon(IconLibrary.BROWSER_PLUS_DISABLED_ICON);
 		// plusButton.setSelectedIcon(FlexoCst.BROWSER_PLUS_SELECTED_ICON);
 		plusButton.addMouseListener(new MouseAdapter() {
@@ -125,7 +125,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 		});
 		FCH.setHelpItem(plusButton, "plus");
 
-		minusButton = new JButton(IconLibrary.BROWSER_MINUS_ICON);
+		minusButton = new ImageButton(IconLibrary.BROWSER_MINUS_ICON);
 		minusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -136,7 +136,6 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 			}
 
 		});
-		minusButton.setBorder(BorderFactory.createEmptyBorder());
 		minusButton.setDisabledIcon(IconLibrary.BROWSER_MINUS_DISABLED_ICON);
 		// minusButton.setSelectedIcon(FlexoCst.BROWSER_MINUS_SELECTED_ICON);
 		minusButton.addMouseListener(new MouseAdapter() {
@@ -160,8 +159,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 		plusMinusPanel.add(minusButton);
 
 		add(plusMinusPanel, BorderLayout.WEST);
-		optionsButton = new JButton(IconLibrary.BROWSER_OPTIONS_ICON);
-		optionsButton.setBorder(BorderFactory.createEmptyBorder());
+		optionsButton = new ImageButton(IconLibrary.BROWSER_OPTIONS_ICON);
 		optionsButton.setDisabledIcon(IconLibrary.BROWSER_OPTIONS_DISABLED_ICON);
 		add(optionsButton, BorderLayout.EAST);
 

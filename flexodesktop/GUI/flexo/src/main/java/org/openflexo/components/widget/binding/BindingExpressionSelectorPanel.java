@@ -210,7 +210,7 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 		// Update apply button state
 		_applyButton.setEnabled(bindingExpression != null && bindingExpression.isBindingValid());
 		if (bindingExpression != null && bindingExpression.isBindingValid()) {
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			if (ToolBox.isMacOSLaf()) {
 				_applyButton.setSelected(true);
 			}
 		}

@@ -121,9 +121,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		super(new BorderLayout());
 		_editedObject = editedObject;
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_BUTTON);
+			_downButton = new ImageButton(UtilsIconLibrary.CUSTOM_POPUP_BUTTON);
 		} else {
-			_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_DOWN);
+			_downButton = new ImageButton(UtilsIconLibrary.CUSTOM_POPUP_DOWN);
 			_downButton.setDisabledIcon(UtilsIconLibrary.CUSTOM_POPUP_DOWN_DISABLED);
 		}
 		_downButton.addActionListener(this);
@@ -136,7 +136,6 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			setBorder(BorderFactory.createEmptyBorder(3, 5, 3, 5));
 		}
-		_downButton.setBorder(BorderFactory.createEmptyBorder());
 		_frontComponent = buildFrontComponent();
 		add(_frontComponent, BorderLayout.CENTER);
 
