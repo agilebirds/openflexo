@@ -764,6 +764,17 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		notifyBindingModelChanged();
 	}
 
+	@Override
+	public void notifyBindingModelChanged() {
+		super.notifyBindingModelChanged();
+		// SGU: as all pattern roles share the edition pattern binding model, they should
+		// all notify change of their binding models
+		for (PatternRole pr : getPatternRoles()) {
+			pr.notifyBindingModelChanged();
+		}
+		getInspector().notifyBindingModelChanged();
+	}
+
 	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
 		List<OntologicObjectPatternRole> roles = getPatternRoles(OntologicObjectPatternRole.class);
 		if (roles.size() > 0) {

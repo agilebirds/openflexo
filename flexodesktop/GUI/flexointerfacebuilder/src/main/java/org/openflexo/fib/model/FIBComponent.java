@@ -740,9 +740,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public void setData(DataBinding data) {
-		data.setOwner(this);
-		data.setBindingAttribute(Parameters.data);
-		data.setBindingDefinition(getDataBindingDefinition());
+		if (data != null) {
+			data.setOwner(this);
+			data.setBindingAttribute(Parameters.data);
+			data.setBindingDefinition(getDataBindingDefinition());
+		}
 		this.data = data;
 	}
 
@@ -754,9 +756,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public void setVisible(DataBinding visible) {
-		visible.setOwner(this);
-		visible.setBindingAttribute(Parameters.visible);
-		visible.setBindingDefinition(VISIBLE);
+		if (visible != null) {
+			visible.setOwner(this);
+			visible.setBindingAttribute(Parameters.visible);
+			visible.setBindingDefinition(VISIBLE);
+		}
 		this.visible = visible;
 	}
 

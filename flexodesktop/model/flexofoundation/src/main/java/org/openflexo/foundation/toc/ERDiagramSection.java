@@ -5,6 +5,8 @@ import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
 public class ERDiagramSection extends ModelObjectSection<ERDiagram> {
 
+	protected static final String DOC_TEMPLATE = "docx_tocentry_diagram.xml.vm";
+
 	public ERDiagramSection(FlexoTOCBuilder builder) {
 		this(builder.tocData);
 		initializeDeserialization(builder);
@@ -28,8 +30,8 @@ public class ERDiagramSection extends ModelObjectSection<ERDiagram> {
 	}
 
 	@Override
-	public String getDefaultTemplateName() {
-		return null;
+	public boolean isERDiagram() {
+		return true;
 	}
 
 }

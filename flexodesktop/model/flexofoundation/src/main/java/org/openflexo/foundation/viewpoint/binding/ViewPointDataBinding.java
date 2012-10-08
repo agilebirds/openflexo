@@ -198,6 +198,12 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 
 		isDeserializing = true;
 
+		if (isDeserializing) {
+			return;
+		}
+
+		isDeserializing = true;
+
 		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getOwner() != null) {
 			BindingFactory factory = getOwner().getBindingFactory();

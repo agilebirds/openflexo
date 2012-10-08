@@ -535,7 +535,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 					return null;
 				}
 				OntologyObject parent = getProject().getProjectOntology().getOntologyObject(parentURI);
+				if (subject != null && parent != null) {
 				statement = ((OWLObject<?>) subject).getSubClassStatement(parent);
+				}
 				logger.info("Found statement: " + statement);
 			}
 			if (statement == null) {

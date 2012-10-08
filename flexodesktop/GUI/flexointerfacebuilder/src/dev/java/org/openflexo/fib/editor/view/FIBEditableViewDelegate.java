@@ -324,7 +324,6 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 			} else if (dataModification instanceof FIBAttributeNotification) {
 				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
 				if (n.getAttribute() == FIBContainer.Parameters.subComponents) {
-					System.out.println("Hop, je refais le layout");
 					((FIBContainerView) view).updateLayout();
 				}
 			}
@@ -467,11 +466,12 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 
 			// if the action is ok we go ahead
 			// otherwise we punt
-			if ((e.getDragAction() & dragAction) == 0)
+			if ((e.getDragAction() & dragAction) == 0) {
 				return;
-			// get the label's text and put it inside a Transferable
-			// Transferable transferable = new StringSelection(
-			// DragLabel.this.getText() );
+				// get the label's text and put it inside a Transferable
+				// Transferable transferable = new StringSelection(
+				// DragLabel.this.getText() );
+			}
 
 			ExistingElementDrag transferable = new ExistingElementDrag(new DraggedFIBComponent(view.getComponent()), e.getDragOrigin());
 
@@ -506,13 +506,15 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 
 			System.out.println("dragDropEnd in MoveDSListener");
 
-			if (e.getDragSourceContext().getTransferable() instanceof ElementDrag)
+			if (e.getDragSourceContext().getTransferable() instanceof ElementDrag) {
 				((ElementDrag) e.getDragSourceContext().getTransferable()).reset();
+			}
 
 			// getDrawingView().resetCapturedNode();
 			if (e.getDropSuccess() == false) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Dropping was not successful");
+				}
 				return;
 			}
 			/*
@@ -565,8 +567,9 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 			DragSourceContext context = e.getDragSourceContext();
 			// System.out.println("dragExit() with "+context+" component="+e.getSource());
 			// interface
-			if (e.getDragSourceContext().getTransferable() instanceof ElementDrag)
+			if (e.getDragSourceContext().getTransferable() instanceof ElementDrag) {
 				((ElementDrag) e.getDragSourceContext().getTransferable()).reset();
+			}
 		}
 
 		/**

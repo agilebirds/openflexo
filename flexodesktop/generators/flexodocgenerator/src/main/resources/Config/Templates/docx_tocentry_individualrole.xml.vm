@@ -1,4 +1,4 @@
-#**
+    #**
 * Context contains the following keys
 * - project: the current project (class FlexoProject)
 * - projectGenerator: the current Project Generator (class ProjectDocGenerator)
@@ -17,7 +17,7 @@
 				<w:b/>
 				<w:u w:val="single"/>
 			</w:rPr>
-				<w:t xml:space="preserve">Organisational unit mission:</w:t>
+				<w:t xml:space="preserve">#escape(${role.getName()}) mission:</w:t>
 			</w:r>
 		</w:p>
 		#descriptionSimple($role)
@@ -29,7 +29,7 @@
 						<w:b/>
 						<w:u w:val="single"/>
 					</w:rPr>
-					<w:t xml:space="preserve">Objectives:</w:t>
+					<w:t xml:space="preserve">#escape(${role.getName()}) objectives:</w:t>
 				</w:r>
 			</w:p>
 		#renderSpecificDescription($role,"Objectives")
@@ -42,7 +42,7 @@
 				<w:b/>
 				<w:u w:val="single"/>
 			</w:rPr>
-				<w:t xml:space="preserve">Role mission:</w:t>
+				<w:t xml:space="preserve">#escape(${role.getName()}) mission:</w:t>
 			</w:r>
 		</w:p>
 		#descriptionSimple($role)
@@ -53,7 +53,7 @@
 						<w:b/>
 						<w:u w:val="single"/>
 					</w:rPr>
-					<w:t xml:space="preserve">Objectives:</w:t>
+					<w:t xml:space="preserve">#escape(${role.getName()}) objectives:</w:t>
 				</w:r>
 			</w:p>
 		#renderSpecificDescription($role,"Objectives")

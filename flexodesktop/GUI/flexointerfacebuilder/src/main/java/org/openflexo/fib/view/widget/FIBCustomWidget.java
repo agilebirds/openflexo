@@ -182,7 +182,7 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 			if (valueDB != null && valueDB.getBinding() != null && valueDB.getBinding().isBindingValid()) {
 				Object value = valueDB.getBinding().getBindingValue(getController());
 				if (variableDB.getBinding().isBindingValid()) {
-					// System.out.println("Assignment "+assign+" set value with "+value);
+					// System.out.println("Assignment " + assign + " set value with " + value);
 					variableDB.getBinding().setBindingValue(value, this);
 				}
 			}

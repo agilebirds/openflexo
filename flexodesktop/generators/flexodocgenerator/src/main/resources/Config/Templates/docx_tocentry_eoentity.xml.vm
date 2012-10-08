@@ -11,12 +11,76 @@
 
 #description($entity)
 
+#if(!$ENTITY_PROPERTY_TABLE_HEADER)
+   #set($ENTITY_PROPERTY_TABLE_HEADER = $generator.getNewVector())
+   #void($ENTITY_PROPERTY_TABLE_HEADER.add("Name"))
+   #void($ENTITY_PROPERTY_TABLE_HEADER.add("Type"))
+   #void($ENTITY_PROPERTY_TABLE_HEADER.add("Description"))
+#end
+
+#set($PROPERTY_TABLE_CONTENT = $generator.getNewVector())
+
+#foreach($property in $entity.getOrderedProperties())
+#if(!$property.getDontGenerate())
+    #set($PROPERTY_ROW = $generator.getNewVector())
+    #void($PROPERTY_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr>#renderName($property)</w:p>"))
+    #set($type = "#escape($!{property.getType().getSimplifiedStringRepresentation()})")
+    #void($PROPERTY_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>$type</w:t></w:r></w:p>"))
+    #void($PROPERTY_ROW.add("#description($property)"))
+    #void($PROPERTY_TABLE_CONTENT.add($PROPERTY_ROW))
+#end ## end of dont generate
+#end
+#if($PROPERTY_TABLE_CONTENT.size()>0)
 <w:p w:rsidR="00A75F67" w:rsidRDefault="00A75F67">
-	<w:pPr><w:keepNext/></w:pPr>
-	<w:r>
-		<w:t xml:space="preserve">This entity contains the following attributes:</w:t>
-	</w:r>
+    <w:pPr><w:keepNext/></w:pPr>
+    <w:r>
+        <w:t xml:space="preserve">This entity contains the following properties:</w:t>
+    </w:r>
 </w:p>
+#renderDocxTable($ENTITY_PROPERTY_TABLE_HEADER $PROPERTY_TABLE_CONTENT)
+<w:p/>
+#else
+## No properties
+#end
+
+#if(!$ENTITY_METHOD_TABLE_HEADER)
+   #set($ENTITY_METHOD_TABLE_HEADER = $generator.getNewVector())
+   #void($ENTITY_METHOD_TABLE_HEADER.add("Name"))
+   #void($ENTITY_METHOD_TABLE_HEADER.add("Return type"))
+   #void($ENTITY_METHOD_TABLE_HEADER.add("Parameters"))
+   #void($ENTITY_METHOD_TABLE_HEADER.add("Description"))
+#end
+
+#set($METHOD_TABLE_CONTENT = $generator.getNewVector())
+
+#foreach($method in $entity.getOrderedMethods())
+#if(!$method.getDontGenerate())
+    #set($METHOD_ROW = $generator.getNewVector())
+    #void($METHOD_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr>#renderName($method)</w:p>"))
+    #set($tmp = $!{method.getReturnType().getSimplifiedStringRepresentation()})
+    #set($type = "#escape($tmp)")
+    #void($METHOD_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>$type</w:t></w:r></w:p>"))
+    #set($tmp = $method.getParameterListAsString($falseValue))
+    #set($params = "#escape($tmp)")
+    #void($METHOD_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>$params</w:t></w:r></w:p>"))
+    #void($METHOD_ROW.add("#description($method)"))
+    #void($METHOD_TABLE_CONTENT.add($METHOD_ROW))
+#end ## end of dont generate
+#end
+#if($METHOD_TABLE_CONTENT.size()>0)
+<w:p w:rsidR="00A75F67" w:rsidRDefault="00A75F67">
+    <w:pPr><w:keepNext/></w:pPr>
+    <w:r>
+        <w:t xml:space="preserve">This entity contains the following methods:</w:t>
+    </w:r>
+</w:p>
+#renderDocxTable($ENTITY_METHOD_TABLE_HEADER $METHOD_TABLE_CONTENT)
+<w:p/>
+#else
+## No methods
+#end
+
+
 #if(!$ENTITY_TABLE_HEADER)
    #set($ENTITY_TABLE_HEADER = $generator.getNewVector())
    #void($ENTITY_TABLE_HEADER.add("Name"))
@@ -39,16 +103,18 @@
     #void($ATTRIBUTE_TABLE_CONTENT.add($ATTRIBUTE_ROW))
 #end ## end of dont generate
 #end
-
+#if($ATTRIBUTE_TABLE_CONTENT.size()>0)
+<w:p w:rsidR="00A75F67" w:rsidRDefault="00A75F67">
+    <w:pPr><w:keepNext/></w:pPr>
+    <w:r>
+        <w:t xml:space="preserve">This entity contains the following attributes:</w:t>
+    </w:r>
+</w:p>
 #renderDocxTable($ENTITY_TABLE_HEADER $ATTRIBUTE_TABLE_CONTENT)
 <w:p/>
-#if(${entity.getOrderedRelationships().size()}>0)
-<w:p w:rsidR="00A75F67" w:rsidRDefault="00A75F67">
-	<w:pPr><w:keepNext/></w:pPr>
-	<w:r>
-		<w:t xml:space="preserve">This entity contains the following relationships:</w:t>
-	</w:r>
-</w:p>
+#else
+## No attributes
+#end
 
 #if(!$ENTITY_REL_TABLE_HEADER)
    #set($ENTITY_REL_TABLE_HEADER = $generator.getNewVector())
@@ -72,6 +138,13 @@
     #void($REL_TABLE_CONTENT.add($ATTRIBUTE_ROW))
 #end ## end of dont generate
 #end
+#if($REL_TABLE_CONTENT.size()>0)
+<w:p w:rsidR="00A75F67" w:rsidRDefault="00A75F67">
+    <w:pPr><w:keepNext/></w:pPr>
+    <w:r>
+        <w:t xml:space="preserve">This entity contains the following relationships:</w:t>
+    </w:r>
+</w:p>
 
 #renderDocxTable($ENTITY_REL_TABLE_HEADER $REL_TABLE_CONTENT)
 <w:p/>

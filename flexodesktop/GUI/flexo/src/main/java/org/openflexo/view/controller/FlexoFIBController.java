@@ -213,4 +213,10 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
 	}
 
+	/*public void createOntologyClass(FlexoOntology ontology) {
+		System.out.println("Create class for " + ontology);
+		CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, getEditor());
+		action.doAction();
+	}*/
+
 }

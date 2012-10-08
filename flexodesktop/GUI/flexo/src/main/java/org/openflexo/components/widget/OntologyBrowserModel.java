@@ -24,9 +24,13 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
@@ -55,7 +59,7 @@ import org.openflexo.toolbox.StringUtils;
  * 
  * @author sguerin
  */
-public class OntologyBrowserModel {
+public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 	static final Logger logger = Logger.getLogger(OntologyBrowserModel.class.getPackage().getName());
 
@@ -111,7 +115,19 @@ public class OntologyBrowserModel {
 	}
 
 	public void setContext(FlexoOntology context) {
+		if (this.context != null) {
+			((FlexoObservable) context).deleteObserver(this);
+		}
 		this.context = context;
+		if (this.context != null) {
+			((FlexoObservable) context).addObserver(this);
+	}
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		System.out.println("ok, je recalcule tout");
+		recomputeStructure();
 	}
 
 	public OntologyClass getRootClass() {

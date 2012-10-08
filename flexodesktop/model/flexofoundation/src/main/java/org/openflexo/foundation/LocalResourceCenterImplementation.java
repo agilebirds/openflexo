@@ -38,7 +38,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
 
-	private static final File CALC_LIBRARY_DIR = new FileResource("ViewPoints");
+	private static final File VIEWPOINT_LIBRARY_DIR = new FileResource("ViewPoints");
 	private static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
 	public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
@@ -67,12 +67,12 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	private static void copyViewPoints(File resourceCenterDirectory, CopyStrategy copyStrategy) {
-		if (CALC_LIBRARY_DIR.getParentFile().equals(resourceCenterDirectory)) {
+		if (VIEWPOINT_LIBRARY_DIR.getParentFile().equals(resourceCenterDirectory)) {
 			return;
 		}
 
 		try {
-			FileUtils.copyDirToDir(CALC_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
+			FileUtils.copyDirToDir(VIEWPOINT_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -143,7 +143,15 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-		if (dir.listFiles().length == 0) {
+		boolean forceUpdate = dir.listFiles().length == 0;
+		if (!forceUpdate && baseOntologyLibrary != null && folder == baseOntologyLibrary.getRootFolder()) {
+			// This should fix issue OPENFLEXO-197 until we find a better solution.
+			forceUpdate |= baseOntologyLibrary.getRDFSOntology() == null;
+			forceUpdate |= baseOntologyLibrary.getRDFOntology() == null;
+			forceUpdate |= baseOntologyLibrary.getOWLOntology() == null;
+			forceUpdate |= baseOntologyLibrary.getFlexoConceptOntology() == null;
+		}
+		if (forceUpdate) {
 			copyOntologies(localDirectory, CopyStrategy.REPLACE);
 		}
 		for (File f : dir.listFiles()) {
@@ -188,7 +196,73 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 
 	@Override
 	public void update() {
+		updateOntologiesOrganization();
 		copyOntologies(localDirectory, CopyStrategy.REPLACE_OLD_ONLY);
 		copyViewPoints(localDirectory, CopyStrategy.REPLACE_OLD_ONLY);
 	}
+
+	/**
+	 * Called to ensure compatibility with ontologies as in 1.4.4
+	 */
+	private void updateOntologiesOrganization() {
+		File localOntologyDir = new File(localDirectory, "Ontologies");
+		File rdfFile = new File(localOntologyDir, "22-rdf-syntax-ns.owl");
+		File rdfsFile = new File(localOntologyDir, "rdf-schema.owl");
+		File owlFile = new File(localOntologyDir, "owl.owl");
+		File fcoFile = new File(localOntologyDir, "FlexoConceptsOntology.owl");
+		File archimateDir = new File(localOntologyDir, "Archimate");
+		File bpmnDir = new File(localOntologyDir, "BPMN");
+		File fmDir = new File(localOntologyDir, "FlexoMethodology");
+		File otDir = new File(localOntologyDir, "OrganizationTree");
+		File sdDir = new File(localOntologyDir, "ScopeDefinition");
+		File skosDir = new File(localOntologyDir, "SKOS");
+		File umlDir = new File(localOntologyDir, "UML");
+		File w3cDir = new File(localOntologyDir, "www.w3.org");
+		File abDir = new File(localOntologyDir, "www.agilebirds.com");
+		File archiDir = new File(localOntologyDir, "www.bolton.ac.uk");
+		File omgDir = new File(localOntologyDir, "www.omg.org");
+		File ofDir = new File(localOntologyDir, "www.openflexo.org");
+		if (!w3cDir.exists()) {
+			if (rdfFile.exists()) {
+				rdfFile.delete();
+			}
+			if (rdfsFile.exists()) {
+				rdfsFile.delete();
+			}
+			if (owlFile.exists()) {
+				owlFile.delete();
+			}
+			if (skosDir.exists()) {
+				FileUtils.deleteDir(skosDir);
+			}
+		}
+		if (!ofDir.exists()) {
+			if (fcoFile.exists()) {
+				fcoFile.delete();
+			}
+		}
+		if (archimateDir.exists() && !archiDir.exists()) {
+			FileUtils.deleteDir(archimateDir);
+		}
+		if (!omgDir.exists()) {
+			if (bpmnDir.exists()) {
+				FileUtils.deleteDir(bpmnDir);
+			}
+			if (umlDir.exists()) {
+				FileUtils.deleteDir(umlDir);
+			}
+		}
+		if (!abDir.exists()) {
+			if (fmDir.exists()) {
+				FileUtils.deleteDir(fmDir);
+			}
+			if (otDir.exists()) {
+				FileUtils.deleteDir(otDir);
+			}
+			if (sdDir.exists()) {
+				FileUtils.deleteDir(sdDir);
+			}
+		}
+	}
+
 }

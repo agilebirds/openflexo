@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
 
+import com.hp.hpl.jena.ontology.MinCardinalityRestriction;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.rdf.model.Literal;
@@ -41,7 +42,14 @@ public class MinCardinalityRestrictionClass extends OntologyRestrictionClass {
 	private int minCardinality = -1;
 	private OntologicDataType dataRange;
 
+	@Deprecated
 	protected MinCardinalityRestrictionClass(Restriction aRestriction, OWLOntology ontology) {
+		super(aRestriction, ontology);
+		this.restriction = aRestriction;
+		retrieveRestrictionInformations();
+	}
+
+	protected MinCardinalityRestrictionClass(MinCardinalityRestriction aRestriction, OWLOntology ontology) {
 		super(aRestriction, ontology);
 		this.restriction = aRestriction;
 		retrieveRestrictionInformations();
@@ -50,6 +58,10 @@ public class MinCardinalityRestrictionClass extends OntologyRestrictionClass {
 	@Override
 	protected void retrieveRestrictionInformations() {
 		super.retrieveRestrictionInformations();
+
+		if (restriction instanceof MinCardinalityRestriction) {
+			minCardinality = ((MinCardinalityRestriction) restriction).getMinCardinality();
+		}
 
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS_PROPERTY = ResourceFactory.createProperty(OWL + ON_CLASS);
