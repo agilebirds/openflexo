@@ -16,7 +16,6 @@ import org.openflexo.dg.docx.ProjectDocDocxGenerator;
 import org.openflexo.dg.html.ProjectDocHTMLGenerator;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
 import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.ValidateProject;
@@ -29,6 +28,8 @@ import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.action.GCAction.ProjectGeneratorFactory;
 import org.openflexo.generator.exception.GenerationException;
+
+import com.sun.istack.NotNull;
 
 /**
  * This class extends the DefaultFlexoEditor for the Flexo server application. So far the implementation is just a simple extension of the
@@ -95,7 +96,7 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 
 	private Runnable whenDone;
 
-	protected Exception exception;
+	protected Throwable exception;
 
 	@Override
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(final A action,
@@ -110,7 +111,7 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 				protected Void doInBackground() throws Exception {
 					try {
 						action.doActionInContext();
-					} catch (Exception e) {
+					} catch (Throwable e) {
 						e.printStackTrace();
 						FlexoBuilderEditor.this.exception = e;
 					}
@@ -131,12 +132,10 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 		} else {
 			try {
 				action.doActionInContext();
-			} catch (FlexoException e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 				FlexoBuilderEditor.this.exception = e;
-				if (FlexoBuilderEditor.this.exception != null) {
-					externalMainWithProject.setExitCodeCleanUpAndExit(FlexoExternalMain.UNEXPECTED_EXCEPTION);
-				}
+				externalMainWithProject.setExitCodeCleanUpAndExit(FlexoExternalMain.UNEXPECTED_EXCEPTION);
 			}
 			if (!action.isEmbedded()) {
 				doNextTodo(action);
@@ -159,14 +158,40 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 				return;
 			}
 			if (todos.isEmpty()) {
-				SwingUtilities.invokeLater(whenDone);
+				class RunnableExceptionCatcher implements Runnable {
+
+					private Runnable toRun;
+
+					public RunnableExceptionCatcher(@NotNull Runnable toRun) {
+						super();
+						this.toRun = toRun;
+					}
+
+					@Override
+					public void run() {
+						try {
+							toRun.run();
+						} catch (Throwable e) {
+							e.printStackTrace();
+							FlexoBuilderEditor.this.exception = e;
+							externalMainWithProject.setExitCodeCleanUpAndExit(FlexoExternalMain.UNEXPECTED_EXCEPTION);
+						}
+					}
+
+				}
+				SwingUtilities.invokeLater(new RunnableExceptionCatcher(whenDone));
 			} else {
 				final FlexoAction<?, ?, ?> todo = todos.remove(0);
 				SwingUtilities.invokeLater(new Runnable() {
 
 					@Override
 					public void run() {
-						todo.doAction();
+						try {
+							todo.doAction();
+						} catch (Throwable e) {
+							e.printStackTrace();
+							externalMainWithProject.handleActionFailed(todo);
+						}
 					}
 				});
 			}
