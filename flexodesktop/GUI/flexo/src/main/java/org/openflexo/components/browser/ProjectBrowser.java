@@ -655,9 +655,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			BrowserElement element = (BrowserElement) found;
 			builtVector.add(element.getTreePath());
 		} else if (found instanceof Vector) {
-			Vector elementList = (Vector) found;
-			for (Enumeration e = elementList.elements(); e.hasMoreElements();) {
-				BrowserElement element = (BrowserElement) e.nextElement();
+			Vector<BrowserElement> elementList = (Vector<BrowserElement>) found;
+			for (Enumeration<BrowserElement> e = elementList.elements(); e.hasMoreElements();) {
+				BrowserElement element = e.nextElement();
 				builtVector.add(element.getTreePath());
 			}
 		} else if (found != null) {
@@ -685,33 +685,23 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * @return
 	 */
 	protected BrowserElement[] elementForObject(FlexoModelObject object) {
-		Vector<BrowserElement> builtVector = new Vector<BrowserElement>();
+		List<BrowserElement> builtVector = new ArrayList<BrowserElement>();
 		Object found = object != null ? _elements.get(object) : null;
 		if (found instanceof BrowserElement) {
 			BrowserElement element = (BrowserElement) found;
 			builtVector.add(element);
 		} else if (found instanceof Vector) {
-			Vector elementList = (Vector) found;
-			for (Enumeration e = elementList.elements(); e.hasMoreElements();) {
-				BrowserElement element = (BrowserElement) e.nextElement();
-				builtVector.add(element);
-			}
+			builtVector.addAll((Vector) found);
 		} else if (found != null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found unexpected " + found.getClass().getName() + " in ProjectBrowser !");
 			}
-			return null;
 		} else {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Found null in ProjectBrowser for object " + object);
 			}
-			return null;
 		}
-		BrowserElement[] returned = new BrowserElement[builtVector.size()];
-		for (int i = 0; i < builtVector.size(); i++) {
-			returned[i] = builtVector.get(i);
-		}
-		return returned;
+		return builtVector.toArray(new BrowserElement[builtVector.size()]);
 	}
 
 	@Deprecated
