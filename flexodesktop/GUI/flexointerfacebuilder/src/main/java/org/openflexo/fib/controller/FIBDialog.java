@@ -131,7 +131,7 @@ public class FIBDialog<T> extends JDialog {
 	 */
 	public void center() {
 		Point center;
-		if (getOwner() != null && getOwner().isVisible()) {
+		if (getOwner() != null && getOwner().isVisible() && !getOwner().getBounds().isEmpty()) {
 			center = new Point(getOwner().getLocationOnScreen().x + getOwner().getWidth() / 2, getOwner().getLocationOnScreen().y
 					+ getOwner().getHeight() / 2);
 		} else {
@@ -142,7 +142,6 @@ public class FIBDialog<T> extends JDialog {
 	}
 
 	public void showDialog() {
-		validate();
 		pack();
 		center();
 		setVisible(true);

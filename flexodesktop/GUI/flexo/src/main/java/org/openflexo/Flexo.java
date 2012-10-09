@@ -191,40 +191,16 @@ public class Flexo {
 				}
 			}
 		}
+		remapStandardOuputs(isDev);
 		final boolean noSplash2 = noSplash;
 		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
 		UserType.setCurrentUserType(userTypeNamed);
-
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-		}
-
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
 
 		FlexoProperties.load();
 		initializeLoggingManager();
-		FlexoApplication.installEventQueue();
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				initFlexo(noSplash2);
-			}
-		});
-	}
-
-	protected static void initFlexo(boolean noSplash) {
-		remapStandardOuputs(isDev);
-		ResourceLocator.printDirectoriesSearchOrder(System.err);
-		try {
-			DenaliSecurityProvider.insertSecurityProvider();
-		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.log(Level.WARNING, "Could not insert security provider", e);
-			}
-		}
-		initUILAF();
 		final ApplicationContext applicationContext = new ApplicationContext() {
 
 			@Override
@@ -251,17 +227,22 @@ public class Flexo {
 				}
 			}
 		};
+		FlexoApplication.installEventQueue();
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				initFlexo(applicationContext, noSplash2);
+			}
+		});
+		ResourceLocator.printDirectoriesSearchOrder(System.err);
+		try {
+			DenaliSecurityProvider.insertSecurityProvider();
+		} catch (Exception e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "Could not insert security provider", e);
+			}
+		}
 		FlexoApplication.initialize(applicationContext.getModuleLoader());
-		if (ToolBox.getFrame(null) != null) {
-			ToolBox.getFrame(null).setIconImage(UserType.getCurrentUserType().getIconImage().getImage());
-		}
-		SplashWindow splashWindow = null;
-		if (!noSplash) {
-			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
-		}
-		if (isDev) {
-			FlexoLoggingFormatter.logDate = false;
-		}
 		initProxyManagement();
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting on " + ToolBox.getPLATFORM() + "... JVM version is " + System.getProperty("java.version"));
@@ -277,39 +258,58 @@ public class Flexo {
 			logger.info("Launching FLEXO Application Suite version " + FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + "...");
 		}
 		FlexoResourceCenterService.getInstance().getFlexoResourceCenter();
-		final SplashWindow splashWindow2 = splashWindow;
 		if (!isDev) {
 			registerShutdownHook();
 		}
+	}
+
+	protected static void initFlexo(ApplicationContext applicationContext, boolean noSplash) {
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+		}
+		initUILAF();
+		SplashWindow splashWindow = null;
+		if (!noSplash) {
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
+		}
+		if (isDev) {
+			FlexoLoggingFormatter.logDate = false;
+		}
 
 		if (fileNameToOpen == null) {
-			WelcomeDialog welcomeDialog = new WelcomeDialog(applicationContext);
-			if (splashWindow2 != null) {
-				splashWindow2.setVisible(false);
-				splashWindow2.dispose();
-			}
-			welcomeDialog.showDialog();
+			showWelcomDialog(applicationContext, splashWindow);
 		} else {
 			try {
 				File projectDirectory = new File(fileNameToOpen);
-				if (splashWindow2 != null) {
-					splashWindow2.setVisible(false);
-					splashWindow2.dispose();
+				if (splashWindow != null) {
+					splashWindow.setVisible(false);
+					splashWindow.dispose();
+					splashWindow = null;
 				}
 
 				applicationContext.getProjectLoader().loadProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e) {
 				// project need a conversion, but user cancelled the conversion.
-				WelcomeDialog welcomeDialog = new WelcomeDialog(applicationContext);
-				welcomeDialog.showDialog();
+				showWelcomDialog(applicationContext, null);
 			} catch (ProjectInitializerException e) {
 				e.printStackTrace();
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
 						+ e.getProjectDirectory().getAbsolutePath());
-				WelcomeDialog welcomeDialog = new WelcomeDialog(applicationContext);
-				welcomeDialog.showDialog();
+				showWelcomDialog(applicationContext, null);
 			}
 		}
+	}
+
+	public static void showWelcomDialog(final ApplicationContext applicationContext, final SplashWindow splashWindow) {
+		WelcomeDialog welcomeDialog = new WelcomeDialog(applicationContext);
+		welcomeDialog.pack();
+		welcomeDialog.center();
+		if (splashWindow != null) {
+			splashWindow.setVisible(false);
+			splashWindow.dispose();
+		}
+		welcomeDialog.setVisible(true);
+		welcomeDialog.toFront();
 	}
 
 	private static void initUILAF() {
