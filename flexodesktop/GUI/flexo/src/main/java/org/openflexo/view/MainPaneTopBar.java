@@ -1,7 +1,6 @@
 package org.openflexo.view;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -10,21 +9,15 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
+import javax.annotation.Nonnull;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.components.widget.FIBProjectSelector;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
@@ -57,8 +50,11 @@ public class MainPaneTopBar extends JMenuBar {
 
 	private boolean forcePreferredSize;
 
-	public MainPaneTopBar(ControllerModel model) {
-		this.model = model;
+	private final FlexoController controller;
+
+	public MainPaneTopBar(@Nonnull FlexoController controller) {
+		this.controller = controller;
+		this.model = controller.getControllerModel();
 		setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		setLayout(new BorderLayout());
@@ -167,7 +163,7 @@ public class MainPaneTopBar extends JMenuBar {
 	}
 
 	private void initProjectSelector() {
-		JLabel label = new JLabel();
+		/*JLabel label = new JLabel();
 		label.setText(FlexoLocalization.localizedForKey("current_project", label));
 		label.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 		left.add(label);
@@ -217,7 +213,11 @@ public class MainPaneTopBar extends JMenuBar {
 			public void propertyChange(PropertyChangeEvent evt) {
 				projectSelector.setSelectedItem(evt.getNewValue());
 			}
-		}, model);
+		}, model);*/
+		FIBProjectSelector selector = new FIBProjectSelector(null);
+		selector.setFlexoController(controller);
+		selector.setProjectLoader(model.getProjectLoader());
+		left.add(selector);
 	}
 
 	protected void updateNavigationControlState(final JButton backwardButton, final JButton forwardButton, final JButton upButton) {

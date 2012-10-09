@@ -64,6 +64,7 @@ import org.openflexo.icon.IconMarker;
 import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
@@ -94,6 +95,8 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	private FIBController controller;
 
 	private PropertyChangeSupport pcSupport;
+
+	private FlexoController flexoController;
 
 	private boolean isFiltered = false;
 
@@ -377,6 +380,9 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	@Override
 	protected ResizablePanel createCustomPanel(T editedObject) {
 		_selectorPanel = makeCustomPanel(editedObject);
+		if (flexoController != null) {
+			_selectorPanel.getController().setFlexoController(flexoController);
+		}
 		return _selectorPanel;
 	}
 
@@ -708,6 +714,17 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	// Used for computation of "isAcceptableValue()?"
 	public void setCandidateValue(T candidateValue) {
 		this.candidateValue = candidateValue;
+	}
+
+	public FlexoController getFlexoController() {
+		return flexoController;
+	}
+
+	public void setFlexoController(FlexoController flexoController) {
+		this.flexoController = flexoController;
+		if (_selectorPanel != null) {
+			_selectorPanel.getController().setFlexoController(flexoController);
+		}
 	}
 
 	/*

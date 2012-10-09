@@ -81,7 +81,7 @@ public class TabbedPane<J extends JComponent> {
 	}
 
 	private static final Color TRANSPARENT = new Color(1.0f, 1.0f, 1.0f, 0.3f);
-	private static final Color LIGHT_BLUE = new Color(206, 231, 255, 255);
+	private static final Color LIGHT_BLUE = new Color(150, 183, 255, 255);
 
 	private static final int TAB_SPACING = 2;
 
@@ -182,7 +182,7 @@ public class TabbedPane<J extends JComponent> {
 					clippedG.dispose();
 					if (tab == selectedTab) {
 						((Graphics2D) g).setPaint(new GradientPaint(new Point2D.Double(0, 0), TRANSPARENT, new Point2D.Double(0,
-								getHeight()), LIGHT_BLUE));
+								getHeight() / 2), LIGHT_BLUE));
 						g.fillRect(0, 0, getWidth(), getHeight());
 					}
 				} else {

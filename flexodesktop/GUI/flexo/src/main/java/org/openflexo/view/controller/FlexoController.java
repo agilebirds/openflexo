@@ -1804,7 +1804,11 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void selectAndFocusObject(FlexoModelObject object) {
-		setCurrentEditedObjectAsModuleView(object);
+		if (object instanceof FlexoProject) {
+			getControllerModel().setCurrentProject((FlexoProject) object);
+		} else {
+			setCurrentEditedObjectAsModuleView(object);
+		}
 	}
 
 	public ValidationModel getDefaultValidationModel() {
@@ -1844,6 +1848,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return DGIconLibrary.iconForObject((CGTemplateObject) object);
 		} else if (object instanceof DocType) {
 			return CGIconLibrary.TARGET_ICON;
+		} else if (object instanceof FlexoProject) {
+			return IconLibrary.OPENFLEXO_NOTEXT_16;
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;

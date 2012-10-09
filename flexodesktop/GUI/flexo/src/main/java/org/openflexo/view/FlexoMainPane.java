@@ -160,7 +160,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				((ModuleView<?>) tab).deleteModuleView();
 			}
 		});
-		add(topBar = new MainPaneTopBar(controller.getControllerModel()), BorderLayout.NORTH);
+		add(topBar = new MainPaneTopBar(controller), BorderLayout.NORTH);
 		add(centerPanel = new JXMultiSplitPane(centerLayout));
 		centerPanel.setDividerSize(DIVIDER_SIZE);
 		centerPanel.setDividerPainter(new DividerPainter() {

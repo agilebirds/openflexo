@@ -52,6 +52,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	public static final String HISTORY = "history";
 	public static final String CURRENT_PERPSECTIVE = "currentPerspective";
 	public static final String CURRENT_EDITOR = "currentEditor";
+	public static final String CURRENT_PROJECT = "currentProject";
 	public static final String CURRENT_OBJECT = "currentObject";
 	public static final String CURRENT_LOCATION = "currentLocation";
 
@@ -107,7 +108,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		return context.getModuleLoader();
 	}
 
-	private ProjectLoader getProjectLoader() {
+	public ProjectLoader getProjectLoader() {
 		return context.getProjectLoader();
 	}
 
@@ -210,6 +211,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			}
 		}
 		getPropertyChangeSupport().firePropertyChange(CURRENT_EDITOR, old, projectEditor);
+		getPropertyChangeSupport().firePropertyChange(CURRENT_PROJECT, old != null ? old.getProject() : null,
+				projectEditor != null ? projectEditor.getProject() : null);
 	}
 
 	public void addToEditors(FlexoEditor editor) {
@@ -224,6 +227,14 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	public List<FlexoEditor> getEditors() {
 		return editors;
+	}
+
+	public FlexoProject getCurrentProject() {
+		return getCurrentEditor() != null ? getCurrentEditor().getProject() : null;
+	}
+
+	public void setCurrentProject(FlexoProject project) {
+		setCurrentEditor(context.getProjectLoader().getEditorForProject(project));
 	}
 
 	public void setCurrentObjectAndPerspective(FlexoModelObject currentObject, FlexoPerspective perspective) {
@@ -284,7 +295,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			getPropertyChangeSupport().firePropertyChange(CURRENT_OBJECT, null, currentObject);
 		}
 		if (currentLocation != null) {
-			setCurrentEditor(context.getProjectLoader().getEditorForProject(currentLocation.getObject().getProject()));
+			setCurrentProject(currentLocation.getObject().getProject());
 		}
 	}
 
@@ -378,7 +389,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	private HistoryLocation getLastHistoryLocationForProject(FlexoProject project) {
-		for (int i = previousHistory.size(); i > 0; i--) {
+		for (int i = previousHistory.size() - 1; i > -1; i--) {
 			HistoryLocation location = previousHistory.get(i);
 			if (location.getObject().getProject() == project) {
 				return location;
@@ -485,4 +496,5 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		FlexoPreferences.savePreferences(true);
 		getPropertyChangeSupport().firePropertyChange(RIGHT_VIEW_VISIBLE, !rightViewVisible, rightViewVisible);
 	}
+
 }

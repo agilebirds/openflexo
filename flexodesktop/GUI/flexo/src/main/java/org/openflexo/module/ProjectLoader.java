@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -47,6 +48,7 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.FileParameter;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
@@ -67,7 +69,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.xmlcode.KeyValueCoder;
 
-public final class ProjectLoader implements HasPropertyChangeSupport {
+public class ProjectLoader implements HasPropertyChangeSupport {
 
 	public static final String PROJECT_OPENED = "projectOpened";
 	public static final String PROJECT_CLOSED = "projectClosed";
@@ -77,6 +79,7 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 	private static final String FOR_FLEXO_SERVER = "_forFlexoServer_";
 	public static final String EDITOR_ADDED = "editorAdded";
 	public static final String EDITOR_REMOVED = "editorRemoved";
+	public static final String ROOT_PROJECTS = "rootProjects";
 
 	private InteractiveFlexoResourceUpdateHandler resourceUpdateHandler;
 
@@ -87,10 +90,11 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 	private Map<FlexoProject, AutoSaveService> autoSaveServices;
 
 	private PropertyChangeSupport propertyChangeSupport;
+	private List<FlexoProject> rootProjects;
 
 	public ProjectLoader(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
-		this.editors = new HashMap<FlexoProject, FlexoEditor>();
+		this.editors = new LinkedHashMap<FlexoProject, FlexoEditor>();
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		autoSaveServices = new HashMap<FlexoProject, AutoSaveService>();
 	}
@@ -205,12 +209,17 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 		if (applicationContext.isAutoSaveServiceEnabled()) {
 			autoSaveServices.put(editor.getProject(), new AutoSaveService(this, editor.getProject()));
 		}
+		resetRootProjects();
 		getPropertyChangeSupport().firePropertyChange(PROJECT_OPENED, null, editor.getProject());
 		getPropertyChangeSupport().firePropertyChange(EDITOR_ADDED, null, editor);
 	}
 
-	public void closeProject(FlexoProject project) {
+	public void resetRootProjects() {
+		rootProjects = null;
+		getPropertyChangeSupport().firePropertyChange(ROOT_PROJECTS, null, null);
+	}
 
+	public void closeProject(FlexoProject project) {
 		AutoSaveService autoSaveService = getAutoSaveService(project);
 		if (autoSaveService != null) {
 			autoSaveService.close();
@@ -405,6 +414,40 @@ public final class ProjectLoader implements HasPropertyChangeSupport {
 			}
 		}
 		return projects;
+	}
+
+	public List<FlexoProject> getRootProjects() {
+		if (rootProjects == null) {
+			rootProjects = new ArrayList<FlexoProject>();
+			for (FlexoEditor editor : editors.values()) {
+				boolean isRoot = true;
+				FlexoProject project = editor.getProject();
+				for (FlexoEditor editor2 : editors.values()) {
+					if (editor2 != editor) {
+						for (FlexoProjectReference ref : editor2.getProject().getProjectData().getImportedProjects()) {
+							try {
+								if (ref.getProject() == project) {
+									isRoot = false;
+									break;
+								}
+							} catch (ProjectLoadingCancelledException e) {
+								if (logger.isLoggable(Level.WARNING)) {
+									logger.log(Level.WARNING, "Project loading cancelled but this should not have occured in this method",
+											e);
+								}
+							}
+						}
+						if (!isRoot) {
+							break;
+						}
+					}
+				}
+				if (isRoot) {
+					rootProjects.add(project);
+				}
+			}
+		}
+		return rootProjects;
 	}
 
 	public void saveProjects(List<FlexoProject> projects) throws SaveResourceExceptionList {
