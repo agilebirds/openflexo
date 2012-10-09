@@ -29,6 +29,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -57,6 +58,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.AbstractBorder;
@@ -238,6 +240,7 @@ public class TabbedPane<J extends JComponent> {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() != close) {
 					dropHoveringEffect();
+					TabHeaders.this.hidePopup();
 					TabbedPane.this.selectTab(tab);
 				}
 			}
@@ -304,6 +307,7 @@ public class TabbedPane<J extends JComponent> {
 			extraTabs.addActionListener(this);
 			extraTabsPopup = new JPopupMenu();
 			extraTabsPopup.setInvoker(extraTabs);
+			extraTabs.setComponentPopupMenu(extraTabsPopup);
 			setBorder(new AbstractBorder() {
 				@Override
 				public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
@@ -314,6 +318,12 @@ public class TabbedPane<J extends JComponent> {
 			});
 		}
 
+		public void hidePopup() {
+			if (extraTabsPopup.isVisible()) {
+				extraTabsPopup.setVisible(false);
+			}
+		}
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == extraTabs) {
@@ -322,7 +332,9 @@ public class TabbedPane<J extends JComponent> {
 						extraTabsPopup.setVisible(false);
 					} else {
 						extraTabsPopup.setVisible(true);
-						extraTabsPopup.show(extraTabs, extraTabs.getWidth() - extraTabsPopup.getWidth(), extraTabs.getHeight());
+						Point location = new Point(extraTabs.getWidth() - extraTabsPopup.getWidth(), extraTabs.getHeight());
+						SwingUtilities.convertPointToScreen(location, extraTabs);
+						extraTabsPopup.setLocation(location);
 					}
 				}
 			}
