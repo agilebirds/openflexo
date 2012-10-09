@@ -1197,7 +1197,7 @@ public class HTMLUtils {
 		}
 
 		public Color getColor() {
-			return extractColorFromHexValue(getHexValue());
+			return extractColorFromHexValue(getHexValue().substring(1));
 		}
 	}
 
@@ -1205,7 +1205,7 @@ public class HTMLUtils {
 		color = color.trim();
 		try {
 			if (color.startsWith("#")) {
-				return extractColorFromHexValue(color);
+				return extractColorFromHexValue(color.substring(1));
 			} else if (color.toLowerCase().startsWith("rgb(") && color.indexOf(')') > -1) {
 				color = color.substring(4, color.indexOf(')'));
 				String[] rgb = color.split(",");
@@ -1218,6 +1218,10 @@ public class HTMLUtils {
 					}
 				}
 			} else {
+				Color returned = extractColorFromHexValue(color);
+				if (returned != null) {
+					return returned;
+				}
 				try {
 					return HTMLColors.valueOf(color.toLowerCase()).getColor();
 				} catch (IllegalArgumentException e) {
@@ -1234,7 +1238,6 @@ public class HTMLUtils {
 	}
 
 	private static Color extractColorFromHexValue(String color) {
-		color = color.substring(1);
 		if (color.length() == 3) {
 			color = String.valueOf(color.charAt(0)) + color.charAt(0) + color.charAt(1) + color.charAt(1) + color.charAt(2)
 					+ color.charAt(2);
