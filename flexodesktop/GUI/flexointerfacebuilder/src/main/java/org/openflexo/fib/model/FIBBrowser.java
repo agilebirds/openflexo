@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.awt.Color;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -381,12 +382,24 @@ public class FIBBrowser extends FIBWidget {
 							return returned;
 						}
 					}
-					return elementForClass(superclass);
+					returned = elementForClass(superclass);
+					if (returned != null) {
+						elementsForClasses.put(aClass, returned);
+						return returned;
+					} else {
+						for (Class<?> superInterface : aClass.getInterfaces()) {
+							returned = elementForClass(superInterface);
+							if (returned != null) {
+								elementsForClasses.put(aClass, returned);
+								return returned;
+							}
+						}
+					}
 				}
 			}
 		}
-		List<Class> matchingClasses = new Vector<Class>();
-		for (Class cl : elementsForClasses.keySet()) {
+		List<Class<?>> matchingClasses = new ArrayList<Class<?>>();
+		for (Class<?> cl : elementsForClasses.keySet()) {
 			if (cl.isAssignableFrom(aClass)) {
 				matchingClasses.add(cl);
 			}

@@ -299,7 +299,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			}
 			Object bindingValue = children.getData().getBindingValue(this);
 			List<?> list = ToolBox.getListFromIterable(bindingValue);
-			if (children.getCast().isSet()) {
+			if (list != null && children.getCast().isSet()) {
 				list = Lists.transform(list, new CastFunction(children));
 			}
 			return list;

@@ -687,7 +687,7 @@ public class TypeUtils {
 		return object;
 	}
 
-	public static Class getMostSpecializedClass(Collection<Class> someClasses) {
+	public static Class<?> getMostSpecializedClass(Collection<Class<?>> someClasses) {
 
 		if (someClasses.size() == 0) {
 			return null;
@@ -695,12 +695,12 @@ public class TypeUtils {
 		if (someClasses.size() == 1) {
 			return someClasses.iterator().next();
 		}
-		Class[] array = someClasses.toArray(new Class[someClasses.size()]);
+		Class<?>[] array = someClasses.toArray(new Class[someClasses.size()]);
 
 		for (int i = 0; i < someClasses.size(); i++) {
 			for (int j = i + 1; j < someClasses.size(); j++) {
-				Class c1 = array[i];
-				Class c2 = array[j];
+				Class<?> c1 = array[i];
+				Class<?> c2 = array[j];
 				if (c1.isAssignableFrom(c2)) {
 					someClasses.remove(c1);
 					return getMostSpecializedClass(someClasses);
