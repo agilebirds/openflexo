@@ -19,22 +19,12 @@
  */
 package org.openflexo.components.widget;
 
-import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
-import org.mockito.Mockito;
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
-import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Widget allowing to select a ViewPoint
@@ -85,7 +75,7 @@ public class FIBProjectSelector extends FIBModelObjectSelector<FlexoProject> {
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
@@ -125,6 +115,6 @@ public class FIBProjectSelector extends FIBModelObjectSelector<FlexoProject> {
 			}
 		};
 		editor.launch();
-	}
+	}*/
 
 }
