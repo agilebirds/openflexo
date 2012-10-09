@@ -68,6 +68,22 @@ import org.openflexo.xmlcode.XMLCoder;
 //	getPalette().setEditorController(editorController);
 public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
+	public static <T extends FIBAbstractEditor> T main(Class<T> editor) {
+		T instance;
+		try {
+			instance = editor.newInstance();
+			instance.launch();
+			return instance;
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	private static final Logger logger = FlexoLogger.getLogger(FIBAbstractEditor.class.getPackage().getName());
 
 	// Instanciate a new localizer in directory src/dev/resources/FIBEditorLocalizer
