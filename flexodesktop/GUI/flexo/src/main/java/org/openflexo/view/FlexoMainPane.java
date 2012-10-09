@@ -158,6 +158,7 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			@Override
 			public void tabClosed(JComponent tab) {
 				((ModuleView<?>) tab).deleteModuleView();
+				FlexoMainPane.this.controller.setCurrentEditedObjectAsModuleView(null);
 			}
 		});
 		add(topBar = new MainPaneTopBar(controller), BorderLayout.NORTH);
@@ -272,10 +273,10 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				}
 			}
 			FCH.setHelpItem((JComponent) moduleView, FCH.getModuleViewItemFor(controller.getModule(), moduleView));
+			newCenterView.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 		} else {
 			newCenterView = new JPanel();
 		}
-		newCenterView.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 		updateLayoutForPerspective();
 		Component centerComponent = ((BorderLayout) moduleViewContainerPanel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
 		if (centerComponent != null) {
@@ -283,17 +284,18 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 		}
 		moduleViewContainerPanel.add(newCenterView);
 		moduleViewContainerPanel.revalidate();
+		moduleViewContainerPanel.repaint();
 		updateComponent(moduleViewContainerPanel, LayoutPosition.MIDDLE_CENTER);
 		centerPanel.revalidate();
+		revalidate();
+		repaint();
+		controller.getFlexoFrame().updateTitle();
 		if (moduleView != null) {
 			controller.getCurrentPerspective().notifyModuleViewDisplayed(moduleView);
 		}
 		if (controller.getFlexoFrame().isValid()) {
 			FCH.validateWindow(controller.getFlexoFrame());
 		}
-		controller.getFlexoFrame().updateTitle();
-		revalidate();
-		repaint();
 	}
 
 	private boolean updateBottomCenterView() {
@@ -537,14 +539,18 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 			} else if (evt.getPropertyName().equals(ControllerModel.RIGHT_VIEW_VISIBLE)) {
 				updateRightViewVisibility();
 			} else if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
-				ModuleView<?> moduleView = controller.moduleViewForObject(controller.getControllerModel().getCurrentObject());
-				if (moduleView != null) {
-					setModuleView(moduleView);
-					tabbedPane.selectTab((JComponent) moduleView);
-				} else {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Could not find module view for object " + controller.getControllerModel().getCurrentObject());
+				if (controller.getControllerModel().getCurrentObject() != null) {
+					ModuleView<?> moduleView = controller.moduleViewForObject(controller.getControllerModel().getCurrentObject());
+					if (moduleView != null) {
+						setModuleView(moduleView);
+						tabbedPane.selectTab((JComponent) moduleView);
+					} else {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Could not find module view for object " + controller.getControllerModel().getCurrentObject());
+						}
 					}
+				} else {
+					setModuleView(null);
 				}
 			}
 		} else if (evt.getSource() == controller.getCurrentPerspective()) {

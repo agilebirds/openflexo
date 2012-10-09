@@ -526,6 +526,10 @@ public class TabbedPane<J extends JComponent> {
 		return selectedTab;
 	}
 
+	public boolean hasTabs() {
+		return tabs.size() > 0;
+	}
+
 	public boolean containsTab(J tab) {
 		return tabs.contains(tab);
 	}
@@ -649,4 +653,5 @@ public class TabbedPane<J extends JComponent> {
 		frame.setSize(800, 600);
 		frame.setVisible(true);
 	}
+
 }
