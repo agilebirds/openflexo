@@ -19,7 +19,9 @@
  */
 package org.openflexo.inspector;
 
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -154,6 +156,85 @@ public class FIBInspector extends FIBPanel {
 		return "Error ???";
 	}
 
+	private boolean ensureCreationOfTabForEP(EditionPattern ep) {
+		FIBTab returned = tabsForEP.get(ep);
+		if (returned == null) {
+			//System.out.println("Creating FIBTab for " + ep);
+			returned = makeFIBTab(ep, 0);
+			tabsForEP.put(ep, returned);
+			getTabPanel().addToSubComponents(returned);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * This method looks after object's EditionPattern references to know if we need to structurally change inspector by adding or removing
+	 * tabs, which all correspond to one and only one EditionPattern
+	 * 
+	 * Note: only object providing support as primary role are handled here
+	 * 
+	 * @param object
+	 * @return a boolean indicating if a new tab was created
+	 */
+	protected boolean updateEditionPatternReferences(FlexoModelObject object) {
+
+		boolean returned = false;
+
+		currentEditionPatterns.clear();
+
+		Set<EditionPattern> editionPatternsToDisplay = new HashSet<EditionPattern>();
+
+		for (EditionPattern ep : tabsForEP.keySet()) {
+			if (object.getEditionPatternReference(ep) == null) {
+				tabsForEP.get(ep).setVisible(new DataBinding("false"));
+			}
+		}
+
+		if (object.getEditionPatternReferences() != null) {
+			for (EditionPatternReference ref : object.getEditionPatternReferences()) {
+				editionPatternsToDisplay.add(ref.getEditionPattern());
+				if (ensureCreationOfTabForEP(ref.getEditionPattern())) {
+					returned = true;
+				}
+				FIBTab tab = tabsForEP.get(ref.getEditionPattern());
+				tab.setVisible(new DataBinding("true"));
+				currentEditionPatterns.add(ref.getEditionPattern());
+			}
+			updateBindingModel();
+		}
+
+		/*for (FIBComponent c : getTabPanel().getSubComponents()) {
+			System.out.println("> Tab: " + c + " visible=" + c.getVisible());
+			if (StringUtils.isNotEmpty(c.getVisible().toString())) {
+				FIBWidget w = (FIBWidget) ((FIBContainer) c).getSubComponents().get(1);
+				try {
+					logger.info("Getting this "
+							+ XMLCoder.encodeObjectWithMapping(w, FIBLibrary.getFIBMapping(), StringEncoder.getDefaultInstance()));
+				} catch (InvalidObjectSpecificationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidModelException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (AccessorInvocationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DuplicateSerializationIdentifierException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println("data=" + w.getData());
+				BindingValue v = (BindingValue) w.getData().getBinding();
+				System.out.println("bv=" + v);
+				System.out.println("0:" + v.getBindingPathElementAtIndex(0) + " of " + v.getBindingPathElementAtIndex(0).getClass());
+				System.out.println("1:" + v.getBindingPathElementAtIndex(1) + " of " + v.getBindingPathElementAtIndex(1).getClass());
+			}
+		}*/
+
+		return returned;
+	}
+
 	/**
 	 * This method looks after object's EditionPattern references to know if we need to structurally change inspector by adding or removing
 	 * tabs, which all correspond to one and only one EditionPattern
@@ -163,11 +244,13 @@ public class FIBInspector extends FIBPanel {
 	 * @param object
 	 * @return
 	 */
-	protected boolean updateEditionPatternReferences(FlexoModelObject object) {
+	@Deprecated
+	protected boolean updateEditionPatternReferences2(FlexoModelObject object) {
+
 		boolean needsChanges = false;
 
 		if (object.getEditionPatternReferences() == null) {
-			needsChanges = (currentEditionPatterns.size() > 0);
+			needsChanges = currentEditionPatterns.size() > 0;
 		} else {
 			/*System.out.println("*********** Object " + object);
 			System.out.println("References: " + object.getEditionPatternReferences().size());
@@ -466,6 +549,7 @@ public class FIBInspector extends FIBPanel {
 	}
 
 	private FIBTab makeFIBTab(EditionPattern ep, int refIndex) {
+		// logger.info("makeFIBTab " + refIndex + " for " + ep);
 		FIBTab newTab = new FIBTab();
 		newTab.setTitle(ep.getInspector().getInspectorTitle());
 		newTab.setIndex(-1);

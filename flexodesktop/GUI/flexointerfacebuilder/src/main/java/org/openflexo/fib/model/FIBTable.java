@@ -35,6 +35,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
 import org.openflexo.fib.model.FIBTableAction.FIBAddAction;
 import org.openflexo.fib.model.FIBTableAction.FIBCustomAction;
@@ -292,7 +293,7 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	@Override
 	public Type getDefaultDataClass() {
 		Type[] args = new Type[1];
-		args[0] = getIteratorClass();
+		args[0] = new WilcardTypeImpl(getIteratorClass());
 		return new ParameterizedTypeImpl(List.class, args);
 	}
 

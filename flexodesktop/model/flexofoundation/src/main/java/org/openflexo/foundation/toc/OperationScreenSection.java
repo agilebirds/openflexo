@@ -34,4 +34,9 @@ public class OperationScreenSection extends ModelObjectSection<OperationComponen
 		return DOC_TEMPLATE;
 	}
 
+	@Override
+	public boolean isIndividualComponentDefinition() {
+		return true;
+	}
+
 }

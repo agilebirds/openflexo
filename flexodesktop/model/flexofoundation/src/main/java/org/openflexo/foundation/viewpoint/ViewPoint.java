@@ -48,6 +48,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -766,5 +767,29 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
+
+	@Override
+	public String getLanguageRepresentation() {
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		StringBuffer sb = new StringBuffer();
+		System.out.println("loaded: " + getViewpointOntology().isLoaded());
+		for (FlexoOntology o : getViewpointOntology().getImportedOntologies()) {
+			if (o != getOntologyLibrary().getOWLOntology()) {
+				String modelName = JavaUtils.getVariableName(o.getName());
+				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);
+			}
+		}
+		sb.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
+		sb.append(" {" + StringUtils.LINE_SEPARATOR);
+		// TODO iterate on slots here
+		sb.append("ModelSlot defaultModelSlot implements toto;");
+		sb.append(StringUtils.LINE_SEPARATOR);
+		for (EditionPattern ep : getEditionPatterns()) {
+			sb.append(ep.getLanguageRepresentation());
+			sb.append(StringUtils.LINE_SEPARATOR);
+		}
+		sb.append("}" + StringUtils.LINE_SEPARATOR);
+		return sb.toString();
+	}
 
 }

@@ -9,7 +9,6 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -97,16 +96,16 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		return getEditionPattern().getInspector().getBindingFactory();
 	}
 
-	@Override
+	/*@Override
 	public BindingModel getBindingModel() {
 		return getEditionPattern().getInspector().getBindingModel();
-	}
+	}*/
 
 	public boolean getIsPrimaryRepresentationRole() {
 		if (getEditionPattern() == null) {
 			return false;
 		}
-		return (getEditionPattern().getPrimaryRepresentationRole() == this);
+		return getEditionPattern().getPrimaryRepresentationRole() == this;
 	}
 
 	public void setIsPrimaryRepresentationRole(boolean isPrimary) {

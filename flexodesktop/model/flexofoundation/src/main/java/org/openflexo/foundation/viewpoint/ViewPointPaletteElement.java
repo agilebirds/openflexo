@@ -365,6 +365,10 @@ public class ViewPointPaletteElement extends ViewPointObject {
 
 		public abstract GraphicalRepresentation<?> getGraphicalRepresentation();
 
+		@Override
+		public String getLanguageRepresentation() {
+			return "<not_implemented:" + getFullyQualifiedName() + ">";
+		}
 	}
 
 	public static class ShapeOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
@@ -429,6 +433,11 @@ public class ViewPointPaletteElement extends ViewPointObject {
 			setChanged();
 			notifyObservers(new DataModification("boundLabelToElementName", !boundLabelToElementName, boundLabelToElementName));
 		}
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
 }

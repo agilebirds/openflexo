@@ -1823,7 +1823,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return getControllerModel().getCurrentEditor();
 	}
 
-	public ImageIcon iconForObject(FlexoModelObject object) {
+	public static ImageIcon iconForObject(Object object) {
 		if (object instanceof WorkflowModelObject) {
 			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
 		} else if (object instanceof WKFObject) {

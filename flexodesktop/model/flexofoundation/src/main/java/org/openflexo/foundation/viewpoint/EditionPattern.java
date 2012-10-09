@@ -560,17 +560,16 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		newDeletionScheme.setName("deletion");
 		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
 		for (PatternRole pr : getPatternRoles()) {
-			if ((pr instanceof GraphicalElementPatternRole) || (pr instanceof IndividualPatternRole)
-					|| (pr instanceof StatementPatternRole)) {
+			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole || pr instanceof StatementPatternRole) {
 				rolesToDelete.add(pr);
 			}
 		}
 		Collections.sort(rolesToDelete, new Comparator<PatternRole>() {
 			@Override
 			public int compare(PatternRole o1, PatternRole o2) {
-				if ((o1 instanceof ShapePatternRole) && (o2 instanceof ConnectorPatternRole)) {
+				if (o1 instanceof ShapePatternRole && o2 instanceof ConnectorPatternRole) {
 					return 1;
-				} else if ((o1 instanceof ConnectorPatternRole) && (o2 instanceof ShapePatternRole)) {
+				} else if (o1 instanceof ConnectorPatternRole && o2 instanceof ShapePatternRole) {
 					return -1;
 				}
 
@@ -765,6 +764,17 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		notifyBindingModelChanged();
 	}
 
+	@Override
+	public void notifyBindingModelChanged() {
+		super.notifyBindingModelChanged();
+		// SGU: as all pattern roles share the edition pattern binding model, they should
+		// all notify change of their binding models
+		for (PatternRole pr : getPatternRoles()) {
+			pr.notifyBindingModelChanged();
+		}
+		getInspector().notifyBindingModelChanged();
+	}
+
 	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
 		List<OntologicObjectPatternRole> roles = getPatternRoles(OntologicObjectPatternRole.class);
 		if (roles.size() > 0) {
@@ -820,7 +830,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 	@Override
 	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
-		return (aType == this);
+		return aType == this;
 	}
 
 	/**
@@ -891,12 +901,28 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public boolean isAssignableFrom(EditionPattern editionPattern) {
-		if (editionPattern == this)
+		if (editionPattern == this) {
 			return true;
+		}
 		if (editionPattern.getParentEditionPattern() != null) {
 			return isAssignableFrom(editionPattern.getParentEditionPattern());
 		}
 		return false;
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		StringBuffer sb = new StringBuffer();
+		sb.append("EditionPattern " + getName());
+		sb.append(" {" + StringUtils.LINE_SEPARATOR);
+		sb.append(StringUtils.LINE_SEPARATOR);
+		for (PatternRole pr : getPatternRoles()) {
+			sb.append(pr.getLanguageRepresentation());
+			sb.append(StringUtils.LINE_SEPARATOR);
+		}
+		sb.append("}" + StringUtils.LINE_SEPARATOR);
+		return sb.toString();
 	}
 
 	public static class EditionPatternShouldHaveRoles extends ValidationRule<EditionPatternShouldHaveRoles, EditionPattern> {

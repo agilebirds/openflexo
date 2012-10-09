@@ -419,4 +419,9 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		return getViewPoint().getBindingModel();
 	}
 
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
+	}
+
 }

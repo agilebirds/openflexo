@@ -34,4 +34,9 @@ public class ProcessFolderSection extends ModelObjectSection<ProcessFolder> {
 		return DOC_TEMPLATE;
 	}
 
+	@Override
+	public boolean isIndividualProcessFolder() {
+		return true;
+	}
+
 }

@@ -53,11 +53,12 @@ public class CEDControllerActionInitializer extends ControllerActionInitializer 
 
 		new CEDSetPropertyInitializer(this);
 
-		// CalcEditor perspective
+		// ViewPointEditor perspective
 		new CreateViewPointInitializer(this);
 		new AddEditionPatternInitializer(this);
 		new DeleteEditionPatternInitializer(this);
 		new DuplicateEditionPatternInitializer(this);
+		new ShowLanguageRepresentationInitializer(this);
 
 		// CalcDrawing edition
 		new CreateCalcDrawingShemaInitializer(this);

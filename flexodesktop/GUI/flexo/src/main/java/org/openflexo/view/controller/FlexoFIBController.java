@@ -138,11 +138,8 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		}
 	}
 
-	public ImageIcon iconForObject(FlexoModelObject object) {
-		if (getFlexoController() != null) {
-			return getFlexoController().iconForObject(object);
-		}
-		return null;
+	public ImageIcon iconForObject(Object object) {
+		return FlexoController.iconForObject(object);
 	}
 
 	@Override
@@ -212,5 +209,11 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	public ImageIcon getOntologyAnnotationPropertyIcon() {
 		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
 	}
+
+	/*public void createOntologyClass(FlexoOntology ontology) {
+		System.out.println("Create class for " + ontology);
+		CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, getEditor());
+		action.doAction();
+	}*/
 
 }

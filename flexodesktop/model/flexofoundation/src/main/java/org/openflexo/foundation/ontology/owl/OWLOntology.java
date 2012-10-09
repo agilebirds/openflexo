@@ -44,6 +44,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
@@ -371,6 +373,9 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 	 */
 	@Override
 	public Vector<OWLOntology> getImportedOntologies() {
+
+		loadWhenUnloaded();
+
 		if (getURI().equals(OWL2URIDefinitions.OWL_ONTOLOGY_URI)) {
 			// OWL ontology should at least import RDF and RDFS ontologies
 			if (!importedOntologies.contains(getOntologyLibrary().getRDFOntology())) {
@@ -1156,6 +1161,12 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			returned = new AllValuesFromRestrictionClass(restriction.asAllValuesFromRestriction(), getOntology());
 		} else if (restriction.isHasValueRestriction()) {
 			returned = new HasValueRestrictionClass(restriction.asHasValueRestriction(), getOntology());
+		} else if (restriction.isCardinalityRestriction()) {
+			returned = new CardinalityRestrictionClass(restriction.asCardinalityRestriction(), getOntology());
+		} else if (restriction.isMinCardinalityRestriction()) {
+			returned = new MinCardinalityRestrictionClass(restriction.asMinCardinalityRestriction(), getOntology());
+		} else if (restriction.isMaxCardinalityRestriction()) {
+			returned = new MaxCardinalityRestrictionClass(restriction.asMaxCardinalityRestriction(), getOntology());
 		} else if (restriction.getProperty(ON_CLASS) != null || restriction.getProperty(ON_DATA_RANGE) != null) {
 			if (restriction.getProperty(QUALIFIED_CARDINALITY) != null) {
 				returned = new CardinalityRestrictionClass(restriction, getOntology());
@@ -1372,54 +1383,6 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 				renamedURI.put(newName, resource);
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		Hashtable<OntResource, String> renamedResources = new Hashtable<OntResource, String>();
-		Hashtable<String, OntResource> renamedURI = new Hashtable<String, OntResource>();
-
-		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
-		String ontologyURI = "file:/tmp/UML2.owl";
-		ontModel.read(ontologyURI);
-		for (Iterator<OntClass> i = ontModel.listClasses(); i.hasNext();) {
-			OntClass aClass = i.next();
-			handleResource(aClass, renamedResources, renamedURI);
-		}
-		for (Iterator<ObjectProperty> i = ontModel.listObjectProperties(); i.hasNext();) {
-			ObjectProperty aProperty = i.next();
-			handleResource(aProperty, renamedResources, renamedURI);
-		}
-		for (Iterator<DatatypeProperty> i = ontModel.listDatatypeProperties(); i.hasNext();) {
-			DatatypeProperty aProperty = i.next();
-			handleResource(aProperty, renamedResources, renamedURI);
-		}
-
-		for (OntResource r : renamedResources.keySet()) {
-			String oldURI = r.getURI();
-			String newURI = r.getURI().substring(0, r.getURI().indexOf("#")) + "#" + renamedResources.get(r);
-			System.out.println("Rename " + oldURI + " to " + newURI);
-			ResourceUtils.renameResource(r, newURI);
-		}
-
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(new File("/tmp/Prout.owl"));
-			ontModel.write(out);
-			logger.info("Wrote " + out);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			logger.warning("FileNotFoundException: " + e.getMessage());
-		} finally {
-			try {
-				if (out != null) {
-					out.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				logger.warning("IOException: " + e.getMessage());
-			}
-		}
-
 	}
 
 	protected void load() {
@@ -2038,6 +2001,75 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 			return returned;
 		}
 		return null;
+	}
+
+	public static void main(String[] args) {
+		File f = new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/Ontologies/www.bolton.ac.uk/Archimate_from_Ecore.owl");
+		String uri = findOntologyURI(f);
+		System.out.println("uri: " + uri);
+		System.out.println("uri: " + findOntologyName(f));
+		FlexoResourceCenter resourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new File(
+				"/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter"));
+		resourceCenter.retrieveBaseOntologyLibrary();
+		// ImportedOntology o = ImportedOntology.createNewImportedOntology(uri, f, resourceCenter.retrieveBaseOntologyLibrary());
+		// o.load();
+		/*try {
+			o.save();
+		} catch (SaveResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		/*System.out.println("ontologies:" + o.getImportedOntologies());
+		System.out.println("classes:" + o.getClasses());
+		System.out.println("properties:" + o.getObjectProperties());*/
+	}
+
+	public static void main2(String[] args) {
+		Hashtable<OntResource, String> renamedResources = new Hashtable<OntResource, String>();
+		Hashtable<String, OntResource> renamedURI = new Hashtable<String, OntResource>();
+
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+		String ontologyURI = "file:/tmp/UML2.owl";
+		ontModel.read(ontologyURI);
+		for (Iterator<OntClass> i = ontModel.listClasses(); i.hasNext();) {
+			OntClass aClass = i.next();
+			handleResource(aClass, renamedResources, renamedURI);
+		}
+		for (Iterator<ObjectProperty> i = ontModel.listObjectProperties(); i.hasNext();) {
+			ObjectProperty aProperty = i.next();
+			handleResource(aProperty, renamedResources, renamedURI);
+		}
+		for (Iterator<DatatypeProperty> i = ontModel.listDatatypeProperties(); i.hasNext();) {
+			DatatypeProperty aProperty = i.next();
+			handleResource(aProperty, renamedResources, renamedURI);
+		}
+
+		for (OntResource r : renamedResources.keySet()) {
+			String oldURI = r.getURI();
+			String newURI = r.getURI().substring(0, r.getURI().indexOf("#")) + "#" + renamedResources.get(r);
+			System.out.println("Rename " + oldURI + " to " + newURI);
+			ResourceUtils.renameResource(r, newURI);
+		}
+
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(new File("/tmp/Prout.owl"));
+			ontModel.write(out);
+			logger.info("Wrote " + out);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			logger.warning("FileNotFoundException: " + e.getMessage());
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.warning("IOException: " + e.getMessage());
+			}
+		}
+
 	}
 
 }

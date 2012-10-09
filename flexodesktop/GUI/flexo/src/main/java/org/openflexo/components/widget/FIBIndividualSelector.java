@@ -175,7 +175,18 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<OntologyIndivi
 
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			model = new OntologyBrowserModel(getContext());
+			model = new OntologyBrowserModel(getContext()) {
+				@Override
+				public void recomputeStructure() {
+					super.recomputeStructure();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+						}
+					});
+				}
+			};
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(false);

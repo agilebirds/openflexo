@@ -133,13 +133,16 @@ public abstract class PatternRole extends EditionPatternObject {
 	public abstract Class<?> getAccessedClass();
 
 	@Override
-	public BindingModel getBindingModel() {
+	public final BindingModel getBindingModel() {
 		return getEditionPattern().getBindingModel();
 	}
 
 	public abstract boolean getIsPrimaryRole();
 
 	public abstract void setIsPrimaryRole(boolean isPrimary);
+
+	// @Override
+	// public abstract String getLanguageRepresentation();
 
 	public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
 		public PatternRoleMustHaveAName() {

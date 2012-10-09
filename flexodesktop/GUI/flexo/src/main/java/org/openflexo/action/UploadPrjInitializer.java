@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.AdvancedPrefs;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoException;
@@ -36,6 +37,8 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.imported.action.UploadPrjAction;
+import org.openflexo.foundation.param.CheckboxParameter;
+import org.openflexo.foundation.param.LabelParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.SaveResourceException;
@@ -44,11 +47,16 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.FlexoServerInstanceManager;
 import org.openflexo.ws.client.PPMWebService.CLProjectDescriptor;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
 public class UploadPrjInitializer extends ActionInitializer {
+
+	private class ChangeServerException extends Exception {
+
+	}
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
@@ -65,51 +73,63 @@ public class UploadPrjInitializer extends ActionInitializer {
 				boolean isFirst = true;
 				PPMWebServiceClient client = null;
 				CLProjectDescriptor[] targetProjects = null;
-				while (targetProjects == null) {
-					client = getController().getWSClient(!isFirst);
-					isFirst = false;
-					if (client == null) {
-						return false;// Cancelled
+				boolean proceed = true;
+				while (proceed) {
+					while (targetProjects == null) {
+						client = getController().getWSClient(!isFirst);
+						isFirst = false;
+						if (client == null) {
+							return false;// Cancelled
+						}
+						try {
+							targetProjects = client.getAvailableProjects();
+						} catch (PPMWebServiceAuthentificationException e1) {
+							getController().handleWSException(e1);
+						} catch (RemoteException e1) {
+							getController().handleWSException(e1);
+						}
 					}
+					CLProjectDescriptor target = null;
 					try {
-						targetProjects = client.getAvailableProjects();
-					} catch (PPMWebServiceAuthentificationException e1) {
-						getController().handleWSException(e1);
-					} catch (RemoteException e1) {
-						getController().handleWSException(e1);
+						proceed = false;
+						target = selectTarget(targetProjects);
+					} catch (ChangeServerException e3) {
+						targetProjects = null;
+						proceed = true;
+						continue;
 					}
-				}
-				CLProjectDescriptor target = selectTarget(targetProjects);
-				if (target != null) {
-					action.setTargetProject(target);
+					if (target != null) {
+						action.setTargetProject(target);
 
-					File zipFile = null;
-					try {
-						zipFile = File.createTempFile("tmp_" + System.currentTimeMillis(), "tmp_" + System.currentTimeMillis());
-						zipFile.deleteOnExit();
-					} catch (IOException e2) {
-						e2.printStackTrace();
-						FlexoController.showError(e2.getMessage());
-						return false;
-					}
+						File zipFile = null;
+						try {
+							zipFile = File.createTempFile("tmp_" + System.currentTimeMillis(), "tmp_" + System.currentTimeMillis());
+							zipFile.deleteOnExit();
+						} catch (IOException e2) {
+							e2.printStackTrace();
+							FlexoController.showError(e2.getMessage());
+							return false;
+						}
 
-					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
-					try {
-						getProject().saveAsZipFile(zipFile, ProgressWindow.instance(), true, true);
-					} catch (SaveResourceException e1) {
-						FlexoController.showError(e1.getMessage());
-						e1.printStackTrace();
-						return false;
+						ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
+						try {
+							getProject().saveAsZipFile(zipFile, ProgressWindow.instance(), true, true);
+						} catch (SaveResourceException e1) {
+							FlexoController.showError(e1.getMessage());
+							e1.printStackTrace();
+							return false;
+						}
+						ProgressWindow.hideProgressWindow();
+						action.setFile(zipFile);
+						action.setClientWS(client);
+						String s = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
+						if (s == null) {
+							return false;
+						}
+						action.setComments(s);
+						return true;
 					}
-					ProgressWindow.hideProgressWindow();
-					action.setFile(zipFile);
-					action.setClientWS(client);
-					String s = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
-					if (s == null) {
-						return false;
-					}
-					action.setComments(s);
-					return true;
+					return false;
 				}
 				return false;
 			}
@@ -138,7 +158,7 @@ public class UploadPrjInitializer extends ActionInitializer {
 		};
 	}
 
-	private CLProjectDescriptor selectTarget(CLProjectDescriptor[] targetProjects) {
+	private CLProjectDescriptor selectTarget(CLProjectDescriptor[] targetProjects) throws ChangeServerException {
 		Arrays.sort(targetProjects, new Comparator<CLProjectDescriptor>() {
 			@Override
 			public int compare(CLProjectDescriptor o1, CLProjectDescriptor o2) {
@@ -159,14 +179,27 @@ public class UploadPrjInitializer extends ActionInitializer {
 			FlexoController.showError(FlexoLocalization.localizedForKey("sorry_but_there_is_no_projects_where_this_prj_can_be_uploaded"));
 			return null;
 		}
-		ParameterDefinition[] parameters = new ParameterDefinition[1];
+		ParameterDefinition[] parameters = new ParameterDefinition[3];
+		LabelParameter info = new LabelParameter("info", "", "<html>"
+				+ FlexoLocalization.localizedForKey("selected_server")
+				+ " <b>"
+				+ FlexoServerInstanceManager.getInstance().getAddressBook().getInstanceWithID(AdvancedPrefs.getWebServiceInstance())
+						.getName() + "</b></html>", false);
+		info.setAlign("center");
 		RadioButtonListParameter<CLProjectDescriptor> p = new RadioButtonListParameter<CLProjectDescriptor>("selectedProject",
 				"choose_project", targetProjects[0], targetProjects);
-		parameters[0] = p;
+		p.setDepends("change");
+		p.setConditional("change=false");
+		CheckboxParameter changeServer = new CheckboxParameter("change", "change_server", false);
+		parameters[0] = info;
+		parameters[1] = p;
+		parameters[2] = changeServer;
 		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
-				FlexoLocalization.localizedForKey("import_processes"), FlexoLocalization.localizedForKey("select_processes_to_import"),
-				parameters);
+				FlexoLocalization.localizedForKey("import_processes"), FlexoLocalization.localizedForKey("select_project"), parameters);
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+			if (changeServer.getValue()) {
+				throw new ChangeServerException();
+			}
 			return p.getValue();
 		} else {
 			return null;

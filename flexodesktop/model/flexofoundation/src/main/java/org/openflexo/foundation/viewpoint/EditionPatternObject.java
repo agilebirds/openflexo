@@ -41,4 +41,9 @@ public abstract class EditionPatternObject extends ViewPointObject {
 				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "." + getClass().getSimpleName();
 	}
 
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
+	}
+
 }

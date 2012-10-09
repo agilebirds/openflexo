@@ -61,8 +61,9 @@ public class EditionPatternPatternRole extends PatternRole {
 	}
 
 	public String _getCreationSchemeURI() {
-		if (getCreationScheme() != null)
+		if (getCreationScheme() != null) {
 			return getCreationScheme().getURI();
+		}
 		return _creationSchemeURI;
 	}
 
