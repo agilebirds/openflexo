@@ -202,7 +202,7 @@ import org.openflexo.localization.FlexoLocalization;
  */
 public enum BrowserElementType {
 
-	PROJECT("project", FlexoProject.class, IconLibrary.PROJECT_ICON),
+	PROJECT("project", FlexoProject.class, IconLibrary.OPENFLEXO_NOTEXT_16),
 	WORKFLOW("workflow", FlexoWorkflow.class, WKFIconLibrary.WORKFLOW_ICON),
 	IMPORTED_PROCESS_LIBRARY("imported_process_library", FlexoImportedProcessLibrary.class, WKFIconLibrary.IMPORTED_PROCESS_LIBRARY_ICON),
 	PROCESS("process", FlexoProcess.class, WKFIconLibrary.PROCESS_ICON),
@@ -359,7 +359,7 @@ public enum BrowserElementType {
 	CVS_REPOSITORY("cvs_repository", null/*Used outside this scope*/, FPSIconLibrary.CVS_REPOSITORY_ICON),
 	CVS_MODULE("cvs_module", null/*Used outside this scope*/, FPSIconLibrary.CVS_MODULE_ICON),
 	CVS_EXPLORER("cvs_explorer", null/*Used outside this scope*/, UtilsIconLibrary.CLOCK_ICON),
-	SHARED_PROJECT("shared_project", null/*Used outside this scope*/, IconLibrary.PROJECT_ICON),
+	SHARED_PROJECT("shared_project", null/*Used outside this scope*/, IconLibrary.OPENFLEXO_NOTEXT_16),
 	CVS_DIRECTORY("cvs_directory", null/*Used outside this scope*/, IconLibrary.FOLDER_ICON),
 	CVS_FILE("cvs_file", null/*Used outside this scope*/, FilesIconLibrary.SMALL_MISC_FILE_ICON),
 	PROJECT_ONTOLOGY("project_ontology", ProjectOWLOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),

@@ -21,12 +21,12 @@ package org.openflexo.inspector;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -157,8 +157,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 				}
 			}
 		}
-		List<Class> matchingClasses = new Vector<Class>();
-		for (Class cl : inspectors.keySet()) {
+		List<Class<?>> matchingClasses = new ArrayList<Class<?>>();
+		for (Class<?> cl : inspectors.keySet()) {
 			if (cl.isAssignableFrom(aClass)) {
 				matchingClasses.add(cl);
 			}

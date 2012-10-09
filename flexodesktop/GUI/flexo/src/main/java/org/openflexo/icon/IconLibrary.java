@@ -153,7 +153,7 @@ public class IconLibrary {
 	public static final ImageIcon CLOSE_EDITION_DISABLED_ICON = new ImageIconResource("Icons/Actions/Palette/CloseEditionDisabled.gif");
 
 	// Model icons
-	public static final ImageIcon PROJECT_ICON = new ImageIconResource("Icons/Model/Project.gif");
+	// public static final ImageIcon PROJECT_ICON = new ImageIconResource("Icons/Model/Project.gif");
 
 	public static ImageIcon getIconForValidationIssue(ValidationIssue issue) {
 		if (issue instanceof ValidationWarning) {
@@ -194,7 +194,7 @@ public class IconLibrary {
 		} else if (resourceType == ResourceType.PROCESS) {
 			return WKFIconLibrary.PROCESS_ICON;
 		} else if (resourceType == ResourceType.RM) {
-			return IconLibrary.PROJECT_ICON;
+			return OPENFLEXO_NOTEXT_16;
 		} else if (resourceType == ResourceType.SCREENSHOT) {
 			return FilesIconLibrary.SMALL_IMAGE_ICON;
 		} else if (resourceType == ResourceType.WORKFLOW) {
