@@ -62,6 +62,7 @@ import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.FlexoResourceCenterService;
+import org.openflexo.module.Modules;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.ssl.DenaliSecurityProvider;
@@ -192,13 +193,16 @@ public class Flexo {
 			}
 		}
 		remapStandardOuputs(isDev);
-		final boolean noSplash2 = noSplash;
 		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
 		UserType.setCurrentUserType(userTypeNamed);
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
-
+		SplashWindow splashWindow = null;
+		if (!noSplash) {
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
+		}
+		final SplashWindow splashWindow2 = splashWindow;
 		FlexoProperties.load();
 		initializeLoggingManager();
 		final ApplicationContext applicationContext = new ApplicationContext() {
@@ -231,10 +235,11 @@ public class Flexo {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				initFlexo(applicationContext, noSplash2);
+				initFlexo(applicationContext, splashWindow2);
 			}
 		});
 		ResourceLocator.printDirectoriesSearchOrder(System.err);
+		Modules.getInstance();
 		try {
 			DenaliSecurityProvider.insertSecurityProvider();
 		} catch (Exception e) {
@@ -263,15 +268,11 @@ public class Flexo {
 		}
 	}
 
-	protected static void initFlexo(ApplicationContext applicationContext, boolean noSplash) {
+	protected static void initFlexo(ApplicationContext applicationContext, SplashWindow splashWindow) {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
 		initUILAF();
-		SplashWindow splashWindow = null;
-		if (!noSplash) {
-			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
-		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
 		}
