@@ -101,6 +101,15 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			baseOntologyLibrary = new OntologyLibrary(this, null);
 			findOntologies(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
 			// baseOntologyLibrary.init();
+
+			// Bug fix: compatibility with old versions:
+			// If some of those ontologies were not found, try to copy default ontologies
+			if (baseOntologyLibrary.getRDFSOntology() == null || baseOntologyLibrary.getRDFOntology() == null
+					|| baseOntologyLibrary.getOWLOntology() == null || baseOntologyLibrary.getFlexoConceptOntology() == null) {
+				copyOntologies(localDirectory, CopyStrategy.REPLACE);
+				findOntologies(baseOntologyFolder, FLEXO_ONTOLOGY_ROOT_URI, baseOntologyLibrary.getRootFolder());
+			}
+
 			logger.fine("Instantiating BaseOntologyLibrary Done. Loading some ontologies...");
 			// baseOntologyLibrary.debug();
 			baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
@@ -128,17 +137,6 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	private void findOntologies(File dir, String baseUri, OntologyFolder folder) {
 		if (!dir.exists()) {
 			dir.mkdirs();
-		}
-		boolean forceUpdate = dir.listFiles().length == 0;
-		if (!forceUpdate && baseOntologyLibrary != null && folder == baseOntologyLibrary.getRootFolder()) {
-			// This should fix issue OPENFLEXO-197 until we find a better solution.
-			forceUpdate |= baseOntologyLibrary.getRDFSOntology() == null;
-			forceUpdate |= baseOntologyLibrary.getRDFOntology() == null;
-			forceUpdate |= baseOntologyLibrary.getOWLOntology() == null;
-			forceUpdate |= baseOntologyLibrary.getFlexoConceptOntology() == null;
-		}
-		if (forceUpdate) {
-			copyOntologies(localDirectory, CopyStrategy.REPLACE);
 		}
 		for (File f : dir.listFiles()) {
 			if (f.isFile() && f.getName().endsWith(".owl")) {
