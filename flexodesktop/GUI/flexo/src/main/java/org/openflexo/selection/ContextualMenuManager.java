@@ -194,6 +194,9 @@ public abstract class ContextualMenuManager {
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithAddType(
 			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
 		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
+		if (getEditor() == null) {
+			return returned;
+		}
 		for (FlexoActionType<?, ?, ?> actionType : focusedObject.getActionList()) {
 			if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
 					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
@@ -214,6 +217,9 @@ public abstract class ContextualMenuManager {
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
 			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
 		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
+		if (getEditor() == null) {
+			return returned;
+		}
 		for (FlexoActionType<?, ?, ?> actionType : focusedObject.getActionList()) {
 			if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
 					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
