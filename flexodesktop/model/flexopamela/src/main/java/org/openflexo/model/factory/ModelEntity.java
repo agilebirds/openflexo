@@ -16,8 +16,10 @@ import javassist.util.proxy.ProxyFactory;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Deleter;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Modify;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.PastingPoints;
 import org.openflexo.model.annotations.Remover;
@@ -41,6 +43,7 @@ public class ModelEntity<I> extends ProxyFactory {
 	private String xmlTag;
 
 	private ModelDeleter<I> deleter;
+	private Modify modify;
 	private boolean isAbstract;
 
 	private Class<? super I> superImplementedInterface;
@@ -57,6 +60,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		implementationClass = implementedInterface.getAnnotation(ImplementationClass.class);
 		xmlElement = implementedInterface.getAnnotation(XMLElement.class);
 		pastingPoints = implementedInterface.getAnnotation(PastingPoints.class);
+		modify = implementedInterface.getAnnotation(Modify.class);
 		this.isAbstract = entityAnnotation.isAbstract();
 		// We resolve here the model super interface
 		// The corresponding model entity MUST be resolved later
@@ -381,6 +385,20 @@ public class ModelEntity<I> extends ProxyFactory {
 				getModelFactory().importClass(property.getType());
 			}
 		}
+	}
+
+	public Modify getModify() throws ModelDefinitionException {
+		if (modify != null) {
+			return modify;
+		} else if (getSuperEntity() != null) {
+			return getSuperEntity().getModify();
+		}
+		return null;
+	}
+
+	public Finder getFinder(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

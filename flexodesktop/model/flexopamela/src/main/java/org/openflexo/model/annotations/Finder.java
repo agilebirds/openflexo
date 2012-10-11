@@ -13,6 +13,9 @@ public @interface Finder {
 
 	public static final String NO_RECURSION = "---";
 	public static final String DEFAULT_VALUE = "name";
+	public static final String DEFAULT_NAME = "name";
+
+	public String name() default DEFAULT_NAME;
 
 	/**
 	 * The name of the property on which the finder should iterate to find the object
