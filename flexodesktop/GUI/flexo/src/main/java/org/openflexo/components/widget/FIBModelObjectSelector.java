@@ -100,6 +100,8 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 
 	private boolean isFiltered = false;
 
+	private boolean showReset = true;
+
 	public static BindingDefinition SELECTABLE = new BindingDefinition("selectable", Boolean.class, BindingDefinitionType.GET, false);
 
 	public FIBModelObjectSelector(T editedObject) {
@@ -221,6 +223,14 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		super.openPopup();
 		// System.out.println("Request focus now");
 		getTextField().requestFocus();
+	}
+
+	public boolean isShowReset() {
+		return showReset;
+	}
+
+	public void setShowReset(boolean showReset) {
+		this.showReset = showReset;
 	}
 
 	@Override

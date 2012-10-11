@@ -17,6 +17,8 @@ public class PropertyChangeListenerRegistrationManager {
 		for (PropertyChangeListenerRegistration registration : new ArrayList<PropertyChangeListenerRegistration>(registrations)) {
 			registration.removeListener();
 		}
+		// Just to be sure
+		registrations.clear();
 	}
 
 	public class PropertyChangeListenerRegistration {

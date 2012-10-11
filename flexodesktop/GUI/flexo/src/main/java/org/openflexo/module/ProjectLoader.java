@@ -424,16 +424,18 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 				FlexoProject project = editor.getProject();
 				for (FlexoEditor editor2 : editors.values()) {
 					if (editor2 != editor) {
-						for (FlexoProjectReference ref : editor2.getProject().getProjectData().getImportedProjects()) {
-							try {
-								if (ref.getProject() == project) {
-									isRoot = false;
-									break;
-								}
-							} catch (ProjectLoadingCancelledException e) {
-								if (logger.isLoggable(Level.WARNING)) {
-									logger.log(Level.WARNING, "Project loading cancelled but this should not have occured in this method",
-											e);
+						if (editor2.getProject().getProjectData() != null) {
+							for (FlexoProjectReference ref : editor2.getProject().getProjectData().getImportedProjects()) {
+								try {
+									if (ref.getProject() == project) {
+										isRoot = false;
+										break;
+									}
+								} catch (ProjectLoadingCancelledException e) {
+									if (logger.isLoggable(Level.WARNING)) {
+										logger.log(Level.WARNING,
+												"Project loading cancelled but this should not have occured in this method", e);
+									}
 								}
 							}
 						}

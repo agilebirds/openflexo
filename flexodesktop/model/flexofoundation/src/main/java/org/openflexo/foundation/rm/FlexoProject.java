@@ -3952,7 +3952,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			FlexoProjectFile dataFile = new FlexoProjectFile(xml, this);
 
 			try {
-				returned = new FlexoPamelaResource<ProjectData>(this, "projectdata", ResourceType.PROJECT_DATA, ProjectData.class, dataFile);
+				returned = new FlexoPamelaResource<ProjectData>(this, getProjectName(), ResourceType.PROJECT_DATA, ProjectData.class,
+						dataFile);
 				registerResource(returned);
 			} catch (Exception e1) {
 				// Warns about the exception

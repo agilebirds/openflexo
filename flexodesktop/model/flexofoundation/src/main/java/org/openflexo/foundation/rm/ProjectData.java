@@ -15,7 +15,7 @@ import org.openflexo.model.factory.AccessibleProxyObject;
 
 @ModelEntity
 @ImplementationClass(ProjectData.ProjectDataImpl.class)
-public interface ProjectData extends StorageResourceData {
+public interface ProjectData extends StorageResourceData, AccessibleProxyObject {
 
 	public static final String FLEXO_RESOURCE = "flexoResource";
 	public static final String PROJECT = "project";
@@ -52,12 +52,12 @@ public interface ProjectData extends StorageResourceData {
 	public void addToImportedProjects(FlexoProjectReference projectReference) throws ProjectImportLoopException,
 			ProjectLoadingCancelledException;
 
+	@Remover(value = IMPORTED_PROJECTS)
+	public void removeFromImportedProjects(FlexoProjectReference projectReference);
+
 	public String canImportProject(FlexoProject project);
 
 	public void removeFromImportedProjects(FlexoProject project);
-
-	@Remover(value = IMPORTED_PROJECTS)
-	public void removeFromImportedProjects(FlexoProjectReference projectReference);
 
 	public static abstract class ProjectDataImpl implements ProjectData, AccessibleProxyObject {
 
@@ -90,9 +90,12 @@ public interface ProjectData extends StorageResourceData {
 			}
 			if (searchRecursively) {
 				for (FlexoProjectReference ref : getImportedProjects()) {
-					FlexoProject projectWithURI;
+					FlexoProject projectWithURI = null;
 					try {
-						projectWithURI = ref.getProject().getProjectData().getImportedProjectWithURI(projectURI, searchRecursively);
+						ProjectData projectData = ref.getProject().getProjectData();
+						if (projectData != null) {
+							projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
+						}
 						if (projectWithURI != null) {
 							return projectWithURI;
 						}
@@ -147,6 +150,15 @@ public interface ProjectData extends StorageResourceData {
 				} catch (ProjectLoadingCancelledException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+
+		@Override
+		public void setModified(boolean modified) {
+			boolean old = isModified();
+			performSuperSetModified(modified);
+			if (modified && !old) {
+				getFlexoResource().notifyResourceStatusChanged();
 			}
 		}
 

@@ -22,6 +22,7 @@ import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.swing.BarButton;
+import org.openflexo.swing.CustomPopup;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
@@ -52,6 +53,8 @@ public class MainPaneTopBar extends JMenuBar {
 
 	private final FlexoController controller;
 
+	private FIBProjectSelector projectSelector;
+
 	public MainPaneTopBar(@Nonnull FlexoController controller) {
 		this.controller = controller;
 		this.model = controller.getControllerModel();
@@ -74,6 +77,7 @@ public class MainPaneTopBar extends JMenuBar {
 
 	public void delete() {
 		registrationManager.delete();
+		projectSelector.delete();
 	}
 
 	private void initModules() {
@@ -163,61 +167,30 @@ public class MainPaneTopBar extends JMenuBar {
 	}
 
 	private void initProjectSelector() {
-		/*JLabel label = new JLabel();
-		label.setText(FlexoLocalization.localizedForKey("current_project", label));
-		label.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-		left.add(label);
-		final JComboBox projectSelector = new JComboBox();
-		projectSelector.addActionListener(new ActionListener() {
+		projectSelector = new FIBProjectSelector(null);
+		projectSelector.addApplyCancelListener(new CustomPopup.ApplyCancelListener() {
+			@Override
+			public void fireApplyPerformed() {
+				model.setCurrentProject(projectSelector.getEditedObject());
+			}
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				model.setCurrentEditor((FlexoEditor) projectSelector.getSelectedItem());
+			public void fireCancelPerformed() {
+
 			}
+
 		});
-		projectSelector.setRenderer(new DefaultListCellRenderer() {
-			@Override
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-				Object passedValue = value;
-				FlexoProject project = null;
-				if (value instanceof FlexoEditor) {
-					project = ((FlexoEditor) value).getProject();
-					passedValue = project.getName();
-				}
-				super.getListCellRendererComponent(list, passedValue, index, isSelected, cellHasFocus);
-				if (project != null) {
-					setToolTipText(project.getProjectDirectory().getAbsolutePath());
-				}
-				return this;
-
-			}
-		});
-		left.add(projectSelector);
-		for (FlexoEditor editor : model.getEditors()) {
-			projectSelector.addItem(editor);
-		}
-		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.EDITORS, new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getNewValue() != null) {
-					projectSelector.addItem(evt.getNewValue());
-				} else if (evt.getOldValue() != null) {
-					projectSelector.removeItem(evt.getOldValue());
-				}
-			}
-		}, model);
 		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.CURRENT_EDITOR, new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				projectSelector.setSelectedItem(evt.getNewValue());
+				projectSelector.setEditedObject(model.getCurrentProject());
 			}
-		}, model);*/
-		FIBProjectSelector selector = new FIBProjectSelector(null);
-		selector.setFlexoController(controller);
-		selector.setProjectLoader(model.getProjectLoader());
-		left.add(selector);
+		}, model);
+		projectSelector.setShowReset(false);
+		projectSelector.setFlexoController(controller);
+		projectSelector.setProjectLoader(model.getProjectLoader());
+		left.add(projectSelector);
 	}
 
 	protected void updateNavigationControlState(final JButton backwardButton, final JButton forwardButton, final JButton upButton) {
