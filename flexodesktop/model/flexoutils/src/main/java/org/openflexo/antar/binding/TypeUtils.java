@@ -250,7 +250,7 @@ public class TypeUtils {
 	}
 
 	public static boolean isAssignableTo(Object object, Type type) {
-		return isTypeAssignableFrom(type, object.getClass());
+		return isTypeAssignableFrom(type, object != null ? object.getClass() : null);
 	}
 
 	public static boolean isAssignableTo(Collection<? extends Object> objects, Type type) {
