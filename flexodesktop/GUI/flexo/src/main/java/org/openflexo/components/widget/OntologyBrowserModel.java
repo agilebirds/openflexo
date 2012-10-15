@@ -532,7 +532,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		if (getDisplayPropertiesInClasses()) {
 			for (OntologyProperty p : properties) {
 				List<OntologyClass> preferredLocations = getPreferredStorageLocations(p, null);
-				if (preferredLocations != null) {
+				if (preferredLocations != null && preferredLocations.size() > 0) {
 					storedProperties.put(p, preferredLocations);
 					for (OntologyClass preferredLocation : preferredLocations) {
 						if (!storageClasses.contains(preferredLocation)) {
