@@ -18,9 +18,9 @@ import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.ModelEntity;
-import org.openflexo.model.factory.ModelExecutionException;
 import org.openflexo.model.factory.ModelProperty;
 import org.openflexo.model.factory.ProxyMethodHandler;
 

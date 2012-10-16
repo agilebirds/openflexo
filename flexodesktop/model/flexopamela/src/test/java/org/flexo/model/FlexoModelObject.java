@@ -3,7 +3,6 @@ package org.flexo.model;
 import org.flexo.model.impl.FlexoModelObjectImpl;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
-import org.openflexo.model.annotations.Deleter;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -39,12 +38,6 @@ public interface FlexoModelObject extends AccessibleProxyObject, CloneableProxyO
 	public void setName(String name);
 
 	public String deriveName();
-
-	@Deleter(deletedProperty = DELETED)
-	public void delete();
-
-	@Getter(value = DELETED, defaultValue = "false")
-	public boolean isDeleted();
 
 	/*@XMLProperty(xml="lastUpdateDate")
 	public Date getLastUpdateDate();

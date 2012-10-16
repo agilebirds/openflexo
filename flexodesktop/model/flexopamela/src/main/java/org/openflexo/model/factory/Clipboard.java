@@ -2,6 +2,9 @@ package org.openflexo.model.factory;
 
 import java.util.List;
 
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelExecutionException;
+
 public class Clipboard {
 
 	private ModelFactory modelFactory;
@@ -56,7 +59,7 @@ public class Clipboard {
 		returned.append("Single object: " + isSingleObject() + "\n");
 		if (isSingleObject()) {
 			returned.append("------------------- " + contents + " -------------------\n");
-			List<Object> embeddedList = modelFactory.getEmbeddedObjects(contents);
+			List<Object> embeddedList = modelFactory.getEmbeddedObjects(contents, EmbeddingType.CLOSURE);
 			for (Object e : embeddedList) {
 				returned.append(Integer.toHexString(e.hashCode()) + " Embedded: " + e + "\n");
 			}
@@ -64,7 +67,7 @@ public class Clipboard {
 			List contentsList = (List) contents;
 			for (Object object : contentsList) {
 				returned.append("------------------- " + object + " -------------------\n");
-				List<Object> embeddedList = modelFactory.getEmbeddedObjects(object, contentsList.toArray());
+				List<Object> embeddedList = modelFactory.getEmbeddedObjects(object, EmbeddingType.CLOSURE, contentsList.toArray());
 				for (Object e : embeddedList) {
 					returned.append(Integer.toHexString(e.hashCode()) + " Embedded: " + e + "\n");
 				}

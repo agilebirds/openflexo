@@ -9,12 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Target(value = ElementType.METHOD)
-public @interface Deleter {
+public @interface ComplexEmbedded {
+	public ClosureCondition[] closureConditions() default {};
 
-	public static final String UNDEFINED = "";
-
-	public String[] embedded() default {};
-
-	public String deletedProperty() default UNDEFINED;
-
+	public DeletionCondition[] deletionConditions() default {};
 }

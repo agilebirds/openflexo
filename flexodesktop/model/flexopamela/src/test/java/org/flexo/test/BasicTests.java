@@ -25,8 +25,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.Clipboard;
-import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.factory.EmbeddingType;
 import org.openflexo.model.factory.ModelEntity;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.xml.InvalidXMLDataException;
@@ -74,6 +75,7 @@ public class BasicTests extends TestCase {
 
 		assertEquals(11, factory.getEntityCount());
 
+		ModelEntity<FlexoModelObject> modelObjectEntity = factory.getModelEntity(FlexoModelObject.class);
 		ModelEntity<FlexoProcess> processEntity = factory.getModelEntity(FlexoProcess.class);
 		ModelEntity<AbstractNode> abstractNodeEntity = factory.getModelEntity(AbstractNode.class);
 		ModelEntity<StartNode> startNodeEntity = factory.getModelEntity(StartNode.class);
@@ -86,16 +88,16 @@ public class BasicTests extends TestCase {
 		assertNotNull(tokenEdgeEntity);
 		assertNotNull(wkfObjectEntity);
 
-		assertNotNull(processEntity.getDeclaredModelProperty(FlexoProcess.NODES));
-		assertNotNull(processEntity.getDeclaredModelProperty(FlexoProcess.FOO));
-		assertNull(processEntity.getDeclaredModelProperty(FlexoModelObject.FLEXO_ID));
+		assertNotNull(processEntity.getModelProperty(FlexoProcess.NODES));
+		assertNotNull(processEntity.getModelProperty(FlexoProcess.FOO));
+		assertNotNull(modelObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
 		assertNotNull(processEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
+		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
+		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID).getSetter());
 
-		assertNotNull(wkfObjectEntity.getDeclaredModelProperty(WKFObject.PROCESS));
-		assertFalse(wkfObjectEntity.getDeclaredModelProperty(WKFObject.PROCESS).override());
+		assertNotNull(wkfObjectEntity.getModelProperty(WKFObject.PROCESS));
 		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
-		assertNotNull(abstractNodeEntity.getDeclaredModelProperty(WKFObject.PROCESS));
-		assertTrue(abstractNodeEntity.getDeclaredModelProperty(WKFObject.PROCESS).override());
+		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
 	}
 
 	public void test2() throws Exception {
@@ -356,12 +358,12 @@ public class BasicTests extends TestCase {
 		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
 
 		// No embedded objects for a simple node (edges let the closure fail)
-		List<Object> embeddedObjects1 = factory.getEmbeddedObjects(startNode);
+		List<Object> embeddedObjects1 = factory.getEmbeddedObjects(startNode, EmbeddingType.CLOSURE);
 		System.out.println("Embedded: " + embeddedObjects1);
 		assertEquals(0, embeddedObjects1.size());
 
 		// The 3 nodes and the 2 edges belongs to same closure, take them
-		List<Object> embeddedObjects2 = factory.getEmbeddedObjects(process);
+		List<Object> embeddedObjects2 = factory.getEmbeddedObjects(process, EmbeddingType.CLOSURE);
 		System.out.println("Embedded: " + embeddedObjects2);
 		assertEquals(5, embeddedObjects2.size());
 		assertTrue(embeddedObjects2.contains(activityNode));
@@ -373,7 +375,7 @@ public class BasicTests extends TestCase {
 		// Computes embedded objects for activity node in the context of process
 		// In this case, edge1 and edge2 are also embedded because belonging to supplied
 		// context which is the process itself
-		List<Object> embeddedObjects3 = factory.getEmbeddedObjects(activityNode, process);
+		List<Object> embeddedObjects3 = factory.getEmbeddedObjects(activityNode, EmbeddingType.CLOSURE, process);
 		System.out.println("Embedded: " + embeddedObjects3);
 		assertEquals(2, embeddedObjects3.size());
 		assertTrue(embeddedObjects3.contains(edge1));
@@ -382,7 +384,7 @@ public class BasicTests extends TestCase {
 		// Computes embedded objects for activity node in the context of node startNode
 		// In this case, edge1 is also embedded because belonging to supplied
 		// context which is the opposite node startNode
-		List<Object> embeddedObjects4 = factory.getEmbeddedObjects(activityNode, startNode);
+		List<Object> embeddedObjects4 = factory.getEmbeddedObjects(activityNode, EmbeddingType.CLOSURE, startNode);
 		System.out.println("Embedded: " + embeddedObjects4);
 		assertEquals(1, embeddedObjects4.size());
 		assertTrue(embeddedObjects4.contains(edge1));

@@ -5,8 +5,6 @@ import java.util.List;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
-import org.openflexo.model.annotations.ClosureCondition;
-import org.openflexo.model.annotations.Deleter;
 import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -27,17 +25,21 @@ public interface AbstractNode extends WKFObject {
 	public static final String MASTER_ANNOTATION = "masterAnnotation";
 	public static final String OTHER_ANNOTATIONS = "otherAnnotations";
 
+	// Like an empty constructor. We don't want to force to use the one-arg init method
+	@Initializer
+	public AbstractNode init();
+
+	// Conveninent method to automatically create an abstract node with a name
 	@Initializer
 	public AbstractNode init(@Parameter(FlexoModelObject.NAME) String name);
 
 	@Override
-	@Deleter(embedded = { OUTGOING_EDGES, INCOMING_EDGES, MASTER_ANNOTATION, OTHER_ANNOTATIONS })
 	public void delete();
 
 	@Getter(value = OUTGOING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.START_NODE)
 	@XMLElement(context = "Outgoing", primary = true)
 	@CloningStrategy(StrategyType.CLONE)
-	@Embedded({ @ClosureCondition(id = Edge.END_NODE) })
+	@Embedded(closureConditions = { Edge.END_NODE })
 	public List<Edge> getOutgoingEdges();
 
 	@Setter(OUTGOING_EDGES)
@@ -51,7 +53,7 @@ public interface AbstractNode extends WKFObject {
 
 	@Getter(value = INCOMING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.END_NODE)
 	@XMLElement(context = "Incoming")
-	@Embedded({ @ClosureCondition(id = Edge.START_NODE) })
+	@Embedded(closureConditions = { Edge.START_NODE })
 	@CloningStrategy(StrategyType.CLONE)
 	public List<Edge> getIncomingEdges();
 
@@ -70,6 +72,7 @@ public interface AbstractNode extends WKFObject {
 
 	@Getter(MASTER_ANNOTATION)
 	@XMLAttribute
+	@Embedded
 	public WKFAnnotation getMasterAnnotation();
 
 	@Setter(MASTER_ANNOTATION)
@@ -77,6 +80,7 @@ public interface AbstractNode extends WKFObject {
 
 	@Getter(value = OTHER_ANNOTATIONS, cardinality = Cardinality.LIST)
 	@XMLElement()
+	@Embedded
 	public List<WKFAnnotation> getOtherAnnotations();
 
 	@Setter(OTHER_ANNOTATIONS)

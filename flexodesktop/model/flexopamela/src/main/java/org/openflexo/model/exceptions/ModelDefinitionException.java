@@ -1,4 +1,4 @@
-package org.openflexo.model.factory;
+package org.openflexo.model.exceptions;
 
 public class ModelDefinitionException extends Exception {
 
