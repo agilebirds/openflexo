@@ -67,6 +67,8 @@ public class ModelProperty<I> {
 		Embedded embedded = null;
 		ComplexEmbedded complexEmbedded = null;
 		CloningStrategy cloningStrategy = null;
+		PastingPoint setPastingPoint = null;
+		PastingPoint addPastingPoint = null;
 		Method getterMethod = null;
 		Method setterMethod = null;
 		Method adderMethod = null;
@@ -98,6 +100,7 @@ public class ModelProperty<I> {
 				} else {
 					setter = aSetter;
 					setterMethod = m;
+					setPastingPoint = m.getAnnotation(PastingPoint.class);
 				}
 			}
 			if (anAdder != null && anAdder.value().equals(propertyIdentifier)) {
@@ -107,6 +110,7 @@ public class ModelProperty<I> {
 				} else {
 					adder = anAdder;
 					adderMethod = m;
+					addPastingPoint = m.getAnnotation(PastingPoint.class);
 				}
 			}
 			if (aRemover != null && aRemover.value().equals(propertyIdentifier)) {
@@ -120,8 +124,8 @@ public class ModelProperty<I> {
 			}
 		}
 		return new ModelProperty<I>(modelEntity, propertyIdentifier, getter, setter, adder, remover, xmlAttribute, xmlElement,
-				returnedValue, embedded, complexEmbedded, cloningStrategy, null, null, getterMethod, setterMethod, adderMethod,
-				removerMethod);
+				returnedValue, embedded, complexEmbedded, cloningStrategy, setPastingPoint, addPastingPoint, getterMethod, setterMethod,
+				adderMethod, removerMethod);
 	}
 
 	protected ModelProperty(ModelEntity<I> modelEntity, String propertyIdentifier, Getter getter, Setter setter, Adder adder,
@@ -810,7 +814,7 @@ public class ModelProperty<I> {
 
 	public StrategyType getCloningStrategy() {
 		if (cloningStrategy == null) {
-					if (getModelFactory().isModelEntity(getType())) {
+			if (getModelFactory().isModelEntity(getType())) {
 				return StrategyType.REFERENCE;
 			} else {
 				return StrategyType.CLONE;

@@ -11,7 +11,6 @@ import java.util.Vector;
 
 import javassist.util.proxy.ProxyObject;
 
-import org.openflexo.model.annotations.ClosureCondition;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.PastingPoint;
@@ -244,6 +243,7 @@ public class ModelFactory {
 				for (Object other : ((ConditionalPresence) o).requiredPresence) {
 					if (!returned.contains(other) && !derivedObjectsFromContext.contains(other)) {
 						allOthersArePresent = false;
+						break;
 					}
 				}
 				if (allOthersArePresent && !returned.contains(((ConditionalPresence) o).object)) {
@@ -368,31 +368,31 @@ public class ModelFactory {
 		return null;
 	}
 
-	public void paste(Clipboard clipboard, Object context) throws ModelExecutionException, ModelDefinitionException,
+	public Object paste(Clipboard clipboard, Object context) throws ModelExecutionException, ModelDefinitionException,
 			CloneNotSupportedException {
 		if (!isProxyObject(context)) {
 			throw new ClipboardOperationException("Cannot paste here: context is not valid");
 		}
 
-		getHandler(context).paste(clipboard);
+		return getHandler(context).paste(clipboard);
 	}
 
-	public void paste(Clipboard clipboard, ModelProperty<?> modelProperty, Object context) throws ModelExecutionException,
+	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, Object context) throws ModelExecutionException,
 			ModelDefinitionException, CloneNotSupportedException {
 		if (!isProxyObject(context)) {
 			throw new ClipboardOperationException("Cannot paste here: context is not valid");
 		}
 
-		getHandler(context).paste(clipboard, (ModelProperty) modelProperty);
+		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty);
 	}
 
-	public void paste(Clipboard clipboard, ModelProperty<?> modelProperty, PastingPoint pp, Object context) throws ModelExecutionException,
-			ModelDefinitionException, CloneNotSupportedException {
+	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, PastingPoint pp, Object context)
+			throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
 		if (!isProxyObject(context)) {
 			throw new ClipboardOperationException("Cannot paste here: context is not valid");
 		}
 
-		getHandler(context).paste(clipboard, (ModelProperty) modelProperty, pp);
+		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty, pp);
 	}
 
 }

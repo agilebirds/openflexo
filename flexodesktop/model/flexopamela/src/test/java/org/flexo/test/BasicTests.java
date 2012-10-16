@@ -415,22 +415,23 @@ public class BasicTests extends TestCase {
 
 		assertNotNull(processCopy);
 		assertTrue(processCopy instanceof FlexoProcess);
-		assertEquals("NewProcess1", processCopy.getName());
+		// TODO: Uncomment next line when FACTORY strategy will be implemented
+		// assertEquals("NewProcess1", processCopy.getName());
 		assertEquals("234XX", processCopy.getFlexoID());
 		assertEquals(8, processCopy.getFoo());
 
-		ActivityNode activityNodeCopy = (ActivityNode) processCopy.getNodeNamed("MyActivity1");
+		ActivityNode activityNodeCopy = (ActivityNode) processCopy.getNodeNamed("MyActivity");
 		assertNotNull(activityNodeCopy);
-		assertEquals("MyActivity1", activityNodeCopy.getName());
+		assertEquals("MyActivity", activityNodeCopy.getName());
 		assertTrue(processCopy.getNodes().contains(activityNodeCopy));
 		assertEquals(processCopy, activityNodeCopy.getProcess());
-		StartNode startNodeCopy = (StartNode) processCopy.getNodeNamed("Start1");
+		StartNode startNodeCopy = (StartNode) processCopy.getNodeNamed("Start");
 		assertNotNull(startNodeCopy);
-		EndNode endNodeCopy = (EndNode) processCopy.getNodeNamed("End1");
+		EndNode endNodeCopy = (EndNode) processCopy.getNodeNamed("End");
 		assertNotNull(endNodeCopy);
-		TokenEdge edge1Copy = (TokenEdge) processCopy.getEdgeNamed("edge11");
+		TokenEdge edge1Copy = (TokenEdge) processCopy.getEdgeNamed("edge1");
 		assertNotNull(edge1Copy);
-		TokenEdge edge2Copy = (TokenEdge) processCopy.getEdgeNamed("edge21");
+		TokenEdge edge2Copy = (TokenEdge) processCopy.getEdgeNamed("edge2");
 		assertNotNull(edge2Copy);
 		assertEquals(processCopy, edge1Copy.getProcess());
 		assertEquals(processCopy, edge2Copy.getProcess());
@@ -487,11 +488,11 @@ public class BasicTests extends TestCase {
 
 		assertEquals(1, activityNodeCopy.getIncomingEdges().size());
 		TokenEdge edge1Copy = (TokenEdge) activityNodeCopy.getIncomingEdges().get(0);
-		assertEquals("edge11", edge1Copy.getName());
+		assertEquals("edge1", edge1Copy.getName());
 
 		assertEquals(1, activityNodeCopy.getOutgoingEdges().size());
 		TokenEdge edge2Copy = (TokenEdge) activityNodeCopy.getOutgoingEdges().get(0);
-		assertEquals("edge21", edge2Copy.getName());
+		assertEquals("edge2", edge2Copy.getName());
 
 		// Clone activityNode in the context of process, edge1 and edge2 will be cloned
 		// because they belong to process' context
@@ -501,11 +502,11 @@ public class BasicTests extends TestCase {
 
 		assertEquals(1, activityNodeCopy2.getIncomingEdges().size());
 		TokenEdge edge1Copy2 = (TokenEdge) activityNodeCopy2.getIncomingEdges().get(0);
-		assertEquals("edge11", edge1Copy2.getName());
+		assertEquals("edge1", edge1Copy2.getName());
 
 		assertEquals(1, activityNodeCopy2.getOutgoingEdges().size());
 		TokenEdge edge2Copy2 = (TokenEdge) activityNodeCopy2.getOutgoingEdges().get(0);
-		assertEquals("edge21", edge2Copy2.getName());
+		assertEquals("edge2", edge2Copy2.getName());
 
 		// Clone activityNode in the context of startNode, only edge1 will be cloned
 		ActivityNode activityNodeCopy3 = (ActivityNode) activityNode.cloneObject(startNode);
@@ -514,7 +515,7 @@ public class BasicTests extends TestCase {
 
 		assertEquals(1, activityNodeCopy3.getIncomingEdges().size());
 		TokenEdge edge1Copy3 = (TokenEdge) activityNodeCopy3.getIncomingEdges().get(0);
-		assertEquals("edge11", edge1Copy3.getName());
+		assertEquals("edge1", edge1Copy3.getName());
 
 		assertEquals(0, activityNodeCopy3.getOutgoingEdges().size());
 	}
@@ -544,15 +545,17 @@ public class BasicTests extends TestCase {
 		System.out.println(debug(clipboard.getContents()));
 		assertTrue(clipboard.isSingleObject());
 		assertTrue(clipboard.getContents() instanceof ActivityNode);
-		assertEquals("MyActivity1", ((ActivityNode) clipboard.getContents()).getName());
+		assertEquals("MyActivity", ((ActivityNode) clipboard.getContents()).getName());
 		assertEquals(0, ((ActivityNode) clipboard.getContents()).getIncomingEdges().size());
 		assertEquals(0, ((ActivityNode) clipboard.getContents()).getOutgoingEdges().size());
 
-		factory.paste(clipboard, process);
-
+		Object pasted = factory.paste(clipboard, process);
+		assertNotNull(pasted);
+		assertTrue(pasted instanceof ActivityNode);
 		System.out.println(debug(process));
 		assertEquals(4, process.getNodes().size());
-		ActivityNode newNode = (ActivityNode) process.getNodeNamed("MyActivity1");
+		assertTrue(((List<?>) process.getNodesNamed("MyActivity")).contains(pasted));
+		ActivityNode newNode = (ActivityNode) pasted;
 		assertEquals(0, newNode.getIncomingEdges().size());
 		assertEquals(0, newNode.getOutgoingEdges().size());
 
@@ -600,22 +603,31 @@ public class BasicTests extends TestCase {
 		assertTrue(((List) clipboard.getContents()).get(1) instanceof ActivityNode);
 		StartNode copiedStartNode = (StartNode) ((List) clipboard.getContents()).get(0);
 		ActivityNode copiedActivityNode = (ActivityNode) ((List) clipboard.getContents()).get(1);
-		assertEquals("Start1", copiedStartNode.getName());
-		assertEquals("MyActivity1", copiedActivityNode.getName());
+		assertEquals("Start", copiedStartNode.getName());
+		assertEquals("MyActivity", copiedActivityNode.getName());
 		assertEquals(0, copiedStartNode.getIncomingEdges().size());
 		assertEquals(1, copiedStartNode.getOutgoingEdges().size());
 		assertEquals(1, copiedActivityNode.getIncomingEdges().size());
 		assertEquals(0, copiedActivityNode.getOutgoingEdges().size());
 		assertSame(copiedStartNode.getOutgoingEdges().get(0), copiedActivityNode.getIncomingEdges().get(0));
 
-		factory.paste(clipboard, process);
+		Object pasted = factory.paste(clipboard, process);
+		assertNotNull(pasted);
+		assertTrue(pasted instanceof List);
 
 		System.out.println(clipboard.debug());
 
 		System.out.println(debug(process));
 		assertEquals(5, process.getNodes().size());
-		ActivityNode newActivity = (ActivityNode) process.getNodeNamed("MyActivity1");
-		StartNode newStartNode = (StartNode) process.getNodeNamed("Start1");
+		ActivityNode newActivity = null;
+		StartNode newStartNode = null;
+		for (Object o : (List<?>) pasted) {
+			if (o instanceof ActivityNode) {
+				newActivity = (ActivityNode) o;
+			} else if (o instanceof StartNode) {
+				newStartNode = (StartNode) o;
+			}
+		}
 		assertEquals(1, newActivity.getIncomingEdges().size());
 		assertEquals(0, newActivity.getOutgoingEdges().size());
 		assertEquals(0, newStartNode.getIncomingEdges().size());

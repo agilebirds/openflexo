@@ -16,6 +16,7 @@ import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.IntegrityConstraint;
 import org.openflexo.model.annotations.IntegrityConstraints;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
@@ -48,6 +49,7 @@ public interface FlexoProcess extends WKFObject {
 	public void setNodes(List<AbstractNode> nodes);
 
 	@Adder(NODES)
+	@PastingPoint
 	public void addToNodes(AbstractNode node);
 
 	@Remover(NODES)
@@ -55,6 +57,9 @@ public interface FlexoProcess extends WKFObject {
 
 	@Finder(attribute = AbstractNode.NAME, collection = NODES)
 	public AbstractNode getNodeNamed(String name);
+
+	@Finder(attribute = AbstractNode.NAME, collection = NODES, isMultiValued = true)
+	public List<AbstractNode> getNodesNamed(String name);
 
 	public Edge getEdgeNamed(String name);
 

@@ -31,7 +31,8 @@ public interface FlexoModelObject extends AccessibleProxyObject, CloneableProxyO
 
 	@Getter(value = NAME, defaultValue = "???")
 	@XMLAttribute(xmlTag = NAME)
-	@CloningStrategy(value = StrategyType.FACTORY, factory = "deriveName()")
+	// @CloningStrategy(StrategyType.FACTORY, factory = "deriveName()")
+	@CloningStrategy(StrategyType.CLONE)
 	public String getName();
 
 	@Setter(NAME)

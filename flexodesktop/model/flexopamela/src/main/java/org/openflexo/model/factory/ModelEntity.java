@@ -682,11 +682,13 @@ public class ModelEntity<I> extends ProxyFactory {
 		} else {
 			if (getDirectSuperEntities() != null) {
 				for (ModelEntity<? super I> e : getDirectSuperEntities()) {
-					if (e.getModify() != null && modify == null) {
-						modify = e.getModify();
-					} else {
-						throw new ModelDefinitionException("Duplicated modify annotation on " + this + ". Please add modify annotation on "
-								+ implementedInterface.getName());
+					if (e.getModify() != null) {
+						if (modify == null) {
+							modify = e.getModify();
+						} else {
+							throw new ModelDefinitionException("Duplicated modify annotation on " + this
+									+ ". Please add modify annotation on " + implementedInterface.getName());
+						}
 					}
 				}
 			}
