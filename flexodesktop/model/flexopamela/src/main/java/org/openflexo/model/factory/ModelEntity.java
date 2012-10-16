@@ -14,7 +14,6 @@ import java.util.Map;
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.ProxyFactory;
 
-import org.flexo.model.TokenEdge;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Finder;
@@ -365,9 +364,6 @@ public class ModelEntity<I> extends ProxyFactory {
 			property = ModelProperty.getModelProperty(propertyIdentifier, this);
 		} else {
 			throw new ModelExecutionException("There is no such property: '" + propertyIdentifier + "'");
-		}
-		if (this.implementedInterface == TokenEdge.class) {
-			System.out.println("coucou");
 		}
 		if (singleInheritance() || multipleInheritance()) {
 			ModelProperty<? super I> parentProperty = buildModelPropertyUsingParentProperties(propertyIdentifier, property);

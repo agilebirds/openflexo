@@ -6,10 +6,12 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.IntegrityConstraint;
 import org.openflexo.model.annotations.IntegrityConstraints;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Modify;
 import org.openflexo.model.annotations.Setter;
 
 @ModelEntity(isAbstract = true)
 @IntegrityConstraints({ @IntegrityConstraint("process != null") })
+@Modify(forward = WKFObject.PROCESS, synchWithForward = true)
 public interface WKFObject extends FlexoModelObject {
 
 	public static final String PROCESS = "process";

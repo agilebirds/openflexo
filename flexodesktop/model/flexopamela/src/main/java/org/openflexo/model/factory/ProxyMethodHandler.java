@@ -606,8 +606,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			} else {
 				values.put(property.getPropertyIdentifier(), value);
 			}
-
-			markAsModified();
 			firePropertyChange(property.getPropertyIdentifier(), oldValue, value);
 			if (modelEntity.getModify() != null && modelEntity.getModify().synchWithForward()
 					&& property.getPropertyIdentifier().equals(modelEntity.getModify().forward())) {
@@ -642,6 +640,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
 				}
 			}
+			markAsModified();
 		}
 	}
 
@@ -673,13 +672,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			modified = true;
 			if (!old) {
 				firePropertyChange(MODIFIED, old, modified);
-			}
-			if (modelEntity.getModify() != null && modelEntity.getModify().forward() != null) {
-				ModelProperty<? super I> modelProperty = modelEntity.getModelProperty(modelEntity.getModify().forward());
-				if (modelProperty != null) {
-					Object forward = invokeGetter(modelProperty);
-					if (forward instanceof ProxyObject) {
-						((ProxyMethodHandler<?>) ((ProxyObject) forward).getHandler()).markAsModified();
+				if (modelEntity.getModify() != null && modelEntity.getModify().forward() != null) {
+					ModelProperty<? super I> modelProperty = modelEntity.getModelProperty(modelEntity.getModify().forward());
+					if (modelProperty != null) {
+						Object forward = invokeGetter(modelProperty);
+						if (forward instanceof ProxyObject) {
+							((ProxyMethodHandler<?>) ((ProxyObject) forward).getHandler()).markAsModified();
+						}
 					}
 				}
 			}
@@ -717,7 +716,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 		if (!list.contains(value)) {
 			list.add(value);
-			markAsModified();
 			// Handle inverse property for new value
 			if (property.getInverseProperty() != null) {
 				switch (property.getInverseProperty().getCardinality()) {
@@ -737,6 +735,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
 				}
 			}
+			markAsModified();
 		}
 	}
 
@@ -767,7 +766,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 		if (list.contains(value)) {
 			list.remove(value);
-			markAsModified();
 			// Handle inverse property for new value
 			if (property.getInverseProperty() != null) {
 				switch (property.getInverseProperty().getCardinality()) {
@@ -787,6 +785,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
 				}
 			}
+			markAsModified();
 		}
 	}
 

@@ -1,5 +1,6 @@
 package org.flexo.test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +27,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.Clipboard;
 import org.openflexo.model.factory.EmbeddingType;
 import org.openflexo.model.factory.ModelEntity;
@@ -645,6 +647,52 @@ public class BasicTests extends TestCase {
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
+	}
+
+	public void testModify() {
+		FlexoProcess process = factory.newInstance(FlexoProcess.class);
+		assertFalse(process.isModified());
+
+		process.setFlexoID("234XX");
+		assertTrue(process.isModified());
+		process.setName("NewProcess");
+		assertTrue(process.isModified());
+		process.setFoo(8);
+		assertTrue(process.isModified());
+
+		serializeObject(process);
+		assertFalse(process.isModified());
+
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class);
+		assertFalse(activityNode.isModified());
+		// Here we verify that if we use an initializer, the object is marked as modified
+		ActivityNode activityNode2 = factory.newInstance(ActivityNode.class, "MyActivity");
+		assertTrue(activityNode2.isModified());
+
+		process.addToNodes(activityNode);
+		assertTrue(process.isModified());
+		serializeObject(process);
+		assertFalse(process.isModified());
+		assertFalse(activityNode.isModified());
+		activityNode.setName("Coucou");
+		assertTrue(activityNode.isModified());
+		assertTrue(process.isModified());// Here we verify the forward state
+		serializeObject(process);
+		assertFalse(activityNode.isModified());// Here we verify the synch forward state
+
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
+		process.addToNodes(startNode);
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
+		process.addToNodes(endNode);
+		serializeObject(process);
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		assertTrue(process.isModified());// Here we verify the forward state
+	}
+
+	public Document serializeObject(AccessibleProxyObject object) {
+		Document doc = serializer.serializeDocument(object, new ByteArrayOutputStream());
+		object.setModified(false);
+		return doc;
 	}
 
 	public String debug(Object o) {
