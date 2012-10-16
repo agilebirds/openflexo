@@ -19,10 +19,10 @@
  */
 package org.openflexo.antar.expr;
 
-import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ExpressionParser.ConstantFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.ConstantFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.FunctionFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
 
 public class EvaluationContext {
 	private ExpressionParser.ConstantFactory _constantFactory;

@@ -25,11 +25,11 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
-import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
+import org.openflexo.antar.expr.oldparser.ExpressionParser;
+import org.openflexo.antar.expr.oldparser.ParseException;
+import org.openflexo.antar.expr.oldparser.Word;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.FunctionFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
 
 public abstract class Expression {
 

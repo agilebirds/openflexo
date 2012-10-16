@@ -41,7 +41,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.parser.Word;
+import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;

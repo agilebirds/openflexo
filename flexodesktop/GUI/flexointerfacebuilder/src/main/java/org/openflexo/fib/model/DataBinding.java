@@ -33,7 +33,7 @@ import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.expr.oldparser.ParseException;
 import org.openflexo.fib.model.FIBComponent.DependancyLoopException;
 import org.openflexo.fib.model.FIBModelObject.FIBModelAttribute;
 import org.openflexo.toolbox.StringUtils;

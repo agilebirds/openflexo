@@ -25,7 +25,10 @@ import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser;
+import org.openflexo.antar.expr.oldparser.ParseException;
+import org.openflexo.antar.expr.oldparser.Word;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
 
 public class TestConditional {
 

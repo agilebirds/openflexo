@@ -21,7 +21,7 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.expr.parser.Word;
+import org.openflexo.antar.expr.oldparser.Word;
 
 public class Variable extends Expression {
 

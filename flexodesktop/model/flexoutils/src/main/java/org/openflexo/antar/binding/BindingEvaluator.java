@@ -10,11 +10,11 @@ import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultFunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultVariableFactory;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
+import org.openflexo.antar.expr.oldparser.ExpressionParser;
+import org.openflexo.antar.expr.oldparser.ParseException;
+import org.openflexo.antar.expr.oldparser.Word;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultFunctionFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultVariableFactory;
 
 /**
  * Utility class allowing to compute binding value over an expression and a given object.<br>

@@ -36,14 +36,14 @@ import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ExpressionParser.ConstantFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultConstantFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultFunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultVariableFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
-import org.openflexo.antar.expr.parser.Value;
-import org.openflexo.antar.expr.parser.Word;
+import org.openflexo.antar.expr.oldparser.Value;
+import org.openflexo.antar.expr.oldparser.Word;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.ConstantFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultConstantFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultFunctionFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultVariableFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.FunctionFactory;
+import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 
 public class BindingExpression extends AbstractBinding {

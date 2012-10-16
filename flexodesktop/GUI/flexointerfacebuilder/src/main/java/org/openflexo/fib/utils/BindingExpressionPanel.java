@@ -75,7 +75,7 @@ import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
-import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.expr.oldparser.ParseException;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;

@@ -22,13 +22,13 @@ package org.openflexo.antar.expr;
 import java.util.Date;
 import java.util.Vector;
 
-import org.openflexo.antar.expr.parser.BooleanValue;
-import org.openflexo.antar.expr.parser.DateValue;
-import org.openflexo.antar.expr.parser.DurationValue;
-import org.openflexo.antar.expr.parser.FloatValue;
-import org.openflexo.antar.expr.parser.IntValue;
-import org.openflexo.antar.expr.parser.StringValue;
-import org.openflexo.antar.expr.parser.Value;
+import org.openflexo.antar.expr.oldparser.BooleanValue;
+import org.openflexo.antar.expr.oldparser.DateValue;
+import org.openflexo.antar.expr.oldparser.DurationValue;
+import org.openflexo.antar.expr.oldparser.FloatValue;
+import org.openflexo.antar.expr.oldparser.IntValue;
+import org.openflexo.antar.expr.oldparser.StringValue;
+import org.openflexo.antar.expr.oldparser.Value;
 import org.openflexo.toolbox.Duration;
 
 public abstract class Constant<V> extends Expression {

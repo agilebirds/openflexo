@@ -72,7 +72,7 @@ import org.openflexo.antar.binding.StaticBindingFactory;
 import org.openflexo.antar.binding.StringStaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.parser.Word;
+import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
