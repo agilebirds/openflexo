@@ -8,6 +8,7 @@ import org.openflexo.antar.expr.BinaryOperatorExpression;
 import org.openflexo.antar.expr.BindingValueAsExpression;
 import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.BooleanUnaryOperator;
+import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.FloatSymbolicConstant;
@@ -24,6 +25,7 @@ import org.openflexo.antar.expr.parser.node.AAsinFuncFunction;
 import org.openflexo.antar.expr.parser.node.AAtanFuncFunction;
 import org.openflexo.antar.expr.parser.node.ABindingTerm;
 import org.openflexo.antar.expr.parser.node.ACharsValueTerm;
+import org.openflexo.antar.expr.parser.node.ACondExprExpr;
 import org.openflexo.antar.expr.parser.node.AConstantNumber;
 import org.openflexo.antar.expr.parser.node.ACosFuncFunction;
 import org.openflexo.antar.expr.parser.node.ADecimalNumberNumber;
@@ -158,6 +160,7 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	// Following methods manage following grammar fragment
 	/*expr =
 	  {expr2} expr2 |
+	  {cond_expr} [condition]:expr if_token [then]:expr2 else_token [else]:expr2 |
 	  {eq_expr} [left]:expr eq [right]:expr2 |
 	  {eq2_expr} [left]:expr eq2 [right]:expr2 |
 	  {neq_expr} [left]:expr neq [right]:expr2 |
@@ -170,6 +173,15 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	public void outAExpr2Expr(AExpr2Expr node) {
 		super.outAExpr2Expr(node);
 		registerExpressionNode(node, getExpression(node.getExpr2()));
+	}
+
+	@Override
+	public void outACondExprExpr(ACondExprExpr node) {
+		super.outACondExprExpr(node);
+		System.out.println("On chope une conditionnelle avec cond:" + node.getCondition() + " then:" + node.getThen() + " else:"
+				+ node.getElse());
+		registerExpressionNode(node, new ConditionalExpression(getExpression(node.getCondition()), getExpression(node.getThen()),
+				getExpression(node.getElse())));
 	}
 
 	@Override

@@ -51,6 +51,18 @@ public class TypeMismatchException extends Exception {
 				+ rightSuppliedType + " while expected type(s) is(are) " + typesAsString(expectedTypes);
 	}
 
+	private TypeMismatchException() {
+		super();
+	}
+
+	public static TypeMismatchException buildIncompatibleEvaluationTypeException(EvaluationType type1, EvaluationType type2) {
+		TypeMismatchException returned = new TypeMismatchException();
+		returned.leftSuppliedType = type1;
+		returned.rightSuppliedType = type2;
+		returned.message = "Incompatible types: " + type1 + " and " + type2;
+		return returned;
+	}
+
 	@Override
 	public String getMessage() {
 		return message;

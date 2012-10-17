@@ -156,4 +156,11 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 		}
 		return e.toString();
 	}
+
+	@Override
+	protected String makeStringRepresentation(ConditionalExpression expression) {
+		return "(" + getStringRepresentation(expression.getCondition()) + " ? " + getStringRepresentation(expression.getThenExpression())
+				+ " : " + getStringRepresentation(expression.getElseExpression()) + ")";
+	}
+
 }

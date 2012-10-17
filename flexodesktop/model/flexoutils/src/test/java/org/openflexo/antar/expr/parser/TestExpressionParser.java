@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
 import org.openflexo.antar.expr.BindingValueAsExpression;
 import org.openflexo.antar.expr.BooleanBinaryOperator;
+import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
@@ -304,6 +305,34 @@ public class TestExpressionParser extends TestCase {
 
 	public void testParsingError5() {
 		tryToParse("test24 [ fdfd + 1", "", null, null, true);
+	}
+
+	public void testConditional1() {
+		tryToParse("a?b:c", "(a ? b : c)", ConditionalExpression.class, null, false);
+	}
+
+	public void testConditional2() {
+		tryToParse("a > 9 ?true:false", "((a > 9) ? true : false)", ConditionalExpression.class, null, false);
+	}
+
+	public void testConditional3() {
+		tryToParse("a+1 > 10-7 ?8+4:5", "(((a + 1) > 3) ? 12 : 5)", ConditionalExpression.class, null, false);
+	}
+
+	public void testConditional4() {
+		tryToParse("a+1 > (a?1:2) ?8+4:5", "(((a + 1) > (a ? 1 : 2)) ? 12 : 5)", ConditionalExpression.class, null, false);
+	}
+
+	public void testConditional5() {
+		tryToParse("2 < 3 ? 4:2", "4", ConditionalExpression.class, 4, false);
+	}
+
+	public void testConditional6() {
+		tryToParse("2 > 3 ? 4:2", "2", ConditionalExpression.class, 2, false);
+	}
+
+	public void testInvalidConditional() {
+		tryToParse("2 > 3 ? 3", "", ConditionalExpression.class, null, true);
 	}
 
 	/*public void test25() throws java.text.ParseException {

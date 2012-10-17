@@ -142,116 +142,128 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTPi(@SuppressWarnings("unused") TPi node)
+    public void caseTIfToken(@SuppressWarnings("unused") TIfToken node)
     {
         this.index = 22;
     }
 
     @Override
-    public void caseTCos(@SuppressWarnings("unused") TCos node)
+    public void caseTElseToken(@SuppressWarnings("unused") TElseToken node)
     {
         this.index = 23;
     }
 
     @Override
-    public void caseTAcos(@SuppressWarnings("unused") TAcos node)
+    public void caseTPi(@SuppressWarnings("unused") TPi node)
     {
         this.index = 24;
     }
 
     @Override
-    public void caseTSin(@SuppressWarnings("unused") TSin node)
+    public void caseTCos(@SuppressWarnings("unused") TCos node)
     {
         this.index = 25;
     }
 
     @Override
-    public void caseTAsin(@SuppressWarnings("unused") TAsin node)
+    public void caseTAcos(@SuppressWarnings("unused") TAcos node)
     {
         this.index = 26;
     }
 
     @Override
-    public void caseTTan(@SuppressWarnings("unused") TTan node)
+    public void caseTSin(@SuppressWarnings("unused") TSin node)
     {
         this.index = 27;
     }
 
     @Override
-    public void caseTAtan(@SuppressWarnings("unused") TAtan node)
+    public void caseTAsin(@SuppressWarnings("unused") TAsin node)
     {
         this.index = 28;
     }
 
     @Override
-    public void caseTLog(@SuppressWarnings("unused") TLog node)
+    public void caseTTan(@SuppressWarnings("unused") TTan node)
     {
         this.index = 29;
     }
 
     @Override
-    public void caseTExp(@SuppressWarnings("unused") TExp node)
+    public void caseTAtan(@SuppressWarnings("unused") TAtan node)
     {
         this.index = 30;
     }
 
     @Override
-    public void caseTSqrt(@SuppressWarnings("unused") TSqrt node)
+    public void caseTLog(@SuppressWarnings("unused") TLog node)
     {
         this.index = 31;
     }
 
     @Override
-    public void caseTTrue(@SuppressWarnings("unused") TTrue node)
+    public void caseTExp(@SuppressWarnings("unused") TExp node)
     {
         this.index = 32;
     }
 
     @Override
-    public void caseTFalse(@SuppressWarnings("unused") TFalse node)
+    public void caseTSqrt(@SuppressWarnings("unused") TSqrt node)
     {
         this.index = 33;
     }
 
     @Override
-    public void caseTDecimalNumber(@SuppressWarnings("unused") TDecimalNumber node)
+    public void caseTTrue(@SuppressWarnings("unused") TTrue node)
     {
         this.index = 34;
     }
 
     @Override
-    public void caseTPreciseNumber(@SuppressWarnings("unused") TPreciseNumber node)
+    public void caseTFalse(@SuppressWarnings("unused") TFalse node)
     {
         this.index = 35;
     }
 
     @Override
-    public void caseTScientificNotationNumber(@SuppressWarnings("unused") TScientificNotationNumber node)
+    public void caseTDecimalNumber(@SuppressWarnings("unused") TDecimalNumber node)
     {
         this.index = 36;
     }
 
     @Override
-    public void caseTStringValue(@SuppressWarnings("unused") TStringValue node)
+    public void caseTPreciseNumber(@SuppressWarnings("unused") TPreciseNumber node)
     {
         this.index = 37;
     }
 
     @Override
-    public void caseTCharsValue(@SuppressWarnings("unused") TCharsValue node)
+    public void caseTScientificNotationNumber(@SuppressWarnings("unused") TScientificNotationNumber node)
     {
         this.index = 38;
     }
 
     @Override
-    public void caseTIdentifier(@SuppressWarnings("unused") TIdentifier node)
+    public void caseTStringValue(@SuppressWarnings("unused") TStringValue node)
     {
         this.index = 39;
     }
 
     @Override
-    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    public void caseTCharsValue(@SuppressWarnings("unused") TCharsValue node)
     {
         this.index = 40;
+    }
+
+    @Override
+    public void caseTIdentifier(@SuppressWarnings("unused") TIdentifier node)
+    {
+        this.index = 41;
+    }
+
+    @Override
+    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    {
+        this.index = 42;
     }
 }

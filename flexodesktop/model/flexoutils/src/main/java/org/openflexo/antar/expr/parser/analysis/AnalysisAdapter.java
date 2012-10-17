@@ -74,6 +74,11 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
+    public void caseACondExprExpr(ACondExprExpr node)
+    {
+        defaultCase(node);
+    }
+
     public void caseAEqExprExpr(AEqExprExpr node)
     {
         defaultCase(node);
@@ -430,6 +435,16 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseTComma(TComma node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTIfToken(TIfToken node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTElseToken(TElseToken node)
     {
         defaultCase(node);
     }

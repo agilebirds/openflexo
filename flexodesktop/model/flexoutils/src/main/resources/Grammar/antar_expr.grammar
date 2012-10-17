@@ -32,6 +32,8 @@ Tokens
  r_par = ')';
  dot = '.';
  comma = ',';
+ if_token = '?';
+ else_token = ':';
  pi = 'pi';
  cos = 'cos';
  acos = 'acos';
@@ -62,6 +64,7 @@ Ignored Tokens
 Productions
  expr =
   {expr2} expr2 |
+  {cond_expr} [condition]:expr if_token [then]:expr2 else_token [else]:expr2 |
   {eq_expr} [left]:expr eq [right]:expr2 |
   {eq2_expr} [left]:expr eq2 [right]:expr2 |
   {neq_expr} [left]:expr neq [right]:expr2 |
