@@ -108,7 +108,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	@Override
 	public boolean useNewInspectorScheme() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -266,7 +266,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			}
 		} else if (perspective == VERSIONNING_PERSPECTIVE) {
 			if (object instanceof DGLatexFile)
-				return true; 
+				return true;
 		}
 	    return super.hasViewForObjectAndPerspective(object, perspective);
 	}*/
@@ -664,7 +664,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 							FlexoLocalization.localizedForKey("resource_edited"), FlexoLocalization.localizedForKey("resource") + " "
 									+ generatedResource.getFileName() + " " + FlexoLocalization.localizedForKey("has_been_edited"),
-							whatToDo, rememberMyChoice);
+									whatToDo, rememberMyChoice);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.IGNORE.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.IGNORE;
