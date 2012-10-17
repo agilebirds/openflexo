@@ -139,7 +139,9 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 			GenerateSourceCode generateSourceCode = GenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(),
 					getGlobalSelection(), this);
 			generateSourceCode.doAction();
-			hasFailed &= generateSourceCode.didGenerationSucceeded();
+			if (hasFailed) {
+				hasFailed = generateSourceCode.didGenerationSucceeded();
+			}
 		} finally {
 			hideFlexoProgress();
 		}
