@@ -109,12 +109,11 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 
 	private BindingValueAsExpression makeBinding(PBinding node) {
 		System.out.println("Make binding with " + node);
-		BindingValueAsExpression returned = new BindingValueAsExpression(node.toString());
 
 		// Apply the translation.
 		BindingSemanticsAnalyzer bsa = new BindingSemanticsAnalyzer();
 		node.apply(bsa);
-
+		BindingValueAsExpression returned = new BindingValueAsExpression(bsa.getPath());
 		System.out.println("Made binding as " + bsa.getPath());
 
 		registerExpressionNode(node, returned);

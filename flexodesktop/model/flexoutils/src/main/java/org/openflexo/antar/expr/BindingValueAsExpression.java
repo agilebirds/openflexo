@@ -19,15 +19,49 @@
  */
 package org.openflexo.antar.expr;
 
+import java.util.List;
 import java.util.Vector;
 
 public class BindingValueAsExpression extends Expression {
 
-	private String unparsed;
+	public static abstract class AbstractBindingPathElement {
+	}
 
-	public BindingValueAsExpression(String unparsed) {
+	public static class NormalBindingPathElement extends AbstractBindingPathElement {
+		public String property;
+
+		public NormalBindingPathElement(String aProperty) {
+			property = aProperty;
+		}
+
+		@Override
+		public String toString() {
+			return "Normal[" + property + "]";
+		}
+
+	}
+
+	public static class MethodCallBindingPathElement extends AbstractBindingPathElement {
+		public String method;
+		public List<Expression> args;
+
+		public MethodCallBindingPathElement(String aMethod, List<Expression> someArgs) {
+			method = aMethod;
+			args = someArgs;
+		}
+
+		@Override
+		public String toString() {
+			return "Call[" + method + "(" + args + ")" + "]";
+		}
+
+	}
+
+	private List<AbstractBindingPathElement> bindingPath;
+
+	public BindingValueAsExpression(List<AbstractBindingPathElement> aBindingPath) {
 		super();
-		this.unparsed = unparsed;
+		this.bindingPath = aBindingPath;
 	}
 
 	@Override
@@ -35,12 +69,8 @@ public class BindingValueAsExpression extends Expression {
 		return 0;
 	}
 
-	public String getUnparsed() {
-		return unparsed;
-	}
-
-	public void setUnparsed(String unparsed) {
-		this.unparsed = unparsed;
+	public List<AbstractBindingPathElement> getBindingPath() {
+		return bindingPath;
 	}
 
 	@Override
@@ -60,7 +90,6 @@ public class BindingValueAsExpression extends Expression {
 
 	public boolean isValid() {
 		return true;
-
 	}
 
 }

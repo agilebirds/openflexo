@@ -3,6 +3,7 @@ package org.openflexo.antar.expr.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openflexo.antar.expr.BindingValueAsExpression;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.parser.node.AAdditionalArg;
 import org.openflexo.antar.expr.parser.node.AArgList;
@@ -24,47 +25,15 @@ import org.openflexo.antar.expr.parser.node.TIdentifier;
  */
 class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 
-	public static abstract class AbstractBindingPathElement {
-
-	}
-
-	public static class NormalBindingPathElement extends AbstractBindingPathElement {
-		public String property;
-
-		public NormalBindingPathElement(String aProperty) {
-			property = aProperty;
-		}
-
-		@Override
-		public String toString() {
-			return "Normal[" + property + "]";
-		}
-	}
-
-	public static class MethodCallBindingPathElement extends AbstractBindingPathElement {
-		public String method;
-		public List<Expression> args;
-
-		public MethodCallBindingPathElement(String aMethod, List<Expression> someArgs) {
-			method = aMethod;
-			args = someArgs;
-		}
-
-		@Override
-		public String toString() {
-			return "Call[" + method + "(" + args + ")" + "]";
-		}
-	}
-
-	private ArrayList<AbstractBindingPathElement> path;
+	private ArrayList<BindingValueAsExpression.AbstractBindingPathElement> path;
 
 	// private Hashtable<>
 
 	public BindingSemanticsAnalyzer() {
-		path = new ArrayList<AbstractBindingPathElement>();
+		path = new ArrayList<BindingValueAsExpression.AbstractBindingPathElement>();
 	}
 
-	public List<AbstractBindingPathElement> getPath() {
+	public List<BindingValueAsExpression.AbstractBindingPathElement> getPath() {
 		return path;
 	};
 
@@ -82,13 +51,13 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	  {call} call |
 	  {tail} identifier dot binding;*/
 
-	protected NormalBindingPathElement makeNormalBindingPathElement(TIdentifier identifier) {
-		NormalBindingPathElement returned = new NormalBindingPathElement(identifier.getText());
+	protected BindingValueAsExpression.NormalBindingPathElement makeNormalBindingPathElement(TIdentifier identifier) {
+		BindingValueAsExpression.NormalBindingPathElement returned = new BindingValueAsExpression.NormalBindingPathElement(identifier.getText());
 		path.add(0, returned);
 		return returned;
 	}
 
-	public MethodCallBindingPathElement makeMethodCallBindingPathElement(ACall node) {
+	public BindingValueAsExpression.MethodCallBindingPathElement makeMethodCallBindingPathElement(ACall node) {
 		AArgList argList = (AArgList) node.getArgList();
 		ArrayList<Expression> args = new ArrayList<Expression>();
 		args.add(getExpression(argList.getExpr()));
@@ -96,7 +65,7 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 			AAdditionalArg additionalArg = (AAdditionalArg) aa;
 			args.add(getExpression(additionalArg.getExpr()));
 		}
-		MethodCallBindingPathElement returned = new MethodCallBindingPathElement(node.getIdentifier().getText(), args);
+		BindingValueAsExpression.MethodCallBindingPathElement returned = new BindingValueAsExpression.MethodCallBindingPathElement(node.getIdentifier().getText(), args);
 		path.add(0, returned);
 		return returned;
 	}

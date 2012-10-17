@@ -24,6 +24,7 @@ import java.io.PrintStream;
 import org.openflexo.antar.expr.BinaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
 import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.DateConstant;
@@ -101,10 +102,6 @@ public abstract class ExpressionPrettyPrinter {
 		return variable.getName();
 	}
 
-	protected String makeStringRepresentation(BindingValueAsExpression bv) {
-		return bv.getUnparsed();
-	}
-
 	protected String makeStringRepresentation(Constant constant) {
 		if (constant instanceof SymbolicConstant) {
 			return makeStringRepresentation((SymbolicConstant) constant);
@@ -125,6 +122,10 @@ public abstract class ExpressionPrettyPrinter {
 		}
 		return "???";
 	}
+
+	protected abstract String makeStringRepresentation(BindingValueAsExpression bv);
+
+	protected abstract String makeStringRepresentation(AbstractBindingPathElement e);
 
 	protected abstract String makeStringRepresentation(BooleanConstant constant);
 
