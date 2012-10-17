@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.expr;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -73,8 +74,32 @@ public class BindingValueAsExpression extends Expression {
 		return bindingPath;
 	}
 
+	public boolean containsAMethodCall() {
+		for (AbstractBindingPathElement e : getBindingPath()) {
+			if (e instanceof MethodCallBindingPathElement) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
-	public Expression evaluate(EvaluationContext context) {
+	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+		if (containsAMethodCall()) {
+			ArrayList<AbstractBindingPathElement> newBindingPath = new ArrayList<AbstractBindingPathElement>();
+			for (AbstractBindingPathElement e : getBindingPath()) {
+				if (e instanceof NormalBindingPathElement) {
+					newBindingPath.add(new NormalBindingPathElement(((NormalBindingPathElement) e).property));
+				} else if (e instanceof MethodCallBindingPathElement) {
+					ArrayList<Expression> newArgs = new ArrayList<Expression>();
+					for (Expression arg : ((MethodCallBindingPathElement) e).args) {
+						newArgs.add(arg.evaluate(context));
+					}
+					newBindingPath.add(new MethodCallBindingPathElement(((MethodCallBindingPathElement) e).method, newArgs));
+				}
+			}
+			return new BindingValueAsExpression(newBindingPath);
+		}
 		return this;
 	}
 

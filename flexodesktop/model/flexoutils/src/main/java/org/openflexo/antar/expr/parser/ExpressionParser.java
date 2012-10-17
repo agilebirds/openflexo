@@ -21,8 +21,14 @@ package org.openflexo.antar.expr.parser;
 
 import java.io.PushbackReader;
 import java.io.StringReader;
+import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.ArithmeticUnaryOperator;
+import org.openflexo.antar.expr.Constant.ArithmeticConstant;
+import org.openflexo.antar.expr.Constant.FloatConstant;
+import org.openflexo.antar.expr.Constant.IntegerConstant;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.UnaryOperatorExpression;
 import org.openflexo.antar.expr.parser.lexer.Lexer;
 import org.openflexo.antar.expr.parser.node.Start;
 import org.openflexo.antar.expr.parser.parser.Parser;
@@ -37,6 +43,8 @@ import org.openflexo.antar.expr.parser.parser.Parser;
  * @author sylvain
  */
 public class ExpressionParser {
+
+	private static final Logger logger = Logger.getLogger(ExpressionParser.class.getPackage().getName());
 
 	public static Expression parse(String anExpression) throws ParseException {
 		try {
@@ -58,10 +66,26 @@ public class ExpressionParser {
 			/*APlusExpr a = (APlusExpr) tree.getPExpr();
 			System.out.println("left=" + a.getExpr());
 			System.out.println("right=" + a.getFactor());*/
-			return t.getExpression();
+			return postSemanticAnalysisReduction(t.getExpression());
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
+			throw new ParseException(e.getMessage());
 		}
-		return null;
+	}
+
+	private static Expression postSemanticAnalysisReduction(Expression e) {
+		if (e instanceof UnaryOperatorExpression && ((UnaryOperatorExpression) e).getOperator() == ArithmeticUnaryOperator.UNARY_MINUS
+				&& ((UnaryOperatorExpression) e).getArgument() instanceof ArithmeticConstant) {
+			// In this case, we will reduce this into a negative single arithmetic constant
+			ArithmeticConstant<?> c = (ArithmeticConstant<?>) ((UnaryOperatorExpression) e).getArgument();
+			if (c instanceof IntegerConstant) {
+				return new IntegerConstant(-((IntegerConstant) c).getValue());
+			} else if (c instanceof FloatConstant) {
+				return new FloatConstant(-((FloatConstant) c).getValue());
+			} else {
+				logger.warning("Unexpected " + c);
+			}
+		}
+		return e;
 	}
 }

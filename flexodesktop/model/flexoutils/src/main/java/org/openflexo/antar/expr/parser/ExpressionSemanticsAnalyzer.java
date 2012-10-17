@@ -121,21 +121,21 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	}
 
 	private IntegerConstant makeDecimalNumber(TDecimalNumber node) {
-		System.out.println("Make decimal number with " + node);
+		System.out.println("Make decimal number with " + node + " as " + Long.parseLong(node.getText()));
 		IntegerConstant returned = new IntegerConstant(Long.parseLong(node.getText()));
 		registerExpressionNode(node, returned);
 		return returned;
 	}
 
 	private FloatConstant makePreciseNumber(TPreciseNumber node) {
-		System.out.println("Make precise number with " + node);
+		System.out.println("Make precise number with " + node + " as " + Double.parseDouble(node.getText()));
 		FloatConstant returned = new FloatConstant(Double.parseDouble(node.getText()));
 		registerExpressionNode(node, returned);
 		return returned;
 	}
 
 	private FloatConstant makeScientificNotationNumber(TScientificNotationNumber node) {
-		System.out.println("Make scientific notation number with " + node);
+		System.out.println("Make scientific notation number with " + node + " as " + Double.parseDouble(node.getText()));
 		FloatConstant returned = new FloatConstant(Double.parseDouble(node.getText()));
 		registerExpressionNode(node, returned);
 		return returned;

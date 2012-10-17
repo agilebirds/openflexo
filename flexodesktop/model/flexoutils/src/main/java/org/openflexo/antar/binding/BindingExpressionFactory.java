@@ -12,15 +12,15 @@ import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.oldparser.ExpressionParser;
-import org.openflexo.antar.expr.oldparser.ParseException;
-import org.openflexo.antar.expr.oldparser.Value;
-import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.ConstantFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultConstantFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultFunctionFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultVariableFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.oldparser.ParseException;
+import org.openflexo.antar.expr.oldparser.Value;
+import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.xmlcode.StringEncoder;
 
