@@ -69,6 +69,8 @@ import org.openflexo.icon.UtilsIconLibrary;
 public class TabbedPane<J extends JComponent> {
 
 	public static interface TabHeaderRenderer<J extends JComponent> {
+		public boolean isTabHeaderVisible(J tab);
+
 		public Icon getTabHeaderIcon(J tab);
 
 		public String getTabHeaderTitle(J tab);
@@ -159,6 +161,11 @@ public class TabbedPane<J extends JComponent> {
 					}
 				});
 				refresh();
+			}
+
+			@Override
+			public boolean isVisible() {
+				return (tabHeaderRenderer == null || tabHeaderRenderer.isTabHeaderVisible(tab)) && super.isVisible();
 			}
 
 			public void refresh() {
@@ -293,7 +300,7 @@ public class TabbedPane<J extends JComponent> {
 
 		private Map<J, TabHeader> headerComponents = new HashMap<J, TabHeader>();
 
-		private JButton extraTabs;
+		private JButton extraTabsButton;
 		private JPopupMenu extraTabsPopup;
 
 		private int xBorderStart = 0;
@@ -302,12 +309,12 @@ public class TabbedPane<J extends JComponent> {
 
 		public TabHeaders() {
 			setOpaque(false);
-			extraTabs = new BarButton(UtilsIconLibrary.ARROW_DOWN);
-			extraTabs.setSize(new Dimension(extraTabs.getIcon().getIconWidth(), extraTabs.getIcon().getIconHeight()));
-			extraTabs.addActionListener(this);
+			extraTabsButton = new BarButton(UtilsIconLibrary.ARROW_DOWN);
+			extraTabsButton.setSize(new Dimension(extraTabsButton.getIcon().getIconWidth(), extraTabsButton.getIcon().getIconHeight()));
+			extraTabsButton.addActionListener(this);
 			extraTabsPopup = new JPopupMenu();
-			extraTabsPopup.setInvoker(extraTabs);
-			extraTabs.setComponentPopupMenu(extraTabsPopup);
+			extraTabsPopup.setInvoker(extraTabsButton);
+			extraTabsButton.setComponentPopupMenu(extraTabsPopup);
 			setBorder(new AbstractBorder() {
 				@Override
 				public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
@@ -326,14 +333,14 @@ public class TabbedPane<J extends JComponent> {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == extraTabs) {
+			if (e.getSource() == extraTabsButton) {
 				if (extraTabsPopup != null) {
 					if (extraTabsPopup.isVisible()) {
 						extraTabsPopup.setVisible(false);
 					} else {
 						extraTabsPopup.setVisible(true);
-						Point location = new Point(extraTabs.getWidth() - extraTabsPopup.getWidth(), extraTabs.getHeight());
-						SwingUtilities.convertPointToScreen(location, extraTabs);
+						Point location = new Point(extraTabsButton.getWidth() - extraTabsPopup.getWidth(), extraTabsButton.getHeight());
+						SwingUtilities.convertPointToScreen(location, extraTabsButton);
 						extraTabsPopup.setLocation(location);
 					}
 				}
@@ -353,14 +360,20 @@ public class TabbedPane<J extends JComponent> {
 				for (int i = 0; i < tabs.size(); i++) {
 					J tab = tabs.get(i);
 					TabHeader tabHeader = headerComponents.get(tab);
+					if (!tabHeader.isVisible()) {
+						selectedHeaderDone |= tabHeader == selectedHeader;
+						continue;
+					}
 					if (!moveToPopup) {
 						if (!selectedHeaderDone) {
 							if (tab != selectedTab && selectedTab != null) {
 								if (i + 2 == tabs.size()) { // in this case, we only need to put the current tab and the selected tab
-									moveToPopup = availableWidth - (tabHeader.getWidth() + selectedHeader.getWidth()) < 0;
+									moveToPopup = availableWidth
+											- (tabHeader.getPreferredSize().width + selectedHeader.getPreferredSize().width) < 0;
 								} else {
 									moveToPopup = availableWidth
-											- (tabHeader.getWidth() + selectedHeader.getWidth() + extraTabs.getWidth()) < 0;
+											- (tabHeader.getWidth() + selectedHeader.getPreferredSize().width + extraTabsButton
+													.getPreferredSize().width) < 0;
 								}
 							}
 							if (moveToPopup) {
@@ -380,16 +393,16 @@ public class TabbedPane<J extends JComponent> {
 							if (i + 1 == tabs.size()) {
 								moveToPopup = availableWidth - tabHeader.getWidth() < 0;
 							} else {
-								moveToPopup = availableWidth - (tabHeader.getWidth() + extraTabs.getWidth()) < 0;
+								moveToPopup = availableWidth - (tabHeader.getWidth() + extraTabsButton.getWidth()) < 0;
 							}
 						}
 					}
 					if (moveToPopup) {
-						if (extraTabs.getParent() != this) {
-							add(extraTabs);
+						if (extraTabsButton.getParent() != this) {
+							add(extraTabsButton);
 						}
-						extraTabs.setSize(extraTabs.getWidth(), getHeight());
-						extraTabs.setLocation(getWidth() - extraTabs.getWidth(), 0);
+						extraTabsButton.setSize(extraTabsButton.getWidth(), getHeight());
+						extraTabsButton.setLocation(getWidth() - extraTabsButton.getWidth(), 0);
 						extraTabsPopup.add(tabHeader);
 						extraTabsPopup.revalidate();
 					} else {
@@ -407,8 +420,8 @@ public class TabbedPane<J extends JComponent> {
 				}
 			}
 			if (!moveToPopup) {
-				if (extraTabs.getParent() == this) {
-					remove(extraTabs);
+				if (extraTabsButton.getParent() == this) {
+					remove(extraTabsButton);
 				}
 			}
 		}
@@ -623,6 +636,11 @@ public class TabbedPane<J extends JComponent> {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		TabbedPane<JLabel> tabbedPane = new TabbedPane<JLabel>();
 		tabbedPane.setTabHeaderRenderer(new TabHeaderRenderer<JLabel>() {
+
+			@Override
+			public boolean isTabHeaderVisible(JLabel tab) {
+				return true;
+			}
 
 			@Override
 			public String getTabHeaderTooltip(JLabel tab) {

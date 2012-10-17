@@ -100,10 +100,9 @@ public class FlexoApplication {
 		// First init localization with default location
 		FlexoLocalization.initWith(new FlexoMainLocalizer());
 
-		boolean isMacOS = ToolBox.getPLATFORM().equals(ToolBox.MACOS);
 		JEditTextArea.DIALOG_FACTORY = FlexoDialog.DIALOG_FACTORY;
 		try {
-			if (isMacOS) {
+			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				application = Class.forName("com.apple.eawt.Application").newInstance();
 				Method enablePrefMenu = application.getClass().getMethod("setEnabledPreferencesMenu", new Class[] { boolean.class });
 				enablePrefMenu.invoke(application, new Object[] { new Boolean(true) });

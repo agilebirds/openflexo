@@ -232,6 +232,8 @@ public class Flexo {
 			}
 		};
 		FlexoApplication.installEventQueue();
+		// Before starting the UI, we need to initialize localization
+		FlexoApplication.initialize(applicationContext.getModuleLoader());
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -247,7 +249,6 @@ public class Flexo {
 				logger.log(Level.WARNING, "Could not insert security provider", e);
 			}
 		}
-		FlexoApplication.initialize(applicationContext.getModuleLoader());
 		initProxyManagement();
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting on " + ToolBox.getPLATFORM() + "... JVM version is " + System.getProperty("java.version"));

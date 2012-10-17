@@ -48,7 +48,6 @@ import org.openflexo.vpm.view.CEDBrowserView;
 import org.openflexo.vpm.view.CalcLibraryView;
 import org.openflexo.vpm.view.CalcView;
 import org.openflexo.vpm.view.EditionPatternView;
-import org.openflexo.vpm.view.OntologyView;
 
 public class ViewPointPerspective extends FlexoPerspective {
 
@@ -199,7 +198,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof ViewPointLibrary || object instanceof ImportedOWLOntology || object instanceof ViewPointPalette
+		return object instanceof ViewPointLibrary /*|| object instanceof ImportedOWLOntology*/|| object instanceof ViewPointPalette
 				|| object instanceof ExampleDrawingShema || object instanceof ViewPoint || object instanceof EditionPattern;
 	}
 
@@ -208,10 +207,10 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (object instanceof ViewPointLibrary) {
 			return new CalcLibraryView((ViewPointLibrary) object, (VPMController) controller);
 		}
-		if (object instanceof ImportedOWLOntology) {
+		/*if (object instanceof ImportedOWLOntology) {
 			((ImportedOWLOntology) object).loadWhenUnloaded();
 			return new OntologyView((ImportedOWLOntology) object, (VPMController) controller, this);
-		}
+		}*/
 		if (object instanceof ViewPoint) {
 			((ViewPoint) object).loadWhenUnloaded();
 			return new CalcView((ViewPoint) object, (VPMController) controller);

@@ -143,6 +143,11 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				return null;
 			}
 
+			@Override
+			public boolean isTabHeaderVisible(JComponent tab) {
+				return !(tab instanceof org.openflexo.view.EmptyPanel<?>);
+			}
+
 		});
 		tabbedPane.setUseTabBody(false);
 		tabbedPane.addToTabListeners(new TabbedPane.TabListener<JComponent>() {
@@ -152,7 +157,10 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				if (tab != null) {
 					FlexoMainPane.this.controller.getControllerModel().setCurrentObjectAndPerspective(
 							((ModuleView<?>) tab).getRepresentedObject(), ((ModuleView<?>) tab).getPerspective());
+				} else {
+					FlexoMainPane.this.controller.getControllerModel().setCurrentObject(null);
 				}
+				setModuleView((ModuleView<?>) tab);
 			}
 
 			@Override
@@ -531,7 +539,10 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				FlexoPerspective next = (FlexoPerspective) evt.getNewValue();
 				saveLayout();
 				perspective = next;
-				setModuleView(controller.moduleViewForObject(controller.getCurrentDisplayedObjectAsModuleView()));
+				ModuleView<?> moduleView = controller.moduleViewForObject(controller.getCurrentDisplayedObjectAsModuleView());
+				if (moduleView != null) {
+					tabbedPane.selectTab((JComponent) moduleView);
+				}
 				updatePropertyChangeListener(previous, next);
 				updateLayoutForPerspective();
 			} else if (evt.getPropertyName().equals(ControllerModel.LEFT_VIEW_VISIBLE)) {
@@ -542,15 +553,8 @@ public abstract class FlexoMainPane extends JPanel implements PropertyChangeList
 				if (controller.getControllerModel().getCurrentObject() != null) {
 					ModuleView<?> moduleView = controller.moduleViewForObject(controller.getControllerModel().getCurrentObject());
 					if (moduleView != null) {
-						setModuleView(moduleView);
 						tabbedPane.selectTab((JComponent) moduleView);
-					} else {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Could not find module view for object " + controller.getControllerModel().getCurrentObject());
-						}
 					}
-				} else {
-					setModuleView(null);
 				}
 			}
 		} else if (evt.getSource() == controller.getCurrentPerspective()) {

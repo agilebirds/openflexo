@@ -154,7 +154,12 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			}
 
 			if (newEditedObject == null || switchCurrentObjectIfNeeded) {
-				newEditedObject = currentPerspective.getDefaultObject(getCurrentObject());
+				HistoryLocation lastHistoryLocationForPerspective = getLastHistoryLocationForPerspective(currentPerspective);
+				if (lastHistoryLocationForPerspective != null) {
+					newEditedObject = lastHistoryLocationForPerspective.getObject();
+				} else {
+					newEditedObject = currentPerspective.getDefaultObject(getCurrentObject());
+				}
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("switchToPerspective " + currentPerspective + " with object " + newEditedObject
@@ -192,11 +197,19 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	 ***********/
 
 	public FlexoEditor getCurrentEditor() {
-		return currentEditor;
+		if (requiresProject()) {
+			return currentEditor;
+		} else {
+			return context.getApplicationEditor();
+		}
+	}
+
+	public boolean requiresProject() {
+		return module.getModule().requireProject();
 	}
 
 	public void setCurrentEditor(FlexoEditor projectEditor) {
-		if (projectEditor == null && canGoBack()) {
+		if (requiresProject() && projectEditor == null && canGoBack()) {
 			historyBack();
 			return;
 		}
@@ -392,6 +405,16 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		for (int i = previousHistory.size() - 1; i > -1; i--) {
 			HistoryLocation location = previousHistory.get(i);
 			if (location.getObject().getProject() == project) {
+				return location;
+			}
+		}
+		return null;
+	}
+
+	private HistoryLocation getLastHistoryLocationForPerspective(FlexoPerspective perspective) {
+		for (int i = previousHistory.size() - 1; i > -1; i--) {
+			HistoryLocation location = previousHistory.get(i);
+			if (location.getPerspective() == perspective) {
 				return location;
 			}
 		}

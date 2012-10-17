@@ -1116,7 +1116,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 		ModuleView<?> moduleView = projectViews.get(object);
 		if (moduleView == null) {
-			if (createViewIfRequired) {
+			if (createViewIfRequired && controllerModel.getCurrentPerspective().hasModuleViewForObject(object)) {
 				moduleView = createModuleViewForObjectAndPerspective(object, controllerModel.getCurrentPerspective());
 				if (moduleView != null) {
 					FlexoModelObject representedObject = moduleView.getRepresentedObject();
@@ -1154,7 +1154,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 *            TODO
 	 * @return a newly created and initialized ModuleView instance
 	 */
-	public final ModuleView<?> createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
+	protected final ModuleView<?> createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) {
 		if (perspective == null) {
 			return null;
 		} else {
@@ -1171,7 +1171,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return _hasViewForObjectAndPerspective(object, perspective);
 		} catch (ClassCastException e) {
 			// Don't worry here
-			// This class cast exception is expected here, this test was intented for this goal
+			// This class cast exception is expected here, this test was intended for this goal
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Perspective " + perspective + " is not supposed to represent objects of class "
 						+ object.getClass().getSimpleName());
@@ -1254,7 +1254,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 *            the view to remove
 	 */
 	public void removeModuleView(ModuleView<?> aView) {
-		if (aView.getRepresentedObject() != null && aView.getRepresentedObject().getProject() != null) {
+		if (aView.getRepresentedObject() != null) {
 			Map<FlexoProject, Map<FlexoModelObject, ModuleView<?>>> map = getLoadedViewsForPerspective(aView.getPerspective());
 			Map<FlexoModelObject, ModuleView<?>> map2 = map.get(aView.getRepresentedObject().getProject());
 			if (map2.get(aView.getRepresentedObject()) == aView) {// Let's make sure we remove the proper
@@ -1363,8 +1363,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	public abstract String getWindowTitleforObject(FlexoModelObject object);
 
 	public String getWindowTitle() {
-		String projectTitle = getProject() != null ? " - " + getProject().getProjectName() + " - "
-				+ getProjectDirectory().getAbsolutePath() : "";
+		String projectTitle = getModule().getModule().requireProject() && getProject() != null ? " - " + getProject().getProjectName()
+				+ " - " + getProjectDirectory().getAbsolutePath() : "";
 		if (getCurrentModuleView() != null) {
 			return getModule().getName() + " : " + getWindowTitleforObject(getCurrentDisplayedObjectAsModuleView()) + projectTitle;
 		} else {
