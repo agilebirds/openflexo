@@ -121,7 +121,11 @@ public class FlexoTemplateResourceLoader extends ResourceLoader {
 	 */
 	@Override
 	public long getLastModified(Resource paramResource) {
-		return getTemplate(paramResource.getName()).getLastUpdate().getTime();
+		CGTemplate template = getTemplate(paramResource.getName());
+		if (paramResource instanceof FlexoTemplate && ((FlexoTemplate) paramResource).getSize() < 0) {
+			((FlexoTemplate) paramResource).setSize(template.getContent().length());
+		}
+		return template.getLastUpdate().getTime();
 	}
 
 	/**
@@ -136,7 +140,14 @@ public class FlexoTemplateResourceLoader extends ResourceLoader {
 	 */
 	@Override
 	public boolean isSourceModified(Resource paramResource) {
-		return getLastModified(paramResource) != paramResource.getLastModified();
+		boolean modified = getLastModified(paramResource) != paramResource.getLastModified();
+		if (modified) {
+			return true;
+		}
+		if (paramResource instanceof FlexoTemplate) {
+			return ((FlexoTemplate) paramResource).getSize() != getTemplate(paramResource.getName()).getContent().length();
+		}
+		return modified;
 	}
 
 	@Override

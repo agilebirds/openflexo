@@ -150,13 +150,17 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 			try {
 				_warRepository = getProject().setDirectoryForRepositoryName(
 						getName() + "WAR",
-						getDirectory() != null ? getDirectory().getParentFile() : FileUtils.createTempDirectory(getProject()
-								.getProjectName() + "Application", ".war"));
+						getDefaultWARDirectory());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return _warRepository;
+	}
+
+	private File getDefaultWARDirectory() throws IOException {
+		return getDirectory() != null ? getDirectory().getParentFile() : FileUtils.createTempDirectory(getProject()
+				.getProjectName() + "Application", ".war");
 	}
 
 	public File getWarDirectory() {
