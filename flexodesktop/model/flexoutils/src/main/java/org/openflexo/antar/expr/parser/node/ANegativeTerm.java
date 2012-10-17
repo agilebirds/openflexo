@@ -34,7 +34,6 @@ public final class ANegativeTerm extends PTerm
             cloneNode(this._term_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseANegativeTerm(this);

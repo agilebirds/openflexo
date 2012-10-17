@@ -25,7 +25,6 @@ public final class TDecimalNumber extends Token
       return new TDecimalNumber(getText(), getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTDecimalNumber(this);

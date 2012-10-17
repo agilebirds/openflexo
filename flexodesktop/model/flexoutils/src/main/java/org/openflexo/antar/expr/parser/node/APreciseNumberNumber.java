@@ -29,7 +29,6 @@ public final class APreciseNumberNumber extends PNumber
             cloneNode(this._preciseNumber_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAPreciseNumberNumber(this);

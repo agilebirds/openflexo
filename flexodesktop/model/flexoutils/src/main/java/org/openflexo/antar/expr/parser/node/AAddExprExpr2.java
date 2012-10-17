@@ -39,7 +39,6 @@ public final class AAddExprExpr2 extends PExpr2
             cloneNode(this._right_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAAddExprExpr2(this);

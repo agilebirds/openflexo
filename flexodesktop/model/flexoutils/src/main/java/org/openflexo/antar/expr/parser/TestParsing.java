@@ -5,18 +5,44 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 
+import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.TypeMismatchException;
 
 public class TestParsing extends TestCase {
+
+	private DefaultExpressionPrettyPrinter prettyPrinter;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		prettyPrinter = new DefaultExpressionPrettyPrinter();
+	}
 
 	private void tryToParse(String anExpression, String expectedEvaluatedExpression, boolean shouldFail) {
 
 		try {
 			System.out.println("Parsing... " + anExpression);
-			Expression e = ExpressionParser.parse(anExpression);
+			Expression parsed = ExpressionParser.parse(anExpression);
 			System.out.println("Parsed " + anExpression);
-
-		} catch (Exception e) {
+			System.out.println("Successfully parsed as : " + parsed.getClass().getSimpleName());
+			System.out.println("Normalized: " + prettyPrinter.getStringRepresentation(parsed));
+			System.out.println("Evaluated: " + prettyPrinter.getStringRepresentation(parsed.evaluate()));
+			if (shouldFail) {
+				fail();
+			}
+			System.out.println("expectedEvaluatedExpression=" + "'" + expectedEvaluatedExpression + "'");
+			System.out.println("prettyPrinter.getStringRepresentation(parsed.evaluate())=" + "'"
+					+ prettyPrinter.getStringRepresentation(parsed.evaluate()) + "'");
+			assertEquals(expectedEvaluatedExpression, prettyPrinter.getStringRepresentation(parsed.evaluate()));
+		} catch (ParseException e) {
+			if (!shouldFail) {
+				e.printStackTrace();
+				fail();
+			} else {
+				System.out.println("Parsing " + anExpression + " has failed as expected: " + e.getMessage());
+			}
+		} catch (TypeMismatchException e) {
 			if (!shouldFail) {
 				e.printStackTrace();
 				fail();

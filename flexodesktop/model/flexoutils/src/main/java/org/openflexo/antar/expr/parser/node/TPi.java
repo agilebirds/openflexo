@@ -25,7 +25,6 @@ public final class TPi extends Token
       return new TPi(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTPi(this);

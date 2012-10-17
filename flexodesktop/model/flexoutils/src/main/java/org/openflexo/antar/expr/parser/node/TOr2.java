@@ -25,7 +25,6 @@ public final class TOr2 extends Token
       return new TOr2(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTOr2(this);

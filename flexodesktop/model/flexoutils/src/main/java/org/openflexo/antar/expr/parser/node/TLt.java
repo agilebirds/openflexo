@@ -25,7 +25,6 @@ public final class TLt extends Token
       return new TLt(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTLt(this);

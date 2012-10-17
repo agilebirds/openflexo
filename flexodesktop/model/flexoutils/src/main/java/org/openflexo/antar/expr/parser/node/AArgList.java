@@ -21,7 +21,7 @@ public final class AArgList extends PArgList
     public AArgList(
         @SuppressWarnings("hiding") TLPar _lPar_,
         @SuppressWarnings("hiding") PExpr _expr_,
-        @SuppressWarnings("hiding") List<?> _additionalArgs_,
+        @SuppressWarnings("hiding") List<PAdditionalArg> _additionalArgs_,
         @SuppressWarnings("hiding") TRPar _rPar_)
     {
         // Constructor
@@ -45,7 +45,6 @@ public final class AArgList extends PArgList
             cloneNode(this._rPar_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAArgList(this);
@@ -106,24 +105,18 @@ public final class AArgList extends PArgList
         return this._additionalArgs_;
     }
 
-    public void setAdditionalArgs(List<?> list)
+    public void setAdditionalArgs(List<PAdditionalArg> list)
     {
-        for(PAdditionalArg e : this._additionalArgs_)
-        {
-            e.parent(null);
-        }
         this._additionalArgs_.clear();
-
-        for(Object obj_e : list)
+        this._additionalArgs_.addAll(list);
+        for(PAdditionalArg e : list)
         {
-            PAdditionalArg e = (PAdditionalArg) obj_e;
             if(e.parent() != null)
             {
                 e.parent().removeChild(e);
             }
 
             e.parent(this);
-            this._additionalArgs_.add(e);
         }
     }
 

@@ -29,7 +29,6 @@ public final class ABindingTerm extends PTerm
             cloneNode(this._binding_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseABindingTerm(this);

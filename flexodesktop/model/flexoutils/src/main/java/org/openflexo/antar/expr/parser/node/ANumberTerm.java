@@ -29,7 +29,6 @@ public final class ANumberTerm extends PTerm
             cloneNode(this._number_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseANumberTerm(this);

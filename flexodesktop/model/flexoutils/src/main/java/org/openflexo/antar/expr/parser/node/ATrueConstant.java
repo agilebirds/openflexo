@@ -29,7 +29,6 @@ public final class ATrueConstant extends PConstant
             cloneNode(this._true_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseATrueConstant(this);

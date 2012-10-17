@@ -25,7 +25,6 @@ public final class TCos extends Token
       return new TCos(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTCos(this);

@@ -25,7 +25,6 @@ public final class TNeq extends Token
       return new TNeq(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTNeq(this);

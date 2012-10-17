@@ -2,7 +2,7 @@ Package org.openflexo.antar.expr.parser;
 
 Helpers
  upper_case = ['A' .. 'Z'];
- lower_case = ['a' .. 'y'];
+ lower_case = ['a' .. 'z'];
  digit = ['0'..'9'];
  letter = upper_case | lower_case;
  any        = [0 .. 0xffff];
@@ -15,6 +15,7 @@ Tokens
  mult = '*';
  div = '/';
  mod = '%';
+ power = '^';
  lt = '<';
  gt = '>';
  lte = '<=';
@@ -33,9 +34,14 @@ Tokens
  comma = ',';
  pi = 'pi';
  cos = 'cos';
+ acos = 'acos';
  sin = 'sin';
+ asin = 'asin';
  tan = 'tan';
  atan = 'atan';
+ log = 'log';
+ exp = 'exp';
+ sqrt = 'sqrt';
  true = 'true';
  false = 'false';
  decimal_number = ['0' .. '9']+;
@@ -78,6 +84,7 @@ Productions
   {mult_expr} [left]:expr3 mult [right]:term |
   {div_expr} [left]:expr3 div [right]:term |
   {mod_expr} [left]:expr3 mod [right]:term |
+  {power_expr} [left]:expr3 power [right]:term |
   {not_expr} not term;
  
  call = 
@@ -92,13 +99,19 @@ Productions
  binding = 
   {identifier} identifier |
   {call} call |
-  {tail} identifier dot binding;
+  {tail1} identifier dot binding |
+  {tail2} call dot binding;
 
  function =
   {cos_func} cos l_par expr2 r_par |
+  {acos_func} acos l_par expr2 r_par |
   {sin_func} sin l_par expr2 r_par |
+  {asin_func} asin l_par expr2 r_par |
   {tan_func} tan l_par expr2 r_par |
-  {atan_func} atan l_par expr2 r_par;
+  {atan_func} atan l_par expr2 r_par |
+  {exp_func} exp l_par expr2 r_par |
+  {log_func} log l_par expr2 r_par |
+  {sqrt_func} sqrt l_par expr2 r_par;
 
  constant = 
   {true} true |

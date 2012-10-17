@@ -25,7 +25,6 @@ public final class TFalse extends Token
       return new TFalse(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTFalse(this);

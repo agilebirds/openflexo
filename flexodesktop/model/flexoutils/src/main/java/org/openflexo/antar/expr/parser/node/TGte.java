@@ -25,7 +25,6 @@ public final class TGte extends Token
       return new TGte(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTGte(this);

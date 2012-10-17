@@ -25,7 +25,6 @@ public final class TAtan extends Token
       return new TAtan(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTAtan(this);

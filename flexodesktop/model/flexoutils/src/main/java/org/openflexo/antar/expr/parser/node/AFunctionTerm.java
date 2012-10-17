@@ -29,7 +29,6 @@ public final class AFunctionTerm extends PTerm
             cloneNode(this._function_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAFunctionTerm(this);

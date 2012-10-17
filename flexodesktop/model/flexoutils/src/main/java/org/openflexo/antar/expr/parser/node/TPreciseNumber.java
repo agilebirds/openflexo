@@ -25,7 +25,6 @@ public final class TPreciseNumber extends Token
       return new TPreciseNumber(getText(), getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTPreciseNumber(this);

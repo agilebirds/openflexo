@@ -25,7 +25,6 @@ public final class TScientificNotationNumber extends Token
       return new TScientificNotationNumber(getText(), getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTScientificNotationNumber(this);

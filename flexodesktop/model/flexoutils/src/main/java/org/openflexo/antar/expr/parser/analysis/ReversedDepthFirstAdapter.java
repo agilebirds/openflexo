@@ -563,6 +563,35 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outAModExprExpr3(node);
     }
 
+    public void inAPowerExprExpr3(APowerExprExpr3 node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAPowerExprExpr3(APowerExprExpr3 node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAPowerExprExpr3(APowerExprExpr3 node)
+    {
+        inAPowerExprExpr3(node);
+        if(node.getRight() != null)
+        {
+            node.getRight().apply(this);
+        }
+        if(node.getPower() != null)
+        {
+            node.getPower().apply(this);
+        }
+        if(node.getLeft() != null)
+        {
+            node.getLeft().apply(this);
+        }
+        outAPowerExprExpr3(node);
+    }
+
     public void inANotExprExpr3(ANotExprExpr3 node)
     {
         defaultIn(node);
@@ -717,20 +746,20 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outACallBinding(node);
     }
 
-    public void inATailBinding(ATailBinding node)
+    public void inATail1Binding(ATail1Binding node)
     {
         defaultIn(node);
     }
 
-    public void outATailBinding(ATailBinding node)
+    public void outATail1Binding(ATail1Binding node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseATailBinding(ATailBinding node)
+    public void caseATail1Binding(ATail1Binding node)
     {
-        inATailBinding(node);
+        inATail1Binding(node);
         if(node.getBinding() != null)
         {
             node.getBinding().apply(this);
@@ -743,7 +772,36 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getIdentifier().apply(this);
         }
-        outATailBinding(node);
+        outATail1Binding(node);
+    }
+
+    public void inATail2Binding(ATail2Binding node)
+    {
+        defaultIn(node);
+    }
+
+    public void outATail2Binding(ATail2Binding node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseATail2Binding(ATail2Binding node)
+    {
+        inATail2Binding(node);
+        if(node.getBinding() != null)
+        {
+            node.getBinding().apply(this);
+        }
+        if(node.getDot() != null)
+        {
+            node.getDot().apply(this);
+        }
+        if(node.getCall() != null)
+        {
+            node.getCall().apply(this);
+        }
+        outATail2Binding(node);
     }
 
     public void inACosFuncFunction(ACosFuncFunction node)
@@ -779,6 +837,39 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outACosFuncFunction(node);
     }
 
+    public void inAAcosFuncFunction(AAcosFuncFunction node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAAcosFuncFunction(AAcosFuncFunction node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAAcosFuncFunction(AAcosFuncFunction node)
+    {
+        inAAcosFuncFunction(node);
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        if(node.getExpr2() != null)
+        {
+            node.getExpr2().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getAcos() != null)
+        {
+            node.getAcos().apply(this);
+        }
+        outAAcosFuncFunction(node);
+    }
+
     public void inASinFuncFunction(ASinFuncFunction node)
     {
         defaultIn(node);
@@ -810,6 +901,39 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             node.getSin().apply(this);
         }
         outASinFuncFunction(node);
+    }
+
+    public void inAAsinFuncFunction(AAsinFuncFunction node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAAsinFuncFunction(AAsinFuncFunction node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAAsinFuncFunction(AAsinFuncFunction node)
+    {
+        inAAsinFuncFunction(node);
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        if(node.getExpr2() != null)
+        {
+            node.getExpr2().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getAsin() != null)
+        {
+            node.getAsin().apply(this);
+        }
+        outAAsinFuncFunction(node);
     }
 
     public void inATanFuncFunction(ATanFuncFunction node)
@@ -876,6 +1000,105 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             node.getAtan().apply(this);
         }
         outAAtanFuncFunction(node);
+    }
+
+    public void inAExpFuncFunction(AExpFuncFunction node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAExpFuncFunction(AExpFuncFunction node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAExpFuncFunction(AExpFuncFunction node)
+    {
+        inAExpFuncFunction(node);
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        if(node.getExpr2() != null)
+        {
+            node.getExpr2().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
+        }
+        outAExpFuncFunction(node);
+    }
+
+    public void inALogFuncFunction(ALogFuncFunction node)
+    {
+        defaultIn(node);
+    }
+
+    public void outALogFuncFunction(ALogFuncFunction node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseALogFuncFunction(ALogFuncFunction node)
+    {
+        inALogFuncFunction(node);
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        if(node.getExpr2() != null)
+        {
+            node.getExpr2().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getLog() != null)
+        {
+            node.getLog().apply(this);
+        }
+        outALogFuncFunction(node);
+    }
+
+    public void inASqrtFuncFunction(ASqrtFuncFunction node)
+    {
+        defaultIn(node);
+    }
+
+    public void outASqrtFuncFunction(ASqrtFuncFunction node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseASqrtFuncFunction(ASqrtFuncFunction node)
+    {
+        inASqrtFuncFunction(node);
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        if(node.getExpr2() != null)
+        {
+            node.getExpr2().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getSqrt() != null)
+        {
+            node.getSqrt().apply(this);
+        }
+        outASqrtFuncFunction(node);
     }
 
     public void inATrueConstant(ATrueConstant node)

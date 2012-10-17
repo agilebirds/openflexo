@@ -34,7 +34,6 @@ public final class AAdditionalArg extends PAdditionalArg
             cloneNode(this._expr_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAAdditionalArg(this);

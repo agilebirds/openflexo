@@ -29,7 +29,6 @@ public final class ADecimalNumberNumber extends PNumber
             cloneNode(this._decimalNumber_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseADecimalNumberNumber(this);

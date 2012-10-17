@@ -27,13 +27,15 @@ import org.openflexo.antar.expr.parser.lexer.Lexer;
 import org.openflexo.antar.expr.parser.node.Start;
 import org.openflexo.antar.expr.parser.parser.Parser;
 
-/*
- * Created on 4 janv. 2006 by sguerin
- *
- * Flexo Application Suite
- * (c) Denali 2003-2005
+/**
+ * This class provides the parsing service for AnTAR expressions and bindings. This includes syntaxic and semantics analyzer.<br>
+ * 
+ * SableCC is extensively used to perform this. To compile and generate the grammar, please invoke {@link CompileAntarExpressionParser}
+ * located in src/dev/java. Generated code is located in org.openflexo.antar.expr.parser.analysis, org.openflexo.antar.expr.parser.lexer,
+ * org.openflexo.antar.expr.parser.node, org.openflexo.antar.expr.parser.parser
+ * 
+ * @author sylvain
  */
-
 public class ExpressionParser {
 
 	public static Expression parse(String anExpression) throws ParseException {
@@ -49,9 +51,8 @@ public class ExpressionParser {
 			Start tree = p.parse();
 
 			// Apply the translation.
-			Translation t = new Translation(tree);
+			ExpressionSemanticsAnalyzer t = new ExpressionSemanticsAnalyzer();
 			tree.apply(t);
-			System.out.println("t=" + t);
 
 			System.out.println("tree.getPExpr() = " + tree.getPExpr() + " of " + tree.getPExpr().getClass().getName());
 			/*APlusExpr a = (APlusExpr) tree.getPExpr();

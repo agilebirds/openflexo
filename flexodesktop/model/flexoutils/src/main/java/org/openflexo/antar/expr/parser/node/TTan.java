@@ -25,7 +25,6 @@ public final class TTan extends Token
       return new TTan(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTTan(this);

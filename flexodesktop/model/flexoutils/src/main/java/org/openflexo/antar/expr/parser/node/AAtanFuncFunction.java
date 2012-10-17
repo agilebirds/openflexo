@@ -44,7 +44,6 @@ public final class AAtanFuncFunction extends PFunction
             cloneNode(this._rPar_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAAtanFuncFunction(this);

@@ -25,7 +25,6 @@ public final class TStringValue extends Token
       return new TStringValue(getText(), getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTStringValue(this);

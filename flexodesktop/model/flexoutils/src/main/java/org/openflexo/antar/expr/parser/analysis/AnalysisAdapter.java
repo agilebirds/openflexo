@@ -10,7 +10,6 @@ public class AnalysisAdapter implements Analysis
     private Hashtable<Node,Object> in;
     private Hashtable<Node,Object> out;
 
-    @Override
     public Object getIn(Node node)
     {
         if(this.in == null)
@@ -21,7 +20,6 @@ public class AnalysisAdapter implements Analysis
         return this.in.get(node);
     }
 
-    @Override
     public void setIn(Node node, Object o)
     {
         if(this.in == null)
@@ -39,7 +37,6 @@ public class AnalysisAdapter implements Analysis
         }
     }
 
-    @Override
     public Object getOut(Node node)
     {
         if(this.out == null)
@@ -50,7 +47,6 @@ public class AnalysisAdapter implements Analysis
         return this.out.get(node);
     }
 
-    @Override
     public void setOut(Node node, Object o)
     {
         if(this.out == null)
@@ -68,487 +64,471 @@ public class AnalysisAdapter implements Analysis
         }
     }
 
-    @Override
     public void caseStart(Start node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAExpr2Expr(AExpr2Expr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAEqExprExpr(AEqExprExpr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAEq2ExprExpr(AEq2ExprExpr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseANeqExprExpr(ANeqExprExpr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseALtExprExpr(ALtExprExpr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAGtExprExpr(AGtExprExpr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseALteExprExpr(ALteExprExpr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAGteExprExpr(AGteExprExpr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAExpr3Expr2(AExpr3Expr2 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAOrExprExpr2(AOrExprExpr2 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAOr2ExprExpr2(AOr2ExprExpr2 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAAddExprExpr2(AAddExprExpr2 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseASubExprExpr2(ASubExprExpr2 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseATermExpr3(ATermExpr3 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAAndExprExpr3(AAndExprExpr3 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAAnd2ExprExpr3(AAnd2ExprExpr3 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAMultExprExpr3(AMultExprExpr3 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseADivExprExpr3(ADivExprExpr3 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAModExprExpr3(AModExprExpr3 node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseAPowerExprExpr3(APowerExprExpr3 node)
+    {
+        defaultCase(node);
+    }
+
     public void caseANotExprExpr3(ANotExprExpr3 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseACall(ACall node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAArgList(AArgList node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAAdditionalArg(AAdditionalArg node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAIdentifierBinding(AIdentifierBinding node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseACallBinding(ACallBinding node)
     {
         defaultCase(node);
     }
 
-    @Override
-    public void caseATailBinding(ATailBinding node)
+    public void caseATail1Binding(ATail1Binding node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseATail2Binding(ATail2Binding node)
+    {
+        defaultCase(node);
+    }
+
     public void caseACosFuncFunction(ACosFuncFunction node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseAAcosFuncFunction(AAcosFuncFunction node)
+    {
+        defaultCase(node);
+    }
+
     public void caseASinFuncFunction(ASinFuncFunction node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseAAsinFuncFunction(AAsinFuncFunction node)
+    {
+        defaultCase(node);
+    }
+
     public void caseATanFuncFunction(ATanFuncFunction node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAAtanFuncFunction(AAtanFuncFunction node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseAExpFuncFunction(AExpFuncFunction node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseALogFuncFunction(ALogFuncFunction node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseASqrtFuncFunction(ASqrtFuncFunction node)
+    {
+        defaultCase(node);
+    }
+
     public void caseATrueConstant(ATrueConstant node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAFalseConstant(AFalseConstant node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAPiConstant(APiConstant node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseADecimalNumberNumber(ADecimalNumberNumber node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAPreciseNumberNumber(APreciseNumberNumber node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAScientificNotationNumberNumber(AScientificNotationNumberNumber node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAConstantNumber(AConstantNumber node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseANegativeTerm(ANegativeTerm node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseANumberTerm(ANumberTerm node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAStringValueTerm(AStringValueTerm node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseACharsValueTerm(ACharsValueTerm node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAFunctionTerm(AFunctionTerm node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseABindingTerm(ABindingTerm node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseAExprTerm(AExprTerm node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTPlus(TPlus node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTMinus(TMinus node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTMult(TMult node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTDiv(TDiv node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTMod(TMod node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseTPower(TPower node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTLt(TLt node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTGt(TGt node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTLte(TLte node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTGte(TGte node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTAnd(TAnd node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTAnd2(TAnd2 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTOr(TOr node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTOr2(TOr2 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTEq(TEq node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTEq2(TEq2 node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTNeq(TNeq node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTNot(TNot node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTLPar(TLPar node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTRPar(TRPar node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTDot(TDot node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTComma(TComma node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTPi(TPi node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTCos(TCos node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseTAcos(TAcos node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTSin(TSin node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseTAsin(TAsin node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTTan(TTan node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTAtan(TAtan node)
     {
         defaultCase(node);
     }
 
-    @Override
+    public void caseTLog(TLog node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTExp(TExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTSqrt(TSqrt node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTTrue(TTrue node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTFalse(TFalse node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTDecimalNumber(TDecimalNumber node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTPreciseNumber(TPreciseNumber node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTScientificNotationNumber(TScientificNotationNumber node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTStringValue(TStringValue node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTCharsValue(TCharsValue node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTIdentifier(TIdentifier node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseTBlank(TBlank node)
     {
         defaultCase(node);
     }
 
-    @Override
     public void caseEOF(EOF node)
     {
         defaultCase(node);

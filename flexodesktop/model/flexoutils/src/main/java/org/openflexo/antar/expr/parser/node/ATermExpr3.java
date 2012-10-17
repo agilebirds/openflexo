@@ -29,7 +29,6 @@ public final class ATermExpr3 extends PExpr3
             cloneNode(this._term_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseATermExpr3(this);

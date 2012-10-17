@@ -25,7 +25,6 @@ public final class TLte extends Token
       return new TLte(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTLte(this);

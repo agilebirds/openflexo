@@ -25,7 +25,6 @@ public final class TEq2 extends Token
       return new TEq2(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTEq2(this);

@@ -29,7 +29,6 @@ public final class AConstantNumber extends PNumber
             cloneNode(this._constant_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAConstantNumber(this);

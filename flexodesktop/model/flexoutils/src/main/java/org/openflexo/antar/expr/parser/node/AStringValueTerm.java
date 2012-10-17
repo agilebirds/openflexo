@@ -29,7 +29,6 @@ public final class AStringValueTerm extends PTerm
             cloneNode(this._stringValue_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAStringValueTerm(this);

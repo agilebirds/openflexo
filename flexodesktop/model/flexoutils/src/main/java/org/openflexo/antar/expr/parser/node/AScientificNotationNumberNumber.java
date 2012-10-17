@@ -29,7 +29,6 @@ public final class AScientificNotationNumberNumber extends PNumber
             cloneNode(this._scientificNotationNumber_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAScientificNotationNumberNumber(this);

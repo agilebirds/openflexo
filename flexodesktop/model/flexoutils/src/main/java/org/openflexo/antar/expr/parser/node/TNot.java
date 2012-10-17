@@ -25,7 +25,6 @@ public final class TNot extends Token
       return new TNot(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTNot(this);

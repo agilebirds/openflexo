@@ -25,7 +25,6 @@ public final class TSin extends Token
       return new TSin(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTSin(this);

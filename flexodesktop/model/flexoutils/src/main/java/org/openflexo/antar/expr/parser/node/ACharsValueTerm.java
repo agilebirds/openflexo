@@ -29,7 +29,6 @@ public final class ACharsValueTerm extends PTerm
             cloneNode(this._charsValue_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseACharsValueTerm(this);

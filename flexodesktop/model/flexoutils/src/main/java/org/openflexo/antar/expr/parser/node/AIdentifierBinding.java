@@ -29,7 +29,6 @@ public final class AIdentifierBinding extends PBinding
             cloneNode(this._identifier_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAIdentifierBinding(this);

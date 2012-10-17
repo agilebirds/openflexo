@@ -29,7 +29,6 @@ public final class ACallBinding extends PBinding
             cloneNode(this._call_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseACallBinding(this);

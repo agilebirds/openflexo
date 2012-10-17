@@ -25,7 +25,6 @@ public final class TTrue extends Token
       return new TTrue(getLine(), getPos());
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseTTrue(this);

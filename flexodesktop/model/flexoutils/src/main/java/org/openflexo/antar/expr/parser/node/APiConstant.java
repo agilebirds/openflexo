@@ -29,7 +29,6 @@ public final class APiConstant extends PConstant
             cloneNode(this._pi_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAPiConstant(this);

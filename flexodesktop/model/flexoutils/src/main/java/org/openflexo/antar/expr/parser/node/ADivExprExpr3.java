@@ -39,7 +39,6 @@ public final class ADivExprExpr3 extends PExpr3
             cloneNode(this._right_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseADivExprExpr3(this);

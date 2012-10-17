@@ -44,7 +44,6 @@ public final class ASinFuncFunction extends PFunction
             cloneNode(this._rPar_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseASinFuncFunction(this);
