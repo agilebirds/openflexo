@@ -24,6 +24,8 @@ import java.util.StringTokenizer;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyObject;
 
+import javax.annotation.Nonnull;
+
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
@@ -92,7 +94,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			PERFORM_SUPER_ADDER = AccessibleProxyObject.class.getMethod("performSuperAdder", String.class, Object.class);
 			PERFORM_SUPER_REMOVER = AccessibleProxyObject.class.getMethod("performSuperRemover", String.class, Object.class);
 			PERFORM_SUPER_DELETER = AccessibleProxyObject.class.getMethod("performSuperDelete");
-			PERFORM_SUPER_FINDER = AccessibleProxyObject.class.getMethod("performSuperFinder", Object.class);
+			PERFORM_SUPER_FINDER = AccessibleProxyObject.class.getMethod("performSuperFinder", String.class, Object.class);
 			PERFORM_SUPER_GETTER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperGetter", String.class, Class.class);
 			PERFORM_SUPER_SETTER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperSetter", String.class, Object.class,
 					Class.class);
@@ -101,7 +103,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			PERFORM_SUPER_REMOVER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperRemover", String.class, Object.class,
 					Class.class);
 			PERFORM_SUPER_DELETER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperDelete", Class.class);
-			PERFORM_SUPER_FINDER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperFinder", Object.class, Class.class);
+			PERFORM_SUPER_FINDER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperFinder", String.class, Object.class,
+					Class.class);
 			IS_SERIALIZING = AccessibleProxyObject.class.getMethod("isSerializing");
 			IS_DESERIALIZING = AccessibleProxyObject.class.getMethod("isDeserializing");
 			IS_MODIFIED = AccessibleProxyObject.class.getMethod("isModified");
@@ -211,6 +214,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			internallyInvokeDeleter();
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER)) {
+
 			internallyInvokeFinder(finder, args);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_GETTER_ENTITY)) {
@@ -232,14 +236,23 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			internallyInvokeDeleter();
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER_ENTITY)) {
-			ModelEntity<? super I> e = getModelEntityFromArg((Class<?>) args[2]);
-			internallyInvokeFinder(finder, args);
-			return null;
+			Class<?> class1 = (Class<?>) args[2];
+			ModelEntity<? super I> e = getModelEntityFromArg(class1);
+			finder = e.getFinder((String) args[0]);
+			if (finder != null) {
+				return internallyInvokeFinder(finder, args);
+			} else {
+				throw new ModelExecutionException("Not such finder defined. Finder '" + args[0] + "' could not be found on entity "
+						+ class1.getName());
+			}
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER)) {
-			// TODO: implement super finder
-			/*finder = modelEntity.getFinder((String)args[0]);
-			internallyInvokeFinder(finder, args[1]);*/
-			return null;
+			finder = getModelEntity().getFinder((String) args[0]);
+			if (finder != null) {
+				return internallyInvokeFinder(finder, args);
+			} else {
+				throw new ModelExecutionException("Not such finder defined. Finder '" + args[0] + "' could not be found on entity "
+						+ getModelEntity().getImplementedInterface().getName());
+			}
 		} else if (methodIsEquivalentTo(method, IS_SERIALIZING)) {
 			return isSerializing();
 		} else if (methodIsEquivalentTo(method, IS_DESERIALIZING)) {
@@ -291,7 +304,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 	}
 
-	private ModelEntity<? super I> getModelEntityFromArg(Class<?> class1) throws ModelDefinitionException {
+	private @Nonnull
+	ModelEntity<? super I> getModelEntityFromArg(Class<?> class1) throws ModelDefinitionException {
 		ModelEntity<?> e = getModelFactory().getModelEntity(class1);
 		if (e == null) {
 			throw new NoSuchEntityException(class1);
@@ -482,11 +496,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private Object invokeGetterForSingleCardinality(ModelProperty<? super I> property) throws ModelDefinitionException {
 		if (property.getReturnedValue() != null) {
-			// Simple implementation of ReturnedValue. This can be drastrically improved
+			// Simple implementation of ReturnedValue. This can be drastically improved
 			String returnedValue = property.getReturnedValue().value();
 			StringTokenizer st = new StringTokenizer(returnedValue, ".");
 			Object value = this;
-			ProxyMethodHandler handler = this;
+			ProxyMethodHandler<?> handler = this;
 			while (st.hasMoreTokens()) {
 				String token = st.nextToken();
 				value = handler.internallyInvokeGetter(token);
@@ -495,7 +509,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 						throw new ModelExecutionException("Cannot invoke " + st.nextToken() + " on object of type "
 								+ value.getClass().getName() + " (caused by returned value: " + returnedValue + ")");
 					}
-					handler = (ProxyMethodHandler) ((ProxyObject) value).getHandler();
+					handler = (ProxyMethodHandler<?>) ((ProxyObject) value).getHandler();
 				}
 			}
 			return value;
@@ -610,12 +624,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			if (modelEntity.getModify() != null && modelEntity.getModify().synchWithForward()
 					&& property.getPropertyIdentifier().equals(modelEntity.getModify().forward())) {
 				if (oldValue instanceof HasPropertyChangeSupport) {
-					((HasPropertyChangeSupport) oldValue).getPropertyChangeSupport().removePropertyChangeListener(
-							modelEntity.getModify().forward(), this);
+					((HasPropertyChangeSupport) oldValue).getPropertyChangeSupport().removePropertyChangeListener(MODIFIED, this);
 				}
 				if (value instanceof HasPropertyChangeSupport) {
-					((HasPropertyChangeSupport) oldValue).getPropertyChangeSupport().addPropertyChangeListener(
-							modelEntity.getModify().forward(), this);
+					((HasPropertyChangeSupport) value).getPropertyChangeSupport().addPropertyChangeListener(MODIFIED, this);
 				}
 			}
 			// First handle inverse property for newValue
@@ -762,7 +774,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeRemoverForListCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
-		List list = (List) invokeGetter(property);
+		List<?> list = (List<?>) invokeGetter(property);
 
 		if (list.contains(value)) {
 			list.remove(value);
@@ -794,7 +806,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		System.err.println("Remover for MAP: not implemented yet");
 	}
 
-	private Object internallyInvokeFinder(Finder finder, Object[] args) throws ModelDefinitionException {
+	private Object internallyInvokeFinder(@Nonnull Finder finder, Object[] args) throws ModelDefinitionException {
 		if (args.length == 0) {
 			throw new ModelDefinitionException("Finder " + finder.collection() + " by attribute " + finder.attribute()
 					+ " does not declare enough argument!");
@@ -1482,10 +1494,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return serializing;
 	}
 
-	public void setSerializing(boolean serializing) {
+	public void setSerializing(boolean serializing) throws ModelDefinitionException {
 		if (this.serializing != serializing) {
 			this.serializing = serializing;
 			firePropertyChange(SERIALIZING, !serializing, serializing);
+			if (!serializing) {
+				setModified(false);
+			}
 		}
 	}
 
@@ -1499,6 +1514,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			if (deserializing) {
 				// At the begining of the deserialization process, we also need to mark the object as initialized
 				initialized = true;
+			} else {
+				modified = false;
 			}
 			firePropertyChange(DESERIALIZING, !deserializing, deserializing);
 		}

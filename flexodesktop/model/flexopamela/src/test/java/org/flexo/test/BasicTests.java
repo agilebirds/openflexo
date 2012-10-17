@@ -687,11 +687,17 @@ public class BasicTests extends TestCase {
 		serializeObject(process);
 		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
 		assertTrue(process.isModified());// Here we verify the forward state
+		assertTrue(activityNode.isModified());
+		activityNode.removeFromIncomingEdges(edge1);
+		process.removeFromNodes(activityNode);
+		serializeObject(process);
+
+		assertFalse(process.isModified());// Here we verify that process has been marked as not-modified (by the serialization mechanism)
+		assertTrue(activityNode.isModified()); // And that activity node is no longer synched with its previous container process.
 	}
 
 	public Document serializeObject(AccessibleProxyObject object) {
 		Document doc = serializer.serializeDocument(object, new ByteArrayOutputStream());
-		object.setModified(false);
 		return doc;
 	}
 

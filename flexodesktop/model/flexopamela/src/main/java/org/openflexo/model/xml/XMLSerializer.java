@@ -154,8 +154,10 @@ public class XMLSerializer {
 								switch (p.getCardinality()) {
 								case SINGLE:
 									Object oValue = handler.invokeGetter(p);
-									Element propertyElement = serializeElement(oValue, propertyXMLElement);
-									returned.addContent(propertyElement);
+									if (oValue != null) {
+										Element propertyElement = serializeElement(oValue, propertyXMLElement);
+										returned.addContent(propertyElement);
+									}
 									break;
 								case LIST:
 									List<?> values = (List<?>) handler.invokeGetter(p);

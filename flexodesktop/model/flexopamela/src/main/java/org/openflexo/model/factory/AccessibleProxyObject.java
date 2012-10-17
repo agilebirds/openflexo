@@ -19,6 +19,7 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 * The deleted property identifier.
 	 */
 	public static final String DELETED = "deleted";
+
 	/**
 	 * Invokes the getter for the property with the given <code>propertyIdentifier</code>.
 	 * 
@@ -75,13 +76,6 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 * @see AccessibleProxyObject#isDeleted()
 	 */
 	public void performSuperDelete(Object... context);
-
-	/**
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public Object performSuperFinder(Object value);
 
 	/**
 	 * Returns the super getter as defined by the model entity associated with the class <code>modelEntityInterface</code>. This method is
@@ -162,7 +156,38 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 */
 	public void performSuperDelete(Class<?> modelEntityInterface, Object... context);
 
-	public Object performSuperFinder(Object value, Class<?> modelEntityInterface);
+	/**
+	 * Invokes the default <code>setModified</code> code handled by {@link ProxyMethodHandler}
+	 * 
+	 * @param modified
+	 *            the value to set on the <code>modified</code> flag.
+	 */
+	public void performSuperSetModified(boolean modified);
+
+	/**
+	 * Invokes the default code for the finder identified by the given <code>finderIdentifier</code> for the provided <code>value</code>.
+	 * 
+	 * @param finderIdentifier
+	 *            the identifier of the finder to run
+	 * @param value
+	 *            the value for which to look
+	 * @return the object or list of objects found.
+	 */
+	public Object performSuperFinder(String finderIdentifier, Object value);
+
+	/**
+	 * Invokes the default code for the finder identified by the given <code>finderIdentifier</code> for the provided <code>value</code> as
+	 * it has been declared on the model entity identified by the provided <code>modelEntityInterface</code>.
+	 * 
+	 * @param finderIdentifier
+	 *            the identifier of the finder to run
+	 * @param value
+	 *            the value for which to look
+	 * @param modelEntityInterface
+	 *            the class corresponding to the model entity from which the finder information should be gathered.
+	 * @return the object or list of objects found.
+	 */
+	public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface);
 
 	/**
 	 * Deletes the current object and all its embedded properties as defined by the {@link Embedded} and {@link ComplexEmbedded}
@@ -194,16 +219,38 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 */
 	public boolean isDeleted();
 
-	public void performSuperSetModified(boolean modified);
-
-	public Object performSuperFinder(String finderIdentifier, Object value);
-
+	/**
+	 * Returns true if this object is currently being serialized
+	 * 
+	 * @return true if it is being serialized
+	 */
 	public boolean isSerializing();
 
+	/**
+	 * Returns true if this object is currently being deserialized
+	 * 
+	 * @return true if it being deserialized
+	 */
 	public boolean isDeserializing();
 
+	/**
+	 * Returns true if this object has been modified since:
+	 * <ul>
+	 * <li>it has been instantiated for the first time, or</li>
+	 * <li>it has been serialized, or</li>
+	 * <li>it has been deserialized.</li>
+	 * </ul>
+	 * 
+	 * @return true if this object has been modified
+	 */
 	public boolean isModified();
 
+	/**
+	 * Sets the value of the <code>modified</code> flag.
+	 * 
+	 * @param modified
+	 *            the value to set
+	 */
 	public void setModified(boolean modified);
 
 }
