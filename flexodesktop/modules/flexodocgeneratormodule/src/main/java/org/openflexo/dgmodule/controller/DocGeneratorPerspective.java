@@ -16,6 +16,8 @@ import org.openflexo.dgmodule.view.DGFileModuleView;
 import org.openflexo.dgmodule.view.DGRepositoryModuleView;
 import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.dgmodule.view.GeneratedDocModuleView;
+import org.openflexo.doceditor.controller.DEController;
+import org.openflexo.doceditor.view.DETOCEntryModuleView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
@@ -23,6 +25,7 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.templates.CGTemplate;
+import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.icon.DGIconLibrary;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
@@ -99,8 +102,8 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> 
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile)
-				|| (object instanceof DGScreenshotFile) || (object instanceof CGTemplate));
+		return object instanceof GeneratedDoc || object instanceof DGRepository || object instanceof DGLatexFile
+				|| object instanceof DGScreenshotFile || object instanceof CGTemplate || object instanceof TOCEntry;
 	}
 
 	@Override
@@ -115,6 +118,8 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> 
 			return new DGFileModuleView((CGFile) object, (DGController) controller);
 		} else if (object instanceof CGTemplate) {
 			return new DGTemplateFileModuleView((CGTemplate) object, (DGController) controller);
+		} else if (object instanceof TOCEntry) {
+			return new DETOCEntryModuleView((TOCEntry) object, (DEController) controller, this);
 		}
 		if (DGController.logger.isLoggable(Level.INFO)) {
 			DGController.logger.info("No module view for object: " + object + " and perspective: " + this);
