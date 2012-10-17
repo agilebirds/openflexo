@@ -75,7 +75,6 @@ import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
-import org.openflexo.antar.expr.oldparser.ParseException;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -364,7 +363,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				update();
 				fireEditedExpressionChanged(_bindingExpression);
 			}
-		} catch (ParseException e) {
+		} catch (org.openflexo.antar.expr.parser.ParseException e) {
 			message = "ERROR: cannot parse " + expressionTA.getText();
 			status = ExpressionParsingStatus.INVALID;
 			updateAdditionalInformations();

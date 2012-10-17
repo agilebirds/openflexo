@@ -19,13 +19,6 @@
  */
 package org.openflexo.antar.expr.oldparser;
 
-/*
- * Created on 4 janv. 2006 by sguerin
- *
- * Flexo Application Suite
- * (c) Denali 2003-2005
- */
-
 public class ParseException extends Exception {
 
 	/**

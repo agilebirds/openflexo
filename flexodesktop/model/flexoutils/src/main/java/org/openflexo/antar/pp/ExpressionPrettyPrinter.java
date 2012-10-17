@@ -98,8 +98,8 @@ public abstract class ExpressionPrettyPrinter {
 		if (expression instanceof ConditionalExpression) {
 			return makeStringRepresentation((ConditionalExpression) expression);
 		}
-		return "<unknown " + expression.getClass().getSimpleName() + ">";
-		// return expression.toString();
+		// return "<unknown " + expression.getClass().getSimpleName() + ">";
+		return expression.toString();
 	}
 
 	protected String makeStringRepresentation(Variable variable) {

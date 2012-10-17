@@ -18,7 +18,6 @@ import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultFunctionFactor
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultVariableFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
-import org.openflexo.antar.expr.oldparser.ParseException;
 import org.openflexo.antar.expr.oldparser.Value;
 import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
@@ -59,15 +58,17 @@ public class BindingExpressionFactory extends StringEncoder.Converter<BindingExp
 		try {
 			Expression expression = parseExpressionFromString(aValue);
 			returned.expression = expression;
-		} catch (ParseException e) {
+		} catch (org.openflexo.antar.expr.parser.ParseException e) {
 			returned.unparsableValue = aValue;
 		}
 		returned.setOwner(_bindable);
 		return returned;
 	}
 
-	public Expression parseExpressionFromString(String aValue) throws ParseException {
-		return parser.parse(aValue);
+	public Expression parseExpressionFromString(String aValue) throws org.openflexo.antar.expr.parser.ParseException {
+		Expression returned = org.openflexo.antar.expr.parser.ExpressionParser.parse(aValue);
+		return returned;
+		// return parser.parse(aValue);
 	}
 
 	@Override

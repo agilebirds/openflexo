@@ -36,14 +36,14 @@ import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.oldparser.Value;
-import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.ConstantFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultConstantFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultFunctionFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultVariableFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.oldparser.Value;
+import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 
 public class BindingExpression extends AbstractBinding {
@@ -70,14 +70,17 @@ public class BindingExpression extends AbstractBinding {
 
 	public BindingExpression() {
 		super();
+		(new Exception("des prout en barre")).printStackTrace();
 	}
 
 	public BindingExpression(BindingDefinition bindingDefinition, Bindable owner) {
 		super(bindingDefinition, owner);
+		(new Exception("des prout en barre 2")).printStackTrace();
 	}
 
 	public BindingExpression(BindingDefinition bindingDefinition, Bindable owner, AbstractBinding abstractBinding) {
 		super(bindingDefinition, owner);
+		(new Exception("des prout en barre 3")).printStackTrace();
 		if (abstractBinding instanceof BindingValue) {
 			setOwner(abstractBinding.getOwner());
 			setExpression(new BindingValueVariable((BindingValue) abstractBinding));
@@ -90,6 +93,7 @@ public class BindingExpression extends AbstractBinding {
 
 	public BindingExpression(BindingDefinition bindingDefinition, Bindable owner, Expression anExpression) {
 		super(bindingDefinition, owner);
+		(new Exception("des prout en barre 4")).printStackTrace();
 		expression = anExpression;
 	}
 
