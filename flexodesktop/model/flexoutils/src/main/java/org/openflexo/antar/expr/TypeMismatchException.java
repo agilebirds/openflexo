@@ -89,10 +89,12 @@ public class TypeMismatchException extends TransformException {
 					"<html>type_mismatch_on_operator_($0)<br>supplied_types_are_($1)_and_($2)<br>while_expected_types_are_($3)</html>",
 					concernedOperator.getLocalizedName(), leftSuppliedType.getLocalizedName(), rightSuppliedType.getLocalizedName(),
 					typesAsString(expectedTypes));
-		} else {
+		} else if (suppliedType != null && concernedOperator != null) {
 			return FlexoLocalization.localizedForKeyWithParams(
 					"<html>type_mismatch_on_operator_($0)<br>supplied_type_is_($1)<br>while_expected_types_are_($2)</html>",
 					concernedOperator.getLocalizedName(), suppliedType.getLocalizedName(), typesAsString(expectedTypes));
+		} else {
+			return "<html>" + getMessage() + "</html>";
 		}
 	}
 

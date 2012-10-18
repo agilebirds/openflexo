@@ -110,48 +110,48 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	}
 
 	private BindingValueAsExpression makeBinding(PBinding node) {
-		System.out.println("Make binding with " + node);
+		// System.out.println("Make binding with " + node);
 
 		// Apply the translation.
 		BindingSemanticsAnalyzer bsa = new BindingSemanticsAnalyzer();
 		node.apply(bsa);
 		BindingValueAsExpression returned = new BindingValueAsExpression(bsa.getPath());
-		System.out.println("Made binding as " + bsa.getPath());
+		// System.out.println("Made binding as " + bsa.getPath());
 
 		registerExpressionNode(node, returned);
 		return returned;
 	}
 
 	private IntegerConstant makeDecimalNumber(TDecimalNumber node) {
-		System.out.println("Make decimal number with " + node + " as " + Long.parseLong(node.getText()));
+		// System.out.println("Make decimal number with " + node + " as " + Long.parseLong(node.getText()));
 		IntegerConstant returned = new IntegerConstant(Long.parseLong(node.getText()));
 		registerExpressionNode(node, returned);
 		return returned;
 	}
 
 	private FloatConstant makePreciseNumber(TPreciseNumber node) {
-		System.out.println("Make precise number with " + node + " as " + Double.parseDouble(node.getText()));
+		// System.out.println("Make precise number with " + node + " as " + Double.parseDouble(node.getText()));
 		FloatConstant returned = new FloatConstant(Double.parseDouble(node.getText()));
 		registerExpressionNode(node, returned);
 		return returned;
 	}
 
 	private FloatConstant makeScientificNotationNumber(TScientificNotationNumber node) {
-		System.out.println("Make scientific notation number with " + node + " as " + Double.parseDouble(node.getText()));
+		// System.out.println("Make scientific notation number with " + node + " as " + Double.parseDouble(node.getText()));
 		FloatConstant returned = new FloatConstant(Double.parseDouble(node.getText()));
 		registerExpressionNode(node, returned);
 		return returned;
 	}
 
 	private StringConstant makeStringValue(TStringValue node) {
-		System.out.println("Make string value with " + node);
+		// System.out.println("Make string value with " + node);
 		StringConstant returned = new StringConstant(node.getText().substring(1, node.getText().length() - 1));
 		registerExpressionNode(node, returned);
 		return returned;
 	}
 
 	private StringConstant makeCharsValue(TCharsValue node) {
-		System.out.println("Make chars value with " + node);
+		// System.out.println("Make chars value with " + node);
 		StringConstant returned = new StringConstant(node.getText().substring(1, node.getText().length() - 1));
 		registerExpressionNode(node, returned);
 		return returned;
@@ -178,8 +178,8 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	@Override
 	public void outACondExprExpr(ACondExprExpr node) {
 		super.outACondExprExpr(node);
-		System.out.println("On chope une conditionnelle avec cond:" + node.getCondition() + " then:" + node.getThen() + " else:"
-				+ node.getElse());
+		// System.out.println("On chope une conditionnelle avec cond:" + node.getCondition() + " then:" + node.getThen() + " else:"+
+		// node.getElse());
 		registerExpressionNode(node, new ConditionalExpression(getExpression(node.getCondition()), getExpression(node.getThen()),
 				getExpression(node.getElse())));
 	}

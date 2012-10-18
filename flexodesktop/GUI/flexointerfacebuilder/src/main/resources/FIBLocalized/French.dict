@@ -1,9 +1,10 @@
 #French
-#Wed Oct 17 21:19:56 CEST 2012
+#Thu Oct 18 22:13:18 CEST 2012
 apply=Appliquer
 arithmetic=Arithm\u00E9tique
 boolean=Bool\u00E9en
 cancel=Annuler
+cannot_evaluate=\u00C9valuation impossible
 choose=Choisir
 comparison=Comparaison
 connect=Connecter
@@ -17,6 +18,7 @@ expression_is_valid_and_conform_to_required_type=L'expression est valide et conf
 expression_is_valid_but_not_conform_to_requested_type_(found\:($0)_expected\:($1))=L'expression est valide mais non conforme au type requis (trouv\u00E9\:($0) requis\:($1))
 false=faux
 float=Flottant
+hide_evaluation=Masquer l'\u00E9valuation
 hide_extra_operators=Masquer les op\u00E9rateurs additionnels
 icon=ic\u00F4ne
 integer=Entier

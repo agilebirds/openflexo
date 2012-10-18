@@ -1,9 +1,10 @@
 #English
-#Wed Oct 17 21:19:56 CEST 2012
+#Thu Oct 18 22:13:18 CEST 2012
 apply=Apply
 arithmetic=Arithmetic
 boolean=Boolean
 cancel=Cancel
+cannot_evaluate=Cannot evaluate
 choose=Choose
 comparison=Comparison
 connect=Connect
@@ -17,6 +18,7 @@ expression_is_valid_and_conform_to_required_type=Expression is valid and conform
 expression_is_valid_but_not_conform_to_requested_type_(found\:($0)_expected\:($1))=Expression is valid but not conform to requested type (found\:($0) expected\:($1))
 false=false
 float=Float
+hide_evaluation=Hide evaluation
 hide_extra_operators=Hide extra operators
 icon=icon
 integer=Integer
