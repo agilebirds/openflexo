@@ -6,14 +6,15 @@ import java.util.List;
 import org.openflexo.antar.expr.BindingValueAsExpression;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.parser.node.AAdditionalArg;
-import org.openflexo.antar.expr.parser.node.AArgList;
 import org.openflexo.antar.expr.parser.node.ABindingTerm;
 import org.openflexo.antar.expr.parser.node.ACall;
 import org.openflexo.antar.expr.parser.node.ACallBinding;
 import org.openflexo.antar.expr.parser.node.AIdentifierBinding;
+import org.openflexo.antar.expr.parser.node.ANonEmptyListArgList;
 import org.openflexo.antar.expr.parser.node.ATail1Binding;
 import org.openflexo.antar.expr.parser.node.ATail2Binding;
 import org.openflexo.antar.expr.parser.node.PAdditionalArg;
+import org.openflexo.antar.expr.parser.node.PArgList;
 import org.openflexo.antar.expr.parser.node.TIdentifier;
 
 /**
@@ -63,12 +64,14 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	}
 
 	public BindingValueAsExpression.MethodCallBindingPathElement makeMethodCallBindingPathElement(ACall node) {
-		AArgList argList = (AArgList) node.getArgList();
+		PArgList argList = node.getArgList();
 		ArrayList<Expression> args = new ArrayList<Expression>();
-		args.add(getExpression(argList.getExpr()));
-		for (PAdditionalArg aa : argList.getAdditionalArgs()) {
-			AAdditionalArg additionalArg = (AAdditionalArg) aa;
-			args.add(getExpression(additionalArg.getExpr()));
+		if (argList instanceof ANonEmptyListArgList) {
+			args.add(getExpression(((ANonEmptyListArgList) argList).getExpr()));
+			for (PAdditionalArg aa : ((ANonEmptyListArgList) argList).getAdditionalArgs()) {
+				AAdditionalArg additionalArg = (AAdditionalArg) aa;
+				args.add(getExpression(additionalArg.getExpr()));
+			}
 		}
 		BindingValueAsExpression.MethodCallBindingPathElement returned = new BindingValueAsExpression.MethodCallBindingPathElement(node
 				.getIdentifier().getText(), args);

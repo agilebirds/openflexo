@@ -100,6 +100,10 @@ public class BindingValueAsExpression extends Expression {
 		return false;
 	}
 
+	public boolean isSimpleVariable() {
+		return getBindingPath().size() == 1 && (getBindingPath().get(0) instanceof NormalBindingPathElement);
+	}
+
 	/*@Override
 	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 		if (containsAMethodCall()) {

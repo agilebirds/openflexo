@@ -94,7 +94,8 @@ Productions
   identifier arg_list ;
 
  arg_list = 
-  l_par expr [additional_args]:additional_arg* r_par;
+  {empty_list} l_par r_par |
+  {non_empty_list} l_par expr [additional_args]:additional_arg* r_par;
 
  additional_arg = 
   comma expr;

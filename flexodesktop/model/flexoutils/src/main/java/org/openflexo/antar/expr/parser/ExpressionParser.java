@@ -48,24 +48,18 @@ public class ExpressionParser {
 
 	public static Expression parse(String anExpression) throws ParseException {
 		try {
-			System.out.println("Parsing: " + anExpression);
+			// System.out.println("Parsing: " + anExpression);
 
 			// Create a Parser instance.
-			// Parser p = new Parser(new Lexer(new PushbackReader(new InputStreamReader(System.in), 1024)));
-			// Parser p = new Parser(new Lexer(new PushbackReader(new StringReader("(45 + 36/2)*3 + 5*2"))));
 			Parser p = new Parser(new Lexer(new PushbackReader(new StringReader(anExpression))));
 
 			// Parse the input.
 			Start tree = p.parse();
 
-			// Apply the translation.
+			// Apply the semantics analyzer.
 			ExpressionSemanticsAnalyzer t = new ExpressionSemanticsAnalyzer();
 			tree.apply(t);
 
-			System.out.println("tree.getPExpr() = " + tree.getPExpr() + " of " + tree.getPExpr().getClass().getName());
-			/*APlusExpr a = (APlusExpr) tree.getPExpr();
-			System.out.println("left=" + a.getExpr());
-			System.out.println("right=" + a.getFactor());*/
 			return postSemanticAnalysisReduction(t.getExpression());
 		} catch (Exception e) {
 			e.printStackTrace();

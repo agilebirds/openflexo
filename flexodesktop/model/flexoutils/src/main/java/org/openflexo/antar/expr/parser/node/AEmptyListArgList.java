@@ -5,51 +5,50 @@ package org.openflexo.antar.expr.parser.node;
 import org.openflexo.antar.expr.parser.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ANegativeTerm extends PTerm
+public final class AEmptyListArgList extends PArgList
 {
-    private TMinus _minus_;
-    private PTerm _term_;
+    private TLPar _lPar_;
+    private TRPar _rPar_;
 
-    public ANegativeTerm()
+    public AEmptyListArgList()
     {
         // Constructor
     }
 
-    public ANegativeTerm(
-        @SuppressWarnings("hiding") TMinus _minus_,
-        @SuppressWarnings("hiding") PTerm _term_)
+    public AEmptyListArgList(
+        @SuppressWarnings("hiding") TLPar _lPar_,
+        @SuppressWarnings("hiding") TRPar _rPar_)
     {
         // Constructor
-        setMinus(_minus_);
+        setLPar(_lPar_);
 
-        setTerm(_term_);
+        setRPar(_rPar_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ANegativeTerm(
-            cloneNode(this._minus_),
-            cloneNode(this._term_));
+        return new AEmptyListArgList(
+            cloneNode(this._lPar_),
+            cloneNode(this._rPar_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseANegativeTerm(this);
+        ((Analysis) sw).caseAEmptyListArgList(this);
     }
 
-    public TMinus getMinus()
+    public TLPar getLPar()
     {
-        return this._minus_;
+        return this._lPar_;
     }
 
-    public void setMinus(TMinus node)
+    public void setLPar(TLPar node)
     {
-        if(this._minus_ != null)
+        if(this._lPar_ != null)
         {
-            this._minus_.parent(null);
+            this._lPar_.parent(null);
         }
 
         if(node != null)
@@ -62,19 +61,19 @@ public final class ANegativeTerm extends PTerm
             node.parent(this);
         }
 
-        this._minus_ = node;
+        this._lPar_ = node;
     }
 
-    public PTerm getTerm()
+    public TRPar getRPar()
     {
-        return this._term_;
+        return this._rPar_;
     }
 
-    public void setTerm(PTerm node)
+    public void setRPar(TRPar node)
     {
-        if(this._term_ != null)
+        if(this._rPar_ != null)
         {
-            this._term_.parent(null);
+            this._rPar_.parent(null);
         }
 
         if(node != null)
@@ -87,30 +86,30 @@ public final class ANegativeTerm extends PTerm
             node.parent(this);
         }
 
-        this._term_ = node;
+        this._rPar_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._minus_)
-            + toString(this._term_);
+            + toString(this._lPar_)
+            + toString(this._rPar_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._minus_ == child)
+        if(this._lPar_ == child)
         {
-            this._minus_ = null;
+            this._lPar_ = null;
             return;
         }
 
-        if(this._term_ == child)
+        if(this._rPar_ == child)
         {
-            this._term_ = null;
+            this._rPar_ = null;
             return;
         }
 
@@ -121,15 +120,15 @@ public final class ANegativeTerm extends PTerm
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._minus_ == oldChild)
+        if(this._lPar_ == oldChild)
         {
-            setMinus((TMinus) newChild);
+            setLPar((TLPar) newChild);
             return;
         }
 
-        if(this._term_ == oldChild)
+        if(this._rPar_ == oldChild)
         {
-            setTerm((PTerm) newChild);
+            setRPar((TRPar) newChild);
             return;
         }
 

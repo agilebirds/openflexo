@@ -60,7 +60,6 @@ import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingExpression.BindingValueConstant;
 import org.openflexo.antar.binding.BindingExpression.BindingValueFunction;
 import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
-import org.openflexo.antar.binding.BindingExpressionFactory;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingModelChanged;
@@ -81,7 +80,6 @@ import org.openflexo.antar.binding.StaticBindingFactory;
 import org.openflexo.antar.binding.StringStaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
@@ -930,9 +928,9 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 	protected BindingExpression makeBindingExpression() {
 		if (getBindable() != null) {
-			BindingExpressionFactory factory = getBindable().getBindingFactory().getBindingExpressionFactory();
+			// BindingExpressionFactory factory = getBindable().getBindingFactory().getBindingExpressionFactory();
 			BindingExpression returned = new BindingExpression(getBindingDefinition(), getBindable());
-			returned.setExpression(factory.getVariableFactory().makeVariable(new Word("")));
+			returned.setExpression(new BindingValueVariable("", getBindable()));
 			return returned;
 		}
 		return null;

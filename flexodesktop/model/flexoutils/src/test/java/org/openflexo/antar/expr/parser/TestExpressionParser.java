@@ -271,6 +271,10 @@ public class TestExpressionParser extends TestCase {
 		tryToParse("function1(function2(8+1,9,10-1))", "function1(function2(9,9,9))", BindingValueAsExpression.class, null, false);
 	}
 
+	public void testEmptyCall() {
+		tryToParse("function1()", "function1()", BindingValueAsExpression.class, null, false);
+	}
+
 	public void testComplexBooleanExpression() {
 		tryToParse("a && (c || d && (!f)) ||b", "((a & (c | (d & (!(f))))) | b)", BinaryOperatorExpression.class, null, false);
 	}
@@ -305,6 +309,10 @@ public class TestExpressionParser extends TestCase {
 
 	public void testParsingError5() {
 		tryToParse("test24 [ fdfd + 1", "", null, null, true);
+	}
+
+	public void testIgnoredChars() {
+		tryToParse(" test  \n\n", "test", BindingValueAsExpression.class, null, false);
 	}
 
 	public void testConditional1() {

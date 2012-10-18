@@ -71,22 +71,23 @@ public class Variable extends Expression {
 			return false;
 		}
 
-		boolean startingPathItem = true;
+		/*boolean startingPathItem = true;
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
 			if (c == '.') {
 				startingPathItem = true;
 			} else {
-				boolean isNormalChar = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '(' || c == ')' || c == '_') // See Java
-																																// authorized
-																																// characters
+				boolean isNormalChar = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '(' || c == ')' || c == '_' || c == ',') // See
+																																			// Java
+				// authorized
+				// characters
 				|| (c >= '0' && c <= '9' && !startingPathItem));
 				if (!isNormalChar) {
 					return false;
 				}
 				startingPathItem = false;
 			}
-		}
+		}*/
 		return true;
 
 	}

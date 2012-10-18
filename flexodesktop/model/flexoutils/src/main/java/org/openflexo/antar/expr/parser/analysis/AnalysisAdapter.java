@@ -184,7 +184,12 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAArgList(AArgList node)
+    public void caseAEmptyListArgList(AEmptyListArgList node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseANonEmptyListArgList(ANonEmptyListArgList node)
     {
         defaultCase(node);
     }

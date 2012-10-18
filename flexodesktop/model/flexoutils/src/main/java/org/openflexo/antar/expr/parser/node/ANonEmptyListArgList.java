@@ -2,29 +2,34 @@
 
 package org.openflexo.antar.expr.parser.node;
 
+import java.util.*;
 import org.openflexo.antar.expr.parser.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExprTerm extends PTerm
+public final class ANonEmptyListArgList extends PArgList
 {
     private TLPar _lPar_;
     private PExpr _expr_;
+    private final LinkedList<PAdditionalArg> _additionalArgs_ = new LinkedList<PAdditionalArg>();
     private TRPar _rPar_;
 
-    public AExprTerm()
+    public ANonEmptyListArgList()
     {
         // Constructor
     }
 
-    public AExprTerm(
+    public ANonEmptyListArgList(
         @SuppressWarnings("hiding") TLPar _lPar_,
         @SuppressWarnings("hiding") PExpr _expr_,
+        @SuppressWarnings("hiding") List<PAdditionalArg> _additionalArgs_,
         @SuppressWarnings("hiding") TRPar _rPar_)
     {
         // Constructor
         setLPar(_lPar_);
 
         setExpr(_expr_);
+
+        setAdditionalArgs(_additionalArgs_);
 
         setRPar(_rPar_);
 
@@ -33,16 +38,16 @@ public final class AExprTerm extends PTerm
     @Override
     public Object clone()
     {
-        return new AExprTerm(
+        return new ANonEmptyListArgList(
             cloneNode(this._lPar_),
             cloneNode(this._expr_),
+            cloneList(this._additionalArgs_),
             cloneNode(this._rPar_));
     }
 
-    @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExprTerm(this);
+        ((Analysis) sw).caseANonEmptyListArgList(this);
     }
 
     public TLPar getLPar()
@@ -95,6 +100,26 @@ public final class AExprTerm extends PTerm
         this._expr_ = node;
     }
 
+    public LinkedList<PAdditionalArg> getAdditionalArgs()
+    {
+        return this._additionalArgs_;
+    }
+
+    public void setAdditionalArgs(List<PAdditionalArg> list)
+    {
+        this._additionalArgs_.clear();
+        this._additionalArgs_.addAll(list);
+        for(PAdditionalArg e : list)
+        {
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
+
+            e.parent(this);
+        }
+    }
+
     public TRPar getRPar()
     {
         return this._rPar_;
@@ -126,6 +151,7 @@ public final class AExprTerm extends PTerm
         return ""
             + toString(this._lPar_)
             + toString(this._expr_)
+            + toString(this._additionalArgs_)
             + toString(this._rPar_);
     }
 
@@ -142,6 +168,11 @@ public final class AExprTerm extends PTerm
         if(this._expr_ == child)
         {
             this._expr_ = null;
+            return;
+        }
+
+        if(this._additionalArgs_.remove(child))
+        {
             return;
         }
 
@@ -168,6 +199,24 @@ public final class AExprTerm extends PTerm
         {
             setExpr((PExpr) newChild);
             return;
+        }
+
+        for(ListIterator<PAdditionalArg> i = this._additionalArgs_.listIterator(); i.hasNext();)
+        {
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PAdditionalArg) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
+
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
         }
 
         if(this._rPar_ == oldChild)

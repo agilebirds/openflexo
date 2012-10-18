@@ -1,5 +1,5 @@
 #English
-#Mon Sep 03 22:56:06 CEST 2012
+#Thu Oct 18 16:40:43 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -209,6 +209,7 @@ trigonometric_arc_tangent=Arc-tangent
 trigonometric_cosinus=Cosinus
 trigonometric_sinus=Sinus
 trigonometric_tangent=Tangent
+type_mismatch_on_operator_($0)_supplied_types_are_($1)_and_($2)_while_expected_types_are_($3)=Type mismatch on operator ($0), the supplied types are ($1) and ($2) while the expected types are ($3 )
 unary_minus=Unary minus
 undo=Undo
 unexpected_exception_occured=OpenFlexo has detected an internal error. OpenFlexo will continue to work but it is highly recommended to restart it.

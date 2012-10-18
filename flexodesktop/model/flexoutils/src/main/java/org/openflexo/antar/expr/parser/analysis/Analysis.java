@@ -35,7 +35,8 @@ public interface Analysis extends Switch
     void caseAPowerExprExpr3(APowerExprExpr3 node);
     void caseANotExprExpr3(ANotExprExpr3 node);
     void caseACall(ACall node);
-    void caseAArgList(AArgList node);
+    void caseAEmptyListArgList(AEmptyListArgList node);
+    void caseANonEmptyListArgList(ANonEmptyListArgList node);
     void caseAAdditionalArg(AAdditionalArg node);
     void caseAIdentifierBinding(AIdentifierBinding node);
     void caseACallBinding(ACallBinding node);

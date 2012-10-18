@@ -679,20 +679,45 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outACall(node);
     }
 
-    public void inAArgList(AArgList node)
+    public void inAEmptyListArgList(AEmptyListArgList node)
     {
         defaultIn(node);
     }
 
-    public void outAArgList(AArgList node)
+    public void outAEmptyListArgList(AEmptyListArgList node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAArgList(AArgList node)
+    public void caseAEmptyListArgList(AEmptyListArgList node)
     {
-        inAArgList(node);
+        inAEmptyListArgList(node);
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        outAEmptyListArgList(node);
+    }
+
+    public void inANonEmptyListArgList(ANonEmptyListArgList node)
+    {
+        defaultIn(node);
+    }
+
+    public void outANonEmptyListArgList(ANonEmptyListArgList node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseANonEmptyListArgList(ANonEmptyListArgList node)
+    {
+        inANonEmptyListArgList(node);
         if(node.getLPar() != null)
         {
             node.getLPar().apply(this);
@@ -712,7 +737,7 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getRPar().apply(this);
         }
-        outAArgList(node);
+        outANonEmptyListArgList(node);
     }
 
     public void inAAdditionalArg(AAdditionalArg node)

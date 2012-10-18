@@ -37,7 +37,7 @@ public class ExpressionEvaluator implements ExpressionTransformer {
 	 */
 	@Override
 	public Expression performTransformation(Expression e) throws TransformException {
-		e._checkSemanticallyAcceptable();
+		// e._checkSemanticallyAcceptable();
 		if (e instanceof BinaryOperatorExpression) {
 			return transformBinaryOperatorExpression((BinaryOperatorExpression) e);
 		} else if (e instanceof UnaryOperatorExpression) {
