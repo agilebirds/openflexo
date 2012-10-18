@@ -866,6 +866,9 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			removeFocusListeners();
 			removeAll();
 
+			System.out
+					.println("Update in ExpressionInnerPanel with " + _representedExpression + " of " + _representedExpression.getClass());
+
 			if (_representedExpression instanceof SymbolicConstant) {
 				GridBagLayout gridbag = new GridBagLayout();
 				GridBagConstraints c = new GridBagConstraints();

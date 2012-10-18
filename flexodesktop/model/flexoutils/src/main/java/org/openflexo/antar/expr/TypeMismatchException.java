@@ -21,7 +21,8 @@ package org.openflexo.antar.expr;
 
 import org.openflexo.localization.FlexoLocalization;
 
-public class TypeMismatchException extends Exception {
+@SuppressWarnings("serial")
+public class TypeMismatchException extends TransformException {
 
 	private Operator concernedOperator;
 	private EvaluationType suppliedType;

@@ -33,7 +33,9 @@ import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.ConstantFactory;
@@ -209,9 +211,14 @@ public class BindingExpression extends AbstractBinding {
 			}
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 			return constant.evaluate();
+		}*/
+
+		@Override
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -300,9 +307,14 @@ public class BindingExpression extends AbstractBinding {
 			this.variable = aVariable;
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 			return variable.evaluate(context);
+		}*/
+
+		@Override
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -461,9 +473,14 @@ public class BindingExpression extends AbstractBinding {
 			this.function = aFunction;
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 			return function.evaluate(context);
+		}*/
+
+		@Override
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override

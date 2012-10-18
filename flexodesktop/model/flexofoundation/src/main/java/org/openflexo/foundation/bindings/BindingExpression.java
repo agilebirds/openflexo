@@ -30,19 +30,21 @@ import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
 import org.openflexo.antar.expr.oldparser.ExpressionParser;
-import org.openflexo.antar.expr.oldparser.ParseException;
-import org.openflexo.antar.expr.oldparser.Value;
-import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.ConstantFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultConstantFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultFunctionFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultVariableFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.oldparser.ParseException;
+import org.openflexo.antar.expr.oldparser.Value;
+import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.antar.java.JavaExpressionPrettyPrinter;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.foundation.DataModification;
@@ -394,6 +396,11 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		@Override
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
+		}
+
+		@Override
 		public String toString() {
 			if (constant != null) {
 				return constant.toString();
@@ -491,6 +498,11 @@ public class BindingExpression extends AbstractBinding {
 		@Override
 		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 			return variable.evaluate();
+		}
+
+		@Override
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -661,6 +673,11 @@ public class BindingExpression extends AbstractBinding {
 		@Override
 		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 			return function.evaluate();
+		}
+
+		@Override
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override

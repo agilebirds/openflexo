@@ -33,9 +33,14 @@ import org.openflexo.toolbox.Duration;
 
 public abstract class Constant<V> extends Expression {
 
-	@Override
+	/*@Override
 	public Expression evaluate(EvaluationContext context) {
 		return this;
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+		return transformer.performTransformation(this);
 	}
 
 	@Override
@@ -253,10 +258,10 @@ public abstract class Constant<V> extends Expression {
 			return Double.toString(getValue());
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) {
 			return new FloatConstant(getValue());
-		}
+		}*/
 
 	}
 
@@ -334,10 +339,10 @@ public abstract class Constant<V> extends Expression {
 			return getSymbol();
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) {
 			return new DateConstant(computeDateForNow());
-		}
+		}*/
 
 		public abstract Date computeDateForNow();
 
@@ -400,10 +405,10 @@ public abstract class Constant<V> extends Expression {
 			return getSymbol();
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) {
 			return this;
-		}
+		}*/
 
 		@Override
 		public EvaluationType getEvaluationType() {

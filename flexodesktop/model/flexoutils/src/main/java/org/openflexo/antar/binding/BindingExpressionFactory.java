@@ -5,12 +5,17 @@ package org.openflexo.antar.binding;
 
 import java.util.Vector;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingExpression.BindingValueConstant;
 import org.openflexo.antar.binding.BindingExpression.BindingValueFunction;
 import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
+import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.ExpressionTransformer;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.oldparser.ExpressionParser;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.ConstantFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.DefaultConstantFactory;
@@ -24,6 +29,9 @@ import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.xmlcode.StringEncoder;
 
 public class BindingExpressionFactory extends StringEncoder.Converter<BindingExpression> {
+
+	static final Logger logger = Logger.getLogger(BindingExpressionFactory.class.getPackage().getName());
+
 	private final ExpressionParser parser;
 	Bindable _bindable;
 	boolean warnOnFailure = true;
@@ -66,8 +74,33 @@ public class BindingExpressionFactory extends StringEncoder.Converter<BindingExp
 	}
 
 	public Expression parseExpressionFromString(String aValue) throws org.openflexo.antar.expr.parser.ParseException {
-		Expression returned = org.openflexo.antar.expr.parser.ExpressionParser.parse(aValue);
-		return returned;
+		Expression parsedExpression = org.openflexo.antar.expr.parser.ExpressionParser.parse(aValue);
+		// Deprecated
+		// We apply this transformer to match old binding model
+		try {
+			Expression returned = parsedExpression.transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof Constant) {
+						System.out.println("Je tombe sur la constante " + e);
+						return new BindingValueConstant((Constant) e, _bindable);
+					} else if (e instanceof BindingValueAsExpression) {
+						System.out.println("Je tombe sur le binding " + e);
+						return new BindingValueVariable(((BindingValueAsExpression) e).toString(), _bindable);
+					}
+					return e;
+				}
+			});
+
+			System.out.println("Returned = " + returned);
+			return returned;
+
+		} catch (TransformException e) {
+			logger.warning("Unexpected exception during transforming: " + e);
+			e.printStackTrace();
+			return parsedExpression;
+		}
+
 		// return parser.parse(aValue);
 	}
 

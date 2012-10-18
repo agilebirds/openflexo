@@ -21,8 +21,6 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.expr.oldparser.Word;
-
 public class Variable extends Expression {
 
 	private String name;
@@ -45,12 +43,17 @@ public class Variable extends Expression {
 		this.name = name;
 	}
 
-	@Override
+	/*@Override
 	public Expression evaluate(EvaluationContext context) {
 		if (context != null) {
 			return context.getVariableFactory().makeVariable(new Word(getName()));
 		}
 		return this;
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+		return transformer.performTransformation(this);
 	}
 
 	@Override

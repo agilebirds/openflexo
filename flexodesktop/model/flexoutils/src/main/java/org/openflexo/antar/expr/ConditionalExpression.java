@@ -21,8 +21,6 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.expr.Constant.BooleanConstant;
-
 public class ConditionalExpression extends Expression {
 
 	private Expression condition;
@@ -41,7 +39,7 @@ public class ConditionalExpression extends Expression {
 		return Math.max(Math.max(thenExpression.getDepth(), elseExpression.getDepth()), condition.getDepth()) + 1;
 	}
 
-	@Override
+	/*@Override
 	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 		_checkSemanticallyAcceptable();
 
@@ -57,6 +55,22 @@ public class ConditionalExpression extends Expression {
 		}
 
 		return new ConditionalExpression(evaluatedCondition, evaluatedThenExpression, evaluatedElseExpression);
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+
+		Expression expression = this;
+		Expression transformedCondition = condition.transform(transformer);
+		Expression transformedThenExpression = thenExpression.transform(transformer);
+		Expression transformedElseExpression = elseExpression.transform(transformer);
+
+		if ((!transformedCondition.equals(condition)) || (!transformedThenExpression.equals(thenExpression))
+				|| (!transformedElseExpression.equals(elseExpression))) {
+			expression = new ConditionalExpression(transformedCondition, transformedThenExpression, transformedElseExpression);
+		}
+
+		return transformer.performTransformation(expression);
 	}
 
 	@Override
@@ -100,6 +114,16 @@ public class ConditionalExpression extends Expression {
 
 	public void setElseExpression(Expression elseExpression) {
 		this.elseExpression = elseExpression;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ConditionalExpression) {
+			ConditionalExpression e = (ConditionalExpression) obj;
+			return getCondition().equals(e.getCondition()) && getThenExpression().equals(e.getThenExpression())
+					&& getElseExpression().equals(e.getElseExpression());
+		}
+		return super.equals(obj);
 	}
 
 }

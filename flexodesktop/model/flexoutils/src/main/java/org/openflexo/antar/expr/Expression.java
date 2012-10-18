@@ -26,20 +26,33 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.oldparser.ExpressionParser;
-import org.openflexo.antar.expr.oldparser.ParseException;
-import org.openflexo.antar.expr.oldparser.Word;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.oldparser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.oldparser.ParseException;
+import org.openflexo.antar.expr.oldparser.Word;
 
 public abstract class Expression {
 
 	private static final Logger logger = Logger.getLogger(Expression.class.getPackage().getName());
 
-	public final Expression evaluate() throws TypeMismatchException {
-		return evaluate((EvaluationContext) null);
+	@Deprecated
+	public final Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+		return null;
 	}
 
-	public abstract Expression evaluate(EvaluationContext context) throws TypeMismatchException;
+	public abstract Expression transform(ExpressionTransformer transformer) throws TransformException;
+
+	public final Expression evaluate() throws TypeMismatchException {
+		try {
+			return transform(new ExpressionEvaluator());
+		} catch (TypeMismatchException e) {
+			throw e;
+		} catch (TransformException e) {
+			logger.warning("Unexpected exception occured during evaluation " + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public abstract int getDepth();
 
@@ -55,7 +68,7 @@ public abstract class Expression {
 		if (obj == null) {
 			return false;
 		} else if (obj instanceof Expression) {
-			return toString().equalsIgnoreCase(((Expression) obj).toString());
+			return getClass().equals(obj.getClass()) && toString().equalsIgnoreCase(((Expression) obj).toString());
 		}
 		return super.equals(obj);
 	}
@@ -222,4 +235,8 @@ public abstract class Expression {
 		return returned;
 	}
 
+	@Override
+	public int hashCode() {
+		return (toString()).hashCode();
+	}
 }

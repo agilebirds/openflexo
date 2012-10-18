@@ -40,6 +40,14 @@ public class BindingValueAsExpression extends Expression {
 			return "Normal[" + property + "]";
 		}
 
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof NormalBindingPathElement) {
+				NormalBindingPathElement e = (NormalBindingPathElement) obj;
+				return property.equals(e.property);
+			}
+			return super.equals(obj);
+		}
 	}
 
 	public static class MethodCallBindingPathElement extends AbstractBindingPathElement {
@@ -54,6 +62,15 @@ public class BindingValueAsExpression extends Expression {
 		@Override
 		public String toString() {
 			return "Call[" + method + "(" + args + ")" + "]";
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof MethodCallBindingPathElement) {
+				MethodCallBindingPathElement e = (MethodCallBindingPathElement) obj;
+				return method.equals(e.method) && args.equals(e.args);
+			}
+			return super.equals(obj);
 		}
 
 	}
@@ -83,7 +100,7 @@ public class BindingValueAsExpression extends Expression {
 		return false;
 	}
 
-	@Override
+	/*@Override
 	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 		if (containsAMethodCall()) {
 			ArrayList<AbstractBindingPathElement> newBindingPath = new ArrayList<AbstractBindingPathElement>();
@@ -101,6 +118,25 @@ public class BindingValueAsExpression extends Expression {
 			return new BindingValueAsExpression(newBindingPath);
 		}
 		return this;
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+
+		ArrayList<AbstractBindingPathElement> newBindingPath = new ArrayList<AbstractBindingPathElement>();
+		for (AbstractBindingPathElement e : getBindingPath()) {
+			if (e instanceof NormalBindingPathElement) {
+				newBindingPath.add(new NormalBindingPathElement(((NormalBindingPathElement) e).property));
+			} else if (e instanceof MethodCallBindingPathElement) {
+				ArrayList<Expression> newArgs = new ArrayList<Expression>();
+				for (Expression arg : ((MethodCallBindingPathElement) e).args) {
+					newArgs.add(arg.transform(transformer));
+				}
+				newBindingPath.add(new MethodCallBindingPathElement(((MethodCallBindingPathElement) e).method, newArgs));
+			}
+		}
+		BindingValueAsExpression bv = new BindingValueAsExpression(newBindingPath);
+		return transformer.performTransformation(bv);
 	}
 
 	@Override
@@ -115,6 +151,15 @@ public class BindingValueAsExpression extends Expression {
 
 	public boolean isValid() {
 		return true;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof BindingValueAsExpression) {
+			BindingValueAsExpression e = (BindingValueAsExpression) obj;
+			return getBindingPath().equals(e.getBindingPath());
+		}
+		return super.equals(obj);
 	}
 
 }
