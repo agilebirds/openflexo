@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -158,7 +159,12 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(chooseFileButton));
-				fileChooser.setCurrentDirectory(codeRepository.getDirectory());
+				File directory = codeRepository.getDirectory();
+				if (directory!=null) {
+					fileChooser.setCurrentDirectory(directory);
+				} else {
+					fileChooser.setCurrentDirectory(codeRepository.getDefaultSourceDirectory());
+				}
 				fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));

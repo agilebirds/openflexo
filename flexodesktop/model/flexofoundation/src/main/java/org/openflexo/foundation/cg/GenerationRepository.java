@@ -317,10 +317,14 @@ public abstract class GenerationRepository extends CGObject {
 			}
 			if (_sourceCodeRepository == null) {
 				_sourceCodeRepository = getProject().setDirectoryForRepositoryName(_displayName != null ? _displayName : "Default",
-						new File(System.getProperty("user.home") + "/" + getProject().getProjectName() + "/" + getTarget().getName()));
+						getDefaultSourceDirectory());
 			}
 		}
 		return _sourceCodeRepository;
+	}
+
+	public File getDefaultSourceDirectory() {
+		return new File(System.getProperty("user.home") + "/" + getProject().getProjectName() + "/" + getTarget().getName());
 	}
 
 	@Override

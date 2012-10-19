@@ -74,13 +74,15 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 
 	protected AddTOCRepository(FlexoModelObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-
-		newRepository = TOCRepository.createTOCRepositoryFromTemplate(getData(), tocTemplate);
+		if (tocTemplate != null && tocTemplate.exists()) {
+			newRepository = TOCRepository.createTOCRepositoryFromTemplate(getData(), tocTemplate);
+		} else {
+			newRepository = TOCRepository.createTOCRepositoryForDocType(getData(), getDocType());
+		}
 		if (getDocType() != null) {
 			newRepository.setDocType(getDocType());
 		}
@@ -127,6 +129,9 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 	}
 
 	public DocType getDocType() {
+		if (docType == null) {
+			return getProject().getDocTypes().get(0);
+		}
 		return docType;
 	}
 

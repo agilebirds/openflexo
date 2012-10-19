@@ -43,7 +43,6 @@ import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.utils.FlexoSplitPaneLocationSaver;
-import org.openflexo.ve.VECst;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
 import org.openflexo.ve.view.VEBrowserView;
@@ -62,7 +61,6 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	private final VEBrowserView shemaBrowserView;
 
 	private final Hashtable<View, VEShemaController> _controllers;
-	private final Hashtable<VEShemaController, JSplitPane> _rightPanels;
 
 	private final JSplitPane splitPane;
 
@@ -71,6 +69,8 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	private final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	private final FIBInspectorPanel inspectorPanel;
+
+	private JSplitPane rightPanel;
 
 	/**
 	 * @param controller
@@ -82,7 +82,6 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 		EMPTY_RIGHT_VIEW.setPreferredSize(new Dimension(300, 300));
 		_controller = controller;
 		_controllers = new Hashtable<View, VEShemaController>();
-		_rightPanels = new Hashtable<VEShemaController, JSplitPane>();
 		_browser = new ShemaLibraryBrowser(controller);
 		_browserView = new VEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
 			@Override
@@ -93,22 +92,23 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 				}
 			}
 
-			/*  public void objectAddedToSelection(ObjectAddedToSelectionEvent event)
-			  {
-			  	if (event.getAddedObject() instanceof ERDiagram) {
-			  		diagramBrowser.deleteBrowserListener(this);
-			  		diagramBrowser.setRepresentedDiagram((ERDiagram)event.getAddedObject());
-			  		diagramBrowser.update();
-			  		diagramBrowser.addBrowserListener(this);
-			  	}
-			  	super.objectAddedToSelection(event);
-			  }			*/
+			/*
+			 * public void objectAddedToSelection(ObjectAddedToSelectionEvent event) { if (event.getAddedObject() instanceof ERDiagram) {
+			 * diagramBrowser.deleteBrowserListener(this); diagramBrowser.setRepresentedDiagram((ERDiagram)event.getAddedObject());
+			 * diagramBrowser.update(); diagramBrowser.addBrowserListener(this); } super.objectAddedToSelection(event); }
+			 */
 		};
 		shemaBrowser = new ShemaBrowser(controller);
 		shemaBrowserView = new VEBrowserView(shemaBrowser, controller, SelectionPolicy.ForceSelection);
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, shemaBrowserView);
 		splitPane.setDividerLocation(0.7);
 		splitPane.setResizeWeight(0.7);
+		rightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		rightPanel.setDividerLocation(0.7);
+		rightPanel.setResizeWeight(0.3);
+		rightPanel.setOpaque(false);
+		rightPanel.setBorder(BorderFactory.createEmptyBorder());
+		new FlexoSplitPaneLocationSaver(rightPanel, "VE_DIAGRAM_PERSPECTIVE_RIGHT_PANE");
 		infoLabel = new JLabel("Diagram perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 
@@ -219,7 +219,6 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 			if (shemaController.getDrawing() != null && shemaController.getDrawing().getShema() != null) {
 				_controllers.remove(shemaController.getDrawing().getShema());
 			}
-			_rightPanels.remove(shemaController);
 		}
 	}
 
@@ -269,32 +268,13 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	 * @return
 	 */
 	protected JSplitPane getRightPanel() {
-		JSplitPane returned = _rightPanels.get(getCurrentShemaModuleView().getController());
-		if (returned == null) {
-			Dimension paletteViewPreferredSize = getCurrentShemaModuleView().getController().getPaletteView().getPreferredSize();
-			Dimension inspectorPanelPreferredSize = inspectorPanel.getPreferredSize();
-			// System.out.println("inspectorPanel=" + inspectorPanel.getPreferredSize());
-			// System.out.println("paletteViewPreferredSize=" + paletteViewPreferredSize);
-			inspectorPanel.setPreferredSize(new Dimension(paletteViewPreferredSize.width, inspectorPanelPreferredSize.height));
+		rightPanel.setTopComponent(getCurrentShemaModuleView().getController().getPaletteView());
+		if (rightPanel.getBottomComponent() == null) {
 			JScrollPane inspectorPanelSP = new JScrollPane(inspectorPanel);
-			// System.out.println("inspectorPanelSP=" + inspectorPanelSP.getPreferredSize());
 			inspectorPanelSP.setOpaque(false);
 			inspectorPanelSP.setBorder(BorderFactory.createEmptyBorder());
-			// inspectorPanelSP.setPreferredSize(new Dimension(300, 300));
-			returned = new JSplitPane(JSplitPane.VERTICAL_SPLIT, getCurrentShemaModuleView().getController().getPaletteView(),
-					inspectorPanelSP /*_controller.getDisconnectedDocInspectorPanel()*/);
-			returned.setOpaque(false);
-			returned.setBorder(BorderFactory.createEmptyBorder());
-			returned.setResizeWeight(0);
-			returned.setDividerLocation(VECst.PALETTE_DOC_SPLIT_LOCATION);
-			// returned.setPreferredSize(new Dimension(300, 300));
-			_rightPanels.put(getCurrentShemaModuleView().getController(), returned);
+			rightPanel.setBottomComponent(inspectorPanelSP);
 		}
-		if (returned.getBottomComponent() == null) {
-			// returned.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-			returned.setBottomComponent(inspectorPanel);
-		}
-		new FlexoSplitPaneLocationSaver(returned, "VE_DIAGRAM_PERSPECTIVE_RIGHT_PANE");
-		return returned;
+		return rightPanel;
 	}
 }
