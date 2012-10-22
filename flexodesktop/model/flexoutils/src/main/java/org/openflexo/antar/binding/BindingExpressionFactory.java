@@ -132,8 +132,7 @@ public class BindingExpressionFactory extends StringEncoder.Converter<BindingExp
 					return e;
 				}
 			});
-
-			System.out.println("Returned = " + returned);
+			//System.out.println("Returned = " + returned);
 			return returned;
 
 		} catch (TransformException ex) {

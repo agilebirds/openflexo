@@ -109,18 +109,22 @@ public class TestExpressionParser extends TestCase {
 	}
 
 	public void testBindingValue2() {
-		tryToParse("foo.foo2.foo3", "foo.foo2.foo3", BindingValueAsExpression.class, null, false);
+		tryToParse("foo_foo2", "foo_foo2", BindingValueAsExpression.class, null, false);
 	}
 
 	public void testBindingValue3() {
-		tryToParse("method(1)", "method(1)", BindingValueAsExpression.class, null, false);
+		tryToParse("foo.foo2.foo3", "foo.foo2.foo3", BindingValueAsExpression.class, null, false);
 	}
 
 	public void testBindingValue4() {
-		tryToParse("a.b.c.method(1)", "a.b.c.method(1)", BindingValueAsExpression.class, null, false);
+		tryToParse("method(1)", "method(1)", BindingValueAsExpression.class, null, false);
 	}
 
 	public void testBindingValue5() {
+		tryToParse("a.b.c.method(1)", "a.b.c.method(1)", BindingValueAsExpression.class, null, false);
+	}
+
+	public void testBindingValue6() {
 		tryToParse("this.is.a(1,2+3,7.8,'foo').little.test(1)", "this.is.a(1,5,7.8,\"foo\").little.test(1)",
 				BindingValueAsExpression.class, null, false);
 	}

@@ -4,7 +4,7 @@ Helpers
  upper_case = ['A' .. 'Z'];
  lower_case = ['a' .. 'z'];
  digit = ['0'..'9'];
- letter = upper_case | lower_case;
+ letter = upper_case | lower_case | '_' ;
  any        = [0 .. 0xffff];
  not_hyphen = [any - '"' ];
  not_hyphen2 = [any - ''' ];

@@ -37,7 +37,8 @@ import org.openflexo.antar.expr.parser.parser.Parser;
  * This class provides the parsing service for AnTAR expressions and bindings. This includes syntaxic and semantics analyzer.<br>
  * 
  * SableCC is extensively used to perform this. To compile and generate the grammar, please invoke {@link CompileAntarExpressionParser}
- * located in src/dev/java. Generated code is located in org.openflexo.antar.expr.parser.analysis, org.openflexo.antar.expr.parser.lexer,
+ * located in src/dev/java. The grammar is located in src/main/resources/antar_expr.grammar.<br>
+ * Generated code is located in org.openflexo.antar.expr.parser.analysis, org.openflexo.antar.expr.parser.lexer,
  * org.openflexo.antar.expr.parser.node, org.openflexo.antar.expr.parser.parser
  * 
  * @author sylvain
@@ -46,6 +47,15 @@ public class ExpressionParser {
 
 	private static final Logger logger = Logger.getLogger(ExpressionParser.class.getPackage().getName());
 
+	/**
+	 * This is the method to invoke to perform a parsing. Syntaxic and (some) semantics analyzer are performed and returned value is an
+	 * Expression conform to AnTAR expression abstract syntaxic tree
+	 * 
+	 * @param anExpression
+	 * @return
+	 * @throws ParseException
+	 *             if expression was not parsable
+	 */
 	public static Expression parse(String anExpression) throws ParseException {
 		try {
 			// System.out.println("Parsing: " + anExpression);
@@ -62,11 +72,17 @@ public class ExpressionParser {
 
 			return postSemanticAnalysisReduction(t.getExpression());
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ParseException(e.getMessage());
+			throw new ParseException(e.getMessage() + " while parsing " + anExpression);
 		}
 	}
 
+	/**
+	 * This method is invoked at the end of the parsing to perform some trivial reductions (eg, a combination of a minus and an arithmetic
+	 * value results in a negative arithmetic value)
+	 * 
+	 * @param e
+	 * @return
+	 */
 	private static Expression postSemanticAnalysisReduction(Expression e) {
 		if (e instanceof UnaryOperatorExpression && ((UnaryOperatorExpression) e).getOperator() == ArithmeticUnaryOperator.UNARY_MINUS
 				&& ((UnaryOperatorExpression) e).getArgument() instanceof ArithmeticConstant) {
