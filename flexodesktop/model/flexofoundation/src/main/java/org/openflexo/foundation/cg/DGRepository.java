@@ -217,15 +217,18 @@ public class DGRepository extends GenerationRepository {
 			if (postBuildRepository == null) {
 				postBuildRepository = getProject().setDirectoryForRepositoryName(
 						getName() + getFormat().getPostBuildKey(),
-						getDirectory() != null ? getDirectory().getParentFile() : new File(System.getProperty("user.home") + "/"
-								+ getFormat().getPostBuildKey() + "/" + getName()));
+						getDefaultPostBuildDirectory());
 			}
 			if (postBuildRepository.getDirectory() == null) {
-				postBuildRepository.setDirectory(getDirectory() != null ? getDirectory().getParentFile() : new File(System
-						.getProperty("user.home") + "/" + getFormat().getPostBuildKey() + "/" + getName()));
+				postBuildRepository.setDirectory(getDefaultPostBuildDirectory());
 			}
 		}
 		return postBuildRepository;
+	}
+
+	public File getDefaultPostBuildDirectory() {
+		return getDirectory() != null ? getDirectory().getParentFile() : new File(System
+				.getProperty("user.home") + "/" + getFormat().getPostBuildKey() + "/" + getName());
 	}
 
 	private String docTypeAsString;

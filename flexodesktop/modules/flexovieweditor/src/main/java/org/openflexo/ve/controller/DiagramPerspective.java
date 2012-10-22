@@ -28,7 +28,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
@@ -60,7 +59,6 @@ public class DiagramPerspective extends FlexoPerspective {
 	private final VEBrowserView shemaBrowserView;
 
 	private final Map<View, VEShemaController> _controllers;
-	private final Map<VEShemaController, JSplitPane> _rightPanels;
 
 	private final JLabel infoLabel;
 
@@ -82,7 +80,6 @@ public class DiagramPerspective extends FlexoPerspective {
 		EMPTY_RIGHT_VIEW.setPreferredSize(new Dimension(300, 300));
 		_controller = controller;
 		_controllers = new Hashtable<View, VEShemaController>();
-		_rightPanels = new Hashtable<VEShemaController, JSplitPane>();
 		bottomRightDummy = new JPanel();
 		_browser = new ShemaLibraryBrowser(controller);
 		_browserView = new VEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
@@ -229,7 +226,6 @@ public class DiagramPerspective extends FlexoPerspective {
 			if (shemaController.getDrawing() != null && shemaController.getDrawing().getShema() != null) {
 				_controllers.remove(shemaController.getDrawing().getShema());
 			}
-			_rightPanels.remove(shemaController);
 		}
 	}
 

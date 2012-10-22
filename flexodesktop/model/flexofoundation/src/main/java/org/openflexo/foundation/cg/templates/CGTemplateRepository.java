@@ -30,6 +30,8 @@ import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
 
+import com.google.common.collect.ArrayListMultimap;
+
 public abstract class CGTemplateRepository extends CGTemplateObject {
 
 	private CGTemplates _templates;
@@ -65,6 +67,30 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 				TargetSpecificCGTemplateSet specificTargetSet = getTemplateSetForTarget(target);
 				if (specificTargetSet != null) {
 					specificTargetSet.update();
+				}
+			}
+		}
+		ArrayListMultimap<String, CGTemplate> templates = ArrayListMultimap.create();
+		for(CGTemplate t: commonTemplates.findAllTemplates()) {
+			templates.put(t.getName(), t);
+		}
+		for (TargetType target : availableTargets) {
+			TargetSpecificCGTemplateSet specificTargetSet = getTemplateSetForTarget(target);
+			if (specificTargetSet != null) {
+				for(CGTemplate t: specificTargetSet.findAllTemplates()) {
+					templates.put(t.getName(), t);
+				}
+			}
+		}
+		for(String key:templates.keySet()) {
+			List<CGTemplate> t = templates.get(key);
+			if (t.size()==1) {
+				continue;
+			}
+			CGTemplate ref = t.get(0);
+			for(CGTemplate template:t) {
+				if (template!=ref && template.getLastUpdate().getTime()==ref.getLastUpdate().getTime()) {
+
 				}
 			}
 		}

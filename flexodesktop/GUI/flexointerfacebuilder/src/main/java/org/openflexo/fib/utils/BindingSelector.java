@@ -21,8 +21,12 @@ package org.openflexo.fib.utils;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -38,7 +42,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractListModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -53,15 +60,16 @@ import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingExpression.BindingValueConstant;
 import org.openflexo.antar.binding.BindingExpression.BindingValueFunction;
 import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
-import org.openflexo.antar.binding.BindingExpressionFactory;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.BooleanStaticBinding;
 import org.openflexo.antar.binding.ComplexPathElement;
+import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.antar.binding.FloatStaticBinding;
 import org.openflexo.antar.binding.IntegerStaticBinding;
 import org.openflexo.antar.binding.MethodCall;
@@ -72,14 +80,15 @@ import org.openflexo.antar.binding.StaticBindingFactory;
 import org.openflexo.antar.binding.StringStaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.icon.UtilsIconLibrary;
+import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.swing.SwingUtils;
 import org.openflexo.swing.TextFieldCustomPopup;
+import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 
@@ -919,9 +928,9 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 	protected BindingExpression makeBindingExpression() {
 		if (getBindable() != null) {
-			BindingExpressionFactory factory = getBindable().getBindingFactory().getBindingExpressionFactory();
+			// BindingExpressionFactory factory = getBindable().getBindingFactory().getBindingExpressionFactory();
 			BindingExpression returned = new BindingExpression(getBindingDefinition(), getBindable());
-			returned.setExpression(factory.getVariableFactory().makeVariable(new Word(""), getBindable()));
+			returned.setExpression(new BindingValueVariable("", getBindable()));
 			return returned;
 		}
 		return null;
@@ -1279,4 +1288,84 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		return this;
 	}
 
+	public static class TestBindable implements Bindable {
+		private BindingFactory bindingFactory = new DefaultBindingFactory();
+		private BindingModel bindingModel = new BindingModel();
+
+		public TestBindable() {
+			bindingModel.addToBindingVariables(new BindingVariableImpl(this, "aString", String.class));
+			bindingModel.addToBindingVariables(new BindingVariableImpl(this, "anInteger", Integer.class));
+			bindingModel.addToBindingVariables(new BindingVariableImpl(this, "aFloat", Float.TYPE));
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return bindingModel;
+		}
+
+		@Override
+		public BindingFactory getBindingFactory() {
+			return bindingFactory;
+		}
+	}
+
+	public static void main(String[] args) {
+		final JDialog dialog = new JDialog((Frame) null, false);
+
+		JButton closeButton = new JButton("Close");
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+				System.exit(0);
+			}
+		});
+
+		JButton logButton = new JButton("Logs");
+		logButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), dialog);
+			}
+		});
+
+		Bindable testBindable = new TestBindable();
+		BindingDefinition bd = new BindingDefinition("testString", String.class, BindingDefinitionType.GET, true);
+
+		BindingFactory factory = new DefaultBindingFactory();
+		AbstractBinding binding = factory.convertFromString("aString", testBindable);
+		binding.setBindingDefinition(bd);
+		// AbstractBinding bv = operatorIF.getConditionPrimitive();
+
+		BindingSelector _selector = new BindingSelector(null) {
+			@Override
+			public void apply() {
+				super.apply();
+				System.out.println("Apply, getEditedObject()=" + getEditedObject());
+			}
+
+			@Override
+			public void cancel() {
+				super.cancel();
+				System.out.println("Cancel, getEditedObject()=" + getEditedObject());
+			}
+		};
+		_selector.setBindable(testBindable);
+		_selector.setBindingDefinition(bd);
+		_selector.setEditedObject(binding);
+		_selector.setRevertValue(binding.clone());
+
+		JPanel panel = new JPanel(new VerticalLayout());
+		panel.add(_selector);
+
+		panel.add(closeButton);
+		panel.add(logButton);
+
+		dialog.setPreferredSize(new Dimension(550, 600));
+		dialog.getContentPane().add(panel);
+		dialog.validate();
+		dialog.pack();
+
+		dialog.setVisible(true);
+	}
 }

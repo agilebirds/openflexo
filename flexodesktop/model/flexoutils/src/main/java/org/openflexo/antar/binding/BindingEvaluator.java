@@ -1,20 +1,16 @@
 package org.openflexo.antar.binding;
 
-import java.util.List;
-
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
+import org.openflexo.antar.expr.BindingValueAsExpression.NormalBindingPathElement;
 import org.openflexo.antar.expr.DefaultExpressionParser;
-import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.Function;
-import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.antar.expr.Variable;
+import org.openflexo.antar.expr.ExpressionTransformer;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultFunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultVariableFactory;
 import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
 
 /**
  * Utility class allowing to compute binding value over an expression and a given object.<br>
@@ -46,43 +42,38 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 		bindingModel.addToBindingVariables(new BindingVariableImpl(this, "object", object.getClass()));
 	}
 
-	private static String normalizeBindingPath(String bindingPath, Bindable bindable) {
+	private static String normalizeBindingPath(String bindingPath) {
 		DefaultExpressionParser parser = new DefaultExpressionParser();
 		Expression expression = null;
 		try {
-			expression = parser.parse(bindingPath, bindable);
-			Expression newExpression = expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(),
-					new DefaultVariableFactory() {
-						@Override
-						public Variable makeVariable(Word value, Bindable bindable) {
-							if (!value.toString().startsWith("object.")) {
-								return super.makeVariable(new Word("object." + value), bindable);
-							} else {
-								return super.makeVariable(value, bindable);
+			expression = ExpressionParser.parse(bindingPath);
+			expression = expression.transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof BindingValueAsExpression) {
+						BindingValueAsExpression bv = (BindingValueAsExpression) e;
+						if (bv.getBindingPath().size() > 0) {
+							AbstractBindingPathElement firstPathElement = bv.getBindingPath().get(0);
+							if (!(firstPathElement instanceof NormalBindingPathElement)
+									|| !((NormalBindingPathElement) firstPathElement).property.equals("object")) {
+								bv.getBindingPath().add(0, new NormalBindingPathElement("object"));
 							}
 						}
-					}, new DefaultFunctionFactory() {
-						@Override
-						public Function makeFunction(String functionName, List<Expression> args, Bindable bindable) {
-							if (!functionName.startsWith("object.")) {
-								return super.makeFunction("object." + functionName, args, bindable);
-							} else {
-								return super.makeFunction(functionName, args, bindable);
-							}
-						}
-					}), bindable);
-			return newExpression.toString();
+						return bv;
+					}
+					return e;
+				}
+			});
+
+			return expression.toString();
 		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (TypeMismatchException e) {
+		} catch (TransformException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (expression != null) {
-			return expression.toString();
-		} else {
-			return "";
-		}
+		return expression.toString();
 	}
 
 	@Override
@@ -101,19 +92,20 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 	}
 
 	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException {
-		String normalizedBindingPath = normalizeBindingPath(bindingPath, this);
-		// System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
-		AbstractBinding binding = BINDING_FACTORY.convertFromString(normalizedBindingPath, this);
+		String normalizedBindingPath = normalizeBindingPath(bindingPath);
+		System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
+		AbstractBinding binding = BINDING_FACTORY.convertFromString(normalizedBindingPath);
 		binding.setBindingDefinition(bindingDefinition);
-		// System.out.println("Binding = " + binding + " valid=" + binding.isBindingValid());
+		System.out.println("Binding = " + binding + " valid=" + binding.isBindingValid() + " as " + binding.getClass());
 		if (!binding.isBindingValid()) {
+			System.out.println("not valid: " + binding.invalidBindingReason());
 			throw new InvalidKeyValuePropertyException("Cannot interpret " + normalizedBindingPath + " for object of type "
 					+ object.getClass());
 		}
 		return binding.getBindingValue(this);
 	}
 
-	public static Object evaluateBinding(String bindingPath, Object object, Bindable bindable) throws InvalidKeyValuePropertyException {
+	public static Object evaluateBinding(String bindingPath, Object object) throws InvalidKeyValuePropertyException {
 
 		BindingEvaluator evaluator = new BindingEvaluator(object);
 		return evaluator.evaluate(bindingPath);
@@ -121,11 +113,11 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 
 	public static void main(String[] args) {
 		String thisIsATest = "Hello world, this is a test";
-		System.out.println(evaluateBinding("toString", thisIsATest, null));
-		System.out.println(evaluateBinding("toString()", thisIsATest, null));
-		System.out.println(evaluateBinding("toString()+' hash='+object.hashCode()", thisIsATest, null));
-		System.out.println(evaluateBinding("substring(6,11)", thisIsATest, null));
-		System.out.println(evaluateBinding("substring(3,length()-2)+' hash='+hashCode()", thisIsATest, null));
+		System.out.println(evaluateBinding("toString", thisIsATest));
+		System.out.println(evaluateBinding("toString()", thisIsATest));
+		System.out.println(evaluateBinding("toString()+' hash='+object.hashCode()", thisIsATest));
+		System.out.println(evaluateBinding("substring(6,11)", thisIsATest));
+		System.out.println(evaluateBinding("substring(3,length()-2)+' hash='+hashCode()", thisIsATest));
 	}
 
 }

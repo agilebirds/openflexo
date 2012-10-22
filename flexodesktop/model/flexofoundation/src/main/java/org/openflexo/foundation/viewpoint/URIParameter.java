@@ -128,7 +128,7 @@ public class URIParameter extends EditionSchemeParameter {
 		if (getBaseURI().isSet() && getBaseURI().isValid()) {
 			Vector<EditionSchemeParameter> returned = new Vector<EditionSchemeParameter>();
 			try {
-				Vector<Variable> variables = Expression.extractVariables(getBaseURI().toString(), null);
+				Vector<Variable> variables = Expression.extractVariables(getBaseURI().toString());
 				for (Variable v : variables) {
 					String parameterName = v.getName().substring(v.getName().indexOf(".") + 1);
 					EditionSchemeParameter p = getScheme().getParameter(parameterName);
