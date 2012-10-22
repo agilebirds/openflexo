@@ -21,7 +21,8 @@ package org.openflexo.antar.expr;
 
 import org.openflexo.localization.FlexoLocalization;
 
-public class TypeMismatchException extends Exception {
+@SuppressWarnings("serial")
+public class TypeMismatchException extends TransformException {
 
 	private Operator concernedOperator;
 	private EvaluationType suppliedType;
@@ -51,6 +52,18 @@ public class TypeMismatchException extends Exception {
 				+ rightSuppliedType + " while expected type(s) is(are) " + typesAsString(expectedTypes);
 	}
 
+	private TypeMismatchException() {
+		super();
+	}
+
+	public static TypeMismatchException buildIncompatibleEvaluationTypeException(EvaluationType type1, EvaluationType type2) {
+		TypeMismatchException returned = new TypeMismatchException();
+		returned.leftSuppliedType = type1;
+		returned.rightSuppliedType = type2;
+		returned.message = "Incompatible types: " + type1 + " and " + type2;
+		return returned;
+	}
+
 	@Override
 	public String getMessage() {
 		return message;
@@ -76,10 +89,12 @@ public class TypeMismatchException extends Exception {
 					"<html>type_mismatch_on_operator_($0)<br>supplied_types_are_($1)_and_($2)<br>while_expected_types_are_($3)</html>",
 					concernedOperator.getLocalizedName(), leftSuppliedType.getLocalizedName(), rightSuppliedType.getLocalizedName(),
 					typesAsString(expectedTypes));
-		} else {
+		} else if (suppliedType != null && concernedOperator != null) {
 			return FlexoLocalization.localizedForKeyWithParams(
 					"<html>type_mismatch_on_operator_($0)<br>supplied_type_is_($1)<br>while_expected_types_are_($2)</html>",
 					concernedOperator.getLocalizedName(), suppliedType.getLocalizedName(), typesAsString(expectedTypes));
+		} else {
+			return "<html>" + getMessage() + "</html>";
 		}
 	}
 

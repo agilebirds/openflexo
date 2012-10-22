@@ -15,8 +15,8 @@ import org.openflexo.antar.binding.BindingValue.DecodingPreProcessor;
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
-import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.expr.oldparser.ExpressionParser;
+import org.openflexo.antar.expr.oldparser.ParseException;
 import org.openflexo.xmlcode.StringEncoder;
 
 public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
