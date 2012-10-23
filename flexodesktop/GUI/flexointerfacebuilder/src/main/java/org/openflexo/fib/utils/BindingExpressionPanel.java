@@ -27,6 +27,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -66,6 +67,7 @@ import org.openflexo.antar.expr.BinaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
 import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.BooleanUnaryOperator;
+import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
@@ -75,7 +77,6 @@ import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
-import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -364,7 +365,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				update();
 				fireEditedExpressionChanged(_bindingExpression);
 			}
-		} catch (ParseException e) {
+		} catch (org.openflexo.antar.expr.parser.ParseException e) {
 			message = "ERROR: cannot parse " + expressionTA.getText();
 			status = ExpressionParsingStatus.INVALID;
 			updateAdditionalInformations();
@@ -535,6 +536,19 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			});
 		}
 
+		if (title.equals("logical")) {
+			JButton b = new JButton(FIBIconLibrary.IF_ICON);
+			b.setBorder(BorderFactory.createEmptyBorder());
+			b.setToolTipText(FlexoLocalization.localizedForKey("conditional"));
+			returned.add(b);
+			b.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					appendConditional();
+				}
+			});
+		}
+
 		returned.setBorder(BorderFactory.createTitledBorder(null, FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, title),
 				TitledBorder.CENTER, TitledBorder.TOP, new Font("SansSerif", Font.ITALIC, 8)));
 		return returned;
@@ -674,6 +688,21 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			}
 		}
 
+		protected class IfOperatorPanel extends JPanel {
+			private final JButton currentOperatorIcon;
+
+			protected IfOperatorPanel() {
+				super();
+				setLayout(new BorderLayout());
+
+				currentOperatorIcon = new JButton(FIBIconLibrary.IF_ICON);
+				currentOperatorIcon.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+				currentOperatorIcon.setToolTipText(FlexoLocalization.localizedForKey("conditional"));
+
+				add(currentOperatorIcon, BorderLayout.CENTER);
+			}
+		}
+
 		private void addBinaryExpressionVerticalLayout() {
 			GridBagLayout gridbag2 = new GridBagLayout();
 			GridBagConstraints c2 = new GridBagConstraints();
@@ -744,6 +773,123 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			c2.gridwidth = GridBagConstraints.REMAINDER;
 			gridbag2.setConstraints(argsPanel, c2);
 			add(argsPanel);
+
+			Box box = Box.createHorizontalBox();
+			c2.weightx = 1.0;
+			c2.weighty = 1.0;
+			c2.anchor = GridBagConstraints.SOUTH;
+			c2.fill = GridBagConstraints.BOTH;
+			c2.gridwidth = GridBagConstraints.REMAINDER;
+			gridbag2.setConstraints(box, c2);
+			add(box);
+
+			isHorizontallyLayouted = false;
+		}
+
+		private void addConditionalExpressionVerticalLayout() {
+			GridBagLayout gridbag2 = new GridBagLayout();
+			GridBagConstraints c2 = new GridBagConstraints();
+			setLayout(gridbag2);
+
+			final ConditionalExpression exp = (ConditionalExpression) _representedExpression;
+			final ExpressionInnerPanel me = this;
+
+			IfOperatorPanel operatorPanel = new IfOperatorPanel();
+
+			c2.weightx = 0.0;
+			c2.weighty = 0.0;
+			c2.anchor = GridBagConstraints.EAST;
+			c2.fill = GridBagConstraints.NONE;
+			c2.gridwidth = GridBagConstraints.RELATIVE;
+			c2.insets = new Insets(0, 0, 0, 0);
+			gridbag2.setConstraints(operatorPanel, c2);
+			add(operatorPanel);
+
+			operatorPanel.setBorder(BorderFactory.createEmptyBorder());
+
+			ExpressionInnerPanel conditionArg = new ExpressionInnerPanel(exp.getCondition()) {
+				@Override
+				public void representedExpressionChanged(Expression newExpression) {
+					exp.setCondition(newExpression);
+					// Take care that we have here a recursion with inner classes
+					// (I known this is not recommanded)
+					// We should here access embedding instance !
+					me.representedExpressionChanged(exp);
+				}
+			};
+
+			c2.weightx = 1.0;
+			c2.weighty = 0.0;
+			c2.anchor = GridBagConstraints.CENTER;
+			c2.fill = GridBagConstraints.HORIZONTAL;
+			c2.gridwidth = GridBagConstraints.REMAINDER;
+			c2.insets = new Insets(0, 0, 0, 0);
+			gridbag2.setConstraints(conditionArg, c2);
+			add(conditionArg);
+
+			JLabel thenLabel = new JLabel("then");
+			thenLabel.setFont(thenLabel.getFont().deriveFont(9.0f));
+
+			c2.weightx = 0.0;
+			c2.weighty = 0.0;
+			c2.anchor = GridBagConstraints.EAST;
+			c2.fill = GridBagConstraints.NONE;
+			c2.gridwidth = GridBagConstraints.RELATIVE;
+			c2.insets = new Insets(0, 0, 0, 3);
+			gridbag2.setConstraints(thenLabel, c2);
+			add(thenLabel);
+
+			ExpressionInnerPanel thenExp = new ExpressionInnerPanel(exp.getThenExpression()) {
+				@Override
+				public void representedExpressionChanged(Expression newExpression) {
+					exp.setThenExpression(newExpression);
+					// Take care that we have here a recursion with inner classes
+					// (I known this is not recommanded)
+					// We should here access embedding instance !
+					me.representedExpressionChanged(exp);
+				}
+			};
+
+			c2.weightx = 1.0;
+			c2.weighty = 0.0;
+			c2.anchor = GridBagConstraints.CENTER;
+			c2.fill = GridBagConstraints.HORIZONTAL;
+			c2.gridwidth = GridBagConstraints.REMAINDER;
+			c2.insets = new Insets(0, 0, 0, 0);
+			gridbag2.setConstraints(thenExp, c2);
+			add(thenExp);
+
+			JLabel elseLabel = new JLabel("else");
+			elseLabel.setFont(elseLabel.getFont().deriveFont(9.0f));
+
+			c2.weightx = 0.0;
+			c2.weighty = 0.0;
+			c2.anchor = GridBagConstraints.EAST;
+			c2.fill = GridBagConstraints.NONE;
+			c2.gridwidth = GridBagConstraints.RELATIVE;
+			c2.insets = new Insets(0, 0, 0, 3);
+			gridbag2.setConstraints(elseLabel, c2);
+			add(elseLabel);
+
+			ExpressionInnerPanel elseExp = new ExpressionInnerPanel(exp.getElseExpression()/*,depth+1*/) {
+				@Override
+				public void representedExpressionChanged(Expression newExpression) {
+					exp.setElseExpression(newExpression);
+					// Take care that we have here a recursion with inner classes
+					// (I known this is not recommanded)
+					// We should here access embedding instance !
+					me.representedExpressionChanged(exp);
+				}
+			};
+
+			c2.weightx = 1.0;
+			c2.weighty = 0.0;
+			c2.anchor = GridBagConstraints.CENTER;
+			c2.fill = GridBagConstraints.HORIZONTAL;
+			c2.gridwidth = GridBagConstraints.REMAINDER;
+			c2.insets = new Insets(0, 0, 0, 0);
+			gridbag2.setConstraints(elseExp, c2);
+			add(elseExp);
 
 			Box box = Box.createHorizontalBox();
 			c2.weightx = 1.0;
@@ -866,6 +1012,9 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			}
 			removeFocusListeners();
 			removeAll();
+
+			// System.out.println("Update in ExpressionInnerPanel with " + _representedExpression + " of " +
+			// _representedExpression.getClass());
 
 			if (_representedExpression instanceof SymbolicConstant) {
 				GridBagLayout gridbag = new GridBagLayout();
@@ -1012,6 +1161,10 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				addUnaryExpressionHorizontalLayout();
 			}
 
+			else if (_representedExpression instanceof ConditionalExpression) {
+				addConditionalExpressionVerticalLayout();
+			}
+
 			addFocusListeners();
 			revalidate();
 			repaint();
@@ -1038,7 +1191,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	}
 
 	protected void appendBinaryOperator(BinaryOperator operator) {
-		System.out.println("appendBinaryOperator " + operator);
+		// System.out.println("appendBinaryOperator " + operator);
 		if (focusReceiver != null) {
 			BindingValueVariable variable = new BindingValueVariable("", _bindingExpression);
 			Expression newExpression = new BinaryOperatorExpression(operator, focusReceiver.getRepresentedExpression(), variable);
@@ -1050,9 +1203,20 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 	}
 
 	protected void appendUnaryOperator(UnaryOperator operator) {
-		System.out.println("appendUnaryOperator " + operator);
+		// System.out.println("appendUnaryOperator " + operator);
 		if (focusReceiver != null) {
 			Expression newExpression = new UnaryOperatorExpression(operator, focusReceiver.getRepresentedExpression());
+			focusReceiver.setRepresentedExpression(newExpression);
+		}
+	}
+
+	protected void appendConditional() {
+		// System.out.println("appendConditional");
+		if (focusReceiver != null) {
+			BindingValueVariable condition = new BindingValueVariable("true", _bindingExpression, new BindingDefinition("condition",
+					Boolean.class, BindingDefinitionType.GET, true));
+			BindingValueVariable elseExpression = new BindingValueVariable("", _bindingExpression);
+			Expression newExpression = new ConditionalExpression(condition, focusReceiver.getRepresentedExpression(), elseExpression);
 			focusReceiver.setRepresentedExpression(newExpression);
 		}
 	}

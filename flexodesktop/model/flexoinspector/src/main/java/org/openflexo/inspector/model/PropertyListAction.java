@@ -25,7 +25,7 @@ import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.expr.oldparser.ParseException;
 
 public class PropertyListAction extends ParametersContainerModelObject {
 	public static final String ADD_TYPE = "ADD";

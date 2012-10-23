@@ -22,20 +22,61 @@ package org.openflexo.antar.expr;
 import java.util.Date;
 import java.util.Vector;
 
-import org.openflexo.antar.expr.parser.BooleanValue;
-import org.openflexo.antar.expr.parser.DateValue;
-import org.openflexo.antar.expr.parser.DurationValue;
-import org.openflexo.antar.expr.parser.FloatValue;
-import org.openflexo.antar.expr.parser.IntValue;
-import org.openflexo.antar.expr.parser.StringValue;
-import org.openflexo.antar.expr.parser.Value;
+import org.openflexo.antar.expr.oldparser.BooleanValue;
+import org.openflexo.antar.expr.oldparser.DateValue;
+import org.openflexo.antar.expr.oldparser.DurationValue;
+import org.openflexo.antar.expr.oldparser.FloatValue;
+import org.openflexo.antar.expr.oldparser.IntValue;
+import org.openflexo.antar.expr.oldparser.StringValue;
+import org.openflexo.antar.expr.oldparser.Value;
 import org.openflexo.toolbox.Duration;
 
 public abstract class Constant<V> extends Expression {
 
-	@Override
+	public static Constant<?> makeConstant(Object value) {
+		if (value == null) {
+			return Constant.ObjectSymbolicConstant.NULL;
+		}
+		if (value instanceof Boolean) {
+			if (((Boolean) value)) {
+				return Constant.BooleanConstant.TRUE;
+			} else {
+				return Constant.BooleanConstant.FALSE;
+			}
+		} else if (value instanceof Character) {
+			return new Constant.StringConstant(((Character) value).toString());
+		} else if (value instanceof String) {
+			return new Constant.StringConstant(((String) value));
+		} else if (value.getClass().isEnum()) {
+			return new Constant.EnumConstant(((Enum) value).name());
+		} else if (value instanceof Float) {
+			return new Constant.FloatConstant(((Float) value).doubleValue());
+		} else if (value instanceof Double) {
+			return new Constant.FloatConstant(((Double) value).doubleValue());
+		} else if (value instanceof Integer) {
+			return new Constant.IntegerConstant(((Integer) value).longValue());
+		} else if (value instanceof Short) {
+			return new Constant.IntegerConstant(((Short) value).longValue());
+		} else if (value instanceof Long) {
+			return new Constant.IntegerConstant(((Long) value).longValue());
+		} else if (value instanceof Byte) {
+			return new Constant.IntegerConstant(((Byte) value).longValue());
+		} /*else if (value instanceof DateValue) {
+			return new Constant.DateConstant(((DateValue) value).getDateValue());
+			} else if (value instanceof DurationValue) {
+			return new Constant.DurationConstant(((DurationValue) value).getDurationValue());
+			}*/
+		return new Constant.StringConstant("?");
+	}
+
+	/*@Override
 	public Expression evaluate(EvaluationContext context) {
 		return this;
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+		return transformer.performTransformation(this);
 	}
 
 	@Override
@@ -253,10 +294,10 @@ public abstract class Constant<V> extends Expression {
 			return Double.toString(getValue());
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) {
 			return new FloatConstant(getValue());
-		}
+		}*/
 
 	}
 
@@ -334,10 +375,10 @@ public abstract class Constant<V> extends Expression {
 			return getSymbol();
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) {
 			return new DateConstant(computeDateForNow());
-		}
+		}*/
 
 		public abstract Date computeDateForNow();
 
@@ -400,10 +441,10 @@ public abstract class Constant<V> extends Expression {
 			return getSymbol();
 		}
 
-		@Override
+		/*@Override
 		public Expression evaluate(EvaluationContext context) {
 			return this;
-		}
+		}*/
 
 		@Override
 		public EvaluationType getEvaluationType() {
