@@ -62,7 +62,7 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View> {
 
 	@Override
 	public DiagramPerspective getPerspective() {
-		return getController().getOEController().DIAGRAM_PERSPECTIVE;
+		return getController().getVEController().DIAGRAM_PERSPECTIVE;
 	}
 
 	public FlexoProject getProject() {

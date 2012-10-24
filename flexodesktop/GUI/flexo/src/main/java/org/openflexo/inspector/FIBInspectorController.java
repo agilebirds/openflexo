@@ -92,7 +92,7 @@ public class FIBInspectorController extends FlexoFIBController {
 			FIBInspector current = (FIBInspector) component;
 			while (current != null) {
 				File inspectorFile = new File(current.getDefinitionFile());
-				System.out.println("> " + inspectorFile);
+				// System.out.println("> " + inspectorFile);
 				if (inspectorFile.exists()) {
 					JMenuItem menuItem = new JMenuItem(inspectorFile.getName());
 					// We dont use existing inspector which is already

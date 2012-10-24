@@ -20,30 +20,29 @@
 package org.openflexo.ve.controller.action;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.action.DeleteViewElements;
+import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.action.VECut;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.VECst;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
-public class DeleteViewElementsInitializer extends ActionInitializer {
+public class VECutInitializer extends ActionInitializer<VECut, ViewObject, ViewObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteViewElementsInitializer(VEControllerActionInitializer actionInitializer) {
-		super(DeleteViewElements.actionType, actionInitializer);
+	VECutInitializer(VEControllerActionInitializer actionInitializer) {
+		super(VECut.actionType, actionInitializer);
 	}
 
 	@Override
@@ -52,26 +51,21 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeleteViewElements> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeleteViewElements>() {
+	protected FlexoActionInitializer<VECut> getDefaultInitializer() {
+		return new FlexoActionInitializer<VECut>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteViewElements action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+			public boolean run(ActionEvent e, VECut action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteViewElements> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeleteViewElements>() {
+	protected FlexoActionFinalizer<VECut> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<VECut>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteViewElements action) {
-				if (getControllerActionInitializer().getVEController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getVEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
-					getControllerActionInitializer().getVEController().getSelectionManager().resetSelection();
-				}
+			public boolean run(ActionEvent e, VECut action) {
+				getControllerActionInitializer().getVESelectionManager().performSelectionCut();
 				return true;
 			}
 		};
@@ -79,18 +73,12 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return IconLibrary.DELETE_ICON;
+		return IconLibrary.CUT_ICON;
 	}
 
 	@Override
 	protected KeyStroke getShortcut() {
-		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(DeleteViewElements.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+		return KeyStroke.getKeyStroke(KeyEvent.VK_X, FlexoCst.META_MASK);
 	}
 
 }

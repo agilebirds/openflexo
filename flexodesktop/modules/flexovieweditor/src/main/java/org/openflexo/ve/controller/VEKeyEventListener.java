@@ -38,7 +38,7 @@ public class VEKeyEventListener extends SelectionManagingKeyEventListener {
 
 	@Override
 	protected SelectionManager getSelectionManager() {
-		return ((VEController) getController()).getOESelectionManager();
+		return ((VEController) getController()).getVESelectionManager();
 	}
 
 	@Override

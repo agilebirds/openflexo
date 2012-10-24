@@ -24,11 +24,13 @@ import java.io.File;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Constants used by the OE module.
+ * Constants used by the ViewEditor module.
  * 
  * @author sylvain
  */
 public class VECst {
+
+	public static final boolean CUT_COPY_PASTE_ENABLED = true;
 
 	public static final String DEFAULT_OE_BROWSER_WINDOW_TITLE = "ontology_browser";
 

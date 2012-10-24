@@ -66,9 +66,9 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DeleteOntologyObjects>() {
 			@Override
 			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
-				if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
-					getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();
+				if (getControllerActionInitializer().getVEController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getVEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
+					getControllerActionInitializer().getVEController().getSelectionManager().resetSelection();
 				}
 				return true;
 			}

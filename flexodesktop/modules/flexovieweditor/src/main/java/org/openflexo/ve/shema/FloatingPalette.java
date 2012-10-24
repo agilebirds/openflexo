@@ -383,7 +383,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		}
 
 		if (availableConnectors.size() == 1) {
-			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller).getOEController()
+			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller).getVEController()
 					.getEditor());
 			action.setLinkScheme(availableConnectors.firstElement());
 			action.setFromShape(from);
@@ -402,7 +402,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					public void actionPerformed(ActionEvent e) {
 						// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
 						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller)
-								.getOEController().getEditor());
+								.getVEController().getEditor());
 						action.setLinkScheme(linkScheme);
 						action.setFromShape(from);
 						action.setToShape(to);
@@ -429,7 +429,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			popup.show((Component) controller.getDrawingView().viewForObject(controller.getGraphicalRepresentation(target)),
 					(int) dropLocation.x, (int) dropLocation.y);
 		} else {
-			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, (controller).getOEController()
+			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, (controller).getVEController()
 					.getEditor());
 			action.setToShape(to);
 			action.setAutomaticallyCreateConnector(true);
@@ -495,7 +495,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private ViewShape createNewShape(FGEPoint dropLocation, ViewObject container, DropScheme dropScheme) {
 
-		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(container, null, controller.getOEController()
+		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(container, null, controller.getVEController()
 				.getEditor());
 		dropSchemeAction.setDropScheme(dropScheme);
 		dropSchemeAction.escapeParameterRetrievingWhenValid = true;
@@ -527,7 +527,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private ViewConnector createNewConnector(ViewShape from, ViewShape to, LinkScheme linkScheme) {
 
-		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getOEController()
+		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getVEController()
 				.getEditor());
 		linkSchemeAction.setLinkScheme(linkScheme);
 		linkSchemeAction.setFromShape(from);

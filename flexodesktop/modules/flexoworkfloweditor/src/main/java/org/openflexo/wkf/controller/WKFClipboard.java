@@ -335,7 +335,7 @@ public class WKFClipboard extends FlexoClipboard {
 	}
 
 	@Override
-	protected boolean isCurrentSelectionValidForCopy(Vector<FlexoModelObject> currentlySelectedObjects) {
+	protected boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
 		return getSelectionManager().getSelectionSize() > 0;
 	}
 
@@ -352,7 +352,7 @@ public class WKFClipboard extends FlexoClipboard {
 	 * Selection procedure for copy
 	 */
 	@Override
-	protected boolean performCopyOfSelection(Vector<FlexoModelObject> currentlySelectedObjects) {
+	protected boolean performCopyOfSelection(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
 		logger.info("performCopyOfSelection() for " + currentlySelectedObjects);
 
 		// TODO reimplement all of this
@@ -369,7 +369,7 @@ public class WKFClipboard extends FlexoClipboard {
 				Vector<WKFArtefact> selectedAnnotations = new Vector<WKFArtefact>();
 
 				FlexoProcess process = null;
-				for (Enumeration<FlexoModelObject> e = currentlySelectedObjects.elements(); e.hasMoreElements();) {
+				for (Enumeration<? extends FlexoModelObject> e = currentlySelectedObjects.elements(); e.hasMoreElements();) {
 					FlexoModelObject next = e.nextElement();
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Selected: " + next);
