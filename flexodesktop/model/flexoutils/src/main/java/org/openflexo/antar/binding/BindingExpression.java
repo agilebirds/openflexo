@@ -731,6 +731,9 @@ public class BindingExpression extends AbstractBinding {
 		return returned;
 	}
 
+	/**
+	 * Evaluates the binding as a GET with supplied binding evaluation context
+	 */
 	@Override
 	public Object getBindingValue(final BindingEvaluationContext context) {
 		if (expression == null) {
@@ -763,7 +766,14 @@ public class BindingExpression extends AbstractBinding {
 				return ((Constant) evaluatedExpression).getValue();
 			}
 
-			logger.warning("Cannot evaluate " + getStringRepresentation() + " max reduction is " + evaluatedExpression);
+			/*if (evaluatedExpression instanceof BinaryOperatorExpression
+					&& ((((BinaryOperatorExpression) evaluatedExpression).getLeftArgument() == ObjectSymbolicConstant.NULL) 
+							|| (((BinaryOperatorExpression) evaluatedExpression).getLeftArgument() == ObjectSymbolicConstant.NULL))) {
+
+			}*/
+
+			logger.warning("Cannot evaluate " + getStringRepresentation() + " max reduction is " + evaluatedExpression
+					+ " resolvedExpression=" + resolvedExpression);
 			return null;
 
 		} catch (TransformException e1) {
