@@ -196,6 +196,12 @@ public class ModelProperty<I> {
 			}
 		}
 
+		// Actually, this can happen when the property is string convertable
+		/*if (isSerializable() && ignoreType()) {
+			throw new ModelDefinitionException("Inconsistent property '" + propertyIdentifier
+					+ "'. It cannot be serializable (annotation XMLAttribute or XMLElement) and ignore");
+		}*/
+
 		if (embedded != null && complexEmbedded != null) {
 			throw new ModelDefinitionException("Cannot define both " + Embedded.class.getSimpleName() + " and "
 					+ ComplexEmbedded.class.getSimpleName() + " on property " + this);
@@ -517,6 +523,7 @@ public class ModelProperty<I> {
 			Cardinality cardinality = null;
 			String inverse = null;
 			String defaultValue = null;
+			boolean ignoreType;
 			if (getGetter() != null) {
 				cardinality = getGetter().cardinality();
 			} else {
@@ -532,7 +539,12 @@ public class ModelProperty<I> {
 			} else {
 				defaultValue = getGetter().defaultValue();
 			}
-			getter = new Getter.GetterImpl(propertyIdentifier, cardinality, inverse, defaultValue);
+			if (getGetter() == null) {
+				ignoreType = property.getGetter().ignoreType();
+			} else {
+				ignoreType = getGetter().ignoreType();
+			}
+			getter = new Getter.GetterImpl(propertyIdentifier, cardinality, inverse, defaultValue, ignoreType);
 		}
 		if (rulingProperty != null && rulingProperty.getSetter() != null) {
 			setter = rulingProperty.getSetter();
@@ -751,6 +763,13 @@ public class ModelProperty<I> {
 		return defaultValue;
 	}
 
+	public boolean ignoreType() {
+		if (getGetter() != null) {
+			return getGetter().ignoreType();
+		}
+		return false;
+	}
+
 	public Cardinality getCardinality() {
 		if (cardinality == null && getGetter() != null) {
 			cardinality = getGetter().cardinality();
@@ -810,6 +829,10 @@ public class ModelProperty<I> {
 
 	public ComplexEmbedded getComplexEmbedded() {
 		return complexEmbedded;
+	}
+
+	public boolean isSerializable() {
+		return getXMLAttribute() != null || getXMLElement() != null;
 	}
 
 	public StrategyType getCloningStrategy() {

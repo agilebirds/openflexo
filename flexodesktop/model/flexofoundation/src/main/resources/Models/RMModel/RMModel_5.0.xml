@@ -84,6 +84,7 @@
     <property name="resourceDataClass" xmlTag="class" attribute="YES"/>
     <property name="name" xmlTag="name" attribute="YES"/>
     <property name="resourceType" xmlTag="type" attribute="YES"/>
+    <property name="useProjectName" xmlTag="useProjectName" attribute="YES"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoXMLStorageResource" abstract="YES">

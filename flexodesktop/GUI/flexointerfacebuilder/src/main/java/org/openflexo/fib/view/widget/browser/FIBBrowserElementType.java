@@ -59,9 +59,12 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		@Override
 		public synchronized Object apply(Object arg0) {
 			child = arg0;
-			Object result = children.getCast().getBindingValue(this);
-			child = null;
-			return result;
+			try {
+				Object result = children.getCast().getBindingValue(this);
+				return result;
+			} finally {
+				child = null;
+			}
 		}
 
 		@Override

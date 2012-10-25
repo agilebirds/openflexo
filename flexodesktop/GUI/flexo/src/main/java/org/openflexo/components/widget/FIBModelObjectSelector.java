@@ -22,6 +22,8 @@ package org.openflexo.components.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.RGBImageFilter;
@@ -47,6 +49,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
@@ -56,12 +59,19 @@ import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBListWidget;
+import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.swing.TextFieldCustomPopup;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.controller.FlexoController;
@@ -737,52 +747,69 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		}
 	}
 
-	/*
-	 * public static void testSelector(final FIBModelObjectSelector selector) {
-	 * final FlexoProject prj = loadProject(); selector.createCustomPanel(null);
-	 * selector.setProject(prj); FIBAbstractEditor editor = new
-	 * FIBAbstractEditor() {
-	 * 
-	 * @Override public Object[] getData() { return
-	 * FIBAbstractEditor.makeArray(selector); }
-	 * 
-	 * @Override public File getFIBFile() { return selector.getFIBFile(); }
-	 * 
-	 * @Override public FIBController getController() { return
-	 * selector.getSelectorPanel().controller; }
-	 * 
-	 * @Override public FIBController makeNewController() { return
-	 * selector.makeCustomFIBController
-	 * (selector.getSelectorPanel().fibComponent); }
-	 * 
-	 * };
-	 * 
-	 * editor.addAction("set_filtered_name",new ActionListener() {
-	 * 
-	 * @Override public void actionPerformed(ActionEvent e) {
-	 * selector.setFilteredName("T"); selector.updateMatchingValues(); } });
-	 * editor.launch(); }
-	 * 
-	 * protected static final FlexoEditorFactory EDITOR_FACTORY = new
-	 * FlexoEditorFactory() { public DefaultFlexoEditor
-	 * makeFlexoEditor(FlexoProject project) { return new
-	 * DefaultFlexoEditor(project); } };
-	 * 
-	 * public static FileResource PRJ_FILE = new
-	 * FileResource("Prj/TestBrowser.prj");
-	 * 
-	 * public static FlexoProject loadProject() { File projectFile = PRJ_FILE;
-	 * FlexoProject project = null; FlexoEditor editor;
-	 * logger.info("Found project "+projectFile.getAbsolutePath()); try { editor
-	 * =
-	 * FlexoResourceManager.initializeExistingProject(projectFile,EDITOR_FACTORY
-	 * ,null); project = editor.getProject(); } catch
-	 * (ProjectLoadingCancelledException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); } catch (ProjectInitializerException e) { // TODO
-	 * Auto-generated catch block e.printStackTrace(); }
-	 * logger.info("Successfully loaded project "
-	 * +projectFile.getAbsolutePath());
-	 * 
-	 * return project; }
-	 */
+	public static void testSelector(final FIBModelObjectSelector selector) {
+		final FlexoProject prj = loadProject();
+		selector.createCustomPanel(null);
+		selector.setProject(prj);
+		FIBAbstractEditor editor = new FIBAbstractEditor() {
+
+			@Override
+			public Object[] getData() {
+				return FIBAbstractEditor.makeArray(selector);
+			}
+
+			@Override
+			public File getFIBFile() {
+				return selector.getFIBFile();
+			}
+
+			@Override
+			public FIBController getController() {
+				return selector.getSelectorPanel().controller;
+			}
+
+			public FIBController makeNewController() {
+				return selector.makeCustomFIBController(selector.getSelectorPanel().fibComponent);
+			}
+
+		};
+
+		editor.addAction("set_filtered_name", new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				selector.setFilteredName("T");
+				selector.updateMatchingValues();
+			}
+		});
+		editor.launch();
+	}
+
+	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+		@Override
+		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
+			return new DefaultFlexoEditor(project);
+		}
+	};
+
+	public static FileResource PRJ_FILE = new FileResource("Prj/TestBrowser.prj");
+
+	public static FlexoProject loadProject() {
+		File projectFile = PRJ_FILE;
+		FlexoProject project = null;
+		FlexoEditor editor;
+		logger.info("Found project " + projectFile.getAbsolutePath());
+		try {
+			editor = FlexoResourceManager.initializeExistingProject(projectFile, EDITOR_FACTORY, null);
+			project = editor.getProject();
+		} catch (ProjectLoadingCancelledException e) { // TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProjectInitializerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.info("Successfully loaded project " + projectFile.getAbsolutePath());
+
+		return project;
+	}
 }

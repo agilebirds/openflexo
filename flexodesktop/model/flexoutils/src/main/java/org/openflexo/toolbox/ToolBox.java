@@ -1023,7 +1023,7 @@ public class ToolBox {
 		}
 		if (iterable instanceof Iterable) {
 			List<Object> list = new ArrayList<Object>();
-			for (Object o : (Iterable) iterable) {
+			for (Object o : (Iterable<?>) iterable) {
 				list.add(o);
 			}
 			return list;

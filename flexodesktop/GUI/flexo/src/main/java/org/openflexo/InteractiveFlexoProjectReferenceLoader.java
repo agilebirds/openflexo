@@ -51,6 +51,8 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 		FlexoDialog dialog = new FlexoDialog();
 		dialog.setModal(true);
 		dialog.add(panel);
+		dialog.pack();
+		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
 		File selectedFile = projectChooserComponent.getSelectedFile();
 		if (selectedFile != null) {

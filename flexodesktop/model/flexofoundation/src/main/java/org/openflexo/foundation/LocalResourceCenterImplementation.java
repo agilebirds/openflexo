@@ -184,6 +184,10 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		}
 	}
 
+	public File getLocalDirectory() {
+		return localDirectory;
+	}
+
 	@Override
 	public File getNewCalcSandboxDirectory() {
 		return newViewPointSandboxDirectory;

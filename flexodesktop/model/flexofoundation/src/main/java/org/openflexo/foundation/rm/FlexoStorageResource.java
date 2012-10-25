@@ -316,7 +316,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 			throws LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException;
 
 	protected boolean isLoadable() {
-		return true;
+		return getFile() != null && getFile().exists();
 	}
 
 	public final SRD loadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws FlexoException {
@@ -324,7 +324,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 			return null;
 		}
 		if (_resolveDependanciesSchemeRunningForThisResource) {
-			new Exception("Loop in dependancies").printStackTrace();
+			new Exception("Loop in dependencies").printStackTrace();
 			logger.warning("Found loop in dependancies. Automatic rebuild dependancies is required !");
 			getProject().setRebuildDependanciesIsRequired();
 			boolean wasLoaded = isLoaded();

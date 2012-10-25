@@ -1,5 +1,5 @@
 #English
-#Fri Sep 28 11:05:49 CEST 2012
+#Thu Oct 25 14:19:10 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -339,6 +339,7 @@ save_project=Save project
 save_project_as=Save project as...
 save_project_for_server=Save project for OpenFlexo server
 send_project_to_flexo_server=Send project to OpenFlexo server
+set_filtered_name=set_filtered_name
 setter_method_javadoc=Sets value for property
 shape=Shape
 show_browser=Show browser

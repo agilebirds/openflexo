@@ -11,10 +11,12 @@ import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.factory.AccessibleProxyObject;
 
 @ModelEntity
 @ImplementationClass(ProjectData.ProjectDataImpl.class)
+@XMLElement
 public interface ProjectData extends StorageResourceData, AccessibleProxyObject {
 
 	public static final String FLEXO_RESOURCE = "flexoResource";
@@ -22,25 +24,28 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 	public static final String IMPORTED_PROJECTS = "importedProjects";
 
 	@Override
-	@Getter(FLEXO_RESOURCE)
+	@Getter(value = FLEXO_RESOURCE, ignoreType = true)
 	public FlexoStorageResource getFlexoResource();
+
+	@Setter(FLEXO_RESOURCE)
+	public void setFlexoStorageResource(FlexoStorageResource resource) throws DuplicateResourceException;
 
 	public FlexoProject getImportedProjectWithURI(String uri);
 
 	public FlexoProject getImportedProjectWithURI(String projectURI, boolean searchRecursively);
 
 	@Override
-	@Setter(FLEXO_RESOURCE)
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException;
 
 	@Override
-	@Getter(value = PROJECT)
+	@Getter(value = PROJECT, ignoreType = true)
 	public FlexoProject getProject();
 
 	@Override
 	public void setProject(FlexoProject aProject);
 
-	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST)
+	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST, ignoreType = true)
+	@XMLElement(xmlTag = "ImportedProjects")
 	public List<FlexoProjectReference> getImportedProjects();
 
 	@Setter(value = IMPORTED_PROJECTS)
@@ -74,6 +79,11 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 		@Override
 		public void setProject(FlexoProject aProject) {
 
+		}
+
+		@Override
+		public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+			setFlexoStorageResource((FlexoStorageResource) resource);
 		}
 
 		@Override

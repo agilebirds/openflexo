@@ -203,7 +203,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		}
 
 		for (ModelProperty<? super I> property : properties.values()) {
-			if (!property.getType().isPrimitive() && !getModelFactory().isStringConvertable(property.getType())) {
+			if (!property.getType().isPrimitive() && !getModelFactory().isStringConvertable(property.getType()) && !property.ignoreType()) {
 				getModelFactory().importClass(property.getType());
 			}
 		}

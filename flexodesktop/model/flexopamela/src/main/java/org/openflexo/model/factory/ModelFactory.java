@@ -160,8 +160,7 @@ public class ModelFactory {
 	public <I> void importClass(Class<I> type) throws ModelDefinitionException {
 		ModelEntity<I> modelEntity = getModelEntity(type);// Performs the import
 		if (modelEntity == null) {
-			throw new ModelDefinitionException("Type " + type.getClass().getName()
-					+ " is not a model entity. Did you forgot to annotated it with @"
+			throw new ModelDefinitionException("Type " + type.getName() + " is not a model entity. Did you forgot to annotated it with @"
 					+ org.openflexo.model.annotations.ModelEntity.class.getSimpleName());
 		}
 		Imports imports = type.getAnnotation(Imports.class);

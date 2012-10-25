@@ -1085,11 +1085,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public FlexoResource<? extends FlexoResourceData> resourceForKey(String fullQualifiedResourceIdentifier) {
-		if (resources.get(fullQualifiedResourceIdentifier) != null) {
+		FlexoResource<? extends FlexoResourceData> flexoResource = resources.get(fullQualifiedResourceIdentifier);
+		if (flexoResource != null) {
 			if (logger.isLoggable(Level.FINER)) {
 				logger.finer("Retrieving resource " + fullQualifiedResourceIdentifier);
 			}
-			return resources.get(fullQualifiedResourceIdentifier);
+			return flexoResource;
 		}
 		// if (logger.isLoggable(Level.WARNING)) logger.warning ("Could not
 		// retrieve resource "+fullQualifiedResourceIdentifier);
@@ -3952,8 +3953,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			FlexoProjectFile dataFile = new FlexoProjectFile(xml, this);
 
 			try {
-				returned = new FlexoPamelaResource<ProjectData>(this, getProjectName(), ResourceType.PROJECT_DATA, ProjectData.class,
-						dataFile);
+				returned = new FlexoPamelaResource<ProjectData>(this, ResourceType.PROJECT_DATA, ProjectData.class, dataFile);
 				registerResource(returned);
 			} catch (Exception e1) {
 				// Warns about the exception

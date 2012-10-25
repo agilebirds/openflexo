@@ -45,7 +45,7 @@ public class FIBBrowser extends FIBWidget {
 
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", getIteratorClass(), BindingDefinitionType.GET_SET, false);
+			SELECTED = new BindingDefinition("selected", Object.class, BindingDefinitionType.GET_SET, false);
 		}
 		return SELECTED;
 	}

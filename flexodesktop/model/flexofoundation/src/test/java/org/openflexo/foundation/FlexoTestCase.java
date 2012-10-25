@@ -66,10 +66,12 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -173,7 +175,7 @@ public abstract class FlexoTestCase extends TestCase {
 		return createProject(projectName, getNewResourceCenter(projectName));
 	}
 
-	protected FlexoResourceCenter getNewResourceCenter(String name) {
+	protected LocalResourceCenterImplementation getNewResourceCenter(String name) {
 		try {
 			return LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(FileUtils.createTempDirectory(name,
 					"ResourceCenter"));
@@ -221,10 +223,31 @@ public abstract class FlexoTestCase extends TestCase {
 		}
 	}
 
+	@Deprecated
 	protected FlexoEditor reloadProject(File prjDir) {
 		try {
 			FlexoEditor _editor = null;
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, null));
+			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
+			return _editor;
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			fail();
+		} catch (ProjectLoadingCancelledException e) {
+			e.printStackTrace();
+			fail();
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		}
+		return null;
+	}
+
+	protected FlexoEditor reloadProject(File prjDir, FlexoResourceCenter resourceCenter, FlexoProjectReferenceLoader projectReferenceLoader) {
+		try {
+			FlexoEditor _editor = null;
+			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, null, EDITOR_FACTORY,
+					new DefaultProjectLoadingHandler(), projectReferenceLoader, resourceCenter));
 			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
 			return _editor;
 		} catch (ProjectInitializerException e) {

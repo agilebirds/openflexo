@@ -413,7 +413,6 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 			if (progress != null) {
 				progress.setProgress("Check ProcessInstance consistency");
 			}
-			getProject().getFlexoWorkflow().checkProcessDMEntitiesConsistency();
 			_loadProjectProgress = null;
 			return project;
 		} catch (LoadXMLResourceException e) {

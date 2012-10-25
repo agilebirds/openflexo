@@ -209,6 +209,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	public void setCurrentEditor(FlexoEditor projectEditor) {
+		if (this.currentEditor == projectEditor) {
+			return;
+		}
 		if (requiresProject() && projectEditor == null && canGoBack()) {
 			historyBack();
 			return;
