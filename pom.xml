@@ -955,6 +955,11 @@
  				<artifactId>swingx-core</artifactId>
 				<version>1.6.3</version>
  			</dependency>		
+			<dependency>
+    			<groupId>sablecc</groupId>
+    			<artifactId>sablecc</artifactId>
+    			<version>3.2-1</version>
+			</dependency>
  		</dependencies>
 	</dependencyManagement>
 </project>

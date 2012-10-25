@@ -39,6 +39,10 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
+		<dependency>
+    		<groupId>sablecc</groupId>
+    		<artifactId>sablecc</artifactId>
+		</dependency>
 	</dependencies>
 </project>
 

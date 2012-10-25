@@ -19,6 +19,8 @@
  */
 package org.openflexo.antar.expr;
 
+import java.util.logging.Logger;
+
 import org.openflexo.antar.expr.Constant.ArithmeticConstant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.DateConstant;
@@ -28,6 +30,8 @@ import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 
 public abstract class BooleanBinaryOperator extends BinaryOperator {
+
+	private static final Logger logger = Logger.getLogger(BooleanBinaryOperator.class.getPackage().getName());
 
 	public static final BooleanBinaryOperator AND = new LogicalBinaryOperator() {
 		@Override
@@ -311,8 +315,16 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 				return ((((DurationConstant) leftArg).getDuration().greaterThan(((DurationConstant) rightArg).getDuration())) ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE);
 			}
-			// System.out.println("leftArg="+leftArg);
-			// System.out.println("rightArg="+rightArg);
+			if (leftArg == ObjectSymbolicConstant.NULL || rightArg == ObjectSymbolicConstant.NULL) {
+				logger.warning("Cannot evaluate operation " + this + " with null value, leftArg=" + leftArg + ", rightArg=" + rightArg);
+				// Developper's note:
+				// Uncommented following to track call
+				/*throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(),
+						EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER, EvaluationType.DATE, EvaluationType.DURATION);*/
+				return Constant.BooleanConstant.FALSE;
+			}
+			// System.out.println("leftArg=" + leftArg + " of " + leftArg.getClass());
+			// System.out.println("rightArg=" + rightArg + " of " + rightArg.getClass());
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(),
 					EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER, EvaluationType.DATE, EvaluationType.DURATION);
 		}

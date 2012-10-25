@@ -95,9 +95,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
-		System.out.println("Search " + epName);
 		EditionPattern ep = getCalc().getEditionPattern(epName);
-		System.out.println("Found " + ep);
 		return getEPInstances(ep);
 	}
 
@@ -110,7 +108,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 			if (epr == null) {
 				continue;
 			}
-			if (/*epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
+			if (/* epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
 				epis.add(epr.getEditionPatternInstance());
 			}
 		}
@@ -119,11 +117,10 @@ public class View extends ViewObject implements XMLStorageResourceData {
 			if (epr == null) {
 				continue;
 			}
-			if (/*epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
+			if (/* epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
 				epis.add(epr.getEditionPatternInstance());
 			}
 		}
-		System.out.println("Return " + epis);
 		return epis;
 	}
 

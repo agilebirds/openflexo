@@ -2100,12 +2100,26 @@ name of the template corresponding to the specific toc_entry.
 #end
 
 #macro(renderEPIWithTagAndAlias $_epi $_bindingPath $_enclosingTag $_alias)
+	#renderEPIWithTagAndAliasAndStyle($_epi $_bindingPath $_enclosingTag $_alias "")
+#end
+
+#macro(renderEPIWithTagAndAliasAndStyle $_epi $_bindingPath $_enclosingTag $_alias $_style)
+#*
+* Allowed tags are:
+* - w:p
+* - w:r
+* - w:tc
+* - w:tr
+*#
+#if(!$_style)
+  #set($_style = "")
+#end
 #set($_text = $_epi.evaluate($_bindingPath))
-#set($muliline = $_text.contains($n))
+#set($multiline = $_text.contains($n))
 #if(!$multiline)
     #foreach($patternRole in ${_epi.getPattern().getPatternRoles()})
-        #if(${patternRole.getLabel().toString()}==$_bindingPath)
-            #set($muliline = ${patternRole.getGraphicalRepresentation().getIsMultilineAllowed()})
+        #if(${generator.isInstance($patternRole, "org.openflexo.foundation.viewpoint.GraphicalElementPatternRole")} && ${patternRole.getLabel().toString()}==$_bindingPath)
+            #set($multiline = ${patternRole.getGraphicalRepresentation().getIsMultilineAllowed()})
             #break
         #end
     #end
@@ -2113,7 +2127,7 @@ name of the template corresponding to the specific toc_entry.
 #if(!$multiline)
     #foreach($entry in ${_epi.getPattern().getInspector().getEntries()})
         #if(${entry.getData()}==$_bindingPath)
-            #set($muliline = ${entry.getWidgetName().equals("TextArea")})
+            #set($multiline = ${entry.getWidgetName().equals("TextArea")})
             #break
         #end
     #end
@@ -2142,13 +2156,13 @@ name of the template corresponding to the specific toc_entry.
             <w:alias w:val="#escape($_alias)"/>
             <w:tag w:val="#escape(${projectGenerator.getEPITag($_epi, $_bindingPath)})" />
             <w:lock w:val="sdtLocked" />
-            <w:text w:multiLine="$muliline"/>
+            <w:text w:multiLine="$multiline"/>
             #if(!$_hasText)
                 <w:showingPlcHdr/>
             #end
         </w:sdtPr>
         <w:sdtContent>
-            $_ot
+            $_ot $_style
             #if($_hasText)
                 #escape($_text)
             #else

@@ -21,8 +21,6 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.expr.parser.Word;
-
 public class Variable extends Expression {
 
 	private String name;
@@ -45,12 +43,17 @@ public class Variable extends Expression {
 		this.name = name;
 	}
 
-	@Override
+	/*@Override
 	public Expression evaluate(EvaluationContext context) {
 		if (context != null) {
 			return context.getVariableFactory().makeVariable(new Word(getName()));
 		}
 		return this;
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+		return transformer.performTransformation(this);
 	}
 
 	@Override
@@ -68,22 +71,23 @@ public class Variable extends Expression {
 			return false;
 		}
 
-		boolean startingPathItem = true;
+		/*boolean startingPathItem = true;
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
 			if (c == '.') {
 				startingPathItem = true;
 			} else {
-				boolean isNormalChar = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '(' || c == ')' || c == '_') // See Java
-																																// authorized
-																																// characters
+				boolean isNormalChar = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '(' || c == ')' || c == '_' || c == ',') // See
+																																			// Java
+				// authorized
+				// characters
 				|| (c >= '0' && c <= '9' && !startingPathItem));
 				if (!isNormalChar) {
 					return false;
 				}
 				startingPathItem = false;
 			}
-		}
+		}*/
 		return true;
 
 	}

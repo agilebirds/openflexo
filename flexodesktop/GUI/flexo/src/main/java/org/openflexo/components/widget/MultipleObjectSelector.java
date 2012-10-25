@@ -56,12 +56,20 @@ public class MultipleObjectSelector<E extends FlexoModelObject> extends TabularB
 		return getModel().getSelectionColumn().getSelectedObjects();
 	}
 
+	@Override
+	public void delete() {
+		if (getModel() != null) {
+			getModel().removeFromSelectionListeners(this);
+		}
+		super.delete();
+	}
+
 	/**
 	 * @return
 	 */
 	@Override
 	public SelectionTabularBrowserModel<E> getModel() {
-		return ((SelectionTabularBrowserModel<E>) super.getModel());
+		return (SelectionTabularBrowserModel<E>) super.getModel();
 	}
 
 	@Override

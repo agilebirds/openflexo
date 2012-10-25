@@ -25,6 +25,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +38,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.view.FIBWidgetView;
@@ -82,9 +84,9 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 			panel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
 					RIGHT_COMPENSATING_BORDER));
 		}
-		/*else {
-		textField.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-		}*/
+		/*
+		 * else { textField.setBorder(new EtchedBorder(EtchedBorder.LOWERED)); }
+		 */
 
 		if (isReadOnly()) {
 			textField.setEditable(false);
@@ -167,6 +169,13 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 
 	public Class getDefaultType() {
 		return String.class;
+	}
+
+	@Override
+	public List<AbstractBinding> getDependencyBindings() {
+		List<AbstractBinding> returned = super.getDependencyBindings();
+		appendToDependingObjects(getWidget().getEditable(), returned);
+		return returned;
 	}
 
 	@Override

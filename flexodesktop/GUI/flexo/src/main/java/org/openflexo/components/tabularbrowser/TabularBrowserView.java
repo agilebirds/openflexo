@@ -145,6 +145,16 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	}
 
+	public void delete() {
+		if (getSelectionModel() != null) {
+			getSelectionModel().removeListSelectionListener(this);
+		}
+		if (_model != null) {
+			_model.delete();
+			_model = null;
+		}
+	}
+
 	/**
 	 * !!!!!!!!!! IMPORTANT !!!!!!!!
 	 * 
@@ -192,7 +202,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	private DefaultContextualMenuManager defaultContextualMenuManager;
 
 	protected ContextualMenuManager getContextualMenuManager() {
-		if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
+		if (_selectionManager != null && _synchronizeWithSelectionManager) {
 			return _selectionManager.getContextualMenuManager();
 		}
 		if (defaultContextualMenuManager == null) {
@@ -488,7 +498,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 			return;
 		}
 
-		if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
+		if (_selectionManager != null && _synchronizeWithSelectionManager) {
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("valueChanged() ListSelectionEvent=" + e + " ListSelectionModel=" + getSelectionModel().toString());

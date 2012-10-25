@@ -1,5 +1,5 @@
 #French
-#Mon Sep 03 22:56:06 CEST 2012
+#Thu Oct 18 16:40:43 CEST 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required=\ Le lien 'URI base' est requis et doit \u00EAtre valide
@@ -209,6 +209,7 @@ trigonometric_arc_tangent=Arc-tangent
 trigonometric_cosinus=Cosinus
 trigonometric_sinus=Sinus
 trigonometric_tangent=Tangente
+type_mismatch_on_operator_($0)_supplied_types_are_($1)_and_($2)_while_expected_types_are_($3)=Erreur de tyoe sur l'op\u00E9rateur ($0). Les types utilis\u00E9s sont ($1) et ($2) alors que le type attendu est ($3)
 unary_minus=unary minus
 undo=D\u00E9faire
 unexpected_exception_occured=OpenFlexo a d\u00E9tect\u00E9 une erreur interne. OpenFlexo continuera de fonctionner mais il est cependant recommand\u00E9 de le red\u00E9marrer.

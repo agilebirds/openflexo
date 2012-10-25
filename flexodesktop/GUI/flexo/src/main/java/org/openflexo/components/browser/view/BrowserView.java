@@ -23,6 +23,7 @@ import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
@@ -185,25 +186,18 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				/*TreePath selPath = treeView.getPathForLocation(e.getX(), e.getY());
-				if (selPath != null && selPath.getLastPathComponent() instanceof BrowserElement)
-				    if (_browser.getSelectionManager() != null) {
-				        _browser.deleteBrowserListener(BrowserView.this);
-				        if (_browser.getSelectionManager().selectionContains(((BrowserElement) selPath.getLastPathComponent()).getObject())) {
-				            if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
-				                _browser.getSelectionManager().removeFromSelected(
-				                        ((BrowserElement) selPath.getLastPathComponent()).getObject());
-				            }
-				        } else {
-				            if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
-				                _browser.getSelectionManager().addToSelected(((BrowserElement) selPath.getLastPathComponent()).getObject());
-				            } else {
-				                _browser.getSelectionManager().resetSelection();
-				                _browser.getSelectionManager().addToSelected(((BrowserElement) selPath.getLastPathComponent()).getObject());
-				            }
-				        }
-				        _browser.addBrowserListener(BrowserView.this);
-				    }*/
+				/*
+				 * TreePath selPath = treeView.getPathForLocation(e.getX(), e.getY()); if (selPath != null && selPath.getLastPathComponent()
+				 * instanceof BrowserElement) if (_browser.getSelectionManager() != null) {
+				 * _browser.deleteBrowserListener(BrowserView.this); if (_browser.getSelectionManager().selectionContains(((BrowserElement)
+				 * selPath.getLastPathComponent()).getObject())) { if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) ==
+				 * InputEvent.SHIFT_DOWN_MASK) { _browser.getSelectionManager().removeFromSelected( ((BrowserElement)
+				 * selPath.getLastPathComponent()).getObject()); } } else { if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) ==
+				 * InputEvent.SHIFT_DOWN_MASK) { _browser.getSelectionManager().addToSelected(((BrowserElement)
+				 * selPath.getLastPathComponent()).getObject()); } else { _browser.getSelectionManager().resetSelection();
+				 * _browser.getSelectionManager().addToSelected(((BrowserElement) selPath.getLastPathComponent()).getObject()); } }
+				 * _browser.addBrowserListener(BrowserView.this); }
+				 */
 				if (getContextualMenuManager() != null) {
 					getContextualMenuManager().processMouseReleased(e);
 				}
@@ -467,21 +461,13 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	 */
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		/*if (getSelectionPolicy() == SelectionPolicy.ForceSelection) {
-		System.out.println("value changed with "+e);
-		if (_browser.getSelectionManager() != null) {
-			selectedElementsNeedRecomputing = true;
-		    _browser.deleteBrowserListener(this);
-		    Vector<FlexoModelObject> objectsToSelect = getSelectedObjects();
-		    _browser.getSelectionManager().resetSelection();
-		    for (FlexoModelObject o : objectsToSelect) {
-		    	System.out.println("Selected: "+o);
-		    	_browser.getSelectionManager().addToSelected(o);
-		    }
-		    _browser.addBrowserListener(this);
-		    return;
-		}
-		}*/
+		/*
+		 * if (getSelectionPolicy() == SelectionPolicy.ForceSelection) { System.out.println("value changed with "+e); if
+		 * (_browser.getSelectionManager() != null) { selectedElementsNeedRecomputing = true; _browser.deleteBrowserListener(this);
+		 * Vector<FlexoModelObject> objectsToSelect = getSelectedObjects(); _browser.getSelectionManager().resetSelection(); for
+		 * (FlexoModelObject o : objectsToSelect) { System.out.println("Selected: "+o); _browser.getSelectionManager().addToSelected(o); }
+		 * _browser.addBrowserListener(this); return; } }
+		 */
 		// Code initial suit:
 
 		if (logger.isLoggable(Level.FINE)) {
@@ -672,6 +658,16 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			setAutoscrolls(true);
 			ToolTipManager.sharedInstance().registerComponent(this);
 			setRowHeight(_browser.getRowHeight());
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			_browser.setHoldStructure();
+			try {
+				super.paint(g);
+			} finally {
+				_browser.resetHoldStructure();
+			}
 		}
 
 		/**
@@ -883,8 +879,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		/*if(_browser.getSelectionManager()!=null)
-			return _browser.getSelectionManager().getFocusedObject();*/
+		/*
+		 * if(_browser.getSelectionManager()!=null) return _browser.getSelectionManager().getFocusedObject();
+		 */
 		if (getSelectedObject() == null && _browser.showRootNode()) {
 			return _browser.getRootObject();
 		}
@@ -893,8 +890,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	@Override
 	public Vector<FlexoModelObject> getGlobalSelection() {
-		/*if(_browser.getSelectionManager()!=null)
-			return _browser.getSelectionManager().getSelection();*/
+		/*
+		 * if(_browser.getSelectionManager()!=null) return _browser.getSelectionManager().getSelection();
+		 */
 		return getSelectedObjects();
 	}
 
@@ -915,10 +913,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		return treeView;
 	}
 
-	/* // TODO: use observable/observer scheme to handle this
-	 public void elementTypeFilterChanged()
-	 {
-	 	controlPanel.elementTypeFilterChanged();
-	 }*/
+	/*
+	 * // TODO: use observable/observer scheme to handle this public void elementTypeFilterChanged() {
+	 * controlPanel.elementTypeFilterChanged(); }
+	 */
 
 }

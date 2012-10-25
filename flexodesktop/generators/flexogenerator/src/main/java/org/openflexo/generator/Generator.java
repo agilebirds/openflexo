@@ -361,7 +361,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 		} catch (TemplateNotFoundException e) {
 			throw e;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			if (e instanceof MethodInvocationException) {
 				if (((MethodInvocationException) e).getWrappedThrowable() != null) {
 					((MethodInvocationException) e).getWrappedThrowable().printStackTrace();
