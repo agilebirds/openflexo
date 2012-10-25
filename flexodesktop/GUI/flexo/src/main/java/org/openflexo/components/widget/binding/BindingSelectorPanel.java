@@ -1243,7 +1243,9 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				new Exception("oops").printStackTrace();
 			}
 			setFilter(null);
-			super.setModel(model);
+			if (model != null) {
+				super.setModel(model);
+			}
 		}
 
 		@Override

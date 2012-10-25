@@ -65,7 +65,7 @@ public class Function extends Expression {
 		this.args.remove(arg);
 	}
 
-	@Override
+	/*@Override
 	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 
 		List<Expression> evaluatedArgs = new ArrayList<Expression>();
@@ -76,6 +76,17 @@ public class Function extends Expression {
 			return context.getFunctionFactory().makeFunction(getName(), evaluatedArgs, bindable);
 		}
 		return new Function(getName(), evaluatedArgs);
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+
+		Vector<Expression> transformedArgs = new Vector<Expression>();
+		for (Expression arg : getArgs()) {
+			transformedArgs.add(arg.transform(transformer));
+		}
+		Function f = new Function(getName(), transformedArgs);
+		return transformer.performTransformation(f);
 	}
 
 	@Override
@@ -86,6 +97,15 @@ public class Function extends Expression {
 	@Override
 	protected Vector<Expression> getChilds() {
 		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Function) {
+			Function e = (Function) obj;
+			return getName().equals(e.getName()) && getArgs().equals(e.getArgs());
+		}
+		return super.equals(obj);
 	}
 
 }

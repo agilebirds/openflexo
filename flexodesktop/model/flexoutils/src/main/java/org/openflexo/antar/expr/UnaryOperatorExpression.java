@@ -62,7 +62,7 @@ public class UnaryOperatorExpression extends Expression {
 		this.operator = operator;
 	}
 
-	@Override
+	/*@Override
 	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 		_checkSemanticallyAcceptable();
 		Expression evaluatedArgument = argument.evaluate(context, bindable);
@@ -72,6 +72,19 @@ public class UnaryOperatorExpression extends Expression {
 			return returned;
 		}
 		return new UnaryOperatorExpression(operator, evaluatedArgument);
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+
+		Expression expression = this;
+		Expression transformedArgument = argument.transform(transformer);
+
+		if (!transformedArgument.equals(argument)) {
+			expression = new UnaryOperatorExpression(operator, transformedArgument);
+		}
+
+		return transformer.performTransformation(expression);
 	}
 
 	@Override
@@ -84,6 +97,15 @@ public class UnaryOperatorExpression extends Expression {
 		Vector<Expression> returned = new Vector<Expression>();
 		returned.add(getArgument());
 		return returned;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof UnaryOperatorExpression) {
+			UnaryOperatorExpression e = (UnaryOperatorExpression) obj;
+			return getOperator().equals(e.getOperator()) && getArgument().equals(e.getArgument());
+		}
+		return super.equals(obj);
 	}
 
 }

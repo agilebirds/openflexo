@@ -59,6 +59,7 @@ public class FIBIconLibrary {
 	public static final ImageIcon ERROR_ICON = new ImageIconResource("Icons/BindingSelector/Error.gif");
 
 	// (expression editor)
+	public static final ImageIcon IF_ICON = new ImageIconResource("Icons/BindingSelector/Operators/If.png");
 	public static final ImageIcon DIVISION_ICON = new ImageIconResource("Icons/BindingSelector/Operators/Divider.gif");
 	public static final ImageIcon MULTIPLICATION_ICON = new ImageIconResource("Icons/BindingSelector/Operators/Multiplication.gif");
 	public static final ImageIcon ADDITION_ICON = new ImageIconResource("Icons/BindingSelector/Operators/Addition.gif");

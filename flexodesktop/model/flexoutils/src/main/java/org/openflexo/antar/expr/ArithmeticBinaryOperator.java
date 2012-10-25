@@ -265,6 +265,40 @@ public abstract class ArithmeticBinaryOperator extends BinaryOperator {
 		}
 	};
 
+	public static final ArithmeticBinaryOperator MOD = new ArithmeticBinaryOperator() {
+		@Override
+		public int getPriority() {
+			return 2;
+		}
+
+		@Override
+		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
+			if (leftArg instanceof ArithmeticConstant && rightArg instanceof ArithmeticConstant) {
+				return new FloatConstant(((ArithmeticConstant) leftArg).getArithmeticValue()
+						% ((ArithmeticConstant) rightArg).getArithmeticValue());
+			}
+			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(),
+					EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER);
+		}
+
+		@Override
+		public EvaluationType getEvaluationType(EvaluationType leftOperandType, EvaluationType rightOperandType)
+				throws TypeMismatchException {
+			if (leftOperandType.isArithmeticOrLiteral()) {
+				if (rightOperandType.isArithmeticOrLiteral()) {
+					return EvaluationType.ARITHMETIC_FLOAT;
+				}
+			}
+			throw new TypeMismatchException(this, leftOperandType, rightOperandType, EvaluationType.ARITHMETIC_FLOAT,
+					EvaluationType.ARITHMETIC_INTEGER, EvaluationType.LITERAL);
+		}
+
+		@Override
+		public String getName() {
+			return "mod";
+		}
+	};
+
 	public static final ArithmeticBinaryOperator POWER = new ArithmeticBinaryOperator() {
 		@Override
 		public int getPriority() {

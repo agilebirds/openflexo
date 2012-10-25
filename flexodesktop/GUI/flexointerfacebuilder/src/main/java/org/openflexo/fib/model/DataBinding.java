@@ -282,7 +282,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 
 			Vector<Expression> primitives;
 			try {
-				primitives = Expression.extractPrimitives(binding.getStringRepresentation(), getBindable());
+				primitives = Expression.extractPrimitives(binding.getStringRepresentation());
 
 				FIBComponent component = (FIBComponent) getOwner();
 				FIBComponent rootComponent = component.getRootComponent();

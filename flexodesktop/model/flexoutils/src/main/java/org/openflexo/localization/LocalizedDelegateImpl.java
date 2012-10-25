@@ -22,6 +22,7 @@ package org.openflexo.localization;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.Collator;
@@ -35,6 +36,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
 import org.openflexo.toolbox.FlexoProperties;
 import org.openflexo.toolbox.HTMLUtils;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -97,16 +99,23 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 	private void saveDictionary(Language language, Properties dict) {
 		File dictFile = getDictionaryFileForLanguage(language);
 		try {
-			if (!dictFile.exists()) {
-				dictFile.createNewFile();
+			final FileOutputStream fos = new FileOutputStream(dictFile);
+			try {
+				if (!dictFile.exists()) {
+					dictFile.createNewFile();
+				}
+				dict.store(new JavaPropertiesOutputStream(fos), language.getName());
+				logger.info("Saved " + dictFile.getAbsolutePath());
+			} catch (IOException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Unable to save file " + dictFile.getAbsolutePath() + " " + e.getClass().getName());
+					// e.printStackTrace();
+				}
+			} finally {
+				IOUtils.closeQuietly(fos);
 			}
-			dict.store(new FileOutputStream(dictFile), language.getName());
-			logger.info("Saved " + dictFile.getAbsolutePath());
-		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Unable to save file " + dictFile.getAbsolutePath() + " " + e.getClass().getName());
-				// e.printStackTrace();
-			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -235,7 +244,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 
 		public String getEnglish() {
 			String localized = getLocalizedForKeyAndLanguage(key, Language.ENGLISH);
-			return (localized != null ? localized : key);
+			return localized != null ? localized : key;
 			// return localizedForKeyAndLanguage(key, Language.ENGLISH);
 		}
 
@@ -248,7 +257,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 
 		public String getFrench() {
 			String localized = getLocalizedForKeyAndLanguage(key, Language.FRENCH);
-			return (localized != null ? localized : key);
+			return localized != null ? localized : key;
 			// return localizedForKeyAndLanguage(key, Language.FRENCH);
 		}
 
@@ -261,7 +270,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 
 		public String getDutch() {
 			String localized = getLocalizedForKeyAndLanguage(key, Language.DUTCH);
-			return (localized != null ? localized : key);
+			return localized != null ? localized : key;
 			// return localizedForKeyAndLanguage(key, Language.DUTCH);
 		}
 
@@ -317,7 +326,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		}
 
 		public boolean isValueValid(String aKey, String aValue) {
-			if ((aValue == null) || (aValue.length() == 0)) {
+			if (aValue == null || aValue.length() == 0) {
 				return false;
 			} // null or empty value is not valid
 			if (aValue.equals(aKey)) {
@@ -359,44 +368,59 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		}
 
 		private boolean contains(String s) {
-			if (s == null)
+			if (s == null) {
 				return false;
-			if (getKey().indexOf(s) >= 0)
+			}
+			if (getKey().indexOf(s) >= 0) {
 				return true;
-			if (getEnglish().indexOf(s) >= 0)
+			}
+			if (getEnglish().indexOf(s) >= 0) {
 				return true;
-			if (getFrench().indexOf(s) >= 0)
+			}
+			if (getFrench().indexOf(s) >= 0) {
 				return true;
-			if (getDutch().indexOf(s) >= 0)
+			}
+			if (getDutch().indexOf(s) >= 0) {
 				return true;
+			}
 			return false;
 		}
 
 		private boolean startsWith(String s) {
-			if (s == null)
+			if (s == null) {
 				return false;
-			if (getKey().startsWith(s))
+			}
+			if (getKey().startsWith(s)) {
 				return true;
-			if (getEnglish().startsWith(s))
+			}
+			if (getEnglish().startsWith(s)) {
 				return true;
-			if (getFrench().startsWith(s))
+			}
+			if (getFrench().startsWith(s)) {
 				return true;
-			if (getDutch().startsWith(s))
+			}
+			if (getDutch().startsWith(s)) {
 				return true;
+			}
 			return false;
 		}
 
 		private boolean endsWith(String s) {
-			if (s == null)
+			if (s == null) {
 				return false;
-			if (getKey().endsWith(s))
+			}
+			if (getKey().endsWith(s)) {
 				return true;
-			if (getEnglish().endsWith(s))
+			}
+			if (getEnglish().endsWith(s)) {
 				return true;
-			if (getFrench().endsWith(s))
+			}
+			if (getFrench().endsWith(s)) {
 				return true;
-			if (getDutch().endsWith(s))
+			}
+			if (getDutch().endsWith(s)) {
 				return true;
+			}
 			return false;
 		}
 	}
@@ -575,10 +599,11 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 	}
 
 	public String getParentDelegateDescription() {
-		if (getParent() == null)
+		if (getParent() == null) {
 			return "none";
-		else
+		} else {
 			return getParent().toString();
+		}
 	}
 
 	@Override

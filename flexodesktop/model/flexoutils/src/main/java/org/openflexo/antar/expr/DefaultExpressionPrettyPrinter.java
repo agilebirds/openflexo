@@ -19,6 +19,9 @@
  */
 package org.openflexo.antar.expr;
 
+import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
+import org.openflexo.antar.expr.BindingValueAsExpression.MethodCallBindingPathElement;
+import org.openflexo.antar.expr.BindingValueAsExpression.NormalBindingPathElement;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.DateConstant;
 import org.openflexo.antar.expr.Constant.DurationConstant;
@@ -122,6 +125,42 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	@Override
 	protected final String makeStringRepresentation(EnumConstant constant) {
 		return constant.getName();
+	}
+
+	@Override
+	protected String makeStringRepresentation(BindingValueAsExpression bv) {
+		StringBuffer sb = new StringBuffer();
+		boolean isFirst = true;
+		for (AbstractBindingPathElement e : bv.getBindingPath()) {
+			sb.append((isFirst ? "" : ".") + makeStringRepresentation(e));
+			isFirst = false;
+		}
+		return sb.toString();
+	}
+
+	@Override
+	protected String makeStringRepresentation(AbstractBindingPathElement e) {
+		if (e instanceof NormalBindingPathElement) {
+			return ((NormalBindingPathElement) e).property;
+		} else if (e instanceof MethodCallBindingPathElement) {
+			StringBuffer sb = new StringBuffer();
+			sb.append(((MethodCallBindingPathElement) e).method);
+			sb.append("(");
+			boolean isFirst = true;
+			for (Expression arg : ((MethodCallBindingPathElement) e).args) {
+				sb.append((isFirst ? "" : ",") + getStringRepresentation(arg));
+				isFirst = false;
+			}
+			sb.append(")");
+			return sb.toString();
+		}
+		return e.toString();
+	}
+
+	@Override
+	protected String makeStringRepresentation(ConditionalExpression expression) {
+		return "(" + getStringRepresentation(expression.getCondition()) + " ? " + getStringRepresentation(expression.getThenExpression())
+				+ " : " + getStringRepresentation(expression.getElseExpression()) + ")";
 	}
 
 }

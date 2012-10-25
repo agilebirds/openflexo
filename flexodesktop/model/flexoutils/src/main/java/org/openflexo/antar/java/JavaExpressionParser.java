@@ -19,7 +19,7 @@
  */
 package org.openflexo.antar.java;
 
-import org.openflexo.antar.expr.parser.ExpressionParser;
+import org.openflexo.antar.expr.oldparser.ExpressionParser;
 
 public class JavaExpressionParser extends ExpressionParser {
 
