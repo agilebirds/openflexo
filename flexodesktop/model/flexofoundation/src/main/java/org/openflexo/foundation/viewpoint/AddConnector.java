@@ -38,6 +38,12 @@ import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
+/**
+ * This edition primitive addresses the creation of a new connector linking two shapes in a diagram
+ * 
+ * @author sylvain
+ * 
+ */
 public class AddConnector extends AddShemaElementAction {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());

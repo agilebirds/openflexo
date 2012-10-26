@@ -38,7 +38,7 @@ import org.openflexo.view.controller.FlexoController;
 /**
  * VEClipboard is intented to be the object working with the VESelectionManager and storing copied, cut and pasted objects.
  * 
- * @author yourname
+ * @author sylvain
  */
 public class VEClipboard extends FlexoClipboard {
 

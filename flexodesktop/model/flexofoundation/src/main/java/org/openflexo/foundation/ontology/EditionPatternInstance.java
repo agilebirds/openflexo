@@ -36,6 +36,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ontology.EditionPatternReference.ActorReference;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.action.DeletionSchemeAction;
+import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
@@ -236,17 +237,6 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	 * Delete this EditionPattern instance using default DeletionScheme
 	 */
 	public void delete() {
-		/*Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
-		deleted = true;
-		for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-			if ((pr instanceof GraphicalElementPatternRole) || (pr instanceof IndividualPatternRole)
-					|| (pr instanceof StatementPatternRole)) {
-				FlexoModelObject o = getPatternActor(pr);
-				if (o != null) {
-					o.delete();
-				}
-			}
-		}*/
 		// Also implement properly #getDeletedProperty()
 		if (getEditionPattern().getDefaultDeletionScheme() != null) {
 			delete(getEditionPattern().getDefaultDeletionScheme());
@@ -271,6 +261,38 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		if (deletionSchemeAction.hasActionExecutionSucceeded()) {
 			logger.info("Successfully performed delete EditionPattern instance " + getEditionPattern());
 		}
+	}
+
+	/**
+	 * Clone this EditionPattern instance using default CloningScheme
+	 */
+	public EditionPatternInstance cloneEditionPatternInstance() {
+		/*if (getEditionPattern().getDefaultDeletionScheme() != null) {
+			delete(getEditionPattern().getDefaultDeletionScheme());
+		} else {
+			// Generate on-the-fly default deletion scheme
+			delete(getEditionPattern().generateDefaultDeletionScheme());
+		}*/
+		System.out.println("cloneEditionPatternInstance() in EditionPatternInstance");
+		return null;
+	}
+
+	/**
+	 * Delete this EditionPattern instance using supplied DeletionScheme
+	 */
+	public EditionPatternInstance cloneEditionPatternInstance(CloningScheme cloningScheme) {
+		/*logger.warning("NEW EditionPatternInstance deletion !");
+		deleted = true;
+		DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewAction(getPatternActor(getEditionPattern()
+				.getPrimaryRepresentationRole()), null, null);
+		deletionSchemeAction.setDeletionScheme(deletionScheme);
+		deletionSchemeAction.setEditionPatternInstanceToDelete(this);
+		deletionSchemeAction.doAction();
+		if (deletionSchemeAction.hasActionExecutionSucceeded()) {
+			logger.info("Successfully performed delete EditionPattern instance " + getEditionPattern());
+		}*/
+		System.out.println("cloneEditionPatternInstance() in EditionPatternInstance with " + cloningScheme);
+		return null;
 	}
 
 	/**
