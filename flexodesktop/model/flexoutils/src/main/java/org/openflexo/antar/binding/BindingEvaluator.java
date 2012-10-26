@@ -94,7 +94,7 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException {
 		String normalizedBindingPath = normalizeBindingPath(bindingPath);
 		System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
-		AbstractBinding binding = BINDING_FACTORY.convertFromString(normalizedBindingPath);
+		AbstractBinding binding = BINDING_FACTORY.convertFromString(normalizedBindingPath, this);
 		binding.setBindingDefinition(bindingDefinition);
 		System.out.println("Binding = " + binding + " valid=" + binding.isBindingValid() + " as " + binding.getClass());
 		if (!binding.isBindingValid()) {
