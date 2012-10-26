@@ -89,7 +89,19 @@ public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepo
 		}
 		((HTMLEditorKit) htmlComponent.getEditorKit()).setStyleSheet(styleSheet);
 		try {
-			((HTMLDocument) htmlComponent.getDocument()).setBase(ctrl.getProject().getImportedImagesDir().getParentFile().toURI().toURL()); /* set the base to the parent of the imported images dir */
+			((HTMLDocument) htmlComponent.getDocument()).setBase(ctrl.getProject().getImportedImagesDir().getParentFile().toURI().toURL()); /*
+																																			 * set
+																																			 * the
+																																			 * base
+																																			 * to
+																																			 * the
+																																			 * parent
+																																			 * of
+																																			 * the
+																																			 * imported
+																																			 * images
+																																			 * dir
+																																			 */
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			if (logger.isLoggable(Level.WARNING)) {
@@ -97,11 +109,9 @@ public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepo
 			}
 		}
 		/*
-		 * Note for later. If we want to entirely control image resolvation, for
-		 * screenshots for example then we can set our own HTMLEditorKit by
-		 * overriding the getViewFactory() method and return our own ViewFactory
-		 * by extending HTMLViewFactory and override the public View
-		 * create(Element elem) method
+		 * Note for later. If we want to entirely control image resolvation, for screenshots for example then we can set our own
+		 * HTMLEditorKit by overriding the getViewFactory() method and return our own ViewFactory by extending HTMLViewFactory and override
+		 * the public View create(Element elem) method
 		 */
 		// GPO: Don't call refresh() now because it is expensive, the willShow() method will!
 		scrollPane = new JScrollPane(htmlComponent);
@@ -122,7 +132,16 @@ public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepo
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		if (observable instanceof TOCEntry && ((TOCEntry) observable).getRepository() == codeRepository) {
 			requestRefresh();
 		} else if (observable == codeRepository) {

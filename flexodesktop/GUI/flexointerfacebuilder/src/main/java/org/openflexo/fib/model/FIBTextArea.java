@@ -21,13 +21,9 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
-public class FIBTextArea extends FIBWidget {
+public class FIBTextArea extends FIBTextWidget {
 
-	// TODO: handle font
-	public boolean validateOnReturn = false;
-	public Integer columns = null;
 	public Integer rows = null;
-	public String text = null;
 
 	public FIBTextArea() {
 	}

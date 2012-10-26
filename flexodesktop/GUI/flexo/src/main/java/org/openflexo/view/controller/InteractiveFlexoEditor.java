@@ -265,9 +265,15 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 				protected Void doInBackground() throws Exception {
 					try {
 						action.execute();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (final Throwable t) {
+						t.printStackTrace();
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								throw new RuntimeException("Exception while executing action " + action.getLocalizedName() + " ("
+										+ t.getMessage() + ")", t);
+							}
+						});
 					}
 					return null;
 				}

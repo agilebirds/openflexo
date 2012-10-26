@@ -70,18 +70,22 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 				if (action.getFilesToWrite().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if ((action.getFilesToWrite().size() > 1 || (!(action.getFocusedObject() instanceof CGFile)))
+				} else if ((action.getFilesToWrite().size() > 1 || !(action.getFocusedObject() instanceof CGFile))
 						&& !(e != null && e.getActionCommand() != null && e.getActionCommand().equals(FlexoKeyEventListener.KEY_PRESSED))) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("write_modified_files_to_disk"),
 							FlexoLocalization.localizedForKey("write_modified_files_to_disk_description"), "write_to_disk",
 							action.getFilesToWrite(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getDGController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
-						action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
-						action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
-					} else {
-						return false;
+					try {
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
+							action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, continue without confirmation

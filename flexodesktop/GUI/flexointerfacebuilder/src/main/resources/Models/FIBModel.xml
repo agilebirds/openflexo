@@ -180,12 +180,16 @@
     <property name="selected" xmlTag="selected" attribute="YES"/> 
     <property name="layoutOrientation" xmlTag="layoutOrientation" attribute="YES"/> 
   </entity>
-
-  <entity name="org.openflexo.fib.model.FIBTextField" xmlTag="TextField"> 
+  
+   <entity name="org.openflexo.fib.model.FIBTextWidget" abstract="yes">
     <property name="validateOnReturn" xmlTag="validateOnReturn" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="columns" xmlTag="columns" attribute="YES"/> 
+    <property name="text" xmlTag="text" attribute="YES"/>
+    <property name="editable" xmlTag="editable" attribute="YES"/>
+   </entity> 
+
+  <entity name="org.openflexo.fib.model.FIBTextField" xmlTag="TextField"> 
     <property name="passwd" xmlTag="passwd" attribute="YES" ignoreDefaultValue="false"/> 
-    <property name="text" xmlTag="text" attribute="YES"/> 
    </entity>
  
   <entity name="org.openflexo.fib.model.FIBTextArea" xmlTag="TextArea"> 

@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +37,7 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.view.FIBWidgetView;
@@ -84,9 +86,9 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 		}
 		border = BorderFactory.createCompoundBorder(border, BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
 		panel.setBorder(border);
-		/*else {
-				textArea.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-				}*/
+		/*
+		 * else { textArea.setBorder(new EtchedBorder(EtchedBorder.LOWERED)); }
+		 */
 
 		textArea.setEditable(!isReadOnly());
 		if (model.text != null) {
@@ -129,14 +131,23 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		textArea.setEnabled(true);
-		/*pane = new JScrollPane(_textArea);
-		
-		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		
-		pane.setMinimumSize(MINIMUM_SIZE);*/
+		/*
+		 * pane = new JScrollPane(_textArea);
+		 * 
+		 * pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		 * pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		 * 
+		 * pane.setMinimumSize(MINIMUM_SIZE);
+		 */
 
 		updateFont();
+	}
+
+	@Override
+	public List<AbstractBinding> getDependencyBindings() {
+		List<AbstractBinding> returned = super.getDependencyBindings();
+		appendToDependingObjects(getWidget().getEditable(), returned);
+		return returned;
 	}
 
 	@Override
@@ -148,7 +159,12 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	@Override
 	public void updateDataObject(Object aDataObject) {
 		super.updateDataObject(aDataObject);
-		textArea.setEditable(!isReadOnly());
+		textArea.setEditable(!isReadOnly() && isEditable());
+	}
+
+	private boolean isEditable() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

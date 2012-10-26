@@ -160,7 +160,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 			public void actionPerformed(ActionEvent e) {
 				FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(chooseFileButton));
 				File directory = codeRepository.getDirectory();
-				if (directory!=null) {
+				if (directory != null) {
 					fileChooser.setCurrentDirectory(directory);
 				} else {
 					fileChooser.setCurrentDirectory(codeRepository.getDefaultSourceDirectory());
@@ -287,9 +287,10 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		}
 
 		bigButtonsPanel.add(buttonPanel, BorderLayout.SOUTH);
-		/*generateButton.setEnabled(repository.isEnabled());
-		generateAndWriteButton.setEnabled(repository.isEnabled());
-		pdfButton.setEnabled(repository.isEnabled());*/
+		/*
+		 * generateButton.setEnabled(repository.isEnabled()); generateAndWriteButton.setEnabled(repository.isEnabled());
+		 * pdfButton.setEnabled(repository.isEnabled());
+		 */
 		JPanel northPanel2 = new JPanel(new BorderLayout());
 		JPanel checkBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		openPostBuildFileCheckBox = new JCheckBox();
@@ -410,7 +411,16 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		if (observable == codeRepository) {
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("pdfDirectory")) {
 				chooseWarLocationButton.setText(codeRepository.getPostBuildDirectory() != null ? codeRepository.getPostBuildDirectory()

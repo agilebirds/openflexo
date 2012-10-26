@@ -41,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorCst;
@@ -124,9 +125,9 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 	}
 
 	private void updateView(boolean forceRebuild) {
-		if ((forceRebuild) || (generationStatus == GenerationStatus.Unknown) || (generationStatus != _cgFile.getGenerationStatus())
-				|| (generationStatus == GenerationStatus.GenerationError) || (isEdited != _cgFile.isEdited())
-				|| (needsMemoryGeneration != _cgFile.needsMemoryGeneration())) {
+		if (forceRebuild || generationStatus == GenerationStatus.Unknown || generationStatus != _cgFile.getGenerationStatus()
+				|| generationStatus == GenerationStatus.GenerationError || isEdited != _cgFile.isEdited()
+				|| needsMemoryGeneration != _cgFile.needsMemoryGeneration()) {
 			logger.fine("CGFileModuleView :" + _cgFile.getFileName() + " rebuild view for new status " + _cgFile.getGenerationStatus());
 			rebuildView();
 			revalidate();
@@ -177,8 +178,8 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 
 			controlPanel = new JPanel(new FlowLayout());
 
-			if ((_cgFile.getGenerationStatus().isConflicting())) {
-				AbstractGeneratedFile agf = ((AbstractGeneratedFile) _cgFile.getResource().getGeneratedResourceData());
+			if (_cgFile.getGenerationStatus().isConflicting()) {
+				AbstractGeneratedFile agf = (AbstractGeneratedFile) _cgFile.getResource().getGeneratedResourceData();
 				if (agf instanceof ASCIIFile) {
 					_observedMerges.add(((ASCIIFile) agf).getGenerationMerge());
 					((ASCIIFile) agf).getGenerationMerge().addObserver(this);
@@ -259,11 +260,11 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 				}
 
 				FlexoActionButton goToCorrespondingWO = null;
-				if ((_cgFile instanceof CGJavaFile) && (_cgFile.getResource() instanceof ComponentJavaFileResource)) {
+				if (_cgFile instanceof CGJavaFile && _cgFile.getResource() instanceof ComponentJavaFileResource) {
 					goToCorrespondingWO = new FlexoActionButton(GoToCorrespondingWO.actionType, "go_to_wo", CGFileModuleView.this,
 							getController().getEditor());
 				}
-				if (!_cgFile.getMarkedAsDoNotGenerate() && (goToCorrespondingWO != null)) {
+				if (!_cgFile.getMarkedAsDoNotGenerate() && goToCorrespondingWO != null) {
 					actionButtons.add(goToCorrespondingWO);
 				}
 				FlexoActionButton goToCorrespondingJava = null;
@@ -271,7 +272,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 					goToCorrespondingJava = new FlexoActionButton(GoToCorrespondingJava.actionType, "go_to_java", CGFileModuleView.this,
 							getController().getEditor());
 				}
-				if (!_cgFile.getMarkedAsDoNotGenerate() && (goToCorrespondingJava != null)) {
+				if (!_cgFile.getMarkedAsDoNotGenerate() && goToCorrespondingJava != null) {
 					actionButtons.add(goToCorrespondingJava);
 				}
 
@@ -285,32 +286,32 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 					}
 				}
 
-				if ((_cgFile.getGenerationStatus() == GenerationStatus.UpToDate) || (_cgFile.getGenerationStatus().isGenerationModified())
-						|| (_cgFile.getGenerationStatus().isDiskModified())
-						|| (_cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged)) {
+				if (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate || _cgFile.getGenerationStatus().isGenerationModified()
+						|| _cgFile.getGenerationStatus().isDiskModified()
+						|| _cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged) {
 					if (!_cgFile.getMarkedAsDoNotGenerate()) {
 						controlPanel.add(editFileAction);
 					}
 				}
 
-				if ((_cgFile.getGenerationStatus().isGenerationModified()) || (_cgFile.getGenerationStatus().isConflicting())
-						|| (_cgFile.getGenerationStatus() == GenerationStatus.GenerationError)) {
+				if (_cgFile.getGenerationStatus().isGenerationModified() || _cgFile.getGenerationStatus().isConflicting()
+						|| _cgFile.getGenerationStatus() == GenerationStatus.GenerationError) {
 					if (!_cgFile.getMarkedAsDoNotGenerate()) {
 						controlPanel.add(generateAction);
 					}
 				}
 
-				if ((_cgFile.getGenerationStatus().isGenerationModified())
-						|| (_cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged)) {
+				if (_cgFile.getGenerationStatus().isGenerationModified()
+						|| _cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged) {
 					if (!_cgFile.getMarkedAsDoNotGenerate()) {
 						controlPanel.add(writeFileAction);
 					}
 				}
 
 				if (_cgFile.getResource().doesGenerationKeepFileUnchanged()) {
-					if ((_cgFile.getGenerationStatus().isGenerationModified())
-							|| (_cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged)
-							|| (_cgFile.getGenerationStatus() == GenerationStatus.OverrideScheduled)) {
+					if (_cgFile.getGenerationStatus().isGenerationModified()
+							|| _cgFile.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged
+							|| _cgFile.getGenerationStatus() == GenerationStatus.OverrideScheduled) {
 						if (!_cgFile.getMarkedAsDoNotGenerate()) {
 							controlPanel.add(dismissUnchangedFileAction);
 						}
@@ -412,7 +413,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 				returned = FlexoLocalization.localizedForKey("edition_of_file_on_disk");
 			} else {
 				returned = generationStatus.getLocalizedStringRepresentation();
-				if (!generationStatus.isAbnormal() && (generationStatus != GenerationStatus.CodeGenerationNotSynchronized)) {
+				if (!generationStatus.isAbnormal() && generationStatus != GenerationStatus.CodeGenerationNotSynchronized) {
 					if (_cgFile.needsMemoryGeneration()) {
 						returned += ", " + FlexoLocalization.localizedForKey("generation_required");
 					} else {
@@ -463,7 +464,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 		}
 
 		DisplayContext previousDisplayContext = null;
-		if ((_codeDisplayer != null) && (_codeDisplayer.getDisplayContext() != null)) {
+		if (_codeDisplayer != null && _codeDisplayer.getDisplayContext() != null) {
 			previousDisplayContext = _codeDisplayer.getDisplayContext();
 
 			if (logger.isLoggable(Level.FINE)) {
@@ -491,7 +492,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 			add(new JLabel(FlexoLocalization.localizedForKey("file_marked_as_do_not_generate"), SwingConstants.CENTER), BorderLayout.CENTER);
 			validate();
 			return;
-		} else if (isEdited && (_cgFile.getResource() instanceof GenerationAvailableFileResource)) {
+		} else if (isEdited && _cgFile.getResource() instanceof GenerationAvailableFileResource) {
 			_codeDisplayer = new CodeEditor((GenerationAvailableFileResource) _cgFile.getResource(), _controller);
 			_codeDisplayer.getComponent().validate();
 			add(_codeDisplayer.getComponent());
@@ -558,7 +559,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 				}
 			}
 			if (_cgFile.getGenerationStatus().isGenerationModified() || _cgFile.getGenerationStatus().isDiskModified()) {
-				if ((_cgFile.getResource() instanceof ASCIIFileResource) || (_cgFile.getResource() instanceof WOFileResource)) {
+				if (_cgFile.getResource() instanceof ASCIIFileResource || _cgFile.getResource() instanceof WOFileResource) {
 					_codeDisplayer = new DiffCodeDisplayer(resource, _controller);
 				} else {
 					_codeDisplayer = new CodeDisplayer(resource, _controller);
@@ -566,17 +567,17 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 				add(_codeDisplayer.getComponent());
 			}
 
-			else if ((_cgFile.getGenerationStatus() == GenerationStatus.UpToDate)) {
+			else if (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate) {
 				_codeDisplayer = new CodeDisplayer(resource, _controller);
 				add(_codeDisplayer.getComponent());
 			}
 
-			else if ((_cgFile.getGenerationStatus().isConflicting()) && (_cgFile.isOverrideScheduled())) {
+			else if (_cgFile.getGenerationStatus().isConflicting() && _cgFile.isOverrideScheduled()) {
 				_codeDisplayer = new DiffCodeDisplayer(resource, _controller);
 				add(_codeDisplayer.getComponent());
 			}
 
-			else if ((_cgFile.getGenerationStatus().isConflicting())) {
+			else if (_cgFile.getGenerationStatus().isConflicting()) {
 				_codeDisplayer = new MergeCodeDisplayer(resource, _controller);
 				add(_codeDisplayer.getComponent());
 				((MergeCodeDisplayer) _codeDisplayer).setEditable(_cgFile.getGenerationStatus() == GenerationStatus.ConflictingUnMerged);
@@ -600,11 +601,19 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CGFileModuleView : RECEIVED " + dataModification + " for " + observable);
 		}
-
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		if (dataModification instanceof ContentRegenerated) {
 			updateView(true);
 		} else {
@@ -681,7 +690,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 			add(stackTraceTA);
 
 			// Cause stack trace
-			if ((exception.getTargetException() != null) && (exception.getTargetException().getCause() != null)) {
+			if (exception.getTargetException() != null && exception.getTargetException().getCause() != null) {
 				JLabel causeSTLabel = new JLabel(FlexoLocalization.localizedForKey("cause_stacktrace"), SwingConstants.LEFT);
 				causeSTLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 				String causeStackTrace = null;
@@ -755,7 +764,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 	public boolean isAutoscrolled() {
 		// Only exception panel requires Flexo scroll scheme
 		// Other panels are autonomous
-		return (_cgFile.getGenerationStatus() != GenerationStatus.GenerationError);
+		return _cgFile.getGenerationStatus() != GenerationStatus.GenerationError;
 	}
 
 	@Override

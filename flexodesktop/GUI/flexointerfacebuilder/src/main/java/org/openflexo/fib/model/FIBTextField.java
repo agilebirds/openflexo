@@ -19,15 +19,10 @@
  */
 package org.openflexo.fib.model;
 
-import java.lang.reflect.Type;
 
-public class FIBTextField extends FIBWidget {
+public class FIBTextField extends FIBTextWidget {
 
-	// TODO: handle font
-	public boolean validateOnReturn = false;
-	public Integer columns;
 	public boolean passwd = false;
-	public String text = null;
 
 	public FIBTextField() {
 	}
@@ -35,11 +30,6 @@ public class FIBTextField extends FIBWidget {
 	@Override
 	protected String getBaseName() {
 		return "TextField";
-	}
-
-	@Override
-	public Type getDefaultDataClass() {
-		return String.class;
 	}
 
 }
