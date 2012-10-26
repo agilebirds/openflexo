@@ -14,12 +14,16 @@ public @interface Setter {
 
 	public String value();
 
+	public boolean onInitializationOnly() default false;
+
 	public static class SetterImpl implements Setter {
 
-		private String value;
+		private final String value;
+		private final boolean onInitializationOnly;
 
-		public SetterImpl(String value) {
+		public SetterImpl(String value, boolean onInitializationOnly) {
 			this.value = value;
+			this.onInitializationOnly = onInitializationOnly;
 		}
 
 		@Override
@@ -30,6 +34,11 @@ public @interface Setter {
 		@Override
 		public String value() {
 			return value;
+		}
+
+		@Override
+		public boolean onInitializationOnly() {
+			return onInitializationOnly;
 		}
 
 	}

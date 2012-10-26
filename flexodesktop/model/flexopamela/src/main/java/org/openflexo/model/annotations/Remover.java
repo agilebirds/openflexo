@@ -15,7 +15,7 @@ public @interface Remover {
 	public String value();
 
 	public static class RemoverImpl implements Remover {
-		private String value;
+		private final String value;
 
 		public RemoverImpl(String value) {
 			this.value = value;

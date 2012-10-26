@@ -62,6 +62,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private boolean beingCloned = false;
 	private boolean modified = false;
 	private PropertyChangeSupport propertyChangeSupport;
+	private boolean initializing;
 
 	private static Method PERFORM_SUPER_GETTER;
 	private static Method PERFORM_SUPER_SETTER;
@@ -164,7 +165,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			internallyInvokeInitializer(getModelEntity().getInitializers(method), args);
 			return self;
 		}
-		if (!initialized) {
+		if (!initialized && !initializing) {
 			throw new UnitializedEntityException(getModelEntity());
 		}
 		Getter getter = method.getAnnotation(Getter.class);
@@ -294,13 +295,18 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private void internallyInvokeInitializer(org.openflexo.model.factory.ModelInitializer in, Object[] args)
 			throws ModelDefinitionException {
-		initialized = true;
-		List<String> parameters = in.getParameters();
-		for (int i = 0; i < parameters.size(); i++) {
-			String parameter = parameters.get(i);
-			if (parameter != null) {
-				internallyInvokeSetter(getModelEntity().getModelProperty(parameter), args[i]);
+		initializing = true;
+		try {
+			List<String> parameters = in.getParameters();
+			for (int i = 0; i < parameters.size(); i++) {
+				String parameter = parameters.get(i);
+				if (parameter != null) {
+					internallyInvokeSetter(getModelEntity().getModelProperty(parameter), args[i]);
+				}
 			}
+		} finally {
+			initialized = true;
+			initializing = false;
 		}
 	}
 
@@ -495,6 +501,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private Object invokeGetterForSingleCardinality(ModelProperty<? super I> property) throws ModelDefinitionException {
+		if (property.getGetter() == null) {
+			throw new ModelExecutionException("Getter is not defined for property " + property);
+		}
 		if (property.getReturnedValue() != null) {
 			// Simple implementation of ReturnedValue. This can be drastically improved
 			String returnedValue = property.getReturnedValue().value();
@@ -504,12 +513,16 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			while (st.hasMoreTokens()) {
 				String token = st.nextToken();
 				value = handler.internallyInvokeGetter(token);
-				if (value != null && st.hasMoreTokens()) {
-					if (!(value instanceof ProxyObject)) {
-						throw new ModelExecutionException("Cannot invoke " + st.nextToken() + " on object of type "
-								+ value.getClass().getName() + " (caused by returned value: " + returnedValue + ")");
+				if (value != null) {
+					if (st.hasMoreTokens()) {
+						if (!(value instanceof ProxyObject)) {
+							throw new ModelExecutionException("Cannot invoke " + st.nextToken() + " on object of type "
+									+ value.getClass().getName() + " (caused by returned value: " + returnedValue + ")");
+						}
+						handler = (ProxyMethodHandler<?>) ((ProxyObject) value).getHandler();
 					}
-					handler = (ProxyMethodHandler<?>) ((ProxyObject) value).getHandler();
+				} else {
+					return null;
 				}
 			}
 			return value;
@@ -531,6 +544,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private List<?> invokeGetterForListCardinality(ModelProperty<? super I> property) {
+		if (property.getGetter() == null) {
+			throw new ModelExecutionException("Getter is not defined for property " + property);
+		}
 		List<?> returned = (List<?>) values.get(property.getPropertyIdentifier());
 		if (returned != null) {
 			return returned;
@@ -552,6 +568,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private Map<?, ?> invokeGetterForMapCardinality(ModelProperty<? super I> property) {
+		if (property.getGetter() == null) {
+			throw new ModelExecutionException("Getter is not defined for property " + property);
+		}
 		Map<?, ?> returned = (Map<?, ?>) values.get(property.getPropertyIdentifier());
 		if (returned != null) {
 			return returned;
@@ -589,11 +608,16 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeSetterForSingleCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getSetter() == null) {
+			throw new ModelExecutionException("Setter is not defined for property " + property);
+		}
 		Object oldValue = invokeGetter(property);
 
 		// Is it a real change ?
 		if (!isEqual(oldValue, value)) {
-
+			if (property.getSetter().onInitializationOnly() && !isDeserializing()) {
+				throw new ModelExecutionException("Setter on property " + property + " can only be invoked during deserialization.");
+			}
 			// First handle inverse property for oldValue
 			if (property.getInverseProperty() != null) {
 				switch (property.getInverseProperty().getCardinality()) {
@@ -698,13 +722,19 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeSetterForListCardinality(ModelProperty<? super I> property, Object value) {
+		if (property.getSetter() == null) {
+			throw new ModelExecutionException("Setter is not defined for property " + property);
+		}
 		// TODO implement this
-		System.err.println("Setter for LIST: not implemented yet");
+		throw new UnsupportedOperationException("Setter for LIST: not implemented yet");
 	}
 
 	private void invokeSetterForMapCardinality(ModelProperty<? super I> property, Object value) {
+		if (property.getSetter() == null) {
+			throw new ModelExecutionException("Setter is not defined for property " + property);
+		}
 		// TODO implement this
-		System.err.println("Setter for MAP: not implemented yet");
+		throw new UnsupportedOperationException("Setter for MAP: not implemented yet");
 	}
 
 	private void internallyInvokeAdder(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
@@ -724,9 +754,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeAdderForListCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getAdder() == null) {
+			throw new ModelExecutionException("Adder is not defined for property " + property);
+		}
 		List list = (List) invokeGetter(property);
 
 		if (!list.contains(value)) {
+			if (property.getAdder().onInitializationOnly() && !isDeserializing()) {
+				throw new ModelExecutionException("Adder on property " + property + " can only be invoked during deserialization.");
+			}
 			list.add(value);
 			// Handle inverse property for new value
 			if (property.getInverseProperty() != null) {
@@ -752,8 +788,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeAdderForMapCardinality(ModelProperty<? super I> property, Object value) {
+		if (property.getAdder() == null) {
+			throw new ModelExecutionException("Adder is not defined for property " + property);
+		}
 		// TODO implement this
-		System.err.println("Adder for MAP: not implemented yet");
+		throw new UnsupportedOperationException("Adder for MAP: not implemented yet");
 	}
 
 	private void internallyInvokeRemover(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
@@ -774,6 +813,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeRemoverForListCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		if (property.getRemover() == null) {
+			throw new ModelExecutionException("Remover is not defined for property " + property);
+		}
 		List<?> list = (List<?>) invokeGetter(property);
 
 		if (list.contains(value)) {
@@ -802,8 +844,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeRemoverForMapCardinality(ModelProperty<? super I> property, Object value) {
+		if (property.getRemover() == null) {
+			throw new ModelExecutionException("Remover is not defined for property " + property);
+		}
 		// TODO implement this
-		System.err.println("Remover for MAP: not implemented yet");
+		throw new UnsupportedOperationException("Remover for MAP: not implemented yet");
 	}
 
 	private Object internallyInvokeFinder(@Nonnull Finder finder, Object[] args) throws ModelDefinitionException {

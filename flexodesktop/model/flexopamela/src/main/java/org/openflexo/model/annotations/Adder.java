@@ -14,13 +14,17 @@ public @interface Adder {
 
 	public String value();
 
+	public boolean onInitializationOnly() default false;
+
 	public static class AdderImpl implements Adder {
 
-		private String value;
+		private final String value;
+		private final boolean onInitializationOnly;
 
-		public AdderImpl(String value) {
+		public AdderImpl(String value, boolean onInitializationOnly) {
 			super();
 			this.value = value;
+			this.onInitializationOnly = onInitializationOnly;
 		}
 
 		@Override
@@ -31,6 +35,11 @@ public @interface Adder {
 		@Override
 		public String value() {
 			return value;
+		}
+
+		@Override
+		public boolean onInitializationOnly() {
+			return onInitializationOnly;
 		}
 	}
 }
