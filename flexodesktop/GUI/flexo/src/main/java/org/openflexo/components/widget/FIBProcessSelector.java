@@ -91,7 +91,7 @@ public class FIBProcessSelector extends FIBModelObjectSelector<FlexoProcess> {
 
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		testSelector(new FIBProcessSelector(null));
-	}
+	}*/
 }
