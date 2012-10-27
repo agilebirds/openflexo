@@ -19,18 +19,13 @@
  */
 package org.openflexo.fge;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Vector;
-import java.util.logging.Logger;
 
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -38,37 +33,15 @@ import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.controller.MouseControl.MouseButton;
 import org.openflexo.fge.cp.ControlArea;
-import org.openflexo.fge.cp.ControlPoint;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.notifications.ConnectorModified;
-import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.fge.notifications.ObjectHasMoved;
-import org.openflexo.fge.notifications.ObjectHasResized;
-import org.openflexo.fge.notifications.ObjectMove;
-import org.openflexo.fge.notifications.ObjectResized;
-import org.openflexo.fge.notifications.ObjectWillMove;
-import org.openflexo.fge.notifications.ObjectWillResize;
-import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.view.ConnectorView;
-import org.openflexo.toolbox.ToolBox;
 
-public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation<O> implements Observer {
+public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
 
-	private static final Logger logger = Logger.getLogger(ConnectorGraphicalRepresentation.class.getPackage().getName());
-
-	// *******************************************************************************
-	// * Parameters *
-	// *******************************************************************************
-
-	public static enum Parameters implements GRParameter {
+	public static enum ConnectorParameters implements GRParameter {
 		connector,
 		foreground,
 		selectedForeground,
@@ -86,514 +59,97 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		debugCoveringArea
 	}
 
-	private Connector connector = null;
-
-	private ForegroundStyle foreground;
-
-	private ForegroundStyle selectedForeground = null;
-	private ForegroundStyle focusedForeground = null;
-
-	private boolean hasSelectedForeground = false;
-	private boolean hasFocusedForeground = false;
-
-	private StartSymbolType startSymbol = StartSymbolType.NONE;
-	private EndSymbolType endSymbol = EndSymbolType.NONE;
-	private MiddleSymbolType middleSymbol = MiddleSymbolType.NONE;
-
-	private double startSymbolSize = 10.0;
-	private double endSymbolSize = 10.0;
-	private double middleSymbolSize = 10.0;
-
-	private double relativeMiddleSymbolLocation = 0.5; // default is in the middle !
-
-	private boolean applyForegroundToSymbols = true;
-
-	private boolean debugCoveringArea = false;
-
-	// *******************************************************************************
-	// * Inner classes *
-	// *******************************************************************************
-
-	// *******************************************************************************
-	// * Fields *
-	// *******************************************************************************
-
-	private ShapeGraphicalRepresentation<?> startObject;
-	private ShapeGraphicalRepresentation<?> endObject;
-	protected FGEConnectorGraphics graphics;
-
-	// *******************************************************************************
-	// * Constructor *
-	// *******************************************************************************
-
-	// Never use this constructor (used during deserialization only)
-	public ConnectorGraphicalRepresentation() {
-		this(null, null, null, null, null);
-	}
-
-	public ConnectorGraphicalRepresentation(ConnectorType aConnectorType, ShapeGraphicalRepresentation<?> aStartObject,
-			ShapeGraphicalRepresentation<?> anEndObject, O aDrawable, Drawing<?> aDrawing) {
-		super(aDrawable, aDrawing);
-
-		layer = FGEConstants.DEFAULT_CONNECTOR_LAYER;
-
-		setStartObject(aStartObject);
-		setEndObject(anEndObject);
-		setConnectorType(aConnectorType);
-		graphics = new FGEConnectorGraphics(this);
-
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
-		// foreground.setGraphicalRepresentation(this);
-		foreground.addObserver(this);
-
-		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		} else {
-			addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		}
-	}
-
-	// ***************************************************************************
-	// * Deletion *
-	// ***************************************************************************
+	@Override
+	public abstract void delete();
 
 	@Override
-	public void delete() {
-		if (foreground != null) {
-			foreground.deleteObserver(this);
-		}
-		super.delete();
-		disableStartObjectObserving();
-		disableEndObjectObserving();
-	}
+	public abstract Vector<GRParameter> getAllParameters();
 
 	@Override
-	public Vector<GRParameter> getAllParameters() {
-		Vector<GRParameter> returned = super.getAllParameters();
-		Parameters[] allParams = Parameters.values();
-		for (int i = 0; i < allParams.length; i++) {
-			returned.add(allParams[i]);
-		}
-		return returned;
-	}
+	public abstract void setsWith(GraphicalRepresentation<?> gr);
 
 	@Override
-	public final void setsWith(GraphicalRepresentation<?> gr) {
-		super.setsWith(gr);
-		if (gr instanceof ConnectorGraphicalRepresentation) {
-			for (Parameters p : Parameters.values()) {
-				if (p != Parameters.connector) {
-					_setParameterValueWith(p, gr);
-				}
-			}
-			Connector connectorToCopy = ((ConnectorGraphicalRepresentation<?>) gr).getConnector();
-			Connector clone = connectorToCopy.clone();
-			setConnector(clone);
-		}
-	}
+	public abstract void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters);
+
+	public abstract Connector getConnector();
+
+	public abstract void setConnector(Connector aConnector);
+
+	public abstract ForegroundStyle getForeground();
+
+	public abstract void setForeground(ForegroundStyle aForeground);
+
+	public abstract ForegroundStyle getSelectedForeground();
+
+	public abstract void setSelectedForeground(ForegroundStyle aForeground);
+
+	public abstract boolean getHasSelectedForeground();
+
+	public abstract void setHasSelectedForeground(boolean aFlag);
+
+	public abstract ForegroundStyle getFocusedForeground();
+
+	public abstract void setFocusedForeground(ForegroundStyle aForeground);
+
+	public abstract boolean getHasFocusedForeground();
+
+	public abstract void setHasFocusedForeground(boolean aFlag);
 
 	@Override
-	public final void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters) {
-		super.setsWith(gr, exceptedParameters);
-		if (gr instanceof ConnectorGraphicalRepresentation) {
-			for (Parameters p : Parameters.values()) {
-				boolean excepted = false;
-				for (GRParameter ep : exceptedParameters) {
-					if (p == ep) {
-						excepted = true;
-					}
-				}
-				if (p != Parameters.connector && !excepted) {
-					_setParameterValueWith(p, gr);
-				}
-			}
-			Connector connectorToCopy = ((ConnectorGraphicalRepresentation<?>) gr).getConnector();
-			Connector clone = connectorToCopy.clone();
-			setConnector(clone);
-		}
-	}
+	public abstract boolean shouldBeDisplayed();
 
-	// *******************************************************************************
-	// * Accessors *
-	// *******************************************************************************
+	public abstract void notifyConnectorChanged();
 
-	public Connector getConnector() {
-		return connector;
-	}
+	public abstract ConnectorType getConnectorType();
 
-	public void setConnector(Connector aConnector) {
-		if (aConnector != null) {
-			aConnector.setGraphicalRepresentation(this);
-		}
-		FGENotification notification = requireChange(Parameters.connector, aConnector);
-		if (notification != null) {
-			this.connector = aConnector;
-			hasChanged(notification);
-		}
-	}
-
-	public ForegroundStyle getForeground() {
-		return foreground;
-	}
-
-	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.foreground, aForeground);
-		if (notification != null) {
-			if (foreground != null) {
-				foreground.deleteObserver(this);
-			}
-			foreground = aForeground;
-			if (aForeground != null) {
-				aForeground.addObserver(this);
-			}
-			hasChanged(notification);
-		}
-	}
-
-	public ForegroundStyle getSelectedForeground() {
-		if (selectedForeground == null) {
-			selectedForeground = foreground.clone();
-		}
-		return selectedForeground;
-	}
-
-	public void setSelectedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.selectedForeground, aForeground, false);
-		if (notification != null) {
-			if (selectedForeground != null) {
-				selectedForeground.deleteObserver(this);
-			}
-			selectedForeground = aForeground;
-			if (aForeground != null) {
-				aForeground.addObserver(this);
-			}
-			hasChanged(notification);
-		}
-	}
-
-	public boolean getHasSelectedForeground() {
-		return hasSelectedForeground;
-	}
-
-	public void setHasSelectedForeground(boolean aFlag) {
-		hasSelectedForeground = aFlag;
-	}
-
-	public ForegroundStyle getFocusedForeground() {
-		if (focusedForeground == null) {
-			focusedForeground = foreground.clone();
-		}
-		return focusedForeground;
-	}
-
-	public void setFocusedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.focusedForeground, aForeground, false);
-		if (notification != null) {
-			if (focusedForeground != null) {
-				focusedForeground.deleteObserver(this);
-			}
-			focusedForeground = aForeground;
-			if (aForeground != null) {
-				aForeground.addObserver(this);
-			}
-			hasChanged(notification);
-		}
-	}
-
-	public boolean getHasFocusedForeground() {
-		return hasFocusedForeground;
-	}
-
-	public void setHasFocusedForeground(boolean aFlag) {
-		hasFocusedForeground = aFlag;
-	}
+	public abstract void setConnectorType(ConnectorType connectorType);
 
 	@Override
-	public final boolean shouldBeDisplayed() {
-		return super.shouldBeDisplayed();
-	}
+	public abstract void setText(String text);
 
-	public void notifyConnectorChanged() {
-		if (!isRegistered()) {
-			return;
-		}
-		checkViewBounds();
-		setChanged();
-		notifyObservers(new ConnectorModified());
-	}
+	public abstract ShapeGraphicalRepresentation<?> getStartObject();
 
-	public ConnectorType getConnectorType() {
-		if (connector != null) {
-			return connector.getConnectorType();
-		}
-		return null;
-	}
+	public abstract void setStartObject(ShapeGraphicalRepresentation<?> aStartObject);
 
-	public void setConnectorType(ConnectorType connectorType) {
-		if (getConnectorType() != connectorType) {
-			setConnector(Connector.makeConnector(connectorType, this));
-		}
-	}
+	public abstract ShapeGraphicalRepresentation<?> getEndObject();
+
+	public abstract void setEndObject(ShapeGraphicalRepresentation<?> anEndObject);
+
+	public abstract void observeRelevantObjects();
 
 	@Override
-	public final void setText(String text) {
-		super.setText(text);
-	}
-
-	public ShapeGraphicalRepresentation<?> getStartObject() {
-		return startObject;
-	}
-
-	public final void setStartObject(ShapeGraphicalRepresentation<?> aStartObject) {
-		startObject = aStartObject;
-		if (!enabledStartObjectObserving) {
-			enableStartObjectObserving(startObject);
-		}
-	}
-
-	private boolean enabledStartObjectObserving = false;
-	private Vector<Observable> observedStartObjects = new Vector<Observable>();
-
-	private boolean enabledEndObjectObserving = false;
-	private Vector<Observable> observedEndObjects = new Vector<Observable>();
-
-	protected void enableStartObjectObserving(ShapeGraphicalRepresentation<?> aStartObject) {
-
-		if (aStartObject == null || !aStartObject.isValidated()) {
-			return;
-		}
-
-		if (enabledStartObjectObserving) {
-			disableStartObjectObserving();
-		}
-
-		if (aStartObject != null /*&& !enabledStartObjectObserving*/) {
-			aStartObject.addObserver(this);
-			observedStartObjects.add(aStartObject);
-			if (!isDeserializing()) {
-				for (Object o : aStartObject.getAncestors(true)) {
-					if (getGraphicalRepresentation(o) != null) {
-						getGraphicalRepresentation(o).addObserver(this);
-						observedStartObjects.add(getGraphicalRepresentation(o));
-					}
-				}
-			}
-			enabledStartObjectObserving = true;
-		}
-	}
-
-	protected void disableStartObjectObserving(/*ShapeGraphicalRepresentation<?> aStartObject*/) {
-		if (/*aStartObject != null &&*/enabledStartObjectObserving) {
-			/*aStartObject.deleteObserver(this);
-			if (!isDeserializing()) {
-				for (Object o : aStartObject.getAncestors())
-					if (getGraphicalRepresentation(o) != null) getGraphicalRepresentation(o).deleteObserver(this);
-			}*/
-			for (Observable o : observedStartObjects) {
-				o.deleteObserver(this);
-			}
-
-			enabledStartObjectObserving = false;
-		}
-	}
-
-	public ShapeGraphicalRepresentation<?> getEndObject() {
-		return endObject;
-	}
-
-	public final void setEndObject(ShapeGraphicalRepresentation<?> anEndObject) {
-		endObject = anEndObject;
-		if (!enabledEndObjectObserving) {
-			enableEndObjectObserving(endObject);
-		}
-	}
-
-	protected void enableEndObjectObserving(ShapeGraphicalRepresentation<?> anEndObject) {
-
-		if (anEndObject == null || !anEndObject.isValidated()) {
-			return;
-		}
-
-		if (enabledEndObjectObserving) {
-			disableEndObjectObserving();
-		}
-
-		if (anEndObject != null /*&& !enabledEndObjectObserving*/) {
-			anEndObject.addObserver(this);
-			observedEndObjects.add(anEndObject);
-			if (!isDeserializing()) {
-				for (Object o : anEndObject.getAncestors(true)) {
-					if (getGraphicalRepresentation(o) != null) {
-						getGraphicalRepresentation(o).addObserver(this);
-						observedEndObjects.add(getGraphicalRepresentation(o));
-					}
-				}
-			}
-			enabledEndObjectObserving = true;
-		}
-	}
-
-	protected void disableEndObjectObserving(/*ShapeGraphicalRepresentation<?> anEndObject*/) {
-		if (/*anEndObject != null &&*/enabledEndObjectObserving) {
-			/*anEndObject.deleteObserver(this);
-			if (!isDeserializing()) {
-				for (Object o : anEndObject.getAncestors())
-					if (getGraphicalRepresentation(o) != null) getGraphicalRepresentation(o).deleteObserver(this);
-			}*/
-			for (Observable o : observedEndObjects) {
-				o.deleteObserver(this);
-			}
-			enabledEndObjectObserving = false;
-		}
-	}
-
-	public void observeRelevantObjects() {
-		enableStartObjectObserving(getStartObject());
-		enableEndObjectObserving(getEndObject());
-	}
+	public abstract int getViewX(double scale);
 
 	@Override
-	public int getViewX(double scale) {
-		return getViewBounds(scale).x;
-	}
+	public abstract int getViewY(double scale);
 
 	@Override
-	public int getViewY(double scale) {
-		return getViewBounds(scale).y;
-	}
+	public abstract int getViewWidth(double scale);
 
 	@Override
-	public int getViewWidth(double scale) {
-		return getViewBounds(scale).width;
-	}
+	public abstract int getViewHeight(double scale);
 
 	@Override
-	public int getViewHeight(double scale) {
-		return getViewBounds(scale).height;
-	}
+	public abstract Rectangle getViewBounds(double scale);
 
-	private double minX = 0.0;
-	private double minY = 0.0;
-	private double maxX = 1.0;
-	private double maxY = 1.0;
+	public abstract int getExtendedX(double scale);
 
-	private void checkViewBounds() {
-		FGERectangle r = getConnector().getConnectorUsedBounds();
-		if (FGEUtils.checkDoubleIsAValue(r.getMinX()) && FGEUtils.checkDoubleIsAValue(r.getMinY())
-				&& FGEUtils.checkDoubleIsAValue(r.getMaxX()) && FGEUtils.checkDoubleIsAValue(r.getMaxY())) {
-			minX = Math.min(r.getMinX(), 0.0);
-			minY = Math.min(r.getMinY(), 0.0);
-			maxX = Math.max(r.getMaxX(), 1.0);
-			maxY = Math.max(r.getMaxY(), 1.0);
-		}
-	}
-
-	@Override
-	public Rectangle getViewBounds(double scale) {
-		// return getNormalizedBounds(scale);
-
-		Rectangle bounds = getNormalizedBounds(scale);
-		/*System.out.println("Bounds="+bounds);
-		System.out.println("minX="+minX);
-		System.out.println("minY="+minY);
-		System.out.println("maxX="+maxX);
-		System.out.println("maxY="+maxY);*/
-		Rectangle returned = new Rectangle();
-		returned.x = (int) (bounds.x + (minX < 0 ? minX * bounds.width : 0));
-		returned.y = (int) (bounds.y + (minY < 0 ? minY * bounds.height : 0));
-		returned.width = (int) ((maxX - minX) * bounds.width);
-		returned.height = (int) ((maxY - minY) * bounds.height);
-		return returned;
-	}
-
-	public int getExtendedX(double scale) {
-		Rectangle bounds = getNormalizedBounds(scale);
-		return (int) (bounds.x + (minX < 0 ? minX * bounds.width : 0));
-	}
-
-	public int getExtendedY(double scale) {
-		Rectangle bounds = getNormalizedBounds(scale);
-		return (int) (bounds.y + (minY < 0 ? minY * bounds.height : 0));
-	}
+	public abstract int getExtendedY(double scale);
 
 	/**
 	 * Return normalized bounds Those bounds corresponds to the normalized area defined as (0.0,0.0)-(1.0,1.0) enclosing EXACTELY the two
 	 * related shape bounds. Those bounds should eventually be extended to contain connector contained outside this area.
 	 */
-	public Rectangle getNormalizedBounds(double scale) {
-		if (getStartObject() == null || getStartObject().isDeleted() || getEndObject() == null || getEndObject().isDeleted()) {
-			logger.warning("Could not obtain connector bounds: start or end object is null or deleted");
-			logger.warning("Object: " + this + " startObject=" + getStartObject() + " endObject=" + getEndObject());
-			// Here, we return a (1,1)-size to avoid obtaining Infinity AffinTransform !!!
-			return new Rectangle(0, 0, 1, 1);
-		}
-
-		if (getContainerGraphicalRepresentation() == null) {
-			logger.warning("getNormalizedBounds() called for GR " + this + " with containerGR=null, validated=" + isValidated());
-		}
-
-		Rectangle startBounds = getStartObject().getViewBounds(getContainerGraphicalRepresentation(), scale);
-		Rectangle endsBounds = getEndObject().getViewBounds(getContainerGraphicalRepresentation(), scale);
-
-		Rectangle bounds = new Rectangle();
-		Rectangle2D.union(startBounds, endsBounds, bounds);
-
-		return bounds;
-	}
+	public abstract Rectangle getNormalizedBounds(double scale);
 
 	@Override
-	public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale) {
-		FGERectangle drawingViewBounds = new FGERectangle(drawingViewSelection.getX(), drawingViewSelection.getY(),
-				drawingViewSelection.getWidth(), drawingViewSelection.getHeight(), Filling.FILLED);
-		boolean isFullyContained = true;
-		for (ControlArea<?> ca : getConnector().getControlAreas()) {
-			if (ca instanceof ControlPoint) {
-				ControlPoint cp = (ControlPoint) ca;
-				Point cpInContainerView = convertLocalNormalizedPointToRemoteViewCoordinates(cp.getPoint(),
-						getDrawingGraphicalRepresentation(), scale);
-				FGEPoint preciseCPInContainerView = new FGEPoint(cpInContainerView.x, cpInContainerView.y);
-				if (!drawingViewBounds.containsPoint(preciseCPInContainerView)) {
-					// System.out.println("Going outside: point="+preciseCPInContainerView+" bounds="+containerViewBounds);
-					isFullyContained = false;
-				}
-			}
-		}
-		return isFullyContained;
-	}
+	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
 	@Override
-	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale) {
-		Rectangle bounds = getNormalizedBounds(scale);
-
-		// return AffineTransform.getScaleInstance(bounds.width, bounds.height);
-
-		AffineTransform returned = AffineTransform.getTranslateInstance(minX < 0 ? -minX * bounds.width : 0, minY < 0 ? -minY
-				* bounds.height : 0);
-
-		returned.concatenate(AffineTransform.getScaleInstance(bounds.width, bounds.height));
-
-		return returned;
-
-	}
+	public abstract AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
 
 	@Override
-	public AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale) {
-		Rectangle bounds = getNormalizedBounds(scale);
-
-		// return AffineTransform.getScaleInstance(1.0/bounds.width, 1.0/bounds.height);
-
-		AffineTransform returned = AffineTransform.getTranslateInstance(minX < 0 ? minX * bounds.width : 0, minY < 0 ? minY * bounds.height
-				: 0);
-
-		returned.preConcatenate(AffineTransform.getScaleInstance(1.0 / bounds.width, 1.0 / bounds.height));
-
-		return returned;
-
-	}
+	public abstract AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
 
 	/**
 	 * Return distance from point to connector representation with a given scale
@@ -603,307 +159,84 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	 * @param scale
 	 * @return
 	 */
-	public double distanceToConnector(FGEPoint aPoint, double scale) {
-		return connector.distanceToConnector(aPoint, scale);
-	}
-
-	// *******************************************************************************
-	// * Methods *
-	// *******************************************************************************
+	public abstract double distanceToConnector(FGEPoint aPoint, double scale);
 
 	@Override
-	public void paint(Graphics g, DrawingController<?> controller) {
-		if (!isRegistered()) {
-			setRegistered(true);
-		}
-
-		super.paint(g, controller);
-
-		if (getStartObject() == null || getStartObject().isDeleted()) {
-			logger.warning("Could not paint connector: start object is null or deleted");
-			return;
-		}
-
-		if (getEndObject() == null || getEndObject().isDeleted()) {
-			logger.warning("Could not paint connector: end object is null or deleted");
-			return;
-		}
-
-		Graphics2D g2 = (Graphics2D) g;
-		graphics.createGraphics(g2, controller);
-
-		if (FGEConstants.DEBUG) {
-			g2.setColor(Color.PINK);
-			g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
-		}
-
-		if (connector != null) {
-
-			if (!isValidated()) {
-				logger.warning("paint connector requested for not validated connector graphical representation: " + this);
-				return;
-			}
-			if (getStartObject() == null || getStartObject().isDeleted() || !getStartObject().isValidated()) {
-				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
-						+ " start=" + getStartObject());
-				return;
-			}
-			if (getEndObject() == null || getEndObject().isDeleted() || !getEndObject().isValidated()) {
-				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
-						+ " end=" + getEndObject());
-				return;
-			}
-			connector.paintConnector(graphics);
-		}
-
-		graphics.releaseGraphics();
-	}
+	public abstract void paint(Graphics g, DrawingController<?> controller);
 
 	@Override
-	public Point getLabelLocation(double scale) {
-		Point connectorCenter = convertNormalizedPointToViewCoordinates(getConnector().getMiddleSymbolLocation(), scale);
-		return new Point((int) (connectorCenter.x + getAbsoluteTextX() * scale + getViewX(scale)), (int) (connectorCenter.y
-				+ getAbsoluteTextY() * scale + getViewY(scale)));
-	}
+	public abstract Point getLabelLocation(double scale);
 
 	@Override
-	public void setLabelLocation(Point point, double scale) {
-		Point connectorCenter = convertNormalizedPointToViewCoordinates(getConnector().getMiddleSymbolLocation(), scale);
-		setAbsoluteTextX(((double) point.x - connectorCenter.x - getViewX(scale)) / scale);
-		setAbsoluteTextY(((double) point.y - connectorCenter.y - getViewY(scale)) / scale);
-	}
+	public abstract void setLabelLocation(Point point, double scale);
 
 	@Override
-	public boolean hasFloatingLabel() {
-		return hasText();
-	}
+	public abstract boolean hasFloatingLabel();
 
 	@Override
-	public String getInspectorName() {
-		return "ConnectorGraphicalRepresentation.inspector";
-	}
+	public abstract String getInspectorName();
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		// System.out.println("Connector received "+notification+" from "+observable);
+	public abstract void update(Observable observable, Object notification);
 
-		super.update(observable, notification);
-
-		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChange(Parameters.foreground);
-		}
-
-		if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
-			connector.connectorWillBeModified();
-			// Propagate notification to views
-			setChanged();
-			notifyObservers(notification);
-		}
-		if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized) {
-			connector.connectorHasBeenModified();
-			// Propagate notification to views
-			setChanged();
-			notifyObservers(notification);
-		}
-		if (notification instanceof ObjectMove || notification instanceof ObjectResized || notification instanceof ShapeChanged) {
-			// if (observable == startObject || observable == endObject) {
-			// !!! or any of ancestors
-			refreshConnector();
-			// }
-		}
-	}
-
-	protected boolean isConnectorConsistent() {
-		// if (true) return true;
-		return getStartObject() != null && getEndObject() != null && !getStartObject().isDeleted() && !getEndObject().isDeleted()
-				&& GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject());
-	}
-
-	public void refreshConnector() {
-		refreshConnector(false);
-	}
-
-	protected void refreshConnector(boolean forceRefresh) {
-		if (!isConnectorConsistent()) {
-			// Dont' go further for connector that are inconsistent (this may happen
-			// during big model restructurations (for example during a multiple delete)
-			return;
-		}
-		try {
-			if (forceRefresh || connector.needsRefresh()) {
-				connector.refreshConnector();
-				checkViewBounds();
-				setChanged();
-				notifyObservers(new ConnectorModified());
-			}
-		} catch (Exception e) {
-			logger.warning("Unexpected exception: " + e);
-			e.printStackTrace();
-		}
-	}
+	public abstract void refreshConnector();
 
 	@Override
-	public void setRegistered(boolean aFlag) {
-		if (aFlag != isRegistered()) {
-			super.setRegistered(aFlag);
-			if (aFlag && !isDeleted()) {
-				refreshConnector();
-			}
-		}
-	}
+	public abstract void setRegistered(boolean aFlag);
 
 	// Override for a custom view management
-	public ConnectorView<O> makeConnectorView(DrawingController<?> controller) {
-		return new ConnectorView<O>(this, controller);
-	}
+	public abstract ConnectorView<O> makeConnectorView(DrawingController<?> controller);
 
-	public EndSymbolType getEndSymbol() {
-		return endSymbol;
-	}
+	public abstract EndSymbolType getEndSymbol();
 
-	public void setEndSymbol(EndSymbolType endSymbol) {
-		FGENotification notification = requireChange(Parameters.endSymbol, endSymbol);
-		if (notification != null) {
-			this.endSymbol = endSymbol;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setEndSymbol(EndSymbolType endSymbol);
 
-	public double getEndSymbolSize() {
-		return endSymbolSize;
-	}
+	public abstract double getEndSymbolSize();
 
-	public void setEndSymbolSize(double endSymbolSize) {
-		FGENotification notification = requireChange(Parameters.endSymbolSize, endSymbolSize);
-		if (notification != null) {
-			this.endSymbolSize = endSymbolSize;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setEndSymbolSize(double endSymbolSize);
 
-	public MiddleSymbolType getMiddleSymbol() {
-		return middleSymbol;
-	}
+	public abstract MiddleSymbolType getMiddleSymbol();
 
-	public void setMiddleSymbol(MiddleSymbolType middleSymbol) {
-		FGENotification notification = requireChange(Parameters.middleSymbol, middleSymbol);
-		if (notification != null) {
-			this.middleSymbol = middleSymbol;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setMiddleSymbol(MiddleSymbolType middleSymbol);
 
-	public double getMiddleSymbolSize() {
-		return middleSymbolSize;
-	}
+	public abstract double getMiddleSymbolSize();
 
-	public void setMiddleSymbolSize(double middleSymbolSize) {
-		FGENotification notification = requireChange(Parameters.middleSymbolSize, middleSymbolSize);
-		if (notification != null) {
-			this.middleSymbolSize = middleSymbolSize;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setMiddleSymbolSize(double middleSymbolSize);
 
-	public StartSymbolType getStartSymbol() {
-		return startSymbol;
-	}
+	public abstract StartSymbolType getStartSymbol();
 
-	public void setStartSymbol(StartSymbolType startSymbol) {
-		FGENotification notification = requireChange(Parameters.startSymbol, startSymbol);
-		if (notification != null) {
-			this.startSymbol = startSymbol;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setStartSymbol(StartSymbolType startSymbol);
 
-	public double getStartSymbolSize() {
-		return startSymbolSize;
-	}
+	public abstract double getStartSymbolSize();
 
-	public void setStartSymbolSize(double startSymbolSize) {
-		FGENotification notification = requireChange(Parameters.startSymbolSize, startSymbolSize);
-		if (notification != null) {
-			this.startSymbolSize = startSymbolSize;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setStartSymbolSize(double startSymbolSize);
 
-	public double getRelativeMiddleSymbolLocation() {
-		return relativeMiddleSymbolLocation;
-	}
+	public abstract double getRelativeMiddleSymbolLocation();
 
-	public void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation) {
-		FGENotification notification = requireChange(Parameters.relativeMiddleSymbolLocation, relativeMiddleSymbolLocation);
-		if (notification != null) {
-			this.relativeMiddleSymbolLocation = relativeMiddleSymbolLocation;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation);
 
-	public boolean getApplyForegroundToSymbols() {
-		return applyForegroundToSymbols;
-	}
+	public abstract boolean getApplyForegroundToSymbols();
 
-	public void setApplyForegroundToSymbols(boolean applyForegroundToSymbols) {
-		FGENotification notification = requireChange(Parameters.applyForegroundToSymbols, applyForegroundToSymbols);
-		if (notification != null) {
-			this.applyForegroundToSymbols = applyForegroundToSymbols;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setApplyForegroundToSymbols(boolean applyForegroundToSymbols);
 
-	public boolean getDebugCoveringArea() {
-		return debugCoveringArea;
-	}
+	public abstract boolean getDebugCoveringArea();
 
-	public void setDebugCoveringArea(boolean debugCoveringArea) {
-		FGENotification notification = requireChange(Parameters.debugCoveringArea, debugCoveringArea);
-		if (notification != null) {
-			this.debugCoveringArea = debugCoveringArea;
-			hasChanged(notification);
-		}
-	}
+	public abstract void setDebugCoveringArea(boolean debugCoveringArea);
 
 	// Override when required
 	@Override
-	public void notifyObjectHierarchyHasBeenUpdated() {
-		super.notifyObjectHierarchyHasBeenUpdated();
-		refreshConnector();
-	}
+	public abstract void notifyObjectHierarchyHasBeenUpdated();
 
-	public FGEConnectorGraphics getGraphics() {
-		return graphics;
-	}
+	public abstract FGEConnectorGraphics getGraphics();
 
-	public List<? extends ControlArea> getControlAreas() {
-		return getConnector().getControlAreas();
-	}
+	public abstract List<? extends ControlArea> getControlAreas();
 
 	/**
 	 * Override parent's behaviour by enabling start and end object observing
 	 */
 	@Override
-	public void setValidated(boolean validated) {
-		super.setValidated(validated);
-		if (!enabledStartObjectObserving) {
-			enableStartObjectObserving(startObject);
-		}
-		if (!enabledEndObjectObserving) {
-			enableEndObjectObserving(endObject);
-		}
-	}
+	public abstract void setValidated(boolean validated);
 
-	@Override
-	public ConnectorGraphicalRepresentation<O> clone() {
-		// logger.info("La GR "+this+" se fait cloner la");
-		try {
-			return (ConnectorGraphicalRepresentation<O>) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// cannot happen since we are clonable
-			e.printStackTrace();
-			return null;
-		}
-	}
+	public abstract ConnectorGraphicalRepresentation<O> clone();
 
 }
