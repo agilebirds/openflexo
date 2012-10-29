@@ -1318,7 +1318,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			return null;
 		}
 		for (EditionPatternReference r : _editionPatternReferences) {
-			System.out.println("1: " + r.getEditionPattern().getName() + "  2: " + editionPattern.getName());
+			// System.out.println("1: " + r.getEditionPattern().getName() + "  2: " + editionPattern.getName());
 			if (r.getEditionPattern().getName().equals(editionPattern.getName())) {
 				return r;
 			}

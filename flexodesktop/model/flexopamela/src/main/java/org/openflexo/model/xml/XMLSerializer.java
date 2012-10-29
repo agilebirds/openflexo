@@ -5,21 +5,22 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javassist.util.proxy.ProxyObject;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.ModelEntity;
-import org.openflexo.model.factory.ModelExecutionException;
 import org.openflexo.model.factory.ModelProperty;
 import org.openflexo.model.factory.ProxyMethodHandler;
 
@@ -29,7 +30,7 @@ public class XMLSerializer {
 	public static final String ID_REF = "idref";
 
 	// Keys are objects and values are ObjectReference
-	private Hashtable<Object, ObjectReference> objectReferences;
+	private Map<Object, ObjectReference> objectReferences;
 
 	/**
 	 * Stores already serialized objects where key is the serialized object and value is a
@@ -40,7 +41,7 @@ public class XMLSerializer {
 	 * 
 	 * instance coding the unique identifier of the object
 	 */
-	private Hashtable<Object, Object> alreadySerialized;
+	private Map<Object, Object> alreadySerialized;
 
 	private DefaultStringEncoder stringEncoder;
 
@@ -58,8 +59,8 @@ public class XMLSerializer {
 		Document builtDocument = new Document();
 		try {
 			id = 0;
-			objectReferences = new Hashtable<Object, ObjectReference>();
-			alreadySerialized = new Hashtable<Object, Object>();
+			objectReferences = new HashMap<Object, ObjectReference>();
+			alreadySerialized = new HashMap<Object, Object>();
 			Element rootElement = serializeElement(object, null);
 			postProcess(rootElement);
 			builtDocument.setRootElement(rootElement);
@@ -119,75 +120,81 @@ public class XMLSerializer {
 			Object reference = alreadySerialized.get(object);
 			if (reference == null) {
 				// First time i see this object
-				// Put this object in alreadySerialized objects
+				try {
+					handler.setSerializing(true);
 
-				reference = generateReference(object);
-				alreadySerialized.put(object, reference);
+					// Put this object in alreadySerialized objects
+					reference = generateReference(object);
+					alreadySerialized.put(object, reference);
 
-				/*
-				 * Element returned = elements.get(object); if (returned == null) {
-				 */
-				if (xmlElement != null) {
-					returned = new Element(elementName, namespace);
-					returned.setAttribute(ID, reference.toString());
-					// elements.put(object, returned);
+					/*
+					 * Element returned = elements.get(object); if (returned == null) {
+					 */
+					if (xmlElement != null) {
+						returned = new Element(elementName, namespace);
+						returned.setAttribute(ID, reference.toString());
+						// elements.put(object, returned);
 
-					Iterator<ModelProperty<? super I>> properties = modelEntity.getProperties();
-					while (properties.hasNext()) {
-						ModelProperty<? super I> p = properties.next();
-						if (p.getXMLAttribute() != null) {
-							Object oValue = handler.invokeGetter(p);
-							if (oValue != null) {
-								String value;
-								try {
-									value = stringEncoder.toString(oValue);
-									returned.setAttribute(p.getXMLTag(), value);
-								} catch (InvalidDataException e) {
-									throw new ModelExecutionException(e);
-								}
-							}
-						} else if (p.getXMLElement() != null) {
-							XMLElement propertyXMLElement = p.getXMLElement();
-							switch (p.getCardinality()) {
-							case SINGLE:
+						Iterator<ModelProperty<? super I>> properties = modelEntity.getProperties();
+						while (properties.hasNext()) {
+							ModelProperty<? super I> p = properties.next();
+							if (p.getXMLAttribute() != null) {
 								Object oValue = handler.invokeGetter(p);
-								Element propertyElement = serializeElement(oValue, propertyXMLElement);
-								returned.addContent(propertyElement);
-								break;
-							case LIST:
-								List<?> values = (List<?>) handler.invokeGetter(p);
-								for (Object o : values) {
-									if (o != null) {
-										Element propertyElement2 = serializeElement(o, propertyXMLElement);
-										returned.addContent(propertyElement2);
+								if (oValue != null) {
+									String value;
+									try {
+										value = stringEncoder.toString(oValue);
+										returned.setAttribute(p.getXMLTag(), value);
+									} catch (InvalidDataException e) {
+										throw new ModelExecutionException(e);
 									}
 								}
-								break;
-							case MAP:
-								throw new UnsupportedOperationException("Cannot serialize maps for now");
-							default:
-								break;
+							} else if (p.getXMLElement() != null) {
+								XMLElement propertyXMLElement = p.getXMLElement();
+								switch (p.getCardinality()) {
+								case SINGLE:
+									Object oValue = handler.invokeGetter(p);
+									if (oValue != null) {
+										Element propertyElement = serializeElement(oValue, propertyXMLElement);
+										returned.addContent(propertyElement);
+									}
+									break;
+								case LIST:
+									List<?> values = (List<?>) handler.invokeGetter(p);
+									for (Object o : values) {
+										if (o != null) {
+											Element propertyElement2 = serializeElement(o, propertyXMLElement);
+											returned.addContent(propertyElement2);
+										}
+									}
+									break;
+								case MAP:
+									throw new UnsupportedOperationException("Cannot serialize maps for now");
+								default:
+									break;
+								}
 							}
 						}
+					} else if (stringEncoder.isConvertable(modelEntity.getImplementedInterface())) {
+						try {
+							returned = new Element(elementName, namespace);
+							returned.setText(stringEncoder.toString(object));
+							returned.setAttribute(ID, reference.toString());
+						} catch (InvalidDataException e) {
+							// This should not happen. If it does, then it is likely that the StringEncoder class is messed up by saying
+							// that a
+							// given type is convertable but does not convert it when asked
+							throw new ModelDefinitionException(
+									"Hu hoh, really don't know how you got into this state: your object is string convertable but conversion could not be performed",
+									e);
+						}
+					} else {
+						throw new ModelDefinitionException("No XML element for " + object);
 					}
-				} else if (stringEncoder.isConvertable(modelEntity.getImplementedInterface())) {
-					try {
-						returned = new Element(elementName, namespace);
-						returned.setText(stringEncoder.toString(object));
-						returned.setAttribute(ID, reference.toString());
-					} catch (InvalidDataException e) {
-						// This should not happen. If it does, then it is likely that the StringEncoder class is messed up by saying that a
-						// given type is convertable but does not convert it when asked
-						throw new ModelDefinitionException(
-								"Hu hoh, really don't know how you got into this state: your object is string convertable but conversion could not be performed",
-								e);
-					}
-				} else {
-					throw new ModelDefinitionException("No XML element for " + object);
+				} finally {
+					handler.setSerializing(false);
 				}
-			}
-
-			else {
+			} else {
 				// This object was already serialized somewhere, only put an idref
 				// Debugging.debug ("This object has already been serialized
 				// somewhere "+anObject);
@@ -239,8 +246,7 @@ public class XMLSerializer {
 	}
 
 	protected static class ObjectReference {
-		// private int id = -1;
-		private String customIdMappingValue = null;
+
 		protected Object serializedObject;
 		protected ElementReference primaryElement;
 		protected Vector<ElementReference> referenceElements;
@@ -250,7 +256,6 @@ public class XMLSerializer {
 			serializedObject = anObject;
 			referenceElements = new Vector<ElementReference>();
 			addElementReference(new ElementReference(xmlElement, context, anElement));
-			// id = idForElement(anElement);
 		}
 
 		protected void delete() {

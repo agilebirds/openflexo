@@ -509,6 +509,13 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return newCreationScheme;
 	}
 
+	public CloningScheme createCloningScheme() {
+		CloningScheme newCloningScheme = new CloningScheme(null);
+		newCloningScheme.setName("clone");
+		addToEditionSchemes(newCloningScheme);
+		return newCloningScheme;
+	}
+
 	public DropScheme createDropScheme() {
 		DropScheme newDropScheme = new DropScheme(null);
 		newDropScheme.setName("drop");

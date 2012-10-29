@@ -68,9 +68,9 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DeleteViewElements>() {
 			@Override
 			public boolean run(ActionEvent e, DeleteViewElements action) {
-				if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
-					getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();
+				if (getControllerActionInitializer().getVEController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getVEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
+					getControllerActionInitializer().getVEController().getSelectionManager().resetSelection();
 				}
 				return true;
 			}

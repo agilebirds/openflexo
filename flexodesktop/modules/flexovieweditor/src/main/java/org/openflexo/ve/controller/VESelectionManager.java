@@ -19,17 +19,27 @@
  */
 package org.openflexo.ve.controller;
 
+import java.awt.Point;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
+
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.ve.shema.VEShemaModuleView;
+import org.openflexo.ve.shema.VEShemaView;
 import org.openflexo.ve.view.menu.OEMenuBar;
 
 /**
- * Selection manager dedicated to this module
+ * This is the selection manager responsible for selection in ViewEditor module
  * 
- * @author yourname
+ * @author sylvain
  */
 public class VESelectionManager extends SelectionManager {
 
@@ -43,7 +53,7 @@ public class VESelectionManager extends SelectionManager {
 		_contextualMenuManager = new VEContextualMenuManager(this, controller.getEditor(), controller);
 	}
 
-	public VEController getXXXController() {
+	public VEController getVEController() {
 		return (VEController) getController();
 	}
 
@@ -67,13 +77,45 @@ public class VESelectionManager extends SelectionManager {
 	 */
 	@Override
 	public FlexoModelObject getRootFocusedObject() {
-		return getXXXController().getCurrentDisplayedObjectAsModuleView();
+		return getVEController().getCurrentDisplayedObjectAsModuleView();
 	}
 
 	@Override
 	public FlexoModelObject getPasteContext() {
-		// TODO please implement this
+		if (getVEController().getCurrentModuleView() instanceof VEShemaModuleView) {
+			VEShemaView v = ((VEShemaModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
+			GraphicalRepresentation<?> gr = v.getController().getLastSelectedGR();
+			if (gr != null && gr.getDrawable() instanceof FlexoModelObject) {
+				return (FlexoModelObject) gr.getDrawable();
+			} else {
+				return (FlexoModelObject) ((DrawingView<?>) getVEController().getCurrentModuleView()).getDrawingGraphicalRepresentation()
+						.getDrawable();
+			}
+		}
 		return null;
+	}
+
+	@Override
+	public PastingGraphicalContext getPastingGraphicalContext() {
+		PastingGraphicalContext pgc = new PastingGraphicalContext();
+		if (getVEController().getCurrentModuleView() instanceof VEShemaModuleView) {
+			VEShemaView v = ((VEShemaModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
+			DrawingController<?> controller = v.getController();
+			GraphicalRepresentation<?> target = controller.getLastSelectedGR();
+			if (target == null) {
+				pgc.targetContainer = controller.getDrawingView();
+			} else {
+				pgc.targetContainer = (JComponent) v.viewForObject(target);
+			}
+			if (controller.getLastClickedPoint() != null) {
+				pgc.precisePastingLocation = controller.getLastClickedPoint();
+				pgc.pastingLocation = new Point((int) pgc.precisePastingLocation.getX(), (int) pgc.precisePastingLocation.getY());
+			} else {
+				pgc.precisePastingLocation = new FGEPoint(0, 0);
+				pgc.pastingLocation = new Point(0, 0);
+			}
+		}
+		return pgc;
 	}
 
 }

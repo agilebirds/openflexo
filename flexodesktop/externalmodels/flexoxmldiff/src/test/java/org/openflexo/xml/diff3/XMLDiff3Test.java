@@ -32,9 +32,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
-import org.jdom.Document;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xml.XMLDiffTest;

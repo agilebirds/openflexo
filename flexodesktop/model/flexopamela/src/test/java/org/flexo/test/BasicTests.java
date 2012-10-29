@@ -1,5 +1,6 @@
 package org.flexo.test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,14 +20,16 @@ import org.flexo.model.StartNode;
 import org.flexo.model.TokenEdge;
 import org.flexo.model.WKFAnnotation;
 import org.flexo.model.WKFObject;
-import org.jdom.Document;
-import org.jdom.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.Clipboard;
-import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.factory.EmbeddingType;
 import org.openflexo.model.factory.ModelEntity;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.xml.InvalidXMLDataException;
@@ -74,6 +77,7 @@ public class BasicTests extends TestCase {
 
 		assertEquals(11, factory.getEntityCount());
 
+		ModelEntity<FlexoModelObject> modelObjectEntity = factory.getModelEntity(FlexoModelObject.class);
 		ModelEntity<FlexoProcess> processEntity = factory.getModelEntity(FlexoProcess.class);
 		ModelEntity<AbstractNode> abstractNodeEntity = factory.getModelEntity(AbstractNode.class);
 		ModelEntity<StartNode> startNodeEntity = factory.getModelEntity(StartNode.class);
@@ -86,16 +90,16 @@ public class BasicTests extends TestCase {
 		assertNotNull(tokenEdgeEntity);
 		assertNotNull(wkfObjectEntity);
 
-		assertNotNull(processEntity.getDeclaredModelProperty(FlexoProcess.NODES));
-		assertNotNull(processEntity.getDeclaredModelProperty(FlexoProcess.FOO));
-		assertNull(processEntity.getDeclaredModelProperty(FlexoModelObject.FLEXO_ID));
+		assertNotNull(processEntity.getModelProperty(FlexoProcess.NODES));
+		assertNotNull(processEntity.getModelProperty(FlexoProcess.FOO));
+		assertNotNull(modelObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
 		assertNotNull(processEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
+		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
+		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID).getSetter());
 
-		assertNotNull(wkfObjectEntity.getDeclaredModelProperty(WKFObject.PROCESS));
-		assertFalse(wkfObjectEntity.getDeclaredModelProperty(WKFObject.PROCESS).override());
+		assertNotNull(wkfObjectEntity.getModelProperty(WKFObject.PROCESS));
 		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
-		assertNotNull(abstractNodeEntity.getDeclaredModelProperty(WKFObject.PROCESS));
-		assertTrue(abstractNodeEntity.getDeclaredModelProperty(WKFObject.PROCESS).override());
+		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
 	}
 
 	public void test2() throws Exception {
@@ -356,12 +360,12 @@ public class BasicTests extends TestCase {
 		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
 
 		// No embedded objects for a simple node (edges let the closure fail)
-		List<Object> embeddedObjects1 = factory.getEmbeddedObjects(startNode);
+		List<Object> embeddedObjects1 = factory.getEmbeddedObjects(startNode, EmbeddingType.CLOSURE);
 		System.out.println("Embedded: " + embeddedObjects1);
 		assertEquals(0, embeddedObjects1.size());
 
 		// The 3 nodes and the 2 edges belongs to same closure, take them
-		List<Object> embeddedObjects2 = factory.getEmbeddedObjects(process);
+		List<Object> embeddedObjects2 = factory.getEmbeddedObjects(process, EmbeddingType.CLOSURE);
 		System.out.println("Embedded: " + embeddedObjects2);
 		assertEquals(5, embeddedObjects2.size());
 		assertTrue(embeddedObjects2.contains(activityNode));
@@ -373,7 +377,7 @@ public class BasicTests extends TestCase {
 		// Computes embedded objects for activity node in the context of process
 		// In this case, edge1 and edge2 are also embedded because belonging to supplied
 		// context which is the process itself
-		List<Object> embeddedObjects3 = factory.getEmbeddedObjects(activityNode, process);
+		List<Object> embeddedObjects3 = factory.getEmbeddedObjects(activityNode, EmbeddingType.CLOSURE, process);
 		System.out.println("Embedded: " + embeddedObjects3);
 		assertEquals(2, embeddedObjects3.size());
 		assertTrue(embeddedObjects3.contains(edge1));
@@ -382,7 +386,7 @@ public class BasicTests extends TestCase {
 		// Computes embedded objects for activity node in the context of node startNode
 		// In this case, edge1 is also embedded because belonging to supplied
 		// context which is the opposite node startNode
-		List<Object> embeddedObjects4 = factory.getEmbeddedObjects(activityNode, startNode);
+		List<Object> embeddedObjects4 = factory.getEmbeddedObjects(activityNode, EmbeddingType.CLOSURE, startNode);
 		System.out.println("Embedded: " + embeddedObjects4);
 		assertEquals(1, embeddedObjects4.size());
 		assertTrue(embeddedObjects4.contains(edge1));
@@ -413,22 +417,23 @@ public class BasicTests extends TestCase {
 
 		assertNotNull(processCopy);
 		assertTrue(processCopy instanceof FlexoProcess);
-		assertEquals("NewProcess1", processCopy.getName());
+		// TODO: Uncomment next line when FACTORY strategy will be implemented
+		// assertEquals("NewProcess1", processCopy.getName());
 		assertEquals("234XX", processCopy.getFlexoID());
 		assertEquals(8, processCopy.getFoo());
 
-		ActivityNode activityNodeCopy = (ActivityNode) processCopy.getNodeNamed("MyActivity1");
+		ActivityNode activityNodeCopy = (ActivityNode) processCopy.getNodeNamed("MyActivity");
 		assertNotNull(activityNodeCopy);
-		assertEquals("MyActivity1", activityNodeCopy.getName());
+		assertEquals("MyActivity", activityNodeCopy.getName());
 		assertTrue(processCopy.getNodes().contains(activityNodeCopy));
 		assertEquals(processCopy, activityNodeCopy.getProcess());
-		StartNode startNodeCopy = (StartNode) processCopy.getNodeNamed("Start1");
+		StartNode startNodeCopy = (StartNode) processCopy.getNodeNamed("Start");
 		assertNotNull(startNodeCopy);
-		EndNode endNodeCopy = (EndNode) processCopy.getNodeNamed("End1");
+		EndNode endNodeCopy = (EndNode) processCopy.getNodeNamed("End");
 		assertNotNull(endNodeCopy);
-		TokenEdge edge1Copy = (TokenEdge) processCopy.getEdgeNamed("edge11");
+		TokenEdge edge1Copy = (TokenEdge) processCopy.getEdgeNamed("edge1");
 		assertNotNull(edge1Copy);
-		TokenEdge edge2Copy = (TokenEdge) processCopy.getEdgeNamed("edge21");
+		TokenEdge edge2Copy = (TokenEdge) processCopy.getEdgeNamed("edge2");
 		assertNotNull(edge2Copy);
 		assertEquals(processCopy, edge1Copy.getProcess());
 		assertEquals(processCopy, edge2Copy.getProcess());
@@ -485,11 +490,11 @@ public class BasicTests extends TestCase {
 
 		assertEquals(1, activityNodeCopy.getIncomingEdges().size());
 		TokenEdge edge1Copy = (TokenEdge) activityNodeCopy.getIncomingEdges().get(0);
-		assertEquals("edge11", edge1Copy.getName());
+		assertEquals("edge1", edge1Copy.getName());
 
 		assertEquals(1, activityNodeCopy.getOutgoingEdges().size());
 		TokenEdge edge2Copy = (TokenEdge) activityNodeCopy.getOutgoingEdges().get(0);
-		assertEquals("edge21", edge2Copy.getName());
+		assertEquals("edge2", edge2Copy.getName());
 
 		// Clone activityNode in the context of process, edge1 and edge2 will be cloned
 		// because they belong to process' context
@@ -499,11 +504,11 @@ public class BasicTests extends TestCase {
 
 		assertEquals(1, activityNodeCopy2.getIncomingEdges().size());
 		TokenEdge edge1Copy2 = (TokenEdge) activityNodeCopy2.getIncomingEdges().get(0);
-		assertEquals("edge11", edge1Copy2.getName());
+		assertEquals("edge1", edge1Copy2.getName());
 
 		assertEquals(1, activityNodeCopy2.getOutgoingEdges().size());
 		TokenEdge edge2Copy2 = (TokenEdge) activityNodeCopy2.getOutgoingEdges().get(0);
-		assertEquals("edge21", edge2Copy2.getName());
+		assertEquals("edge2", edge2Copy2.getName());
 
 		// Clone activityNode in the context of startNode, only edge1 will be cloned
 		ActivityNode activityNodeCopy3 = (ActivityNode) activityNode.cloneObject(startNode);
@@ -512,7 +517,7 @@ public class BasicTests extends TestCase {
 
 		assertEquals(1, activityNodeCopy3.getIncomingEdges().size());
 		TokenEdge edge1Copy3 = (TokenEdge) activityNodeCopy3.getIncomingEdges().get(0);
-		assertEquals("edge11", edge1Copy3.getName());
+		assertEquals("edge1", edge1Copy3.getName());
 
 		assertEquals(0, activityNodeCopy3.getOutgoingEdges().size());
 	}
@@ -542,15 +547,17 @@ public class BasicTests extends TestCase {
 		System.out.println(debug(clipboard.getContents()));
 		assertTrue(clipboard.isSingleObject());
 		assertTrue(clipboard.getContents() instanceof ActivityNode);
-		assertEquals("MyActivity1", ((ActivityNode) clipboard.getContents()).getName());
+		assertEquals("MyActivity", ((ActivityNode) clipboard.getContents()).getName());
 		assertEquals(0, ((ActivityNode) clipboard.getContents()).getIncomingEdges().size());
 		assertEquals(0, ((ActivityNode) clipboard.getContents()).getOutgoingEdges().size());
 
-		factory.paste(clipboard, process);
-
+		Object pasted = factory.paste(clipboard, process);
+		assertNotNull(pasted);
+		assertTrue(pasted instanceof ActivityNode);
 		System.out.println(debug(process));
 		assertEquals(4, process.getNodes().size());
-		ActivityNode newNode = (ActivityNode) process.getNodeNamed("MyActivity1");
+		assertTrue(((List<?>) process.getNodesNamed("MyActivity")).contains(pasted));
+		ActivityNode newNode = (ActivityNode) pasted;
 		assertEquals(0, newNode.getIncomingEdges().size());
 		assertEquals(0, newNode.getOutgoingEdges().size());
 
@@ -598,22 +605,31 @@ public class BasicTests extends TestCase {
 		assertTrue(((List) clipboard.getContents()).get(1) instanceof ActivityNode);
 		StartNode copiedStartNode = (StartNode) ((List) clipboard.getContents()).get(0);
 		ActivityNode copiedActivityNode = (ActivityNode) ((List) clipboard.getContents()).get(1);
-		assertEquals("Start1", copiedStartNode.getName());
-		assertEquals("MyActivity1", copiedActivityNode.getName());
+		assertEquals("Start", copiedStartNode.getName());
+		assertEquals("MyActivity", copiedActivityNode.getName());
 		assertEquals(0, copiedStartNode.getIncomingEdges().size());
 		assertEquals(1, copiedStartNode.getOutgoingEdges().size());
 		assertEquals(1, copiedActivityNode.getIncomingEdges().size());
 		assertEquals(0, copiedActivityNode.getOutgoingEdges().size());
 		assertSame(copiedStartNode.getOutgoingEdges().get(0), copiedActivityNode.getIncomingEdges().get(0));
 
-		factory.paste(clipboard, process);
+		Object pasted = factory.paste(clipboard, process);
+		assertNotNull(pasted);
+		assertTrue(pasted instanceof List);
 
 		System.out.println(clipboard.debug());
 
 		System.out.println(debug(process));
 		assertEquals(5, process.getNodes().size());
-		ActivityNode newActivity = (ActivityNode) process.getNodeNamed("MyActivity1");
-		StartNode newStartNode = (StartNode) process.getNodeNamed("Start1");
+		ActivityNode newActivity = null;
+		StartNode newStartNode = null;
+		for (Object o : (List<?>) pasted) {
+			if (o instanceof ActivityNode) {
+				newActivity = (ActivityNode) o;
+			} else if (o instanceof StartNode) {
+				newStartNode = (StartNode) o;
+			}
+		}
 		assertEquals(1, newActivity.getIncomingEdges().size());
 		assertEquals(0, newActivity.getOutgoingEdges().size());
 		assertEquals(0, newStartNode.getIncomingEdges().size());
@@ -631,6 +647,58 @@ public class BasicTests extends TestCase {
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
+	}
+
+	public void testModify() {
+		FlexoProcess process = factory.newInstance(FlexoProcess.class);
+		assertFalse(process.isModified());
+
+		process.setFlexoID("234XX");
+		assertTrue(process.isModified());
+		process.setName("NewProcess");
+		assertTrue(process.isModified());
+		process.setFoo(8);
+		assertTrue(process.isModified());
+
+		serializeObject(process);
+		assertFalse(process.isModified());
+
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class);
+		assertFalse(activityNode.isModified());
+		// Here we verify that if we use an initializer, the object is marked as modified
+		ActivityNode activityNode2 = factory.newInstance(ActivityNode.class, "MyActivity");
+		assertTrue(activityNode2.isModified());
+
+		process.addToNodes(activityNode);
+		assertTrue(process.isModified());
+		serializeObject(process);
+		assertFalse(process.isModified());
+		assertFalse(activityNode.isModified());
+		activityNode.setName("Coucou");
+		assertTrue(activityNode.isModified());
+		assertTrue(process.isModified());// Here we verify the forward state
+		serializeObject(process);
+		assertFalse(activityNode.isModified());// Here we verify the synch forward state
+
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
+		process.addToNodes(startNode);
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
+		process.addToNodes(endNode);
+		serializeObject(process);
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		assertTrue(process.isModified());// Here we verify the forward state
+		assertTrue(activityNode.isModified());
+		activityNode.removeFromIncomingEdges(edge1);
+		process.removeFromNodes(activityNode);
+		serializeObject(process);
+
+		assertFalse(process.isModified());// Here we verify that process has been marked as not-modified (by the serialization mechanism)
+		assertTrue(activityNode.isModified()); // And that activity node is no longer synched with its previous container process.
+	}
+
+	public Document serializeObject(AccessibleProxyObject object) {
+		Document doc = serializer.serializeDocument(object, new ByteArrayOutputStream());
+		return doc;
 	}
 
 	public String debug(Object o) {

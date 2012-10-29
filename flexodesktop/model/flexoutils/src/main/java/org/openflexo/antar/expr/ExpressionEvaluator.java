@@ -22,7 +22,6 @@ package org.openflexo.antar.expr;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.FloatSymbolicConstant;
-import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 
 /**
  * This ExpressionTransformer is used to evaluate expressions
@@ -53,21 +52,21 @@ public class ExpressionEvaluator implements ExpressionTransformer {
 
 	private Expression transformBinaryOperatorExpression(BinaryOperatorExpression e) throws TransformException {
 		if ((e.getLeftArgument() instanceof Constant) && (e.getRightArgument() instanceof Constant)
-				&& (e.getLeftArgument() != ObjectSymbolicConstant.NULL) && (e.getRightArgument() != ObjectSymbolicConstant.NULL)) {
+		/*&& (e.getLeftArgument() != ObjectSymbolicConstant.NULL) && (e.getRightArgument() != ObjectSymbolicConstant.NULL)*/) {
 			Constant returned = e.getOperator().evaluate((Constant) e.getLeftArgument(), (Constant) e.getRightArgument());
 			return returned;
 		}
-		if ((e.getLeftArgument() instanceof Constant) && (e.getLeftArgument() != ObjectSymbolicConstant.NULL)) {
+		if ((e.getLeftArgument() instanceof Constant) /*&& (e.getLeftArgument() != ObjectSymbolicConstant.NULL)*/) {
 			return e.getOperator().evaluate((Constant) e.getLeftArgument(), e.getRightArgument());
 		}
-		if ((e.getRightArgument() instanceof Constant) && (e.getRightArgument() != ObjectSymbolicConstant.NULL)) {
+		if ((e.getRightArgument() instanceof Constant) /*&& (e.getRightArgument() != ObjectSymbolicConstant.NULL)*/) {
 			return e.getOperator().evaluate(e.getLeftArgument(), (Constant) e.getRightArgument());
 		}
 		return e;
 	}
 
 	private Expression transformUnaryOperatorExpression(UnaryOperatorExpression e) throws TransformException {
-		if (e.getArgument() instanceof Constant && (e.getArgument() != ObjectSymbolicConstant.NULL)) {
+		if (e.getArgument() instanceof Constant /*&& (e.getArgument() != ObjectSymbolicConstant.NULL)*/) {
 			Constant returned = e.getOperator().evaluate((Constant) e.getArgument());
 			return returned;
 		}

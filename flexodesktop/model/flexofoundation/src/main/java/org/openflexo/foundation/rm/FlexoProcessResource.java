@@ -19,19 +19,20 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.filter.AbstractFilter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.gen.FlexoProcessImageBuilder;
 import org.openflexo.foundation.rm.FlexoProject.FlexoIDMustBeUnique.DuplicateObjectIDIssue;
@@ -61,7 +62,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> implements Serializable {
+public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> {
 
 	protected static final Logger logger = Logger.getLogger(FlexoProcessResource.class.getPackage().getName());
 
@@ -1663,19 +1664,19 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			XMLMapping processMapping = new FlexoXMLMappings().getWKFMapping();
 
 			// 1. Convert all Next... to End...
-			Iterator nextElementIterator = document.getDescendants(new AbstractFilter() {
+			Iterator<Element> nextElementIterator = document.getDescendants(new ElementFilter() {
 				@Override
-				public boolean matches(Object obj) {
-					if (obj instanceof Element) {
-						Element el = (Element) obj;
-						return el.getName().startsWith("Next");
+				public Element filter(Object obj) {
+					Element el = super.filter(obj);
+					if (el != null && el.getName().startsWith("Next")) {
+						return el;
 					} else {
-						return false;
+						return null;
 					}
 				}
 			});
 			while (nextElementIterator.hasNext()) {
-				Element elem = (Element) nextElementIterator.next();
+				Element elem = nextElementIterator.next();
 				elem.setName("End" + elem.getName().substring("Next".length()));
 				count++;
 			}
@@ -1692,15 +1693,19 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			for (ModelEntity entity : eventEntities) {
 				eventXMLTags.add(entity.getDefaultXmlTag());
 			}
-			Iterator elementIterator = document.getDescendants(new AbstractFilter() {
+			Iterator<Element> elementIterator = document.getDescendants(new ElementFilter() {
 				@Override
-				public boolean matches(Object obj) {
-					return obj instanceof Element
-							&& (((Element) obj).getAttribute("id") != null || ((Element) obj).getAttribute("idref") != null);
+				public Element filter(Object obj) {
+					Element el = super.filter(obj);
+					if (el != null && (el.getAttribute("id") != null || el.getAttribute("idref") != null)) {
+						return el;
+					} else {
+						return null;
+					}
 				}
 			});
 			while (elementIterator.hasNext()) {
-				Element elem = (Element) elementIterator.next();
+				Element elem = elementIterator.next();
 				if (elem.getAttribute("id") != null) {
 					elementsWithID.put(elem.getAttributeValue("id"), elem);
 				} else {
@@ -1742,24 +1747,23 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 			count = 0;
 			// 3. Convert all external edges
-			Iterator externalEdgesIterator = document.getDescendants(new AbstractFilter() {
+			Iterator<Element> externalEdgesIterator = document.getDescendants(new ElementFilter() {
 				@Override
-				public boolean matches(Object obj) {
-					if (obj instanceof Element) {
-						Element el = (Element) obj;
-
-						return el.getName().endsWith("ExternalFlexoNodeMessageInEdge")
-								|| el.getName().endsWith("ExternalOperatorMessageInEdge")
-								|| el.getName().endsWith("ExternalFlexoNodeMessageOutEdge")
-								|| el.getName().endsWith("ExternalOperatorMessageOutEdge");
-
+				public Element filter(Object obj) {
+					Element el = super.filter(obj);
+					if (el != null
+							&& (el.getName().endsWith("ExternalFlexoNodeMessageInEdge")
+									|| el.getName().endsWith("ExternalOperatorMessageInEdge")
+									|| el.getName().endsWith("ExternalFlexoNodeMessageOutEdge") || el.getName().endsWith(
+									"ExternalOperatorMessageOutEdge"))) {
+						return el;
 					} else {
-						return false;
+						return null;
 					}
 				}
 			});
 			while (externalEdgesIterator.hasNext()) {
-				Element edge = (Element) externalEdgesIterator.next();
+				Element edge = externalEdgesIterator.next();
 				String suffix = edge.getName().endsWith("InEdge") ? "ExternalMessageInEdge" : "ExternalMessageOutEdge";
 				edge.setName(edge.getName().substring(0, edge.getName().lastIndexOf("External")) + suffix);
 				count++;
@@ -1770,22 +1774,21 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 			count = 0;
 			// 4. Convert all operator edges
-			Iterator operatorEdgesIterator = document.getDescendants(new AbstractFilter() {
+			Iterator<Element> operatorEdgesIterator = document.getDescendants(new ElementFilter() {
 				@Override
-				public boolean matches(Object obj) {
-					if (obj instanceof Element) {
-						Element el = (Element) obj;
-
-						return el.getName().endsWith("OperatorInEdge") || el.getName().endsWith("OperatorOutEdge")
-								|| el.getName().endsWith("OperatorInterEdge");
-
+				public Element filter(Object obj) {
+					Element el = super.filter(obj);
+					if (el != null
+							&& (el.getName().endsWith("OperatorInEdge") || el.getName().endsWith("OperatorOutEdge") || el.getName()
+									.endsWith("OperatorInterEdge"))) {
+						return el;
 					} else {
-						return false;
+						return null;
 					}
 				}
 			});
 			while (operatorEdgesIterator.hasNext()) {
-				Element edge = (Element) operatorEdgesIterator.next();
+				Element edge = operatorEdgesIterator.next();
 				edge.setName(edge.getName().substring(0, edge.getName().lastIndexOf("Operator")) + "TokenEdge");
 				count++;
 			}
@@ -1795,29 +1798,23 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 			// 5. Convert all pre-conditions wrongly attached
 			count = 0;
-			Iterator preConditionsIterator = document.getDescendants(new AbstractFilter() {
+			ElementFilter filter = new ElementFilter() {
 				@Override
-				public boolean matches(Object obj) {
-					if (obj instanceof Element) {
-						Element el = (Element) obj;
-
-						return el.getName().endsWith("FlexoPreCondition");
-
+				public Element filter(Object obj) {
+					Element el = super.filter(obj);
+					if (el != null && el.getName().startsWith("AttachedBegin")) {
+						return el;
 					} else {
-						return false;
+						return null;
 					}
 				}
-			});
+			};
+			Iterator<Element> preConditionsIterator = document.getDescendants(filter);
 			while (preConditionsIterator.hasNext()) {
-				Element pre = (Element) preConditionsIterator.next();
-				Iterator attached = pre.getDescendants(new AbstractFilter() {
-					@Override
-					public boolean matches(Object obj) {
-						return obj instanceof Element && ((Element) obj).getName().startsWith("AttachedBegin");
-					}
-				});
+				Element pre = preConditionsIterator.next();
+				Iterator<Element> attached = pre.getDescendants(filter);
 				while (attached.hasNext()) {
-					Element attachedBeginNode = (Element) attached.next();
+					Element attachedBeginNode = attached.next();
 					if (attachedBeginNode.getAttributeValue("idref") != null) {
 						Element e = elementsWithID.get(attachedBeginNode.getAttributeValue("idref"));
 						if (processMapping.entityWithXMLTag(e.getName()) != processMapping.entityWithXMLTag(attachedBeginNode.getName())) {
@@ -1865,21 +1862,20 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 		private void handlePreConditionAttachedToEvent(Element pre, Hashtable<String, Element> preAndEdgesWithID,
 				Hashtable<String, Vector<Element>> preAndEdgesWithIDRef) {
 			Element event = pre.getParentElement();
-			Iterator incomingEdgesIterator = pre.getDescendants(new AbstractFilter() {
+			Iterator<Element> incomingEdgesIterator = pre.getDescendants(new ElementFilter() {
 				@Override
-				public boolean matches(Object obj) {
-					if (obj instanceof Element) {
-						Element el = (Element) obj;
-
-						return el.getName().startsWith("Incoming");
+				public Element filter(Object obj) {
+					Element el = super.filter(obj);
+					if (el != null && el.getName().startsWith("Incoming")) {
+						return el;
 					} else {
-						return false;
+						return null;
 					}
 				}
 			});
-			Vector<Element> incomingEdges = new Vector<Element>();
+			List<Element> incomingEdges = new ArrayList<Element>();
 			while (incomingEdgesIterator.hasNext()) {
-				Element edge = (Element) incomingEdgesIterator.next();
+				Element edge = incomingEdgesIterator.next();
 				incomingEdges.add(edge);
 			}
 			for (Element edge : incomingEdges) {
@@ -1936,7 +1932,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		ValidationReport report = getProject().validate();
-		for (ValidationIssue issue : report.getValidationIssues()) {
+		for (ValidationIssue<?, ?> issue : report.getValidationIssues()) {
 			if (issue instanceof DuplicateObjectIDIssue) {
 				return true;
 			}
@@ -1977,44 +1973,44 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			// positionner correctement le trigger (en fonction du sous-type)
 			// attention au mailOut, Timer et TimeOut qui avaient des attributs spécifiques a conserver !
 
-			Iterator it = document.getDescendants(new ElementNameFilter("DefaultStartEvent"));
+			Iterator<Element> it = document.getDescendants(new ElementNameFilter("DefaultStartEvent"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Start");
 				el.setAttribute("trigger", TriggerType.NONE.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("DefaultEndEvent"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "End");
 				el.setAttribute("trigger", TriggerType.NONE.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("Timer"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Start");
 				el.setAttribute("trigger", TriggerType.TIMER.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("TimeOut"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Intermediate");
 				el.setAttribute("trigger", TriggerType.TIMER.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("MailIn"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Intermediate");
 				el.setAttribute("trigger", TriggerType.MESSAGE.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("MailOut"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Intermediate");
 				el.setAttribute("isCatching", "false");
@@ -2022,63 +2018,63 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			}
 			it = document.getDescendants(new ElementNameFilter("FaultHandler"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Intermediate");
 				el.setAttribute("trigger", TriggerType.ERROR.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("FaultThrower"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "End");
 				el.setAttribute("trigger", TriggerType.ERROR.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("CancelThrower"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "End");
 				el.setAttribute("trigger", TriggerType.CANCEL.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("CancelHandler"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Intermediate");
 				el.setAttribute("trigger", TriggerType.CANCEL.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("CheckPoint"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Intermediate");
 				el.setAttribute("trigger", TriggerType.NONE.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("Revert"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Intermediate");
 				el.setAttribute("trigger", TriggerType.NONE.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("CompensateThrower"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "End");
 				el.setAttribute("trigger", TriggerType.COMPENSATION.name());
 			}
 			it = document.getDescendants(new ElementNameFilter("CompensateHandler"));
 			while (it.hasNext()) {
-				Element el = (Element) it.next();
+				Element el = it.next();
 				el.setName("EventNode");
 				el.setAttribute("eventType", "Intermediate");
 				el.setAttribute("trigger", TriggerType.COMPENSATION.name());
 			}
 		}
 
-		private class ElementNameFilter extends AbstractFilter {
+		private class ElementNameFilter extends ElementFilter {
 			private final String elname;
 
 			public ElementNameFilter(String elementName) {
@@ -2087,11 +2083,12 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			}
 
 			@Override
-			public boolean matches(Object obj) {
-				if (obj instanceof Element) {
-					return ((Element) obj).getName().equals(elname);
+			public Element filter(Object obj) {
+				Element el = super.filter(obj);
+				if (obj != null && el.getName().equals(elname)) {
+					return el;
 				} else {
-					return false;
+					return null;
 				}
 			}
 		}

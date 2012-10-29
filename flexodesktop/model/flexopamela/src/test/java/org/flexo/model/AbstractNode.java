@@ -5,8 +5,6 @@ import java.util.List;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
-import org.openflexo.model.annotations.ClosureCondition;
-import org.openflexo.model.annotations.Deleter;
 import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -27,64 +25,70 @@ public interface AbstractNode extends WKFObject {
 	public static final String MASTER_ANNOTATION = "masterAnnotation";
 	public static final String OTHER_ANNOTATIONS = "otherAnnotations";
 
+	// Like an empty constructor. We don't want to force to use the one-arg init method
+	@Initializer
+	public AbstractNode init();
+
+	// Conveninent method to automatically create an abstract node with a name
 	@Initializer
 	public AbstractNode init(@Parameter(FlexoModelObject.NAME) String name);
 
 	@Override
-	@Deleter(embedded = { OUTGOING_EDGES, INCOMING_EDGES, MASTER_ANNOTATION, OTHER_ANNOTATIONS })
 	public void delete();
 
 	@Getter(value = OUTGOING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.START_NODE)
 	@XMLElement(context = "Outgoing", primary = true)
 	@CloningStrategy(StrategyType.CLONE)
-	@Embedded({ @ClosureCondition(id = Edge.END_NODE) })
+	@Embedded(closureConditions = { Edge.END_NODE })
 	public List<Edge> getOutgoingEdges();
 
-	@Setter(value = OUTGOING_EDGES)
+	@Setter(OUTGOING_EDGES)
 	public void setOutgoingEdges(List<Edge> edges);
 
-	@Adder(id = OUTGOING_EDGES)
+	@Adder(OUTGOING_EDGES)
 	public void addToOutgoingEdges(Edge edge);
 
-	@Remover(id = OUTGOING_EDGES)
+	@Remover(OUTGOING_EDGES)
 	public void removeFromOutgoingEdges(Edge edge);
 
 	@Getter(value = INCOMING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.END_NODE)
 	@XMLElement(context = "Incoming")
-	@Embedded({ @ClosureCondition(id = Edge.START_NODE) })
+	@Embedded(closureConditions = { Edge.START_NODE })
 	@CloningStrategy(StrategyType.CLONE)
 	public List<Edge> getIncomingEdges();
 
-	@Setter(value = INCOMING_EDGES)
+	@Setter(INCOMING_EDGES)
 	public void setIncomingEdges(List<Edge> edges);
 
-	@Adder(id = INCOMING_EDGES)
+	@Adder(INCOMING_EDGES)
 	public void addToIncomingEdges(Edge edge);
 
-	@Remover(id = INCOMING_EDGES)
+	@Remover(INCOMING_EDGES)
 	public void removeFromIncomingEdges(Edge edge);
 
 	@Getter(value = PROCESS, inverse = FlexoProcess.NODES)
 	@Override
 	public FlexoProcess getProcess();
 
-	@Getter(value = MASTER_ANNOTATION)
+	@Getter(MASTER_ANNOTATION)
 	@XMLAttribute
+	@Embedded
 	public WKFAnnotation getMasterAnnotation();
 
-	@Setter(value = MASTER_ANNOTATION)
+	@Setter(MASTER_ANNOTATION)
 	public void setMasterAnnotation(WKFAnnotation a);
 
 	@Getter(value = OTHER_ANNOTATIONS, cardinality = Cardinality.LIST)
 	@XMLElement()
+	@Embedded
 	public List<WKFAnnotation> getOtherAnnotations();
 
-	@Setter(value = OTHER_ANNOTATIONS)
+	@Setter(OTHER_ANNOTATIONS)
 	public void setOtherAnnotations(List<WKFAnnotation> as);
 
-	@Adder(id = OTHER_ANNOTATIONS)
+	@Adder(OTHER_ANNOTATIONS)
 	public void addToOtherAnnotations(WKFAnnotation a);
 
-	@Remover(id = OTHER_ANNOTATIONS)
+	@Remover(OTHER_ANNOTATIONS)
 	public void removeFromOtherAnnotations(WKFAnnotation a);
 }

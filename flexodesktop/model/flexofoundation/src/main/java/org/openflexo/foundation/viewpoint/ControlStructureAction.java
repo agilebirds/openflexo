@@ -243,6 +243,33 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 	}
 
 	@Override
+	public CloneShape createCloneShapeAction() {
+		CloneShape newAction = new CloneShape(null);
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
+	public CloneConnector createCloneConnectorAction() {
+		CloneConnector newAction = new CloneConnector(null);
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
+	public CloneIndividual createCloneIndividualAction() {
+		CloneIndividual newAction = new CloneIndividual(null);
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
 	public DeleteAction createDeleteAction() {
 		DeleteAction newAction = new DeleteAction(null);
 		addToActions(newAction);

@@ -22,4 +22,18 @@ public interface CloneableProxyObject {
 	 */
 	public Object cloneObject(Object... context);
 
+	/**
+	 * Returns true when <code>this</code> object is currently being created based on another object by using the "cloning" technique.
+	 * 
+	 * @return true if this object is currently being creating by cloning
+	 */
+	public boolean isCreatedByCloning();
+
+	/**
+	 * Returns true when <code>this</code> object is currently being cloned to create another object based on <code>this</code> object
+	 * 
+	 * @return true when <code>this</code> object is currently being cloned to create another object based on <code>this</code> object
+	 */
+	public boolean isBeingCloned();
+
 }
