@@ -47,6 +47,8 @@ import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.kvc.KVCObject;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
@@ -58,6 +60,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @param <O>
  *            the represented type
  */
+@ModelEntity
+@ImplementationClass(ShapeGraphicalRepresentationImpl.class)
 public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
 
 	public static enum ShapeParameters implements GRParameter {

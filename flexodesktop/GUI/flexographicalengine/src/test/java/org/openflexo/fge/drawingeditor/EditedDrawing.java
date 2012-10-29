@@ -24,14 +24,25 @@ import java.util.logging.Logger;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.factory.ModelDefinitionException;
 
 public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
+
+	private DrawingEditorFactory factory;
 
 	private MyDrawingController controller;
 
 	public EditedDrawing(MyDrawing drawing) {
 		super(drawing);
+
+		try {
+			factory = new DrawingEditorFactory();
+			System.out.println("factory: " + factory.debug());
+		} catch (ModelDefinitionException e1) {
+			e1.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -64,5 +75,9 @@ public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 
 	@Override
 	protected void buildGraphicalObjectsHierarchy() {
+	}
+
+	public DrawingEditorFactory getFactory() {
+		return factory;
 	}
 }

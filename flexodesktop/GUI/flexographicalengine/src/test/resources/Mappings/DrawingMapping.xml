@@ -24,15 +24,15 @@
   	 <property name="graphicalRepresentation" xmlTag="MyConnectorGraphicalRepresentation"/>
   </entity>
 
-  <entity name="org.openflexo.fge.drawingeditor.MyDrawingGraphicalRepresentation" xmlTag="MyDrawingGraphicalRepresentation">
+  <entity name="org.openflexo.fge.drawingeditor.MyDrawingGraphicalRepresentationImpl" xmlTag="MyDrawingGraphicalRepresentation">
      <description>Drawing graphical representation</description>
   </entity>
 
-  <entity name="org.openflexo.fge.drawingeditor.MyShapeGraphicalRepresentation" xmlTag="MyShapeGraphicalRepresentation" contexts="Start,End">
+  <entity name="org.openflexo.fge.drawingeditor.MyShapeGraphicalRepresentationImpl" xmlTag="MyShapeGraphicalRepresentation" contexts="Start,End">
      <description>Shape graphical representation</description>
   </entity>
 
-  <entity name="org.openflexo.fge.drawingeditor.MyConnectorGraphicalRepresentation" xmlTag="MyConnectorGraphicalRepresentation">
+  <entity name="org.openflexo.fge.drawingeditor.MyConnectorGraphicalRepresentationImpl" xmlTag="MyConnectorGraphicalRepresentation">
      <description>Connector graphical representation</description>
   </entity>
 

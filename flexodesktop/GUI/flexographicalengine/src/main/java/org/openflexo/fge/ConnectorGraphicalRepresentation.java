@@ -38,6 +38,8 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.view.ConnectorView;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
 /**
  * Represents a connector linking two shapes in a diagram<br>
@@ -48,6 +50,8 @@ import org.openflexo.fge.view.ConnectorView;
  * @param <O>
  *            the represented type
  */
+@ModelEntity
+@ImplementationClass(ConnectorGraphicalRepresentationImpl.class)
 public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
 
 	public static enum ConnectorParameters implements GRParameter {

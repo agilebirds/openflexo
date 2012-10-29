@@ -42,6 +42,7 @@ import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
 
 public class MyDrawingController extends DrawingController<EditedDrawing> {
+
 	private JPopupMenu contextualMenu;
 	private GraphicalRepresentation<?> contextualMenuInvoker;
 	private Point contextualMenuClickedPoint;
@@ -50,6 +51,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	public MyDrawingController(final EditedDrawing aDrawing) {
 		super(aDrawing);
+
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
 			public void performedDrawNewShape(ShapeGraphicalRepresentation<?> graphicalRepresentation,

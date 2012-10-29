@@ -64,7 +64,8 @@ public class MyDrawing extends MyDrawingElement<MyDrawing, MyDrawingGraphicalRep
 
 	private MyDrawing() {
 		super(null);
-		setGraphicalRepresentation(new MyDrawingGraphicalRepresentation(editedDrawing));
+
+		setGraphicalRepresentation(editedDrawing.getFactory().makeNewDrawing(editedDrawing));
 	}
 
 	// Called for LOAD

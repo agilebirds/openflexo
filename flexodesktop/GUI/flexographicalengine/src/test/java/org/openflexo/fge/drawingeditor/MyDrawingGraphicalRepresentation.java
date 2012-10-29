@@ -19,37 +19,12 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
-import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
-import org.openflexo.xmlcode.XMLSerializable;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
-public class MyDrawingGraphicalRepresentation extends DrawingGraphicalRepresentationImpl<MyDrawing> implements XMLSerializable {
+@ModelEntity
+@ImplementationClass(MyDrawingGraphicalRepresentationImpl.class)
+public interface MyDrawingGraphicalRepresentation extends DrawingGraphicalRepresentation<MyDrawing> {
 
-	// Called for LOAD
-	public MyDrawingGraphicalRepresentation(DrawingBuilder builder) {
-		this(builder.drawing.getEditedDrawing());
-		initializeDeserialization();
-	}
-
-	// Called for NEW
-	public MyDrawingGraphicalRepresentation(EditedDrawing editedDrawing) {
-		super(editedDrawing);
-
-		/*MouseClickControl showContextualMenu 
-		= MouseClickControl.makeMouseClickControl("Show contextual menu", MouseButton.RIGHT, 1,
-				new CustomClickControlAction() {
-			@Override
-			public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, java.awt.event.MouseEvent event)
-			{
-				FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
-				Point newPoint = SwingUtilities.convertPoint(
-						(Component)event.getSource(), 
-						event.getPoint(), 
-						(Component)view);
-				((MyDrawingController)controller).showContextualMenu(graphicalRepresentation,view,newPoint);
-				return false;
-			}
-		});*/
-		addToMouseClickControls(new ShowContextualMenuControl());
-	}
 }

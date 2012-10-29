@@ -31,7 +31,20 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
+/**
+ * Represents the diagram as the top-level graphical representation <br>
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ *            the represented type
+ */
+@ModelEntity
+@ImplementationClass(DrawingGraphicalRepresentationImpl.class)
 public interface DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M> {
 
 	public static enum DrawingParameters implements GRParameter {

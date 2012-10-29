@@ -19,78 +19,17 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-import java.util.logging.Logger;
-
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
-import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.fge.view.ShapeView;
-import org.openflexo.xmlcode.XMLSerializable;
+import org.openflexo.fge.drawingeditor.MyShapeGraphicalRepresentationImpl.MyShapeView;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
-public class MyShapeGraphicalRepresentation extends ShapeGraphicalRepresentationImpl<MyShape> implements XMLSerializable {
-	private static final Logger logger = Logger.getLogger(MyShapeGraphicalRepresentation.class.getPackage().getName());
-
-	// Called for LOAD
-	public MyShapeGraphicalRepresentation(DrawingBuilder builder) {
-		this(ShapeType.RECTANGLE, null, builder.drawing.getEditedDrawing());
-		initializeDeserialization();
-	}
-
-	public MyShapeGraphicalRepresentation(ShapeType shapeType, MyShape aDrawable, EditedDrawing aDrawing) {
-		super(shapeType, aDrawable, aDrawing);
-		addToMouseClickControls(new ShowContextualMenuControl());
-		addToMouseDragControls(new DrawEdgeControl());
-	}
-
-	public MyShapeGraphicalRepresentation(ShapeGraphicalRepresentation<?> aGR, MyShape aDrawable, EditedDrawing aDrawing) {
-		super(aGR, aDrawable, aDrawing);
-		setIsFocusable(true);
-		setIsSelectable(true);
-		setIsReadOnly(false);
-		setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
-		addToMouseClickControls(new ShowContextualMenuControl());
-		addToMouseDragControls(new DrawEdgeControl());
-	}
+@ModelEntity
+@ImplementationClass(MyShapeGraphicalRepresentationImpl.class)
+public interface MyShapeGraphicalRepresentation extends ShapeGraphicalRepresentation<MyShape> {
 
 	@Override
-	public MyShapeView makeShapeView(DrawingController<?> controller) {
-		return new MyShapeView(this, controller);
-	}
-
-	@SuppressWarnings("serial")
-	public class MyShapeView extends ShapeView<MyShape> {
-		public MyShapeView(MyShapeGraphicalRepresentation aGraphicalRepresentation, DrawingController<?> controller) {
-			super(aGraphicalRepresentation, controller);
-		}
-
-		@Override
-		public MyDrawingController getController() {
-			return (MyDrawingController) super.getController();
-		}
-
-		@Override
-		public MyDrawingView getDrawingView() {
-			return (MyDrawingView) super.getDrawingView();
-		}
-
-		/*	@Override
-			public void update(Observable o, Object aNotification) {
-				super.update(o, aNotification);
-				if (aNotification instanceof FGENotification) {
-					FGENotification notification = (FGENotification)aNotification;
-					logger.info("notification="+notification);
-				}
-			}*/
-
-	}
-
-	/*@Override
-	public void setBackground(BackgroundStyle aBackground) 
-	{
-		super.setBackground(aBackground);
-		logger.info("********** setBackground with "+aBackground);
-	}*/
+	public abstract MyShapeView makeShapeView(DrawingController<?> controller);
 
 }

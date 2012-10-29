@@ -34,7 +34,20 @@ import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
+/**
+ * Represents a geometric object in a diagram<br>
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ *            the represented type
+ */
+@ModelEntity
+@ImplementationClass(GeometricGraphicalRepresentationImpl.class)
 public interface GeometricGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
 
 	public static enum GeometricParameters implements GRParameter {

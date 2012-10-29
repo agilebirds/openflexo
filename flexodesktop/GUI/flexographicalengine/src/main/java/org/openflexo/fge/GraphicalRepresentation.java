@@ -211,14 +211,14 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	@Setter(value = IDENTIFIER)
 	public abstract void setIdentifier(String identifier);
 
-	@Getter(value = LAYER)
+	@Getter(value = LAYER, defaultValue = "0")
 	@XMLAttribute
 	public abstract int getLayer();
 
 	@Setter(value = LAYER)
 	public abstract void setLayer(int layer);
 
-	@Getter(value = HAS_TEXT)
+	@Getter(value = HAS_TEXT, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getHasText();
 
@@ -236,21 +236,21 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 
 	public abstract void setMultilineText(String text);
 
-	@Getter(value = IS_MULTILINE_ALLOWED)
+	@Getter(value = IS_MULTILINE_ALLOWED, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getIsMultilineAllowed();
 
 	@Setter(value = IS_MULTILINE_ALLOWED)
 	public abstract void setIsMultilineAllowed(boolean multilineAllowed);
 
-	@Getter(value = LINE_WRAP)
+	@Getter(value = LINE_WRAP, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getLineWrap();
 
 	@Setter(value = LINE_WRAP)
 	public abstract void setLineWrap(boolean lineWrap);
 
-	@Getter(value = CONTINUOUS_TEXT_EDITING)
+	@Getter(value = CONTINUOUS_TEXT_EDITING, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getContinuousTextEditing();
 
@@ -264,98 +264,98 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	@Setter(value = TEXT_STYLE)
 	public abstract void setTextStyle(TextStyle aTextStyle);
 
-	@Getter(value = ABSOLUTE_TEXT_X)
+	@Getter(value = ABSOLUTE_TEXT_X, defaultValue = "0")
 	@XMLAttribute
 	public abstract double getAbsoluteTextX();
 
 	@Setter(value = ABSOLUTE_TEXT_X)
 	public abstract void setAbsoluteTextX(double absoluteTextX);
 
-	@Getter(value = ABSOLUTE_TEXT_Y)
+	@Getter(value = ABSOLUTE_TEXT_Y, defaultValue = "0")
 	@XMLAttribute
 	public abstract double getAbsoluteTextY();
 
 	@Setter(value = ABSOLUTE_TEXT_Y)
 	public abstract void setAbsoluteTextY(double absoluteTextY);
 
-	@Getter(value = HORIZONTAL_TEXT_ALIGNEMENT)
+	@Getter(value = HORIZONTAL_TEXT_ALIGNEMENT, defaultValue = "CENTER")
 	@XMLAttribute
 	public abstract HorizontalTextAlignment getHorizontalTextAlignment();
 
 	@Setter(value = HORIZONTAL_TEXT_ALIGNEMENT)
 	public abstract void setHorizontalTextAlignment(HorizontalTextAlignment horizontalTextAlignment);
 
-	@Getter(value = VERTICAL_TEXT_ALIGNEMENT)
+	@Getter(value = VERTICAL_TEXT_ALIGNEMENT, defaultValue = "MIDDLE")
 	@XMLAttribute
 	public abstract VerticalTextAlignment getVerticalTextAlignment();
 
 	@Setter(value = VERTICAL_TEXT_ALIGNEMENT)
 	public abstract void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment);
 
-	@Getter(value = PARAGRAPH_ALIGNMENT)
+	@Getter(value = PARAGRAPH_ALIGNMENT, defaultValue = "CENTER")
 	@XMLAttribute
 	public abstract ParagraphAlignment getParagraphAlignment();
 
 	@Setter(value = PARAGRAPH_ALIGNMENT)
 	public abstract void setParagraphAlignment(ParagraphAlignment paragraphAlignment);
 
-	@Getter(value = IS_SELECTABLE)
+	@Getter(value = IS_SELECTABLE, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getIsSelectable();
 
 	@Setter(value = IS_SELECTABLE)
 	public abstract void setIsSelectable(boolean isSelectable);
 
-	@Getter(value = IS_FOCUSABLE)
+	@Getter(value = IS_FOCUSABLE, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getIsFocusable();
 
 	@Setter(value = IS_FOCUSABLE)
 	public abstract void setIsFocusable(boolean isFocusable);
 
-	@Getter(value = IS_SELECTED)
+	@Getter(value = IS_SELECTED, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getIsSelected();
 
 	@Setter(value = IS_SELECTED)
 	public abstract void setIsSelected(boolean aFlag);
 
-	@Getter(value = IS_FOCUSED)
+	@Getter(value = IS_FOCUSED, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getIsFocused();
 
 	@Setter(value = IS_FOCUSED)
 	public abstract void setIsFocused(boolean aFlag);
 
-	@Getter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED)
+	@Getter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getDrawControlPointsWhenFocused();
 
 	@Setter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED)
 	public abstract void setDrawControlPointsWhenFocused(boolean aFlag);
 
-	@Getter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED)
+	@Getter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getDrawControlPointsWhenSelected();
 
 	@Setter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED)
 	public abstract void setDrawControlPointsWhenSelected(boolean aFlag);
 
-	@Getter(value = IS_READ_ONLY)
+	@Getter(value = IS_READ_ONLY, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getIsReadOnly();
 
 	@Setter(value = IS_READ_ONLY)
 	public abstract void setIsReadOnly(boolean readOnly);
 
-	@Getter(value = IS_LABEL_EDITABLE)
+	@Getter(value = IS_LABEL_EDITABLE, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getIsLabelEditable();
 
 	@Setter(value = IS_LABEL_EDITABLE)
 	public abstract void setIsLabelEditable(boolean labelEditable);
 
-	@Getter(value = IS_VISIBLE)
+	@Getter(value = IS_VISIBLE, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getIsVisible();
 

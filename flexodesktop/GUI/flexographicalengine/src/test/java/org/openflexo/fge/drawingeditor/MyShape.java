@@ -37,7 +37,7 @@ public class MyShape extends MyDrawingElement<MyShape, MyShapeGraphicalRepresent
 	// Called for NEW
 	public MyShape(ShapeType shape, FGEPoint p, EditedDrawing drawing) {
 		super(drawing.getModel());
-		MyShapeGraphicalRepresentation gr = new MyShapeGraphicalRepresentation(shape, this, drawing);
+		MyShapeGraphicalRepresentation gr = drawing.getFactory().makeNewShape(shape, this, drawing);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setWidth(80);
 			gr.setHeight(80);
@@ -52,7 +52,7 @@ public class MyShape extends MyDrawingElement<MyShape, MyShapeGraphicalRepresent
 
 	public MyShape(ShapeGraphicalRepresentation<?> aGR, FGEPoint p, EditedDrawing drawing) {
 		super(drawing.getModel());
-		MyShapeGraphicalRepresentation gr = new MyShapeGraphicalRepresentation(aGR, this, drawing);
+		MyShapeGraphicalRepresentation gr = drawing.getFactory().makeNewShape(aGR, this, drawing);
 		/*if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setWidth(80);
 			gr.setHeight(80);

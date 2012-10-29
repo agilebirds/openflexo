@@ -34,9 +34,11 @@ public class MyConnector extends MyDrawingElement<MyConnector, MyConnectorGraphi
 	// Called for NEW
 	public MyConnector(MyShape from, MyShape to, EditedDrawing drawing) {
 		super(drawing.getModel());
-		gr = new MyConnectorGraphicalRepresentation(ConnectorType.LINE,
+
+		gr = drawing.getFactory().makeNewConnector(ConnectorType.LINE,
 				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(from),
 				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(to), this, drawing);
+
 		setGraphicalRepresentation(gr);
 	}
 
