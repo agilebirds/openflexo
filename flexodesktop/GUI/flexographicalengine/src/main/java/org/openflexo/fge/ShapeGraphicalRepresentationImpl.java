@@ -151,7 +151,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	// Never use this constructor (used during deserialization only)
 	public ShapeGraphicalRepresentationImpl() {
-		this(null, null);
+		this((ShapeType) null, null, null);
 	}
 
 	private ShapeGraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
@@ -171,28 +171,17 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 		graphics = new FGEShapeGraphics(this);
 
-		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		} else {
-			addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		}
-		addToMouseDragControls(MouseDragControl.makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
-		addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
-		addToMouseDragControls(MouseDragControl.makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
-				MouseDragControlActionType.RECTANGLE_SELECTING));
+		init();
 	}
 
 	public ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation<?> aGR, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 
 		setsWith(aGR);
-		// setShape(aGR.getShape().clone());
-		// getShape().setGraphicalRepresentation(this);
-		// getShape().rebuildControlPoints();
+		init();
+	}
+
+	private void init() {
 
 		graphics = new FGEShapeGraphics(this);
 

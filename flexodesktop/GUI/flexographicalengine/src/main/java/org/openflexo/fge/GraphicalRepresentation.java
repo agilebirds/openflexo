@@ -45,15 +45,11 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.kvc.KeyValueCoding;
-import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
-import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -257,11 +253,11 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	@Setter(value = CONTINUOUS_TEXT_EDITING)
 	public abstract void setContinuousTextEditing(boolean continuousTextEditing);
 
-	@Getter(value = TEXT_STYLE)
-	@XMLElement
+	// @Getter(value = TEXT_STYLE)
+	// @XMLElement
 	public abstract TextStyle getTextStyle();
 
-	@Setter(value = TEXT_STYLE)
+	// @Setter(value = TEXT_STYLE)
 	public abstract void setTextStyle(TextStyle aTextStyle);
 
 	@Getter(value = ABSOLUTE_TEXT_X, defaultValue = "0")
@@ -362,34 +358,34 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	@Setter(value = IS_VISIBLE)
 	public abstract void setIsVisible(boolean isVisible);
 
-	@Getter(value = MOUSE_CLICK_CONTROLS, cardinality = Cardinality.LIST)
-	@XMLElement
+	// @Getter(value = MOUSE_CLICK_CONTROLS, cardinality = Cardinality.LIST)
+	// @XMLElement
 	public abstract Vector<MouseClickControl> getMouseClickControls();
 
-	@Setter(value = MOUSE_CLICK_CONTROLS)
+	// @Setter(value = MOUSE_CLICK_CONTROLS)
 	public abstract void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
 
-	@Adder(value = MOUSE_CLICK_CONTROLS)
+	// @Adder(value = MOUSE_CLICK_CONTROLS)
 	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl);
 
 	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
 
-	@Remover(value = MOUSE_CLICK_CONTROLS)
+	// @Remover(value = MOUSE_CLICK_CONTROLS)
 	public abstract void removeFromMouseClickControls(MouseClickControl mouseClickControl);
 
-	@Getter(value = MOUSE_DRAG_CONTROLS, cardinality = Cardinality.LIST)
-	@XMLElement
+	// @Getter(value = MOUSE_DRAG_CONTROLS, cardinality = Cardinality.LIST)
+	// @XMLElement
 	public abstract Vector<MouseDragControl> getMouseDragControls();
 
-	@Setter(value = MOUSE_DRAG_CONTROLS)
+	// @Setter(value = MOUSE_DRAG_CONTROLS)
 	public abstract void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
 
-	@Adder(value = MOUSE_DRAG_CONTROLS)
+	// @Adder(value = MOUSE_DRAG_CONTROLS)
 	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl);
 
 	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
 
-	@Remover(value = MOUSE_DRAG_CONTROLS)
+	// @Remover(value = MOUSE_DRAG_CONTROLS)
 	public abstract void removeFromMouseDragControls(MouseDragControl mouseDragControl);
 
 	@Getter(value = TOOLTIP_TEXT)
@@ -399,17 +395,17 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	@Setter(value = TOOLTIP_TEXT)
 	public abstract void setToolTipText(String tooltipText);
 
-	@Getter(value = VARIABLES, cardinality = Cardinality.LIST)
-	@XMLElement
+	// @Getter(value = VARIABLES, cardinality = Cardinality.LIST)
+	// @XMLElement
 	public abstract Vector<GRVariable> getVariables();
 
-	@Setter(value = VARIABLES)
+	// @Setter(value = VARIABLES)
 	public abstract void setVariables(Vector<GRVariable> variables);
 
-	@Adder(value = VARIABLES)
+	// @Adder(value = VARIABLES)
 	public abstract void addToVariables(GRVariable v);
 
-	@Remover(value = VARIABLES)
+	// @Remover(value = VARIABLES)
 	public abstract void removeFromVariables(GRVariable v);
 
 	// *******************************************************************************

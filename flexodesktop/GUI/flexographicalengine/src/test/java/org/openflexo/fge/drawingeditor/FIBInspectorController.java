@@ -186,7 +186,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 
 	protected FIBInspector inspectorForObject(Object object) {
 		if (object == null) {
-			return null;
+			return null;sd
 		}
 		return inspectorForClass(object.getClass());
 	}
