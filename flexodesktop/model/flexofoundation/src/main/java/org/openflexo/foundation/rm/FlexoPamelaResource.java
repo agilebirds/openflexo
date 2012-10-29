@@ -14,11 +14,11 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.model.factory.XMLDeserializer;
+import org.openflexo.model.factory.XMLSerializer;
 import org.openflexo.model.xml.DefaultStringEncoder;
 import org.openflexo.model.xml.InvalidDataException;
 import org.openflexo.model.xml.InvalidXMLDataException;
-import org.openflexo.model.xml.XMLDeserializer;
-import org.openflexo.model.xml.XMLSerializer;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class FlexoPamelaResource<SRD extends StorageResourceData> extends FlexoStorageResource<SRD> {

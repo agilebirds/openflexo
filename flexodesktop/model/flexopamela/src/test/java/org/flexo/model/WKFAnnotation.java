@@ -15,11 +15,13 @@ public interface WKFAnnotation extends FlexoModelObject {
 
 	public static final String TEXT = "text";
 
+	@Override
 	@Initializer
-	public void init();
+	public WKFAnnotation init();
 
+	@Override
 	@Initializer
-	public void init(@Parameter(TEXT) String text);
+	public WKFAnnotation init(@Parameter(TEXT) String text);
 
 	@Getter(TEXT)
 	public String getText();

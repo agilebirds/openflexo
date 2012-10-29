@@ -253,4 +253,8 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 */
 	public void setModified(boolean modified);
 
+	/**
+	 * Returns the model factory that created this object
+	 */
+	public ModelFactory getModelFactory();
 }

@@ -27,14 +27,15 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.exceptions.UnitializedEntityException;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.Clipboard;
 import org.openflexo.model.factory.EmbeddingType;
 import org.openflexo.model.factory.ModelEntity;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.model.factory.XMLDeserializer;
+import org.openflexo.model.factory.XMLSerializer;
 import org.openflexo.model.xml.InvalidXMLDataException;
-import org.openflexo.model.xml.XMLDeserializer;
-import org.openflexo.model.xml.XMLSerializer;
 
 public class BasicTests extends TestCase {
 
@@ -95,7 +96,7 @@ public class BasicTests extends TestCase {
 		assertNotNull(modelObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
 		assertNotNull(processEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
 		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
-		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID).getSetter());
+		assertNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID).getSetter());
 
 		assertNotNull(wkfObjectEntity.getModelProperty(WKFObject.PROCESS));
 		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
@@ -107,10 +108,15 @@ public class BasicTests extends TestCase {
 
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		assertTrue(process instanceof FlexoProcess);
-
+		try {
+			process.getName();
+			fail("getName() should not be invokable until init() has been called");
+		} catch (UnitializedEntityException e) {
+			// OK this on purpose.
+		}
+		process.init("234XX");
 		System.out.println("process=" + process);
 		System.out.println("Id=" + process.getFlexoID());
-		process.setFlexoID("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 		assertEquals("NewProcess", process.getName());
@@ -118,6 +124,7 @@ public class BasicTests extends TestCase {
 		assertEquals(8, process.getFoo());
 
 		ActivityNode activityNode = factory.newInstance(ActivityNode.class);
+		activityNode.init();
 		assertTrue(activityNode instanceof ActivityNode);
 		assertEquals("0000", activityNode.getFlexoID());
 
@@ -135,6 +142,7 @@ public class BasicTests extends TestCase {
 		process.addToNodes(startNode);
 
 		EndNode endNode = factory.newInstance(EndNode.class);
+		endNode.init();
 		endNode.setName("End");
 		process.addToNodes(endNode);
 
@@ -172,7 +180,7 @@ public class BasicTests extends TestCase {
 		Document doc;
 
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
-		process.setFlexoID("234XX");
+		process.init("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
@@ -185,6 +193,7 @@ public class BasicTests extends TestCase {
 		assertEquals("Start", startNode.getName());
 
 		EndNode endNode = factory.newInstance(EndNode.class, "End");
+		endNode.init();
 		process.addToNodes(endNode);
 		assertEquals("End", endNode.getName());
 
@@ -346,7 +355,7 @@ public class BasicTests extends TestCase {
 	 */
 	public void test6() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
-		process.setFlexoID("234XX");
+		process.init("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
@@ -399,7 +408,7 @@ public class BasicTests extends TestCase {
 	 */
 	public void test7() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
-		process.setFlexoID("234XX");
+		process.init("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
@@ -469,7 +478,7 @@ public class BasicTests extends TestCase {
 	 */
 	public void test8() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
-		process.setFlexoID("234XX");
+		process.init("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
@@ -529,7 +538,7 @@ public class BasicTests extends TestCase {
 	 */
 	public void test9() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
-		process.setFlexoID("234XX");
+		process.init("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
@@ -582,7 +591,7 @@ public class BasicTests extends TestCase {
 	 */
 	public void test10() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
-		process.setFlexoID("234XX");
+		process.init("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
@@ -651,9 +660,8 @@ public class BasicTests extends TestCase {
 
 	public void testModify() {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
-		assertFalse(process.isModified());
 
-		process.setFlexoID("234XX");
+		process.init("234XX");
 		assertTrue(process.isModified());
 		process.setName("NewProcess");
 		assertTrue(process.isModified());

@@ -1,4 +1,4 @@
-package org.openflexo.model.xml;
+package org.openflexo.model.factory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,10 +20,9 @@ import org.jdom2.input.SAXBuilder;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
-import org.openflexo.model.factory.ModelEntity;
-import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.factory.ModelProperty;
-import org.openflexo.model.factory.ProxyMethodHandler;
+import org.openflexo.model.xml.DefaultStringEncoder;
+import org.openflexo.model.xml.InvalidDataException;
+import org.openflexo.model.xml.InvalidXMLDataException;
 
 public class XMLDeserializer {
 
@@ -162,7 +161,7 @@ public class XMLDeserializer {
 					try {
 						value = getStringEncoder().fromString(p.getType(), node.getAttributeValue(p.getXMLTag()));
 						if (value != null) {
-							handler.invokeSetter(p, value);
+							handler.internallyInvokeSetter(p, value);
 						}
 					} catch (InvalidDataException e) {
 						throw new InvalidXMLDataException(e.getMessage());
@@ -178,7 +177,7 @@ public class XMLDeserializer {
 								MatchingElement matchingElement = matchingElements.next();
 								// System.out.println("SINGLE, "+matchingElement);
 								Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
-								handler.invokeSetter(p, value);
+								handler.internallyInvokeSetter(p, value);
 							}
 							break;
 						case LIST:
@@ -186,7 +185,7 @@ public class XMLDeserializer {
 								MatchingElement matchingElement = matchingElements.next();
 								// System.out.println("LIST, "+matchingElement);
 								Object value = buildObjectFromNodeAndModelEntity(matchingElement.element, matchingElement.modelEntity);
-								handler.invokeAdder(p, value);
+								handler.internallyInvokeAdder(p, value);
 							}
 							break;
 						case MAP:
@@ -207,10 +206,10 @@ public class XMLDeserializer {
 							}
 							switch (p.getCardinality()) {
 							case SINGLE:
-								handler.invokeSetter(p, value);
+								handler.internallyInvokeSetter(p, value);
 								break;
 							case LIST:
-								handler.invokeAdder(p, value);
+								handler.internallyInvokeAdder(p, value);
 								break;
 							default:
 								break;

@@ -5,7 +5,9 @@ import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Initializer;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Parameter;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.factory.AccessibleProxyObject;
@@ -19,15 +21,17 @@ public interface FlexoModelObject extends AccessibleProxyObject, CloneableProxyO
 	public static final String NAME = "name";
 	public static final String DELETED = "deleted";
 
+	@Initializer
+	public FlexoModelObject init();
+
+	@Initializer
+	public FlexoModelObject init(@Parameter(FLEXO_ID) String flexoId);
+
 	// @XMLProperty(id="flexoId",kind=Kind.GETTER,xml="flexoID",defaultValue="00000")
 
 	@Getter(value = FLEXO_ID, defaultValue = "0000")
 	@XMLAttribute(xmlTag = FLEXO_ID)
 	public String getFlexoID();
-
-	// @XMLProperty(id="flexoId",kind=Kind.SETTER)
-	@Setter(FLEXO_ID)
-	public void setFlexoID(String flexoID);
 
 	@Getter(value = NAME, defaultValue = "???")
 	@XMLAttribute(xmlTag = NAME)

@@ -1,4 +1,4 @@
-package org.openflexo.model.xml;
+package org.openflexo.model.factory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,9 +20,8 @@ import org.jdom2.output.XMLOutputter;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
-import org.openflexo.model.factory.ModelEntity;
-import org.openflexo.model.factory.ModelProperty;
-import org.openflexo.model.factory.ProxyMethodHandler;
+import org.openflexo.model.xml.DefaultStringEncoder;
+import org.openflexo.model.xml.InvalidDataException;
 
 public class XMLSerializer {
 

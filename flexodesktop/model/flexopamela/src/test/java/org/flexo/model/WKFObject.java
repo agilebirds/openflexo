@@ -23,7 +23,4 @@ public interface WKFObject extends FlexoModelObject {
 	@Setter(PROCESS)
 	public void setProcess(FlexoProcess aProcess);
 
-	@Override
-	@Setter(FlexoModelObject.FLEXO_ID)
-	public void setFlexoID(String flexoID);
 }

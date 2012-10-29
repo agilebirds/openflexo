@@ -188,6 +188,11 @@ public class ModelEntity<I> extends ProxyFactory {
 			}
 		}
 
+		// TODO: maybe it would be better to be closer to what constructors do, ie, if there are super-initializer,
+		// And none of them are without arguments, then this entity should define an initializer with the same
+		// method signature (this is to enforce the developer to be aware of what the parameters do):
+		// FlexoModelObject.init(flexoID) vs AbstractNode.init(nodeName)
+
 		// 4. Validate initializers
 		for (ModelInitializer i : initializers.values()) {
 			for (String s : i.getParameters()) {
@@ -491,19 +496,20 @@ public class ModelEntity<I> extends ProxyFactory {
 				}
 			}
 			ModelInitializer initializerForArgs = getInitializerForArgs(types);
-			if (initializerForArgs == null && args.length > 0) {
-				StringBuilder sb = new StringBuilder();
-				for (Class<?> c : types) {
-					if (sb.length() > 0) {
-						sb.append(',');
-					}
-					sb.append(c.getName());
-
-				}
-				throw new NoSuchMethodException("Could not find any initializer with args " + sb.toString());
-			}
 			if (initializerForArgs != null) {
 				initializerForArgs.getInitializingMethod().invoke(returned, args);
+			} else {
+				if (args.length > 0) {
+					StringBuilder sb = new StringBuilder();
+					for (Class<?> c : types) {
+						if (sb.length() > 0) {
+							sb.append(',');
+						}
+						sb.append(c.getName());
+
+					}
+					throw new NoSuchMethodException("Could not find any initializer with args " + sb.toString());
+				}
 			}
 		}
 		return returned;
@@ -613,6 +619,9 @@ public class ModelEntity<I> extends ProxyFactory {
 	public ModelInitializer getInitializerForArgs(Class<?>[] types) throws ModelDefinitionException {
 		List<ModelInitializer> list = getPossibleInitializers(types);
 		if (list.size() == 0) {
+			if (initializers.size() > 0) {
+				return null;
+			}
 			ModelInitializer found = null;
 			if (getDirectSuperEntities() != null) {
 				for (ModelEntity<? super I> e : getDirectSuperEntities()) {
