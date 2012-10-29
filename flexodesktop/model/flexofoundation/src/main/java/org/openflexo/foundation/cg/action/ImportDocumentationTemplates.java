@@ -28,7 +28,7 @@ import java.util.zip.ZipException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;

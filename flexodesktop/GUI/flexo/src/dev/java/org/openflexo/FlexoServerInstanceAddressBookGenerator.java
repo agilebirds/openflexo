@@ -3,7 +3,7 @@ package org.openflexo;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.xml.XMLSerializer;
 import org.openflexo.view.controller.FlexoServerInstanceManager;
 

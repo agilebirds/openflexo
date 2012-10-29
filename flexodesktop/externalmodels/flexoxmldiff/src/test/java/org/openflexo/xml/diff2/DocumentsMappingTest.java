@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.Document;
+import org.jdom2.Document;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xml.XMLDiffTest;
 import org.xml.sax.SAXException;

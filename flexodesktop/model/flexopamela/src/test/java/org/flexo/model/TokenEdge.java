@@ -12,7 +12,7 @@ import org.openflexo.model.annotations.XMLElement;
 public interface TokenEdge extends Edge {
 
 	@Override
-	@Getter(value = PROCESS)
+	@Getter(PROCESS)
 	public FlexoProcess getProcess();
 
 }

@@ -111,7 +111,6 @@ import org.openflexo.inspector.ModuleInspectorController;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.model.factory.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
@@ -1805,7 +1804,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		ModelFactory factory = new ModelFactory();
 		try {
 			factory.importClass(PPMWSClientParameter.class);
-		} catch (ModelDefinitionException e) {
+		} catch (org.openflexo.model.exceptions.ModelDefinitionException e) {
 			// It sucks but it seems that a developer left a crappy thing.
 			e.printStackTrace();
 		}

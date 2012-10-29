@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.DocType;
+import org.jdom2.DocType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.drm.Language;

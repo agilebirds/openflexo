@@ -33,9 +33,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.filter.ElementFilter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoXMLSerializableObject;

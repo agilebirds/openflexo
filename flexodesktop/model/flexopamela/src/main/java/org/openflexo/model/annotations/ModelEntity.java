@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.openflexo.model.factory.ModelExecutionException;
+import org.openflexo.model.exceptions.ModelExecutionException;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.TYPE)

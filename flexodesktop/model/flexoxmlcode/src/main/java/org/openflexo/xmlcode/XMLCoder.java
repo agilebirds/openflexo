@@ -38,13 +38,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.jdom.Attribute;
-import org.jdom.DocType;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Text;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Attribute;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Text;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.openflexo.xmlcode.XMLMapId.NoMapIdEntryException;
 import org.xml.sax.SAXException;
 

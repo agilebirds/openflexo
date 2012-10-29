@@ -11,9 +11,11 @@ import java.util.Vector;
 
 import javassist.util.proxy.ProxyObject;
 
-import org.openflexo.model.annotations.ClosureCondition;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
+import org.openflexo.model.annotations.PastingPoint;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.xml.DefaultStringEncoder;
 import org.openflexo.model.xml.DefaultStringEncoder.Converter;
 
@@ -158,8 +160,7 @@ public class ModelFactory {
 	public <I> void importClass(Class<I> type) throws ModelDefinitionException {
 		ModelEntity<I> modelEntity = getModelEntity(type);// Performs the import
 		if (modelEntity == null) {
-			throw new ModelDefinitionException("Type " + type.getClass().getName()
-					+ " is not a model entity. Did you forgot to annotated it with @"
+			throw new ModelDefinitionException("Type " + type.getName() + " is not a model entity. Did you forgot to annotated it with @"
 					+ org.openflexo.model.annotations.ModelEntity.class.getSimpleName());
 		}
 		Imports imports = type.getAnnotation(Imports.class);
@@ -180,22 +181,28 @@ public class ModelFactory {
 		for (ModelEntity entity : modelEntities.values()) {
 			returned.append("------------------- ").append(entity.getImplementedInterface().getSimpleName())
 					.append(" -------------------\n");
-			Iterator<ModelProperty> i = entity.getDeclaredProperties();
+			Iterator<ModelProperty> i;
+			try {
+				i = entity.getProperties();
+			} catch (ModelDefinitionException e) {
+				e.printStackTrace();
+				continue;
+			}
 			while (i.hasNext()) {
 				ModelProperty property = i.next();
-				returned.append(property.override() ? "  * " : "    ").append(property.getPropertyIdentifier()).append(" ")
-						.append(property.getCardinality()).append(" type=").append(property.getType().getSimpleName()).append("\n");
+				returned.append(property.getPropertyIdentifier()).append(" ").append(property.getCardinality()).append(" type=")
+						.append(property.getType().getSimpleName()).append("\n");
 			}
 		}
 		return returned.toString();
 	}
 
-	public boolean isEmbedddedIn(Object parentObject, Object childObject) {
-		return getEmbeddedObjects(parentObject).contains(childObject);
+	public boolean isEmbedddedIn(Object parentObject, Object childObject, EmbeddingType embeddingType) {
+		return getEmbeddedObjects(parentObject, embeddingType).contains(childObject);
 	}
 
-	public boolean isEmbedddedIn(Object parentObject, Object childObject, Object... context) {
-		return getEmbeddedObjects(parentObject, context).contains(childObject);
+	public boolean isEmbedddedIn(Object parentObject, Object childObject, EmbeddingType embeddingType, Object... context) {
+		return getEmbeddedObjects(parentObject, embeddingType, context).contains(childObject);
 	}
 
 	/**
@@ -208,7 +215,7 @@ public class ModelFactory {
 	 * @param context
 	 * @return
 	 */
-	public List<Object> getEmbeddedObjects(Object root, Object... context) {
+	public List<Object> getEmbeddedObjects(Object root, EmbeddingType embeddingType, Object... context) {
 		if (!isProxyObject(root)) {
 			return null;
 		}
@@ -217,17 +224,17 @@ public class ModelFactory {
 		if (context != null && context.length > 0) {
 			for (Object o : context) {
 				derivedObjectsFromContext.add(o);
-				derivedObjectsFromContext.addAll(getEmbeddedObjects(o));
+				derivedObjectsFromContext.addAll(getEmbeddedObjects(o, embeddingType));
 			}
 		}
 
 		List<Object> returned = new ArrayList<Object>();
 		try {
-			appendEmbeddedObjects(root, returned);
+			appendEmbeddedObjects(root, returned, embeddingType);
 		} catch (ModelDefinitionException e) {
 			throw new ModelExecutionException(e);
 		}
-		ArrayList<Object> discardedObjects = new ArrayList<Object>();
+		List<Object> discardedObjects = new ArrayList<Object>();
 		for (int i = 0; i < returned.size(); i++) {
 			Object o = returned.get(i);
 			if (o instanceof ConditionalPresence) {
@@ -235,6 +242,7 @@ public class ModelFactory {
 				for (Object other : ((ConditionalPresence) o).requiredPresence) {
 					if (!returned.contains(other) && !derivedObjectsFromContext.contains(other)) {
 						allOthersArePresent = false;
+						break;
 					}
 				}
 				if (allOthersArePresent && !returned.contains(((ConditionalPresence) o).object)) {
@@ -263,52 +271,86 @@ public class ModelFactory {
 		}
 	}
 
-	private void appendEmbedded(ModelProperty p, Object father, List<Object> list, Object child) throws ModelDefinitionException {
+	private void appendEmbedded(ModelProperty p, Object father, List<Object> list, Object child, EmbeddingType embeddingType)
+			throws ModelDefinitionException {
 		if (!isProxyObject(child)) {
 			return;
 		}
 
-		if (p.getEmbedded() == null) {
+		if (p.getEmbedded() == null && p.getComplexEmbedded() == null) {
+			// this property is not embedded
 			return;
 		}
 
-		if (p.getEmbedded().value().length == 0) {
+		boolean append = false;
+		switch (embeddingType) {
+		case CLOSURE:
+			append = p.getEmbedded() != null && p.getEmbedded().closureConditions().length == 0 || p.getComplexEmbedded() != null
+					&& p.getComplexEmbedded().closureConditions().length == 0;
+			break;
+		case DELETION:
+			append = p.getEmbedded() != null && p.getEmbedded().deletionConditions().length == 0 || p.getComplexEmbedded() != null
+					&& p.getComplexEmbedded().deletionConditions().length == 0;
+			break;
+		}
+
+		if (append) {
 			// There is no condition, just append it
 			if (!list.contains(child)) {
 				list.add(child);
 				// System.out.println("Embedded in "+father+" because of "+p+" : "+child);
-				appendEmbeddedObjects(child, list);
+				appendEmbeddedObjects(child, list, embeddingType);
 			}
 		} else {
 			List<Object> requiredPresence = new ArrayList<Object>();
-			for (ClosureCondition c : p.getEmbedded().value()) {
-				ModelEntity closureConditionEntity = getModelEntity(child);
-				ModelProperty closureConditionProperty = getModelEntity(child).getModelProperty(c.id());
-				Object closureConditionRequiredObject = getHandler(child).invokeGetter(closureConditionProperty);
-				requiredPresence.add(closureConditionRequiredObject);
+			if (p.getEmbedded() != null) {
+				switch (embeddingType) {
+				case CLOSURE:
+					for (String c : p.getEmbedded().closureConditions()) {
+						ModelEntity closureConditionEntity = getModelEntity(child);
+						ModelProperty closureConditionProperty = getModelEntity(child).getModelProperty(c);
+						Object closureConditionRequiredObject = getHandler(child).invokeGetter(closureConditionProperty);
+						if (closureConditionRequiredObject != null) {
+							requiredPresence.add(closureConditionRequiredObject);
+						}
+					}
+					break;
+				case DELETION:
+					for (String c : p.getEmbedded().deletionConditions()) {
+						ModelEntity deletionConditionEntity = getModelEntity(child);
+						ModelProperty deletionConditionProperty = getModelEntity(child).getModelProperty(c);
+						Object deletionConditionRequiredObject = getHandler(child).invokeGetter(deletionConditionProperty);
+						if (deletionConditionRequiredObject != null) {
+							requiredPresence.add(deletionConditionRequiredObject);
+						}
+					}
+					break;
+				}
+				if (requiredPresence.size() > 0) {
+					ConditionalPresence conditionalPresence = new ConditionalPresence(child, requiredPresence);
+					list.add(conditionalPresence);
+				}
 			}
-			ConditionalPresence conditionalPresence = new ConditionalPresence(child, requiredPresence);
-			list.add(conditionalPresence);
 			// System.out.println("Embedded in "+father+" : "+child+" conditioned to required presence of "+requiredPresence);
 		}
 	}
 
-	private void appendEmbeddedObjects(Object father, List<Object> list) throws ModelDefinitionException {
+	private void appendEmbeddedObjects(Object father, List<Object> list, EmbeddingType embeddingType) throws ModelDefinitionException {
 		ProxyMethodHandler handler = getHandler(father);
 		ModelEntity modelEntity = handler.getModelEntity();
 
 		Iterator<ModelProperty<?>> properties = modelEntity.getProperties();
 		while (properties.hasNext()) {
-			ModelProperty p = properties.next();
+			ModelProperty<?> p = properties.next();
 			switch (p.getCardinality()) {
 			case SINGLE:
 				Object oValue = handler.invokeGetter(p);
-				appendEmbedded(p, father, list, oValue);
+				appendEmbedded(p, father, list, oValue, embeddingType);
 				break;
 			case LIST:
-				List values = (List) handler.invokeGetter(p);
+				List<?> values = (List<?>) handler.invokeGetter(p);
 				for (Object o : values) {
-					appendEmbedded(p, father, list, o);
+					appendEmbedded(p, father, list, o, embeddingType);
 				}
 				break;
 			default:
@@ -325,13 +367,31 @@ public class ModelFactory {
 		return null;
 	}
 
-	public void paste(Clipboard clipboard, Object context) throws ModelExecutionException, ModelDefinitionException,
+	public Object paste(Clipboard clipboard, Object context) throws ModelExecutionException, ModelDefinitionException,
 			CloneNotSupportedException {
 		if (!isProxyObject(context)) {
 			throw new ClipboardOperationException("Cannot paste here: context is not valid");
 		}
 
-		getHandler(context).paste(clipboard);
+		return getHandler(context).paste(clipboard);
+	}
+
+	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, Object context) throws ModelExecutionException,
+			ModelDefinitionException, CloneNotSupportedException {
+		if (!isProxyObject(context)) {
+			throw new ClipboardOperationException("Cannot paste here: context is not valid");
+		}
+
+		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty);
+	}
+
+	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, PastingPoint pp, Object context)
+			throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
+		if (!isProxyObject(context)) {
+			throw new ClipboardOperationException("Cannot paste here: context is not valid");
+		}
+
+		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty, pp);
 	}
 
 }
