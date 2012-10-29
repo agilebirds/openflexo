@@ -224,15 +224,6 @@ public class DMPackage extends DMObject {
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEntity.actionType);
-		returned.add(ImportJDKEntity.actionType);
-		returned.add(UpdateLoadableDMEntity.actionType);
-		return returned;
-	}
-
-	@Override
 	public void delete() {
 		Vector<DMEntity> entitiesToDelete = new Vector<DMEntity>();
 		entitiesToDelete.addAll(getEntities());

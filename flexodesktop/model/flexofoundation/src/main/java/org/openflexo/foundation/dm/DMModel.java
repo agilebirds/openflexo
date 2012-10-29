@@ -42,18 +42,8 @@ import javax.swing.tree.TreeNode;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.DMType.DMTypeStringConverter;
-import org.openflexo.foundation.dm.action.CreateDMRepository;
-import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
-import org.openflexo.foundation.dm.action.CreateProjectRepository;
-import org.openflexo.foundation.dm.action.ImportExternalDatabaseRepository;
-import org.openflexo.foundation.dm.action.ImportJARFileRepository;
-import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
-import org.openflexo.foundation.dm.action.ImportThesaurusDatabaseRepository;
-import org.openflexo.foundation.dm.action.ImportThesaurusRepository;
-import org.openflexo.foundation.dm.action.UpdateLoadableDMEntity;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DiagramCreated;
 import org.openflexo.foundation.dm.dm.DiagramDeleted;
@@ -651,22 +641,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	@Override
 	public boolean isNameValid() {
 		return true;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMRepository.actionType);
-		returned.add(CreateProjectRepository.actionType);
-		returned.add(CreateProjectDatabaseRepository.actionType);
-		returned.add(ImportExternalDatabaseRepository.actionType);
-		returned.add(ImportJARFileRepository.actionType);
-		returned.add(ImportRationalRoseRepository.actionType);
-		// returned.add(ImportDenaliFoundationRepository.actionType);
-		returned.add(ImportThesaurusRepository.actionType);
-		returned.add(ImportThesaurusDatabaseRepository.actionType);
-		returned.add(UpdateLoadableDMEntity.actionType);
-		return returned;
 	}
 
 	@Override

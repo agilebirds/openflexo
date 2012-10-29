@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -58,6 +59,9 @@ public class OpenPortRegistery extends FlexoUndoableAction<OpenPortRegistery, Fl
 		}
 
 	};
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
 
 	OpenPortRegistery(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -79,8 +83,8 @@ public class OpenPortRegistery extends FlexoUndoableAction<OpenPortRegistery, Fl
 
 	@Override
 	public String getLocalizedName() {
-		if ((getFocusedObject()).getPortRegistery() != null) {
-			if ((getFocusedObject()).getPortRegistery().getIsVisible()) {
+		if (getFocusedObject().getPortRegistery() != null) {
+			if (getFocusedObject().getPortRegistery().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_port_registery");
 			} else {
 				return FlexoLocalization.localizedForKey("open_port_registery");

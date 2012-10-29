@@ -32,15 +32,11 @@ import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IETopComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
-import org.openflexo.foundation.ie.action.DropIEElement;
-import org.openflexo.foundation.ie.action.TopComponentDown;
-import org.openflexo.foundation.ie.action.TopComponentUp;
 import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.dm.InnerBlocInserted;
 import org.openflexo.foundation.ie.dm.InnerBlocRemoved;
@@ -250,20 +246,6 @@ public class IEBlocWidget extends AbstractButtonedWidget implements IETopCompone
 	public void notifyListActionButtonStateChange(IEDataModification modif) {
 		setChanged();
 		notifyObservers(modif);
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(TopComponentUp.actionType);
-		v.add(TopComponentDown.actionType);
-		v.add(DropIEElement.actionType);
-		return v;
 	}
 
 	public void handleContentResize() {

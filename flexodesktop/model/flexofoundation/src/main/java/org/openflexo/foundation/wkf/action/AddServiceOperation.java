@@ -61,6 +61,9 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, ServiceInterface.class);
+	}
 	private String _newOperationName;
 
 	private FlexoPort _relatedPort;
@@ -74,7 +77,7 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 	}
 
 	public FlexoProcess getProcess() {
-		if ((getFocusedObject() != null) && (getFocusedObject() instanceof ServiceInterface)) {
+		if (getFocusedObject() != null && getFocusedObject() instanceof ServiceInterface) {
 			return ((WKFObject) getFocusedObject()).getProcess();
 		}
 		return null;
@@ -101,8 +104,8 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 		if (_serviceInterface != null) {
 			return _serviceInterface;
 		}
-		if ((getFocusedObject() != null) && (getFocusedObject() instanceof ServiceInterface)) {
-			return ((ServiceInterface) getFocusedObject());
+		if (getFocusedObject() != null && getFocusedObject() instanceof ServiceInterface) {
+			return (ServiceInterface) getFocusedObject();
 		}
 		return null;
 	}

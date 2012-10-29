@@ -54,7 +54,7 @@ public class DeleteCol extends FlexoAction {
 			Enumeration<FlexoModelObject> en = v.elements();
 			while (en.hasMoreElements()) {
 				FlexoModelObject o = en.nextElement();
-				if (!(o instanceof IETDWidget) && !((o instanceof IESequenceWidget) && ((IESequenceWidget) o).isInTD())) {
+				if (!(o instanceof IETDWidget) && !(o instanceof IESequenceWidget && ((IESequenceWidget) o).isInTD())) {
 					return false;
 				}
 			}
@@ -62,6 +62,11 @@ public class DeleteCol extends FlexoAction {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+	}
 
 	DeleteCol(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -80,7 +85,7 @@ public class DeleteCol extends FlexoAction {
 			} else if (o instanceof IESequenceWidget) {
 				IESequenceWidget seq = (IESequenceWidget) o;
 				IETDWidget td = seq.td();
-				if ((td != null) && !td.isDeleted()) {
+				if (td != null && !td.isDeleted()) {
 					td.deleteCol();
 				}
 			}

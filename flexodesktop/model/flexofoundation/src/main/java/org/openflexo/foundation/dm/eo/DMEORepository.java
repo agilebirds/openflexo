@@ -30,12 +30,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMRepository;
-import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.dm.EOModelRegistered;
 import org.openflexo.foundation.dm.dm.EOModelUnregistered;
 import org.openflexo.foundation.dm.eo.model.EOEntity;
@@ -186,7 +184,7 @@ public abstract class DMEORepository extends DMRepository {
 	@Override
 	public void removeEntityWithKey(String entityName, boolean notify) {
 		DMEntity entity = getDMEntity(entityName);
-		if ((entity != null) && (entity instanceof DMEOEntity)) {
+		if (entity != null && entity instanceof DMEOEntity) {
 			DMEOEntity dmEOEntity = (DMEOEntity) entity;
 			internallyUnregisterDMEOEntity(dmEOEntity);
 			if (dmEOEntity.getDMEOModel() != null) {
@@ -198,13 +196,6 @@ public abstract class DMEORepository extends DMRepository {
 
 	public DMEOEntity getDMEOEntity(EOEntity eoEntity) {
 		return _entitiesForEOEntity.get(eoEntity);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEOModel.actionType);
-		return returned;
 	}
 
 	public DMEOModel importEOModelFile(FlexoProjectFile eoModelDir, DMModel dmModel, FlexoDMResource dmRes)
@@ -428,7 +419,7 @@ public abstract class DMEORepository extends DMRepository {
 
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;

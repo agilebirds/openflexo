@@ -54,10 +54,14 @@ public class SubmitVersion extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItem));
+			return object != null && object instanceof DocItem;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItem.class);
+	}
 
 	private DocItem _docItem;
 	private DocItemVersion _version;
@@ -94,7 +98,7 @@ public class SubmitVersion extends FlexoAction {
 
 	public DocItem getDocItem() {
 		if (_docItem == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DocItem) {
 				_docItem = (DocItem) getFocusedObject();
 			}
 		}

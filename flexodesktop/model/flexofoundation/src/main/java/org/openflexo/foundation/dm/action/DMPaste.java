@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dm.DMObject;
@@ -53,6 +54,10 @@ public class DMPaste extends FlexoUndoableAction<DMPaste, DMObject, DMObject> {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMObject.class);
+	}
 
 	protected DMPaste(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

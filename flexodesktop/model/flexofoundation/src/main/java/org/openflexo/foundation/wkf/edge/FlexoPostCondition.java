@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
@@ -260,13 +259,6 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 		_setGraphicalPropertyForKey(hide, "hideWhenInduced");
 		setChanged();
 		notifyAttributeModification("hideWhenInduced", !hide, hide);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		// v.add(TightenEdge.actionType);
-		return v;
 	}
 
 	// =========================================================
@@ -626,9 +618,10 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	}
 
 	public boolean getIsConditional() {
-		/*if (getStartNode() instanceof OperatorNode && ((OperatorNode) getStartNode()).isExclusiveGateway()) {
-			return !getIsDefaultFlow();
-		}*/
+		/*
+		 * if (getStartNode() instanceof OperatorNode && ((OperatorNode) getStartNode()).isExclusiveGateway()) { return !getIsDefaultFlow();
+		 * }
+		 */
 		if (isStartingFromOr()) {
 			return !getIsDefaultFlow();
 		}
@@ -682,7 +675,7 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 		if (getStartNode() instanceof EventNode) {
 			return false;
 		}
-		boolean b = !getIsDefaultFlow() /* && getStartNode().getOutgoingPostConditions().size()>1*/;
+		boolean b = !getIsDefaultFlow() /* && getStartNode().getOutgoingPostConditions().size()>1 */;
 		if (b && getStartNode() instanceof OperatorNode) {
 			OperatorNode start = (OperatorNode) getStartNode();
 			b &= start.isInclusiveGateway();

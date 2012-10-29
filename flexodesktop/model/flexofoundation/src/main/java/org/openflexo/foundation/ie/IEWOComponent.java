@@ -36,20 +36,14 @@ import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.dm.ComponentDMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
-import org.openflexo.foundation.ie.action.DropIEElement;
-import org.openflexo.foundation.ie.action.DropPartialComponent;
-import org.openflexo.foundation.ie.action.DuplicateComponentAction;
-import org.openflexo.foundation.ie.action.GenerateComponentScreenshot;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
-import org.openflexo.foundation.ie.cl.action.ShowComponentUsage;
 import org.openflexo.foundation.ie.dm.ComponentDeleteRequest;
 import org.openflexo.foundation.ie.dm.ComponentDeleted;
 import org.openflexo.foundation.ie.dm.ComponentNameChanged;
@@ -275,21 +269,6 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		this.lastUpdate = lastUpdate;
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(DuplicateComponentAction.actionType);
-		returned.add(GenerateComponentScreenshot.actionType);
-		returned.add(DropIEElement.actionType);
-		returned.add(DropPartialComponent.actionType);
-		returned.add(ShowComponentUsage.actionType);
-		return returned;
-	}
-
-	// ==========================================================================
-	// ============================= Accessors
-	// ==================================
-	// ==========================================================================
 	/**
 	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
 	 * WOComponent itself

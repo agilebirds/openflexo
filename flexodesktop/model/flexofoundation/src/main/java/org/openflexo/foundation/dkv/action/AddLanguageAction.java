@@ -25,9 +25,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dkv.DKVModel;
+import org.openflexo.foundation.dkv.DKVModel.LanguageList;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dkv.Language;
 import org.openflexo.logging.FlexoLogger;
@@ -69,6 +71,11 @@ public class AddLanguageAction extends FlexoUndoableAction<AddLanguageAction, DK
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DKVModel.class);
+		FlexoModelObject.addActionForClass(actionType, LanguageList.class);
+	}
 
 	private DKVModel _dkvModel;
 	private Language newLanguage;

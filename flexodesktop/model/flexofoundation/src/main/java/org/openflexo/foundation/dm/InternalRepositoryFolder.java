@@ -21,7 +21,6 @@ package org.openflexo.foundation.dm;
 
 //import org.openflexo.foundation.dm.action.CreateDMRepository;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
 public class InternalRepositoryFolder extends DMRepositoryFolder {
@@ -61,18 +60,6 @@ public class InternalRepositoryFolder extends DMRepositoryFolder {
 			logger.warning("Index out of range: " + index);
 			return null;
 		}
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.dm.DMObject#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector v = super.getSpecificActionListForThatClass();
-		// v.add(CreateDMRepository.actionType);
-		return v;
 	}
 
 	@Override

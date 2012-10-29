@@ -27,6 +27,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.toc.TOCEntry;
+import org.openflexo.foundation.toc.TOCRepository;
 
 public class RemoveTOCEntry extends FlexoAction<RemoveTOCEntry, TOCEntry, TOCEntry> {
 
@@ -46,7 +47,7 @@ public class RemoveTOCEntry extends FlexoAction<RemoveTOCEntry, TOCEntry, TOCEnt
 
 		@Override
 		protected boolean isVisibleForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
-			return true;
+			return !(object instanceof TOCRepository);
 		}
 
 		@Override
@@ -55,6 +56,10 @@ public class RemoveTOCEntry extends FlexoAction<RemoveTOCEntry, TOCEntry, TOCEnt
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCEntry.class);
+	}
 
 	RemoveTOCEntry(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

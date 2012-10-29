@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -49,15 +50,19 @@ public class OpenActionLevel extends FlexoUndoableAction<OpenActionLevel, Operat
 
 		@Override
 		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && object.mightHaveActionPetriGraph() && ((object).getNodeType() == NodeType.NORMAL));
+			return object != null && object.mightHaveActionPetriGraph() && object.getNodeType() == NodeType.NORMAL;
 		}
 
 		@Override
 		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return (object.getNodeType() == NodeType.NORMAL);
+			return object.getNodeType() == NodeType.NORMAL;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
 
 	OpenActionLevel(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -90,8 +95,8 @@ public class OpenActionLevel extends FlexoUndoableAction<OpenActionLevel, Operat
 
 	@Override
 	public String getLocalizedName() {
-		if ((getFocusedObject()).getActionPetriGraph() != null) {
-			if ((getFocusedObject()).getActionPetriGraph().getIsVisible()) {
+		if (getFocusedObject().getActionPetriGraph() != null) {
+			if (getFocusedObject().getActionPetriGraph().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_action_level");
 			} else {
 				return FlexoLocalization.localizedForKey("open_action_level");

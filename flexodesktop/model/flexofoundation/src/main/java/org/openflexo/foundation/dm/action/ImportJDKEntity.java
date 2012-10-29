@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
@@ -59,6 +60,11 @@ public class ImportJDKEntity extends FlexoAction<ImportJDKEntity, DMObject, DMOb
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, JDKRepository.class);
+		FlexoModelObject.addActionForClass(actionType, DMPackage.class);
+	}
 
 	ImportJDKEntity(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

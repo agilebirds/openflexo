@@ -29,7 +29,6 @@ import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.validation.DeletionFixProposal;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
@@ -39,8 +38,6 @@ import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.LevelledObject;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.action.ShowHidePortmapRegistery;
-import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.PortMapInserted;
 import org.openflexo.foundation.wkf.dm.PortMapRegisteryOrientationChanged;
@@ -142,7 +139,7 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 	}
 
 	public ServiceInterface getServiceInterface() {
-		if ((getSubProcessNode() != null) && (getSubProcessNode().getSubProcess() != null)) {
+		if (getSubProcessNode() != null && getSubProcessNode().getSubProcess() != null) {
 			if (getSubProcessNode().getActiveServiceInterface() != null) {
 				getSubProcessNode().getActiveServiceInterface().addObserver(this);
 			} else {
@@ -168,14 +165,6 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 			FlexoPortMap portMap = e.nextElement();
 			returned.addAll(portMap.getAllEmbeddedWKFObjects());
 		}
-		return returned;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.remove(WKFDelete.actionType);
-		returned.add(ShowHidePortmapRegistery.actionType);
 		return returned;
 	}
 

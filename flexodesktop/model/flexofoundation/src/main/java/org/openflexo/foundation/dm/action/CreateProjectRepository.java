@@ -23,8 +23,11 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
+import org.openflexo.foundation.dm.NonPersistantDataRepositoryFolder;
 import org.openflexo.foundation.dm.ProjectRepository;
 
 public class CreateProjectRepository extends CreateDMRepository {
@@ -53,6 +56,11 @@ public class CreateProjectRepository extends CreateDMRepository {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+		FlexoModelObject.addActionForClass(actionType, NonPersistantDataRepositoryFolder.class);
+	}
 
 	CreateProjectRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

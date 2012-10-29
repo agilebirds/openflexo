@@ -54,10 +54,14 @@ public class ImportDocSubmissionReport extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItemFolder) && (((DocItemFolder) object).isRootFolder()));
+			return object != null && object instanceof DocItemFolder && ((DocItemFolder) object).isRootFolder();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
+	}
 
 	ImportDocSubmissionReport(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

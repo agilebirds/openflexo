@@ -35,6 +35,7 @@ import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.action.DuplicateSectionException;
@@ -81,10 +82,14 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 		@Override
 		protected boolean isEnabledForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
-			return (object instanceof TOCEntry && ((TOCEntry) object).canHaveChildren());
+			return object instanceof TOCEntry && ((TOCEntry) object).canHaveChildren();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCEntry.class);
+	}
 
 	public static enum KindOfTocEntry {
 		NormalSection {
@@ -325,7 +330,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public TOCDataBinding getCondition() {
 		if (condition == null && getFocusedObject() instanceof TOCEntry) {
-			condition = new TOCDataBinding(((TOCEntry) getFocusedObject()), ControlSectionBindingAttribute.condition,
+			condition = new TOCDataBinding((TOCEntry) getFocusedObject(), ControlSectionBindingAttribute.condition,
 					getConditionBindingDefinition());
 		}
 		return condition;
@@ -333,7 +338,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public void setCondition(TOCDataBinding condition) {
 		if (condition != null && getFocusedObject() instanceof TOCEntry) {
-			condition.setOwner(((TOCEntry) getFocusedObject()));
+			condition.setOwner((TOCEntry) getFocusedObject());
 			condition.setBindingAttribute(ControlSectionBindingAttribute.condition);
 			condition.setBindingDefinition(getConditionBindingDefinition());
 			this.condition = condition;
@@ -376,7 +381,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public TOCDataBinding getIterationCondition() {
 		if (iterationCondition == null && getFocusedObject() instanceof TOCEntry) {
-			iterationCondition = new TOCDataBinding(((TOCEntry) getFocusedObject()), ControlSectionBindingAttribute.condition,
+			iterationCondition = new TOCDataBinding((TOCEntry) getFocusedObject(), ControlSectionBindingAttribute.condition,
 					getIterationConditionBindingDefinition());
 		}
 		return iterationCondition;
@@ -384,7 +389,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public void setIterationCondition(TOCDataBinding iterationCondition) {
 		if (iterationCondition != null && getFocusedObject() instanceof TOCEntry) {
-			iterationCondition.setOwner(((TOCEntry) getFocusedObject()));
+			iterationCondition.setOwner((TOCEntry) getFocusedObject());
 			iterationCondition.setBindingAttribute(ControlSectionBindingAttribute.iterationCondition);
 			iterationCondition.setBindingDefinition(getIterationConditionBindingDefinition());
 			this.iterationCondition = iterationCondition;

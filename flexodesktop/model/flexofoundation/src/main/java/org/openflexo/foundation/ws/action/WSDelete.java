@@ -21,15 +21,16 @@ package org.openflexo.foundation.ws.action;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
+import org.openflexo.foundation.wkf.ws.DefaultServiceInterface;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.ws.ExternalWSService;
 import org.openflexo.foundation.ws.InternalWSService;
@@ -44,39 +45,40 @@ import org.openflexo.foundation.ws.WSService;
  * @author dvanvyve
  * 
  */
-public class WSDelete extends FlexoUndoableAction {
+public class WSDelete extends FlexoUndoableAction<WSDelete, FlexoModelObject, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(WSDelete.class.getPackage().getName());
 
-	public static FlexoActionType actionType = new FlexoActionType("delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<WSDelete, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<WSDelete, FlexoModelObject, FlexoModelObject>(
+			"delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public WSDelete makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 			return new WSDelete(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			if (globalSelection == null) {
 				return false;
 			}
 			for (Enumeration en = globalSelection.elements(); en.hasMoreElements();) {
 				FlexoModelObject next = (FlexoModelObject) en.nextElement();
 				// Only ExternalWSService and InternalWSService
-				if ((next instanceof ExternalWSService) && (((ExternalWSService) next).isDeletable())) {
+				if (next instanceof ExternalWSService && ((ExternalWSService) next).isDeletable()) {
 					return true;
-				} else if ((next instanceof InternalWSService) && (((InternalWSService) next).isDeletable())) {
+				} else if (next instanceof InternalWSService && ((InternalWSService) next).isDeletable()) {
 					return true;
-				} else if ((next instanceof ServiceInterface)) {
-					WSService ws = next.getProject().getFlexoWSLibrary().getParentOfServiceInterface(((ServiceInterface) next));
+				} else if (next instanceof ServiceInterface && !(next instanceof DefaultServiceInterface)) {
+					WSService ws = next.getProject().getFlexoWSLibrary().getParentOfServiceInterface((ServiceInterface) next);
 					if (ws != null && ws instanceof InternalWSService) {
 						return true;
 					}
@@ -87,9 +89,14 @@ public class WSDelete extends FlexoUndoableAction {
 
 	};
 
-	WSDelete(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	static {
+		FlexoModelObject.addActionForClass(actionType, WSService.class);
+		FlexoModelObject.addActionForClass(actionType, ServiceInterface.class);
+	}
+
+	WSDelete(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		_deletionContexts = new Hashtable();
+		_deletionContexts = new Hashtable<WSObject, Object>();
 	}
 
 	@Override
@@ -101,9 +108,8 @@ public class WSDelete extends FlexoUndoableAction {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("selection to delete is: " + getObjectsToDelete());
 		}
-		for (Enumeration en = getObjectsToDelete().elements(); en.hasMoreElements();) {
-			FlexoModelObject next = (FlexoModelObject) en.nextElement();
-			deleteObject(next);
+		for (FlexoModelObject object : getObjectsToDelete()) {
+			deleteObject(object);
 		}
 	}
 
@@ -127,18 +133,16 @@ public class WSDelete extends FlexoUndoableAction {
 	public Vector<FlexoModelObject> getObjectsToDelete() {
 		if (_objectsToDelete == null) {
 			_objectsToDelete = new Vector<FlexoModelObject>();
-			Enumeration en = getGlobalSelection().elements();
-			while (en.hasMoreElements()) {
-				FlexoModelObject object = (FlexoModelObject) en.nextElement();
+			for (FlexoModelObject object : getGlobalSelection()) {
 				// only externalWSGroup and InternalWSService
-				if ((object instanceof ExternalWSService || object instanceof InternalWSService) && (((WSObject) object).isDeletable())) {
+				if ((object instanceof ExternalWSService || object instanceof InternalWSService) && ((WSObject) object).isDeletable()) {
 
 					_objectsToDelete.add(object);
 
 				}
 				// WARNING: assumption that THERE IS ONLY ONE PortType for a ServiceInterface !
-				else if ((object instanceof ServiceInterface)) {
-					WSService ws = object.getProject().getFlexoWSLibrary().getParentOfServiceInterface(((ServiceInterface) object));
+				else if (object instanceof ServiceInterface) {
+					WSService ws = object.getProject().getFlexoWSLibrary().getParentOfServiceInterface((ServiceInterface) object);
 					if (ws != null && ws instanceof InternalWSService) {
 						_objectsToDelete.add(object);
 					}
@@ -152,7 +156,7 @@ public class WSDelete extends FlexoUndoableAction {
 	// ============= Deletion contexts management ===============
 	// ==========================================================
 
-	private Hashtable _deletionContexts;
+	private Map<WSObject, Object> _deletionContexts;
 
 	public void setDeletionContextForObject(Object deletionContext, WSObject object) {
 		_deletionContexts.put(object, deletionContext);
@@ -168,9 +172,9 @@ public class WSDelete extends FlexoUndoableAction {
 		} else if (object instanceof InternalWSService) {
 			((InternalWSService) object).delete();
 		} else if (object instanceof ServiceInterface) {
-			ServiceInterface si = ((ServiceInterface) object);
+			ServiceInterface si = (ServiceInterface) object;
 			WSPortType pt = si.getProject().getFlexoWSLibrary().getWSPortTypeNamed(si.getName());
-			if (pt != null && (pt.getWSService() instanceof InternalWSService)) {
+			if (pt != null && pt.getWSService() instanceof InternalWSService) {
 				pt.delete();
 			}
 

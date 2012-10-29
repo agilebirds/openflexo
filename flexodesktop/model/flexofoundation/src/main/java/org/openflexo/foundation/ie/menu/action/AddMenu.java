@@ -58,10 +58,14 @@ public class AddMenu extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof FlexoItemMenu));
+			return object != null && object instanceof FlexoItemMenu;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoItemMenu.class);
+	}
 
 	private String menuLabel;
 

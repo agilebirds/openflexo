@@ -53,11 +53,16 @@ public class InsertColBefore extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && ((object instanceof IETDWidget) || ((object instanceof IESequenceWidget) && ((IESequenceWidget) object)
-					.isInTD())));
+			return object != null
+					&& (object instanceof IETDWidget || object instanceof IESequenceWidget && ((IESequenceWidget) object).isInTD());
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+	}
 
 	InsertColBefore(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -65,7 +70,7 @@ public class InsertColBefore extends FlexoAction {
 
 	@Override
 	protected void doAction(Object context) {
-		if ((getFocusedTD() != null) && (getFocusedTD().htmlTable() != null)) {
+		if (getFocusedTD() != null && getFocusedTD().htmlTable() != null) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Inserting new col " + getFocusedTD().getXLocation());
 			}

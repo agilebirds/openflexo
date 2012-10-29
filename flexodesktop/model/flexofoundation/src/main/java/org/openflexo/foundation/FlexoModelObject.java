@@ -35,7 +35,6 @@ import org.openflexo.foundation.action.DeleteFlexoProperty;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.action.FlexoActionnable;
-import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.action.SortFlexoProperties;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
@@ -164,10 +163,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		customProperties = new Vector<FlexoProperty>();
 		_editionPatternReferences = new Vector<EditionPatternReference>();
 		if (project != null) {
-			/*if (project.getLastUniqueIDHasBeenSet() && flexoID < 0) {
-				flexoID = project.getNewFlexoID();
-				System.err.println("Via constructor New flexo ID: "+flexoID);
-			}*/
+			/*
+			 * if (project.getLastUniqueIDHasBeenSet() && flexoID < 0) { flexoID = project.getNewFlexoID();
+			 * System.err.println("Via constructor New flexo ID: "+flexoID); }
+			 */
 			project.register(this);
 			isRegistered = true;
 		} else {
@@ -459,12 +458,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	private static final Hashtable<Class, Vector<FlexoActionType>> _actionListForClass = new Hashtable<Class, Vector<FlexoActionType>>();
 
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = new Vector<FlexoActionType>();
-		returned.add(SetPropertyAction.actionType);
-		return returned;
-	}
-
 	public Vector<FlexoActionType> getActionList() {
 		return getActionList(this);
 	}
@@ -543,7 +536,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 				newActionList.addAll(_declaredActionsForClass.get(aClass));
 			}
 		}
-		newActionList.addAll(object.getSpecificActionListForThatClass());
+		// newActionList.addAll(object.getSpecificActionListForThatClass());
 		_actionListForClass.put(object.getClass(), newActionList);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateActionListFor() object: " + object);
@@ -1360,25 +1353,14 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return null;
 	}
 
-	/* private Vector<TabModel> _tabList;
-
-	public Vector<TabModel> inspectionExtraTabs()
-	{
-	if (_tabList == null) {
-		_tabList = new Vector<TabModel>();
-		if (getEditionPatternReferences() != null) {
-			for (EditionPatternReference ref : getEditionPatternReferences()) {
-				EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
-				if (inspector != null) {
-					//for (Integer i : inspector.getTabs().keySet()) {
-					//	_tabList.add(inspector.getTabs().get(i));
-					//}
-				}
-			}
-		}
-	}
-	return _tabList;
-	}*/
+	/*
+	 * private Vector<TabModel> _tabList;
+	 * 
+	 * public Vector<TabModel> inspectionExtraTabs() { if (_tabList == null) { _tabList = new Vector<TabModel>(); if
+	 * (getEditionPatternReferences() != null) { for (EditionPatternReference ref : getEditionPatternReferences()) { EditionPatternInspector
+	 * inspector = ref.getEditionPattern().getInspector(); if (inspector != null) { //for (Integer i : inspector.getTabs().keySet()) { //
+	 * _tabList.add(inspector.getTabs().get(i)); //} } } } } return _tabList; }
+	 */
 
 	public String getInspectorTitle() {
 		// By default, take default inspector name

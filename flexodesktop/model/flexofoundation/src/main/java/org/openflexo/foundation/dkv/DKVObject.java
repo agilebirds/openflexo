@@ -22,8 +22,6 @@ package org.openflexo.foundation.dkv;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dkv.action.DKVDelete;
 import org.openflexo.foundation.dkv.dm.DKVDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
@@ -69,18 +67,6 @@ public abstract class DKVObject extends FlexoModelObject implements Validable {
 	}
 
 	public abstract boolean isDeleteAble();
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.FlexoModelObject#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(DKVDelete.actionType);
-		return v;
-	}
 
 	/**
 	 * Overrides setProject

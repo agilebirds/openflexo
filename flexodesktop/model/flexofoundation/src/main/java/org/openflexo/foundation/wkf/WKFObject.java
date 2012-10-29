@@ -37,7 +37,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
@@ -46,11 +45,6 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.wkf.action.WKFCopy;
-import org.openflexo.foundation.wkf.action.WKFCut;
-import org.openflexo.foundation.wkf.action.WKFDelete;
-import org.openflexo.foundation.wkf.action.WKFPaste;
-import org.openflexo.foundation.wkf.action.WKFSelectAll;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
@@ -210,7 +204,7 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	public void setObjectForKey(Object object, String key) {
 		Object oldValue = objectForKey(key);
 		super.setObjectForKey(object, key);
-		if (((oldValue != null) && (!oldValue.equals(object))) || ((oldValue == null) && (object != null))) {
+		if (oldValue != null && !oldValue.equals(object) || oldValue == null && object != null) {
 			// logger.info("Obj: "+getClass().getName()+" property: "+key+" was "+oldValue+" is now "+object);
 			notifyModification(key, oldValue, object);
 		}
@@ -238,21 +232,6 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(WKFCut.actionType);
-		returned.add(WKFCopy.actionType);
-		returned.add(WKFPaste.actionType);
-		returned.add(WKFDelete.actionType);
-		returned.add(WKFSelectAll.actionType);
-		return returned;
-	}
-
-	// ===================================================================
-	// =========================== FlexoObserver =========================
-	// ===================================================================
-
-	@Override
 	public void delete() {
 		super.delete();
 	}
@@ -268,7 +247,7 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	public boolean isContainedIn(WKFObject obj) {
 		// logger.warning
 		// ("Contains not IMPLEMENTED for "+getClass().getName()+" and "+obj.getClass().getName()+": default implementation returns true only if supplied object is the owner process: override in sub-classes !");
-		return (obj == getProcess());
+		return obj == getProcess();
 	}
 
 	public boolean contains(WKFObject obj) {

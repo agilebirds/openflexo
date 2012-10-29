@@ -52,11 +52,17 @@ public class DecreaseColSpan extends FlexoUndoableAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (((object != null) && (object instanceof IETDWidget || (object instanceof IESequenceWidget && ((IESequenceWidget) object)
-					.isInTD()))) && (getFocusedTD((IEWidget) object).canDecreaseColSpan()));
+			return object != null
+					&& (object instanceof IETDWidget || object instanceof IESequenceWidget && ((IESequenceWidget) object).isInTD())
+					&& getFocusedTD((IEWidget) object).canDecreaseColSpan();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+	}
 
 	DecreaseColSpan(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

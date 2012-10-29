@@ -23,15 +23,12 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
 import org.openflexo.foundation.ie.HTMLListDescriptorCollection;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IETopComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.TopComponentContainer;
-import org.openflexo.foundation.ie.action.TopComponentDown;
-import org.openflexo.foundation.ie.action.TopComponentUp;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.TopComponentInserted;
 import org.openflexo.foundation.ie.dm.TopComponentRemoved;
@@ -53,19 +50,6 @@ public class IESequenceTopComponent extends IESequence<IETopComponent> implement
 
 	public IESequenceTopComponent(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
 		super(woComponent, parent, prj);
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(TopComponentUp.actionType);
-		v.add(TopComponentDown.actionType);
-		return v;
 	}
 
 	@Override

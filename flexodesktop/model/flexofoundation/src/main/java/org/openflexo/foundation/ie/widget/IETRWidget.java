@@ -25,19 +25,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
 import org.openflexo.foundation.ie.SingleWidgetComponentInstance;
-import org.openflexo.foundation.ie.action.DeleteRow;
-import org.openflexo.foundation.ie.action.IECopy;
-import org.openflexo.foundation.ie.action.IECut;
-import org.openflexo.foundation.ie.action.IEDelete;
-import org.openflexo.foundation.ie.action.IEPaste;
-import org.openflexo.foundation.ie.action.InsertRowAfter;
-import org.openflexo.foundation.ie.action.InsertRowBefore;
 import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.dm.TDRemoved;
 import org.openflexo.foundation.ie.dm.WidgetAddedToSequence;
@@ -95,25 +87,6 @@ public class IETRWidget extends IEWidget implements ITableRow {
 	@Override
 	public IEOperator getOperator() {
 		return getSequenceTR().getOperator();
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.remove(IECopy.actionType);
-		returned.remove(IECut.actionType);
-		returned.remove(IEPaste.actionType);
-		returned.remove(IEDelete.actionType);
-		returned.add(InsertRowBefore.actionType);
-		returned.add(InsertRowAfter.actionType);
-		returned.add(DeleteRow.actionType);
-		returned.add(InsertRowAfter.actionType);
-		return returned;
 	}
 
 	@Override
@@ -328,8 +301,8 @@ public class IETRWidget extends IEWidget implements ITableRow {
 		} else {
 			return false;
 			/*
-			 * Enumeration en = colsEnumeration(); while (en.hasMoreElements()) { if
-			 * (en.nextElement().equals(widget)) return true; } return false;
+			 * Enumeration en = colsEnumeration(); while (en.hasMoreElements()) { if (en.nextElement().equals(widget)) return true; } return
+			 * false;
 			 */
 		}
 	}

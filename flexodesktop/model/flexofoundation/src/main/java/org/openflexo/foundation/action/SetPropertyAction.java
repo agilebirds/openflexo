@@ -82,6 +82,10 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 
 	private boolean performValidate = true;
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoModelObject.class);
+	}
+
 	/**
 	 * @param actionType
 	 * @param focusedObject

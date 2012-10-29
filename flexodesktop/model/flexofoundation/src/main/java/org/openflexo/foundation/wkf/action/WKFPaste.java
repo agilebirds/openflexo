@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
+import org.openflexo.foundation.wkf.WKFObject;
 
 public class WKFPaste extends FlexoUndoableAction<WKFPaste, FlexoModelObject, FlexoModelObject> {
 
@@ -53,6 +54,10 @@ public class WKFPaste extends FlexoUndoableAction<WKFPaste, FlexoModelObject, Fl
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFObject.class);
+	}
 
 	WKFPaste(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

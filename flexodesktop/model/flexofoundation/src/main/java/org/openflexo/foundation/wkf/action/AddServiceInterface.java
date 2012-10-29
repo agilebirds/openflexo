@@ -60,6 +60,9 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
 	private String _newInterfaceName;
 	private ServiceInterface _serviceInterface;
 
@@ -68,7 +71,7 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 	}
 
 	public FlexoProcess getProcess() {
-		if ((getFocusedObject() != null) && (getFocusedObject() instanceof WKFObject)) {
+		if (getFocusedObject() != null && getFocusedObject() instanceof WKFObject) {
 			return ((WKFObject) getFocusedObject()).getProcess();
 		}
 		return null;

@@ -59,13 +59,6 @@ public abstract class WSObject extends FlexoModelObject implements TreeNode {
 		this.project = wsl.getProject();
 	}
 
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		// returned.add(AddServiceOperation.actionType);
-		return returned;
-	}
-
 	/**
 	 * Overrides getFlexoResource
 	 * 

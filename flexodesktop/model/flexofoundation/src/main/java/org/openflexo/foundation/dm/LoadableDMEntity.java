@@ -40,12 +40,10 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.MethodReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.PropertyReference;
-import org.openflexo.foundation.dm.action.UpdateLoadableDMEntity;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
 /**
@@ -144,13 +142,6 @@ public class LoadableDMEntity extends DMEntity {
 		getProject().getJarClassLoader().unloadClass(javaType);
 		super.delete();
 	};
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(UpdateLoadableDMEntity.actionType);
-		return returned;
-	}
 
 	@Override
 	public boolean getIsReadOnly() {
@@ -471,16 +462,12 @@ public class LoadableDMEntity extends DMEntity {
 			}
 			DMEntity returnTypeBaseEntity = obtainDMEntity(repository, baseType, importReferencedEntities);
 
-			/*if ((returnTypeBaseEntity == null) && (importReferencedEntities)) {
-				if (logger.isLoggable(Level.FINE))
-					logger.finer("Force register " + baseType.getName() + " in DataModel");
-				LoadableDMEntity.createLoadableDMEntity(baseType, dmModel, false, false);
-				returnTypeBaseEntity = dmModel.getDMEntity(baseType);
-				if (returnTypeBaseEntity == null) {
-					if (logger.isLoggable(Level.WARNING))
-						logger.warning("Could not register " + baseType.getName() + " in DataModel");
-				} 
-			}*/
+			/*
+			 * if ((returnTypeBaseEntity == null) && (importReferencedEntities)) { if (logger.isLoggable(Level.FINE))
+			 * logger.finer("Force register " + baseType.getName() + " in DataModel"); LoadableDMEntity.createLoadableDMEntity(baseType,
+			 * dmModel, false, false); returnTypeBaseEntity = dmModel.getDMEntity(baseType); if (returnTypeBaseEntity == null) { if
+			 * (logger.isLoggable(Level.WARNING)) logger.warning("Could not register " + baseType.getName() + " in DataModel"); } }
+			 */
 
 			if (returnTypeBaseEntity != null) {
 				return DMType.makeResolvedDMType(returnTypeBaseEntity, DMType.arrayDepth(typeAsClass));
@@ -618,24 +605,16 @@ public class LoadableDMEntity extends DMEntity {
 		DMType returnedDMType = makeType(repository, returnType, importReferencedEntities);
 		newMethod.setReturnType(returnedDMType, true);
 
-		/*DMEntity returnTypeEntity = dmModel.getDMEntity(returnType);
-		if ((returnTypeEntity == null) && (importReferencedEntities)) {
-		    if (logger.isLoggable(Level.FINE))
-		        logger.finer("Force register " + returnType.getName() + " in DataModel");
-		    LoadableDMEntity.createLoadableDMEntity(returnType, dmModel, false, false);
-		    returnTypeEntity = dmModel.getDMEntity(returnType);
-		    if (returnTypeEntity == null) {
-		        if (logger.isLoggable(Level.WARNING))
-		            logger.warning("Could not register " + returnType.getName() + " in DataModel");
-		    } 
-		}
-		
-		if ((!importReferencedEntities) && (returnTypeEntity == null)) {
-			newMethod.setReturnType(new DMType(returnType));
-		}
-		else {
-			newMethod.setReturnType(new DMType(returnTypeEntity));
-		}*/
+		/*
+		 * DMEntity returnTypeEntity = dmModel.getDMEntity(returnType); if ((returnTypeEntity == null) && (importReferencedEntities)) { if
+		 * (logger.isLoggable(Level.FINE)) logger.finer("Force register " + returnType.getName() + " in DataModel");
+		 * LoadableDMEntity.createLoadableDMEntity(returnType, dmModel, false, false); returnTypeEntity = dmModel.getDMEntity(returnType);
+		 * if (returnTypeEntity == null) { if (logger.isLoggable(Level.WARNING)) logger.warning("Could not register " + returnType.getName()
+		 * + " in DataModel"); } }
+		 * 
+		 * if ((!importReferencedEntities) && (returnTypeEntity == null)) { newMethod.setReturnType(new DMType(returnType)); } else {
+		 * newMethod.setReturnType(new DMType(returnTypeEntity)); }
+		 */
 
 		if (parameters != null) {
 			for (int j = 0; j < parameters.length; j++) {
@@ -654,27 +633,15 @@ public class LoadableDMEntity extends DMEntity {
 				param.setType(paramDMType);
 
 				/*
-				DMEntity paramTypeEntity = dmModel.getDMEntity(parameter);
-				if ((paramTypeEntity == null) && (importReferencedEntities)) {
-				    LoadableDMEntity.createLoadableDMEntity(parameter, dmModel, false, false);
-				    paramTypeEntity = dmModel.getDMEntity(parameter);
-				    if (logger.isLoggable(Level.FINE))
-				        logger.finer("Force register " + parameter.getName() + " in DataModel: " + paramTypeEntity);
-				    if (paramTypeEntity == null) {
-				        if (logger.isLoggable(Level.WARNING))
-				            logger.warning("Could not register " + parameter.getName() + " in DataModel");
-				    } 
-				}
-				DMMethodParameter param = new DMMethodParameter(dmModel,newMethod);
-				if (paramTypeEntity != null) {
-				    param.setName(paramTypeEntity.getNameAsMethodArgument());
-				    param.setType(new DMType(paramTypeEntity));
-				}
-				else {
-				    param.setName("???");
-				    param.setType(new DMType(parameter));
-				    //param.setUnresolvedTypeClass(parameter);
-				}*/
+				 * DMEntity paramTypeEntity = dmModel.getDMEntity(parameter); if ((paramTypeEntity == null) && (importReferencedEntities)) {
+				 * LoadableDMEntity.createLoadableDMEntity(parameter, dmModel, false, false); paramTypeEntity =
+				 * dmModel.getDMEntity(parameter); if (logger.isLoggable(Level.FINE)) logger.finer("Force register " + parameter.getName() +
+				 * " in DataModel: " + paramTypeEntity); if (paramTypeEntity == null) { if (logger.isLoggable(Level.WARNING))
+				 * logger.warning("Could not register " + parameter.getName() + " in DataModel"); } } DMMethodParameter param = new
+				 * DMMethodParameter(dmModel,newMethod); if (paramTypeEntity != null) {
+				 * param.setName(paramTypeEntity.getNameAsMethodArgument()); param.setType(new DMType(paramTypeEntity)); } else {
+				 * param.setName("???"); param.setType(new DMType(parameter)); //param.setUnresolvedTypeClass(parameter); }
+				 */
 
 				newMethod.addToParametersNoCheck(param);
 			}
@@ -866,24 +833,14 @@ public class LoadableDMEntity extends DMEntity {
 				// lookup type
 				DMType propertyType = makeType(repository, returnType, importReferencedEntities);
 
-				/*DMEntity returnTypeEntity = dmModel.getDMEntity(returnType);
-				 if ((returnTypeEntity == null) && (importReferencedEntities)) {
-				     if (logger.isLoggable(Level.FINE))
-				         logger.finer("Force register " + type.getName() + " in DataModel: " + returnTypeEntity);
-				     LoadableDMEntity.createLoadableDMEntity(returnType, dmModel, false, false);
-				     returnTypeEntity = dmModel.getDMEntity(returnType);
-				     if (returnTypeEntity == null) {
-				         if (logger.isLoggable(Level.WARNING))
-				             logger.warning("Could not register " + type.getName() + " in DataModel");
-				     } 
-				 }
-				 DMType propertyType;
-				 if (returnTypeEntity != null) {
-				 	propertyType = new DMType(returnTypeEntity);
-				 }
-				 else {
-				 	propertyType = new DMType(returnType);
-				 }*/
+				/*
+				 * DMEntity returnTypeEntity = dmModel.getDMEntity(returnType); if ((returnTypeEntity == null) &&
+				 * (importReferencedEntities)) { if (logger.isLoggable(Level.FINE)) logger.finer("Force register " + type.getName() +
+				 * " in DataModel: " + returnTypeEntity); LoadableDMEntity.createLoadableDMEntity(returnType, dmModel, false, false);
+				 * returnTypeEntity = dmModel.getDMEntity(returnType); if (returnTypeEntity == null) { if (logger.isLoggable(Level.WARNING))
+				 * logger.warning("Could not register " + type.getName() + " in DataModel"); } } DMType propertyType; if (returnTypeEntity
+				 * != null) { propertyType = new DMType(returnTypeEntity); } else { propertyType = new DMType(returnType); }
+				 */
 
 				DMProperty newProperty = new DMProperty(dmModel, propertyName, propertyType, cardinality, true, isSettable,
 						DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
@@ -902,8 +859,11 @@ public class LoadableDMEntity extends DMEntity {
 	/**
 	 * Build a new DMProperty
 	 */
-	private static DMProperty makeProperty(Field field, DMModel dmModel, DMRepository repository, /*boolean includesGetOnlyProperties, boolean includesMethods,*/
-			boolean importReferencedEntities/*, Vector excludedSignatures*/) {
+	private static DMProperty makeProperty(Field field, DMModel dmModel, DMRepository repository, /*
+																								 * boolean includesGetOnlyProperties,
+																								 * boolean includesMethods,
+																								 */
+			boolean importReferencedEntities/* , Vector excludedSignatures */) {
 		// Class type = field.getDeclaringClass();
 		Type fieldType = field.getGenericType();
 		if (fieldType != Void.TYPE && Modifier.isPublic(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())) {
@@ -912,37 +872,31 @@ public class LoadableDMEntity extends DMEntity {
 			// lookup type
 			DMType propertyType = makeType(repository, fieldType, importReferencedEntities);
 
-			/*  DMEntity typeEntity = dmModel.getDMEntity(fieldType);
-			 if ((typeEntity == null) && (importReferencedEntities)) {
-			     if (logger.isLoggable(Level.FINE))
-			         logger.finer("Force register " + type.getName() + " in DataModel: " + typeEntity);
-			     LoadableDMEntity.createLoadableDMEntity(fieldType, dmModel, false, false);
-			     typeEntity = dmModel.getDMEntity(fieldType);
-			     if (typeEntity == null) {
-			         if (logger.isLoggable(Level.WARNING))
-			             logger.warning("Could not register " + type.getName() + " in DataModel");
-			     } 
-			 }*/
+			/*
+			 * DMEntity typeEntity = dmModel.getDMEntity(fieldType); if ((typeEntity == null) && (importReferencedEntities)) { if
+			 * (logger.isLoggable(Level.FINE)) logger.finer("Force register " + type.getName() + " in DataModel: " + typeEntity);
+			 * LoadableDMEntity.createLoadableDMEntity(fieldType, dmModel, false, false); typeEntity = dmModel.getDMEntity(fieldType); if
+			 * (typeEntity == null) { if (logger.isLoggable(Level.WARNING)) logger.warning("Could not register " + type.getName() +
+			 * " in DataModel"); } }
+			 */
 
 			// Look for name
 			String propertyName = field.getName();
 			// OK, we have the name, let's look at the cardinality
 			DMCardinality cardinality = DMCardinality.get(fieldType);
 
-			/*DMType propertyType = null;
-			if (typeEntity != null) {
-				propertyType = new DMType(typeEntity);
-			}
-			else {
-				propertyType = new DMType(fieldType);
-			}*/
+			/*
+			 * DMType propertyType = null; if (typeEntity != null) { propertyType = new DMType(typeEntity); } else { propertyType = new
+			 * DMType(fieldType); }
+			 */
 
 			DMProperty newProperty = new DMProperty(dmModel, propertyName, propertyType, cardinality, true, true,
 					DMPropertyImplementationType.PUBLIC_FIELD);
 			newProperty.setEntity(obtainDMEntity(repository, field.getDeclaringClass(), true));
 
-			/* if ((!importReferencedEntities) && (typeEntity == null))
-			 	newProperty.setUnresolvedTypeName(fieldType.getCanonicalName());*/
+			/*
+			 * if ((!importReferencedEntities) && (typeEntity == null)) newProperty.setUnresolvedTypeName(fieldType.getCanonicalName());
+			 */
 
 			return newProperty;
 		}
@@ -1053,14 +1007,11 @@ public class LoadableDMEntity extends DMEntity {
 
 		Type params[] = new Type[1];
 		params[0] = aType;
-		/*if (aType instanceof Class)
-			params[0] = (Class)aType;
-		else if (aType instanceof ParameterizedType)
-			params[0] = (Class)((ParameterizedType)aType).getRawType();
-		else if (aType instanceof TypeVariable){
-			logger.warning ("Pas tres bien gere pour le moment "+aType.getClass());
-			params[0] = Object.class;
-		}*/
+		/*
+		 * if (aType instanceof Class) params[0] = (Class)aType; else if (aType instanceof ParameterizedType) params[0] =
+		 * (Class)((ParameterizedType)aType).getRawType(); else if (aType instanceof TypeVariable){ logger.warning
+		 * ("Pas tres bien gere pour le moment "+aType.getClass()); params[0] = Object.class; }
+		 */
 
 		tries.add("set" + propertyNameWithFirstCharToUpperCase);
 		tries.add("_set" + propertyNameWithFirstCharToUpperCase);

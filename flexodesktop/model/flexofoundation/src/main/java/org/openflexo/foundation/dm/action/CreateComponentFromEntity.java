@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionExecutionFailed;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -103,6 +104,10 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEntity.class);
+	}
 
 	private ComponentType componentType;
 
@@ -248,9 +253,9 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 				if (p.getType() == null) {
 					break;
 				}
-				/*if(p.getType().isBoolean())
-				    ((IEStringWidget)droppedWidget).setFieldType(TextFieldType.)
-				else */
+				/*
+				 * if(p.getType().isBoolean()) ((IEStringWidget)droppedWidget).setFieldType(TextFieldType.) else
+				 */
 				if (p.getType().isString() || p.getType().isChar()) {
 					((IEStringWidget) droppedWidget).setFieldType(TextFieldType.TEXT);
 				} else if (p.getType().isInteger()) {

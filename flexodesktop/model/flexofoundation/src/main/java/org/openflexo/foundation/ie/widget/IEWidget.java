@@ -37,7 +37,6 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.openflexo.foundation.DeletableObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.AdditionalBindingDefinition;
 import org.openflexo.foundation.bindings.Bindable;
@@ -61,12 +60,6 @@ import org.openflexo.foundation.ie.IEPopupComponent;
 import org.openflexo.foundation.ie.IETopComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.TopComponentContainer;
-import org.openflexo.foundation.ie.action.ExportWidgetToPalette;
-import org.openflexo.foundation.ie.action.MakePartialComponent;
-import org.openflexo.foundation.ie.action.SuroundWithConditional;
-import org.openflexo.foundation.ie.action.SuroundWithRepetition;
-import org.openflexo.foundation.ie.action.UnwrapConditional;
-import org.openflexo.foundation.ie.action.UnwrapRepetition;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.dm.DisplayNeedsRefresh;
 import org.openflexo.foundation.ie.dm.IEDataModification;
@@ -222,23 +215,6 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 		return cls;
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(MakePartialComponent.actionType);
-		returned.add(SuroundWithConditional.actionType);
-		returned.add(SuroundWithRepetition.actionType);
-		returned.add(UnwrapConditional.actionType);
-		returned.add(UnwrapRepetition.actionType);
-		returned.add(ExportWidgetToPalette.actionType);
-		// returned.add(GenerateEntityFromSelection.actionType);
-		return returned;
-	}
-
-	// ==========================================================================
-	// ============================= InspectableObject
-	// ==========================
-	// ==========================================================================
 	public String getCSSName() {
 		return getFlexoCSS().getName();
 	}
@@ -842,10 +818,10 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 				return null;
 			}
 		} /*
-			* else { if (!(getParent() instanceof IESequenceTopComponent)) if (logger.isLoggable(Level.WARNING))
-			* logger.warning("widgets located within a " + getParent().getClass().getName() + " are not capable to find their label"); return
-			* null; }
-			*/
+		 * else { if (!(getParent() instanceof IESequenceTopComponent)) if (logger.isLoggable(Level.WARNING))
+		 * logger.warning("widgets located within a " + getParent().getClass().getName() + " are not capable to find their label"); return
+		 * null; }
+		 */
 		return null;
 	}
 
