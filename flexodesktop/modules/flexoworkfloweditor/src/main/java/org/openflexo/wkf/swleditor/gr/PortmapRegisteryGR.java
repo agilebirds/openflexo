@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -195,7 +196,8 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 
 	public void refreshOrientation() {
 		SubProcessNodeGR subProcessNodeGR = (SubProcessNodeGR) getContainerGraphicalRepresentation();
-		FGEPoint locationInSubProcessNode = GraphicalRepresentation.convertNormalizedPoint(this, new FGEPoint(0.5, 0.5), subProcessNodeGR);
+		FGEPoint locationInSubProcessNode = GraphicalRepresentationUtils.convertNormalizedPoint(this, new FGEPoint(0.5, 0.5),
+				subProcessNodeGR);
 		SimplifiedCardinalDirection orientation = FGEPoint.getSimplifiedOrientation(new FGEPoint(0.5, 0.5), locationInSubProcessNode);
 		if (orientation != _orientation) {
 			if (logger.isLoggable(Level.FINE)) {

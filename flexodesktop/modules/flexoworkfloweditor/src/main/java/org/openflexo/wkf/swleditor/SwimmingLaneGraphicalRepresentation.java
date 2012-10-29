@@ -19,12 +19,12 @@
  */
 package org.openflexo.wkf.swleditor;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.wkf.processeditor.gr.WKFConnectorGR;
 
-public class SwimmingLaneGraphicalRepresentation extends DrawingGraphicalRepresentation<FlexoProcess> {
+public class SwimmingLaneGraphicalRepresentation extends DrawingGraphicalRepresentationImpl<FlexoProcess> {
 
 	private SwimmingLaneRepresentation swimmingLaneRepresentation;
 

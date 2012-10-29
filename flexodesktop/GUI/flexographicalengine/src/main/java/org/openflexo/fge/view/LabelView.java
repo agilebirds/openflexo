@@ -360,11 +360,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 						|| notification.getParameter() == GraphicalRepresentation.Parameters.verticalTextAlignment) {
 					updateBounds();
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextX
-						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextY
+				} else if (notification.getParameter() == ShapeGraphicalRepresentation.ShapeParameters.relativeTextX
+						|| notification.getParameter() == ShapeGraphicalRepresentation.ShapeParameters.relativeTextY
 						|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextX
 						|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextY
-						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel) {
+						|| notification.getParameter() == ShapeGraphicalRepresentation.ShapeParameters.isFloatingLabel) {
 					updateBounds();
 					getPaintManager().repaint(this);
 				} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize

@@ -37,6 +37,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
@@ -499,7 +500,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 			public Rectangle paint(FGEGraphics drawingGraphics) {
 				Graphics2D oldGraphics = drawingGraphics.cloneGraphics();
 				drawingGraphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.4f, DashStyle.BIG_DASHES));
-				AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(RoleContainerGR.this,
+				AffineTransform at = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(RoleContainerGR.this,
 						drawingGraphics.getGraphicalRepresentation());
 				getArea().transform(at).paint(drawingGraphics);
 				drawingGraphics.releaseClonedGraphics(oldGraphics);

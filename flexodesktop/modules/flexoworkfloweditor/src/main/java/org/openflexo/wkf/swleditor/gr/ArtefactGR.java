@@ -27,6 +27,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.TextStyle;
@@ -123,8 +124,8 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 			if (node instanceof PetriGraphNode && ((PetriGraphNode) node).getParentPetriGraph() == parentPetrigraph) {
 				GraphicalRepresentation<?> gr = getGraphicalRepresentation(node);
 				if (gr != null) {
-					AffineTransform at = convertCoordinatesAT(gr.getParentGraphicalRepresentation(), getParentGraphicalRepresentation(),
-							1.0);
+					AffineTransform at = GraphicalRepresentationUtils.convertCoordinatesAT(gr.getParentGraphicalRepresentation(),
+							getParentGraphicalRepresentation(), 1.0);
 					if (node.hasLocationForContext(SWIMMING_LANE_EDITOR)
 							&& node.hasLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 						Point2D p1 = node.getLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
@@ -149,7 +150,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 	}
 
 	/*
-	 * @Override public void setBorder(org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder border) { if (border ==null) { if
+	 * @Override public void setBorder(org.openflexo.fge.ShapeGraphicalRepresentationUtils.ShapeBorder border) { if (border ==null) { if
 	 * (logger.isLoggable(Level.WARNING)) logger.warning("Cannot set null border on PetriGraphNodeGR"); border = new ShapeBorder(0,0,0,20);
 	 * } else { if (border.right<20) border.right=20; if (border.top<10) border.top=10; if (border.bottom<10) border.bottom=10; }
 	 * super.setBorder(border); }

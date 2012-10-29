@@ -281,7 +281,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 				// Use buffer
 				Image buffer = getPaintManager().getPaintBuffer();
 				Rectangle localViewBounds = g.getClipBounds();
-				Rectangle viewBoundsInDrawingView = GraphicalRepresentation.convertRectangle(getGraphicalRepresentation(), localViewBounds, getDrawingGraphicalRepresentation(), getScale());
+				Rectangle viewBoundsInDrawingView = GraphicalRepresentationUtils.convertRectangle(getGraphicalRepresentation(), localViewBounds, getDrawingGraphicalRepresentation(), getScale());
 				Point dp1 = localViewBounds.getLocation();
 				Point dp2 = new Point(localViewBounds.x+localViewBounds.width-1,localViewBounds.y+localViewBounds.height-1);
 				Point sp1 = viewBoundsInDrawingView.getLocation();
@@ -382,7 +382,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 						}
 					}
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == ConnectorGraphicalRepresentation.Parameters.applyForegroundToSymbols) {
+				} else if (notification.getParameter() == ConnectorGraphicalRepresentation.ConnectorParameters.applyForegroundToSymbols) {
 					getPaintManager().repaint(this);
 				} else if (notification instanceof ObjectWillMove) {
 					if (getPaintManager().isPaintingCacheEnabled()) {

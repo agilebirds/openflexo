@@ -307,7 +307,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				// Use buffer
 				Image buffer = getPaintManager().getPaintBuffer();
 				Rectangle localViewBounds = g.getClipBounds();
-				Rectangle viewBoundsInDrawingView = GraphicalRepresentation.convertRectangle(getGraphicalRepresentation(), localViewBounds, getDrawingGraphicalRepresentation(), getScale());
+				Rectangle viewBoundsInDrawingView = GraphicalRepresentationUtils.convertRectangle(getGraphicalRepresentation(), localViewBounds, getDrawingGraphicalRepresentation(), getScale());
 				//System.out.println("SHAPEVIEW  Paint buffer "+g.getClipBounds());
 				Point dp1 = localViewBounds.getLocation();
 				Point dp2 = new Point(localViewBounds.x+localViewBounds.width,localViewBounds.y+localViewBounds.height);

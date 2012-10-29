@@ -21,7 +21,7 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.geom.FGEPoint;
@@ -30,7 +30,7 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation<O> implements GraphicalFlexoObserver,
+public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentationImpl<O> implements GraphicalFlexoObserver,
 		ProcessEditorConstants {
 
 	@SuppressWarnings("unused")

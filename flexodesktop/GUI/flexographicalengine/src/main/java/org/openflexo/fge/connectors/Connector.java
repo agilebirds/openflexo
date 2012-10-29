@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
 import org.openflexo.fge.cp.ControlArea;
@@ -275,7 +275,7 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	 * g.setDefaultForeground(fs2); g.setDefaultBackground(bs2); secondDegreeCoveringArea.paint(g);
 	 * 
 	 * 
-	 * AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT( getStartObject(), getGraphicalRepresentation());
+	 * AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT( getStartObject(), getGraphicalRepresentation());
 	 * FGEArea testFromWest = getStartObject().getShape().getAllowedHorizontalConnectorLocationFromWest().transform(at1);
 	 * System.out.println("Was:"+getStartObject().getShape().getAllowedHorizontalConnectorLocationFromWest());
 	 * System.out.println("Is:"+testFromWest); g.setDefaultForeground(fs3); g.setDefaultBackground(bs3); testFromWest.paint(g);
@@ -294,9 +294,9 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	 * @return
 	 */
 	public FGEArea computeCoveringArea(int order) {
-		AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getStartObject(), getGraphicalRepresentation());
+		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getStartObject(), getGraphicalRepresentation());
 
-		AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getEndObject(), getGraphicalRepresentation());
+		AffineTransform at2 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getEndObject(), getGraphicalRepresentation());
 
 		if (order == 0) {
 			FGEArea startObjectShape = getStartObject().getShape().getShape().transform(at1);

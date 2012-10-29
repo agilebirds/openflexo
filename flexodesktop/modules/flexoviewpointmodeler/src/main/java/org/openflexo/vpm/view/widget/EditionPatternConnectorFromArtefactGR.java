@@ -22,7 +22,7 @@ package org.openflexo.vpm.view.widget;
 import java.awt.Color;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -31,7 +31,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.vpm.view.widget.EditionPatternPreviewRepresentation.ConnectorFromArtifact;
 
-public class EditionPatternConnectorFromArtefactGR extends ShapeGraphicalRepresentation<ConnectorFromArtifact> implements
+public class EditionPatternConnectorFromArtefactGR extends ShapeGraphicalRepresentationImpl<ConnectorFromArtifact> implements
 		GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")

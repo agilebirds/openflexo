@@ -33,9 +33,11 @@ import javax.swing.JPanel;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -318,12 +320,12 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 				}
 
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
+			drawingGR = new DrawingGraphicalRepresentationImpl(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			lineGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, line, drawing);
+			lineGR = new ShapeGraphicalRepresentationImpl(ShapeType.RECTANGLE, line, drawing);
 			lineGR.setWidth(25);
 			lineGR.setHeight(0);
 			lineGR.setX(-5);

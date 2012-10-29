@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.GeometricGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
@@ -66,7 +67,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		parentGR = getController().getDrawingView().getFocusRetriever()
 				.getFocusedObject(getController().getDrawingGraphicalRepresentation(), e);
 		shape = makeDefaultShape(e);
-		currentEditedShapeGR = new GeometricGraphicalRepresentation<S>(shape, shape, controller.getDrawing()) {
+		currentEditedShapeGR = new GeometricGraphicalRepresentationImpl(shape, shape, controller.getDrawing()) {
 			@Override
 			public void notifyGeometryChanged() {
 				super.notifyGeometryChanged();

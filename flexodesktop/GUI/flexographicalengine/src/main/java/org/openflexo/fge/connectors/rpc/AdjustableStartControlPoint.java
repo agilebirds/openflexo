@@ -22,7 +22,7 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -41,7 +41,7 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 		return getConnector().retrieveAllowedStartArea(false);
 
 		/*FGEShape<?> shape = getConnector().getStartObject().getShape().getOutline();
-		FGEShape<?> startArea = (FGEShape<?>) shape.transform(GraphicalRepresentation.convertNormalizedCoordinatesAT(getConnector().getStartObject(), getGraphicalRepresentation()));
+		FGEShape<?> startArea = (FGEShape<?>) shape.transform(GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getConnector().getStartObject(), getGraphicalRepresentation()));
 		
 		
 		if (getConnector().getPrimitiveAllowedStartOrientations().size() > 0 
@@ -81,8 +81,8 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 			return false;
 		}
 		setPoint(pt);
-		FGEPoint ptRelativeToStartObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), pt, getConnector()
-				.getStartObject());
+		FGEPoint ptRelativeToStartObject = GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), pt,
+				getConnector().getStartObject());
 		getConnector().setFixedStartLocation(ptRelativeToStartObject);
 		switch (getConnector().getAdjustability()) {
 		case AUTO_LAYOUT:

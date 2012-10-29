@@ -34,6 +34,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.controller.CustomDragControlAction;
@@ -134,7 +135,7 @@ public class DrawEdgeControl extends MouseDragControl {
 					((CalcDrawingShemaController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 
-			ConnectorGraphicalRepresentation<?> connectorGR = new ConnectorGraphicalRepresentation<ExampleDrawingConnector>();
+			ConnectorGraphicalRepresentation<?> connectorGR = new ConnectorGraphicalRepresentationImpl<ExampleDrawingConnector>();
 			connectorGR.setConnectorType(ConnectorType.LINE);
 			connectorGR.setIsSelectable(true);
 			connectorGR.setIsFocusable(true);

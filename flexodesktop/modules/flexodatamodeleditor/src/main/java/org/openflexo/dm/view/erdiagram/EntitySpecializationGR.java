@@ -23,9 +23,10 @@ import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.jdom.Verifier;
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
@@ -41,7 +42,7 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.toolbox.ToolBox;
 
-public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<EntitySpecialization> implements ERDiagramConstants {
+public class EntitySpecializationGR extends ConnectorGraphicalRepresentationImpl<EntitySpecialization> implements ERDiagramConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EntitySpecializationGR.class.getPackage().getName());
@@ -211,7 +212,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 	private void ensurePolylinConverterIsRegistered() {
 		if (!isPolylinConverterRegistered) {
 			if (getSpecializedEntity().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null) {
-				getSpecializedEntity().getProject().getStringEncoder()._addConverter(RECT_POLYLIN_CONVERTER);
+				getSpecializedEntity().getProject().getStringEncoder()._addConverter(GraphicalRepresentationUtils.RECT_POLYLIN_CONVERTER);
 			}
 			isPolylinConverterRegistered = true;
 		}

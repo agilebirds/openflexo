@@ -22,7 +22,7 @@ package org.openflexo.wkf.processeditor;
 import java.awt.Color;
 
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
@@ -41,7 +41,7 @@ import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.gr.WKFConnectorGR;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
 
-public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentation<FlexoProcess> implements ProcessEditorConstants {
+public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentationImpl<FlexoProcess> implements ProcessEditorConstants {
 	private FlexoProcess process;
 
 	protected static final Color GRID_COLOR = new Color(220, 220, 220);

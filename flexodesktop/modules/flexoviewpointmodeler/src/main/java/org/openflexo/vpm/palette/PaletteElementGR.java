@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -34,7 +34,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 import org.openflexo.toolbox.ToolBox;
 
-public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPaletteElement> implements GraphicalFlexoObserver {
+public class PaletteElementGR extends ShapeGraphicalRepresentationImpl<ViewPointPaletteElement> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PaletteElementGR.class.getPackage().getName());

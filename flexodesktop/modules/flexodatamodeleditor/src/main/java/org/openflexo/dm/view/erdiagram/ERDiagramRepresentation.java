@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -44,7 +45,7 @@ public class ERDiagramRepresentation extends DefaultDrawing<ERDiagram> implement
 
 	public ERDiagramRepresentation(ERDiagram aDiagram) {
 		super(aDiagram);
-		graphicalRepresentation = new DrawingGraphicalRepresentation<ERDiagram>(this);
+		graphicalRepresentation = new DrawingGraphicalRepresentationImpl<ERDiagram>(this);
 		graphicalRepresentation.setBackgroundColor(new Color(255, 255, 204));
 		graphicalRepresentation.addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl());
 

@@ -396,7 +396,7 @@ public class TestSwimmingLanes {
 				foreground.setLineWidth(0.2);
 				gr.setForeground(foreground);
 				gr.setBackground(BackgroundStyle.makeColorGradientBackground(new Color(230,230,230), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST));
-				gr.setBorder(new ShapeGraphicalRepresentation.ShapeBorder(10,10,10,10));
+				gr.setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(10,10,10,10));
 			}
 
 			public ShapeGraphicalRepresentation getGraphicalRepresentation() 
@@ -493,7 +493,7 @@ public class TestSwimmingLanes {
 					gr.setX(30);
 					gr.setY(300);
 					gr.setBackground(BackgroundStyle.makeColoredBackground(Color.ORANGE));
-					gr.setBorder(new ShapeGraphicalRepresentation.ShapeBorder(20,20,20,20));
+					gr.setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(20,20,20,20));
 				}
 
 				public ShapeGraphicalRepresentation getGraphicalRepresentation() 

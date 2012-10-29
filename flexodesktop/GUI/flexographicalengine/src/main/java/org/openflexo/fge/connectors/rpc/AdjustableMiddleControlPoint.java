@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -105,12 +105,12 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 
 		if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 			getConnector().setFixedStartLocation(
-					GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getFirstPoint(),
+					GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getFirstPoint(),
 							getGraphicalRepresentation().getStartObject()));
 		}
 		if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
 			getConnector().setFixedEndLocation(
-					GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getLastPoint(),
+					GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getLastPoint(),
 							getGraphicalRepresentation().getEndObject()));
 		}
 
@@ -197,7 +197,7 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 			getConnector().getStartControlPoint().setPoint(newPoint);
 			if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 				getConnector().setFixedStartLocation(
-						GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newPoint, getGraphicalRepresentation().getStartObject()));
+						GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPoint, getGraphicalRepresentation().getStartObject()));
 			}
 		}
 
@@ -214,7 +214,7 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 			getConnector().getEndControlPoint().setPoint(newPoint);
 			if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
 				getConnector().setFixedEndLocation(
-						GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newPoint, getGraphicalRepresentation().getEndObject()));
+						GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPoint, getGraphicalRepresentation().getEndObject()));
 			}
 		}
 

@@ -22,13 +22,14 @@ package org.openflexo.fge.drawingeditor;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public class MyShapeGraphicalRepresentation extends ShapeGraphicalRepresentation<MyShape> implements XMLSerializable {
+public class MyShapeGraphicalRepresentation extends ShapeGraphicalRepresentationImpl<MyShape> implements XMLSerializable {
 	private static final Logger logger = Logger.getLogger(MyShapeGraphicalRepresentation.class.getPackage().getName());
 
 	// Called for LOAD

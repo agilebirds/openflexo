@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
@@ -50,7 +51,7 @@ public class RMViewerRepresentation extends DefaultDrawing<FlexoProject> impleme
 
 	public RMViewerRepresentation(FlexoProject project) {
 		super(project);
-		graphicalRepresentation = new DrawingGraphicalRepresentation<FlexoProject>(this);
+		graphicalRepresentation = new DrawingGraphicalRepresentationImpl<FlexoProject>(this);
 
 		project.addObserver(this);
 

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.DecorationPainter;
@@ -43,7 +44,7 @@ import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.toolbox.ToolBox;
 
-public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implements GraphicalFlexoObserver, ERDiagramConstants {
+public class DMEntityGR extends ShapeGraphicalRepresentationImpl<DMEntity> implements GraphicalFlexoObserver, ERDiagramConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DMEntityGR.class.getPackage().getName());

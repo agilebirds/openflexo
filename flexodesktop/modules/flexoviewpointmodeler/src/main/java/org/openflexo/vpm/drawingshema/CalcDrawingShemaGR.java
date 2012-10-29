@@ -21,7 +21,7 @@ package org.openflexo.vpm.drawingshema;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
@@ -33,7 +33,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 
-public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDrawingShema> implements GraphicalFlexoObserver,
+public class CalcDrawingShemaGR extends DrawingGraphicalRepresentationImpl<ExampleDrawingShema> implements GraphicalFlexoObserver,
 		CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")

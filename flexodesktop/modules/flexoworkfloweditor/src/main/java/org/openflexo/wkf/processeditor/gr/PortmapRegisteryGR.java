@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -194,11 +195,12 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 		// getPortMapRegistery().printObservers();
 		// logger.info("Sinon moi en tant que GR, j'ai: "+countObservers()+" observers");
 		SubProcessNodeGR subProcessNodeGR = (SubProcessNodeGR) getContainerGraphicalRepresentation();
-		if (!GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(this, subProcessNodeGR)) {
+		if (!GraphicalRepresentationUtils.areElementsConnectedInGraphicalHierarchy(this, subProcessNodeGR)) {
 			// Might happen when big restructuration (eg multiple deletion, see Bug 1005566)
 			return;
 		}
-		FGEPoint locationInSubProcessNode = GraphicalRepresentation.convertNormalizedPoint(this, new FGEPoint(0.5, 0.5), subProcessNodeGR);
+		FGEPoint locationInSubProcessNode = GraphicalRepresentationUtils.convertNormalizedPoint(this, new FGEPoint(0.5, 0.5),
+				subProcessNodeGR);
 		SimplifiedCardinalDirection orientation = FGEPoint.getSimplifiedOrientation(new FGEPoint(0.5, 0.5), locationInSubProcessNode);
 		if (orientation != _orientation) {
 			if (logger.isLoggable(Level.FINE)) {

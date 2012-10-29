@@ -186,7 +186,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 				MouseDragControlActionType.RECTANGLE_SELECTING));
 	}
 
-	public ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentationImpl<?> aGR, O aDrawable, Drawing<?> aDrawing) {
+	public ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation<?> aGR, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 
 		setsWith(aGR);
@@ -508,7 +508,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public FGEPoint getLocationInDrawing() {
-		return GraphicalRepresentation.convertNormalizedPoint(this, new FGEPoint(0, 0), getDrawingGraphicalRepresentation());
+		return GraphicalRepresentationUtils.convertNormalizedPoint(this, new FGEPoint(0, 0), getDrawingGraphicalRepresentation());
 	}
 
 	/*@Override
@@ -2140,7 +2140,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public Rectangle getBounds(GraphicalRepresentation<?> container, double scale) {
 		Rectangle bounds = getBounds(scale);
-		bounds = convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
+		bounds = GraphicalRepresentationUtils.convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
 		return bounds;
 	}
 
@@ -2159,7 +2159,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		if (container == null) {
 			logger.warning("Container is null for " + this + " validated=" + isValidated());
 		}
-		bounds = convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
+		bounds = GraphicalRepresentationUtils.convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
 		return bounds;
 	}
 
@@ -2428,7 +2428,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public String getInspectorName() {
-		return "ShapeGraphicalRepresentation.inspector";
+		return "ShapeGraphicalRepresentationUtils.inspector";
 	}
 
 	// Override for a custom view management

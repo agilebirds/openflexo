@@ -21,7 +21,7 @@ package org.openflexo.vpm.view.widget;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -29,7 +29,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 
-public class EditionPatternPreviewShemaGR extends DrawingGraphicalRepresentation<EditionPattern> implements GraphicalFlexoObserver,
+public class EditionPatternPreviewShemaGR extends DrawingGraphicalRepresentationImpl<EditionPattern> implements GraphicalFlexoObserver,
 		EditionPatternPreviewConstants {
 
 	@SuppressWarnings("unused")

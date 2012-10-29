@@ -21,7 +21,7 @@ package org.openflexo.vpm.drawingshema;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -33,8 +33,8 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.toolbox.ToolBox;
 
-public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<ExampleDrawingConnector> implements GraphicalFlexoObserver,
-		CalcDrawingShemaConstants {
+public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentationImpl<ExampleDrawingConnector> implements
+		GraphicalFlexoObserver, CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingConnectorGR.class.getPackage().getName());

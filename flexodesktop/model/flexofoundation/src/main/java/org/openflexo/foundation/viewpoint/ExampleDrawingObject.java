@@ -41,7 +41,7 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	private Vector<ExampleDrawingObject> childs;
 
 	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation is a org.openflexo.fge.GraphicalRepresentation.
+	// But you can assert graphical representation is a org.openflexo.fge.GraphicalRepresentationUtils.
 	// For a CalcDrawingSchema, graphicalRepresentation is a DrawingGraphicalRepresentation
 	// For a CalcDrawingShape, graphicalRepresentation is a ShapeGraphicalRepresentation
 	// For a CalcDrawingConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation

@@ -49,6 +49,15 @@ import org.openflexo.fge.view.ShapeView;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
+/**
+ * Represents a shape in a diagram<br>
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ *            the represented type
+ */
 public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
 
 	public static enum ShapeParameters implements GRParameter {

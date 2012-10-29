@@ -46,7 +46,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 	public VEShemaRepresentation(View aShema) {
 		super(aShema);
 		// graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
-		// graphicalRepresentation.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
+		// GraphicalRepresentationUtils.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
 
 		shapesGR = new Hashtable<ViewShape, VEShapeGR>();
 		connectorsGR = new Hashtable<ViewConnector, VEConnectorGR>();
@@ -120,9 +120,9 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 			}
 			else if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 				OEShapeGR graphicalRepresentation = new OEShapeGR(shape,this);
-				graphicalRepresentation.setsWith(
+				GraphicalRepresentationUtils.setsWith(
 						(ShapeGraphicalRepresentation)shape.getGraphicalRepresentation(),
-						GraphicalRepresentation.Parameters.text);
+						GraphicalRepresentationUtils.Parameters.text);
 				shape.setGraphicalRepresentation(graphicalRepresentation);
 				return graphicalRepresentation;
 			}
@@ -142,9 +142,9 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 			}
 			else if (connector.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
 				OEConnectorGR graphicalRepresentation = new OEConnectorGR(connector,this);
-				graphicalRepresentation.setsWith(
+				GraphicalRepresentationUtils.setsWith(
 						(ConnectorGraphicalRepresentation)connector.getGraphicalRepresentation(),
-						GraphicalRepresentation.Parameters.text);
+						GraphicalRepresentationUtils.Parameters.text);
 				connector.setGraphicalRepresentation(graphicalRepresentation);
 				return graphicalRepresentation;
 			}
@@ -197,7 +197,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			VEShapeGR graphicalRepresentation = new VEShapeGR(shape, this);
 			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) shape.getGraphicalRepresentation(),
-					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentation.Parameters.border*/);
+					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentationUtils.Parameters.border*/);
 			shape.setGraphicalRepresentation(graphicalRepresentation);
 			return graphicalRepresentation;
 		}

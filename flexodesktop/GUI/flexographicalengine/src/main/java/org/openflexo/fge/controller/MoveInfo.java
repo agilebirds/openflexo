@@ -31,6 +31,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -53,7 +54,7 @@ public class MoveInfo {
 	MoveInfo(ShapeGraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller) {
 		view = controller.getDrawingView();
 
-		startMovingLocationInDrawingView = GraphicalRepresentation
+		startMovingLocationInDrawingView = GraphicalRepresentationUtils
 				.convertPointFromDrawableToDrawing(graphicalRepresentation.getParentGraphicalRepresentation(), new Point(
 						graphicalRepresentation.getViewX(controller.getScale()), graphicalRepresentation.getViewY(controller.getScale())),
 						controller.getScale());
@@ -184,9 +185,9 @@ public class MoveInfo {
 			FGERectangle bounds = new FGERectangle(0, 0, container.getWidth() - movedObject.getWidth(), container.getHeight()
 					- movedObject.getHeight(), Filling.FILLED);
 			FGEPoint nearestPoint = bounds.getNearestPoint(desiredLocation);
-			Point p1 = GraphicalRepresentation.convertPointFromDrawableToDrawing(movedObject.getContainerGraphicalRepresentation(),
+			Point p1 = GraphicalRepresentationUtils.convertPointFromDrawableToDrawing(movedObject.getContainerGraphicalRepresentation(),
 					desiredLocation.toPoint(), view.getScale());
-			Point p2 = GraphicalRepresentation.convertPointFromDrawableToDrawing(movedObject.getContainerGraphicalRepresentation(),
+			Point p2 = GraphicalRepresentationUtils.convertPointFromDrawableToDrawing(movedObject.getContainerGraphicalRepresentation(),
 					nearestPoint.toPoint(), view.getScale());
 			if (Point2D.distance(p1.x, p1.y, p2.x, p2.y) > FGEConstants.DND_DISTANCE) {
 				return true;

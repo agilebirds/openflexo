@@ -36,6 +36,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
@@ -276,7 +277,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				if (dropPoint.y < 0) {
 					dropPoint.y = 0;
 				}
-				Point p = GraphicalRepresentation.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR,
+				Point p = GraphicalRepresentationUtils.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR,
 						controller.getScale());
 				FGEPoint dropLocation = new FGEPoint(p.x / controller.getScale(), p.y / controller.getScale());
 				Role to = null;
@@ -331,7 +332,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	private Role createRole(FGEPoint dropLocation, RoleList container, SimplifiedCardinalDirection direction) {
 		FGEPoint locationInDrawing = null;
 		if (controller.getGraphicalRepresentation(container) != null) {
-			locationInDrawing = dropLocation.transform(GraphicalRepresentation.convertCoordinatesAT(
+			locationInDrawing = dropLocation.transform(GraphicalRepresentationUtils.convertCoordinatesAT(
 					controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));// gr.getLocationInDrawing();
 		}
 
@@ -398,7 +399,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		if (/*nodeGR.getIsSelected() ||*/roleGR.isResizing() || roleGR.isMoving()) {
 			return null;
 		}
-		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(roleGR, drawingGraphics.getGraphicalRepresentation());
+		AffineTransform at = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(roleGR,
+				drawingGraphics.getGraphicalRepresentation());
 
 		Graphics2D oldGraphics = drawingGraphics.cloneGraphics();
 

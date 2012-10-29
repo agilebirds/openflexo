@@ -71,6 +71,7 @@ import org.openflexo.fge.geomedit.edition.CreateVerticalLineWithPoint;
 import org.openflexo.fge.geomedit.edition.Edition;
 import org.openflexo.fge.geomedit.edition.EditionInput;
 import org.openflexo.fge.view.DrawingView;
+import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
@@ -464,7 +465,7 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
+			notifyObservers(new UniqueSelection((InspectableObject) getSelectedObjects().get(0), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -480,7 +481,7 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
+			notifyObservers(new UniqueSelection((InspectableObject) getSelectedObjects().get(0), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -504,7 +505,7 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 	public void selectDrawing() {
 		super.selectDrawing();
 		setChanged();
-		notifyObservers(new UniqueSelection(getDrawingGraphicalRepresentation(), null));
+		notifyObservers(new UniqueSelection((InspectableObject) getDrawingGraphicalRepresentation(), null));
 	}
 
 	@Override

@@ -73,7 +73,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 						VEShapeGR expectedGR = (VEShapeGR) action.getParent().getGraphicalRepresentation();
 						VEShapeGR myGR = (VEShapeGR) action.getPrimaryShape().getGraphicalRepresentation();
 						Point p = new Point((int) myGR.getX(), (int) myGR.getY());
-						Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
+						Point newP = GraphicalRepresentationUtils.convertPoint(expectedGR, p, parentGR, 1.0);
 						myGR.setLocation(new FGEPoint(newP.x, newP.y));
 						logger.info("border6 = " + myGR.getBorder());
 						logger.info("Shape has been relocated");

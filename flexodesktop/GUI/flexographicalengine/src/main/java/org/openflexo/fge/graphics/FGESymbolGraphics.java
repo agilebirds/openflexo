@@ -36,7 +36,7 @@ public class FGESymbolGraphics extends FGEGraphics {
 	}
 
 	// sometimes this method throw a class cast exception with a TokenEdgeGR instead of a
-	// ShapeGraphicalRepresentation.
+	// ShapeGraphicalRepresentationUtils.
 	// don't know the source cause, but commenting this code seems to be a workaround.
 
 	// The real solution could be to use Generic Typing to find the root cause of this issue

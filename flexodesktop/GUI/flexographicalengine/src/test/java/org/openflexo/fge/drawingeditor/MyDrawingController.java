@@ -28,6 +28,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.controller.DrawingController;
@@ -35,6 +36,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
@@ -125,7 +127,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	public void addNewConnector(MyConnector aConnector) {
 		ShapeGraphicalRepresentation startObject = aConnector.getStartObject();
 		ShapeGraphicalRepresentation endObject = aConnector.getEndObject();
-		GraphicalRepresentation fatherGR = GraphicalRepresentation.getFirstCommonAncestor(startObject, endObject);
+		GraphicalRepresentation fatherGR = GraphicalRepresentationUtils.getFirstCommonAncestor(startObject, endObject);
 		((MyDrawingElement) fatherGR.getDrawable()).addToChilds(aConnector);
 		// getDrawing().addDrawable(aConnector, fatherGR.getDrawable());
 	}
@@ -141,7 +143,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
+			notifyObservers(new UniqueSelection((InspectableObject) (getSelectedObjects().get(0)), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -153,7 +155,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
+			notifyObservers(new UniqueSelection((InspectableObject) (getSelectedObjects().get(0)), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -170,7 +172,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	public void selectDrawing() {
 		super.selectDrawing();
 		setChanged();
-		notifyObservers(new UniqueSelection(getDrawingGraphicalRepresentation(), null));
+		notifyObservers(new UniqueSelection((InspectableObject) getDrawingGraphicalRepresentation(), null));
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -43,7 +44,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getStartObject(),
+		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getStartObject(),
 				getGraphicalRepresentation());
 		FGEArea startArea = getGraphicalRepresentation().getStartObject().getShape().getShape().transform(at1);
 		return new FGESubstractionArea(new FGEPlane(), startArea, false);
@@ -102,7 +103,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 			getConnector().getStartControlPoint().setPoint(newStartPoint);
 			if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 				getConnector().setFixedStartLocation(
-						GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newStartPoint,
+						GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPoint,
 								getGraphicalRepresentation().getStartObject()));
 			}
 
@@ -241,7 +242,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 				getConnector().getStartControlPoint().setPoint(newStartPosition);
 				if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 					getConnector().setFixedStartLocation(
-							GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newStartPosition,
+							GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPosition,
 									getGraphicalRepresentation().getStartObject()));
 				}
 
@@ -283,7 +284,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 	/*private void movedFirstCP()
 	{
 
-		AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
+		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
 				getConnector().getStartObject(), getGraphicalRepresentation());
 		FGEArea startArea = getConnector().getStartObject().getShape().getOutline().transform(at1);
 

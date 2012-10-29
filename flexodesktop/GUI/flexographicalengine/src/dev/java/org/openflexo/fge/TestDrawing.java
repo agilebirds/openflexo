@@ -400,7 +400,7 @@ public class TestDrawing {
 				gr.setY(300);
 				((Rectangle) gr.getShape()).setIsRounded(true);
 				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.ORANGE));
-				gr.setBorder(new ShapeGraphicalRepresentation.ShapeBorder(20, 20, 20, 20));
+				gr.setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(20, 20, 20, 20));
 				circle = new MyCircle();
 			}
 
@@ -442,7 +442,7 @@ public class TestDrawing {
 				gr.setY(100);
 				gr.getForeground().setColor(Color.BLUE);
 				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.YELLOW));
-				gr.setBorder(new MyShapeGraphicalRepresentation.ShapeBorder(20, 10, 50, 0));
+				gr.setBorder(new MyShapeGraphicalRepresentationUtils.ShapeBorder(20, 10, 50, 0));
 				gr.setLayer(2);
 				gr.setDecorationPainter(new DecorationPainter() {
 					@Override
@@ -478,7 +478,7 @@ public class TestDrawing {
 				gr.setLayer(3);
 				gr.getForeground().setColor(Color.BLUE);
 				gr.setBackground(BackgroundStyle.makeImageBackground(new FileResource("Resources/WKF/IfOperator.gif")));
-				gr.setBorder(new MyShapeGraphicalRepresentation.ShapeBorder(20, 10, 50, 0));
+				gr.setBorder(new MyShapeGraphicalRepresentationUtils.ShapeBorder(20, 10, 50, 0));
 			}
 
 			@Override

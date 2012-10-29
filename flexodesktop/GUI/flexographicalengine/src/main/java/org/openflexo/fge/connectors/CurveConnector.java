@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
@@ -102,7 +102,7 @@ public class CurveConnector extends Connector {
 				// We have to compute the intersection between this line and the outline
 				// of joined shapes
 
-				FGEPoint centerOfEndObjectSeenFromStartObject = GraphicalRepresentation.convertNormalizedPoint(getEndObject(),
+				FGEPoint centerOfEndObjectSeenFromStartObject = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(),
 						new FGEPoint(0.5, 0.5), getStartObject());
 				cp1RelativeToStartObject = getStartObject().getShape().outlineIntersect(centerOfEndObjectSeenFromStartObject);
 				if (cp1RelativeToStartObject == null) {
@@ -110,7 +110,7 @@ public class CurveConnector extends Connector {
 					cp1RelativeToStartObject = new FGEPoint(0.5, 0.5);
 				}
 
-				FGEPoint centerOfStartObjectSeenFromEndObject = GraphicalRepresentation.convertNormalizedPoint(getStartObject(),
+				FGEPoint centerOfStartObjectSeenFromEndObject = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(),
 						new FGEPoint(0.5, 0.5), getEndObject());
 				cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(centerOfStartObjectSeenFromEndObject);
 				if (cp2RelativeToEndObject == null) {
@@ -128,7 +128,7 @@ public class CurveConnector extends Connector {
 			}
 			cp1RelativeToStartObject = getStartObject().getShape().outlineIntersect(cp1RelativeToStartObject);
 			if (cp1RelativeToStartObject != null) {
-				newP1 = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject,
+				newP1 = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject,
 						getGraphicalRepresentation());
 			}
 
@@ -137,8 +137,8 @@ public class CurveConnector extends Connector {
 			}
 			cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(cp2RelativeToEndObject);
 			if (cp2RelativeToEndObject != null) {
-				newP2 = GraphicalRepresentation
-						.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
+				newP2 = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject,
+						getGraphicalRepresentation());
 			}
 
 			if (cpPosition == null) {
@@ -156,7 +156,7 @@ public class CurveConnector extends Connector {
 
 			updateCPPositionIfNeeded();
 
-			FGEPoint cpPositionSeenFromStartObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(),
+			FGEPoint cpPositionSeenFromStartObject = GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(),
 					cpPosition, getStartObject());
 			cp1RelativeToStartObject = getStartObject().getShape().outlineIntersect(cpPositionSeenFromStartObject);
 			if (cp1RelativeToStartObject == null) {
@@ -164,17 +164,18 @@ public class CurveConnector extends Connector {
 				cp1RelativeToStartObject = new FGEPoint(0.5, 0.5);
 			}
 
-			FGEPoint cpPositionSeenFromEndObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), cpPosition,
-					getEndObject());
+			FGEPoint cpPositionSeenFromEndObject = GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(),
+					cpPosition, getEndObject());
 			cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(cpPositionSeenFromEndObject);
 			if (cp2RelativeToEndObject == null) {
 				logger.warning("outlineIntersect() returned null");
 				cp2RelativeToEndObject = new FGEPoint(0.5, 0.5);
 			}
 
-			newP1 = GraphicalRepresentation
-					.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject, getGraphicalRepresentation());
-			newP2 = GraphicalRepresentation.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
+			newP1 = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject,
+					getGraphicalRepresentation());
+			newP2 = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject,
+					getGraphicalRepresentation());
 
 		}
 
@@ -183,7 +184,7 @@ public class CurveConnector extends Connector {
 			public FGEArea getDraggingAuthorizedArea() {
 				if (getAreBoundsAdjustable()) {
 					FGEShape<?> shape = getStartObject().getShape().getShape();
-					FGEShape<?> returned = (FGEShape<?>) shape.transform(GraphicalRepresentation.convertNormalizedCoordinatesAT(
+					FGEShape<?> returned = (FGEShape<?>) shape.transform(GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
 							getStartObject(), getGraphicalRepresentation()));
 					returned.setIsFilled(false);
 					return returned;
@@ -198,7 +199,7 @@ public class CurveConnector extends Connector {
 				if (getAreBoundsAdjustable()) {
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 					setPoint(pt);
-					cp1RelativeToStartObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), pt,
+					cp1RelativeToStartObject = GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), pt,
 							getStartObject());
 					refreshCurve();
 					getGraphicalRepresentation().notifyConnectorChanged();
@@ -213,7 +214,7 @@ public class CurveConnector extends Connector {
 			public FGEArea getDraggingAuthorizedArea() {
 				if (getAreBoundsAdjustable()) {
 					FGEShape<?> shape = getEndObject().getShape().getShape();
-					FGEShape<?> returned = (FGEShape<?>) shape.transform(GraphicalRepresentation.convertNormalizedCoordinatesAT(
+					FGEShape<?> returned = (FGEShape<?>) shape.transform(GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
 							getEndObject(), getGraphicalRepresentation()));
 					returned.setIsFilled(false);
 					return returned;
@@ -228,7 +229,7 @@ public class CurveConnector extends Connector {
 				if (getAreBoundsAdjustable()) {
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 					setPoint(pt);
-					cp2RelativeToEndObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), pt,
+					cp2RelativeToEndObject = GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), pt,
 							getEndObject());
 					refreshCurve();
 					getGraphicalRepresentation().notifyConnectorChanged();
@@ -310,9 +311,9 @@ public class CurveConnector extends Connector {
 	}
 
 	private FGESegment getCenterToCenterSegment() {
-		return new FGESegment(GraphicalRepresentation.convertNormalizedPoint(getStartObject(), getStartObject().getShape().getShape()
-				.getCenter(), getGraphicalRepresentation()), GraphicalRepresentation.convertNormalizedPoint(getEndObject(), getEndObject()
-				.getShape().getShape().getCenter(), getGraphicalRepresentation()));
+		return new FGESegment(GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), getStartObject().getShape().getShape()
+				.getCenter(), getGraphicalRepresentation()), GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(),
+				getEndObject().getShape().getShape().getCenter(), getGraphicalRepresentation()));
 	}
 
 	@Override
@@ -323,25 +324,25 @@ public class CurveConnector extends Connector {
 	};
 
 	private void updateFromNewCPPosition() {
-		FGEPoint cpPositionSeenFromStartObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), cpPosition,
-				getStartObject());
+		FGEPoint cpPositionSeenFromStartObject = GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(),
+				cpPosition, getStartObject());
 		cp1RelativeToStartObject = getStartObject().getShape().outlineIntersect(cpPositionSeenFromStartObject);
 		if (cp1RelativeToStartObject == null) {
 			logger.warning("outlineIntersect() returned null");
 			cp1RelativeToStartObject = new FGEPoint(0.5, 0.5);
 		}
 
-		FGEPoint cpPositionSeenFromEndObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), cpPosition,
-				getEndObject());
+		FGEPoint cpPositionSeenFromEndObject = GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(),
+				cpPosition, getEndObject());
 		cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(cpPositionSeenFromEndObject);
 		if (cp2RelativeToEndObject == null) {
 			logger.warning("outlineIntersect() returned null");
 			cp2RelativeToEndObject = new FGEPoint(0.5, 0.5);
 		}
 
-		FGEPoint newP1 = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject,
+		FGEPoint newP1 = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject,
 				getGraphicalRepresentation());
-		FGEPoint newP2 = GraphicalRepresentation.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject,
+		FGEPoint newP2 = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject,
 				getGraphicalRepresentation());
 
 		cp1.setPoint(newP1);

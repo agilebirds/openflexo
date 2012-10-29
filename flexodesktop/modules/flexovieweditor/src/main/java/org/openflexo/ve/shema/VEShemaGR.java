@@ -21,7 +21,7 @@ package org.openflexo.ve.shema;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -33,7 +33,7 @@ import org.openflexo.foundation.view.ShapeRemoved;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
-public class VEShemaGR extends DrawingGraphicalRepresentation<View> implements GraphicalFlexoObserver, VEShemaConstants {
+public class VEShemaGR extends DrawingGraphicalRepresentationImpl<View> implements GraphicalFlexoObserver, VEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEShemaGR.class.getPackage().getName());

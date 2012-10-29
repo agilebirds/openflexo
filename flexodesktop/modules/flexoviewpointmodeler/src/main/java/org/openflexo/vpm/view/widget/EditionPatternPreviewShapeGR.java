@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
@@ -35,7 +35,7 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.GraphicalRepresentationChanged;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 
-public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<ShapePatternRole> implements GraphicalFlexoObserver,
+public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentationImpl<ShapePatternRole> implements GraphicalFlexoObserver,
 		EditionPatternPreviewConstants {
 
 	@SuppressWarnings("unused")

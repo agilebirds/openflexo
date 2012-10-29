@@ -353,11 +353,11 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 				DrawingTreeNode<?> startTreeNode = _hashMap.get(connector.getStartObject().getDrawable());
 				DrawingTreeNode<?> endTreeNode = _hashMap.get(connector.getEndObject().getDrawable());
 				if (startTreeNode != null && startTreeNode.isInvalidated) {
-					// System.out.println("Invalidate "+n.graphicalRepresentation.getDrawable()+" because "+startTreeNode.graphicalRepresentation.getDrawable()+" is invalidated");
+					// System.out.println("Invalidate "+n.GraphicalRepresentationUtils.getDrawable()+" because "+startTreeNode.GraphicalRepresentationUtils.getDrawable()+" is invalidated");
 					n.invalidate();
 				}
 				if (endTreeNode != null && endTreeNode.isInvalidated) {
-					// System.out.println("Invalidate "+n.graphicalRepresentation.getDrawable()+" because "+endTreeNode.graphicalRepresentation.getDrawable()+" is invalidated");
+					// System.out.println("Invalidate "+n.GraphicalRepresentationUtils.getDrawable()+" because "+endTreeNode.GraphicalRepresentationUtils.getDrawable()+" is invalidated");
 					n.invalidate();
 				}
 			}

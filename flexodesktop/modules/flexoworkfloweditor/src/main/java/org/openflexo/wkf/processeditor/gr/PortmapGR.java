@@ -72,7 +72,7 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 
 		setForeground(ForegroundStyle.makeStyle(Color.BLACK));
 		setBackground(BackgroundStyle.makeColoredBackground(getMainBgColor()));
-		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0,10,0,0));
+		// setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(0,10,0,0));
 
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 

@@ -120,7 +120,7 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 	public abstract void setBindingValue(Object value, BindingEvaluationContext context);
 
 	public static interface BindingEvaluationContext {
-		public Object getValue(BindingVariable variable);
+		public Object getValue(BindingVariable<?> variable);
 	}
 
 	public abstract Type getAccessedType();

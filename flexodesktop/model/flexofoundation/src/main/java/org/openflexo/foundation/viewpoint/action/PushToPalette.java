@@ -26,9 +26,11 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
@@ -116,7 +118,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 
 			if (takeScreenshotForTopLevelElement) {
 				File screenshotFile = saveScreenshot();
-				ShapeGraphicalRepresentation gr = new ShapeGraphicalRepresentation();
+				ShapeGraphicalRepresentation gr = new ShapeGraphicalRepresentationImpl();
 				gr.setShapeType(ShapeType.RECTANGLE);
 				gr.setForeground(ForegroundStyle.makeNone());
 				gr.setBackground(new BackgroundStyle.BackgroundImage(screenshotFile));
@@ -131,10 +133,10 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 			} else {
 				GraphicalRepresentation gr = (GraphicalRepresentation) getFocusedObject().getGraphicalRepresentation();
 				if (gr instanceof ShapeGraphicalRepresentation) {
-					graphicalRepresentation = new ShapeGraphicalRepresentation();
+					graphicalRepresentation = new ShapeGraphicalRepresentationImpl();
 					((ShapeGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
 				} else if (gr instanceof ConnectorGraphicalRepresentation) {
-					graphicalRepresentation = new ConnectorGraphicalRepresentation();
+					graphicalRepresentation = new ConnectorGraphicalRepresentationImpl();
 					((ConnectorGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
 				}
 			}

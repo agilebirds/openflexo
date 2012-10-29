@@ -48,7 +48,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	private Vector<ViewObject> childs;
 
 	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation is a org.openflexo.fge.GraphicalRepresentation.
+	// But you can assert graphical representation is a org.openflexo.fge.GraphicalRepresentationUtils.
 	// For a OEShema, graphicalRepresentation is a DrawingGraphicalRepresentation
 	// For a OEShape, graphicalRepresentation is a ShapeGraphicalRepresentation
 	// For a OEConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation

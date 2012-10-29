@@ -26,7 +26,7 @@ import java.util.Vector;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -67,9 +67,9 @@ public class CurvedPolylinConnector extends Connector {
 	}
 
 	private void updateControlPoints() {
-		FGEPoint newP1 = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5),
+		FGEPoint newP1 = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5),
 				getGraphicalRepresentation());
-		FGEPoint newP2 = GraphicalRepresentation.convertNormalizedPoint(getEndObject(), new FGEPoint(0.5, 0.5),
+		FGEPoint newP2 = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(), new FGEPoint(0.5, 0.5),
 				getGraphicalRepresentation());
 
 		p1.x = newP1.x;

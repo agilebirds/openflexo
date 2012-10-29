@@ -150,9 +150,9 @@ public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> 
 		/*if (element.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			logger.info("TODO: faire ici comme dans CalcDrawingShemaRepresentation");
 			PaletteElementGR graphicalRepresentation = new PaletteElementGR(element,this);
-			graphicalRepresentation.setsWith(
+			GraphicalRepresentationUtils.setsWith(
 					(ShapeGraphicalRepresentation)element.getGraphicalRepresentation(),
-					GraphicalRepresentation.Parameters.text);
+					GraphicalRepresentationUtils.Parameters.text);
 			element.setGraphicalRepresentation(graphicalRepresentation);
 			return graphicalRepresentation;
 		}*/

@@ -29,6 +29,7 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -56,7 +57,7 @@ import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.toolbox.ConcatenedList;
 
-public class RoleGR extends ShapeGraphicalRepresentation<Role> implements GraphicalFlexoObserver {
+public class RoleGR extends ShapeGraphicalRepresentationImpl<Role> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(RoleGR.class.getPackage().getName());
 

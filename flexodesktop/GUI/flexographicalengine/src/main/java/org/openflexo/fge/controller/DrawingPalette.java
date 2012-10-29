@@ -45,7 +45,9 @@ import javax.swing.ScrollPaneConstants;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementTransferable;
 import org.openflexo.fge.controller.PaletteElement.TransferedPaletteElement;
@@ -158,7 +160,7 @@ public class DrawingPalette {
 		private final DrawingGraphicalRepresentation<DrawingPalette> gr;
 
 		private PaletteDrawing() {
-			gr = new DrawingGraphicalRepresentation<DrawingPalette>(this, false);
+			gr = new DrawingGraphicalRepresentationImpl<DrawingPalette>(this, false);
 			gr.setWidth(width);
 			gr.setHeight(height);
 			gr.setDrawWorkingArea(false);
@@ -442,8 +444,8 @@ public class DrawingPalette {
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = GraphicalRepresentation.convertPoint(((FGEView<?>) targetComponent).getGraphicalRepresentation(), pt,
-										focused, ((FGEView<?>) targetComponent).getScale());
+								pt = GraphicalRepresentationUtils.convertPoint(((FGEView<?>) targetComponent).getGraphicalRepresentation(),
+										pt, focused, ((FGEView<?>) targetComponent).getScale());
 								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
 								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();
 								modelLocation.x -= ((TransferedPaletteElement) data).getOffset().x;

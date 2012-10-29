@@ -22,7 +22,7 @@ package org.openflexo.vpm.drawingshema;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -36,7 +36,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 import org.openflexo.toolbox.ToolBox;
 
-public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDrawingShape> implements GraphicalFlexoObserver,
+public class CalcDrawingShapeGR extends ShapeGraphicalRepresentationImpl<ExampleDrawingShape> implements GraphicalFlexoObserver,
 		CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")

@@ -21,7 +21,7 @@ package org.openflexo.wkf.roleeditor;
 
 import java.awt.Color;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -35,7 +35,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.RoleSpecialization;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 
-public class RoleSpecializationGR extends ConnectorGraphicalRepresentation<RoleSpecialization> implements GraphicalFlexoObserver {
+public class RoleSpecializationGR extends ConnectorGraphicalRepresentationImpl<RoleSpecialization> implements GraphicalFlexoObserver {
 
 	private ForegroundStyle foreground;
 

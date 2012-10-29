@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -38,21 +37,66 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.fge.GraphicalRepresentationImpl.DependencyLoopException;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.kvc.KeyValueCoding;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
-import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
+/**
+ * This is the common super interfaces for all graphical representation object encoded in a diagram<br>
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ *            the represented type
+ */
+@ModelEntity(isAbstract = true)
+@ImplementationClass(GraphicalRepresentationImpl.class)
 public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGEConstants, Observer,
-		HasPropertyChangeSupport {
+		HasPropertyChangeSupport, KeyValueCoding {
+
+	public static final String IDENTIFIER = "identifier";
+	public static final String LAYER = "layer";
+	public static final String HAS_TEXT = "hasText";
+	public static final String TEXT = "text";
+	public static final String IS_MULTILINE_ALLOWED = "isMultilineAllowed";
+	public static final String LINE_WRAP = "lineWrap";
+	public static final String CONTINUOUS_TEXT_EDITING = "continuousTextEditing";
+	public static final String TEXT_STYLE = "textStyle";
+	public static final String ABSOLUTE_TEXT_X = "absoluteTextX";
+	public static final String ABSOLUTE_TEXT_Y = "absoluteTextY";
+	public static final String HORIZONTAL_TEXT_ALIGNEMENT = "horizontalTextAlignment";
+	public static final String VERTICAL_TEXT_ALIGNEMENT = "verticalTextAlignment";
+	public static final String PARAGRAPH_ALIGNMENT = "paragraphAlignment";
+	public static final String IS_SELECTABLE = "isSelectable";
+	public static final String IS_FOCUSABLE = "isFocusable";
+	public static final String IS_SELECTED = "isSelected";
+	public static final String IS_FOCUSED = "isFocused";
+	public static final String DRAW_CONTROL_POINTS_WHEN_FOCUSED = "drawControlPointsWhenFocused";
+	public static final String DRAW_CONTROL_POINTS_WHEN_SELECTED = "drawControlPointsWhenSelected";
+	public static final String IS_READ_ONLY = "isReadOnly";
+	public static final String IS_LABEL_EDITABLE = "isLabelEditable";
+	public static final String IS_VISIBLE = "isVisible";
+	public static final String MOUSE_CLICK_CONTROLS = "mouseClickControls";
+	public static final String MOUSE_DRAG_CONTROLS = "mouseDragControls";
+	public static final String TOOLTIP_TEXT = "toolTipText";
+	public static final String VARIABLES = "variables";
 
 	public static interface LabelMetricsProvider {
 		public Dimension getScaledPreferredDimension(double scale);
@@ -130,76 +174,263 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 		}
 	}
 
-	public static StringEncoder.Converter<FGEPoint> POINT_CONVERTER = new StringEncoder.Converter<FGEPoint>(FGEPoint.class) {
-		@Override
-		public FGEPoint convertFromString(String value) {
-			try {
-				FGEPoint returned = new FGEPoint();
-				StringTokenizer st = new StringTokenizer(value, ",");
-				if (st.hasMoreTokens()) {
-					returned.x = Double.parseDouble(st.nextToken());
-				}
-				if (st.hasMoreTokens()) {
-					returned.y = Double.parseDouble(st.nextToken());
-				}
-				return returned;
-			} catch (NumberFormatException e) {
-				// Warns about the exception
-				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
-				return null;
-			}
+	@SuppressWarnings("serial")
+	public static class DependencyLoopException extends Exception {
+		private Vector<GraphicalRepresentation<?>> dependencies;
+
+		public DependencyLoopException(Vector<GraphicalRepresentation<?>> dependancies) {
+			this.dependencies = dependancies;
 		}
 
 		@Override
-		public String convertToString(FGEPoint aPoint) {
-			if (aPoint != null) {
-				return aPoint.x + "," + aPoint.y;
-			} else {
-				return null;
-			}
+		public String getMessage() {
+			return "DependencyLoopException: " + dependencies;
 		}
-	};
-	public static StringEncoder.Converter<FGERectPolylin> RECT_POLYLIN_CONVERTER = new StringEncoder.Converter<FGERectPolylin>(
-			FGERectPolylin.class) {
-		@Override
-		public FGERectPolylin convertFromString(String value) {
-			try {
-				Vector<FGEPoint> points = new Vector<FGEPoint>();
-				StringTokenizer st = new StringTokenizer(value, ";");
-				while (st.hasMoreTokens()) {
-					String nextPoint = st.nextToken();
-					points.add(POINT_CONVERTER.convertFromString(nextPoint));
-				}
-				return new FGERectPolylin(points);
-			} catch (NumberFormatException e) {
-				// Warns about the exception
-				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
-				return null;
-			}
-		}
+	}
 
-		@Override
-		public String convertToString(FGERectPolylin aPolylin) {
-			if (aPolylin != null) {
-				StringBuffer sb = new StringBuffer();
-				boolean isFirst = true;
-				for (FGEPoint pt : aPolylin.getPoints()) {
-					if (!isFirst) {
-						sb.append(";");
-					}
-					sb.append(POINT_CONVERTER.convertToString(pt));
-					isFirst = false;
-				}
-				return sb.toString();
-			} else {
-				return null;
-			}
-		}
-	};
+	// *******************************************************************************
+	// * Model
+	// *******************************************************************************
 
+	public abstract O getDrawable();
+
+	public abstract void setDrawable(O aDrawable);
+
+	public abstract Drawing<?> getDrawing();
+
+	public abstract void setDrawing(Drawing<?> drawing);
+
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
+
+	@Getter(value = IDENTIFIER)
+	@XMLAttribute
+	public abstract String getIdentifier();
+
+	@Setter(value = IDENTIFIER)
+	public abstract void setIdentifier(String identifier);
+
+	@Getter(value = LAYER)
+	@XMLAttribute
+	public abstract int getLayer();
+
+	@Setter(value = LAYER)
+	public abstract void setLayer(int layer);
+
+	@Getter(value = HAS_TEXT)
+	@XMLAttribute
+	public abstract boolean getHasText();
+
+	@Setter(value = HAS_TEXT)
+	public abstract void setHasText(boolean hasText);
+
+	@Getter(value = TEXT)
+	@XMLAttribute
+	public abstract String getText();
+
+	@Setter(value = TEXT)
+	public abstract void setText(String text);
+
+	public abstract String getMultilineText();
+
+	public abstract void setMultilineText(String text);
+
+	@Getter(value = IS_MULTILINE_ALLOWED)
+	@XMLAttribute
+	public abstract boolean getIsMultilineAllowed();
+
+	@Setter(value = IS_MULTILINE_ALLOWED)
+	public abstract void setIsMultilineAllowed(boolean multilineAllowed);
+
+	@Getter(value = LINE_WRAP)
+	@XMLAttribute
+	public abstract boolean getLineWrap();
+
+	@Setter(value = LINE_WRAP)
+	public abstract void setLineWrap(boolean lineWrap);
+
+	@Getter(value = CONTINUOUS_TEXT_EDITING)
+	@XMLAttribute
+	public abstract boolean getContinuousTextEditing();
+
+	@Setter(value = CONTINUOUS_TEXT_EDITING)
+	public abstract void setContinuousTextEditing(boolean continuousTextEditing);
+
+	@Getter(value = TEXT_STYLE)
+	@XMLElement
+	public abstract TextStyle getTextStyle();
+
+	@Setter(value = TEXT_STYLE)
+	public abstract void setTextStyle(TextStyle aTextStyle);
+
+	@Getter(value = ABSOLUTE_TEXT_X)
+	@XMLAttribute
+	public abstract double getAbsoluteTextX();
+
+	@Setter(value = ABSOLUTE_TEXT_X)
+	public abstract void setAbsoluteTextX(double absoluteTextX);
+
+	@Getter(value = ABSOLUTE_TEXT_Y)
+	@XMLAttribute
+	public abstract double getAbsoluteTextY();
+
+	@Setter(value = ABSOLUTE_TEXT_Y)
+	public abstract void setAbsoluteTextY(double absoluteTextY);
+
+	@Getter(value = HORIZONTAL_TEXT_ALIGNEMENT)
+	@XMLAttribute
+	public abstract HorizontalTextAlignment getHorizontalTextAlignment();
+
+	@Setter(value = HORIZONTAL_TEXT_ALIGNEMENT)
+	public abstract void setHorizontalTextAlignment(HorizontalTextAlignment horizontalTextAlignment);
+
+	@Getter(value = VERTICAL_TEXT_ALIGNEMENT)
+	@XMLAttribute
+	public abstract VerticalTextAlignment getVerticalTextAlignment();
+
+	@Setter(value = VERTICAL_TEXT_ALIGNEMENT)
+	public abstract void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment);
+
+	@Getter(value = PARAGRAPH_ALIGNMENT)
+	@XMLAttribute
+	public abstract ParagraphAlignment getParagraphAlignment();
+
+	@Setter(value = PARAGRAPH_ALIGNMENT)
+	public abstract void setParagraphAlignment(ParagraphAlignment paragraphAlignment);
+
+	@Getter(value = IS_SELECTABLE)
+	@XMLAttribute
+	public abstract boolean getIsSelectable();
+
+	@Setter(value = IS_SELECTABLE)
+	public abstract void setIsSelectable(boolean isSelectable);
+
+	@Getter(value = IS_FOCUSABLE)
+	@XMLAttribute
+	public abstract boolean getIsFocusable();
+
+	@Setter(value = IS_FOCUSABLE)
+	public abstract void setIsFocusable(boolean isFocusable);
+
+	@Getter(value = IS_SELECTED)
+	@XMLAttribute
+	public abstract boolean getIsSelected();
+
+	@Setter(value = IS_SELECTED)
+	public abstract void setIsSelected(boolean aFlag);
+
+	@Getter(value = IS_FOCUSED)
+	@XMLAttribute
+	public abstract boolean getIsFocused();
+
+	@Setter(value = IS_FOCUSED)
+	public abstract void setIsFocused(boolean aFlag);
+
+	@Getter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED)
+	@XMLAttribute
+	public abstract boolean getDrawControlPointsWhenFocused();
+
+	@Setter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED)
+	public abstract void setDrawControlPointsWhenFocused(boolean aFlag);
+
+	@Getter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED)
+	@XMLAttribute
+	public abstract boolean getDrawControlPointsWhenSelected();
+
+	@Setter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED)
+	public abstract void setDrawControlPointsWhenSelected(boolean aFlag);
+
+	@Getter(value = IS_READ_ONLY)
+	@XMLAttribute
+	public abstract boolean getIsReadOnly();
+
+	@Setter(value = IS_READ_ONLY)
+	public abstract void setIsReadOnly(boolean readOnly);
+
+	@Getter(value = IS_LABEL_EDITABLE)
+	@XMLAttribute
+	public abstract boolean getIsLabelEditable();
+
+	@Setter(value = IS_LABEL_EDITABLE)
+	public abstract void setIsLabelEditable(boolean labelEditable);
+
+	@Getter(value = IS_VISIBLE)
+	@XMLAttribute
+	public abstract boolean getIsVisible();
+
+	@Setter(value = IS_VISIBLE)
+	public abstract void setIsVisible(boolean isVisible);
+
+	@Getter(value = MOUSE_CLICK_CONTROLS, cardinality = Cardinality.LIST)
+	@XMLElement
+	public abstract Vector<MouseClickControl> getMouseClickControls();
+
+	@Setter(value = MOUSE_CLICK_CONTROLS)
+	public abstract void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
+
+	@Adder(id = MOUSE_CLICK_CONTROLS)
+	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl);
+
+	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
+
+	@Remover(id = MOUSE_CLICK_CONTROLS)
+	public abstract void removeFromMouseClickControls(MouseClickControl mouseClickControl);
+
+	@Getter(value = MOUSE_DRAG_CONTROLS, cardinality = Cardinality.LIST)
+	@XMLElement
+	public abstract Vector<MouseDragControl> getMouseDragControls();
+
+	@Setter(value = MOUSE_DRAG_CONTROLS)
+	public abstract void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
+
+	@Adder(id = MOUSE_DRAG_CONTROLS)
+	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl);
+
+	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
+
+	@Remover(id = MOUSE_DRAG_CONTROLS)
+	public abstract void removeFromMouseDragControls(MouseDragControl mouseDragControl);
+
+	@Getter(value = TOOLTIP_TEXT)
+	@XMLAttribute
+	public abstract String getToolTipText();
+
+	@Setter(value = TOOLTIP_TEXT)
+	public abstract void setToolTipText(String tooltipText);
+
+	@Getter(value = VARIABLES, cardinality = Cardinality.LIST)
+	@XMLElement
+	public abstract Vector<GRVariable> getVariables();
+
+	@Setter(value = VARIABLES)
+	public abstract void setVariables(Vector<GRVariable> variables);
+
+	@Adder(id = VARIABLES)
+	public abstract void addToVariables(GRVariable v);
+
+	@Remover(id = VARIABLES)
+	public abstract void removeFromVariables(GRVariable v);
+
+	// *******************************************************************************
+	// * Deletion management
+	// *******************************************************************************
+
+	/**
+	 * Delete this graphical representation
+	 */
 	public abstract void delete();
 
+	/**
+	 * Return a flag indicating if this graphical representation has been deleted
+	 * 
+	 * @return
+	 */
 	public abstract boolean isDeleted();
+
+	// *******************************************************************************
+	// * Utils
+	// *******************************************************************************
 
 	public abstract GRParameter parameterWithName(String parameterName);
 
@@ -215,23 +446,13 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 
 	public abstract boolean isDeserializing();
 
-	public abstract void resetToDefaultIdentifier();
+	// *******************************************************************************
+	// * Graphical Utils
+	// *******************************************************************************
 
-	public abstract String getIdentifier();
+	public abstract boolean hasFloatingLabel();
 
-	public abstract void setIdentifier(String identifier);
-
-	public abstract int getLayer();
-
-	public abstract void setLayer(int layer);
-
-	public abstract O getDrawable();
-
-	public abstract void setDrawable(O aDrawable);
-
-	public abstract Drawing<?> getDrawing();
-
-	public abstract void setDrawing(Drawing<?> drawing);
+	public abstract boolean shouldBeDisplayed();
 
 	public abstract DrawingGraphicalRepresentation<?> getDrawingGraphicalRepresentation();
 
@@ -277,88 +498,6 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 
 	public abstract ShapeGraphicalRepresentation<?> shapeHiding(FGEPoint p);
 
-	public abstract TextStyle getTextStyle();
-
-	public abstract void setTextStyle(TextStyle aTextStyle);
-
-	public abstract double getAbsoluteTextX();
-
-	public abstract void setAbsoluteTextX(double absoluteTextX);
-
-	public abstract void setAbsoluteTextXNoNotification(double absoluteTextX);
-
-	public abstract double getAbsoluteTextY();
-
-	public abstract void setAbsoluteTextY(double absoluteTextY);
-
-	public abstract void setAbsoluteTextYNoNotification(double absoluteTextY);
-
-	public abstract boolean getIsFocusable();
-
-	public abstract void setIsFocusable(boolean isFocusable);
-
-	public abstract boolean getDrawControlPointsWhenFocused();
-
-	public abstract void setDrawControlPointsWhenFocused(boolean aFlag);
-
-	public abstract boolean getIsSelectable();
-
-	public abstract void setIsSelectable(boolean isSelectable);
-
-	public abstract boolean getDrawControlPointsWhenSelected();
-
-	public abstract void setDrawControlPointsWhenSelected(boolean aFlag);
-
-	public abstract String getText();
-
-	public abstract void setText(String text);
-
-	public abstract void setTextNoNotification(String text);
-
-	public abstract String getMultilineText();
-
-	public abstract void setMultilineText(String text);
-
-	public abstract boolean getHasText();
-
-	public abstract void setHasText(boolean hasText);
-
-	public abstract boolean getIsMultilineAllowed();
-
-	public abstract void setIsMultilineAllowed(boolean multilineAllowed);
-
-	public abstract boolean getLineWrap();
-
-	public abstract void setLineWrap(boolean lineWrap);
-
-	public abstract boolean getContinuousTextEditing();
-
-	public abstract void setContinuousTextEditing(boolean continuousTextEditing);
-
-	public abstract boolean hasFloatingLabel();
-
-	public abstract boolean getIsFocused();
-
-	public abstract void setIsFocused(boolean aFlag);
-
-	public abstract boolean getIsSelected();
-
-	public abstract void setIsSelected(boolean aFlag);
-
-	public abstract boolean getIsReadOnly();
-
-	public abstract void setIsReadOnly(boolean readOnly);
-
-	public abstract boolean getIsLabelEditable();
-
-	public abstract void setIsLabelEditable(boolean labelEditable);
-
-	public abstract boolean shouldBeDisplayed();
-
-	public abstract boolean getIsVisible();
-
-	public abstract void setIsVisible(boolean isVisible);
-
 	public abstract boolean hasText();
 
 	public abstract int getViewX(double scale);
@@ -382,6 +521,8 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	public abstract Rectangle getLabelBounds(double scale);
 
 	public abstract void paint(Graphics g, DrawingController<?> controller);
+
+	public abstract void notifyChange(GRParameter parameter, Object oldValue, Object newValue);
 
 	public abstract void notifyChange(GRParameter parameter);
 
@@ -435,26 +576,6 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 
 	public abstract void setRegistered(boolean aFlag);
 
-	public abstract Vector<MouseClickControl> getMouseClickControls();
-
-	public abstract void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
-
-	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl);
-
-	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
-
-	public abstract void removeFromMouseClickControls(MouseClickControl mouseClickControl);
-
-	public abstract Vector<MouseDragControl> getMouseDragControls();
-
-	public abstract void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
-
-	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl);
-
-	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
-
-	public abstract void removeFromMouseDragControls(MouseDragControl mouseDragControl);
-
 	public abstract MouseClickControl createMouseClickControl();
 
 	public abstract void deleteMouseClickControl(MouseClickControl mouseClickControl);
@@ -483,22 +604,6 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	// Override when required
 	public abstract void notifyObjectHierarchyHasBeenUpdated();
 
-	public abstract String getToolTipText();
-
-	public abstract void setToolTipText(String tooltipText);
-
-	public abstract HorizontalTextAlignment getHorizontalTextAlignment();
-
-	public abstract void setHorizontalTextAlignment(HorizontalTextAlignment horizontalTextAlignment);
-
-	public abstract VerticalTextAlignment getVerticalTextAlignment();
-
-	public abstract void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment);
-
-	public abstract ParagraphAlignment getParagraphAlignment();
-
-	public abstract void setParagraphAlignment(ParagraphAlignment paragraphAlignment);
-
 	public abstract void performRandomLayout(double width, double height);
 
 	public abstract void performAutoLayout(double width, double height);
@@ -520,7 +625,7 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	public abstract void updateBindingModel();
 
 	@Override
-	public abstract Object getValue(BindingVariable variable);
+	public abstract Object getValue(BindingVariable<?> variable);
 
 	public abstract void notifiedBindingModelRecreated();
 
@@ -538,14 +643,6 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 
 	public abstract void declareDependantOf(GraphicalRepresentation<?> aComponent, GRParameter requiringParameter,
 			GRParameter requiredParameter) throws DependencyLoopException;
-
-	public abstract Vector<GRVariable> getVariables();
-
-	public abstract void setVariables(Vector<GRVariable> variables);
-
-	public abstract void addToVariables(GRVariable v);
-
-	public abstract void removeFromVariables(GRVariable v);
 
 	public abstract GRVariable createStringVariable();
 
@@ -582,5 +679,74 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	 * @return
 	 */
 	public abstract int getAvailableLabelWidth(double scale);
+
+	/**
+	 * Adds an observer to the set of observers for this object, provided that it is not the same as some observer already in the set. The
+	 * order in which notifications will be delivered to multiple observers is not specified. See the class comment.
+	 * 
+	 * @param o
+	 *            an observer to be added.
+	 * @throws NullPointerException
+	 *             if the parameter o is null.
+	 */
+	public void addObserver(Observer o);
+
+	/**
+	 * Deletes an observer from the set of observers of this object. Passing <CODE>null</CODE> to this method will have no effect.
+	 * 
+	 * @param o
+	 *            the observer to be deleted.
+	 */
+	public void deleteObserver(Observer o);
+
+	/**
+	 * If this object has changed, as indicated by the <code>hasChanged</code> method, then notify all of its observers and then call the
+	 * <code>clearChanged</code> method to indicate that this object has no longer changed.
+	 * <p>
+	 * Each observer has its <code>update</code> method called with two arguments: this observable object and <code>null</code>. In other
+	 * words, this method is equivalent to: <blockquote><tt>
+	 * notifyObservers(null)</tt></blockquote>
+	 * 
+	 * @see java.util.Observable#clearChanged()
+	 * @see java.util.Observable#hasChanged()
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	public void notifyObservers();
+
+	/**
+	 * If this object has changed, as indicated by the <code>hasChanged</code> method, then notify all of its observers and then call the
+	 * <code>clearChanged</code> method to indicate that this object has no longer changed.
+	 * <p>
+	 * Each observer has its <code>update</code> method called with two arguments: this observable object and the <code>arg</code> argument.
+	 * 
+	 * @param arg
+	 *            any object.
+	 * @see java.util.Observable#clearChanged()
+	 * @see java.util.Observable#hasChanged()
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	public void notifyObservers(Object arg);
+
+	/**
+	 * Clears the observer list so that this object no longer has any observers.
+	 */
+	public void deleteObservers();
+
+	/**
+	 * Tests if this object has changed.
+	 * 
+	 * @return <code>true</code> if and only if the <code>setChanged</code> method has been called more recently than the
+	 *         <code>clearChanged</code> method on this object; <code>false</code> otherwise.
+	 * @see java.util.Observable#clearChanged()
+	 * @see java.util.Observable#setChanged()
+	 */
+	public boolean hasChanged();
+
+	/**
+	 * Returns the number of observers of this <tt>Observable</tt> object.
+	 * 
+	 * @return the number of observers of this object.
+	 */
+	public int countObservers();
 
 }

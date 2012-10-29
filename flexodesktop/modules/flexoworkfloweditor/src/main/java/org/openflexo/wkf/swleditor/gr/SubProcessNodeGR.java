@@ -66,7 +66,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 	public SubProcessNodeGR(SubProcessNode subProcessNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(subProcessNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
 		addToMouseDragControls(new ProcessOpener(), true);
-		/*setBorder(new ShapeGraphicalRepresentation.ShapeBorder(
+		/*setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,

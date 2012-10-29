@@ -21,7 +21,7 @@ package org.openflexo.ve.shema;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -38,7 +38,7 @@ import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ToolBox;
 
-public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnector> implements GraphicalFlexoObserver, VEShemaConstants {
+public class VEConnectorGR extends ConnectorGraphicalRepresentationImpl<ViewConnector> implements GraphicalFlexoObserver, VEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEConnectorGR.class.getPackage().getName());
@@ -104,7 +104,7 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 		if (observable == getOEConnector()) {
 			/*if (dataModification instanceof NameChanged) {
 				// logger.info("received NameChanged notification");
-				// notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
+				// notifyChange(org.openflexo.fge.GraphicalRepresentationUtils.Parameters.text);
 				// setText(getText());
 			} else*/if (dataModification instanceof ElementUpdated) {
 				update();

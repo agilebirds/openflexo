@@ -94,7 +94,7 @@ public class LabelViewMouseListener extends FGEViewMouseListener {
 					startLabelCenterPoint.x+newLocationInDrawingView.x-startMovingLocationInDrawingView.x,
 					startLabelCenterPoint.y+newLocationInDrawingView.y-startMovingLocationInDrawingView.y);
 
-			graphicalRepresentation.setLabelViewCenter(newLabelCenterPoint, labelView.getScale());
+			GraphicalRepresentationUtils.setLabelViewCenter(newLabelCenterPoint, labelView.getScale());
 
 		}
 

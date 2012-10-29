@@ -371,12 +371,12 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 		if (aStartObject != null /*&& !enabledStartObjectObserving*/) {
 			aStartObject.addObserver(this);
-			observedStartObjects.add(aStartObject);
+			observedStartObjects.add((Observable) aStartObject);
 			if (!isDeserializing()) {
 				for (Object o : aStartObject.getAncestors(true)) {
 					if (getGraphicalRepresentation(o) != null) {
 						getGraphicalRepresentation(o).addObserver(this);
-						observedStartObjects.add(getGraphicalRepresentation(o));
+						observedStartObjects.add((Observable) getGraphicalRepresentation(o));
 					}
 				}
 			}
@@ -424,12 +424,12 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 		if (anEndObject != null /*&& !enabledEndObjectObserving*/) {
 			anEndObject.addObserver(this);
-			observedEndObjects.add(anEndObject);
+			observedEndObjects.add((Observable) anEndObject);
 			if (!isDeserializing()) {
 				for (Object o : anEndObject.getAncestors(true)) {
 					if (getGraphicalRepresentation(o) != null) {
 						getGraphicalRepresentation(o).addObserver(this);
-						observedEndObjects.add(getGraphicalRepresentation(o));
+						observedEndObjects.add((Observable) getGraphicalRepresentation(o));
 					}
 				}
 			}
@@ -685,7 +685,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public String getInspectorName() {
-		return "ConnectorGraphicalRepresentation.inspector";
+		return "ConnectorGraphicalRepresentationUtils.inspector";
 	}
 
 	@Override
@@ -718,10 +718,11 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		}
 	}
 
-	protected boolean isConnectorConsistent() {
+	@Override
+	public boolean isConnectorConsistent() {
 		// if (true) return true;
 		return getStartObject() != null && getEndObject() != null && !getStartObject().isDeleted() && !getEndObject().isDeleted()
-				&& GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject());
+				&& GraphicalRepresentationUtils.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject());
 	}
 
 	@Override

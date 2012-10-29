@@ -561,7 +561,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				if (post.isEdgeDisplayable()) {
 					// ConnectorGraphicalRepresentation<?> postGR = (ConnectorGraphicalRepresentation<?>)getGraphicalRepresentation(post);
 					// GraphicalRepresentation commonAncestor =
-					// GraphicalRepresentation.getFirstCommonAncestor(postGR.getStartObject(),postGR.getEndObject());
+					// GraphicalRepresentationUtils.getFirstCommonAncestor(postGR.getStartObject(),postGR.getEndObject());
 					// System.out.println("Common ancestor: "+commonAncestor.getDrawable());
 					// addDrawable(post,commonAncestor.getDrawable());
 					addDrawable(post, getProcess());

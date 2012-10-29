@@ -28,6 +28,7 @@ import javax.naming.InvalidNameException;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -42,7 +43,7 @@ import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DuplicatePropertyNameException;
 import org.openflexo.toolbox.ToolBox;
 
-public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> implements GraphicalFlexoObserver, ERDiagramConstants {
+public class DMPropertyGR extends ShapeGraphicalRepresentationImpl<DMProperty> implements GraphicalFlexoObserver, ERDiagramConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DMPropertyGR.class.getPackage().getName());

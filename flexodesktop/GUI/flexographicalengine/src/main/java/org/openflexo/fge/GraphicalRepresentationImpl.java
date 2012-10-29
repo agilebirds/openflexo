@@ -29,7 +29,6 @@ import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -62,31 +61,19 @@ import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
-import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.inspector.DefaultInspectableObject;
-import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.StringEncoder;
 
 public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableObject implements GraphicalRepresentation<O> {
 
-	private static final Logger logger = Logger.getLogger(GraphicalRepresentation.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(GraphicalRepresentationUtils.class.getPackage().getName());
 
 	static {
-		StringEncoder.getDefaultInstance()._addConverter(POINT_CONVERTER);
-		StringEncoder.getDefaultInstance()._addConverter(RECT_POLYLIN_CONVERTER);
+		StringEncoder.getDefaultInstance()._addConverter(GraphicalRepresentationUtils.POINT_CONVERTER);
+		StringEncoder.getDefaultInstance()._addConverter(GraphicalRepresentationUtils.RECT_POLYLIN_CONVERTER);
 	}
 
-	// Instantiate a new localizer in directory src/dev/resources/FGELocalized
-	// Little hack to be removed: linked to parent localizer (which is Openflexo main localizer)
-	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FGELocalized"),
-			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null, false), true);
-
 	private Stroke specificStroke = null;
-
-	private static BindingFactory BINDING_FACTORY = new GRBindingFactory();
-
-	private static final List<Object> EMPTY_VECTOR = Collections.emptyList();
-	private static final List<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = Collections.emptyList();
 
 	// *******************************************************************************
 	// * Parameters *
@@ -311,7 +298,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		// logger.info("Hop: finalizeDeserialization for "+this+" root is "+getRootGraphicalRepresentation());
 
 		if (getRootGraphicalRepresentation().getBindingModel() == null) {
-			getRootGraphicalRepresentation().createBindingModel();
+			((GraphicalRepresentationImpl<?>) getRootGraphicalRepresentation()).createBindingModel();
 		}
 
 		isDeserializing = false;
@@ -328,7 +315,6 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 
 	private String identifier = null;
 
-	@Override
 	public void resetToDefaultIdentifier() {
 		identifier = retrieveDefaultIdentifier();
 	}
@@ -343,7 +329,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 				// logger.info("retrieveDefaultIdentifier return "+index);
 				return "object_" + index;
 			} else {
-				return getParentGraphicalRepresentation().retrieveDefaultIdentifier() + "_" + index;
+				return ((GraphicalRepresentationImpl<?>) getParentGraphicalRepresentation()).retrieveDefaultIdentifier() + "_" + index;
 			}
 		}
 	}
@@ -459,7 +445,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	@Override
 	public List<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
 		if (!isValidated()) {
-			return EMPTY_GR_VECTOR;
+			return GraphicalRepresentationUtils.EMPTY_GR_VECTOR;
 		}
 
 		if (getContainedObjects() == null) {
@@ -496,7 +482,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	private List<GraphicalRepresentation<?>> getOrderedContainedGR() {
 		if (!isValidated()) {
 			logger.warning("GR " + this + " is not validated");
-			return EMPTY_GR_VECTOR;
+			return GraphicalRepresentationUtils.EMPTY_GR_VECTOR;
 		}
 		if (orderedContainedGR == null) {
 			orderedContainedGR = new ArrayList<GraphicalRepresentation<?>>();
@@ -615,7 +601,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	@Override
 	public List<Object> getAncestors() {
 		if (!isValidated()) {
-			return EMPTY_VECTOR;
+			return GraphicalRepresentationUtils.EMPTY_VECTOR;
 		}
 		return getAncestors(false);
 	}
@@ -623,10 +609,10 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	@Override
 	public List<Object> getAncestors(boolean forceRecompute) {
 		if (!isValidated()) {
-			return EMPTY_VECTOR;
+			return GraphicalRepresentationUtils.EMPTY_VECTOR;
 		}
 		if (getDrawing() == null) {
-			return EMPTY_VECTOR;
+			return GraphicalRepresentationUtils.EMPTY_VECTOR;
 		}
 		if (ancestors == null || forceRecompute) {
 			ancestors = new Vector<Object>();
@@ -676,94 +662,6 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		return false;
 	}
 
-	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2) {
-		if (!child1.isValidated()) {
-			return null;
-		}
-		if (!child2.isValidated()) {
-			return null;
-		}
-		return getFirstCommonAncestor(child1, child2, false);
-	}
-
-	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2,
-			boolean includeCurrent) {
-		if (!child1.isValidated()) {
-			return null;
-		}
-		if (!child2.isValidated()) {
-			return null;
-		}
-		List<Object> ancestors1 = child1.getAncestors(true);
-		if (includeCurrent) {
-			ancestors1.add(0, child1);
-		}
-		List<Object> ancestors2 = child2.getAncestors(true);
-		if (includeCurrent) {
-			ancestors2.add(0, child2);
-		}
-		for (int i = 0; i < ancestors1.size(); i++) {
-			Object o1 = ancestors1.get(i);
-			if (ancestors2.contains(o1)) {
-				return child1.getGraphicalRepresentation(o1);
-			}
-		}
-		return null;
-	}
-
-	public static boolean areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation<?> element1, GraphicalRepresentation<?> element2) {
-		if (!element1.isValidated()) {
-			return false;
-		}
-		if (!element2.isValidated()) {
-			return false;
-		}
-		return getFirstCommonAncestor(element1, element2) != null;
-	}
-
-	/*
-	 * public boolean isLayerVisibleAccross(GraphicalRepresentation<?> gr) { if (getLayer() > gr.getLayer()) return true;
-	 * 
-	 * //if (debug) logger.info("this="+this); //if (debug) logger.info("gr="+gr);
-	 * 
-	 * // But may be i have one parent whose layer is bigger than opposite gr GraphicalRepresentation<?> commonAncestor =
-	 * getFirstCommonAncestor(this, gr, true);
-	 * 
-	 * //if (debug) logger.info("commonAncestor="+commonAncestor+" of "+commonAncestor .getClass().getName());
-	 * 
-	 * if (commonAncestor == null) return false;
-	 * 
-	 * GraphicalRepresentation<?> lastAncestor1 = null; GraphicalRepresentation<?> lastAncestor2 = null; if (commonAncestor == this)
-	 * lastAncestor1 = this; if (commonAncestor == gr) lastAncestor2 = gr;
-	 * 
-	 * for (GraphicalRepresentation<?> child : commonAncestor.getContainedGraphicalRepresentations()) { //logger.info("Child:"+child); if
-	 * (lastAncestor1 == null && (child == this || child.isAncestorOf(this))) lastAncestor1 = child; if (lastAncestor2 == null && (child ==
-	 * gr || child.isAncestorOf(gr))) lastAncestor2 = child; }
-	 * 
-	 * //if (debug) logger.info("Ancestor1="+lastAncestor1+" layer="+lastAncestor1 .getLayer()); //if (debug)
-	 * logger.info("Ancestor2="+lastAncestor2+" layer=" +lastAncestor2.getLayer());
-	 * 
-	 * if (lastAncestor1 == null) return false; if (lastAncestor2 == null) return false;
-	 * 
-	 * return lastAncestor1.getLayer() >= lastAncestor2.getLayer(); }
-	 */
-
-	/*
-	 * public boolean isPointVisible(FGEPoint p) { if (!getIsVisible()) return false;
-	 * 
-	 * GraphicalRepresentation<?> initialGR = this; GraphicalRepresentation<?> currentGR = this;
-	 * 
-	 * while (currentGR != null) { GraphicalRepresentation<?> parentGR = currentGR.getContainerGraphicalRepresentation(); if (parentGR ==
-	 * null) return true; if (!parentGR.getIsVisible()) return false; for (GraphicalRepresentation<?> child :
-	 * parentGR.getContainedGraphicalRepresentations()) { // Only ShapeGR can hide other GR, ignore ConnectorGR here if (child instanceof
-	 * ShapeGraphicalRepresentation) { ShapeGraphicalRepresentation<?> shapedChild = (ShapeGraphicalRepresentation<?>)child; if
-	 * (shapedChild.getShape().getShape().containsPoint( convertNormalizedPoint(initialGR, p, child))) {
-	 * logger.info("GR "+child+" contains point "+p+" on "+initialGR); if(child.getLayer() > currentGR.getLayer()) {
-	 * logger.info("GR "+child+" hides point "+p+" on "+initialGR); } } } } currentGR = parentGR; }
-	 * 
-	 * return true; }
-	 */
-
 	@Override
 	public boolean isPointVisible(FGEPoint p) {
 		if (!getIsVisible()) {
@@ -799,8 +697,8 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		}
 
 		DrawingGraphicalRepresentation<?> drawingGR = getDrawingGraphicalRepresentation();
-		ShapeGraphicalRepresentation<?> topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(convertNormalizedPoint(this, p,
-				drawingGR));
+		ShapeGraphicalRepresentation<?> topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(GraphicalRepresentationUtils
+				.convertNormalizedPoint(this, p, drawingGR));
 
 		if (topLevelShape == this || topLevelShape == getParentGraphicalRepresentation()) {
 			return null;
@@ -853,7 +751,6 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		}
 	}
 
-	@Override
 	public void setAbsoluteTextXNoNotification(double absoluteTextX) {
 		this.absoluteTextX = absoluteTextX;
 	}
@@ -872,7 +769,6 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		}
 	}
 
-	@Override
 	public void setAbsoluteTextYNoNotification(double absoluteTextY) {
 		this.absoluteTextY = absoluteTextY;
 	}
@@ -947,7 +843,6 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		}
 	}
 
-	@Override
 	public void setTextNoNotification(String text) {
 		this.text = text;
 	}
@@ -1184,7 +1079,8 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	// * Utils *
 	// *******************************************************************************
 
-	protected void notifyChange(GRParameter parameter, Object oldValue, Object newValue) {
+	@Override
+	public void notifyChange(GRParameter parameter, Object oldValue, Object newValue) {
 		// Never notify unchanged values
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
@@ -1313,7 +1209,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 
 	@Override
 	public String getInspectorName() {
-		return "GraphicalRepresentation.inspector";
+		return "GraphicalRepresentationUtils.inspector";
 	}
 
 	@Override
@@ -1360,168 +1256,6 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	// * Coordinates manipulation *
 	// *******************************************************************************
 
-	/**
-	 * Convert a point relative to the view representing source drawable, with supplied scale, in a point relative to the view representing
-	 * destination drawable
-	 * 
-	 * @param source
-	 *            graphical representation of drawable represented in the source view
-	 * @param point
-	 *            point to convert
-	 * @param destination
-	 *            graphical representation of drawable represented in the destination view
-	 * @param scale
-	 *            the scale to be used to perform this conversion
-	 * @return
-	 */
-	public static Point convertPoint(GraphicalRepresentation<?> source, Point point, GraphicalRepresentation<?> destination, double scale) {
-		if (source != destination) {
-			AffineTransform at = convertCoordinatesAT(source, destination, scale);
-			return (Point) at.transform(point, new Point());
-		} else {
-			return new Point(point);
-		}
-	}
-
-	/**
-	 * Convert a rectangle coordinates expressed in the view representing source drawable, with supplied scale, in coordinates expressed in
-	 * the view representing destination drawable
-	 * 
-	 * @param source
-	 *            graphical representation of drawable represented in the source view
-	 * @param aRectangle
-	 *            rectangle to convert
-	 * @param destination
-	 *            graphical representation of drawable represented in the destination view
-	 * @param scale
-	 *            the scale to be used to perform this conversion
-	 * @return
-	 */
-	public static Rectangle convertRectangle(GraphicalRepresentation<?> source, Rectangle aRectangle,
-			GraphicalRepresentation<?> destination, double scale) {
-		Point point = new Point(aRectangle.x, aRectangle.y);
-		if (source != destination) {
-			point = convertPoint(source, point, destination, scale);
-		}
-		return new Rectangle(point.x, point.y, aRectangle.width, aRectangle.height);
-	}
-
-	/**
-	 * Build and return a new AffineTransform allowing to perform coordinates conversion from the view representing source drawable, with
-	 * supplied scale, to the view representing destination drawable
-	 * 
-	 * @param source
-	 * @param destination
-	 * @param scale
-	 * @return
-	 */
-	public static AffineTransform convertCoordinatesAT(GraphicalRepresentation<?> source, GraphicalRepresentation<?> destination,
-			double scale) {
-		if (source != destination) {
-			AffineTransform returned = convertFromDrawableToDrawingAT(source, scale);
-			returned.preConcatenate(convertFromDrawingToDrawableAT(destination, scale));
-			return returned;
-		} else {
-			return new AffineTransform();
-		}
-	}
-
-	/**
-	 * Convert a point defined in coordinates system related to "source" graphical representation to related drawing graphical
-	 * representation
-	 * 
-	 * @param destination
-	 * @param point
-	 * @param scale
-	 * @return
-	 */
-	public static Point convertPointFromDrawableToDrawing(GraphicalRepresentation<?> source, Point point, double scale) {
-		AffineTransform at = convertFromDrawableToDrawingAT(source, scale);
-		return (Point) at.transform(point, new Point());
-	}
-
-	/**
-	 * 
-	 * Build a new AffineTransform allowing to convert coordinates from coordinate system defined by "source" graphical representation to
-	 * related drawing graphical representation
-	 * 
-	 * @param source
-	 * @param scale
-	 * @return
-	 */
-	public static AffineTransform convertFromDrawableToDrawingAT(GraphicalRepresentation<?> source, double scale) {
-		double tx = 0;
-		double ty = 0;
-		if (source == null) {
-			logger.warning("Called convertFromDrawableToDrawingAT() for null graphical representation (source)");
-			return new AffineTransform();
-		}
-		Object current = source.getDrawable();
-		while (current != source.getDrawing().getModel()) {
-			if (source.getDrawing().getGraphicalRepresentation(current) == null) {
-				throw new IllegalArgumentException(
-						"Drawable "
-								+ current
-								+ " has no graphical representation.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
-			}
-			if (source.getDrawing().getContainer(current) == null) {
-				throw new IllegalArgumentException(
-						"Drawable "
-								+ current
-								+ " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
-			}
-			tx += source.getDrawing().getGraphicalRepresentation(current).getViewX(scale);
-			ty += source.getDrawing().getGraphicalRepresentation(current).getViewY(scale);
-			current = source.getDrawing().getContainer(current);
-		}
-		return AffineTransform.getTranslateInstance(tx, ty);
-	}
-
-	/**
-	 * Convert a point defined in related drawing graphical representation coordinates system to the one defined by "destination" graphical
-	 * representation
-	 * 
-	 * @param destination
-	 * @param point
-	 * @param scale
-	 * @return
-	 */
-	public static Point convertPointFromDrawingToDrawable(GraphicalRepresentation<?> destination, Point point, double scale) {
-		AffineTransform at = convertFromDrawingToDrawableAT(destination, scale);
-		return (Point) at.transform(point, new Point());
-	}
-
-	/**
-	 * 
-	 * Build a new AffineTransform allowing to convert coordinates from coordinate system defined by related drawing graphical
-	 * representation to the one defined by "destination" graphical representation
-	 * 
-	 * @param destination
-	 * @param scale
-	 * @return
-	 */
-	public static AffineTransform convertFromDrawingToDrawableAT(GraphicalRepresentation<?> destination, double scale) {
-		double tx = 0;
-		double ty = 0;
-		if (destination == null) {
-			logger.warning("Called convertFromDrawingToDrawableAT() for null graphical representation (destination)");
-			return new AffineTransform();
-		}
-		Object current = destination.getDrawable();
-		while (current != destination.getDrawing().getModel()) {
-			if (destination.getDrawing().getContainer(current) == null) {
-				throw new IllegalArgumentException(
-						"Drawable "
-								+ current
-								+ " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
-			}
-			tx -= destination.getDrawing().getGraphicalRepresentation(current).getViewX(scale);
-			ty -= destination.getDrawing().getGraphicalRepresentation(current).getViewY(scale);
-			current = destination.getDrawing().getContainer(current);
-		}
-		return AffineTransform.getTranslateInstance(tx, ty);
-	}
-
 	@Override
 	public final Point convertNormalizedPointToViewCoordinates(double x, double y, double scale) {
 		AffineTransform at = convertNormalizedPointToViewCoordinatesAT(scale);
@@ -1563,48 +1297,12 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		return convertViewCoordinatesToNormalizedPoint(p.x, p.y, scale);
 	}
 
-	/**
-	 * Convert a point relative to the normalized coordinates system from source drawable to the normalized coordinates system from
-	 * destination drawable
-	 * 
-	 * @param source
-	 * @param point
-	 * @param destination
-	 * @return
-	 */
-	public static FGEPoint convertNormalizedPoint(GraphicalRepresentation<?> source, FGEPoint point, GraphicalRepresentation<?> destination) {
-		if (point == null) {
-			return null;
-		}
-		AffineTransform at = convertNormalizedCoordinatesAT(source, destination);
-		return (FGEPoint) at.transform(point, new FGEPoint());
-	}
-
-	/**
-	 * Build and return an AffineTransform allowing to convert locations relative to the normalized coordinates system from source drawable
-	 * to the normalized coordinates system from destination drawable
-	 * 
-	 * @param source
-	 * @param point
-	 * @param destination
-	 * @return
-	 */
-	public static AffineTransform convertNormalizedCoordinatesAT(GraphicalRepresentation<?> source, GraphicalRepresentation<?> destination) {
-		if (source == null) {
-			logger.warning("null source !");
-		}
-		AffineTransform returned = source.convertNormalizedPointToViewCoordinatesAT(1.0);
-		returned.preConcatenate(convertCoordinatesAT(source, destination, 1.0));
-		returned.preConcatenate(destination.convertViewCoordinatesToNormalizedPointAT(1.0));
-		return returned;
-	}
-
 	@Override
 	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation<?> source, double scale) {
 		if (!isConnectedToDrawing() || !source.isConnectedToDrawing()) {
 			return new FGEPoint(p.x / scale, p.y / scale);
 		}
-		Point pointRelativeToCurrentView = convertPoint(source, p, this, scale);
+		Point pointRelativeToCurrentView = GraphicalRepresentationUtils.convertPoint(source, p, this, scale);
 		return convertViewCoordinatesToNormalizedPoint(pointRelativeToCurrentView, scale);
 	}
 
@@ -1613,14 +1311,14 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		if (!isConnectedToDrawing() || !destination.isConnectedToDrawing()) {
 			return new FGEPoint(p.x * scale, p.y * scale);
 		}
-		Point pointRelativeToRemoteView = convertPoint(this, p, destination, scale);
+		Point pointRelativeToRemoteView = GraphicalRepresentationUtils.convertPoint(this, p, destination, scale);
 		return destination.convertViewCoordinatesToNormalizedPoint(pointRelativeToRemoteView, scale);
 	}
 
 	@Override
 	public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, GraphicalRepresentation<?> destination, double scale) {
 		Point point = convertNormalizedPointToViewCoordinates(p, scale);
-		return convertPoint(this, point, destination, scale);
+		return GraphicalRepresentationUtils.convertPoint(this, point, destination, scale);
 	}
 
 	@Override
@@ -1636,7 +1334,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	@Override
 	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation<?> source, double scale) {
 		Point point = source.convertNormalizedPointToViewCoordinates(p, scale);
-		return convertPoint(source, point, this, scale);
+		return GraphicalRepresentationUtils.convertPoint(source, point, this, scale);
 	}
 
 	@Override
@@ -1923,7 +1621,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 
 	@Override
 	public BindingFactory getBindingFactory() {
-		return BINDING_FACTORY;
+		return GraphicalRepresentationUtils.BINDING_FACTORY;
 	}
 
 	@Override
@@ -1957,8 +1655,8 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	}
 
 	@Override
-	public Object getValue(BindingVariable variable) {
-		BindingVariable bv = getBindingModel().bindingVariableNamed(variable.getVariableName());
+	public Object getValue(BindingVariable<?> variable) {
+		BindingVariable<?> bv = getBindingModel().bindingVariableNamed(variable.getVariableName());
 		/*if (bv instanceof ComponentBindingVariable) {
 			return ((ComponentBindingVariable) bv).getReference();
 		}
@@ -1985,7 +1683,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 	@Override
 	public List<GraphicalRepresentation<?>> retrieveAllContainedGR() {
 		if (!isValidated()) {
-			return EMPTY_GR_VECTOR;
+			return GraphicalRepresentationUtils.EMPTY_GR_VECTOR;
 		}
 		List<GraphicalRepresentation<?>> returned = new ArrayList<GraphicalRepresentation<?>>();
 		addAllContainedGR(this, returned);
@@ -2074,14 +1772,14 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 			logger.info("Parameter " + requiringParameter + " of GR " + this + " depends of parameter " + requiredParameter + " of GR "
 					+ aComponent);
 		}
-		if (!aComponent.alterings.contains(newDependancy)) {
-			aComponent.alterings.add(newDependancy);
+		if (!((GraphicalRepresentationImpl<?>) aComponent).alterings.contains(newDependancy)) {
+			((GraphicalRepresentationImpl<?>) aComponent).alterings.add(newDependancy);
 		}
 	}
 
 	private void searchLoopInDependenciesWith(GraphicalRepresentation<?> aComponent, Vector<GraphicalRepresentation<?>> actualDependancies)
 			throws DependencyLoopException {
-		for (ConstraintDependency dependancy : aComponent.dependancies) {
+		for (ConstraintDependency dependancy : ((GraphicalRepresentationImpl<?>) aComponent).dependancies) {
 			GraphicalRepresentation<?> c = dependancy.requiredGR;
 			if (c == this) {
 				throw new DependencyLoopException(actualDependancies);
@@ -2093,23 +1791,10 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		}
 	}
 
-	protected static class DependencyLoopException extends Exception {
-		private Vector<GraphicalRepresentation<?>> dependencies;
-
-		public DependencyLoopException(Vector<GraphicalRepresentation<?>> dependancies) {
-			this.dependencies = dependancies;
-		}
-
-		@Override
-		public String getMessage() {
-			return "DependencyLoopException: " + dependencies;
-		}
-	}
-
 	protected void propagateConstraintsAfterModification(GRParameter parameter) {
 		for (ConstraintDependency dependency : alterings) {
 			if (dependency.requiredParameter == parameter) {
-				dependency.requiringGR.computeNewConstraint(dependency);
+				((GraphicalRepresentationImpl<?>) dependency.requiringGR).computeNewConstraint(dependency);
 			}
 		}
 	}

@@ -121,7 +121,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 	}
 
 	/*
-	 * @Override public void setBorder(org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder border) { if (border ==null) { if
+	 * @Override public void setBorder(org.openflexo.fge.ShapeGraphicalRepresentationUtils.ShapeBorder border) { if (border ==null) { if
 	 * (logger.isLoggable(Level.WARNING)) logger.warning("Cannot set null border on ArtifactGR"); border = new ShapeBorder(0,0,0,20); } else
 	 * { if (border.right<20) border.right=20; if (border.top<10) border.top=10; if (border.bottom<10) border.bottom=10; }
 	 * super.setBorder(border); }

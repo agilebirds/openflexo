@@ -116,7 +116,7 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	}
 
 	/*@Override
-	public void setBorder(org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder border) {
+	public void setBorder(org.openflexo.fge.ShapeGraphicalRepresentationUtils.ShapeBorder border) {
 		if (hasNodePalette()) {
 			if (border ==null) {
 				if (logger.isLoggable(Level.WARNING))

@@ -71,7 +71,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	private RelativePathFileConverter relativePathFileConverter;
 
 	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation here is a org.openflexo.fge.DrawingGraphicalRepresentation.
+	// But you can assert graphical representation here is a org.openflexo.fge.DrawingGraphicalRepresentationUtils.
 	private Object graphicalRepresentation;
 
 	public static ViewPointPalette instanciateCalcPalette(ViewPoint calc, File paletteFile) {

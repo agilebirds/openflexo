@@ -326,23 +326,23 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 					rescale();
 					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.backgroundColor) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.DrawingParameters.backgroundColor) {
 					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 					updateBackground();
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.drawWorkingArea) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.DrawingParameters.drawWorkingArea) {
 					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 					updateBackground();
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.width) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.DrawingParameters.width) {
 					rescale();
 					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.height) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.DrawingParameters.height) {
 					rescale();
 					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.Parameters.isResizable) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.DrawingParameters.isResizable) {
 					if (getDrawingGraphicalRepresentation().isResizable()) {
 						removeMouseListener(mouseListener); // We remove the mouse
 															// listener, so that the

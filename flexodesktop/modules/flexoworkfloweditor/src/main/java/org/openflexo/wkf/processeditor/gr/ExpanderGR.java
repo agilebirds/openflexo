@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -46,7 +46,7 @@ import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepresentation<ExpanderGR.Expander<O>> implements
+public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepresentationImpl<ExpanderGR.Expander<O>> implements
 		ProcessEditorConstants {
 
 	static final Logger logger = Logger.getLogger(Connector.class.getPackage().getName());
@@ -136,9 +136,9 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 		}
 
 		private void updateControlPoints() {
-			FGEPoint centerOfStartObject = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5),
+			FGEPoint centerOfStartObject = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5),
 					getGraphicalRepresentation());
-			FGEPoint centerOfEndObject = GraphicalRepresentation.convertNormalizedPoint(getEndObject(), new FGEPoint(0.5, 0.5),
+			FGEPoint centerOfEndObject = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(), new FGEPoint(0.5, 0.5),
 					getGraphicalRepresentation());
 
 			SimplifiedCardinalDirection orientation = FGEPoint.getSimplifiedOrientation(centerOfStartObject, centerOfEndObject);
@@ -172,10 +172,10 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 			newEndP1 = getEndObject().getShape().outlineIntersect(newEndP1);
 			newEndP2 = getEndObject().getShape().outlineIntersect(newEndP2);
 
-			newStartP1 = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), newStartP1, getGraphicalRepresentation());
-			newStartP2 = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), newStartP2, getGraphicalRepresentation());
-			newEndP1 = GraphicalRepresentation.convertNormalizedPoint(getEndObject(), newEndP1, getGraphicalRepresentation());
-			newEndP2 = GraphicalRepresentation.convertNormalizedPoint(getEndObject(), newEndP2, getGraphicalRepresentation());
+			newStartP1 = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), newStartP1, getGraphicalRepresentation());
+			newStartP2 = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), newStartP2, getGraphicalRepresentation());
+			newEndP1 = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(), newEndP1, getGraphicalRepresentation());
+			newEndP2 = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(), newEndP2, getGraphicalRepresentation());
 
 			startP1 = new ConnectorControlPoint(getGraphicalRepresentation(), newStartP1);
 			startP2 = new ConnectorControlPoint(getGraphicalRepresentation(), newStartP2);

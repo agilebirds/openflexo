@@ -21,7 +21,7 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.geom.FGEPoint;
@@ -30,7 +30,8 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation<O> implements GraphicalFlexoObserver, SWLEditorConstants {
+public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentationImpl<O> implements GraphicalFlexoObserver,
+		SWLEditorConstants {
 
 	private static final Logger logger = Logger.getLogger(WKFConnectorGR.class.getPackage().getName());
 

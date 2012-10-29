@@ -284,7 +284,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 			/*if (graphicalRepresentation instanceof ShapeGraphicalRepresentation
 					&& ((ShapeGraphicalRepresentation)graphicalRepresentation).isParentLayoutedAsContainer()) {
-				Point resultingLocation = graphicalRepresentation.getLabelViewCenter(view.getScale());
+				Point resultingLocation = GraphicalRepresentationUtils.getLabelViewCenter(view.getScale());
 				if (!resultingLocation.equals(newLabelCenterPoint)) {
 					int dx = resultingLocation.x-newLabelCenterPoint.x;
 					int dy = resultingLocation.y-newLabelCenterPoint.y;

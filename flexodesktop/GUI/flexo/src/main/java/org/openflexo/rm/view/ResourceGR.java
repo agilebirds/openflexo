@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.BackgroundStyle;
@@ -44,7 +45,7 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.icon.IconLibrary;
 
-public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource<? extends FlexoResourceData>> {
+public class ResourceGR extends ShapeGraphicalRepresentationImpl<FlexoResource<? extends FlexoResourceData>> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ResourceGR.class.getPackage().getName());

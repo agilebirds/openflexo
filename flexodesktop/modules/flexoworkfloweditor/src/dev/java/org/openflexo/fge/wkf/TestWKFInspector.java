@@ -39,10 +39,10 @@ public class TestWKFInspector extends InspectorController {
 		super(null,null);
 		logger.info("Load WKF inspectors...");
 		try {
-			importInspectorFile(new FileResource("DrawingEditorInspectors/GraphicalRepresentation.inspector"));
-			importInspectorFile(new FileResource("DrawingEditorInspectors/ShapeGraphicalRepresentation.inspector"));
-			importInspectorFile(new FileResource("DrawingEditorInspectors/DrawingGraphicalRepresentation.inspector"));
-			importInspectorFile(new FileResource("DrawingEditorInspectors/ConnectorGraphicalRepresentation.inspector"));
+			importInspectorFile(new FileResource("DrawingEditorInspectors/GraphicalRepresentationUtils.inspector"));
+			importInspectorFile(new FileResource("DrawingEditorInspectors/ShapeGraphicalRepresentationUtils.inspector"));
+			importInspectorFile(new FileResource("DrawingEditorInspectors/DrawingGraphicalRepresentationUtils.inspector"));
+			importInspectorFile(new FileResource("DrawingEditorInspectors/ConnectorGraphicalRepresentationUtils.inspector"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

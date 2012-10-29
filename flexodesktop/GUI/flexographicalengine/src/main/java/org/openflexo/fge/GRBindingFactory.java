@@ -30,19 +30,19 @@ public class GRBindingFactory extends DefaultBindingFactory {
 	private static final Logger logger = Logger.getLogger(GRBindingFactory.class.getPackage().getName());
 
 	private static GRParameter[] allowedPropertiesInBindings = { Parameters.layer, Parameters.text,
-			ShapeGraphicalRepresentation.Parameters.relativeTextX, ShapeGraphicalRepresentation.Parameters.relativeTextY,
-			Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible, ShapeGraphicalRepresentation.Parameters.x,
-			ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
-			ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.minimalWidth,
-			ShapeGraphicalRepresentation.Parameters.minimalHeight, ShapeGraphicalRepresentation.Parameters.maximalWidth,
-			ShapeGraphicalRepresentation.Parameters.maximalHeight };
+			ShapeGraphicalRepresentation.ShapeParameters.relativeTextX, ShapeGraphicalRepresentation.ShapeParameters.relativeTextY,
+			Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible, ShapeGraphicalRepresentation.ShapeParameters.x,
+			ShapeGraphicalRepresentation.ShapeParameters.y, ShapeGraphicalRepresentation.ShapeParameters.width,
+			ShapeGraphicalRepresentation.ShapeParameters.height, ShapeGraphicalRepresentation.ShapeParameters.minimalWidth,
+			ShapeGraphicalRepresentation.ShapeParameters.minimalHeight, ShapeGraphicalRepresentation.ShapeParameters.maximalWidth,
+			ShapeGraphicalRepresentation.ShapeParameters.maximalHeight };
 
 	private static Class<? extends GraphicalRepresentation<?>> DECLARING_CLASS;
 
 	static {
 		// Hack to have a grab on the Type Class<? extends GraphicalRepresentation<?>
 		try {
-			DECLARING_CLASS = (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentation.class.getName());
+			DECLARING_CLASS = (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentationUtils.class.getName());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			DECLARING_CLASS = null;
@@ -169,7 +169,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		private Vector<ComponentPathElement> components;
 
 		public ComponentsBindingVariable(GraphicalRepresentation<?> owner) {
-			super(owner, "components", new ParameterizedTypeImpl(Vector.class, GraphicalRepresentation.class));
+			super(owner, "components", new ParameterizedTypeImpl(Vector.class, GraphicalRepresentationUtils.class));
 			this.owner = owner;
 			components = new Vector<GRBindingFactory.ComponentPathElement>();
 			Iterator<GraphicalRepresentation<?>> it = owner.getRootGraphicalRepresentation().allContainedGRIterator();

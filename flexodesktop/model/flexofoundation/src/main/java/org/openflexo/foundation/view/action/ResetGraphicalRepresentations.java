@@ -110,10 +110,10 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 				((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation()).setsWith((ShapeGraphicalRepresentation) shape
 						.getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
 						GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
-						GraphicalRepresentation.Parameters.absoluteTextY, ShapeGraphicalRepresentation.Parameters.x,
-						ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
-						ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.relativeTextX,
-						ShapeGraphicalRepresentation.Parameters.relativeTextY);
+						GraphicalRepresentation.Parameters.absoluteTextY, ShapeGraphicalRepresentation.ShapeParameters.x,
+						ShapeGraphicalRepresentation.ShapeParameters.y, ShapeGraphicalRepresentation.ShapeParameters.width,
+						ShapeGraphicalRepresentation.ShapeParameters.height, ShapeGraphicalRepresentation.ShapeParameters.relativeTextX,
+						ShapeGraphicalRepresentation.ShapeParameters.relativeTextY);
 			}
 		} else if (o instanceof ViewConnector) {
 			ViewConnector connector = (ViewConnector) o;

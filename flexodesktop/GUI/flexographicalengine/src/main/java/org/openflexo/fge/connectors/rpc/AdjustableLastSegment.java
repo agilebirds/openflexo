@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -59,7 +59,7 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		currentOrientation = currentSegment.getApproximatedOrientation();
 		previousOrientation = previousSegment.getApproximatedOrientation();
 
-		AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getConnector().getEndObject(),
+		AffineTransform at2 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getConnector().getEndObject(),
 				getGraphicalRepresentation());
 		endArea = getConnector().getEndObject().getShape().getOutline().transform(at2);
 		FGEArea orthogonalPerspectiveArea = endArea.getOrthogonalPerspectiveArea(currentOrientation.getOpposite());

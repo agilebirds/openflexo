@@ -20,7 +20,7 @@
 package org.openflexo.foundation;
 
 import org.openflexo.fge.DataBinding;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.foundation.cg.version.CGVersionIdentifier;
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
@@ -116,8 +116,8 @@ public abstract class FlexoObject extends KVCObject {
 		encoder._addConverter(CGVersionIdentifier.converter);
 		encoder._addConverter(Duration.converter);
 		encoder._addConverter(DataBinding.CONVERTER);
-		encoder._addConverter(GraphicalRepresentation.POINT_CONVERTER);
-		encoder._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
+		encoder._addConverter(GraphicalRepresentationUtils.POINT_CONVERTER);
+		encoder._addConverter(GraphicalRepresentationUtils.RECT_POLYLIN_CONVERTER);
 	}
 
 	@Override

@@ -21,7 +21,7 @@ package org.openflexo.rm.view;
 
 import java.awt.Color;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -30,7 +30,7 @@ import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.rm.view.RMViewerRepresentation.ResourceSynchronization;
 
-public class ResourceSynchronizationGR extends ConnectorGraphicalRepresentation<ResourceSynchronization> {
+public class ResourceSynchronizationGR extends ConnectorGraphicalRepresentationImpl<ResourceSynchronization> {
 
 	private ForegroundStyle foreground;
 

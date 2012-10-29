@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.notifications.FGENotification;
@@ -33,7 +34,7 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.GraphicalRepresentationChanged;
 
-public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresentation<ConnectorPatternRole> implements
+public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresentationImpl<ConnectorPatternRole> implements
 		GraphicalFlexoObserver, EditionPatternPreviewConstants {
 
 	@SuppressWarnings("unused")

@@ -8,11 +8,11 @@ import org.openflexo.localization.FlexoLocalization;
 public class ConnectorPatternRole extends GraphicalElementPatternRole {
 
 	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation is a org.openflexo.fge.ConnectorGraphicalRepresentation.
+	// But you can assert graphical representation is a org.openflexo.fge.ConnectorGraphicalRepresentationUtils.
 	private Object _graphicalRepresentation;
 
 	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation here are a org.openflexo.fge.ShapeGraphicalRepresentation.
+	// But you can assert graphical representation here are a org.openflexo.fge.ShapeGraphicalRepresentationUtils.
 	private Object artifactFromGraphicalRepresentation;
 	private Object artifactToGraphicalRepresentation;
 

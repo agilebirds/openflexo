@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.PaletteElement;
@@ -154,7 +155,7 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 				}
 				if (object instanceof WKFArtefact && container == swlRepresentation.getProcess().getActivityPetriGraph()) {
 					FGEPoint p = new FGEPoint();
-					GraphicalRepresentation.convertFromDrawableToDrawingAT(gr, 1).transform(dropLocation, p);
+					GraphicalRepresentationUtils.convertFromDrawableToDrawingAT(gr, 1).transform(dropLocation, p);
 					dropLocation = p;
 					if (gr.getDrawing() != null && swlRepresentation.isVisible(swlRepresentation.getProcess().getPortRegistery())) {
 						if (swlRepresentation.getGraphicalRepresentation(swlRepresentation.getProcess().getPortRegistery()) != null) {

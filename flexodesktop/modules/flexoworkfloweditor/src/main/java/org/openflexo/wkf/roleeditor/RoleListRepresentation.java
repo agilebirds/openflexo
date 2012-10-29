@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
@@ -44,7 +45,7 @@ public class RoleListRepresentation extends DefaultDrawing<RoleList> implements 
 	public RoleListRepresentation(RoleList aRoleList, FlexoEditor editor) {
 		super(aRoleList);
 		this.editor = editor;
-		graphicalRepresentation = new DrawingGraphicalRepresentation<RoleList>(this);
+		graphicalRepresentation = new DrawingGraphicalRepresentationImpl<RoleList>(this);
 		graphicalRepresentation.addToMouseClickControls(new RoleEditorController.ShowContextualMenuControl());
 
 		aRoleList.addObserver(this);

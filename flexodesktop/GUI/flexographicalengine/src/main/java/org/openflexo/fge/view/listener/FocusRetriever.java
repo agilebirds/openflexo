@@ -109,7 +109,7 @@ public class FocusRetriever {
 	}
 
 	private boolean focusOnFloatingLabel(GraphicalRepresentation<?> graphicalRepresentation, Component eventSource, Point eventLocation) {
-		// if (!graphicalRepresentation.hasText()) return false;
+		// if (!GraphicalRepresentationUtils.hasText()) return false;
 
 		if (graphicalRepresentation instanceof GeometricGraphicalRepresentation) {
 			return false;
@@ -141,7 +141,7 @@ public class FocusRetriever {
 			Point viewPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 					(Component) drawingView.viewForObject(container));
 			// FGEPoint point =
-			// graphicalRepresentation.convertViewCoordinatesToNormalizedPoint(viewPoint,
+			// GraphicalRepresentationUtils.convertViewCoordinatesToNormalizedPoint(viewPoint,
 			// getScale());
 
 			// Look if we are near a CP

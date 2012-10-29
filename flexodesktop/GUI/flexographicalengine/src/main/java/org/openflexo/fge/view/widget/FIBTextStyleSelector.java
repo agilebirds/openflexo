@@ -32,9 +32,12 @@ import javax.swing.JPanel;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -310,17 +313,17 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 				}
 
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
+			drawingGR = new DrawingGraphicalRepresentationImpl(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(199);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			textGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
+			textGR = new ShapeGraphicalRepresentationImpl(ShapeType.RECTANGLE, text, drawing);
 			textGR.setWidth(200);
 			textGR.setHeight(20);
 			textGR.setX(0);
 			textGR.setY(0);
-			textGR.setText(FlexoLocalization.localizedForKey(GraphicalRepresentation.LOCALIZATION, "no_font_selected"));
+			textGR.setText(FlexoLocalization.localizedForKey(GraphicalRepresentationUtils.LOCALIZATION, "no_font_selected"));
 			textGR.setIsFloatingLabel(false);
 			textGR.setRelativeTextX(0.5);
 			textGR.setRelativeTextY(0.35);

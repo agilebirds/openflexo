@@ -21,7 +21,7 @@ package org.openflexo.fge.geomedit.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.GeometricGraphicalRepresentationImpl;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricObject;
@@ -32,7 +32,7 @@ import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class GeometricObjectGraphicalRepresentation<A extends FGEArea, G extends GeometricObject<A>> extends
-		GeometricGraphicalRepresentation<G> implements XMLSerializable {
+		GeometricGraphicalRepresentationImpl<G> implements XMLSerializable {
 	// Called for LOAD
 	public GeometricObjectGraphicalRepresentation(GeomEditBuilder builder) {
 		this(null, builder.drawing);

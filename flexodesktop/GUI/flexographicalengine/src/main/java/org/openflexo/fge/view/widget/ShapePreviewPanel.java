@@ -10,10 +10,12 @@ import javax.swing.JPanel;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -96,12 +98,12 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 			}
 
 		};
-		drawingGR = new DrawingGraphicalRepresentation<RepresentedDrawing>(drawing, false);
+		drawingGR = new DrawingGraphicalRepresentationImpl<RepresentedDrawing>(drawing, false);
 		drawingGR.setBackgroundColor(Color.WHITE);
 		drawingGR.setWidth(getPanelWidth());
 		drawingGR.setHeight(getPanelHeight());
 		drawingGR.setDrawWorkingArea(false);
-		shapeGR = new ShapeGraphicalRepresentation<RepresentedShape>(ShapeType.RECTANGLE, representedShape, drawing);
+		shapeGR = new ShapeGraphicalRepresentationImpl<RepresentedShape>(ShapeType.RECTANGLE, representedShape, drawing);
 		shapeGR.setX(getShapeX());
 		shapeGR.setY(getShapeY());
 		shapeGR.setWidth(getShapeWidth());

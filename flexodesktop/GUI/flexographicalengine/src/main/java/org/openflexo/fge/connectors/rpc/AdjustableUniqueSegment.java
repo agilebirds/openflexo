@@ -51,12 +51,12 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 		endArea = getConnector().retrieveAllowedEndArea(false);
 
 		/*
-		AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
+		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
 				getConnector().getStartObject(), getGraphicalRepresentation());
 		startArea = getConnector().getStartObject().getShape().getOutline().transform(at1);
 		FGEArea startOrthogonalPerspectiveArea = startArea.getOrthogonalPerspectiveArea(currentOrientation);
 
-		AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
+		AffineTransform at2 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
 				getConnector().getEndObject(), getGraphicalRepresentation());
 		endArea = getConnector().getEndObject().getShape().getOutline().transform(at2);
 		FGEArea endOrthogonalPerspectiveArea = endArea.getOrthogonalPerspectiveArea(currentOrientation.getOpposite());

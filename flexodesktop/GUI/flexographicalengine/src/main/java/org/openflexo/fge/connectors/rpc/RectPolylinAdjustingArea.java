@@ -57,9 +57,9 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	@Override
 	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
 			FGEPoint initialPoint, MouseEvent event) {
-		/*AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
+		/*AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
 				getConnector().getStartObject(), getGraphicalRepresentation());
-		AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
+		AffineTransform at2 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
 				getConnector().getEndObject(), getGraphicalRepresentation());
 		FGEArea startArea = getConnector().getStartObject().getShape().getShape().transform(at1);
 		FGEArea endArea = getConnector().getEndObject().getShape().getShape().transform(at2);

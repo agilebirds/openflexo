@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.notifications.FGENotification;
@@ -46,7 +46,7 @@ import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
-public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implements GraphicalFlexoObserver, VEShemaConstants {
+public class VEShapeGR extends ShapeGraphicalRepresentationImpl<ViewShape> implements GraphicalFlexoObserver, VEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEShapeGR.class.getPackage().getName());
@@ -77,7 +77,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 			aShape.update();
 		}
 
-		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
+		// setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(25, 25, 25, 25));
 
 	}
 

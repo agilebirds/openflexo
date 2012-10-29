@@ -32,9 +32,11 @@ import javax.swing.JPanel;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -307,12 +309,12 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 				}
 
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
+			drawingGR = new DrawingGraphicalRepresentationImpl(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			shapeGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
+			shapeGR = new ShapeGraphicalRepresentationImpl(ShapeType.RECTANGLE, text, drawing);
 			shapeGR.setWidth(130);
 			shapeGR.setHeight(130);
 			shapeGR.setAllowToLeaveBounds(true);

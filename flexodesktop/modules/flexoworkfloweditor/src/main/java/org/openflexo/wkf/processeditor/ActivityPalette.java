@@ -164,7 +164,7 @@ public class ActivityPalette extends AbstractWKFPalette {
 				return "<role>";
 			}
 			// @Override
-			// public org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder getBorder() {
+			// public org.openflexo.fge.ShapeGraphicalRepresentationUtils.ShapeBorder getBorder() {
 			// return new ShapeBorder(0, 0, 0, 0);
 			// }
 		}, DROP_ON_PROCESS_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP_FOR_INTERACTIVE_NODE);

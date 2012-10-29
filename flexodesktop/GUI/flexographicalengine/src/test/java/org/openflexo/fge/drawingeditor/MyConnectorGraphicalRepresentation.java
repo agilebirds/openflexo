@@ -19,14 +19,14 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public class MyConnectorGraphicalRepresentation extends ConnectorGraphicalRepresentation<MyConnector> implements XMLSerializable {
+public class MyConnectorGraphicalRepresentation extends ConnectorGraphicalRepresentationImpl<MyConnector> implements XMLSerializable {
 
 	// Called for LOAD
 	public MyConnectorGraphicalRepresentation(DrawingBuilder builder) {

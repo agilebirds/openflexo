@@ -19,11 +19,11 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public class MyDrawingGraphicalRepresentation extends DrawingGraphicalRepresentation<MyDrawing> implements XMLSerializable {
+public class MyDrawingGraphicalRepresentation extends DrawingGraphicalRepresentationImpl<MyDrawing> implements XMLSerializable {
 
 	// Called for LOAD
 	public MyDrawingGraphicalRepresentation(DrawingBuilder builder) {

@@ -53,7 +53,7 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 
 		this.readOnly = readOnly;
 		// graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
-		// graphicalRepresentation.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
+		// GraphicalRepresentationUtils.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
 
 		shapesGR = new Hashtable<ExampleDrawingShape, CalcDrawingShapeGR>();
 		connectorsGR = new Hashtable<ExampleDrawingConnector, CalcDrawingConnectorGR>();

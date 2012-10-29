@@ -24,7 +24,7 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 public class ConnectorModified extends FGENotification {
 
 	public ConnectorModified() {
-		super(ConnectorGraphicalRepresentation.Parameters.connector, null, null);
+		super(ConnectorGraphicalRepresentation.ConnectorParameters.connector, null, null);
 	}
 
 	@Override

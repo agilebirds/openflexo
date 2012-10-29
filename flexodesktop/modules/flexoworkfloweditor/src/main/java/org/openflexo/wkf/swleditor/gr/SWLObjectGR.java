@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.FlexoModelObject;
@@ -31,8 +31,8 @@ import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraphicalRepresentation<O> implements GraphicalFlexoObserver,
-		SWLEditorConstants {
+public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraphicalRepresentationImpl<O> implements
+		GraphicalFlexoObserver, SWLEditorConstants {
 
 	public SWLObjectGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(shapeType, object, aDrawing);

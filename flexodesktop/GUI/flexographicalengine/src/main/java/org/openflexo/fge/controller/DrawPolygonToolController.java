@@ -28,9 +28,10 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController.EditorTool;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
@@ -133,8 +134,8 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 
 	@Override
 	public ShapeGraphicalRepresentation<?> buildShapeGraphicalRepresentation() {
-		ShapeGraphicalRepresentation<?> returned = new ShapeGraphicalRepresentation<Object>(ShapeType.CUSTOM_POLYGON, null, getController()
-				.getDrawing());
+		ShapeGraphicalRepresentation<?> returned = new ShapeGraphicalRepresentationImpl<Object>(ShapeType.CUSTOM_POLYGON, null,
+				getController().getDrawing());
 		returned.setBorder(new ShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
 				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));
 		returned.setBackground(getController().getCurrentBackgroundStyle());
@@ -150,7 +151,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 		AffineTransform scaleAT = AffineTransform.getScaleInstance(1 / boundingBox.getWidth(), 1 / boundingBox.getHeight());
 		FGEPolygon normalizedPolygon = getPolygon().transform(translateAT).transform(scaleAT);
 		if (parentGR instanceof ShapeGraphicalRepresentation) {
-			FGEPoint pt = GraphicalRepresentation.convertNormalizedPoint(parentGR, new FGEPoint(0, 0), getController()
+			FGEPoint pt = GraphicalRepresentationUtils.convertNormalizedPoint(parentGR, new FGEPoint(0, 0), getController()
 					.getDrawingGraphicalRepresentation());
 			returned.setX(boundingBox.getX() - pt.x);
 			returned.setY(boundingBox.getY() - pt.y);

@@ -1,0 +1,591 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+package org.openflexo.fge;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Logger;
+
+import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
+import org.openflexo.fge.controller.MouseControl.MouseButton;
+import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.fge.controller.MouseDragControlAction.MouseDragControlActionType;
+import org.openflexo.fge.geom.FGEDimension;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.DrawingDecorationPainter;
+import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
+import org.openflexo.fge.graphics.FGEDrawingGraphics;
+import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.ObjectHasResized;
+import org.openflexo.fge.notifications.ObjectResized;
+import org.openflexo.fge.notifications.ObjectWillResize;
+
+public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentationImpl<M> implements DrawingGraphicalRepresentation<M> {
+
+	private static final Logger logger = Logger.getLogger(DrawingGraphicalRepresentationImpl.class.getPackage().getName());
+
+	// *******************************************************************************
+	// * Parameters *
+	// *******************************************************************************
+
+	private Color backgroundColor = Color.WHITE;
+
+	private double width;
+	private double height;
+	private Color rectangleSelectingSelectionColor = Color.BLUE;
+	private Color focusColor = Color.RED;
+	private Color selectionColor = Color.BLUE;
+	private boolean drawWorkingArea = true;
+	private boolean isResizable = false;
+	protected DrawingDecorationPainter decorationPainter;
+
+	// *******************************************************************************
+	// * Inner classes *
+	// *******************************************************************************
+
+	// *******************************************************************************
+	// * Fields *
+	// *******************************************************************************
+
+	protected FGEDrawingGraphics graphics;
+	private FGEDrawingDecorationGraphics decorationGraphics;
+	private BackgroundStyle bgStyle;
+
+	// *******************************************************************************
+	// * Methods *
+	// *******************************************************************************
+
+	// *******************************************************************************
+	// * Constructor *
+	// *******************************************************************************
+
+	// Never use this constructor (used during deserialization only)
+	public DrawingGraphicalRepresentationImpl() {
+		this(null, true);
+	}
+
+	public DrawingGraphicalRepresentationImpl(Drawing<M> aDrawing) {
+		this(aDrawing, true);
+	}
+
+	public DrawingGraphicalRepresentationImpl(Drawing<M> aDrawing, boolean initBasicControls) {
+		super(aDrawing != null ? aDrawing.getModel() : null, aDrawing);
+		graphics = new FGEDrawingGraphics(this);
+		if (initBasicControls) {
+			addToMouseClickControls(MouseClickControl.makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
+					MouseClickControlActionType.SELECTION));
+			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
+					MouseDragControlActionType.RECTANGLE_SELECTING));
+			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
+		}
+		width = 1000;
+		height = 1000;
+		bgStyle = BackgroundStyle.makeColoredBackground(getBackgroundColor());
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		if (graphics != null) {
+			graphics.delete();
+		}
+		graphics = null;
+		decorationGraphics = null;
+		decorationPainter = null;
+	}
+
+	@Override
+	public Vector<GRParameter> getAllParameters() {
+		Vector<GRParameter> returned = super.getAllParameters();
+		DrawingParameters[] allParams = DrawingParameters.values();
+		for (int i = 0; i < allParams.length; i++) {
+			returned.add(allParams[i]);
+		}
+		return returned;
+	}
+
+	/**
+	 * Override parent behaviour by always returning true<br>
+	 * IMPORTANT: a drawing graphical representation MUST be always validated
+	 */
+	@Override
+	public final boolean isValidated() {
+		return true;
+	}
+
+	// ***************************************************************************
+	// * Cloning *
+	// ***************************************************************************
+
+	@Override
+	public final void setsWith(GraphicalRepresentation<?> gr) {
+		super.setsWith(gr);
+		if (gr instanceof DrawingGraphicalRepresentationImpl) {
+			for (DrawingParameters p : DrawingParameters.values()) {
+				_setParameterValueWith(p, gr);
+			}
+		}
+	}
+
+	@Override
+	public final void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters) {
+		super.setsWith(gr, exceptedParameters);
+		if (gr instanceof ConnectorGraphicalRepresentation) {
+			for (DrawingParameters p : DrawingParameters.values()) {
+				boolean excepted = false;
+				for (GRParameter ep : exceptedParameters) {
+					if (p == ep) {
+						excepted = true;
+					}
+				}
+				if (!excepted) {
+					_setParameterValueWith(p, gr);
+				}
+			}
+		}
+	}
+
+	// *******************************************************************************
+	// * Accessors *
+	// *******************************************************************************
+
+	@Override
+	public FGERectangle getWorkingArea() {
+		return new FGERectangle(0, 0, getWidth(), getHeight(), Filling.FILLED);
+	}
+
+	@Override
+	public int getLayer() {
+		return 0;
+	}
+
+	@Override
+	public Color getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	@Override
+	public void setBackgroundColor(Color backgroundColor) {
+		// logger.info("For "+this+" Set bg color to "+backgroundColor);
+
+		FGENotification notification = requireChange(DrawingParameters.backgroundColor, backgroundColor);
+		if (notification != null) {
+			this.backgroundColor = backgroundColor;
+			bgStyle = BackgroundStyle.makeColoredBackground(backgroundColor);
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public double getHeight() {
+		return height;
+	}
+
+	@Override
+	public void setHeight(double aValue) {
+		FGENotification notification = requireChange(DrawingParameters.height, aValue);
+		if (notification != null) {
+			height = aValue;
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public double getWidth() {
+		return width;
+	}
+
+	@Override
+	public void setWidth(double aValue) {
+		FGENotification notification = requireChange(DrawingParameters.width, aValue);
+		if (notification != null) {
+			width = aValue;
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public Color getFocusColor() {
+		return focusColor;
+	}
+
+	@Override
+	public void setFocusColor(Color focusColor) {
+		FGENotification notification = requireChange(DrawingParameters.focusColor, focusColor);
+		if (notification != null) {
+			this.focusColor = focusColor;
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public Color getSelectionColor() {
+		return selectionColor;
+	}
+
+	@Override
+	public void setSelectionColor(Color selectionColor) {
+		FGENotification notification = requireChange(DrawingParameters.selectionColor, selectionColor);
+		if (notification != null) {
+			this.selectionColor = selectionColor;
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public Color getRectangleSelectingSelectionColor() {
+		return rectangleSelectingSelectionColor;
+	}
+
+	@Override
+	public void setRectangleSelectingSelectionColor(Color selectionColor) {
+		FGENotification notification = requireChange(DrawingParameters.rectangleSelectingSelectionColor, selectionColor);
+		if (notification != null) {
+			this.rectangleSelectingSelectionColor = selectionColor;
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public int getViewX(double scale) {
+		return 0;
+	}
+
+	@Override
+	public int getViewY(double scale) {
+		return 0;
+	}
+
+	@Override
+	public int getViewWidth(double scale) {
+		return (int) (getWidth() * scale);
+	}
+
+	@Override
+	public int getViewHeight(double scale) {
+		return (int) (getHeight() * scale);
+	}
+
+	@Override
+	public FGERectangle getNormalizedBounds() {
+		return new FGERectangle(0, 0, getWidth(), getHeight(), Filling.FILLED);
+	}
+
+	@Override
+	public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale) {
+		return false;
+	}
+
+	@Override
+	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale) {
+		return AffineTransform.getScaleInstance(scale, scale);
+
+		/*AffineTransform returned = AffineTransform.getScaleInstance(getWidth(), getHeight());
+		if (scale != 1) {
+			returned.preConcatenate(AffineTransform.getScaleInstance(scale,scale));
+		}
+		return returned;*/
+	}
+
+	@Override
+	public AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale) {
+		return AffineTransform.getScaleInstance(1 / scale, 1 / scale);
+
+		/*AffineTransform returned = new AffineTransform();
+		if (scale != 1) returned = AffineTransform.getScaleInstance(1/scale, 1/scale);
+		returned.preConcatenate(AffineTransform.getScaleInstance(1/getWidth(),1/getHeight()));
+		return returned;*/
+	}
+
+	// *******************************************************************************
+	// * Methods *
+	// *******************************************************************************
+
+	@Override
+	public void paint(Graphics g, DrawingController controller) {
+		Graphics2D g2 = (Graphics2D) g;
+		graphics.createGraphics(g2, controller);
+		// If there is a decoration painter init its graphics
+		if (decorationPainter != null) {
+			decorationGraphics.createGraphics(g2, controller);
+		}
+
+		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
+		if (decorationPainter != null && decorationPainter.paintBeforeDrawing()) {
+			decorationPainter.paintDecoration(decorationGraphics);
+		}
+
+		super.paint(g, controller);
+
+		if (!(bgStyle instanceof BackgroundStyle.Color) || !((BackgroundStyle.Color) bgStyle).getColor().equals(getBackgroundColor())) {
+			bgStyle = BackgroundStyle.makeColoredBackground(getBackgroundColor());
+		}
+
+		ForegroundStyle fgStyle = ForegroundStyle.makeStyle(Color.DARK_GRAY);
+
+		graphics.setDefaultForeground(fgStyle);
+		graphics.setDefaultBackground(bgStyle);
+		getWorkingArea().paint(graphics);
+		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
+		if (decorationPainter != null && !decorationPainter.paintBeforeDrawing()) {
+			decorationPainter.paintDecoration(decorationGraphics);
+		}
+
+		graphics.releaseGraphics();
+
+	}
+
+	@Override
+	public DrawingDecorationPainter getDecorationPainter() {
+		return decorationPainter;
+	}
+
+	@Override
+	public void setDecorationPainter(DrawingDecorationPainter aPainter) {
+		decorationGraphics = new FGEDrawingDecorationGraphics(this);
+		decorationPainter = aPainter;
+	}
+
+	@Override
+	public boolean hasText() {
+		return false;
+	}
+
+	@Override
+	public boolean hasFloatingLabel() {
+		return false;
+	}
+
+	@Override
+	public String getInspectorName() {
+		return "DrawingGraphicalRepresentationUtils.inspector";
+	}
+
+	@Override
+	public GraphicalRepresentation<?> getContainerGraphicalRepresentation() {
+		return null;
+	}
+
+	@Override
+	public final boolean shouldBeDisplayed() {
+		return true;
+	}
+
+	@Override
+	public boolean getIsVisible() {
+		return true;
+	}
+
+	@Override
+	public Vector<GraphicalRepresentation> allGraphicalRepresentations() {
+		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
+		_appendGraphicalRepresentations(returned, this);
+		return returned;
+	}
+
+	private static void _appendGraphicalRepresentations(Vector<GraphicalRepresentation> v, GraphicalRepresentation<?> gr) {
+		v.add(gr);
+		List<? extends Object> containedObjects = gr.getContainedObjects();
+		if (containedObjects == null) {
+			return;
+		}
+		for (Object drawable : containedObjects) {
+			GraphicalRepresentation<?> next = gr.getGraphicalRepresentation(drawable);
+			_appendGraphicalRepresentations(v, next);
+		}
+	}
+
+	/*@Override
+	public void finalizeDeserialization()
+	{
+		logger.info("ICI ???");
+		super.finalizeDeserialization();
+		for (GraphicalRepresentation gr : allGraphicalRepresentations()) {
+			logger.info("gr="+gr);
+			if (gr instanceof ConnectorGraphicalRepresentation) {
+				((ConnectorGraphicalRepresentation)gr).observeRelevantObjects();
+			}
+		}
+	}*/
+
+	@Override
+	public boolean getDrawWorkingArea() {
+		return drawWorkingArea;
+	}
+
+	@Override
+	public void setDrawWorkingArea(boolean drawWorkingArea) {
+		// logger.info("setDrawWorkingArea with "+drawWorkingArea);
+
+		FGENotification notification = requireChange(DrawingParameters.drawWorkingArea, drawWorkingArea);
+		if (notification != null) {
+			this.drawWorkingArea = drawWorkingArea;
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public boolean isResizable() {
+		return isResizable;
+	}
+
+	@Override
+	public void setIsResizable(boolean isResizable) {
+		FGENotification notification = requireChange(DrawingParameters.isResizable, isResizable);
+		if (notification != null) {
+			this.isResizable = isResizable;
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public void startConnectorObserving() {
+		for (GraphicalRepresentation gr : allGraphicalRepresentations()) {
+			if (gr instanceof ConnectorGraphicalRepresentation) {
+				((ConnectorGraphicalRepresentation) gr).observeRelevantObjects();
+			}
+		}
+	}
+
+	@Override
+	public FGEDimension getSize() {
+		return new FGEDimension(getWidth(), getHeight());
+	}
+
+	/**
+	 * Notify that the object just resized
+	 */
+	@Override
+	public void notifyObjectResized(FGEDimension oldSize) {
+		setChanged();
+		notifyObservers(new ObjectResized(oldSize, getSize()));
+	}
+
+	/**
+	 * Notify that the object will be resized
+	 */
+	@Override
+	public void notifyObjectWillResize() {
+		setChanged();
+		notifyObservers(new ObjectWillResize());
+	}
+
+	/**
+	 * Notify that the object resizing has finished (take care that this just notify END of resize, this should NOT be used to notify a
+	 * resizing: use notifyObjectResize() instead)
+	 */
+	@Override
+	public void notifyObjectHasResized() {
+		setChanged();
+		notifyObservers(new ObjectHasResized());
+	}
+
+	@Override
+	public void notifyDrawingNeedsToBeRedrawn() {
+		setChanged();
+		notifyObservers(new DrawingNeedsToBeRedrawn());
+	}
+
+	@Override
+	public FGEDrawingGraphics getGraphics() {
+		return graphics;
+	}
+
+	@Override
+	public ShapeGraphicalRepresentation<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p) {
+		return getTopLevelShapeGraphicalRepresentation(this, p);
+	}
+
+	private ShapeGraphicalRepresentation<?> getTopLevelShapeGraphicalRepresentation(GraphicalRepresentation<?> container, FGEPoint p) {
+
+		List<ShapeGraphicalRepresentation<?>> enclosingShapes = new ArrayList<ShapeGraphicalRepresentation<?>>();
+
+		for (GraphicalRepresentation<?> gr : container.getContainedGraphicalRepresentations()) {
+			if (gr instanceof ShapeGraphicalRepresentation) {
+				ShapeGraphicalRepresentation<?> child = (ShapeGraphicalRepresentation<?>) gr;
+				if (child.getShape().getShape().containsPoint(GraphicalRepresentationUtils.convertNormalizedPoint(this, p, child))) {
+					enclosingShapes.add(child);
+				} else {
+					// Look if we are not contained in a child shape outside current shape
+					GraphicalRepresentation<?> insideFocusedShape = getTopLevelShapeGraphicalRepresentation(child, p);
+					if (insideFocusedShape != null && insideFocusedShape instanceof ShapeGraphicalRepresentation) {
+						enclosingShapes.add((ShapeGraphicalRepresentation<?>) insideFocusedShape);
+					}
+				}
+			}
+		}
+
+		if (enclosingShapes.size() > 0) {
+
+			Collections.sort(enclosingShapes, new Comparator<ShapeGraphicalRepresentation<?>>() {
+				@Override
+				public int compare(ShapeGraphicalRepresentation<?> o1, ShapeGraphicalRepresentation<?> o2) {
+					if (o2.getLayer() == o1.getLayer() && o1.getParentGraphicalRepresentation() != null
+							&& o1.getParentGraphicalRepresentation() == o2.getParentGraphicalRepresentation()) {
+						return o1.getParentGraphicalRepresentation().getOrder(o1, o2);
+					}
+					return o2.getLayer() - o1.getLayer();
+				}
+			});
+
+			ShapeGraphicalRepresentation<?> focusedShape = enclosingShapes.get(0);
+
+			ShapeGraphicalRepresentation<?> insideFocusedShape = getTopLevelShapeGraphicalRepresentation(focusedShape, p);
+
+			if (insideFocusedShape != null) {
+				return insideFocusedShape;
+			} else {
+				return focusedShape;
+			}
+		}
+
+		return null;
+
+	}
+
+	// *******************************************************************************
+	// * Layout *
+	// *******************************************************************************
+
+	@Override
+	public void performRandomLayout() {
+		performRandomLayout(getWidth(), getHeight());
+	}
+
+	@Override
+	public void performAutoLayout() {
+		performAutoLayout(getWidth(), getHeight());
+	}
+
+}

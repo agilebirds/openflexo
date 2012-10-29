@@ -39,6 +39,15 @@ import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.view.ConnectorView;
 
+/**
+ * Represents a connector linking two shapes in a diagram<br>
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ *            the represented type
+ */
 public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
 
 	public static enum ConnectorParameters implements GRParameter {
@@ -178,6 +187,8 @@ public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresenta
 
 	@Override
 	public abstract void update(Observable observable, Object notification);
+
+	public boolean isConnectorConsistent();
 
 	public abstract void refreshConnector();
 
