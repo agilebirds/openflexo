@@ -369,12 +369,12 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	@Setter(value = MOUSE_CLICK_CONTROLS)
 	public abstract void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
 
-	@Adder(id = MOUSE_CLICK_CONTROLS)
+	@Adder(value = MOUSE_CLICK_CONTROLS)
 	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl);
 
 	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
 
-	@Remover(id = MOUSE_CLICK_CONTROLS)
+	@Remover(value = MOUSE_CLICK_CONTROLS)
 	public abstract void removeFromMouseClickControls(MouseClickControl mouseClickControl);
 
 	@Getter(value = MOUSE_DRAG_CONTROLS, cardinality = Cardinality.LIST)
@@ -384,12 +384,12 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	@Setter(value = MOUSE_DRAG_CONTROLS)
 	public abstract void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
 
-	@Adder(id = MOUSE_DRAG_CONTROLS)
+	@Adder(value = MOUSE_DRAG_CONTROLS)
 	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl);
 
 	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
 
-	@Remover(id = MOUSE_DRAG_CONTROLS)
+	@Remover(value = MOUSE_DRAG_CONTROLS)
 	public abstract void removeFromMouseDragControls(MouseDragControl mouseDragControl);
 
 	@Getter(value = TOOLTIP_TEXT)
@@ -406,10 +406,10 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	@Setter(value = VARIABLES)
 	public abstract void setVariables(Vector<GRVariable> variables);
 
-	@Adder(id = VARIABLES)
+	@Adder(value = VARIABLES)
 	public abstract void addToVariables(GRVariable v);
 
-	@Remover(id = VARIABLES)
+	@Remover(value = VARIABLES)
 	public abstract void removeFromVariables(GRVariable v);
 
 	// *******************************************************************************

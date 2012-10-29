@@ -25,8 +25,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.velocity.VelocityContext;
-import org.jdom.Element;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Element;
+import org.jdom2.output.XMLOutputter;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;

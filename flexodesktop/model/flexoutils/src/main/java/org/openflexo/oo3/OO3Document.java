@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.DocType;
+import org.jdom2.DocType;
 import org.openflexo.oo3.OO3Attachments.OO3Attachment;
 import org.openflexo.oo3.OO3NamedStyles.OO3NamedStyle;
 import org.openflexo.toolbox.FileResource;

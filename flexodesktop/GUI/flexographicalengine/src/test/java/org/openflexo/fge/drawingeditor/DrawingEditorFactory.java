@@ -4,7 +4,7 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class DrawingEditorFactory extends FGEModelFactory {
 

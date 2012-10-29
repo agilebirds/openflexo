@@ -22,7 +22,7 @@ package org.openflexo.dm.view.erdiagram;
 import java.awt.Color;
 import java.util.logging.Logger;
 
-import org.jdom.Verifier;
+import org.jdom2.Verifier;
 import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;

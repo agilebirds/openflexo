@@ -19,29 +19,33 @@
  */
 package org.openflexo.xml.diff2;
 
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Text;
-import org.jdom.filter.Filter;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Text;
+import org.jdom2.filter.ElementFilter;
 import org.openflexo.xml.diff3.XMLDiff3;
 
 public class DocumentsMapping {
 
 	private Document _src;
 	private Document _target;
-	private Hashtable<Content, Content> _srcTarget;
-	private Hashtable<Content, Content> _targetSource;
-	private Hashtable<Content, ParentReferences> _movedElements;
-	private Hashtable<Content, MatchingXML> _matchingXMLs;
-	private Vector<Content> _removedFromTarget;
-	private Vector<Content> _addedInTarget;
-	private Hashtable<Content, ModifierFlags> _modifiersFlags;
+	private Map<Content, Content> _srcTarget;
+	private Map<Content, Content> _targetSource;
+	private Map<Content, ParentReferences> _movedElements;
+	private Map<Content, MatchingXML> _matchingXMLs;
+	private List<Content> _removedFromTarget;
+	private List<Content> _addedInTarget;
+	private Map<Content, ModifierFlags> _modifiersFlags;
 
 	public DocumentsMapping(Document src, Document target) {
 		super();
@@ -73,25 +77,22 @@ public class DocumentsMapping {
 		return _src;
 	}
 
-	public Vector<Content> getRemovedElements() {
+	public List<Content> getRemovedElements() {
 		return _removedFromTarget;
 	}
 
-	public Vector<Content> getAddedElements() {
+	public List<Content> getAddedElements() {
 		return _addedInTarget;
 	}
 
-	public Hashtable<Content, Integer> getAddedElementsInSourceRef(Element srcRef) {
-		Hashtable<Content, Integer> reply = new Hashtable<Content, Integer>();
-		Enumeration<Content> en = _addedInTarget.elements();
-		Content item = null;
-		Element parentOfItemInTarget = null;
-		while (en.hasMoreElements()) {
-			item = en.nextElement();
+	public Map<Content, Integer> getAddedElementsInSourceRef(Element srcRef) {
+		Map<Content, Integer> reply = new Hashtable<Content, Integer>();
+		Element parentOfItemInTarget;
+		for (Content item : _addedInTarget) {
 			parentOfItemInTarget = item.getParentElement();
 			Element parentOfItemInSrc = (Element) _targetSource.get(parentOfItemInTarget);
 			if (srcRef.equals(parentOfItemInSrc)) {
-				reply.put((Content) item.clone(), new Integer(indexOfElement(item)));
+				reply.put(item.clone(), Integer.valueOf(indexOfElement(item)));
 			}
 		}
 		return reply;
@@ -109,7 +110,7 @@ public class DocumentsMapping {
 		return reply;
 	}
 
-	public Hashtable<Content, ParentReferences> getMovedElements() {
+	public Map<Content, ParentReferences> getMovedElements() {
 		return _movedElements;
 	}
 
@@ -124,11 +125,9 @@ public class DocumentsMapping {
 		} else {
 			// System.out.println("Found mapping for : "+_targetSource.size()+" xml objects");
 		}
-		Enumeration<Content> en = _srcTarget.keys();
-		Content itemKey = null;
-		while (en.hasMoreElements()) {
-			itemKey = en.nextElement();
-			Content matchingTargetInSrcTarget = _srcTarget.get(itemKey);
+		for (Entry<Content, Content> e : _srcTarget.entrySet()) {
+			Content itemKey = e.getKey();
+			Content matchingTargetInSrcTarget = e.getValue();
 			Content matchingSourceInTargetSource = _targetSource.get(matchingTargetInSrcTarget);
 			if (matchingSourceInTargetSource == null) {
 				System.err.println("Cannot find the pending of " + itemKey + "," + matchingTargetInSrcTarget + " into targetSource");
@@ -145,16 +144,13 @@ public class DocumentsMapping {
 			System.out.println("xmlObjects added in target : " + _addedInTarget.size());
 			print(_addedInTarget);
 			System.out.println("xmlObjects moved in target : " + _movedElements.size());
-			print(_movedElements);
+			print(_movedElements.keySet());
 		}
 	}
 
-	private void print(Vector<Content> v) {
-		Enumeration<Content> en = v.elements();
-		Content item = null;
-		while (en.hasMoreElements()) {
-			item = en.nextElement();
-			// System.out.println("\t"+print(item));
+	private void print(Collection<Content> v) {
+		for (Content content : v) {
+			// System.out.println(content);
 		}
 	}
 
@@ -374,14 +370,14 @@ public class DocumentsMapping {
 		if (idRef == null) {
 			return null;
 		}
-		Iterator it = document.getDescendants(new IDFilter(idRef));
+		Iterator<Element> it = document.getDescendants(new IDFilter(idRef));
 		if (it.hasNext()) {
-			return (Element) it.next();
+			return it.next();
 		}
 		return null;
 	}
 
-	private static class IDFilter implements Filter {
+	private static class IDFilter extends ElementFilter {
 
 		private String _searchedID;
 
@@ -391,11 +387,12 @@ public class DocumentsMapping {
 		}
 
 		@Override
-		public boolean matches(Object arg0) {
-			if (arg0 instanceof Element) {
-				return _searchedID.equals(((Element) arg0).getAttributeValue("id"));
+		public Element filter(Object arg0) {
+			Element element = super.filter(arg0);
+			if (element != null && _searchedID.equals(element.getAttributeValue("id"))) {
+				return element;
 			}
-			return false;
+			return null;
 		}
 	}
 

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());

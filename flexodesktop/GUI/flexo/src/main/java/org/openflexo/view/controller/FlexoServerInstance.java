@@ -57,9 +57,9 @@ public interface FlexoServerInstance {
 	@Setter(value = USER_TYPES)
 	public void setUserTypes(List<String> userTypes);
 
-	@Adder(id = USER_TYPES)
+	@Adder(value = USER_TYPES)
 	public void addToUserTypes(String userType);
 
-	@Remover(id = USER_TYPES)
+	@Remover(value = USER_TYPES)
 	public void removeFromUserTypes(String userType);
 }
