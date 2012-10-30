@@ -88,6 +88,7 @@ public class DropIEElement extends FlexoAction<DropIEElement, IEObject, IEObject
 		FlexoModelObject.addActionForClass(actionType, IEBlocWidget.class);
 		FlexoModelObject.addActionForClass(actionType, IEHTMLTableWidget.class);
 		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IEWOComponent.class);
 	}
 
 	DropIEElement(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
