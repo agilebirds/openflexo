@@ -427,7 +427,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 						if (editor2.getProject().getProjectData() != null) {
 							for (FlexoProjectReference ref : editor2.getProject().getProjectData().getImportedProjects()) {
 								try {
-									if (ref.getProject() == project) {
+									if (ref.getReferredProject() == project) {
 										isRoot = false;
 										break;
 									}

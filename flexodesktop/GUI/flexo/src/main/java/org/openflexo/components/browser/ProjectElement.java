@@ -90,7 +90,7 @@ public class ProjectElement extends BrowserElement {
 		if (getProject().getProjectData() != null) {
 			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
 				try {
-					addToChilds(ref.getProject());
+					addToChilds(ref.getReferredProject());
 				} catch (ProjectLoadingCancelledException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

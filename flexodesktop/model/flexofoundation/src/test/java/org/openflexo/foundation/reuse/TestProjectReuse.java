@@ -34,6 +34,9 @@ public class TestProjectReuse extends FlexoTestCase {
 
 		@Override
 		public FlexoProject loadProject(FlexoProjectReference reference) throws ProjectLoadingCancelledException {
+			if (importedProject != null) {
+				return importedProject;
+			}
 			return importedProject = reloadProject(importedProjectDirectory, resourceCenter, this).getProject();
 		}
 
@@ -82,12 +85,13 @@ public class TestProjectReuse extends FlexoTestCase {
 		rootProject.save();
 		rootProject.close();
 		importedProject.close();
+		importedProject = null;
 		rootProject = reloadProject(rootProjectDirectory, resourceCenter, new ProjectReferenceLoader()).getProject();
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference
 		// loader
 		assertNotNull(rootProject.getProjectData(false));
 		assertEquals(1, rootProject.getProjectData().getImportedProjects().size());
-		assertEquals(importedProject, rootProject.getProjectData().getImportedProjects().get(0).getProject());
+		assertEquals(importedProject, rootProject.getProjectData().getImportedProjects().get(0).getReferredProject());
 	}
 
 	public void testReuseProcess() throws SaveResourceException {
@@ -95,7 +99,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		importProject.setProjectToImport(importedProject);
 		importProject.doAction();
 		assertTrue("Import project action failed", importProject.hasActionExecutionSucceeded());
-		FlexoProcess subProcess = createSubProcess(SUB_PROCESS_NAME, importedProject.getRootProcess(), importedProjectEditor);
+		FlexoProcess subProcess = createSubProcess(SUB_PROCESS_NAME, null, importedProjectEditor);
 		SubProcessNode subProcessNode = instanciateLoopSubProcess(subProcess, rootProject.getRootProcess(), 400, 200, rootEditor);
 		subProcessNode.setName(SUB_PROCESS_NODE_NAME);
 		importedProject.save();

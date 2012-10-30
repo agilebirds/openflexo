@@ -134,6 +134,12 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 					logger.warning("Could not load resource data for resource " + getResourceIdentifier() + " message: " + e.getMessage());
 				}
 				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 

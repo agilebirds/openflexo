@@ -78,7 +78,8 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 		List<FlexoResource<FlexoResourceData>> resources = new ArrayList<FlexoResource<FlexoResourceData>>(size());
 		for (FlexoResource<FlexoResourceData> resource : this) {
 			if (!resource.isToBeSerialized() || getRelatedResource().getProject().getFlexoResource() != null
-					&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource.checkIntegrity()) {
+					&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource.checkIntegrity()
+					|| getRelatedResource().getProject() != resource.getProject()) {
 				continue;
 			}
 			resources.add(resource);

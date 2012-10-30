@@ -24,7 +24,6 @@ import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -214,11 +213,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 				return null;
 			}
 			if (force && !res.isLoaded()) {
-				try {
-					res.loadResourceData();
-				} catch (FlexoException e) {
-					e.printStackTrace();
-				}
+				res.getResourceData();
 			}
 			if (res.isLoaded() && !res.getIsLoading()) {
 				return (O) getEnclosingProject().findObject(userIdentifier, flexoID);

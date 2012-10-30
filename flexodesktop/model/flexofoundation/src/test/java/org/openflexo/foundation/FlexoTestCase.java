@@ -561,16 +561,17 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	public static FlexoProcess createSubProcess(String subProcessName, FlexoProcess parentProcess, FlexoEditor editor) {
-		AddSubProcess action = AddSubProcess.actionType.makeNewAction(parentProcess, null, editor);
+		AddSubProcess action = AddSubProcess.actionType.makeNewAction(parentProcess != null ? parentProcess : editor.getProject()
+				.getWorkflow(), null, editor);
 		action.setParentProcess(parentProcess);
 		action.setNewProcessName(subProcessName);
 		action.doAction();
 		assertTrue(action.hasActionExecutionSucceeded());
-		FlexoProcessResource _subProcessResource = parentProcess.getProject().getFlexoProcessResource(subProcessName);
+		FlexoProcessResource _subProcessResource = editor.getProject().getFlexoProcessResource(subProcessName);
 		assertNotNull(_subProcessResource);
 		assertNotNull(_subProcessResource.getFlexoProcess());
 		assertEquals(_subProcessResource.getFlexoProcess().getParentProcess(), parentProcess);
-		assertEquals(_subProcessResource.getFlexoProcess(), parentProcess.getProject().getLocalFlexoProcess(subProcessName));
+		assertEquals(_subProcessResource.getFlexoProcess(), editor.getProject().getLocalFlexoProcess(subProcessName));
 		return _subProcessResource.getFlexoProcess();
 	}
 

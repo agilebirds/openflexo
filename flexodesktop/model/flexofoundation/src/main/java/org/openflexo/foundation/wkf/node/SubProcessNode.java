@@ -137,8 +137,8 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		if (parentProcess != null && parentProcess.isImported()) {
 			return false;
 		}
-		if (aProcess.isImported()) {
-			return aProcess.isTopLevelProcess();
+		if (aProcess.isTopLevelProcess()) {
+			return true;
 		}
 
 		if (parentProcess == null) {

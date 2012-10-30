@@ -1,153 +1,118 @@
 package org.openflexo.foundation.rm;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.logging.FlexoLogger;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder.Converter;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Initializer;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Parameter;
+import org.openflexo.model.annotations.ReturnedValue;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.factory.AccessibleProxyObject;
 
-public class FlexoProjectReference implements StringConvertable<FlexoProjectReference> {
+@ModelEntity
+@XMLElement
+@ImplementationClass(FlexoProjectReferenceImpl.class)
+public interface FlexoProjectReference extends AccessibleProxyObject {
 
-	private static final Logger logger = FlexoLogger.getLogger(FlexoModelObjectReference.class.getPackage().getName());
-
-	private static final String SEPARATOR = "|";
-
-	public static interface ReferenceOwner {
-
-		public void projectDeleted(FlexoProjectReference reference);
-
-	}
+	public static final String PROJECT_DATA = "projectData";
+	public static final String PROJECT_NAME = "projectName";
+	public static final String PROJECT_URI = "projectURI";
+	public static final String PROJECT_VERSION = "projectVersion";
+	public static final String PROJECT_REVISION = "projectRevision";
+	public static final String REFERRING_PROJECT = "referringProject";
+	public static final String REFERRED_PROJECT = "referredProject";
+	public static final String PROJECT = "project";
+	public static final String STATUS = "status";
 
 	public enum ReferenceStatus {
-		RESOLVED, UNRESOLVED, UNDECODABLE;
+		RESOLVED, UNRESOLVED;
 	}
 
-	private ReferenceStatus status = ReferenceStatus.UNRESOLVED;
+	@Initializer
+	public FlexoProjectReference init(@Parameter(REFERRED_PROJECT) FlexoProject referredProject);
 
-	private String serializationRepresentation;
+	/**
+	 * Getter for the project data
+	 * 
+	 * @return the project data of this project reference
+	 */
+	@Getter(value = PROJECT_DATA, inverse = ProjectData.IMPORTED_PROJECTS)
+	public ProjectData getProjectData();
 
-	private String projectName;
-	private String projectURI;
-	private String projectVersion;
-	private long projectRevision;
+	/**
+	 * Sets the project data
+	 * 
+	 * @param data
+	 *            the project data
+	 */
+	@Setter(PROJECT_DATA)
+	public void setProjectData(ProjectData data);
 
-	private FlexoProject referringProject;
+	/**
+	 * Returns the referring project, ie, the project in which this project reference belongs, is used. The returned value is equivalent
+	 * {@link #getProjectData()}.{@link ProjectData#getProject()}.
+	 * 
+	 * @return the referring project.
+	 */
+	@Getter(value = REFERRING_PROJECT, ignoreType = true)
+	@ReturnedValue(PROJECT_DATA + "." + ProjectData.PROJECT)
+	public FlexoProject getReferringProject();
 
-	private FlexoProject referredProject;
+	/**
+	 * The status of this reference.
+	 * 
+	 * @return the status of this reference
+	 */
+	@Getter(STATUS)
+	public ReferenceStatus getStatus();
 
-	public FlexoProjectReference(FlexoProject project, String serializationRepresentation) {
-		this.referringProject = project;
-		this.serializationRepresentation = serializationRepresentation;
-		this.status = ReferenceStatus.UNDECODABLE;
-		int start = serializationRepresentation.lastIndexOf(SEPARATOR);
-		if (start > -1) {
-			try {
-				projectRevision = Long.valueOf(serializationRepresentation.substring(start + 1));
-				int end = serializationRepresentation.lastIndexOf(SEPARATOR, start - 1);
-				if (end > -1) {
-					projectVersion = serializationRepresentation.substring(end + 1, start);
-					start = end;
-					end = serializationRepresentation.lastIndexOf(SEPARATOR, start - 1);
-					if (end > -1) {
-						projectURI = serializationRepresentation.substring(end + 1, start);
-						projectName = serializationRepresentation.substring(0, end);
-					} else {
-						projectURI = serializationRepresentation.substring(0, end);
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Could not find project name in project reference '" + serializationRepresentation + "'");
-						}
-					}
-					status = ReferenceStatus.UNRESOLVED;
-				} else if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not decode project reference: '" + serializationRepresentation + "'");
-				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	/**
+	 * Returns the referred project, the project to which this reference refers to.
+	 * 
+	 * @return the referred project
+	 * @throws ProjectLoadingCancelledException
+	 *             in case the user cancels the loading of this project.
+	 */
+	@Getter(value = REFERRED_PROJECT, ignoreType = true)
+	public FlexoProject getReferredProject() throws ProjectLoadingCancelledException;
 
-	public FlexoProjectReference(FlexoProject referringProject, FlexoProject referredProject) {
-		this.referringProject = referringProject;
-		this.referredProject = referredProject;
-		this.status = ReferenceStatus.RESOLVED;
-	}
+	/**
+	 * Returns the name of the referred project. This getter can be used to display the name of the project
+	 * 
+	 * @return the name of the referred project
+	 */
+	@Getter(PROJECT_NAME)
+	@XMLAttribute
+	public String getProjectName();
 
-	public ReferenceStatus getStatus() {
-		return status;
-	}
+	/**
+	 * Returns the URI of the referred project.
+	 * 
+	 * @return the URI of the referred project
+	 */
+	@Getter(PROJECT_URI)
+	@XMLAttribute
+	public String getProjectURI();
 
-	public FlexoProject getProject() throws ProjectLoadingCancelledException {
-		if (referredProject == null && serializationRepresentation != null) {
-			referredProject = referringProject.loadProject(this);
-			if (referredProject != null) {
-				status = ReferenceStatus.RESOLVED;
-				serializationRepresentation = null;
-			}
-		}
-		return referredProject;
-	}
+	/**
+	 * Returns the version of the referred project
+	 * 
+	 * @return
+	 */
+	@Getter(PROJECT_VERSION)
+	@XMLAttribute
+	public String getProjectVersion();
 
-	public static String getSerializationRepresentation(FlexoProject project) {
-		return project.getProjectName() + SEPARATOR + project.getURI() + SEPARATOR
-				+ (project.getVersion() != null ? project.getVersion() : "") + SEPARATOR + project.getRevision();
-	}
-
-	public void delete() {
-
-	}
-
-	@Override
-	public String toString() {
-		return "FlexoProjectReference " + getSerializationRepresentation();
-	}
-
-	public String getSerializationRepresentation() {
-		if (referredProject != null) {
-			return getSerializationRepresentation(referredProject);
-		} else {
-			return serializationRepresentation;
-		}
-	}
-
-	@Override
-	public Converter<FlexoProjectReference> getConverter() {
-		return referringProject.getProjectReferenceConverter();
-	}
-
-	public String getProjectName() {
-		if (referredProject != null) {
-			return referredProject.getProjectName();
-		} else {
-			return projectName;
-		}
-	}
-
-	public String getProjectURI() {
-		if (referredProject != null) {
-			return referredProject.getProjectURI();
-		} else {
-			return projectURI;
-		}
-	}
-
-	public String getProjectVersion() {
-		if (referredProject != null) {
-			return referredProject.getVersion();
-		} else {
-			return projectVersion;
-		}
-	}
-
-	public long getProjectRevision() {
-		if (referredProject != null) {
-			return referredProject.getRevision();
-		} else {
-			return projectRevision;
-		}
-	}
+	/**
+	 * Returns the revision of the referred project
+	 * 
+	 * @return
+	 */
+	@Getter(PROJECT_REVISION)
+	@XMLAttribute
+	public Long getProjectRevision();
 
 }

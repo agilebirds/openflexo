@@ -504,7 +504,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			ProxyMethodHandler<?> handler = this;
 			while (st.hasMoreTokens()) {
 				String token = st.nextToken();
-				value = handler.internallyInvokeGetter(token);
+				value = handler.invokeGetter(token);
 				if (value != null) {
 					if (st.hasMoreTokens()) {
 						if (!(value instanceof ProxyObject)) {

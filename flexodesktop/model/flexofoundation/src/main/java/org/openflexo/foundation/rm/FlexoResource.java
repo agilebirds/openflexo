@@ -81,7 +81,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 				r.resolveOrder();
 			} catch (ResourceDependencyLoopException e) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Loop in dependancies found! Will continue but this should not happen.");
+					logger.warning("Loop in dependencies found! Will continue but this should not happen.");
 				}
 			}
 		}

@@ -454,7 +454,7 @@ public class TestRM extends FlexoTestCase {
 
 		// We simulate here a 'touch' on the partial component
 		try {
-			_partialComponentResource.loadResourceData();
+			_partialComponentResource.getResourceData();
 			// To simulate a touch on a data, we must trigger a setChanged(), otherwise the lastKnownMemoryUpdate will not be updated!
 			_partialComponentResource.getResourceData().setChanged();
 			_partialComponentResource.saveResourceData();

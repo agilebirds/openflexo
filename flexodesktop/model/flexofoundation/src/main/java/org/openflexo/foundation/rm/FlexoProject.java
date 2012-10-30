@@ -243,7 +243,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	protected TranstypedBindingStringConverter transtypedBindingConverter = new TranstypedBindingStringConverter(abstractBindingConverter);
 	protected BindingAssignmentStringConverter bindingAssignmentConverter = new BindingAssignment.BindingAssignmentStringConverter(this);
 	protected FlexoModelObjectReferenceConverter objectReferenceConverter = new FlexoModelObjectReferenceConverter();
-	protected FlexoProjectReferenceConverter projectReferenceConverter = new FlexoProjectReferenceConverter();
 
 	private boolean lastUniqueIDHasBeenSet = false;
 	private long lastID = Integer.MIN_VALUE;
@@ -367,22 +366,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	}
 
-	private class FlexoProjectReferenceConverter extends Converter<FlexoProjectReference> {
-		public FlexoProjectReferenceConverter() {
-			super(FlexoProjectReference.class);
-		}
-
-		@Override
-		public String convertToString(FlexoProjectReference value) {
-			return value.getSerializationRepresentation();
-		}
-
-		@Override
-		public FlexoProjectReference convertFromString(String value) {
-			return new FlexoProjectReference(FlexoProject.this, value);
-		}
-	}
-
 	protected class FlexoProjectStringEncoder extends StringEncoder {
 		@Override
 		public void _initialize() {
@@ -394,7 +377,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			_addConverter(staticBindingConverter);
 			_addConverter(bindingAssignmentConverter);
 			_addConverter(objectReferenceConverter);
-			_addConverter(projectReferenceConverter);
 			_addConverter(imageFileConverter);
 			_addConverter(TOCDataBinding.CONVERTER);
 		}
@@ -961,7 +943,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * 
 	 * @return a Vector of FlexoStorageResource
 	 */
-	public Vector<FlexoStorageResource<? extends StorageResourceData>> getLoadedStorageResources() {
+	public synchronized Vector<FlexoStorageResource<? extends StorageResourceData>> getLoadedStorageResources() {
 		Vector<FlexoStorageResource<? extends StorageResourceData>> returned = new Vector<FlexoStorageResource<? extends StorageResourceData>>();
 		for (Entry<String, FlexoResource<? extends FlexoResourceData>> e : resources.entrySet()) {
 			FlexoResource<? extends FlexoResourceData> resource = e.getValue();
@@ -1080,7 +1062,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	@Override
-	public Iterator<FlexoResource<? extends FlexoResourceData>> iterator() {
+	public synchronized Iterator<FlexoResource<? extends FlexoResourceData>> iterator() {
 		return new ArrayList<FlexoResource<? extends FlexoResourceData>>(resources.values()).iterator();
 	}
 
@@ -1097,7 +1079,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return null;
 	}
 
-	public void setResourceForKey(FlexoResource<? extends FlexoResourceData> resource, String resourceIdentifier) {
+	public synchronized void setResourceForKey(FlexoResource<? extends FlexoResourceData> resource, String resourceIdentifier) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Registering resource " + resourceIdentifier + " with object " + resource);
 		}
@@ -1157,7 +1139,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	public void repairKeyForResource(FlexoResource<FlexoResourceData> resource) {
+	public synchronized void repairKeyForResource(FlexoResource<FlexoResourceData> resource) {
 		try {
 			String actualKey = registeredKeyForResource(resource);
 			if (actualKey == null) {
@@ -1187,7 +1169,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return registeredKeyForResource(resource) != null;
 	}
 
-	public String registeredKeyForResource(FlexoResource<? extends FlexoResourceData> resource) {
+	public synchronized String registeredKeyForResource(FlexoResource<? extends FlexoResourceData> resource) {
 		for (Entry<String, FlexoResource<? extends FlexoResourceData>> r : resources.entrySet()) {
 			if (r.getValue() == resource) {
 				return r.getKey();
@@ -1200,7 +1182,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return resources.get(resourceIdentifier) != null;
 	}
 
-	public void removeResource(FlexoResource<? extends FlexoResourceData> resource) {
+	public synchronized void removeResource(FlexoResource<? extends FlexoResourceData> resource) {
 		String identifier = resource.getResourceIdentifier();
 		if (resources.get(identifier) == null) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -4309,14 +4291,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		this.projectReferenceLoader = projectReferenceLoader;
 	}
 
-	public Converter<FlexoProjectReference> getProjectReferenceConverter() {
-		return projectReferenceConverter;
-	}
-
 	public void loadImportedProjects() throws ProjectLoadingCancelledException {
 		if (getProject() != null && getProjectData() != null) {
 			for (FlexoProjectReference ref : getProjectData().getImportedProjects()) {
-				ref.getProject();
+				ref.getReferredProject();
 			}
 		}
 	}

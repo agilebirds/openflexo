@@ -315,12 +315,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 					Vector<BrowserElement> childrenToRemove = new Vector<BrowserElement>();
 					for (Enumeration<BrowserElement> e = newElement.children(); e.hasMoreElements();) {
 						BrowserElement newElement2 = e.nextElement();
-						childrenToRemove.add(newElement2);
-						newElement2._parent = this;
-						_childs.add(newElement2);
-					}
-					for (BrowserElement element : childrenToRemove) {
-						newElement.removeFromChilds(element);
+						addToChilds(newElement2.getObject());
 					}
 				}
 				// DVA April 06: if deepBrowsing is on, do not delete element and children...

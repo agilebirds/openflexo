@@ -10,6 +10,7 @@ import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.ReturnedValue;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.factory.AccessibleProxyObject;
@@ -39,12 +40,13 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 
 	@Override
 	@Getter(value = PROJECT, ignoreType = true)
+	@ReturnedValue(FLEXO_RESOURCE + ".project")
 	public FlexoProject getProject();
 
 	@Override
 	public void setProject(FlexoProject aProject);
 
-	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST, ignoreType = true)
+	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST, inverse = FlexoProjectReference.PROJECT_DATA)
 	@XMLElement(xmlTag = "ImportedProjects")
 	public List<FlexoProjectReference> getImportedProjects();
 
@@ -91,7 +93,7 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 			for (FlexoProjectReference ref : getImportedProjects()) {
 				if (ref.getProjectURI().equals(projectURI)) {
 					try {
-						return ref.getProject();
+						return ref.getReferredProject();
 					} catch (ProjectLoadingCancelledException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -102,7 +104,7 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 				for (FlexoProjectReference ref : getImportedProjects()) {
 					FlexoProject projectWithURI = null;
 					try {
-						ProjectData projectData = ref.getProject().getProjectData();
+						ProjectData projectData = ref.getReferredProject().getProjectData();
 						if (projectData != null) {
 							projectWithURI = projectData.getImportedProjectWithURI(projectURI, searchRecursively);
 						}
@@ -120,14 +122,18 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 
 		@Override
 		public void addToImportedProjects(FlexoProject project) throws ProjectImportLoopException, ProjectLoadingCancelledException {
-			addToImportedProjects(new FlexoProjectReference(getProject(), project));
+			FlexoProjectReference projectReference = getModelFactory().newInstance(FlexoProjectReference.class).init(project);
+			addToImportedProjects(projectReference);
 		}
 
 		@Override
 		public void addToImportedProjects(FlexoProjectReference projectReference) throws ProjectImportLoopException,
 				ProjectLoadingCancelledException {
 			if (!isDeserializing()) {
-				String reason = canImportProject(projectReference.getProject());
+				if (getImportedProjects().contains(projectReference)) {
+					return;
+				}
+				String reason = canImportProject(projectReference.getReferredProject());
 				if (reason != null) {
 					throw new ProjectImportLoopException(reason);
 				}
@@ -153,7 +159,7 @@ public interface ProjectData extends StorageResourceData, AccessibleProxyObject 
 		public void removeFromImportedProjects(FlexoProject project) {
 			for (FlexoProjectReference ref : getImportedProjects()) {
 				try {
-					if (ref.getProject() == project) {
+					if (ref.getReferredProject() == project) {
 						removeFromImportedProjects(ref);
 						break;
 					}

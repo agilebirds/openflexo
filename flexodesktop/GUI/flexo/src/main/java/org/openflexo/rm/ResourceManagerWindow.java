@@ -122,7 +122,7 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 					try {
 						FlexoResource resourceToLoad = getActivePanel().getSelectedResource();
 						if (resourceToLoad instanceof FlexoStorageResource) {
-							((FlexoStorageResource) resourceToLoad).loadResourceData();
+							((FlexoStorageResource) resourceToLoad).getResourceData();
 						} else if (resourceToLoad instanceof FlexoImportedResource) {
 							((FlexoImportedResource) resourceToLoad).importResourceData();
 						} else if (resourceToLoad instanceof FlexoGeneratedResource) {

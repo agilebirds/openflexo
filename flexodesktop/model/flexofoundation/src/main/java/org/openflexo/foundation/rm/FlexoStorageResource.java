@@ -27,7 +27,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.dm.InvalidFileException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
@@ -35,6 +34,20 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 public abstract class FlexoStorageResource<SRD extends StorageResourceData> extends FlexoFileResource<SRD> {
 
 	private static final Logger logger = Logger.getLogger(FlexoStorageResource.class.getPackage().getName());
+
+	private static final class StorageResourceLoadResourceException extends LoadResourceException {
+		private final Exception cause;
+
+		private StorageResourceLoadResourceException(FlexoFileResource<?> fileResource, String message, Exception cause) {
+			super(fileResource, message);
+			this.cause = cause;
+		}
+
+		@Override
+		public Throwable getCause() {
+			return cause;
+		}
+	}
 
 	public static interface ResourceLoadingListener {
 		public void notifyResourceWillBeLoaded(FlexoStorageResource resource);
@@ -180,6 +193,12 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 					logger.warning("Could not load resource data for resource " + getResourceIdentifier());
 				}
 				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		return _resourceData;
@@ -192,16 +211,8 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	 * @return
 	 */
 	public SRD reloadResourceData() {
-		try {
-			_resourceData = loadResourceData();
-		} catch (FlexoException e) {
-			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not reload resource data for resource " + getResourceIdentifier());
-			}
-			e.printStackTrace();
-		}
-		return _resourceData;
+		_resourceData = null;
+		return getResourceData();
 	}
 
 	/**
@@ -297,21 +308,6 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 
 	protected boolean _resolveDependanciesSchemeRunningForThisResource = false;
 
-	protected final SRD performLoadResourceData() throws LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException {
-		if (!isLoadable()) {
-			return null;
-		}
-		boolean wasLoaded = isLoaded();
-		if (!wasLoaded) {
-			notifyListenersResourceWillBeLoaded();
-		}
-		SRD data = performLoadResourceData(null, getLoadingHandler());
-		if (!wasLoaded) {
-			notifyListenersResourceHasBeenLoaded();
-		}
-		return data;
-	}
-
 	protected abstract SRD performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException;
 
@@ -319,7 +315,8 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 		return getFile() != null && getFile().exists();
 	}
 
-	public final SRD loadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws FlexoException {
+	public final SRD loadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws FlexoException,
+			FileNotFoundException, ResourceDependencyLoopException {
 		if (!isLoadable()) {
 			return null;
 		}
@@ -327,20 +324,6 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 			new Exception("Loop in dependencies").printStackTrace();
 			logger.warning("Found loop in dependancies. Automatic rebuild dependancies is required !");
 			getProject().setRebuildDependanciesIsRequired();
-			boolean wasLoaded = isLoaded();
-			if (!wasLoaded) {
-				notifyListenersResourceWillBeLoaded();
-			}
-			try {
-				_resourceData = performLoadResourceData(progress, loadingHandler);
-				if (!wasLoaded) {
-					notifyListenersResourceHasBeenLoaded();
-				}
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-				throw new InvalidFileException(e.getMessage());
-			}
-			return _resourceData;
 		}
 		try {
 			update();
@@ -351,26 +334,14 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 			e1.printStackTrace();
 			// BMA VERY EXPERIMENTAL : ignore LOOP, just load the resource
 			if (!isLoaded()) {
-				try {
-					notifyListenersResourceWillBeLoaded();
-					_resourceData = performLoadResourceData();
-					notifyListenersResourceHasBeenLoaded();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					throw new InvalidFileException(e.getMessage());
-				}
+				performUpdating(null);
 			}
 
-		} catch (FileNotFoundException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.log(Level.WARNING, "File not found exception.", e);
-			}
-			e.printStackTrace();
 		}
 		return _resourceData;
 	}
 
-	public final SRD loadResourceData() throws FlexoException {
+	public final SRD loadResourceData() throws FlexoException, FileNotFoundException, ResourceDependencyLoopException {
 		return loadResourceData(null, getLoadingHandler());
 	}
 
@@ -459,14 +430,12 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, FlexoException,
 			LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException {
 		if (!isLoaded()) {
-			try {
-				_resourceData = performLoadResourceData();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-				throw new InvalidFileException(e.getMessage());
-			}
+			_resourceData = performLoadResourceData(null, getLoadingHandler());
+			_resourceData.setFlexoResource(this);
 		}
-		backwardSynchronizeWith(updatedResources);
+		if (updatedResources != null) {
+			backwardSynchronizeWith(updatedResources);
+		}
 	}
 
 }

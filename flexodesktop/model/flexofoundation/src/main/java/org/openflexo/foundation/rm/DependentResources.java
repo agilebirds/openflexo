@@ -62,7 +62,7 @@ public class DependentResources extends ResourceList {
 	public void addToResources(FlexoResource<FlexoResourceData> resource) {
 		if (resource == getRelatedResource()) {
 			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("A resource attempted to add itself to its dependant resource list" + this.getClass().getName()
+				logger.severe("A resource attempted to add itself to its dependent resource list" + this.getClass().getName()
 						+ "): this is strictly forbidden.\n\tYou must attempt to find the cause of this and FIX it!");
 			}
 			return;
