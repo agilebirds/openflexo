@@ -21,7 +21,6 @@ package org.openflexo.fge.drawingeditor;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
@@ -31,17 +30,22 @@ import org.openflexo.fge.view.ShapeView;
 public class MyShapeGraphicalRepresentationImpl extends ShapeGraphicalRepresentationImpl<MyShape> implements MyShapeGraphicalRepresentation {
 	private static final Logger logger = Logger.getLogger(MyShapeGraphicalRepresentationImpl.class.getPackage().getName());
 
+	// Called by PAMELA, do not use
 	public MyShapeGraphicalRepresentationImpl() {
 		// TODO Auto-generated constructor stub
+		logger.info("Je cree le machin !!!!!!!!!!!!!!!!!");
 	}
 
-	// Called for LOAD
+	// Called during LOAD
 	public MyShapeGraphicalRepresentationImpl(DrawingBuilder builder) {
-		this(ShapeType.RECTANGLE, null, builder.drawing.getEditedDrawing());
+		this();
+		setShapeType(ShapeType.RECTANGLE);
+		setDrawing(builder.drawing.getEditedDrawing());
+		// this(ShapeType.RECTANGLE, null, builder.drawing.getEditedDrawing());
 		initializeDeserialization();
 	}
 
-	public MyShapeGraphicalRepresentationImpl(ShapeType shapeType, MyShape aDrawable, EditedDrawing aDrawing) {
+	/*public MyShapeGraphicalRepresentationImpl(ShapeType shapeType, MyShape aDrawable, EditedDrawing aDrawing) {
 		super(shapeType, aDrawable, aDrawing);
 		addToMouseClickControls(new ShowContextualMenuControl());
 		addToMouseDragControls(new DrawEdgeControl());
@@ -55,7 +59,7 @@ public class MyShapeGraphicalRepresentationImpl extends ShapeGraphicalRepresenta
 		setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
 		addToMouseClickControls(new ShowContextualMenuControl());
 		addToMouseDragControls(new DrawEdgeControl());
-	}
+	}*/
 
 	@Override
 	public MyShapeView makeShapeView(DrawingController<?> controller) {

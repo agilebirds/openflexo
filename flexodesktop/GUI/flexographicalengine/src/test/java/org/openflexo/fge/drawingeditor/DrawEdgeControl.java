@@ -38,10 +38,12 @@ public class DrawEdgeControl extends MouseDragControl {
 	boolean drawEdge = false;
 	MyShapeGraphicalRepresentation fromShape = null;
 	MyShapeGraphicalRepresentation toShape = null;
+	private DrawingEditorFactory factory;
 
-	public DrawEdgeControl() {
+	public DrawEdgeControl(DrawingEditorFactory factory) {
 		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
 		action = new DrawEdgeAction();
+		this.factory = factory;
 	}
 
 	protected class DrawEdgeAction extends CustomDragControlAction {
@@ -63,7 +65,7 @@ public class DrawEdgeControl extends MouseDragControl {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
 					// System.out.println("Add Connector contextualMenuInvoker="+contextualMenuInvoker+" point="+contextualMenuClickedPoint);
-					MyConnector newConnector = new MyConnector(fromShape.getDrawable(), toShape.getDrawable(),
+					MyConnector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(),
 							(EditedDrawing) controller.getDrawing());
 					((MyDrawingController) controller).addNewConnector(newConnector);
 				}

@@ -27,4 +27,12 @@ public class FGEModelFactory extends ModelFactory {
 		deserializer = new XMLDeserializer(this);
 		serializer = new XMLSerializer(getStringEncoder());
 	}
+
+	public XMLSerializer getSerializer() {
+		return serializer;
+	}
+
+	public XMLDeserializer getDeserializer() {
+		return deserializer;
+	}
 }

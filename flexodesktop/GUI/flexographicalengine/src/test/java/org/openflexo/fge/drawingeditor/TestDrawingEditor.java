@@ -52,6 +52,7 @@ import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
@@ -120,8 +121,18 @@ public class TestDrawingEditor {
 
 	private FIBInspectorController inspector;
 
+	private DrawingEditorFactory factory;
+
 	public TestDrawingEditor() {
 		super();
+
+		try {
+			factory = new DrawingEditorFactory();
+			System.out.println("factory: " + factory.debug());
+		} catch (ModelDefinitionException e1) {
+			e1.printStackTrace();
+		}
+
 		frame = new JFrame();
 		frame.setPreferredSize(new Dimension(1000, 800));
 		fileChooser = new FlexoFileChooser(frame);
@@ -153,6 +164,10 @@ public class TestDrawingEditor {
 			super(v);
 			drawingView = v;
 		}
+	}
+
+	public DrawingEditorFactory getFactory() {
+		return factory;
 	}
 
 	private void addDrawing(final MyDrawing drawing) {
@@ -386,14 +401,14 @@ public class TestDrawingEditor {
 	}
 
 	public void newDrawing() {
-		MyDrawing newDrawing = MyDrawing.makeNewDrawing();
+		MyDrawing newDrawing = factory.makeNewDrawing();
 		addDrawing(newDrawing);
 	}
 
 	public void loadDrawing() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			MyDrawing loadedDrawing = MyDrawing.load(file);
+			MyDrawing loadedDrawing = MyDrawingImpl.load(file);
 			if (loadedDrawing != null) {
 				addDrawing(loadedDrawing);
 			}
@@ -404,7 +419,7 @@ public class TestDrawingEditor {
 		if (currentDrawing == null) {
 			return false;
 		}
-		if (currentDrawing.file == null) {
+		if (currentDrawing.getFile() == null) {
 			return saveDrawingAs();
 		} else {
 			return currentDrawing.save();
@@ -420,7 +435,7 @@ public class TestDrawingEditor {
 			if (!file.getName().endsWith(".drw")) {
 				file = new File(file.getParentFile(), file.getName() + ".drw");
 			}
-			currentDrawing.file = file;
+			currentDrawing.setFile(file);
 			updateFrameTitle();
 			updateTabTitle();
 			return currentDrawing.save();

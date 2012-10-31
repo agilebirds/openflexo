@@ -24,87 +24,73 @@ import java.util.Observer;
 import java.util.Vector;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PastingPoint;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.factory.AccessibleProxyObject;
+import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public abstract class MyDrawingElement<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation<M>> extends Observable implements
-		XMLSerializable, Cloneable, Observer {
+@ModelEntity
+@ImplementationClass(MyDrawingElementImpl.class)
+public interface MyDrawingElement<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation<M>> extends XMLSerializable,
+		Cloneable, Observer, AccessibleProxyObject, CloneableProxyObject {
 
-	private MyDrawing _drawing;
-	private Vector<MyDrawingElement<?, ?>> childs;
-	private G graphicalRepresentation;
+	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
+	public static final String DRAWING = "drawing";
+	public static final String CHILDS = "childs";
 
-	public MyDrawingElement(MyDrawing drawing) {
-		childs = new Vector<MyDrawingElement<?, ?>>();
-		_drawing = drawing;
-	}
+	@Getter(value = CHILDS, cardinality = Cardinality.LIST)
+	@XMLElement(primary = true)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
+	public Vector<MyDrawingElement/*<?, ?>*/> getChilds();
 
-	public Vector<MyDrawingElement<?, ?>> getChilds() {
-		return childs;
-	}
+	@Setter(CHILDS)
+	public void setChilds(Vector<MyDrawingElement/*<?, ?>*/> someChilds);
 
-	public void setChilds(Vector<MyDrawingElement<?, ?>> someChilds) {
-		childs.addAll(someChilds);
-	}
+	@Adder(CHILDS)
+	@PastingPoint
+	public void addToChilds(MyDrawingElement/*<?, ?>*/aChild);
 
-	public void addToChilds(MyDrawingElement<?, ?> aChild) {
-		childs.add(aChild);
-		// System.out.println("Add "+aChild+" isDeserializing="+isDeserializing());
-		if (!isDeserializing()) {
-			getDrawing().getEditedDrawing().addDrawable(aChild, this);
-		}
-	}
+	@Remover(CHILDS)
+	public void removeFromChilds(MyDrawingElement/*<?, ?>*/aChild);
 
-	public void removeFromChilds(MyDrawingElement<?, ?> aChild) {
-		childs.remove(aChild);
-	}
+	@Getter(value = DRAWING)
+	public MyDrawing getDrawing();
 
-	public MyDrawing getDrawing() {
-		return _drawing;
-	}
+	@Setter(value = DRAWING)
+	public void setDrawing(MyDrawing drawing);
 
-	public final G getGraphicalRepresentation() {
-		return graphicalRepresentation;
-	}
+	@Getter(value = GRAPHICAL_REPRESENTATION)
+	@XMLElement
+	public G getGraphicalRepresentation();
 
-	public void setGraphicalRepresentation(G graphicalRepresentation) {
-		this.graphicalRepresentation = graphicalRepresentation;
-		graphicalRepresentation.setDrawable((M) this);
-		graphicalRepresentation.addObserver(this);
-	}
+	@Setter(value = GRAPHICAL_REPRESENTATION)
+	public void setGraphicalRepresentation(G graphicalRepresentation);
 
-	private boolean isDeserializing = false;
+	public void initializeDeserialization();
 
-	public void initializeDeserialization() {
-		isDeserializing = true;
-	}
-
-	public void finalizeDeserialization() {
-		isDeserializing = false;
-		/*for (MyDrawingElement e : childs) {
-			getDrawing().getEditedDrawing().addDrawable(e, this);
-		}*/
-	}
-
-	public boolean isDeserializing() {
-		return isDeserializing;
-	}
+	public void finalizeDeserialization();
 
 	@Override
-	public MyDrawingElement<M, G> clone() {
-		try {
-			return (MyDrawingElement<M, G>) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			// cannot happen since we are clonable
-			return null;
-		}
-	}
+	public boolean isDeserializing();
+
+	public MyDrawingElement<M, G> clone();
 
 	@Override
-	public void update(Observable o, Object arg) {
-		if (o == getGraphicalRepresentation()) {
-			getDrawing().setChanged();
-		}
-	}
+	public void update(Observable o, Object arg);
 
+	public void setChanged();
+
+	public boolean hasChanged();
 }

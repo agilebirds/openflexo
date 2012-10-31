@@ -19,56 +19,17 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
-import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class MyShape extends MyDrawingElement<MyShape, MyShapeGraphicalRepresentation> {
-	public String name;
+@ModelEntity
+@ImplementationClass(MyShapeImpl.class)
+@XMLElement(xmlTag = "MyShape")
+public interface MyShape extends MyDrawingElement<MyShape, MyShapeGraphicalRepresentation> {
 
-	// Called for LOAD
-	public MyShape(DrawingBuilder builder) {
-		super(builder.drawing);
-		initializeDeserialization();
-	}
+	public String getName();
 
-	// Called for NEW
-	public MyShape(ShapeType shape, FGEPoint p, EditedDrawing drawing) {
-		super(drawing.getModel());
-		MyShapeGraphicalRepresentation gr = drawing.getFactory().makeNewShape(shape, this, drawing);
-		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-			gr.setWidth(80);
-			gr.setHeight(80);
-		} else {
-			gr.setWidth(100);
-			gr.setHeight(80);
-		}
-		gr.setX(p.x);
-		gr.setY(p.y);
-		setGraphicalRepresentation(gr);
-	}
-
-	public MyShape(ShapeGraphicalRepresentation<?> aGR, FGEPoint p, EditedDrawing drawing) {
-		super(drawing.getModel());
-		MyShapeGraphicalRepresentation gr = drawing.getFactory().makeNewShape(aGR, this, drawing);
-		/*if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-			gr.setWidth(80);
-			gr.setHeight(80);
-		}
-		else {
-			gr.setWidth(100);
-			gr.setHeight(80);
-		}*/
-		gr.setX(p.x);
-		gr.setY(p.y);
-		setGraphicalRepresentation(gr);
-	}
-
-	@Override
-	public String toString() {
-		return "MyShape[" + name + ":" + getGraphicalRepresentation().toString() + "]";
-	}
+	public void setName(String name);
 
 }

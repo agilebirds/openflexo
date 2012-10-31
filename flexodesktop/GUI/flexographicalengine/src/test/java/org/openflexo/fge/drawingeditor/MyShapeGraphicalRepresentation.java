@@ -24,9 +24,11 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.MyShapeGraphicalRepresentationImpl.MyShapeView;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(MyShapeGraphicalRepresentationImpl.class)
+@XMLElement(xmlTag = "MyShapeGraphicalRepresentation")
 public interface MyShapeGraphicalRepresentation extends ShapeGraphicalRepresentation<MyShape> {
 
 	@Override

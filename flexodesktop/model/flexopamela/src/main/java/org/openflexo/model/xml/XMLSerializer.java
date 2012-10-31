@@ -56,20 +56,41 @@ public class XMLSerializer {
 	}
 
 	public Document serializeDocument(Object object, OutputStream out) {
-		Document builtDocument = new Document();
+		Document builtDocument = buildDocument(object);
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 		try {
-			id = 0;
-			objectReferences = new HashMap<Object, ObjectReference>();
-			alreadySerialized = new HashMap<Object, Object>();
+			outputter.output(builtDocument, out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return builtDocument;
+	}
+
+	public String serializeAsString(Object object) {
+		Document builtDocument = buildDocument(object);
+		return buildXMLOutput(builtDocument);
+	}
+
+	public String buildXMLOutput(Document doc) {
+		StringWriter writer = new StringWriter();
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		try {
+			outputter.output(doc, writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return writer.toString();
+	}
+
+	private Document buildDocument(Object object) {
+		Document builtDocument = new Document();
+		id = 0;
+		objectReferences = new HashMap<Object, ObjectReference>();
+		alreadySerialized = new HashMap<Object, Object>();
+		try {
 			Element rootElement = serializeElement(object, null);
 			postProcess(rootElement);
 			builtDocument.setRootElement(rootElement);
-			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-			try {
-				outputter.output(builtDocument, out);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,17 +105,6 @@ public class XMLSerializer {
 			e.printStackTrace();
 		}
 		return builtDocument;
-	}
-
-	public String buildXMLOutput(Document doc) {
-		StringWriter writer = new StringWriter();
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		try {
-			outputter.output(doc, writer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return writer.toString();
 	}
 
 	private String generateReference(Object o) {

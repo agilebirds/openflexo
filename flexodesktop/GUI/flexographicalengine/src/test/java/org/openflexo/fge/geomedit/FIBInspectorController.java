@@ -23,7 +23,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -36,6 +38,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.view.FIBView;
@@ -195,15 +198,50 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		return inspectorForClass(object.getClass());
 	}
 
-	protected FIBInspector inspectorForClass(Class aClass) {
-		Class c = aClass;
-		while (c != null) {
-			FIBInspector returned = inspectors.get(c);
-			if (returned != null) {
-				return returned;
-			} else {
-				c = c.getSuperclass();
+	protected FIBInspector inspectorForClass(Class<?> aClass) {
+		if (aClass == null) {
+			return null;
+		}
+		FIBInspector returned = inspectors.get(aClass);
+		if (returned != null) {
+			return returned;
+		} else {
+			Class<?> superclass = aClass.getSuperclass();
+			if (superclass != null) {
+				returned = inspectors.get(aClass);
+				if (returned != null) {
+					return returned;
+				} else {
+					for (Class<?> superInterface : aClass.getInterfaces()) {
+						returned = inspectors.get(superInterface);
+						if (returned != null) {
+							return returned;
+						}
+					}
+					returned = inspectorForClass(superclass);
+					if (returned != null) {
+						inspectors.put(aClass, returned);
+						return returned;
+					} else {
+						for (Class<?> superInterface : aClass.getInterfaces()) {
+							returned = inspectorForClass(superInterface);
+							if (returned != null) {
+								inspectors.put(aClass, returned);
+								return returned;
+							}
+						}
+					}
+				}
 			}
+		}
+		List<Class<?>> matchingClasses = new ArrayList<Class<?>>();
+		for (Class<?> cl : inspectors.keySet()) {
+			if (cl.isAssignableFrom(aClass)) {
+				matchingClasses.add(cl);
+			}
+		}
+		if (matchingClasses.size() > 0) {
+			return inspectors.get(TypeUtils.getMostSpecializedClass(matchingClasses));
 		}
 		return null;
 	}

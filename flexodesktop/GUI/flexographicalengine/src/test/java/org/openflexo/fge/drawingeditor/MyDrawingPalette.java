@@ -47,10 +47,11 @@ public class MyDrawingPalette extends DrawingPalette {
 	private static final int GRID_HEIGHT = 60;
 	public static final Font DEFAULT_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 9);
 	public static final Font LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
+	private DrawingEditorFactory factory;
 
-	public MyDrawingPalette() {
+	public MyDrawingPalette(DrawingEditorFactory factory) {
 		super(360, 350, "default");
-
+		this.factory = factory;
 		int px = 0;
 		int py = 0;
 		for (ShapeType st : ShapeType.values()) {
@@ -214,7 +215,7 @@ public class MyDrawingPalette extends DrawingPalette {
 				if (applyCurrentShadowStyle) {
 					shapeGR.setShadowStyle(getController().getCurrentShadowStyle());
 				}
-				getController().addNewShape(new MyShape(shapeGR, dropLocation, getController().getDrawing()), container);
+				getController().addNewShape(factory.makeNewShape(shapeGR, dropLocation, getController().getDrawing()), container);
 				return true;
 			}
 

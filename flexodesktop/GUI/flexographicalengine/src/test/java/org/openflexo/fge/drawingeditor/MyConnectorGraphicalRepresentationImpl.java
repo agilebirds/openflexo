@@ -28,21 +28,24 @@ import org.openflexo.fge.view.ConnectorView;
 public class MyConnectorGraphicalRepresentationImpl extends ConnectorGraphicalRepresentationImpl<MyConnector> implements
 		MyConnectorGraphicalRepresentation {
 
+	// Called by PAMELA, do not use
 	public MyConnectorGraphicalRepresentationImpl() {
-		// TODO Auto-generated constructor stub
 	}
 
 	// Called for LOAD
 	public MyConnectorGraphicalRepresentationImpl(DrawingBuilder builder) {
-		this(ConnectorType.LINE, null, null, null, builder.drawing.getEditedDrawing());
+		this();
+		setConnectorType(ConnectorType.LINE);
+		setDrawing(builder.drawing.getEditedDrawing());
+		// this(ConnectorType.LINE, null, null, null, builder.drawing.getEditedDrawing());
 		initializeDeserialization();
 	}
 
-	public MyConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, MyShapeGraphicalRepresentation aStartObject,
+	/*public MyConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, MyShapeGraphicalRepresentation aStartObject,
 			MyShapeGraphicalRepresentation anEndObject, MyConnector aDrawable, EditedDrawing aDrawing) {
 		super(aConnectorType, aStartObject, anEndObject, aDrawable, aDrawing);
 		addToMouseClickControls(new ShowContextualMenuControl());
-	}
+	}*/
 
 	@Override
 	public MyShapeGraphicalRepresentation getStartObject() {
