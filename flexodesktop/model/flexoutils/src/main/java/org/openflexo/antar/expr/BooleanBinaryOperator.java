@@ -155,8 +155,8 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 				return ((((EnumConstant) leftArg).getName().equals(((StringConstant) rightArg).getValue())) ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE);
 			}
-			// System.out.println("leftArg="+leftArg+" of "+leftArg.getEvaluationType());
-			// System.out.println("rightArg="+rightArg+" of "+rightArg.getEvaluationType());
+			// System.out.println("leftArg=" + leftArg + " of " + leftArg.getEvaluationType());
+			// System.out.println("rightArg=" + rightArg + " of " + rightArg.getEvaluationType());
 			if (rightArg == ObjectSymbolicConstant.NULL) {
 				if (leftArg == ObjectSymbolicConstant.NULL) {
 					return Constant.BooleanConstant.TRUE;

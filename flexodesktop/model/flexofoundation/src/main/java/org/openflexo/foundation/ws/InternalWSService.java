@@ -30,7 +30,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.foundation.ws.dm.InternalWSServiceRemoved;
 import org.openflexo.foundation.xml.FlexoWSLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
@@ -61,13 +60,6 @@ public class InternalWSService extends WSService implements FlexoObserver, Inspe
 	@Override
 	public String getFullyQualifiedName() {
 		return "INT_WSSERVICE_" + getName();// +"_"+getProject().getProjectName();
-	}
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateNewWebService.actionType);
-		return returned;
 	}
 
 	public static Logger getLogger() {

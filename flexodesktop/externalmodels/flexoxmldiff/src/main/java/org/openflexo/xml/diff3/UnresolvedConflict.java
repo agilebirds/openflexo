@@ -22,7 +22,7 @@ package org.openflexo.xml.diff3;
 import java.util.Observable;
 import java.util.Vector;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 public abstract class UnresolvedConflict extends Observable {
 

@@ -26,14 +26,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DeletableObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
-import org.openflexo.foundation.wkf.action.AddStatus;
 import org.openflexo.foundation.wkf.dm.StatusInserted;
 import org.openflexo.foundation.wkf.dm.StatusRemoved;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
@@ -121,13 +119,6 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		return returned;
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddStatus.actionType);
-		return returned;
-	}
-
 	public void setStatus(Vector<Status> status) {
 		_status = status;
 		if (getProject() != null) {
@@ -185,7 +176,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	private void notifyStatusAdded(Status status, FlexoProcess process) {
 		setChanged();
 		notifyObservers(new StatusInserted(status, process));
-		if ((getProcess() != null) && (getProcess().getSubProcesses() != null)) {
+		if (getProcess() != null && getProcess().getSubProcesses() != null) {
 			for (Enumeration e = getProcess().getSubProcesses().elements(); e.hasMoreElements();) {
 				FlexoProcess subProcess = (FlexoProcess) e.nextElement();
 				subProcess.getStatusList().notifyStatusAdded(status, process);
@@ -232,7 +223,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		}
 		for (Enumeration e = _status.elements(); e.hasMoreElements();) {
 			Status temp = (Status) e.nextElement();
-			if ((temp != null) && (temp.getName().equals(aStatusName))) {
+			if (temp != null && temp.getName().equals(aStatusName)) {
 				return temp;
 			}
 		}

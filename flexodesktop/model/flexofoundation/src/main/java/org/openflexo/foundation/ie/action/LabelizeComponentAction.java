@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEWOComponent;
@@ -68,6 +69,10 @@ public class LabelizeComponentAction extends FlexoAction<LabelizeComponentAction
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+	}
 
 	protected LabelizeComponentAction(ComponentDefinition focusedObject, Vector<ComponentDefinition> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

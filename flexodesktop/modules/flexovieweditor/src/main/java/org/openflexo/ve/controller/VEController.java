@@ -137,10 +137,10 @@ public class VEController extends FlexoController implements SelectionManagingCo
 	public void initInspectors() {
 		super.initInspectors();
 		if (getSharedInspectorController() != null) {
-			getOESelectionManager().addObserver(getSharedInspectorController());
+			getVESelectionManager().addObserver(getSharedInspectorController());
 		}
 		if (getDocInspectorController() != null) {
-			getOESelectionManager().addObserver(getDocInspectorController());
+			getVESelectionManager().addObserver(getDocInspectorController());
 		}
 
 		if (useNewInspectorScheme()) {
@@ -192,10 +192,10 @@ public class VEController extends FlexoController implements SelectionManagingCo
 
 	@Override
 	public SelectionManager getSelectionManager() {
-		return getOESelectionManager();
+		return getVESelectionManager();
 	}
 
-	public VESelectionManager getOESelectionManager() {
+	public VESelectionManager getVESelectionManager() {
 		return _selectionManager;
 	}
 

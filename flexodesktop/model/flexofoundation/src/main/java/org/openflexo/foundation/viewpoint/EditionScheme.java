@@ -32,6 +32,12 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
+/**
+ * An EditionScheme represents a behavioural feature attached to an EditionPattern
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class EditionScheme extends EditionSchemeObject implements ActionContainer {
 
 	protected BindingModel _bindingModel;
@@ -46,7 +52,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	public static final String THIS = "this";
 
 	public static enum EditionSchemeType {
-		CreationScheme, DropScheme, LinkScheme, ActionScheme, NavigationScheme, DeletionScheme
+		CreationScheme, DropScheme, LinkScheme, ActionScheme, NavigationScheme, DeletionScheme, CloningScheme
 	}
 
 	private String name;
@@ -397,6 +403,30 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	@Override
 	public IterationAction createIterationAction() {
 		IterationAction newAction = new IterationAction(null);
+		addToActions(newAction);
+		return newAction;
+	}
+
+	public CloneShape createCloneShapeAction() {
+		CloneShape newAction = new CloneShape(null);
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
+		addToActions(newAction);
+		return newAction;
+	}
+
+	public CloneConnector createCloneConnectorAction() {
+		CloneConnector newAction = new CloneConnector(null);
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
+		addToActions(newAction);
+		return newAction;
+	}
+
+	public CloneIndividual createCloneIndividualAction() {
+		CloneIndividual newAction = new CloneIndividual(null);
 		addToActions(newAction);
 		return newAction;
 	}

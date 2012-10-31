@@ -36,12 +36,6 @@ import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dm.action.DMCopy;
-import org.openflexo.foundation.dm.action.DMCut;
-import org.openflexo.foundation.dm.action.DMDelete;
-import org.openflexo.foundation.dm.action.DMPaste;
-import org.openflexo.foundation.dm.action.ResetSourceCode;
 import org.openflexo.foundation.dm.dm.ChildrenReordered;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEOObject;
@@ -157,17 +151,6 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 
 	@Override
 	public abstract void setName(String aName) throws InvalidNameException, FlexoException;
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(ResetSourceCode.actionType);
-		returned.add(DMCut.actionType);
-		returned.add(DMCopy.actionType);
-		returned.add(DMPaste.actionType);
-		returned.add(DMDelete.actionType);
-		return returned;
-	}
 
 	/**
 	 * used by velocity (dynamic invacation: DON'T delete !)

@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BindingVariable;
 import org.openflexo.foundation.wkf.DuplicateWKFObjectException;
@@ -38,14 +37,12 @@ import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.LevelledObject;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.action.AddServiceOperation;
 import org.openflexo.foundation.wkf.dm.ServiceInterfaceRemoved;
 import org.openflexo.foundation.wkf.dm.ServiceOperationInserted;
 import org.openflexo.foundation.wkf.dm.ServiceOperationRemoved;
 import org.openflexo.foundation.ws.DuplicateWSObjectException;
 import org.openflexo.foundation.ws.WSPortType;
 import org.openflexo.foundation.ws.WSService;
-import org.openflexo.foundation.ws.action.WSDelete;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
@@ -118,7 +115,7 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 		Vector allInterfaces = process.getServiceInterfaces();
 		for (Enumeration e = allInterfaces.elements(); e.hasMoreElements();) {
 			ServiceInterface p = (ServiceInterface) e.nextElement();
-			if (p != currentInt && (p.getName().equals(aName))) {
+			if (p != currentInt && p.getName().equals(aName)) {
 				throw new DuplicateWKFObjectException(p, "a_service_interface_with_the_same_name_already_exist");
 			}
 		}
@@ -204,14 +201,6 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 		}
 
 		return null;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddServiceOperation.actionType);
-		returned.add(WSDelete.actionType);
-		return returned;
 	}
 
 	@Override

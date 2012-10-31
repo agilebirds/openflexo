@@ -28,15 +28,8 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.wkf.action.DeleteRole;
-import org.openflexo.foundation.wkf.action.DeleteRoleSpecialization;
-import org.openflexo.foundation.wkf.action.WKFCopy;
-import org.openflexo.foundation.wkf.action.WKFCut;
-import org.openflexo.foundation.wkf.action.WKFPaste;
-import org.openflexo.foundation.wkf.action.WKFSelectAll;
 import org.openflexo.foundation.wkf.dm.RoleSpecializationRemoved;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
@@ -99,18 +92,6 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 	@Override
 	public String getInspectorName() {
 		return Inspectors.WKF.ROLE_SPECIALIZATION_INSPECTOR;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(DeleteRoleSpecialization.actionType);
-		returned.add(WKFCut.actionType);
-		returned.add(WKFCopy.actionType);
-		returned.add(WKFPaste.actionType);
-		returned.add(WKFSelectAll.actionType);
-		returned.add(DeleteRole.actionType);
-		return returned;
 	}
 
 	public String getAnnotation() {

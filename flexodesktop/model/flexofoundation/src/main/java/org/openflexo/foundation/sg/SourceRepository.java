@@ -28,7 +28,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.GenerationRepository;
@@ -109,13 +108,6 @@ public class SourceRepository extends GenerationRepository implements ReferenceO
 	@Override
 	public void delete(FlexoProgress progress, boolean deleteFiles) {
 		super.delete(progress, deleteFiles);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateSourceRepository.actionType);
-		return returned;
 	}
 
 	@Override

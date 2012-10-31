@@ -37,7 +37,6 @@ import javax.swing.tree.TreeNode;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
@@ -47,8 +46,6 @@ import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
-import org.openflexo.foundation.dm.action.CreateDMEOAttribute;
-import org.openflexo.foundation.dm.action.CreateDMEORelationship;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
@@ -218,13 +215,13 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 			Vector<DMProperty> propertiesToDelete = new Vector<DMProperty>();
 			for (Enumeration en = getProperties().elements(); en.hasMoreElements();) {
 				DMProperty next = (DMProperty) en.nextElement();
-				if ((next instanceof DMEOAttribute) && (((DMEOAttribute) next).getEOAttribute() == null)) {
+				if (next instanceof DMEOAttribute && ((DMEOAttribute) next).getEOAttribute() == null) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Delete dereferenced attribute " + next.getName());
 					}
 					propertiesToDelete.add(next);
 				}
-				if ((next instanceof DMEORelationship) && (((DMEORelationship) next).getEORelationship() == null)) {
+				if (next instanceof DMEORelationship && ((DMEORelationship) next).getEORelationship() == null) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Delete dereferenced relationship " + next.getName());
 					}
@@ -257,7 +254,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 					EOAttribute eoAttribute = i.next();
 
 					DMEOAttribute foundAttribute = lookupDMEOAttributeWithName(eoAttribute.getName());
-					if ((foundAttribute != null) && (foundAttribute.getDMEOEntity() != this)) {
+					if (foundAttribute != null && foundAttribute.getDMEOEntity() != this) {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Lookup dereferenced EOAttribute " + foundAttribute.getName() + "! Trying to repair...");
 						}
@@ -320,7 +317,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 				for (Iterator<EORelationship> i = new Vector<EORelationship>(eoEntity.getRelationships()).iterator(); i.hasNext();) {
 					EORelationship eoRelationship = i.next();
 					DMEORelationship foundRelationship = lookupDMEORelationshipWithName(eoRelationship.getName());
-					if ((foundRelationship != null) && (foundRelationship.getDMEOEntity() != this)) {
+					if (foundRelationship != null && foundRelationship.getDMEOEntity() != this) {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Lookup dereferenced EORelationship " + foundRelationship.getName() + "! Trying to repair...");
 						}
@@ -377,7 +374,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	}
 
 	public boolean isPrototypeEntity() {
-		return (getRepository() instanceof EOPrototypeRepository);
+		return getRepository() instanceof EOPrototypeRepository;
 	}
 
 	@Override
@@ -462,7 +459,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 			throw new InvalidNameException();
 		}
-		if ((name == null) || (!name.equals(newName))) {
+		if (name == null || !name.equals(newName)) {
 			DMRepository containerRepository = getRepository();
 			if (!isDeserializing()) {
 				if (containerRepository != null) {
@@ -518,7 +515,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	@Override
 	public void setRepository(DMRepository repository, boolean notify) {
-		if ((repository instanceof DMEORepository) || (repository == null)) {
+		if (repository instanceof DMEORepository || repository == null) {
 			super.setRepository(repository, notify);
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -530,7 +527,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	@Override
 	public DMType getParentType() {
 		if (_parentType == null) {
-			if ((_parentEOEntity != null) && (getDMEORepository() != null)) {
+			if (_parentEOEntity != null && getDMEORepository() != null) {
 				_parentType = DMType.makeResolvedDMType(getDMModel().getDMEOEntity(_parentEOEntity));
 			} else {
 				DMEntity defaultParentEntity = getDMModel().getDefaultParentDMEOEntity();
@@ -553,7 +550,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	@Override
 	public void setParentType(DMType parentType, boolean notify) {
-		if ((parentType == null && _parentType != null) || (parentType != null && !parentType.equals(_parentType))) {
+		if (parentType == null && _parentType != null || parentType != null && !parentType.equals(_parentType)) {
 
 			if (parentType == null) {
 				super.setParentType(parentType, notify);
@@ -627,7 +624,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	public EOEntity getEOEntity() {
 		if (_eoEntity == null) {
-			if ((getDMEOModel() != null) && (getDMEOModel().getEOModel() != null)) {
+			if (getDMEOModel() != null && getDMEOModel().getEOModel() != null) {
 				try {
 					_eoEntity = getDMEOModel().getEOModel().entityNamed(getName());
 				} catch (IllegalArgumentException e) {
@@ -644,14 +641,6 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		_eoEntity = eoEntity;
 		_primaryKeyAttributesNeedsRecomputing = true;
 		_attributesUsedForLockingNeedsRecomputing = true;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEOAttribute.actionType);
-		returned.add(CreateDMEORelationship.actionType);
-		return returned;
 	}
 
 	@Override
@@ -782,7 +771,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		if (!isDeserializing() && (anEntityClassName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(anEntityClassName).matches())) {
 			throw new InvalidNameException();
 		}
-		if ((getEntityClassName() == null) || (!getEntityClassName().equals(anEntityClassName))) {
+		if (getEntityClassName() == null || !getEntityClassName().equals(anEntityClassName)) {
 			if (getEOEntity() != null) {
 				if (getDMModel().getDMEntity(getEntityPackageName(), anEntityClassName) != null) {
 					throw new DuplicateClassNameException(getEntityPackageName() + "." + anEntityClassName);
@@ -1035,11 +1024,11 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	@Override
 	public void removePropertyWithKey(String propertyName, boolean notify) {
 		DMProperty property = getDMProperty(propertyName);
-		if ((property != null) && (property instanceof DMEOAttribute)) {
+		if (property != null && property instanceof DMEOAttribute) {
 			DMEOAttribute dmEOAttribute = (DMEOAttribute) property;
 			internallyUnregisterDMEOAttribute(dmEOAttribute);
 		}
-		if ((property != null) && (property instanceof DMEORelationship)) {
+		if (property != null && property instanceof DMEORelationship) {
 			DMEORelationship dmEORelationship = (DMEORelationship) property;
 			internallyUnregisterDMEORelationship(dmEORelationship);
 		}
@@ -1174,7 +1163,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 			}
 			for (Enumeration en = getProperties().elements(); en.hasMoreElements();) {
 				DMProperty next = (DMProperty) en.nextElement();
-				if ((!(next instanceof DMEOAttribute)) && (!(next instanceof DMEORelationship))) {
+				if (!(next instanceof DMEOAttribute) && !(next instanceof DMEORelationship)) {
 					_orderedSingleProperties.add(next);
 				}
 			}

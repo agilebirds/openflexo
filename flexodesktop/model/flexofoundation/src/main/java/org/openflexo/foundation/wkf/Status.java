@@ -24,10 +24,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DeletableObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
-import org.openflexo.foundation.wkf.action.AddStatus;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
@@ -94,13 +92,6 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddStatus.actionType);
-		return returned;
-	}
-
-	@Override
 	public String getName() {
 		return statusName;
 	}
@@ -111,9 +102,9 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 
 	@Override
 	public void setName(String aName) throws DuplicateStatusException {
-		if ((statusName == null && aName != null) || (statusName != null && aName == null)
-				|| (statusName != null && aName != null && !statusName.equals(aName))) {
-			if ((getStatusList() != null) && (getStatusList().statusWithName(aName) != null)) {
+		if (statusName == null && aName != null || statusName != null && aName == null || statusName != null && aName != null
+				&& !statusName.equals(aName)) {
+			if (getStatusList() != null && getStatusList().statusWithName(aName) != null) {
 				if (isDeserializing()) {
 					setName(aName + "-1");
 				}

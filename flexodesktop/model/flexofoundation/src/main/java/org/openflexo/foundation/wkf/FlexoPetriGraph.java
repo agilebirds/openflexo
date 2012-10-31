@@ -25,14 +25,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.wkf.action.DropWKFElement;
 import org.openflexo.foundation.wkf.dm.ArtefactInserted;
 import org.openflexo.foundation.wkf.dm.ArtefactRemoved;
 import org.openflexo.foundation.wkf.dm.GroupInserted;
@@ -207,13 +205,6 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		return super.contains(obj);
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(DropWKFElement.actionType);
-		return returned;
-	}
-
 	public Vector<PetriGraphNode> getNodes() {
 		return _nodes;
 	}
@@ -268,7 +259,7 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("insertNode() with " + aNode + " of " + aNode.getClass().getName());
 		}
-		if ((getLevel() != aNode.getLevel()) && (!(aNode instanceof OperatorNode)) && (!(aNode instanceof EventNode))) {
+		if (getLevel() != aNode.getLevel() && !(aNode instanceof OperatorNode) && !(aNode instanceof EventNode)) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Invalid level: cannot insert node");
 			}
@@ -702,7 +693,7 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		returned.add(this);
 		Enumeration<AbstractNode> en = new Vector<AbstractNode>(_nodes).elements();
 		while (en.hasMoreElements()) {
-			returned.addAll((en.nextElement()).getAllEmbeddedDeleted());
+			returned.addAll(en.nextElement().getAllEmbeddedDeleted());
 		}
 		for (WKFGroup group : getGroups()) {
 			returned.addAll(group.getAllEmbeddedWKFObjects());

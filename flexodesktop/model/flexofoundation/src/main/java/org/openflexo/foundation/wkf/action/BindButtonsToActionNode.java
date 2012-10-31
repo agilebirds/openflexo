@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
@@ -62,10 +63,14 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 
 		@Override
 		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && (object).getComponentInstance() != null);
+			return object != null && object.getComponentInstance() != null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
 
 	protected BindButtonsToActionNode(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

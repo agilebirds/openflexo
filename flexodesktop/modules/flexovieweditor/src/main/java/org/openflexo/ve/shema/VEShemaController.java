@@ -72,7 +72,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
 
-				AddShape action = AddShape.actionType.makeNewAction(getShema(), null, getOEController().getEditor());
+				AddShape action = AddShape.actionType.makeNewAction(getShema(), null, getVEController().getEditor());
 				action.setGraphicalRepresentation(graphicalRepresentation);
 				action.setNameSetToNull(true);
 
@@ -100,7 +100,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		return new VEShemaView(drawing, this);
 	}
 
-	public VEController getOEController() {
+	public VEController getVEController() {
 		return _controller;
 	}
 

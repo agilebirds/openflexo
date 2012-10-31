@@ -52,11 +52,17 @@ public class IncreaseColSpan extends FlexoUndoableAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (((object != null) && (object instanceof IETDWidget || (object instanceof IESequenceWidget && ((IESequenceWidget) object)
-					.isInTD()))) && (getFocusedTD((IEWidget) object).canIncreaseColSpan()));
+			return object != null
+					&& (object instanceof IETDWidget || object instanceof IESequenceWidget && ((IESequenceWidget) object).isInTD())
+					&& getFocusedTD((IEWidget) object).canIncreaseColSpan();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+	}
 
 	protected IncreaseColSpan(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

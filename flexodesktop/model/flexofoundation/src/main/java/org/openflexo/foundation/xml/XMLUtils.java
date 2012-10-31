@@ -40,9 +40,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.xerces.parsers.DOMParser;
-import org.jdom.input.DOMBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.input.DOMBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.xmlcode.XMLDecoder;
@@ -63,28 +63,27 @@ public class XMLUtils {
 	// ============================= JDOM ================================
 	// ==========================================================================
 
-	public static org.jdom.Document getJDOMDocument(File f) throws Exception {
+	public static org.jdom2.Document getJDOMDocument(File f) throws Exception {
 		Document domDoc = parseXMLFile(f);
 		return convertDOMToJDOM(domDoc);
 	}
 
-	public static org.jdom.Document getJDOMDocument(InputStream is) throws Exception {
+	public static org.jdom2.Document getJDOMDocument(InputStream is) throws Exception {
 		Document domDoc = parseXML(is);
 		return convertDOMToJDOM(domDoc);
 	}
 
-	public static org.jdom.Document convertDOMToJDOM(Document domDoc) {
+	public static org.jdom2.Document convertDOMToJDOM(Document domDoc) {
 		DOMBuilder jDomBuilder = new DOMBuilder();
-		org.jdom.Document jdomDoc = jDomBuilder.build(domDoc);
+		org.jdom2.Document jdomDoc = jDomBuilder.build(domDoc);
 		return jdomDoc;
 	}
 
 	public static boolean saveXMLFile(Document document, File aFile) {
-		convertDOMToJDOM(document);
-		return saveXMLFile(document, aFile);
+		return saveXMLFile(convertDOMToJDOM(document), aFile);
 	}
 
-	public static boolean saveXMLFile(org.jdom.Document document, File aFile) {
+	public static boolean saveXMLFile(org.jdom2.Document document, File aFile) {
 		try {
 			return saveXMLFile(document, new FileOutputStream(aFile));
 		} catch (FileNotFoundException e) {
@@ -93,7 +92,7 @@ public class XMLUtils {
 		return false;
 	}
 
-	public static boolean saveXMLFile(org.jdom.Document document, OutputStream os) {
+	public static boolean saveXMLFile(org.jdom2.Document document, OutputStream os) {
 		try {
 			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 			outputter.output(document, os);
@@ -184,13 +183,13 @@ public class XMLUtils {
 		// return replaceString(message,replacedString,aNewString);
 		// DON'T WORK FOR (" ","",message)
 
-		if ((message == null) || (message.equals(""))) {
+		if (message == null || message.equals("")) {
 			return "";
 		}
-		if ((replacedString == null) || (replacedString.equals(""))) {
+		if (replacedString == null || replacedString.equals("")) {
 			return message;
 		}
-		if ((aNewString == null) || (aNewString.equals(""))) {
+		if (aNewString == null || aNewString.equals("")) {
 			aNewString = "";
 		}
 

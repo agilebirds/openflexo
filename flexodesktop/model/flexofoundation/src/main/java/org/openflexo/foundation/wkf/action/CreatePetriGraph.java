@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
@@ -64,6 +65,10 @@ public class CreatePetriGraph extends FlexoUndoableAction<CreatePetriGraph, Fath
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FatherNode.class);
+	}
 
 	CreatePetriGraph(FatherNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

@@ -55,10 +55,14 @@ public class RefuseVersion extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItem) && (getPendingActions((DocItem) object).size() > 0));
+			return object != null && object instanceof DocItem && getPendingActions((DocItem) object).size() > 0;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItem.class);
+	}
 
 	protected static Vector getPendingActions(DocItem item) {
 		Vector returned = new Vector();
@@ -106,7 +110,7 @@ public class RefuseVersion extends FlexoAction {
 
 	public DocItem getDocItem() {
 		if (_docItem == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DocItem) {
 				_docItem = (DocItem) getFocusedObject();
 			}
 		}

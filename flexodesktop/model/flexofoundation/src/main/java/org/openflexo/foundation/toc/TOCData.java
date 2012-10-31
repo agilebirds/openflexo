@@ -24,9 +24,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.action.AddDocType;
-import org.openflexo.foundation.cg.action.ImportTOCTemplate;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoTOCResource;
@@ -35,7 +32,6 @@ import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
@@ -81,15 +77,6 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 	@Override
 	public String getClassNameKey() {
 		return "toc_data";
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(AddTOCRepository.actionType);
-		v.add(AddDocType.actionType);
-		v.add(ImportTOCTemplate.actionType);
-		return v;
 	}
 
 	@Override

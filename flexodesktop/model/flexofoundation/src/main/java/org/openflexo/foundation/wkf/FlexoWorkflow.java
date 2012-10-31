@@ -39,7 +39,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMEntity;
@@ -79,7 +78,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
 import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
-import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
 import org.openflexo.foundation.wkf.dm.ProcessInserted;
 import org.openflexo.foundation.wkf.dm.ProcessRemoved;
@@ -107,19 +105,10 @@ import org.openflexo.ws.client.PPMWebService.PPMProcess;
 public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData, InspectableObject {
 
 	public enum GraphicalProperties {
-		CONNECTOR_REPRESENTATION("connectorRepresentation"),
-		COMPONENT_FONT("componentFont"),
-		ROLE_FONT("roleFont"),
-		EVENT_FONT("eventFont"),
-		ACTION_FONT("actionFont"),
-		OPERATION_FONT("operationFont"),
-		ACTIVITY_FONT("activityFont"),
-		ARTEFACT_FONT("artefactFont"),
-		EDGE_FONT("edgeFont"),
-		SHOW_MESSAGES("showMessages"),
-		SHOW_WO_NAME("showWOName"),
-		SHOW_SHADOWS("showShadows"),
-		USE_TRANSPARENCY("useTransparency");
+		CONNECTOR_REPRESENTATION("connectorRepresentation"), COMPONENT_FONT("componentFont"), ROLE_FONT("roleFont"), EVENT_FONT("eventFont"), ACTION_FONT(
+				"actionFont"), OPERATION_FONT("operationFont"), ACTIVITY_FONT("activityFont"), ARTEFACT_FONT("artefactFont"), EDGE_FONT(
+				"edgeFont"), SHOW_MESSAGES("showMessages"), SHOW_WO_NAME("showWOName"), SHOW_SHADOWS("showShadows"), USE_TRANSPARENCY(
+				"useTransparency");
 		private String serializationName;
 
 		GraphicalProperties(String s) {
@@ -453,13 +442,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 			fip = FlexoProcess.createImportedProcessFromProcess(this, process);
 		}
 		return fip;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddSubProcess.actionType);
-		return returned;
 	}
 
 	// Used by templates in doc

@@ -27,8 +27,10 @@ import org.openflexo.dataimporter.DataImporter;
 import org.openflexo.dataimporter.DataImporterLoader;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.DMSet;
@@ -75,6 +77,10 @@ public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+	}
 
 	CreateDMRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -198,54 +204,34 @@ public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject
 				hideFlexoProgress();
 			}
 		}
-		/*else if (_repositoryType.equals(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY)) {
-		            if (getDenaliFoundationRepositoryFile() != null) {
-		        if (!getNewRepositoryName()
-		                .equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME)) {
-		            if (_project.getDataModel().getDenaliFoundationRepository() == null) {*/
-		/*FlexoController
-		        .notify(FlexoLocalization
-		                .localizedForKey("dependant_repository_denali_foundation_must_also_be_imported"));*//*
-																											makeFlexoProgress(FlexoLocalization
-																											.localizedForKey("importing_denali_foundation"), 6);
-																											setProgress(FlexoLocalization
-																											.localizedForKey("importing")
-																											+ " " + getDenaliFoundationRepositoryFile().getName());
-																											_newRepository = DenaliFoundationRepository
-																											.createDenaliFoundationRepository(_project.getDataModel(),getFlexoProgress());
-																											hideFlexoProgress();
-																											}
-																											}
-																											if ((!getNewRepositoryName()
-																											.equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME))
-																											&& (!getNewRepositoryName()
-																											.equals(DenaliFoundationRepository.DENALI_FLEXO_REPOSITORY_NAME))) {
-																											if (getProject().getDataModel().getDenaliFlexoRepository() == null) {*/
-		/*FlexoController
-		        .notify(FlexoLocalization
-		                .localizedForKey("dependant_repository_denali_flexo_must_also_be_imported"));*//*
-																										makeFlexoProgress(FlexoLocalization
-																										.localizedForKey("importing_denali_flexo"), 6);
-																										setProgress(FlexoLocalization
-																										.localizedForKey("importing")
-																										+ " " + getDenaliFoundationRepositoryFile().getName());
-																										_newRepository = DenaliFoundationRepository.createDenaliFlexoRepository(
-																										_project.getDataModel(), getFlexoProgress());
-																										hideFlexoProgress();
-																										}
-																										}
-
-																										makeFlexoProgress(FlexoLocalization
-																										.localizedForKey("importing")
-																										+ " " + getDenaliFoundationRepositoryFile().getName(), 6);
-																										setProgress(FlexoLocalization
-																										.localizedForKey("importing")
-																										+ " " + getDenaliFoundationRepositoryFile().getName());
-																										_newRepository = DenaliFoundationRepository.createNewDenaliFoundationRepository(
-																										_project.getDataModel(), getDenaliFoundationRepositoryFile(), getFlexoProgress());
-																										hideFlexoProgress();
-																										}
-																										} */
+		/*
+		 * else if (_repositoryType.equals(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY)) { if (getDenaliFoundationRepositoryFile() !=
+		 * null) { if (!getNewRepositoryName() .equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME)) { if
+		 * (_project.getDataModel().getDenaliFoundationRepository() == null) {
+		 */
+		/*
+		 * FlexoController .notify(FlexoLocalization .localizedForKey("dependant_repository_denali_foundation_must_also_be_imported"));
+		 *//*
+			 * makeFlexoProgress(FlexoLocalization .localizedForKey("importing_denali_foundation"), 6); setProgress(FlexoLocalization
+			 * .localizedForKey("importing") + " " + getDenaliFoundationRepositoryFile().getName()); _newRepository =
+			 * DenaliFoundationRepository .createDenaliFoundationRepository(_project.getDataModel(),getFlexoProgress());
+			 * hideFlexoProgress(); } } if ((!getNewRepositoryName() .equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME))
+			 * && (!getNewRepositoryName() .equals(DenaliFoundationRepository.DENALI_FLEXO_REPOSITORY_NAME))) { if
+			 * (getProject().getDataModel().getDenaliFlexoRepository() == null) {
+			 */
+		/*
+		 * FlexoController .notify(FlexoLocalization .localizedForKey("dependant_repository_denali_flexo_must_also_be_imported"));
+		 *//*
+			 * makeFlexoProgress(FlexoLocalization .localizedForKey("importing_denali_flexo"), 6); setProgress(FlexoLocalization
+			 * .localizedForKey("importing") + " " + getDenaliFoundationRepositoryFile().getName()); _newRepository =
+			 * DenaliFoundationRepository.createDenaliFlexoRepository( _project.getDataModel(), getFlexoProgress()); hideFlexoProgress(); }
+			 * }
+			 * 
+			 * makeFlexoProgress(FlexoLocalization .localizedForKey("importing") + " " + getDenaliFoundationRepositoryFile().getName(), 6);
+			 * setProgress(FlexoLocalization .localizedForKey("importing") + " " + getDenaliFoundationRepositoryFile().getName());
+			 * _newRepository = DenaliFoundationRepository.createNewDenaliFoundationRepository( _project.getDataModel(),
+			 * getDenaliFoundationRepositoryFile(), getFlexoProgress()); hideFlexoProgress(); } }
+			 */
 		else if (getRepositoryType().equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
 			logger.info("Importing from RationalRose...");
 			DataImporter rationalRoseImporter = DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.getImporter();

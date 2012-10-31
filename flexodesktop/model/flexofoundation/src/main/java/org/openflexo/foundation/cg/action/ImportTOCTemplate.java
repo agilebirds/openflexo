@@ -28,6 +28,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.GeneratedDoc;
+import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -56,6 +57,7 @@ public class ImportTOCTemplate extends FlexoAction<ImportTOCTemplate, FlexoModel
 
 	static {
 		FlexoModelObject.addActionForClass(ImportTOCTemplate.actionType, GeneratedDoc.class);
+		FlexoModelObject.addActionForClass(ImportTOCTemplate.actionType, TOCData.class);
 	}
 
 	private File sourceFile;

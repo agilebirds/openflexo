@@ -27,9 +27,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dkv.action.AddDomainAction;
-import org.openflexo.foundation.dkv.action.AddLanguageAction;
 import org.openflexo.foundation.dkv.dm.DomainAdded;
 import org.openflexo.foundation.dkv.dm.DomainRemoved;
 import org.openflexo.foundation.dkv.dm.LanguageAdded;
@@ -353,18 +350,6 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 			// nothing to do since it can not be deleted :-)
 		}
 
-		/**
-		 * Overrides getSpecificActionListForThatClass
-		 * 
-		 * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
-		 */
-		@Override
-		protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-			Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-			v.add(AddDomainAction.actionType);
-			return v;
-		}
-
 		public DomainAdded addToDomains(Domain dom) {
 			if (domains.contains(dom)) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -449,18 +434,6 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 		@Override
 		public void undelete() {
 			// nothing to do since it can not be deleted :-)
-		}
-
-		/**
-		 * Overrides getSpecificActionListForThatClass
-		 * 
-		 * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
-		 */
-		@Override
-		protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-			Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-			v.add(AddLanguageAction.actionType);
-			return v;
 		}
 
 		public LanguageAdded addToLanguages(Language lg) {
@@ -593,19 +566,6 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 	@Override
 	public void undelete() {
 		// nothing to do since it can not be deleted :-)
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(AddDomainAction.actionType);
-		v.add(AddLanguageAction.actionType);
-		return v;
 	}
 
 	@Override

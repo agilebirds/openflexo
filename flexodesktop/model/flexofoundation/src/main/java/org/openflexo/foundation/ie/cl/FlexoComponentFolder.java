@@ -32,15 +32,12 @@ import javax.naming.InvalidNameException;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.filter.ElementFilter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IObject;
-import org.openflexo.foundation.ie.cl.action.AddComponent;
-import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
 import org.openflexo.foundation.ie.cl.dm.ComponentFolderDeleted;
 import org.openflexo.foundation.ie.cl.dm.ComponentFolderInserted;
 import org.openflexo.foundation.ie.dm.ComponentInserted;
@@ -133,14 +130,6 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		}
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddComponent.actionType);
-		returned.add(AddComponentFolder.actionType);
-		return returned;
-	}
-
 	private static Vector<FlexoComponentFolder> getAllSubFoldersForFolder(FlexoComponentFolder folder) {
 		Vector<FlexoComponentFolder> v = new Vector<FlexoComponentFolder>();
 		if (folder != null) {
@@ -223,14 +212,11 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 			}
 			library.setRootFolder(newFolder);
 		}
-		/*library.notifyObservers(new DataModification(
-				DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY, null,
-				newFolder));
-		if (parentFolder != null) {
-			parentFolder.setChanged();
-			parentFolder.notifyObservers(new ComponentFolderInserted(
-					parentFolder, newFolder));
-		}*/
+		/*
+		 * library.notifyObservers(new DataModification( DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY, null, newFolder)); if
+		 * (parentFolder != null) { parentFolder.setChanged(); parentFolder.notifyObservers(new ComponentFolderInserted( parentFolder,
+		 * newFolder)); }
+		 */
 		return newFolder;
 	}
 
@@ -436,7 +422,7 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 	}
 
 	public void addToComponents(ComponentDefinition cd) {
-		if ((cd.getFolder() != null) && (cd.getFolder() != this)) {
+		if (cd.getFolder() != null && cd.getFolder() != this) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("UNEXPECTEDELY Move component " + cd + " from folder " + cd.getFolder().getName() + " to folder "
 						+ getName());
@@ -883,7 +869,7 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		@Override
 		public ValidationIssue applyValidation(final Validable object) {
 			final FlexoComponentFolder folder = (FlexoComponentFolder) object;
-			if ((folder.getFatherFolder() == null) && (folder.getComponentPrefix() == null || folder.getComponentPrefix().equals(""))) {
+			if (folder.getFatherFolder() == null && (folder.getComponentPrefix() == null || folder.getComponentPrefix().equals(""))) {
 				ValidationError error = new ValidationError(this, object, "folder_($object.name)_has_no_component_prefix");
 
 				return error;
@@ -933,7 +919,7 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		 */
 		@Override
 		public int compare(FlexoComponentFolder o1, FlexoComponentFolder o2) {
-			return (o1).getName().compareTo((o2).getName());
+			return o1.getName().compareTo(o2.getName());
 		}
 	}
 

@@ -199,7 +199,7 @@ public class CommonPalette extends DrawingPalette {
 					shapeGR.setLayer(containerGR.getLayer() + 1);
 					shapeGR.setAllowToLeaveBounds(true);
 
-					AddShape action = AddShape.actionType.makeNewAction(container, null, getController().getOEController().getEditor());
+					AddShape action = AddShape.actionType.makeNewAction(container, null, getController().getVEController().getEditor());
 					action.setGraphicalRepresentation(shapeGR);
 					action.setNameSetToNull(true);
 					// action.setNewShapeName(FlexoLocalization.localizedForKey("unnamed"));

@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -56,6 +57,10 @@ public class OpenEmbeddedProcess extends FlexoGUIAction<OpenEmbeddedProcess, Sub
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, SubProcessNode.class);
+	}
 
 	OpenEmbeddedProcess(SubProcessNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

@@ -28,6 +28,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.action.AddDocType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
@@ -56,6 +57,11 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCData.class);
+		FlexoModelObject.addActionForClass(actionType, GeneratedDoc.class);
+	}
 
 	private String repositoryName;
 

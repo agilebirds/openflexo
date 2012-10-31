@@ -19,8 +19,8 @@
  */
 package org.openflexo.xml.diff3;
 
-import org.jdom.Content;
-import org.jdom.Element;
+import org.jdom2.Content;
+import org.jdom2.Element;
 
 public class UnresolvedElementConflict extends UnresolvedConflict {
 

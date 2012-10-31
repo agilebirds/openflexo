@@ -30,7 +30,6 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BooleanStaticBinding;
 import org.openflexo.foundation.bindings.ComponentBindingDefinition;
@@ -41,10 +40,6 @@ import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
 import org.openflexo.foundation.ie.TabComponentInstance;
-import org.openflexo.foundation.ie.action.AddTab;
-import org.openflexo.foundation.ie.action.MoveTabLeft;
-import org.openflexo.foundation.ie.action.MoveTabRight;
-import org.openflexo.foundation.ie.action.SuroundWithRepetition;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.operator.ConditionalOperator;
@@ -77,21 +72,6 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 	@Override
 	protected TabComponentInstance createComponentInstance(TabComponentDefinition componentDefinition, IEWOComponent woComponent) {
 		return new TabComponentInstance(componentDefinition, this);
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddTab.actionType);
-		returned.add(MoveTabLeft.actionType);
-		returned.add(MoveTabRight.actionType);
-		returned.remove(SuroundWithRepetition.actionType);
-		return returned;
 	}
 
 	/**
@@ -291,10 +271,9 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification obj) {
-		/*if (observable == getTabComponent()) {
-		    setChanged();
-		    notifyObservers(obj);
-		}*/
+		/*
+		 * if (observable == getTabComponent()) { setChanged(); notifyObservers(obj); }
+		 */
 		super.update(observable, obj);
 	}
 

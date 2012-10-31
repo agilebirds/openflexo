@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
-import java.util.Vector;
 import java.util.logging.Level;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -34,7 +33,6 @@ import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
@@ -42,8 +40,6 @@ import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
-import org.openflexo.foundation.toc.action.RemoveTOCEntry;
-import org.openflexo.foundation.toc.action.RemoveTOCRepository;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -130,14 +126,6 @@ public class TOCRepository extends TOCEntry {
 	@Override
 	public TOCRepository getRepository() {
 		return this;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.remove(RemoveTOCEntry.actionType);
-		v.add(RemoveTOCRepository.actionType);
-		return v;
 	}
 
 	@Override

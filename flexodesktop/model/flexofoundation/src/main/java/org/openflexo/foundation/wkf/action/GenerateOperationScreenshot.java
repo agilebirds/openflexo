@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.ScreenshotResource;
@@ -58,6 +59,9 @@ public class GenerateOperationScreenshot extends FlexoAction<GenerateOperationSc
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
 	private boolean _hasBeenRegenerated;
 
 	GenerateOperationScreenshot(OperationNode focusedObject, Vector<OperationNode> globalSelection, FlexoEditor editor) {

@@ -21,7 +21,6 @@ package org.openflexo.tm.java.formatter;
 
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,8 +30,8 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 import org.openflexo.sg.formatter.Formatter;
 import org.openflexo.sg.formatter.exception.FormattingException;
 import org.openflexo.toolbox.FileFormat;
@@ -70,10 +69,10 @@ public class JavaFormatter implements Formatter {
 		try {
 			inputStream = getClass().getResourceAsStream(DEFAULT_JAVA_FORMATTER_SETTINGS_RESOURCEPATH);
 			SAXBuilder sxb = new SAXBuilder();
-			org.jdom.Document document = sxb.build(getClass().getResourceAsStream(DEFAULT_JAVA_FORMATTER_SETTINGS_RESOURCEPATH));
+			org.jdom2.Document document = sxb.build(getClass().getResourceAsStream(DEFAULT_JAVA_FORMATTER_SETTINGS_RESOURCEPATH));
 			Element root = document.getRootElement();
 			Element profile = root.getChild("profile");
-			for (Element settingElement : ((List<Element>) profile.getChildren("setting"))) {
+			for (Element settingElement : profile.getChildren("setting")) {
 				options.put(settingElement.getAttributeValue("id"), settingElement.getAttributeValue("value"));
 			}
 

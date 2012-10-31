@@ -42,8 +42,9 @@ public class UnwrapConditional extends FlexoAction {
 
 		@Override
 		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence && ((IESequence) ((IEWidget) object)
-					.getParent()).isConditional()) || (object instanceof IESequence && ((IESequence) object).isConditional());
+			return object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence
+					&& ((IESequence) ((IEWidget) object).getParent()).isConditional() || object instanceof IESequence
+					&& ((IESequence) object).isConditional();
 		}
 
 		@Override
@@ -52,6 +53,10 @@ public class UnwrapConditional extends FlexoAction {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
 
 	UnwrapConditional(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

@@ -1,5 +1,6 @@
 package org.openflexo.model.annotations;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -20,4 +21,44 @@ public @interface XMLElement {
 	public String namespace() default NO_NAME_SPACE;
 
 	boolean primary() default false;
+
+	public static class XMLElementImpl implements XMLElement {
+		private String xmlTag;
+		private String context;
+		private String namespace;
+		private boolean primary;
+
+		public XMLElementImpl(String xmlTag, String context, String namespace, boolean primary) {
+			this.xmlTag = xmlTag;
+			this.context = context;
+			this.namespace = namespace;
+			this.primary = primary;
+		}
+
+		@Override
+		public Class<? extends Annotation> annotationType() {
+			return XMLElement.class;
+		}
+
+		@Override
+		public String xmlTag() {
+			return xmlTag;
+		}
+
+		@Override
+		public String context() {
+			return context;
+		}
+
+		@Override
+		public String namespace() {
+			return namespace;
+		}
+
+		@Override
+		public boolean primary() {
+			return primary;
+		}
+
+	}
 }

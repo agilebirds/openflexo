@@ -56,10 +56,14 @@ public class ApproveVersion extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItem) && (getPendingActions((DocItem) object).size() > 0));
+			return object != null && object instanceof DocItem && getPendingActions((DocItem) object).size() > 0;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItem.class);
+	}
 
 	protected static Vector getPendingActions(DocItem item) {
 		Vector returned = new Vector();
@@ -101,7 +105,7 @@ public class ApproveVersion extends FlexoAction {
 	protected void doAction(Object context) {
 		if (getVersion() != null) {
 			logger.info("ApproveVersion");
-			if ((_newVersion != null) && (!_newVersion.equals(getVersion().getVersion()))) {
+			if (_newVersion != null && !_newVersion.equals(getVersion().getVersion())) {
 				getVersion().setVersion(_newVersion);
 			}
 			_newAction = getDocItem().approveVersion(getVersion(), getAuthor(), getDocItem().getDocResourceCenter());
@@ -111,7 +115,7 @@ public class ApproveVersion extends FlexoAction {
 
 	public DocItem getDocItem() {
 		if (_docItem == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DocItem) {
 				_docItem = (DocItem) getFocusedObject();
 			}
 		}

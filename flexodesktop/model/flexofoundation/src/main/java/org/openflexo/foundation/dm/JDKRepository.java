@@ -28,7 +28,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.dm.action.ImportJDKEntity;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.Duration;
@@ -166,13 +165,6 @@ public class JDKRepository extends DMRepository {
 			}
 		}
 		return super.packageForEntity(entity);
-	}
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(ImportJDKEntity.actionType);
-		return returned;
 	}
 
 	/**

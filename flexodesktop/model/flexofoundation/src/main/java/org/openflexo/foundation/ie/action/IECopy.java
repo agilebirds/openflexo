@@ -26,9 +26,12 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
+import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
+import org.openflexo.foundation.ie.widget.IETRWidget;
 
 public class IECopy extends FlexoAction {
 
@@ -51,13 +54,19 @@ public class IECopy extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (globalSelection != null) && globalSelection.size() == 1
+			return globalSelection != null && globalSelection.size() == 1
 					&& !(globalSelection.firstElement() instanceof ComponentDefinition)
 					&& !(globalSelection.firstElement() instanceof IEWOComponent)
+					&& !(globalSelection.firstElement() instanceof IETRWidget)
+					&& !(globalSelection.firstElement() instanceof FlexoComponentLibrary)
 					&& !(globalSelection.firstElement() instanceof FlexoComponentFolder);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEObject.class);
+	}
 
 	IECopy(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

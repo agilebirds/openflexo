@@ -80,10 +80,14 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && (object.getProcess() != null));
+			return object != null && object.getProcess() != null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoPetriGraph.class);
+	}
 
 	DropWKFElement(FlexoPetriGraph focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -120,7 +124,7 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 	@Override
 	protected void doAction(Object context) throws InvalidLevelException {
 		logger.info("Insert WKF element");
-		if ((getProcess() != null) && (getObject() != null) && (getPetriGraph() != null)) {
+		if (getProcess() != null && getObject() != null && getPetriGraph() != null) {
 			if (getGraphicalContext() != null) {
 				getObject().setX(posX, getGraphicalContext());
 				getObject().setY(posY, getGraphicalContext());

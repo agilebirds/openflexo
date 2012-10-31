@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dkv.DKVModel;
@@ -69,6 +70,11 @@ public class AddDomainAction extends FlexoUndoableAction<AddDomainAction, DKVObj
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DKVModel.DomainList.class);
+		FlexoModelObject.addActionForClass(actionType, DKVModel.class);
+	}
 
 	private Domain newDomain;
 	private DKVModel _dkvModel;

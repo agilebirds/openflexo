@@ -31,7 +31,6 @@ import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.ComponentBindingDefinition;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.ComponentInstanceOwner;
@@ -42,10 +41,6 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.IEDataModification;
-import org.openflexo.foundation.ie.menu.action.AddMenu;
-import org.openflexo.foundation.ie.menu.action.MoveMenuDown;
-import org.openflexo.foundation.ie.menu.action.MoveMenuUp;
-import org.openflexo.foundation.ie.menu.action.MoveMenuUpperLevel;
 import org.openflexo.foundation.ie.menu.dm.MenuItemAdded;
 import org.openflexo.foundation.ie.menu.dm.MenuItemRemoved;
 import org.openflexo.foundation.ie.menu.dm.ReOrderedMenuItem;
@@ -181,16 +176,6 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		super.finalizeDeserialization(builder);
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddMenu.actionType);
-		returned.add(MoveMenuUp.actionType);
-		returned.add(MoveMenuDown.actionType);
-		returned.add(MoveMenuUpperLevel.actionType);
-		return returned;
-	}
-
 	/**
 	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
 	 * navigation menu
@@ -255,7 +240,8 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 					if (cbd.getIsMandatory()) {
 						/*
 						 * if(getOperation().getComponentInstance().getBinding(cbd).getBindingValue()!=null){
-						 * args.append(", "+getOperation().getComponentInstance().getBinding(cbd).getBindingValue().getCodeStringRepresentation()); }else
+						 * args.append(", "+getOperation()
+						 * .getComponentInstance().getBinding(cbd).getBindingValue().getCodeStringRepresentation()); }else
 						 */
 						args.append(", ").append(cbd.getType().getDefaultValue());
 					}
@@ -270,11 +256,15 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 			} else {
 				woaUrl = "\"#\"";
 				/*
-				 * } else if (getOperation() != null && getOperation().hasWOComponent()) { String w = getPopupWidth(); String h = getPopupHeight(); String selectedTab = "";
-				 * if(getOperation().getComponentInstance().getComponentDefinition().getFirstTabContainerTitle()!=null) selectedTab = ", null"; woaUrl = "\"window.open(\\\\'\"+" +
-				 * getOperation().getComponentDefinition().getName() + ".getUrlForOperation(context()"+selectedTab+","+getOperation().getComponentInstance().getFlexoID()+")+\"\\\\'" + ",\\\\'" +
-				 * (getPopupWindowName() != null ? getPopupWindowName() : getOperation().getComponentDefinition().getName()) + "\\\\',\\\\'width=" + w + ",height=" + h +
-				 * ",directories=no,fullscreen=no,location=no,menubar=no,resizable=yes,scrollbars=yes,status=yes,titlebar=no,toolbar=no\\\\',\\\\'\\\\')\""; }
+				 * } else if (getOperation() != null && getOperation().hasWOComponent()) { String w = getPopupWidth(); String h =
+				 * getPopupHeight(); String selectedTab = "";
+				 * if(getOperation().getComponentInstance().getComponentDefinition().getFirstTabContainerTitle()!=null) selectedTab =
+				 * ", null"; woaUrl = "\"window.open(\\\\'\"+" + getOperation().getComponentDefinition().getName() +
+				 * ".getUrlForOperation(context()"+selectedTab+","+getOperation().getComponentInstance().getFlexoID()+")+\"\\\\'" + ",\\\\'"
+				 * + (getPopupWindowName() != null ? getPopupWindowName() : getOperation().getComponentDefinition().getName()) +
+				 * "\\\\',\\\\'width=" + w + ",height=" + h +
+				 * ",directories=no,fullscreen=no,location=no,menubar=no,resizable=yes,scrollbars=yes,status=yes,titlebar=no,toolbar=no\\\\',\\\\'\\\\')\""
+				 * ; }
 				 */
 			}
 		}

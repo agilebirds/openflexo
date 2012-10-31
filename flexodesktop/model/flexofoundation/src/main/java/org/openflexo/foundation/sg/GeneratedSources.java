@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedSourcesResource;
@@ -119,13 +118,6 @@ public class GeneratedSources extends GeneratedOutput {
 		builder.generatedSources = this;
 		_resource = builder.resource;
 		initializeDeserialization(builder);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateSourceRepository.actionType);
-		return returned;
 	}
 
 	@Override

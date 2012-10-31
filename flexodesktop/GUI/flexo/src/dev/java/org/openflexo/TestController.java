@@ -31,18 +31,16 @@ import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.listener.SelectionManagingKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 
-public class TestController extends FlexoController implements SelectionManagingController
-{
-    private static final Logger logger = Logger.getLogger(SelectionManager.class.getPackage().getName());
+public class TestController extends FlexoController implements SelectionManagingController {
+	private static final Logger logger = Logger.getLogger(SelectionManager.class.getPackage().getName());
 
-    private final TestController.TestSelectionManager selectionManager;
+	private final TestController.TestSelectionManager selectionManager;
 	private final TestFrame frame;
-    protected TestMenuBar menuBar;
-    protected TestKeyEventListener keyEventListener;
-	
-	public TestController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception
-	{
-		super(projectEditor,module);
+	protected TestMenuBar menuBar;
+	protected TestKeyEventListener keyEventListener;
+
+	public TestController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
+		super(projectEditor, module);
 		menuBar = (TestMenuBar) createAndRegisterNewMenuBar();
 		frame = new TestFrame("test", keyEventListener = new TestKeyEventListener(), menuBar);
 		selectionManager = new TestSelectionManager();
@@ -51,213 +49,178 @@ public class TestController extends FlexoController implements SelectionManaging
 	}
 
 	@Override
-	protected FlexoMainPane createMainPane() 
-	{
+	protected FlexoMainPane createMainPane() {
 		return new TestMainPane(getEmptyPanel(), getMainFrame(), this);
 	}
 
 	@Override
-	public TestMainPane getMainPane() 
-	{
+	public TestMainPane getMainPane() {
 		return (TestMainPane) super.getMainPane();
 	}
 
-	public TestFrame getMainFrame() 
-	{
+	public TestFrame getMainFrame() {
 		return frame;
 	}
 
 	@Override
-	protected TestMenuBar createNewMenuBar() 
-	{
+	protected TestMenuBar createNewMenuBar() {
 		return new TestMenuBar();
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) 
-	{
+	public String getWindowTitleforObject(FlexoModelObject object) {
 		return object.toString();
 	}
 
 	@Override
-	public SelectionManager getSelectionManager() 
-	{
+	public SelectionManager getSelectionManager() {
 		return selectionManager;
 	}
 
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) 
-	{
+	public void selectAndFocusObject(FlexoModelObject object) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
-	public void initInspectors()
-	{
+	public void initInspectors() {
 		super.initInspectors();
 		selectionManager.addObserver(getSharedInspectorController());
 	}
 
-
-	public class TestSelectionManager extends SelectionManager
-	{
-		public TestSelectionManager() 
-		{
+	public class TestSelectionManager extends SelectionManager {
+		public TestSelectionManager() {
 			super(TestController.this);
-			_clipboard = new TestClipboard(this, 
-					menuBar.getEditMenu(TestController.this).copyItem, 
-					menuBar.getEditMenu(TestController.this).pasteItem, 
-					menuBar.getEditMenu(TestController.this).cutItem);
+			_clipboard = new TestClipboard(this, menuBar.getEditMenu(TestController.this).copyItem,
+					menuBar.getEditMenu(TestController.this).pasteItem, menuBar.getEditMenu(TestController.this).cutItem);
 		}
-		
+
 		@Override
-		public FlexoModelObject getPasteContext() 
-		{
+		public FlexoModelObject getPasteContext() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public FlexoModelObject getRootFocusedObject() 
-		{
+		public FlexoModelObject getRootFocusedObject() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public boolean performSelectionSelectAll() 
-		{
+		public boolean performSelectionSelectAll() {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
-		public class TestClipboard extends FlexoClipboard
-		{
+
+		public class TestClipboard extends FlexoClipboard {
 			public TestClipboard(SelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem) {
 				super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
 			}
 
 			@Override
-			protected boolean isCurrentSelectionValidForCopy(
-					Vector<FlexoModelObject> currentlySelectedObjects) {
+			protected boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
 				return false;
 			}
 
 			@Override
-			protected boolean performCopyOfSelection(
-					Vector<FlexoModelObject> currentlySelectedObjects) {
+			protected boolean performCopyOfSelection(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
 				return false;
 			}
 
 			@Override
-			protected void performSelectionPaste(
-					FlexoModelObject pastingContext,
-					PastingGraphicalContext graphicalContext) {
+			protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
 			}
 		}
-		
+
 	}
-	
-	public class TestFrame extends FlexoFrame implements FlexoActionSource
-	{
 
+	public class TestFrame extends FlexoFrame implements FlexoActionSource {
 
-	     // ==========================================================================
-	    // ============================= Constructor
-	    // ================================
-	    // ==========================================================================
+		// ==========================================================================
+		// ============================= Constructor
+		// ================================
+		// ==========================================================================
 
-	    /**
-	     * Constructor for WKFFrame
-	     */
-	    public TestFrame(String title, TestKeyEventListener keyEventListener, TestMenuBar menuBar) throws HeadlessException
-	    {
-	        super(title, TestController.this, keyEventListener, menuBar);
-	        _keyEventListener = keyEventListener;
-	        _menuBar = menuBar;
-	        getContentPane().setLayout(new BorderLayout());
-	        setSize(100,100);
-	        getContentPane().add(new JLabel("prout"),BorderLayout.CENTER);
-	    }
-
-	    @Override
-	    public void update(FlexoObservable observable, DataModification dataModification)
-	    {
-	       super.update(observable,dataModification);
-	    }
-
-	    /**
-	     * @return Returns the controller.
-	     */
-	    @Override
-		public TestController getController()
-	    {
-	        return (TestController)super.getController();
-	    }
+		/**
+		 * Constructor for WKFFrame
+		 */
+		public TestFrame(String title, TestKeyEventListener keyEventListener, TestMenuBar menuBar) throws HeadlessException {
+			super(title, TestController.this, keyEventListener, menuBar);
+			_keyEventListener = keyEventListener;
+			_menuBar = menuBar;
+			getContentPane().setLayout(new BorderLayout());
+			setSize(100, 100);
+			getContentPane().add(new JLabel("prout"), BorderLayout.CENTER);
+		}
 
 		@Override
-		public void dispose()
-		{
+		public void update(FlexoObservable observable, DataModification dataModification) {
+			super.update(observable, dataModification);
+		}
+
+		/**
+		 * @return Returns the controller.
+		 */
+		@Override
+		public TestController getController() {
+			return (TestController) super.getController();
+		}
+
+		@Override
+		public void dispose() {
 			_keyEventListener = null;
 			_menuBar = null;
-		    super.dispose();
+			super.dispose();
 		}
 
 	}
 
-	public class TestKeyEventListener extends SelectionManagingKeyEventListener
-	{
+	public class TestKeyEventListener extends SelectionManagingKeyEventListener {
 
-	    public TestKeyEventListener()
-	    {
-	        super(TestController.this);
-	    }
+		public TestKeyEventListener() {
+			super(TestController.this);
+		}
 
-	    @Override
-	    public TestController getController() {
-	    	return (TestController)super.getController();
-	    }
-	    
-	    @Override
-		protected SelectionManager getSelectionManager()
-	    {
-	        return getController().getSelectionManager();
-	    }
+		@Override
+		public TestController getController() {
+			return (TestController) super.getController();
+		}
 
-		public InteractiveFlexoEditor getEditor() 
-		{
+		@Override
+		protected SelectionManager getSelectionManager() {
+			return getController().getSelectionManager();
+		}
+
+		@Override
+		public InteractiveFlexoEditor getEditor() {
 			return getController().getEditor();
 		}
-		
-	}
-
-	public class TestMenuBar extends FlexoMenuBar
-	{
-
-	    public TestMenuBar()
-	    {
-	        super(TestController.this, Module.TEST_MODULE);
-	    }
 
 	}
-	
-	public class TestMainPane extends FlexoMainPane implements GraphicalFlexoObserver
-	{
-	    public TestMainPane(ModuleView moduleView, TestFrame mainFrame, TestController controller)
-	    {
-	        super(moduleView,mainFrame,controller);
-	        showLeftView();
-	     }
 
-	    @Override
-		protected  FlexoModelObject getParentObject(FlexoModelObject object)
-	    {
-	       if (object instanceof FlexoProcess) {
-	           return (((FlexoProcess)object).getParentProcess());
-	       }
-	       return null;
-	    }
+	public class TestMenuBar extends FlexoMenuBar {
+
+		public TestMenuBar() {
+			super(TestController.this, Module.TEST_MODULE);
+		}
+
 	}
-	
+
+	public class TestMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+		public TestMainPane(ModuleView moduleView, TestFrame mainFrame, TestController controller) {
+			super(moduleView, mainFrame, controller);
+			showLeftView();
+		}
+
+		@Override
+		protected FlexoModelObject getParentObject(FlexoModelObject object) {
+			if (object instanceof FlexoProcess) {
+				return (((FlexoProcess) object).getParentProcess());
+			}
+			return null;
+		}
+	}
+
 }

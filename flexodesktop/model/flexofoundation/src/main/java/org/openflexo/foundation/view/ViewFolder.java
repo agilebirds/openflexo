@@ -32,9 +32,6 @@ import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ie.cl.action.AddComponent;
-import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.ontology.dm.ShemaFolderDeleted;
@@ -116,14 +113,6 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		}
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddComponent.actionType);
-		returned.add(AddComponentFolder.actionType);
-		return returned;
-	}
-
 	private static Vector<ViewFolder> getAllSubFoldersForFolder(ViewFolder folder) {
 		Vector<ViewFolder> v = new Vector<ViewFolder>();
 		if (folder != null) {
@@ -196,14 +185,11 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			}
 			library.setRootFolder(newFolder);
 		}
-		/*library.notifyObservers(new DataModification(
-				DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY, null,
-				newFolder));
-		if (parentFolder != null) {
-			parentFolder.setChanged();
-			parentFolder.notifyObservers(new ComponentFolderInserted(
-					parentFolder, newFolder));
-		}*/
+		/*
+		 * library.notifyObservers(new DataModification( DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY, null, newFolder)); if
+		 * (parentFolder != null) { parentFolder.setChanged(); parentFolder.notifyObservers(new ComponentFolderInserted( parentFolder,
+		 * newFolder)); }
+		 */
 		return newFolder;
 	}
 
@@ -467,9 +453,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 				throw new DuplicateFolderNameException(this, name);
 			}
 			// There is no reason to dismiss accents
-			/*if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
-			throw new InvalidNameException(name);
-			}*/
+			/*
+			 * if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) { throw new InvalidNameException(name); }
+			 */
 			String old = _name;
 			_name = name;
 			setChanged();

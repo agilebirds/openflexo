@@ -19,10 +19,7 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.util.Vector;
 import java.util.logging.Logger;
-
-import org.openflexo.foundation.dm.action.CreateProjectRepository;
 
 public class NonPersistantDataRepositoryFolder extends DMRepositoryFolder {
 
@@ -42,7 +39,7 @@ public class NonPersistantDataRepositoryFolder extends DMRepositoryFolder {
 
 	@Override
 	public DMRepository getRepositoryAtIndex(int index) {
-		if ((index >= 0) && (index < getDMModel().getProjectRepositories().size())) {
+		if (index >= 0 && index < getDMModel().getProjectRepositories().size()) {
 			return getDMModel().getProjectRepositories().elementAt(index);
 		}
 		logger.warning("Index out of range: " + index);
@@ -57,13 +54,6 @@ public class NonPersistantDataRepositoryFolder extends DMRepositoryFolder {
 	@Override
 	public String getFullyQualifiedName() {
 		return getDMModel().getFullyQualifiedName() + ".NON_PERSISTANT_DATA_REPOSITORY_FOLDER";
-	}
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateProjectRepository.actionType);
-		return returned;
 	}
 
 	/**

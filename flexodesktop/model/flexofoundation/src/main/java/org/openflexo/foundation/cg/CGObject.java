@@ -20,14 +20,12 @@
 package org.openflexo.foundation.cg;
 
 import java.util.Observable;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
@@ -107,12 +105,6 @@ public abstract class CGObject extends FlexoModelObject implements FlexoObserver
 	@Override
 	public void update(FlexoObservable observable, DataModification obj) {
 		// Ignored at this level: implements it in sub-classes
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		return returned;
 	}
 
 	@Override

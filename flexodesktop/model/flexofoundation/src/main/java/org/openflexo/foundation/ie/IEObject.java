@@ -31,11 +31,6 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ie.action.IECopy;
-import org.openflexo.foundation.ie.action.IECut;
-import org.openflexo.foundation.ie.action.IEDelete;
-import org.openflexo.foundation.ie.action.IEPaste;
 import org.openflexo.foundation.ie.widget.IEBrowserWidget;
 import org.openflexo.foundation.ie.widget.IEButtonWidget;
 import org.openflexo.foundation.ie.widget.IECheckBoxWidget;
@@ -101,16 +96,6 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 	@Override
 	public void update(FlexoObservable observable, DataModification obj) {
 		// Ignored at this level: implements it in sub-classes
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(IECut.actionType);
-		returned.add(IECopy.actionType);
-		returned.add(IEPaste.actionType);
-		returned.add(IEDelete.actionType);
-		return returned;
 	}
 
 	// ==========================================================================

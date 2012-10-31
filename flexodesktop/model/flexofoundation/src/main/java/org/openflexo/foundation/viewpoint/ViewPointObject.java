@@ -139,6 +139,7 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 		return getViewPoint();
 	}
 
+	@Deprecated
 	@Override
 	public String getInspectorName() {
 		// TODO Auto-generated method stub

@@ -24,10 +24,10 @@ public interface FlexoServerAddressBook {
 	@Setter(value = INSTANCES)
 	public void setInstances(List<FlexoServerInstance> instances);
 
-	@Adder(id = INSTANCES)
+	@Adder(value = INSTANCES)
 	public void addToInstances(FlexoServerInstance instance);
 
-	@Remover(id = INSTANCES)
+	@Remover(value = INSTANCES)
 	public void removeFromInstances(FlexoServerInstance instance);
 
 	@Finder(attribute = FlexoServerInstance.ID, collection = INSTANCES)

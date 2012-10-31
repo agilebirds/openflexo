@@ -29,6 +29,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.widget.IESequenceWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
+import org.openflexo.foundation.ie.widget.IETRWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.logging.FlexoLogger;
 
@@ -53,11 +54,17 @@ public class InsertRowAfter extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && ((object instanceof IETDWidget) || ((object instanceof IESequenceWidget) && ((IESequenceWidget) object)
-					.isInTD())));
+			return object != null
+					&& (object instanceof IETDWidget || object instanceof IESequenceWidget && ((IESequenceWidget) object).isInTD());
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETDWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETRWidget.class);
+	}
 
 	InsertRowAfter(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -65,7 +72,7 @@ public class InsertRowAfter extends FlexoAction {
 
 	@Override
 	protected void doAction(Object context) {
-		if ((getFocusedTD() != null) && (getFocusedTD().htmlTable() != null)) {
+		if (getFocusedTD() != null && getFocusedTD().htmlTable() != null) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Inserting new row " + (getFocusedTD().getYLocation() + 1));
 			}

@@ -25,7 +25,7 @@ public interface Edge extends WKFObject {
 			@Parameter(END_NODE) AbstractNode end);
 
 	@Override
-	@Getter(value = PROCESS)
+	@Getter(PROCESS)
 	@ReturnedValue("startNode.process")
 	public FlexoProcess getProcess();
 
@@ -33,13 +33,13 @@ public interface Edge extends WKFObject {
 	@XMLElement(context = "Start")
 	public AbstractNode getStartNode();
 
-	@Setter(value = START_NODE)
+	@Setter(START_NODE)
 	public void setStartNode(AbstractNode node);
 
 	@Getter(value = END_NODE, inverse = AbstractNode.INCOMING_EDGES)
 	@XMLElement(context = "End")
 	public AbstractNode getEndNode();
 
-	@Setter(value = END_NODE)
+	@Setter(END_NODE)
 	public void setEndNode(AbstractNode node);
 }

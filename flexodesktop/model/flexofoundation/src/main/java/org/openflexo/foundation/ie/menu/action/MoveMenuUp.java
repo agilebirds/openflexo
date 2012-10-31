@@ -56,11 +56,15 @@ public class MoveMenuUp extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (object != null) && (object instanceof FlexoItemMenu) && (((FlexoItemMenu) object).getFather() != null)
-					&& ((((FlexoItemMenu) object).getFather()).getSubItems().indexOf(object) > 0);
+			return object != null && object instanceof FlexoItemMenu && ((FlexoItemMenu) object).getFather() != null
+					&& ((FlexoItemMenu) object).getFather().getSubItems().indexOf(object) > 0;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoItemMenu.class);
+	}
 
 	private FlexoItemMenu itemMenu;
 
@@ -81,7 +85,7 @@ public class MoveMenuUp extends FlexoAction {
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		FlexoItemMenu item = getItemMenu();
-		if ((item.getFather() == null) || (item.getFather().getSubItems().indexOf(item) == 0)) {
+		if (item.getFather() == null || item.getFather().getSubItems().indexOf(item) == 0) {
 			return;
 		}
 		item.getFather().switchItems(item.getFather().getSubItems().get(item.getFather().getSubItems().indexOf(item) - 1), item);

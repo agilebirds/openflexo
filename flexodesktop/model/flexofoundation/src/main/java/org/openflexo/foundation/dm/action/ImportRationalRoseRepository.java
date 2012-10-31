@@ -24,7 +24,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.dataimporter.DataImporterLoader;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 
 public class ImportRationalRoseRepository extends CreateDMRepository {
@@ -53,6 +55,10 @@ public class ImportRationalRoseRepository extends CreateDMRepository {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+	}
 
 	ImportRationalRoseRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

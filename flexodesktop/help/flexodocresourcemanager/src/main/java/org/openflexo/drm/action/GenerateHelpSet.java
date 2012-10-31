@@ -60,10 +60,14 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return ((object != null) && (object instanceof DocItemFolder) && (((DocItemFolder) object).isRootFolder()));
+			return object != null && object instanceof DocItemFolder && ((DocItemFolder) object).isRootFolder();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
+	}
 
 	private String baseName;
 	private String note;
@@ -80,18 +84,13 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 		generatedHelpsets = new Hashtable<HelpSetConfiguration, DRMHelpSet>();
 	}
 
-	/*public DRMHelpSet getNewHelpSet() {
-	    return newHelpSet;
-	}
-
-	public Language getLanguage() 
-	{
-	    return language;
-	}
-
-	public void setLanguage(Language language) {
-	    this.language = language;
-	}*/
+	/*
+	 * public DRMHelpSet getNewHelpSet() { return newHelpSet; }
+	 * 
+	 * public Language getLanguage() { return language; }
+	 * 
+	 * public void setLanguage(Language language) { this.language = language; }
+	 */
 
 	public String getBaseName() {
 		if (baseName == null) {

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBBrowser;
+import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
 import org.openflexo.foundation.FlexoModelObject;
@@ -97,6 +98,13 @@ public abstract class FIBBrowserView<O extends FlexoModelObject> extends Selecti
 		}
 		if (!browser.getRightClickAction().isSet() || !browser.getRightClickAction().isValid()) {
 			browser.setRightClickAction(new DataBinding("controller.rightClick(" + browser.getName() + ".selected,event)"));
+		}
+		for (FIBBrowserElement el : browser.getElements()) {
+			if (el.getDataClass() != null) {
+				if (FlexoModelObject.class.isAssignableFrom(el.getDataClass())) {
+
+				}
+			}
 		}
 	}
 

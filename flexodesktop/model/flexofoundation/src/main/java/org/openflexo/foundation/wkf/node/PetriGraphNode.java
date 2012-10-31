@@ -33,7 +33,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
@@ -116,13 +115,6 @@ public abstract class PetriGraphNode extends Node implements Bindable, Sortable 
 			return getParentPetriGraph().getContainer().getFullyQualifiedName() + "." + formattedString(getNodeName());
 		}
 		return "???";
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		// returned.add(ShowExecutionControlGraphs.actionType);
-		return returned;
 	}
 
 	public FlexoPetriGraph getParentPetriGraph() {

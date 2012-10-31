@@ -24,22 +24,8 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
-import org.openflexo.foundation.ie.action.DecreaseColSpan;
-import org.openflexo.foundation.ie.action.DecreaseRowSpan;
-import org.openflexo.foundation.ie.action.DeleteCol;
-import org.openflexo.foundation.ie.action.DeleteRow;
-import org.openflexo.foundation.ie.action.DropIEElement;
-import org.openflexo.foundation.ie.action.DropPartialComponent;
-import org.openflexo.foundation.ie.action.IEDelete;
-import org.openflexo.foundation.ie.action.IncreaseColSpan;
-import org.openflexo.foundation.ie.action.IncreaseRowSpan;
-import org.openflexo.foundation.ie.action.InsertColAfter;
-import org.openflexo.foundation.ie.action.InsertColBefore;
-import org.openflexo.foundation.ie.action.InsertRowAfter;
-import org.openflexo.foundation.ie.action.InsertRowBefore;
 import org.openflexo.foundation.ie.dm.DisplayNeedsRefresh;
 import org.openflexo.foundation.ie.dm.WidgetRemovedFromSequence;
 import org.openflexo.foundation.ie.util.TextFieldType;
@@ -152,34 +138,13 @@ public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsCon
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(InsertColAfter.actionType);
-		returned.add(InsertColBefore.actionType);
-		returned.add(InsertRowAfter.actionType);
-		returned.add(InsertRowBefore.actionType);
-		returned.add(IncreaseColSpan.actionType);
-		returned.add(DecreaseColSpan.actionType);
-		returned.add(IncreaseRowSpan.actionType);
-		returned.add(DecreaseRowSpan.actionType);
-		returned.add(DeleteRow.actionType);
-		returned.add(DeleteCol.actionType);
-		returned.remove(IEDelete.actionType);
-		returned.add(DropIEElement.actionType);
-		returned.add(DropPartialComponent.actionType);
-		return returned;
-	}
-
-	@Override
 	public boolean isSubsequence() {
 		return getParent() instanceof IESequenceWidget;
 	}
 
 	/*
-	 * public String getLabelForChild(IEWidget widget) { Object o =
-	 * getPrevious(widget); if (o instanceof IELabelWidget) return
-	 * ((IELabelWidget)o).getValue(); else if (o instanceof IEWidget) return
-	 * ((IEWidget)o).lookForLabelInTD(); else return null; }
+	 * public String getLabelForChild(IEWidget widget) { Object o = getPrevious(widget); if (o instanceof IELabelWidget) return
+	 * ((IELabelWidget)o).getValue(); else if (o instanceof IEWidget) return ((IEWidget)o).lookForLabelInTD(); else return null; }
 	 */
 
 	public IEWidget findFirstWidgetOfClass(Class c) {

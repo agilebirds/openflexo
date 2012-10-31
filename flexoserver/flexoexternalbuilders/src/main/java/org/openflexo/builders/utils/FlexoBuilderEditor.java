@@ -150,7 +150,12 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 
 					@Override
 					public void run() {
-						todo.doAction();
+						try {
+							todo.doAction();
+						} catch (Throwable t) {
+							t.printStackTrace();
+							FlexoBuilderEditor.this.externalMainWithProject.handleActionFailed(todo);
+						}
 					}
 				});
 			}

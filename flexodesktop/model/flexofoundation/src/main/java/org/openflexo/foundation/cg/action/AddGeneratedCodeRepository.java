@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
@@ -65,10 +66,15 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 
 		@Override
 		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
-			return ((object != null) && (object.getGeneratedCode() != null));
+			return object != null && object.getGeneratedCode() != null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, GeneratedOutput.class);
+		FlexoModelObject.addActionForClass(actionType, GenerationRepository.class);
+	}
 
 	private GenerationRepository _newGeneratedCodeRepository;
 
@@ -160,7 +166,7 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 					woSymbDir.getFile().mkdirs();
 					webSymbDir.getFile().mkdirs();
 					libSymbDir.getFile().mkdirs();
-					(new File(projectSymbDir.getFile(), "docs")).mkdirs();
+					new File(projectSymbDir.getFile(), "docs").mkdirs();
 				}
 
 			} else if (gc instanceof GeneratedDoc) {

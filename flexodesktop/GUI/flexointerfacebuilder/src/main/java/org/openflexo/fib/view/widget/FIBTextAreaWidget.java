@@ -159,12 +159,7 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	@Override
 	public void updateDataObject(Object aDataObject) {
 		super.updateDataObject(aDataObject);
-		textArea.setEditable(!isReadOnly() && isEditable());
-	}
-
-	private boolean isEditable() {
-		// TODO Auto-generated method stub
-		return false;
+		textArea.setEditable(!isReadOnly());
 	}
 
 	@Override

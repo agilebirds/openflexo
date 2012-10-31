@@ -45,8 +45,9 @@ public class UnwrapRepetition extends FlexoAction {
 
 		@Override
 		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence && ((IESequence) ((IEWidget) object)
-					.getParent()).isRepetition()) || (object instanceof IESequence && ((IESequence) object).isRepetition());
+			return object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence
+					&& ((IESequence) ((IEWidget) object).getParent()).isRepetition() || object instanceof IESequence
+					&& ((IESequence) object).isRepetition();
 		}
 
 		@Override
@@ -55,6 +56,10 @@ public class UnwrapRepetition extends FlexoAction {
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
 
 	UnwrapRepetition(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

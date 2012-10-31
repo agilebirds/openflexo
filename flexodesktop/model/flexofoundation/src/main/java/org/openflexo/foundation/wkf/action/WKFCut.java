@@ -29,6 +29,7 @@ import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFGroup;
+import org.openflexo.foundation.wkf.WKFObject;
 
 public class WKFCut extends FlexoUndoableAction<WKFCut, FlexoModelObject, FlexoModelObject> {
 
@@ -56,6 +57,10 @@ public class WKFCut extends FlexoUndoableAction<WKFCut, FlexoModelObject, FlexoM
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFObject.class);
+	}
 
 	WKFCut(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

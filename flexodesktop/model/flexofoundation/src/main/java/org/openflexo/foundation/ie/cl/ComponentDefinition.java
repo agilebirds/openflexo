@@ -31,7 +31,6 @@ import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingDefinition;
 import org.openflexo.foundation.bindings.BindingModel;
@@ -53,12 +52,6 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
-import org.openflexo.foundation.ie.action.DuplicateComponentAction;
-import org.openflexo.foundation.ie.action.GenerateComponentScreenshot;
-import org.openflexo.foundation.ie.action.LabelizeComponentAction;
-import org.openflexo.foundation.ie.cl.action.AddComponent;
-import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
-import org.openflexo.foundation.ie.cl.action.ShowComponentUsage;
 import org.openflexo.foundation.ie.dm.ComponentDeleteRequest;
 import org.openflexo.foundation.ie.dm.ComponentDeleted;
 import org.openflexo.foundation.ie.dm.ComponentLoaded;
@@ -157,18 +150,6 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 			return _dummyComponentInstance = new DummyComponentInstance(this);
 		}
 		return _dummyComponentInstance;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddComponent.actionType);
-		returned.add(AddComponentFolder.actionType);
-		returned.add(DuplicateComponentAction.actionType);
-		returned.add(LabelizeComponentAction.actionType);
-		returned.add(GenerateComponentScreenshot.actionType);
-		returned.add(ShowComponentUsage.actionType);
-		return returned;
 	}
 
 	@Override
@@ -531,18 +512,11 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	/*
-	 * Commented because bindings are no more stored on the ComponentDefinition
-	public void notifyBindingDefinitionAdded(BindingDefinition bindingDefinition)
-	{
-	    setChanged();
-	    notifyObservers(new BindingAdded(bindingDefinition));
-	}
-
-	public void notifyBindingDefinitionRemoved(BindingDefinition bindingDefinition)
-	{
-	    setChanged();
-	    notifyObservers(new BindingRemoved(bindingDefinition));
-	}
+	 * Commented because bindings are no more stored on the ComponentDefinition public void notifyBindingDefinitionAdded(BindingDefinition
+	 * bindingDefinition) { setChanged(); notifyObservers(new BindingAdded(bindingDefinition)); }
+	 * 
+	 * public void notifyBindingDefinitionRemoved(BindingDefinition bindingDefinition) { setChanged(); notifyObservers(new
+	 * BindingRemoved(bindingDefinition)); }
 	 */
 	private BindingModel _bindingModel = null;
 

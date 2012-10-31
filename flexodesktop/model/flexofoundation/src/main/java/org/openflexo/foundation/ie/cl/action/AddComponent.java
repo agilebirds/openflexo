@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -69,10 +70,17 @@ public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObje
 
 		@Override
 		protected boolean isEnabledForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
-			return (object instanceof FlexoComponentFolder || object instanceof ComponentDefinition || object instanceof FlexoComponentLibrary);
+			return object instanceof FlexoComponentFolder || object instanceof ComponentDefinition
+					|| object instanceof FlexoComponentLibrary;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoComponentLibrary.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoComponentFolder.class);
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+	}
 
 	public enum ComponentType implements StringRepresentable {
 		OPERATION_COMPONENT {
@@ -264,11 +272,11 @@ public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObje
 
 	public FlexoComponentFolder getFolder() {
 		if (_folder == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof ComponentDefinition)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof ComponentDefinition) {
 				_folder = ((ComponentDefinition) getFocusedObject()).getFolder();
-			} else if ((getFocusedObject() != null) && (getFocusedObject() instanceof FlexoComponentFolder)) {
+			} else if (getFocusedObject() != null && getFocusedObject() instanceof FlexoComponentFolder) {
 				_folder = (FlexoComponentFolder) getFocusedObject();
-			} else if ((getFocusedObject() != null) && (getFocusedObject() instanceof FlexoComponentLibrary)) {
+			} else if (getFocusedObject() != null && getFocusedObject() instanceof FlexoComponentLibrary) {
 				_folder = ((FlexoComponentLibrary) getFocusedObject()).getRootFolder();
 			}
 
