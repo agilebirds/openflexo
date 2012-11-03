@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -37,65 +37,44 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.inspector.HasIcon;
-import org.openflexo.toolbox.ImageIconResource;
-import org.openflexo.xmlcode.XMLSerializable;
 
 import sun.awt.image.ImageRepresentation;
 import sun.awt.image.ToolkitImage;
 
-public abstract class BackgroundStyle extends Observable implements XMLSerializable, Cloneable {
-	private static final Logger logger = Logger.getLogger(BackgroundStyle.class.getPackage().getName());
+public abstract class BackgroundStyleImpl extends Observable implements BackgroundStyle {
+	private static final Logger logger = Logger.getLogger(BackgroundStyleImpl.class.getPackage().getName());
 
 	private transient GraphicalRepresentation graphicalRepresentation;
 
 	private boolean useTransparency = false;
 	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
 
-	public static enum Parameters implements GRParameter {
-		color,
-		color1,
-		color2,
-		direction,
-		textureType,
-		imageFile,
-		deltaX,
-		deltaY,
-		imageBackgroundType,
-		scaleX,
-		scaleY,
-		fitToShape,
-		imageBackgroundColor,
-		transparencyLevel,
-		useTransparency;
+	public static BackgroundStyleImpl makeEmptyBackground() {
+		return new NoneImpl();
 	}
 
-	public static BackgroundStyle makeEmptyBackground() {
-		return new None();
+	public static BackgroundStyleImpl makeColoredBackground(java.awt.Color aColor) {
+		return new ColorImpl(aColor);
 	}
 
-	public static BackgroundStyle makeColoredBackground(java.awt.Color aColor) {
-		return new Color(aColor);
+	public static BackgroundStyleImpl makeColorGradientBackground(java.awt.Color color1, java.awt.Color color2,
+			ColorGradientDirection direction) {
+		return new ColorGradientImpl(color1, color2, direction);
 	}
 
-	public static BackgroundStyle makeColorGradientBackground(java.awt.Color color1, java.awt.Color color2,
-			ColorGradient.ColorGradientDirection direction) {
-		return new ColorGradient(color1, color2, direction);
-	}
-
-	public static BackgroundStyle makeTexturedBackground(Texture.TextureType type, java.awt.Color aColor1, java.awt.Color aColor2) {
-		return new Texture(type, aColor1, aColor2);
+	public static BackgroundStyleImpl makeTexturedBackground(TextureType type, java.awt.Color aColor1, java.awt.Color aColor2) {
+		return new TextureImpl(type, aColor1, aColor2);
 	}
 
 	public static BackgroundImage makeImageBackground(File imageFile) {
-		return new BackgroundImage(imageFile);
+		return new BackgroundImageImpl(imageFile);
 	}
 
 	public static BackgroundImage makeImageBackground(ImageIcon image) {
-		return new BackgroundImage(image);
+		return new BackgroundImageImpl(image);
 	}
 
 	public static BackgroundStyle makeBackground(BackgroundStyleType type) {
@@ -104,19 +83,19 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 		} else if (type == BackgroundStyleType.COLOR) {
 			return makeColoredBackground(java.awt.Color.WHITE);
 		} else if (type == BackgroundStyleType.COLOR_GRADIENT) {
-			return makeColorGradientBackground(java.awt.Color.WHITE, java.awt.Color.BLACK,
-					org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+			return makeColorGradientBackground(java.awt.Color.WHITE, java.awt.Color.BLACK, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		} else if (type == BackgroundStyleType.TEXTURE) {
-			return makeTexturedBackground(org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType.TEXTURE1, java.awt.Color.RED,
-					java.awt.Color.WHITE);
+			return makeTexturedBackground(TextureType.TEXTURE1, java.awt.Color.RED, java.awt.Color.WHITE);
 		} else if (type == BackgroundStyleType.IMAGE) {
 			return makeImageBackground((File) null);
 		}
 		return null;
 	}
 
+	@Override
 	public abstract Paint getPaint(GraphicalRepresentation gr, double scale);
 
+	@Override
 	public abstract BackgroundStyleType getBackgroundStyleType();
 
 	/*public GraphicalRepresentation getGraphicalRepresentation()
@@ -133,11 +112,7 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 	@Override
 	public abstract String toString();
 
-	public static enum BackgroundStyleType {
-		NONE, COLOR, COLOR_GRADIENT, TEXTURE, IMAGE
-	}
-
-	public static class None extends BackgroundStyle {
+	public static class NoneImpl extends BackgroundStyleImpl implements None {
 		@Override
 		public Paint getPaint(GraphicalRepresentation gr, double scale) {
 			return null;
@@ -154,14 +129,14 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 		}
 	}
 
-	public static class Color extends BackgroundStyle {
+	public static class ColorImpl extends BackgroundStyleImpl implements Color {
 		private java.awt.Color color;
 
-		public Color() {
+		public ColorImpl() {
 			color = java.awt.Color.WHITE;
 		}
 
-		public Color(java.awt.Color aColor) {
+		public ColorImpl(java.awt.Color aColor) {
 			color = aColor;
 		}
 
@@ -170,6 +145,7 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			return color;
 		}
 
+		@Override
 		public java.awt.Color getColor() {
 			return color;
 		}
@@ -179,6 +155,7 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			return BackgroundStyleType.COLOR;
 		}
 
+		@Override
 		public void setColor(java.awt.Color aColor) {
 			if (requireChange(this.color, aColor)) {
 				java.awt.Color oldColor = color;
@@ -206,25 +183,20 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 	}
 
-	public static class ColorGradient extends BackgroundStyle {
+	public static class ColorGradientImpl extends BackgroundStyleImpl implements ColorGradient {
 		private java.awt.Color color1;
 		private java.awt.Color color2;
 		private ColorGradientDirection direction;
 
-		public ColorGradient() {
-			this(java.awt.Color.WHITE, java.awt.Color.BLACK,
-					org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+		public ColorGradientImpl() {
+			this(java.awt.Color.WHITE, java.awt.Color.BLACK, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		}
 
-		public ColorGradient(java.awt.Color aColor1, java.awt.Color aColor2, ColorGradientDirection aDirection) {
+		public ColorGradientImpl(java.awt.Color aColor1, java.awt.Color aColor2, ColorGradientDirection aDirection) {
 			super();
 			this.color1 = aColor1;
 			this.color2 = aColor2;
 			this.direction = aDirection;
-		}
-
-		public static enum ColorGradientDirection {
-			NORTH_SOUTH, WEST_EAST, SOUTH_EAST_NORTH_WEST, SOUTH_WEST_NORTH_EAST
 		}
 
 		@Override
@@ -250,10 +222,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			return BackgroundStyleType.COLOR_GRADIENT;
 		}
 
+		@Override
 		public java.awt.Color getColor1() {
 			return color1;
 		}
 
+		@Override
 		public void setColor1(java.awt.Color aColor) {
 			if (requireChange(this.color1, aColor)) {
 				java.awt.Color oldColor = color1;
@@ -263,10 +237,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public java.awt.Color getColor2() {
 			return color2;
 		}
 
+		@Override
 		public void setColor2(java.awt.Color aColor) {
 			if (requireChange(this.color2, aColor)) {
 				java.awt.Color oldColor = color2;
@@ -276,10 +252,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public ColorGradientDirection getDirection() {
 			return direction;
 		}
 
+		@Override
 		public void setDirection(ColorGradientDirection aDirection) {
 			if (requireChange(this.direction, aDirection)) {
 				ColorGradientDirection oldTexture = direction;
@@ -307,18 +285,18 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 	}
 
-	public static class Texture extends BackgroundStyle {
+	public static class TextureImpl extends BackgroundStyleImpl implements Texture {
 		private TextureType textureType;
 		private java.awt.Color color1;
 		private java.awt.Color color2;
 		private BufferedImage coloredTexture;
 		private ToolkitImage coloredImage;
 
-		public Texture() {
+		public TextureImpl() {
 			this(TextureType.TEXTURE1, java.awt.Color.WHITE, java.awt.Color.BLACK);
 		}
 
-		public Texture(TextureType aTextureType, java.awt.Color aColor1, java.awt.Color aColor2) {
+		public TextureImpl(TextureType aTextureType, java.awt.Color aColor1, java.awt.Color aColor2) {
 			super();
 			textureType = aTextureType;
 			this.color1 = aColor1;
@@ -419,35 +397,6 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 		}
 
-		public static enum TextureType implements HasIcon {
-			TEXTURE1,
-			TEXTURE2,
-			TEXTURE3,
-			TEXTURE4,
-			TEXTURE5,
-			TEXTURE6,
-			TEXTURE7,
-			TEXTURE8,
-			TEXTURE9,
-			TEXTURE10,
-			TEXTURE11,
-			TEXTURE12,
-			TEXTURE13,
-			TEXTURE14,
-			TEXTURE15,
-			TEXTURE16;
-
-			public ImageIcon getImageIcon() {
-				return new ImageIconResource("Motifs/Motif" + (ordinal() + 1) + ".gif");
-			}
-
-			@Override
-			public ImageIcon getIcon() {
-				return getImageIcon();
-			}
-
-		}
-
 		@Override
 		public Paint getPaint(GraphicalRepresentation gr, double scale) {
 			return new TexturePaint(getColoredTexture(), new Rectangle(0, 0, getColoredTexture().getWidth(), getColoredTexture()
@@ -459,10 +408,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			return BackgroundStyleType.TEXTURE;
 		}
 
+		@Override
 		public TextureType getTextureType() {
 			return textureType;
 		}
 
+		@Override
 		public void setTextureType(TextureType aTextureType) {
 			if (requireChange(this.textureType, aTextureType)) {
 				TextureType oldTexture = textureType;
@@ -473,10 +424,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public java.awt.Color getColor1() {
 			return color1;
 		}
 
+		@Override
 		public void setColor1(java.awt.Color aColor) {
 			if (requireChange(this.color1, aColor)) {
 				java.awt.Color oldColor = color1;
@@ -487,10 +440,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public java.awt.Color getColor2() {
 			return color2;
 		}
 
+		@Override
 		public void setColor2(java.awt.Color aColor) {
 			if (requireChange(this.color2, aColor)) {
 				java.awt.Color oldColor = color2;
@@ -518,20 +473,20 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 		}
 	}
 
-	public static class BackgroundImage extends BackgroundStyle {
+	public static class BackgroundImageImpl extends BackgroundStyleImpl implements BackgroundImage {
 		private File imageFile;
 		private Image image;
 
-		public BackgroundImage() {
+		public BackgroundImageImpl() {
 			this((File) null);
 		}
 
-		public BackgroundImage(File imageFile) {
+		public BackgroundImageImpl(File imageFile) {
 			super();
 			setImageFile(imageFile);
 		}
 
-		public BackgroundImage(ImageIcon image) {
+		public BackgroundImageImpl(ImageIcon image) {
 			super();
 			this.image = image.getImage();
 		}
@@ -546,16 +501,18 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			return BackgroundStyleType.IMAGE;
 		}
 
+		@Override
 		public File getImageFile() {
 			return imageFile;
 		}
 
+		@Override
 		public void setImageFile(File anImageFile) {
 			if (requireChange(this.imageFile, anImageFile)) {
 				File oldFile = imageFile;
 				imageFile = anImageFile;
 				if (anImageFile != null && anImageFile.exists()) {
-					image = (new ImageIcon(anImageFile.getAbsolutePath())).getImage();
+					image = new ImageIcon(anImageFile.getAbsolutePath()).getImage();
 				} else {
 					image = null;
 				}
@@ -576,14 +533,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 		private java.awt.Color imageBackgroundColor = java.awt.Color.WHITE;
 		private boolean fitToShape = false;
 
-		public static enum ImageBackgroundType {
-			OPAQUE, TRANSPARENT
-		}
-
+		@Override
 		public java.awt.Color getImageBackgroundColor() {
 			return imageBackgroundColor;
 		}
 
+		@Override
 		public void setImageBackgroundColor(java.awt.Color aColor) {
 			if (requireChange(this.imageBackgroundColor, aColor)) {
 				java.awt.Color oldColor = imageBackgroundColor;
@@ -593,10 +548,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public double getDeltaX() {
 			return deltaX;
 		}
 
+		@Override
 		public void setDeltaX(double aDeltaX) {
 			if (requireChange(this.deltaX, aDeltaX)) {
 				double oldDeltaX = this.deltaX;
@@ -606,10 +563,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public double getDeltaY() {
 			return deltaY;
 		}
 
+		@Override
 		public void setDeltaY(double aDeltaY) {
 			if (requireChange(this.deltaY, aDeltaY)) {
 				double oldDeltaY = this.deltaY;
@@ -619,10 +578,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public ImageBackgroundType getImageBackgroundType() {
 			return imageBackgroundType;
 		}
 
+		@Override
 		public void setImageBackgroundType(ImageBackgroundType anImageBackgroundType) {
 			if (requireChange(this.imageBackgroundType, anImageBackgroundType)) {
 				ImageBackgroundType oldImageBackgroundType = this.imageBackgroundType;
@@ -632,10 +593,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public double getScaleX() {
 			return scaleX;
 		}
 
+		@Override
 		public void setScaleX(double aScaleX) {
 			if (requireChange(this.scaleX, aScaleX)) {
 				double oldScaleX = this.scaleX;
@@ -652,10 +615,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public double getScaleY() {
 			return scaleY;
 		}
 
+		@Override
 		public void setScaleY(double aScaleY) {
 			if (requireChange(this.scaleY, aScaleY)) {
 				double oldScaleY = this.scaleY;
@@ -672,10 +637,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			}
 		}
 
+		@Override
 		public boolean getFitToShape() {
 			return fitToShape;
 		}
 
+		@Override
 		public void setFitToShape(boolean aFlag) {
 			if (requireChange(this.fitToShape, aFlag)) {
 				boolean oldValue = fitToShape;
@@ -703,10 +670,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 	}
 
+	@Override
 	public float getTransparencyLevel() {
 		return transparencyLevel;
 	}
 
+	@Override
 	public void setTransparencyLevel(float aLevel) {
 		if (requireChange(this.transparencyLevel, aLevel)) {
 			float oldValue = transparencyLevel;
@@ -716,10 +685,12 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 		}
 	}
 
+	@Override
 	public boolean getUseTransparency() {
 		return useTransparency;
 	}
 
+	@Override
 	public void setUseTransparency(boolean aFlag) {
 		if (requireChange(this.useTransparency, aFlag)) {
 			boolean oldValue = useTransparency;
@@ -730,9 +701,9 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 	}
 
 	@Override
-	public BackgroundStyle clone() {
+	public BackgroundStyleImpl clone() {
 		try {
-			BackgroundStyle returned = (BackgroundStyle) super.clone();
+			BackgroundStyleImpl returned = (BackgroundStyleImpl) super.clone();
 			returned.graphicalRepresentation = null;
 			return returned;
 		} catch (CloneNotSupportedException e) {

@@ -45,8 +45,8 @@ public class EditionPatternPreviewShemaGR extends DrawingGraphicalRepresentation
 	public EditionPatternPreviewShemaGR(EditionPatternPreviewRepresentation aDrawing) {
 		super(aDrawing);
 
-		setWidth(WIDTH);
-		setHeight(HEIGHT);
+		setWidth(PREVIEW_DEFAULT_WIDTH);
+		setHeight(PREVIEW_DEFAULT_HEIGHT);
 		setBackgroundColor(BACKGROUND_COLOR);
 		setDrawWorkingArea(false);
 

@@ -21,7 +21,7 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.wkf.WKFPreferences;
@@ -64,7 +64,7 @@ public abstract class AbstractOperationNodeGR extends FlexoNodeGR<OperationNode>
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getOperationFont(WKFPreferences.getOperationNodeFont()).getFont() : WKFPreferences
 						.getOperationNodeFont().getFont()));
 	}

@@ -22,14 +22,15 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle.BackgroundImage;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -69,10 +70,10 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 			activityNode.getExecutionPetriGraph().addObserver(this);
 		}
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.2);
 
-		background = BackgroundStyle.makeImageBackground(WKFIconLibrary.SELF_EXECUTABLE_IMAGE);
+		background = BackgroundStyleImpl.makeImageBackground(WKFIconLibrary.SELF_EXECUTABLE_IMAGE);
 		background.setImageBackgroundType(ImageBackgroundType.OPAQUE);
 		background.setImageBackgroundColor(getMainBgColor());
 		background.setScaleX(1);

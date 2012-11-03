@@ -20,9 +20,20 @@
 package org.openflexo.fge.drawingeditor;
 
 import java.io.File;
+import java.util.Vector;
 
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PastingPoint;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(MyDrawingImpl.class)
@@ -55,5 +66,25 @@ public interface MyDrawing extends MyDrawingElement<MyDrawing, MyDrawingGraphica
 	public DrawingEditorFactory getFactory();
 
 	public void setFactory(DrawingEditorFactory factory);
+
+	@Override
+	@Getter(value = CHILDS, cardinality = Cardinality.LIST)
+	@XMLElement(primary = true)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
+	public Vector<MyDrawingElement/*<?, ?>*/> getChilds();
+
+	@Override
+	@Setter(CHILDS)
+	public void setChilds(Vector<MyDrawingElement/*<?, ?>*/> someChilds);
+
+	@Override
+	@Adder(CHILDS)
+	@PastingPoint
+	public void addToChilds(MyDrawingElement/*<?, ?>*/aChild);
+
+	@Override
+	@Remover(CHILDS)
+	public void removeFromChilds(MyDrawingElement/*<?, ?>*/aChild);
 
 }

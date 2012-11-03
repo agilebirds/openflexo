@@ -35,4 +35,8 @@ public class FGEModelFactory extends ModelFactory {
 	public XMLDeserializer getDeserializer() {
 		return deserializer;
 	}
+
+	public ForegroundStyle makeNewForegroundStyle() {
+		return newInstance(ForegroundStyle.class);
+	}
 }

@@ -24,21 +24,24 @@ import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -75,9 +78,9 @@ public class ResourceGR extends ShapeGraphicalRepresentationImpl<FlexoResource<?
 
 		setDecorationPainter(new ResourceDecorationPainter(aResource));
 
-		resourceTypeStyle = TextStyle.makeTextStyle(aResource.getResourceType().getMainColor().darker(), new Font("SansSerif", Font.BOLD,
-				10));
-		lastUpdateStyle = TextStyle.makeTextStyle(Color.GRAY, new Font("SansSerif", Font.ITALIC, 10));
+		resourceTypeStyle = TextStyleImpl.makeTextStyle(aResource.getResourceType().getMainColor().darker(), new Font("SansSerif",
+				Font.BOLD, 10));
+		lastUpdateStyle = TextStyleImpl.makeTextStyle(Color.GRAY, new Font("SansSerif", Font.ITALIC, 10));
 
 		setShapePainter(new ShapePainter() {
 			@Override
@@ -93,9 +96,9 @@ public class ResourceGR extends ShapeGraphicalRepresentationImpl<FlexoResource<?
 	}
 
 	private void updateStyles() {
-		foreground = ForegroundStyle.makeStyle(getResource().getResourceType().getMainColor());
+		foreground = ForegroundStyleImpl.makeStyle(getResource().getResourceType().getMainColor());
 		foreground.setLineWidth(0.5);
-		background = BackgroundStyle.makeColorGradientBackground(getResource().getResourceType().getMainColor(), Color.WHITE,
+		background = BackgroundStyleImpl.makeColorGradientBackground(getResource().getResourceType().getMainColor(), Color.WHITE,
 				ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
 		setForeground(foreground);
 		setBackground(background);
@@ -116,12 +119,12 @@ public class ResourceGR extends ShapeGraphicalRepresentationImpl<FlexoResource<?
 
 			updateDecorationBackground();
 
-			decorationForeground = ForegroundStyle.makeStyle(resource.getResourceType().getMainColor());
+			decorationForeground = ForegroundStyleImpl.makeStyle(resource.getResourceType().getMainColor());
 			decorationForeground.setLineWidth(1);
 		}
 
 		private void updateDecorationBackground() {
-			decorationBackground = BackgroundStyle.makeImageBackground(IconLibrary.getIconForResourceType(resource.getResourceType()));
+			decorationBackground = BackgroundStyleImpl.makeImageBackground(IconLibrary.getIconForResourceType(resource.getResourceType()));
 			decorationBackground.setImageBackgroundType(ImageBackgroundType.OPAQUE);
 			decorationBackground.setImageBackgroundColor(Color.WHITE);
 			decorationBackground.setDeltaX(8);

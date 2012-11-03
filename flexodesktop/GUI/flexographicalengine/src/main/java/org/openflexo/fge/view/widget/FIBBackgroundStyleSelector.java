@@ -33,20 +33,21 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -225,19 +226,19 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			switch (backgroundStyleType) {
 			case NONE:
-				backgroundStyle = BackgroundStyle.makeEmptyBackground();
+				backgroundStyle = BackgroundStyleImpl.makeEmptyBackground();
 				break;
 			case COLOR:
-				backgroundStyle = BackgroundStyle.makeColoredBackground(color1);
+				backgroundStyle = BackgroundStyleImpl.makeColoredBackground(color1);
 				break;
 			case COLOR_GRADIENT:
-				backgroundStyle = BackgroundStyle.makeColorGradientBackground(color1, color2, gradientDirection);
+				backgroundStyle = BackgroundStyleImpl.makeColorGradientBackground(color1, color2, gradientDirection);
 				break;
 			case TEXTURE:
-				backgroundStyle = BackgroundStyle.makeTexturedBackground(textureType, color1, color2);
+				backgroundStyle = BackgroundStyleImpl.makeTexturedBackground(textureType, color1, color2);
 				break;
 			case IMAGE:
-				backgroundStyle = BackgroundStyle.makeImageBackground(imageFile);
+				backgroundStyle = BackgroundStyleImpl.makeImageBackground(imageFile);
 				break;
 			default:
 				break;
@@ -452,9 +453,9 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			rectGR.setHeight(20);
 			rectGR.setX(0);
 			rectGR.setY(0);
-			rectGR.setForeground(ForegroundStyle.makeNone());
-			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : BackgroundStyle.makeColoredBackground(DEFAULT_COLOR1));
-			rectGR.setShadowStyle(ShadowStyle.makeNone());
+			rectGR.setForeground(ForegroundStyleImpl.makeNone());
+			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : BackgroundStyleImpl.makeColoredBackground(DEFAULT_COLOR1));
+			rectGR.setShadowStyle(ShadowStyleImpl.makeNone());
 			rectGR.setIsSelectable(false);
 			rectGR.setIsFocusable(false);
 			rectGR.setIsReadOnly(true);
@@ -477,7 +478,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		}
 
 		protected void update() {
-			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : BackgroundStyle.makeColoredBackground(DEFAULT_COLOR1));
+			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : BackgroundStyleImpl.makeColoredBackground(DEFAULT_COLOR1));
 			// We do it later because producer of texture may not has finished its job
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override

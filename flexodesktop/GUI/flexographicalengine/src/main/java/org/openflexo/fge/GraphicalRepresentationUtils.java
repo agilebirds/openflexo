@@ -15,7 +15,6 @@ import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class GraphicalRepresentationUtils {
 

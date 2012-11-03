@@ -1389,6 +1389,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					}
 				});
 		if (pastingPointProperties.size() == 0) {
+			System.out.println("propertiesAssignableFrom=" + propertiesAssignableFrom);
+			System.out.println("pastingPointProperties=" + pastingPointProperties);
 			throw new ClipboardOperationException("Cannot paste here: no pasting point found");
 		} else if (pastingPointProperties.size() > 1) {
 			throw new ClipboardOperationException("Ambiguous pasting operations: several properties are compatible for pasting type "

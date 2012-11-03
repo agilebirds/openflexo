@@ -21,6 +21,8 @@ package org.openflexo.fge.geomedit.edition;
 
 import java.awt.Color;
 
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.FGECircle;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
@@ -31,8 +33,6 @@ import org.openflexo.fge.geomedit.construction.CircleConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.TangentLineWithCircleAndPointConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 
 public class CreateTangentLineWithCircleAndPoint extends Edition {
 
@@ -70,12 +70,12 @@ public class CreateTangentLineWithCircleAndPoint extends Edition {
 			FGEUnionArea tangentPoints = FGECircle.getTangentsPointsToCircle(circle, lastMouseLocation);
 
 			if (tangentPoints.isUnionOfPoints()) {
-				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
+				graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
 				FGELine line1 = new FGELine(lastMouseLocation, (FGEPoint) tangentPoints.getObjects().firstElement());
 				FGELine line2 = new FGELine(lastMouseLocation, (FGEPoint) tangentPoints.getObjects().elementAt(1));
 				line1.paint(graphics);
 				line2.paint(graphics);
-				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1));
+				graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.RED, 1));
 				tangentPoints.getObjects().firstElement().paint(graphics);
 				tangentPoints.getObjects().elementAt(1).paint(graphics);
 			}
@@ -84,12 +84,12 @@ public class CreateTangentLineWithCircleAndPoint extends Edition {
 			FGEPoint point = ((ObtainPoint) inputs.get(1)).getInputData();
 			FGEUnionArea tangentPoints = FGECircle.getTangentsPointsToCircle(circle, point);
 			if (tangentPoints.isUnionOfPoints()) {
-				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
+				graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
 				FGELine line1 = new FGELine(point, (FGEPoint) tangentPoints.getObjects().firstElement());
 				FGELine line2 = new FGELine(point, (FGEPoint) tangentPoints.getObjects().elementAt(1));
 				line1.paint(graphics);
 				line2.paint(graphics);
-				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1));
+				graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.RED, 1));
 				tangentPoints.getObjects().firstElement().paint(graphics);
 				tangentPoints.getObjects().elementAt(1).paint(graphics);
 				(new FGELine(point, tangentPoints.getNearestPoint(lastMouseLocation))).paint(graphics);

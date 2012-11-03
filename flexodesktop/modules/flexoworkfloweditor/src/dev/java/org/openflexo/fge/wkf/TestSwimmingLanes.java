@@ -395,7 +395,7 @@ public class TestSwimmingLanes {
 				ForegroundStyle foreground = ForegroundStyle.makeColoredStyle(Color.BLACK);
 				foreground.setLineWidth(0.2);
 				gr.setForeground(foreground);
-				gr.setBackground(BackgroundStyle.makeColorGradientBackground(new Color(230,230,230), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST));
+				gr.setBackground(BackgroundStyleImpl.makeColorGradientBackground(new Color(230,230,230), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST));
 				gr.setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(10,10,10,10));
 			}
 
@@ -462,7 +462,7 @@ public class TestSwimmingLanes {
 				gr.setHeight(100);
 				gr.setX(300);
 				gr.setY(300);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.LIGHT_GRAY));
+				gr.setBackground(BackgroundStyleImpl.makeColoredBackground(Color.LIGHT_GRAY));
 				list.add(operation1);
 				list.add(operation2);
 			}
@@ -492,7 +492,7 @@ public class TestSwimmingLanes {
 					gr.setHeight(200);
 					gr.setX(30);
 					gr.setY(300);
-					gr.setBackground(BackgroundStyle.makeColoredBackground(Color.ORANGE));
+					gr.setBackground(BackgroundStyleImpl.makeColoredBackground(Color.ORANGE));
 					gr.setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(20,20,20,20));
 				}
 

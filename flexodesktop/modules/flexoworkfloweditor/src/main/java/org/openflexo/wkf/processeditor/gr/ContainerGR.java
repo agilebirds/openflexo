@@ -30,20 +30,22 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.CapStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.JoinStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
@@ -109,18 +111,18 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 				Rectangle closingBoxRect = new Rectangle((int) g.getWidth() - 20, 5, 15, 15);
 				int crossBorder = 4;
 
-				g.useBackgroundStyle(BackgroundStyle.makeColoredBackground(Color.WHITE));
+				g.useBackgroundStyle(BackgroundStyleImpl.makeColoredBackground(Color.WHITE));
 				g.fillRoundRect(closingBoxRect.x, closingBoxRect.y, closingBoxRect.width, closingBoxRect.height, 10, 10);
 				g.useForegroundStyle(closingBoxForeground);
 				g.drawRoundRect(closingBoxRect.x, closingBoxRect.y, closingBoxRect.width, closingBoxRect.height, 10, 10);
-				g.useForegroundStyle(ForegroundStyle.makeStyle(mainColor, 2.0f, JoinStyle.JOIN_MITER, CapStyle.CAP_ROUND,
+				g.useForegroundStyle(ForegroundStyleImpl.makeStyle(mainColor, 2.0f, JoinStyle.JOIN_MITER, CapStyle.CAP_ROUND,
 						DashStyle.PLAIN_STROKE));
 				g.drawLine(closingBoxRect.x + crossBorder, closingBoxRect.y + crossBorder, closingBoxRect.x + closingBoxRect.width
 						- crossBorder, closingBoxRect.y + closingBoxRect.height - crossBorder);
 				g.drawLine(closingBoxRect.x + closingBoxRect.width - crossBorder, closingBoxRect.y + crossBorder, closingBoxRect.x
 						+ crossBorder, closingBoxRect.y + closingBoxRect.height - crossBorder);
 
-				g.useTextStyle(TextStyle.makeTextStyle(Color.WHITE, FGEConstants.DEFAULT_TEXT_FONT));
+				g.useTextStyle(TextStyleImpl.makeTextStyle(Color.WHITE, FGEConstants.DEFAULT_TEXT_FONT));
 				g.drawString(getLabel(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT, HorizontalTextAlignment.CENTER);
 			};
 
@@ -130,8 +132,8 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 			}
 		});
 
-		setForeground(ForegroundStyle.makeNone());
-		setBackground(BackgroundStyle.makeEmptyBackground());
+		setForeground(ForegroundStyleImpl.makeNone());
+		setBackground(BackgroundStyleImpl.makeEmptyBackground());
 
 		addToMouseDragControls(new ContainerCloser(), true);
 		if (object instanceof FlexoPetriGraph && ((FlexoPetriGraph) object).getContainer() != null) {
@@ -173,20 +175,20 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 	protected void updateDecorationBackground() {
 		if (getWorkflow() != null && getWorkflow().getUseTransparency(WKFPreferences.getUseTransparency()) || getWorkflow() == null
 				&& WKFPreferences.getUseTransparency()) {
-			decorationBackground = BackgroundStyle.makeColorGradientBackground(backColor, Color.WHITE,
+			decorationBackground = BackgroundStyleImpl.makeColorGradientBackground(backColor, Color.WHITE,
 					ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 			decorationBackground.setUseTransparency(true);
 			decorationBackground.setTransparencyLevel(0.9f);
 		} else {
-			decorationBackground = BackgroundStyle.makeColoredBackground(backColor);
+			decorationBackground = BackgroundStyleImpl.makeColoredBackground(backColor);
 		}
 	}
 
 	protected void updateDecorationForeground() {
-		decorationForeground = ForegroundStyle.makeStyle(mainColor);
+		decorationForeground = ForegroundStyleImpl.makeStyle(mainColor);
 		decorationForeground.setLineWidth(0.2);
 
-		closingBoxForeground = ForegroundStyle.makeStyle(mainColor);
+		closingBoxForeground = ForegroundStyleImpl.makeStyle(mainColor);
 		closingBoxForeground.setLineWidth(0.2);
 	}
 

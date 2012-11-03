@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GeometricGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -39,7 +40,6 @@ import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 
 public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Observable implements Observer {
 
@@ -161,7 +161,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		}
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
-		graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.GREEN));
+		graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.GREEN));
 
 		currentEditedShapeGR.paint(graphics.getGraphics(), getController());
 

@@ -46,7 +46,6 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ObjectHasMoved;
@@ -123,7 +122,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		setConnectorType(aConnectorType);
 		graphics = new FGEConnectorGraphics(this);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
 

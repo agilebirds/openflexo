@@ -34,10 +34,19 @@ import java.util.Vector;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.CapStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.JoinStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
@@ -48,15 +57,8 @@ import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
@@ -106,18 +108,18 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 				Rectangle closingBoxRect = new Rectangle(5, 5, 15, 15);
 				int crossBorder = 4;
 
-				g.useBackgroundStyle(BackgroundStyle.makeColoredBackground(Color.WHITE));
+				g.useBackgroundStyle(BackgroundStyleImpl.makeColoredBackground(Color.WHITE));
 				g.fillRoundRect(closingBoxRect.x, closingBoxRect.y, closingBoxRect.width, closingBoxRect.height, 10, 10);
 				g.useForegroundStyle(closingBoxForeground);
 				g.drawRoundRect(closingBoxRect.x, closingBoxRect.y, closingBoxRect.width, closingBoxRect.height, 10, 10);
-				g.useForegroundStyle(ForegroundStyle.makeStyle(mainColor, 2.0f, JoinStyle.JOIN_MITER, CapStyle.CAP_ROUND,
+				g.useForegroundStyle(ForegroundStyleImpl.makeStyle(mainColor, 2.0f, JoinStyle.JOIN_MITER, CapStyle.CAP_ROUND,
 						DashStyle.PLAIN_STROKE));
 				g.drawLine(closingBoxRect.x + crossBorder, closingBoxRect.y + crossBorder, closingBoxRect.x + closingBoxRect.width
 						- crossBorder, closingBoxRect.y + closingBoxRect.height - crossBorder);
 				g.drawLine(closingBoxRect.x + closingBoxRect.width - crossBorder, closingBoxRect.y + crossBorder, closingBoxRect.x
 						+ crossBorder, closingBoxRect.y + closingBoxRect.height - crossBorder);
 
-				g.useTextStyle(TextStyle.makeTextStyle(Color.WHITE, FGEConstants.DEFAULT_TEXT_FONT));
+				g.useTextStyle(TextStyleImpl.makeTextStyle(Color.WHITE, FGEConstants.DEFAULT_TEXT_FONT));
 				g.drawString(getLabel(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT, HorizontalTextAlignment.CENTER);
 
 				/*g.drawImage(IconLibrary.TRIANGLE_UP.getImage(), new FGEPoint(controls.upRect.getX()*g.getScale(),controls.upRect.getY()*g.getScale()));
@@ -132,8 +134,8 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 			}
 		});
 
-		setForeground(ForegroundStyle.makeNone());
-		setBackground(BackgroundStyle.makeEmptyBackground());
+		setForeground(ForegroundStyleImpl.makeNone());
+		setBackground(BackgroundStyleImpl.makeEmptyBackground());
 
 		portRegistery.addObserver(this);
 
@@ -281,21 +283,21 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	protected void updateDecorationBackground() {
 		backColor = OPERATION_PG_BACK_COLOR;
 		if (getModel().getWorkflow().getUseTransparency(WKFPreferences.getUseTransparency())) {
-			decorationBackground = BackgroundStyle.makeColorGradientBackground(backColor, Color.WHITE,
+			decorationBackground = BackgroundStyleImpl.makeColorGradientBackground(backColor, Color.WHITE,
 					ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 			decorationBackground.setUseTransparency(true);
 			decorationBackground.setTransparencyLevel(0.9f);
 		} else {
-			decorationBackground = BackgroundStyle.makeColoredBackground(backColor);
+			decorationBackground = BackgroundStyleImpl.makeColoredBackground(backColor);
 		}
 	}
 
 	protected void updateDecorationForeground() {
 		mainColor = PORT_REGISTRY_PG_COLOR;
-		decorationForeground = ForegroundStyle.makeStyle(mainColor);
+		decorationForeground = ForegroundStyleImpl.makeStyle(mainColor);
 		decorationForeground.setLineWidth(0.2);
 
-		closingBoxForeground = ForegroundStyle.makeStyle(mainColor);
+		closingBoxForeground = ForegroundStyleImpl.makeStyle(mainColor);
 		closingBoxForeground.setLineWidth(0.2);
 	}
 
@@ -402,7 +404,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 			@Override
 			public Rectangle paint(FGEGraphics drawingGraphics) {
 				Graphics2D oldGraphics = drawingGraphics.cloneGraphics();
-				drawingGraphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.4f, DashStyle.BIG_DASHES));
+				drawingGraphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 0.4f, DashStyle.BIG_DASHES));
 				AffineTransform at = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(PortRegisteryGR.this,
 						drawingGraphics.getGraphicalRepresentation());
 				getArea().transform(at).paint(drawingGraphics);

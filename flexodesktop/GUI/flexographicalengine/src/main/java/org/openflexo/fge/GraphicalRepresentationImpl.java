@@ -52,7 +52,6 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.DrawUtils;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
 import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
@@ -81,7 +80,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 
 	protected int layer;
 
-	private TextStyle textStyle = TextStyle.makeDefault();
+	private TextStyle textStyle = TextStyleImpl.makeDefault();
 	private String text;
 	private boolean multilineAllowed = false;
 	private boolean lineWrap = false;
@@ -138,7 +137,7 @@ public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableO
 		super();
 		drawable = aDrawable;
 		drawing = aDrawing;
-		textStyle = TextStyle.makeDefault();
+		textStyle = TextStyleImpl.makeDefault();
 		// textStyle.setGraphicalRepresentation(this);
 		if (textStyle != null) {
 			textStyle.addObserver(this);

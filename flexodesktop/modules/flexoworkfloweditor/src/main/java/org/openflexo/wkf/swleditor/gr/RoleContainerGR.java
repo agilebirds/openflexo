@@ -34,11 +34,20 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
@@ -49,15 +58,8 @@ import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.ConvertedIntoLocalObject;
@@ -109,7 +111,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		backColor = new Color ((255*3+mainColor.getRed())/4,(255*3+mainColor.getGreen())/4,(255*3+mainColor.getBlue())/4);
 
 		setIsFloatingLabel(true);
-		setTextStyle(TextStyle.makeTextStyle(mainColor,new Font("SansSerif", Font.BOLD, 12)));
+		setTextStyle(TextStyleImpl.makeTextStyle(mainColor,new Font("SansSerif", Font.BOLD, 12)));
 
 		updatePropertiesFromWKFPreferences();*/
 		setIsLabelEditable(!role.isImported());
@@ -132,14 +134,14 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				labelBoundsRect.x = labelBoundsRect.x - (int) getX();
 				labelBoundsRect.y = labelBoundsRect.y - (int) getY();
 
-				g.useBackgroundStyle(BackgroundStyle.makeColoredBackground(Color.WHITE));
+				g.useBackgroundStyle(BackgroundStyleImpl.makeColoredBackground(Color.WHITE));
 				g.fillRoundRect(labelBoundsRect.x, labelBoundsRect.y, labelBoundsRect.width, labelBoundsRect.height, 10, 10);
 				g.useForegroundStyle(decorationForeground);
 				g.drawRoundRect(labelBoundsRect.x, labelBoundsRect.y, labelBoundsRect.width, labelBoundsRect.height, 10, 10);
 
 				Color bestColor = FGEUtils.chooseBestColor(mainColor, Color.WHITE, mainColor, FGEUtils.emphasizedColor(mainColor),
 						emphasizedMainColor);
-				g.useTextStyle(TextStyle.makeTextStyle(bestColor, FGEConstants.DEFAULT_TEXT_FONT));
+				g.useTextStyle(TextStyleImpl.makeTextStyle(bestColor, FGEConstants.DEFAULT_TEXT_FONT));
 				g.drawString(getRole().getName(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT,
 						HorizontalTextAlignment.CENTER);
 
@@ -156,8 +158,8 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 			}
 		});
 
-		setForeground(ForegroundStyle.makeNone());
-		setBackground(BackgroundStyle.makeEmptyBackground());
+		setForeground(ForegroundStyleImpl.makeNone());
+		setBackground(BackgroundStyleImpl.makeEmptyBackground());
 
 		role.addObserver(this);
 
@@ -252,19 +254,19 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		super.updatePropertiesFromWKFPreferences();
 
 		setIsFloatingLabel(true);
-		setTextStyle(TextStyle.makeTextStyle(emphasizedMainColor, new Font("SansSerif", Font.BOLD, 12)));
+		setTextStyle(TextStyleImpl.makeTextStyle(emphasizedMainColor, new Font("SansSerif", Font.BOLD, 12)));
 
 		// Those are the styles used by border painter (not the one used for shape itself, which are empty)
 
-		background = BackgroundStyle.makeColorGradientBackground(backColor, Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+		background = BackgroundStyleImpl.makeColorGradientBackground(backColor, Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 
-		decorationForeground = ForegroundStyle.makeStyle(mainColor);
+		decorationForeground = ForegroundStyleImpl.makeStyle(mainColor);
 		decorationForeground.setLineWidth(0.2);
 
 		if (getRole().getIsSystemRole()) {
-			decorationBackground = BackgroundStyle.makeImageBackground(SYSTEM_ROLE_ICON);
+			decorationBackground = BackgroundStyleImpl.makeImageBackground(SYSTEM_ROLE_ICON);
 		} else {
-			decorationBackground = BackgroundStyle.makeImageBackground(USER_ROLE_ICON);
+			decorationBackground = BackgroundStyleImpl.makeImageBackground(USER_ROLE_ICON);
 		}
 
 		decorationBackground.setImageBackgroundType(ImageBackgroundType.OPAQUE);
@@ -499,7 +501,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 			@Override
 			public Rectangle paint(FGEGraphics drawingGraphics) {
 				Graphics2D oldGraphics = drawingGraphics.cloneGraphics();
-				drawingGraphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.4f, DashStyle.BIG_DASHES));
+				drawingGraphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 0.4f, DashStyle.BIG_DASHES));
 				AffineTransform at = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(RoleContainerGR.this,
 						drawingGraphics.getGraphicalRepresentation());
 				getArea().transform(at).paint(drawingGraphics);

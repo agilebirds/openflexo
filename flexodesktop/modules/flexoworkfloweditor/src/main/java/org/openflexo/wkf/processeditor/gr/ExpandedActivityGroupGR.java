@@ -22,8 +22,8 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Level;
 
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.ActivityGroup;
@@ -63,7 +63,7 @@ public class ExpandedActivityGroupGR extends ContainerGR<ActivityGroup> {
 	@Override
 	protected void updateDecorationForeground() {
 		super.updateDecorationForeground();
-		decorationForeground = ForegroundStyle.makeStyle(mainColor);
+		decorationForeground = ForegroundStyleImpl.makeStyle(mainColor);
 		decorationForeground.setLineWidth(1);
 		decorationForeground.setDashStyle(DashStyle.BIG_DASHES);
 	}

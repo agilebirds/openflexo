@@ -36,7 +36,7 @@ public class BackgroundStylePanelEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			public Object[] getData()
 			{
-				BackgroundStyleFactory bsFactory = new BackgroundStyleFactory(BackgroundStyle.makeEmptyBackground());//BackgroundStyle.makeColoredBackground(Color.BLUE);
+				BackgroundStyleFactory bsFactory = new BackgroundStyleFactory(BackgroundStyleImpl.makeEmptyBackground());//BackgroundStyleImpl.makeColoredBackground(Color.BLUE);
 				return FIBAbstractEditor.makeArray(bsFactory);
 			}
 			public File getFIBFile() {

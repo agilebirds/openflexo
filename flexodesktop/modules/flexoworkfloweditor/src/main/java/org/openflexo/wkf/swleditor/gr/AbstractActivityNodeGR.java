@@ -25,10 +25,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -62,7 +62,7 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont() : WKFPreferences
 						.getActivityNodeFont().getFont()));
 		setIsMultilineAllowed(true);

@@ -23,11 +23,11 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -180,7 +180,7 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 				return;
 			}
 			// Uses a gray line
-			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.gray));
+			g.useForegroundStyle(ForegroundStyleImpl.makeStyle(Color.gray));
 
 			// Finds the bottomLeft in the view coordinates (we don't pass the scale here because it will be done by the graphics)
 			Point southWest = convertNormalizedPointToViewCoordinates(getShape().nearestOutlinePoint(bottomLeft), 1);

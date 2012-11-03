@@ -25,11 +25,12 @@ import java.text.SimpleDateFormat;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.rm.view.RMViewerRepresentation.ResourceDependancy;
 
 public class ResourceDependancyGR extends ConnectorGraphicalRepresentationImpl<ResourceDependancy> {
@@ -39,14 +40,14 @@ public class ResourceDependancyGR extends ConnectorGraphicalRepresentationImpl<R
 	public ResourceDependancyGR(ResourceDependancy dependancy, Drawing<?> aDrawing) {
 		super(ConnectorType.LINE, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(dependancy.getR1()),
 				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(dependancy.getR2()), dependancy, aDrawing);
-		foreground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
+		foreground = ForegroundStyleImpl.makeStyle(Color.DARK_GRAY);
 		foreground.setLineWidth(1.6);
 		setForeground(foreground);
 
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
 		setLayer(Math.max(getStartObject().getLayer(), getEndObject().getLayer()) + 1);
 
-		setTextStyle(TextStyle.makeTextStyle(Color.GRAY, new Font("SansSerif", Font.ITALIC, 8)));
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.GRAY, new Font("SansSerif", Font.ITALIC, 8)));
 
 	}
 

@@ -25,9 +25,13 @@ import java.util.logging.Logger;
 import org.jdom2.Verifier;
 import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
@@ -37,8 +41,6 @@ import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.toolbox.ToolBox;
 
@@ -58,7 +60,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentationImpl
 
 		updateStyles();
 
-		propertyNameStyle = TextStyle.makeTextStyle(Color.DARK_GRAY, ATTRIBUTE_FONT);
+		propertyNameStyle = TextStyleImpl.makeTextStyle(Color.DARK_GRAY, ATTRIBUTE_FONT);
 
 		setTextStyle(propertyNameStyle);
 
@@ -77,7 +79,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentationImpl
 			getConnector().setWasManuallyAdjusted(true);
 		}
 
-		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
+		setForeground(ForegroundStyleImpl.makeStyle(Color.DARK_GRAY, 1.6f));
 
 		setIsFocusable(true);
 
@@ -96,9 +98,9 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentationImpl
 	}
 
 	private void updateStyles() {
-		/*foreground = ForegroundStyle.makeStyle(getEntity().getColor());
+		/*foreground = ForegroundStyleImpl.makeStyle(getEntity().getColor());
 		foreground.setLineWidth(2);
-		background = BackgroundStyle.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
+		background = BackgroundStyleImpl.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
 		setForeground(foreground);
 		setBackground(background);*/
 	}

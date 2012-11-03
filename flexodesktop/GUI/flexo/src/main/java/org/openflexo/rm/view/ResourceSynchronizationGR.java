@@ -23,11 +23,12 @@ import java.awt.Color;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.rm.view.RMViewerRepresentation.ResourceSynchronization;
 
 public class ResourceSynchronizationGR extends ConnectorGraphicalRepresentationImpl<ResourceSynchronization> {
@@ -37,7 +38,7 @@ public class ResourceSynchronizationGR extends ConnectorGraphicalRepresentationI
 	public ResourceSynchronizationGR(ResourceSynchronization synchro, Drawing<?> aDrawing) {
 		super(ConnectorType.LINE, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(synchro.getR1()),
 				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(synchro.getR2()), synchro, aDrawing);
-		foreground = ForegroundStyle.makeStyle(Color.RED);
+		foreground = ForegroundStyleImpl.makeStyle(Color.RED);
 		foreground.setLineWidth(1.6);
 		setForeground(foreground);
 

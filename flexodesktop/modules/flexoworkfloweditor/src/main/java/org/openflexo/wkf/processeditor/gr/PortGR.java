@@ -22,9 +22,10 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.icon.WKFIconLibrary;
@@ -51,7 +52,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 		// setAbsoluteTextY(getPort().getNodeLabelPosY());
 		setIsFloatingLabel(true);
 
-		background = BackgroundStyle.makeImageBackground(WKFIconLibrary.getImageIconForFlexoPort(getPort()));
+		background = BackgroundStyleImpl.makeImageBackground(WKFIconLibrary.getImageIconForFlexoPort(getPort()));
 
 		// System.out.println("width="+getPort().getImageIcon().getIconWidth()+" height="+getPort().getImageIcon().getIconHeight());
 
@@ -60,7 +61,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 		background.setDeltaX(0);
 		background.setDeltaY(0);
 
-		setForeground(ForegroundStyle.makeNone());
+		setForeground(ForegroundStyleImpl.makeNone());
 		setBackground(background);
 
 		// TODO handle layer !!!
@@ -91,7 +92,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
 		setBorder(new ShapeBorder(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont() : WKFPreferences
 						.getActivityNodeFont().getFont()));
 		getShadowStyle().setShadowDepth(1);

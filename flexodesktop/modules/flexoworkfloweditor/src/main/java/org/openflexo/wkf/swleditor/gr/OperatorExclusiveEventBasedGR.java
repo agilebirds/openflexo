@@ -23,13 +23,15 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.FGECircle;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.ExclusiveEventBasedOperator;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
@@ -45,8 +47,8 @@ public class OperatorExclusiveEventBasedGR extends OperatorGR<ExclusiveEventBase
 
 	public OperatorExclusiveEventBasedGR(ExclusiveEventBasedOperator operatorNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
-		painterForeground = ForegroundStyle.makeStyle(Color.BLACK);
-		painterBackground = BackgroundStyle.makeColoredBackground(Color.BLACK);
+		painterForeground = ForegroundStyleImpl.makeStyle(Color.BLACK);
+		painterBackground = BackgroundStyleImpl.makeColoredBackground(Color.BLACK);
 		painterForeground.setLineWidth(1.0);
 		_polygon = new FGEPolygon(Filling.FILLED);
 		double startA = -Math.PI / 2;

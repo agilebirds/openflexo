@@ -30,17 +30,17 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -320,8 +320,8 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			shapeGR.setAllowToLeaveBounds(true);
 			shapeGR.setX(-130);
 			shapeGR.setY(-143);
-			shapeGR.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
-			shapeGR.setBackground(BackgroundStyle.makeColoredBackground(new Color(252, 242, 175)));
+			shapeGR.setForeground(ForegroundStyleImpl.makeStyle(Color.BLACK));
+			shapeGR.setBackground(BackgroundStyleImpl.makeColoredBackground(new Color(252, 242, 175)));
 
 			shapeGR.setIsSelectable(false);
 			shapeGR.setIsFocusable(false);

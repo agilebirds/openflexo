@@ -35,7 +35,7 @@ public class TextStylePanelEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			public Object[] getData()
 			{
-				TextStyle ts = TextStyle.makeDefault();
+				TextStyle ts = TextStyleImpl.makeDefault();
 				return FIBAbstractEditor.makeArray(ts);
 			}
 			public File getFIBFile() {

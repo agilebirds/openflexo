@@ -380,7 +380,7 @@ public class TestDrawing {
 				gr.setHeight(100);
 				gr.setX(300);
 				gr.setY(300);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.LIGHT_GRAY));
+				gr.setBackground(BackgroundStyleImpl.makeColoredBackground(Color.LIGHT_GRAY));
 			}
 
 			@Override
@@ -399,7 +399,7 @@ public class TestDrawing {
 				gr.setX(30);
 				gr.setY(300);
 				((Rectangle) gr.getShape()).setIsRounded(true);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.ORANGE));
+				gr.setBackground(BackgroundStyleImpl.makeColoredBackground(Color.ORANGE));
 				gr.setBorder(new ShapeGraphicalRepresentationUtils.ShapeBorder(20, 20, 20, 20));
 				circle = new MyCircle();
 			}
@@ -421,7 +421,7 @@ public class TestDrawing {
 				gr.setX(30);
 				gr.setY(40);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.PINK));
+				gr.setBackground(BackgroundStyleImpl.makeColoredBackground(Color.PINK));
 			}
 
 			@Override
@@ -441,13 +441,13 @@ public class TestDrawing {
 				gr.setX(100);
 				gr.setY(100);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.YELLOW));
+				gr.setBackground(BackgroundStyleImpl.makeColoredBackground(Color.YELLOW));
 				gr.setBorder(new MyShapeGraphicalRepresentationUtils.ShapeBorder(20, 10, 50, 0));
 				gr.setLayer(2);
 				gr.setDecorationPainter(new DecorationPainter() {
 					@Override
 					public void paintDecoration(FGEShapeDecorationGraphics g) {
-						g.setDefaultBackground(BackgroundStyle.makeColoredBackground(Color.RED));
+						g.setDefaultBackground(BackgroundStyleImpl.makeColoredBackground(Color.RED));
 						g.useDefaultBackgroundStyle();
 						g.drawRoundRect(0, 0, g.getWidth() - 1, g.getHeight() - 1, 20, 20);
 					}
@@ -477,7 +477,7 @@ public class TestDrawing {
 				gr.setY(100);
 				gr.setLayer(3);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle.makeImageBackground(new FileResource("Resources/WKF/IfOperator.gif")));
+				gr.setBackground(BackgroundStyleImpl.makeImageBackground(new FileResource("Resources/WKF/IfOperator.gif")));
 				gr.setBorder(new MyShapeGraphicalRepresentationUtils.ShapeBorder(20, 10, 50, 0));
 			}
 
@@ -496,7 +496,7 @@ public class TestDrawing {
 						d2.getGraphicalRepresentation(), this, MyDrawing.this);
 				gr.getForeground().setColor(Color.BLUE);
 				gr.getForeground().setLineWidth(1.5);
-				// gr.setBackground(BackgroundStyle.makeColoredBackground(Color.PINK));
+				// gr.setBackground(BackgroundStyleImpl.makeColoredBackground(Color.PINK));
 				gr.setIsFocusable(true);
 				gr.setText("label");
 			}

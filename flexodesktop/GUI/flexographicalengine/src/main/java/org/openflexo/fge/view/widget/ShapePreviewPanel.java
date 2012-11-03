@@ -8,18 +8,21 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.controller.FIBController;
@@ -42,9 +45,9 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	private int height = 80;
 	private static final float RATIO = 0.6f;
 
-	private ForegroundStyle foregroundStyle = ForegroundStyle.makeStyle(Color.BLACK);
-	private BackgroundStyle backgroundStyle = BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
-	private ShadowStyle shadowStyle = ShadowStyle.makeNone();
+	private ForegroundStyle foregroundStyle = ForegroundStyleImpl.makeStyle(Color.BLACK);
+	private BackgroundStyle backgroundStyle = BackgroundStyleImpl.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+	private ShadowStyle shadowStyle = ShadowStyleImpl.makeNone();
 
 	public ShapePreviewPanel(Shape aShape) {
 		super(new BorderLayout());

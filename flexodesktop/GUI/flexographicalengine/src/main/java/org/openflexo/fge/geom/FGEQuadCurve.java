@@ -151,7 +151,7 @@ public class FGEQuadCurve extends Double implements FGEGeneralShape.GeneralShape
 		g.drawCurve(this);
 
 		// DEBUG
-		// g.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED));
+		// g.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.RED));
 		// (buildFlattenPath(0.01)).paint(g);
 	}
 

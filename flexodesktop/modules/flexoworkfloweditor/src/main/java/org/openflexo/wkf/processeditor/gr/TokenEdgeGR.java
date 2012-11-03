@@ -22,8 +22,8 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.WKFGroup;
 import org.openflexo.foundation.wkf.edge.TokenEdge;
 import org.openflexo.foundation.wkf.node.FlexoNode;
@@ -40,7 +40,7 @@ public class TokenEdgeGR extends EdgeGR<TokenEdge> {
 		if (isInduced() && !(aDrawing.getFirstVisibleObject(edge.getStartNode()) instanceof WKFGroup)
 				&& !(aDrawing.getFirstVisibleObject(edge.getEndNode()) instanceof WKFGroup)
 				&& !(edge.getStartNode() instanceof FlexoNode && ((FlexoNode) edge.getStartNode()).isEndNode())/* terminal induced edges are not represented in light gray anymore */) {
-			setForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1.6f));
+			setForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 1.6f));
 		}
 	}
 

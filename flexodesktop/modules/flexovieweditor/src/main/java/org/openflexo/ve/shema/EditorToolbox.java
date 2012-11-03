@@ -24,10 +24,14 @@ import java.awt.FlowLayout;
 
 import javax.swing.JPanel;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.ShadowStyleImpl;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
@@ -47,10 +51,10 @@ public class EditorToolbox {
 	private FIBShadowStyleSelector shadowStyleSelector;
 
 	public EditorToolbox() {
-		currentForegroundStyle = ForegroundStyle.makeDefault();
-		currentBackgroundStyle = BackgroundStyle.makeColoredBackground(Color.RED);
-		currentTextStyle = TextStyle.makeDefault();
-		currentShadowStyle = ShadowStyle.makeDefault();
+		currentForegroundStyle = ForegroundStyleImpl.makeDefault();
+		currentBackgroundStyle = BackgroundStyleImpl.makeColoredBackground(Color.RED);
+		currentTextStyle = TextStyleImpl.makeDefault();
+		currentShadowStyle = ShadowStyleImpl.makeDefault();
 	}
 
 	public JPanel getToolboxPanel() {

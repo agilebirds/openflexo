@@ -21,14 +21,14 @@ package org.openflexo.wkf.utils;
 
 import java.awt.Color;
 
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.geom.FGECircle;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
@@ -71,7 +71,7 @@ public class EventShapePainter implements ShapePainter {
 			_polygon.addToPoints(new FGEPoint(0.250, 0.300));
 			_polygon.addToPoints(new FGEPoint(0.525, 0.575));
 			_polygon.addToPoints(new FGEPoint(0.800, 0.300));
-			g.setDefaultBackground(BackgroundStyle.makeColoredBackground(Color.BLACK));
+			g.setDefaultBackground(BackgroundStyleImpl.makeColoredBackground(Color.BLACK));
 			g.fillPolygon(_polygon);
 
 			FGEPolygon _polygon2 = new FGEPolygon(Filling.FILLED);

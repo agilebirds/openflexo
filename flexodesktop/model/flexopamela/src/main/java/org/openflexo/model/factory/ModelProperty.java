@@ -128,9 +128,10 @@ public class ModelProperty<I> {
 				adderMethod, removerMethod);
 	}
 
-	protected ModelProperty(ModelEntity<I> modelEntity, String propertyIdentifier, Getter getter, Setter setter, Adder adder,
-			Remover remover, XMLAttribute xmlAttribute, XMLElement xmlElement, ReturnedValue returnedValue, Embedded embedded,
-			ComplexEmbedded complexEmbedded, CloningStrategy cloningStrategy, PastingPoint setPastingPoint, PastingPoint addPastingPoint,
+	protected ModelProperty(ModelEntity<I> modelEntity, String propertyIdentifier, final Getter getter, final Setter setter,
+			final Adder adder, final Remover remover, final XMLAttribute xmlAttribute, final XMLElement xmlElement,
+			final ReturnedValue returnedValue, final Embedded embedded, final ComplexEmbedded complexEmbedded,
+			final CloningStrategy cloningStrategy, final PastingPoint setPastingPoint, final PastingPoint addPastingPoint,
 			Method getterMethod, Method setterMethod, Method adderMethod, Method removerMethod) {
 		this.modelEntity = modelEntity;
 		this.propertyIdentifier = propertyIdentifier;
@@ -150,16 +151,17 @@ public class ModelProperty<I> {
 		this.setterMethod = setterMethod;
 		this.adderMethod = adderMethod;
 		this.removerMethod = removerMethod;
+
 		if (setterMethod != null) {
 			PastingPoint pastingPoint = setterMethod.getAnnotation(PastingPoint.class);
 			if (pastingPoint != null) {
-				setPastingPoint = pastingPoint;
+				this.setPastingPoint = pastingPoint;
 			}
 		}
 		if (adderMethod != null) {
 			PastingPoint pastingPoint = adderMethod.getAnnotation(PastingPoint.class);
 			if (pastingPoint != null) {
-				addPastingPoint = pastingPoint;
+				this.addPastingPoint = pastingPoint;
 			}
 		}
 		if (getter != null) {
@@ -178,6 +180,7 @@ public class ModelProperty<I> {
 				break;
 			}
 		}
+
 	}
 
 	public void validate() throws ModelDefinitionException {
@@ -812,7 +815,8 @@ public class ModelProperty<I> {
 
 	@Override
 	public String toString() {
-		return "ModelProperty[" + getModelEntity() + "." + getPropertyIdentifier() + "]";
+		return "ModelProperty[" + getModelEntity() + "." + getPropertyIdentifier() + "]" + " APP=" + getAddPastingPoint() + " SPP="
+				+ getSetPastingPoint();
 	}
 
 	public ModelEntity<?> getAccessedEntity() throws ModelDefinitionException {

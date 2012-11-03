@@ -25,23 +25,26 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -105,10 +108,10 @@ public class RoleGR extends ShapeGraphicalRepresentationImpl<Role> implements Gr
 	}
 
 	private void updateStyles() {
-		foreground = ForegroundStyle.makeStyle(getRoleColor());
+		foreground = ForegroundStyleImpl.makeStyle(getRoleColor());
 		foreground.setLineWidth(2);
-		background = BackgroundStyle.makeColorGradientBackground(getRoleColor(), Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
-		textStyle = TextStyle.makeDefault();
+		background = BackgroundStyleImpl.makeColorGradientBackground(getRoleColor(), Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+		textStyle = TextStyleImpl.makeDefault();
 		textStyle.setColor(FGEUtils.chooseBestColor(getRoleColor(), Color.WHITE, Color.BLACK));
 		setForeground(foreground);
 		setBackground(background);
@@ -144,17 +147,17 @@ public class RoleGR extends ShapeGraphicalRepresentationImpl<Role> implements Gr
 
 			updateDecorationBackground();
 
-			decorationForeground = ForegroundStyle.makeStyle(getRoleColor());
+			decorationForeground = ForegroundStyleImpl.makeStyle(getRoleColor());
 			decorationForeground.setLineWidth(2);
 		}
 
 		private void updateDecorationBackground() {
 			if (role.getIsSystemRole()) {
 				isSystemRole = true;
-				decorationBackground = BackgroundStyle.makeImageBackground(WKFIconLibrary.SYSTEM_ROLE_ICON);
+				decorationBackground = BackgroundStyleImpl.makeImageBackground(WKFIconLibrary.SYSTEM_ROLE_ICON);
 			} else {
 				isSystemRole = false;
-				decorationBackground = BackgroundStyle.makeImageBackground(WKFIconLibrary.ROLE_ICON);
+				decorationBackground = BackgroundStyleImpl.makeImageBackground(WKFIconLibrary.ROLE_ICON);
 			}
 
 			decorationBackground.setImageBackgroundType(ImageBackgroundType.OPAQUE);

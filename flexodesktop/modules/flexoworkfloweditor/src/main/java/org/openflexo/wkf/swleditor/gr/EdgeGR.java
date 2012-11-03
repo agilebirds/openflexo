@@ -22,8 +22,11 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
@@ -38,8 +41,6 @@ import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
@@ -78,7 +79,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		isInduced = aDrawing.getFirstVisibleObject(edge.getStartNode()) != edge.getStartNode()
 				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
 
-		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
+		setForeground(ForegroundStyleImpl.makeStyle(Color.DARK_GRAY, 1.6f));
 
 		setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
 
@@ -566,7 +567,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		if (isInsideSameActionPetriGraph()) {
 			type = EdgeRepresentation.CURVE;
 		}
-		TextStyle ts = TextStyle.makeTextStyle(Color.BLACK, getEdgeFont().getFont());
+		TextStyle ts = TextStyleImpl.makeTextStyle(Color.BLACK, getEdgeFont().getFont());
 		ts.setBackgroundColor(Color.WHITE);
 		ts.setIsBackgroundColored(true);
 		setTextStyle(ts);

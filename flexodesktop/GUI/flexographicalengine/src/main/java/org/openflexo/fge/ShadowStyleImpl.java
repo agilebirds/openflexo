@@ -17,48 +17,43 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.util.Observable;
 
-import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.xmlcode.XMLSerializable;
 
-public class ShadowStyle extends Observable implements XMLSerializable, Cloneable {
+public class ShadowStyleImpl extends Observable implements ShadowStyle {
 
 	private boolean drawShadow;
 	private int shadowDarkness;
 	private int shadowDepth;
 	private int shadowBlur;
 
-	public static enum Parameters implements GRParameter {
-		drawShadow, shadowDarkness, shadowDepth, shadowBlur
-	}
-
-	public ShadowStyle() {
+	public ShadowStyleImpl() {
 		drawShadow = true;
 		shadowDarkness = FGEConstants.DEFAULT_SHADOW_DARKNESS;
 		shadowDepth = FGEConstants.DEFAULT_SHADOW_DEEP;
 		shadowBlur = FGEConstants.DEFAULT_SHADOW_BLUR;
 	}
 
-	public static ShadowStyle makeNone() {
-		ShadowStyle returned = new ShadowStyle();
+	public static ShadowStyleImpl makeNone() {
+		ShadowStyleImpl returned = new ShadowStyleImpl();
 		returned.drawShadow = false;
 		returned.shadowDepth = 0;
 		return returned;
 	}
 
-	public static ShadowStyle makeDefault() {
-		return new ShadowStyle();
+	public static ShadowStyleImpl makeDefault() {
+		return new ShadowStyleImpl();
 	}
 
+	@Override
 	public boolean getDrawShadow() {
 		return drawShadow;
 	}
 
+	@Override
 	public void setDrawShadow(boolean aFlag) {
 		if (requireChange(this.drawShadow, aFlag)) {
 			boolean oldValue = drawShadow;
@@ -68,10 +63,12 @@ public class ShadowStyle extends Observable implements XMLSerializable, Cloneabl
 		}
 	}
 
+	@Override
 	public int getShadowDarkness() {
 		return shadowDarkness;
 	}
 
+	@Override
 	public void setShadowDarkness(int aValue) {
 		if (requireChange(this.shadowDarkness, aValue)) {
 			int oldShadowDarkness = shadowDarkness;
@@ -81,15 +78,18 @@ public class ShadowStyle extends Observable implements XMLSerializable, Cloneabl
 		}
 	}
 
+	@Override
 	public int getShadowDepth() {
 		return shadowDepth;
 	}
 
+	@Override
 	@Deprecated
 	public int getShadowDeep() {
 		return getShadowDepth();
 	}
 
+	@Override
 	public void setShadowDepth(int aValue) {
 		if (requireChange(this.shadowDepth, aValue)) {
 			int oldShadowDeep = shadowDepth;
@@ -99,10 +99,12 @@ public class ShadowStyle extends Observable implements XMLSerializable, Cloneabl
 		}
 	}
 
+	@Override
 	public int getShadowBlur() {
 		return shadowBlur;
 	}
 
+	@Override
 	public void setShadowBlur(int aValue) {
 		if (requireChange(this.shadowBlur, aValue)) {
 			int oldShadowBlur = shadowBlur;
@@ -113,9 +115,9 @@ public class ShadowStyle extends Observable implements XMLSerializable, Cloneabl
 	}
 
 	@Override
-	public ShadowStyle clone() {
+	public ShadowStyleImpl clone() {
 		try {
-			return (ShadowStyle) super.clone();
+			return (ShadowStyleImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// cannot happen, we are clonable
 			e.printStackTrace();

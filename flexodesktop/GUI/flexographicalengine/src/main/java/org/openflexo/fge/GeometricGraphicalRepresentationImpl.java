@@ -30,6 +30,7 @@ import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -56,10 +57,7 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GeometryModified;
 import org.openflexo.toolbox.ToolBox;
@@ -95,11 +93,11 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	public GeometricGraphicalRepresentationImpl(FGEArea anObject, O aDrawable, Drawing<?> aDrawing) {
 		super(aDrawable, aDrawing);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
 
-		background = BackgroundStyle.makeColoredBackground(Color.WHITE);
+		background = BackgroundStyleImpl.makeColoredBackground(Color.WHITE);
 		// background.setGraphicalRepresentation(this);
 		background.addObserver(this);
 
@@ -208,7 +206,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	@Override
 	public void setBackgroundType(BackgroundStyleType backgroundType) {
 		if (backgroundType != getBackgroundType()) {
-			setBackground(BackgroundStyle.makeBackground(backgroundType));
+			setBackground(BackgroundStyleImpl.makeBackground(backgroundType));
 		}
 	}
 

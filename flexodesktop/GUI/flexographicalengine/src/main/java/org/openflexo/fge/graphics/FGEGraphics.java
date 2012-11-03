@@ -41,10 +41,17 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEDimension;
@@ -54,7 +61,6 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
 
 public abstract class FGEGraphics {
 
@@ -66,9 +72,9 @@ public abstract class FGEGraphics {
 	private GraphicalRepresentation<?> gr;
 	private Graphics2D g2d;
 
-	private ForegroundStyle defaultForeground = ForegroundStyle.makeDefault();
-	private BackgroundStyle defaultBackground = BackgroundStyle.makeEmptyBackground();
-	private TextStyle defaultTextStyle = TextStyle.makeDefault();
+	private ForegroundStyle defaultForeground = ForegroundStyleImpl.makeDefault();
+	private BackgroundStyle defaultBackground = BackgroundStyleImpl.makeEmptyBackground();
+	private TextStyle defaultTextStyle = TextStyleImpl.makeDefault();
 
 	private ForegroundStyle currentForeground = defaultForeground;
 	protected BackgroundStyle currentBackground = defaultBackground;

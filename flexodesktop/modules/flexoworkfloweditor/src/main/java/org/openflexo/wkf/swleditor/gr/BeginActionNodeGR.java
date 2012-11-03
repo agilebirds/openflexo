@@ -21,9 +21,11 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.foundation.wkf.node.ActionNode;
@@ -49,16 +51,16 @@ public class BeginActionNodeGR extends AbstractActionNodeGR {
 
 		setIsFloatingLabel(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.2);
-		background = BackgroundStyle.makeColoredBackground(getMainBgColor());
+		background = BackgroundStyleImpl.makeColoredBackground(getMainBgColor());
 		setForeground(foreground);
 		setBackground(background);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 
-		painterForeground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
+		painterForeground = ForegroundStyleImpl.makeStyle(Color.DARK_GRAY);
 		painterForeground.setLineWidth(2.0);
-		// painterBackground = BackgroundStyle.makeColoredBackground(Color.DARK_GRAY);
+		// painterBackground = BackgroundStyleImpl.makeColoredBackground(Color.DARK_GRAY);
 
 		setShapePainter(new ShapePainter() {
 			@Override

@@ -26,14 +26,12 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
 
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 

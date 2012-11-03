@@ -22,10 +22,10 @@ package org.openflexo.vpm.view.widget;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -58,12 +58,12 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentationIm
 	}
 
 	private void initWithDefaultValues() {
-		setTextStyle(TextStyle.makeTextStyle(DEFAULT_SHAPE_TEXT_COLOR, DEFAULT_FONT));
-		setX((WIDTH - DEFAULT_SHAPE_WIDTH) / 2);
-		setY((HEIGHT - DEFAULT_SHAPE_HEIGHT) / 2);
+		setTextStyle(TextStyleImpl.makeTextStyle(DEFAULT_SHAPE_TEXT_COLOR, DEFAULT_FONT));
+		setX((PREVIEW_DEFAULT_WIDTH - DEFAULT_SHAPE_WIDTH) / 2);
+		setY((PREVIEW_DEFAULT_HEIGHT - DEFAULT_SHAPE_HEIGHT) / 2);
 		setWidth(DEFAULT_SHAPE_WIDTH);
 		setHeight(DEFAULT_SHAPE_HEIGHT);
-		setBackground(BackgroundStyle.makeColoredBackground(DEFAULT_SHAPE_BACKGROUND_COLOR));
+		setBackground(BackgroundStyleImpl.makeColoredBackground(DEFAULT_SHAPE_BACKGROUND_COLOR));
 		setIsFloatingLabel(false);
 	}
 

@@ -23,12 +23,13 @@ import java.awt.Color;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinConstraints;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -43,7 +44,7 @@ public class RoleSpecializationGR extends ConnectorGraphicalRepresentationImpl<R
 		super(ConnectorType.LINE, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(specialization.getRole()),
 				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(specialization.getParentRole()), specialization,
 				aDrawing);
-		foreground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
+		foreground = ForegroundStyleImpl.makeStyle(Color.DARK_GRAY);
 		foreground.setLineWidth(1.6);
 		setForeground(foreground);
 		/*if (getConnector() instanceof LineConnector) {

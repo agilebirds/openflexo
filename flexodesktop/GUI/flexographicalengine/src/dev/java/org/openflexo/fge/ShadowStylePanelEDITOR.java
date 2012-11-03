@@ -35,7 +35,7 @@ public class ShadowStylePanelEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			public Object[] getData()
 			{
-				ShadowStyle ss = ShadowStyle.makeDefault();
+				ShadowStyle ss = ShadowStyleImpl.makeDefault();
 				return FIBAbstractEditor.makeArray(ss);
 			}
 			public File getFIBFile() {

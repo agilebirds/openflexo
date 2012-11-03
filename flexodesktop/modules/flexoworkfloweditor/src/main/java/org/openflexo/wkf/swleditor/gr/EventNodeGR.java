@@ -23,16 +23,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -72,15 +74,15 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 		updateBackgroundForeground();
 		setShapePainter(new EventShapePainter(getDrawable()));
 		// if (getEventNode().getImageIcon() != null) {
-		// foreground = ForegroundStyle.makeNone();
-		// background = BackgroundStyle.makeImageBackground(getEventNode().getImageIcon());
+		// foreground = ForegroundStyleImpl.makeNone();
+		// background = BackgroundStyleImpl.makeImageBackground(getEventNode().getImageIcon());
 		// ((BackgroundImage)background).setScaleX(1);
 		// ((BackgroundImage)background).setScaleY(1);
 		// }
 		// else {
-		// foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		// foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		//
-		// background = BackgroundStyle.makeColoredBackground(getMainBgColor());
+		// background = BackgroundStyleImpl.makeColoredBackground(getMainBgColor());
 		// }
 
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
@@ -96,7 +98,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 		updatePropertiesFromWKFPreferences();
 		if (isInPalette) {
 			getTextStyle().setFont(specialPaletteFont);
-			setShadowStyle(ShadowStyle.makeNone());
+			setShadowStyle(ShadowStyleImpl.makeNone());
 		}
 		if (eventNode.getEventType() == EVENT_TYPE.NonInteruptive || eventNode.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 			setSpecificStroke(FGEConstants.DASHED);
@@ -125,9 +127,9 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 	}
 
 	private void updateBackgroundForeground() {
-		foreground = ForegroundStyle.makeDefault();
+		foreground = ForegroundStyleImpl.makeDefault();
 		foreground.setLineWidth(getEventNode().isEnd() ? 1.8 : 0.6);
-		background = BackgroundStyle.makeColoredBackground(getMainBgColor());
+		background = BackgroundStyleImpl.makeColoredBackground(getMainBgColor());
 		setForeground(foreground);
 		setBackground(background);
 	}
@@ -165,7 +167,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getEventFont(WKFPreferences.getEventNodeFont()).getFont() : WKFPreferences
 						.getEventNodeFont().getFont()));
 		setIsMultilineAllowed(true);

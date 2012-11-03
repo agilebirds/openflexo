@@ -21,11 +21,14 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -51,7 +54,7 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 		setIsFloatingLabel(false);
 		getShape().setIsRounded(true);
 		setRelativeTextX(0.5); // Center label horizontally
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.2);
 		setForeground(foreground);
 		updateBackground();
@@ -87,7 +90,7 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		roleLabelTextStyle = TextStyle.makeTextStyle(Color.GRAY, getRoleFont().getFont());
+		roleLabelTextStyle = TextStyleImpl.makeTextStyle(Color.GRAY, getRoleFont().getFont());
 	}
 
 	protected FlexoFont getRoleFont() {
@@ -147,7 +150,7 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 	}
 
 	private void updateBackground() {
-		background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
+		background = BackgroundStyleImpl.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
 				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		setBackground(background);
 		updatePropertiesFromWKFPreferences();

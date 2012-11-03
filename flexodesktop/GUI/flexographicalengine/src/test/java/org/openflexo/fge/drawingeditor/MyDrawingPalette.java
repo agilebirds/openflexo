@@ -23,19 +23,19 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.logging.FlexoLogger;
 
@@ -87,10 +87,10 @@ public class MyDrawingPalette extends DrawingPalette {
 			gr.setHeight(50);
 		}
 		gr.setText(st.name());
-		gr.setTextStyle(TextStyle.makeTextStyle(Color.DARK_GRAY, DEFAULT_TEXT_FONT));
+		gr.setTextStyle(TextStyleImpl.makeTextStyle(Color.DARK_GRAY, DEFAULT_TEXT_FONT));
 		gr.setIsFloatingLabel(false);
-		// gr.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
-		gr.setBackground(BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
+		// gr.setForeground(ForegroundStyleImpl.makeStyle(Color.BLACK));
+		gr.setBackground(BackgroundStyleImpl.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
 		gr.setIsVisible(true);
 		gr.setAllowToLeaveBounds(false);
 
@@ -135,12 +135,12 @@ public class MyDrawingPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setText("Label");
 		gr.setIsFloatingLabel(false);
-		gr.setForeground(ForegroundStyle.makeNone());
-		gr.setBackground(BackgroundStyle.makeEmptyBackground());
-		gr.setShadowStyle(ShadowStyle.makeNone());
+		gr.setForeground(ForegroundStyleImpl.makeNone());
+		gr.setBackground(BackgroundStyleImpl.makeEmptyBackground());
+		gr.setShadowStyle(ShadowStyleImpl.makeNone());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);
@@ -156,13 +156,13 @@ public class MyDrawingPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setIsMultilineAllowed(true);
 		gr.setText("Multiple\nlines label");
 		gr.setIsFloatingLabel(false);
-		gr.setForeground(ForegroundStyle.makeNone());
-		gr.setBackground(BackgroundStyle.makeEmptyBackground());
-		gr.setShadowStyle(ShadowStyle.makeNone());
+		gr.setForeground(ForegroundStyleImpl.makeNone());
+		gr.setBackground(BackgroundStyleImpl.makeEmptyBackground());
+		gr.setShadowStyle(ShadowStyleImpl.makeNone());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);
@@ -178,12 +178,12 @@ public class MyDrawingPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setIsMultilineAllowed(true);
 		gr.setText("Multiple\nlines label");
 		gr.setIsFloatingLabel(false);
-		gr.setBackground(BackgroundStyle.makeEmptyBackground());
-		gr.setShadowStyle(ShadowStyle.makeNone());
+		gr.setBackground(BackgroundStyleImpl.makeEmptyBackground());
+		gr.setShadowStyle(ShadowStyleImpl.makeNone());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);

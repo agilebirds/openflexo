@@ -22,9 +22,11 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
@@ -50,11 +52,11 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 
 		getShape().setIsRounded(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.2);
 		setForeground(foreground);
 
-		BackgroundStyle background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
+		BackgroundStyle background = BackgroundStyleImpl.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
 				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		setBackground(background);
 		// setDecorationPainter(new NodeDecorationPainter());

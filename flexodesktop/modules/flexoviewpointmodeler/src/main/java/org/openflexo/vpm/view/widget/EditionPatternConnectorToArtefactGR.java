@@ -22,9 +22,9 @@ package org.openflexo.vpm.view.widget;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -61,8 +61,8 @@ public class EditionPatternConnectorToArtefactGR extends ShapeGraphicalRepresent
 
 		// if (anArtefact != null) anArtefact.addObserver(this);
 
-		setForeground(ForegroundStyle.makeStyle(new Color(255, 204, 0)));
-		setBackground(BackgroundStyle.makeColoredBackground(new Color(255, 255, 204)));
+		setForeground(ForegroundStyleImpl.makeStyle(new Color(255, 204, 0)));
+		setBackground(BackgroundStyleImpl.makeColoredBackground(new Color(255, 255, 204)));
 
 		setIsFocusable(true);
 		setIsSelectable(false);

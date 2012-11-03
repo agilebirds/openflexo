@@ -35,7 +35,7 @@ public class ForegroundStylePanelEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			public Object[] getData()
 			{
-				ForegroundStyle fs = ForegroundStyle.makeDefault();
+				ForegroundStyle fs = ForegroundStyleImpl.makeDefault();
 				return FIBAbstractEditor.makeArray(fs);
 			}
 			public File getFIBFile() {

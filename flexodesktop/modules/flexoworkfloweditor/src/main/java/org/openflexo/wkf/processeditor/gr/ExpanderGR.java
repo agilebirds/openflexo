@@ -23,7 +23,11 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
@@ -35,9 +39,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -79,19 +81,19 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 
 		setConnector(new ExpanderConnector());
 
-		emptyBackground = BackgroundStyle.makeEmptyBackground();
+		emptyBackground = BackgroundStyleImpl.makeEmptyBackground();
 
 		if (expander.getPetriGraph() instanceof ActivityPetriGraph) {
-			foreground = ForegroundStyle.makeStyle(ProcessEditorConstants.ACTIVITY_PG_COLOR, 0.3f);
-			noneForeground = ForegroundStyle.makeNone();
+			foreground = ForegroundStyleImpl.makeStyle(ProcessEditorConstants.ACTIVITY_PG_COLOR, 0.3f);
+			noneForeground = ForegroundStyleImpl.makeNone();
 			setLayer(ACTIVITY_PG_LAYER);
 		} else if (expander.getPetriGraph() instanceof OperationPetriGraph) {
-			foreground = ForegroundStyle.makeStyle(ProcessEditorConstants.OPERATION_PG_COLOR, 0.3f);
-			noneForeground = ForegroundStyle.makeNone();
+			foreground = ForegroundStyleImpl.makeStyle(ProcessEditorConstants.OPERATION_PG_COLOR, 0.3f);
+			noneForeground = ForegroundStyleImpl.makeNone();
 			setLayer(OPERATION_PG_LAYER);
 		} else if (expander.getPetriGraph() instanceof ActionPetriGraph) {
-			foreground = ForegroundStyle.makeStyle(ProcessEditorConstants.ACTION_PG_COLOR, 0.3f);
-			noneForeground = ForegroundStyle.makeNone();
+			foreground = ForegroundStyleImpl.makeStyle(ProcessEditorConstants.ACTION_PG_COLOR, 0.3f);
+			noneForeground = ForegroundStyleImpl.makeNone();
 			setLayer(ACTION_PG_LAYER);
 		}
 

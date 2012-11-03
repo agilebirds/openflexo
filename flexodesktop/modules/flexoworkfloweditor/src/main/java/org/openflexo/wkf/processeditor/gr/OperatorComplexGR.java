@@ -23,9 +23,10 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.CapStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.ComplexOperator;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
@@ -36,7 +37,7 @@ public class OperatorComplexGR extends OperatorGR<ComplexOperator> {
 
 	public OperatorComplexGR(ComplexOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
-		painterForeground = ForegroundStyle.makeStyle(Color.BLACK);
+		painterForeground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		painterForeground.setLineWidth(4.0);
 		painterForeground.setCapStyle(CapStyle.CAP_ROUND);
 		setShapePainter(new ShapePainter() {

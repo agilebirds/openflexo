@@ -25,15 +25,17 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
-import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -67,17 +69,17 @@ public class DMPropertyGR extends ShapeGraphicalRepresentationImpl<DMProperty> i
 		updateStyles();
 		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(10, 10, 10, 10));
 
-		propertyNameStyle = TextStyle.makeTextStyle(Color.DARK_GRAY, ATTRIBUTE_FONT);
-		propertyTypeStyle = TextStyle.makeTextStyle(Color.GRAY, ATTRIBUTE_FONT);
+		propertyNameStyle = TextStyleImpl.makeTextStyle(Color.DARK_GRAY, ATTRIBUTE_FONT);
+		propertyTypeStyle = TextStyleImpl.makeTextStyle(Color.GRAY, ATTRIBUTE_FONT);
 
 		setTextStyle(propertyNameStyle);
 
-		setForeground(ForegroundStyle.makeNone());
-		setShadowStyle(ShadowStyle.makeNone());
+		setForeground(ForegroundStyleImpl.makeNone());
+		setShadowStyle(ShadowStyleImpl.makeNone());
 
-		unfocusedBackground = BackgroundStyle.makeEmptyBackground();
-		focusedBackground = BackgroundStyle.makeColoredBackground(FOCUSED_COLOR);
-		selectedBackground = BackgroundStyle.makeColoredBackground(SELECTED_COLOR);
+		unfocusedBackground = BackgroundStyleImpl.makeEmptyBackground();
+		focusedBackground = BackgroundStyleImpl.makeColoredBackground(FOCUSED_COLOR);
+		selectedBackground = BackgroundStyleImpl.makeColoredBackground(SELECTED_COLOR);
 		setBackground(unfocusedBackground);
 
 		setIsFocusable(true);
@@ -109,9 +111,9 @@ public class DMPropertyGR extends ShapeGraphicalRepresentationImpl<DMProperty> i
 	}
 
 	private void updateStyles() {
-		/*foreground = ForegroundStyle.makeStyle(getEntity().getColor());
+		/*foreground = ForegroundStyleImpl.makeStyle(getEntity().getColor());
 		foreground.setLineWidth(2);
-		background = BackgroundStyle.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
+		background = BackgroundStyleImpl.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
 		setForeground(foreground);
 		setBackground(background);*/
 	}

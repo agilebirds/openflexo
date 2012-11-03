@@ -21,6 +21,8 @@ package org.openflexo.fge.geomedit.edition;
 
 import java.awt.Color;
 
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEQuadCurve;
@@ -29,8 +31,6 @@ import org.openflexo.fge.geomedit.CubicCurve;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.CubicCurveWithFourPointsConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 
 public class CreateCubicCurveFromFourPoints extends Edition {
 
@@ -74,11 +74,11 @@ public class CreateCubicCurveFromFourPoints extends Edition {
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			FGEPoint p2 = ((ObtainPoint) inputs.get(1)).getInputData();
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
+			graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
 			FGESegment line1 = new FGESegment(lastMouseLocation, p1);
 			line1.paint(graphics);
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1));
+			graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.RED, 1));
 			p1.paint(graphics);
 			p2.paint(graphics);
 			lastMouseLocation.paint(graphics);
@@ -90,13 +90,13 @@ public class CreateCubicCurveFromFourPoints extends Edition {
 			FGEPoint p2 = ((ObtainPoint) inputs.get(1)).getInputData();
 			FGEPoint cp1 = ((ObtainPoint) inputs.get(2)).getInputData();
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
+			graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
 			FGESegment line1 = new FGESegment(p1, cp1);
 			FGESegment line2 = new FGESegment(p2, lastMouseLocation);
 			line1.paint(graphics);
 			line2.paint(graphics);
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1));
+			graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.RED, 1));
 			p1.paint(graphics);
 			p2.paint(graphics);
 			cp1.paint(graphics);

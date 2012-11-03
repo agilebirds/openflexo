@@ -538,8 +538,8 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		g.drawPolygon(getPoints().toArray(new FGEPoint[getPoints().size()]));
 
 		/*
-		g.setDefaultBackground(BackgroundStyle.makeEmptyBackground());
-		g.setDefaultForeground(ForegroundStyle.makeStyle(Color.GRAY,1,DashStyle.MEDIUM_DASHES));
+		g.setDefaultBackground(BackgroundStyleImpl.makeEmptyBackground());
+		g.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.GRAY,1,DashStyle.MEDIUM_DASHES));
 		getBoundingBox().paint(g);*/
 	}
 

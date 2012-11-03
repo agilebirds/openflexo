@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.ShapeResizingControlPoint;
@@ -37,9 +41,7 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEHalfBand;
 import org.openflexo.fge.geom.area.FGEHalfLine;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -342,10 +344,10 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 		g.getGraphics().clip(clipArea);
 
 		Color shadowColor = new Color(darkness, darkness, darkness);
-		ForegroundStyle foreground = ForegroundStyle.makeStyle(shadowColor);
+		ForegroundStyle foreground = ForegroundStyleImpl.makeStyle(shadowColor);
 		foreground.setUseTransparency(true);
 		foreground.setTransparencyLevel(0.5f);
-		BackgroundStyle background = BackgroundStyle.makeColoredBackground(shadowColor);
+		BackgroundStyle background = BackgroundStyleImpl.makeColoredBackground(shadowColor);
 		background.setUseTransparency(true);
 		background.setTransparencyLevel(0.5f);
 		g.setDefaultForeground(foreground);

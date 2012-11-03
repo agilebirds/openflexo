@@ -22,15 +22,17 @@ package org.openflexo.dm.view.erdiagram;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -64,7 +66,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentationImpl<DMEntity> imple
 
 		setWidth(getDefaultWidth());
 
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, ENTITY_FONT));
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK, ENTITY_FONT));
 
 		addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
@@ -74,9 +76,9 @@ public class DMEntityGR extends ShapeGraphicalRepresentationImpl<DMEntity> imple
 
 		aDMEntity.addObserver(this);
 
-		foreground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
-		background = BackgroundStyle.makeColoredBackground(Color.WHITE);
-		headerBackground = BackgroundStyle.makeColoredBackground(Color.LIGHT_GRAY);
+		foreground = ForegroundStyleImpl.makeStyle(Color.DARK_GRAY);
+		background = BackgroundStyleImpl.makeColoredBackground(Color.WHITE);
+		headerBackground = BackgroundStyleImpl.makeColoredBackground(Color.LIGHT_GRAY);
 
 		setDecorationPainter(new DecorationPainter() {
 			@Override
@@ -98,9 +100,9 @@ public class DMEntityGR extends ShapeGraphicalRepresentationImpl<DMEntity> imple
 	}
 
 	private void updateStyles() {
-		/*foreground = ForegroundStyle.makeStyle(getEntity().getColor());
+		/*foreground = ForegroundStyleImpl.makeStyle(getEntity().getColor());
 		foreground.setLineWidth(2);
-		background = BackgroundStyle.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
+		background = BackgroundStyleImpl.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
 		setForeground(foreground);
 		setBackground(background);*/
 	}
@@ -223,7 +225,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentationImpl<DMEntity> imple
 
 	// Override to implement defaut automatic layout
 	public double getDefaultWidth() {
-		return WIDTH;
+		return DEFAULT_WIDTH;
 	}
 
 	// Override to implement defaut automatic layout

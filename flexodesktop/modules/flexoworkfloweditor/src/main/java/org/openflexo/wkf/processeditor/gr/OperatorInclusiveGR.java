@@ -23,8 +23,9 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.InclusiveOperator;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
@@ -35,7 +36,7 @@ public class OperatorInclusiveGR extends OperatorGR<InclusiveOperator> {
 
 	public OperatorInclusiveGR(InclusiveOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
-		painterForeground = ForegroundStyle.makeStyle(Color.BLACK);
+		painterForeground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		painterForeground.setLineWidth(3.0);
 		setShapePainter(new ShapePainter() {
 			@Override

@@ -23,17 +23,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -66,9 +69,9 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		setIsFloatingLabel(false);
 		setRelativeTextX(0.5); // Center label horizontally
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.2);
-		background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
+		background = BackgroundStyleImpl.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
 				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		setForeground(foreground);
 		setBackground(background);
@@ -143,7 +146,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		screenNameLabelTextStyle = TextStyle.makeTextStyle(Color.GRAY, WKFPreferences.getComponentFont().getFont());
+		screenNameLabelTextStyle = TextStyleImpl.makeTextStyle(Color.GRAY, WKFPreferences.getComponentFont().getFont());
 		/*if (WKFPreferences.getShowWONameInWKF() && getOperationNode().hasWOComponent()) {
 			setRelativeTextY(0.35); // Label is located on first third
 		}

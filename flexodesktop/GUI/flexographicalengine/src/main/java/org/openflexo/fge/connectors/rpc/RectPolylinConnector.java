@@ -33,7 +33,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
@@ -55,8 +57,6 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.toolbox.ConcatenedList;
 
 /**
@@ -184,16 +184,16 @@ public class RectPolylinConnector extends Connector {
 		}
 
 		/*
-		 * if (debugPolylin != null) { g.setDefaultForeground(ForegroundStyle.makeStyle(Color.PINK, 1.0f, DashStyle.SMALL_DASHES));
+		 * if (debugPolylin != null) { g.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.PINK, 1.0f, DashStyle.SMALL_DASHES));
 		 * debugPolylin.paint(g); }
 		 */
 
 		if (getDebug()) {
-			g.setDefaultForeground(ForegroundStyle.makeStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES));
+			g.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES));
 			for (FGERectPolylin p : potentialPolylin) {
 				p.paint(g);
 			}
-			g.setDefaultForeground(ForegroundStyle.makeStyle(Color.BLACK, 3.0f, DashStyle.PLAIN_STROKE));
+			g.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.BLACK, 3.0f, DashStyle.PLAIN_STROKE));
 			if (polylin != null) {
 				polylin.debugPaint(g);
 			}
@@ -209,7 +209,7 @@ public class RectPolylinConnector extends Connector {
 		}
 
 		/*
-		 * if (debugPolylin != null) { g.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1.0f, DashStyle.PLAIN_STROKE));
+		 * if (debugPolylin != null) { g.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.RED, 1.0f, DashStyle.PLAIN_STROKE));
 		 * debugPolylin.paint(g); }
 		 */
 

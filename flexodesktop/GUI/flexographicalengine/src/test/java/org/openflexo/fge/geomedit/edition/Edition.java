@@ -22,13 +22,15 @@ package org.openflexo.fge.geomedit.edition;
 import java.awt.Color;
 import java.util.Vector;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.GeometricObject;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 
 public abstract class Edition {
 	public int currentStep;
@@ -40,8 +42,8 @@ public abstract class Edition {
 	protected static BackgroundStyle focusedBackgroundStyle;
 
 	static {
-		focusedForegroundStyle = ForegroundStyle.makeStyle(Color.RED);
-		focusedBackgroundStyle = BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE);
+		focusedForegroundStyle = ForegroundStyleImpl.makeStyle(Color.RED);
+		focusedBackgroundStyle = BackgroundStyleImpl.makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE);
 		focusedBackgroundStyle.setUseTransparency(true);
 	}
 

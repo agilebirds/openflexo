@@ -23,19 +23,21 @@ import java.awt.Color;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.CapStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.JoinStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ShapeResizingControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.RegularPolygon;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -49,8 +51,8 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 
 	private static final Logger logger = Logger.getLogger(DataObjectGR.class.getPackage().getName());
 
-	private static final BackgroundStyle BACKGROUND = BackgroundStyle.makeColoredBackground(Color.WHITE);
-	private static final ForegroundStyle FOREGROUND = ForegroundStyle.makeStyle(new Color(0, 34, 73), 1.6f, JoinStyle.JOIN_ROUND,
+	private static final BackgroundStyle BACKGROUND = BackgroundStyleImpl.makeColoredBackground(Color.WHITE);
+	private static final ForegroundStyle FOREGROUND = ForegroundStyleImpl.makeStyle(new Color(0, 34, 73), 1.6f, JoinStyle.JOIN_ROUND,
 			CapStyle.CAP_ROUND, DashStyle.PLAIN_STROKE);
 
 	private static final double height = 1;

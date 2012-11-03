@@ -27,7 +27,7 @@ public interface ERDiagramConstants {
 	public static final int ENTITY_BORDER = 10;
 	public static final int PROPERTY_BORDER = 5;
 
-	public static final double WIDTH = 200;
+	public static final double DEFAULT_WIDTH = 200;
 	public static final double PROPERTY_HEIGHT = 17;
 	public static final double HEADER_HEIGHT = 30;
 

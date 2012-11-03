@@ -28,19 +28,22 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
@@ -80,7 +83,7 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 
 		getShape().setIsRounded(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		foreground.setLineWidth(1);
 		foreground.setDashStyle(DashStyle.BIG_DASHES);
 		setForeground(foreground);
@@ -119,7 +122,7 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 	}
 
 	private void updateBackground() {
-		background = BackgroundStyle.makeColorGradientBackground(getActivityGroup().getColor(), Color.WHITE,
+		background = BackgroundStyleImpl.makeColorGradientBackground(getActivityGroup().getColor(), Color.WHITE,
 				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		setBackground(background);
 	}
@@ -136,7 +139,7 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont() : WKFPreferences
 						.getActivityNodeFont().getFont()));
 	}

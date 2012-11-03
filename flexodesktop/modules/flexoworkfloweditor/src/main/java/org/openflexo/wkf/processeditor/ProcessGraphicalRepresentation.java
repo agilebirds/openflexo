@@ -24,6 +24,7 @@ import java.awt.Color;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
@@ -35,7 +36,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEFiniteGrid;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.gr.WKFConnectorGR;
@@ -60,7 +60,7 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 			@Override
 			public void paintDecoration(FGEDrawingDecorationGraphics g) {
 				if (getShowGrid()) {
-					g.useForegroundStyle(ForegroundStyle.makeStyle(GRID_COLOR));
+					g.useForegroundStyle(ForegroundStyleImpl.makeStyle(GRID_COLOR));
 					double w = g.getWidth();
 					double h = g.getHeight();
 					double scaledHStep = constraints.getHorizontalStep();

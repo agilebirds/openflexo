@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.CustomWidget;

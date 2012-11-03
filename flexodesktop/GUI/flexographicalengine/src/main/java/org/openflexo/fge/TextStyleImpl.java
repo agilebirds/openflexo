@@ -17,20 +17,17 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.xmlcode.XMLSerializable;
 
-public class TextStyle extends Observable implements XMLSerializable, Cloneable {
-	private static final Logger logger = Logger.getLogger(TextStyle.class.getPackage().getName());
+public class TextStyleImpl extends Observable implements TextStyle {
+	private static final Logger logger = Logger.getLogger(TextStyleImpl.class.getPackage().getName());
 
 	private Color color;
 	private Color backgroundColor = Color.WHITE;
@@ -38,34 +35,32 @@ public class TextStyle extends Observable implements XMLSerializable, Cloneable 
 	private int orientation = 0; // angle in degree
 	private boolean backgroundColored = false;
 
-	public static enum Parameters implements GRParameter {
-		color, backgroundColor, font, orientation, backgroundColored
-	}
-
-	public TextStyle() {
+	public TextStyleImpl() {
 		super();
 		color = FGEConstants.DEFAULT_TEXT_COLOR;
 		font = FGEConstants.DEFAULT_TEXT_FONT;
 	}
 
-	public TextStyle(Color aColor, Font aFont) {
+	public TextStyleImpl(Color aColor, Font aFont) {
 		this();
 		color = aColor;
 		font = aFont;
 	}
 
-	public static TextStyle makeDefault() {
+	public static TextStyleImpl makeDefault() {
 		return makeTextStyle(FGEConstants.DEFAULT_TEXT_COLOR, FGEConstants.DEFAULT_TEXT_FONT);
 	}
 
-	public static TextStyle makeTextStyle(Color aColor, Font aFont) {
-		return new TextStyle(aColor, aFont);
+	public static TextStyleImpl makeTextStyle(Color aColor, Font aFont) {
+		return new TextStyleImpl(aColor, aFont);
 	}
 
+	@Override
 	public Color getColor() {
 		return color;
 	}
 
+	@Override
 	public void setColor(Color aColor) {
 		if (requireChange(this.color, aColor)) {
 			Color oldColor = color;
@@ -75,10 +70,12 @@ public class TextStyle extends Observable implements XMLSerializable, Cloneable 
 		}
 	}
 
+	@Override
 	public Font getFont() {
 		return font;
 	}
 
+	@Override
 	public void setFont(Font aFont) {
 		if (requireChange(this.font, aFont)) {
 			Font oldFont = this.font;
@@ -88,10 +85,12 @@ public class TextStyle extends Observable implements XMLSerializable, Cloneable 
 		}
 	}
 
+	@Override
 	public int getOrientation() {
 		return orientation;
 	}
 
+	@Override
 	public void setOrientation(int anOrientation) {
 		if (requireChange(this.orientation, anOrientation)) {
 			int oldOrientation = this.orientation;
@@ -101,10 +100,12 @@ public class TextStyle extends Observable implements XMLSerializable, Cloneable 
 		}
 	}
 
+	@Override
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
 
+	@Override
 	public void setBackgroundColor(Color aColor) {
 		if (requireChange(this.backgroundColor, aColor)) {
 			Color oldColor = backgroundColor;
@@ -114,10 +115,12 @@ public class TextStyle extends Observable implements XMLSerializable, Cloneable 
 		}
 	}
 
+	@Override
 	public boolean getIsBackgroundColored() {
 		return backgroundColored;
 	}
 
+	@Override
 	public void setIsBackgroundColored(boolean aFlag) {
 		if (requireChange(this.backgroundColored, aFlag)) {
 			boolean oldValue = backgroundColored;
@@ -128,9 +131,9 @@ public class TextStyle extends Observable implements XMLSerializable, Cloneable 
 	}
 
 	@Override
-	public TextStyle clone() {
+	public TextStyleImpl clone() {
 		try {
-			return (TextStyle) super.clone();
+			return (TextStyleImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable
 			e.printStackTrace();

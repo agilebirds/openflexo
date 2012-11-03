@@ -22,6 +22,8 @@ package org.openflexo.fge.geomedit.gr;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEPoint;
@@ -30,8 +32,6 @@ import org.openflexo.fge.geomedit.CubicCurve;
 import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGECubicCurve, CubicCurve> implements
@@ -64,7 +64,7 @@ public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalR
 			FGEPoint cp1 = getGeometricObject().getCtrlP1();
 			FGEPoint cp2 = getGeometricObject().getCtrlP2();
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.5f, DashStyle.PLAIN_STROKE));
+			graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 0.5f, DashStyle.PLAIN_STROKE));
 
 			FGESegment line1 = new FGESegment(p1, cp1);
 			FGESegment line2 = new FGESegment(p2, cp2);

@@ -22,11 +22,13 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -40,21 +42,21 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 	private static final int NUMBER_OF_CYLINDER = 6;
 	private static final Color ODD_COLOR = new Color(233, 235, 53);
 	private static final Color EVEN_COLOR = new Color(211, 101, 38);
-	public static final BackgroundStyle EVEN_BACKGROUND = BackgroundStyle.makeColorGradientBackground(EVEN_COLOR,
+	public static final BackgroundStyle EVEN_BACKGROUND = BackgroundStyleImpl.makeColorGradientBackground(EVEN_COLOR,
 			FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), BackgroundStyle.ColorGradient.ColorGradientDirection.NORTH_SOUTH);
-	public static final BackgroundStyle ODD_BACKROUND = BackgroundStyle.makeColorGradientBackground(ODD_COLOR,
+	public static final BackgroundStyle ODD_BACKROUND = BackgroundStyleImpl.makeColorGradientBackground(ODD_COLOR,
 			FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), BackgroundStyle.ColorGradient.ColorGradientDirection.NORTH_SOUTH);
-	public static final ForegroundStyle NO_FOREGROUND = ForegroundStyle.makeNone();
+	public static final ForegroundStyle NO_FOREGROUND = ForegroundStyleImpl.makeNone();
 
-	// private static final ForegroundStyle ODD_FOREGROUND = ForegroundStyle.makeStyle(ODD_COLOR);
+	// private static final ForegroundStyle ODD_FOREGROUND = ForegroundStyleImpl.makeStyle(ODD_COLOR);
 
 	// private boolean isUpdatingPosition = false;
 
 	public DataSourceGR(WKFDataSource dataSource, ProcessRepresentation aDrawing) {
 		super(dataSource, ShapeType.RECTANGLE, aDrawing);
 		setIsFloatingLabel(true);
-		setForeground(ForegroundStyle.makeNone());
-		setBackground(BackgroundStyle.makeEmptyBackground());
+		setForeground(ForegroundStyleImpl.makeNone());
+		setBackground(BackgroundStyleImpl.makeEmptyBackground());
 		setMinimalWidth(10);
 		setMinimalHeight(10);
 		setShapePainter(new ShapePainter() {

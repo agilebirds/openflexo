@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;

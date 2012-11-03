@@ -255,13 +255,13 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 
 	/*
 	 * private FGEArea trivialCoveringArea; private FGEArea firstDegreeCoveringArea; private FGEArea secondDegreeCoveringArea; private
-	 * ForegroundStyle fs0 = ForegroundStyle.makeStyle(Color.BLUE); private BackgroundStyle bs0 =
+	 * ForegroundStyle fs0 = ForegroundStyleImpl.makeStyle(Color.BLUE); private BackgroundStyle bs0 =
 	 * BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE8,Color.RED,Color.YELLOW); private ForegroundStyle fs1 =
-	 * ForegroundStyle.makeStyle(Color.RED); private BackgroundStyle bs1 =
+	 * ForegroundStyleImpl.makeStyle(Color.RED); private BackgroundStyle bs1 =
 	 * BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE1,Color.RED,Color.WHITE); private ForegroundStyle fs2 =
-	 * ForegroundStyle.makeStyle(Color.RED); private BackgroundStyle bs2 =
+	 * ForegroundStyleImpl.makeStyle(Color.RED); private BackgroundStyle bs2 =
 	 * BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE4,Color.GREEN,Color.LIGHT_GRAY); private ForegroundStyle fs3 =
-	 * ForegroundStyle.makeStyle(Color.MAGENTA); private BackgroundStyle bs3 =
+	 * ForegroundStyleImpl.makeStyle(Color.MAGENTA); private BackgroundStyle bs3 =
 	 * BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE8,Color.BLACK,Color.WHITE);
 	 */
 

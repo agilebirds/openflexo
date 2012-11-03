@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
@@ -38,7 +39,6 @@ import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -111,7 +111,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 				} else {
 					g.drawImage(SwingUtils.scaleIt(cache, (int) getWidth() - 13, (int) getHeight() - 13), new FGEPoint(10d / getWidth(),
 							10d / getHeight()));
-					setBackground(BackgroundStyle.makeColoredBackground(Color.WHITE));
+					setBackground(BackgroundStyleImpl.makeColoredBackground(Color.WHITE));
 					// setText("");
 					setHasText(false);
 					ImageIcon typeIcon = getImageIcon(getSubProcessNode());

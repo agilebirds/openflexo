@@ -21,8 +21,10 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.node.ActionNode;
@@ -50,8 +52,8 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 	 */
 	private void updateImageBackground() {
 		/*if (getActionNode().getImageIcon() != null) {
-			foreground = ForegroundStyle.makeNone();
-			background = BackgroundStyle.makeImageBackground(getActionNode().getImageIcon());
+			foreground = ForegroundStyleImpl.makeNone();
+			background = BackgroundStyleImpl.makeImageBackground(getActionNode().getImageIcon());
 			((BackgroundImage)background).setScaleX(1);
 			((BackgroundImage)background).setScaleY(1);
 			if (getActionNode().getActionType() == ActionType.FLEXO_ACTION) {
@@ -64,9 +66,9 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 			}
 		}
 		else {*/
-		foreground = ForegroundStyle.makeStyle(Color.RED);
+		foreground = ForegroundStyleImpl.makeStyle(Color.RED);
 		foreground.setLineWidth(0.6);
-		background = BackgroundStyle.makeColoredBackground(getMainBgColor());
+		background = BackgroundStyleImpl.makeColoredBackground(getMainBgColor());
 		// }
 		setForeground(foreground);
 		setBackground(background);
@@ -95,7 +97,7 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 				}
 				return (index % 4 ) * 50 + xOffset + 75;
 		*/
-		return (index % 4) * 50 + 50;
+		return index % 4 * 50 + 50;
 	}
 
 	/**
@@ -113,7 +115,7 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 				}
 				return ((index / 4 )) * 50+yOffset;
 		*/
-		return (index / 4) * 50;
+		return index / 4 * 50;
 	}
 
 	@Override

@@ -23,9 +23,11 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -53,17 +55,17 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 		// setAbsoluteTextY(getOperatorNode().getNodeLabelPosY());
 		setIsFloatingLabel(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.6);
 
 		if (getImageIcon() != null) {
-			background = BackgroundStyle.makeImageBackground(getImageIcon());
+			background = BackgroundStyleImpl.makeImageBackground(getImageIcon());
 			((BackgroundStyle.BackgroundImage) background).setScaleX(1);
 			((BackgroundStyle.BackgroundImage) background).setScaleY(1);
 			((BackgroundStyle.BackgroundImage) background).setDeltaX(-2);
 			((BackgroundStyle.BackgroundImage) background).setDeltaY(-3);
 		} else {
-			background = BackgroundStyle.makeEmptyBackground();
+			background = BackgroundStyleImpl.makeEmptyBackground();
 		}
 
 		setForeground(foreground);
@@ -90,7 +92,7 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getEventFont(WKFPreferences.getEventNodeFont()).getFont() : WKFPreferences
 						.getEventNodeFont().getFont()));
 		setIsMultilineAllowed(true);

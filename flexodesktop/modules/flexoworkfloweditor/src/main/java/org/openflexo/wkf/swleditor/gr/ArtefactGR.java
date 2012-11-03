@@ -28,9 +28,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -262,7 +263,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 	}
 
 	protected TextStyle createTextStyle() {
-		return TextStyle.makeTextStyle(getDrawable().getTextColor(), getArtefactFont().getFont());
+		return TextStyleImpl.makeTextStyle(getDrawable().getTextColor(), getArtefactFont().getFont());
 	}
 
 	private FlexoFont getArtefactFont() {

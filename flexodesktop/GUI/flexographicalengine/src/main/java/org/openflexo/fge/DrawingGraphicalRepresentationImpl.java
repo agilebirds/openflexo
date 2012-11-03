@@ -41,11 +41,9 @@ import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectResized;
@@ -111,7 +109,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		}
 		width = 1000;
 		height = 1000;
-		bgStyle = BackgroundStyle.makeColoredBackground(getBackgroundColor());
+		bgStyle = BackgroundStyleImpl.makeColoredBackground(getBackgroundColor());
 	}
 
 	@Override
@@ -202,7 +200,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		FGENotification notification = requireChange(DrawingParameters.backgroundColor, backgroundColor);
 		if (notification != null) {
 			this.backgroundColor = backgroundColor;
-			bgStyle = BackgroundStyle.makeColoredBackground(backgroundColor);
+			bgStyle = BackgroundStyleImpl.makeColoredBackground(backgroundColor);
 			hasChanged(notification);
 		}
 	}
@@ -349,10 +347,10 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		super.paint(g, controller);
 
 		if (!(bgStyle instanceof BackgroundStyle.Color) || !((BackgroundStyle.Color) bgStyle).getColor().equals(getBackgroundColor())) {
-			bgStyle = BackgroundStyle.makeColoredBackground(getBackgroundColor());
+			bgStyle = BackgroundStyleImpl.makeColoredBackground(getBackgroundColor());
 		}
 
-		ForegroundStyle fgStyle = ForegroundStyle.makeStyle(Color.DARK_GRAY);
+		ForegroundStyle fgStyle = ForegroundStyleImpl.makeStyle(Color.DARK_GRAY);
 
 		graphics.setDefaultForeground(fgStyle);
 		graphics.setDefaultBackground(bgStyle);

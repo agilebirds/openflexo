@@ -19,8 +19,8 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
+import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -71,9 +71,9 @@ public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraph
 		if (supportShadow()
 				&& ((getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows())) || (getWorkflow() == null && WKFPreferences
 						.getShowShadows()))) {
-			setShadowStyle(ShadowStyle.makeDefault());
+			setShadowStyle(ShadowStyleImpl.makeDefault());
 		} else {
-			setShadowStyle(ShadowStyle.makeNone());
+			setShadowStyle(ShadowStyleImpl.makeNone());
 		}
 	}
 

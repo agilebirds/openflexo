@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -52,15 +53,10 @@ import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
@@ -120,7 +116,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	private Shape shape = null;
 
-	private ShadowStyle shadowStyle = ShadowStyle.makeDefault();
+	private ShadowStyle shadowStyle = ShadowStyleImpl.makeDefault();
 
 	private boolean allowToLeaveBounds = true;
 
@@ -162,10 +158,10 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		this(aDrawable, aDrawing);
 		setShapeType(shapeType);
 		layer = FGEConstants.DEFAULT_SHAPE_LAYER;
-		foreground = ForegroundStyle.makeDefault();
+		foreground = ForegroundStyleImpl.makeDefault();
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
-		background = BackgroundStyle.makeColoredBackground(Color.WHITE);
+		background = BackgroundStyleImpl.makeColoredBackground(Color.WHITE);
 		// background.setGraphicalRepresentation(this);
 		background.addObserver(this);
 
@@ -421,7 +417,6 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		}
 	}
 
-	@Override
 	public void setXNoNotification(double aValue) {
 		x = aValue;
 	}
@@ -458,7 +453,6 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		}
 	}
 
-	@Override
 	public void setYNoNotification(double aValue) {
 		y = aValue;
 	}
@@ -913,8 +907,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		}
 	}
 
-	@Override
-	public void setWidthNoNotification(double aValue) {
+	protected void setWidthNoNotification(double aValue) {
 		width = aValue;
 	}
 
@@ -935,8 +928,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		}
 	}
 
-	@Override
-	public void setHeightNoNotification(double aValue) {
+	protected void setHeightNoNotification(double aValue) {
 		height = aValue;
 	}
 
@@ -1138,8 +1130,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @param labelWidth
 	 * @return
 	 */
-	@Override
-	public double getRequiredWidth(double labelWidth) {
+	protected double getRequiredWidth(double labelWidth) {
 		return labelWidth;
 	}
 
@@ -1155,8 +1146,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @param labelHeight
 	 * @return
 	 */
-	@Override
-	public double getRequiredHeight(double labelHeight) {
+	protected double getRequiredHeight(double labelHeight) {
 		return labelHeight;
 	}
 
@@ -1695,7 +1685,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public void setBackgroundType(BackgroundStyleType backgroundType) {
 		if (backgroundType != getBackgroundType()) {
-			setBackground(BackgroundStyle.makeBackground(backgroundType));
+			setBackground(BackgroundStyleImpl.makeBackground(backgroundType));
 		}
 	}
 

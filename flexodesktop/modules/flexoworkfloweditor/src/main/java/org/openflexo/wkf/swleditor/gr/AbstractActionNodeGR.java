@@ -21,7 +21,7 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.ActionNode;
@@ -59,7 +59,7 @@ public abstract class AbstractActionNodeGR extends FlexoNodeGR<ActionNode> {
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getActionFont(WKFPreferences.getActionNodeFont()).getFont() : WKFPreferences
 						.getActionNodeFont().getFont()));
 		setIsMultilineAllowed(true);

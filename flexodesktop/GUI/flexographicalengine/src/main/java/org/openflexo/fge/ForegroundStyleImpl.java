@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -25,23 +25,12 @@ import java.awt.Stroke;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
-
-import org.openflexo.fge.FGEIconLibrary;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.inspector.HasIcon;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.xmlcode.XMLSerializable;
 
-public class ForegroundStyle extends Observable implements XMLSerializable, Cloneable {
+public class ForegroundStyleImpl extends Observable implements ForegroundStyle {
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(ForegroundStyle.class.getPackage().getName());
-
-	public static enum Parameters implements GRParameter {
-		color, lineWidth, capStyle, joinStyle, dashStyle, noStroke, useTransparency, transparencyLevel
-	}
+	private static final Logger logger = Logger.getLogger(ForegroundStyleImpl.class.getPackage().getName());
 
 	private boolean noStroke = false;
 
@@ -57,151 +46,7 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 	private Stroke stroke;
 	private double strokeScale;
 
-	public static enum JoinStyle implements HasIcon {
-		/**
-		 * Joins path segments by extending their outside edges until they meet.
-		 */
-		JOIN_MITER,
-
-		/**
-		 * Joins path segments by rounding off the corner at a radius of half the line width.
-		 */
-		JOIN_ROUND,
-
-		/**
-		 * Joins path segments by connecting the outer corners of their wide outlines with a straight segment.
-		 */
-		JOIN_BEVEL;
-
-		@Override
-		public ImageIcon getIcon() {
-			if (this == JOIN_MITER) {
-				return FGEIconLibrary.JOIN_MITER_ICON;
-			} else if (this == JOIN_ROUND) {
-				return FGEIconLibrary.JOIN_ROUND_ICON;
-			} else if (this == JOIN_BEVEL) {
-				return FGEIconLibrary.JOIN_BEVEL_ICON;
-			}
-			return null;
-		}
-	}
-
-	public static enum CapStyle implements HasIcon {
-		/**
-		 * Ends unclosed subpaths and dash segments with no added decoration.
-		 */
-		CAP_BUTT,
-
-		/**
-		 * Ends unclosed subpaths and dash segments with a round decoration that has a radius equal to half of the width of the pen.
-		 */
-		CAP_ROUND,
-
-		/**
-		 * Ends unclosed subpaths and dash segments with a square projection that extends beyond the end of the segment to a distance equal
-		 * to half of the line width.
-		 */
-		CAP_SQUARE;
-
-		@Override
-		public ImageIcon getIcon() {
-			if (this == CAP_BUTT) {
-				return FGEIconLibrary.CAP_BUTT_ICON;
-			} else if (this == CAP_ROUND) {
-				return FGEIconLibrary.CAP_ROUND_ICON;
-			} else if (this == CAP_SQUARE) {
-				return FGEIconLibrary.CAP_SQUARE_ICON;
-			}
-			return null;
-		}
-
-	}
-
-	public static enum DashStyle implements HasIcon {
-		PLAIN_STROKE, SMALL_DASHES, MEDIUM_DASHES, MEDIUM_SPACED_DASHES, BIG_DASHES, DOTS_DASHES, DOT_LINES_DASHES;
-
-		@Override
-		public ImageIcon getIcon() {
-			if (this == PLAIN_STROKE) {
-				return FGEIconLibrary.PLAIN_STROKE_ICON;
-			} else if (this == SMALL_DASHES) {
-				return FGEIconLibrary.SMALL_DASHES_ICON;
-			} else if (this == MEDIUM_DASHES) {
-				return FGEIconLibrary.MEDIUM_DASHES_ICON;
-			} else if (this == MEDIUM_SPACED_DASHES) {
-				return FGEIconLibrary.MEDIUM_SPACED_DASHES_ICON;
-			} else if (this == BIG_DASHES) {
-				return FGEIconLibrary.BIG_DASHES_ICON;
-			} else if (this == DOTS_DASHES) {
-				return FGEIconLibrary.DOTS_DASHES_ICON;
-			} else if (this == DOT_LINES_DASHES) {
-				return FGEIconLibrary.DOTS_LINES_DASHES_ICON;
-			}
-			return null;
-		}
-
-		/**
-		 * Returns the array representing the lengths of the dash segments. Alternate entries in the array represent the user space lengths
-		 * of the opaque and transparent segments of the dashes. As the pen moves along the outline of the <code>Shape</code> to be stroked,
-		 * the user space distance that the pen travels is accumulated. The distance value is used to index into the dash array. The pen is
-		 * opaque when its current cumulative distance maps to an even element of the dash array and transparent otherwise.
-		 * 
-		 * @return the dash array.
-		 */
-		public float[] getDashArray() {
-			if (this == PLAIN_STROKE) {
-				return null;
-			} else if (this == SMALL_DASHES) {
-				float[] da = { 3, 2 };
-				return da;
-			} else if (this == MEDIUM_DASHES) {
-				float[] da = { 5, 3 };
-				return da;
-			} else if (this == MEDIUM_SPACED_DASHES) {
-				float[] da = { 5, 5 };
-				return da;
-			} else if (this == BIG_DASHES) {
-				float[] da = { 10, 5 };
-				return da;
-			} else if (this == DOTS_DASHES) {
-				float[] da = { 1, 4 };
-				return da;
-			} else if (this == DOT_LINES_DASHES) {
-				float[] da = { 15, 3, 3, 3 };
-				return da;
-			}
-			return null;
-		}
-
-		/**
-		 * Returns the current dash phase. The dash phase is a distance specified in user coordinates that represents an offset into the
-		 * dashing pattern. In other words, the dash phase defines the point in the dashing pattern that will correspond to the beginning of
-		 * the stroke.
-		 * 
-		 * @return the dash phase as a <code>float</code> value.
-		 */
-		public float getDashPhase() {
-			if (this == PLAIN_STROKE) {
-				return 0;
-			} else if (this == SMALL_DASHES) {
-				return 0;
-			} else if (this == MEDIUM_DASHES) {
-				return 0;
-			} else if (this == MEDIUM_SPACED_DASHES) {
-				return 0;
-			} else if (this == BIG_DASHES) {
-				return 0;
-			} else if (this == DOTS_DASHES) {
-				return 0;
-			} else if (this == DOT_LINES_DASHES) {
-				return 0;
-			}
-			return 0;
-		}
-
-	}
-
-	public ForegroundStyle() {
+	public ForegroundStyleImpl() {
 		super();
 		noStroke = false;
 		color = Color.BLACK;
@@ -211,33 +56,33 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		dashStyle = DashStyle.PLAIN_STROKE;
 	}
 
-	public ForegroundStyle(Color aColor) {
+	public ForegroundStyleImpl(Color aColor) {
 		this();
 		color = aColor;
 	}
 
-	public static ForegroundStyle makeDefault() {
-		return new ForegroundStyle();
+	public static ForegroundStyleImpl makeDefault() {
+		return new ForegroundStyleImpl();
 	}
 
-	public static ForegroundStyle makeNone() {
-		ForegroundStyle returned = new ForegroundStyle();
+	public static ForegroundStyleImpl makeNone() {
+		ForegroundStyleImpl returned = new ForegroundStyleImpl();
 		returned.setNoStroke(true);
 		return returned;
 	}
 
-	public static ForegroundStyle makeStyle(Color aColor) {
-		return new ForegroundStyle(aColor);
+	public static ForegroundStyleImpl makeStyle(Color aColor) {
+		return new ForegroundStyleImpl(aColor);
 	}
 
-	public static ForegroundStyle makeStyle(Color aColor, float aLineWidth) {
-		ForegroundStyle returned = new ForegroundStyle(aColor);
+	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth) {
+		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		return returned;
 	}
 
-	public static ForegroundStyle makeStyle(Color aColor, float aLineWidth, JoinStyle joinStyle, CapStyle capStyle, DashStyle dashStyle) {
-		ForegroundStyle returned = new ForegroundStyle(aColor);
+	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, JoinStyle joinStyle, CapStyle capStyle, DashStyle dashStyle) {
+		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		returned.setJoinStyle(joinStyle);
 		returned.setCapStyle(capStyle);
@@ -245,17 +90,19 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		return returned;
 	}
 
-	public static ForegroundStyle makeStyle(Color aColor, float aLineWidth, DashStyle dashStyle) {
-		ForegroundStyle returned = new ForegroundStyle(aColor);
+	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, DashStyle dashStyle) {
+		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		returned.setDashStyle(dashStyle);
 		return returned;
 	}
 
+	@Override
 	public CapStyle getCapStyle() {
 		return capStyle;
 	}
 
+	@Override
 	public void setCapStyle(CapStyle aCapStyle) {
 		if (requireChange(this.color, aCapStyle)) {
 			CapStyle oldCapStyle = capStyle;
@@ -266,10 +113,12 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		}
 	}
 
+	@Override
 	public Color getColor() {
 		return color;
 	}
 
+	@Override
 	public void setColor(Color aColor) {
 		if (requireChange(this.color, aColor)) {
 			java.awt.Color oldColor = color;
@@ -279,14 +128,17 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		}
 	}
 
+	@Override
 	public void setColorNoNotification(Color aColor) {
 		this.color = aColor;
 	}
 
+	@Override
 	public DashStyle getDashStyle() {
 		return dashStyle;
 	}
 
+	@Override
 	public void setDashStyle(DashStyle aDashStyle) {
 		if (requireChange(this.color, aDashStyle)) {
 			DashStyle oldDashStyle = dashStyle;
@@ -297,10 +149,12 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		}
 	}
 
+	@Override
 	public JoinStyle getJoinStyle() {
 		return joinStyle;
 	}
 
+	@Override
 	public void setJoinStyle(JoinStyle aJoinStyle) {
 		if (requireChange(this.joinStyle, aJoinStyle)) {
 			JoinStyle oldJoinStyle = joinStyle;
@@ -311,10 +165,12 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		}
 	}
 
+	@Override
 	public double getLineWidth() {
 		return lineWidth;
 	}
 
+	@Override
 	public void setLineWidth(double aLineWidth) {
 		if (requireChange(this.lineWidth, aLineWidth)) {
 			double oldLineWidth = lineWidth;
@@ -325,10 +181,12 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		}
 	}
 
+	@Override
 	public boolean getNoStroke() {
 		return noStroke;
 	}
 
+	@Override
 	public void setNoStroke(boolean aFlag) {
 		if (requireChange(this.noStroke, aFlag)) {
 			boolean oldValue = noStroke;
@@ -338,6 +196,7 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		}
 	}
 
+	@Override
 	public Stroke getStroke(double scale) {
 		if (stroke == null || scale != strokeScale) {
 			if (dashStyle == DashStyle.PLAIN_STROKE) {
@@ -356,10 +215,12 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		return stroke;
 	}
 
+	@Override
 	public float getTransparencyLevel() {
 		return transparencyLevel;
 	}
 
+	@Override
 	public void setTransparencyLevel(float aLevel) {
 		if (requireChange(this.transparencyLevel, aLevel)) {
 			float oldValue = transparencyLevel;
@@ -369,10 +230,12 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		}
 	}
 
+	@Override
 	public boolean getUseTransparency() {
 		return useTransparency;
 	}
 
+	@Override
 	public void setUseTransparency(boolean aFlag) {
 		if (requireChange(this.useTransparency, aFlag)) {
 			boolean oldValue = useTransparency;
@@ -383,9 +246,9 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 	}
 
 	@Override
-	public ForegroundStyle clone() {
+	public ForegroundStyleImpl clone() {
 		try {
-			ForegroundStyle returned = (ForegroundStyle) super.clone();
+			ForegroundStyleImpl returned = (ForegroundStyleImpl) super.clone();
 			return returned;
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable
@@ -401,6 +264,7 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 				+ useTransparency + ",transparencyLevel=" + transparencyLevel + "]";
 	}
 
+	@Override
 	public String toNiceString() {
 		if (getNoStroke()) {
 			return FlexoLocalization.localizedForKey(GraphicalRepresentationUtils.LOCALIZATION, "no_stroke");
@@ -411,12 +275,12 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ForegroundStyle) {
+		if (obj instanceof ForegroundStyleImpl) {
 			// logger.info("Equals called for ForegroundStyle !!!!!!!!!");
-			ForegroundStyle fs = (ForegroundStyle) obj;
-			return (getNoStroke() == fs.getNoStroke() && getLineWidth() == fs.getLineWidth() && getColor() == fs.getColor()
+			ForegroundStyleImpl fs = (ForegroundStyleImpl) obj;
+			return getNoStroke() == fs.getNoStroke() && getLineWidth() == fs.getLineWidth() && getColor() == fs.getColor()
 					&& getJoinStyle() == fs.getJoinStyle() && getCapStyle() == fs.getCapStyle() && getDashStyle() == fs.getDashStyle()
-					&& getUseTransparency() == fs.getUseTransparency() && getTransparencyLevel() == fs.getTransparencyLevel());
+					&& getUseTransparency() == fs.getUseTransparency() && getTransparencyLevel() == fs.getTransparencyLevel();
 		}
 		return super.equals(obj);
 	}

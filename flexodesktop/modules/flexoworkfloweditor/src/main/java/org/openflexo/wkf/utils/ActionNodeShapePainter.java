@@ -22,13 +22,14 @@ package org.openflexo.wkf.utils;
 import java.awt.Color;
 import java.util.Vector;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEArc;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.ActionType;
@@ -60,7 +61,7 @@ public class ActionNodeShapePainter implements ShapePainter {
 		GEAR = points.toArray(new FGEPoint[0]);
 	}
 
-	private static final ForegroundStyle FOREGROUND = ForegroundStyle.makeStyle(Color.BLACK);
+	private static final ForegroundStyle FOREGROUND = ForegroundStyleImpl.makeStyle(Color.BLACK);
 	private ShapeGraphicalRepresentation<ActionNode> shape;
 
 	public ActionNodeShapePainter(ShapeGraphicalRepresentation<ActionNode> shape) {

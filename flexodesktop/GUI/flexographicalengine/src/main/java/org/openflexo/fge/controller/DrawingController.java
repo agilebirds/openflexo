@@ -40,21 +40,25 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
 import org.openflexo.fge.shapes.Shape;
@@ -111,10 +115,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		super();
 
 		setCurrentTool(EditorTool.SelectionTool);
-		currentForegroundStyle = ForegroundStyle.makeDefault();
-		currentBackgroundStyle = BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
-		currentTextStyle = TextStyle.makeDefault();
-		currentShadowStyle = ShadowStyle.makeDefault();
+		currentForegroundStyle = ForegroundStyleImpl.makeDefault();
+		currentBackgroundStyle = BackgroundStyleImpl.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		currentTextStyle = TextStyleImpl.makeDefault();
+		currentShadowStyle = ShadowStyleImpl.makeDefault();
 		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
 
 		toolbox = new EditorToolbox(this);

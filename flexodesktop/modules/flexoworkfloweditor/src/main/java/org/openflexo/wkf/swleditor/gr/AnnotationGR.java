@@ -24,15 +24,15 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.FlexoLevel;
@@ -68,7 +68,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 			public void paintShape(FGEShapeGraphics g) {
 				if (getAnnotation().isAnnotation()) {
 					if (getAnnotation().hasIncomingAssociations() || getAnnotation().hasOutgoingAssociations()) {
-						g.setDefaultForeground(ForegroundStyle.makeDefault());
+						g.setDefaultForeground(ForegroundStyleImpl.makeDefault());
 						g.useDefaultForegroundStyle();
 						for (int i = 0; i < INCOMING_ANNOTATION_BORDER.length - 1; i++) {
 							FGEPoint p1 = INCOMING_ANNOTATION_BORDER[i];
@@ -78,7 +78,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 					}
 				}
 				/*if (getAnnotation().hasOutgoingAssociations()) {
-					g.setDefaultForeground(ForegroundStyle.makeDefault());
+					g.setDefaultForeground(ForegroundStyleImpl.makeDefault());
 					g.useDefaultForegroundStyle();
 					for (int i = 0; i < OUTGOING_ANNOTATION_BORDER.length-1; i++) {
 						FGEPoint p1 = OUTGOING_ANNOTATION_BORDER[i];
@@ -171,8 +171,8 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
 		if (getAnnotation().isAnnotation()) {
-			setBackground(BackgroundStyle.makeEmptyBackground());
-			setForeground(ForegroundStyle.makeNone());
+			setBackground(BackgroundStyleImpl.makeEmptyBackground());
+			setForeground(ForegroundStyleImpl.makeNone());
 			setIsFloatingLabel(false);
 			setAdjustMinimalWidthToLabelWidth(true);
 			setAdjustMinimalHeightToLabelHeight(true);
@@ -181,14 +181,14 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		} else {
 			if (getAnnotation().getIsSolidBackground()) {
-				setBackground(BackgroundStyle.makeColoredBackground(getAnnotation().getBackgroundColor()));
+				setBackground(BackgroundStyleImpl.makeColoredBackground(getAnnotation().getBackgroundColor()));
 			} else {
-				setBackground(BackgroundStyle.makeEmptyBackground());
+				setBackground(BackgroundStyleImpl.makeEmptyBackground());
 			}
 			if (getAnnotation().getDashStyle() == null) {
 				getAnnotation().setDashStyle(DashStyle.DOT_LINES_DASHES);
 			}
-			setForeground(ForegroundStyle.makeStyle(getAnnotation().getBorderColor(), 1.0f, (DashStyle) getAnnotation().getDashStyle()));
+			setForeground(ForegroundStyleImpl.makeStyle(getAnnotation().getBorderColor(), 1.0f, (DashStyle) getAnnotation().getDashStyle()));
 			((Rectangle) getShape()).setIsRounded(getAnnotation().getIsRounded());
 			setIsFloatingLabel(true);
 			setAdjustMinimalWidthToLabelWidth(false);
@@ -196,7 +196,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 			setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		}
 		setIsMultilineAllowed(true);
-		// setTextStyle(TextStyle.makeTextStyle(getAnnotation().getTextColor(), getAnnotation().getTextFont().getTheFont()));
+		// setTextStyle(TextStyleImpl.makeTextStyle(getAnnotation().getTextColor(), getAnnotation().getTextFont().getTheFont()));
 		if (getAnnotation().getTextAlignment() == null || !(getDrawable().getTextAlignment() instanceof ParagraphAlignment)) {
 			getAnnotation().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
 		}

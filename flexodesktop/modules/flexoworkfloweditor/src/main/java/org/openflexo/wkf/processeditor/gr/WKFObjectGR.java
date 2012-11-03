@@ -21,9 +21,9 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -107,9 +107,9 @@ public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRep
 		if (supportShadow()
 				&& (getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows()) || getWorkflow() == null
 						&& WKFPreferences.getShowShadows())) {
-			setShadowStyle(ShadowStyle.makeDefault());
+			setShadowStyle(ShadowStyleImpl.makeDefault());
 		} else {
-			setShadowStyle(ShadowStyle.makeNone());
+			setShadowStyle(ShadowStyleImpl.makeNone());
 		}
 	}
 

@@ -32,8 +32,13 @@ import java.util.Observer;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -47,10 +52,7 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -90,13 +92,13 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	private static final int PALETTE_WIDTH = 15;
 	private static final int PALETTE_HEIGHT = 4 * ELEMENTS_HEIGHT + 5 * SPACING;
 
-	private static final ForegroundStyle NONE = ForegroundStyle.makeNone();
-	private static final BackgroundStyle DEFAULT = BackgroundStyle.makeColoredBackground(Color.WHITE);
-	private static final ForegroundStyle NODE_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_DARK_GREEN, 1.0f);
-	private static final ForegroundStyle EDGE_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BROWN, 1.0f);
-	private static final ForegroundStyle DATA_OBJECT_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BLUE, 1.0f);
-	// private static final ForegroundStyle AND_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BORDEAU, 1.0f);
-	private static final BackgroundStyle NODE_BACKGROUND = BackgroundStyle.makeColorGradientBackground(FGEUtils.NICE_DARK_GREEN,
+	private static final ForegroundStyle NONE = ForegroundStyleImpl.makeNone();
+	private static final BackgroundStyle DEFAULT = BackgroundStyleImpl.makeColoredBackground(Color.WHITE);
+	private static final ForegroundStyle NODE_FOREGROUND = ForegroundStyleImpl.makeStyle(FGEUtils.NICE_DARK_GREEN, 1.0f);
+	private static final ForegroundStyle EDGE_FOREGROUND = ForegroundStyleImpl.makeStyle(FGEUtils.NICE_BROWN, 1.0f);
+	private static final ForegroundStyle DATA_OBJECT_FOREGROUND = ForegroundStyleImpl.makeStyle(FGEUtils.NICE_BLUE, 1.0f);
+	// private static final ForegroundStyle AND_FOREGROUND = ForegroundStyleImpl.makeStyle(FGEUtils.NICE_BORDEAU, 1.0f);
+	private static final BackgroundStyle NODE_BACKGROUND = BackgroundStyleImpl.makeColorGradientBackground(FGEUtils.NICE_DARK_GREEN,
 			Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 
 	static {

@@ -22,6 +22,8 @@ package org.openflexo.fge.geom.area;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -29,7 +31,6 @@ import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEGraphics;
 
 public class FGESubstractionArea extends FGEOperationArea {
@@ -196,7 +197,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 
 		getContainerArea().paint(g);
 		BackgroundStyle old = g.getDefaultBackground();
-		BackgroundStyle bs = BackgroundStyle.makeColoredBackground(java.awt.Color.GRAY);
+		BackgroundStyle bs = BackgroundStyleImpl.makeColoredBackground(java.awt.Color.GRAY);
 		bs.setUseTransparency(true);
 		g.setDefaultBackground(bs);
 		getSubstractedArea().paint(g);
