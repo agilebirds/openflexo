@@ -112,7 +112,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	private boolean hasFocusedForeground = false;
 	private boolean hasFocusedBackground = false;
 
-	private ShapeBorder border = new ShapeBorder();
+	private ShapeBorder border = new ShapeBorderImpl();
 
 	private Shape shape = null;
 
@@ -140,6 +140,94 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	protected FGEShapeDecorationGraphics decorationGraphics;
 	protected DecorationPainter decorationPainter;
 	protected ShapePainter shapePainter;
+
+	public static class ShapeBorderImpl extends FGEObjectImpl implements ShapeBorder {
+		private int top;
+		private int bottom;
+		private int left;
+		private int right;
+
+		public ShapeBorderImpl() {
+			super();
+			this.top = FGEConstants.DEFAULT_BORDER_SIZE;
+			this.bottom = FGEConstants.DEFAULT_BORDER_SIZE;
+			this.left = FGEConstants.DEFAULT_BORDER_SIZE;
+			this.right = FGEConstants.DEFAULT_BORDER_SIZE;
+		}
+
+		public ShapeBorderImpl(int top, int bottom, int left, int right) {
+			super();
+			this.top = top;
+			this.bottom = bottom;
+			this.left = left;
+			this.right = right;
+		}
+
+		public ShapeBorderImpl(ShapeBorder border) {
+			super();
+			this.top = border.getTop();
+			this.bottom = border.getBottom();
+			this.left = border.getLeft();
+			this.right = border.getRight();
+		}
+
+		@Override
+		public ShapeBorder clone() {
+			try {
+				return (ShapeBorder) super.clone();
+			} catch (CloneNotSupportedException e) {
+				// cannot happen, we are clonable
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "ShapeBorder [" + left + "," + top + "," + right + "," + bottom + "]";
+		}
+
+		@Override
+		public int getTop() {
+			return top;
+		}
+
+		@Override
+		public void setTop(int top) {
+			this.top = top;
+		}
+
+		@Override
+		public int getBottom() {
+			return bottom;
+		}
+
+		@Override
+		public void setBottom(int bottom) {
+			this.bottom = bottom;
+		}
+
+		@Override
+		public int getLeft() {
+			return left;
+		}
+
+		@Override
+		public void setLeft(int left) {
+			this.left = left;
+		}
+
+		@Override
+		public int getRight() {
+			return right;
+		}
+
+		@Override
+		public void setRight(int right) {
+			this.right = right;
+		}
+
+	}
 
 	// *******************************************************************************
 	// * Constructor *
@@ -2068,7 +2156,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public double getUnscaledViewWidth() {
-		return getWidth() + (getBorder() != null ? getBorder().left + getBorder().right : 0);
+		return getWidth() + (getBorder() != null ? getBorder().getLeft() + getBorder().getRight() : 0);
 	}
 
 	@Override
@@ -2078,7 +2166,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public double getUnscaledViewHeight() {
-		return getHeight() + (getBorder() != null ? getBorder().top + getBorder().bottom : 0);
+		return getHeight() + (getBorder() != null ? getBorder().getTop() + getBorder().getBottom() : 0);
 	}
 
 	/**
@@ -2088,7 +2176,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 */
 	@Override
 	public FGERectangle getBounds() {
-		return new FGERectangle(getX(), getY(), getWidth() + (getBorder() != null ? getBorder().left + getBorder().right : 0),
+		return new FGERectangle(getX(), getY(), getWidth() + (getBorder() != null ? getBorder().getLeft() + getBorder().getRight() : 0),
 				getUnscaledViewHeight());
 	}
 
@@ -2102,8 +2190,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public Rectangle getBounds(double scale) {
 		Rectangle bounds = new Rectangle();
 
-		bounds.x = (int) ((getX() + (getBorder() != null ? getBorder().left : 0)) * scale);
-		bounds.y = (int) ((getY() + (getBorder() != null ? getBorder().top : 0)) * scale);
+		bounds.x = (int) ((getX() + (getBorder() != null ? getBorder().getLeft() : 0)) * scale);
+		bounds.y = (int) ((getY() + (getBorder() != null ? getBorder().getTop() : 0)) * scale);
 		bounds.width = (int) (getWidth() * scale);
 		bounds.height = (int) (getHeight() * scale);
 
@@ -2146,7 +2234,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale) {
 		AffineTransform returned = AffineTransform.getScaleInstance(getWidth(), getHeight());
 		if (getBorder() != null) {
-			returned.preConcatenate(AffineTransform.getTranslateInstance(getBorder().left, getBorder().top));
+			returned.preConcatenate(AffineTransform.getTranslateInstance(getBorder().getLeft(), getBorder().getTop()));
 		}
 		if (scale != 1) {
 			returned.preConcatenate(AffineTransform.getScaleInstance(scale, scale));
@@ -2173,7 +2261,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			returned = AffineTransform.getScaleInstance(1 / scale, 1 / scale);
 		}
 		if (getBorder() != null) {
-			returned.preConcatenate(AffineTransform.getTranslateInstance(-getBorder().left, -getBorder().top));
+			returned.preConcatenate(AffineTransform.getTranslateInstance(-getBorder().getLeft(), -getBorder().getTop()));
 		}
 		returned.preConcatenate(AffineTransform.getScaleInstance(1 / getWidth(), 1 / getHeight()));
 		return returned;
@@ -2252,7 +2340,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 				g2.setColor(Color.RED);
 				g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
 				g2.setColor(Color.BLUE);
-				g2.drawRect((int) (getBorder().left * controller.getScale()), (int) (getBorder().top * controller.getScale()),
+				g2.drawRect((int) (getBorder().getLeft() * controller.getScale()), (int) (getBorder().getTop() * controller.getScale()),
 						(int) (getWidth() * controller.getScale()) - 1, (int) (getHeight() * controller.getScale()) - 1);
 			} else {
 				g2.setColor(Color.BLUE);

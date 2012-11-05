@@ -22,7 +22,6 @@ package org.openflexo.fge;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Represent shadow properties which should be applied to a graphical representation
@@ -32,7 +31,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 @ModelEntity
 @ImplementationClass(ShadowStyleImpl.class)
-public interface ShadowStyle extends XMLSerializable, Cloneable, IObservable {
+public interface ShadowStyle extends FGEStyle {
 
 	public static enum Parameters implements GRParameter {
 		drawShadow, shadowDarkness, shadowDepth, shadowBlur

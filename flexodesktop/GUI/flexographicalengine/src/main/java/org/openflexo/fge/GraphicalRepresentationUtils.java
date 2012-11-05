@@ -12,7 +12,10 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
+import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
+import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.model.xml.DefaultStringEncoder;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.StringEncoder;
 
@@ -289,7 +292,37 @@ public class GraphicalRepresentationUtils {
 				return null;
 			}
 		}
-	
+
+		@Override
+		public String convertToString(FGEPoint aPoint) {
+			if (aPoint != null) {
+				return aPoint.x + "," + aPoint.y;
+			} else {
+				return null;
+			}
+		}
+	};
+	public static final DefaultStringEncoder.Converter<FGEPoint> POINT_CONVERTER_2 = new DefaultStringEncoder.Converter<FGEPoint>(
+			FGEPoint.class) {
+		@Override
+		public FGEPoint convertFromString(String value, ModelFactory factory) {
+			try {
+				FGEPoint returned = new FGEPoint();
+				StringTokenizer st = new StringTokenizer(value, ",");
+				if (st.hasMoreTokens()) {
+					returned.x = Double.parseDouble(st.nextToken());
+				}
+				if (st.hasMoreTokens()) {
+					returned.y = Double.parseDouble(st.nextToken());
+				}
+				return returned;
+			} catch (NumberFormatException e) {
+				// Warns about the exception
+				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
+				return null;
+			}
+		}
+
 		@Override
 		public String convertToString(FGEPoint aPoint) {
 			if (aPoint != null) {
@@ -317,7 +350,7 @@ public class GraphicalRepresentationUtils {
 				return null;
 			}
 		}
-	
+
 		@Override
 		public String convertToString(FGERectPolylin aPolylin) {
 			if (aPolylin != null) {
@@ -331,6 +364,38 @@ public class GraphicalRepresentationUtils {
 					isFirst = false;
 				}
 				return sb.toString();
+			} else {
+				return null;
+			}
+		}
+	};
+
+	public static final DefaultStringEncoder.Converter<FGESteppedDimensionConstraint> STEPPED_DIMENSION_CONVERTER = new DefaultStringEncoder.Converter<FGESteppedDimensionConstraint>(
+			FGESteppedDimensionConstraint.class) {
+		@Override
+		public FGESteppedDimensionConstraint convertFromString(String value, ModelFactory factory) {
+			try {
+				Double hStep = null;
+				Double vStep = null;
+				StringTokenizer st = new StringTokenizer(value, ",");
+				if (st.hasMoreTokens()) {
+					hStep = Double.parseDouble(st.nextToken());
+				}
+				if (st.hasMoreTokens()) {
+					vStep = Double.parseDouble(st.nextToken());
+				}
+				return new FGESteppedDimensionConstraint(hStep, vStep);
+			} catch (NumberFormatException e) {
+				// Warns about the exception
+				System.err.println("Supplied value is not parsable as a FGESteppedDimensionConstraint:" + value);
+				return null;
+			}
+		}
+
+		@Override
+		public String convertToString(FGESteppedDimensionConstraint aDim) {
+			if (aDim != null) {
+				return aDim.getHorizontalStep() + "," + aDim.getVerticalStep();
 			} else {
 				return null;
 			}

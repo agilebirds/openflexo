@@ -79,7 +79,7 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 		setHasText(false);
 		setForeground(foreground);
 		setBackground(background);
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, 0, 0, 0));
+		setBorder(new ShapeBorderImpl(0, 0, 0, 0));
 		setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		updatePropertiesFromWKFPreferences();
@@ -121,8 +121,8 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
 						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
 				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation<?>) parent).getBorder();
-				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(parentBorder.left - PRECONDITION_SIZE / 2,
-						parentBorder.top - PRECONDITION_SIZE / 2));
+				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(
+						parentBorder.getLeft() - PRECONDITION_SIZE / 2, parentBorder.getTop() - PRECONDITION_SIZE / 2));
 				// System.out.println("Rebuild outline = "+parentOutline);
 				parentGR = parent;
 			}

@@ -91,7 +91,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setBorder(new ShapeBorder(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
+		setBorder(new ShapeBorderImpl(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
 		setTextStyle(TextStyleImpl.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont() : WKFPreferences
 						.getActivityNodeFont().getFont()));

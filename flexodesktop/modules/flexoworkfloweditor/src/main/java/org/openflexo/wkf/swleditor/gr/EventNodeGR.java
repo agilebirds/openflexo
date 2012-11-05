@@ -108,22 +108,22 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 
 	@Override
 	int getTopBorder() {
-		return (isInPalette ? 1 : super.getTopBorder());
+		return isInPalette ? 1 : super.getTopBorder();
 	}
 
 	@Override
 	int getBottomBorder() {
-		return (isInPalette ? 1 : super.getBottomBorder());
+		return isInPalette ? 1 : super.getBottomBorder();
 	}
 
 	@Override
 	int getLeftBorder() {
-		return (isInPalette ? 1 : super.getLeftBorder());
+		return isInPalette ? 1 : super.getLeftBorder();
 	}
 
 	@Override
 	int getRightBorder() {
-		return (isInPalette ? 1 : super.getRightBorder());
+		return isInPalette ? 1 : super.getRightBorder();
 	}
 
 	private void updateBackgroundForeground() {
@@ -154,8 +154,8 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 					parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
 							((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
 					ShapeBorder parentBorder = ((ShapeGraphicalRepresentation<?>) parent).getBorder();
-					parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(parentBorder.left - 20,
-							parentBorder.top - 20));
+					parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(parentBorder.getLeft() - 20,
+							parentBorder.getTop() - 20));
 					// System.out.println("Rebuild outline = "+parentOutline);
 					parentGR = parent;
 				}
@@ -189,7 +189,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 			if (dataModification instanceof RoleChanged) {
 				resetLocationConstrainedArea();
 				getDrawing().requestRebuildCompleteHierarchy();
-			} else if ("eventType".equals((dataModification).propertyName()) || "isCatching".equals((dataModification).propertyName())) {
+			} else if ("eventType".equals(dataModification.propertyName()) || "isCatching".equals(dataModification.propertyName())) {
 				updateBackgroundForeground();
 				notifyShapeNeedsToBeRedrawn();
 			} else {

@@ -39,8 +39,8 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -334,7 +334,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setIsSelectable(false);
 			textGR.setIsFocusable(false);
 			textGR.setIsReadOnly(true);
-			textGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+			textGR.setBorder(new ShapeBorderImpl(0, 0, 0, 0));
 			textGR.setValidated(true);
 
 			controller = new DrawingController<Drawing<?>>(drawing);

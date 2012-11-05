@@ -30,7 +30,6 @@ import org.openflexo.inspector.HasIcon;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.toolbox.ImageIconResource;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Represent background properties which should be applied to a graphical representation
@@ -40,7 +39,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(BackgroundStyleImpl.class)
-public interface BackgroundStyle extends XMLSerializable, Cloneable, IObservable {
+public interface BackgroundStyle extends FGEStyle {
 
 	public static enum Parameters implements GRParameter {
 		color,

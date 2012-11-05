@@ -253,7 +253,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setBorder(new ShapeBorder(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
+		setBorder(new ShapeBorderImpl(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
 		setIsMultilineAllowed(true);
 		setTextStyle(createTextStyle());
 		if (getDrawable().getTextAlignment() == null || !(getDrawable().getTextAlignment() instanceof ParagraphAlignment)) {

@@ -105,7 +105,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 		// setDimensionConstraints(DimensionConstraints.CONTAINER);
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, CONTAINER_LABEL_HEIGHT, 0, 0));
+		setBorder(new ShapeBorderImpl(0, CONTAINER_LABEL_HEIGHT, 0, 0));
 
 		/*mainColor = role.getColor();
 		backColor = new Color ((255*3+mainColor.getRed())/4,(255*3+mainColor.getGreen())/4,(255*3+mainColor.getBlue())/4);
@@ -407,10 +407,10 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	public FGEArea getLocationConstrainedAreaForChild(AbstractNodeGR node) {
 		Vector<FGESegment> lines = new Vector<FGESegment>();
 		for (int i = 0; i < getSwimmingLaneNb(); i++) {
-			double x1 = SWIMMING_LANE_BORDER - node.getBorder().left;
-			double x2 = getWidth() - SWIMMING_LANE_BORDER - node.getWidth() - node.getBorder().left;
+			double x1 = SWIMMING_LANE_BORDER - node.getBorder().getLeft();
+			double x2 = getWidth() - SWIMMING_LANE_BORDER - node.getWidth() - node.getBorder().getLeft();
 			double y = i * getHeight() / getSwimmingLaneNb() + getHeight() / getSwimmingLaneNb() / 2 - node.getHeight() / 2
-					- node.getBorder().top;
+					- node.getBorder().getTop();
 			lines.add(new FGESegment(x1, y, x2, y));
 		}
 		return FGEUnionArea.makeUnion(lines);

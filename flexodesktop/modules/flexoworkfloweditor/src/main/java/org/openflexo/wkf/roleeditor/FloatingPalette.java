@@ -356,8 +356,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			double yOffset = 0;
 			if (gr != null) {
 				if (gr.getBorder() != null) {
-					xOffset -= gr.getBorder().left;
-					yOffset -= gr.getBorder().top;
+					xOffset -= gr.getBorder().getLeft();
+					yOffset -= gr.getBorder().getTop();
 				}
 				/*switch (direction) {
 				case NORTH:

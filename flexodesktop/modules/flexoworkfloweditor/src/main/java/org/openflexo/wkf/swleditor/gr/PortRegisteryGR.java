@@ -88,7 +88,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	public PortRegisteryGR(PortRegistery portRegistery, SwimmingLaneRepresentation aDrawing) {
 		super(portRegistery, ShapeType.RECTANGLE, aDrawing);
 		setLayer(ROLE_LAYER);
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, 12, 0, 0));
+		setBorder(new ShapeBorderImpl(0, 12, 0, 0));
 
 		updatePropertiesFromWKFPreferences();
 
@@ -354,10 +354,10 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	public FGEArea getLocationConstrainedAreaForChild(AbstractNodeGR node) {
 		Vector<FGESegment> lines = new Vector<FGESegment>();
 		for (int i = 0; i < getSwimmingLaneNb(); i++) {
-			double x1 = SWIMMING_LANE_BORDER - node.getBorder().left;
-			double x2 = getWidth() - SWIMMING_LANE_BORDER - node.getWidth() - node.getBorder().left;
+			double x1 = SWIMMING_LANE_BORDER - node.getBorder().getLeft();
+			double x2 = getWidth() - SWIMMING_LANE_BORDER - node.getWidth() - node.getBorder().getLeft();
 			double y = i * getHeight() / getSwimmingLaneNb() + getHeight() / getSwimmingLaneNb() / 2 - node.getHeight() / 2
-					- node.getBorder().top;
+					- node.getBorder().getTop();
 			lines.add(new FGESegment(x1, y, x2, y));
 		}
 		return FGEUnionArea.makeUnion(lines);

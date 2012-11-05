@@ -31,7 +31,6 @@ import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
 import java.io.File;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +43,7 @@ import org.openflexo.fge.notifications.FGENotification;
 import sun.awt.image.ImageRepresentation;
 import sun.awt.image.ToolkitImage;
 
-public abstract class BackgroundStyleImpl extends Observable implements BackgroundStyle {
+public abstract class BackgroundStyleImpl extends FGEStyleImpl implements BackgroundStyle {
 	private static final Logger logger = Logger.getLogger(BackgroundStyleImpl.class.getPackage().getName());
 
 	private transient GraphicalRepresentation graphicalRepresentation;
@@ -521,6 +520,7 @@ public abstract class BackgroundStyleImpl extends Observable implements Backgrou
 			}
 		}
 
+		@Override
 		public Image getImage() {
 			return image;
 		}
@@ -609,6 +609,7 @@ public abstract class BackgroundStyleImpl extends Observable implements Backgrou
 			}
 		}
 
+		@Override
 		public void setScaleXNoNotification(double aScaleX) {
 			if (requireChange(this.scaleX, aScaleX)) {
 				this.scaleX = aScaleX;
@@ -631,6 +632,7 @@ public abstract class BackgroundStyleImpl extends Observable implements Backgrou
 			}
 		}
 
+		@Override
 		public void setScaleYNoNotification(double aScaleY) {
 			if (requireChange(this.scaleY, aScaleY)) {
 				this.scaleY = aScaleY;

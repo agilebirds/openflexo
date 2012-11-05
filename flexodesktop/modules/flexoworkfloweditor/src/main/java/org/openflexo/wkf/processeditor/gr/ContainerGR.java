@@ -41,6 +41,7 @@ import org.openflexo.fge.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
@@ -89,7 +90,7 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 
 		setDimensionConstraints(DimensionConstraints.CONTAINER);
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, CONTAINER_LABEL_HEIGHT, 0, CONTAINER_LABEL_HEIGHT));
+		setBorder(new ShapeGraphicalRepresentationImpl.ShapeBorderImpl(0, CONTAINER_LABEL_HEIGHT, 0, CONTAINER_LABEL_HEIGHT));
 
 		updateBackground(aMainColor, aBackColor);
 

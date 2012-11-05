@@ -19,11 +19,9 @@
  */
 package org.openflexo.fge;
 
-import java.util.Observable;
-
 import org.openflexo.fge.notifications.FGENotification;
 
-public class ShadowStyleImpl extends Observable implements ShadowStyle {
+public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 
 	private boolean drawShadow;
 	private int shadowDarkness;

@@ -51,7 +51,7 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setBorder(new ShapeBorder(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
+		setBorder(new ShapeBorderImpl(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
 	}
 
 	/**

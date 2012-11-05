@@ -32,7 +32,6 @@ import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyleImpl;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.TextStyleImpl;
@@ -71,7 +70,7 @@ public class ResourceGR extends ShapeGraphicalRepresentationImpl<FlexoResource<?
 		getShape().setIsRounded(true);
 		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		updateStyles();
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(10, 10, 10, 10));
+		setBorder(new ShapeBorderImpl(10, 10, 10, 10));
 
 		setAdjustMinimalWidthToLabelWidth(true);
 		setMinimalWidth(150);

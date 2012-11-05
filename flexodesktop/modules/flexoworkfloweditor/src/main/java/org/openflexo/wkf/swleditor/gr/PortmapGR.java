@@ -29,7 +29,6 @@ import javax.swing.ImageIcon;
 import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
@@ -173,22 +172,22 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 			if (orientation == SimplifiedCardinalDirection.NORTH) {
 				setX(PortmapRegisteryGR.PORTMAP_MARGIN + index * PORTMAP_SIZE);
 				setY(0);
-				setBorder(new ShapeGraphicalRepresentation.ShapeBorder(2, 18, 3, 3));
+				setBorder(new ShapeBorderImpl(2, 18, 3, 3));
 				setLocationConstrainedArea(FGELine.makeHorizontalLine(new FGEPoint(0.5, 0.5)));
 			} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 				setX(PortmapRegisteryGR.PORTMAP_MARGIN + index * PORTMAP_SIZE);
 				setY(observedContainer.getHeight() - PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH);
-				setBorder(new ShapeGraphicalRepresentation.ShapeBorder(18, 2, 3, 3));
+				setBorder(new ShapeBorderImpl(18, 2, 3, 3));
 				setLocationConstrainedArea(FGELine.makeHorizontalLine(new FGEPoint(0.5, 0.5)));
 			} else if (orientation == SimplifiedCardinalDirection.WEST) {
 				setX(0);
 				setY(PortmapRegisteryGR.PORTMAP_MARGIN + index * PORTMAP_SIZE);
-				setBorder(new ShapeGraphicalRepresentation.ShapeBorder(3, 3, 2, 18));
+				setBorder(new ShapeBorderImpl(3, 3, 2, 18));
 				setLocationConstrainedArea(FGELine.makeVerticalLine(new FGEPoint(0.5, 0.5)));
 			} else if (orientation == SimplifiedCardinalDirection.EAST) {
 				setX(observedContainer.getWidth() - PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH);
 				setY(PortmapRegisteryGR.PORTMAP_MARGIN + index * PORTMAP_SIZE);
-				setBorder(new ShapeGraphicalRepresentation.ShapeBorder(3, 3, 18, 2));
+				setBorder(new ShapeBorderImpl(3, 3, 18, 2));
 				setLocationConstrainedArea(FGELine.makeVerticalLine(new FGEPoint(0.5, 0.5)));
 			}
 			// System.out.println("layout as "+orientation+" index="+index);

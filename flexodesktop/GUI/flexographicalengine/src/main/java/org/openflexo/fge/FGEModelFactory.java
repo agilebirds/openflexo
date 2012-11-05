@@ -18,6 +18,13 @@ public class FGEModelFactory extends ModelFactory {
 	private XMLDeserializer deserializer;
 
 	public FGEModelFactory() throws ModelDefinitionException {
+
+		super();
+
+		getStringEncoder().addConverter(DataBinding.CONVERTER2);
+		getStringEncoder().addConverter(GraphicalRepresentationUtils.POINT_CONVERTER_2);
+		getStringEncoder().addConverter(GraphicalRepresentationUtils.STEPPED_DIMENSION_CONVERTER);
+
 		importClass(GraphicalRepresentation.class);
 		importClass(DrawingGraphicalRepresentation.class);
 		importClass(ShapeGraphicalRepresentation.class);

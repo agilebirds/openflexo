@@ -60,10 +60,9 @@ import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
-import org.openflexo.inspector.DefaultInspectableObject;
 import org.openflexo.xmlcode.StringEncoder;
 
-public abstract class GraphicalRepresentationImpl<O> extends DefaultInspectableObject implements GraphicalRepresentation<O> {
+public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl implements GraphicalRepresentation<O> {
 
 	static final Logger logger = Logger.getLogger(GraphicalRepresentationUtils.class.getPackage().getName());
 

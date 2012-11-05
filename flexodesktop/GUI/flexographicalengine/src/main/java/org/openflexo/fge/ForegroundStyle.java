@@ -28,7 +28,6 @@ import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.inspector.HasIcon;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Represent foreground properties (line properties) which should be applied to a graphical representation
@@ -38,7 +37,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 @ModelEntity
 @ImplementationClass(ForegroundStyleImpl.class)
-public interface ForegroundStyle extends XMLSerializable, Cloneable, IObservable {
+public interface ForegroundStyle extends FGEStyle {
 
 	public static enum Parameters implements GRParameter {
 		color, lineWidth, capStyle, joinStyle, dashStyle, noStroke, useTransparency, transparencyLevel

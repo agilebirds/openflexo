@@ -26,6 +26,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -168,27 +169,27 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 				// Temporary comment this portion of code if child shapes are declared inside this shape
 				if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(EditionScheme.TOP_LEVEL)) {
 					ShapeBorder border = gr.getBorder();
-					ShapeBorder newBorder = new ShapeBorder(border);
+					ShapeBorder newBorder = new ShapeBorderImpl(border);
 					boolean requireNewBorder = false;
 					double deltaX = 0;
 					double deltaY = 0;
-					if (border.top < 25) {
+					if (border.getTop() < 25) {
 						requireNewBorder = true;
-						deltaY = border.top - 25;
-						newBorder.top = 25;
+						deltaY = border.getTop() - 25;
+						newBorder.setTop(25);
 					}
-					if (border.left < 25) {
+					if (border.getLeft() < 25) {
 						requireNewBorder = true;
-						deltaX = border.left - 25;
-						newBorder.left = 25;
+						deltaX = border.getLeft() - 25;
+						newBorder.setLeft(25);
 					}
-					if (border.right < 25) {
+					if (border.getRight() < 25) {
 						requireNewBorder = true;
-						newBorder.right = 25;
+						newBorder.setRight(25);
 					}
-					if (border.bottom < 25) {
+					if (border.getBottom() < 25) {
 						requireNewBorder = true;
-						newBorder.bottom = 25;
+						newBorder.setBottom(25);
 					}
 					if (requireNewBorder) {
 						gr.setBorder(newBorder);

@@ -89,7 +89,7 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 
 		setDimensionConstraints(DimensionConstraints.CONTAINER);
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, CONTAINER_LABEL_HEIGHT, 0, CONTAINER_LABEL_HEIGHT));
+		setBorder(new ShapeBorderImpl(0, CONTAINER_LABEL_HEIGHT, 0, CONTAINER_LABEL_HEIGHT));
 
 		updateBackground(aMainColor, aBackColor);
 

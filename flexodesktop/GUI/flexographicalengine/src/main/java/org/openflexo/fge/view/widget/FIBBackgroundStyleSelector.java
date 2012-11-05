@@ -45,8 +45,8 @@ import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.FIBLibrary;
@@ -459,7 +459,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			rectGR.setIsSelectable(false);
 			rectGR.setIsFocusable(false);
 			rectGR.setIsReadOnly(true);
-			rectGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+			rectGR.setBorder(new ShapeBorderImpl(0, 0, 0, 0));
 			rectGR.setValidated(true);
 
 			controller = new DrawingController<Drawing<?>>(drawing);

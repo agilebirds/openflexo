@@ -22,13 +22,12 @@ package org.openflexo.fge;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
-import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ForegroundStyleImpl extends Observable implements ForegroundStyle {
+public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ForegroundStyleImpl.class.getPackage().getName());
 

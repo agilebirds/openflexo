@@ -25,7 +25,6 @@ import java.awt.Font;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Represent text properties which should be applied to a graphical representation
@@ -35,7 +34,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 @ModelEntity
 @ImplementationClass(TextStyleImpl.class)
-public interface TextStyle extends XMLSerializable, Cloneable, IObservable {
+public interface TextStyle extends FGEStyle {
 
 	public static enum Parameters implements GRParameter {
 		color, backgroundColor, font, orientation, backgroundColored

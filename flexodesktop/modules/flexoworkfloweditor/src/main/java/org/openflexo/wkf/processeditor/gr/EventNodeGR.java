@@ -196,8 +196,8 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
 						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
 				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation<?>) parent).getBorder();
-				parentOutline = parentOutline
-						.transform(AffineTransform.getTranslateInstance(parentBorder.left - 20, parentBorder.top - 20));
+				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(parentBorder.getLeft() - 20,
+						parentBorder.getTop() - 20));
 				// System.out.println("Rebuild outline = "+parentOutline);
 				parentGR = parent;
 			}

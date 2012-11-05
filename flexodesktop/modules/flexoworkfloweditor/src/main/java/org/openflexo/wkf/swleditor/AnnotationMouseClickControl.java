@@ -47,8 +47,8 @@ public class AnnotationMouseClickControl extends MouseClickControl {
 				// getDrawingGraphicalRepresentation(), controller.getScale());
 				// Point p = getDrawingGraphicalRepresentation().convertNormalizedPointToViewCoordinates(normalizedPoint,1.0);
 				FGEPoint dropLocation = new FGEPoint(event.getX() / controller.getScale()
-						- annotation.getGraphicalRepresentation().getBorder().left, event.getY() / controller.getScale()
-						- annotation.getGraphicalRepresentation().getBorder().top);
+						- annotation.getGraphicalRepresentation().getBorder().getLeft(), event.getY() / controller.getScale()
+						- annotation.getGraphicalRepresentation().getBorder().getTop());
 				annotation.elementDragged(graphicalRepresentation, dropLocation);
 			}
 			return false;

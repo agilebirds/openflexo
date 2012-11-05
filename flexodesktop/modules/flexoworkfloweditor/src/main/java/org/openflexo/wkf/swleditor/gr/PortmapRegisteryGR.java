@@ -75,7 +75,7 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 		setForeground(foreground);
 		setBackground(background);
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, 0, 0, 0));
+		setBorder(new ShapeBorderImpl(0, 0, 0, 0));
 		setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 
@@ -103,8 +103,8 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 				parentOutline = ((ShapeGraphicalRepresentation<?>) parent).getShape().getOutline();
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
 						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
-				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(
-						PORTMAP_REGISTERY_WIDTH / 2 - getBorder().left, PORTMAP_REGISTERY_WIDTH / 2 - getBorder().top));
+				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(PORTMAP_REGISTERY_WIDTH / 2
+						- getBorder().getLeft(), PORTMAP_REGISTERY_WIDTH / 2 - getBorder().getTop()));
 				// System.out.println("Rebuild outline = "+parentOutline);
 				parentGR = parent;
 			}
@@ -237,8 +237,8 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 				}
 			}
 			double portmapRegisteryWidth = PortmapGR.PORTMAP_SIZE * portmapNb + 6;
-			return computeConstrainedLocation(new FGEPoint(
-					(parentGR.getWidth() + parentGR.getBorder().left + parentGR.getBorder().right - portmapRegisteryWidth) / 2, 0)).x;
+			return computeConstrainedLocation(new FGEPoint((parentGR.getWidth() + parentGR.getBorder().getLeft()
+					+ parentGR.getBorder().getRight() - portmapRegisteryWidth) / 2, 0)).x;
 		}
 		return 0;
 	}

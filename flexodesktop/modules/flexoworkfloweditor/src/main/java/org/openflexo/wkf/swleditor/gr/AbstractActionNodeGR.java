@@ -38,7 +38,7 @@ public abstract class AbstractActionNodeGR extends FlexoNodeGR<ActionNode> {
 
 	@Override
 	int getTopBorder() {
-		return (isInPalette ? super.getTopBorder() : REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX);
+		return isInPalette ? super.getTopBorder() : REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX;
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public abstract class AbstractActionNodeGR extends FlexoNodeGR<ActionNode> {
 	 */
 	@Override
 	public double getDefaultLabelY() {
-		return 40 + getBorder().top;
+		return 40 + getBorder().getTop();
 	}
 
 }

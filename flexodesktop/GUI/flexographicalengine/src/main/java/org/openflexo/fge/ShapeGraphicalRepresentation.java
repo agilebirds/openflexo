@@ -41,14 +41,12 @@ import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.kvc.KVCObject;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Represents a shape in a diagram<br>
@@ -173,52 +171,27 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 		UNMOVABLE, RELATIVE_TO_PARENT, X_FIXED, Y_FIXED, AREA_CONSTRAINED;
 	}
 
-	public static class ShapeBorder extends KVCObject implements XMLSerializable, Cloneable {
-		public int top;
-		public int bottom;
-		public int left;
-		public int right;
-
-		public ShapeBorder() {
-			super();
-			this.top = FGEConstants.DEFAULT_BORDER_SIZE;
-			this.bottom = FGEConstants.DEFAULT_BORDER_SIZE;
-			this.left = FGEConstants.DEFAULT_BORDER_SIZE;
-			this.right = FGEConstants.DEFAULT_BORDER_SIZE;
-		}
-
-		public ShapeBorder(int top, int bottom, int left, int right) {
-			super();
-			this.top = top;
-			this.bottom = bottom;
-			this.left = left;
-			this.right = right;
-		}
-
-		public ShapeBorder(ShapeBorder border) {
-			super();
-			this.top = border.top;
-			this.bottom = border.bottom;
-			this.left = border.left;
-			this.right = border.right;
-		}
+	public static interface ShapeBorder extends FGEObject {
+		public ShapeBorder clone();
 
 		@Override
-		public ShapeBorder clone() {
-			try {
-				return (ShapeBorder) super.clone();
-			} catch (CloneNotSupportedException e) {
-				// cannot happen, we are clonable
-				e.printStackTrace();
-				return null;
-			}
-		}
+		public String toString();
 
-		@Override
-		public String toString() {
-			return "ShapeBorder [" + left + "," + top + "," + right + "," + bottom + "]";
-		}
+		public int getTop();
 
+		public void setTop(int top);
+
+		public int getBottom();
+
+		public void setBottom(int bottom);
+
+		public int getLeft();
+
+		public void setLeft(int left);
+
+		public int getRight();
+
+		public void setRight(int right);
 	}
 
 	// *******************************************************************************
@@ -229,56 +202,56 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = X)
+	@Getter(value = X, defaultValue = "0.0")
 	@XMLAttribute
 	public abstract double getX();
 
 	@Setter(value = X)
 	public abstract void setX(double aValue);
 
-	@Getter(value = Y)
+	@Getter(value = Y, defaultValue = "0.0")
 	@XMLAttribute
 	public abstract double getY();
 
 	@Setter(value = Y)
 	public abstract void setY(double aValue);
 
-	@Getter(value = WIDTH)
+	@Getter(value = WIDTH, defaultValue = "60.0")
 	@XMLAttribute
 	public abstract double getWidth();
 
 	@Setter(value = WIDTH)
 	public abstract void setWidth(double aValue);
 
-	@Getter(value = HEIGHT)
+	@Getter(value = HEIGHT, defaultValue = "20.0")
 	@XMLAttribute
 	public abstract double getHeight();
 
 	@Setter(value = HEIGHT)
 	public abstract void setHeight(double aValue);
 
-	@Getter(value = MINIMAL_WIDTH)
+	@Getter(value = MINIMAL_WIDTH, defaultValue = "0.0")
 	@XMLAttribute
 	public abstract double getMinimalWidth();
 
 	@Setter(value = MINIMAL_WIDTH)
 	public abstract void setMinimalWidth(double minimalWidth);
 
-	@Getter(value = MINIMAL_HEIGHT)
+	@Getter(value = MINIMAL_HEIGHT, defaultValue = "0.0")
 	@XMLAttribute
 	public abstract double getMinimalHeight();
 
 	@Setter(value = MINIMAL_HEIGHT)
 	public abstract void setMinimalHeight(double minimalHeight);
 
-	@Getter(value = MAXIMAL_HEIGHT)
+	@Getter(value = MAXIMAL_HEIGHT, defaultValue = "POSITIVE_INFINITY")
 	@XMLAttribute
 	public abstract double getMaximalHeight();
 
 	@Setter(value = MAXIMAL_HEIGHT)
 	public abstract void setMaximalHeight(double maximalHeight);
 
-	@Getter(value = MAXIMAL_WIDTH)
+	@Getter(value = MAXIMAL_WIDTH, defaultValue = "POSITIVE_INFINITY")
 	@XMLAttribute
 	public abstract double getMaximalWidth();
 
@@ -355,7 +328,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = SELECTED_FOREGROUND)
 	public abstract void setSelectedForeground(ForegroundStyle aForeground);
 
-	@Getter(value = HAS_SELECTED_FOREGROUND)
+	@Getter(value = HAS_SELECTED_FOREGROUND, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getHasSelectedForeground();
 
@@ -369,7 +342,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = FOCUSED_FOREGROUND)
 	public abstract void setFocusedForeground(ForegroundStyle aForeground);
 
-	@Getter(value = HAS_FOCUSED_FOREGROUND)
+	@Getter(value = HAS_FOCUSED_FOREGROUND, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getHasFocusedForeground();
 
@@ -390,7 +363,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = SELECTED_BACKGROUND)
 	public abstract void setSelectedBackground(BackgroundStyle aBackground);
 
-	@Getter(value = HAS_SELECTED_BACKGROUND)
+	@Getter(value = HAS_SELECTED_BACKGROUND, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getHasSelectedBackground();
 
@@ -404,7 +377,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = FOCUSED_BACKGROUND)
 	public abstract void setFocusedBackground(BackgroundStyle aBackground);
 
-	@Getter(value = HAS_FOCUSED_BACKGROUND)
+	@Getter(value = HAS_FOCUSED_BACKGROUND, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean getHasFocusedBackground();
 
@@ -439,28 +412,28 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = SHADOW_STYLE)
 	public abstract void setShadowStyle(ShadowStyle aShadowStyle);
 
-	@Getter(value = IS_FLOATING_LABEL)
+	@Getter(value = IS_FLOATING_LABEL, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getIsFloatingLabel();
 
 	@Setter(value = IS_FLOATING_LABEL)
 	public abstract void setIsFloatingLabel(boolean isFloatingLabel);
 
-	@Getter(value = RELATIVE_TEXT_X)
+	@Getter(value = RELATIVE_TEXT_X, defaultValue = "0.0")
 	@XMLAttribute
 	public abstract double getRelativeTextX();
 
 	@Setter(value = RELATIVE_TEXT_X)
 	public abstract void setRelativeTextX(double textX);
 
-	@Getter(value = RELATIVE_TEXT_Y)
+	@Getter(value = RELATIVE_TEXT_Y, defaultValue = "0.0")
 	@XMLAttribute
 	public abstract double getRelativeTextY();
 
 	@Setter(value = RELATIVE_TEXT_Y)
 	public abstract void setRelativeTextY(double textY);
 
-	@Getter(value = ALLOW_TO_LEAVE_BOUNDS)
+	@Getter(value = ALLOW_TO_LEAVE_BOUNDS, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getAllowToLeaveBounds();
 

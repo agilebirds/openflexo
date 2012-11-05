@@ -420,7 +420,7 @@ public abstract class FGEGraphics {
 		}*/
 		if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation();
-			at.concatenate(AffineTransform.getTranslateInstance(gr.getBorder().left, gr.getBorder().top));
+			at.concatenate(AffineTransform.getTranslateInstance(gr.getBorder().getLeft(), gr.getBorder().getTop()));
 		}
 		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
 			at.concatenate(AffineTransform.getTranslateInstance(((BackgroundStyle.BackgroundImage) currentBackground).getDeltaX(),

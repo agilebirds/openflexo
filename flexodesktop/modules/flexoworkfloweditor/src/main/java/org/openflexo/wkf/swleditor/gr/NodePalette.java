@@ -431,8 +431,8 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 			double yOffset = 0;
 			if (gr != null) {
 				if (gr.getBorder() != null) {
-					xOffset -= gr.getBorder().left;
-					yOffset -= gr.getBorder().top;
+					xOffset -= gr.getBorder().getLeft();
+					yOffset -= gr.getBorder().getTop();
 				}
 				/*switch (direction) {
 

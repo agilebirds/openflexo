@@ -28,7 +28,6 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.geom.FGEPoint;
@@ -62,7 +61,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentationImpl<DMEntity> imple
 		getShape().setIsRounded(false);
 		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		updateStyles();
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER));
+		setBorder(new ShapeBorderImpl(ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER));
 
 		setWidth(getDefaultWidth());
 

@@ -35,7 +35,6 @@ import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.TextStyleImpl;
@@ -80,7 +79,7 @@ public class RoleGR extends ShapeGraphicalRepresentationImpl<Role> implements Gr
 		getShape().setIsRounded(true);
 		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		updateStyles();
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
+		setBorder(new ShapeBorderImpl(25, 25, 25, 25));
 
 		setDecorationPainter(new RoleDecorationPainter(aRole));
 
@@ -110,7 +109,8 @@ public class RoleGR extends ShapeGraphicalRepresentationImpl<Role> implements Gr
 	private void updateStyles() {
 		foreground = ForegroundStyleImpl.makeStyle(getRoleColor());
 		foreground.setLineWidth(2);
-		background = BackgroundStyleImpl.makeColorGradientBackground(getRoleColor(), Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+		background = BackgroundStyleImpl.makeColorGradientBackground(getRoleColor(), Color.WHITE,
+				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		textStyle = TextStyleImpl.makeDefault();
 		textStyle.setColor(FGEUtils.chooseBestColor(getRoleColor(), Color.WHITE, Color.BLACK));
 		setForeground(foreground);

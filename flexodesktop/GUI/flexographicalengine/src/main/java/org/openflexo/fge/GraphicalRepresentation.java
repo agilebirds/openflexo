@@ -43,7 +43,6 @@ import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -51,7 +50,6 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * This is the common super interfaces for all graphical representation object encoded in a diagram<br>
@@ -64,8 +62,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(GraphicalRepresentationImpl.class)
-public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGEConstants, Observer,
-		HasPropertyChangeSupport, KeyValueCoding, IObservable {
+public interface GraphicalRepresentation<O> extends FGEObject, Bindable, BindingEvaluationContext, Observer, HasPropertyChangeSupport {
 
 	// Property keys
 
@@ -428,6 +425,7 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 	 * 
 	 * @return
 	 */
+	@Override
 	public abstract boolean isDeleted();
 
 	// *******************************************************************************
@@ -532,6 +530,7 @@ public interface GraphicalRepresentation<O> extends XMLSerializable, Bindable, B
 
 	public abstract void notify(FGENotification notification);
 
+	@Override
 	public abstract String getInspectorName();
 
 	public abstract boolean isShape();

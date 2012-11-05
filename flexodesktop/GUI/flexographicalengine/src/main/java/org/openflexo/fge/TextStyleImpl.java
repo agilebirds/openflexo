@@ -21,12 +21,11 @@ package org.openflexo.fge;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.notifications.FGENotification;
 
-public class TextStyleImpl extends Observable implements TextStyle {
+public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 	private static final Logger logger = Logger.getLogger(TextStyleImpl.class.getPackage().getName());
 
 	private Color color;

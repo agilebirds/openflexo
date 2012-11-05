@@ -150,8 +150,8 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 						grid.origin.y -= gr.getHeight() / 2;
 					}
 					if (gr.getBorder() != null) {
-						grid.origin.x -= gr.getBorder().left;
-						grid.origin.y -= gr.getBorder().top;
+						grid.origin.x -= gr.getBorder().getLeft();
+						grid.origin.y -= gr.getBorder().getTop();
 					}
 					if (gr.getShape().getShape().getEmbeddingBounds().x > 0) {
 						grid.origin.x -= gr.getShape().getShape().getEmbeddingBounds().x * gr.getWidth();

@@ -334,6 +334,12 @@ public class DefaultStringEncoder {
 
 		@Override
 		public Double convertFromString(String value, ModelFactory factory) {
+			if ("POSITIVE_INFINITY".equals(value)) {
+				return Double.POSITIVE_INFINITY;
+			}
+			if ("NEGATIVE_INFINITY".equals(value)) {
+				return Double.NEGATIVE_INFINITY;
+			}
 			return Double.valueOf(value);
 		}
 

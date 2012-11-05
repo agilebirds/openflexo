@@ -31,7 +31,6 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyleImpl;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.TextStyleImpl;
@@ -67,7 +66,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentationImpl<DMProperty> i
 		getShape().setIsRounded(false);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		updateStyles();
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(10, 10, 10, 10));
+		setBorder(new ShapeBorderImpl(10, 10, 10, 10));
 
 		propertyNameStyle = TextStyleImpl.makeTextStyle(Color.DARK_GRAY, ATTRIBUTE_FONT);
 		propertyTypeStyle = TextStyleImpl.makeTextStyle(Color.GRAY, ATTRIBUTE_FONT);
