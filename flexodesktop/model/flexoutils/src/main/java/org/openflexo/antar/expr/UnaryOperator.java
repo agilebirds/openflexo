@@ -19,12 +19,18 @@
  */
 package org.openflexo.antar.expr;
 
+/**
+ * Represents an unary operator (an operator with one operand)
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class UnaryOperator extends Operator {
 
 	@Override
 	public abstract int getPriority();
 
-	public abstract Constant evaluate(Constant arg) throws TypeMismatchException;
+	public abstract Constant evaluate(Constant arg) throws TypeMismatchException, NullReferenceException;
 
 	public abstract EvaluationType getEvaluationType(EvaluationType operandType) throws TypeMismatchException;
 

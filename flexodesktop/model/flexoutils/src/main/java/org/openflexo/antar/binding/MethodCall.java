@@ -27,6 +27,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 
 public class MethodCall extends Observable implements ComplexPathElement<Object> {
 
@@ -185,7 +187,15 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 		// System.out.println("Invoke method "+_method+" on class "+_method.getDeclaringClass());
 
 		for (MethodCallArgument a : _args) {
-			args[i] = TypeUtils.castTo(a.getBinding().getBindingValue(context), _method.getGenericParameterTypes()[i]);
+			try {
+				args[i] = TypeUtils.castTo(a.getBinding().getBindingValue(context), _method.getGenericParameterTypes()[i]);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+				args[i] = null;
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+				args[i] = null;
+			}
 			// System.out.println("arg"+i+"="+args[i]+" of "+args[i].getClass().getSimpleName());
 			i++;
 		}

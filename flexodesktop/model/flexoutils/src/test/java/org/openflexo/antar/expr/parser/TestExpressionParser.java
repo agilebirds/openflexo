@@ -14,6 +14,7 @@ import org.openflexo.antar.expr.Constant.IntegerConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
 
@@ -68,6 +69,14 @@ public class TestExpressionParser extends TestCase {
 			}
 			return null;
 		} catch (TypeMismatchException e) {
+			if (!shouldFail) {
+				e.printStackTrace();
+				fail();
+			} else {
+				System.out.println("Parsing " + anExpression + " has failed as expected: " + e.getMessage());
+			}
+			return null;
+		} catch (NullReferenceException e) {
 			if (!shouldFail) {
 				e.printStackTrace();
 				fail();

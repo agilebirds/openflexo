@@ -31,12 +31,12 @@ public abstract class BooleanUnaryOperator extends UnaryOperator {
 		}
 
 		@Override
-		public Constant evaluate(Constant arg) throws TypeMismatchException {
-			if (arg == ObjectSymbolicConstant.NULL) {
-				return ObjectSymbolicConstant.NULL;
-			}
+		public Constant evaluate(Constant arg) throws TypeMismatchException, NullReferenceException {
 			if (arg instanceof BooleanConstant) {
 				return BooleanConstant.get(!((BooleanConstant) arg).getValue());
+			}
+			if (arg == ObjectSymbolicConstant.NULL) {
+				throw new NullReferenceException(this);
 			}
 			throw new TypeMismatchException(this, arg.getEvaluationType(), EvaluationType.BOOLEAN);
 		}

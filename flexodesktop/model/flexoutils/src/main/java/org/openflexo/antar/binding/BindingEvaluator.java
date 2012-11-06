@@ -8,7 +8,9 @@ import org.openflexo.antar.expr.BindingValueAsExpression.NormalBindingPathElemen
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
 
@@ -92,7 +94,7 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 		return object;
 	}
 
-	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException {
+	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException, TypeMismatchException, NullReferenceException {
 		String normalizedBindingPath = normalizeBindingPath(bindingPath);
 		System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
 		AbstractBinding binding = BINDING_FACTORY.convertFromString(normalizedBindingPath);
@@ -106,7 +108,8 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 		return binding.getBindingValue(this);
 	}
 
-	public static Object evaluateBinding(String bindingPath, Object object) throws InvalidKeyValuePropertyException {
+	public static Object evaluateBinding(String bindingPath, Object object) throws InvalidKeyValuePropertyException, TypeMismatchException,
+			NullReferenceException {
 
 		BindingEvaluator evaluator = new BindingEvaluator(object);
 		return evaluator.evaluate(bindingPath);
@@ -114,11 +117,19 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 
 	public static void main(String[] args) {
 		String thisIsATest = "Hello world, this is a test";
-		System.out.println(evaluateBinding("toString", thisIsATest));
-		System.out.println(evaluateBinding("toString()", thisIsATest));
-		System.out.println(evaluateBinding("toString()+' hash='+object.hashCode()", thisIsATest));
-		System.out.println(evaluateBinding("substring(6,11)", thisIsATest));
-		System.out.println(evaluateBinding("substring(3,length()-2)+' hash='+hashCode()", thisIsATest));
+		try {
+			System.out.println(evaluateBinding("toString", thisIsATest));
+			System.out.println(evaluateBinding("toString()", thisIsATest));
+			System.out.println(evaluateBinding("toString()+' hash='+object.hashCode()", thisIsATest));
+			System.out.println(evaluateBinding("substring(6,11)", thisIsATest));
+			System.out.println(evaluateBinding("substring(3,length()-2)+' hash='+hashCode()", thisIsATest));
+		} catch (InvalidKeyValuePropertyException e) {
+			e.printStackTrace();
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

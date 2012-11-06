@@ -2,12 +2,24 @@ package org.openflexo.antar.binding;
 
 import junit.framework.TestCase;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+
 public class TestBindingEvaluator extends TestCase {
 
 	public static void genericTest(String bindingPath, Object object, Object expectedResult) {
 
 		System.out.println("Evaluate " + bindingPath);
-		Object evaluatedResult = BindingEvaluator.evaluateBinding(bindingPath, object);
+		Object evaluatedResult = null;
+		try {
+			evaluatedResult = BindingEvaluator.evaluateBinding(bindingPath, object);
+		} catch (InvalidKeyValuePropertyException e) {
+			fail();
+		} catch (TypeMismatchException e) {
+			fail();
+		} catch (NullReferenceException e) {
+			fail();
+		}
 		System.out.println("Evaluated as " + evaluatedResult);
 
 		if (expectedResult instanceof Number) {
