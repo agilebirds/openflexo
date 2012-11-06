@@ -99,16 +99,19 @@ public class DropListener implements DropTargetListener {
 
 		int da = e.getDropAction();
 		// we're saying that these actions are necessary
-		if ((da & acceptableActions) == 0)
+		if ((da & acceptableActions) == 0) {
 			return false;
+		}
 
 		try {
 			FIBDraggable element = (FIBDraggable) e.getTransferable().getTransferData(ElementDrag.defaultFlavor());
-			if (element == null)
+			if (element == null) {
 				return false;
+			}
 			Object source = e.getSource();
-			if (source instanceof FIBDropTarget)
+			if (source instanceof FIBDropTarget) {
 				return element.acceptDragging((FIBDropTarget) source);
+			}
 			return false;
 
 		} catch (UnsupportedFlavorException e1) {
@@ -233,19 +236,20 @@ public class DropListener implements DropTargetListener {
 				 */
 
 				data = e.getTransferable().getTransferData(chosen);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("data is a " + data.getClass().getName());
-				if (data == null)
+				}
+				if (data == null) {
 					throw new NullPointerException();
+				}
 			} catch (Throwable t) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Couldn't get transfer data: " + t.getMessage());
+				}
 				t.printStackTrace();
 				e.dropComplete(false);
 				return;
 			}
-
-			System.out.println("Ma donnee c'est: " + data);
 
 			if (data instanceof FIBDraggable) {
 
