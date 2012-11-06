@@ -14,6 +14,8 @@ import org.openflexo.model.xml.XMLSerializer;
  */
 public class FGEModelFactory extends ModelFactory {
 
+	public boolean usePamela = true;
+
 	private XMLSerializer serializer;
 	private XMLDeserializer deserializer;
 
@@ -33,6 +35,7 @@ public class FGEModelFactory extends ModelFactory {
 
 		deserializer = new XMLDeserializer(this);
 		serializer = new XMLSerializer(getStringEncoder());
+
 	}
 
 	public XMLSerializer getSerializer() {

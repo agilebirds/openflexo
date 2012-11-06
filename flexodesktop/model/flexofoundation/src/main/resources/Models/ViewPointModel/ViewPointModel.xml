@@ -744,7 +744,7 @@
 		<description>Arc connector</description>
 	</entity>
 
-	<entity name="org.openflexo.fge.TextStyle" xmlTag="TextStyle">
+	<entity name="org.openflexo.fge.TextStyleImpl" xmlTag="TextStyle">
 		<description>Text style</description>
 		<property name="font" xmlTag="font" attribute="YES" />
 		<property name="color" xmlTag="color" attribute="YES" />
@@ -755,7 +755,7 @@
 			attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.ForegroundStyle"
+	<entity name="org.openflexo.fge.ForegroundStyleImpl"
 		xmlTag="ForegroundStyle" contexts="Focused,Selected">
 		<description>Foreground style</description>
 		<property name="noStroke" xmlTag="noStroke" attribute="YES" />
@@ -770,7 +770,7 @@
 			attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.BackgroundStyle"
+	<entity name="org.openflexo.fge.BackgroundStyleImpl"
 		abstract="YES" contexts="Focused,Selected">
 		<description>Background style</description>
 		<property name="useTransparency" xmlTag="useTransparency"
@@ -779,7 +779,7 @@
 			attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.ShapeGraphicalRepresentation$ShapeBorder"
+	<entity name="org.openflexo.fge.ShapeGraphicalRepresentationImpl$ShapeBorderImpl"
 		xmlTag="Border">
 		<description>Border</description>
 		<property name="top" xmlTag="top" attribute="YES" />
@@ -788,7 +788,7 @@
 		<property name="right" xmlTag="right" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.ShadowStyle" xmlTag="ShadowStyle">
+	<entity name="org.openflexo.fge.ShadowStyleImpl" xmlTag="ShadowStyle">
 		<description>Shadow</description>
 		<property name="drawShadow" xmlTag="drawShadow" attribute="YES" />
 		<property name="shadowDarkness" xmlTag="shadowDarkness"
@@ -798,18 +798,18 @@
 	</entity>
 
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$None"
+	<entity name="org.openflexo.fge.BackgroundStyleImpl$NoneImpl"
 		xmlTag="NoneBackgroundStyle">
 		<description>Empty background style</description>
 	</entity>
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$Color"
+	<entity name="org.openflexo.fge.BackgroundStyleImpl$ColorImpl"
 		xmlTag="ColorBackgroundStyle">
 		<description>Colored background style</description>
 		<property name="color" xmlTag="color" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$ColorGradient"
+	<entity name="org.openflexo.fge.BackgroundStyleImpl$ColorGradientImpl"
 		xmlTag="ColorGradientBackgroundStyle">
 		<description>Colored gradient background style</description>
 		<property name="color1" xmlTag="color1" attribute="YES" />
@@ -817,7 +817,7 @@
 		<property name="direction" xmlTag="direction" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$Texture"
+	<entity name="org.openflexo.fge.BackgroundStyleImpl$TextureImpl"
 		xmlTag="TexturedBackgroundStyle">
 		<description>Textured background style</description>
 		<property name="color1" xmlTag="color1" attribute="YES" />
@@ -825,7 +825,7 @@
 		<property name="textureType" xmlTag="textureType" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$BackgroundImage"
+	<entity name="org.openflexo.fge.BackgroundStyleImpl$BackgroundImageImpl"
 		xmlTag="ImageBackgroundStyle">
 		<description>Textured background style</description>
 		<property name="imageFile" xmlTag="imageFile" attribute="YES" />

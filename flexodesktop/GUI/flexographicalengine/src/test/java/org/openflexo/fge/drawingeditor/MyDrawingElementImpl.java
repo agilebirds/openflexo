@@ -22,6 +22,8 @@ package org.openflexo.fge.drawingeditor;
 import java.util.Observable;
 import java.util.Vector;
 
+import javax.inject.Inject;
+
 import org.openflexo.fge.GraphicalRepresentation;
 
 public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation<M>> extends Observable
@@ -29,6 +31,8 @@ public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G e
 
 	private MyDrawing _drawing;
 	private Vector<MyDrawingElement/*<?, ?>*/> childs;
+
+	@Inject
 	private G graphicalRepresentation;
 
 	public MyDrawingElementImpl(MyDrawing drawing) {

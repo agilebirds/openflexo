@@ -1456,6 +1456,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private String internallyInvokeToString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(modelEntity.getImplementedInterface().getSimpleName());
 		List<String> variables = new ArrayList<String>(values.keySet());
 		Collections.sort(variables);
 		for (String var : variables) {

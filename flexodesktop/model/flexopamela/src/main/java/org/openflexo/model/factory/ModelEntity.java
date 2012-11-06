@@ -517,6 +517,10 @@ public class ModelEntity<I> extends ProxyFactory {
 		return implementationClass;
 	}
 
+	public Class<?> getImplementingClass() {
+		return implementingClass;
+	}
+
 	public XMLElement getXMLElement() {
 		return xmlElement;
 	}

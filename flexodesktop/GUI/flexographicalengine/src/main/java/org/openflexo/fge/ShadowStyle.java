@@ -33,6 +33,9 @@ import org.openflexo.model.annotations.ModelEntity;
 @ImplementationClass(ShadowStyleImpl.class)
 public interface ShadowStyle extends FGEStyle {
 
+	public static final String NONE_CONFIGURATION = "none";
+	public static final String DEFAULT_CONFIGURATION = "default";
+
 	public static enum Parameters implements GRParameter {
 		drawShadow, shadowDarkness, shadowDepth, shadowBlur
 	}

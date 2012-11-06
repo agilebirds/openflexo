@@ -139,6 +139,11 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		resizeView();
 		getGraphicalRepresentation().addObserver(this);
 
+		System.out.println("getGraphicalRepresentation()=" + getGraphicalRepresentation());
+		System.out.println("drawable=" + getGraphicalRepresentation().getDrawable());
+		System.out.println("drawing=" + getGraphicalRepresentation().getDrawing());
+		System.out.println("objects=" + getGraphicalRepresentation().getContainedObjects());
+
 		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 			if (gr instanceof GeometricGraphicalRepresentation) {
 				((GeometricGraphicalRepresentation) gr).addObserver(this);

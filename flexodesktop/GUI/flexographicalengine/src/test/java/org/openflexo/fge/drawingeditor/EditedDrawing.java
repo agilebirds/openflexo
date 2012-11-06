@@ -32,7 +32,6 @@ public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 
 	public EditedDrawing(MyDrawing drawing) {
 		super(drawing);
-
 	}
 
 	@Override

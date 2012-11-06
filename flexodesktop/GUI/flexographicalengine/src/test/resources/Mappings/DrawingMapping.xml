@@ -244,7 +244,7 @@
      <description>Arc connector</description>
    </entity>	
 
-  <entity name="org.openflexo.fge.TextStyle" xmlTag="TextStyle">
+  <entity name="org.openflexo.fge.TextStyleImpl" xmlTag="TextStyle">
      <description>Text style</description>
    	 <property name="font" xmlTag="font" attribute="YES"/>
    	 <property name="color" xmlTag="color" attribute="YES"/>
@@ -253,7 +253,7 @@
    	 <property name="backgroundColor" xmlTag="backgroundColor" attribute="YES"/>
   </entity>
 
-  <entity name="org.openflexo.fge.ForegroundStyle" xmlTag="ForegroundStyle" contexts="Focused,Selected">
+  <entity name="org.openflexo.fge.ForegroundStyleImpl" xmlTag="ForegroundStyle" contexts="Focused,Selected">
      <description>Foreground style</description>
    	 <property name="noStroke" xmlTag="noStroke" attribute="YES"/>
    	 <property name="color" xmlTag="color" attribute="YES"/>
@@ -265,13 +265,13 @@
  	 <property name="transparencyLevel" xmlTag="transparencyLevel" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.BackgroundStyle" abstract="YES" contexts="Focused,Selected">
+  <entity name="org.openflexo.fge.BackgroundStyleImpl" abstract="YES" contexts="Focused,Selected">
      <description>Background style</description>
  	 <property name="useTransparency" xmlTag="useTransparency" attribute="YES"/>
  	 <property name="transparencyLevel" xmlTag="transparencyLevel" attribute="YES"/>
  </entity>
 	
-  <entity name="org.openflexo.fge.ShapeGraphicalRepresentation$ShapeBorder" xmlTag="Border">
+  <entity name="org.openflexo.fge.ShapeGraphicalRepresentationImpl$ShapeBorderImpl" xmlTag="Border">
      <description>Border</description>
  	 <property name="top" xmlTag="top" attribute="YES"/>
 	 <property name="bottom" xmlTag="bottom" attribute="YES"/>
@@ -279,7 +279,7 @@
 	 <property name="right" xmlTag="right" attribute="YES"/>
  </entity>
 	
-  <entity name="org.openflexo.fge.ShadowStyle" xmlTag="ShadowStyle">
+  <entity name="org.openflexo.fge.ShadowStyleImpl" xmlTag="ShadowStyle">
      <description>Shadow</description>
  	 <property name="drawShadow" xmlTag="drawShadow" attribute="YES"/>
 	 <property name="shadowDarkness" xmlTag="shadowDarkness" attribute="YES"/>
@@ -287,30 +287,30 @@
 	 <property name="shadowBlur" xmlTag="shadowBlur" attribute="YES"/>
  </entity>
 
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$None" xmlTag="NoneBackgroundStyle">
+  <entity name="org.openflexo.fge.BackgroundStyleImpl$NoneImpl" xmlTag="NoneBackgroundStyle">
      <description>Empty background style</description>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$Color" xmlTag="ColorBackgroundStyle">
+  <entity name="org.openflexo.fge.BackgroundStyleImpl$ColorImpl" xmlTag="ColorBackgroundStyle">
      <description>Colored background style</description>
   	 <property name="color" xmlTag="color" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$ColorGradient" xmlTag="ColorGradientBackgroundStyle">
+  <entity name="org.openflexo.fge.BackgroundStyleImpl$ColorGradientImpl" xmlTag="ColorGradientBackgroundStyle">
      <description>Colored gradient background style</description>
   	 <property name="color1" xmlTag="color1" attribute="YES"/>
   	 <property name="color2" xmlTag="color2" attribute="YES"/>
   	 <property name="direction" xmlTag="direction" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$Texture" xmlTag="TexturedBackgroundStyle">
+  <entity name="org.openflexo.fge.BackgroundStyleImpl$TextureImpl" xmlTag="TexturedBackgroundStyle">
      <description>Textured background style</description>
   	 <property name="color1" xmlTag="color1" attribute="YES"/>
   	 <property name="color2" xmlTag="color2" attribute="YES"/>
   	 <property name="textureType" xmlTag="textureType" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$BackgroundImage" xmlTag="ImageBackgroundStyle">
+  <entity name="org.openflexo.fge.BackgroundStyleImpl$BackgroundImageImpl" xmlTag="ImageBackgroundStyle">
      <description>Textured background style</description>
   	 <property name="imageFile" xmlTag="imageFile" attribute="YES"/>
   	 <property name="scaleX" xmlTag="scaleX" attribute="YES"/>

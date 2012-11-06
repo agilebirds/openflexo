@@ -47,6 +47,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.DataBinding;
+import org.openflexo.fge.FGEPamelaInjectionModule;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
@@ -57,6 +58,9 @@ import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.StringEncoder;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class TestDrawingEditor {
 
@@ -121,14 +125,19 @@ public class TestDrawingEditor {
 
 	private FIBInspectorController inspector;
 
-	private DrawingEditorFactory factory;
+	// private DrawingEditorFactory factory;
+	private Injector injector;
 
 	public TestDrawingEditor() {
 		super();
 
 		try {
-			factory = new DrawingEditorFactory();
+			DrawingEditorFactory factory = new DrawingEditorFactory();
 			System.out.println("factory: " + factory.debug());
+			FGEPamelaInjectionModule injectionModule = new FGEPamelaInjectionModule(factory);
+			injector = Guice.createInjector(injectionModule);
+
+			// factory = new DrawingEditorFactory();
 		} catch (ModelDefinitionException e1) {
 			e1.printStackTrace();
 		}
@@ -166,8 +175,12 @@ public class TestDrawingEditor {
 		}
 	}
 
-	public DrawingEditorFactory getFactory() {
+	/*public DrawingEditorFactory getFactory() {
 		return factory;
+	}*/
+
+	public Injector getInjector() {
+		return injector;
 	}
 
 	private void addDrawing(final MyDrawing drawing) {
@@ -401,7 +414,14 @@ public class TestDrawingEditor {
 	}
 
 	public void newDrawing() {
-		MyDrawing newDrawing = factory.makeNewDrawing();
+		// MyDrawing newDrawing = factory.makeNewDrawing();
+		MyDrawing newDrawing = injector.getInstance(MyDrawing.class);
+		System.out.println("newDrawing= [" + newDrawing + "] of " + newDrawing.getClass());
+		System.out.println("editedDrawing=" + newDrawing.getEditedDrawing());
+		System.out.println("gr=" + newDrawing.getGraphicalRepresentation() + " of " + newDrawing.getGraphicalRepresentation().getClass());
+		newDrawing.getGraphicalRepresentation().setDrawing(newDrawing.getEditedDrawing());
+		newDrawing.getGraphicalRepresentation().setDrawable(newDrawing);
+		newDrawing.getEditedDrawing().init();
 		addDrawing(newDrawing);
 	}
 

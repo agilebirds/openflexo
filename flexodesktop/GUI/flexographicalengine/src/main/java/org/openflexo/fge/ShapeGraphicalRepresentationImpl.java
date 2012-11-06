@@ -32,6 +32,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
@@ -112,11 +115,14 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	private boolean hasFocusedForeground = false;
 	private boolean hasFocusedBackground = false;
 
-	private ShapeBorder border = new ShapeBorderImpl();
+	@Inject
+	private ShapeBorder border;// = new ShapeBorderImpl();
 
 	private Shape shape = null;
 
-	private ShadowStyle shadowStyle = ShadowStyleImpl.makeDefault();
+	@Inject
+	@Named(ShadowStyle.DEFAULT_CONFIGURATION)
+	private ShadowStyle shadowStyle; // = ShadowStyleImpl.makeDefault();
 
 	private boolean allowToLeaveBounds = true;
 

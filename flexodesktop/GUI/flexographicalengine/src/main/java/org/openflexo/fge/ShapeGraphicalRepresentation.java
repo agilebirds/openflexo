@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Observable;
 
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
@@ -171,27 +172,45 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 		UNMOVABLE, RELATIVE_TO_PARENT, X_FIXED, Y_FIXED, AREA_CONSTRAINED;
 	}
 
+	@ModelEntity
+	@ImplementationClass(ShapeBorderImpl.class)
 	public static interface ShapeBorder extends FGEObject {
-		public ShapeBorder clone();
 
-		@Override
-		public String toString();
+		public static final String TOP = "top";
+		public static final String BOTTOM = "bottom";
+		public static final String LEFT = "left";
+		public static final String RIGHT = "right";
 
+		@Getter(value = TOP, defaultValue = "20")
+		@XMLAttribute
 		public int getTop();
 
+		@Setter(value = TOP)
 		public void setTop(int top);
 
+		@Getter(value = BOTTOM, defaultValue = "20")
+		@XMLAttribute
 		public int getBottom();
 
+		@Setter(value = BOTTOM)
 		public void setBottom(int bottom);
 
+		@Getter(value = LEFT, defaultValue = "20")
+		@XMLAttribute
 		public int getLeft();
 
+		@Setter(value = LEFT)
 		public void setLeft(int left);
 
+		@Getter(value = RIGHT, defaultValue = "20")
+		@XMLAttribute
 		public int getRight();
 
+		@Setter(value = RIGHT)
 		public void setRight(int right);
+
+		public ShapeBorder clone();
+
 	}
 
 	// *******************************************************************************
@@ -272,7 +291,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = LOCATION_CONSTRAINTS)
 	public abstract void setLocationConstraints(LocationConstraints locationConstraints);
 
-	@Getter(value = LOCATION_CONSTRAINED_AREA)
+	@Getter(value = LOCATION_CONSTRAINED_AREA, ignoreType = true)
 	@XMLAttribute
 	public abstract FGEArea getLocationConstrainedArea();
 
@@ -385,7 +404,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	public abstract void setHasFocusedBackground(boolean aFlag);
 
 	@Getter(value = BORDER)
-	@XMLAttribute
+	@XMLElement
 	public abstract ShapeBorder getBorder();
 
 	@Setter(value = BORDER)
@@ -398,7 +417,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = SHAPE_TYPE)
 	public abstract void setShapeType(ShapeType shapeType);
 
-	@Getter(value = SHAPE)
+	@Getter(value = SHAPE, ignoreType = true)
 	@XMLAttribute
 	public abstract Shape getShape();
 
