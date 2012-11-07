@@ -86,7 +86,6 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 		return shadowDepth;
 	}
 
-	@Override
 	@Deprecated
 	public int getShadowDeep() {
 		return getShadowDepth();

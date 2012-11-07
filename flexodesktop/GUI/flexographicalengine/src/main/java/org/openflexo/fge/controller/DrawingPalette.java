@@ -185,7 +185,7 @@ public class DrawingPalette {
 			gr = factory.makeDrawingGraphicalRepresentation(this, false);
 			gr.setWidth(width);
 			gr.setHeight(height);
-			gr.setDrawWorkingArea(false);
+			gr.setDrawWorkingArea(true);
 		}
 
 		@Override

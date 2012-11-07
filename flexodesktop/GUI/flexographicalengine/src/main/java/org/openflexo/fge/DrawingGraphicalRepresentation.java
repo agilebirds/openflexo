@@ -21,8 +21,6 @@ package org.openflexo.fge;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.util.Vector;
 
 import org.openflexo.fge.controller.DrawingController;
@@ -31,8 +29,12 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents the diagram as the top-level graphical representation <br>
@@ -45,83 +47,85 @@ import org.openflexo.model.annotations.ModelEntity;
  */
 @ModelEntity
 @ImplementationClass(DrawingGraphicalRepresentationImpl.class)
+@XMLElement(xmlTag = "DrawingGraphicalRepresentation")
 public interface DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M> {
+
+	// Property keys
+
+	public static final String BACKGROUND_COLOR = "backgroundColor";
+	public static final String WIDTH = "width";
+	public static final String HEIGHT = "height";
+	public static final String RECTANGLE_SELECTING_SELECTION_COLOR = "rectangleSelectingSelectionColor";
+	public static final String FOCUS_COLOR = "focusColor";
+	public static final String SELECTION_COLOR = "selectionColor";
+	public static final String DRAW_WORKING_AREA = "drawWorkingArea";
+	public static final String IS_RESIZABLE = "isResizable";
 
 	public static enum DrawingParameters implements GRParameter {
 		backgroundColor, width, height, rectangleSelectingSelectionColor, focusColor, selectionColor, drawWorkingArea, isResizable;
 	}
 
-	@Override
-	public abstract void delete();
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
 
-	@Override
-	public abstract Vector<GRParameter> getAllParameters();
-
-	/**
-	 * Override parent behaviour by always returning true<br>
-	 * IMPORTANT: a drawing graphical representation MUST be always validated
-	 */
-	@Override
-	public abstract boolean isValidated();
-
-	@Override
-	public abstract void setsWith(GraphicalRepresentation<?> gr);
-
-	@Override
-	public abstract void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters);
-
-	public abstract FGERectangle getWorkingArea();
-
-	@Override
-	public abstract int getLayer();
-
+	@Getter(value = BACKGROUND_COLOR)
+	@XMLAttribute
 	public abstract Color getBackgroundColor();
 
+	@Setter(value = BACKGROUND_COLOR)
 	public abstract void setBackgroundColor(Color backgroundColor);
 
+	@Getter(value = HEIGHT, defaultValue = "1000.0")
+	@XMLAttribute
 	public abstract double getHeight();
 
+	@Setter(value = HEIGHT)
 	public abstract void setHeight(double aValue);
 
+	@Getter(value = WIDTH, defaultValue = "1000.0")
+	@XMLAttribute
 	public abstract double getWidth();
 
+	@Setter(value = WIDTH)
 	public abstract void setWidth(double aValue);
 
+	@Getter(value = FOCUS_COLOR)
+	@XMLAttribute
 	public abstract Color getFocusColor();
 
+	@Setter(value = FOCUS_COLOR)
 	public abstract void setFocusColor(Color focusColor);
 
+	@Getter(value = SELECTION_COLOR)
+	@XMLAttribute
 	public abstract Color getSelectionColor();
 
+	@Setter(value = SELECTION_COLOR)
 	public abstract void setSelectionColor(Color selectionColor);
 
+	@Getter(value = RECTANGLE_SELECTING_SELECTION_COLOR)
+	@XMLAttribute
 	public abstract Color getRectangleSelectingSelectionColor();
 
+	@Setter(value = RECTANGLE_SELECTING_SELECTION_COLOR)
 	public abstract void setRectangleSelectingSelectionColor(Color selectionColor);
 
-	@Override
-	public abstract int getViewX(double scale);
+	@Getter(value = DRAW_WORKING_AREA, defaultValue = "true")
+	@XMLAttribute
+	public abstract boolean getDrawWorkingArea();
 
-	@Override
-	public abstract int getViewY(double scale);
+	@Setter(DRAW_WORKING_AREA)
+	public abstract void setDrawWorkingArea(boolean drawWorkingArea);
 
-	@Override
-	public abstract int getViewWidth(double scale);
+	@Getter(value = IS_RESIZABLE, defaultValue = "false")
+	@XMLAttribute
+	public abstract boolean isResizable();
 
-	@Override
-	public abstract int getViewHeight(double scale);
+	@Setter(IS_RESIZABLE)
+	public abstract void setIsResizable(boolean isResizable);
 
-	@Override
-	public abstract FGERectangle getNormalizedBounds();
-
-	@Override
-	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
-
-	@Override
-	public abstract AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
-
-	@Override
-	public abstract AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
+	public abstract FGERectangle getWorkingArea();
 
 	@Override
 	public abstract void paint(Graphics g, DrawingController controller);
@@ -130,33 +134,7 @@ public interface DrawingGraphicalRepresentation<M> extends GraphicalRepresentati
 
 	public abstract void setDecorationPainter(DrawingDecorationPainter aPainter);
 
-	@Override
-	public abstract boolean hasText();
-
-	@Override
-	public abstract boolean hasFloatingLabel();
-
-	@Override
-	public abstract String getInspectorName();
-
-	@Override
-	public abstract GraphicalRepresentation<?> getContainerGraphicalRepresentation();
-
-	@Override
-	public abstract boolean shouldBeDisplayed();
-
-	@Override
-	public abstract boolean getIsVisible();
-
 	public abstract Vector<GraphicalRepresentation> allGraphicalRepresentations();
-
-	public abstract boolean getDrawWorkingArea();
-
-	public abstract void setDrawWorkingArea(boolean drawWorkingArea);
-
-	public abstract boolean isResizable();
-
-	public abstract void setIsResizable(boolean isResizable);
 
 	public abstract void startConnectorObserving();
 

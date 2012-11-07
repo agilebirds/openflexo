@@ -169,6 +169,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param shapeGraphicalRepresentation
 	 */
 	public void applyDefaultProperties(ShapeGraphicalRepresentation<?> shapeGraphicalRepresentation) {
+		shapeGraphicalRepresentation.setBorder(makeShapeBorder());
 		shapeGraphicalRepresentation.setLayer(FGEConstants.DEFAULT_SHAPE_LAYER);
 		shapeGraphicalRepresentation.setTextStyle(makeDefaultTextStyle());
 		shapeGraphicalRepresentation.setForeground(makeDefaultForegroundStyle());

@@ -78,7 +78,6 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// * Fields *
 	// *******************************************************************************
 
-	private int layer = FGEConstants.DEFAULT_OBJECT_LAYER;
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
 
@@ -174,12 +173,10 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		}
 	}
 
-	@Override
 	public boolean getNoStroke() {
 		return foreground.getNoStroke();
 	}
 
-	@Override
 	public void setNoStroke(boolean noStroke) {
 		foreground.setNoStroke(noStroke);
 	}
@@ -206,29 +203,13 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		}
 	}
 
-	@Override
 	public BackgroundStyleType getBackgroundType() {
 		return background.getBackgroundStyleType();
 	}
 
-	@Override
 	public void setBackgroundType(BackgroundStyleType backgroundType) {
 		if (backgroundType != getBackgroundType()) {
 			setBackground(getFactory().makeBackground(backgroundType));
-		}
-	}
-
-	@Override
-	public int getLayer() {
-		return layer;
-	}
-
-	@Override
-	public void setLayer(int layer) {
-		FGENotification notification = requireChange(GeometricParameters.layer, layer);
-		if (notification != null) {
-			this.layer = layer;
-			hasChanged(notification);
 		}
 	}
 

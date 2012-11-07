@@ -73,6 +73,7 @@ public class MyDrawingPalette extends DrawingPalette {
 
 	private PaletteElement makePaletteElement(ShapeType st, int px, int py) {
 		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(st, this, null, getPaletteDrawing());
+		getFactory().applyDefaultProperties(gr);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setX(px * GRID_WIDTH + 15);
 			gr.setY(py * GRID_HEIGHT + 10);
@@ -91,8 +92,6 @@ public class MyDrawingPalette extends DrawingPalette {
 		gr.setBackground(getFactory().makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
 		gr.setIsVisible(true);
 		gr.setAllowToLeaveBounds(false);
-
-		System.out.println("Palette element: " + gr);
 
 		return makePaletteElement(gr, true, true, true, true);
 

@@ -19,13 +19,8 @@
  */
 package org.openflexo.fge;
 
-import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.util.List;
-import java.util.Observable;
-import java.util.Vector;
 
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -37,8 +32,12 @@ import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.view.ConnectorView;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents a connector linking two shapes in a diagram<br>
@@ -51,7 +50,29 @@ import org.openflexo.model.annotations.ModelEntity;
  */
 @ModelEntity
 @ImplementationClass(ConnectorGraphicalRepresentationImpl.class)
+@XMLElement(xmlTag = "ConnectorGraphicalRepresentation")
 public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
+
+	// Property keys
+
+	public static final String START_OBJECT = "startObject";
+	public static final String END_OBJECT = "endObject";
+	public static final String CONNECTOR = "connector";
+
+	public static final String FOREGROUND = "foreground";
+	public static final String SELECTED_FOREGROUND = "selectedForeground";
+	public static final String FOCUSED_FOREGROUND = "focusedForeground";
+	public static final String HAS_SELECTED_FOREGROUND = "hasSelectedForeground";
+	public static final String HAS_FOCUSED_FOREGROUND = "hasFocusedForeground";
+
+	public static final String START_SYMBOL = "startSymbol";
+	public static final String END_SYMBOL = "endSymbol";
+	public static final String MIDDLE_SYMBOL = "middleSymbol";
+	public static final String START_SYMBOL_SIZE = "startSymbolSize";
+	public static final String END_SYMBOL_SIZE = "endSymbolSize";
+	public static final String MIDDLE_SYMBOL_SIZE = "middleSymbolSize";
+	public static final String RELATIVE_MIDDLE_SYMBOL_LOCATION = "relativeMiddleSymbolLocation";
+	public static final String APPLY_FOREGROUND_TO_SYMBOLS = "applyForegroundToSymbols";
 
 	public static enum ConnectorParameters implements GRParameter {
 		connector,
@@ -71,97 +92,142 @@ public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresenta
 		debugCoveringArea
 	}
 
-	@Override
-	public abstract void delete();
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
 
-	@Override
-	public abstract Vector<GRParameter> getAllParameters();
+	@Getter(value = START_OBJECT)
+	@XMLElement(context = "Start")
+	public ShapeGraphicalRepresentation<?> getStartObject();
 
-	@Override
-	public abstract void setsWith(GraphicalRepresentation<?> gr);
+	@Setter(value = START_OBJECT)
+	public void setStartObject(ShapeGraphicalRepresentation<?> aStartObject);
 
-	@Override
-	public abstract void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters);
+	@Getter(value = END_OBJECT)
+	@XMLElement(context = "End")
+	public ShapeGraphicalRepresentation<?> getEndObject();
 
-	public abstract Connector getConnector();
+	@Setter(value = END_OBJECT)
+	public void setEndObject(ShapeGraphicalRepresentation<?> anEndObject);
 
-	public abstract void setConnector(Connector aConnector);
+	@Getter(value = CONNECTOR, ignoreType = true)
+	public Connector getConnector();
 
-	public abstract ForegroundStyle getForeground();
+	@Setter(value = CONNECTOR)
+	public void setConnector(Connector aConnector);
 
-	public abstract void setForeground(ForegroundStyle aForeground);
+	@Getter(value = FOREGROUND)
+	@XMLElement
+	public ForegroundStyle getForeground();
 
-	public abstract ForegroundStyle getSelectedForeground();
+	@Setter(value = FOREGROUND)
+	public void setForeground(ForegroundStyle aForeground);
 
-	public abstract void setSelectedForeground(ForegroundStyle aForeground);
+	@Getter(value = SELECTED_FOREGROUND)
+	@XMLElement(context = "Selected")
+	public ForegroundStyle getSelectedForeground();
 
-	public abstract boolean getHasSelectedForeground();
+	@Setter(value = SELECTED_FOREGROUND)
+	public void setSelectedForeground(ForegroundStyle aForeground);
 
-	public abstract void setHasSelectedForeground(boolean aFlag);
+	@Getter(value = HAS_SELECTED_FOREGROUND, defaultValue = "false")
+	@XMLAttribute
+	public boolean getHasSelectedForeground();
 
-	public abstract ForegroundStyle getFocusedForeground();
+	@Setter(value = HAS_SELECTED_FOREGROUND)
+	public void setHasSelectedForeground(boolean aFlag);
 
-	public abstract void setFocusedForeground(ForegroundStyle aForeground);
+	@Getter(value = FOCUSED_FOREGROUND)
+	@XMLElement(context = "Focused")
+	public ForegroundStyle getFocusedForeground();
 
-	public abstract boolean getHasFocusedForeground();
+	@Setter(value = FOCUSED_FOREGROUND)
+	public void setFocusedForeground(ForegroundStyle aForeground);
 
-	public abstract void setHasFocusedForeground(boolean aFlag);
+	@Getter(value = HAS_FOCUSED_FOREGROUND, defaultValue = "false")
+	@XMLAttribute
+	public boolean getHasFocusedForeground();
 
-	@Override
-	public abstract boolean shouldBeDisplayed();
+	@Setter(value = HAS_FOCUSED_FOREGROUND)
+	public void setHasFocusedForeground(boolean aFlag);
 
-	public abstract void notifyConnectorChanged();
+	@Getter(value = START_SYMBOL)
+	@XMLAttribute
+	public StartSymbolType getStartSymbol();
 
-	public abstract ConnectorType getConnectorType();
+	@Setter(value = START_SYMBOL)
+	public void setStartSymbol(StartSymbolType startSymbol);
 
-	public abstract void setConnectorType(ConnectorType connectorType);
+	@Getter(value = END_SYMBOL)
+	@XMLAttribute
+	public EndSymbolType getEndSymbol();
 
-	@Override
-	public abstract void setText(String text);
+	@Setter(value = END_SYMBOL)
+	public void setEndSymbol(EndSymbolType endSymbol);
 
-	public abstract ShapeGraphicalRepresentation<?> getStartObject();
+	@Getter(value = MIDDLE_SYMBOL)
+	@XMLAttribute
+	public MiddleSymbolType getMiddleSymbol();
 
-	public abstract void setStartObject(ShapeGraphicalRepresentation<?> aStartObject);
+	@Setter(value = MIDDLE_SYMBOL)
+	public void setMiddleSymbol(MiddleSymbolType middleSymbol);
 
-	public abstract ShapeGraphicalRepresentation<?> getEndObject();
+	@Getter(value = START_SYMBOL_SIZE, defaultValue = "10.0")
+	@XMLAttribute
+	public double getStartSymbolSize();
 
-	public abstract void setEndObject(ShapeGraphicalRepresentation<?> anEndObject);
+	@Setter(value = START_SYMBOL_SIZE)
+	public void setStartSymbolSize(double startSymbolSize);
 
-	public abstract void observeRelevantObjects();
+	@Getter(value = END_SYMBOL_SIZE, defaultValue = "10.0")
+	@XMLAttribute
+	public double getEndSymbolSize();
 
-	@Override
-	public abstract int getViewX(double scale);
+	@Setter(value = END_SYMBOL_SIZE)
+	public void setEndSymbolSize(double endSymbolSize);
 
-	@Override
-	public abstract int getViewY(double scale);
+	@Getter(value = MIDDLE_SYMBOL_SIZE, defaultValue = "10.0")
+	@XMLAttribute
+	public double getMiddleSymbolSize();
 
-	@Override
-	public abstract int getViewWidth(double scale);
+	@Setter(value = MIDDLE_SYMBOL_SIZE)
+	public void setMiddleSymbolSize(double middleSymbolSize);
 
-	@Override
-	public abstract int getViewHeight(double scale);
+	@Getter(value = RELATIVE_MIDDLE_SYMBOL_LOCATION, defaultValue = "0.5")
+	@XMLAttribute
+	public double getRelativeMiddleSymbolLocation();
 
-	@Override
-	public abstract Rectangle getViewBounds(double scale);
+	@Setter(value = RELATIVE_MIDDLE_SYMBOL_LOCATION)
+	public void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation);
 
-	public abstract int getExtendedX(double scale);
+	@Getter(value = APPLY_FOREGROUND_TO_SYMBOLS, defaultValue = "true")
+	@XMLAttribute
+	public boolean getApplyForegroundToSymbols();
 
-	public abstract int getExtendedY(double scale);
+	@Setter(value = APPLY_FOREGROUND_TO_SYMBOLS)
+	public void setApplyForegroundToSymbols(boolean applyForegroundToSymbols);
+
+	// *******************************************************************************
+	// * Utils
+	// *******************************************************************************
+
+	public void notifyConnectorChanged();
+
+	public ConnectorType getConnectorType();
+
+	public void setConnectorType(ConnectorType connectorType);
+
+	public void observeRelevantObjects();
+
+	public int getExtendedX(double scale);
+
+	public int getExtendedY(double scale);
 
 	/**
 	 * Return normalized bounds Those bounds corresponds to the normalized area defined as (0.0,0.0)-(1.0,1.0) enclosing EXACTELY the two
 	 * related shape bounds. Those bounds should eventually be extended to contain connector contained outside this area.
 	 */
-	public abstract Rectangle getNormalizedBounds(double scale);
-
-	@Override
-	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
-
-	@Override
-	public abstract AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
-
-	@Override
-	public abstract AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
+	public Rectangle getNormalizedBounds(double scale);
 
 	/**
 	 * Return distance from point to connector representation with a given scale
@@ -171,86 +237,23 @@ public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresenta
 	 * @param scale
 	 * @return
 	 */
-	public abstract double distanceToConnector(FGEPoint aPoint, double scale);
-
-	@Override
-	public abstract void paint(Graphics g, DrawingController<?> controller);
-
-	@Override
-	public abstract Point getLabelLocation(double scale);
-
-	@Override
-	public abstract void setLabelLocation(Point point, double scale);
-
-	@Override
-	public abstract boolean hasFloatingLabel();
-
-	@Override
-	public abstract String getInspectorName();
-
-	@Override
-	public abstract void update(Observable observable, Object notification);
+	public double distanceToConnector(FGEPoint aPoint, double scale);
 
 	public boolean isConnectorConsistent();
 
-	public abstract void refreshConnector();
-
-	@Override
-	public abstract void setRegistered(boolean aFlag);
+	public void refreshConnector();
 
 	// Override for a custom view management
-	public abstract ConnectorView<O> makeConnectorView(DrawingController<?> controller);
+	public ConnectorView<O> makeConnectorView(DrawingController<?> controller);
 
-	public abstract EndSymbolType getEndSymbol();
+	public boolean getDebugCoveringArea();
 
-	public abstract void setEndSymbol(EndSymbolType endSymbol);
+	public void setDebugCoveringArea(boolean debugCoveringArea);
 
-	public abstract double getEndSymbolSize();
+	public FGEConnectorGraphics getGraphics();
 
-	public abstract void setEndSymbolSize(double endSymbolSize);
+	public List<? extends ControlArea> getControlAreas();
 
-	public abstract MiddleSymbolType getMiddleSymbol();
-
-	public abstract void setMiddleSymbol(MiddleSymbolType middleSymbol);
-
-	public abstract double getMiddleSymbolSize();
-
-	public abstract void setMiddleSymbolSize(double middleSymbolSize);
-
-	public abstract StartSymbolType getStartSymbol();
-
-	public abstract void setStartSymbol(StartSymbolType startSymbol);
-
-	public abstract double getStartSymbolSize();
-
-	public abstract void setStartSymbolSize(double startSymbolSize);
-
-	public abstract double getRelativeMiddleSymbolLocation();
-
-	public abstract void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation);
-
-	public abstract boolean getApplyForegroundToSymbols();
-
-	public abstract void setApplyForegroundToSymbols(boolean applyForegroundToSymbols);
-
-	public abstract boolean getDebugCoveringArea();
-
-	public abstract void setDebugCoveringArea(boolean debugCoveringArea);
-
-	// Override when required
-	@Override
-	public abstract void notifyObjectHierarchyHasBeenUpdated();
-
-	public abstract FGEConnectorGraphics getGraphics();
-
-	public abstract List<? extends ControlArea> getControlAreas();
-
-	/**
-	 * Override parent's behaviour by enabling start and end object observing
-	 */
-	@Override
-	public abstract void setValidated(boolean validated);
-
-	public abstract ConnectorGraphicalRepresentation<O> clone();
+	public ConnectorGraphicalRepresentation<O> clone();
 
 }

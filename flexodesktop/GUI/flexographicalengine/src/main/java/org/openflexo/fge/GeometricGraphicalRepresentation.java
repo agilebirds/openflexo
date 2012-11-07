@@ -19,21 +19,17 @@
  */
 package org.openflexo.fge;
 
-import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.util.List;
-import java.util.Observable;
-import java.util.Vector;
 
-import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlPoint;
-import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents a geometric object in a diagram<br>
@@ -46,91 +42,56 @@ import org.openflexo.model.annotations.ModelEntity;
  */
 @ModelEntity
 @ImplementationClass(GeometricGraphicalRepresentationImpl.class)
+@XMLElement(xmlTag = "GeometricGraphicalRepresentation")
 public interface GeometricGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
 
+	// Property keys
+
+	public static final String FOREGROUND = "foreground";
+	public static final String BACKGROUND = "background";
+	public static final String GEOMETRIC_OBJECT = "geometricObject";
+
 	public static enum GeometricParameters implements GRParameter {
-		foreground, background, layer, geometricObject
+		foreground, background, geometricObject
 	}
 
-	@Override
-	public abstract Vector<GRParameter> getAllParameters();
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
 
-	@Override
-	public abstract void delete();
+	@Getter(value = FOREGROUND)
+	@XMLElement
+	public ForegroundStyle getForeground();
 
-	public abstract ForegroundStyle getForeground();
+	@Setter(value = FOREGROUND)
+	public void setForeground(ForegroundStyle aForeground);
 
-	public abstract void setForeground(ForegroundStyle aForeground);
+	@Getter(value = BACKGROUND)
+	@XMLElement
+	public BackgroundStyle getBackground();
 
-	public abstract boolean getNoStroke();
+	@Setter(value = BACKGROUND)
+	public void setBackground(BackgroundStyle aBackground);
 
-	public abstract void setNoStroke(boolean noStroke);
+	@Getter(value = GEOMETRIC_OBJECT, ignoreType = true)
+	@XMLElement
+	public FGEArea getGeometricObject();
 
-	public abstract BackgroundStyle getBackground();
+	@Setter(value = GEOMETRIC_OBJECT)
+	public void setGeometricObject(FGEArea geometricObject);
 
-	public abstract void setBackground(BackgroundStyle aBackground);
+	// *******************************************************************************
+	// * Utils
+	// *******************************************************************************
 
-	public abstract BackgroundStyleType getBackgroundType();
+	public Rectangle getBounds(double scale);
 
-	public abstract void setBackgroundType(BackgroundStyleType backgroundType);
+	public void paintGeometricObject(FGEGeometricGraphics graphics);
 
-	@Override
-	public abstract int getLayer();
+	public List<ControlPoint> getControlPoints();
 
-	@Override
-	public abstract void setLayer(int layer);
+	public List<ControlPoint> rebuildControlPoints();
 
-	@Override
-	public abstract int getViewX(double scale);
-
-	@Override
-	public abstract int getViewY(double scale);
-
-	@Override
-	public abstract int getViewWidth(double scale);
-
-	@Override
-	public abstract int getViewHeight(double scale);
-
-	@Override
-	public abstract Rectangle getViewBounds(double scale);
-
-	public abstract Rectangle getBounds(double scale);
-
-	@Override
-	public abstract FGERectangle getNormalizedBounds();
-
-	@Override
-	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
-
-	@Override
-	public abstract AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
-
-	@Override
-	public abstract AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
-
-	public abstract void paintGeometricObject(FGEGeometricGraphics graphics);
-
-	@Override
-	public abstract void paint(Graphics g, DrawingController<?> controller);
-
-	@Override
-	public abstract boolean hasFloatingLabel();
-
-	@Override
-	public abstract String getInspectorName();
-
-	@Override
-	public abstract void update(Observable observable, Object notification);
-
-	public abstract FGEArea getGeometricObject();
-
-	public abstract void setGeometricObject(FGEArea geometricObject);
-
-	public abstract List<ControlPoint> getControlPoints();
-
-	public abstract List<ControlPoint> rebuildControlPoints();
-
-	public abstract void notifyGeometryChanged();
+	public void notifyGeometryChanged();
 
 }

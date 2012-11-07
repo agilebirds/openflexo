@@ -29,7 +29,7 @@
 			<param name="columns" value="10"/>
 			<param name="showReset" value="false"/>
 			<param name="showIcon" value="true"/>
-			<param name="type" value="org.openflexo.fge.graphics.ForegroundStyle$DashStyle"/>
+			<param name="type" value="org.openflexo.fge.ForegroundStyle$DashStyle"/>
 		</property>
 		<property name="borderColor" label="border_color" widget="COLOR" constraint="4">
 			<param name="columns" value="10"/>

@@ -32,8 +32,6 @@ public class MyShapeGraphicalRepresentationImpl extends ShapeGraphicalRepresenta
 
 	// Called by PAMELA, do not use
 	public MyShapeGraphicalRepresentationImpl() {
-		// TODO Auto-generated constructor stub
-		logger.info("Je cree le machin !!!!!!!!!!!!!!!!!");
 	}
 
 	// Called during LOAD

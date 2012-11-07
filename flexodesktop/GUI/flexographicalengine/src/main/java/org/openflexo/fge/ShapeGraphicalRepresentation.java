@@ -20,12 +20,8 @@
 package org.openflexo.fge;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.util.List;
-import java.util.Observable;
 
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
@@ -60,6 +56,7 @@ import org.openflexo.model.annotations.XMLElement;
  */
 @ModelEntity
 @ImplementationClass(ShapeGraphicalRepresentationImpl.class)
+@XMLElement(xmlTag = "ShapeGraphicalRepresentation")
 public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
 
 	// Property keys
@@ -100,10 +97,10 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	public static final String DECORATION_PAINTER = "decorationPainter";
 	public static final String SHAPE_PAINTER = "shapePainter";
 	public static final String ALLOW_TO_LEAVE_BOUNDS = "allowToLeaveBounds";
-	public static final String X_CONSTRAINTS = "xConstraints";
-	public static final String Y_CONSTRAINTS = "yConstraints";
-	public static final String WIDTH_CONSTRAINTS = "widthConstraints";
-	public static final String HEIGHT_CONSTRAINTS = "heightConstraints";
+	public static final String X_CONSTRAINTS_KEY = "xConstraints";
+	public static final String Y_CONSTRAINTS_KEY = "yConstraints";
+	public static final String WIDTH_CONSTRAINTS_KEY = "widthConstraints";
+	public static final String HEIGHT_CONSTRAINTS_KEY = "heightConstraints";
 
 	// *******************************************************************************
 	// * Inner concepts
@@ -174,6 +171,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	@ModelEntity
 	@ImplementationClass(ShapeBorderImpl.class)
+	@XMLElement(xmlTag = "ShapeBorder")
 	public static interface ShapeBorder extends FGEObject {
 
 		public static final String TOP = "top";
@@ -223,394 +221,370 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	@Getter(value = X, defaultValue = "0.0")
 	@XMLAttribute
-	public abstract double getX();
+	public double getX();
 
 	@Setter(value = X)
-	public abstract void setX(double aValue);
+	public void setX(double aValue);
 
 	@Getter(value = Y, defaultValue = "0.0")
 	@XMLAttribute
-	public abstract double getY();
+	public double getY();
 
 	@Setter(value = Y)
-	public abstract void setY(double aValue);
+	public void setY(double aValue);
 
 	@Getter(value = WIDTH, defaultValue = "60.0")
 	@XMLAttribute
-	public abstract double getWidth();
+	public double getWidth();
 
 	@Setter(value = WIDTH)
-	public abstract void setWidth(double aValue);
+	public void setWidth(double aValue);
 
 	@Getter(value = HEIGHT, defaultValue = "20.0")
 	@XMLAttribute
-	public abstract double getHeight();
+	public double getHeight();
 
 	@Setter(value = HEIGHT)
-	public abstract void setHeight(double aValue);
+	public void setHeight(double aValue);
 
 	@Getter(value = MINIMAL_WIDTH, defaultValue = "0.0")
 	@XMLAttribute
-	public abstract double getMinimalWidth();
+	public double getMinimalWidth();
 
 	@Setter(value = MINIMAL_WIDTH)
-	public abstract void setMinimalWidth(double minimalWidth);
+	public void setMinimalWidth(double minimalWidth);
 
 	@Getter(value = MINIMAL_HEIGHT, defaultValue = "0.0")
 	@XMLAttribute
-	public abstract double getMinimalHeight();
+	public double getMinimalHeight();
 
 	@Setter(value = MINIMAL_HEIGHT)
-	public abstract void setMinimalHeight(double minimalHeight);
+	public void setMinimalHeight(double minimalHeight);
 
 	@Getter(value = MAXIMAL_HEIGHT, defaultValue = "POSITIVE_INFINITY")
 	@XMLAttribute
-	public abstract double getMaximalHeight();
+	public double getMaximalHeight();
 
 	@Setter(value = MAXIMAL_HEIGHT)
-	public abstract void setMaximalHeight(double maximalHeight);
+	public void setMaximalHeight(double maximalHeight);
 
 	@Getter(value = MAXIMAL_WIDTH, defaultValue = "POSITIVE_INFINITY")
 	@XMLAttribute
-	public abstract double getMaximalWidth();
+	public double getMaximalWidth();
 
 	@Setter(value = MAXIMAL_WIDTH)
-	public abstract void setMaximalWidth(double maximalWidth);
+	public void setMaximalWidth(double maximalWidth);
 
 	@Getter(value = DIMENSION_CONSTRAINT_STEP)
 	@XMLAttribute
-	public abstract FGESteppedDimensionConstraint getDimensionConstraintStep();
+	public FGESteppedDimensionConstraint getDimensionConstraintStep();
 
 	@Setter(value = DIMENSION_CONSTRAINT_STEP)
-	public abstract void setDimensionConstraintStep(FGESteppedDimensionConstraint dimensionConstraintStep);
+	public void setDimensionConstraintStep(FGESteppedDimensionConstraint dimensionConstraintStep);
 
 	@Getter(value = LOCATION_CONSTRAINTS)
 	@XMLAttribute
-	public abstract LocationConstraints getLocationConstraints();
+	public LocationConstraints getLocationConstraints();
 
 	@Setter(value = LOCATION_CONSTRAINTS)
-	public abstract void setLocationConstraints(LocationConstraints locationConstraints);
+	public void setLocationConstraints(LocationConstraints locationConstraints);
 
 	@Getter(value = LOCATION_CONSTRAINED_AREA, ignoreType = true)
 	@XMLAttribute
-	public abstract FGEArea getLocationConstrainedArea();
+	public FGEArea getLocationConstrainedArea();
 
 	@Setter(value = LOCATION_CONSTRAINED_AREA)
-	public abstract void setLocationConstrainedArea(FGEArea locationConstrainedArea);
+	public void setLocationConstrainedArea(FGEArea locationConstrainedArea);
 
 	@Getter(value = DIMENSION_CONSTRAINTS)
 	@XMLAttribute
-	public abstract DimensionConstraints getDimensionConstraints();
+	public DimensionConstraints getDimensionConstraints();
 
 	@Setter(value = DIMENSION_CONSTRAINTS)
-	public abstract void setDimensionConstraints(DimensionConstraints dimensionConstraints);
+	public void setDimensionConstraints(DimensionConstraints dimensionConstraints);
 
 	@Getter(value = ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getAdjustMinimalWidthToLabelWidth();
+	public boolean getAdjustMinimalWidthToLabelWidth();
 
 	@Setter(value = ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH)
-	public abstract void setAdjustMinimalWidthToLabelWidth(boolean adjustMinimalWidthToLabelWidth);
+	public void setAdjustMinimalWidthToLabelWidth(boolean adjustMinimalWidthToLabelWidth);
 
 	@Getter(value = ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getAdjustMinimalHeightToLabelHeight();
+	public boolean getAdjustMinimalHeightToLabelHeight();
 
 	@Setter(value = ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT)
-	public abstract void setAdjustMinimalHeightToLabelHeight(boolean adjustMinimalHeightToLabelHeight);
+	public void setAdjustMinimalHeightToLabelHeight(boolean adjustMinimalHeightToLabelHeight);
 
 	@Getter(value = ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getAdjustMaximalWidthToLabelWidth();
+	public boolean getAdjustMaximalWidthToLabelWidth();
 
 	@Setter(value = ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH)
-	public abstract void setAdjustMaximalWidthToLabelWidth(boolean adjustMaximalWidthToLabelWidth);
+	public void setAdjustMaximalWidthToLabelWidth(boolean adjustMaximalWidthToLabelWidth);
 
 	@Getter(value = ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getAdjustMaximalHeightToLabelHeight();
+	public boolean getAdjustMaximalHeightToLabelHeight();
 
 	@Setter(value = ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT)
-	public abstract void setAdjustMaximalHeightToLabelHeight(boolean adjustMaximalHeightToLabelHeight);
+	public void setAdjustMaximalHeightToLabelHeight(boolean adjustMaximalHeightToLabelHeight);
 
 	@Getter(value = FOREGROUND)
 	@XMLElement
-	public abstract ForegroundStyle getForeground();
+	public ForegroundStyle getForeground();
 
 	@Setter(value = FOREGROUND)
-	public abstract void setForeground(ForegroundStyle aForeground);
+	public void setForeground(ForegroundStyle aForeground);
 
 	@Getter(value = SELECTED_FOREGROUND)
 	@XMLElement(context = "Selected")
-	public abstract ForegroundStyle getSelectedForeground();
+	public ForegroundStyle getSelectedForeground();
 
 	@Setter(value = SELECTED_FOREGROUND)
-	public abstract void setSelectedForeground(ForegroundStyle aForeground);
+	public void setSelectedForeground(ForegroundStyle aForeground);
 
 	@Getter(value = HAS_SELECTED_FOREGROUND, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getHasSelectedForeground();
+	public boolean getHasSelectedForeground();
 
 	@Setter(value = HAS_SELECTED_FOREGROUND)
-	public abstract void setHasSelectedForeground(boolean aFlag);
+	public void setHasSelectedForeground(boolean aFlag);
 
 	@Getter(value = FOCUSED_FOREGROUND)
 	@XMLElement(context = "Focused")
-	public abstract ForegroundStyle getFocusedForeground();
+	public ForegroundStyle getFocusedForeground();
 
 	@Setter(value = FOCUSED_FOREGROUND)
-	public abstract void setFocusedForeground(ForegroundStyle aForeground);
+	public void setFocusedForeground(ForegroundStyle aForeground);
 
 	@Getter(value = HAS_FOCUSED_FOREGROUND, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getHasFocusedForeground();
+	public boolean getHasFocusedForeground();
 
 	@Setter(value = HAS_FOCUSED_FOREGROUND)
-	public abstract void setHasFocusedForeground(boolean aFlag);
+	public void setHasFocusedForeground(boolean aFlag);
 
 	@Getter(value = BACKGROUND)
 	@XMLElement
-	public abstract BackgroundStyle getBackground();
+	public BackgroundStyle getBackground();
 
 	@Setter(value = BACKGROUND)
-	public abstract void setBackground(BackgroundStyle aBackground);
+	public void setBackground(BackgroundStyle aBackground);
 
 	@Getter(value = SELECTED_BACKGROUND)
 	@XMLElement(context = "Selected")
-	public abstract BackgroundStyle getSelectedBackground();
+	public BackgroundStyle getSelectedBackground();
 
 	@Setter(value = SELECTED_BACKGROUND)
-	public abstract void setSelectedBackground(BackgroundStyle aBackground);
+	public void setSelectedBackground(BackgroundStyle aBackground);
 
 	@Getter(value = HAS_SELECTED_BACKGROUND, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getHasSelectedBackground();
+	public boolean getHasSelectedBackground();
 
 	@Setter(value = HAS_SELECTED_BACKGROUND)
-	public abstract void setHasSelectedBackground(boolean aFlag);
+	public void setHasSelectedBackground(boolean aFlag);
 
 	@Getter(value = FOCUSED_BACKGROUND)
 	@XMLElement(context = "Focused")
-	public abstract BackgroundStyle getFocusedBackground();
+	public BackgroundStyle getFocusedBackground();
 
 	@Setter(value = FOCUSED_BACKGROUND)
-	public abstract void setFocusedBackground(BackgroundStyle aBackground);
+	public void setFocusedBackground(BackgroundStyle aBackground);
 
 	@Getter(value = HAS_FOCUSED_BACKGROUND, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getHasFocusedBackground();
+	public boolean getHasFocusedBackground();
 
 	@Setter(value = HAS_FOCUSED_BACKGROUND)
-	public abstract void setHasFocusedBackground(boolean aFlag);
+	public void setHasFocusedBackground(boolean aFlag);
 
 	@Getter(value = BORDER)
 	@XMLElement
-	public abstract ShapeBorder getBorder();
+	public ShapeBorder getBorder();
 
 	@Setter(value = BORDER)
-	public abstract void setBorder(ShapeBorder border);
+	public void setBorder(ShapeBorder border);
 
 	@Getter(value = SHAPE_TYPE)
 	@XMLAttribute
-	public abstract ShapeType getShapeType();
+	public ShapeType getShapeType();
 
 	@Setter(value = SHAPE_TYPE)
-	public abstract void setShapeType(ShapeType shapeType);
+	public void setShapeType(ShapeType shapeType);
 
 	@Getter(value = SHAPE, ignoreType = true)
-	@XMLAttribute
-	public abstract Shape getShape();
+	public Shape getShape();
 
 	@Setter(value = SHAPE)
-	public abstract void setShape(Shape aShape);
+	public void setShape(Shape aShape);
 
 	@Getter(value = SHADOW_STYLE)
 	@XMLElement
-	public abstract ShadowStyle getShadowStyle();
+	public ShadowStyle getShadowStyle();
 
 	@Setter(value = SHADOW_STYLE)
-	public abstract void setShadowStyle(ShadowStyle aShadowStyle);
+	public void setShadowStyle(ShadowStyle aShadowStyle);
 
 	@Getter(value = IS_FLOATING_LABEL, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getIsFloatingLabel();
+	public boolean getIsFloatingLabel();
 
 	@Setter(value = IS_FLOATING_LABEL)
-	public abstract void setIsFloatingLabel(boolean isFloatingLabel);
+	public void setIsFloatingLabel(boolean isFloatingLabel);
 
 	@Getter(value = RELATIVE_TEXT_X, defaultValue = "0.0")
 	@XMLAttribute
-	public abstract double getRelativeTextX();
+	public double getRelativeTextX();
 
 	@Setter(value = RELATIVE_TEXT_X)
-	public abstract void setRelativeTextX(double textX);
+	public void setRelativeTextX(double textX);
 
 	@Getter(value = RELATIVE_TEXT_Y, defaultValue = "0.0")
 	@XMLAttribute
-	public abstract double getRelativeTextY();
+	public double getRelativeTextY();
 
 	@Setter(value = RELATIVE_TEXT_Y)
-	public abstract void setRelativeTextY(double textY);
+	public void setRelativeTextY(double textY);
 
 	@Getter(value = ALLOW_TO_LEAVE_BOUNDS, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getAllowToLeaveBounds();
+	public boolean getAllowToLeaveBounds();
 
 	@Setter(value = ALLOW_TO_LEAVE_BOUNDS)
-	public abstract void setAllowToLeaveBounds(boolean allowToLeaveBounds);
+	public void setAllowToLeaveBounds(boolean allowToLeaveBounds);
 
-	@Getter(value = X_CONSTRAINTS)
+	@Getter(value = X_CONSTRAINTS_KEY)
 	@XMLAttribute
-	public abstract DataBinding getXConstraints();
+	public DataBinding getXConstraints();
 
-	@Setter(value = X_CONSTRAINTS)
-	public abstract void setXConstraints(DataBinding xConstraints);
+	@Setter(value = X_CONSTRAINTS_KEY)
+	public void setXConstraints(DataBinding xConstraints);
 
-	@Getter(value = Y_CONSTRAINTS)
+	@Getter(value = Y_CONSTRAINTS_KEY)
 	@XMLAttribute
-	public abstract DataBinding getYConstraints();
+	public DataBinding getYConstraints();
 
-	@Setter(value = Y_CONSTRAINTS)
-	public abstract void setYConstraints(DataBinding yConstraints);
+	@Setter(value = Y_CONSTRAINTS_KEY)
+	public void setYConstraints(DataBinding yConstraints);
 
-	@Getter(value = WIDTH_CONSTRAINTS)
+	@Getter(value = WIDTH_CONSTRAINTS_KEY)
 	@XMLAttribute
-	public abstract DataBinding getWidthConstraints();
+	public DataBinding getWidthConstraints();
 
-	@Setter(value = WIDTH_CONSTRAINTS)
-	public abstract void setWidthConstraints(DataBinding widthConstraints);
+	@Setter(value = WIDTH_CONSTRAINTS_KEY)
+	public void setWidthConstraints(DataBinding widthConstraints);
 
-	@Getter(value = HEIGHT_CONSTRAINTS)
+	@Getter(value = HEIGHT_CONSTRAINTS_KEY)
 	@XMLAttribute
-	public abstract DataBinding getHeightConstraints();
+	public DataBinding getHeightConstraints();
 
-	@Setter(value = HEIGHT_CONSTRAINTS)
-	public abstract void setHeightConstraints(DataBinding heightConstraints);
+	@Setter(value = HEIGHT_CONSTRAINTS_KEY)
+	public void setHeightConstraints(DataBinding heightConstraints);
 
 	// *******************************************************************************
 	// * Position management
 	// *******************************************************************************
 
-	public abstract FGEPoint getLocation();
+	public FGEPoint getLocation();
 
-	public abstract void setLocation(FGEPoint newLocation);
+	public void setLocation(FGEPoint newLocation);
 
-	public abstract FGEPoint getLocationInDrawing();
+	public FGEPoint getLocationInDrawing();
 
 	// *******************************************************************************
 	// * Size management
 	// *******************************************************************************
 
-	public abstract Dimension getNormalizedLabelSize();
+	public Dimension getNormalizedLabelSize();
 
-	public abstract Rectangle getNormalizedLabelBounds();
+	public Rectangle getNormalizedLabelBounds();
 
-	public abstract boolean isFullyContainedInContainer();
+	public boolean isFullyContainedInContainer();
 
-	public abstract boolean isParentLayoutedAsContainer();
+	public boolean isParentLayoutedAsContainer();
 
-	public abstract double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation);
+	public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation);
 
-	public abstract FGEDimension getSize();
+	public FGEDimension getSize();
 
-	public abstract void setSize(FGEDimension newSize);
+	public void setSize(FGEDimension newSize);
 
 	// *******************************************************************************
 	// * Properties management
 	// *******************************************************************************
 
-	@Override
-	public abstract boolean hasFloatingLabel();
-
 	// *******************************************************************************
 	// * Utils
 	// *******************************************************************************
 
-	public abstract ShapeGraphicalRepresentation<O> clone();
+	public ShapeGraphicalRepresentation<O> clone();
 
-	// This might be very dangerous to override this (this has been done in the past)
-	// SGU: Developer really need to think about what he's doing while overriding this
-	@Override
-	public abstract void update(Observable observable, Object notification);
+	public void extendParentBoundsToHostThisShape();
 
-	public abstract void extendParentBoundsToHostThisShape();
+	public void finalizeConstraints();
 
-	public abstract void finalizeConstraints();
+	public void updateConstraints();
 
-	public abstract void updateConstraints();
+	public void constraintChanged(DataBinding constraint);
 
-	public abstract void constraintChanged(DataBinding constraint);
+	public boolean getNoStroke();
 
-	public abstract boolean getNoStroke();
+	public void setNoStroke(boolean noStroke);
 
-	public abstract void setNoStroke(boolean noStroke);
+	public BackgroundStyleType getBackgroundType();
 
-	public abstract BackgroundStyleType getBackgroundType();
+	public void setBackgroundType(BackgroundStyleType backgroundType);
 
-	public abstract void setBackgroundType(BackgroundStyleType backgroundType);
+	public void notifyShapeChanged();
 
-	public abstract void notifyShapeChanged();
+	public void notifyShapeNeedsToBeRedrawn();
 
-	public abstract void notifyShapeNeedsToBeRedrawn();
+	public void notifyObjectMoved();
 
-	public abstract void notifyObjectMoved();
+	public void notifyObjectMoved(FGEPoint oldLocation);
 
-	public abstract void notifyObjectMoved(FGEPoint oldLocation);
+	public void notifyObjectWillMove();
 
-	public abstract void notifyObjectWillMove();
+	public void notifyObjectHasMoved();
 
-	public abstract void notifyObjectHasMoved();
-
-	public abstract boolean isMoving();
+	public boolean isMoving();
 
 	/**
 	 * Notify that the object just resized
 	 */
-	public abstract void notifyObjectResized();
+	public void notifyObjectResized();
 
 	/**
 	 * Notify that the object just resized
 	 */
-	public abstract void notifyObjectResized(FGEDimension oldSize);
+	public void notifyObjectResized(FGEDimension oldSize);
 
 	/**
 	 * Notify that the object will be resized
 	 */
-	public abstract void notifyObjectWillResize();
+	public void notifyObjectWillResize();
 
 	/**
 	 * Notify that the object resizing has finished (take care that this just notify END of resize, this should NOT be used to notify a
 	 * resizing: use notifyObjectResize() instead)
 	 */
-	public abstract void notifyObjectHasResized();
+	public void notifyObjectHasResized();
 
-	public abstract boolean isResizing();
+	public boolean isResizing();
 
-	@Override
-	public abstract boolean shouldBeDisplayed();
+	public double getUnscaledViewWidth();
 
-	@Override
-	public abstract int getViewX(double scale);
-
-	@Override
-	public abstract int getViewY(double scale);
-
-	@Override
-	public abstract int getViewWidth(double scale);
-
-	public abstract double getUnscaledViewWidth();
-
-	@Override
-	public abstract int getViewHeight(double scale);
-
-	public abstract double getUnscaledViewHeight();
+	public double getUnscaledViewHeight();
 
 	/**
 	 * Return bounds (including border) relative to parent container
 	 * 
 	 * @return
 	 */
-	public abstract FGERectangle getBounds();
+	public FGERectangle getBounds();
 
 	/**
 	 * Return view bounds (excluding border) relative to parent container
@@ -618,7 +592,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 * @param scale
 	 * @return
 	 */
-	public abstract Rectangle getBounds(double scale);
+	public Rectangle getBounds(double scale);
 
 	/**
 	 * Return view bounds (excluding border) relative to given container
@@ -626,7 +600,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 * @param scale
 	 * @return
 	 */
-	public abstract Rectangle getBounds(GraphicalRepresentation<?> container, double scale);
+	public Rectangle getBounds(GraphicalRepresentation<?> container, double scale);
 
 	/**
 	 * Return logical bounds (including border) relative to given container
@@ -634,81 +608,50 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 * @param scale
 	 * @return
 	 */
-	public abstract Rectangle getViewBounds(GraphicalRepresentation<?> container, double scale);
+	public Rectangle getViewBounds(GraphicalRepresentation<?> container, double scale);
 
-	@Override
-	public abstract AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
+	public boolean isPointInsideShape(FGEPoint aPoint);
 
-	@Override
-	public abstract AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
+	public DecorationPainter getDecorationPainter();
 
-	public abstract boolean isPointInsideShape(FGEPoint aPoint);
+	public void setDecorationPainter(DecorationPainter aPainter);
 
-	public abstract DecorationPainter getDecorationPainter();
+	public ShapePainter getShapePainter();
 
-	public abstract void setDecorationPainter(DecorationPainter aPainter);
-
-	public abstract ShapePainter getShapePainter();
-
-	public abstract void setShapePainter(ShapePainter aPainter);
-
-	@Override
-	public abstract void paint(Graphics g, DrawingController<?> controller);
-
-	@Override
-	public abstract Point getLabelLocation(double scale);
-
-	@Override
-	public abstract void setLabelLocation(Point point, double scale);
-
-	@Override
-	public abstract int getAvailableLabelWidth(double scale);
-
-	@Override
-	public abstract void setHorizontalTextAlignment(
-			org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment horizontalTextAlignment);
-
-	@Override
-	public abstract void setVerticalTextAlignment(org.openflexo.fge.GraphicalRepresentation.VerticalTextAlignment verticalTextAlignment);
-
-	@Override
-	public abstract String getInspectorName();
+	public void setShapePainter(ShapePainter aPainter);
 
 	// Override for a custom view management
-	public abstract ShapeView<O> makeShapeView(DrawingController<?> controller);
+	public ShapeView<O> makeShapeView(DrawingController<?> controller);
 
 	@Override
-	public abstract String toString();
+	public String toString();
 
-	@Override
-	public abstract void notifyObjectHierarchyHasBeenUpdated();
+	public List<? extends ControlArea<?>> getControlAreas();
 
-	public abstract List<? extends ControlArea<?>> getControlAreas();
-
-	public abstract FGEShapeGraphics getGraphics();
+	public FGEShapeGraphics getGraphics();
 
 	/**
 	 * Override this if you want to use such a feature
 	 * 
 	 * @return
 	 */
-	public abstract boolean isAllowedToBeDraggedOutsideParentContainer();
+	public boolean isAllowedToBeDraggedOutsideParentContainer();
 
 	/**
 	 * Override this if you want to use this feature Default implementation return always false
 	 * 
 	 * @return
 	 */
-	public abstract boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container);
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container);
 
 	/**
 	 * Override this if you want to use this feature Default implementation does nothing return boolean indicating if drag was successfully
 	 * performed
 	 */
-	public abstract boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location);
+	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location);
 
-	public abstract void performRandomLayout();
+	public void performRandomLayout();
 
-	public abstract void performAutoLayout();
+	public void performAutoLayout();
 
 }

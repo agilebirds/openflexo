@@ -20,8 +20,12 @@
 package org.openflexo.fge;
 
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represent shadow properties which should be applied to a graphical representation
@@ -31,32 +35,47 @@ import org.openflexo.model.annotations.ModelEntity;
  */
 @ModelEntity
 @ImplementationClass(ShadowStyleImpl.class)
+@XMLElement(xmlTag = "ShadowStyle")
 public interface ShadowStyle extends FGEStyle {
 
 	public static final String NONE_CONFIGURATION = "none";
 	public static final String DEFAULT_CONFIGURATION = "default";
 
+	public static final String DRAW_SHADOW = "drawShadow";
+	public static final String SHADOW_DARKNESS = "shadowDarkness";
+	public static final String SHADOW_DEPTH = "shadowDepth";
+	public static final String SHADOW_BLUR = "shadowBlur";
+
 	public static enum Parameters implements GRParameter {
 		drawShadow, shadowDarkness, shadowDepth, shadowBlur
 	}
 
+	@Getter(value = DRAW_SHADOW, defaultValue = "true")
+	@XMLAttribute
 	public boolean getDrawShadow();
 
+	@Setter(value = DRAW_SHADOW)
 	public void setDrawShadow(boolean aFlag);
 
+	@Getter(value = SHADOW_DARKNESS, defaultValue = "150")
+	@XMLAttribute
 	public int getShadowDarkness();
 
+	@Setter(value = SHADOW_DARKNESS)
 	public void setShadowDarkness(int aValue);
 
+	@Getter(value = SHADOW_DEPTH, defaultValue = "2")
+	@XMLAttribute
 	public int getShadowDepth();
 
-	@Deprecated
-	public int getShadowDeep();
-
+	@Setter(value = SHADOW_DEPTH)
 	public void setShadowDepth(int aValue);
 
+	@Getter(value = SHADOW_BLUR, defaultValue = "4")
+	@XMLAttribute
 	public int getShadowBlur();
 
+	@Setter(value = SHADOW_BLUR)
 	public void setShadowBlur(int aValue);
 
 	public ShadowStyle clone();

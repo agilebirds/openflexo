@@ -23,8 +23,12 @@ import java.awt.Color;
 import java.awt.Font;
 
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represent text properties which should be applied to a graphical representation
@@ -34,30 +38,58 @@ import org.openflexo.model.annotations.ModelEntity;
  */
 @ModelEntity
 @ImplementationClass(TextStyleImpl.class)
+@XMLElement(xmlTag = "TextStyle")
 public interface TextStyle extends FGEStyle {
+
+	// Property keys
+
+	public static final String COLOR = "color";
+	public static final String BACKGROUND_COLOR = "backgroundColor";
+	public static final String FONT = "font";
+	public static final String ORIENTATION = "orientation";
+	public static final String IS_BACKGROUND_COLORED = "isBackgroundColored";
 
 	public static enum Parameters implements GRParameter {
 		color, backgroundColor, font, orientation, backgroundColored
 	}
 
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
+
+	@Getter(value = COLOR)
+	@XMLAttribute
 	public Color getColor();
 
+	@Setter(value = COLOR)
 	public void setColor(Color aColor);
 
-	public Font getFont();
-
-	public void setFont(Font aFont);
-
-	public int getOrientation();
-
-	public void setOrientation(int anOrientation);
-
+	@Getter(value = BACKGROUND_COLOR)
+	@XMLAttribute
 	public Color getBackgroundColor();
 
+	@Setter(value = BACKGROUND_COLOR)
 	public void setBackgroundColor(Color aColor);
 
+	@Getter(value = FONT)
+	@XMLAttribute
+	public Font getFont();
+
+	@Setter(value = FONT)
+	public void setFont(Font aFont);
+
+	@Getter(value = ORIENTATION, defaultValue = "0")
+	@XMLAttribute
+	public int getOrientation();
+
+	@Setter(value = ORIENTATION)
+	public void setOrientation(int anOrientation);
+
+	@Getter(value = IS_BACKGROUND_COLORED, defaultValue = "false")
+	@XMLAttribute
 	public boolean getIsBackgroundColored();
 
+	@Setter(value = IS_BACKGROUND_COLORED)
 	public void setIsBackgroundColored(boolean aFlag);
 
 	public TextStyle clone();

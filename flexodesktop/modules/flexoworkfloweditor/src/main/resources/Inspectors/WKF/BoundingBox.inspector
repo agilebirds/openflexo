@@ -9,7 +9,7 @@
       <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
       <DropDown format="object.name" localize="true" name="TextAlignment" data="data.paragraphAlignment" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" />
       <Label label="dash_style" localize="true" name="DashStyleLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="DashStyle" data="data.dashStyle" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" width="150" showIcon="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$DashStyle" />
+      <DropDown format="object.name" localize="true" name="DashStyle" data="data.dashStyle" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" width="150" showIcon="true" iteratorClassName="org.openflexo.fge.ForegroundStyle$DashStyle" />
       <Label label="border_color" localize="true" name="BorderColorLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
       <Color data="data.borderColor" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="BorderColor" localize="true" />
       <Label label="rounded_corners" localize="true" name="IsRoundedLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />

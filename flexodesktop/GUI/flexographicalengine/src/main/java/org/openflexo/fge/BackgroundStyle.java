@@ -27,8 +27,12 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.inspector.HasIcon;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -71,6 +75,7 @@ public interface BackgroundStyle extends FGEStyle {
 	 */
 	@ModelEntity
 	@ImplementationClass(BackgroundStyleImpl.NoneImpl.class)
+	@XMLElement(xmlTag = "NoneBackgroundStyle")
 	public static interface None extends BackgroundStyle {
 
 	}
@@ -83,9 +88,16 @@ public interface BackgroundStyle extends FGEStyle {
 	 */
 	@ModelEntity
 	@ImplementationClass(BackgroundStyleImpl.ColorImpl.class)
+	@XMLElement(xmlTag = "ColorBackgroundStyle")
 	public static interface Color extends BackgroundStyle {
+
+		public static final String COLOR = "color";
+
+		@Getter(value = COLOR)
+		@XMLAttribute
 		public java.awt.Color getColor();
 
+		@Setter(value = COLOR)
 		public void setColor(java.awt.Color aColor);
 
 	}
@@ -98,22 +110,36 @@ public interface BackgroundStyle extends FGEStyle {
 	 */
 	@ModelEntity
 	@ImplementationClass(BackgroundStyleImpl.ColorGradientImpl.class)
+	@XMLElement(xmlTag = "ColorGradientBackgroundStyle")
 	public static interface ColorGradient extends BackgroundStyle {
+
+		public static final String COLOR1 = "color1";
+		public static final String COLOR2 = "color2";
+		public static final String DIRECTION = "direction";
 
 		public static enum ColorGradientDirection {
 			NORTH_SOUTH, WEST_EAST, SOUTH_EAST_NORTH_WEST, SOUTH_WEST_NORTH_EAST
 		}
 
+		@Getter(value = COLOR1)
+		@XMLAttribute
 		public java.awt.Color getColor1();
 
+		@Setter(value = COLOR1)
 		public void setColor1(java.awt.Color aColor);
 
+		@Getter(value = COLOR2)
+		@XMLAttribute
 		public java.awt.Color getColor2();
 
+		@Setter(value = COLOR2)
 		public void setColor2(java.awt.Color aColor);
 
+		@Getter(value = DIRECTION)
+		@XMLAttribute
 		public ColorGradientDirection getDirection();
 
+		@Setter(value = DIRECTION)
 		public void setDirection(ColorGradientDirection aDirection);
 
 	}
@@ -126,7 +152,12 @@ public interface BackgroundStyle extends FGEStyle {
 	 */
 	@ModelEntity
 	@ImplementationClass(BackgroundStyleImpl.TextureImpl.class)
+	@XMLElement(xmlTag = "TexturedBackgroundStyle")
 	public static interface Texture extends BackgroundStyle {
+
+		public static final String COLOR1 = "color1";
+		public static final String COLOR2 = "color2";
+		public static final String TEXTURE_TYPE = "textureType";
 
 		public static enum TextureType implements HasIcon {
 			TEXTURE1,
@@ -154,20 +185,29 @@ public interface BackgroundStyle extends FGEStyle {
 			public ImageIcon getIcon() {
 				return getImageIcon();
 			}
-
 		}
 
+		@Getter(value = TEXTURE_TYPE)
+		@XMLAttribute
 		public TextureType getTextureType();
 
+		@Setter(value = TEXTURE_TYPE)
 		public void setTextureType(TextureType aTextureType);
 
+		@Getter(value = COLOR1)
+		@XMLAttribute
 		public java.awt.Color getColor1();
 
+		@Setter(value = COLOR1)
 		public void setColor1(java.awt.Color aColor);
 
+		@Getter(value = COLOR2)
+		@XMLAttribute
 		public java.awt.Color getColor2();
 
+		@Setter(value = COLOR2)
 		public void setColor2(java.awt.Color aColor);
+
 	}
 
 	/**
@@ -178,7 +218,18 @@ public interface BackgroundStyle extends FGEStyle {
 	 */
 	@ModelEntity
 	@ImplementationClass(BackgroundStyleImpl.BackgroundImageImpl.class)
+	@XMLElement(xmlTag = "ImageBackgroundStyle")
 	public static interface BackgroundImage extends BackgroundStyle {
+
+		public static final String IMAGE_FILE = "imageFile";
+		public static final String SCALE_X = "scaleX";
+		public static final String SCALE_Y = "scaleY";
+		public static final String DELTA_X = "deltaX";
+		public static final String DELTA_Y = "deltaY";
+		public static final String FIT_TO_SHAPE = "fitToShape";
+		public static final String IMAGE_BACKGROUND_TYPE = "imageBackgroundType";
+		public static final String IMAGE_BACKGROUND_COLOR = "imageBackgroundColor";
+
 		public static enum ImageBackgroundType {
 			OPAQUE, TRANSPARENT
 		}
@@ -186,36 +237,60 @@ public interface BackgroundStyle extends FGEStyle {
 		@Override
 		public BackgroundStyleType getBackgroundStyleType();
 
+		@Getter(value = IMAGE_FILE)
+		@XMLAttribute
 		public File getImageFile();
 
+		@Setter(value = IMAGE_FILE)
 		public void setImageFile(File anImageFile);
 
+		@Getter(value = IMAGE_BACKGROUND_COLOR)
+		@XMLAttribute
 		public java.awt.Color getImageBackgroundColor();
 
+		@Setter(value = IMAGE_BACKGROUND_COLOR)
 		public void setImageBackgroundColor(java.awt.Color aColor);
 
+		@Getter(value = DELTA_X, defaultValue = "0.0")
+		@XMLAttribute
 		public double getDeltaX();
 
+		@Setter(value = DELTA_X)
 		public void setDeltaX(double aDeltaX);
 
+		@Getter(value = DELTA_Y, defaultValue = "0.0")
+		@XMLAttribute
 		public double getDeltaY();
 
+		@Setter(value = DELTA_Y)
 		public void setDeltaY(double aDeltaY);
 
+		@Getter(value = IMAGE_BACKGROUND_TYPE)
+		@XMLAttribute
 		public ImageBackgroundType getImageBackgroundType();
 
+		@Setter(value = IMAGE_BACKGROUND_TYPE)
 		public void setImageBackgroundType(ImageBackgroundType anImageBackgroundType);
 
+		@Getter(value = SCALE_X, defaultValue = "1.0")
+		@XMLAttribute
 		public double getScaleX();
 
+		@Setter(value = SCALE_X)
 		public void setScaleX(double aScaleX);
 
+		@Getter(value = SCALE_Y, defaultValue = "1.0")
+		@XMLAttribute
 		public double getScaleY();
 
+		@Setter(value = SCALE_Y)
 		public void setScaleY(double aScaleY);
 
+		@Getter(value = FIT_TO_SHAPE, defaultValue = "false")
+		@XMLAttribute
 		public boolean getFitToShape();
 
+		@Setter(value = FIT_TO_SHAPE)
 		public void setFitToShape(boolean aFlag);
 
 		public Image getImage();

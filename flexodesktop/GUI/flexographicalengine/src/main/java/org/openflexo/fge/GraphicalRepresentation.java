@@ -194,13 +194,13 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	// * Model
 	// *******************************************************************************
 
-	public abstract O getDrawable();
+	public O getDrawable();
 
-	public abstract void setDrawable(O aDrawable);
+	public void setDrawable(O aDrawable);
 
-	public abstract Drawing<?> getDrawing();
+	public Drawing<?> getDrawing();
 
-	public abstract void setDrawing(Drawing<?> drawing);
+	public void setDrawing(Drawing<?> drawing);
 
 	// *******************************************************************************
 	// * Properties
@@ -208,211 +208,209 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	@Getter(value = IDENTIFIER)
 	@XMLAttribute
-	public abstract String getIdentifier();
+	public String getIdentifier();
 
 	@Setter(value = IDENTIFIER)
-	public abstract void setIdentifier(String identifier);
+	public void setIdentifier(String identifier);
 
 	@Getter(value = LAYER, defaultValue = "0")
 	@XMLAttribute
-	public abstract int getLayer();
+	public int getLayer();
 
 	@Setter(value = LAYER)
-	public abstract void setLayer(int layer);
+	public void setLayer(int layer);
 
 	@Getter(value = HAS_TEXT, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getHasText();
+	public boolean getHasText();
 
 	@Setter(value = HAS_TEXT)
-	public abstract void setHasText(boolean hasText);
+	public void setHasText(boolean hasText);
 
 	@Getter(value = TEXT)
 	@XMLAttribute
-	public abstract String getText();
+	public String getText();
 
 	@Setter(value = TEXT)
-	public abstract void setText(String text);
+	public void setText(String text);
 
-	public abstract String getMultilineText();
+	public String getMultilineText();
 
-	public abstract void setMultilineText(String text);
+	public void setMultilineText(String text);
 
 	@Getter(value = IS_MULTILINE_ALLOWED, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getIsMultilineAllowed();
+	public boolean getIsMultilineAllowed();
 
 	@Setter(value = IS_MULTILINE_ALLOWED)
-	public abstract void setIsMultilineAllowed(boolean multilineAllowed);
+	public void setIsMultilineAllowed(boolean multilineAllowed);
 
 	@Getter(value = LINE_WRAP, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getLineWrap();
+	public boolean getLineWrap();
 
 	@Setter(value = LINE_WRAP)
-	public abstract void setLineWrap(boolean lineWrap);
+	public void setLineWrap(boolean lineWrap);
 
 	@Getter(value = CONTINUOUS_TEXT_EDITING, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getContinuousTextEditing();
+	public boolean getContinuousTextEditing();
 
 	@Setter(value = CONTINUOUS_TEXT_EDITING)
-	public abstract void setContinuousTextEditing(boolean continuousTextEditing);
+	public void setContinuousTextEditing(boolean continuousTextEditing);
 
 	@Getter(value = TEXT_STYLE)
 	@XMLElement
-	public abstract TextStyle getTextStyle();
+	public TextStyle getTextStyle();
 
 	@Setter(value = TEXT_STYLE)
-	public abstract void setTextStyle(TextStyle aTextStyle);
+	public void setTextStyle(TextStyle aTextStyle);
 
 	@Getter(value = ABSOLUTE_TEXT_X, defaultValue = "0")
 	@XMLAttribute
-	public abstract double getAbsoluteTextX();
+	public double getAbsoluteTextX();
 
 	@Setter(value = ABSOLUTE_TEXT_X)
-	public abstract void setAbsoluteTextX(double absoluteTextX);
+	public void setAbsoluteTextX(double absoluteTextX);
 
 	@Getter(value = ABSOLUTE_TEXT_Y, defaultValue = "0")
 	@XMLAttribute
-	public abstract double getAbsoluteTextY();
+	public double getAbsoluteTextY();
 
 	@Setter(value = ABSOLUTE_TEXT_Y)
-	public abstract void setAbsoluteTextY(double absoluteTextY);
+	public void setAbsoluteTextY(double absoluteTextY);
 
 	@Getter(value = HORIZONTAL_TEXT_ALIGNEMENT, defaultValue = "CENTER")
 	@XMLAttribute
-	public abstract HorizontalTextAlignment getHorizontalTextAlignment();
+	public HorizontalTextAlignment getHorizontalTextAlignment();
 
 	@Setter(value = HORIZONTAL_TEXT_ALIGNEMENT)
-	public abstract void setHorizontalTextAlignment(HorizontalTextAlignment horizontalTextAlignment);
+	public void setHorizontalTextAlignment(HorizontalTextAlignment horizontalTextAlignment);
 
 	@Getter(value = VERTICAL_TEXT_ALIGNEMENT, defaultValue = "MIDDLE")
 	@XMLAttribute
-	public abstract VerticalTextAlignment getVerticalTextAlignment();
+	public VerticalTextAlignment getVerticalTextAlignment();
 
 	@Setter(value = VERTICAL_TEXT_ALIGNEMENT)
-	public abstract void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment);
+	public void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment);
 
 	@Getter(value = PARAGRAPH_ALIGNMENT, defaultValue = "CENTER")
 	@XMLAttribute
-	public abstract ParagraphAlignment getParagraphAlignment();
+	public ParagraphAlignment getParagraphAlignment();
 
 	@Setter(value = PARAGRAPH_ALIGNMENT)
-	public abstract void setParagraphAlignment(ParagraphAlignment paragraphAlignment);
+	public void setParagraphAlignment(ParagraphAlignment paragraphAlignment);
 
 	@Getter(value = IS_SELECTABLE, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getIsSelectable();
+	public boolean getIsSelectable();
 
 	@Setter(value = IS_SELECTABLE)
-	public abstract void setIsSelectable(boolean isSelectable);
+	public void setIsSelectable(boolean isSelectable);
 
 	@Getter(value = IS_FOCUSABLE, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getIsFocusable();
+	public boolean getIsFocusable();
 
 	@Setter(value = IS_FOCUSABLE)
-	public abstract void setIsFocusable(boolean isFocusable);
+	public void setIsFocusable(boolean isFocusable);
 
 	@Getter(value = IS_SELECTED, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getIsSelected();
+	public boolean getIsSelected();
 
 	@Setter(value = IS_SELECTED)
-	public abstract void setIsSelected(boolean aFlag);
+	public void setIsSelected(boolean aFlag);
 
 	@Getter(value = IS_FOCUSED, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getIsFocused();
+	public boolean getIsFocused();
 
 	@Setter(value = IS_FOCUSED)
-	public abstract void setIsFocused(boolean aFlag);
+	public void setIsFocused(boolean aFlag);
 
 	@Getter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getDrawControlPointsWhenFocused();
+	public boolean getDrawControlPointsWhenFocused();
 
 	@Setter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED)
-	public abstract void setDrawControlPointsWhenFocused(boolean aFlag);
+	public void setDrawControlPointsWhenFocused(boolean aFlag);
 
 	@Getter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getDrawControlPointsWhenSelected();
+	public boolean getDrawControlPointsWhenSelected();
 
 	@Setter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED)
-	public abstract void setDrawControlPointsWhenSelected(boolean aFlag);
+	public void setDrawControlPointsWhenSelected(boolean aFlag);
 
 	@Getter(value = IS_READ_ONLY, defaultValue = "false")
 	@XMLAttribute
-	public abstract boolean getIsReadOnly();
+	public boolean getIsReadOnly();
 
 	@Setter(value = IS_READ_ONLY)
-	public abstract void setIsReadOnly(boolean readOnly);
+	public void setIsReadOnly(boolean readOnly);
 
 	@Getter(value = IS_LABEL_EDITABLE, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getIsLabelEditable();
+	public boolean getIsLabelEditable();
 
 	@Setter(value = IS_LABEL_EDITABLE)
-	public abstract void setIsLabelEditable(boolean labelEditable);
+	public void setIsLabelEditable(boolean labelEditable);
 
 	@Getter(value = IS_VISIBLE, defaultValue = "true")
 	@XMLAttribute
-	public abstract boolean getIsVisible();
+	public boolean getIsVisible();
 
 	@Setter(value = IS_VISIBLE)
-	public abstract void setIsVisible(boolean isVisible);
+	public void setIsVisible(boolean isVisible);
 
 	@Getter(value = MOUSE_CLICK_CONTROLS, cardinality = Cardinality.LIST, ignoreType = true)
-	@XMLElement
-	public abstract Vector<MouseClickControl> getMouseClickControls();
+	public Vector<MouseClickControl> getMouseClickControls();
 
 	@Setter(value = MOUSE_CLICK_CONTROLS)
-	public abstract void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
+	public void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
 
 	@Adder(value = MOUSE_CLICK_CONTROLS)
-	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl);
+	public void addToMouseClickControls(MouseClickControl mouseClickControl);
 
-	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
+	public void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
 
 	@Remover(value = MOUSE_CLICK_CONTROLS)
-	public abstract void removeFromMouseClickControls(MouseClickControl mouseClickControl);
+	public void removeFromMouseClickControls(MouseClickControl mouseClickControl);
 
 	@Getter(value = MOUSE_DRAG_CONTROLS, cardinality = Cardinality.LIST, ignoreType = true)
-	@XMLElement
-	public abstract Vector<MouseDragControl> getMouseDragControls();
+	public Vector<MouseDragControl> getMouseDragControls();
 
 	@Setter(value = MOUSE_DRAG_CONTROLS)
-	public abstract void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
+	public void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
 
 	@Adder(value = MOUSE_DRAG_CONTROLS)
-	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl);
+	public void addToMouseDragControls(MouseDragControl mouseDragControl);
 
-	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
+	public void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
 
 	@Remover(value = MOUSE_DRAG_CONTROLS)
-	public abstract void removeFromMouseDragControls(MouseDragControl mouseDragControl);
+	public void removeFromMouseDragControls(MouseDragControl mouseDragControl);
 
 	@Getter(value = TOOLTIP_TEXT)
 	@XMLAttribute
-	public abstract String getToolTipText();
+	public String getToolTipText();
 
 	@Setter(value = TOOLTIP_TEXT)
-	public abstract void setToolTipText(String tooltipText);
+	public void setToolTipText(String tooltipText);
 
 	// @Getter(value = VARIABLES, cardinality = Cardinality.LIST)
 	// @XMLElement
-	public abstract Vector<GRVariable> getVariables();
+	public Vector<GRVariable> getVariables();
 
 	// @Setter(value = VARIABLES)
-	public abstract void setVariables(Vector<GRVariable> variables);
+	public void setVariables(Vector<GRVariable> variables);
 
 	// @Adder(value = VARIABLES)
-	public abstract void addToVariables(GRVariable v);
+	public void addToVariables(GRVariable v);
 
 	// @Remover(value = VARIABLES)
-	public abstract void removeFromVariables(GRVariable v);
+	public void removeFromVariables(GRVariable v);
 
 	// *******************************************************************************
 	// * Deletion management
@@ -421,7 +419,7 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	/**
 	 * Delete this graphical representation
 	 */
-	public abstract void delete();
+	public void delete();
 
 	/**
 	 * Return a flag indicating if this graphical representation has been deleted
@@ -429,236 +427,234 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	 * @return
 	 */
 	@Override
-	public abstract boolean isDeleted();
+	public boolean isDeleted();
 
 	// *******************************************************************************
 	// * Utils
 	// *******************************************************************************
 
-	public abstract GRParameter parameterWithName(String parameterName);
+	public GRParameter parameterWithName(String parameterName);
 
-	public abstract Vector<GRParameter> getAllParameters();
+	public Vector<GRParameter> getAllParameters();
 
-	public abstract void setsWith(GraphicalRepresentation<?> gr);
+	public void setsWith(GraphicalRepresentation<?> gr);
 
-	public abstract void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters);
+	public void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters);
 
-	public abstract void initializeDeserialization();
+	public void initializeDeserialization();
 
-	public abstract void finalizeDeserialization();
+	public void finalizeDeserialization();
 
-	public abstract boolean isDeserializing();
+	public boolean isDeserializing();
 
 	// *******************************************************************************
 	// * Graphical Utils
 	// *******************************************************************************
 
-	public abstract boolean hasFloatingLabel();
+	public boolean hasFloatingLabel();
 
-	public abstract boolean shouldBeDisplayed();
+	public boolean shouldBeDisplayed();
 
-	public abstract DrawingGraphicalRepresentation<?> getDrawingGraphicalRepresentation();
+	public DrawingGraphicalRepresentation<?> getDrawingGraphicalRepresentation();
 
-	public abstract <O2> GraphicalRepresentation<O2> getGraphicalRepresentation(O2 drawable);
+	public <O2> GraphicalRepresentation<O2> getGraphicalRepresentation(O2 drawable);
 
-	public abstract List<? extends Object> getContainedObjects(Object drawable);
+	public List<? extends Object> getContainedObjects(Object drawable);
 
-	public abstract Object getContainer(Object drawable);
+	public Object getContainer(Object drawable);
 
-	public abstract List<? extends Object> getContainedObjects();
+	public List<? extends Object> getContainedObjects();
 
-	public abstract List<GraphicalRepresentation<?>> getContainedGraphicalRepresentations();
+	public List<GraphicalRepresentation<?>> getContainedGraphicalRepresentations();
 
-	public abstract List<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations();
+	public List<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations();
 
-	public abstract void moveToTop(GraphicalRepresentation<?> gr);
+	public void moveToTop(GraphicalRepresentation<?> gr);
 
-	public abstract int getOrder(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2);
+	public int getOrder(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2);
 
-	public abstract int getLayerOrder();
+	public int getLayerOrder();
 
-	public abstract int getIndex();
+	public int getIndex();
 
-	public abstract Object getContainer();
+	public Object getContainer();
 
-	public abstract GraphicalRepresentation<?> getContainerGraphicalRepresentation();
+	public GraphicalRepresentation<?> getContainerGraphicalRepresentation();
 
-	public abstract GraphicalRepresentation<?> getParentGraphicalRepresentation();
+	public GraphicalRepresentation<?> getParentGraphicalRepresentation();
 
-	public abstract boolean contains(GraphicalRepresentation<?> gr);
+	public boolean contains(GraphicalRepresentation<?> gr);
 
-	public abstract boolean contains(Object drawable);
+	public boolean contains(Object drawable);
 
-	public abstract List<Object> getAncestors();
+	public List<Object> getAncestors();
 
-	public abstract List<Object> getAncestors(boolean forceRecompute);
+	public List<Object> getAncestors(boolean forceRecompute);
 
-	public abstract boolean isConnectedToDrawing();
+	public boolean isConnectedToDrawing();
 
-	public abstract boolean isAncestorOf(GraphicalRepresentation<?> child);
+	public boolean isAncestorOf(GraphicalRepresentation<?> child);
 
-	public abstract boolean isPointVisible(FGEPoint p);
+	public boolean isPointVisible(FGEPoint p);
 
-	public abstract ShapeGraphicalRepresentation<?> shapeHiding(FGEPoint p);
+	public ShapeGraphicalRepresentation<?> shapeHiding(FGEPoint p);
 
-	public abstract boolean hasText();
+	public boolean hasText();
 
-	public abstract int getViewX(double scale);
+	public int getViewX(double scale);
 
-	public abstract int getViewY(double scale);
+	public int getViewY(double scale);
 
-	public abstract int getViewWidth(double scale);
+	public int getViewWidth(double scale);
 
-	public abstract int getViewHeight(double scale);
+	public int getViewHeight(double scale);
 
-	public abstract Rectangle getViewBounds(double scale);
+	public Rectangle getViewBounds(double scale);
 
-	public abstract FGERectangle getNormalizedBounds();
+	public FGERectangle getNormalizedBounds();
 
-	public abstract Point getLabelLocation(double scale);
+	public Point getLabelLocation(double scale);
 
-	public abstract Dimension getLabelDimension(double scale);
+	public Dimension getLabelDimension(double scale);
 
-	public abstract void setLabelLocation(Point point, double scale);
+	public void setLabelLocation(Point point, double scale);
 
-	public abstract Rectangle getLabelBounds(double scale);
+	public Rectangle getLabelBounds(double scale);
 
-	public abstract void paint(Graphics g, DrawingController<?> controller);
+	public void paint(Graphics g, DrawingController<?> controller);
 
-	public abstract void notifyChange(GRParameter parameter, Object oldValue, Object newValue);
+	public void notifyChange(GRParameter parameter, Object oldValue, Object newValue);
 
-	public abstract void notifyChange(GRParameter parameter);
+	public void notifyChange(GRParameter parameter);
 
-	public abstract void notifyAttributeChange(GRParameter parameter);
+	public void notifyAttributeChange(GRParameter parameter);
 
-	public abstract void notify(FGENotification notification);
-
-	@Override
-	public abstract String getInspectorName();
-
-	public abstract boolean isShape();
-
-	public abstract boolean isConnector();
-
-	public abstract boolean isDrawing();
-
-	public abstract void notifyDrawableAdded(GraphicalRepresentation<?> addedGR);
-
-	public abstract void notifyDrawableRemoved(GraphicalRepresentation<?> removedGR);
+	public void notify(FGENotification notification);
 
 	@Override
-	public abstract void update(Observable observable, Object notification);
+	public String getInspectorName();
 
-	public abstract Point convertNormalizedPointToViewCoordinates(double x, double y, double scale);
+	public boolean isShape();
 
-	public abstract Rectangle convertNormalizedRectangleToViewCoordinates(FGERectangle r, double scale);
+	public boolean isConnector();
 
-	public abstract AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
+	public boolean isDrawing();
 
-	public abstract FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y, double scale);
+	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR);
 
-	public abstract AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
+	public void notifyDrawableRemoved(GraphicalRepresentation<?> removedGR);
 
-	public abstract Point convertNormalizedPointToViewCoordinates(FGEPoint p, double scale);
+	@Override
+	public void update(Observable observable, Object notification);
 
-	public abstract FGEPoint convertViewCoordinatesToNormalizedPoint(Point p, double scale);
+	public Point convertNormalizedPointToViewCoordinates(double x, double y, double scale);
 
-	public abstract FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation<?> source, double scale);
+	public Rectangle convertNormalizedRectangleToViewCoordinates(FGERectangle r, double scale);
 
-	public abstract FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, GraphicalRepresentation<?> destination,
+	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
+
+	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y, double scale);
+
+	public AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
+
+	public Point convertNormalizedPointToViewCoordinates(FGEPoint p, double scale);
+
+	public FGEPoint convertViewCoordinatesToNormalizedPoint(Point p, double scale);
+
+	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation<?> source, double scale);
+
+	public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, GraphicalRepresentation<?> destination, double scale);
+
+	public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, GraphicalRepresentation<?> destination, double scale);
+
+	public Rectangle convertLocalNormalizedRectangleToRemoteViewCoordinates(FGERectangle r, GraphicalRepresentation<?> destination,
 			double scale);
 
-	public abstract Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, GraphicalRepresentation<?> destination,
-			double scale);
+	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation<?> source, double scale);
 
-	public abstract Rectangle convertLocalNormalizedRectangleToRemoteViewCoordinates(FGERectangle r,
-			GraphicalRepresentation<?> destination, double scale);
+	public boolean isRegistered();
 
-	public abstract Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation<?> source, double scale);
+	public void setRegistered(boolean aFlag);
 
-	public abstract boolean isRegistered();
+	public MouseClickControl createMouseClickControl();
 
-	public abstract void setRegistered(boolean aFlag);
+	public void deleteMouseClickControl(MouseClickControl mouseClickControl);
 
-	public abstract MouseClickControl createMouseClickControl();
+	public boolean isMouseClickControlDeletable(MouseClickControl mouseClickControl);
 
-	public abstract void deleteMouseClickControl(MouseClickControl mouseClickControl);
+	public MouseDragControl createMouseDragControl();
 
-	public abstract boolean isMouseClickControlDeletable(MouseClickControl mouseClickControl);
+	public void deleteMouseDragControl(MouseDragControl mouseDragControl);
 
-	public abstract MouseDragControl createMouseDragControl();
+	public boolean isMouseDragControlDeletable(MouseDragControl mouseDragControl);
 
-	public abstract void deleteMouseDragControl(MouseDragControl mouseDragControl);
+	public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
-	public abstract boolean isMouseDragControlDeletable(MouseDragControl mouseDragControl);
+	public void notifyLabelWillBeEdited();
 
-	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
+	public void notifyLabelHasBeenEdited();
 
-	public abstract void notifyLabelWillBeEdited();
+	public void notifyLabelWillMove();
 
-	public abstract void notifyLabelHasBeenEdited();
-
-	public abstract void notifyLabelWillMove();
-
-	public abstract void notifyLabelHasMoved();
+	public void notifyLabelHasMoved();
 
 	// Override when required
-	public abstract void notifyObjectHierarchyWillBeUpdated();
+	public void notifyObjectHierarchyWillBeUpdated();
 
 	// Override when required
-	public abstract void notifyObjectHierarchyHasBeenUpdated();
+	public void notifyObjectHierarchyHasBeenUpdated();
 
-	public abstract void performRandomLayout(double width, double height);
+	public void performRandomLayout(double width, double height);
 
-	public abstract void performAutoLayout(double width, double height);
+	public void performAutoLayout(double width, double height);
 
-	public abstract Stroke getSpecificStroke();
+	public Stroke getSpecificStroke();
 
-	public abstract void setSpecificStroke(Stroke aStroke);
+	public void setSpecificStroke(Stroke aStroke);
 
-	public abstract boolean isRootGraphicalRepresentation();
+	public boolean isRootGraphicalRepresentation();
 
-	public abstract GraphicalRepresentation<?> getRootGraphicalRepresentation();
-
-	@Override
-	public abstract BindingModel getBindingModel();
+	public GraphicalRepresentation<?> getRootGraphicalRepresentation();
 
 	@Override
-	public abstract BindingFactory getBindingFactory();
-
-	public abstract void updateBindingModel();
+	public BindingModel getBindingModel();
 
 	@Override
-	public abstract Object getValue(BindingVariable<?> variable);
+	public BindingFactory getBindingFactory();
 
-	public abstract void notifiedBindingModelRecreated();
-
-	public abstract void notifyBindingChanged(DataBinding binding);
-
-	public abstract List<GraphicalRepresentation<?>> retrieveAllContainedGR();
-
-	public abstract Iterator<GraphicalRepresentation<?>> allGRIterator();
-
-	public abstract Iterator<GraphicalRepresentation<?>> allContainedGRIterator();
-
-	public abstract Vector<ConstraintDependency> getDependancies();
-
-	public abstract Vector<ConstraintDependency> getAlterings();
-
-	public abstract void declareDependantOf(GraphicalRepresentation<?> aComponent, GRParameter requiringParameter,
-			GRParameter requiredParameter) throws DependencyLoopException;
-
-	public abstract GRVariable createStringVariable();
-
-	public abstract GRVariable createIntegerVariable();
-
-	public abstract void deleteVariable(GRVariable v);
+	public void updateBindingModel();
 
 	@Override
-	public abstract PropertyChangeSupport getPropertyChangeSupport();
+	public Object getValue(BindingVariable<?> variable);
+
+	public void notifiedBindingModelRecreated();
+
+	public void notifyBindingChanged(DataBinding binding);
+
+	public List<GraphicalRepresentation<?>> retrieveAllContainedGR();
+
+	public Iterator<GraphicalRepresentation<?>> allGRIterator();
+
+	public Iterator<GraphicalRepresentation<?>> allContainedGRIterator();
+
+	public Vector<ConstraintDependency> getDependancies();
+
+	public Vector<ConstraintDependency> getAlterings();
+
+	public void declareDependantOf(GraphicalRepresentation<?> aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
+			throws DependencyLoopException;
+
+	public GRVariable createStringVariable();
+
+	public GRVariable createIntegerVariable();
+
+	public void deleteVariable(GRVariable v);
 
 	@Override
-	public abstract String getDeletedProperty();
+	public PropertyChangeSupport getPropertyChangeSupport();
+
+	@Override
+	public String getDeletedProperty();
 
 	/**
 	 * Return boolean indicating if this graphical representation is validated. A validated graphical representation is a graphical
@@ -668,13 +664,13 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	 * 
 	 * @return
 	 */
-	public abstract boolean isValidated();
+	public boolean isValidated();
 
-	public abstract void setValidated(boolean validated);
+	public void setValidated(boolean validated);
 
-	public abstract LabelMetricsProvider getLabelMetricsProvider();
+	public LabelMetricsProvider getLabelMetricsProvider();
 
-	public abstract void setLabelMetricsProvider(LabelMetricsProvider labelMetricsProvider);
+	public void setLabelMetricsProvider(LabelMetricsProvider labelMetricsProvider);
 
 	/**
 	 * Returns the number of pixels available for the label considering its positioning. This method is used in case of line wrapping.
@@ -682,6 +678,6 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	 * @param scale
 	 * @return
 	 */
-	public abstract int getAvailableLabelWidth(double scale);
+	public int getAvailableLabelWidth(double scale);
 
 }

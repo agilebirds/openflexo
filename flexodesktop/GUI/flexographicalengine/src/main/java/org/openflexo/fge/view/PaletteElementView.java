@@ -42,8 +42,6 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 	public PaletteElementView(PaletteElementGraphicalRepresentation aGraphicalRepresentation, DrawingController<PaletteDrawing> controller) {
 		super(aGraphicalRepresentation, controller);
 
-		System.out.println("Created PaletteElementView, bounds=" + getBounds());
-
 		this.dgListener = new DGListener();
 		this.dragSource = DragSource.getDefaultDragSource();
 		this.dsListener = new DSListener();

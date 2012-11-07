@@ -26,8 +26,12 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.inspector.HasIcon;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represent foreground properties (line properties) which should be applied to a graphical representation
@@ -37,7 +41,19 @@ import org.openflexo.model.annotations.ModelEntity;
  */
 @ModelEntity
 @ImplementationClass(ForegroundStyleImpl.class)
+@XMLElement(xmlTag = "ForegroundStyle")
 public interface ForegroundStyle extends FGEStyle {
+
+	// Property keys
+
+	public static final String COLOR = "color";
+	public static final String LINE_WIDTH = "lineWidth";
+	public static final String CAP_STYLE = "capStyle";
+	public static final String JOIN_STYLE = "joinStyle";
+	public static final String DASH_STYLE = "dashStyle";
+	public static final String NO_STROKE = "noStroke";
+	public static final String USE_TRANSPARENCY = "useTransparency";
+	public static final String TRANSPARENCY_LEVEL = "transparencyLevel";
 
 	public static enum Parameters implements GRParameter {
 		color, lineWidth, capStyle, joinStyle, dashStyle, noStroke, useTransparency, transparencyLevel
@@ -186,44 +202,76 @@ public interface ForegroundStyle extends FGEStyle {
 		}
 	}
 
-	public abstract CapStyle getCapStyle();
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
 
-	public abstract void setCapStyle(CapStyle aCapStyle);
+	@Getter(value = COLOR)
+	@XMLAttribute
+	public Color getColor();
 
-	public abstract Color getColor();
+	@Setter(value = COLOR)
+	public void setColor(Color aColor);
 
-	public abstract void setColor(Color aColor);
+	@Getter(value = LINE_WIDTH, defaultValue = "1.0")
+	@XMLAttribute
+	public double getLineWidth();
 
-	public abstract void setColorNoNotification(Color aColor);
+	@Setter(value = LINE_WIDTH)
+	public void setLineWidth(double aLineWidth);
 
-	public abstract DashStyle getDashStyle();
+	@Getter(value = CAP_STYLE)
+	@XMLAttribute
+	public CapStyle getCapStyle();
 
-	public abstract void setDashStyle(DashStyle aDashStyle);
+	@Setter(value = CAP_STYLE)
+	public void setCapStyle(CapStyle aCapStyle);
 
-	public abstract JoinStyle getJoinStyle();
+	@Getter(value = JOIN_STYLE)
+	@XMLAttribute
+	public JoinStyle getJoinStyle();
 
-	public abstract void setJoinStyle(JoinStyle aJoinStyle);
+	@Setter(value = JOIN_STYLE)
+	public void setJoinStyle(JoinStyle aJoinStyle);
 
-	public abstract double getLineWidth();
+	@Getter(value = DASH_STYLE)
+	@XMLAttribute
+	public DashStyle getDashStyle();
 
-	public abstract void setLineWidth(double aLineWidth);
+	@Setter(value = DASH_STYLE)
+	public void setDashStyle(DashStyle aDashStyle);
 
-	public abstract boolean getNoStroke();
+	@Getter(value = NO_STROKE, defaultValue = "false")
+	@XMLAttribute
+	public boolean getNoStroke();
 
-	public abstract void setNoStroke(boolean aFlag);
+	@Setter(value = NO_STROKE)
+	public void setNoStroke(boolean aFlag);
 
-	public abstract Stroke getStroke(double scale);
+	@Getter(value = TRANSPARENCY_LEVEL, defaultValue = "0.5")
+	@XMLAttribute
+	public float getTransparencyLevel();
 
-	public abstract float getTransparencyLevel();
+	@Setter(value = TRANSPARENCY_LEVEL)
+	public void setTransparencyLevel(float aLevel);
 
-	public abstract void setTransparencyLevel(float aLevel);
+	@Getter(value = USE_TRANSPARENCY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getUseTransparency();
 
-	public abstract boolean getUseTransparency();
+	@Setter(value = USE_TRANSPARENCY)
+	public void setUseTransparency(boolean aFlag);
 
-	public abstract void setUseTransparency(boolean aFlag);
+	// *******************************************************************************
+	// * Utils
+	// *******************************************************************************
 
-	public abstract ForegroundStyle clone();
+	public void setColorNoNotification(Color aColor);
 
-	public abstract String toNiceString();
+	public Stroke getStroke(double scale);
+
+	public ForegroundStyle clone();
+
+	public String toNiceString();
 
 }

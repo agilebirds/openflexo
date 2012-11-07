@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.controller;
 
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -126,11 +125,6 @@ public interface PaletteElement extends Serializable {
 			return super.getLocationConstraints();
 		}
 
-		@Override
-		public void paint(Graphics g, DrawingController<?> controller) {
-			super.paint(g, controller);
-			System.out.println("Painting PaletteElementGraphicalRepresentation " + this);
-		}
 	}
 
 	public static class PaletteElementTransferable implements Transferable {
