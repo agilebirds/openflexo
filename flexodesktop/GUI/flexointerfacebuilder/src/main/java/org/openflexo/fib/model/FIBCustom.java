@@ -391,7 +391,7 @@ public class FIBCustom extends FIBWidget {
 	private static Class<?> getDataClassForComponent(Class<?> componentClass) {
 		Class<?> returned = DATA_CLASS_FOR_COMPONENT.get(componentClass);
 		if (returned == null) {
-			logger.info("Searching dataClass for " + componentClass);
+			logger.fine("Searching dataClass for " + componentClass);
 			FIBCustomComponent customComponent = null;
 			for (Constructor constructor : componentClass.getConstructors()) {
 				if (constructor.getGenericParameterTypes().length == 1) {
@@ -419,11 +419,11 @@ public class FIBCustom extends FIBWidget {
 					}
 				}
 			}
-			logger.info("customComponent=" + customComponent);
+			logger.fine("customComponent=" + customComponent);
 			if (customComponent != null) {
 				returned = customComponent.getRepresentedType();
 				DATA_CLASS_FOR_COMPONENT.put(componentClass, returned);
-				logger.info("Found " + returned);
+				logger.fine("Found " + returned);
 				return returned;
 			}
 			return Object.class;
