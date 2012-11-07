@@ -17,7 +17,6 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -121,7 +120,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		shapeGR.setIsSelectable(false);
 		shapeGR.setIsFocusable(false);
 		shapeGR.setIsReadOnly(true);
-		shapeGR.setBorder(new ShapeBorderImpl(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
+		shapeGR.setBorder(factory.makeShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
 		shapeGR.setValidated(true);
 
 		controller = new DrawingController<Drawing<?>>(drawing, factory);
@@ -142,7 +141,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 	public void setBorderSize(int border) {
 		this.border = border;
-		shapeGR.setBorder(new ShapeBorderImpl(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
+		shapeGR.setBorder(factory.makeShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
 		shapeGR.setX(getShapeX());
 		shapeGR.setY(getShapeY());
 		shapeGR.setWidth(getShapeWidth());

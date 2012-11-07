@@ -54,8 +54,8 @@ public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 		return null;
 	}
 
-	public void init() {
-		controller = new MyDrawingController(this);
+	public void init(DrawingEditorFactory factory) {
+		controller = new MyDrawingController(this, factory);
 	}
 
 	public MyDrawingController getController() {

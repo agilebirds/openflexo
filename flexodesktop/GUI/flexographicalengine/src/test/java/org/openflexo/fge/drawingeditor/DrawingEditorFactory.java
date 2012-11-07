@@ -29,7 +29,7 @@ public class DrawingEditorFactory extends FGEModelFactory {
 		MyDrawing returned = newInstance(MyDrawing.class);
 		returned.setFactory(this);
 		returned.setIndex(totalOccurences);
-		returned.getEditedDrawing().init();
+		returned.getEditedDrawing().init(this);
 		return returned;
 	}
 
@@ -71,34 +71,45 @@ public class DrawingEditorFactory extends FGEModelFactory {
 
 	public MyDrawingGraphicalRepresentation makeNewDrawingGR(EditedDrawing aDrawing) {
 		MyDrawingGraphicalRepresentation returned = newInstance(MyDrawingGraphicalRepresentation.class);
+		returned.setFGEModelFactory(this);
+		returned.setDrawable(aDrawing.getModel());
 		returned.setDrawing(aDrawing);
+		applyDefaultProperties(returned);
+		applyBasicControls(returned);
 		returned.addToMouseClickControls(new ShowContextualMenuControl());
 		return returned;
 	}
 
 	public MyShapeGraphicalRepresentation makeNewShapeGR(ShapeType shapeType, MyShape aDrawable, EditedDrawing aDrawing) {
 		MyShapeGraphicalRepresentation returned = newInstance(MyShapeGraphicalRepresentation.class);
-		returned.setShapeType(shapeType);
+		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
+		applyDefaultProperties(returned);
+		returned.setShapeType(shapeType);
 		returned.setIsFocusable(true);
 		returned.setIsSelectable(true);
 		returned.setIsReadOnly(false);
 		returned.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
+		applyBasicControls(returned);
 		returned.addToMouseClickControls(new ShowContextualMenuControl());
 		returned.addToMouseDragControls(new DrawEdgeControl(this));
 		return returned;
+
 	}
 
 	public MyShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation<?> aGR, MyShape aDrawable, EditedDrawing aDrawing) {
 		MyShapeGraphicalRepresentation returned = newInstance(MyShapeGraphicalRepresentation.class);
+		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
+		applyDefaultProperties(returned);
 		returned.setsWith(aGR);
 		returned.setIsFocusable(true);
 		returned.setIsSelectable(true);
 		returned.setIsReadOnly(false);
 		returned.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
+		applyBasicControls(returned);
 		returned.addToMouseClickControls(new ShowContextualMenuControl());
 		returned.addToMouseDragControls(new DrawEdgeControl(this));
 		return returned;
@@ -107,11 +118,14 @@ public class DrawingEditorFactory extends FGEModelFactory {
 	public MyConnectorGraphicalRepresentation makeNewConnectorGR(ConnectorType aConnectorType, MyShapeGraphicalRepresentation aStartObject,
 			MyShapeGraphicalRepresentation anEndObject, MyConnector aDrawable, EditedDrawing aDrawing) {
 		MyConnectorGraphicalRepresentation returned = newInstance(MyConnectorGraphicalRepresentation.class);
+		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
 		returned.setConnectorType(aConnectorType);
 		returned.setStartObject(aStartObject);
 		returned.setEndObject(anEndObject);
+		applyDefaultProperties(returned);
+		applyBasicControls(returned);
 		return returned;
 	}
 

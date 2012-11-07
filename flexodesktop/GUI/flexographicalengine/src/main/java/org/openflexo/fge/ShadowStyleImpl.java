@@ -28,13 +28,17 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 	private int shadowDepth;
 	private int shadowBlur;
 
-	private ShadowStyleImpl() {
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public ShadowStyleImpl() {
 		drawShadow = true;
 		shadowDarkness = FGEConstants.DEFAULT_SHADOW_DARKNESS;
 		shadowDepth = FGEConstants.DEFAULT_SHADOW_DEEP;
 		shadowBlur = FGEConstants.DEFAULT_SHADOW_BLUR;
 	}
 
+	@Deprecated
 	private static ShadowStyleImpl makeNone() {
 		ShadowStyleImpl returned = new ShadowStyleImpl();
 		returned.drawShadow = false;
@@ -42,6 +46,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 		return returned;
 	}
 
+	@Deprecated
 	private static ShadowStyleImpl makeDefault() {
 		return new ShadowStyleImpl();
 	}

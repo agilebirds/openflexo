@@ -104,21 +104,40 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public <M> DrawingGraphicalRepresentation<M> makeDrawingGraphicalRepresentation(Drawing<M> aDrawing, boolean initBasicControls) {
 		DrawingGraphicalRepresentation<M> returned = newInstance(DrawingGraphicalRepresentation.class);
+		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawing.getModel());
 		returned.setDrawing(aDrawing);
-		returned.setTextStyle(makeDefaultTextStyle());
-		returned.setBackgroundColor(FGEConstants.DEFAULT_DRAWING_BACKGROUND_COLOR);
-		returned.setWidth(FGEConstants.DEFAULT_DRAWING_WIDTH);
-		returned.setHeight(FGEConstants.DEFAULT_DRAWING_HEIGHT);
+		applyDefaultProperties(returned);
 		if (initBasicControls) {
-			returned.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.SELECTION));
-			returned.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
-					MouseDragControlActionType.RECTANGLE_SELECTING));
-			returned.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT,
-					MouseDragControlActionType.ZOOM));
+			applyBasicControls(returned);
 		}
 		return returned;
+	}
+
+	/**
+	 * Sets and apply default properties (text style, background and size) to supplied DrawingGraphicalRepresentation
+	 * 
+	 * @param drawingGraphicalRepresentation
+	 */
+	public void applyDefaultProperties(DrawingGraphicalRepresentation<?> drawingGraphicalRepresentation) {
+		drawingGraphicalRepresentation.setTextStyle(makeDefaultTextStyle());
+		drawingGraphicalRepresentation.setBackgroundColor(FGEConstants.DEFAULT_DRAWING_BACKGROUND_COLOR);
+		drawingGraphicalRepresentation.setWidth(FGEConstants.DEFAULT_DRAWING_WIDTH);
+		drawingGraphicalRepresentation.setHeight(FGEConstants.DEFAULT_DRAWING_HEIGHT);
+	}
+
+	/**
+	 * Sets and apply default basic controls (drawing selection, rectangle selection and zoom) to supplied DrawingGraphicalRepresentation
+	 * 
+	 * @param drawingGraphicalRepresentation
+	 */
+	public void applyBasicControls(DrawingGraphicalRepresentation<?> drawingGraphicalRepresentation) {
+		drawingGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Drawing selection",
+				MouseButton.LEFT, 1, MouseClickControlActionType.SELECTION));
+		drawingGraphicalRepresentation.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Rectangle selection",
+				MouseButton.LEFT, MouseDragControlActionType.RECTANGLE_SELECTING));
+		drawingGraphicalRepresentation.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT,
+				MouseDragControlActionType.ZOOM));
 	}
 
 	/**
@@ -135,29 +154,49 @@ public class FGEModelFactory extends ModelFactory {
 	public <O> ShapeGraphicalRepresentation<O> makeShapeGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
 
 		ShapeGraphicalRepresentation<O> returned = newInstance(ShapeGraphicalRepresentation.class);
+		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
-		returned.setLayer(FGEConstants.DEFAULT_SHAPE_LAYER);
-		returned.setTextStyle(makeDefaultTextStyle());
-		returned.setForeground(makeDefaultForegroundStyle());
-		returned.setBackground(makeColoredBackground(Color.WHITE));
-		returned.setShadowStyle(makeDefaultShadowStyle());
+		applyDefaultProperties(returned);
+		applyBasicControls(returned);
+		return returned;
+	}
 
-		returned.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
+	/**
+	 * Sets and apply default properties (border, layer, text style, foreground, background and shadow) to supplied
+	 * ShapeGraphicalRepresentation
+	 * 
+	 * @param shapeGraphicalRepresentation
+	 */
+	public void applyDefaultProperties(ShapeGraphicalRepresentation<?> shapeGraphicalRepresentation) {
+		shapeGraphicalRepresentation.setLayer(FGEConstants.DEFAULT_SHAPE_LAYER);
+		shapeGraphicalRepresentation.setTextStyle(makeDefaultTextStyle());
+		shapeGraphicalRepresentation.setForeground(makeDefaultForegroundStyle());
+		shapeGraphicalRepresentation.setBackground(makeColoredBackground(Color.WHITE));
+		shapeGraphicalRepresentation.setShadowStyle(makeDefaultShadowStyle());
+	}
+
+	/**
+	 * Sets and apply default basic controls (drawing selection, rectangle selection and zoom) to supplied ShapeGraphicalRepresentation
+	 * 
+	 * @param shapeGraphicalRepresentation
+	 */
+	public void applyBasicControls(ShapeGraphicalRepresentation<?> shapeGraphicalRepresentation) {
+		shapeGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			returned.addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+			shapeGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection",
+					MouseButton.LEFT, 1, MouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
-			returned.addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+			shapeGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection",
+					MouseButton.LEFT, 1, MouseClickControlActionType.MULTIPLE_SELECTION));
 		}
-		returned.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
-		returned.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
-		returned.addToMouseDragControls(MouseDragControl.makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
-				MouseDragControlActionType.RECTANGLE_SELECTING));
-
-		return returned;
+		shapeGraphicalRepresentation.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Move", MouseButton.LEFT,
+				MouseDragControlActionType.MOVE));
+		shapeGraphicalRepresentation.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT,
+				MouseDragControlActionType.ZOOM));
+		shapeGraphicalRepresentation.addToMouseDragControls(MouseDragControl.makeMouseShiftDragControl("Rectangle selection",
+				MouseButton.LEFT, MouseDragControlActionType.RECTANGLE_SELECTING));
 	}
 
 	/**
@@ -208,22 +247,11 @@ public class FGEModelFactory extends ModelFactory {
 	public <O> ConnectorGraphicalRepresentation<O> makeConnectorGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
 
 		ConnectorGraphicalRepresentation<O> returned = newInstance(ConnectorGraphicalRepresentation.class);
+		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
-		returned.setLayer(FGEConstants.DEFAULT_CONNECTOR_LAYER);
-		returned.setForeground(makeDefaultForegroundStyle());
-		returned.setTextStyle(makeDefaultTextStyle());
-
-		returned.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			returned.addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		} else {
-			returned.addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		}
-
+		applyDefaultProperties(returned);
+		applyBasicControls(returned);
 		return returned;
 	}
 
@@ -250,6 +278,34 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
+	 * Sets and apply default properties (layer, text style, foreground) to supplied ConnectorGraphicalRepresentation
+	 * 
+	 * @param connectorGraphicalRepresentation
+	 */
+	public void applyDefaultProperties(ConnectorGraphicalRepresentation<?> connectorGraphicalRepresentation) {
+		connectorGraphicalRepresentation.setLayer(FGEConstants.DEFAULT_CONNECTOR_LAYER);
+		connectorGraphicalRepresentation.setForeground(makeDefaultForegroundStyle());
+		connectorGraphicalRepresentation.setTextStyle(makeDefaultTextStyle());
+	}
+
+	/**
+	 * Sets and apply default basic controls (drawing selection, rectangle selection and zoom) to supplied ConnectorGraphicalRepresentation
+	 * 
+	 * @param connectorGraphicalRepresentation
+	 */
+	public void applyBasicControls(ConnectorGraphicalRepresentation<?> connectorGraphicalRepresentation) {
+		connectorGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
+				MouseClickControlActionType.SELECTION));
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			connectorGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection",
+					MouseButton.LEFT, 1, MouseClickControlActionType.MULTIPLE_SELECTION));
+		} else {
+			connectorGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection",
+					MouseButton.LEFT, 1, MouseClickControlActionType.MULTIPLE_SELECTION));
+		}
+	}
+
+	/**
 	 * Creates and return a new GeometricGraphicalRepresentation, given a Drawable and a Drawing instance, initialized with default values
 	 * 
 	 * @param aDrawing
@@ -262,22 +318,12 @@ public class FGEModelFactory extends ModelFactory {
 	public <O> GeometricGraphicalRepresentation<O> makeGeometricGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
 
 		GeometricGraphicalRepresentation<O> returned = newInstance(GeometricGraphicalRepresentation.class);
+		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
-		returned.setLayer(FGEConstants.DEFAULT_OBJECT_LAYER);
-		returned.setForeground(makeDefaultForegroundStyle());
-		returned.setBackground(makeColoredBackground(Color.WHITE));
-		returned.setTextStyle(makeDefaultTextStyle());
 
-		returned.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			returned.addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		} else {
-			returned.addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		}
+		applyDefaultProperties(returned);
+		applyBasicControls(returned);
 
 		return returned;
 	}
@@ -301,12 +347,43 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
+	 * Sets and apply default properties (layer, text style, foreground) to supplied ConnectorGraphicalRepresentation
+	 * 
+	 * @param connectorGraphicalRepresentation
+	 */
+	public void applyDefaultProperties(GeometricGraphicalRepresentation<?> geometricGraphicalRepresentation) {
+		geometricGraphicalRepresentation.setLayer(FGEConstants.DEFAULT_OBJECT_LAYER);
+		geometricGraphicalRepresentation.setForeground(makeDefaultForegroundStyle());
+		geometricGraphicalRepresentation.setBackground(makeColoredBackground(Color.WHITE));
+		geometricGraphicalRepresentation.setTextStyle(makeDefaultTextStyle());
+	}
+
+	/**
+	 * Sets and apply default basic controls (drawing selection, rectangle selection and zoom) to supplied ConnectorGraphicalRepresentation
+	 * 
+	 * @param connectorGraphicalRepresentation
+	 */
+	public void applyBasicControls(GeometricGraphicalRepresentation<?> geometricGraphicalRepresentation) {
+		geometricGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
+				MouseClickControlActionType.SELECTION));
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			geometricGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection",
+					MouseButton.LEFT, 1, MouseClickControlActionType.MULTIPLE_SELECTION));
+		} else {
+			geometricGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection",
+					MouseButton.LEFT, 1, MouseClickControlActionType.MULTIPLE_SELECTION));
+		}
+	}
+
+	/**
 	 * Make a new foreground style (stroke style)
 	 * 
 	 * @return a newly created ForegroundStyle
 	 */
 	public ForegroundStyle makeNewForegroundStyle() {
-		return newInstance(ForegroundStyle.class);
+		ForegroundStyle returned = newInstance(ForegroundStyle.class);
+		returned.setFGEModelFactory(this);
+		return returned;
 	}
 
 	/**
@@ -316,6 +393,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ForegroundStyle makeDefaultForegroundStyle() {
 		ForegroundStyle returned = newInstance(ForegroundStyle.class);
+		returned.setFGEModelFactory(this);
 		returned.setNoStroke(false);
 		returned.setColor(Color.BLACK);
 		returned.setLineWidth(1.0);
@@ -415,6 +493,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public BackgroundStyle.None makeEmptyBackground() {
 		BackgroundStyle.None returned = newInstance(None.class);
+		returned.setFGEModelFactory(this);
 		return returned;
 	}
 
@@ -427,6 +506,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public BackgroundStyle.Color makeColoredBackground(Color aColor) {
 		BackgroundStyle.Color returned = newInstance(BackgroundStyle.Color.class);
+		returned.setFGEModelFactory(this);
 		returned.setColor(aColor);
 		return returned;
 	}
@@ -442,6 +522,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public BackgroundStyle.ColorGradient makeColorGradientBackground(Color color1, Color color2, ColorGradientDirection direction) {
 		BackgroundStyle.ColorGradient returned = newInstance(BackgroundStyle.ColorGradient.class);
+		returned.setFGEModelFactory(this);
 		returned.setColor1(color1);
 		returned.setColor2(color2);
 		returned.setDirection(direction);
@@ -459,6 +540,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public BackgroundStyle.Texture makeTexturedBackground(TextureType textureType, Color color1, Color color2) {
 		BackgroundStyle.Texture returned = newInstance(BackgroundStyle.Texture.class);
+		returned.setFGEModelFactory(this);
 		returned.setColor1(color1);
 		returned.setColor2(color2);
 		returned.setTextureType(textureType);
@@ -475,6 +557,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public BackgroundStyle.BackgroundImage makeImageBackground(File imageFile) {
 		BackgroundStyle.BackgroundImage returned = newInstance(BackgroundStyle.BackgroundImage.class);
+		returned.setFGEModelFactory(this);
 		returned.setImageFile(imageFile);
 		return returned;
 	}
@@ -488,6 +571,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public BackgroundStyle.BackgroundImage makeImageBackground(Image image) {
 		BackgroundStyle.BackgroundImage returned = newInstance(BackgroundStyle.BackgroundImage.class);
+		returned.setFGEModelFactory(this);
 		returned.setImage(image);
 		return returned;
 	}
@@ -519,10 +603,11 @@ public class FGEModelFactory extends ModelFactory {
 	 * @return a newly created ShadowStyle
 	 */
 	public ShadowStyle makeNoneShadowStyle() {
-		ShadowStyle shadow = newInstance(ShadowStyle.class);
-		shadow.setDrawShadow(false);
-		shadow.setShadowDepth(0);
-		return shadow;
+		ShadowStyle returned = newInstance(ShadowStyle.class);
+		returned.setFGEModelFactory(this);
+		returned.setDrawShadow(false);
+		returned.setShadowDepth(0);
+		return returned;
 	}
 
 	/**
@@ -531,12 +616,13 @@ public class FGEModelFactory extends ModelFactory {
 	 * @return a newly created ShadowStyle
 	 */
 	public ShadowStyle makeDefaultShadowStyle() {
-		ShadowStyle shadow = newInstance(ShadowStyle.class);
-		shadow.setDrawShadow(true);
-		shadow.setShadowDarkness(FGEConstants.DEFAULT_SHADOW_DARKNESS);
-		shadow.setShadowDepth(FGEConstants.DEFAULT_SHADOW_DEEP);
-		shadow.setShadowBlur(FGEConstants.DEFAULT_SHADOW_BLUR);
-		return shadow;
+		ShadowStyle returned = newInstance(ShadowStyle.class);
+		returned.setFGEModelFactory(this);
+		returned.setDrawShadow(true);
+		returned.setShadowDarkness(FGEConstants.DEFAULT_SHADOW_DARKNESS);
+		returned.setShadowDepth(FGEConstants.DEFAULT_SHADOW_DEEP);
+		returned.setShadowBlur(FGEConstants.DEFAULT_SHADOW_BLUR);
+		return returned;
 	}
 
 	/**
@@ -558,6 +644,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public TextStyle makeTextStyle(Color aColor, Font aFont) {
 		TextStyle returned = newInstance(TextStyle.class);
+		returned.setFGEModelFactory(this);
 		returned.setFont(aFont);
 		returned.setColor(aColor);
 		return returned;
@@ -570,6 +657,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ShapeBorder makeShapeBorder() {
 		ShapeBorder returned = newInstance(ShapeBorder.class);
+		returned.setFGEModelFactory(this);
 		returned.setTop(FGEConstants.DEFAULT_BORDER_SIZE);
 		returned.setBottom(FGEConstants.DEFAULT_BORDER_SIZE);
 		returned.setLeft(FGEConstants.DEFAULT_BORDER_SIZE);
@@ -584,6 +672,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ShapeBorder makeShapeBorder(int top, int bottom, int left, int right) {
 		ShapeBorder returned = newInstance(ShapeBorder.class);
+		returned.setFGEModelFactory(this);
 		returned.setTop(top);
 		returned.setBottom(bottom);
 		returned.setLeft(left);

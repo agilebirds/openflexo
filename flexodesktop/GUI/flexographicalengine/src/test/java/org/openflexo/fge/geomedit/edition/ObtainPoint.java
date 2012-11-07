@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
@@ -149,7 +148,7 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 		@Override
 		public void paint(FGEDrawingGraphics graphics) {
 			if (focusedControlPoint != null) {
-				graphics.useForegroundStyle(ForegroundStyleImpl.makeStyle(Color.RED));
+				graphics.useForegroundStyle(graphics.getFactory().makeForegroundStyle(Color.RED));
 				graphics.drawControlPoint(focusedControlPoint.getPoint(), FGEConstants.CONTROL_POINT_SIZE);
 				graphics.drawRoundArroundPoint(focusedControlPoint.getPoint(), 8);
 			}

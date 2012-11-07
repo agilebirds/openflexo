@@ -31,15 +31,15 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.GeometricGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
+import org.openflexo.fge.notifications.GeometryModified;
 
 public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Observable implements Observer {
 
@@ -55,11 +55,15 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 
 	private boolean editionHasBeenStarted = false;
 
+	private ForegroundStyle currentlyEditedForeground;
+
 	public DrawShapeToolController(DrawingController<?> controller, DrawShapeAction control) {
 		super();
 		this.controller = controller;
 		this.control = control;
 		editionHasBeenStarted = false;
+
+		currentlyEditedForeground = controller.getFactory().makeForegroundStyle(Color.GREEN);
 	}
 
 	protected void startMouseEdition(MouseEvent e) {
@@ -67,13 +71,23 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		parentGR = getController().getDrawingView().getFocusRetriever()
 				.getFocusedObject(getController().getDrawingGraphicalRepresentation(), e);
 		shape = makeDefaultShape(e);
-		currentEditedShapeGR = new GeometricGraphicalRepresentationImpl(shape, shape, controller.getDrawing()) {
+		currentEditedShapeGR = getController().getFactory().makeGeometricGraphicalRepresentation(shape, shape, controller.getDrawing());
+		currentEditedShapeGR.addObserver(new Observer() {
+			@Override
+			public void update(Observable observable, Object dataModification) {
+				if (dataModification instanceof GeometryModified) {
+					geometryChanged();
+				}
+			}
+		});
+		// TODO Check this / fge_under_pamela
+		/*currentEditedShapeGR = new GeometricGraphicalRepresentationImpl(shape, shape, controller.getDrawing()) {
 			@Override
 			public void notifyGeometryChanged() {
 				super.notifyGeometryChanged();
 				geometryChanged();
 			}
-		};
+		};*/
 		currentEditedShapeGR.setBackground(getController().getCurrentBackgroundStyle());
 		currentEditedShapeGR.setForeground(getController().getCurrentForegroundStyle());
 		geometryChanged();
@@ -161,7 +175,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		}
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
-		graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.GREEN));
+		graphics.setDefaultForeground(currentlyEditedForeground);
 
 		currentEditedShapeGR.paint(graphics.getGraphics(), getController());
 

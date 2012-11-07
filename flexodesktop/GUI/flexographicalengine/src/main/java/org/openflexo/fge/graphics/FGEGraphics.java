@@ -43,15 +43,13 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEDimension;
@@ -72,9 +70,14 @@ public abstract class FGEGraphics {
 	private GraphicalRepresentation<?> gr;
 	private Graphics2D g2d;
 
-	private ForegroundStyle defaultForeground = ForegroundStyleImpl.makeDefault();
-	private BackgroundStyle defaultBackground = BackgroundStyleImpl.makeEmptyBackground();
-	private TextStyle defaultTextStyle = TextStyleImpl.makeDefault();
+	private static final FGEModelFactory GRAPHICS_FACTORY = new FGEModelFactory();
+	private static final ForegroundStyle DEFAULT_FG = GRAPHICS_FACTORY.makeDefaultForegroundStyle();
+	private static final BackgroundStyle DEFAULT_BG = GRAPHICS_FACTORY.makeEmptyBackground();
+	private static final TextStyle DEFAULT_TEXT = GRAPHICS_FACTORY.makeDefaultTextStyle();
+
+	private ForegroundStyle defaultForeground = DEFAULT_FG;
+	private BackgroundStyle defaultBackground = DEFAULT_BG;
+	private TextStyle defaultTextStyle = DEFAULT_TEXT;
 
 	private ForegroundStyle currentForeground = defaultForeground;
 	protected BackgroundStyle currentBackground = defaultBackground;
@@ -83,6 +86,13 @@ public abstract class FGEGraphics {
 	public FGEGraphics(GraphicalRepresentation<?> aGraphicalRepresentation) {
 		super();
 		gr = aGraphicalRepresentation;
+		if (defaultForeground == null) {
+			logger.info("defaultForeground=" + defaultForeground);
+		}
+	}
+
+	public FGEModelFactory getFactory() {
+		return GRAPHICS_FACTORY;
 	}
 
 	public GraphicalRepresentation<?> getGraphicalRepresentation() {
@@ -146,6 +156,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void setDefaultForeground(ForegroundStyle aForegound) {
+		if (aForegound == null) {
+			logger.info("setDefaultForeground " + aForegound);
+		}
 		defaultForeground = aForegound;
 	}
 
@@ -158,6 +171,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void useForegroundStyle(ForegroundStyle aStyle) {
+		if (aStyle == null) {
+			logger.info("useForegroundStyle " + aStyle);
+		}
 		currentForeground = aStyle;
 		applyCurrentForegroundStyle();
 	}
@@ -166,8 +182,6 @@ public abstract class FGEGraphics {
 		if (g2d == null) {
 			return; // Strange...
 		}
-
-		// logger.info("Apply "+currentForeground);
 
 		g2d.setColor(currentForeground.getColor());
 		g2d.setStroke(currentForeground.getStroke(getScale()));

@@ -47,7 +47,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.DataBinding;
-import org.openflexo.fge.FGEPamelaInjectionModule;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
@@ -132,7 +131,7 @@ public class TestDrawingEditor {
 		try {
 			factory = new DrawingEditorFactory();
 			System.out.println("factory: " + factory.debug());
-			FGEPamelaInjectionModule injectionModule = new FGEPamelaInjectionModule(factory);
+			// FGEPamelaInjectionModule injectionModule = new FGEPamelaInjectionModule(factory);
 			// injector = Guice.createInjector(injectionModule);
 
 			factory = new DrawingEditorFactory();
@@ -426,7 +425,7 @@ public class TestDrawingEditor {
 	public void loadDrawing() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			MyDrawing loadedDrawing = MyDrawingImpl.load(file);
+			MyDrawing loadedDrawing = MyDrawingImpl.load(file, factory);
 			if (loadedDrawing != null) {
 				addDrawing(loadedDrawing);
 			}

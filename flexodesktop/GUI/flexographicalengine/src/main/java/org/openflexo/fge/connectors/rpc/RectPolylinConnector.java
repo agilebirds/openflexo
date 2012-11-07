@@ -33,9 +33,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.ForegroundStyleImpl;
-import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
@@ -132,6 +133,12 @@ public class RectPolylinConnector extends Connector {
 	private FGEPoint fixedEndLocationRelativeToEndObject;
 	private FGEPoint _crossedPoint;
 
+	private ConcatenedList<ControlArea> allControlAreas;
+
+	private static final FGEModelFactory DEBUG_FACTORY = new FGEModelFactory();
+	private static final ForegroundStyle DEBUG_GRAY_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES);
+	private static final ForegroundStyle DEBUG_BLACK_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.BLACK, 3.0f, DashStyle.PLAIN_STROKE);
+
 	// *******************************************************************************
 	// * Constructor *
 	// *******************************************************************************
@@ -175,8 +182,6 @@ public class RectPolylinConnector extends Connector {
 		return allControlAreas;
 	}
 
-	private ConcatenedList<ControlArea> allControlAreas;
-
 	@Override
 	public void drawConnector(FGEConnectorGraphics g) {
 		if (!firstUpdated) {
@@ -189,11 +194,11 @@ public class RectPolylinConnector extends Connector {
 		 */
 
 		if (getDebug()) {
-			g.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES));
+			g.setDefaultForeground(DEBUG_GRAY_STROKE);
 			for (FGERectPolylin p : potentialPolylin) {
 				p.paint(g);
 			}
-			g.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.BLACK, 3.0f, DashStyle.PLAIN_STROKE));
+			g.setDefaultForeground(DEBUG_BLACK_STROKE);
 			if (polylin != null) {
 				polylin.debugPaint(g);
 			}

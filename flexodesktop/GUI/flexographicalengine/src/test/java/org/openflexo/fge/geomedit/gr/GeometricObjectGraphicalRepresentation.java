@@ -22,7 +22,6 @@ package org.openflexo.fge.geomedit.gr;
 import java.awt.Color;
 
 import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.GeometricGraphicalRepresentationImpl;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geomedit.GeometricDrawing;
@@ -35,13 +34,16 @@ public class GeometricObjectGraphicalRepresentation<A extends FGEArea, G extends
 		GeometricGraphicalRepresentationImpl<G> implements XMLSerializable {
 	// Called for LOAD
 	public GeometricObjectGraphicalRepresentation(GeomEditBuilder builder) {
-		this(null, builder.drawing);
+		super();
+		setDrawing(builder.drawing);
 		initializeDeserialization();
 	}
 
 	public GeometricObjectGraphicalRepresentation(G object, GeometricDrawing aDrawing) {
-		super(/*object.getGeometricObject()*/null, object, aDrawing);
-		setBackground(BackgroundStyleImpl.makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE));
+		super();
+		setDrawing(aDrawing);
+		setDrawable(object);
+		setBackground(aDrawing.getController().getFactory().makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE));
 		addToMouseClickControls(new ShowContextualMenuControl());
 	}
 

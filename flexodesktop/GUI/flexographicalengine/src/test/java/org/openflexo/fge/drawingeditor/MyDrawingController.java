@@ -36,7 +36,6 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
@@ -53,8 +52,8 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	// private MyShape copiedShape;
 
-	public MyDrawingController(final EditedDrawing aDrawing) {
-		super(aDrawing);
+	public MyDrawingController(final EditedDrawing aDrawing, DrawingEditorFactory factory) {
+		super(aDrawing, factory);
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
@@ -151,7 +150,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection((InspectableObject) (getSelectedObjects().get(0)), null));
+			notifyObservers(new UniqueSelection((getSelectedObjects().get(0)), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -163,7 +162,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection((InspectableObject) (getSelectedObjects().get(0)), null));
+			notifyObservers(new UniqueSelection((getSelectedObjects().get(0)), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -180,7 +179,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	public void selectDrawing() {
 		super.selectDrawing();
 		setChanged();
-		notifyObservers(new UniqueSelection((InspectableObject) getDrawingGraphicalRepresentation(), null));
+		notifyObservers(new UniqueSelection(getDrawingGraphicalRepresentation(), null));
 	}
 
 	@Override

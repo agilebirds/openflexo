@@ -58,7 +58,7 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 
 	// Called for LOAD
 	public MyDrawingImpl(DrawingBuilder builder) {
-		super(null);
+		this();
 		builder.drawing = this;
 		initializeDeserialization();
 	}
@@ -77,6 +77,7 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 	public void setFactory(DrawingEditorFactory factory) {
 		this.factory = factory;
 		setGraphicalRepresentation(factory.makeNewDrawingGR(editedDrawing));
+		editedDrawing.init(factory);
 	}
 
 	@Override
@@ -134,7 +135,7 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 		}
 	}
 
-	public static MyDrawing load(File file) {
+	public static MyDrawing load(File file, DrawingEditorFactory factory) {
 		logger.info("Loading " + file);
 
 		XMLDecoder decoder = new XMLDecoder(mapping, new DrawingBuilder());
@@ -142,7 +143,7 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 		try {
 			MyDrawingImpl drawing = (MyDrawingImpl) decoder.decodeObject(new FileInputStream(file));
 			drawing.file = file;
-			drawing.editedDrawing.init();
+			drawing.editedDrawing.init(factory);
 			logger.info("Succeeded to load: " + file);
 			return drawing;
 		} catch (Exception e) {

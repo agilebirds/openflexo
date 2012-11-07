@@ -70,11 +70,19 @@ public interface BackgroundStyle extends FGEStyle {
 	 * 
 	 */
 	@ModelEntity
-	@ImplementationClass(BackgroundStyleImpl.class)
+	@ImplementationClass(BackgroundStyleImpl.NoneImpl.class)
 	public static interface None extends BackgroundStyle {
 
 	}
 
+	/**
+	 * Represents a plain colored background
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	@ModelEntity
+	@ImplementationClass(BackgroundStyleImpl.ColorImpl.class)
 	public static interface Color extends BackgroundStyle {
 		public java.awt.Color getColor();
 
@@ -82,6 +90,14 @@ public interface BackgroundStyle extends FGEStyle {
 
 	}
 
+	/**
+	 * Represents a background colored with a linear gradient between two colors
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	@ModelEntity
+	@ImplementationClass(BackgroundStyleImpl.ColorGradientImpl.class)
 	public static interface ColorGradient extends BackgroundStyle {
 
 		public static enum ColorGradientDirection {
@@ -102,6 +118,14 @@ public interface BackgroundStyle extends FGEStyle {
 
 	}
 
+	/**
+	 * Represents a textured background defined with a texture and two colors
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	@ModelEntity
+	@ImplementationClass(BackgroundStyleImpl.TextureImpl.class)
 	public static interface Texture extends BackgroundStyle {
 
 		public static enum TextureType implements HasIcon {
@@ -146,6 +170,14 @@ public interface BackgroundStyle extends FGEStyle {
 		public void setColor2(java.awt.Color aColor);
 	}
 
+	/**
+	 * Represents a background filled with an image
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	@ModelEntity
+	@ImplementationClass(BackgroundStyleImpl.BackgroundImageImpl.class)
 	public static interface BackgroundImage extends BackgroundStyle {
 		public static enum ImageBackgroundType {
 			OPAQUE, TRANSPARENT

@@ -22,7 +22,6 @@ package org.openflexo.fge.geomedit.edition;
 import java.awt.Color;
 
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGESegment;
@@ -71,13 +70,13 @@ public class CreateQuadCurveFromThreePoints extends Edition {
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			FGEPoint p2 = ((ObtainPoint) inputs.get(1)).getInputData();
 
-			graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
+			graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
 			FGESegment line1 = new FGESegment(lastMouseLocation, p1);
 			FGESegment line2 = new FGESegment(lastMouseLocation, p2);
 			line1.paint(graphics);
 			line2.paint(graphics);
 
-			graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.RED, 1));
+			graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.RED, 1));
 			p1.paint(graphics);
 			p2.paint(graphics);
 			lastMouseLocation.paint(graphics);

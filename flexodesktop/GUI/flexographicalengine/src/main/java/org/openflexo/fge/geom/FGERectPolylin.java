@@ -30,10 +30,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
-import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
@@ -56,18 +55,18 @@ public class FGERectPolylin extends FGEPolylin {
 	private FGEArea resultingStartArea;
 	private FGEArea resultingEndArea;
 
-	// TODO: debug only remove this
-	protected static ForegroundStyle focusedForegroundStyle;
-	protected static BackgroundStyle focusedBackgroundStyle;
-
 	private boolean respectAllConstraints = true;
 
 	// TODO: debug only remove this
+	private static final FGEModelFactory DEBUG_FACTORY = new FGEModelFactory();
+	private static final ForegroundStyle DEBUG_FOCUSED_FG = DEBUG_FACTORY.makeForegroundStyle(Color.RED, 0.5f, DashStyle.MEDIUM_DASHES);
+	private static final BackgroundStyle DEBUG_FOCUSED_BG = DEBUG_FACTORY.makeTexturedBackground(TextureType.TEXTURE1, Color.RED,
+			Color.WHITE);
+
+	// TODO: debug only remove this
 	static {
-		focusedForegroundStyle = ForegroundStyleImpl.makeStyle(Color.RED, 0.5f, DashStyle.MEDIUM_DASHES);
-		focusedBackgroundStyle = BackgroundStyleImpl.makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE);
-		focusedBackgroundStyle.setUseTransparency(true);
-		focusedBackgroundStyle.setTransparencyLevel(0.1f);
+		DEBUG_FOCUSED_BG.setUseTransparency(true);
+		DEBUG_FOCUSED_BG.setTransparencyLevel(0.1f);
 	}
 
 	public FGERectPolylin() {
@@ -702,8 +701,8 @@ public class FGERectPolylin extends FGEPolylin {
 	public void debugPaint(FGEGraphics g) {
 		ForegroundStyle fg = g.getDefaultForeground();
 		BackgroundStyle bg = g.getDefaultBackground();
-		g.setDefaultForeground(focusedForegroundStyle);
-		g.setDefaultBackground(focusedBackgroundStyle);
+		g.setDefaultForeground(DEBUG_FOCUSED_FG);
+		g.setDefaultBackground(DEBUG_FOCUSED_BG);
 		if (resultingStartArea != null) {
 			resultingStartArea.paint(g);
 		}

@@ -37,7 +37,6 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.FIBLibrary;
@@ -337,7 +336,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 			lineGR.setIsSelectable(false);
 			lineGR.setIsFocusable(false);
 			lineGR.setIsReadOnly(true);
-			lineGR.setBorder(new ShapeBorderImpl(10, 10, 10, 10));
+			lineGR.setBorder(factory.makeShapeBorder(10, 10, 10, 10));
 			lineGR.setValidated(true);
 
 			controller = new DrawingController<Drawing<?>>(drawing, factory);

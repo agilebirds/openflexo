@@ -41,6 +41,9 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 
 	public PaletteElementView(PaletteElementGraphicalRepresentation aGraphicalRepresentation, DrawingController<PaletteDrawing> controller) {
 		super(aGraphicalRepresentation, controller);
+
+		System.out.println("Created PaletteElementView, bounds=" + getBounds());
+
 		this.dgListener = new DGListener();
 		this.dragSource = DragSource.getDefaultDragSource();
 		this.dsListener = new DSListener();
@@ -237,4 +240,18 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 			context.setCursor(DragSource.DefaultCopyNoDrop);
 		}
 	}
+
+	/*@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		System.out.println("Je suis sense me peindre " + isDeleted());
+		System.out.println("Je suis un: " + getGraphicalRepresentation());
+		System.out.println("validated=" + getGraphicalRepresentation().isValidated());
+		System.out.println("Ma vue=" + this);
+		System.out.println("bounds=" + getBounds());
+		System.out.println("factory=" + getGraphicalRepresentation().getFactory());
+		System.out.println("Mon drawing=" + getDrawingGraphicalRepresentation());
+		System.out.println("validated=" + getDrawingGraphicalRepresentation().isValidated());
+		System.out.println("factory=" + getDrawingGraphicalRepresentation().getFactory());
+	}*/
 }

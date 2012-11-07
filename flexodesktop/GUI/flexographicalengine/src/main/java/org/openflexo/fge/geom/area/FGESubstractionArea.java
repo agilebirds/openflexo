@@ -23,7 +23,7 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -36,6 +36,9 @@ import org.openflexo.fge.graphics.FGEGraphics;
 public class FGESubstractionArea extends FGEOperationArea {
 
 	private static final Logger logger = Logger.getLogger(FGESubstractionArea.class.getPackage().getName());
+
+	private static final FGEModelFactory FACTORY = new FGEModelFactory();
+	private static final BackgroundStyle BACKGROUND = FACTORY.makeColoredBackground(java.awt.Color.GRAY);
 
 	private FGEArea containerArea;
 	private FGEArea substractedArea;
@@ -197,7 +200,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 
 		getContainerArea().paint(g);
 		BackgroundStyle old = g.getDefaultBackground();
-		BackgroundStyle bs = BackgroundStyleImpl.makeColoredBackground(java.awt.Color.GRAY);
+		BackgroundStyle bs = BACKGROUND;
 		bs.setUseTransparency(true);
 		g.setDefaultBackground(bs);
 		getSubstractedArea().paint(g);

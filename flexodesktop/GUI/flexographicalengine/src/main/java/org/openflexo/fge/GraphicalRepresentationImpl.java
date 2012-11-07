@@ -143,6 +143,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 
 		dependancies = new Vector<ConstraintDependency>();
 		alterings = new Vector<ConstraintDependency>();
+
 	}
 
 	@Deprecated

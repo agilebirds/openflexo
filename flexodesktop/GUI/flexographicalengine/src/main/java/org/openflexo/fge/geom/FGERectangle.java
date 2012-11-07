@@ -822,6 +822,10 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 
 	@Override
 	public void paint(FGEGraphics g) {
+		// System.out.println("Painting rectangle, filled=" + getIsFilled() + " " + getX() + "," + getY() + "," + getWidth() + "," +
+		// getHeight());
+		// System.out.println("BG=" + g.getDefaultBackground());
+		// System.out.println("FG=" + g.getDefaultForeground());
 		if (getIsFilled()) {
 			g.useDefaultBackgroundStyle();
 			g.fillRect(getX(), getY(), getWidth(), getHeight());

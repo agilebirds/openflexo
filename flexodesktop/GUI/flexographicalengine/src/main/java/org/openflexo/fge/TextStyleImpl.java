@@ -34,22 +34,28 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 	private int orientation = 0; // angle in degree
 	private boolean backgroundColored = false;
 
-	private TextStyleImpl() {
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public TextStyleImpl() {
 		super();
 		color = FGEConstants.DEFAULT_TEXT_COLOR;
 		font = FGEConstants.DEFAULT_TEXT_FONT;
 	}
 
+	@Deprecated
 	private TextStyleImpl(Color aColor, Font aFont) {
 		this();
 		color = aColor;
 		font = aFont;
 	}
 
+	@Deprecated
 	private static TextStyleImpl makeDefault() {
 		return makeTextStyle(FGEConstants.DEFAULT_TEXT_COLOR, FGEConstants.DEFAULT_TEXT_FONT);
 	}
 
+	@Deprecated
 	private static TextStyleImpl makeTextStyle(Color aColor, Font aFont) {
 		return new TextStyleImpl(aColor, aFont);
 	}

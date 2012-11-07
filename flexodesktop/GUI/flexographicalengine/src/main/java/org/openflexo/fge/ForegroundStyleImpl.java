@@ -45,7 +45,10 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 	private Stroke stroke;
 	private double strokeScale;
 
-	private ForegroundStyleImpl() {
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public ForegroundStyleImpl() {
 		super();
 		noStroke = false;
 		color = Color.BLACK;

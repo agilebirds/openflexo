@@ -145,36 +145,10 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	protected ShapePainter shapePainter;
 
 	public static class ShapeBorderImpl extends FGEObjectImpl implements ShapeBorder {
-		private int top;
-		private int bottom;
-		private int left;
-		private int right;
-
-		private ShapeBorderImpl() {
-			super();
-			this.top = FGEConstants.DEFAULT_BORDER_SIZE;
-			this.bottom = FGEConstants.DEFAULT_BORDER_SIZE;
-			this.left = FGEConstants.DEFAULT_BORDER_SIZE;
-			this.right = FGEConstants.DEFAULT_BORDER_SIZE;
-		}
-
-		@Deprecated
-		private ShapeBorderImpl(int top, int bottom, int left, int right) {
-			super();
-			this.top = top;
-			this.bottom = bottom;
-			this.left = left;
-			this.right = right;
-		}
-
-		@Deprecated
-		private ShapeBorderImpl(ShapeBorder border) {
-			super();
-			this.top = border.getTop();
-			this.bottom = border.getBottom();
-			this.left = border.getLeft();
-			this.right = border.getRight();
-		}
+		private int top = FGEConstants.DEFAULT_BORDER_SIZE;
+		private int bottom = FGEConstants.DEFAULT_BORDER_SIZE;
+		private int left = FGEConstants.DEFAULT_BORDER_SIZE;
+		private int right = FGEConstants.DEFAULT_BORDER_SIZE;
 
 		@Override
 		public ShapeBorder clone() {
@@ -254,7 +228,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	}
 
 	@Deprecated
-	private ShapeGraphicalRepresentationImpl(ShapeType shapeType, O aDrawable, Drawing<?> aDrawing) {
+	public ShapeGraphicalRepresentationImpl(ShapeType shapeType, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 		setShapeType(shapeType);
 		layer = FGEConstants.DEFAULT_SHAPE_LAYER;

@@ -36,8 +36,6 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
 import org.openflexo.fge.notifications.FGENotification;
 
 import sun.awt.image.ImageRepresentation;
@@ -51,69 +49,11 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	private boolean useTransparency = false;
 	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
 
-	@Deprecated
-	private static BackgroundStyleImpl makeEmptyBackground() {
-		return new NoneImpl();
-	}
-
-	@Deprecated
-	private static BackgroundStyleImpl makeColoredBackground(java.awt.Color aColor) {
-		return new ColorImpl(aColor);
-	}
-
-	@Deprecated
-	private static BackgroundStyleImpl makeColorGradientBackground(java.awt.Color color1, java.awt.Color color2,
-			ColorGradientDirection direction) {
-		return new ColorGradientImpl(color1, color2, direction);
-	}
-
-	@Deprecated
-	private static BackgroundStyleImpl makeTexturedBackground(TextureType type, java.awt.Color aColor1, java.awt.Color aColor2) {
-		return new TextureImpl(type, aColor1, aColor2);
-	}
-
-	@Deprecated
-	private static BackgroundImage makeImageBackground(File imageFile) {
-		return new BackgroundImageImpl(imageFile);
-	}
-
-	@Deprecated
-	private static BackgroundImage makeImageBackground(ImageIcon image) {
-		return new BackgroundImageImpl(image);
-	}
-
-	@Deprecated
-	private static BackgroundStyle makeBackground(BackgroundStyleType type) {
-		if (type == BackgroundStyleType.NONE) {
-			return makeEmptyBackground();
-		} else if (type == BackgroundStyleType.COLOR) {
-			return makeColoredBackground(java.awt.Color.WHITE);
-		} else if (type == BackgroundStyleType.COLOR_GRADIENT) {
-			return makeColorGradientBackground(java.awt.Color.WHITE, java.awt.Color.BLACK, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
-		} else if (type == BackgroundStyleType.TEXTURE) {
-			return makeTexturedBackground(TextureType.TEXTURE1, java.awt.Color.RED, java.awt.Color.WHITE);
-		} else if (type == BackgroundStyleType.IMAGE) {
-			return makeImageBackground((File) null);
-		}
-		return null;
-	}
-
 	@Override
 	public abstract Paint getPaint(GraphicalRepresentation gr, double scale);
 
 	@Override
 	public abstract BackgroundStyleType getBackgroundStyleType();
-
-	/*public GraphicalRepresentation getGraphicalRepresentation()
-	{
-		return graphicalRepresentation;
-	}
-
-	public void setGraphicalRepresentation(
-			GraphicalRepresentation graphicalRepresentation)
-	{
-		this.graphicalRepresentation = graphicalRepresentation;
-	}*/
 
 	@Override
 	public abstract String toString();
@@ -136,15 +76,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	}
 
 	public static class ColorImpl extends BackgroundStyleImpl implements Color {
-		private java.awt.Color color;
-
-		private ColorImpl() {
-			color = java.awt.Color.WHITE;
-		}
-
-		private ColorImpl(java.awt.Color aColor) {
-			color = aColor;
-		}
+		private java.awt.Color color = java.awt.Color.WHITE;
 
 		@Override
 		public Paint getPaint(GraphicalRepresentation gr, double scale) {
@@ -190,20 +122,9 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	}
 
 	public static class ColorGradientImpl extends BackgroundStyleImpl implements ColorGradient {
-		private java.awt.Color color1;
-		private java.awt.Color color2;
-		private ColorGradientDirection direction;
-
-		private ColorGradientImpl() {
-			this(java.awt.Color.WHITE, java.awt.Color.BLACK, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
-		}
-
-		private ColorGradientImpl(java.awt.Color aColor1, java.awt.Color aColor2, ColorGradientDirection aDirection) {
-			super();
-			this.color1 = aColor1;
-			this.color2 = aColor2;
-			this.direction = aDirection;
-		}
+		private java.awt.Color color1 = java.awt.Color.WHITE;
+		private java.awt.Color color2 = java.awt.Color.BLACK;
+		private ColorGradientDirection direction = ColorGradientDirection.SOUTH_EAST_NORTH_WEST;
 
 		@Override
 		public Paint getPaint(GraphicalRepresentation gr, double scale) {
@@ -292,21 +213,17 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	}
 
 	public static class TextureImpl extends BackgroundStyleImpl implements Texture {
-		private TextureType textureType;
-		private java.awt.Color color1;
-		private java.awt.Color color2;
+		private TextureType textureType = TextureType.TEXTURE1;
+		private java.awt.Color color1 = java.awt.Color.WHITE;
+		private java.awt.Color color2 = java.awt.Color.BLACK;
 		private BufferedImage coloredTexture;
 		private ToolkitImage coloredImage;
 
-		private TextureImpl() {
-			this(TextureType.TEXTURE1, java.awt.Color.WHITE, java.awt.Color.BLACK);
-		}
-
-		private TextureImpl(TextureType aTextureType, java.awt.Color aColor1, java.awt.Color aColor2) {
+		/**
+		 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+		 */
+		public TextureImpl() {
 			super();
-			textureType = aTextureType;
-			this.color1 = aColor1;
-			this.color2 = aColor2;
 			rebuildColoredTexture();
 		}
 
@@ -480,22 +397,8 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	}
 
 	public static class BackgroundImageImpl extends BackgroundStyleImpl implements BackgroundImage {
-		private File imageFile;
-		private Image image;
-
-		private BackgroundImageImpl() {
-			this((File) null);
-		}
-
-		private BackgroundImageImpl(File imageFile) {
-			super();
-			setImageFile(imageFile);
-		}
-
-		private BackgroundImageImpl(ImageIcon image) {
-			super();
-			this.image = image.getImage();
-		}
+		private File imageFile = null;
+		private Image image = null;
 
 		@Override
 		public Paint getPaint(GraphicalRepresentation gr, double scale) {

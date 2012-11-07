@@ -28,9 +28,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.BackgroundStyleImpl;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.ShapeResizingControlPoint;
@@ -64,11 +63,10 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 	public static final FGEPoint WEST = new FGEPoint(0, 0.5);
 
 	public static enum ShapeType {
-		RECTANGLE, SQUARE, RECTANGULAROCTOGON, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON/*
-																													* ,
-																													* CUSTOM_COMPLEX_SHAPE
-																													*/
+		RECTANGLE, SQUARE, RECTANGULAROCTOGON, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON
 	}
+
+	private static final FGEModelFactory SHADOW_FACTORY = new FGEModelFactory();
 
 	// *******************************************************************************
 	// * Constructor *
@@ -139,6 +137,9 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedForeground()) {
 			g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
 		} else {
+			if (getGraphicalRepresentation().getForeground() == null) {
+				logger.info("Ca vient de la: " + getGraphicalRepresentation());
+			}
 			g.setDefaultForeground(getGraphicalRepresentation().getForeground());
 		}
 
@@ -344,10 +345,10 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 		g.getGraphics().clip(clipArea);
 
 		Color shadowColor = new Color(darkness, darkness, darkness);
-		ForegroundStyle foreground = ForegroundStyleImpl.makeStyle(shadowColor);
+		ForegroundStyle foreground = SHADOW_FACTORY.makeForegroundStyle(shadowColor);
 		foreground.setUseTransparency(true);
 		foreground.setTransparencyLevel(0.5f);
-		BackgroundStyle background = BackgroundStyleImpl.makeColoredBackground(shadowColor);
+		BackgroundStyle background = SHADOW_FACTORY.makeColoredBackground(shadowColor);
 		background.setUseTransparency(true);
 		background.setTransparencyLevel(0.5f);
 		g.setDefaultForeground(foreground);

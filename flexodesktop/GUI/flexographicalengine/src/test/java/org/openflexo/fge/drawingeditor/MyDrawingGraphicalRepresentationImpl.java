@@ -37,7 +37,8 @@ public class MyDrawingGraphicalRepresentationImpl extends DrawingGraphicalRepres
 
 	// Called for NEW
 	public MyDrawingGraphicalRepresentationImpl(EditedDrawing editedDrawing) {
-		super(editedDrawing);
+		super();
+		setDrawing(editedDrawing);
 
 		/*MouseClickControl showContextualMenu 
 		= MouseClickControl.makeMouseClickControl("Show contextual menu", MouseButton.RIGHT, 1,

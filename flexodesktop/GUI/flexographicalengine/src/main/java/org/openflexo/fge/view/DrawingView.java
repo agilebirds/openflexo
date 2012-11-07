@@ -56,7 +56,7 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -112,6 +112,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 
 	private static final Logger logger = Logger.getLogger(DrawingView.class.getPackage().getName());
 
+	private static final FGEModelFactory PAINT_FACTORY = new FGEModelFactory();
+
 	private D drawing;
 	private Map<GraphicalRepresentation<?>, FGEView<?>> contents;
 	private DrawingController<D> _controller;
@@ -138,11 +140,6 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		addMouseMotionListener(mouseListener);
 		resizeView();
 		getGraphicalRepresentation().addObserver(this);
-
-		System.out.println("getGraphicalRepresentation()=" + getGraphicalRepresentation());
-		System.out.println("drawable=" + getGraphicalRepresentation().getDrawable());
-		System.out.println("drawing=" + getGraphicalRepresentation().getDrawing());
-		System.out.println("objects=" + getGraphicalRepresentation().getContainedObjects());
 
 		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 			if (gr instanceof GeometricGraphicalRepresentation) {
@@ -634,7 +631,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
-		graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(getGraphicalRepresentation().getSelectionColor()));
+		graphics.setDefaultForeground(PAINT_FACTORY.makeForegroundStyle(getGraphicalRepresentation().getSelectionColor()));
 
 		if (selected instanceof ShapeGraphicalRepresentation) {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) selected;
@@ -692,7 +689,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		getController().getDrawShapeToolController().paintCurrentEditedShape(graphics);
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
-		graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(getGraphicalRepresentation().getFocusColor()));
+		graphics.setDefaultForeground(PAINT_FACTORY.makeForegroundStyle(getGraphicalRepresentation().getFocusColor()));
 
 		for (ControlArea<?> ca : getController().getDrawShapeToolController().getControlAreas()) {
 			paintControlArea(ca, graphics);
@@ -712,7 +709,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
-		graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(getGraphicalRepresentation().getFocusColor()));
+		graphics.setDefaultForeground(PAINT_FACTORY.makeForegroundStyle(getGraphicalRepresentation().getFocusColor()));
 
 		if (focused instanceof ShapeGraphicalRepresentation) {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) focused;

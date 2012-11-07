@@ -109,6 +109,15 @@ public class DrawingPalette {
 		}
 	}
 
+	/**
+	 * Return the factory of the palette, which is different of the one which is used in the related drawing editor
+	 * 
+	 * @return
+	 */
+	public FGEModelFactory getFactory() {
+		return factory;
+	}
+
 	public void delete() {
 		_paletteController.delete();
 		for (PaletteElement element : elements) {

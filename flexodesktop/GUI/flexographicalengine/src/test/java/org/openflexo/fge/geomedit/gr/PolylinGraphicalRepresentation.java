@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
@@ -72,17 +71,17 @@ public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepr
 		if (getGeometricObject() instanceof FGERectPolylin) {
 			FGERectPolylin rectPoly = (FGERectPolylin) getGeometricObject();
 			if (rectPoly.missingPath != null) {
-				graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.YELLOW, 1.0f, DashStyle.SMALL_DASHES));
+				graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.YELLOW, 1.0f, DashStyle.SMALL_DASHES));
 				rectPoly.missingPath.paint(graphics);
 			}
-			graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.GREEN));
+			graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.GREEN));
 			FGERectPolylin debugPolylin = rectPoly.makeNormalizedRectPolylin();
 			debugPolylin.paint(graphics);
 			for (FGEPoint p : debugPolylin.getPoints()) {
 				p.paint(graphics);
 			}
 			if (rectPoly.currentPointStartingSide != null) {
-				graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.RED, 2.0f));
+				graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.RED, 2.0f));
 				rectPoly.currentPointStartingSide.paint(graphics);
 				rectPoly.currentPointEndingSide.paint(graphics);
 			}
@@ -100,7 +99,7 @@ public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepr
 				/*,null, 
 					null*/);
 
-				graphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.BLUE));
+				graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.BLUE));
 				polylinCrossingPoint.paint(graphics);
 
 			}

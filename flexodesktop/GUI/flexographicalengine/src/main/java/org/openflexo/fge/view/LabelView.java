@@ -49,12 +49,12 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.notifications.FGENotification;
@@ -491,7 +491,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
 		TextStyle ts = getGraphicalRepresentation().getTextStyle();
 		if (ts == null) {
-			ts = TextStyleImpl.makeDefault();
+			if (getGraphicalRepresentation().getFactory() != null) {
+				ts = getGraphicalRepresentation().getFactory().makeDefaultTextStyle();
+			} else {
+				ts = (new FGEModelFactory()).makeDefaultTextStyle();
+			}
 		}
 		if (ts.getOrientation() != 0) {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(ts.getOrientation())));

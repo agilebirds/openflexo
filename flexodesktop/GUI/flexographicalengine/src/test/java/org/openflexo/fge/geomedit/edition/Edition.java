@@ -24,9 +24,7 @@ import java.util.Vector;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.GeometricObject;
@@ -38,18 +36,15 @@ public abstract class Edition {
 	private String label;
 	private GeomEditController controller;
 
-	protected static ForegroundStyle focusedForegroundStyle;
-	protected static BackgroundStyle focusedBackgroundStyle;
-
-	static {
-		focusedForegroundStyle = ForegroundStyleImpl.makeStyle(Color.RED);
-		focusedBackgroundStyle = BackgroundStyleImpl.makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE);
-		focusedBackgroundStyle.setUseTransparency(true);
-	}
+	protected ForegroundStyle focusedForegroundStyle;
+	protected BackgroundStyle focusedBackgroundStyle;
 
 	public Edition(String aLabel, GeomEditController aController) {
 		super();
 		controller = aController;
+		focusedForegroundStyle = aController.getFactory().makeForegroundStyle(Color.RED);
+		focusedBackgroundStyle = aController.getFactory().makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE);
+		focusedBackgroundStyle.setUseTransparency(true);
 		label = aLabel;
 		currentStep = 0;
 		inputs = new Vector<EditionInput>();

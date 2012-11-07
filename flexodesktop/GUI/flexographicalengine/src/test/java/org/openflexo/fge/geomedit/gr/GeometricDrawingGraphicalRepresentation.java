@@ -36,7 +36,8 @@ public class GeometricDrawingGraphicalRepresentation extends DrawingGraphicalRep
 
 	// Called for NEW
 	public GeometricDrawingGraphicalRepresentation(GeometricDrawing editedDrawing) {
-		super(editedDrawing);
+		super();
+		setDrawing(editedDrawing);
 		setWidth(10000);
 		setHeight(10000);
 

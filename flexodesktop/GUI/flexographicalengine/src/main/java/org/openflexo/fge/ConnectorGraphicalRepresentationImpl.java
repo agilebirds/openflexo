@@ -111,6 +111,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	 */
 	public ConnectorGraphicalRepresentationImpl() {
 		super();
+		graphics = new FGEConnectorGraphics(this);
 	}
 
 	@Deprecated

@@ -36,7 +36,6 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.FIBLibrary;
@@ -327,7 +326,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			shapeGR.setIsSelectable(false);
 			shapeGR.setIsFocusable(false);
 			shapeGR.setIsReadOnly(true);
-			shapeGR.setBorder(new ShapeBorderImpl(20, 20, 20, 20));
+			shapeGR.setBorder(factory.makeShapeBorder(20, 20, 20, 20));
 			shapeGR.setValidated(true);
 
 			update();
