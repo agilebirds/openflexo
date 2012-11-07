@@ -26,6 +26,18 @@ import org.openflexo.inspector.DefaultInspectableObject;
 public abstract class FGEObjectImpl extends DefaultInspectableObject implements FGEObject {
 	private static final Logger logger = Logger.getLogger(FGEObjectImpl.class.getPackage().getName());
 
+	private FGEModelFactory factory;
+
+	@Override
+	public FGEModelFactory getFactory() {
+		return factory;
+	}
+
+	@Override
+	public void setFGEModelFactory(FGEModelFactory factory) {
+		this.factory = factory;
+	}
+
 	@Override
 	@Deprecated
 	public String getInspectorName() {

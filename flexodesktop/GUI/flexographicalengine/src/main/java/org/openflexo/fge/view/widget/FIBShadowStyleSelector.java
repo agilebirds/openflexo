@@ -30,15 +30,12 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
-import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -259,12 +256,16 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 		private Object p1, p2, text;
 		private ShapeGraphicalRepresentation shapeGR;
 
+		private FGEModelFactory factory;
+
 		protected ShadowStylePreviewPanel() {
 			super(new BorderLayout());
 			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
 			// setBorder(BorderFactory.createEtchedBorder());
 			setPreferredSize(new Dimension(40, 19));
 			// setBackground(Color.WHITE);
+
+			factory = new FGEModelFactory();
 
 			text = new Object();
 
@@ -309,19 +310,19 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 				}
 
 			};
-			drawingGR = new DrawingGraphicalRepresentationImpl(drawing, false);
+			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			shapeGR = new ShapeGraphicalRepresentationImpl(ShapeType.RECTANGLE, text, drawing);
+			shapeGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
 			shapeGR.setWidth(130);
 			shapeGR.setHeight(130);
 			shapeGR.setAllowToLeaveBounds(true);
 			shapeGR.setX(-130);
 			shapeGR.setY(-143);
-			shapeGR.setForeground(ForegroundStyleImpl.makeStyle(Color.BLACK));
-			shapeGR.setBackground(BackgroundStyleImpl.makeColoredBackground(new Color(252, 242, 175)));
+			shapeGR.setForeground(factory.makeForegroundStyle(Color.BLACK));
+			shapeGR.setBackground(factory.makeColoredBackground(new Color(252, 242, 175)));
 
 			shapeGR.setIsSelectable(false);
 			shapeGR.setIsFocusable(false);
@@ -331,7 +332,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 			update();
 
-			controller = new DrawingController<Drawing<?>>(drawing);
+			controller = new DrawingController<Drawing<?>>(drawing, factory);
 			add(controller.getDrawingView());
 
 		}

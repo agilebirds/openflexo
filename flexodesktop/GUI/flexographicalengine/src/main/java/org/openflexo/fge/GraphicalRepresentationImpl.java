@@ -79,7 +79,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 
 	protected int layer;
 
-	private TextStyle textStyle = TextStyleImpl.makeDefault();
+	private TextStyle textStyle;
 	private String text;
 	private boolean multilineAllowed = false;
 	private boolean lineWrap = false;
@@ -132,21 +132,29 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	// * Constructor *
 	// *******************************************************************************
 
-	protected GraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public GraphicalRepresentationImpl() {
 		super();
-		drawable = aDrawable;
-		drawing = aDrawing;
-		textStyle = TextStyleImpl.makeDefault();
-		// textStyle.setGraphicalRepresentation(this);
-		if (textStyle != null) {
-			textStyle.addObserver(this);
-		}
 
 		mouseClickControls = new Vector<MouseClickControl>();
 		mouseDragControls = new Vector<MouseDragControl>();
 
 		dependancies = new Vector<ConstraintDependency>();
 		alterings = new Vector<ConstraintDependency>();
+	}
+
+	@Deprecated
+	private GraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+		this();
+		setDrawable(aDrawable);
+		setDrawing(aDrawing);
+		textStyle = getFactory().makeDefaultTextStyle();
+		// textStyle.setGraphicalRepresentation(this);
+		if (textStyle != null) {
+			textStyle.addObserver(this);
+		}
 
 	}
 

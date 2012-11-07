@@ -7,4 +7,7 @@ import org.openflexo.xmlcode.XMLSerializable;
 public interface FGEObject extends /*AccessibleProxyObject,*/XMLSerializable, Cloneable, IObservable, KeyValueCoding, FGEConstants,
 		InspectableObject {
 
+	public FGEModelFactory getFactory();
+
+	public void setFGEModelFactory(FGEModelFactory factory);
 }

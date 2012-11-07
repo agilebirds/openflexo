@@ -31,16 +31,12 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -271,12 +267,16 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 		private Object p1, p2, line;
 		private ShapeGraphicalRepresentation lineGR;
 
+		private FGEModelFactory factory;
+
 		protected ForegroundStylePreviewPanel() {
 			super(new BorderLayout());
 			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
 			// setBorder(BorderFactory.createEtchedBorder());
 			setPreferredSize(new Dimension(40, 19));
 			// setBackground(Color.WHITE);
+
+			factory = new FGEModelFactory();
 
 			line = new Object();
 
@@ -321,26 +321,26 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 				}
 
 			};
-			drawingGR = new DrawingGraphicalRepresentationImpl(drawing, false);
+			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			lineGR = new ShapeGraphicalRepresentationImpl(ShapeType.RECTANGLE, line, drawing);
+			lineGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, line, drawing);
 			lineGR.setWidth(25);
 			lineGR.setHeight(0);
 			lineGR.setX(-5);
 			lineGR.setY(-2);
-			lineGR.setForeground(getEditedObject() != null ? getEditedObject() : ForegroundStyleImpl.makeDefault());
-			lineGR.setBackground(BackgroundStyleImpl.makeEmptyBackground());
-			lineGR.setShadowStyle(ShadowStyleImpl.makeNone());
+			lineGR.setForeground(getEditedObject() != null ? getEditedObject() : factory.makeDefaultForegroundStyle());
+			lineGR.setBackground(factory.makeEmptyBackground());
+			lineGR.setShadowStyle(factory.makeNoneShadowStyle());
 			lineGR.setIsSelectable(false);
 			lineGR.setIsFocusable(false);
 			lineGR.setIsReadOnly(true);
 			lineGR.setBorder(new ShapeBorderImpl(10, 10, 10, 10));
 			lineGR.setValidated(true);
 
-			controller = new DrawingController<Drawing<?>>(drawing);
+			controller = new DrawingController<Drawing<?>>(drawing, factory);
 			add(controller.getDrawingView());
 		}
 

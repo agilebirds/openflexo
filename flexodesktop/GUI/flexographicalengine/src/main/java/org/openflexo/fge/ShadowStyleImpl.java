@@ -28,21 +28,21 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 	private int shadowDepth;
 	private int shadowBlur;
 
-	public ShadowStyleImpl() {
+	private ShadowStyleImpl() {
 		drawShadow = true;
 		shadowDarkness = FGEConstants.DEFAULT_SHADOW_DARKNESS;
 		shadowDepth = FGEConstants.DEFAULT_SHADOW_DEEP;
 		shadowBlur = FGEConstants.DEFAULT_SHADOW_BLUR;
 	}
 
-	public static ShadowStyleImpl makeNone() {
+	private static ShadowStyleImpl makeNone() {
 		ShadowStyleImpl returned = new ShadowStyleImpl();
 		returned.drawShadow = false;
 		returned.shadowDepth = 0;
 		return returned;
 	}
 
-	public static ShadowStyleImpl makeDefault() {
+	private static ShadowStyleImpl makeDefault() {
 		return new ShadowStyleImpl();
 	}
 

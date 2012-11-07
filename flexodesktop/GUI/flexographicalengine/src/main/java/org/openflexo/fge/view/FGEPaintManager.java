@@ -238,6 +238,9 @@ public class FGEPaintManager {
 			// must be performed (in case of border is not sufficient)
 			ShapeGraphicalRepresentation<?> gr = ((ShapeView<?>) view).getGraphicalRepresentation();
 			int requiredControlPointSpace = FGEConstants.CONTROL_POINT_SIZE;
+			/*if (gr.getBorder() == null) {
+				System.out.println("J'ai une border null, et je suis un " + gr.getClass());
+			}*/
 			if (gr.getBorder().getTop() * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
 						((Component) view).getWidth() + requiredControlPointSpace * 2, requiredControlPointSpace * 2);

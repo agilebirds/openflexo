@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
@@ -52,8 +53,8 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 
 	private SelectionManager _selectionManager;
 
-	public SelectionManagingDrawingController(D drawing, SelectionManager selectionManager) {
-		super(drawing);
+	public SelectionManagingDrawingController(D drawing, SelectionManager selectionManager, FGEModelFactory factory) {
+		super(drawing, factory);
 		_selectionManager = selectionManager;
 		if (_selectionManager != null) {
 			selectionManager.addToSelectionListeners(this);

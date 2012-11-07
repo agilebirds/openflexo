@@ -90,21 +90,29 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// * Constructor *
 	// *******************************************************************************
 
-	public GeometricGraphicalRepresentationImpl(FGEArea anObject, O aDrawable, Drawing<?> aDrawing) {
-		super(aDrawable, aDrawing);
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public GeometricGraphicalRepresentationImpl() {
+		super();
+		graphics = new FGEGeometricGraphics(this);
+	}
 
-		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
+	@Deprecated
+	private GeometricGraphicalRepresentationImpl(FGEArea anObject, O aDrawable, Drawing<?> aDrawing) {
+		this();
+		setDrawable(aDrawable);
+		setDrawing(aDrawing);
+
+		foreground = getFactory().makeForegroundStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
 
-		background = BackgroundStyleImpl.makeColoredBackground(Color.WHITE);
+		background = getFactory().makeColoredBackground(Color.WHITE);
 		// background.setGraphicalRepresentation(this);
 		background.addObserver(this);
 
-		geometricObject = anObject;
-		rebuildControlPoints();
-
-		graphics = new FGEGeometricGraphics(this);
+		setGeometricObject(anObject);
 
 		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
@@ -206,7 +214,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	@Override
 	public void setBackgroundType(BackgroundStyleType backgroundType) {
 		if (backgroundType != getBackgroundType()) {
-			setBackground(BackgroundStyleImpl.makeBackground(backgroundType));
+			setBackground(getFactory().makeBackground(backgroundType));
 		}
 	}
 

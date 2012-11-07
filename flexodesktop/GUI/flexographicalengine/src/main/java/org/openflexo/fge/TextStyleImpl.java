@@ -34,23 +34,23 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 	private int orientation = 0; // angle in degree
 	private boolean backgroundColored = false;
 
-	public TextStyleImpl() {
+	private TextStyleImpl() {
 		super();
 		color = FGEConstants.DEFAULT_TEXT_COLOR;
 		font = FGEConstants.DEFAULT_TEXT_FONT;
 	}
 
-	public TextStyleImpl(Color aColor, Font aFont) {
+	private TextStyleImpl(Color aColor, Font aFont) {
 		this();
 		color = aColor;
 		font = aFont;
 	}
 
-	public static TextStyleImpl makeDefault() {
+	private static TextStyleImpl makeDefault() {
 		return makeTextStyle(FGEConstants.DEFAULT_TEXT_COLOR, FGEConstants.DEFAULT_TEXT_FONT);
 	}
 
-	public static TextStyleImpl makeTextStyle(Color aColor, Font aFont) {
+	private static TextStyleImpl makeTextStyle(Color aColor, Font aFont) {
 		return new TextStyleImpl(aColor, aFont);
 	}
 

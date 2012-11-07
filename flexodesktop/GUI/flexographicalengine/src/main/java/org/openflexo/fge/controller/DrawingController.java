@@ -41,20 +41,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
-import org.openflexo.fge.ShadowStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -69,6 +66,15 @@ import org.openflexo.fge.view.FGEPaintManager;
 import org.openflexo.fge.view.LabelView;
 import org.openflexo.fge.view.ShapeView;
 
+/**
+ * This is the controller for the whole Drawing Editor<br>
+ * This controller maintains the state both of the model and the views, and provides all tools required to edit the drawing.<br>
+ * To do so, this controller maintains the factory used to create graphical objects.
+ * 
+ * @author sylvain
+ * 
+ * @param <D>
+ */
 public class DrawingController<D extends Drawing<?>> extends Observable implements Observer {
 
 	private static final Logger logger = Logger.getLogger(DrawingController.class.getPackage().getName());
@@ -111,14 +117,21 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	private FGEPoint lastClickedPoint;
 	private GraphicalRepresentation<?> lastSelectedGR;
 
-	public DrawingController(D aDrawing) {
+	/**
+	 * This factory is the one which is used to creates and maintains object graph
+	 */
+	private FGEModelFactory factory;
+
+	public DrawingController(D aDrawing, FGEModelFactory factory) {
 		super();
 
+		this.factory = factory;
+
 		setCurrentTool(EditorTool.SelectionTool);
-		currentForegroundStyle = ForegroundStyleImpl.makeDefault();
-		currentBackgroundStyle = BackgroundStyleImpl.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
-		currentTextStyle = TextStyleImpl.makeDefault();
-		currentShadowStyle = ShadowStyleImpl.makeDefault();
+		currentForegroundStyle = factory.makeDefaultForegroundStyle();
+		currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		currentTextStyle = factory.makeDefaultTextStyle();
+		currentShadowStyle = factory.makeDefaultShadowStyle();
 		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
 
 		toolbox = new EditorToolbox(this);
@@ -135,6 +148,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Building DrawingController: " + this);
 		}
+	}
+
+	public FGEModelFactory getFactory() {
+		return factory;
 	}
 
 	public DrawingView<D> rebuildDrawingView() {

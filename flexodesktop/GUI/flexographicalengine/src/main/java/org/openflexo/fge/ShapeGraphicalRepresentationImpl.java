@@ -32,9 +32,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
@@ -115,13 +112,13 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	private boolean hasFocusedForeground = false;
 	private boolean hasFocusedBackground = false;
 
-	@Inject
-	private ShapeBorder border;// = new ShapeBorderImpl();
+	// @Inject
+	private ShapeBorder border = new ShapeBorderImpl();
 
 	private Shape shape = null;
 
-	@Inject
-	@Named(ShadowStyle.DEFAULT_CONFIGURATION)
+	// @Inject
+	// @Named(ShadowStyle.DEFAULT_CONFIGURATION)
 	private ShadowStyle shadowStyle; // = ShadowStyleImpl.makeDefault();
 
 	private boolean allowToLeaveBounds = true;
@@ -153,7 +150,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		private int left;
 		private int right;
 
-		public ShapeBorderImpl() {
+		private ShapeBorderImpl() {
 			super();
 			this.top = FGEConstants.DEFAULT_BORDER_SIZE;
 			this.bottom = FGEConstants.DEFAULT_BORDER_SIZE;
@@ -161,7 +158,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			this.right = FGEConstants.DEFAULT_BORDER_SIZE;
 		}
 
-		public ShapeBorderImpl(int top, int bottom, int left, int right) {
+		@Deprecated
+		private ShapeBorderImpl(int top, int bottom, int left, int right) {
 			super();
 			this.top = top;
 			this.bottom = bottom;
@@ -169,7 +167,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			this.right = right;
 		}
 
-		public ShapeBorderImpl(ShapeBorder border) {
+		@Deprecated
+		private ShapeBorderImpl(ShapeBorder border) {
 			super();
 			this.top = border.getTop();
 			this.bottom = border.getBottom();
@@ -239,23 +238,30 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	// * Constructor *
 	// *******************************************************************************
 
-	// Never use this constructor (used during deserialization only)
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
 	public ShapeGraphicalRepresentationImpl() {
-		this((ShapeType) null, null, null);
+		super();
+		graphics = new FGEShapeGraphics(this);
 	}
 
+	@Deprecated
 	private ShapeGraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
-		super(aDrawable, aDrawing);
+		this();
+		setDrawable(aDrawable);
+		setDrawing(aDrawing);
 	}
 
-	public ShapeGraphicalRepresentationImpl(ShapeType shapeType, O aDrawable, Drawing<?> aDrawing) {
+	@Deprecated
+	private ShapeGraphicalRepresentationImpl(ShapeType shapeType, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 		setShapeType(shapeType);
 		layer = FGEConstants.DEFAULT_SHAPE_LAYER;
-		foreground = ForegroundStyleImpl.makeDefault();
+		foreground = getFactory().makeDefaultForegroundStyle();
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
-		background = BackgroundStyleImpl.makeColoredBackground(Color.WHITE);
+		background = getFactory().makeColoredBackground(Color.WHITE);
 		// background.setGraphicalRepresentation(this);
 		background.addObserver(this);
 
@@ -264,13 +270,15 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		init();
 	}
 
-	public ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation<?> aGR, O aDrawable, Drawing<?> aDrawing) {
+	@Deprecated
+	private ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation<?> aGR, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 
 		setsWith(aGR);
 		init();
 	}
 
+	@Deprecated
 	private void init() {
 
 		graphics = new FGEShapeGraphics(this);
@@ -1779,7 +1787,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public void setBackgroundType(BackgroundStyleType backgroundType) {
 		if (backgroundType != getBackgroundType()) {
-			setBackground(BackgroundStyleImpl.makeBackground(backgroundType));
+			setBackground(getFactory().makeBackground(backgroundType));
 		}
 	}
 

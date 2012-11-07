@@ -106,14 +106,24 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// * Constructor *
 	// *******************************************************************************
 
-	// Never use this constructor (used during deserialization only)
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
 	public ConnectorGraphicalRepresentationImpl() {
-		this(null, null, null, null, null);
+		super();
 	}
 
-	public ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation<?> aStartObject,
+	@Deprecated
+	private ConnectorGraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+		this();
+		setDrawable(aDrawable);
+		setDrawing(aDrawing);
+	}
+
+	@Deprecated
+	private ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation<?> aStartObject,
 			ShapeGraphicalRepresentation<?> anEndObject, O aDrawable, Drawing<?> aDrawing) {
-		super(aDrawable, aDrawing);
+		this(aDrawable, aDrawing);
 
 		layer = FGEConstants.DEFAULT_CONNECTOR_LAYER;
 
@@ -122,7 +132,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		setConnectorType(aConnectorType);
 		graphics = new FGEConnectorGraphics(this);
 
-		foreground = ForegroundStyleImpl.makeStyle(Color.BLACK);
+		foreground = getFactory().makeForegroundStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
 

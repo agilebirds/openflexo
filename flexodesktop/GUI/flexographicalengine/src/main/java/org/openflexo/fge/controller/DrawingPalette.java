@@ -45,7 +45,7 @@ import javax.swing.ScrollPaneConstants;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
@@ -58,6 +58,13 @@ import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.toolbox.ToolBox;
 
+/**
+ * A DrawingPalette represents the graphical tool working with a Drawing Editor, which allows to drag-drop elements represented in a panel
+ * into an edited drawing
+ * 
+ * @author sylvain
+ * 
+ */
 public class DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(DrawingPalette.class.getPackage().getName());
@@ -85,7 +92,13 @@ public class DrawingPalette {
 	private final int height;
 	private final String title;
 
+	/**
+	 * This factory is the one of the palette itself, NOT THE ONE which is used in the related drawing editor
+	 */
+	private FGEModelFactory factory;
+
 	public DrawingPalette(int width, int height, String title) {
+		factory = new FGEModelFactory();
 		this.width = width;
 		this.height = height;
 		this.title = title;
@@ -149,7 +162,7 @@ public class DrawingPalette {
 		for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().setValidated(true);
 		}
-		_paletteController = new DrawingController<PaletteDrawing>(_paletteDrawing);
+		_paletteController = new DrawingController<PaletteDrawing>(_paletteDrawing, factory);
 		for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
 		}
@@ -160,7 +173,7 @@ public class DrawingPalette {
 		private final DrawingGraphicalRepresentation<DrawingPalette> gr;
 
 		private PaletteDrawing() {
-			gr = new DrawingGraphicalRepresentationImpl<DrawingPalette>(this, false);
+			gr = factory.makeDrawingGraphicalRepresentation(this, false);
 			gr.setWidth(width);
 			gr.setHeight(height);
 			gr.setDrawWorkingArea(false);

@@ -188,6 +188,8 @@ public interface BackgroundStyle extends FGEStyle {
 
 		public Image getImage();
 
+		public void setImage(Image image);
+
 		public void setScaleXNoNotification(double aScaleX);
 
 		public void setScaleYNoNotification(double aScaleY);

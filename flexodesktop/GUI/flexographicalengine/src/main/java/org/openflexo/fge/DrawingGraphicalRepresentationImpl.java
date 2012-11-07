@@ -88,18 +88,24 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 	// * Constructor *
 	// *******************************************************************************
 
-	// Never use this constructor (used during deserialization only)
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
 	public DrawingGraphicalRepresentationImpl() {
-		this(null, true);
-	}
-
-	public DrawingGraphicalRepresentationImpl(Drawing<M> aDrawing) {
-		this(aDrawing, true);
-	}
-
-	public DrawingGraphicalRepresentationImpl(Drawing<M> aDrawing, boolean initBasicControls) {
-		super(aDrawing != null ? aDrawing.getModel() : null, aDrawing);
+		super();
 		graphics = new FGEDrawingGraphics(this);
+	}
+
+	@Deprecated
+	private DrawingGraphicalRepresentationImpl(Drawing<M> aDrawing) {
+		this();
+		setDrawing(aDrawing);
+		setDrawable(aDrawing != null ? aDrawing.getModel() : null);
+	}
+
+	@Deprecated
+	private DrawingGraphicalRepresentationImpl(Drawing<M> aDrawing, boolean initBasicControls) {
+		this(aDrawing);
 		if (initBasicControls) {
 			addToMouseClickControls(MouseClickControl.makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.SELECTION));
@@ -107,9 +113,9 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 					MouseDragControlActionType.RECTANGLE_SELECTING));
 			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
 		}
-		width = 1000;
-		height = 1000;
-		bgStyle = BackgroundStyleImpl.makeColoredBackground(getBackgroundColor());
+		width = FGEConstants.DEFAULT_DRAWING_WIDTH;
+		height = FGEConstants.DEFAULT_DRAWING_HEIGHT;
+		bgStyle = getFactory().makeColoredBackground(getBackgroundColor());
 	}
 
 	@Override
@@ -200,7 +206,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		FGENotification notification = requireChange(DrawingParameters.backgroundColor, backgroundColor);
 		if (notification != null) {
 			this.backgroundColor = backgroundColor;
-			bgStyle = BackgroundStyleImpl.makeColoredBackground(backgroundColor);
+			bgStyle = getFactory().makeColoredBackground(backgroundColor);
 			hasChanged(notification);
 		}
 	}
@@ -347,10 +353,10 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		super.paint(g, controller);
 
 		if (!(bgStyle instanceof BackgroundStyle.Color) || !((BackgroundStyle.Color) bgStyle).getColor().equals(getBackgroundColor())) {
-			bgStyle = BackgroundStyleImpl.makeColoredBackground(getBackgroundColor());
+			bgStyle = getFactory().makeColoredBackground(getBackgroundColor());
 		}
 
-		ForegroundStyle fgStyle = ForegroundStyleImpl.makeStyle(Color.DARK_GRAY);
+		ForegroundStyle fgStyle = getFactory().makeForegroundStyle(Color.DARK_GRAY);
 
 		graphics.setDefaultForeground(fgStyle);
 		graphics.setDefaultBackground(bgStyle);

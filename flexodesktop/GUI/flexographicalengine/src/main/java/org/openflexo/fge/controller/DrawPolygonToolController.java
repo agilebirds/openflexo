@@ -30,8 +30,6 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController.EditorTool;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
@@ -134,9 +132,9 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 
 	@Override
 	public ShapeGraphicalRepresentation<?> buildShapeGraphicalRepresentation() {
-		ShapeGraphicalRepresentation<?> returned = new ShapeGraphicalRepresentationImpl<Object>(ShapeType.CUSTOM_POLYGON, null,
-				getController().getDrawing());
-		returned.setBorder(new ShapeBorderImpl(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
+		ShapeGraphicalRepresentation<?> returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON,
+				null, getController().getDrawing());
+		returned.setBorder(getController().getFactory().makeShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
 				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));
 		returned.setBackground(getController().getCurrentBackgroundStyle());
 		returned.setForeground(getController().getCurrentForegroundStyle());

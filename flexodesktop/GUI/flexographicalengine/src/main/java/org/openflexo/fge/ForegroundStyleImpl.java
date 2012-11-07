@@ -45,7 +45,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 	private Stroke stroke;
 	private double strokeScale;
 
-	public ForegroundStyleImpl() {
+	private ForegroundStyleImpl() {
 		super();
 		noStroke = false;
 		color = Color.BLACK;
@@ -55,32 +55,38 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 		dashStyle = DashStyle.PLAIN_STROKE;
 	}
 
-	public ForegroundStyleImpl(Color aColor) {
+	@Deprecated
+	private ForegroundStyleImpl(Color aColor) {
 		this();
 		color = aColor;
 	}
 
-	public static ForegroundStyleImpl makeDefault() {
+	@Deprecated
+	private static ForegroundStyleImpl makeDefault() {
 		return new ForegroundStyleImpl();
 	}
 
-	public static ForegroundStyleImpl makeNone() {
+	@Deprecated
+	private static ForegroundStyleImpl makeNone() {
 		ForegroundStyleImpl returned = new ForegroundStyleImpl();
 		returned.setNoStroke(true);
 		return returned;
 	}
 
-	public static ForegroundStyleImpl makeStyle(Color aColor) {
+	@Deprecated
+	private static ForegroundStyleImpl makeStyle(Color aColor) {
 		return new ForegroundStyleImpl(aColor);
 	}
 
-	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth) {
+	@Deprecated
+	private static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth) {
 		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		return returned;
 	}
 
-	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, JoinStyle joinStyle, CapStyle capStyle, DashStyle dashStyle) {
+	@Deprecated
+	private static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, JoinStyle joinStyle, CapStyle capStyle, DashStyle dashStyle) {
 		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		returned.setJoinStyle(joinStyle);
@@ -89,7 +95,8 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 		return returned;
 	}
 
-	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, DashStyle dashStyle) {
+	@Deprecated
+	private static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, DashStyle dashStyle) {
 		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		returned.setDashStyle(dashStyle);

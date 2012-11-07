@@ -43,9 +43,12 @@ import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -361,34 +364,34 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	@Setter(value = IS_VISIBLE)
 	public abstract void setIsVisible(boolean isVisible);
 
-	// @Getter(value = MOUSE_CLICK_CONTROLS, cardinality = Cardinality.LIST)
-	// @XMLElement
+	@Getter(value = MOUSE_CLICK_CONTROLS, cardinality = Cardinality.LIST, ignoreType = true)
+	@XMLElement
 	public abstract Vector<MouseClickControl> getMouseClickControls();
 
-	// @Setter(value = MOUSE_CLICK_CONTROLS)
+	@Setter(value = MOUSE_CLICK_CONTROLS)
 	public abstract void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
 
-	// @Adder(value = MOUSE_CLICK_CONTROLS)
+	@Adder(value = MOUSE_CLICK_CONTROLS)
 	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl);
 
 	public abstract void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
 
-	// @Remover(value = MOUSE_CLICK_CONTROLS)
+	@Remover(value = MOUSE_CLICK_CONTROLS)
 	public abstract void removeFromMouseClickControls(MouseClickControl mouseClickControl);
 
-	// @Getter(value = MOUSE_DRAG_CONTROLS, cardinality = Cardinality.LIST)
-	// @XMLElement
+	@Getter(value = MOUSE_DRAG_CONTROLS, cardinality = Cardinality.LIST, ignoreType = true)
+	@XMLElement
 	public abstract Vector<MouseDragControl> getMouseDragControls();
 
-	// @Setter(value = MOUSE_DRAG_CONTROLS)
+	@Setter(value = MOUSE_DRAG_CONTROLS)
 	public abstract void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
 
-	// @Adder(value = MOUSE_DRAG_CONTROLS)
+	@Adder(value = MOUSE_DRAG_CONTROLS)
 	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl);
 
 	public abstract void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
 
-	// @Remover(value = MOUSE_DRAG_CONTROLS)
+	@Remover(value = MOUSE_DRAG_CONTROLS)
 	public abstract void removeFromMouseDragControls(MouseDragControl mouseDragControl);
 
 	@Getter(value = TOOLTIP_TEXT)

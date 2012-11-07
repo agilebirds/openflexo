@@ -51,32 +51,39 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	private boolean useTransparency = false;
 	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
 
-	public static BackgroundStyleImpl makeEmptyBackground() {
+	@Deprecated
+	private static BackgroundStyleImpl makeEmptyBackground() {
 		return new NoneImpl();
 	}
 
-	public static BackgroundStyleImpl makeColoredBackground(java.awt.Color aColor) {
+	@Deprecated
+	private static BackgroundStyleImpl makeColoredBackground(java.awt.Color aColor) {
 		return new ColorImpl(aColor);
 	}
 
-	public static BackgroundStyleImpl makeColorGradientBackground(java.awt.Color color1, java.awt.Color color2,
+	@Deprecated
+	private static BackgroundStyleImpl makeColorGradientBackground(java.awt.Color color1, java.awt.Color color2,
 			ColorGradientDirection direction) {
 		return new ColorGradientImpl(color1, color2, direction);
 	}
 
-	public static BackgroundStyleImpl makeTexturedBackground(TextureType type, java.awt.Color aColor1, java.awt.Color aColor2) {
+	@Deprecated
+	private static BackgroundStyleImpl makeTexturedBackground(TextureType type, java.awt.Color aColor1, java.awt.Color aColor2) {
 		return new TextureImpl(type, aColor1, aColor2);
 	}
 
-	public static BackgroundImage makeImageBackground(File imageFile) {
+	@Deprecated
+	private static BackgroundImage makeImageBackground(File imageFile) {
 		return new BackgroundImageImpl(imageFile);
 	}
 
-	public static BackgroundImage makeImageBackground(ImageIcon image) {
+	@Deprecated
+	private static BackgroundImage makeImageBackground(ImageIcon image) {
 		return new BackgroundImageImpl(image);
 	}
 
-	public static BackgroundStyle makeBackground(BackgroundStyleType type) {
+	@Deprecated
+	private static BackgroundStyle makeBackground(BackgroundStyleType type) {
 		if (type == BackgroundStyleType.NONE) {
 			return makeEmptyBackground();
 		} else if (type == BackgroundStyleType.COLOR) {
@@ -131,11 +138,11 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	public static class ColorImpl extends BackgroundStyleImpl implements Color {
 		private java.awt.Color color;
 
-		public ColorImpl() {
+		private ColorImpl() {
 			color = java.awt.Color.WHITE;
 		}
 
-		public ColorImpl(java.awt.Color aColor) {
+		private ColorImpl(java.awt.Color aColor) {
 			color = aColor;
 		}
 
@@ -187,11 +194,11 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		private java.awt.Color color2;
 		private ColorGradientDirection direction;
 
-		public ColorGradientImpl() {
+		private ColorGradientImpl() {
 			this(java.awt.Color.WHITE, java.awt.Color.BLACK, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		}
 
-		public ColorGradientImpl(java.awt.Color aColor1, java.awt.Color aColor2, ColorGradientDirection aDirection) {
+		private ColorGradientImpl(java.awt.Color aColor1, java.awt.Color aColor2, ColorGradientDirection aDirection) {
 			super();
 			this.color1 = aColor1;
 			this.color2 = aColor2;
@@ -291,11 +298,11 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		private BufferedImage coloredTexture;
 		private ToolkitImage coloredImage;
 
-		public TextureImpl() {
+		private TextureImpl() {
 			this(TextureType.TEXTURE1, java.awt.Color.WHITE, java.awt.Color.BLACK);
 		}
 
-		public TextureImpl(TextureType aTextureType, java.awt.Color aColor1, java.awt.Color aColor2) {
+		private TextureImpl(TextureType aTextureType, java.awt.Color aColor1, java.awt.Color aColor2) {
 			super();
 			textureType = aTextureType;
 			this.color1 = aColor1;
@@ -476,16 +483,16 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		private File imageFile;
 		private Image image;
 
-		public BackgroundImageImpl() {
+		private BackgroundImageImpl() {
 			this((File) null);
 		}
 
-		public BackgroundImageImpl(File imageFile) {
+		private BackgroundImageImpl(File imageFile) {
 			super();
 			setImageFile(imageFile);
 		}
 
-		public BackgroundImageImpl(ImageIcon image) {
+		private BackgroundImageImpl(ImageIcon image) {
 			super();
 			this.image = image.getImage();
 		}
@@ -523,6 +530,11 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		@Override
 		public Image getImage() {
 			return image;
+		}
+
+		@Override
+		public void setImage(Image image) {
+			this.image = image;
 		}
 
 		private ImageBackgroundType imageBackgroundType = ImageBackgroundType.TRANSPARENT;
