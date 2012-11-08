@@ -78,12 +78,9 @@ public interface MyDrawingElement<M extends MyDrawingElement<M, G>, G extends Gr
 	@Setter(value = GRAPHICAL_REPRESENTATION)
 	public void setGraphicalRepresentation(G graphicalRepresentation);
 
-	public void initializeDeserialization();
+	// public void initializeDeserialization();
 
 	public void finalizeDeserialization();
-
-	@Override
-	public boolean isDeserializing();
 
 	public MyDrawingElement<M, G> clone();
 

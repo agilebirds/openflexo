@@ -19,8 +19,8 @@
  */
 package org.openflexo.wkf.swleditor;
 
-import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingGraphicalRepresentationImpl;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.wkf.processeditor.gr.WKFConnectorGR;
 

@@ -14,7 +14,12 @@ import org.openflexo.fge.ForegroundStyle.CapStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.CurveConnector;
+import org.openflexo.fge.connectors.CurvedPolylinConnector;
+import org.openflexo.fge.connectors.LineConnector;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
@@ -103,14 +108,10 @@ public class FGEModelFactory extends ModelFactory {
 	 * @return a newly created DrawingGraphicalRepresentation
 	 */
 	public <M> DrawingGraphicalRepresentation<M> makeDrawingGraphicalRepresentation(Drawing<M> aDrawing, boolean initBasicControls) {
-		DrawingGraphicalRepresentation<M> returned = newInstance(DrawingGraphicalRepresentation.class);
+		DrawingGraphicalRepresentation<M> returned = newInstance(DrawingGraphicalRepresentation.class, true, initBasicControls);
 		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawing.getModel());
 		returned.setDrawing(aDrawing);
-		applyDefaultProperties(returned);
-		if (initBasicControls) {
-			applyBasicControls(returned);
-		}
 		return returned;
 	}
 
@@ -153,12 +154,10 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public <O> ShapeGraphicalRepresentation<O> makeShapeGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
 
-		ShapeGraphicalRepresentation<O> returned = newInstance(ShapeGraphicalRepresentation.class);
+		ShapeGraphicalRepresentation<O> returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
 		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
-		applyDefaultProperties(returned);
-		applyBasicControls(returned);
 		return returned;
 	}
 
@@ -247,12 +246,10 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public <O> ConnectorGraphicalRepresentation<O> makeConnectorGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
 
-		ConnectorGraphicalRepresentation<O> returned = newInstance(ConnectorGraphicalRepresentation.class);
+		ConnectorGraphicalRepresentation<O> returned = newInstance(ConnectorGraphicalRepresentation.class, true, true);
 		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
-		applyDefaultProperties(returned);
-		applyBasicControls(returned);
 		return returned;
 	}
 
@@ -318,7 +315,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public <O> GeometricGraphicalRepresentation<O> makeGeometricGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
 
-		GeometricGraphicalRepresentation<O> returned = newInstance(GeometricGraphicalRepresentation.class);
+		GeometricGraphicalRepresentation<O> returned = newInstance(GeometricGraphicalRepresentation.class, true, true);
 		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
@@ -374,6 +371,76 @@ public class FGEModelFactory extends ModelFactory {
 			geometricGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection",
 					MouseButton.LEFT, 1, MouseClickControlActionType.MULTIPLE_SELECTION));
 		}
+	}
+
+	public Connector makeConnector(ConnectorType type, ConnectorGraphicalRepresentation<?> aGraphicalRepresentation) {
+
+		if (type == ConnectorType.LINE) {
+			return makeLineConnector(aGraphicalRepresentation);
+		} else if (type == ConnectorType.RECT_POLYLIN) {
+			return makeRectPolylinConnector(aGraphicalRepresentation);
+		} else if (type == ConnectorType.CURVE) {
+			return makeCurveConnector(aGraphicalRepresentation);
+		} else if (type == ConnectorType.CURVED_POLYLIN) {
+			return makeCurvedPolylinConnector(aGraphicalRepresentation);
+		} else if (type == ConnectorType.CUSTOM) {
+			return null;
+		}
+		logger.warning("Unexpected type: " + type);
+		return null;
+
+	}
+
+	/**
+	 * Creates and return a new LineConnector, given a connector graphical representation
+	 * 
+	 * @param aGR
+	 * @return a newly created LineConnector
+	 */
+	public LineConnector makeLineConnector(ConnectorGraphicalRepresentation<?> aGR) {
+		LineConnector returned = newInstance(LineConnector.class);
+		returned.setFGEModelFactory(this);
+		returned.setGraphicalRepresentation(aGR);
+		return returned;
+	}
+
+	/**
+	 * Creates and return a new CurveConnector, given a connector graphical representation
+	 * 
+	 * @param aGR
+	 * @return a newly created CurveConnector
+	 */
+	public CurveConnector makeCurveConnector(ConnectorGraphicalRepresentation<?> aGR) {
+		CurveConnector returned = newInstance(CurveConnector.class);
+		returned.setFGEModelFactory(this);
+		returned.setGraphicalRepresentation(aGR);
+		return returned;
+	}
+
+	/**
+	 * Creates and return a new RectPolylinConnector, given a connector graphical representation
+	 * 
+	 * @param aGR
+	 * @return a newly created RectPolylinConnector
+	 */
+	public RectPolylinConnector makeRectPolylinConnector(ConnectorGraphicalRepresentation<?> aGR) {
+		RectPolylinConnector returned = newInstance(RectPolylinConnector.class);
+		returned.setFGEModelFactory(this);
+		returned.setGraphicalRepresentation(aGR);
+		return returned;
+	}
+
+	/**
+	 * Creates and return a new CurvedPolylinConnector, given a connector graphical representation
+	 * 
+	 * @param aGR
+	 * @return a newly created CurvedPolylinConnector
+	 */
+	public CurvedPolylinConnector makeCurvedPolylinConnector(ConnectorGraphicalRepresentation<?> aGR) {
+		CurvedPolylinConnector returned = newInstance(CurvedPolylinConnector.class);
+		returned.setFGEModelFactory(this);
+		returned.setGraphicalRepresentation(aGR);
+		return returned;
 	}
 
 	/**
@@ -678,6 +745,41 @@ public class FGEModelFactory extends ModelFactory {
 		returned.setBottom(bottom);
 		returned.setLeft(left);
 		returned.setRight(right);
+		return returned;
+	}
+
+	public <I extends GraphicalRepresentation<?>> I newInstance(Class<I> implementedInterface, boolean initWithDefaultProperties,
+			boolean initWithBasicControls) {
+		I returned = super.newInstance(implementedInterface);
+		if (returned instanceof ShapeGraphicalRepresentation) {
+			if (initWithDefaultProperties) {
+				applyDefaultProperties((ShapeGraphicalRepresentation<?>) returned);
+			}
+			if (initWithBasicControls) {
+				applyBasicControls((ShapeGraphicalRepresentation<?>) returned);
+			}
+		} else if (returned instanceof ConnectorGraphicalRepresentation) {
+			if (initWithDefaultProperties) {
+				applyDefaultProperties((ConnectorGraphicalRepresentation<?>) returned);
+			}
+			if (initWithBasicControls) {
+				applyBasicControls((ConnectorGraphicalRepresentation<?>) returned);
+			}
+		} else if (returned instanceof DrawingGraphicalRepresentation) {
+			if (initWithDefaultProperties) {
+				applyDefaultProperties((DrawingGraphicalRepresentation<?>) returned);
+			}
+			if (initWithBasicControls) {
+				applyBasicControls((DrawingGraphicalRepresentation<?>) returned);
+			}
+		} else if (returned instanceof GeometricGraphicalRepresentation) {
+			if (initWithDefaultProperties) {
+				applyDefaultProperties((GeometricGraphicalRepresentation<?>) returned);
+			}
+			if (initWithBasicControls) {
+				applyBasicControls((GeometricGraphicalRepresentation<?>) returned);
+			}
+		}
 		return returned;
 	}
 

@@ -22,10 +22,10 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.BackgroundStyleImpl;
-import org.openflexo.fge.ForegroundStyleImpl;
-import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.impl.BackgroundStyleImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
+import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.icon.WKFIconLibrary;

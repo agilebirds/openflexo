@@ -19,10 +19,10 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.view.ConnectorView;
 
 public class MyConnectorGraphicalRepresentationImpl extends ConnectorGraphicalRepresentationImpl<MyConnector> implements

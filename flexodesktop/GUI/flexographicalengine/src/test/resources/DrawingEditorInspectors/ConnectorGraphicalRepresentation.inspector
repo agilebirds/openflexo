@@ -40,7 +40,7 @@
 		<property name="connector.rectPolylinConstraints" label="constraints" widget="DROPDOWN" constraint="13" depends="connectorType" conditional="connectorType=RECT_POLYLIN">
 			<param name="columns" value="10"/>
 			<param name="showReset" value="false"/>
-			<param name="type" value="org.openflexo.fge.connectors.rpc.RectPolylinConnector$RectPolylinConstraints"/>
+			<param name="type" value="org.openflexo.fge.connectors.RectPolylinConnector$RectPolylinConstraints"/>
 		</property>
 		<property name="connector.startOrientation" label="start_orientation" widget="DROPDOWN" constraint="14" depends="connector.rectPolylinConstraints" conditional="connector.rectPolylinConstraints=ORIENTATIONS_FIXED OR connector.rectPolylinConstraints=START_ORIENTATION_FIXED">
 			<param name="showIcon" value="true"/>
@@ -59,7 +59,7 @@
 		</property>
 		<property name="connector.adjustability" label="adjustability" widget="DROPDOWN" constraint="17" depends="connectorType" conditional="connectorType=RECT_POLYLIN">
 			<param name="showReset" value="false"/>
-			<param name="type" value="org.openflexo.fge.connectors.rpc.RectPolylinConnector$RectPolylinAdjustability"/>
+			<param name="type" value="org.openflexo.fge.connectors.RectPolylinConnector$RectPolylinAdjustability"/>
 		</property>
 		<property name="connector.isStartingLocationFixed" label="start_location_fixed" widget="CHECKBOX" constraint="18" depends="connectorType" conditional="connectorType=RECT_POLYLIN">
 			<param name="columns" value="10"/>

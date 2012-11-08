@@ -17,12 +17,28 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.util.logging.Logger;
 
-public abstract class FGEStyleImpl extends FGEObjectImpl implements FGEStyle {
-	private static final Logger logger = Logger.getLogger(FGEStyleImpl.class.getPackage().getName());
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEObject;
+import org.openflexo.inspector.DefaultInspectableObject;
+
+public abstract class FGEObjectImpl extends DefaultInspectableObject implements FGEObject {
+	private static final Logger logger = Logger.getLogger(FGEObjectImpl.class.getPackage().getName());
+
+	private FGEModelFactory factory;
+
+	@Override
+	public FGEModelFactory getFactory() {
+		return factory;
+	}
+
+	@Override
+	public void setFGEModelFactory(FGEModelFactory factory) {
+		this.factory = factory;
+	}
 
 	@Override
 	@Deprecated

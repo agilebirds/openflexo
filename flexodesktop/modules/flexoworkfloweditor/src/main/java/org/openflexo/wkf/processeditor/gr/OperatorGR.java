@@ -24,10 +24,10 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
-import org.openflexo.fge.TextStyleImpl;
+import org.openflexo.fge.impl.BackgroundStyleImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
+import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.node.OperatorNode;

@@ -21,7 +21,7 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.TextStyleImpl;
+import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.ActionNode;

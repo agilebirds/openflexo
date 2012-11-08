@@ -23,11 +23,11 @@ import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.dm.AssociationRemoved;

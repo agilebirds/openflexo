@@ -27,7 +27,7 @@ public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, MyShapeG
 	// Called for LOAD
 	public MyShapeImpl(DrawingBuilder builder) {
 		super(builder.drawing);
-		initializeDeserialization();
+		// initializeDeserialization();
 	}
 
 	// Used by PAMELA, do not use it

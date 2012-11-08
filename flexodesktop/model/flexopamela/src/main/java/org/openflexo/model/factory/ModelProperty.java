@@ -2,6 +2,7 @@ package org.openflexo.model.factory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class ModelProperty<I> {
 
 	/* Computed values of the model property */
 	private Class<?> type;
+	private Type genericType;
 	private Class<?> keyType;
 	private String xmlTag;
 
@@ -168,13 +170,16 @@ public class ModelProperty<I> {
 			switch (getCardinality()) {
 			case SINGLE:
 				type = getterMethod.getReturnType();
+				genericType = getterMethod.getGenericReturnType();
 				break;
 			case LIST:
-				type = (Class<?>) ((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[0];
+				genericType = ((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[0];
+				type = TypeUtils.getBaseClass(genericType);
 				break;
 			case MAP:
 				keyType = (Class<?>) ((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[0];
-				type = (Class<?>) ((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[1];
+				genericType = ((ParameterizedType) getterMethod.getGenericReturnType()).getActualTypeArguments()[1];
+				type = TypeUtils.getBaseClass(genericType);
 				break;
 			default:
 				break;
@@ -250,9 +255,9 @@ public class ModelProperty<I> {
 					throw new ModelDefinitionException("Invalid adder method for property '" + propertyIdentifier + "': method "
 							+ getAdderMethod().toString() + " must have exactly 1 parameter");
 				}
-				if (!TypeUtils.isTypeAssignableFrom(type, getAdderMethod().getParameterTypes()[0])) {
+				if (!TypeUtils.isTypeAssignableFrom(genericType, getAdderMethod().getParameterTypes()[0])) {
 					throw new ModelDefinitionException("Invalid adder method for property '" + propertyIdentifier + "': method "
-							+ getAdderMethod().toString() + " parameter must be assignable to " + type.getName());
+							+ getAdderMethod().toString() + " parameter must be assignable to " + genericType);
 				}
 				break;
 			case MAP:
@@ -264,9 +269,9 @@ public class ModelProperty<I> {
 					throw new ModelDefinitionException("Invalid adder method for property '" + propertyIdentifier + "': method "
 							+ getAdderMethod().toString() + " first parameter must be assignable to " + keyType.getName());
 				}
-				if (!TypeUtils.isTypeAssignableFrom(type, getAdderMethod().getParameterTypes()[1])) {
+				if (!TypeUtils.isTypeAssignableFrom(genericType, getAdderMethod().getParameterTypes()[1])) {
 					throw new ModelDefinitionException("Invalid adder method for property '" + propertyIdentifier + "': method "
-							+ getAdderMethod().toString() + " second parameter must be assignable to " + type.getName());
+							+ getAdderMethod().toString() + " second parameter must be assignable to " + genericType);
 				}
 				break;
 			default:
@@ -281,9 +286,9 @@ public class ModelProperty<I> {
 					throw new ModelDefinitionException("Invalid remover method for property '" + propertyIdentifier + "': method "
 							+ getRemoverMethod().toString() + " must have exactly 1 parameter");
 				}
-				if (!TypeUtils.isTypeAssignableFrom(type, getRemoverMethod().getParameterTypes()[0])) {
+				if (!TypeUtils.isTypeAssignableFrom(genericType, getRemoverMethod().getParameterTypes()[0])) {
 					throw new ModelDefinitionException("Invalid remover method for property '" + propertyIdentifier + "': method "
-							+ getRemoverMethod().toString() + " parameter must be assignable to " + type.getName());
+							+ getRemoverMethod().toString() + " parameter must be assignable to " + genericType);
 				}
 				break;
 			case MAP:
@@ -704,6 +709,10 @@ public class ModelProperty<I> {
 
 	public Class<?> getType() {
 		return type;
+	}
+
+	public Type getGenericType() {
+		return genericType;
 	}
 
 	public String getPropertyIdentifier() {

@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
+import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;

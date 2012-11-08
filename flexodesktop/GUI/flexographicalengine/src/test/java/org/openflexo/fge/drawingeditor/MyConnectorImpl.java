@@ -27,7 +27,7 @@ public abstract class MyConnectorImpl extends MyDrawingElementImpl<MyConnector, 
 	// Called for LOAD
 	public MyConnectorImpl(DrawingBuilder builder) {
 		super(builder.drawing);
-		initializeDeserialization();
+		// initializeDeserialization();
 	}
 
 	// Used by PAMELA, do not use it

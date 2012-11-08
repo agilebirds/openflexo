@@ -23,13 +23,13 @@ import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.impl.BackgroundStyleImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
 import org.openflexo.foundation.wkf.node.SelfExecutableActionNode;
 import org.openflexo.icon.WKFIconLibrary;

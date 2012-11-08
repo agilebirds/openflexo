@@ -17,60 +17,62 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.connectors.rpc;
+package org.openflexo.fge.connectors.impl;
 
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
+import org.openflexo.fge.geom.area.FGEHalfPlane;
 
-public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
-	static final Logger logger = Logger.getLogger(AdjustableUniqueSegment.class.getPackage().getName());
+public class AdjustableFirstSegment extends RectPolylinAdjustableSegment {
+	static final Logger logger = Logger.getLogger(AdjustableFirstSegment.class.getPackage().getName());
 
 	private boolean consistentData = false;
 	private FGESegment currentSegment;
+	private FGESegment nextSegment;
+	private FGESegment afterNextSegment;
 	private SimplifiedCardinalDirection currentOrientation;
+	private SimplifiedCardinalDirection nextOrientation;
 	private FGEArea startArea;
-	private FGEArea endArea;
 	private FGEArea draggingAuthorizedArea;
 
 	private void retrieveInfos() {
 		currentSegment = getArea();
-		if (currentSegment.getApproximatedOrientation() == null) {
-			RectPolylinConnector.logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+		nextSegment = getPolylin().getSegmentAt(1);
+		if (currentSegment.getApproximatedOrientation() == null || nextSegment.getApproximatedOrientation() == null) {
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return;
 		}
+		if (getPolylin().getSegmentNb() > 2) {
+			afterNextSegment = getPolylin().getSegmentAt(2);
+		}
 		currentOrientation = currentSegment.getApproximatedOrientation();
+		nextOrientation = nextSegment.getApproximatedOrientation();
 
-		startArea = getConnector().retrieveAllowedStartArea(false);
-		endArea = getConnector().retrieveAllowedEndArea(false);
-
-		/*
-		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
-				getConnector().getStartObject(), getGraphicalRepresentation());
+		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getConnector().getStartObject(),
+				getGraphicalRepresentation());
 		startArea = getConnector().getStartObject().getShape().getOutline().transform(at1);
-		FGEArea startOrthogonalPerspectiveArea = startArea.getOrthogonalPerspectiveArea(currentOrientation);
-
-		AffineTransform at2 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(
-				getConnector().getEndObject(), getGraphicalRepresentation());
-		endArea = getConnector().getEndObject().getShape().getOutline().transform(at2);
-		FGEArea endOrthogonalPerspectiveArea = endArea.getOrthogonalPerspectiveArea(currentOrientation.getOpposite());
-		*/
-
-		FGEArea startOrthogonalPerspectiveArea = startArea.getOrthogonalPerspectiveArea(currentOrientation);
-		FGEArea endOrthogonalPerspectiveArea = endArea.getOrthogonalPerspectiveArea(currentOrientation.getOpposite());
-
-		draggingAuthorizedArea = startOrthogonalPerspectiveArea.intersect(endOrthogonalPerspectiveArea);
+		FGEArea orthogonalPerspectiveArea = startArea.getOrthogonalPerspectiveArea(currentOrientation);
+		if (!nextSegment.containsPoint(currentSegment.getP1())) {
+			FGEHalfPlane hp = new FGEHalfPlane(nextSegment, currentSegment.getP1());
+			draggingAuthorizedArea = orthogonalPerspectiveArea.intersect(hp);
+		} else {
+			draggingAuthorizedArea = orthogonalPerspectiveArea;
+		}
 
 		consistentData = true;
 	}
 
-	public AdjustableUniqueSegment(FGESegment segment, RectPolylinConnector connector) {
+	public AdjustableFirstSegment(FGESegment segment, RectPolylinConnector connector) {
 		super(segment, connector);
 		retrieveInfos();
 	}
@@ -79,7 +81,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		retrieveInfos();
-		logger.info("start cpts=" + getConnector().getControlAreas());
+		logger.info("Start dragging: " + draggingAuthorizedArea);
 	}
 
 	@Override
@@ -89,6 +91,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 		}
 
 		return draggingAuthorizedArea;
+
 	}
 
 	@Override
@@ -96,7 +99,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 			FGEPoint initialPoint, MouseEvent event) {
 		FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 
-		FGEPoint p1 = getPolylin().getPointAt(0);
+		FGEPoint p1 = getPolylin().getFirstPoint();
 		if (p1 == null) {
 			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return false;
@@ -107,24 +110,15 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 			return false;
 		}
 
-		// System.out.println("draggingAuthorizedArea="+draggingAuthorizedArea);
-		// System.out.println("pt="+pt);
-
 		p1 = startArea.nearestPointFrom(pt, currentOrientation.getOpposite());
-		p2 = endArea.nearestPointFrom(pt, currentOrientation);
-
-		/*if (currentOrientation.isHorizontal()) {
-			p1.y = pt.y;
+		if (currentOrientation.isHorizontal()) {
 			p2.y = pt.y;
-		}	
-		else if (currentOrientation.isVertical()) {
-			p1.x = pt.x;
+		} else if (currentOrientation.isVertical()) {
 			p2.x = pt.x;
-		}	
-		else {
+		} else {
 			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return false;
-		}*/
+		}
 
 		getPolylin().updatePointAt(0, p1);
 		getConnector()._getControlPoints().elementAt(0).setPoint(p1);
@@ -135,8 +129,16 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 		getConnector()._connectorChanged(true);
 		getGraphicalRepresentation().notifyConnectorChanged();
 
-		// logger.info("drag cpts="+getConnector().getControlAreas());
 		return true;
+
 	}
 
+	/*@Override
+	public void stopDragging(DrawingController controller)
+	{
+		if (afterNextSegment != null && afterNextSegment.overlap(currentSegment)) {
+			getConnector()._simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(1);
+		}
+		super.stopDragging(controller);
+	}*/
 }

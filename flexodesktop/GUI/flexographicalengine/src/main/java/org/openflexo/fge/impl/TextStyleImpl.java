@@ -17,12 +17,15 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextStyle.Parameters;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class TextStyleImpl extends FGEStyleImpl implements TextStyle {

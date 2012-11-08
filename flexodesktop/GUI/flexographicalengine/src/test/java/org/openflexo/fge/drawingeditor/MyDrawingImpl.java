@@ -21,14 +21,17 @@ package org.openflexo.fge.drawingeditor;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.jdom2.JDOMException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDrawingGraphicalRepresentation> implements MyDrawing {
@@ -60,7 +63,7 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 	public MyDrawingImpl(DrawingBuilder builder) {
 		this();
 		builder.drawing = this;
-		initializeDeserialization();
+		// initializeDeserialization();
 	}
 
 	@Override
@@ -98,30 +101,43 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 	public boolean save() {
 		System.out.println("Saving " + file);
 
-		XMLCoder coder = new XMLCoder(mapping);
+		try {
+			getFactory().getSerializer().serializeDocument(this, new FileOutputStream(file));
+			System.out.println("Saved " + file.getAbsolutePath());
+			System.out.println(factory.getSerializer().serializeAsString(this));
+			return true;
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		return false;
+
+		/*XMLCoder coder = new XMLCoder(mapping);
 
 		try {
 			coder.encodeObject(this, new FileOutputStream(file));
 			clearChanged();
 			logger.info("Succeeded to save: " + file);
 			System.out.println("> " + new XMLCoder(mapping).encodeObject(this));
+			System.out.println("Et j'ai ca aussi: " + getFactory().getSerializer().serializeAsString(this));
 			return true;
 		} catch (Exception e) {
 			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return false;
+				return false;
+		 */
+
 	}
 
 	@Override
 	public void finalizeDeserialization() {
-		// TODO Auto-generated method stub
-		super.finalizeDeserialization();
+		// super.finalizeDeserialization();
 
 		/*for (MyDrawingElement e : childs) {
 			getDrawing().getEditedDrawing().addDrawable(e, this);
 		}*/
 		_finalizeDeserializationFor(this);
+		_finalizeDeserializationFor2(this);
 
 		editedDrawing.getDrawingGraphicalRepresentation().startConnectorObserving();
 
@@ -129,16 +145,53 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 
 	private void _finalizeDeserializationFor(MyDrawingElement<?, ?> element) {
 		// element.getGraphicalRepresentation().resetToDefaultIdentifier();
+
+		element.setDrawing(this);
+		element.getGraphicalRepresentation().setDrawing(getEditedDrawing());
+
+		for (MyDrawingElement<?, ?> e : element.getChilds()) {
+			_finalizeDeserializationFor(e);
+		}
+	}
+
+	private void _finalizeDeserializationFor2(MyDrawingElement<?, ?> element) {
+		// element.getGraphicalRepresentation().resetToDefaultIdentifier();
+
+		System.out.println(">>>>>>> " + element);
+		System.out.println("Drawing=" + element.getDrawing());
+		System.out.println("GR= " + element.getGraphicalRepresentation());
+		System.out.println("drawable= " + element.getGraphicalRepresentation().getDrawable());
+		System.out.println("gr_drawing=" + element.getGraphicalRepresentation().getDrawing());
+
 		for (MyDrawingElement<?, ?> e : element.getChilds()) {
 			getDrawing().getEditedDrawing().addDrawable(e, element);
-			_finalizeDeserializationFor(e);
+			_finalizeDeserializationFor2(e);
 		}
 	}
 
 	public static MyDrawing load(File file, DrawingEditorFactory factory) {
 		logger.info("Loading " + file);
 
-		XMLDecoder decoder = new XMLDecoder(mapping, new DrawingBuilder());
+		try {
+			MyDrawing returned = (MyDrawing) factory.getDeserializer().deserializeDocument(new FileInputStream(file));
+			System.out.println("Loaded " + factory.getSerializer().serializeAsString(returned));
+			returned.finalizeDeserialization();
+			returned.setFactory(factory);
+			return returned;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (InvalidXMLDataException e) {
+			e.printStackTrace();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+		/*XMLDecoder decoder = new XMLDecoder(mapping, new DrawingBuilder());
 
 		try {
 			MyDrawingImpl drawing = (MyDrawingImpl) decoder.decodeObject(new FileInputStream(file));
@@ -150,7 +203,7 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 			logger.warning("Failed to load: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 			return null;
-		}
+		}*/
 	}
 
 	@Override

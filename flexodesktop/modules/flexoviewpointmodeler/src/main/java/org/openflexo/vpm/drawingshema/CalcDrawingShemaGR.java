@@ -21,8 +21,8 @@ package org.openflexo.vpm.drawingshema;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;

@@ -24,7 +24,6 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
@@ -35,6 +34,8 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;

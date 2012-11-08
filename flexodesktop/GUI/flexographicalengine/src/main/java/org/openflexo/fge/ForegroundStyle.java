@@ -25,6 +25,7 @@ import java.awt.Stroke;
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.inspector.HasIcon;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;

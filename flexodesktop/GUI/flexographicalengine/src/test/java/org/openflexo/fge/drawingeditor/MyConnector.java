@@ -21,9 +21,11 @@ package org.openflexo.fge.drawingeditor;
 
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(MyConnectorImpl.class)
+@XMLElement(xmlTag = "MyConnector")
 public interface MyConnector extends MyDrawingElement<MyConnector, MyConnectorGraphicalRepresentation> {
 
 	public abstract MyShape getStartShape();

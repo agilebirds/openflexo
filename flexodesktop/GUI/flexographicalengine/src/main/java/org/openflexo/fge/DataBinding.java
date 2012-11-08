@@ -200,7 +200,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 		this.owner = owner;
 	}
 
-	protected void finalizeDeserialization() {
+	public void finalizeDeserialization() {
 		if (getUnparsedBinding() == null) {
 			return;
 		}
@@ -228,7 +228,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 		updateDependancies();
 	}
 
-	protected void updateDependancies() {
+	public void updateDependancies() {
 		if (binding == null) {
 			return;
 		}

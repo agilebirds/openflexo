@@ -21,10 +21,10 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;

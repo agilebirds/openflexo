@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -31,6 +31,16 @@ import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing;
+import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentation.ConnectorParameters;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
@@ -341,7 +351,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	@Override
 	public void setConnectorType(ConnectorType connectorType) {
 		if (getConnectorType() != connectorType) {
-			setConnector(Connector.makeConnector(connectorType, this));
+			setConnector(getFactory().makeConnector(connectorType, this));
 		}
 	}
 

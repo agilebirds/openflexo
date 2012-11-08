@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.impl.BackgroundStyleImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;

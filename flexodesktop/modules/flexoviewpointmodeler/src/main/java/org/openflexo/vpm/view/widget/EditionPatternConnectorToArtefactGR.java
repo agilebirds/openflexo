@@ -22,9 +22,9 @@ package org.openflexo.vpm.view.widget;
 import java.awt.Color;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.BackgroundStyleImpl;
-import org.openflexo.fge.ForegroundStyleImpl;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
+import org.openflexo.fge.impl.BackgroundStyleImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;

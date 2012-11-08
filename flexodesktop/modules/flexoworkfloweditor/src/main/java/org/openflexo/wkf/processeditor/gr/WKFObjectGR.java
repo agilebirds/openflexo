@@ -21,9 +21,9 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ShadowStyleImpl;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.impl.ShadowStyleImpl;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.FlexoWorkflow;

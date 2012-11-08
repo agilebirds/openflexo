@@ -23,14 +23,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.text.SimpleDateFormat;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
+import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.rm.view.RMViewerRepresentation.ResourceDependancy;
 
 public class ResourceDependancyGR extends ConnectorGraphicalRepresentationImpl<ResourceDependancy> {

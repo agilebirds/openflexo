@@ -21,10 +21,10 @@ package org.openflexo.ve.shema;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;

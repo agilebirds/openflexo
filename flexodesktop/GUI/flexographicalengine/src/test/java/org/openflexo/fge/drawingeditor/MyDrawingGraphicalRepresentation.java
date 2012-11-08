@@ -22,9 +22,11 @@ package org.openflexo.fge.drawingeditor;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(MyDrawingGraphicalRepresentationImpl.class)
+@XMLElement(xmlTag = "MyDrawingGraphicalRepresentation")
 public interface MyDrawingGraphicalRepresentation extends DrawingGraphicalRepresentation<MyDrawing> {
 
 }

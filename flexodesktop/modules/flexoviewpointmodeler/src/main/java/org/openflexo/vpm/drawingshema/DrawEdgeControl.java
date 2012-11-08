@@ -34,12 +34,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.foundation.viewpoint.AddConnector;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;

@@ -1,5 +1,6 @@
 package org.openflexo.fge;
 
+import org.openflexo.fge.impl.FGEStyleImpl;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 

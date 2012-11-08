@@ -22,7 +22,7 @@ package org.openflexo.vpm.drawingshema;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;

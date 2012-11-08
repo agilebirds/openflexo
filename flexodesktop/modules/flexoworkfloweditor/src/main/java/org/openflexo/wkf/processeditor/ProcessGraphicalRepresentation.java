@@ -22,9 +22,7 @@ package org.openflexo.wkf.processeditor;
 import java.awt.Color;
 
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
@@ -36,6 +34,8 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEFiniteGrid;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
+import org.openflexo.fge.impl.DrawingGraphicalRepresentationImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.gr.WKFConnectorGR;

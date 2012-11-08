@@ -17,13 +17,14 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.connectors.rpc;
+package org.openflexo.fge.connectors.impl;
 
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -50,7 +51,7 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		segmentsNb = getPolylin().getSegmentNb();
 		previousSegment = getPolylin().getSegmentAt(segmentsNb - 2);
 		if (currentSegment.getApproximatedOrientation() == null || previousSegment.getApproximatedOrientation() == null) {
-			RectPolylinConnector.logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return;
 		}
 		if (getPolylin().getSegmentNb() > 2) {

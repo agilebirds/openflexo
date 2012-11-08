@@ -81,7 +81,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 		if (!editionHasBeenStarted()) {
 			startMouseEdition(e);
 		} else {
-			// System.out.println("Edition started");
+			logger.info("Edition started");
 			if (isBuildingPoints) {
 				FGEPoint newPoint = getPoint(e);
 				if (e.getClickCount() == 2 || e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {

@@ -25,9 +25,7 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.cp.ControlArea;
@@ -36,6 +34,8 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.graphics.FGEGraphics;
+import org.openflexo.fge.impl.BackgroundStyleImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 

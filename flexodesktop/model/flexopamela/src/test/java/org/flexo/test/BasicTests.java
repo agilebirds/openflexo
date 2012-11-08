@@ -83,6 +83,7 @@ public class BasicTests extends TestCase {
 		ModelEntity<StartNode> startNodeEntity = factory.getModelEntity(StartNode.class);
 		ModelEntity<TokenEdge> tokenEdgeEntity = factory.getModelEntity(TokenEdge.class);
 		ModelEntity<WKFObject> wkfObjectEntity = factory.getModelEntity(WKFObject.class);
+		ModelEntity<Edge> edgeEntity = factory.getModelEntity(Edge.class);
 
 		assertNotNull(processEntity);
 		assertNotNull(abstractNodeEntity);
@@ -100,6 +101,11 @@ public class BasicTests extends TestCase {
 		assertNotNull(wkfObjectEntity.getModelProperty(WKFObject.PROCESS));
 		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
 		assertNotNull(abstractNodeEntity.getModelProperty(WKFObject.PROCESS));
+
+		assertTrue(modelObjectEntity.getAllDescendants().contains(processEntity));
+		assertTrue(modelObjectEntity.getAllDescendants().contains(tokenEdgeEntity));
+		assertTrue(edgeEntity.getAllDescendants().contains(tokenEdgeEntity));
+		assertFalse(tokenEdgeEntity.getAllDescendants().contains(edgeEntity));
 	}
 
 	public void test2() throws Exception {

@@ -17,14 +17,15 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.connectors.rpc;
+package org.openflexo.fge.connectors.impl;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
+import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnector.RectPolylinAdjustability;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -94,8 +95,8 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 	 * @param index
 	 */
 	private boolean movedIntermediateCP(int index, FGEPoint oldCPLocation, boolean simplifyLayout) {
-		if (RectPolylinConnector.logger.isLoggable(Level.FINE)) {
-			RectPolylinConnector.logger.fine("Moved intermediate point at index: " + index);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Moved intermediate point at index: " + index);
 		}
 
 		// First, obtain location of Control Point being moved
@@ -128,7 +129,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 		} else if (previousSegmentOrientation.isVertical()) {
 			previousCPNewLocation.x = newCPLocation.x;
 		} else {
-			RectPolylinConnector.logger.warning("Inconsistent data: segment not horizontal nor vertical");
+			logger.warning("Inconsistent data: segment not horizontal nor vertical");
 		}
 
 		// If we don't modify general layout of connector,
@@ -200,7 +201,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 		} else if (nextSegmentOrientation.isVertical()) {
 			nextCPNewLocation.x = newCPLocation.x;
 		} else {
-			RectPolylinConnector.logger.warning("Inconsistent data: segment not horizontal nor vertical");
+			logger.warning("Inconsistent data: segment not horizontal nor vertical");
 		}
 
 		// If we don't modify general layout of connector,

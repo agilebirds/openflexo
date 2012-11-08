@@ -29,9 +29,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingPalette.PaletteDrawing;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.PaletteElementView;
 import org.openflexo.fge.view.ShapeView;

@@ -24,9 +24,11 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.MyConnectorGraphicalRepresentationImpl.MyConnectorView;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(MyConnectorGraphicalRepresentationImpl.class)
+@XMLElement(xmlTag = "MyConnectorGraphicalRepresentation")
 public interface MyConnectorGraphicalRepresentation extends ConnectorGraphicalRepresentation<MyConnector> {
 
 	@Override

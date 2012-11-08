@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -36,6 +36,18 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.BackgroundStyle.Color;
+import org.openflexo.fge.BackgroundStyle.ColorGradient;
+import org.openflexo.fge.BackgroundStyle.None;
+import org.openflexo.fge.BackgroundStyle.Parameters;
+import org.openflexo.fge.BackgroundStyle.Texture;
+import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
+import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
 import org.openflexo.fge.notifications.FGENotification;
 
 import sun.awt.image.ImageRepresentation;

@@ -270,9 +270,13 @@ public class GraphicalRepresentationUtils {
 	// Little hack to be removed: linked to parent localizer (which is Openflexo main localizer)
 	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FGELocalized"),
 			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null, false), true);
-	static BindingFactory BINDING_FACTORY = new GRBindingFactory();
-	static final List<Object> EMPTY_VECTOR = Collections.emptyList();
-	static final List<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = Collections.emptyList();
+
+	public static BindingFactory BINDING_FACTORY = new GRBindingFactory();
+
+	public static final List<Object> EMPTY_VECTOR = Collections.emptyList();
+
+	public static final List<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = Collections.emptyList();
+
 	public static final StringEncoder.Converter<FGEPoint> POINT_CONVERTER = new StringEncoder.Converter<FGEPoint>(FGEPoint.class) {
 		@Override
 		public FGEPoint convertFromString(String value) {

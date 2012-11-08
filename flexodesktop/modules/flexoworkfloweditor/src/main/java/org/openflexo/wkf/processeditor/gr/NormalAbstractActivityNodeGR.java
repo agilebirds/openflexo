@@ -23,12 +23,12 @@ import java.awt.Color;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.BackgroundStyleImpl;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.TextStyleImpl;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
+import org.openflexo.fge.impl.BackgroundStyleImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
+import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;

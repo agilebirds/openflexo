@@ -42,6 +42,7 @@ import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.impl.GraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
@@ -151,10 +152,10 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	}
 
 	public static class ConstraintDependency {
-		GraphicalRepresentation<?> requiringGR;
-		GRParameter requiringParameter;
-		GraphicalRepresentation<?> requiredGR;
-		GRParameter requiredParameter;
+		public GraphicalRepresentation<?> requiringGR;
+		public GRParameter requiringParameter;
+		public GraphicalRepresentation<?> requiredGR;
+		public GRParameter requiredParameter;
 
 		public ConstraintDependency(GraphicalRepresentation<?> requiringGR, GRParameter requiringParameter,
 				GraphicalRepresentation<?> requiredGR, GRParameter requiredParameter) {

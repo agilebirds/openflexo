@@ -22,9 +22,9 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.foundation.wkf.WKFGroup;
 import org.openflexo.foundation.wkf.edge.TokenEdge;
 import org.openflexo.foundation.wkf.node.FlexoNode;

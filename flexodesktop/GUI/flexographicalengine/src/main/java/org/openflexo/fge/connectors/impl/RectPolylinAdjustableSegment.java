@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.connectors.rpc;
+package org.openflexo.fge.connectors.impl;
 
 import java.awt.Cursor;
 import java.awt.Rectangle;
@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;

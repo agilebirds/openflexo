@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -30,7 +30,14 @@ import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.GeometricGraphicalRepresentation.GeometricParameters;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;

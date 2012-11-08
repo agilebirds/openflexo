@@ -23,7 +23,7 @@ import java.awt.Color;
 import java.util.logging.Level;
 
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.ForegroundStyleImpl;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.ActivityGroup;

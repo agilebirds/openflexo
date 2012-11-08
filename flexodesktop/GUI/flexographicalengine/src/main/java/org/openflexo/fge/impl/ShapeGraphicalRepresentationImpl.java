@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -35,7 +35,27 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.DataBinding;
+import org.openflexo.fge.Drawing;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.GraphicalRepresentation.ConstraintDependency;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
+import org.openflexo.fge.GraphicalRepresentation.VerticalTextAlignment;
+import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
+import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
+import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -1657,8 +1677,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public ForegroundStyle getSelectedForeground() {
-		if (selectedForeground == null) {
-			selectedForeground = foreground.clone();
+		if (selectedForeground == null && getForeground() != null) {
+			selectedForeground = getForeground().clone();
 		}
 		return selectedForeground;
 	}
@@ -1690,8 +1710,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public ForegroundStyle getFocusedForeground() {
-		if (focusedForeground == null) {
-			focusedForeground = foreground.clone();
+		if (focusedForeground == null && getForeground() != null) {
+			focusedForeground = getForeground().clone();
 		}
 		return focusedForeground;
 	}
@@ -1767,8 +1787,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public BackgroundStyle getSelectedBackground() {
-		if (selectedBackground == null) {
-			selectedBackground = background.clone();
+		if (selectedBackground == null && getBackground() != null) {
+			selectedBackground = getBackground().clone();
 		}
 		return selectedBackground;
 	}
@@ -1802,8 +1822,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public BackgroundStyle getFocusedBackground() {
-		if (focusedBackground == null) {
-			focusedBackground = background.clone();
+		if (focusedBackground == null && getBackground() != null) {
+			focusedBackground = getBackground().clone();
 		}
 		return focusedBackground;
 	}

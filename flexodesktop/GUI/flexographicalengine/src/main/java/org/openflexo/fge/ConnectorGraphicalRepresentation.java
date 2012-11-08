@@ -31,6 +31,7 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -110,7 +111,8 @@ public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresenta
 	@Setter(value = END_OBJECT)
 	public void setEndObject(ShapeGraphicalRepresentation<?> anEndObject);
 
-	@Getter(value = CONNECTOR, ignoreType = true)
+	@Getter(value = CONNECTOR)
+	@XMLElement
 	public Connector getConnector();
 
 	@Setter(value = CONNECTOR)

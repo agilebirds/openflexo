@@ -17,8 +17,11 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
+import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.ShadowStyle.Parameters;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {

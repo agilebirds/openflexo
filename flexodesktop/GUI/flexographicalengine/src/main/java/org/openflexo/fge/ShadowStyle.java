@@ -20,6 +20,7 @@
 package org.openflexo.fge;
 
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.impl.ShadowStyleImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;

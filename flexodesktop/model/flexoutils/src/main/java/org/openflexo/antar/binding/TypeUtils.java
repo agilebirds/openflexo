@@ -571,7 +571,7 @@ public class TypeUtils {
 		if (type instanceof TypeVariable) {
 			TypeVariable<GenericDeclaration> tv = (TypeVariable<GenericDeclaration>) type;
 			GenericDeclaration gd = tv.getGenericDeclaration();
-			// System.out.println("Found type variable "+tv+" name="+tv.getName()+" GD="+tv.getGenericDeclaration());
+			// System.out.println("Found type variable " + tv + " name=" + tv.getName() + " GD=" + tv.getGenericDeclaration());
 			if (gd instanceof Class) {
 				if (context instanceof ParameterizedType) {
 					for (int i = 0; i < gd.getTypeParameters().length; i++) {
@@ -590,7 +590,25 @@ public class TypeUtils {
 							}
 						}
 					}
-				} else if ((context instanceof Class) && (((Class) context).getGenericSuperclass() != null)) {
+				} else if (context instanceof Class) {
+					Class<?> contextClass = (Class<?>) context;
+					if (contextClass.getGenericSuperclass() != null) {
+						return makeInstantiatedType(type, contextClass.getGenericSuperclass());
+					}
+					if (contextClass.getGenericInterfaces().length > 0) {
+						for (Type superInterface : contextClass.getGenericInterfaces()) {
+							Type t2 = makeInstantiatedType(type, superInterface);
+							// System.out.println("With interface " + superInterface + " t2=" + t2);
+							if (t2 != type) {
+								// This has been resolved
+								return t2;
+							}
+						}
+					}
+					return type;
+				}
+
+				else if ((context instanceof Class) && (((Class) context).getGenericSuperclass() != null)) {
 					return makeInstantiatedType(type, ((Class) context).getGenericSuperclass());
 				}
 			} else if (gd instanceof Method) {

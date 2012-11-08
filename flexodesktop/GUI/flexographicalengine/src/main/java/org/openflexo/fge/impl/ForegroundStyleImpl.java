@@ -17,13 +17,19 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.ForegroundStyle.CapStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.JoinStyle;
+import org.openflexo.fge.ForegroundStyle.Parameters;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.localization.FlexoLocalization;
 

@@ -86,7 +86,7 @@ public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G e
 		graphicalRepresentation.addObserver(this);
 	}
 
-	private boolean isDeserializing = false;
+	/*private boolean isDeserializing = false;
 
 	@Override
 	public void initializeDeserialization() {
@@ -96,15 +96,12 @@ public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G e
 	@Override
 	public void finalizeDeserialization() {
 		isDeserializing = false;
-		/*for (MyDrawingElement e : childs) {
-			getDrawing().getEditedDrawing().addDrawable(e, this);
-		}*/
 	}
 
 	@Override
 	public boolean isDeserializing() {
 		return isDeserializing;
-	}
+	}*/
 
 	@Override
 	public MyDrawingElementImpl<M, G> clone() {
@@ -120,7 +117,9 @@ public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G e
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o == getGraphicalRepresentation()) {
-			getDrawing().setChanged();
+			if (getDrawing() != null) {
+				getDrawing().setChanged();
+			}
 		}
 	}
 

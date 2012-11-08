@@ -19,8 +19,8 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-import org.openflexo.fge.DrawingGraphicalRepresentationImpl;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
+import org.openflexo.fge.impl.DrawingGraphicalRepresentationImpl;
 
 public class MyDrawingGraphicalRepresentationImpl extends DrawingGraphicalRepresentationImpl<MyDrawing> implements
 		MyDrawingGraphicalRepresentation {

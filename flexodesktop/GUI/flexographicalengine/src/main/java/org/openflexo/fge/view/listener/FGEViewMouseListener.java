@@ -62,6 +62,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+
 		if (view.isDeleted()) {
 			return;
 		}

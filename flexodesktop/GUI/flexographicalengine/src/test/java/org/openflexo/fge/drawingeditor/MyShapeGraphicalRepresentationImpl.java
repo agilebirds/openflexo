@@ -21,9 +21,9 @@ package org.openflexo.fge.drawingeditor;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 
@@ -32,11 +32,13 @@ public class MyShapeGraphicalRepresentationImpl extends ShapeGraphicalRepresenta
 
 	// Called by PAMELA, do not use
 	public MyShapeGraphicalRepresentationImpl() {
+		logger.info(">>>>>>>>>>>>> Hop la zoum la belle shape !!!");
 	}
 
 	// Called during LOAD
 	public MyShapeGraphicalRepresentationImpl(DrawingBuilder builder) {
 		this();
+		logger.info(">>>>>>>>>>>>> Hop la zoum la belle shape avec un builder !!!");
 		setShapeType(ShapeType.RECTANGLE);
 		setDrawing(builder.drawing.getEditedDrawing());
 		// this(ShapeType.RECTANGLE, null, builder.drawing.getEditedDrawing());

@@ -1,5 +1,7 @@
 package org.openflexo.fge.drawingeditor;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
@@ -70,48 +72,37 @@ public class DrawingEditorFactory extends FGEModelFactory {
 	}
 
 	public MyDrawingGraphicalRepresentation makeNewDrawingGR(EditedDrawing aDrawing) {
-		MyDrawingGraphicalRepresentation returned = newInstance(MyDrawingGraphicalRepresentation.class);
+		MyDrawingGraphicalRepresentation returned = newInstance(MyDrawingGraphicalRepresentation.class, true, true);
 		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawing.getModel());
 		returned.setDrawing(aDrawing);
-		applyDefaultProperties(returned);
-		applyBasicControls(returned);
-		returned.addToMouseClickControls(new ShowContextualMenuControl());
 		return returned;
 	}
 
 	public MyShapeGraphicalRepresentation makeNewShapeGR(ShapeType shapeType, MyShape aDrawable, EditedDrawing aDrawing) {
-		MyShapeGraphicalRepresentation returned = newInstance(MyShapeGraphicalRepresentation.class);
+		MyShapeGraphicalRepresentation returned = newInstance(MyShapeGraphicalRepresentation.class, true, true);
 		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
-		applyDefaultProperties(returned);
 		returned.setShapeType(shapeType);
 		returned.setIsFocusable(true);
 		returned.setIsSelectable(true);
 		returned.setIsReadOnly(false);
 		returned.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
-		applyBasicControls(returned);
-		returned.addToMouseClickControls(new ShowContextualMenuControl());
-		returned.addToMouseDragControls(new DrawEdgeControl(this));
 		return returned;
 
 	}
 
 	public MyShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation<?> aGR, MyShape aDrawable, EditedDrawing aDrawing) {
-		MyShapeGraphicalRepresentation returned = newInstance(MyShapeGraphicalRepresentation.class);
+		MyShapeGraphicalRepresentation returned = newInstance(MyShapeGraphicalRepresentation.class, true, true);
 		returned.setFGEModelFactory(this);
 		returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
-		applyDefaultProperties(returned);
 		returned.setsWith(aGR);
 		returned.setIsFocusable(true);
 		returned.setIsSelectable(true);
 		returned.setIsReadOnly(false);
 		returned.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
-		applyBasicControls(returned);
-		returned.addToMouseClickControls(new ShowContextualMenuControl());
-		returned.addToMouseDragControls(new DrawEdgeControl(this));
 		return returned;
 	}
 
@@ -127,6 +118,37 @@ public class DrawingEditorFactory extends FGEModelFactory {
 		applyDefaultProperties(returned);
 		applyBasicControls(returned);
 		return returned;
+	}
+
+	@Override
+	public <I> I newInstance(Class<I> implementedInterface) {
+		if (implementedInterface == MyShapeGraphicalRepresentation.class) {
+			return (I) newInstance(MyShapeGraphicalRepresentation.class, true, true);
+		} else if (implementedInterface == MyConnectorGraphicalRepresentation.class) {
+			return (I) newInstance(MyConnectorGraphicalRepresentation.class, true, true);
+		} else if (implementedInterface == MyDrawingGraphicalRepresentation.class) {
+			return (I) newInstance(MyDrawingGraphicalRepresentation.class, true, true);
+		}
+		return super.newInstance(implementedInterface);
+	}
+
+	@Override
+	public void applyBasicControls(ConnectorGraphicalRepresentation<?> connectorGraphicalRepresentation) {
+		super.applyBasicControls(connectorGraphicalRepresentation);
+	}
+
+	@Override
+	public void applyBasicControls(DrawingGraphicalRepresentation<?> drawingGraphicalRepresentation) {
+		super.applyBasicControls(drawingGraphicalRepresentation);
+		drawingGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl());
+		drawingGraphicalRepresentation.addToMouseDragControls(new DrawEdgeControl(this));
+	}
+
+	@Override
+	public void applyBasicControls(ShapeGraphicalRepresentation<?> shapeGraphicalRepresentation) {
+		super.applyBasicControls(shapeGraphicalRepresentation);
+		shapeGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl());
+		shapeGraphicalRepresentation.addToMouseDragControls(new DrawEdgeControl(this));
 	}
 
 }

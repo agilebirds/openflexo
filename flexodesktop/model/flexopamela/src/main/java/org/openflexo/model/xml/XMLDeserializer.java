@@ -3,7 +3,7 @@ package org.openflexo.model.xml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -17,6 +17,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
@@ -126,18 +127,9 @@ public class XMLDeserializer {
 			}
 		} else {
 			try {
-				returned = modelEntity.newInstance();
+				// returned = modelEntity.newInstance();
+				returned = modelFactory.newInstance(modelEntity.getImplementedInterface());
 			} catch (IllegalArgumentException e) {
-				throw new ModelExecutionException(e);
-			} catch (NoSuchMethodException e) {
-				throw new ModelExecutionException(e);
-			} catch (InstantiationException e) {
-				throw new ModelExecutionException(e);
-			} catch (IllegalAccessException e) {
-				throw new ModelExecutionException(e);
-			} catch (InvocationTargetException e) {
-				throw new ModelExecutionException(e);
-			} catch (ModelDefinitionException e) {
 				throw new ModelExecutionException(e);
 			}
 		}
@@ -171,7 +163,7 @@ public class XMLDeserializer {
 					XMLElement propertyXMLElement = p.getXMLElement();
 					// System.out.println("Handle element "+p);
 					if (p.getAccessedEntity() != null) {
-						Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node, p);
+						Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node, p, modelEntity);
 						switch (p.getCardinality()) {
 						case SINGLE:
 							if (matchingElements.hasNext()) {
@@ -242,19 +234,24 @@ public class XMLDeserializer {
 		}
 	}
 
-	private Iterator<MatchingElement> elementsMatchingHandledXMLTags(Element node, ModelProperty<?> modelProperty)
-			throws ModelDefinitionException {
+	private Iterator<MatchingElement> elementsMatchingHandledXMLTags(Element node, ModelProperty<?> modelProperty,
+			ModelEntity<?> modelEntity) throws ModelDefinitionException {
+
+		// First we resolve the type of property in entity context
+		Type resolvedType = TypeUtils.makeInstantiatedType(modelProperty.getGenericType(), modelEntity.getImplementedInterface());
+
 		ArrayList<MatchingElement> returned = new ArrayList<MatchingElement>();
 		String contextString = modelProperty.getXMLElement() != null ? modelProperty.getXMLElement().context() : "";
 		if (modelProperty.getAccessedEntity() != null) {
 			for (ModelEntity<?> entity : modelProperty.getAccessedEntity().getAllDescendantsAndMe()) {
-				if (entity.getXMLElement() != null || getStringEncoder().isConvertable(entity.getImplementedInterface())) { // Only consider
-					// "XML-concrete"
-					// entities and string
-					// convertable entities
-					List<Element> elements = node.getContent(new ElementFilter(contextString + entity.getXMLTag()));
-					for (Element element : elements) {
-						returned.add(new MatchingElement(element, entity));
+				if (entity.getXMLElement() != null || getStringEncoder().isConvertable(entity.getImplementedInterface())) {
+					// Only consider "XML-concrete" entities and string convertable entities
+					if (TypeUtils.isTypeAssignableFrom(resolvedType, entity.getImplementedInterface())) {
+						// Only consider entities compatibles with resolved type
+						List<Element> elements = node.getContent(new ElementFilter(contextString + entity.getXMLTag()));
+						for (Element element : elements) {
+							returned.add(new MatchingElement(element, entity));
+						}
 					}
 				}
 			}

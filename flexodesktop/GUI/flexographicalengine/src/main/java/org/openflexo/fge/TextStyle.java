@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;

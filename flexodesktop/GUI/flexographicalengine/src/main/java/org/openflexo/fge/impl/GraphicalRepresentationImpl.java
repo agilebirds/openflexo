@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -40,9 +40,27 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.DataBinding;
+import org.openflexo.fge.Drawing;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.GRBindingFactory;
+import org.openflexo.fge.GRVariable;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.GRBindingFactory.ComponentPathElement;
 import org.openflexo.fge.GRBindingFactory.ComponentsBindingVariable;
 import org.openflexo.fge.GRVariable.GRVariableType;
+import org.openflexo.fge.GraphicalRepresentation.ConstraintDependency;
+import org.openflexo.fge.GraphicalRepresentation.DependencyLoopException;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
+import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
+import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
+import org.openflexo.fge.GraphicalRepresentation.Parameters;
+import org.openflexo.fge.GraphicalRepresentation.VerticalTextAlignment;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseControl.MouseButton;

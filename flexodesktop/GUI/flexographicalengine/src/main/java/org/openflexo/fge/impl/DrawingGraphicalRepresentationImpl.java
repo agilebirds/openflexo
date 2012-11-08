@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge;
+package org.openflexo.fge.impl;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -31,6 +31,18 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.DrawingNeedsToBeRedrawn;
+import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentation.DrawingParameters;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -78,6 +90,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 
 	protected FGEDrawingGraphics graphics;
 	private FGEDrawingDecorationGraphics decorationGraphics;
+
 	private BackgroundStyle bgStyle;
 
 	// *******************************************************************************
@@ -206,7 +219,9 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		FGENotification notification = requireChange(DrawingParameters.backgroundColor, backgroundColor);
 		if (notification != null) {
 			this.backgroundColor = backgroundColor;
-			bgStyle = getFactory().makeColoredBackground(backgroundColor);
+			if (getFactory() != null) {
+				bgStyle = getFactory().makeColoredBackground(backgroundColor);
+			}
 			hasChanged(notification);
 		}
 	}
