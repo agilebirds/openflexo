@@ -170,7 +170,6 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 					}
 					nullDimension.width += i.left + i.right + ri.left + ri.right;
 					nullDimension.height += i.top + i.bottom + ri.top + ri.right;
-					System.err.println(nullDimension + " " + preferredSize);
 					preferredSize.width = Math.max(preferredSize.width, nullDimension.width);
 					preferredSize.height = Math.max(preferredSize.height, nullDimension.height);
 				}
