@@ -219,7 +219,7 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	public void setActionType(ActionType type) {
 		ActionType old = _actionType;
 		_actionType = type;
-		if (_actionType == ActionType.DISPLAY_ACTION) {
+		if (isDisplayAction()) {
 			Vector<FlexoPostCondition> posts = (Vector<FlexoPostCondition>) getOutgoingPostConditions().clone();
 			Enumeration<FlexoPostCondition> en = posts.elements();
 			while (en.hasMoreElements()) {
@@ -231,12 +231,8 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		notifyObservers(new WKFAttributeDataModification("actionType", old, _actionType));
 	}
 
-	public FlexoProcess getSubProcess() {
-		return _subProcess;
-	}
-
-	public void setSubProcess(FlexoProcess subProcess) {
-		this._subProcess = subProcess;
+	public boolean isDisplayAction() {
+		return _actionType == ActionType.DISPLAY_ACTION;
 	}
 
 	public ImageIcon getImageIcon() {
