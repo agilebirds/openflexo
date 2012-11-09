@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -80,10 +81,43 @@ public class ImageUtils {
 		return null;
 	}
 
+	public static ImageIcon getThumbnail(ImageIcon src, int maxWidth, int maxHeight) {
+		if (src != null) {
+			double ratio = (double) maxWidth / maxHeight;
+			double imageRatio = (double) src.getIconWidth() / src.getIconHeight();
+			if (ratio < imageRatio) {
+				return new ImageIcon(src.getImage().getScaledInstance(maxWidth, -1, Image.SCALE_SMOOTH));
+			} else {
+				return new ImageIcon(src.getImage().getScaledInstance(-1, maxHeight, Image.SCALE_SMOOTH));
+			}
+
+		}
+		return null;
+	}
+
 	public static ImageIcon resize(ImageIcon src, Dimension size) {
 		if (src != null) {
 			return new ImageIcon(src.getImage().getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH));
 		}
 		return null;
+	}
+
+	public static BufferedImage scaleImage(BufferedImage img, int width, int height) {
+		int imgWidth = img.getWidth();
+		int imgHeight = img.getHeight();
+		if (imgWidth * height < imgHeight * width) {
+			width = imgWidth * height / imgHeight;
+		} else {
+			height = imgHeight * width / imgWidth;
+		}
+		BufferedImage newImage = new BufferedImage(width, height, img.getType());
+		Graphics2D g = newImage.createGraphics();
+		try {
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			g.drawImage(img, 0, 0, width, height, null);
+		} finally {
+			g.dispose();
+		}
+		return newImage;
 	}
 }
