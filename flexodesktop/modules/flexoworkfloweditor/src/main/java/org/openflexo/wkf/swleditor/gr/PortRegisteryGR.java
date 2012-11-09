@@ -37,12 +37,12 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.CapStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
@@ -405,7 +405,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 			public Rectangle paint(FGEGraphics drawingGraphics) {
 				Graphics2D oldGraphics = drawingGraphics.cloneGraphics();
 				drawingGraphics.setDefaultForeground(ForegroundStyleImpl.makeStyle(Color.LIGHT_GRAY, 0.4f, DashStyle.BIG_DASHES));
-				AffineTransform at = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(PortRegisteryGR.this,
+				AffineTransform at = FGEUtils.convertNormalizedCoordinatesAT(PortRegisteryGR.this,
 						drawingGraphics.getGraphicalRepresentation());
 				getArea().transform(at).paint(drawingGraphics);
 				drawingGraphics.releaseClonedGraphics(oldGraphics);

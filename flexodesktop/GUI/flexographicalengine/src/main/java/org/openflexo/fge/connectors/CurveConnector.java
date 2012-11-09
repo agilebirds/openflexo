@@ -30,7 +30,7 @@ import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(CurveConnectorImpl.class)
-@XMLElement(xmlTag = "CurveConnector")
+@XMLElement(xmlTag = "ArcConnector")
 public interface CurveConnector extends Connector {
 
 	// Property keys

@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -44,7 +44,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		AffineTransform at2 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getEndObject(),
+		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getEndObject(),
 				getGraphicalRepresentation());
 		FGEArea endArea = getGraphicalRepresentation().getEndObject().getShape().getShape().transform(at2);
 		return new FGESubstractionArea(new FGEPlane(), endArea, false);
@@ -104,7 +104,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 			getConnector().getEndControlPoint().setPoint(newEndPoint);
 			if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
 				getConnector().setFixedEndLocation(
-						GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newEndPoint,
+						FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newEndPoint,
 								getGraphicalRepresentation().getEndObject()));
 			}
 
@@ -232,7 +232,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 				getConnector().getEndControlPoint().setPoint(newEndPosition);
 				if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
 					getConnector().setFixedEndLocation(
-							GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newEndPosition,
+							FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newEndPosition,
 									getGraphicalRepresentation().getEndObject()));
 				}
 

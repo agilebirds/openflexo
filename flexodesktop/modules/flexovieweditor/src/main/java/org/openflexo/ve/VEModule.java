@@ -27,7 +27,7 @@ import javax.swing.JComponent;
 
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
@@ -67,8 +67,8 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 		// Put here a code to display default view
 		// getOEController().setCurrentEditedObjectAsModuleView(projectEditor.getProject());
 
-		projectEditor.getProject().getStringEncoder()._addConverter(GraphicalRepresentationUtils.POINT_CONVERTER);
-		projectEditor.getProject().getStringEncoder()._addConverter(GraphicalRepresentationUtils.RECT_POLYLIN_CONVERTER);
+		projectEditor.getProject().getStringEncoder()._addConverter(FGEUtils.POINT_CONVERTER);
+		projectEditor.getProject().getStringEncoder()._addConverter(FGEUtils.RECT_POLYLIN_CONVERTER);
 
 		// Retain here all necessary resources
 		// retain(<the_required_resource_data>);

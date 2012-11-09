@@ -42,7 +42,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 	static {
 		// Hack to have a grab on the Type Class<? extends GraphicalRepresentation<?>
 		try {
-			DECLARING_CLASS = (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentationUtils.class.getName());
+			DECLARING_CLASS = (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentation.class.getName());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			DECLARING_CLASS = null;
@@ -169,7 +169,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		private Vector<ComponentPathElement> components;
 
 		public ComponentsBindingVariable(GraphicalRepresentation<?> owner) {
-			super(owner, "components", new ParameterizedTypeImpl(Vector.class, GraphicalRepresentationUtils.class));
+			super(owner, "components", new ParameterizedTypeImpl(Vector.class, GraphicalRepresentation.class));
 			this.owner = owner;
 			components = new Vector<GRBindingFactory.ComponentPathElement>();
 			Iterator<GraphicalRepresentation<?>> it = owner.getRootGraphicalRepresentation().allContainedGRIterator();

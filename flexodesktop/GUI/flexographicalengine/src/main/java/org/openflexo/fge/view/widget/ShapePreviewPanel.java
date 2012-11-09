@@ -13,6 +13,7 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
@@ -49,13 +50,12 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	public ShapePreviewPanel(Shape aShape) {
 		super(new BorderLayout());
 
-		factory = new FGEModelFactory();
+		factory = FGEUtils.TOOLS_FACTORY;
 
 		representedDrawing = new RepresentedDrawing();
 		representedShape = new RepresentedShape();
 		setPreferredSize(new Dimension(getPanelWidth(), getPanelHeight()));
 
-		factory = new FGEModelFactory();
 		foregroundStyle = factory.makeForegroundStyle(Color.BLACK);
 		backgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
 		shadowStyle = factory.makeNoneShadowStyle();

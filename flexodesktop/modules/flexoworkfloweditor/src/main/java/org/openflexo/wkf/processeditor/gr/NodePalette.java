@@ -38,7 +38,6 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
@@ -300,7 +299,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 				if (dropPoint.y < 0) {
 					dropPoint.y = 0;
 				}
-				Point p = GraphicalRepresentationUtils.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR,
+				Point p = FGEUtils.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR,
 						controller.getScale());
 				FGEPoint dropLocation = new FGEPoint(p.x / controller.getScale(), p.y / controller.getScale());
 				WKFNode to = null;
@@ -403,7 +402,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 			SimplifiedCardinalDirection direction) {
 		FGEPoint locationInDrawing = null;
 		if (controller.getGraphicalRepresentation(container) != null) {
-			locationInDrawing = dropLocation.transform(GraphicalRepresentationUtils.convertCoordinatesAT(
+			locationInDrawing = dropLocation.transform(FGEUtils.convertCoordinatesAT(
 					controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));// gr.getLocationInDrawing();
 		}
 		DropWKFElement drop = element.createAndExecuteDropElementAction(dropLocation, container, null, false);
@@ -461,7 +460,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 		if (/*nodeGR.getIsSelected() ||*/nodeGR.isResizing() || nodeGR.isMoving()) {
 			return null;
 		}
-		AffineTransform at = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(nodeGR,
+		AffineTransform at = FGEUtils.convertNormalizedCoordinatesAT(nodeGR,
 				drawingGraphics.getGraphicalRepresentation());
 
 		Graphics2D oldGraphics = drawingGraphics.cloneGraphics();

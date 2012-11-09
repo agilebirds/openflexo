@@ -49,8 +49,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.MoveAction.ShapeGraphicalRepresentationTransferable;
 import org.openflexo.fge.controller.MoveAction.TransferedShapeGraphicalRepresentation;
@@ -528,7 +528,7 @@ public class DNDInfo {
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = GraphicalRepresentationUtils.convertPoint(((FGEView<?>) targetComponent).getGraphicalRepresentation(),
+								pt = FGEUtils.convertPoint(((FGEView<?>) targetComponent).getGraphicalRepresentation(),
 										pt, focused, ((FGEView<?>) targetComponent).getScale());
 								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
 								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();

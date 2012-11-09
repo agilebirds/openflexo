@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.CurveConnector;
@@ -341,7 +341,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		if ((getConnector() instanceof RectPolylinConnector) && (getEndObject() instanceof PreConditionGR)) {
 			PreConditionGR preGR = (PreConditionGR) getEndObject();
 			AbstractNodeGR<?> nodeGR = (AbstractNodeGR<?>) preGR.getContainerGraphicalRepresentation();
-			FGEPoint preLocationInNode = GraphicalRepresentationUtils.convertNormalizedPoint(preGR, new FGEPoint(0.5, 0.5), nodeGR);
+			FGEPoint preLocationInNode = FGEUtils.convertNormalizedPoint(preGR, new FGEPoint(0.5, 0.5), nodeGR);
 			SimplifiedCardinalDirection orientation = FGEPoint.getSimplifiedOrientation(new FGEPoint(0.5, 0.5), preLocationInNode);
 			endOrientationFixed = true;
 			newEndOrientation = orientation;
@@ -623,7 +623,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	private void ensurePolylinConverterIsRegistered() {
 		if (!isPolylinConverterRegistered) {
 			if (getEdge().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null) {
-				getEdge().getProject().getStringEncoder()._addConverter(GraphicalRepresentationUtils.RECT_POLYLIN_CONVERTER);
+				getEdge().getProject().getStringEncoder()._addConverter(FGEUtils.RECT_POLYLIN_CONVERTER);
 			}
 			isPolylinConverterRegistered = true;
 		}
@@ -635,7 +635,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	private void ensurePointConverterIsRegistered() {
 		if (!isPointConverterRegistered) {
 			if (getEdge().getProject().getStringEncoder()._converterForClass(FGEPoint.class) == null) {
-				getEdge().getProject().getStringEncoder()._addConverter(GraphicalRepresentationUtils.POINT_CONVERTER);
+				getEdge().getProject().getStringEncoder()._addConverter(FGEUtils.POINT_CONVERTER);
 			}
 			isPointConverterRegistered = true;
 		}

@@ -37,8 +37,8 @@ import javax.swing.RepaintManager;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 
@@ -473,7 +473,7 @@ public class FGEPaintManager {
 		}
 		// Use buffer
 		BufferedImage buffer = getPaintBuffer();
-		Rectangle viewBoundsInDrawingView = GraphicalRepresentationUtils.convertRectangle(gr, renderingBounds,
+		Rectangle viewBoundsInDrawingView = FGEUtils.convertRectangle(gr, renderingBounds,
 				gr.getDrawingGraphicalRepresentation(), scale);
 		Point dp1 = renderingBounds.getLocation();
 		Point dp2 = new Point(renderingBounds.x + renderingBounds.width, renderingBounds.y + renderingBounds.height);

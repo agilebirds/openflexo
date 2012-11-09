@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -58,7 +58,7 @@ public class AdjustableFirstSegment extends RectPolylinAdjustableSegment {
 		currentOrientation = currentSegment.getApproximatedOrientation();
 		nextOrientation = nextSegment.getApproximatedOrientation();
 
-		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getConnector().getStartObject(),
+		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getConnector().getStartObject(),
 				getGraphicalRepresentation());
 		startArea = getConnector().getStartObject().getShape().getOutline().transform(at1);
 		FGEArea orthogonalPerspectiveArea = startArea.getOrthogonalPerspectiveArea(currentOrientation);

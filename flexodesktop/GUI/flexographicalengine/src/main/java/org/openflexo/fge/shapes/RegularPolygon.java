@@ -36,7 +36,7 @@ import org.openflexo.model.annotations.XMLElement;
  */
 @ModelEntity
 @ImplementationClass(RegularPolygonImpl.class)
-@XMLElement(xmlTag = "RegularPolygonShape")
+@XMLElement(xmlTag = "PolygonShape")
 public interface RegularPolygon extends Polygon {
 
 	// Property keys

@@ -33,7 +33,7 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 
 	private FGEPolygon _polygon;
 
-	private int npoints = 5;
+	private int npoints = -1;
 	private int startAngle = 90;
 
 	// *******************************************************************************

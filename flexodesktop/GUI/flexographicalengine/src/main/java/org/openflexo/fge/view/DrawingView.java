@@ -57,6 +57,7 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -112,7 +113,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 
 	private static final Logger logger = Logger.getLogger(DrawingView.class.getPackage().getName());
 
-	private static final FGEModelFactory PAINT_FACTORY = new FGEModelFactory();
+	private static final FGEModelFactory PAINT_FACTORY = FGEUtils.TOOLS_FACTORY;
 
 	private D drawing;
 	private Map<GraphicalRepresentation<?>, FGEView<?>> contents;

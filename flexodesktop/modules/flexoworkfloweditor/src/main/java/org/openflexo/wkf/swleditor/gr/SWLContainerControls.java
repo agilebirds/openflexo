@@ -25,9 +25,9 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
 import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
@@ -108,7 +108,7 @@ public class SWLContainerControls extends ControlArea<FGERectangle> implements S
 
 	@Override
 	public Rectangle paint(FGEGraphics drawingGraphics) {
-		AffineTransform at = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT((GraphicalRepresentation) _containerGR,
+		AffineTransform at = FGEUtils.convertNormalizedCoordinatesAT((GraphicalRepresentation) _containerGR,
 				drawingGraphics.getGraphicalRepresentation());
 
 		Graphics2D oldGraphics = drawingGraphics.cloneGraphics();

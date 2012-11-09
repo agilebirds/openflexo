@@ -27,6 +27,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.geom.FGEEllips;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -41,7 +42,7 @@ import org.openflexo.inspector.HasIcon;
 
 public interface ConnectorSymbol {
 
-	public static final FGEModelFactory CONNECTOR_SYMBOL_FACTORY = new FGEModelFactory();
+	public static final FGEModelFactory CONNECTOR_SYMBOL_FACTORY = FGEUtils.TOOLS_FACTORY;
 
 	public static enum StartSymbolType implements ConnectorSymbol, HasIcon {
 		NONE,

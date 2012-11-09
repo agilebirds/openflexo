@@ -37,7 +37,6 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -740,7 +739,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	public boolean isConnectorConsistent() {
 		// if (true) return true;
 		return getStartObject() != null && getEndObject() != null && !getStartObject().isDeleted() && !getEndObject().isDeleted()
-				&& GraphicalRepresentationUtils.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject());
+				&& FGEUtils.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject());
 	}
 
 	@Override

@@ -20,11 +20,14 @@
 package org.openflexo.fge.cp;
 
 import java.awt.Cursor;
+import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 
 public class ConnectorControlPoint extends ControlPoint {
+
+	static final Logger logger = Logger.getLogger(ConnectorControlPoint.class.getPackage().getName());
 
 	public ConnectorControlPoint(ConnectorGraphicalRepresentation graphicalRepresentation, FGEPoint pt) {
 		super(graphicalRepresentation, pt);

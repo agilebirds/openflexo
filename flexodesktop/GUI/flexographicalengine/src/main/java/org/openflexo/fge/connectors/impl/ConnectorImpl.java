@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.cp.ControlArea;
@@ -274,9 +274,9 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	 */
 	@Override
 	public FGEArea computeCoveringArea(int order) {
-		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getStartObject(), getGraphicalRepresentation());
+		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getStartObject(), getGraphicalRepresentation());
 
-		AffineTransform at2 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getEndObject(), getGraphicalRepresentation());
+		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getEndObject(), getGraphicalRepresentation());
 
 		if (order == 0) {
 			FGEArea startObjectShape = getStartObject().getShape().getShape().transform(at1);

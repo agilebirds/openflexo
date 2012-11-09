@@ -37,9 +37,9 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation.DrawingParameters;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
@@ -553,7 +553,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		for (GraphicalRepresentation<?> gr : container.getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
 				ShapeGraphicalRepresentation<?> child = (ShapeGraphicalRepresentation<?>) gr;
-				if (child.getShape().getShape().containsPoint(GraphicalRepresentationUtils.convertNormalizedPoint(this, p, child))) {
+				if (child.getShape().getShape().containsPoint(FGEUtils.convertNormalizedPoint(this, p, child))) {
 					enclosingShapes.add(child);
 				} else {
 					// Look if we are not contained in a child shape outside current shape

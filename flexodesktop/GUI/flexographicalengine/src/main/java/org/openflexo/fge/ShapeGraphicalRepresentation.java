@@ -409,13 +409,6 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = BORDER)
 	public void setBorder(ShapeBorder border);
 
-	@Getter(value = SHAPE_TYPE)
-	@XMLAttribute
-	public ShapeType getShapeType();
-
-	@Setter(value = SHAPE_TYPE)
-	public void setShapeType(ShapeType shapeType);
-
 	@Getter(value = SHAPE)
 	@XMLElement
 	public Shape getShape();
@@ -521,6 +514,10 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	// *******************************************************************************
 	// * Utils
 	// *******************************************************************************
+
+	public ShapeType getShapeType();
+
+	public void setShapeType(ShapeType shapeType);
 
 	public ShapeGraphicalRepresentation<O> clone();
 

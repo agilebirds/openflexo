@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -37,7 +38,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 
 	private static final Logger logger = Logger.getLogger(FGESubstractionArea.class.getPackage().getName());
 
-	private static final FGEModelFactory FACTORY = new FGEModelFactory();
+	private static final FGEModelFactory FACTORY = FGEUtils.TOOLS_FACTORY;
 	private static final BackgroundStyle BACKGROUND = FACTORY.makeColoredBackground(java.awt.Color.GRAY);
 
 	private FGEArea containerArea;

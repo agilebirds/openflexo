@@ -76,8 +76,8 @@ public class FGEModelFactory extends ModelFactory {
 		super();
 
 		getStringEncoder().addConverter(DataBinding.CONVERTER2);
-		getStringEncoder().addConverter(GraphicalRepresentationUtils.POINT_CONVERTER_2);
-		getStringEncoder().addConverter(GraphicalRepresentationUtils.STEPPED_DIMENSION_CONVERTER);
+		getStringEncoder().addConverter(FGEUtils.POINT_CONVERTER_2);
+		getStringEncoder().addConverter(FGEUtils.STEPPED_DIMENSION_CONVERTER);
 
 		try {
 			importClass(GraphicalRepresentation.class);

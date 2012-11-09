@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -44,7 +44,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		AffineTransform at1 = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getStartObject(),
+		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getStartObject(),
 				getGraphicalRepresentation());
 		FGEArea startArea = getGraphicalRepresentation().getStartObject().getShape().getShape().transform(at1);
 		return new FGESubstractionArea(new FGEPlane(), startArea, false);
@@ -103,7 +103,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 			getConnector().getStartControlPoint().setPoint(newStartPoint);
 			if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 				getConnector().setFixedStartLocation(
-						GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPoint,
+						FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPoint,
 								getGraphicalRepresentation().getStartObject()));
 			}
 
@@ -242,7 +242,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 				getConnector().getStartControlPoint().setPoint(newStartPosition);
 				if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 					getConnector().setFixedStartLocation(
-							GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPosition,
+							FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPosition,
 									getGraphicalRepresentation().getStartObject()));
 				}
 

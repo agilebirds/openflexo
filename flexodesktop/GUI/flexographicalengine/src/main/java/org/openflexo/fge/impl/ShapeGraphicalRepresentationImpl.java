@@ -44,7 +44,6 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
@@ -579,7 +578,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public FGEPoint getLocationInDrawing() {
-		return GraphicalRepresentationUtils.convertNormalizedPoint(this, new FGEPoint(0, 0), getDrawingGraphicalRepresentation());
+		return FGEUtils.convertNormalizedPoint(this, new FGEPoint(0, 0), getDrawingGraphicalRepresentation());
 	}
 
 	/*@Override
@@ -2207,7 +2206,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public Rectangle getBounds(GraphicalRepresentation<?> container, double scale) {
 		Rectangle bounds = getBounds(scale);
-		bounds = GraphicalRepresentationUtils.convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
+		bounds = FGEUtils.convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
 		return bounds;
 	}
 
@@ -2226,7 +2225,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		if (container == null) {
 			logger.warning("Container is null for " + this + " validated=" + isValidated());
 		}
-		bounds = GraphicalRepresentationUtils.convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
+		bounds = FGEUtils.convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
 		return bounds;
 	}
 

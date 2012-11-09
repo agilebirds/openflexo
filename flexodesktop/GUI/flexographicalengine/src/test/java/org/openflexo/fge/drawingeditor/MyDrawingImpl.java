@@ -155,6 +155,14 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 	}
 
 	private void _finalizeDeserializationFor2(MyDrawingElement<?, ?> element) {
+
+		/*if (element instanceof MyConnector) {
+			Connector c = ((MyConnector) element).getGraphicalRepresentation().getConnector();
+			if (c instanceof LineConnector) {
+				((LineConnectorImpl) c).updateControlPoints();
+			}
+		}*/
+
 		// element.getGraphicalRepresentation().resetToDefaultIdentifier();
 
 		/*System.out.println(">>>>>>> " + element);
@@ -177,6 +185,7 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 			System.out.println("Loaded " + factory.getSerializer().serializeAsString(returned));
 			returned.finalizeDeserialization();
 			returned.setFactory(factory);
+			returned.setFile(file);
 			return returned;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

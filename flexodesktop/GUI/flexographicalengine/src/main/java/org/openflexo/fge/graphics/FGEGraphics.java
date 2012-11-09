@@ -45,6 +45,7 @@ import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
@@ -70,7 +71,7 @@ public abstract class FGEGraphics {
 	private GraphicalRepresentation<?> gr;
 	private Graphics2D g2d;
 
-	private static final FGEModelFactory GRAPHICS_FACTORY = new FGEModelFactory();
+	private static final FGEModelFactory GRAPHICS_FACTORY = FGEUtils.TOOLS_FACTORY;
 	private static final ForegroundStyle DEFAULT_FG = GRAPHICS_FACTORY.makeDefaultForegroundStyle();
 	private static final BackgroundStyle DEFAULT_BG = GRAPHICS_FACTORY.makeEmptyBackground();
 	private static final TextStyle DEFAULT_TEXT = GRAPHICS_FACTORY.makeDefaultTextStyle();

@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
@@ -125,7 +125,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 			if (node instanceof PetriGraphNode && ((PetriGraphNode) node).getParentPetriGraph() == parentPetrigraph) {
 				GraphicalRepresentation<?> gr = getGraphicalRepresentation(node);
 				if (gr != null) {
-					AffineTransform at = GraphicalRepresentationUtils.convertCoordinatesAT(gr.getParentGraphicalRepresentation(),
+					AffineTransform at = FGEUtils.convertCoordinatesAT(gr.getParentGraphicalRepresentation(),
 							getParentGraphicalRepresentation(), 1.0);
 					if (node.hasLocationForContext(SWIMMING_LANE_EDITOR)
 							&& node.hasLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {

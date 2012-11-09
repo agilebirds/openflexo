@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController.EditorTool;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -148,7 +148,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 		AffineTransform scaleAT = AffineTransform.getScaleInstance(1 / boundingBox.getWidth(), 1 / boundingBox.getHeight());
 		FGEPolygon normalizedPolygon = getPolygon().transform(translateAT).transform(scaleAT);
 		if (parentGR instanceof ShapeGraphicalRepresentation) {
-			FGEPoint pt = GraphicalRepresentationUtils.convertNormalizedPoint(parentGR, new FGEPoint(0, 0), getController()
+			FGEPoint pt = FGEUtils.convertNormalizedPoint(parentGR, new FGEPoint(0, 0), getController()
 					.getDrawingGraphicalRepresentation());
 			returned.setX(boundingBox.getX() - pt.x);
 			returned.setY(boundingBox.getY() - pt.y);

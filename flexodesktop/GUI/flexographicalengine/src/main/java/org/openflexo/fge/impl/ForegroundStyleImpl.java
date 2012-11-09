@@ -24,8 +24,8 @@ import java.awt.Color;
 import java.awt.Stroke;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ForegroundStyle.CapStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.ForegroundStyle.JoinStyle;
@@ -282,7 +282,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 	@Override
 	public String toNiceString() {
 		if (getNoStroke()) {
-			return FlexoLocalization.localizedForKey(GraphicalRepresentationUtils.LOCALIZATION, "no_stroke");
+			return FlexoLocalization.localizedForKey(FGEUtils.LOCALIZATION, "no_stroke");
 		} else {
 			return lineWidth + "pt, " + color;
 		}

@@ -49,7 +49,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
@@ -494,7 +494,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			if (getGraphicalRepresentation().getFactory() != null) {
 				ts = getGraphicalRepresentation().getFactory().makeDefaultTextStyle();
 			} else {
-				ts = (new FGEModelFactory()).makeDefaultTextStyle();
+				ts = FGEUtils.TOOLS_FACTORY.makeDefaultTextStyle();
 			}
 		}
 		if (ts.getOrientation() != 0) {

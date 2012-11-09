@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -264,7 +265,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			setPreferredSize(new Dimension(40, 19));
 			// setBackground(Color.WHITE);
 
-			factory = new FGEModelFactory();
+			factory = FGEUtils.TOOLS_FACTORY;
 
 			text = new Object();
 

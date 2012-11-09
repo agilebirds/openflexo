@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Arc;
 import org.openflexo.fge.shapes.Circle;
@@ -68,7 +69,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	private static final Color DEFAULT_COLOR1 = Color.RED;
 	private static final Color DEFAULT_COLOR2 = Color.WHITE;
 
-	private static final FGEModelFactory SHAPE_FACTORY = new FGEModelFactory();
+	private static final FGEModelFactory SHAPE_FACTORY = FGEUtils.TOOLS_FACTORY;
 
 	private Shape _revertValue;
 

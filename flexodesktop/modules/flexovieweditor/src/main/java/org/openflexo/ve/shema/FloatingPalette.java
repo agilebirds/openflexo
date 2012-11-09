@@ -44,7 +44,6 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
@@ -295,7 +294,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					dropPoint.y = 0;
 				}
 
-				Point p = GraphicalRepresentationUtils.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, focusedGR,
+				Point p = FGEUtils.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, focusedGR,
 						controller.getScale());
 				FGEPoint dropLocation = new FGEPoint(p.x / controller.getScale(), p.y / controller.getScale());
 				ViewShape to = null;
@@ -551,7 +550,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		if (/*nodeGR.getIsSelected() ||*/shapeGR.isResizing() || shapeGR.isMoving()) {
 			return null;
 		}
-		AffineTransform at = GraphicalRepresentationUtils.convertNormalizedCoordinatesAT(shapeGR,
+		AffineTransform at = FGEUtils.convertNormalizedCoordinatesAT(shapeGR,
 				drawingGraphics.getGraphicalRepresentation());
 
 		Graphics2D oldGraphics = drawingGraphics.cloneGraphics();

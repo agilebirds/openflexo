@@ -26,7 +26,6 @@ import java.util.Vector;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.connectors.CurvedPolylinConnector;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
@@ -40,6 +39,8 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 	private FGEPoint p1 = new FGEPoint();
 	private FGEPoint p2 = new FGEPoint();
 	private Vector<ControlPoint> controlPoints;
+
+	private static final FGEPoint MIDDLE_SYMBOL_LOCATION = new FGEPoint(0.5, 0.5);
 
 	// *******************************************************************************
 	// * Constructor *
@@ -72,10 +73,8 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 	}
 
 	private void updateControlPoints() {
-		FGEPoint newP1 = GraphicalRepresentationUtils.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5),
-				getGraphicalRepresentation());
-		FGEPoint newP2 = GraphicalRepresentationUtils.convertNormalizedPoint(getEndObject(), new FGEPoint(0.5, 0.5),
-				getGraphicalRepresentation());
+		FGEPoint newP1 = FGEUtils.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5), getGraphicalRepresentation());
+		FGEPoint newP2 = FGEUtils.convertNormalizedPoint(getEndObject(), new FGEPoint(0.5, 0.5), getGraphicalRepresentation());
 
 		p1.x = newP1.x;
 		p1.y = newP1.y;
@@ -131,8 +130,7 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 
 	@Override
 	public FGEPoint getMiddleSymbolLocation() {
-		// TODO Auto-generated method stub
-		return new FGEPoint(0.5, 0.5);
+		return MIDDLE_SYMBOL_LOCATION;
 	}
 
 	private FGERectangle NORMALIZED_BOUNDS = new FGERectangle(0, 0, 1, 1, Filling.FILLED);

@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlPoint;
@@ -52,7 +53,7 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 
 	private transient Vector<ControlPoint> _controlPoints = null;
 
-	private static final FGEModelFactory SHADOW_FACTORY = new FGEModelFactory();
+	private static final FGEModelFactory SHADOW_FACTORY = FGEUtils.TOOLS_FACTORY;
 
 	// *******************************************************************************
 	// * Constructor *

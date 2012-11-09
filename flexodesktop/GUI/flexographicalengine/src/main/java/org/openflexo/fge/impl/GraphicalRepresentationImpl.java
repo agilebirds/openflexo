@@ -44,23 +44,15 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBindingFactory;
-import org.openflexo.fge.GRVariable;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.GRBindingFactory.ComponentPathElement;
 import org.openflexo.fge.GRBindingFactory.ComponentsBindingVariable;
+import org.openflexo.fge.GRVariable;
 import org.openflexo.fge.GRVariable.GRVariableType;
-import org.openflexo.fge.GraphicalRepresentation.ConstraintDependency;
-import org.openflexo.fge.GraphicalRepresentation.DependencyLoopException;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
-import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
-import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
-import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
-import org.openflexo.fge.GraphicalRepresentation.Parameters;
-import org.openflexo.fge.GraphicalRepresentation.VerticalTextAlignment;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
@@ -82,11 +74,11 @@ import org.openflexo.xmlcode.StringEncoder;
 
 public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl implements GraphicalRepresentation<O> {
 
-	static final Logger logger = Logger.getLogger(GraphicalRepresentationUtils.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(GraphicalRepresentationImpl.class.getPackage().getName());
 
 	static {
-		StringEncoder.getDefaultInstance()._addConverter(GraphicalRepresentationUtils.POINT_CONVERTER);
-		StringEncoder.getDefaultInstance()._addConverter(GraphicalRepresentationUtils.RECT_POLYLIN_CONVERTER);
+		StringEncoder.getDefaultInstance()._addConverter(FGEUtils.POINT_CONVERTER);
+		StringEncoder.getDefaultInstance()._addConverter(FGEUtils.RECT_POLYLIN_CONVERTER);
 	}
 
 	private Stroke specificStroke = null;
@@ -470,7 +462,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	@Override
 	public List<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
 		if (!isValidated()) {
-			return GraphicalRepresentationUtils.EMPTY_GR_VECTOR;
+			return FGEUtils.EMPTY_GR_VECTOR;
 		}
 
 		if (getContainedObjects() == null) {
@@ -507,7 +499,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	private List<GraphicalRepresentation<?>> getOrderedContainedGR() {
 		if (!isValidated()) {
 			logger.warning("GR " + this + " is not validated");
-			return GraphicalRepresentationUtils.EMPTY_GR_VECTOR;
+			return FGEUtils.EMPTY_GR_VECTOR;
 		}
 		if (orderedContainedGR == null) {
 			orderedContainedGR = new ArrayList<GraphicalRepresentation<?>>();
@@ -626,7 +618,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	@Override
 	public List<Object> getAncestors() {
 		if (!isValidated()) {
-			return GraphicalRepresentationUtils.EMPTY_VECTOR;
+			return FGEUtils.EMPTY_VECTOR;
 		}
 		return getAncestors(false);
 	}
@@ -634,10 +626,10 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	@Override
 	public List<Object> getAncestors(boolean forceRecompute) {
 		if (!isValidated()) {
-			return GraphicalRepresentationUtils.EMPTY_VECTOR;
+			return FGEUtils.EMPTY_VECTOR;
 		}
 		if (getDrawing() == null) {
-			return GraphicalRepresentationUtils.EMPTY_VECTOR;
+			return FGEUtils.EMPTY_VECTOR;
 		}
 		if (ancestors == null || forceRecompute) {
 			ancestors = new Vector<Object>();
@@ -722,8 +714,8 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		}
 
 		DrawingGraphicalRepresentation<?> drawingGR = getDrawingGraphicalRepresentation();
-		ShapeGraphicalRepresentation<?> topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(GraphicalRepresentationUtils
-				.convertNormalizedPoint(this, p, drawingGR));
+		ShapeGraphicalRepresentation<?> topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(FGEUtils.convertNormalizedPoint(
+				this, p, drawingGR));
 
 		if (topLevelShape == this || topLevelShape == getParentGraphicalRepresentation()) {
 			return null;
@@ -1327,7 +1319,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		if (!isConnectedToDrawing() || !source.isConnectedToDrawing()) {
 			return new FGEPoint(p.x / scale, p.y / scale);
 		}
-		Point pointRelativeToCurrentView = GraphicalRepresentationUtils.convertPoint(source, p, this, scale);
+		Point pointRelativeToCurrentView = FGEUtils.convertPoint(source, p, this, scale);
 		return convertViewCoordinatesToNormalizedPoint(pointRelativeToCurrentView, scale);
 	}
 
@@ -1336,14 +1328,14 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		if (!isConnectedToDrawing() || !destination.isConnectedToDrawing()) {
 			return new FGEPoint(p.x * scale, p.y * scale);
 		}
-		Point pointRelativeToRemoteView = GraphicalRepresentationUtils.convertPoint(this, p, destination, scale);
+		Point pointRelativeToRemoteView = FGEUtils.convertPoint(this, p, destination, scale);
 		return destination.convertViewCoordinatesToNormalizedPoint(pointRelativeToRemoteView, scale);
 	}
 
 	@Override
 	public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, GraphicalRepresentation<?> destination, double scale) {
 		Point point = convertNormalizedPointToViewCoordinates(p, scale);
-		return GraphicalRepresentationUtils.convertPoint(this, point, destination, scale);
+		return FGEUtils.convertPoint(this, point, destination, scale);
 	}
 
 	@Override
@@ -1359,7 +1351,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	@Override
 	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation<?> source, double scale) {
 		Point point = source.convertNormalizedPointToViewCoordinates(p, scale);
-		return GraphicalRepresentationUtils.convertPoint(source, point, this, scale);
+		return FGEUtils.convertPoint(source, point, this, scale);
 	}
 
 	@Override
@@ -1646,7 +1638,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 
 	@Override
 	public BindingFactory getBindingFactory() {
-		return GraphicalRepresentationUtils.BINDING_FACTORY;
+		return FGEUtils.BINDING_FACTORY;
 	}
 
 	@Override
@@ -1708,7 +1700,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	@Override
 	public List<GraphicalRepresentation<?>> retrieveAllContainedGR() {
 		if (!isValidated()) {
-			return GraphicalRepresentationUtils.EMPTY_GR_VECTOR;
+			return FGEUtils.EMPTY_GR_VECTOR;
 		}
 		List<GraphicalRepresentation<?>> returned = new ArrayList<GraphicalRepresentation<?>>();
 		addAllContainedGR(this, returned);

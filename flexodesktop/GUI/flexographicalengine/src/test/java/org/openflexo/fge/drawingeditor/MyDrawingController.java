@@ -27,8 +27,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.controller.DrawingController;
@@ -134,7 +134,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	public void addNewConnector(MyConnector aConnector) {
 		ShapeGraphicalRepresentation startObject = aConnector.getStartObject();
 		ShapeGraphicalRepresentation endObject = aConnector.getEndObject();
-		GraphicalRepresentation fatherGR = GraphicalRepresentationUtils.getFirstCommonAncestor(startObject, endObject);
+		GraphicalRepresentation fatherGR = FGEUtils.getFirstCommonAncestor(startObject, endObject);
 		((MyDrawingElement) fatherGR.getDrawable()).addToChilds(aConnector);
 		// getDrawing().addDrawable(aConnector, fatherGR.getDrawable());
 	}

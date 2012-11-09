@@ -23,9 +23,9 @@ import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.connectors.RectPolylinConnector;
@@ -212,7 +212,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentationImpl<Relat
 	private void ensurePolylinConverterIsRegistered() {
 		if (!isPolylinConverterRegistered) {
 			if (getProperty().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null) {
-				getProperty().getProject().getStringEncoder()._addConverter(GraphicalRepresentationUtils.RECT_POLYLIN_CONVERTER);
+				getProperty().getProject().getStringEncoder()._addConverter(FGEUtils.RECT_POLYLIN_CONVERTER);
 			}
 			isPolylinConverterRegistered = true;
 		}

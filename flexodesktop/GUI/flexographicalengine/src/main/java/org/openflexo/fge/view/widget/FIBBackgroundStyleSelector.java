@@ -40,6 +40,7 @@ import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
@@ -167,8 +168,8 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 				fgeFactory = backgroundStyle.getFactory();
 			}
 			if (fgeFactory == null) {
-				logger.warning("Could not find any FGE factory, creating a new one");
-				fgeFactory = new FGEModelFactory();
+				logger.warning("Could not find any FGE factory, creating a default one");
+				fgeFactory = FGEUtils.TOOLS_FACTORY;
 			}
 		}
 
@@ -406,7 +407,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			setPreferredSize(new Dimension(40, 19));
 			// setBackground(Color.WHITE);
 
-			factory = new FGEModelFactory();
+			factory = FGEUtils.TOOLS_FACTORY;
 
 			rect = new Object();
 

@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentationUtils;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -106,12 +106,12 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 
 		if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 			getConnector().setFixedStartLocation(
-					GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getFirstPoint(),
+					FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getFirstPoint(),
 							getGraphicalRepresentation().getStartObject()));
 		}
 		if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
 			getConnector().setFixedEndLocation(
-					GraphicalRepresentationUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getLastPoint(),
+					FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getLastPoint(),
 							getGraphicalRepresentation().getEndObject()));
 		}
 

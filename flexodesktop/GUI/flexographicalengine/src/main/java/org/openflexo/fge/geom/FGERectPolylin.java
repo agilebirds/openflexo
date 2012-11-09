@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -58,7 +59,7 @@ public class FGERectPolylin extends FGEPolylin {
 	private boolean respectAllConstraints = true;
 
 	// TODO: debug only remove this
-	private static final FGEModelFactory DEBUG_FACTORY = new FGEModelFactory();
+	private static final FGEModelFactory DEBUG_FACTORY = FGEUtils.TOOLS_FACTORY;
 	private static final ForegroundStyle DEBUG_FOCUSED_FG = DEBUG_FACTORY.makeForegroundStyle(Color.RED, 0.5f, DashStyle.MEDIUM_DASHES);
 	private static final BackgroundStyle DEBUG_FOCUSED_BG = DEBUG_FACTORY.makeTexturedBackground(TextureType.TEXTURE1, Color.RED,
 			Color.WHITE);
