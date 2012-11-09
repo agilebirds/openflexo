@@ -25,8 +25,22 @@ import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlAct
 import org.openflexo.fge.controller.MouseControl.MouseButton;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseDragControlAction.MouseDragControlActionType;
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.shapes.Arc;
+import org.openflexo.fge.shapes.Circle;
+import org.openflexo.fge.shapes.Losange;
+import org.openflexo.fge.shapes.Oval;
+import org.openflexo.fge.shapes.Polygon;
+import org.openflexo.fge.shapes.Rectangle;
+import org.openflexo.fge.shapes.RectangularOctogon;
+import org.openflexo.fge.shapes.RegularPolygon;
+import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.Square;
+import org.openflexo.fge.shapes.Star;
+import org.openflexo.fge.shapes.Triangle;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.xml.XMLDeserializer;
@@ -78,6 +92,8 @@ public class FGEModelFactory extends ModelFactory {
 
 		deserializer = new XMLDeserializer(this);
 		serializer = new XMLSerializer(getStringEncoder());
+
+		logger.info("Created new FGEModelFactory...............................");
 
 	}
 
@@ -748,6 +764,105 @@ public class FGEModelFactory extends ModelFactory {
 		return returned;
 	}
 
+	/**
+	 * Make a new Shape from corresponding ShapeType and set with supplied graphical representation
+	 * 
+	 * @param type
+	 * @param aGraphicalRepresentation
+	 * @return a newly created Shape
+	 */
+	public Shape makeShape(ShapeType type, ShapeGraphicalRepresentation<?> aGraphicalRepresentation) {
+
+		Shape returned = makeShape(type);
+		if (returned != null) {
+			returned.setGraphicalRepresentation(aGraphicalRepresentation);
+		}
+		return returned;
+	}
+
+	/**
+	 * Make a new Shape from corresponding ShapeType
+	 * 
+	 * @param type
+	 * @return a newly created Shape
+	 */
+	public Shape makeShape(ShapeType type) {
+		Shape returned = null;
+		if (type == ShapeType.SQUARE) {
+			returned = newInstance(Square.class);
+		} else if (type == ShapeType.RECTANGLE) {
+			returned = newInstance(Rectangle.class);
+		} else if (type == ShapeType.TRIANGLE) {
+			returned = newInstance(Triangle.class);
+		} else if (type == ShapeType.LOSANGE) {
+			returned = newInstance(Losange.class);
+		} else if (type == ShapeType.RECTANGULAROCTOGON) {
+			returned = newInstance(RectangularOctogon.class);
+		} else if (type == ShapeType.POLYGON) {
+			returned = newInstance(RegularPolygon.class);
+		} else if (type == ShapeType.CUSTOM_POLYGON) {
+			returned = newInstance(Polygon.class);
+		} else if (type == ShapeType.OVAL) {
+			returned = newInstance(Oval.class);
+		} else if (type == ShapeType.CIRCLE) {
+			returned = newInstance(Circle.class);
+		} else if (type == ShapeType.STAR) {
+			returned = newInstance(Star.class);
+		} else if (type == ShapeType.ARC) {
+			returned = newInstance(Arc.class);
+		} else {
+			logger.warning("Unexpected ShapeType: " + type);
+		}
+
+		if (returned != null) {
+			returned.setFGEModelFactory(this);
+		}
+
+		return returned;
+	}
+
+	/**
+	 * Make a new Polygon with supplied polygon
+	 * 
+	 * @param aGraphicalRepresentation
+	 * @param aPolygon
+	 * @return a newly created Polygon
+	 */
+	public Polygon makePolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPolygon aPolygon) {
+		Polygon polygon = newInstance(Polygon.class);
+		for (FGEPoint pt : aPolygon.getPoints()) {
+			polygon.addToPoints(pt);
+		}
+		polygon.updateShape();
+		return polygon;
+	}
+
+	/**
+	 * Make a new Polygon with supplied points
+	 * 
+	 * @param aGraphicalRepresentation
+	 * @param aPolygon
+	 * @return a newly created Polygon
+	 */
+	public Polygon makePolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPoint... points) {
+		Polygon polygon = newInstance(Polygon.class);
+		for (FGEPoint pt : points) {
+			polygon.addToPoints(pt);
+		}
+		polygon.updateShape();
+		return polygon;
+	}
+
+	/**
+	 * Instanciate a new instance with parameters defining whether default properties and/or defaut basic controls should be assigned to
+	 * newly created instances for GraphicalRepresentation instances
+	 * 
+	 * 
+	 * @param implementedInterface
+	 * @param initWithDefaultProperties
+	 * @param initWithBasicControls
+	 * @return
+	 */
 	public <I extends GraphicalRepresentation<?>> I newInstance(Class<I> implementedInterface, boolean initWithDefaultProperties,
 			boolean initWithBasicControls) {
 		I returned = super.newInstance(implementedInterface);

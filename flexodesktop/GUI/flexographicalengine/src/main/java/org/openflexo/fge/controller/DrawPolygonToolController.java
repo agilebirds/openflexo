@@ -36,7 +36,6 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.shapes.Polygon;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 
 public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygon> {
@@ -157,7 +156,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 			returned.setX(boundingBox.getX() - FGEConstants.DEFAULT_BORDER_SIZE);
 			returned.setY(boundingBox.getY() - FGEConstants.DEFAULT_BORDER_SIZE);
 		}
-		returned.setShape(new Polygon(returned, normalizedPolygon));
+		returned.setShape(getController().getFactory().makePolygon(returned, normalizedPolygon));
 		return returned;
 	}
 }

@@ -19,77 +19,56 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEArc;
 import org.openflexo.fge.geom.FGEArc.ArcType;
+import org.openflexo.fge.shapes.impl.ArcImpl;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class Arc extends Shape {
+/**
+ * Represents an Arc, as defined by an arc type, an angle start, and an angle extent
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(ArcImpl.class)
+@XMLElement(xmlTag = "ArcShape")
+public interface Arc extends Shape {
 
-	private FGEArc arc;
+	// Property keys
 
-	private int angleStart = 0;
-	private int angleExtent = 90;
-	private ArcType arcType = ArcType.PIE;
+	public static final String ANGLE_EXTENT = "angleExtent";
+	public static final String ANGLE_START = "angleStart";
+	public static final String ARC_TYPE = "arcType";
 
-	public Arc() {
-		this(null);
-	}
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
 
-	public Arc(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
-		updateShape();
-	}
+	@Getter(value = ANGLE_START, defaultValue = "0")
+	@XMLAttribute
+	public int getAngleStart();
 
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.ARC;
-	}
+	@Setter(value = ANGLE_START)
+	public void setAngleStart(int anAngle);
 
-	@Override
-	public void updateShape() {
-		arc = new FGEArc(0, 0, 1, 1, angleStart, angleExtent, arcType);
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().notifyShapeChanged();
-		}
-	}
+	@Getter(value = ANGLE_EXTENT, defaultValue = "90")
+	@XMLAttribute
+	public int getAngleExtent();
 
-	@Override
-	public FGEArc getShape() {
-		return arc;
-	}
+	@Setter(value = ANGLE_EXTENT)
+	public void setAngleExtent(int anAngle);
 
-	public int getAngleStart() {
-		return angleStart;
-	}
+	@Getter(value = ARC_TYPE)
+	@XMLAttribute
+	public ArcType getArcType();
 
-	public void setAngleStart(int anAngle) {
-		if (angleStart != anAngle) {
-			angleStart = anAngle;
-			updateShape();
-		}
-	}
-
-	public int getAngleExtent() {
-		return angleExtent;
-	}
-
-	public void setAngleExtent(int anAngle) {
-		if (angleExtent != anAngle) {
-			angleExtent = anAngle;
-			updateShape();
-		}
-	}
-
-	public ArcType getArcType() {
-		return arcType;
-	}
-
-	public void setArcType(ArcType anArcType) {
-		if (arcType != anArcType) {
-			arcType = anArcType;
-			updateShape();
-		}
-	}
+	@Setter(value = ARC_TYPE)
+	public void setArcType(ArcType anArcType);
 
 }

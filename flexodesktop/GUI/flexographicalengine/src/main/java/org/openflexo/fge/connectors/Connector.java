@@ -33,10 +33,14 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(ConnectorImpl.class)
+@Imports({ @Import(LineConnector.class), @Import(CurveConnector.class), @Import(RectPolylinConnector.class),
+		@Import(CurvedPolylinConnector.class) })
 public interface Connector extends FGEObject {
 
 	public static enum ConnectorType {
@@ -62,7 +66,7 @@ public interface Connector extends FGEObject {
 
 	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation();
 
-	public void setGraphicalRepresentation(ConnectorGraphicalRepresentation aGraphicalRepresentation);
+	public void setGraphicalRepresentation(ConnectorGraphicalRepresentation<?> aGraphicalRepresentation);
 
 	public double getStartAngle();
 
@@ -70,9 +74,9 @@ public interface Connector extends FGEObject {
 
 	public Object getDrawable();
 
-	public ShapeGraphicalRepresentation getStartObject();
+	public ShapeGraphicalRepresentation<?> getStartObject();
 
-	public ShapeGraphicalRepresentation getEndObject();
+	public ShapeGraphicalRepresentation<?> getEndObject();
 
 	/**
 	 * Return value indicating distance from aPoint to connector, asserting aPoint is related to local normalized coordinates system
@@ -88,7 +92,7 @@ public interface Connector extends FGEObject {
 
 	public void drawConnector(FGEConnectorGraphics g);
 
-	public List<? extends ControlArea> getControlAreas();
+	public List<? extends ControlArea<?>> getControlAreas();
 
 	public ConnectorType getConnectorType();
 

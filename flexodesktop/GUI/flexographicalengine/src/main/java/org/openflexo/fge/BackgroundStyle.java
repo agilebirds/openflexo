@@ -304,7 +304,7 @@ public interface BackgroundStyle extends FGEStyle {
 
 	}
 
-	public Paint getPaint(GraphicalRepresentation gr, double scale);
+	public Paint getPaint(GraphicalRepresentation<?> gr, double scale);
 
 	public BackgroundStyleType getBackgroundStyleType();
 

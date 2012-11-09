@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Drawing id="1">
+<MyDrawing id="1">
   <MyDrawingGraphicalRepresentation id="2" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="1000.0" height="1000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
     <TextStyle id="3" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
   </MyDrawingGraphicalRepresentation>
-  <Shape id="4">
+  <MyShape id="4">
     <MyShapeGraphicalRepresentation id="5" text="This is a rectangle" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="66.0" y="34.0" width="222.79959869795496" height="119.98498498498499" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="6" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="7" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -11,8 +11,8 @@
       <Border id="9" top="5" bottom="5" left="5" right="5" />
       <RectangleShape id="10" isRounded="false" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="11">
+  </MyShape>
+  <MyShape id="11">
     <MyShapeGraphicalRepresentation id="12" text="This is a square" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="318.0" y="32.0" width="122.52252252252251" height="122.52252252252251" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="13" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="14" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -20,8 +20,8 @@
       <Border id="16" top="5" bottom="5" left="5" right="5" />
       <SquareShape id="17" isRounded="false" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="18">
+  </MyShape>
+  <MyShape id="18">
     <MyShapeGraphicalRepresentation id="19" text="n=3" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="587.0" y="124.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="20" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="21" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -29,8 +29,8 @@
       <Border id="23" top="5" bottom="5" left="5" right="5" />
       <PolygonShape id="24" nPoints="3" startAngle="90" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="25">
+  </MyShape>
+  <MyShape id="25">
     <MyShapeGraphicalRepresentation id="26" text="Here comes the triangle" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="78.0" absoluteTextY="92.0" x="437.0" y="506.0" width="135.72655899081636" height="92.7927927927928" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
       <TextStyle id="27" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="28" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -38,8 +38,8 @@
       <Border id="30" top="5" bottom="5" left="5" right="5" />
       <TriangleShape id="31" nPoints="3" startAngle="90" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="32">
+  </MyShape>
+  <MyShape id="32">
     <MyShapeGraphicalRepresentation id="33" text="This is a&#xA;losange&#xA;" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="52.0" y="168.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="34" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="35" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -47,8 +47,8 @@
       <Border id="37" top="5" bottom="5" left="5" right="5" />
       <LosangeShape id="38" nPoints="4" startAngle="90" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="39">
+  </MyShape>
+  <MyShape id="39">
     <MyShapeGraphicalRepresentation id="40" text="This is an oval" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="296.0" y="189.3063063063063" width="169.36936936936937" height="93.69369369369369" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="41" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="42" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -56,8 +56,8 @@
       <Border id="44" top="5" bottom="5" left="5" right="5" />
       <OvalShape id="45" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="46">
+  </MyShape>
+  <MyShape id="46">
     <MyShapeGraphicalRepresentation id="47" text="This is &#xA;a circle&#xA;" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="172.0" y="175.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="48" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="49" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -65,8 +65,8 @@
       <Border id="51" top="5" bottom="5" left="5" right="5" />
       <CircleShape id="52" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="53">
+  </MyShape>
+  <MyShape id="53">
     <MyShapeGraphicalRepresentation id="54" text="Those are basic shapes.&#xA;You might move them and try to resize them.&#xA;See as square and circle can only be resized with&#xA;fixed ratio.&#xA;" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="109.0" y="296.0" width="313.5135135135135" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="55" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="56" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -74,8 +74,8 @@
       <Border id="58" top="5" bottom="5" left="5" right="5" />
       <RectangleShape id="59" isRounded="false" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="60">
+  </MyShape>
+  <MyShape id="60">
     <MyShapeGraphicalRepresentation id="61" text="" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.88" absoluteTextX="0.0" absoluteTextY="0.0" x="37.0" y="9.0" width="451.5510824450983" height="380.81528003199026" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="0" isFloatingLabel="false">
       <TextStyle id="62" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="63" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -83,8 +83,8 @@
       <Border id="65" top="5" bottom="5" left="5" right="5" />
       <RectangleShape id="66" isRounded="true" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="67">
+  </MyShape>
+  <MyShape id="67">
     <MyShapeGraphicalRepresentation id="68" text="Some regular polygons" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.08" absoluteTextX="0.0" absoluteTextY="0.0" x="563.0" y="65.0" width="340.6799349492759" height="274.1866394696583" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="0" isFloatingLabel="false">
       <TextStyle id="69" font="SansSerif,1,13" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="70" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -92,7 +92,7 @@
       <Border id="72" top="5" bottom="5" left="5" right="5" />
       <RectangleShape id="73" isRounded="true" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
-    <Shape id="74">
+    <MyShape id="74">
       <MyShapeGraphicalRepresentation id="75" text="      n=5&#xA;angle=125°&#xA;&#xA;&#xA;" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="128.0" y="46.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="76" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="77" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -100,8 +100,8 @@
         <Border id="79" top="5" bottom="5" left="5" right="5" />
         <PolygonShape id="80" nPoints="5" startAngle="125" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-    <Shape id="81">
+    </MyShape>
+    <MyShape id="81">
       <MyShapeGraphicalRepresentation id="82" text="n=6" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="14.0" y="156.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="83" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="84" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -109,8 +109,8 @@
         <Border id="86" top="5" bottom="5" left="5" right="5" />
         <PolygonShape id="87" nPoints="6" startAngle="90" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-    <Shape id="88">
+    </MyShape>
+    <MyShape id="88">
       <MyShapeGraphicalRepresentation id="89" text="n=8" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="121.0" y="160.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="90" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="91" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -118,8 +118,8 @@
         <Border id="93" top="5" bottom="5" left="5" right="5" />
         <PolygonShape id="94" nPoints="8" startAngle="90" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-    <Shape id="95">
+    </MyShape>
+    <MyShape id="95">
       <MyShapeGraphicalRepresentation id="96" text="n=12" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="233.0" y="159.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="97" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="98" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -127,8 +127,8 @@
         <Border id="100" top="5" bottom="5" left="5" right="5" />
         <PolygonShape id="101" nPoints="12" startAngle="90" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-    <Shape id="102">
+    </MyShape>
+    <MyShape id="102">
       <MyShapeGraphicalRepresentation id="103" text="   n=5&#xA;angle=90°&#xA;&#xA;" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="232.0" y="48.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="104" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="105" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -136,9 +136,9 @@
         <Border id="107" top="5" bottom="5" left="5" right="5" />
         <PolygonShape id="108" nPoints="5" startAngle="90" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-  </Shape>
-  <Shape id="109">
+    </MyShape>
+  </MyShape>
+  <MyShape id="109">
     <MyShapeGraphicalRepresentation id="110" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="690.0" y="528.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="111" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="112" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -146,8 +146,8 @@
       <Border id="114" top="5" bottom="5" left="5" right="5" />
       <RectangleShape id="115" isRounded="false" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-  <Shape id="116">
+  </MyShape>
+  <MyShape id="116">
     <MyShapeGraphicalRepresentation id="117" text="Some triangles" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.44" relativeTextY="0.08" absoluteTextX="0.0" absoluteTextY="0.0" x="53.0" y="425.0" width="316.1199691252718" height="278.2786885245901" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
       <TextStyle id="118" font="SansSerif,1,13" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="119" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -155,7 +155,7 @@
       <Border id="121" top="5" bottom="5" left="5" right="5" />
       <RectangleShape id="122" isRounded="true" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
-    <Shape id="123">
+    <MyShape id="123">
       <MyShapeGraphicalRepresentation id="124" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="24.0" y="21.0" width="74.8948504388858" height="167.26726726726724" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="125" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="126" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -163,8 +163,8 @@
         <Border id="128" top="5" bottom="5" left="5" right="5" />
         <TriangleShape id="129" nPoints="3" startAngle="90" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-    <Shape id="130">
+    </MyShape>
+    <MyShape id="130">
       <MyShapeGraphicalRepresentation id="131" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="156.17208662286265" y="31.0" width="168.5563699553503" height="140.84084084084085" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="132" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="133" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -172,8 +172,8 @@
         <Border id="135" top="5" bottom="5" left="5" right="5" />
         <TriangleShape id="136" nPoints="3" startAngle="90" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-    <Shape id="137">
+    </MyShape>
+    <MyShape id="137">
       <MyShapeGraphicalRepresentation id="138" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="-15.042380408577571" y="173.0" width="187.79661535695223" height="47.85853552691667" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="139" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="140" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -181,8 +181,8 @@
         <Border id="142" top="5" bottom="5" left="5" right="5" />
         <TriangleShape id="143" nPoints="3" startAngle="120" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-    <Shape id="144">
+    </MyShape>
+    <MyShape id="144">
       <MyShapeGraphicalRepresentation id="145" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="188.0" y="135.0" width="100.0" height="100.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="146" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="147" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -190,8 +190,8 @@
         <Border id="149" top="5" bottom="5" left="5" right="5" />
         <TriangleShape id="150" nPoints="3" startAngle="150" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-    <Shape id="151">
+    </MyShape>
+    <MyShape id="151">
       <MyShapeGraphicalRepresentation id="152" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="113.0" y="61.0" width="50.0" height="50.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
         <TextStyle id="153" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="154" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -199,9 +199,9 @@
         <Border id="156" top="5" bottom="5" left="5" right="5" />
         <TriangleShape id="157" nPoints="3" startAngle="90" />
       </MyShapeGraphicalRepresentation>
-    </Shape>
-  </Shape>
-  <Shape id="158">
+    </MyShape>
+  </MyShape>
+  <MyShape id="158">
     <MyShapeGraphicalRepresentation id="159" text="You can move and &#xA;resize triangles, and rotate them&#xA;" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="71.0" y="668.0" width="295.16528480671906" height="37.83783783783784" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="2" isFloatingLabel="false">
       <TextStyle id="160" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <ForegroundStyle id="161" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -209,6 +209,6 @@
       <Border id="163" top="5" bottom="5" left="5" right="5" />
       <RectangleShape id="164" isRounded="false" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
-  </Shape>
-</Drawing>
+  </MyShape>
+</MyDrawing>
 

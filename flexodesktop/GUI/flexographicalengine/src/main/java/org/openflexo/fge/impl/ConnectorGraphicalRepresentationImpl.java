@@ -39,8 +39,6 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ConnectorGraphicalRepresentation.ConnectorParameters;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
@@ -924,7 +922,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		return getConnector().getControlAreas();
 	}
 

@@ -30,13 +30,10 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentationUtils;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.LineConnector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.LineConnector.LineConnectorType;
+import org.openflexo.fge.connectors.LineConnector;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ConnectorControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
@@ -70,12 +67,14 @@ public class LineConnectorImpl extends ConnectorImpl implements LineConnector {
 
 	// Used for deserialization
 	public LineConnectorImpl() {
-		this(null);
+		super();
+		controlPoints = new Vector<ControlPoint>();
 	}
 
-	public LineConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
-		super(graphicalRepresentation);
-		controlPoints = new Vector<ControlPoint>();
+	@Deprecated
+	private LineConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+		this();
+		setGraphicalRepresentation(graphicalRepresentation);
 	}
 
 	@Override

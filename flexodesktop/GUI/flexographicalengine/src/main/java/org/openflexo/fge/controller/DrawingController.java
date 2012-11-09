@@ -132,7 +132,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
 		currentTextStyle = factory.makeDefaultTextStyle();
 		currentShadowStyle = factory.makeDefaultShadowStyle();
-		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
+		currentShape = factory.makeShape(ShapeType.RECTANGLE);
 
 		toolbox = new EditorToolbox(this);
 

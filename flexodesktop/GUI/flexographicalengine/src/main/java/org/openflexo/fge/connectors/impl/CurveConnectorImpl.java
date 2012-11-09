@@ -30,11 +30,10 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentationUtils;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
+import org.openflexo.fge.connectors.CurveConnector;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEAbstractLine;
@@ -51,7 +50,7 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-public class CurveConnectorImpl extends ConnectorImpl implements Connector {
+public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector {
 
 	private static final Logger logger = Logger.getLogger(CurveConnectorImpl.class.getPackage().getName());
 
@@ -72,14 +71,18 @@ public class CurveConnectorImpl extends ConnectorImpl implements Connector {
 	// * Constructor *
 	// *******************************************************************************
 
-	// Used for deserialization
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
 	public CurveConnectorImpl() {
-		this(null);
+		super();
+		controlPoints = new Vector<ControlPoint>();
 	}
 
-	public CurveConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
-		super(graphicalRepresentation);
-		controlPoints = new Vector<ControlPoint>();
+	@Deprecated
+	private CurveConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+		super();
+		setGraphicalRepresentation(graphicalRepresentation);
 	}
 
 	@Override
@@ -437,34 +440,42 @@ public class CurveConnectorImpl extends ConnectorImpl implements Connector {
 		return cpPosition;
 	}
 
+	@Override
 	public FGEPoint _getCp1RelativeToStartObject() {
 		return cp1RelativeToStartObject;
 	}
 
+	@Override
 	public void _setCp1RelativeToStartObject(FGEPoint aPoint) {
 		this.cp1RelativeToStartObject = aPoint;
 	}
 
+	@Override
 	public FGEPoint _getCp2RelativeToEndObject() {
 		return cp2RelativeToEndObject;
 	}
 
+	@Override
 	public void _setCp2RelativeToEndObject(FGEPoint aPoint) {
 		this.cp2RelativeToEndObject = aPoint;
 	}
 
+	@Override
 	public FGEPoint _getCpPosition() {
 		return cpPosition;
 	}
 
+	@Override
 	public void _setCpPosition(FGEPoint cpPosition) {
 		this.cpPosition = cpPosition;
 	}
 
+	@Override
 	public boolean getAreBoundsAdjustable() {
 		return areBoundsAdjustable;
 	}
 
+	@Override
 	public void setAreBoundsAdjustable(boolean aFlag) {
 		if (areBoundsAdjustable != aFlag) {
 			areBoundsAdjustable = aFlag;

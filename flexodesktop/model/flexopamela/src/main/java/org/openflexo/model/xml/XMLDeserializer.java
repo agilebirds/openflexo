@@ -149,6 +149,12 @@ public class XMLDeserializer {
 			Iterator<ModelProperty<? super I>> properties = modelEntity.getProperties();
 			while (properties.hasNext()) {
 				ModelProperty<? super I> p = properties.next();
+				/*boolean debug = false;
+				if (p.getPropertyIdentifier().equals("connector")) {
+					System.out.println("Entering debug mode");
+					debug = true;
+				}*/
+
 				if (p.getXMLAttribute() != null) {
 					Object value;
 					try {
@@ -163,6 +169,13 @@ public class XMLDeserializer {
 					XMLElement propertyXMLElement = p.getXMLElement();
 					// System.out.println("Handle element "+p);
 					if (p.getAccessedEntity() != null) {
+						/*if (debug) {
+							System.out.println("node");
+							Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node, p, modelEntity);
+							while (matchingElements.hasNext()) {
+								System.out.println("> " + matchingElements.next());
+							}
+						}*/
 						Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node, p, modelEntity);
 						switch (p.getCardinality()) {
 						case SINGLE:
@@ -237,11 +250,24 @@ public class XMLDeserializer {
 	private Iterator<MatchingElement> elementsMatchingHandledXMLTags(Element node, ModelProperty<?> modelProperty,
 			ModelEntity<?> modelEntity) throws ModelDefinitionException {
 
+		/*boolean debug = false;
+		if (modelProperty.getPropertyIdentifier().equals("connector")) {
+			debug = true;
+		}*/
+
 		// First we resolve the type of property in entity context
 		Type resolvedType = TypeUtils.makeInstantiatedType(modelProperty.getGenericType(), modelEntity.getImplementedInterface());
 
 		ArrayList<MatchingElement> returned = new ArrayList<MatchingElement>();
 		String contextString = modelProperty.getXMLElement() != null ? modelProperty.getXMLElement().context() : "";
+
+		/*if (debug) {
+			System.out.println("resolvedType=" + resolvedType);
+			System.out.println("modelProperty.getAccessedEntity()=" + modelProperty.getAccessedEntity());
+			System.out.println("modelProperty.getAccessedEntity().getAllDescendantsAndMe()="
+					+ modelProperty.getAccessedEntity().getAllDescendantsAndMe());
+		}*/
+
 		if (modelProperty.getAccessedEntity() != null) {
 			for (ModelEntity<?> entity : modelProperty.getAccessedEntity().getAllDescendantsAndMe()) {
 				if (entity.getXMLElement() != null || getStringEncoder().isConvertable(entity.getImplementedInterface())) {

@@ -17,23 +17,34 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.shapes;
+package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.shapes.impl.SquareImpl;
-import org.openflexo.model.annotations.ImplementationClass;
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.shapes.Circle;
 
-/**
- * Represents a square
- * 
- * Note that this implementation is powered by PAMELA framework.
- * 
- * @author sylvain
- */
-@ModelEntity
-@ImplementationClass(SquareImpl.class)
-@XMLElement(xmlTag = "SquareShape")
-public interface Square extends Rectangle {
+public class CircleImpl extends OvalImpl implements Circle {
+
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public CircleImpl() {
+		super();
+	}
+
+	@Deprecated
+	private CircleImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
+		this();
+		setGraphicalRepresentation(aGraphicalRepresentation);
+	}
+
+	@Override
+	public ShapeType getShapeType() {
+		return ShapeType.CIRCLE;
+	}
+
+	@Override
+	public boolean areDimensionConstrained() {
+		return true;
+	}
 
 }

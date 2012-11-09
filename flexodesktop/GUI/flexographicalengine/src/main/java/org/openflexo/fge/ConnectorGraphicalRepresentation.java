@@ -254,7 +254,7 @@ public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresenta
 
 	public FGEConnectorGraphics getGraphics();
 
-	public List<? extends ControlArea> getControlAreas();
+	public List<? extends ControlArea<?>> getControlAreas();
 
 	public ConnectorGraphicalRepresentation<O> clone();
 

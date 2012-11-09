@@ -65,7 +65,7 @@ public interface CurveConnector extends Connector {
 	@Setter(value = CP_POSITION)
 	public void _setCpPosition(FGEPoint cpPosition);
 
-	@Getter(value = ARE_BOUNDS_ADJUSTABLE)
+	@Getter(value = ARE_BOUNDS_ADJUSTABLE, defaultValue = "true")
 	@XMLAttribute
 	public boolean getAreBoundsAdjustable();
 

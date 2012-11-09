@@ -27,8 +27,7 @@ import java.util.Vector;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentationUtils;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.CurvedPolylinConnector;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -36,7 +35,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-public class CurvedPolylinConnectorImpl extends ConnectorImpl implements Connector {
+public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedPolylinConnector {
 
 	private FGEPoint p1 = new FGEPoint();
 	private FGEPoint p2 = new FGEPoint();
@@ -46,14 +45,18 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements Connect
 	// * Constructor *
 	// *******************************************************************************
 
-	// Used for deserialization
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
 	public CurvedPolylinConnectorImpl() {
-		this(null);
+		super();
+		controlPoints = new Vector<ControlPoint>();
 	}
 
-	public CurvedPolylinConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
-		super(graphicalRepresentation);
-		controlPoints = new Vector<ControlPoint>();
+	@Deprecated
+	private CurvedPolylinConnectorImpl(ConnectorGraphicalRepresentation<?> graphicalRepresentation) {
+		this();
+		setGraphicalRepresentation(graphicalRepresentation);
 		controlPoints.add(new ConnectorAdjustingControlPoint(graphicalRepresentation, p1));
 		controlPoints.add(new ConnectorAdjustingControlPoint(graphicalRepresentation, p2));
 	}

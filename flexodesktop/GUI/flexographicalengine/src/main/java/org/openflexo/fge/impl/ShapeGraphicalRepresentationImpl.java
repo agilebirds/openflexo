@@ -36,6 +36,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -47,15 +48,6 @@ import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.GraphicalRepresentation.ConstraintDependency;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
-import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
-import org.openflexo.fge.GraphicalRepresentation.VerticalTextAlignment;
-import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
-import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -1982,7 +1974,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public void setShapeType(ShapeType shapeType) {
 		if (getShapeType() != shapeType) {
-			setShape(Shape.makeShape(shapeType, this));
+			setShape(getFactory().makeShape(shapeType, this));
 			if (getShape().areDimensionConstrained()) {
 				double newSize = Math.max(getWidth(), getHeight());
 				setWidth(newSize);

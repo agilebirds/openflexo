@@ -37,10 +37,10 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.GraphicalRepresentationUtils;
-import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ConnectorNonAdjustableControlPoint;
 import org.openflexo.fge.cp.ControlArea;
@@ -114,7 +114,7 @@ public class RectPolylinConnectorImpl extends ConnectorImpl implements RectPolyl
 	private FGEPoint fixedEndLocationRelativeToEndObject;
 	private FGEPoint _crossedPoint;
 
-	private ConcatenedList<ControlArea> allControlAreas;
+	private ConcatenedList<ControlArea<?>> allControlAreas;
 
 	private static final FGEModelFactory DEBUG_FACTORY = new FGEModelFactory();
 	private static final ForegroundStyle DEBUG_GRAY_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES);
@@ -124,16 +124,20 @@ public class RectPolylinConnectorImpl extends ConnectorImpl implements RectPolyl
 	// * Constructor *
 	// *******************************************************************************
 
-	// Used for deserialization
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
 	public RectPolylinConnectorImpl() {
-		this(null);
-	}
-
-	public RectPolylinConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
-		super(graphicalRepresentation);
+		super();
 		controlPoints = new Vector<ControlPoint>();
 		controlAreas = new Vector<ControlArea<?>>();
 		potentialPolylin = new Vector<FGERectPolylin>();
+	}
+
+	@Deprecated
+	private RectPolylinConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+		this();
+		setGraphicalRepresentation(graphicalRepresentation);
 	}
 
 	@Override
@@ -147,14 +151,14 @@ public class RectPolylinConnectorImpl extends ConnectorImpl implements RectPolyl
 	}
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		if (getGraphicalRepresentation().getMiddleSymbol() == MiddleSymbolType.NONE && controlAreas.size() == 0) {
 			return controlPoints;
 		}
 
 		// Otherwise, we have to manage a concatenation
 		if (allControlAreas == null) {
-			allControlAreas = new ConcatenedList<ControlArea>();
+			allControlAreas = new ConcatenedList<ControlArea<?>>();
 			allControlAreas.addElementList(controlPoints);
 			if (getGraphicalRepresentation().getMiddleSymbol() != MiddleSymbolType.NONE && middleSymbolLocationControlPoint != null) {
 				allControlAreas.add(0, middleSymbolLocationControlPoint);

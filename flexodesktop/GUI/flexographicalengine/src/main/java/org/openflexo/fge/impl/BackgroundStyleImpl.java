@@ -38,16 +38,6 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.BackgroundStyle.Color;
-import org.openflexo.fge.BackgroundStyle.ColorGradient;
-import org.openflexo.fge.BackgroundStyle.None;
-import org.openflexo.fge.BackgroundStyle.Parameters;
-import org.openflexo.fge.BackgroundStyle.Texture;
-import org.openflexo.fge.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.BackgroundStyle.Texture.TextureType;
 import org.openflexo.fge.notifications.FGENotification;
 
 import sun.awt.image.ImageRepresentation;
@@ -56,13 +46,11 @@ import sun.awt.image.ToolkitImage;
 public abstract class BackgroundStyleImpl extends FGEStyleImpl implements BackgroundStyle {
 	private static final Logger logger = Logger.getLogger(BackgroundStyleImpl.class.getPackage().getName());
 
-	private transient GraphicalRepresentation graphicalRepresentation;
-
 	private boolean useTransparency = false;
 	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
 
 	@Override
-	public abstract Paint getPaint(GraphicalRepresentation gr, double scale);
+	public abstract Paint getPaint(GraphicalRepresentation<?> gr, double scale);
 
 	@Override
 	public abstract BackgroundStyleType getBackgroundStyleType();
@@ -72,7 +60,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 
 	public static class NoneImpl extends BackgroundStyleImpl implements None {
 		@Override
-		public Paint getPaint(GraphicalRepresentation gr, double scale) {
+		public Paint getPaint(GraphicalRepresentation<?> gr, double scale) {
 			return null;
 		}
 
@@ -91,7 +79,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		private java.awt.Color color = java.awt.Color.WHITE;
 
 		@Override
-		public Paint getPaint(GraphicalRepresentation gr, double scale) {
+		public Paint getPaint(GraphicalRepresentation<?> gr, double scale) {
 			return color;
 		}
 
@@ -139,7 +127,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		private ColorGradientDirection direction = ColorGradientDirection.SOUTH_EAST_NORTH_WEST;
 
 		@Override
-		public Paint getPaint(GraphicalRepresentation gr, double scale) {
+		public Paint getPaint(GraphicalRepresentation<?> gr, double scale) {
 			switch (direction) {
 			case SOUTH_EAST_NORTH_WEST:
 				return new GradientPaint(0, 0, color1, gr.getViewWidth(scale), gr.getViewHeight(scale), color2);
@@ -333,7 +321,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		}
 
 		@Override
-		public Paint getPaint(GraphicalRepresentation gr, double scale) {
+		public Paint getPaint(GraphicalRepresentation<?> gr, double scale) {
 			return new TexturePaint(getColoredTexture(), new Rectangle(0, 0, getColoredTexture().getWidth(), getColoredTexture()
 					.getHeight()));
 		}
@@ -413,7 +401,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		private Image image = null;
 
 		@Override
-		public Paint getPaint(GraphicalRepresentation gr, double scale) {
+		public Paint getPaint(GraphicalRepresentation<?> gr, double scale) {
 			return java.awt.Color.WHITE;
 		}
 
@@ -633,7 +621,6 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	public BackgroundStyleImpl clone() {
 		try {
 			BackgroundStyleImpl returned = (BackgroundStyleImpl) super.clone();
-			returned.graphicalRepresentation = null;
 			return returned;
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable

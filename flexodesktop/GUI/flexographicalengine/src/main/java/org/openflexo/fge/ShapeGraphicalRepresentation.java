@@ -416,7 +416,8 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = SHAPE_TYPE)
 	public void setShapeType(ShapeType shapeType);
 
-	@Getter(value = SHAPE, ignoreType = true)
+	@Getter(value = SHAPE)
+	@XMLElement
 	public Shape getShape();
 
 	@Setter(value = SHAPE)

@@ -212,51 +212,51 @@
 	 <property name="applyForegroundToSymbols" xmlTag="applyForegroundToSymbols" attribute="YES"/>
   </entity>
 
-   <entity name="org.openflexo.fge.shapes.Rectangle" xmlTag="RectangleShape">
+   <entity name="org.openflexo.fge.shapes.impl.RectangleImpl" xmlTag="RectangleShape">
      <description>Rectangle shape</description>
    	 <property name="isRounded" xmlTag="isRounded" attribute="YES"/>
   	 <property name="arcSize" xmlTag="arcSize" attribute="YES"/>
   </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Square" xmlTag="SquareShape">
+   <entity name="org.openflexo.fge.shapes.impl.SquareImpl" xmlTag="SquareShape">
      <description>Square shape</description>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Arc" xmlTag="ArcShape">
+   <entity name="org.openflexo.fge.shapes.impl.ArcImpl" xmlTag="ArcShape">
      <description>Arc shape</description>
   	 <property name="angleExtent" xmlTag="angleExtent" attribute="YES"/>
   	 <property name="angleStart" xmlTag="angleStart" attribute="YES"/>
   	 <property name="arcType" xmlTag="arcType" attribute="YES"/>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Oval" xmlTag="OvalShape">
+   <entity name="org.openflexo.fge.shapes.impl.OvalImpl" xmlTag="OvalShape">
      <description>Oval shape</description>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Circle" xmlTag="CircleShape">
+   <entity name="org.openflexo.fge.shapes.impl.CircleImpl" xmlTag="CircleShape">
      <description>Circle shape</description>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Polygon" xmlTag="CustomPolygon">
+   <entity name="org.openflexo.fge.shapes.impl.PolygonImpl" xmlTag="CustomPolygon">
      <description>Custom polygon shape</description>
 	 <property name="points" xmlTag="FGEPoint" type="vector" primary="yes"/>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.RegularPolygon" xmlTag="PolygonShape">
+   <entity name="org.openflexo.fge.shapes.impl.RegularPolygonImpl" xmlTag="PolygonShape">
      <description>Regular polygon shape</description>
   	 <property name="nPoints" xmlTag="nPoints" attribute="YES"/>
   	 <property name="startAngle" xmlTag="startAngle" attribute="YES"/>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Triangle" xmlTag="TriangleShape">
+   <entity name="org.openflexo.fge.shapes.impl.TriangleImpl" xmlTag="TriangleShape">
      <description>Triangle shape</description>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Losange" xmlTag="LosangeShape">
+   <entity name="org.openflexo.fge.shapes.impl.LosangeImpl" xmlTag="LosangeShape">
      <description>Losange shape</description>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Star" xmlTag="StarShape">
+   <entity name="org.openflexo.fge.shapes.impl.StarImpl" xmlTag="StarShape">
      <description>Star shape</description>
   	 <property name="nPoints" xmlTag="nPoints" attribute="YES"/>
   	 <property name="startAngle" xmlTag="startAngle" attribute="YES"/>

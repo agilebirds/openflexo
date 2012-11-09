@@ -19,22 +19,21 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.shapes.impl.RectangularOctogonImpl;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class RectangularOctogon extends Polygon {
-
-	// *******************************************************************************
-	// * Constructor *
-	// *******************************************************************************
-
-	public RectangularOctogon() {
-		this(null);
-	}
-
-	public RectangularOctogon(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation, new FGEPoint(0, 0.2), new FGEPoint(0, 0.8), new FGEPoint(0.1, 1), new FGEPoint(0.9, 1),
-				new FGEPoint(1, 0.8), new FGEPoint(1, 0.2), new FGEPoint(0.9, 0), new FGEPoint(0.1, 0));
-	}
+/**
+ * Represents a rectangular octogon
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(RectangularOctogonImpl.class)
+@XMLElement(xmlTag = "RectangularOctogonShape")
+public interface RectangularOctogon extends Polygon {
 
 }

@@ -121,7 +121,7 @@ public interface RectPolylinConnector extends Connector {
 	public void setRectPolylinConstraints(RectPolylinConstraints someRectPolylinConstraints, SimplifiedCardinalDirection aStartOrientation,
 			SimplifiedCardinalDirection aEndOrientation);
 
-	@Getter(value = STRAIGHT_LINE_WHEN_POSSIBLE)
+	@Getter(value = STRAIGHT_LINE_WHEN_POSSIBLE, defaultValue = "true")
 	@XMLAttribute
 	public boolean getStraightLineWhenPossible();
 
@@ -149,46 +149,46 @@ public interface RectPolylinConnector extends Connector {
 	@Setter(value = START_ORIENTATION)
 	public void setStartOrientation(SimplifiedCardinalDirection anOrientation);
 
-	@Getter(value = IS_ROUNDED)
+	@Getter(value = IS_ROUNDED, defaultValue = "true")
 	@XMLAttribute
 	public boolean getIsRounded();
 
 	@Setter(value = IS_ROUNDED)
 	public void setIsRounded(boolean aFlag);
 
-	@Getter(value = ARC_SIZE)
+	@Getter(value = ARC_SIZE, defaultValue = "10")
 	@XMLAttribute
 	public int getArcSize();
 
 	@Setter(value = ARC_SIZE)
 	public void setArcSize(int anArcSize);
 
-	@Getter(value = IS_STARTING_LOCATION_FIXED)
+	@Getter(value = IS_STARTING_LOCATION_FIXED, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsStartingLocationFixed();
 
 	@Setter(value = IS_STARTING_LOCATION_FIXED)
 	public void setIsStartingLocationFixed(boolean aFlag);
 
-	@Getter(value = IS_STARTING_LOCATION_DRAGGABLE)
+	@Getter(value = IS_STARTING_LOCATION_DRAGGABLE, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsStartingLocationDraggable();
 
 	@Setter(value = IS_STARTING_LOCATION_DRAGGABLE)
 	public void setIsStartingLocationDraggable(boolean aFlag);
 
-	@Getter(value = IS_ENDING_LOCATION_FIXED)
+	@Getter(value = IS_ENDING_LOCATION_FIXED, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsEndingLocationFixed();
 
 	@Setter(value = IS_ENDING_LOCATION_FIXED)
 	public void setIsEndingLocationFixed(boolean aFlag);
 
-	@Getter(value = IS_ENDING_LOCATION_DRAGGABLE)
+	@Getter(value = IS_ENDING_LOCATION_DRAGGABLE, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsEndingLocationDraggable();
 
-	@Setter(value = CROSSED_CONTROL_POINT)
+	@Setter(value = IS_ENDING_LOCATION_DRAGGABLE)
 	public void setIsEndingLocationDraggable(boolean aFlag);
 
 	@Getter(value = CROSSED_CONTROL_POINT)
@@ -236,7 +236,7 @@ public interface RectPolylinConnector extends Connector {
 	@Setter(value = FIXED_END_LOCATION)
 	public void setFixedEndLocation(FGEPoint aPoint);
 
-	@Getter(value = POLYLIN)
+	@Getter(value = POLYLIN, ignoreType = true)
 	@XMLElement
 	public FGERectPolylin _getPolylin();
 
@@ -260,7 +260,7 @@ public interface RectPolylinConnector extends Connector {
 	public void setPixelOverlap(int aPixelOverlap);
 
 	@Override
-	public List<? extends ControlArea> getControlAreas();
+	public List<? extends ControlArea<?>> getControlAreas();
 
 	/**
 	 * 

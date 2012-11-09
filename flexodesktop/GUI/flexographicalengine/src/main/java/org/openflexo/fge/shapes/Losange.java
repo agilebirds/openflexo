@@ -19,43 +19,21 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.shapes.impl.LosangeImpl;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class Losange extends RegularPolygon {
-
-	// *******************************************************************************
-	// * Constructor *
-	// *******************************************************************************
-
-	public Losange() {
-		this(null);
-	}
-
-	public Losange(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation, 4);
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.LOSANGE;
-	}
-
-	@Override
-	public int getNPoints() {
-		return 4;
-	}
-
-	@Override
-	public void setNPoints(int pointsNb) {
-	}
-
-	@Override
-	public int getStartAngle() {
-		return 90;
-	}
-
-	@Override
-	public void setStartAngle(int anAngle) {
-	}
+/**
+ * Represents a losange, vertically layouted
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(LosangeImpl.class)
+@XMLElement(xmlTag = "LosangeShape")
+public interface Losange extends RegularPolygon {
 
 }

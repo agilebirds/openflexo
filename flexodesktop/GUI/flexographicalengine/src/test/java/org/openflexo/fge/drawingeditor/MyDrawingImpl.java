@@ -157,11 +157,11 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 	private void _finalizeDeserializationFor2(MyDrawingElement<?, ?> element) {
 		// element.getGraphicalRepresentation().resetToDefaultIdentifier();
 
-		System.out.println(">>>>>>> " + element);
+		/*System.out.println(">>>>>>> " + element);
 		System.out.println("Drawing=" + element.getDrawing());
 		System.out.println("GR= " + element.getGraphicalRepresentation());
 		System.out.println("drawable= " + element.getGraphicalRepresentation().getDrawable());
-		System.out.println("gr_drawing=" + element.getGraphicalRepresentation().getDrawing());
+		System.out.println("gr_drawing=" + element.getGraphicalRepresentation().getDrawing());*/
 
 		for (MyDrawingElement<?, ?> e : element.getChilds()) {
 			getDrawing().getEditedDrawing().addDrawable(e, element);

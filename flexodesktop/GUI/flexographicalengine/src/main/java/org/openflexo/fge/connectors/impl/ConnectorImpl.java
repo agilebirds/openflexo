@@ -28,7 +28,6 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentationUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -51,7 +50,15 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 
 	protected FGERectangle NORMALIZED_BOUNDS = new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 
-	public ConnectorImpl(ConnectorGraphicalRepresentation aGraphicalRepresentation) {
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public ConnectorImpl() {
+		super();
+	}
+
+	@Deprecated
+	private ConnectorImpl(ConnectorGraphicalRepresentation aGraphicalRepresentation) {
 		super();
 		graphicalRepresentation = aGraphicalRepresentation;
 		// labelCP1 = new LabelControlPoint(aGraphicalRepresentation,new FGEPoint());
@@ -84,7 +91,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation getStartObject() {
+	public ShapeGraphicalRepresentation<?> getStartObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
@@ -92,7 +99,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation getEndObject() {
+	public ShapeGraphicalRepresentation<?> getEndObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
@@ -143,7 +150,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	public abstract void drawConnector(FGEConnectorGraphics g);
 
 	@Override
-	public abstract List<? extends ControlArea> getControlAreas();
+	public abstract List<? extends ControlArea<?>> getControlAreas();
 
 	@Override
 	public abstract ConnectorType getConnectorType();

@@ -78,13 +78,13 @@ public class DataBinding implements StringConvertable<DataBinding> {
 		return CONVERTER;
 	}
 
-	private GraphicalRepresentation owner;
+	private GraphicalRepresentation<?> owner;
 	private GRParameter bindingAttribute;
 	private String unparsedBinding;
 	private BindingDefinition bindingDefinition;
 	private AbstractBinding binding;
 
-	public DataBinding(GraphicalRepresentation owner, GRParameter attribute, BindingDefinition df) {
+	public DataBinding(GraphicalRepresentation<?> owner, GRParameter attribute, BindingDefinition df) {
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
@@ -192,11 +192,11 @@ public class DataBinding implements StringConvertable<DataBinding> {
 		this.unparsedBinding = unparsedBinding;
 	}
 
-	public GraphicalRepresentation getOwner() {
+	public GraphicalRepresentation<?> getOwner() {
 		return owner;
 	}
 
-	public void setOwner(GraphicalRepresentation owner) {
+	public void setOwner(GraphicalRepresentation<?> owner) {
 		this.owner = owner;
 	}
 
@@ -241,7 +241,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 			for (TargetObject o : targetList) {
 				// System.out.println("> "+o.target+" for "+o.propertyName);
 				if (o.target instanceof GraphicalRepresentation) {
-					GraphicalRepresentation<?> c = (GraphicalRepresentation) o.target;
+					GraphicalRepresentation<?> c = (GraphicalRepresentation<?>) o.target;
 					GRParameter param = c.parameterWithName(o.propertyName);
 					// logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
 					try {
