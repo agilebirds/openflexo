@@ -106,20 +106,13 @@ import org.openflexo.ws.client.PPMWebService.PPMProcess;
 
 public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData, InspectableObject {
 
+	public static final String ALL_ASSIGNABLE_ROLES = "allAssignableRoles";
+
 	public enum GraphicalProperties {
-		CONNECTOR_REPRESENTATION("connectorRepresentation"),
-		COMPONENT_FONT("componentFont"),
-		ROLE_FONT("roleFont"),
-		EVENT_FONT("eventFont"),
-		ACTION_FONT("actionFont"),
-		OPERATION_FONT("operationFont"),
-		ACTIVITY_FONT("activityFont"),
-		ARTEFACT_FONT("artefactFont"),
-		EDGE_FONT("edgeFont"),
-		SHOW_MESSAGES("showMessages"),
-		SHOW_WO_NAME("showWOName"),
-		SHOW_SHADOWS("showShadows"),
-		USE_TRANSPARENCY("useTransparency");
+		CONNECTOR_REPRESENTATION("connectorRepresentation"), COMPONENT_FONT("componentFont"), ROLE_FONT("roleFont"), EVENT_FONT("eventFont"), ACTION_FONT(
+				"actionFont"), OPERATION_FONT("operationFont"), ACTIVITY_FONT("activityFont"), ARTEFACT_FONT("artefactFont"), EDGE_FONT(
+				"edgeFont"), SHOW_MESSAGES("showMessages"), SHOW_WO_NAME("showWOName"), SHOW_SHADOWS("showShadows"), USE_TRANSPARENCY(
+				"useTransparency");
 		private String serializationName;
 
 		GraphicalProperties(String s) {
@@ -151,6 +144,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	private RoleList _roleList;
 	private RoleList importedRoleList;
+
+	private Vector<Role> allAssignableRoles;
 
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addProcessMetricsDefinitionActionizer;
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addActivityMetricsDefinitionActionizer;
@@ -1231,22 +1226,29 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		return reply;
 	}
 
-	public Vector<Role> getAllAssignableRoles() {
-		Vector<Role> reply = new Vector<Role>();
+	public void clearAssignableRolesCache() {
+		allAssignableRoles = null;
+		notifyAttributeModification(ALL_ASSIGNABLE_ROLES, null, null);
+	}
 
-		for (Role r : getRoleList().getRoles()) {
-			if (r.getIsAssignable()) {
-				reply.add(r);
-			}
-		}
-		if (getImportedRoleList() != null) {
-			for (Role r : getImportedRoleList().getRoles()) {
+	public Vector<Role> getAllAssignableRoles() {
+		if (allAssignableRoles == null) {
+			allAssignableRoles = new Vector<Role>();
+
+			for (Role r : getRoleList().getRoles()) {
 				if (r.getIsAssignable()) {
-					reply.add(r);
+					allAssignableRoles.add(r);
+				}
+			}
+			if (getImportedRoleList() != null) {
+				for (Role r : getImportedRoleList().getRoles()) {
+					if (r.getIsAssignable()) {
+						allAssignableRoles.add(r);
+					}
 				}
 			}
 		}
-		return reply;
+		return allAssignableRoles;
 	}
 
 	public Vector<Role> getAllSortedRoles() {

@@ -209,6 +209,9 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 			aRole.setRoleList(this);
 			if (!isDeserializing()) {
 				notifyRoleAdded(aRole);
+				if (getWorkflow() != null) {
+					getWorkflow().clearAssignableRolesCache();
+				}
 			}
 		}
 	}
@@ -219,6 +222,9 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 			aRole.setRoleList(null);
 			if (!isDeserializing()) {
 				notifyRoleRemoved(aRole);
+				if (getWorkflow() != null) {
+					getWorkflow().clearAssignableRolesCache();
+				}
 			}
 		}
 	}
