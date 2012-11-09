@@ -44,16 +44,16 @@
       </TextField>
     </Tab>
     <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="component_instance_id" localize="true" name="ComponentInstanceflexoIDLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="ComponentInstanceflexoID" data="data.componentInstance.flexoID.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+      <Label label="component_instance_id" localize="true" name="ComponentInstanceflexoIDLabel" constraints="twocols(location=left;index=30;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="ComponentInstanceflexoID" data="data.componentInstance.flexoID.toString" constraints="twocols(location=right;index=31;expandHorizontally=true;expandVertically=false)">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="css_sheet" localize="true" name="CssSheetLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="CssSheet" data="data.cssSheet" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS">
+      <Label label="css_sheet" localize="true" name="CssSheetLabel" constraints="twocols(location=left;index=32;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="CssSheet" data="data.cssSheet" constraints="twocols(location=right;index=33;expandHorizontally=false;expandVertically=false)" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </DropDown>
-      <Label label="last_update" localize="true" name="LastUpdateAsStringLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="LastUpdateAsString" data="data.lastUpdateAsString" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)">
+      <Label label="last_update" localize="true" name="LastUpdateAsStringLabel" constraints="twocols(location=left;index=34;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="LastUpdateAsString" data="data.lastUpdateAsString" constraints="twocols(location=right;index=35;expandHorizontally=true;expandVertically=false)">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
     </Tab>
