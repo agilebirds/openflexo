@@ -1205,6 +1205,48 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outAFalseConstant(node);
     }
 
+    public void inANullConstant(ANullConstant node)
+    {
+        defaultIn(node);
+    }
+
+    public void outANullConstant(ANullConstant node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseANullConstant(ANullConstant node)
+    {
+        inANullConstant(node);
+        if(node.getNull() != null)
+        {
+            node.getNull().apply(this);
+        }
+        outANullConstant(node);
+    }
+
+    public void inAThisConstant(AThisConstant node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAThisConstant(AThisConstant node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAThisConstant(AThisConstant node)
+    {
+        inAThisConstant(node);
+        if(node.getThis() != null)
+        {
+            node.getThis().apply(this);
+        }
+        outAThisConstant(node);
+    }
+
     public void inAPiConstant(APiConstant node)
     {
         defaultIn(node);

@@ -46,6 +46,8 @@ Tokens
  sqrt = 'sqrt';
  true = 'true';
  false = 'false';
+ null = 'null';
+ this = 'this';
  decimal_number = ['0' .. '9']+;
  precise_number = ['0' .. '9']+ '.' ['0' .. '9']+;
  scientific_notation_number = 
@@ -53,8 +55,8 @@ Tokens
  | ['0' .. '9']+ '.' ['0' .. '9']+ 'e' '-' ['0' .. '9']+
  | ['0' .. '9']+ '.' ['0' .. '9']+ 'E' ['0' .. '9']+ 
  | ['0' .. '9']+ '.' ['0' .. '9']+ 'E' '-' ['0' .. '9']+;
- string_value = '"' (not_hyphen)+ '"';
- chars_value = ''' (not_hyphen2)+ ''';
+ string_value = '"' (not_hyphen)* '"';
+ chars_value = ''' (not_hyphen2)* ''';
  identifier = letter (letter | digit)*;
  blank = (' ' | 13 | 10)+;
 
@@ -120,6 +122,8 @@ Productions
  constant = 
   {true} true |
   {false} false |
+  {null} null |
+  {this} this |
   {pi} pi;
 
  number =

@@ -226,44 +226,56 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTDecimalNumber(@SuppressWarnings("unused") TDecimalNumber node)
+    public void caseTNull(@SuppressWarnings("unused") TNull node)
     {
         this.index = 36;
     }
 
     @Override
-    public void caseTPreciseNumber(@SuppressWarnings("unused") TPreciseNumber node)
+    public void caseTThis(@SuppressWarnings("unused") TThis node)
     {
         this.index = 37;
     }
 
     @Override
-    public void caseTScientificNotationNumber(@SuppressWarnings("unused") TScientificNotationNumber node)
+    public void caseTDecimalNumber(@SuppressWarnings("unused") TDecimalNumber node)
     {
         this.index = 38;
     }
 
     @Override
-    public void caseTStringValue(@SuppressWarnings("unused") TStringValue node)
+    public void caseTPreciseNumber(@SuppressWarnings("unused") TPreciseNumber node)
     {
         this.index = 39;
     }
 
     @Override
-    public void caseTCharsValue(@SuppressWarnings("unused") TCharsValue node)
+    public void caseTScientificNotationNumber(@SuppressWarnings("unused") TScientificNotationNumber node)
     {
         this.index = 40;
     }
 
     @Override
-    public void caseTIdentifier(@SuppressWarnings("unused") TIdentifier node)
+    public void caseTStringValue(@SuppressWarnings("unused") TStringValue node)
     {
         this.index = 41;
     }
 
     @Override
-    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    public void caseTCharsValue(@SuppressWarnings("unused") TCharsValue node)
     {
         this.index = 42;
+    }
+
+    @Override
+    public void caseTIdentifier(@SuppressWarnings("unused") TIdentifier node)
+    {
+        this.index = 43;
+    }
+
+    @Override
+    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    {
+        this.index = 44;
     }
 }

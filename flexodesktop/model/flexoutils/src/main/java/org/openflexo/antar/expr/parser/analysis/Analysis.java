@@ -53,6 +53,8 @@ public interface Analysis extends Switch
     void caseASqrtFuncFunction(ASqrtFuncFunction node);
     void caseATrueConstant(ATrueConstant node);
     void caseAFalseConstant(AFalseConstant node);
+    void caseANullConstant(ANullConstant node);
+    void caseAThisConstant(AThisConstant node);
     void caseAPiConstant(APiConstant node);
     void caseADecimalNumberNumber(ADecimalNumberNumber node);
     void caseAPreciseNumberNumber(APreciseNumberNumber node);
@@ -102,6 +104,8 @@ public interface Analysis extends Switch
     void caseTSqrt(TSqrt node);
     void caseTTrue(TTrue node);
     void caseTFalse(TFalse node);
+    void caseTNull(TNull node);
+    void caseTThis(TThis node);
     void caseTDecimalNumber(TDecimalNumber node);
     void caseTPreciseNumber(TPreciseNumber node);
     void caseTScientificNotationNumber(TScientificNotationNumber node);

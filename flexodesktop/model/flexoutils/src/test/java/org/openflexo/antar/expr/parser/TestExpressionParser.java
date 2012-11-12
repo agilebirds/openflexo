@@ -134,8 +134,8 @@ public class TestExpressionParser extends TestCase {
 	}
 
 	public void testBindingValue6() {
-		tryToParse("this.is.a(1,2+3,7.8,'foo').little.test(1)", "this.is.a(1,5,7.8,\"foo\").little.test(1)",
-				BindingValueAsExpression.class, null, false);
+		tryToParse("i.am.a(1,2+3,7.8,'foo').little.test(1)", "i.am.a(1,5,7.8,\"foo\").little.test(1)", BindingValueAsExpression.class,
+				null, false);
 	}
 
 	public void testNumericValue1() {
