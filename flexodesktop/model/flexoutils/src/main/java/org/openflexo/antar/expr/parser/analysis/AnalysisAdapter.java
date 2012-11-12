@@ -279,11 +279,6 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAThisConstant(AThisConstant node)
-    {
-        defaultCase(node);
-    }
-
     public void caseAPiConstant(APiConstant node)
     {
         defaultCase(node);
@@ -525,11 +520,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseTNull(TNull node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTThis(TThis node)
     {
         defaultCase(node);
     }

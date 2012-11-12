@@ -63,7 +63,6 @@ import org.openflexo.antar.expr.parser.node.AStringValueTerm;
 import org.openflexo.antar.expr.parser.node.ASubExprExpr2;
 import org.openflexo.antar.expr.parser.node.ATanFuncFunction;
 import org.openflexo.antar.expr.parser.node.ATermExpr3;
-import org.openflexo.antar.expr.parser.node.AThisConstant;
 import org.openflexo.antar.expr.parser.node.ATrueConstant;
 import org.openflexo.antar.expr.parser.node.Node;
 import org.openflexo.antar.expr.parser.node.PBinding;
@@ -446,12 +445,6 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 	public void outANullConstant(ANullConstant node) {
 		super.outANullConstant(node);
 		registerExpressionNode(node, ObjectSymbolicConstant.NULL);
-	}
-
-	@Override
-	public void outAThisConstant(AThisConstant node) {
-		super.outAThisConstant(node);
-		registerExpressionNode(node, ObjectSymbolicConstant.THIS);
 	}
 
 	// Following methods manage following grammar fragment

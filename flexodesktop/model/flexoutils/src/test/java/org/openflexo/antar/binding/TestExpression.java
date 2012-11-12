@@ -20,11 +20,11 @@ public class TestExpression extends TestCase {
 
 	public void testVariable1() {
 		try {
-			List<Variable> vars = Expression.extractVariables("i+am+a+test");
+			List<Variable> vars = Expression.extractVariables("this+is+a+test");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
-			assertTrue(vars.contains(new Variable("i")));
-			assertTrue(vars.contains(new Variable("am")));
+			assertTrue(vars.contains(new Variable("this")));
+			assertTrue(vars.contains(new Variable("is")));
 			assertTrue(vars.contains(new Variable("a")));
 			assertTrue(vars.contains(new Variable("test")));
 		} catch (ParseException e) {
@@ -56,12 +56,12 @@ public class TestExpression extends TestCase {
 
 	public void testVariable3() {
 		try {
-			List<Variable> vars = Expression.extractVariables("i.am.a.little.test+and+following+is.not()");
+			List<Variable> vars = Expression.extractVariables("this.is.a.little.test+and+this+is.not()");
 			System.out.println("Variables:" + vars);
 			assertEquals(4, vars.size());
-			assertTrue(vars.contains(new Variable("i.am.a.little.test")));
+			assertTrue(vars.contains(new Variable("this.is.a.little.test")));
 			assertTrue(vars.contains(new Variable("and")));
-			assertTrue(vars.contains(new Variable("following")));
+			assertTrue(vars.contains(new Variable("this")));
 			assertTrue(vars.contains(new Variable("is.not()")));
 		} catch (ParseException e) {
 			e.printStackTrace();

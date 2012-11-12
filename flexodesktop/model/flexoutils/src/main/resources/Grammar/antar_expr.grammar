@@ -47,7 +47,6 @@ Tokens
  true = 'true';
  false = 'false';
  null = 'null';
- this = 'this';
  decimal_number = ['0' .. '9']+;
  precise_number = ['0' .. '9']+ '.' ['0' .. '9']+;
  scientific_notation_number = 
@@ -123,7 +122,6 @@ Productions
   {true} true |
   {false} false |
   {null} null |
-  {this} this |
   {pi} pi;
 
  number =

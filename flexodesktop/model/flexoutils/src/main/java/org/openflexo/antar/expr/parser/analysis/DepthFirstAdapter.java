@@ -1225,27 +1225,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outANullConstant(node);
     }
 
-    public void inAThisConstant(AThisConstant node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAThisConstant(AThisConstant node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAThisConstant(AThisConstant node)
-    {
-        inAThisConstant(node);
-        if(node.getThis() != null)
-        {
-            node.getThis().apply(this);
-        }
-        outAThisConstant(node);
-    }
-
     public void inAPiConstant(APiConstant node)
     {
         defaultIn(node);
