@@ -21,6 +21,12 @@ package org.openflexo.antar.expr;
 
 import org.openflexo.localization.FlexoLocalization;
 
+/**
+ * This exception is thrown when an operator is invoked in a type mismatch context
+ * 
+ * @author sylvain
+ * 
+ */
 @SuppressWarnings("serial")
 public class TypeMismatchException extends TransformException {
 
@@ -102,7 +108,7 @@ public class TypeMismatchException extends TransformException {
 		StringBuffer sb = new StringBuffer();
 		boolean isFirst = true;
 		for (EvaluationType t : types) {
-			sb.append((isFirst ? t.getLocalizedName() : "," + t.getLocalizedName()));
+			sb.append(isFirst ? t.getLocalizedName() : "," + t.getLocalizedName());
 			isFirst = false;
 		}
 		return sb.toString();

@@ -31,6 +31,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
 import org.openflexo.antar.expr.parser.ParseException;
@@ -94,7 +95,13 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	public Object getBindingValue(BindingEvaluationContext context) {
 		// logger.info("getBindingValue() "+this);
 		if (getBinding() != null) {
-			return getBinding().getBindingValue(context);
+			try {
+				return getBinding().getBindingValue(context);
+			} catch (TypeMismatchException e) {
+				return null;
+			} catch (NullReferenceException e) {
+				return null;
+			}
 		}
 		return null;
 	}

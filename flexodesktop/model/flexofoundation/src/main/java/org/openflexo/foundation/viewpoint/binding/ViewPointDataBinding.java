@@ -25,6 +25,8 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.xmlcode.StringConvertable;
@@ -79,7 +81,13 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 	public Object getBindingValue(BindingEvaluationContext context) {
 		// logger.info("getBindingValue() "+this);
 		if (getBinding() != null) {
-			return getBinding().getBindingValue(context);
+			try {
+				return getBinding().getBindingValue(context);
+			} catch (TypeMismatchException e) {
+				return null;
+			} catch (NullReferenceException e) {
+				return null;
+			}
 		}
 		return null;
 	}

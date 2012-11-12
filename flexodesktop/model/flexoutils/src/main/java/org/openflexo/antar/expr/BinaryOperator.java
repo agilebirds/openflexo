@@ -19,12 +19,18 @@
  */
 package org.openflexo.antar.expr;
 
+/**
+ * Represents an binary operator (an operator with two operands)
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class BinaryOperator extends Operator {
 
 	@Override
 	public abstract int getPriority();
 
-	public abstract Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException;
+	public abstract Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException, NullReferenceException;
 
 	public abstract EvaluationType getEvaluationType(EvaluationType leftOperandType, EvaluationType rightOperandType)
 			throws TypeMismatchException;

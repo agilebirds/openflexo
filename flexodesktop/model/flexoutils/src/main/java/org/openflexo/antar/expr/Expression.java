@@ -27,16 +27,24 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
 
+/**
+ * Represents a symbolic expression
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class Expression {
 
 	private static final Logger logger = Logger.getLogger(Expression.class.getPackage().getName());
 
 	public abstract Expression transform(ExpressionTransformer transformer) throws TransformException;
 
-	public final Expression evaluate() throws TypeMismatchException {
+	public final Expression evaluate() throws TypeMismatchException, NullReferenceException {
 		try {
 			return transform(new ExpressionEvaluator());
 		} catch (TypeMismatchException e) {
+			throw e;
+		} catch (NullReferenceException e) {
 			throw e;
 		} catch (TransformException e) {
 			logger.warning("Unexpected exception occured during evaluation " + e);

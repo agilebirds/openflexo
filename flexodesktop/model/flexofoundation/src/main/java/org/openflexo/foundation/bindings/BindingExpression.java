@@ -31,6 +31,7 @@ import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
@@ -432,9 +433,9 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable) {
-			this(new Variable(variableName), bindable, (bindable != null ? new BindingDefinition("object",
+			this(new Variable(variableName), bindable, bindable != null ? new BindingDefinition("object",
 					DMType.makeObjectDMType(((FlexoModelObject) bindable).getProject()), (FlexoModelObject) bindable,
-					BindingDefinitionType.GET, true) : null));
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable, BindingDefinition bd) {
@@ -442,9 +443,9 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable) {
-			this(aVariable, bindable, (bindable != null ? new BindingDefinition("object",
+			this(aVariable, bindable, bindable != null ? new BindingDefinition("object",
 					DMType.makeObjectDMType(((FlexoModelObject) bindable).getProject()), (FlexoModelObject) bindable,
-					BindingDefinitionType.GET, true) : null));
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable, BindingDefinition bd) {
@@ -579,9 +580,9 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable) {
-			this(new Function(functionName, args), bindable, (bindable != null ? new BindingDefinition("object",
+			this(new Function(functionName, args), bindable, bindable != null ? new BindingDefinition("object",
 					DMType.makeObjectDMType(((FlexoModelObject) bindable).getProject()), (FlexoModelObject) bindable,
-					BindingDefinitionType.GET, true) : null));
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable, BindingDefinition bd) {
@@ -589,9 +590,9 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(Function aFunction, Bindable bindable) {
-			this(aFunction, bindable, (bindable != null ? new BindingDefinition("object",
+			this(aFunction, bindable, bindable != null ? new BindingDefinition("object",
 					DMType.makeObjectDMType(((FlexoModelObject) bindable).getProject()), (FlexoModelObject) bindable,
-					BindingDefinitionType.GET, true) : null));
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueFunction(Function aFunction, Bindable bindable, BindingDefinition bd) {
@@ -705,7 +706,7 @@ public class BindingExpression extends AbstractBinding {
 		return expression.getEvaluationType();
 	}
 
-	public BindingExpression evaluate() throws TypeMismatchException {
+	public BindingExpression evaluate() throws TypeMismatchException, NullReferenceException {
 		if (expression == null) {
 			return clone();
 		}

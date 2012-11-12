@@ -51,15 +51,17 @@ public class ExpressionEvaluator implements ExpressionTransformer {
 	}
 
 	private Expression transformBinaryOperatorExpression(BinaryOperatorExpression e) throws TransformException {
-		if ((e.getLeftArgument() instanceof Constant) && (e.getRightArgument() instanceof Constant)
+		// If both arguments are constants, we try to evaluate them
+		if (e.getLeftArgument() instanceof Constant && e.getRightArgument() instanceof Constant
+		/*&& e.getLeftArgument().getEvaluationType() == e.getRightArgument().getEvaluationType()*/
 		/*&& (e.getLeftArgument() != ObjectSymbolicConstant.NULL) && (e.getRightArgument() != ObjectSymbolicConstant.NULL)*/) {
 			Constant returned = e.getOperator().evaluate((Constant) e.getLeftArgument(), (Constant) e.getRightArgument());
 			return returned;
 		}
-		if ((e.getLeftArgument() instanceof Constant) /*&& (e.getLeftArgument() != ObjectSymbolicConstant.NULL)*/) {
+		if (e.getLeftArgument() instanceof Constant /*&& (e.getLeftArgument() != ObjectSymbolicConstant.NULL)*/) {
 			return e.getOperator().evaluate((Constant) e.getLeftArgument(), e.getRightArgument());
 		}
-		if ((e.getRightArgument() instanceof Constant) /*&& (e.getRightArgument() != ObjectSymbolicConstant.NULL)*/) {
+		if (e.getRightArgument() instanceof Constant /*&& (e.getRightArgument() != ObjectSymbolicConstant.NULL)*/) {
 			return e.getOperator().evaluate(e.getLeftArgument(), (Constant) e.getRightArgument());
 		}
 		return e;

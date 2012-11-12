@@ -34,6 +34,7 @@ import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
@@ -239,8 +240,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable) {
-			this(new Variable(variableName), bindable, (bindable != null ? new BindingDefinition("object", Object.class,
-					BindingDefinitionType.GET, true) : null));
+			this(new Variable(variableName), bindable, bindable != null ? new BindingDefinition("object", Object.class,
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable, BindingDefinition bd) {
@@ -248,8 +249,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable) {
-			this(aVariable, bindable, (bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
-					: null));
+			this(aVariable, bindable, bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
+					: null);
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable, BindingDefinition bd) {
@@ -376,8 +377,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable) {
-			this(new Function(functionName, args), bindable, (bindable != null ? new BindingDefinition("object", Object.class,
-					BindingDefinitionType.GET, true) : null));
+			this(new Function(functionName, args), bindable, bindable != null ? new BindingDefinition("object", Object.class,
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable, BindingDefinition bd) {
@@ -385,8 +386,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(Function aFunction, Bindable bindable) {
-			this(aFunction, bindable, (bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
-					: null));
+			this(aFunction, bindable, bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
+					: null);
 			// System.out.println("Je me fabrique une BindingValueFunction avec "+aFunction);
 			// System.out.println("Mon bindable c'est "+bindable);
 			// System.out.println("BindingModel="+bindable.getBindingModel());
@@ -494,7 +495,7 @@ public class BindingExpression extends AbstractBinding {
 		return expression.getEvaluationType();
 	}
 
-	public BindingExpression evaluate() throws TypeMismatchException {
+	public BindingExpression evaluate() throws TypeMismatchException, NullReferenceException {
 		if (expression == null) {
 			return clone();
 		}
@@ -735,7 +736,7 @@ public class BindingExpression extends AbstractBinding {
 	 * Evaluates the binding as a GET with supplied binding evaluation context
 	 */
 	@Override
-	public Object getBindingValue(final BindingEvaluationContext context) {
+	public Object getBindingValue(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		if (expression == null) {
 			return null;
 		}
@@ -776,8 +777,12 @@ public class BindingExpression extends AbstractBinding {
 					+ " resolvedExpression=" + resolvedExpression);
 			return null;
 
+		} catch (NullReferenceException e1) {
+			throw e1;
+		} catch (TypeMismatchException e1) {
+			throw e1;
 		} catch (TransformException e1) {
-			logger.warning("TransformException while evaluating " + getStringRepresentation() + " " + e1.getMessage());
+			logger.warning("Unexpected TransformException while evaluating " + getStringRepresentation() + " " + e1.getMessage());
 			e1.printStackTrace();
 			return null;
 		}

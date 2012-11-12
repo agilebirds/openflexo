@@ -24,6 +24,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
@@ -115,7 +117,7 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 
 	}
 
-	public abstract Object getBindingValue(BindingEvaluationContext context);
+	public abstract Object getBindingValue(BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException;
 
 	public abstract void setBindingValue(Object value, BindingEvaluationContext context);
 
