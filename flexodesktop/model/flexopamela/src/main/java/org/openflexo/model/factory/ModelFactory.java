@@ -21,7 +21,7 @@ import org.openflexo.model.xml.DefaultStringEncoder.Converter;
 
 public class ModelFactory {
 
-	private Class<?> defaultModelClass = Object.class;;
+	private Class<?> defaultModelClass = Object.class;
 	private Class<? extends List> listImplementationClass = Vector.class;
 	private Class<? extends Map> mapImplementationClass = Hashtable.class;
 
