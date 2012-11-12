@@ -23,15 +23,18 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -52,7 +55,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	// For a OEShema, graphicalRepresentation is a DrawingGraphicalRepresentation
 	// For a OEShape, graphicalRepresentation is a ShapeGraphicalRepresentation
 	// For a OEConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation
-	private Object _graphicalRepresentation;
+	private GraphicalRepresentation<?> _graphicalRepresentation;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -146,6 +149,80 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 		}
 	}
 
+	/**
+	 * Re-index child, as it is defined in diagram hierarchy
+	 * 
+	 * @param aChild
+	 * @param newIndex
+	 */
+	protected void setIndexForChild(ViewObject aChild, int newIndex) {
+		if (childs.contains(aChild) && childs.indexOf(aChild) != newIndex) {
+			childs.remove(aChild);
+			childs.insertElementAt(aChild, newIndex);
+			for (ViewObject o : childs) {
+				o.notifyIndexChange();
+			}
+		}
+	}
+
+	/**
+	 * Return the index of this ViewElement, as it is defined in diagram hierarchy
+	 * 
+	 * @return
+	 */
+	public int getIndex() {
+		if (getParent() == null) {
+			return -1;
+		}
+		return getParent().getChilds().indexOf(this);
+	}
+
+	/**
+	 * Sets the index of this ViewElement, as it is defined in diagram hierarchy
+	 * 
+	 * @param index
+	 */
+	public void setIndex(int index) {
+		if (getIndex() != index && !isDeserializing()) {
+			getParent().setIndexForChild(this, index);
+		}
+	}
+
+	/**
+	 * Re-index child, relative to its position in the list of ViewObject declared to be of same EditionPattern
+	 * 
+	 * @param aChild
+	 * @param newIndex
+	 */
+	protected void setIndexForChildRelativeToEPType(ViewObject aChild, int newIndex) {
+		if (childs.contains(aChild) && childs.indexOf(aChild) != newIndex) {
+			childs.remove(aChild);
+			childs.insertElementAt(aChild, newIndex);
+			for (ViewObject o : childs) {
+				o.notifyIndexChange();
+			}
+		}
+	}
+
+	public List<ViewObject> getChildsOfType(EditionPattern editionPattern) {
+		ArrayList<ViewObject> returned = new ArrayList<ViewObject>();
+		for (ViewObject o : getChilds()) {
+			if (o instanceof ViewElement) {
+				ViewElement e = (ViewElement) o;
+				if (e.getEditionPattern() == editionPattern) {
+					returned.add(e);
+				}
+			}
+		}
+		return returned;
+	}
+
+	protected void notifyIndexChange() {
+		System.out.println("Hop, l'index de " + this + " change pour " + getIndex());
+		setChanged();
+		notifyObservers(new ElementUpdated(this));
+	}
+
 	public <T extends ViewObject> Collection<T> getChildrenOfType(final Class<T> type) {
 		return getChildrenOfType(type, true);
 	}
@@ -199,11 +276,11 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 		setChanged();
 	}
 
-	public Object getGraphicalRepresentation() {
+	public GraphicalRepresentation<?> getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
 		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
 			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
@@ -250,6 +327,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 		return o.isContainedIn(this);
 	}
 
+	@Override
 	public abstract String getDisplayableDescription();
 
 }

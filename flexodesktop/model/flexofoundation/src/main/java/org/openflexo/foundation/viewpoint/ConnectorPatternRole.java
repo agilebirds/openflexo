@@ -1,6 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
@@ -9,7 +10,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation is a org.openflexo.fge.ConnectorGraphicalRepresentation.
-	private Object _graphicalRepresentation;
+	private ConnectorGraphicalRepresentation<?> _graphicalRepresentation;
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation here are a org.openflexo.fge.ShapeGraphicalRepresentation.
@@ -39,21 +40,20 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 	}
 
 	@Override
-	public Object getGraphicalRepresentation() {
+	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
 	@Override
-	public void setGraphicalRepresentation(Object graphicalRepresentation) {
-		_graphicalRepresentation = graphicalRepresentation;
+	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
+		_graphicalRepresentation = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
 	}
 
-	public void updateGraphicalRepresentation(Object graphicalRepresentation) {
+	public void updateGraphicalRepresentation(ConnectorGraphicalRepresentation<?> graphicalRepresentation) {
 		if (_graphicalRepresentation != null) {
-			((ConnectorGraphicalRepresentation) _graphicalRepresentation)
-					.setsWith((ConnectorGraphicalRepresentation) graphicalRepresentation);
+			((ConnectorGraphicalRepresentation<?>) _graphicalRepresentation).setsWith(graphicalRepresentation);
 			setChanged();
 			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
 		} else {
@@ -63,8 +63,8 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 
 	// No notification
 	@Override
-	public void _setGraphicalRepresentationNoNotification(Object graphicalRepresentation) {
-		_graphicalRepresentation = graphicalRepresentation;
+	public void _setGraphicalRepresentationNoNotification(GraphicalRepresentation<?> graphicalRepresentation) {
+		_graphicalRepresentation = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
 	}
 
 	public Object getArtifactFromGraphicalRepresentation() {

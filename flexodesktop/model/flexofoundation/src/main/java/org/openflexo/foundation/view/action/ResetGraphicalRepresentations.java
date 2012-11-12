@@ -23,9 +23,6 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -35,11 +32,10 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewDefinition.DuplicateShemaNameException;
+import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
 
 /**
  * This action reset all graphical representations found in view to conform to those described in EditionPattern
@@ -104,7 +100,10 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 	}
 
 	private void processElement(ViewObject o) {
-		if (o instanceof ViewShape) {
+		if (o instanceof ViewElement) {
+			((ViewElement) o).resetGraphicalRepresentation();
+		}
+		/*if (o instanceof ViewShape) {
 			ViewShape shape = (ViewShape) o;
 			if (shape.getPatternRole() != null) {
 				((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation()).setsWith((ShapeGraphicalRepresentation) shape
@@ -123,7 +122,7 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 						GraphicalRepresentation.Parameters.text, GraphicalRepresentation.Parameters.isVisible,
 						GraphicalRepresentation.Parameters.absoluteTextX, GraphicalRepresentation.Parameters.absoluteTextY);
 			}
-		}
+		}*/
 		for (ViewObject child : o.getChilds()) {
 			processElement(child);
 		}

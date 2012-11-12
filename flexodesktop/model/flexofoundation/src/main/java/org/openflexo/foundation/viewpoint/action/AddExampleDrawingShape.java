@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -68,7 +69,7 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 	private ExampleDrawingShape _newShape;
 	public String newShapeName;
 	private ExampleDrawingObject _parent;
-	public Object graphicalRepresentation;
+	public ShapeGraphicalRepresentation<?> graphicalRepresentation;
 	public boolean nameSetToNull = false;
 
 	AddExampleDrawingShape(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {

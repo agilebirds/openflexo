@@ -137,6 +137,17 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	 * @param element
 	 */
 	public void applyToGraphicalRepresentation(GR gr, ViewElement element) {
+		/*if (getValue().toString().equals(
+				"(property.label.asString + ((inputAttributeReference.value != \"\") ? (\"=\" + inputAttributeReference.value) : \"\"))")) {
+			System.out.println("value=" + getValue());
+			System.out.println("hasBinding=" + getValue().hasBinding());
+			System.out.println("valid=" + getValue().isValid());
+			System.out.println("reason=" + getValue().getBinding().invalidBindingReason());
+			System.out.println("EPI=" + element.getEditionPatternInstance().debug());
+			System.out.println("Result=" + getValue().getBindingValue(element.getEditionPatternInstance()));
+			System.out.println("Hop");
+		}*/
+
 		getFeature().applyToGraphicalRepresentation(gr, (T) getValue().getBindingValue(element.getEditionPatternInstance()));
 	}
 

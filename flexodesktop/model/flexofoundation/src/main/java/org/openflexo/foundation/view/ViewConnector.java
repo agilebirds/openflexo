@@ -21,6 +21,8 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.xml.VEShemaBuilder;
@@ -60,6 +62,20 @@ public class ViewConnector extends ViewElement {
 		super(shema);
 		setStartShape(aStartShape);
 		setEndShape(anEndShape);
+	}
+
+	@Override
+	public ConnectorGraphicalRepresentation<ViewConnector> getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation<ViewConnector>) super.getGraphicalRepresentation();
+	}
+
+	@Override
+	public void resetGraphicalRepresentation() {
+		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
+				GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
+				GraphicalRepresentation.Parameters.absoluteTextY);
+		// getGraphicalRepresentation().notifyConnectorChanged();
+		super.resetGraphicalRepresentation();
 	}
 
 	@Override

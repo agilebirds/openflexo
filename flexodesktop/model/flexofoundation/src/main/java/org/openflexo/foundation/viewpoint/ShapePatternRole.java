@@ -10,7 +10,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation is a org.openflexo.fge.ShapeGraphicalRepresentation.
-	private Object _graphicalRepresentation;
+	private ShapeGraphicalRepresentation<?> _graphicalRepresentation;
 
 	private ShapePatternRole parentShapePatternRole;
 
@@ -37,20 +37,20 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 	}
 
 	@Override
-	public Object getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
 	@Override
-	public void setGraphicalRepresentation(Object graphicalRepresentation) {
-		_graphicalRepresentation = graphicalRepresentation;
+	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
+		_graphicalRepresentation = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
 	}
 
-	public void updateGraphicalRepresentation(Object graphicalRepresentation) {
+	public void updateGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		if (_graphicalRepresentation != null) {
-			((ShapeGraphicalRepresentation<?>) _graphicalRepresentation).setsWith((GraphicalRepresentation<?>) graphicalRepresentation);
+			((ShapeGraphicalRepresentation<?>) _graphicalRepresentation).setsWith(graphicalRepresentation);
 			setChanged();
 			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
 		} else {
@@ -60,8 +60,8 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 
 	// No notification
 	@Override
-	public void _setGraphicalRepresentationNoNotification(Object graphicalRepresentation) {
-		_graphicalRepresentation = graphicalRepresentation;
+	public void _setGraphicalRepresentationNoNotification(GraphicalRepresentation<?> graphicalRepresentation) {
+		_graphicalRepresentation = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
 	}
 
 	public void tryToFindAGR() {

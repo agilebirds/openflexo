@@ -72,6 +72,7 @@
   
   <entity name="org.openflexo.foundation.view.ViewObject" abstract="YES" finalizer="finalizeDeserialization" contexts="Contained">
     <property name="childs" type="vector" contains="org.openflexo.foundation.view.ViewObject" primary="yes" context="Contained"/>
+  	 <property name="index" xmlTag="index" attribute="YES"/>
   </entity>
 	
   <entity name="org.openflexo.foundation.view.View" xmlTag="VEShema">
@@ -80,6 +81,7 @@
   </entity>
 
   <entity name="org.openflexo.foundation.view.ViewElement" abstract="yes">
+  	 <property name="indexRelativeToEPType" xmlTag="indexRelativeToEPType" attribute="YES"/>
      <description>Shape or Connector</description>
   	<!--  <property name="editionPatternIdentifier" xmlTag="editionPatternIdentifier" attribute="YES"/>
   	 <property name="editionPatternInstanceId" xmlTag="editionPatternInstanceId" attribute="YES"/>-->

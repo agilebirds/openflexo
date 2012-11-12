@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
@@ -59,6 +60,11 @@ public class ExampleDrawingShape extends ExampleDrawingObject {
 		}
 		super.delete();
 		deleteObservers();
+	}
+
+	@Override
+	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return (ShapeGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
 	@Override

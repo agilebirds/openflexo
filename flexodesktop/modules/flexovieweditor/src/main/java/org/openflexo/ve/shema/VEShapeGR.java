@@ -253,4 +253,5 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	public boolean getContinuousTextEditing() {
 		return false;
 	}
+
 }

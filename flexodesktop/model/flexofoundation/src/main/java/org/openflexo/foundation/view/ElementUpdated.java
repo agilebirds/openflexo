@@ -29,8 +29,8 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
  */
 public class ElementUpdated extends OEDataModification {
 
-	public ElementUpdated(ViewElement element) {
-		super(null, element);
+	public ElementUpdated(ViewObject o) {
+		super(null, o);
 	}
 
 }
