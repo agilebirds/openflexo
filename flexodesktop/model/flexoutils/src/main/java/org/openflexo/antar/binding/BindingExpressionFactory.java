@@ -49,6 +49,7 @@ public class BindingExpressionFactory extends StringEncoder.Converter<BindingExp
 
 	@Override
 	public BindingExpression convertFromString(String aValue) {
+		// System.out.println("Converting from " + aValue);
 		BindingExpression returned = new BindingExpression();
 		try {
 			Expression expression = parseExpressionFromString(aValue);
@@ -57,6 +58,26 @@ public class BindingExpressionFactory extends StringEncoder.Converter<BindingExp
 			returned.unparsableValue = aValue;
 		}
 		returned.setOwner(_bindable);
+
+		/*System.out.println("valid=" + returned.isBindingValid());
+		if (returned.getExpression() instanceof BinaryOperatorExpression) {
+			BinaryOperatorExpression e = (BinaryOperatorExpression) returned.getExpression();
+			System.out.println("left=" + e.getLeftArgument() + " of "
+					+ (e.getLeftArgument() != null ? e.getLeftArgument().getClass() : "null"));
+			System.out.println("right=" + e.getRightArgument() + " of "
+					+ (e.getRightArgument() != null ? e.getRightArgument().getClass() : "null"));
+			if (e.getLeftArgument() instanceof BindingValueVariable) {
+				BindingValueVariable left = (BindingValueVariable) e.getLeftArgument();
+				System.out.println("left is valid = " + left.isValid());
+			}
+			if (e.getRightArgument() instanceof BindingValueConstant) {
+				BindingValueConstant right = (BindingValueConstant) e.getRightArgument();
+				System.out.println("right sb = " + right.getStaticBinding());
+				// System.out.println("right valid = " + right.getStaticBinding());
+				// System.out.println("right invalid reason= " + right.getStaticBinding().invalidBindingReason());
+			}
+		}*/
+
 		return returned;
 	}
 
@@ -125,14 +146,16 @@ public class BindingExpressionFactory extends StringEncoder.Converter<BindingExp
 				@Override
 				public Expression performTransformation(Expression e) throws TransformException {
 					if (e instanceof Constant) {
+						// System.out.println("Found constant " + e + " of " + e.getClass());
 						return new BindingValueConstant((Constant) e, bindable);
 					} else if (e instanceof BindingValueAsExpression) {
+						// System.out.println("Found expression " + e + " of " + e.getClass());
 						return new BindingValueVariable(((BindingValueAsExpression) e).toString(), bindable);
 					}
 					return e;
 				}
 			});
-			//System.out.println("Returned = " + returned);
+			// System.out.println("Returned = " + returned);
 			return returned;
 
 		} catch (TransformException ex) {

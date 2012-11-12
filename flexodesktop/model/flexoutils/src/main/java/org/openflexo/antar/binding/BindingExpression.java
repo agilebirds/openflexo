@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.MethodCall.MethodCallArgument;
 import org.openflexo.antar.expr.Constant;
+import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
@@ -169,6 +170,8 @@ public class BindingExpression extends AbstractBinding {
 				constant = new Constant.FloatConstant(((FloatStaticBinding) aStaticBinding).getValue());
 			} else if (aStaticBinding instanceof StringStaticBinding) {
 				constant = new Constant.StringConstant(((StringStaticBinding) aStaticBinding).getValue());
+			} else if (aStaticBinding instanceof NullStaticBinding) {
+				constant = ObjectSymbolicConstant.NULL;
 			}
 		}
 
@@ -192,6 +195,8 @@ public class BindingExpression extends AbstractBinding {
 				staticBinding = new FloatStaticBinding(bd, _bindable, ((Constant.FloatConstant) constant).getValue());
 			} else if (constant instanceof Constant.StringConstant) {
 				staticBinding = new StringStaticBinding(bd, _bindable, ((Constant.StringConstant) constant).getValue());
+			} else if (constant == ObjectSymbolicConstant.NULL) {
+				staticBinding = new NullStaticBinding(bd, _bindable);
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("staticBinding=" + staticBinding + " bindable=" + staticBinding.getOwner() + " bd="
@@ -741,6 +746,8 @@ public class BindingExpression extends AbstractBinding {
 			return null;
 		}
 
+		// System.out.println("Evaluated " + this);
+
 		try {
 			Expression resolvedExpression = expression.transform(new ExpressionTransformer() {
 				@Override
@@ -761,7 +768,11 @@ public class BindingExpression extends AbstractBinding {
 				}
 			});
 
+			// System.out.println("Resolved expression=" + resolvedExpression);
+
 			Expression evaluatedExpression = resolvedExpression.evaluate();
+
+			// System.out.println("Evaluated expression=" + evaluatedExpression);
 
 			if (evaluatedExpression instanceof Constant) {
 				return ((Constant) evaluatedExpression).getValue();
