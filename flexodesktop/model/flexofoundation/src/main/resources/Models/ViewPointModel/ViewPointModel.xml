@@ -11,6 +11,7 @@
 		<property name="viewPointURI" xmlTag="uri" attribute="YES" />
 		<property name="owlFile" xmlTag="owlFile" attribute="YES" />
 		<property name="description" xmlTag="description" />
+		<property name="version" xmlTag="version" attribute="YES" />
 		<property name="editionPatterns" type="vector"
 			contains="org.openflexo.foundation.viewpoint.EditionPattern"
 			primary="yes" />

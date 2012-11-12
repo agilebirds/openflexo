@@ -39,6 +39,7 @@ import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
@@ -68,6 +69,8 @@ public class ViewPoint extends ViewPointObject {
 	private String name;
 	private String viewPointURI;
 	private String description;
+	private String version;
+
 	private Vector<EditionPattern> editionPatterns;
 	private LocalizedDictionary localizedDictionary;
 
@@ -511,6 +514,19 @@ public class ViewPoint extends ViewPointObject {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String aVersion) {
+		if (requireChange(version, aVersion)) {
+			String old = this.version;
+			this.version = aVersion;
+			setChanged();
+			notifyObservers(new OEDataModification("version", old, version));
+		}
 	}
 
 	@Override
