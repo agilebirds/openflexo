@@ -30,7 +30,7 @@ import org.openflexo.toolbox.FileResource;
  */
 public class VECst {
 
-	public static final boolean CUT_COPY_PASTE_ENABLED = true;
+	public static final boolean CUT_COPY_PASTE_ENABLED = false;
 
 	public static final String DEFAULT_OE_BROWSER_WINDOW_TITLE = "ontology_browser";
 
