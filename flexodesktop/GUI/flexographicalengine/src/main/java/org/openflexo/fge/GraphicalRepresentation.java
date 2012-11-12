@@ -45,6 +45,7 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.impl.GraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -70,6 +71,8 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	// Property keys
 
+	public static final String DRAWABLE = "drawable";
+	public static final String DRAWING = "drawing";
 	public static final String IDENTIFIER = "identifier";
 	public static final String LAYER = "layer";
 	public static final String HAS_TEXT = "hasText";
@@ -195,12 +198,18 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	// * Model
 	// *******************************************************************************
 
+	@Getter(value = DRAWABLE, ignoreType = true)
+	@CloningStrategy(CloningStrategy.StrategyType.REFERENCE)
 	public O getDrawable();
 
+	@Setter(value = DRAWABLE)
 	public void setDrawable(O aDrawable);
 
+	@Getter(value = DRAWING, ignoreType = true)
+	@CloningStrategy(CloningStrategy.StrategyType.REFERENCE)
 	public Drawing<?> getDrawing();
 
+	@Setter(value = DRAWING)
 	public void setDrawing(Drawing<?> drawing);
 
 	// *******************************************************************************

@@ -195,7 +195,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	private Clipboard clipboard;
 
 	public void copy() {
-		if (contextualMenuInvoker instanceof MyShapeGraphicalRepresentation) {
+		/*if (contextualMenuInvoker instanceof MyShapeGraphicalRepresentation) {
 			MyShape copiedShape = (MyShape) ((MyShapeGraphicalRepresentation) getFocusedObjects().firstElement()).getDrawable().clone();
 			System.out.println("Copied: " + copiedShape);
 
@@ -215,7 +215,35 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 				e.printStackTrace();
 			}
 
+		}*/
+
+		System.out.println("Selected objects = " + getSelectedObjects());
+		Object[] objectsToBeCopied = new Object[getSelectedObjects().size()];
+
+		XMLSerializer serializer = getDrawing().getModel().getFactory().getSerializer();
+		int i = 0;
+		for (GraphicalRepresentation gr : getSelectedObjects()) {
+			objectsToBeCopied[i] = getSelectedObjects().get(i).getDrawable();
+			System.out.println("object: " + objectsToBeCopied[i] + " gr=" + getSelectedObjects().get(i));
+			System.out.println("Copied: " + serializer.serializeAsString(objectsToBeCopied[i]));
+			i++;
 		}
+
+		try {
+			clipboard = getDrawing().getModel().getFactory().copy(objectsToBeCopied);
+		} catch (ModelExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ModelDefinitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println(clipboard.debug());
+
 	}
 
 	public void paste() {

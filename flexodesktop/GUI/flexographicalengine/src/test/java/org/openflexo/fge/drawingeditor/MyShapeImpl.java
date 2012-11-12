@@ -71,7 +71,13 @@ public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, MyShapeG
 
 	@Override
 	public String toString() {
-		return "MyShape[" + name + ":" + getGraphicalRepresentation().toString() + "]";
+		return "MyShape["
+				+ name
+				+ ":"
+				+ getGraphicalRepresentation().toString()
+				+ "  drawable="
+				+ (getGraphicalRepresentation().getDrawable() != null ? getGraphicalRepresentation().getDrawable().getClass()
+						.getSimpleName() : null) + " drawing=" + getGraphicalRepresentation().getDrawing() + "]";
 	}
 
 }
