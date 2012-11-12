@@ -22,6 +22,8 @@ package org.openflexo.localization;
 import java.awt.Component;
 import java.awt.Frame;
 import java.io.File;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
@@ -300,54 +302,58 @@ public class FlexoLocalization {
 	}
 
 	public static void updateGUILocalized() {
-		for (Component next : _storedLocalizedForComponents.keySet()) {
-			if (next == null) {
+		for (Map.Entry<Component, String> e : _storedLocalizedForComponents.entrySet()) {
+			Component component = e.getKey();
+			if (component == null) {
 				continue;
 			}
-			String string = _storedLocalizedForComponents.get(next);
+			String string = e.getValue();
 			if (string == null) {
 				continue;
 			}
 			String text = localizedForKey(string);
-			String additionalString = _storedAdditionalStrings.get(next);
+			String additionalString = _storedAdditionalStrings.get(component);
 			if (additionalString != null) {
 				text = text + additionalString;
 			}
-			if (next instanceof AbstractButton) {
-				((AbstractButton) next).setText(text);
+			if (component instanceof AbstractButton) {
+				((AbstractButton) component).setText(text);
 			}
-			if (next instanceof JLabel) {
-				((JLabel) next).setText(text);
+			if (component instanceof JLabel) {
+				((JLabel) component).setText(text);
 			}
-			next.setName(text);
-			if (next.getParent() instanceof JTabbedPane) {
-				if (((JTabbedPane) next.getParent()).indexOfComponent(next) > -1) {
-					((JTabbedPane) next.getParent()).setTitleAt(((JTabbedPane) next.getParent()).indexOfComponent(next), text);
+			component.setName(text);
+			if (component.getParent() instanceof JTabbedPane) {
+				if (((JTabbedPane) component.getParent()).indexOfComponent(component) > -1) {
+					((JTabbedPane) component.getParent()).setTitleAt(((JTabbedPane) component.getParent()).indexOfComponent(component),
+							text);
 				}
 			}
-			if (next.getParent() != null && next.getParent().getParent() instanceof JTabbedPane) {
-				if (((JTabbedPane) next.getParent().getParent()).indexOfComponent(next) > -1) {
-					((JTabbedPane) next.getParent().getParent()).setTitleAt(
-							((JTabbedPane) next.getParent().getParent()).indexOfComponent(next), text);
+			if (component.getParent() != null && component.getParent().getParent() instanceof JTabbedPane) {
+				if (((JTabbedPane) component.getParent().getParent()).indexOfComponent(component) > -1) {
+					((JTabbedPane) component.getParent().getParent()).setTitleAt(
+							((JTabbedPane) component.getParent().getParent()).indexOfComponent(component), text);
 				}
 			}
 		}
-		for (TitledBorder next : _storedLocalizedForBorders.keySet()) {
+		for (Entry<TitledBorder, String> e : _storedLocalizedForBorders.entrySet()) {
+			TitledBorder next = e.getKey();
 			if (next == null) {
 				continue;
 			}
-			String string = _storedLocalizedForBorders.get(next);
+			String string = e.getValue();
 			if (string == null) {
 				continue;
 			}
 			String text = localizedForKey(string);
 			next.setTitle(text);
 		}
-		for (TableColumn next : _storedLocalizedForTableColumn.keySet()) {
+		for (Entry<TableColumn, String> e : _storedLocalizedForTableColumn.entrySet()) {
+			TableColumn next = e.getKey();
 			if (next == null) {
 				continue;
 			}
-			String string = _storedLocalizedForTableColumn.get(next);
+			String string = e.getValue();
 			if (string == null) {
 				continue;
 			}
@@ -490,9 +496,9 @@ public class FlexoLocalization {
 		} catch (InvalidObjectSpecificationException e) {
 			logger.warning(e.getMessage());
 			return key;
-			/*}catch (InvalidKeyValuePropertyException e) {
-			logger.warning(e.getMessage());
-			return key;*/
+			/*
+			 * }catch (InvalidKeyValuePropertyException e) { logger.warning(e.getMessage()); return key;
+			 */
 		}
 	}
 
