@@ -22,9 +22,11 @@ package org.openflexo.fib.view;
 import java.awt.Dimension;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
@@ -116,7 +118,19 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	}
 
 	@Override
-	public void updateDataObject(Object dataObject) {
+	public void updateDataObject(final Object dataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(dataObject);
+				}
+			});
+			return;
+		}
 		update();
 		if (isComponentVisible()) {
 			for (FIBView v : subViews) {

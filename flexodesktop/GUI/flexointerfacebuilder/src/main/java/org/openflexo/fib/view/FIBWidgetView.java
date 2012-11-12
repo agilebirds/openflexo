@@ -233,9 +233,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			dependingObjects = new DependingObjects(this);
 		}
 		dependingObjects.refreshObserving(getController() /*
-														 * ,getWidget().getName() != null &&
-														 * getWidget().getName().equals("InspectorPropertyTable")
-														 */);
+															* ,getWidget().getName() != null &&
+															* getWidget().getName().equals("InspectorPropertyTable")
+															*/);
 	}
 
 	@Override
@@ -346,6 +346,18 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	@Override
 	public void updateDataObject(Object aDataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update();
+				}
+			});
+			return;
+		}
 		update();
 	}
 

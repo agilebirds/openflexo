@@ -25,12 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListDataListener;
 
 import org.openflexo.antar.binding.AbstractBinding;
@@ -361,9 +363,21 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}*/
 
 	@Override
-	public final void updateDataObject(Object value) {
+	public final void updateDataObject(final Object dataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(dataObject);
+				}
+			});
+			return;
+		}
 		updateListModelWhenRequired();
-		super.updateDataObject(value);
+		super.updateDataObject(dataObject);
 	}
 
 	@Override
