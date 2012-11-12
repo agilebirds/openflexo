@@ -896,9 +896,10 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	protected StatusList getStatusList(boolean createIfMissing) {
 		if (_statusList == null && createIfMissing) {
 			if (!isDeserializing()) {
-				_statusList = new StatusList(this, true);
+				setStatusList(new StatusList(this, true));
+
 			} else {
-				_statusList = new StatusList(this, false);
+				setStatusList(new StatusList(this, false));
 			}
 		}
 		return _statusList;
@@ -906,6 +907,8 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 
 	public void setStatusList(StatusList list) {
 		_statusList = list;
+		setChanged();
+		notifyAttributeModification("statusList", null, _statusList);
 	}
 
 	protected void notifyStatusListUpdated() {

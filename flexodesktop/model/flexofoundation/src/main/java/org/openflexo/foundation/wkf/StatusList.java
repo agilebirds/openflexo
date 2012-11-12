@@ -185,15 +185,17 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	private void notifyStatusAdded(Status status, FlexoProcess process) {
 		setChanged();
 		notifyObservers(new StatusInserted(status, process));
-		if ((getProcess() != null) && (getProcess().getSubProcesses() != null)) {
-			for (Enumeration e = getProcess().getSubProcesses().elements(); e.hasMoreElements();) {
-				FlexoProcess subProcess = (FlexoProcess) e.nextElement();
+		if (getProcess() != null && getProcess().getSubProcesses() != null) {
+			for (Enumeration<FlexoProcess> e = getProcess().getSubProcesses().elements(); e.hasMoreElements();) {
+				FlexoProcess subProcess = e.nextElement();
 				subProcess.getStatusList().notifyStatusAdded(status, process);
 			}
 		}
 		if (getProcess() != null) {
 			getProcess().notifyStatusListUpdated();
 		}
+		setChanged();
+		notifyAttributeModification("allAvailableStatus", null, status);
 	}
 
 	public void removeFromStatus(Status aStatus) {
@@ -222,6 +224,8 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 			FlexoProcess subProcess = (FlexoProcess) e.nextElement();
 			subProcess.getStatusList().notifyStatusRemoved(status, process);
 		}
+		setChanged();
+		notifyAttributeModification("allAvailableStatus", null, status);
 	}
 
 	public Status statusWithName(String aStatusName) {
@@ -232,7 +236,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		}
 		for (Enumeration e = _status.elements(); e.hasMoreElements();) {
 			Status temp = (Status) e.nextElement();
-			if ((temp != null) && (temp.getName().equals(aStatusName))) {
+			if (temp != null && temp.getName().equals(aStatusName)) {
 				return temp;
 			}
 		}

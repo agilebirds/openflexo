@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.Component;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -32,6 +33,7 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBMultipleValuesDynamicModel;
 import org.openflexo.fib.model.FIBModelObject;
@@ -97,6 +99,10 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				}
 			}
 
+			if (list == null && array == null && getWidget().getIteratorClass() != null && getWidget().getIteratorClass().isEnum()) {
+				array = getWidget().getIteratorClass().getEnumConstants();
+			}
+
 			if (list == null && array == null && StringUtils.isNotEmpty(getWidget().getStaticList())) {
 				list = new Vector();
 				StringTokenizer st = new StringTokenizer(getWidget().getStaticList(), ",");
@@ -104,6 +110,8 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 					list.add(st.nextToken());
 				}
 			}
+
+			// logger.info("Built list model: " + this);
 
 		}
 
@@ -206,9 +214,47 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			return super.equals(object);
 		}
 
+		/*@Override
+		public FIBMultipleValueModel clone() {
+			FIBMultipleValueModel returned = new FIBMultipleValueModel();
+			if (list != null) {
+				returned.list = new ArrayList(list);
+			} else if (array != null) {
+				returned.array = new Object[array.length];
+				for (int i = 0; i < array.length; i++) {
+					returned.array[i] = array[i];
+				}
+			}
+			return returned;
+		}*/
+
 		@Override
 		public String toString() {
-			return getClass().getSimpleName() + "[" + (list != null ? list.toString() : "null") + "]";
+			return getClass().getSimpleName() + "[" + (list != null ? list.size() + " " + list.toString() : "null") + "]";
+		}
+
+		protected ArrayList<Object> toArrayList() {
+			ArrayList<Object> returned = new ArrayList<Object>();
+			for (int i = 0; i < getSize(); i++) {
+				returned.add(getElementAt(i));
+			}
+			return returned;
+		}
+
+		protected boolean equalsToList(List l) {
+			if (l == null) {
+				return getSize() == 0;
+			}
+			if (getSize() == l.size()) {
+				for (int i = 0; i < getSize(); i++) {
+					if (!getElementAt(i).equals(l.get(i))) {
+						return false;
+					}
+				}
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -272,7 +318,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			listModel = new FIBMultipleValueModel();
 		} else {
 			FIBMultipleValueModel aNewListModel = new FIBMultipleValueModel();
-			if (!aNewListModel.equals(listModel)) {
+			if (!aNewListModel.equals(listModel) || didLastKnownValuesChange()) {
 				listModel = aNewListModel;
 			}
 		}
@@ -283,6 +329,25 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		listModel = null;
 		updateListModelWhenRequired();
 		return listModel;
+	}
+
+	private ArrayList<Object> lastKnownValues = null;
+
+	/**
+	 * Return a flag indicating if last known values declared as ListModel have changed since the last time this method was called.
+	 * 
+	 * @return
+	 */
+	protected boolean didLastKnownValuesChange() {
+		boolean returned;
+		if (listModel != null) {
+			returned = !listModel.equalsToList(lastKnownValues);
+			lastKnownValues = listModel.toArrayList();
+		} else {
+			returned = lastKnownValues != null;
+			lastKnownValues = null;
+		}
+		return returned;
 	}
 
 	/*protected final FIBListModel rebuildListModel()
@@ -325,6 +390,14 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				getLocalized(s);
 			}
 		}
+	}
+
+	@Override
+	public List<AbstractBinding> getDependencyBindings() {
+		List<AbstractBinding> returned = super.getDependencyBindings();
+		appendToDependingObjects(getWidget().getList(), returned);
+		appendToDependingObjects(getWidget().getArray(), returned);
+		return returned;
 	}
 
 }
