@@ -150,15 +150,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	@Override
 	public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
 
-		/*boolean debug = false;
-		if (method.getName().indexOf("setFlexoID") > -1 && args[0].equals("0000")) {
-			debug = true;
-			System.out.println("Got it");
-			System.out.println("method="+method);
-			System.out.println("proceed="+proceed);
-			System.out.println("args[0]="+args[0]);
-			System.exit(-1);
-		}*/
+		/*
+		 * boolean debug = false; if (method.getName().indexOf("setFlexoID") > -1 && args[0].equals("0000")) { debug = true;
+		 * System.out.println("Got it"); System.out.println("method="+method); System.out.println("proceed="+proceed);
+		 * System.out.println("args[0]="+args[0]); System.exit(-1); }
+		 */
 		Initializer initializer = method.getAnnotation(Initializer.class);
 		if (initializer != null) {
 			internallyInvokeInitializer(getModelEntity().getInitializers(method), args);
@@ -503,13 +499,17 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			ProxyMethodHandler<?> handler = this;
 			while (st.hasMoreTokens()) {
 				String token = st.nextToken();
-				value = handler.internallyInvokeGetter(token);
-				if (value != null && st.hasMoreTokens()) {
-					if (!(value instanceof ProxyObject)) {
-						throw new ModelExecutionException("Cannot invoke " + st.nextToken() + " on object of type "
-								+ value.getClass().getName() + " (caused by returned value: " + returnedValue + ")");
+				value = handler.invokeGetter(token);
+				if (value != null) {
+					if (st.hasMoreTokens()) {
+						if (!(value instanceof ProxyObject)) {
+							throw new ModelExecutionException("Cannot invoke " + st.nextToken() + " on object of type "
+									+ value.getClass().getName() + " (caused by returned value: " + returnedValue + ")");
+						}
+						handler = (ProxyMethodHandler<?>) ((ProxyObject) value).getHandler();
 					}
-					handler = (ProxyMethodHandler<?>) ((ProxyObject) value).getHandler();
+				} else {
+					return null;
 				}
 			}
 			return value;
