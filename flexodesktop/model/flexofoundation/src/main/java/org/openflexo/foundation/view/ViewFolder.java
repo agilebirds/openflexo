@@ -471,6 +471,11 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		_fatherFolder = folder;
 	}
 
+	/**
+	 * @param folder
+	 * @deprecated use {@link #setFatherFolder(ViewFolder)}
+	 */
+	@Deprecated
 	public void setParent(ViewFolder folder) {
 		setFatherFolder(folder);
 	}
