@@ -255,7 +255,7 @@ public abstract class FlexoMainPane extends JPanel implements GraphicalFlexoObse
 				_rightPanel.add(_centerView, BorderLayout.CENTER);
 			}
 
-			((JComponent) moduleView).validate();
+			((JComponent) moduleView).revalidate();
 			((JComponent) moduleView).repaint();
 		}
 
