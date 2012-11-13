@@ -32,6 +32,7 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewElement;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
@@ -62,6 +63,10 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+	}
 
 	private View _view;
 	private DeletionScheme deletionScheme;
