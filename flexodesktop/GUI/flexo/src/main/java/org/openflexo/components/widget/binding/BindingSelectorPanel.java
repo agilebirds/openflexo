@@ -173,7 +173,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 	public void delete() {
 		for (JList list : _lists) {
 			list.removeListSelectionListener(this);
-			list.setModel(null);
+			list.setModel(EMPTY_MODEL);
 		}
 		_lists.clear();
 		_listModels.clear();

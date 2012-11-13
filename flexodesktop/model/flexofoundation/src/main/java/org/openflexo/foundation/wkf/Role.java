@@ -649,6 +649,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		if (aFlag != isAssignable) {
 			this.isAssignable = aFlag;
 			notifyAttributeModification("isAssignable", !aFlag, aFlag);
+			if (getWorkflow() != null) {
+				getWorkflow().clearAssignableRolesCache();
+			}
 		}
 	}
 
