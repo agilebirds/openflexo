@@ -22,6 +22,7 @@ package org.openflexo.fib.view;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -182,8 +183,21 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		}
 	}
 
-	public void update() {
+	/**
+	 * This method is called to update view representing a FIBComponent.<br>
+	 * Callers are all the components that have been updated during current update loop. If the callers contains the component itself, does
+	 * nothing and return.
+	 * 
+	 * @param callers
+	 *            all the components that have been previously updated during current update loop
+	 * @return a flag indicating if component has been updated
+	 */
+	public boolean update(List<FIBComponent> callers) {
+		if (callers.contains(getComponent())) {
+			return false;
+		}
 		updateVisibility(true);
+		return true;
 	}
 
 	protected abstract boolean checkValidDataPath();

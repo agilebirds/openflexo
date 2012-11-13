@@ -21,6 +21,7 @@ package org.openflexo.fib.view;
 
 import java.awt.Dimension;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -117,7 +118,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 
 	@Override
 	public void updateDataObject(Object dataObject) {
-		update();
+		update(new Vector<FIBComponent>());
 		if (isComponentVisible()) {
 			for (FIBView v : subViews) {
 				v.updateDataObject(dataObject);
@@ -154,9 +155,18 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 		}
 	}
 
+	/**
+	 * This method is called to update view representing a FIBComponent.<br>
+	 * Callers are all the components that have been updated during current update loop. If the callers contains the component itself, does
+	 * nothing and return.
+	 * 
+	 * @param callers
+	 *            all the components that have been previously updated during current update loop
+	 * @return a flag indicating if component has been updated
+	 */
 	@Override
-	public void update() {
-		super.update();
+	public boolean update(List<FIBComponent> callers) {
+		return super.update(callers);
 	}
 
 	protected void registerViewForComponent(FIBView view, FIBComponent component) {
