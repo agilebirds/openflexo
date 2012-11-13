@@ -30,8 +30,10 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBBrowserAction;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.fib.view.FIBView;
@@ -65,6 +67,41 @@ import org.openflexo.view.controller.FlexoFIBController;
  */
 public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, HasPropertyChangeSupport, PropertyChangeListener {
 	static final Logger logger = Logger.getLogger(FlexoFIBView.class.getPackage().getName());
+
+	public class FIBBrowserActionAdapter extends FIBBrowserAction {
+
+		private FlexoActionType actionType;
+
+		public FIBBrowserActionAdapter(FlexoActionType<?, ?, ?> actionType) {
+			super();
+			this.actionType = actionType;
+			// setIsAvailable(new DataBinding(unparsed))
+		}
+
+		@Override
+		public Object performAction(BindingEvaluationContext context, Object selectedObject) {
+			FlexoAction action = actionType.makeNewAction((FlexoModelObject) selectedObject, null, controller.getEditor());
+			action.doAction();
+			return null;
+		}
+
+		@Override
+		public String getName() {
+			return actionType.getUnlocalizedName();
+		}
+
+		@Override
+		public ActionType getActionType() {
+			if (actionType.getActionCategory() == FlexoActionType.ADD_ACTION_TYPE) {
+				return ActionType.Add;
+			} else if (actionType.getActionCategory() == FlexoActionType.DELETE_ACTION_TYPE) {
+				return ActionType.Delete;
+			} else {
+				return ActionType.Custom;
+			}
+		}
+
+	}
 
 	private O dataObject;
 	private FlexoController controller;
@@ -163,14 +200,11 @@ public class FlexoFIBView<O> extends JPanel implements GraphicalFlexoObserver, H
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		/* if (dataModification instanceof ObjectDeleted) {
-		     if (dataModification.oldValue() == getOntologyObject()) {
-		         deleteModuleView();
-		      }
-		 } else if (dataModification.propertyName()!=null && dataModification.propertyName().equals("name")) {
-		     getOEController().getFlexoFrame().updateTitle();
-		     updateTitlePanel();
-		 }*/
+		/*
+		 * if (dataModification instanceof ObjectDeleted) { if (dataModification.oldValue() == getOntologyObject()) { deleteModuleView(); }
+		 * } else if (dataModification.propertyName()!=null && dataModification.propertyName().equals("name")) {
+		 * getOEController().getFlexoFrame().updateTitle(); updateTitlePanel(); }
+		 */
 
 	}
 
