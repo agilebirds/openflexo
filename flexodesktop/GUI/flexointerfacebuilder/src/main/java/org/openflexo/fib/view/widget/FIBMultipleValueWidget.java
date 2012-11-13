@@ -20,6 +20,7 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -265,11 +266,15 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}
 
 	protected class FIBMultipleValueCellRenderer extends DefaultListCellRenderer {
+		private Dimension nullDimesion;
+
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			FIBMultipleValueCellRenderer label = (FIBMultipleValueCellRenderer) super.getListCellRendererComponent(list, value, index,
 					isSelected, cellHasFocus);
-
+			if (value != null && nullDimesion == null) {
+				nullDimesion = ((JComponent) getListCellRendererComponent(list, null, -1, false, false)).getPreferredSize();
+			}
 			if (getWidget().getShowText()) {
 				if (value != null) {
 					String stringRepresentation = getStringRepresentation(value);
@@ -297,6 +302,22 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			// System.out.println("I will prefer "+label.getPreferredSize().getWidth());
 
 			return label;
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			Dimension preferredSize = super.getPreferredSize();
+			if (nullDimesion != null) {
+				preferredSize.width = Math.max(preferredSize.width, nullDimesion.width);
+				preferredSize.height = Math.max(preferredSize.height, nullDimesion.height);
+			}
+			return preferredSize;
+		}
+
+		@Override
+		public void updateUI() {
+			nullDimesion = null;
+			super.updateUI();
 		}
 	}
 
