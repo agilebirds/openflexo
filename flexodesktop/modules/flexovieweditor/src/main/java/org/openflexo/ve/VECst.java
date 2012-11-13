@@ -50,6 +50,7 @@ public class VECst {
 	// Shema edition
 	public static File ADD_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/AddViewDialog.fib");
 	public static File DELETE_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteViewElementsDialog.fib");
+	public static File REINDEX_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/ReindexViewElementsDialog.fib");
 
 	// Ontology edition
 	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");

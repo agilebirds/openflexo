@@ -36,7 +36,7 @@ import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 
 /**
- * This action is called to force refresh elements
+ * This action is called to force refresh elements, by resetting graphical representation to those defined in EditionPattern
  * 
  * @author sylvain
  * 
