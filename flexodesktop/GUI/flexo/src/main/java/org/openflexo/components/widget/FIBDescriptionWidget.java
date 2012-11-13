@@ -40,7 +40,7 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoModelOb
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBDescriptionWidget.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource("Fib/DescriptionWidget.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/DescriptionWidget.fib");
 
 	public FIBDescriptionWidget(FlexoModelObject editedObject) {
 		super(FIB_FILE, editedObject, FlexoLocalization.getMainLocalizer());
