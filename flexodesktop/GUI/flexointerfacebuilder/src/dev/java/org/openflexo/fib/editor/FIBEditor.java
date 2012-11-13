@@ -552,6 +552,8 @@ public class FIBEditor implements FIBGenericEditor {
 
 		private JMenu openRecent;
 
+		private JMenuItem showPaletteItem;
+
 		public MenuBar() {
 			fileMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "file"));
 			editMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "edit"));
@@ -697,7 +699,14 @@ public class FIBEditor implements FIBGenericEditor {
 			});
 			inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? KeyEvent.CTRL_MASK
 					: KeyEvent.META_MASK));
+			showPaletteItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "show_palette"));
+			showPaletteItem.addActionListener(new ActionListener() {
 
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					getPalette().setVisible(true);
+				}
+			});
 			logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "logs"));
 			logsItem.addActionListener(new ActionListener() {
 				@Override
@@ -747,6 +756,7 @@ public class FIBEditor implements FIBGenericEditor {
 			});
 
 			toolsMenu.add(inspectItem);
+			toolsMenu.add(showPaletteItem);
 			toolsMenu.add(logsItem);
 			toolsMenu.add(localizedItem);
 			toolsMenu.add(displayFileItem);
