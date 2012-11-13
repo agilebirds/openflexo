@@ -1,5 +1,5 @@
 #French
-#Mon May 28 12:57:59 CEST 2012
+#Tue Nov 13 12:28:20 CET 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -53,6 +53,8 @@
 'object'_binding_is_not_valid_description=Le lien 'objet' n'est pas valide
 'object'_binding_is_required_and_must_be_valid=\ Le lien 'objet' est requis et doit \u00EAtre valide
 'object'_binding_is_required_and_must_be_valid_description=\ Le lien 'objet' est requis et doit \u00EAtre valide
+'object_to_delete'_binding_is_not_valid='object_to_delete'_binding_is_not_valid
+'object_to_delete'_binding_is_not_valid_description='object_to_delete'_binding_is_not_valid_description
 'subject'_binding_is_required_and_must_be_valid=\ Le lien 'sujet' est requis et doit \u00EAtre valide
 'subject'_binding_is_required_and_must_be_valid_description=\ Le lien 'sujet' est requis et doit \u00EAtre valide
 'uri'_binding_is_required_and_must_be_valid=\ Le lien 'uri' est requis et doit \u00EAtre valide
@@ -160,6 +162,7 @@ COMPENSATE=COMPENSER
 COMPENSATED=COMPENSE
 COMPLEX=COMPLEX
 CREATE_SUB_PROCESS=NEW
+CUSTOM_POLYGON=CUSTOM_POLYGON
 CVSIgnored=Ignor\u00E9 par CVS
 CVSStatus_CVSIgnored=Fichier ignor\u00E9
 CVSStatus_Conflicting=Fichier en conflit
@@ -2151,6 +2154,8 @@ edition_pattern=edition pattern
 edition_pattern\ =edition pattern 
 edition_pattern_id=edition pattern id
 edition_pattern_name=Nom de l'edition pattern
+edition_pattern_should_have_deletion_scheme=edition_pattern_should_have_deletion_scheme
+edition_pattern_should_have_deletion_scheme_description=edition_pattern_should_have_deletion_scheme_description
 edition_pattern_should_have_edition_scheme=Les Edition Pattenrs doivent avec un Edition Scheme
 edition_pattern_should_have_edition_scheme_description=Les Edition Pattenrs doivent avec une description d'Edition Scheme
 edition_pattern_should_have_roles=Les Edition Patterns doivent avoir des r\u00F4les
@@ -4163,6 +4168,7 @@ register_component_file=Enregistre le fichier de l'\u00E9cran
 register_eomodels=Enregistrement des EOModels
 register_new_release=Faire une nouvelle release
 regular_expression=Expression r\u00E9guli\u00E8re
+reindex_contents=R\u00E9-indexer le contenu
 reinitialize=R\u00E9initialise
 reinject_docx=R\u00E9-injecter docx
 reinject_docx_failed=Echec de la r\u00E9-injecter dans le mod\u00E8le

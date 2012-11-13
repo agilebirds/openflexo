@@ -1,5 +1,5 @@
 #Dutch
-#Tue Nov 06 11:26:44 CET 2012
+#Tue Nov 13 13:47:41 CET 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required='base uri' binding is required
@@ -119,6 +119,7 @@ component_font=Screen font
 component_localization=Component localization
 component_name_label=Scfreen
 component_validation=Component validation
+conditional=conditional
 connector=connector
 connector_adjustability=Connector adjustability
 connector_representation=Edge representation
@@ -263,6 +264,7 @@ really_quit=Do you really want to quit ?
 rect_polylin=Rect polyline
 redetect_proxy_settings=Redetect proxy settings
 redo=Redo
+reindex_contents=Re-index content
 repair_project=Repair project
 reset=Reset
 resource_center=Resource center

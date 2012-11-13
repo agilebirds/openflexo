@@ -1,5 +1,5 @@
 #Dutch
-#Thu Oct 18 22:13:18 CEST 2012
+#Tue Nov 13 12:58:52 CET 2012
 apply=Apply
 arithmetic=Arithmetic
 boolean=Boolean
@@ -28,6 +28,7 @@ name=Name
 no_file=No file
 no_selection=No selection
 no_type=No type
+null=null
 please_define_expression=Please define expression
 reset=Reset
 scientific=Scientific

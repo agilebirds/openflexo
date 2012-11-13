@@ -1,5 +1,5 @@
 #French
-#Tue Nov 06 11:26:44 CET 2012
+#Tue Nov 13 13:47:41 CET 2012
 'assign'_binding_is_not_valid='assign'_binding_is_not_valid
 'assign'_binding_is_not_valid_description='assign'_binding_is_not_valid_description
 'base_uri'_binding_is_required=\ Le lien 'URI base' est requis et doit \u00EAtre valide
@@ -119,6 +119,7 @@ component_font=Police des \u00E9crans
 component_localization=Localisation du composant
 component_name_label=Ecran
 component_validation=Validation du composant
+conditional=conditionnel
 connector=connector
 connector_adjustability=Ajustement des connecteurs
 connector_representation=Repr\u00E9sentation des ar\u00EAtes
@@ -263,6 +264,7 @@ really_quit=Voulez vous reellement quitter OpenFlexo ?
 rect_polylin=Polyligne rectangle
 redetect_proxy_settings=Red\u00E9tecter les param\u00E8tres du proxy
 redo=Refaire
+reindex_contents=R\u00E9-indexer le contenu
 repair_project=R\u00E9parer le projet
 reset=RAZ
 resource_center=Centre des ressources
