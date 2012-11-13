@@ -27,7 +27,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.openflexo.FlexoCst;
@@ -270,10 +269,11 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	protected JSplitPane getRightPanel() {
 		rightPanel.setTopComponent(getCurrentShemaModuleView().getController().getPaletteView());
 		if (rightPanel.getBottomComponent() == null) {
-			JScrollPane inspectorPanelSP = new JScrollPane(inspectorPanel);
-			inspectorPanelSP.setOpaque(false);
-			inspectorPanelSP.setBorder(BorderFactory.createEmptyBorder());
-			rightPanel.setBottomComponent(inspectorPanelSP);
+			// JScrollPane inspectorPanelSP = new JScrollPane(inspectorPanel);
+			// inspectorPanelSP.setOpaque(false);
+			// inspectorPanelSP.setBorder(BorderFactory.createEmptyBorder());
+			// rightPanel.setBottomComponent(inspectorPanelSP);
+			rightPanel.setBottomComponent(inspectorPanel);
 		}
 		return rightPanel;
 	}
