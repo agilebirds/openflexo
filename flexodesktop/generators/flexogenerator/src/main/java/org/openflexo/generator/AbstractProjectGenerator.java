@@ -162,8 +162,8 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification.propertyName() != null && (dataModification.propertyName().equals("targetType") || dataModification
-				.propertyName().equals("docType")))) {
+		if (dataModification.propertyName() != null
+				&& (dataModification.propertyName().equals("targetType") || dataModification.propertyName().equals("docType"))) {
 			getTemplateLocator().notifyTemplateModified();
 		}
 		if (dataModification instanceof TemplateFileNotification) {
@@ -277,18 +277,28 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 	}
 
 	public void err(String log) {
+		if (log.matches("\\s*")) {
+			return;
+		}
 		for (LogListener l : logListeners) {
 			l.err(log);
 		}
 	}
 
 	public void warn(String log) {
+		if (log.matches("\\s*")) {
+			return;
+		}
 		for (LogListener l : logListeners) {
 			l.warn(log);
 		}
 	}
 
+	@Override
 	public void log(String log) {
+		if (log.matches("\\s*")) {
+			return;
+		}
 		for (LogListener l : logListeners) {
 			l.log(log);
 		}

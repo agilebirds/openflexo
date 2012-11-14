@@ -108,12 +108,12 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	@Override
 	public boolean useNewInspectorScheme() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean useOldInspectorScheme() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -209,33 +209,19 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		return (DGKeyEventListener) _generatorKeyEventListener;
 	}
 
-	/*public ModuleView createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective)
-	{
-		if (perspective == CODE_GENERATOR_PERSPECTIVE) {
-			if (object instanceof GeneratedDoc) {
-				return new GeneratedDocModuleView((GeneratedDoc) object, this);
-			}
-
-			else if (object instanceof DGRepository) {
-				return new DGRepositoryModuleView((DGRepository) object, this);
-			}
-		}
-
-		if (object instanceof CGFile) {
-			if (perspective == CODE_GENERATOR_PERSPECTIVE) {
-				return new DGFileModuleView((CGFile) object, this);
-			} else if (perspective == VERSIONNING_PERSPECTIVE) {
-				return new DGFileHistoryModuleView((CGFile) object, this);
-			}
-		}
-
-		if (object instanceof CGTemplateFile) {
-			return new DGTemplateFileModuleView((CGTemplateFile) object,
-					this);
-		}
-
-		return super.createModuleViewForObjectAndPerspective(object, perspective);
-	}*/
+	/*
+	 * public ModuleView createModuleViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) { if (perspective ==
+	 * CODE_GENERATOR_PERSPECTIVE) { if (object instanceof GeneratedDoc) { return new GeneratedDocModuleView((GeneratedDoc) object, this); }
+	 * 
+	 * else if (object instanceof DGRepository) { return new DGRepositoryModuleView((DGRepository) object, this); } }
+	 * 
+	 * if (object instanceof CGFile) { if (perspective == CODE_GENERATOR_PERSPECTIVE) { return new DGFileModuleView((CGFile) object, this);
+	 * } else if (perspective == VERSIONNING_PERSPECTIVE) { return new DGFileHistoryModuleView((CGFile) object, this); } }
+	 * 
+	 * if (object instanceof CGTemplateFile) { return new DGTemplateFileModuleView((CGTemplateFile) object, this); }
+	 * 
+	 * return super.createModuleViewForObjectAndPerspective(object, perspective); }
+	 */
 
 	/**
 	 * Overrides hasViewForObjectAndPerpsective
@@ -243,54 +229,25 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	 * @see org.openflexo.view.controller.FlexoController#hasViewForObjectAndPerspective(org.openflexo.foundation.FlexoModelObject,
 	 *      org.openflexo.view.FlexoPerspective)
 	 */
-	/* @Override
-	public boolean hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective)
-	{
-		if (perspective == CODE_GENERATOR_PERSPECTIVE) {
-	        if (object instanceof GeneratedDoc) {
-	            return true;
-	        } else if (object instanceof DGRepository) {
-	            return true;
-	        } else if (object instanceof DGLatexFile) {
-	            return true;
-	        } else if (object instanceof DGScreenshotFile) {
-	            return true;
-	        } else if (object instanceof CGTemplateFile) {
-	            return true;
-	        } else if (object instanceof TOCEntry) {
-				return true;
-			} else if (object instanceof TOCRepository) {
-				return true;
-			} else if (object instanceof TOCData) {
-				return true;
-			}
-		} else if (perspective == VERSIONNING_PERSPECTIVE) {
-			if (object instanceof DGLatexFile)
-				return true;
-		}
-	    return super.hasViewForObjectAndPerspective(object, perspective);
-	}*/
+	/*
+	 * @Override public boolean hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective) { if (perspective ==
+	 * CODE_GENERATOR_PERSPECTIVE) { if (object instanceof GeneratedDoc) { return true; } else if (object instanceof DGRepository) { return
+	 * true; } else if (object instanceof DGLatexFile) { return true; } else if (object instanceof DGScreenshotFile) { return true; } else
+	 * if (object instanceof CGTemplateFile) { return true; } else if (object instanceof TOCEntry) { return true; } else if (object
+	 * instanceof TOCRepository) { return true; } else if (object instanceof TOCData) { return true; } } else if (perspective ==
+	 * VERSIONNING_PERSPECTIVE) { if (object instanceof DGLatexFile) return true; } return super.hasViewForObjectAndPerspective(object,
+	 * perspective); }
+	 */
 
-	/* @Override
-	public FlexoModelObject getDefaultObjectForPerspective(
-			FlexoModelObject currentObjectAsModuleView, FlexoPerspective perspective) {
-		if (perspective==DOCEDITOR_PERSPECTIVE) {
-	        if (currentObjectAsModuleView instanceof DGLatexFile) {
-	            return ((DGLatexFile)currentObjectAsModuleView).getRepository();
-	        } else if (currentObjectAsModuleView instanceof DGScreenshotFile) {
-	            return ((DGScreenshotFile)currentObjectAsModuleView).getRepository();
-	        } else {
-	            return getProject().getTOCData();
-	        }
-		} else if (perspective == CODE_GENERATOR_PERSPECTIVE) {
-	        if (currentObjectAsModuleView instanceof TOCEntry) {
-	            return ((TOCEntry)currentObjectAsModuleView).getRepository();
-	        } else {
-	            return getProject().getGeneratedDoc();
-	        }
-		}
-		return super.getDefaultObjectForPerspective(currentObjectAsModuleView, perspective);
-	}*/
+	/*
+	 * @Override public FlexoModelObject getDefaultObjectForPerspective( FlexoModelObject currentObjectAsModuleView, FlexoPerspective
+	 * perspective) { if (perspective==DOCEDITOR_PERSPECTIVE) { if (currentObjectAsModuleView instanceof DGLatexFile) { return
+	 * ((DGLatexFile)currentObjectAsModuleView).getRepository(); } else if (currentObjectAsModuleView instanceof DGScreenshotFile) { return
+	 * ((DGScreenshotFile)currentObjectAsModuleView).getRepository(); } else { return getProject().getTOCData(); } } else if (perspective ==
+	 * CODE_GENERATOR_PERSPECTIVE) { if (currentObjectAsModuleView instanceof TOCEntry) { return
+	 * ((TOCEntry)currentObjectAsModuleView).getRepository(); } else { return getProject().getGeneratedDoc(); } } return
+	 * super.getDefaultObjectForPerspective(currentObjectAsModuleView, perspective); }
+	 */
 
 	@Override
 	protected FlexoMainPane createMainPane() {
@@ -664,7 +621,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 							FlexoLocalization.localizedForKey("resource_edited"), FlexoLocalization.localizedForKey("resource") + " "
 									+ generatedResource.getFileName() + " " + FlexoLocalization.localizedForKey("has_been_edited"),
-									whatToDo, rememberMyChoice);
+							whatToDo, rememberMyChoice);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.IGNORE.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.IGNORE;

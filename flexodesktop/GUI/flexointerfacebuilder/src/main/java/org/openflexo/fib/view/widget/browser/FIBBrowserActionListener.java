@@ -119,7 +119,7 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 			logger.fine("Perform action " + browserAction.getName() + " method " + browserAction.getMethod());
 			logger.fine("controller=" + getController() + " of " + getController().getClass().getSimpleName());
 			this.selectedObject = selectedObject;
-			final Object newObject = browserAction.getMethod().getBindingValue(this);
+			final Object newObject = browserAction.performAction(this, selectedObject);
 			// browserModel.fireTableDataChanged();
 			// browserModel.getBrowserWidget().updateWidgetFromModel();
 			SwingUtilities.invokeLater(new Runnable() {

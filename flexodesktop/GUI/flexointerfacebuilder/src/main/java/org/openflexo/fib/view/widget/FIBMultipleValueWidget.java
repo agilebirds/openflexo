@@ -20,17 +20,20 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListDataListener;
 
 import org.openflexo.antar.binding.AbstractBinding;
@@ -263,11 +266,15 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}
 
 	protected class FIBMultipleValueCellRenderer extends DefaultListCellRenderer {
+		private Dimension nullDimesion;
+
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			FIBMultipleValueCellRenderer label = (FIBMultipleValueCellRenderer) super.getListCellRendererComponent(list, value, index,
 					isSelected, cellHasFocus);
-
+			if (value != null && nullDimesion == null) {
+				nullDimesion = ((JComponent) getListCellRendererComponent(list, null, -1, false, false)).getPreferredSize();
+			}
 			if (getWidget().getShowText()) {
 				if (value != null) {
 					String stringRepresentation = getStringRepresentation(value);
@@ -295,6 +302,22 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			// System.out.println("I will prefer "+label.getPreferredSize().getWidth());
 
 			return label;
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			Dimension preferredSize = super.getPreferredSize();
+			if (nullDimesion != null) {
+				preferredSize.width = Math.max(preferredSize.width, nullDimesion.width);
+				preferredSize.height = Math.max(preferredSize.height, nullDimesion.height);
+			}
+			return preferredSize;
+		}
+
+		@Override
+		public void updateUI() {
+			nullDimesion = null;
+			super.updateUI();
 		}
 	}
 
@@ -361,9 +384,21 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}*/
 
 	@Override
-	public final void updateDataObject(Object value) {
+	public final void updateDataObject(final Object dataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(dataObject);
+				}
+			});
+			return;
+		}
 		updateListModelWhenRequired();
-		super.updateDataObject(value);
+		super.updateDataObject(dataObject);
 	}
 
 	@Override

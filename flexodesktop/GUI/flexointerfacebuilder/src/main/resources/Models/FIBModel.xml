@@ -211,6 +211,7 @@
 
   <entity name="org.openflexo.fib.model.FIBNumber" xmlTag="Number"> 
     <property name="validateOnReturn" xmlTag="validateOnReturn" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="allowsNull" xmlTag="allowsNull" attribute="YES" ignoreDefaultValue="true"/> 
     <property name="minValue" xmlTag="minValue" attribute="YES"/> 
     <property name="maxValue" xmlTag="maxValue" attribute="YES"/> 
     <property name="increment" xmlTag="increment" attribute="YES"/> 

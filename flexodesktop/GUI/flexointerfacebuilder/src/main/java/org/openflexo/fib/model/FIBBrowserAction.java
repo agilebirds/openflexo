@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
@@ -108,6 +109,9 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 		if (method != null) {
 			method.finalizeDeserialization();
 		}
+		if (isAvailable != null) {
+			isAvailable.finalizeDeserialization();
+		}
 	}
 
 	@Override
@@ -140,6 +144,14 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 		@Override
 		public ActionType getActionType() {
 			return ActionType.Custom;
+		}
+	}
+
+	public Object performAction(BindingEvaluationContext context, Object selectedObject) {
+		if (getMethod() != null && getMethod().isSet()) {
+			return getMethod().getBindingValue(context);
+		} else {
+			return null;
 		}
 	}
 

@@ -105,10 +105,8 @@ public class ModelEntity<I> extends ProxyFactory {
 			public boolean isHandled(Method method) {
 				// System.out.println("isHandled for "+method+" in "+method.getDeclaringClass());
 				/*
-				 * return method.getAnnotation(Getter.class) != null ||
-				 * method.getAnnotation(Setter.class) != null ||
-				 * method.getAnnotation(Adder.class) != null ||
-				 * method.getAnnotation(Remover.class) != null;
+				 * return method.getAnnotation(Getter.class) != null || method.getAnnotation(Setter.class) != null ||
+				 * method.getAnnotation(Adder.class) != null || method.getAnnotation(Remover.class) != null;
 				 */
 
 				return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
@@ -570,7 +568,7 @@ public class ModelEntity<I> extends ProxyFactory {
 		}
 		if (entity.getDirectSuperEntities() != null) {
 			for (ModelEntity<?> e : entity.getDirectSuperEntities()) {
-				if (entity == this) {
+				if (e == this) {
 					return true;
 				} else if (isAncestorOf(e)) {
 					return true;

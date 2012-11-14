@@ -86,7 +86,7 @@ public class WrapLayout extends FlowLayout {
 	 */
 	private Dimension layoutSize(Container target, boolean preferred) {
 		synchronized (target.getTreeLock()) {
-			// Each row must fit with the width allocated to the containter.
+			// Each row must fit with the width allocated to the container.
 			// When the container width = 0, the preferred width of the container
 			// has not yet been calculated so lets ask for the maximum.
 
@@ -156,12 +156,13 @@ public class WrapLayout extends FlowLayout {
 	}
 
 	/*
-	 *  A new row has been completed. Use the dimensions of this row
-	 *  to update the preferred size for the container.
-	 *
-	 *  @param dim update the width and height when appropriate
-	 *  @param rowWidth the width of the row to add
-	 *  @param rowHeight the height of the row to add
+	 * A new row has been completed. Use the dimensions of this row to update the preferred size for the container.
+	 * 
+	 * @param dim update the width and height when appropriate
+	 * 
+	 * @param rowWidth the width of the row to add
+	 * 
+	 * @param rowHeight the height of the row to add
 	 */
 	private void addRow(Dimension dim, int rowWidth, int rowHeight) {
 		dim.width = Math.max(dim.width, rowWidth);

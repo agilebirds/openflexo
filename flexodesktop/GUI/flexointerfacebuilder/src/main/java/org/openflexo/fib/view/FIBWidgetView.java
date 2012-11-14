@@ -217,12 +217,10 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 
 		updateDependancies(new Vector<FIBComponent>());
-		/*Iterator<FIBComponent> it = getWidget().getMayAltersIterator();
-		while(it.hasNext()) {
-			FIBComponent c = it.next();
-			logger.info("Modified "+aValue+" now update "+c);
-			getController().viewForComponent(c).update();
-		}*/
+		/*
+		 * Iterator<FIBComponent> it = getWidget().getMayAltersIterator(); while(it.hasNext()) { FIBComponent c = it.next();
+		 * logger.info("Modified "+aValue+" now update "+c); getController().viewForComponent(c).update(); }
+		 */
 
 		if (getWidget().getValueChangedAction().isValid()) {
 			getWidget().getValueChangedAction().execute(getController());
@@ -235,8 +233,10 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
-		dependingObjects
-				.refreshObserving(getController() /*,getWidget().getName() != null && getWidget().getName().equals("InspectorPropertyTable")*/);
+		dependingObjects.refreshObserving(getController() /*
+															* ,getWidget().getName() != null &&
+															* getWidget().getName().equals("InspectorPropertyTable")
+															*/);
 	}
 
 	@Override
@@ -363,7 +363,19 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	@Override
-	public void updateDataObject(Object aDataObject) {
+	public void updateDataObject(final Object aDataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(aDataObject);
+				}
+			});
+			return;
+		}
 		update(new Vector<FIBComponent>());
 	}
 
@@ -499,7 +511,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	public final void updateEnability() {
 		if (isComponentEnabled()) {
-			if (enabled == false) {
+			if (!enabled) {
 				// Becomes enabled
 				logger.fine("Component becomes enabled");
 				// System.out.println("Component  becomes enabled "+getJComponent());
@@ -507,7 +519,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				enabled = true;
 			}
 		} else {
-			if (enabled == true) {
+			if (enabled) {
 				// Becomes disabled
 				logger.fine("Component becomes disabled");
 				// System.out.println("Component  becomes disabled "+getJComponent());

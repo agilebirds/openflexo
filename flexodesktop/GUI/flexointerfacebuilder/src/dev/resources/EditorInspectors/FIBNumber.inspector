@@ -23,6 +23,12 @@
 				<Label label="increment" constraints="twocols(location=left)"/>
 				<Number numberType="IntegerType" data="data.incrementAsInteger"/>
 				
+				<Label label="allowsNull" constraints="twocols(location=left)"/>
+				<CheckBox data="data.allowsNull"/>
+				
+				<Label label="validateOnReturn" constraints="twocols(location=left)"/>
+				<CheckBox data="data.validateOnReturn"/>
+				
 			</Tab>
 						
 		</TabPanel>

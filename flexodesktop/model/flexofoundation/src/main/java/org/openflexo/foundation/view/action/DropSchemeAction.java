@@ -71,6 +71,10 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+	}
+
 	private ViewObject _parent;
 	private ViewPointPaletteElement _paletteElement;
 	private DropScheme _dropScheme;

@@ -20,6 +20,7 @@
 package org.openflexo.components;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -27,6 +28,11 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,6 +41,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -118,6 +125,67 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	protected JPanel mainPane;
 
+	private MouseAdapter mouseListener = new MouseAdapter() {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			e.consume();
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			e.consume();
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			e.consume();
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			e.consume();
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			e.consume();
+		};
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			e.consume();
+		};
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			e.consume();
+		};
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			e.consume();
+		};
+
+	};
+
+	private FocusListener focusListener = new FocusListener() {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			if (getOwner() instanceof JFrame) {
+				Component glassPane = ((JFrame) getOwner()).getGlassPane();
+				if (glassPane.isVisible()) {
+					glassPane.requestFocus();
+				}
+			}
+		}
+
+		@Override
+		public void focusGained(FocusEvent e) {
+
+		}
+	};
+
 	public static ProgressWindow makeProgressWindow(String title, int steps) {
 		if (_instance != null) {
 			logger.warning("Invoke creation of new progress window while an other one is displayed. Using old one.");
@@ -194,11 +262,11 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		mainPane.add(secondaryProgressBarLabel);
 		mainPane.add(secondaryProgressBar);
 		// flexoLogo.setBounds(135, 15, 230, 80);
-		label.setBounds(50, /*115*/180, 510, 20);
-		mainProgressBarLabel.setBounds(25, /*150*/205, 560, 15);
-		mainProgressBar.setBounds(25, /*165*/220, 560, 15);
-		secondaryProgressBarLabel.setBounds(25, /*200*/245, 560, 15);
-		secondaryProgressBar.setBounds(25, /*215*/260, 560, 15);
+		label.setBounds(50, /* 115 */180, 510, 20);
+		mainProgressBarLabel.setBounds(25, /* 150 */205, 560, 15);
+		mainProgressBar.setBounds(25, /* 165 */220, 560, 15);
+		secondaryProgressBarLabel.setBounds(25, /* 200 */245, 560, 15);
+		secondaryProgressBar.setBounds(25, /* 215 */260, 560, 15);
 		mainPane.setPreferredSize(new Dimension(600, 300));
 		getContentPane().add(mainPane);
 		setSize(600, 300);
@@ -228,6 +296,24 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		} else {
 			paintImmediately(mainPane);
 		}
+	}
+
+	@Override
+	public void setVisible(boolean b) {
+		if (getOwner() instanceof JFrame) {
+			((JFrame) getOwner()).getGlassPane().setVisible(b);
+			if (b) {
+				((JFrame) getOwner()).getGlassPane().addMouseListener(mouseListener);
+				((JFrame) getOwner()).getGlassPane().addMouseMotionListener(mouseListener);
+				((JFrame) getOwner()).getGlassPane().addFocusListener(focusListener);
+				((JFrame) getOwner()).getGlassPane().requestFocusInWindow();
+			} else {
+				((JFrame) getOwner()).getGlassPane().removeMouseListener(mouseListener);
+				((JFrame) getOwner()).getGlassPane().removeMouseMotionListener(mouseListener);
+				((JFrame) getOwner()).getGlassPane().removeFocusListener(focusListener);
+			}
+		}
+		super.setVisible(b);
 	}
 
 	public static void showProgressWindow(String title, int steps) {
