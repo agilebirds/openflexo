@@ -41,7 +41,7 @@ public class StateView extends QuiduView {
 	}
 
 	public String getIDParameter() {
-		return (String) params.get(1);
+		return params.get(1);
 	}
 
 	public ItemLabel getLabel() {

@@ -107,7 +107,7 @@ public class DropScheme extends AbstractCreationScheme {
 			if (targetHasMultipleRoles()) {
 				// TODO make proper implementation when role inheritance will be in use !!!
 				return getTargetPatternRole() == null
-						|| (getTargetPatternRole().getPatternRoleName().equals(contextRole.getPatternRoleName()));
+						|| getTargetPatternRole().getPatternRoleName().equals(contextRole.getPatternRoleName());
 			} else {
 				return true;
 			}

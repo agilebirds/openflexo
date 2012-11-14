@@ -114,7 +114,7 @@ public class Sequence extends ControlGraph {
 		Vector<ControlGraph> normalizedList = new Vector<ControlGraph>();
 
 		for (ControlGraph statement : getStatements()) {
-			if ((statement != null) && (!(statement instanceof Nop))) {
+			if (statement != null && !(statement instanceof Nop)) {
 				ControlGraph normalizedStatement = statement.normalize();
 				if (normalizedStatement instanceof Sequence) {
 					Vector<ControlGraph> listOfNormalizedStatements = new Vector<ControlGraph>();

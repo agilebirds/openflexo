@@ -368,7 +368,7 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		AbstractColumn column = columnAt(col);
-		if ((column != null) && (column instanceof EditableColumn)) {
+		if (column != null && column instanceof EditableColumn) {
 			D object = elementAt(row);
 			((EditableColumn) column).setValueFor(object, value);
 			fireCellUpdated(object, row, col);

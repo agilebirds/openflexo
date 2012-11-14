@@ -52,22 +52,22 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 	@Override
 	int getTopBorder() {
-		return (isInPalette ? 10 : super.getTopBorder());
+		return isInPalette ? 10 : super.getTopBorder();
 	}
 
 	@Override
 	int getBottomBorder() {
-		return (isInPalette ? 1 : super.getBottomBorder());
+		return isInPalette ? 1 : super.getBottomBorder();
 	}
 
 	@Override
 	int getLeftBorder() {
-		return (isInPalette ? 1 : super.getLeftBorder());
+		return isInPalette ? 1 : super.getLeftBorder();
 	}
 
 	@Override
 	int getRightBorder() {
-		return (isInPalette ? 1 : super.getRightBorder());
+		return isInPalette ? 1 : super.getRightBorder();
 	}
 
 	private ImageIcon getImageIcon() {

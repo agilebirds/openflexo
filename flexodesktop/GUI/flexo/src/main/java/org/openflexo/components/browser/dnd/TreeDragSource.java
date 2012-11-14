@@ -119,7 +119,7 @@ public class TreeDragSource implements DragSourceListener, DragGestureListener {
 	@Override
 	public void dragGestureRecognized(DragGestureEvent dge) {
 		TreePath path = sourceTree.getSelectionPath();
-		if ((path == null) || (path.getPathCount() <= 1)) {
+		if (path == null || path.getPathCount() <= 1) {
 			// We can't move the root node or an empty selection
 			return;
 		}
@@ -196,7 +196,7 @@ public class TreeDragSource implements DragSourceListener, DragGestureListener {
 		/*
 		 * to support move or copy, we have to check which occurred:
 		 */
-		if (dsde.getDropSuccess() && (dsde.getDropAction() == DnDConstants.ACTION_MOVE)) {
+		if (dsde.getDropSuccess() && dsde.getDropAction() == DnDConstants.ACTION_MOVE) {
 			// ((ProjectBrowser) sourceTree.getModel()).reload();
 		} else {
 			logger.fine("drop failed");

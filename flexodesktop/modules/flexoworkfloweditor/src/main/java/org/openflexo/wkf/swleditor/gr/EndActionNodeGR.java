@@ -80,7 +80,7 @@ public class EndActionNodeGR extends AbstractActionNodeGR {
 	 */
 	@Override
 	public double _getDefaultY() {
-		return (getActionNode().getParentPetriGraph().getIndexForEndNode(getActionNode()) * 50) + DEFAULT_BEGIN_Y_OFFSET;
+		return getActionNode().getParentPetriGraph().getIndexForEndNode(getActionNode()) * 50 + DEFAULT_BEGIN_Y_OFFSET;
 	}
 
 	@Override

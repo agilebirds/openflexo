@@ -40,8 +40,7 @@ public class DocumentationTest extends FlexoTestCase {
 					null);
 			FlexoProject project = editor.getProject();
 
-			CreateNewWebService action = (CreateNewWebService) CreateNewWebService.actionType.makeNewAction(project.getFlexoWSLibrary(),
-					null, editor);
+			CreateNewWebService action = CreateNewWebService.actionType.makeNewAction(project.getFlexoWSLibrary(), null, editor);
 			action.setWebServiceType(CreateNewWebService.EXTERNAL_WS);
 
 			String externalName = "quizz";

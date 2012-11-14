@@ -56,13 +56,13 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 				if (relationship == null) {
 					return null;
 				}
-				return (relationship.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return relationship.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEORelationship relationship) {
-				return (relationship.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return relationship.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 
 		});
@@ -72,13 +72,13 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 				if (relationship == null) {
 					return null;
 				}
-				return (relationship.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON);
+				return relationship.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEORelationship relationship) {
-				return (relationship.getIsSettable() ? FlexoLocalization.localizedForKey("can_be_set") : FlexoLocalization
-						.localizedForKey("cannot_be_set"));
+				return relationship.getIsSettable() ? FlexoLocalization.localizedForKey("can_be_set") : FlexoLocalization
+						.localizedForKey("cannot_be_set");
 			}
 		});
 		addToColumns(new IconColumn<DMEORelationship>("class_property", 25) {
@@ -87,7 +87,7 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 				if (relationship == null) {
 					return null;
 				}
-				return (relationship.getIsClassProperty() ? DMEIconLibrary.CLASS_PROPERTY_ICON : null);
+				return relationship.getIsClassProperty() ? DMEIconLibrary.CLASS_PROPERTY_ICON : null;
 			}
 
 			@Override
@@ -103,7 +103,7 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 				if (relationship == null) {
 					return null;
 				}
-				return (relationship.getIsToMany() ? ">>" : ">");
+				return relationship.getIsToMany() ? ">>" : ">";
 			}
 		});
 		addToColumns(new StringColumn<DMEORelationship>("name", 150) {

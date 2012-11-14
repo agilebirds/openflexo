@@ -58,7 +58,7 @@ public abstract class FixProposal<R extends ValidationRule<R, C>, C extends FIBM
 	}
 
 	public String getLocalizedMessage() {
-		if ((_localizedMessage == null) && (getProblemIssue() != null) && (getObject() != null)) {
+		if (_localizedMessage == null && getProblemIssue() != null && getObject() != null) {
 			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(ValidationIssue.VALIDATION_LOCALIZATION, _message, this);
 		}
 		return _localizedMessage;

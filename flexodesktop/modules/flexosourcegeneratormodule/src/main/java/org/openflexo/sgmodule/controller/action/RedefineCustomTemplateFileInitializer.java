@@ -76,7 +76,7 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 				String CHOOSE_EXISTING_REPOSITORY = FlexoLocalization.localizedForKey("choose_existing_repository");
 				String[] locationChoices = { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
 				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location", "location",
-						(templates.getCustomCodeRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY),
+						templates.getCustomCodeRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY,
 						locationChoices);
 				TextFieldParameter newRepositoryNameParam = new TextFieldParameter("name", "custom_template_repository_name",
 						templates.getNextGeneratedCodeRepositoryName());
@@ -86,9 +86,9 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 						"customRepository",
 						"custom_templates_repository",
 						templates.getCustomCodeRepositoriesVector(),
-						(getControllerActionInitializer().getSGController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
+						getControllerActionInitializer().getSGController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
 								.getSGController().getLastEditedCGRepository().getPreferredTemplateRepository()
-								: null));
+								: null);
 				customRepositoryParam.setFormatter("name");
 				customRepositoryParam.setDepends("location");
 				customRepositoryParam.setConditional("location=" + '"' + CHOOSE_EXISTING_REPOSITORY + '"');
@@ -150,8 +150,8 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, RedefineCustomTemplateFile action) {
 				if (action.getNewTemplateFile() != null) {
-					if ((action.getInvoker() != null) && (action.getInvoker() instanceof CGTemplateFileModuleView)
-							&& (((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+					if (action.getInvoker() != null && action.getInvoker() instanceof CGTemplateFileModuleView
+							&& ((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 						CGTemplateFileModuleView invoker = (CGTemplateFileModuleView) action.getInvoker();
 						FlexoDialog dialog = (FlexoDialog) SwingUtilities.getAncestorOfClass(FlexoDialog.class, invoker);
 						dialog.getContentPane().remove(invoker);

@@ -218,7 +218,7 @@ public abstract class CustomColumn extends AbstractColumn implements EditableCol
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c;
-			if (((isSelected) && (hasFocus)) || useCustomViewForCellRendering) {
+			if (isSelected && hasFocus || useCustomViewForCellRendering) {
 				c = getViewCustomWidget(elementAt(row)).getDynamicComponent();
 				Color fg = null;
 				Color bg = null;

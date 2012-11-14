@@ -82,42 +82,42 @@ public abstract class NodeDesactivation<N extends FlexoNode> extends ControlGrap
 	public static ControlGraphBuilder getDesactivationNodeBuilder(FlexoNode node) throws NotSupportedException, InvalidModelException {
 		if (node instanceof AbstractActivityNode) {
 			if (node instanceof SubProcessNode) {
-				return (new SubProcessActivityNodeDesactivation((SubProcessNode) node));
+				return new SubProcessActivityNodeDesactivation((SubProcessNode) node);
 			} else if (node instanceof ActivityNode) {
 				if (node instanceof SelfExecutableActivityNode) {
-					return (new SelfExecutableActivityNodeDesactivation((SelfExecutableActivityNode) node));
+					return new SelfExecutableActivityNodeDesactivation((SelfExecutableActivityNode) node);
 				} else {
 					if (node.getNodeType() == NodeType.BEGIN) {
-						return (new BeginActivityNodeDesactivation((ActivityNode) node));
+						return new BeginActivityNodeDesactivation((ActivityNode) node);
 					} else if (node.getNodeType() == NodeType.END) {
-						return (new EndActivityNodeDesactivation((ActivityNode) node));
+						return new EndActivityNodeDesactivation((ActivityNode) node);
 					} else { // Normal node
-						return (new NormalActivityNodeDesactivation((ActivityNode) node));
+						return new NormalActivityNodeDesactivation((ActivityNode) node);
 					}
 				}
 			}
 		} else if (node instanceof OperationNode) {
 			if (node instanceof SelfExecutableOperationNode) {
-				return (new SelfExecutableOperationNodeDesactivation((SelfExecutableOperationNode) node));
+				return new SelfExecutableOperationNodeDesactivation((SelfExecutableOperationNode) node);
 			} else {
 				if (node.getNodeType() == NodeType.BEGIN) {
-					return (new BeginOperationNodeDesactivation((OperationNode) node));
+					return new BeginOperationNodeDesactivation((OperationNode) node);
 				} else if (node.getNodeType() == NodeType.END) {
-					return (new EndOperationNodeDesactivation((OperationNode) node));
+					return new EndOperationNodeDesactivation((OperationNode) node);
 				} else { // Normal node
-					return (new NormalOperationNodeDesactivation((OperationNode) node));
+					return new NormalOperationNodeDesactivation((OperationNode) node);
 				}
 			}
 		} else if (node instanceof ActionNode) {
 			if (node instanceof SelfExecutableActionNode) {
-				return (new SelfExecutableActionNodeDesactivation((SelfExecutableActionNode) node));
+				return new SelfExecutableActionNodeDesactivation((SelfExecutableActionNode) node);
 			} else {
 				if (node.getNodeType() == NodeType.BEGIN) {
-					return (new BeginActionNodeDesactivation((ActionNode) node));
+					return new BeginActionNodeDesactivation((ActionNode) node);
 				} else if (node.getNodeType() == NodeType.END) {
-					return (new EndActionNodeDesactivation((ActionNode) node));
+					return new EndActionNodeDesactivation((ActionNode) node);
 				} else { // Normal node
-					return (new NormalActionNodeDesactivation((ActionNode) node));
+					return new NormalActionNodeDesactivation((ActionNode) node);
 				}
 			}
 		}

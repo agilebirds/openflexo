@@ -56,8 +56,9 @@ public class DiagramPatternRole extends PatternRole {
 	}
 
 	public String _getViewpointURI() {
-		if (getViewpoint() != null)
+		if (getViewpoint() != null) {
 			return getViewpoint().getURI();
+		}
 		return viewpointURI;
 	}
 

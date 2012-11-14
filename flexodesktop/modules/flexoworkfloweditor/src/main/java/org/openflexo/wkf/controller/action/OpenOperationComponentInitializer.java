@@ -30,7 +30,6 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.wkf.action.OpenOperationComponent;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.toolbox.ToolBox;

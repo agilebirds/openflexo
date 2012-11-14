@@ -81,7 +81,7 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 				}
 				action.setSaveBeforeGenerating(SGPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
-				(getController()).getBrowser().setHoldStructure();
+				getController().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -92,8 +92,8 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<GenerateSourceCode>() {
 			@Override
 			public boolean run(ActionEvent e, GenerateSourceCode action) {
-				(getController()).getBrowser().resetHoldStructure();
-				(getController()).getBrowser().update();
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
@@ -113,8 +113,8 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 		return new FlexoExceptionHandler<GenerateSourceCode>() {
 			@Override
 			public boolean handleException(FlexoException exception, GenerateSourceCode action) {
-				(getController()).getBrowser().resetHoldStructure();
-				(getController()).getBrowser().update();
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
 				if (exception instanceof GenerationException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("generation_failed") + ":\n"

@@ -39,7 +39,7 @@ public class SubProcessNodeElement extends AbstractActivityNodeElement {
 	@Override
 	protected void buildChildrenVector() {
 		// We add portmaps registery
-		if ((getSubProcessNode() != null) && (getSubProcessNode().getPortMapRegistery() != null)) {
+		if (getSubProcessNode() != null && getSubProcessNode().getPortMapRegistery() != null) {
 			addToChilds(getSubProcessNode().getPortMapRegistery());
 		}
 		// We add sub process

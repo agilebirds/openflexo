@@ -105,7 +105,7 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 	}
 
 	public ComponentBindingDefinition getBindingDefinition() {
-		if ((_bindingDefinition == null) && (_componentInstance != null) && (_bindingDefinitionName != null)) {
+		if (_bindingDefinition == null && _componentInstance != null && _bindingDefinitionName != null) {
 			_bindingDefinition = _componentInstance.getComponentDefinition().bindingDefinitionNamed(_bindingDefinitionName);
 		}
 		return _bindingDefinition;
@@ -180,7 +180,7 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 	public String getFullyQualifiedName() {
 		return new StringBuffer(_componentInstance != null ? _componentInstance.getFullyQualifiedName() : "null").append(".")
 				.append(getBindingDefinitionName()).append("=")
-				.append((getBindingValue() == null ? "null" : getBindingValue().getStringRepresentation())).toString();
+				.append(getBindingValue() == null ? "null" : getBindingValue().getStringRepresentation()).toString();
 	}
 
 	@Override
@@ -229,7 +229,7 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 		public int compare(ComponentInstanceBinding o1, ComponentInstanceBinding o2) {
 			String s1 = o1.getBindingDefinitionName();
 			String s2 = o2.getBindingDefinitionName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;

@@ -53,19 +53,19 @@ public enum CVSStatus {
 	}
 
 	public boolean isLocallyModified() {
-		return ((this == LocallyModified) || (this == LocallyAdded) || (this == LocallyRemoved) || (this == MarkedAsMerged) || isConflicting());
+		return this == LocallyModified || this == LocallyAdded || this == LocallyRemoved || this == MarkedAsMerged || isConflicting();
 	}
 
 	public boolean isRemotelyModified() {
-		return ((this == RemotelyModified) || (this == RemotelyAdded) || (this == RemotelyRemoved) || isConflicting());
+		return this == RemotelyModified || this == RemotelyAdded || this == RemotelyRemoved || isConflicting();
 	}
 
 	public boolean isConflicting() {
-		return ((this == Conflicting) || (this == ConflictingAdded) || (this == ConflictingRemoved));
+		return this == Conflicting || this == ConflictingAdded || this == ConflictingRemoved;
 	}
 
 	public boolean isUnderCVS() {
-		return (this != CVSIgnored && this != Unknown && this != LocallyAdded);
+		return this != CVSIgnored && this != Unknown && this != LocallyAdded;
 	}
 
 	public String getLocalizedStringRepresentation() {

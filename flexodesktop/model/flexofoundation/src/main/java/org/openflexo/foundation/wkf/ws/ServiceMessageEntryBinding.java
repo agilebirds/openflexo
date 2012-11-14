@@ -94,7 +94,7 @@ public class ServiceMessageEntryBinding extends FlexoModelObject implements Insp
 	}
 
 	public void lookupBindingDefinition() {
-		if ((_bindingDefinition == null) && (_messageBindings != null) && (_bindingDefinitionName != null)) {
+		if (_bindingDefinition == null && _messageBindings != null && _bindingDefinitionName != null) {
 			_bindingDefinition = _messageBindings.getMessageDefinition().entryWithName(_bindingDefinitionName);
 			if (getBindingValue() != null) {
 				if (getBindingValue().getBindingDefinition() == null) {
@@ -133,10 +133,10 @@ public class ServiceMessageEntryBinding extends FlexoModelObject implements Insp
 
 	public void setMessageBindings(ServiceMessageBindings messageBindings) {
 		_messageBindings = messageBindings;
-		if ((_bindingValue != null) && _messageBindings != null) {
+		if (_bindingValue != null && _messageBindings != null) {
 			_bindingValue.setOwner(_messageBindings);
 		}
-		if ((_messageBindings != null) && (_messageBindings.getMessageDefinition() != null)) {
+		if (_messageBindings != null && _messageBindings.getMessageDefinition() != null) {
 			if (_bindingDefinitionName != null) {
 				setBindingDefinition(_messageBindings.getMessageDefinition().entryWithName(_bindingDefinitionName));
 			}

@@ -132,7 +132,7 @@ public abstract class Command implements CVSListener, Cloneable {
 	 */
 	@Override
 	public void messageSent(MessageEvent e) {
-		if (e.isError() && (e.getSource() instanceof org.netbeans.lib.cvsclient.response.ErrorResponse) || e.getSource() == this) {
+		if (e.isError() && e.getSource() instanceof org.netbeans.lib.cvsclient.response.ErrorResponse || e.getSource() == this) {
 			// We need to ignore ErrorMessageResponse
 			failed = true;
 		}

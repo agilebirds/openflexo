@@ -58,25 +58,7 @@ public class FIBPanel extends FIBContainer {
 	private boolean protectContent = false;
 
 	public static enum Parameters implements FIBModelAttribute {
-		layout,
-		flowAlignment,
-		boxLayoutAxis,
-		hGap,
-		vGap,
-		cols,
-		rows,
-		border,
-		borderColor,
-		borderTitle,
-		borderTop,
-		borderBottom,
-		borderLeft,
-		borderRight,
-		titleFont,
-		darkLevel,
-		protectContent,
-		trackViewPortWidth,
-		trackViewPortHeight;
+		layout, flowAlignment, boxLayoutAxis, hGap, vGap, cols, rows, border, borderColor, borderTitle, borderTop, borderBottom, borderLeft, borderRight, titleFont, darkLevel, protectContent, trackViewPortWidth, trackViewPortHeight;
 	}
 
 	public static enum Layout {

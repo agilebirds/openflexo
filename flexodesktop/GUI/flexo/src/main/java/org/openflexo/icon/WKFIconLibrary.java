@@ -518,14 +518,14 @@ public class WKFIconLibrary extends IconLibrary {
 	}
 
 	public static ImageIcon getImageIconForPortmap(FlexoPortMap portmap) {
-		if ((portmap.getOperation() != null) && (portmap.getOperation().getPort() != null)) {
+		if (portmap.getOperation() != null && portmap.getOperation().getPort() != null) {
 			return getSmallImageIconForFlexoPort(portmap.getOperation().getPort());
 		}
 		return null;
 	}
 
 	public static ImageIcon getImageIconForPortmap(FlexoPortMap portmap, int orientation) {
-		if ((portmap.getOperation() != null) && (portmap.getOperation().getPort() != null)) {
+		if (portmap.getOperation() != null && portmap.getOperation().getPort() != null) {
 			return getSmallImageIconForFlexoPort(portmap.getOperation().getPort(), orientation);
 		}
 		return null;

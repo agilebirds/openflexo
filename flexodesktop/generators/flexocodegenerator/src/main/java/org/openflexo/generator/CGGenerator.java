@@ -175,7 +175,7 @@ public abstract class CGGenerator<T extends FlexoModelObject> extends Generator<
 	 */
 	@Override
 	public boolean hasFormattingException() {
-		return (_javaFormattingException != null);
+		return _javaFormattingException != null;
 	}
 
 	public JavaAppendingException getAppendingException() {
@@ -187,7 +187,7 @@ public abstract class CGGenerator<T extends FlexoModelObject> extends Generator<
 	 */
 	@Override
 	public boolean hasAppendingException() {
-		return (javaAppendingException != null);
+		return javaAppendingException != null;
 	}
 
 	public String serializeHashtable(Hashtable<String, String> params) {

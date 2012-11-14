@@ -140,10 +140,10 @@ public class DKVModelView extends CompoundTabularView<DKVModel> implements Selec
 	public Domain getSelectedDomain() {
 		IESelectionManager sm = getIEController().getIESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof Domain)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof Domain) {
 			return (Domain) selection.firstElement();
 		}
-		if ((selection.size() == 1) && (selection.firstElement() instanceof Domain.KeyList)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof Domain.KeyList) {
 			return ((Domain.KeyList) selection.firstElement()).getDomain();
 		}
 		if (getSelectedKey() != null) {
@@ -155,7 +155,7 @@ public class DKVModelView extends CompoundTabularView<DKVModel> implements Selec
 	public Key getSelectedKey() {
 		IESelectionManager sm = getIEController().getIESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof Key)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof Key) {
 			return (Key) selection.firstElement();
 		}
 		return null;

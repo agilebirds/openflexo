@@ -249,8 +249,8 @@ public class TabularBrowserFooter extends JPanel {
 			plusButton.setEnabled(false);
 			minusButton.setEnabled(false);
 		} else {
-			plusButton.setEnabled((focusedObject != null) && (getActionTypesWithAddType(focusedObject).size() > 0));
-			minusButton.setEnabled((focusedObject != null) && (getActionTypesWithDeleteType(focusedObject, globalSelection).size() > 0));
+			plusButton.setEnabled(focusedObject != null && getActionTypesWithAddType(focusedObject).size() > 0);
+			minusButton.setEnabled(focusedObject != null && getActionTypesWithDeleteType(focusedObject, globalSelection).size() > 0);
 		}
 		plusActionMenuNeedsRecomputed = true;
 	}
@@ -375,7 +375,7 @@ public class TabularBrowserFooter extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (_filter != null) {
-				_filter.setStatus((isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE));
+				_filter.setStatus(isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE);
 				if (_tabularBrowserView.getBrowser() != null) {
 					_tabularBrowserView.getBrowser().update();
 				}

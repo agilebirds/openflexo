@@ -282,19 +282,19 @@ public class TestBinding extends TestCase {
 	}
 
 	public void test10() {
-		BINDING_CONTEXT.aString = "";
+		TestBindingContext.aString = "";
 		genericTest("aString == ''", Boolean.TYPE, true);
 	}
 
 	public void test11() {
-		BINDING_CONTEXT.aString = "foo";
+		TestBindingContext.aString = "foo";
 		genericTest("aString+((aString != 'foo' ? ('=' + aString) : ''))", String.class, "foo");
-		BINDING_CONTEXT.aString = "foo2";
+		TestBindingContext.aString = "foo2";
 		genericTest("aString+((aString != 'foo' ? ('=' + aString) : ''))", String.class, "foo2=foo2");
 	}
 
 	public void test12() {
-		BINDING_CONTEXT.aString = "";
+		TestBindingContext.aString = "";
 		genericTest("anInt > 2 ? 'anInt > 2' : 'anInt<=2' ", String.class, "anInt > 2");
 	}
 

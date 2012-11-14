@@ -40,7 +40,7 @@ public abstract class SendToken<E extends FlexoPostCondition> extends ControlGra
 	 */
 	public static ControlGraph sendToken(FlexoPostCondition<?, ?> edge, boolean interprocedural) throws InvalidModelException,
 			NotSupportedException {
-		return (new SendTokenOnTokenEdge(edge)).makeControlGraph(interprocedural);
+		return new SendTokenOnTokenEdge(edge).makeControlGraph(interprocedural);
 	}
 
 	protected SendToken(E edge) {
@@ -55,7 +55,7 @@ public abstract class SendToken<E extends FlexoPostCondition> extends ControlGra
 	@Override
 	protected String getProcedureName() {
 		return "sendTokenTo"
-				+ ToolBox.getJavaName((getEdge() != null ? getEdge().getFullyQualifiedName() + "_" + getEdge().getFlexoID() : "Null"));
+				+ ToolBox.getJavaName(getEdge() != null ? getEdge().getFullyQualifiedName() + "_" + getEdge().getFlexoID() : "Null");
 	}
 
 }

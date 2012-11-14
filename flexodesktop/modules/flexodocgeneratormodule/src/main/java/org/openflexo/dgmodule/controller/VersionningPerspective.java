@@ -100,8 +100,8 @@ public class VersionningPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile)
-				|| (object instanceof DGScreenshotFile) || (object instanceof CGTemplate));
+		return object instanceof GeneratedDoc || object instanceof DGRepository || object instanceof DGLatexFile
+				|| object instanceof DGScreenshotFile || object instanceof CGTemplate;
 	}
 
 	@Override

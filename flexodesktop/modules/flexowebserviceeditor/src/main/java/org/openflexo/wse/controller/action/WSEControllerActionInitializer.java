@@ -54,11 +54,11 @@ public class WSEControllerActionInitializer extends ControllerActionInitializer 
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new WSESetPropertyInitializer(this)).init();
+		new WSESetPropertyInitializer(this).init();
 
-		(new WSDeleteInitializer(this)).init();
-		(new ImportWsdlInitializer(this)).init();
-		(new CreateNewWebServiceInitializer(this)).init();
+		new WSDeleteInitializer(this).init();
+		new ImportWsdlInitializer(this).init();
+		new CreateNewWebServiceInitializer(this).init();
 
 	}
 

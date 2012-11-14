@@ -44,9 +44,9 @@ public class GeneratedDocFileElement extends DGBrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		if ((getFile() != null) && (getFile().getRepository() != null) && getFile().getRepository().getManageHistory()
-				&& (getFile().getResource() != null) && getFile().getResource().isLoaded()
-				&& (getFile().getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+		if (getFile() != null && getFile().getRepository() != null && getFile().getRepository().getManageHistory()
+				&& getFile().getResource() != null && getFile().getResource().isLoaded()
+				&& getFile().getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 			for (CGFileReleaseVersion releaseVersion : ((AbstractGeneratedFile) getFile().getResource().getGeneratedResourceData())
 					.getHistory().getReleasesVersion()) {
 				addToChilds(releaseVersion);

@@ -171,7 +171,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 						ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) viewPointPaletteElement
 								.getOverridingGraphicalRepresentation(role);
 						if (shapeGR == null) {
-							shapeGR = (ShapeGraphicalRepresentation<?>) role.getGraphicalRepresentation();
+							shapeGR = role.getGraphicalRepresentation();
 						}
 						ExampleDrawingObject container = null;
 						if (role.getParentShapePatternRole() != null) {

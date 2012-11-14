@@ -148,7 +148,7 @@ public class DMMainPane extends FlexoMainPane {
 	@Override
 	protected FlexoModelObject getParentObject(FlexoModelObject object) {
 		if (object instanceof DMObject) {
-			return (DMObject) (((DMObject) object).getParent());
+			return (DMObject) ((DMObject) object).getParent();
 		}
 		return null;
 	}

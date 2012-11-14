@@ -54,7 +54,7 @@ public class RemoveCustomTemplateRepository extends
 
 		@Override
 		protected boolean isEnabledForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};

@@ -226,7 +226,7 @@ public class DMEOModelView extends DMView<DMEOModel> {
 	public DMEOEntity getSelectedDMEOEntity() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOEntity)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEOEntity) {
 			return (DMEOEntity) selection.firstElement();
 		}
 		if (getSelectedDMProperty() != null) {
@@ -253,7 +253,7 @@ public class DMEOModelView extends DMView<DMEOModel> {
 	public DMProperty getSelectedDMProperty() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMProperty) {
 			return (DMProperty) selection.firstElement();
 		}
 		return null;
@@ -262,7 +262,7 @@ public class DMEOModelView extends DMView<DMEOModel> {
 	public DMMethod getSelectedDMMethod() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMMethod)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMMethod) {
 			return (DMMethod) selection.firstElement();
 		}
 		return null;
@@ -271,7 +271,7 @@ public class DMEOModelView extends DMView<DMEOModel> {
 	public DMEOAttribute getSelectedDMEOAttribute() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOAttribute)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEOAttribute) {
 			return (DMEOAttribute) selection.firstElement();
 		}
 		return null;
@@ -280,7 +280,7 @@ public class DMEOModelView extends DMView<DMEOModel> {
 	public DMEORelationship getSelectedDMEORelationship() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEORelationship)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEORelationship) {
 			return (DMEORelationship) selection.firstElement();
 		}
 		return null;

@@ -49,8 +49,8 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 		super(
 				browserConfiguration,
 				" ",
-				(browserConfiguration instanceof MultipleObjectSelector.TabularBrowserConfiguration ? ((MultipleObjectSelector.TabularBrowserConfiguration) browserConfiguration)
-						.getBrowsingColumnWidth() : 200));
+				browserConfiguration instanceof MultipleObjectSelector.TabularBrowserConfiguration ? ((MultipleObjectSelector.TabularBrowserConfiguration) browserConfiguration)
+						.getBrowsingColumnWidth() : 200);
 		_selectionColumn = new SelectionColumn(25);
 		insertColumnAtIndex(_selectionColumn, 0);
 		if (browserConfiguration instanceof MultipleObjectSelector.TabularBrowserConfiguration) {

@@ -2,37 +2,32 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TSqrt extends Token
-{
-    public TSqrt()
-    {
-        super.setText("sqrt");
-    }
+public final class TSqrt extends Token {
+	public TSqrt() {
+		super.setText("sqrt");
+	}
 
-    public TSqrt(int line, int pos)
-    {
-        super.setText("sqrt");
-        setLine(line);
-        setPos(pos);
-    }
+	public TSqrt(int line, int pos) {
+		super.setText("sqrt");
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TSqrt(getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TSqrt(getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTSqrt(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTSqrt(this);
+	}
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TSqrt text.");
-    }
+	@Override
+	public void setText(@SuppressWarnings("unused") String text) {
+		throw new RuntimeException("Cannot change TSqrt text.");
+	}
 }

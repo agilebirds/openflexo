@@ -2,31 +2,27 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TDecimalNumber extends Token
-{
-    public TDecimalNumber(String text)
-    {
-        setText(text);
-    }
+public final class TDecimalNumber extends Token {
+	public TDecimalNumber(String text) {
+		setText(text);
+	}
 
-    public TDecimalNumber(String text, int line, int pos)
-    {
-        setText(text);
-        setLine(line);
-        setPos(pos);
-    }
+	public TDecimalNumber(String text, int line, int pos) {
+		setText(text);
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TDecimalNumber(getText(), getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TDecimalNumber(getText(), getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTDecimalNumber(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTDecimalNumber(this);
+	}
 }

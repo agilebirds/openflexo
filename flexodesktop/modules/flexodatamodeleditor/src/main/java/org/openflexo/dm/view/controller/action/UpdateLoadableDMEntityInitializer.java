@@ -58,7 +58,7 @@ public class UpdateLoadableDMEntityInitializer extends ActionInitializer {
 						getControllerActionInitializer().getDMController(), action.getFlexoProgress());
 				action.hideFlexoProgress();
 				popup.setVisible(true);
-				if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+				if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getDMSet().getSelectedObjects().size() > 0) {
 					action.setUpdatedSet(popup.getDMSet());
 					return true;
 				} else {

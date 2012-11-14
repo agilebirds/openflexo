@@ -53,7 +53,7 @@ public class CreateSegmentFromPoints extends Edition {
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
+			new FGESegment(p1, lastMouseLocation).paint(graphics);
 		}
 	}
 }

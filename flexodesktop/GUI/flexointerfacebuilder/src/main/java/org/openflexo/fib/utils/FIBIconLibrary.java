@@ -45,9 +45,8 @@ public class FIBIconLibrary {
 
 	// Icons used in BindingSelector
 	public static final ImageIcon ARROW_RIGHT_ICON = new ImageIcon(
-			(new FileResource("Icons/BindingSelector/SmallArrowRight.gif")).getAbsolutePath());
-	public static final ImageIcon CONNECTED_ICON = new ImageIcon(
-			(new FileResource("Icons/BindingSelector/Connected.gif")).getAbsolutePath());
+			new FileResource("Icons/BindingSelector/SmallArrowRight.gif").getAbsolutePath());
+	public static final ImageIcon CONNECTED_ICON = new ImageIcon(new FileResource("Icons/BindingSelector/Connected.gif").getAbsolutePath());
 	public static final ImageIcon METHOD_ICON = new ImageIconResource("Icons/BindingSelector/Method.gif");
 	public static final ImageIcon TOGGLE_ARROW_BOTTOM_ICON = new ImageIconResource("Icons/BindingSelector/toggleArrowBottom.gif");
 	public static final ImageIcon TOGGLE_ARROW_BOTTOM_SELECTED_ICON = new ImageIconResource(

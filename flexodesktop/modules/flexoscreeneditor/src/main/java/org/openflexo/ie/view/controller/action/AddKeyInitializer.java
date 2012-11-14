@@ -60,7 +60,7 @@ public class AddKeyInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, AddKeyAction action) {
 				Domain d = null;
 				if (action.getFocusedObject() instanceof Domain) {
-					d = ((Domain) action.getFocusedObject());
+					d = (Domain) action.getFocusedObject();
 				} else if (action.getFocusedObject() instanceof Domain.KeyList) {
 					d = ((Domain.KeyList) action.getFocusedObject()).getDomain();
 				} else {
@@ -87,18 +87,18 @@ public class AddKeyInitializer extends ActionInitializer {
 						}
 						try {
 							if (d.isKeyNameLegal(name)) {
-								(action).setDomain(d);
-								(action).setKeyName(name);
-								(action).setKeyDescription(newKeyDialog.getKeyDescrition());
+								action.setDomain(d);
+								action.setKeyName(name);
+								action.setKeyDescription(newKeyDialog.getKeyDescrition());
 								for (Language lang : d.getDkvModel().getLanguageList().getLanguages()) {
-									(action).setValueForLanguage(newKeyDialog.getValueForLanguage(lang), lang);
+									action.setValueForLanguage(newKeyDialog.getValueForLanguage(lang), lang);
 								}
 							}
 							ok = true;
 							if (newKeyDialog.getStatus() == AskNewKeyDialog.VALIDATE) {
 								lastCreatedKey = null;
 							} else if (newKeyDialog.getStatus() == AskNewKeyDialog.VALIDATE_AND_REDO) {
-								(action).setContext(new Boolean(true));
+								action.setContext(new Boolean(true));
 							}
 						} catch (DuplicateDKVObjectException e2) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("name_of_key_already_exists"));
@@ -133,17 +133,16 @@ public class AddKeyInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddKeyAction>() {
 			@Override
 			public boolean run(ActionEvent e, final AddKeyAction action) {
-				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewKey());
+				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject(action.getNewKey());
 				// getController().setCurrentEditedObjectAsModuleView(((AddKeyAction)
 				// action).getNewKey());
-				if ((action.getContext() != null) && (action.getContext() instanceof Boolean)
-						&& ((Boolean) action.getContext()).booleanValue()) {
+				if (action.getContext() != null && action.getContext() instanceof Boolean && ((Boolean) action.getContext()).booleanValue()) {
 					// Redo
-					lastCreatedKey = (action).getNewKey();
+					lastCreatedKey = action.getNewKey();
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							AddKeyAction.actionType.makeNewAction((action).getDomain(), null, action.getEditor()).doAction();
+							AddKeyAction.actionType.makeNewAction(action.getDomain(), null, action.getEditor()).doAction();
 						}
 					});
 				}

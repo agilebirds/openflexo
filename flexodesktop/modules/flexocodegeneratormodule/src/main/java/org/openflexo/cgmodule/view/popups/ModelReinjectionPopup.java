@@ -233,7 +233,7 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 
 				@Override
 				public boolean mustBeHighlighted() {
-					return (((PropertyReference) getObject()).isNewlyDiscovered() && ((PropertyReference) getObject()).isResolvable());
+					return ((PropertyReference) getObject()).isNewlyDiscovered() && ((PropertyReference) getObject()).isResolvable();
 				}
 
 				@Override
@@ -272,7 +272,7 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 
 				@Override
 				public boolean mustBeHighlighted() {
-					return (((MethodReference) getObject()).isNewlyDiscovered() && ((MethodReference) getObject()).isResolvable());
+					return ((MethodReference) getObject()).isNewlyDiscovered() && ((MethodReference) getObject()).isResolvable();
 				}
 
 				@Override

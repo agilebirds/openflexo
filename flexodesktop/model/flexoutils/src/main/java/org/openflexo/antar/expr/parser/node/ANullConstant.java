@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class ANullConstant extends PConstant
-{
-    private TNull _null_;
+public final class ANullConstant extends PConstant {
+	private TNull _null_;
 
-    public ANullConstant()
-    {
-        // Constructor
-    }
+	public ANullConstant() {
+		// Constructor
+	}
 
-    public ANullConstant(
-        @SuppressWarnings("hiding") TNull _null_)
-    {
-        // Constructor
-        setNull(_null_);
+	public ANullConstant(@SuppressWarnings("hiding") TNull _null_) {
+		// Constructor
+		setNull(_null_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new ANullConstant(
-            cloneNode(this._null_));
-    }
+	@Override
+	public Object clone() {
+		return new ANullConstant(cloneNode(this._null_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseANullConstant(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseANullConstant(this);
+	}
 
-    public TNull getNull()
-    {
-        return this._null_;
-    }
+	public TNull getNull() {
+		return this._null_;
+	}
 
-    public void setNull(TNull node)
-    {
-        if(this._null_ != null)
-        {
-            this._null_.parent(null);
-        }
+	public void setNull(TNull node) {
+		if (this._null_ != null) {
+			this._null_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._null_ = node;
-    }
+		this._null_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._null_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._null_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._null_ == child)
-        {
-            this._null_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._null_ == child) {
+			this._null_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._null_ == oldChild)
-        {
-            setNull((TNull) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._null_ == oldChild) {
+			setNull((TNull) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

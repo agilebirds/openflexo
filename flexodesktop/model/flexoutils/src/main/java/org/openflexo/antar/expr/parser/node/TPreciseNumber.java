@@ -2,31 +2,27 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TPreciseNumber extends Token
-{
-    public TPreciseNumber(String text)
-    {
-        setText(text);
-    }
+public final class TPreciseNumber extends Token {
+	public TPreciseNumber(String text) {
+		setText(text);
+	}
 
-    public TPreciseNumber(String text, int line, int pos)
-    {
-        setText(text);
-        setLine(line);
-        setPos(pos);
-    }
+	public TPreciseNumber(String text, int line, int pos) {
+		setText(text);
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TPreciseNumber(getText(), getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TPreciseNumber(getText(), getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTPreciseNumber(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTPreciseNumber(this);
+	}
 }

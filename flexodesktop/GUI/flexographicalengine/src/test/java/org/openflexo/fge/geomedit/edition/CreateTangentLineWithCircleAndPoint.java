@@ -92,7 +92,7 @@ public class CreateTangentLineWithCircleAndPoint extends Edition {
 				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1));
 				tangentPoints.getObjects().firstElement().paint(graphics);
 				tangentPoints.getObjects().elementAt(1).paint(graphics);
-				(new FGELine(point, tangentPoints.getNearestPoint(lastMouseLocation))).paint(graphics);
+				new FGELine(point, tangentPoints.getNearestPoint(lastMouseLocation)).paint(graphics);
 			}
 		}
 	}

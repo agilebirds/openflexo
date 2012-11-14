@@ -45,7 +45,7 @@ public class CGFileReleaseVersion extends AbstractCGFileVersion {
 	 * Default constructor
 	 */
 	public CGFileReleaseVersion(CGFile cgFile, CGRelease release, File file) {
-		super(cgFile, (release != null ? release.getVersionIdentifier() : CGVersionIdentifier.DEFAULT_VERSION_ID()), file);
+		super(cgFile, release != null ? release.getVersionIdentifier() : CGVersionIdentifier.DEFAULT_VERSION_ID(), file);
 		_release = release;
 		_intermediateVersions = new Vector<CGFileIntermediateVersion>();
 	}

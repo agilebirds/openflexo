@@ -109,7 +109,7 @@ public class EOEntity extends EOObject {
 			if (e != null) {
 				throw new IllegalStateException("duplicated entity '" + e.getName() + "'");
 			}
-			if ((getName() == null && name != null) || (getName() != null && !getName().equals(name))) {
+			if (getName() == null && name != null || getName() != null && !getName().equals(name)) {
 				if (getFile() != null && getFile().exists()) {
 					getModel().addToFilesToDelete(getFile());
 				}

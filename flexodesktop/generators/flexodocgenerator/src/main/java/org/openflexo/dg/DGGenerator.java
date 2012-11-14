@@ -94,7 +94,7 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static double getImageRatio(Icon image) {
-		return ((double) image.getIconHeight()) / ((double) image.getIconWidth());
+		return (double) image.getIconHeight() / (double) image.getIconWidth();
 	}
 
 	private boolean isGenerating = false;

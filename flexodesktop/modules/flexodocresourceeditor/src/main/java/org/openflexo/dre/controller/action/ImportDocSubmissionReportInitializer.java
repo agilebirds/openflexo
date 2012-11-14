@@ -70,7 +70,7 @@ public class ImportDocSubmissionReportInitializer extends ActionInitializer {
 						}
 
 					});
-					if ((chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) && (chooser.getSelectedFile() != null)) {
+					if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						action.setDocSubmissionReportFile(chooser.getSelectedFile());
 					} else {
 						return false;

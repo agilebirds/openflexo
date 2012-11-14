@@ -81,7 +81,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	 * Returns boolean indicating if primitive (a primitive or a directely string convertable object)
 	 */
 	public boolean classIsPrimitive(StringEncoder encoder) {
-		return ((getType().isPrimitive()) || (encoder._isEncodable(getType())));
+		return getType().isPrimitive() || encoder._isEncodable(getType());
 	}
 
 	/**

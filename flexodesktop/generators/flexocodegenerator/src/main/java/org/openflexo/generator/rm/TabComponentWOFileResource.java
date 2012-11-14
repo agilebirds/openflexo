@@ -41,7 +41,7 @@ public class TabComponentWOFileResource extends ComponentWOFileResource<TabCompo
 	protected static final Logger logger = FlexoLogger.getLogger(TabComponentWOFileResource.class.getPackage().getName());
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
+		if (!isObserverRegistered && getComponentDefinition() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());

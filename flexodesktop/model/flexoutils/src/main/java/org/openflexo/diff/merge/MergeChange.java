@@ -38,35 +38,11 @@ public class MergeChange {
 	}
 
 	public enum MergeChangeAction {
-		AutomaticMergeResolving,
-		KeepChange,
-		IgnoreChange,
-		ChooseLeft,
-		ChooseRight,
-		ChooseBothLeftFirst,
-		ChooseBothRightFirst,
-		ChooseNone,
-		CustomEditing,
-		Undecided
+		AutomaticMergeResolving, KeepChange, IgnoreChange, ChooseLeft, ChooseRight, ChooseBothLeftFirst, ChooseBothRightFirst, ChooseNone, CustomEditing, Undecided
 	}
 
 	public enum ChangeCategory {
-		LEFT_ADDITION,
-		LEFT_MODIFICATION,
-		LEFT_REMOVAL,
-		SMART_CONFLICT_RESOLVED,
-		SMART_CONFLICT_UNRESOLVED,
-		CUSTOM_EDITING_RESOLVED,
-		CUSTOM_EDITING_UNRESOLVED,
-		ADD_CONFLICT_RESOLVED,
-		ADD_CONFLICT_UNRESOLVED,
-		CONFLICT_RESOLVED,
-		CONFLICT_UNRESOLVED,
-		DEL_CONFLICT_RESOLVED,
-		DEL_CONFLICT_UNRESOLVED,
-		RIGHT_ADDITION,
-		RIGHT_MODIFICATION,
-		RIGHT_REMOVAL
+		LEFT_ADDITION, LEFT_MODIFICATION, LEFT_REMOVAL, SMART_CONFLICT_RESOLVED, SMART_CONFLICT_UNRESOLVED, CUSTOM_EDITING_RESOLVED, CUSTOM_EDITING_UNRESOLVED, ADD_CONFLICT_RESOLVED, ADD_CONFLICT_UNRESOLVED, CONFLICT_RESOLVED, CONFLICT_UNRESOLVED, DEL_CONFLICT_RESOLVED, DEL_CONFLICT_UNRESOLVED, RIGHT_ADDITION, RIGHT_MODIFICATION, RIGHT_REMOVAL
 	}
 
 	public static final ChangeCategory[] CONFLICT_RESOLVED_CATEGORIES = new ChangeCategory[] { ChangeCategory.SMART_CONFLICT_RESOLVED,
@@ -140,22 +116,22 @@ public class MergeChange {
 	protected static MergeChange makeMergeChange(Vector<MergeChange> changes, MergeChangeAction defaultAction) {
 		MergeChange returned = new MergeChange();
 		for (MergeChange change : changes) {
-			if ((returned.getFirst0() == -1) || (returned.getFirst0() >= change.getFirst0() && change.getFirst0() <= change.getLast0())) {
+			if (returned.getFirst0() == -1 || returned.getFirst0() >= change.getFirst0() && change.getFirst0() <= change.getLast0()) {
 				returned.setFirst0(change.getFirst0());
 			}
-			if ((returned.getFirst1() == -1) || (returned.getFirst1() >= change.getFirst1() && change.getFirst1() <= change.getLast1())) {
+			if (returned.getFirst1() == -1 || returned.getFirst1() >= change.getFirst1() && change.getFirst1() <= change.getLast1()) {
 				returned.setFirst1(change.getFirst1());
 			}
-			if ((returned.getFirst2() == -1) || (returned.getFirst2() >= change.getFirst2() && change.getFirst2() <= change.getLast2())) {
+			if (returned.getFirst2() == -1 || returned.getFirst2() >= change.getFirst2() && change.getFirst2() <= change.getLast2()) {
 				returned.setFirst2(change.getFirst2());
 			}
-			if ((returned.getLast0() == -1) || (returned.getLast0() <= change.getLast0() && change.getFirst0() <= change.getLast0())) {
+			if (returned.getLast0() == -1 || returned.getLast0() <= change.getLast0() && change.getFirst0() <= change.getLast0()) {
 				returned.setLast0(change.getLast0());
 			}
-			if ((returned.getLast1() == -1) || (returned.getLast1() <= change.getLast1() && change.getFirst1() <= change.getLast1())) {
+			if (returned.getLast1() == -1 || returned.getLast1() <= change.getLast1() && change.getFirst1() <= change.getLast1()) {
 				returned.setLast1(change.getLast1());
 			}
-			if ((returned.getLast2() == -1) || (returned.getLast2() <= change.getLast2() && change.getFirst2() <= change.getLast2())) {
+			if (returned.getLast2() == -1 || returned.getLast2() <= change.getLast2() && change.getFirst2() <= change.getLast2()) {
 				returned.setLast2(change.getLast2());
 			}
 		}
@@ -178,8 +154,8 @@ public class MergeChange {
 			changesToMerge.add(change);
 		}
 		MergeChange oppositeMerge = makeMergeChange(changesToMerge, defaultAction);
-		if ((oppositeMerge.getFirst1() >= returned.getFirst1()) && (oppositeMerge.getLast1() <= returned.getLast1())) {
-			int d = (oppositeMerge.getLast2() - oppositeMerge.getFirst2() - oppositeMerge.getLast1() + oppositeMerge.getFirst1());
+		if (oppositeMerge.getFirst1() >= returned.getFirst1() && oppositeMerge.getLast1() <= returned.getLast1()) {
+			int d = oppositeMerge.getLast2() - oppositeMerge.getFirst2() - oppositeMerge.getLast1() + oppositeMerge.getFirst1();
 			if (Merge.debug) {
 				System.out.println("Including case from left d=" + d);
 			}
@@ -205,8 +181,8 @@ public class MergeChange {
 			changesToMerge.add(change);
 		}
 		MergeChange oppositeMerge = makeMergeChange(changesToMerge, defaultAction);
-		if ((oppositeMerge.getFirst1() >= returned.getFirst1()) && (oppositeMerge.getLast1() <= returned.getLast1())) {
-			int d = (oppositeMerge.getLast0() - oppositeMerge.getFirst0() - oppositeMerge.getLast1() + oppositeMerge.getFirst1());
+		if (oppositeMerge.getFirst1() >= returned.getFirst1() && oppositeMerge.getLast1() <= returned.getLast1()) {
+			int d = oppositeMerge.getLast0() - oppositeMerge.getFirst0() - oppositeMerge.getLast1() + oppositeMerge.getFirst1();
 			if (Merge.debug) {
 				System.out.println("Including case from right d=" + d);
 			}
@@ -413,7 +389,7 @@ public class MergeChange {
 
 		public String[] getSignificativeTokens() {
 			if (_significativeTokens == null) {
-				_significativeTokens = (new DiffSource(merge, getDelimitingMethod())).getSignificativeTokens();
+				_significativeTokens = new DiffSource(merge, getDelimitingMethod()).getSignificativeTokens();
 			}
 			return _significativeTokens;
 		}
@@ -561,7 +537,7 @@ public class MergeChange {
 	}
 
 	public boolean isResolved() {
-		if ((mergeChangeSource == MergeChangeSource.Left) || (mergeChangeSource == MergeChangeSource.Right)) {
+		if (mergeChangeSource == MergeChangeSource.Left || mergeChangeSource == MergeChangeSource.Right) {
 			return true;
 		}
 		// else conflict
@@ -570,10 +546,10 @@ public class MergeChange {
 		}
 		if (mergeChangeAction == MergeChangeAction.AutomaticMergeResolving) {
 			tryToAutomaticallyResolve();
-			return (automaticMergeResult != null);
+			return automaticMergeResult != null;
 		}
 		if (mergeChangeAction == MergeChangeAction.CustomEditing) {
-			return (customHandEdition != null);
+			return customHandEdition != null;
 		}
 		return true;
 	}

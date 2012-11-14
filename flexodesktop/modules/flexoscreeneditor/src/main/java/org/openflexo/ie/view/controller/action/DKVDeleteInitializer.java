@@ -67,7 +67,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 				if (action.getFocusedObject() != null && !v.contains(action.getFocusedObject())) {
 					v.add(action.getFocusedObject());
 				}
-				(action).setObjectsToDelete(v);
+				action.setObjectsToDelete(v);
 				Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
 				Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 				for (FlexoModelObject object : objects) {

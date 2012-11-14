@@ -392,7 +392,7 @@ public class FGEIntersectionArea extends FGEOperationArea {
 			return false;
 		}
 
-		return (_findFirstUnionArea(this) != null || _findFirstSubstractionArea(this) != null);
+		return _findFirstUnionArea(this) != null || _findFirstSubstractionArea(this) != null;
 
 	}
 

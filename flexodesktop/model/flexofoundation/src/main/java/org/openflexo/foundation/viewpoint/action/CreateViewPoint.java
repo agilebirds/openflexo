@@ -122,7 +122,8 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		}
 
 		// Instanciate new Calc
-		_newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary, getCalcFolder());
+		_newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary,
+				getCalcFolder());
 		_newViewPoint.setDescription(getNewCalcDescription());
 
 		// And register it to the library
@@ -246,7 +247,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 			return false;
 		}
 		if (ontologicalScopeChoice == OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY) {
-			return (getOntologyFile() != null);
+			return getOntologyFile() != null;
 		}
 		return true;
 	}

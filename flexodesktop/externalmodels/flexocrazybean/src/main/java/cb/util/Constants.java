@@ -95,9 +95,9 @@ public abstract class Constants {
 		if (ret.equals("ClassCategory")) { // Find more specific class
 			String obj = (String) params.get(0);
 
-			if (obj.equals("Use Case View") || (parent instanceof UseCaseCategory)) {
+			if (obj.equals("Use Case View") || parent instanceof UseCaseCategory) {
 				return "UseCaseCategory";
-			} else if (obj.equals("Logical View") || (parent instanceof LogicalCategory)) {
+			} else if (obj.equals("Logical View") || parent instanceof LogicalCategory) {
 				return "LogicalCategory";
 			} else {
 				return ret;

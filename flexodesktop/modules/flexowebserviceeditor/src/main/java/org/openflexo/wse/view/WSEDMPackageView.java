@@ -118,7 +118,7 @@ public class WSEDMPackageView extends WSEView<DMPackage> {
 	public DMEntity getSelectedDMEntity() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEntity)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEntity) {
 			return (DMEntity) selection.firstElement();
 		}
 		if (getSelectedDMProperty() != null) {
@@ -131,7 +131,7 @@ public class WSEDMPackageView extends WSEView<DMPackage> {
 	public DMProperty getSelectedDMProperty() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMProperty) {
 			return (DMProperty) selection.firstElement();
 		}
 		return null;

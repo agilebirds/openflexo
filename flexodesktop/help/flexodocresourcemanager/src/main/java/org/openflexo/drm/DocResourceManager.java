@@ -211,7 +211,7 @@ public class DocResourceManager {
 				}
 			}
 		}
-		if ((!drmFile.exists()) && (!isSaving)) {
+		if (!drmFile.exists() && !isSaving) {
 			drmFile = new File(getDocResourceCenterDirectory(), "DocResourceCenter.xml");
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("DocResourceCenter.xml not found. Creates new DocResourceCenter");
@@ -303,11 +303,11 @@ public class DocResourceManager {
 	}
 
 	public boolean isEdited(DocItem docItem) {
-		return (getEditedVersion(docItem) != null);
+		return getEditedVersion(docItem) != null;
 	}
 
 	public boolean isSubmitting(DocItem docItem) {
-		return ((getEditedVersion(docItem) != null) && (!docItem.getVersions().contains(getEditedVersion(docItem))));
+		return getEditedVersion(docItem) != null && !docItem.getVersions().contains(getEditedVersion(docItem));
 	}
 
 	public DocItemVersion getEditedVersion(DocItem docItem) {

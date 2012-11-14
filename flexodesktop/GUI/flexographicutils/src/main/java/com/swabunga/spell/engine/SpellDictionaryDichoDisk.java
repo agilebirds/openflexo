@@ -109,7 +109,7 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 		}
 		long pm2 = dictFile.getFilePointer();
 		if (pm2 >= p2) {
-			return (seqFind(code, p1, p2));
+			return seqFind(code, p1, p2);
 		}
 		int istar = l.indexOf('*');
 		if (istar == -1) {
@@ -118,16 +118,16 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 		String testcode = l.substring(0, istar);
 		int comp = code.compareTo(testcode);
 		if (comp < 0) {
-			return (dichoFind(code, p1, pm - 1));
+			return dichoFind(code, p1, pm - 1);
 		} else if (comp > 0) {
-			return (dichoFind(code, pm2, p2));
+			return dichoFind(code, pm2, p2);
 		} else {
 			LinkedList l1 = dichoFind(code, p1, pm - 1);
 			LinkedList l2 = dichoFind(code, pm2, p2);
 			String word = l.substring(istar + 1);
 			l1.add(word);
 			l1.addAll(l2);
-			return (l1);
+			return l1;
 		}
 	}
 
@@ -152,7 +152,7 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 				list.add(word);
 			}
 		}
-		return (list);
+		return list;
 	}
 
 	/**
@@ -171,10 +171,10 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 		} catch (EOFException ex) {
 		}
 		if (i == 0) {
-			return ("");
+			return "";
 		}
 		String s = new String(buf, 0, i - 1, encoding);
-		return (s);
+		return s;
 	}
 
 	/**

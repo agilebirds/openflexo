@@ -32,7 +32,7 @@ public class ActivitySelector extends NodeSelector<AbstractActivityNode> {
 	protected static final String EMPTY_STRING = "";
 
 	public ActivitySelector(AbstractActivityNode node) {
-		super((node != null ? node.getProject() : null), node, AbstractActivityNode.class);
+		super(node != null ? node.getProject() : null, node, AbstractActivityNode.class);
 	}
 
 }

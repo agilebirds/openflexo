@@ -194,16 +194,16 @@ public class CVSListener extends CVSAdapter {
 				cvsFile = _project.createCVSFile(info.getFile());
 				fileWasAdded = true;
 			}
-			if (info.getType().equals("U") && (cvsFile instanceof CVSFile)) {
+			if (info.getType().equals("U") && cvsFile instanceof CVSFile) {
 				if (fileWasAdded) {
 					((CVSFile) cvsFile).setStatus(CVSStatus.RemotelyAdded);
 				} else if (((CVSFile) cvsFile).getStatus() != CVSStatus.LocallyRemoved
 						&& ((CVSFile) cvsFile).getStatus() != CVSStatus.LocallyAdded) {
 					((CVSFile) cvsFile).setStatus(CVSStatus.RemotelyModified);
 				}
-			} else if (info.getType().equals("C") && (cvsFile instanceof CVSFile)) {
+			} else if (info.getType().equals("C") && cvsFile instanceof CVSFile) {
 				((CVSFile) cvsFile).setStatus(CVSStatus.Conflicting);
-			} else if (info.getType().equals("Y") && (cvsFile instanceof CVSFile)) {
+			} else if (info.getType().equals("Y") && cvsFile instanceof CVSFile) {
 				((CVSFile) cvsFile).setStatus(CVSStatus.RemotelyRemoved);
 			}
 		} else if (e.getInfoContainer() instanceof StatusInformation) {

@@ -94,19 +94,15 @@ public final class ProjectLoader {
 	}
 
 	/**
-	 * Loads the project located withing <code> projectDirectory </code>. The
-	 * following method is the default methode to call when opening a project
-	 * from a GUI (Interactive mode) so that resource update handling is
-	 * properly initialized. Additional small stuffs can be performed in that
-	 * call so that projects are always opened the same way.
+	 * Loads the project located withing <code> projectDirectory </code>. The following method is the default methode to call when opening a
+	 * project from a GUI (Interactive mode) so that resource update handling is properly initialized. Additional small stuffs can be
+	 * performed in that call so that projects are always opened the same way.
 	 * 
 	 * @param projectDirectory
 	 *            the project directory
-	 * @return the {@link InteractiveFlexoEditor} editor if the opening
-	 *         succeeded else <code>null</code>
+	 * @return the {@link InteractiveFlexoEditor} editor if the opening succeeded else <code>null</code>
 	 * @throws org.openflexo.foundation.utils.ProjectLoadingCancelledException
-	 *             whenever the load procedure is interrupted by the user or by
-	 *             Flexo.
+	 *             whenever the load procedure is interrupted by the user or by Flexo.
 	 * @throws ProjectInitializerException
 	 */
 	public InteractiveFlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
@@ -494,9 +490,8 @@ public final class ProjectLoader {
 	}
 
 	/**
-	 * Check if there is an external repository with some active resources
-	 * connected In this case, explicitely ask what to do, connect or let
-	 * disconnected
+	 * Check if there is an external repository with some active resources connected In this case, explicitely ask what to do, connect or
+	 * let disconnected
 	 * 
 	 * @param project
 	 *            the project

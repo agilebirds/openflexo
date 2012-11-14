@@ -405,7 +405,7 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 			}
 		}
 
-		String newCode = (foundSize == -1) ? code : code.substring(0, foundSize);
+		String newCode = foundSize == -1 ? code : code.substring(0, foundSize);
 		if (cacheable) {
 			indexCodeCache.add(newCode);
 		}

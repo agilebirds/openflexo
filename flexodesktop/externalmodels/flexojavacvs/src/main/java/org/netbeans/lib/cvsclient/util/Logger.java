@@ -57,7 +57,7 @@ public final class Logger {
 	}
 
 	public static void setLogging(String logPath) {
-		logging = (logPath != null);
+		logging = logPath != null;
 
 		try {
 			if (logging) {

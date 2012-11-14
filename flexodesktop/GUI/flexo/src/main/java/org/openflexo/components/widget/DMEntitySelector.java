@@ -87,7 +87,7 @@ public class DMEntitySelector<D extends DMEntity> extends AbstractBrowserSelecto
 		// private DMModel _dmModel;
 
 		protected DataModelBrowser(/* DMModel dataModel */) {
-			super((getDataModel() != null ? getDataModel().getProject() : null), false);
+			super(getDataModel() != null ? getDataModel().getProject() : null, false);
 			init();
 			setDMViewMode(DMViewMode.Packages);
 			setRowHeight(16);

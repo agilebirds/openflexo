@@ -91,7 +91,7 @@ public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoOntology);
+		return object instanceof FlexoOntology;
 	}
 
 	@Override

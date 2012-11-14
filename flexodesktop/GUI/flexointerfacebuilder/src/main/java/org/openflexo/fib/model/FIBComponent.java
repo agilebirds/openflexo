@@ -69,26 +69,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		index,
-		data,
-		visible,
-		dataClass,
-		controllerClass,
-		font,
-		opaque,
-		backgroundColor,
-		foregroundColor,
-		width,
-		height,
-		minWidth,
-		minHeight,
-		maxWidth,
-		maxHeight,
-		useScrollBar,
-		horizontalScrollbarPolicy,
-		verticalScrollbarPolicy,
-		constraints,
-		explicitDependancies
+		index, data, visible, dataClass, controllerClass, font, opaque, backgroundColor, foregroundColor, width, height, minWidth, minHeight, maxWidth, maxHeight, useScrollBar, horizontalScrollbarPolicy, verticalScrollbarPolicy, constraints, explicitDependancies
 	}
 
 	public static enum VerticalScrollBarPolicy {

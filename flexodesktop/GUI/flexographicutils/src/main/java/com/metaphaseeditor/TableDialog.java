@@ -474,7 +474,7 @@ public class TableDialog extends javax.swing.JDialog {
 		for (int i = 0; i < rows; i++) {
 			buffer.append("<tr>");
 			for (int j = 0; j < columns; j++) {
-				if ((i == 0 && rowHeaders) || (j == 0 && columnHeaders)) {
+				if (i == 0 && rowHeaders || j == 0 && columnHeaders) {
 					buffer.append("<th>&nbsp;</th>");
 				} else {
 					buffer.append("<td>&nbsp;</td>");

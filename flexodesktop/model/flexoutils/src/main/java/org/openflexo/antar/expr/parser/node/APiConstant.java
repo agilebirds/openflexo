@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class APiConstant extends PConstant
-{
-    private TPi _pi_;
+public final class APiConstant extends PConstant {
+	private TPi _pi_;
 
-    public APiConstant()
-    {
-        // Constructor
-    }
+	public APiConstant() {
+		// Constructor
+	}
 
-    public APiConstant(
-        @SuppressWarnings("hiding") TPi _pi_)
-    {
-        // Constructor
-        setPi(_pi_);
+	public APiConstant(@SuppressWarnings("hiding") TPi _pi_) {
+		// Constructor
+		setPi(_pi_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new APiConstant(
-            cloneNode(this._pi_));
-    }
+	@Override
+	public Object clone() {
+		return new APiConstant(cloneNode(this._pi_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAPiConstant(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseAPiConstant(this);
+	}
 
-    public TPi getPi()
-    {
-        return this._pi_;
-    }
+	public TPi getPi() {
+		return this._pi_;
+	}
 
-    public void setPi(TPi node)
-    {
-        if(this._pi_ != null)
-        {
-            this._pi_.parent(null);
-        }
+	public void setPi(TPi node) {
+		if (this._pi_ != null) {
+			this._pi_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._pi_ = node;
-    }
+		this._pi_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._pi_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._pi_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._pi_ == child)
-        {
-            this._pi_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._pi_ == child) {
+			this._pi_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._pi_ == oldChild)
-        {
-            setPi((TPi) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._pi_ == oldChild) {
+			setPi((TPi) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

@@ -253,7 +253,7 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 			return true;
 		}
 
-		if ((object != null) && (object.getActionList().indexOf(this) == -1)) {
+		if (object != null && object.getActionList().indexOf(this) == -1) {
 			return false;
 		}
 		if (editor.isActionEnabled(this)) {
@@ -269,7 +269,7 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 	}
 
 	public String getDisabledReason(T1 object, Vector<T2> globalSelection, FlexoEditor editor) {
-		if ((object != null) && (object.getActionList().indexOf(this) == -1)) {
+		if (object != null && object.getActionList().indexOf(this) == -1) {
 			return FlexoLocalization.localizedForKey("action") + " " + getLocalizedName() + " "
 					+ FlexoLocalization.localizedForKey("is_not_active_for") + " "
 					+ FlexoLocalization.localizedForKey(object.getClassNameKey());
@@ -282,7 +282,7 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 			return FlexoLocalization.localizedForKey("action") + " " + getLocalizedName() + " "
 					+ FlexoLocalization.localizedForKey("is_not_active_for_this_selection");
 		}
-		if ((getEnableConditionForEditor(editor) != null)
+		if (getEnableConditionForEditor(editor) != null
 				&& !getEnableConditionForEditor(editor).isEnabled(this, object, globalSelection, editor)) {
 			// TODO: Add getDisableReason() also on FlexoActionEnableCondition
 			return FlexoLocalization.localizedForKey("conditions_to_enable_action_are_not_met");
@@ -324,8 +324,8 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("matchesInstanceOf-globalSelection= " + globalSelection.size() + " " + globalSelection);
 		}
-		return (((object != null) && (aClass.isAssignableFrom(object.getClass()))) || ((globalSelection != null)
-				&& (globalSelection.size() > 0) && (aClass.isAssignableFrom(globalSelection.firstElement().getClass()))));
+		return object != null && aClass.isAssignableFrom(object.getClass()) || globalSelection != null && globalSelection.size() > 0
+				&& aClass.isAssignableFrom(globalSelection.firstElement().getClass());
 	}
 
 	protected boolean matchesUniqueInstanceOf(Class aClass, T1 object, Vector<T2> globalSelection) {
@@ -335,21 +335,23 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("matchesUniqueInstanceOf-globalSelection= " + globalSelection.size() + " " + globalSelection);
 		}
-		return (((object != null) && (aClass.isAssignableFrom(object.getClass())) && ((globalSelection == null)
-				|| (globalSelection.size() == 0) || ((globalSelection.size() == 1) && (globalSelection.firstElement() == object)))) || ((globalSelection != null)
-				&& (globalSelection.size() == 1) && (aClass.isAssignableFrom(globalSelection.firstElement().getClass())) && ((object == null) || (object == globalSelection
-				.firstElement()))));
+		return object != null
+				&& aClass.isAssignableFrom(object.getClass())
+				&& (globalSelection == null || globalSelection.size() == 0 || globalSelection.size() == 1
+						&& globalSelection.firstElement() == object) || globalSelection != null && globalSelection.size() == 1
+				&& aClass.isAssignableFrom(globalSelection.firstElement().getClass())
+				&& (object == null || object == globalSelection.firstElement());
 	}
 
 	protected FlexoModelObject getUniqueInstanceOf(Class aClass, T1 object, Vector<T2> globalSelection) {
-		if ((object != null)
-				&& (aClass.isAssignableFrom(object.getClass()))
-				&& ((globalSelection == null) || (globalSelection.size() == 0) || ((globalSelection.size() == 1) && (globalSelection
-						.firstElement() == object)))) {
+		if (object != null
+				&& aClass.isAssignableFrom(object.getClass())
+				&& (globalSelection == null || globalSelection.size() == 0 || globalSelection.size() == 1
+						&& globalSelection.firstElement() == object)) {
 			return object;
-		} else if ((globalSelection != null) && (globalSelection.size() == 1)
-				&& (aClass.isAssignableFrom(globalSelection.firstElement().getClass()))
-				&& ((object == null) || (object == globalSelection.firstElement()))) {
+		} else if (globalSelection != null && globalSelection.size() == 1
+				&& aClass.isAssignableFrom(globalSelection.firstElement().getClass())
+				&& (object == null || object == globalSelection.firstElement())) {
 			return globalSelection.firstElement();
 		}
 		return null;

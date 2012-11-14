@@ -56,7 +56,7 @@ public class ElementMovable implements Transferable, Serializable {
 
 	@Override
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
-		return (flavor.getRepresentationClass() == BrowserElement.class);
+		return flavor.getRepresentationClass() == BrowserElement.class;
 	}
 
 	@Override

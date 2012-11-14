@@ -82,7 +82,7 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 						message = "would_you_really_like_to_move_process_($0)_to_($1)";
 					}
 					return FlexoController.confirm(FlexoLocalization.localizedForKeyWithParams(message, movedProcess.getName(),
-							(newParentProcess != null ? newParentProcess.getName() : null)));
+							newParentProcess != null ? newParentProcess.getName() : null));
 				}
 
 				/*if (exception instanceof ProcessMovingConfirmation) {
@@ -131,8 +131,9 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 				} else if (action.getFocusedObject() instanceof SubProcessNode && action.getKey().equals("subProcess")) {
 					if (action.getPreviousValue() instanceof FlexoProcess && ((FlexoProcess) action.getPreviousValue()).isImported()
 							&& !(action.getValue() instanceof FlexoProcess && ((FlexoProcess) action.getValue()).isImported())) {
-						if ((action.getFocusedObject() instanceof SingleInstanceSubProcessNode
-								|| action.getFocusedObject() instanceof WSCallSubProcessNode || action.getFocusedObject() instanceof LoopSubProcessNode)) {
+						if (action.getFocusedObject() instanceof SingleInstanceSubProcessNode
+								|| action.getFocusedObject() instanceof WSCallSubProcessNode
+								|| action.getFocusedObject() instanceof LoopSubProcessNode) {
 							if (((SubProcessNode) action.getFocusedObject()).getPreConditions().size() > 0) {
 								WKFDelete delete = WKFDelete.actionType
 										.makeNewAction(null,

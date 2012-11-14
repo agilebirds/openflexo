@@ -134,7 +134,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	public String getLocalizedTitle() {
-		if ((title == null) || (!displayTitle)) {
+		if (title == null || !displayTitle) {
 			return " ";
 		}
 		return getLocalized(getTitle());

@@ -81,7 +81,7 @@ public class DocItemTableModel extends AbstractModel<DocItemFolder, DocItem> {
 
 	@Override
 	public DocItem elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDocItemFolder().getItems().elementAt(row);
 		} else {
 			return null;

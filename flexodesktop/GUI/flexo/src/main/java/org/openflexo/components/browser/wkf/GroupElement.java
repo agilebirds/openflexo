@@ -98,7 +98,7 @@ public class GroupElement extends BrowserElement implements ExpansionSynchronize
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-			return (getGroup().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+			return getGroup().getProcess() == _browser.getSelectionManager().getRootFocusedObject();
 		}
 		return false;
 	}
@@ -109,7 +109,7 @@ public class GroupElement extends BrowserElement implements ExpansionSynchronize
 			return ((PreConditionElement) next).getPreCondition().isContainedIn(getGroup());
 		} else if (next instanceof PostConditionElement) {
 			FlexoPostCondition edge = ((PostConditionElement) next).getPostCondition();
-			if ((edge.getNextNode().isContainedIn(getGroup())) && (edge.getStartNode().isContainedIn(getGroup()))) {
+			if (edge.getNextNode().isContainedIn(getGroup()) && edge.getStartNode().isContainedIn(getGroup())) {
 				return true;
 			}
 			return false;

@@ -2,37 +2,32 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TAsin extends Token
-{
-    public TAsin()
-    {
-        super.setText("asin");
-    }
+public final class TAsin extends Token {
+	public TAsin() {
+		super.setText("asin");
+	}
 
-    public TAsin(int line, int pos)
-    {
-        super.setText("asin");
-        setLine(line);
-        setPos(pos);
-    }
+	public TAsin(int line, int pos) {
+		super.setText("asin");
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TAsin(getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TAsin(getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTAsin(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTAsin(this);
+	}
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TAsin text.");
-    }
+	@Override
+	public void setText(@SuppressWarnings("unused") String text) {
+		throw new RuntimeException("Cannot change TAsin text.");
+	}
 }

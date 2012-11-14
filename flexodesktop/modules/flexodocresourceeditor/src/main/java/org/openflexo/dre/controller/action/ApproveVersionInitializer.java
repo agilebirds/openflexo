@@ -85,7 +85,7 @@ public class ApproveVersionInitializer extends ActionInitializer {
 						super.setValue(value);
 						// logger.info("On met l'action a "+value);
 						action.setVersion(value);
-						params[3].setValue((value).getVersion().toString());
+						params[3].setValue(value.getVersion().toString());
 					}
 				};
 				params[2].addParameter("format", "localizedName");

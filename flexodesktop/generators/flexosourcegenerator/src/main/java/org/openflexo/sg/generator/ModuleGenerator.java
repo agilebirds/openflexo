@@ -171,17 +171,17 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 				if (result == null) {
 					result = new ArrayList<Object>();
 				}
-				((List<Object>) result).addAll(((List<Object>) object));
+				((List<Object>) result).addAll((List<Object>) object);
 			} else if (object instanceof Set) {
 				if (result == null) {
 					result = new LinkedHashSet<Object>();
 				}
-				((HashSet<Object>) result).addAll(((HashSet<Object>) object));
+				((HashSet<Object>) result).addAll((HashSet<Object>) object);
 			} else if (object instanceof Map) {
 				if (result == null) {
 					result = new LinkedHashMap<Object, Object>();
 				}
-				((Map<Object, Object>) result).putAll(((Map<Object, Object>) object));
+				((Map<Object, Object>) result).putAll((Map<Object, Object>) object);
 			}
 		}
 
@@ -213,7 +213,7 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 
 		// Checks all data are in List<Object> for each generator
 		for (Entry<Generator<?, ?>, Object> entry : classifiedMap.entrySet()) {
-			if ((entry.getValue() != null) && !(entry.getValue() instanceof List)) {
+			if (entry.getValue() != null && !(entry.getValue() instanceof List)) {
 				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName()
 						+ "' for classifier '" + classifier + "' because it already contains a non List value ("
 						+ entry.getValue().getClass() + ") added by generator '" + entry.getKey() + "'");
@@ -255,7 +255,7 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 
 		// Checks all data are in List<Object> for each generator
 		for (Entry<Generator<?, ?>, Object> entry : classifiedMap.entrySet()) {
-			if ((entry.getValue() != null) && !(entry.getValue() instanceof Set)) {
+			if (entry.getValue() != null && !(entry.getValue() instanceof Set)) {
 				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName()
 						+ "' for classifier '" + classifier + "' because it already contains a non Set value ("
 						+ entry.getValue().getClass() + ") added by generator '" + entry.getKey() + "'");
@@ -299,7 +299,7 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 
 		// Checks all data are in List<Object> for each generator
 		for (Entry<Generator<?, ?>, Object> entry : classifiedMap.entrySet()) {
-			if ((entry.getValue() != null) && !(entry.getValue() instanceof Map)) {
+			if (entry.getValue() != null && !(entry.getValue() instanceof Map)) {
 				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName()
 						+ "' for classifier '" + classifier + "' because it already contains a non Map value ("
 						+ entry.getValue().getClass() + ") added by generator '" + entry.getKey() + "'");

@@ -63,7 +63,7 @@ public class Import extends AbstractCommandProvider {
 		}
 		int argIndex = go.optIndexGet();
 		// test if we have been passed the repository, vendor-tag and release-tag argument
-		if (argIndex < (args.length - 2)) {
+		if (argIndex < args.length - 2) {
 			command.setModule(args[argIndex]);
 			command.setVendorTag(args[++argIndex]);
 			command.setReleaseTag(args[++argIndex]);

@@ -97,7 +97,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 					@Override
 					public void setValue(File aValue) {
 						super.setValue(aValue);
-						String newSelectedName = (aValue).getName();
+						String newSelectedName = aValue.getName();
 						String newName = null;
 						if (newSelectedName.indexOf(".") > 0) {
 							newName = newSelectedName.substring(0, newSelectedName.indexOf("."));
@@ -233,20 +233,20 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 		return new FlexoExceptionHandler<CreateNewWebService>() {
 			@Override
 			public boolean handleException(FlexoException exception, CreateNewWebService action) {
-				if (action instanceof CreateNewWebService && (action).getWebServiceType().equals(CreateNewWebService.EXTERNAL_WS)) {
+				if (action instanceof CreateNewWebService && action.getWebServiceType().equals(CreateNewWebService.EXTERNAL_WS)) {
 					if (exception.getLocalizationKey() != null) {
 						FlexoController.showError(FlexoLocalization.localizedForKey("ws_import_interupted") + " : "
-								+ FlexoLocalization.localizedForKey((exception).getLocalizationKey()));
+								+ FlexoLocalization.localizedForKey(exception.getLocalizationKey()));
 						return true;
 					} else {
 						FlexoController.showError(FlexoLocalization.localizedForKey("ws_import_interupted_exception_raised"));
 						return true;
 					}
 
-				} else if (action instanceof CreateNewWebService && (action).getWebServiceType().equals(CreateNewWebService.INTERNAL_WS)) {
+				} else if (action instanceof CreateNewWebService && action.getWebServiceType().equals(CreateNewWebService.INTERNAL_WS)) {
 					if (exception.getLocalizationKey() != null) {
 						FlexoController.showError(FlexoLocalization.localizedForKey("ws_add_service_not_completed") + " : "
-								+ FlexoLocalization.localizedForKey((exception).getLocalizationKey()));
+								+ FlexoLocalization.localizedForKey(exception.getLocalizationKey()));
 						return true;
 					} else {
 						FlexoController.showError(FlexoLocalization.localizedForKey("ws_add_service_not_completed_exception_raised"));

@@ -72,13 +72,13 @@ public class PropertyListActionListener implements ActionListener {
 		if (_plAction.type.equals("ADD")) {
 			returned = true;
 		} else if (_plAction.type.equals("DELETE")) {
-			returned = (selectedObject != null);
+			returned = selectedObject != null;
 		} else if (_plAction.type.equals("ACTION")) {
-			returned = (selectedObject != null);
+			returned = selectedObject != null;
 		} else if (_plAction.type.equals("STATIC_ACTION")) {
 			return isAvailable(null);
 		}
-		if ((_plAction.getIsAvailableExpression() != null) && (selectedObject != null) && (returned == true)) {
+		if (_plAction.getIsAvailableExpression() != null && selectedObject != null && returned == true) {
 			return isAvailable(selectedObject);
 		}
 		return returned;
@@ -91,7 +91,7 @@ public class PropertyListActionListener implements ActionListener {
 		StringTokenizer strTok = new StringTokenizer(listAccessor, ".");
 		String accessor;
 		Object currentObject = sourceObject;
-		while (strTok.hasMoreTokens() && (currentObject != null) && (currentObject instanceof KeyValueCoding)) {
+		while (strTok.hasMoreTokens() && currentObject != null && currentObject instanceof KeyValueCoding) {
 			accessor = strTok.nextToken();
 			if (strTok.hasMoreTokens()) {
 				if (currentObject != null) {

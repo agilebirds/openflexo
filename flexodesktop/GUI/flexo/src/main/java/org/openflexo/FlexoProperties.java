@@ -108,9 +108,9 @@ public class FlexoProperties {
 
 	public Level getDefaultLoggingLevel() {
 		String returned = applicationProperties.getProperty(DEFAULT_LOG_LEVEL);
-		if (returned == null)
+		if (returned == null) {
 			return null;
-		else if (returned.equals("SEVERE")) {
+		} else if (returned.equals("SEVERE")) {
 			return Level.SEVERE;
 		} else if (returned.equals("WARNING")) {
 			return Level.WARNING;

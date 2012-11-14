@@ -65,12 +65,12 @@ public class Lexer {
 
 		buf.setLength(0);
 
-		if ((ch == '+') || (ch == '-')) {
+		if (ch == '+' || ch == '-') {
 			buf.append((char) ch);
 			ch = _reader.read();
 		}
 
-		while (Character.isDigit((char) ch) || (ch == '.')) {
+		while (Character.isDigit((char) ch) || ch == '.') {
 			if (ch == '.') {
 				if (kind == FLOAT) {
 					throw new RuntimeException("Lexer Error: Found second . in float");

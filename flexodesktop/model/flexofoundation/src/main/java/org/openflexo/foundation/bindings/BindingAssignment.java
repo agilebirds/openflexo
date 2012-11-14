@@ -256,8 +256,8 @@ public class BindingAssignment extends FlexoModelObject implements Bindable, Ins
 			BindingExpression decodedExpression = _project.getBindingExpressionConverter().convertFromString(aString);
 
 			if (decodedExpression != null) {
-				if ((decodedExpression.getExpression() != null) && (decodedExpression.getExpression() instanceof BinaryOperatorExpression)
-						&& (((BinaryOperatorExpression) decodedExpression.getExpression()).getOperator() == BooleanBinaryOperator.EQUALS)) {
+				if (decodedExpression.getExpression() != null && decodedExpression.getExpression() instanceof BinaryOperatorExpression
+						&& ((BinaryOperatorExpression) decodedExpression.getExpression()).getOperator() == BooleanBinaryOperator.EQUALS) {
 					Expression left = ((BinaryOperatorExpression) decodedExpression.getExpression()).getLeftArgument();
 					Expression right = ((BinaryOperatorExpression) decodedExpression.getExpression()).getRightArgument();
 					BindingValue receiver = _project.getBindingValueConverter().convertFromString(left.toString());

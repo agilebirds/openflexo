@@ -123,7 +123,7 @@ public class BinaryOperatorExpression extends Expression {
 		Expression transformedLeftArgument = leftArgument.transform(transformer);
 		Expression transformedRightArgument = rightArgument.transform(transformer);
 
-		if ((!transformedLeftArgument.equals(leftArgument)) || (!transformedRightArgument.equals(rightArgument))) {
+		if (!transformedLeftArgument.equals(leftArgument) || !transformedRightArgument.equals(rightArgument)) {
 			expression = new BinaryOperatorExpression(operator, transformedLeftArgument, transformedRightArgument);
 		}
 

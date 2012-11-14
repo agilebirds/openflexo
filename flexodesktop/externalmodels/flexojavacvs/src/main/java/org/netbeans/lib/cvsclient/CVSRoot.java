@@ -480,7 +480,7 @@ public class CVSRoot {
 			return true;
 		}
 		try {
-			if ((new File(this.repository)).getCanonicalFile().equals(new File(compared.repository).getCanonicalFile())) {
+			if (new File(this.repository).getCanonicalFile().equals(new File(compared.repository).getCanonicalFile())) {
 				return true;
 			} else {
 				return false;

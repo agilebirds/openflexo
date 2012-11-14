@@ -101,7 +101,7 @@ abstract class CachedPainter {
 			// If we did this 3 times and the contents are still lost
 			// assume we're painting to a VolatileImage that is bogus and
 			// give up. Presumably we'll be called again to paint.
-		} while ((image instanceof VolatileImage) && ((VolatileImage) image).contentsLost() && ++attempts < 3);
+		} while (image instanceof VolatileImage && ((VolatileImage) image).contentsLost() && ++attempts < 3);
 	}
 
 	/**
@@ -260,7 +260,7 @@ abstract class CachedPainter {
 
 			public boolean equals(GraphicsConfiguration config, int w, int h, Object[] args) {
 				if (this.w == w && this.h == h
-						&& ((this.config != null && this.config.equals(config)) || (this.config == null && config == null))) {
+						&& (this.config != null && this.config.equals(config) || this.config == null && config == null)) {
 					if (this.args == null && args == null) {
 						return true;
 					}

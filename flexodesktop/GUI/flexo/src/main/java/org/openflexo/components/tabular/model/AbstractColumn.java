@@ -83,7 +83,7 @@ public abstract class AbstractColumn<D extends FlexoModelObject, T> {
 	}
 
 	public String getLocalizedTitle() {
-		if ((_title == null) || (!_displayTitle)) {
+		if (_title == null || !_displayTitle) {
 			return " ";
 		}
 		return FlexoLocalization.localizedForKey(getTitle());
@@ -174,7 +174,7 @@ public abstract class AbstractColumn<D extends FlexoModelObject, T> {
 		}
 
 		protected void setComponentBackground(Component component, boolean hasFocus, boolean isSelected, int row, int column) {
-			if ((hasFocus) && ((getModel() != null) && (getModel().isCellEditable(row, column))) && (isSelected)) {
+			if (hasFocus && getModel() != null && getModel().isCellEditable(row, column) && isSelected) {
 				component.setForeground(ColorCst.SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
 			} else {
 				component.setForeground(ColorCst.UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);

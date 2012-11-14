@@ -44,7 +44,6 @@ import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;

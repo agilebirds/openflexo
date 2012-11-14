@@ -301,7 +301,7 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 		 */
 		@Override
 		public boolean isSelectable(FlexoModelObject object) {
-			return object instanceof DMProperty || (object instanceof DMMethod && ((DMMethod) object).getReturnType() != null);
+			return object instanceof DMProperty || object instanceof DMMethod && ((DMMethod) object).getReturnType() != null;
 		}
 
 	}

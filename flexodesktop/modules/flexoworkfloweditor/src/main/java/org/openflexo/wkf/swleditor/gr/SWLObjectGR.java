@@ -69,8 +69,8 @@ public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraph
 
 	public void updatePropertiesFromWKFPreferences() {
 		if (supportShadow()
-				&& ((getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows())) || (getWorkflow() == null && WKFPreferences
-						.getShowShadows()))) {
+				&& (getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows()) || getWorkflow() == null
+						&& WKFPreferences.getShowShadows())) {
 			setShadowStyle(ShadowStyle.makeDefault());
 		} else {
 			setShadowStyle(ShadowStyle.makeNone());

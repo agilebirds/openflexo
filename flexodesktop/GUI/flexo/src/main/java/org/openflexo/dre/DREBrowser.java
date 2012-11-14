@@ -275,7 +275,7 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine(getClass().getName() + " receive DataModification " + dataModification.getClass().getName());
 					}
-					if ((_browser != null) && (dataModification instanceof DRMDataModification)) {
+					if (_browser != null && dataModification instanceof DRMDataModification) {
 						refreshWhenPossible();
 					} else {
 						super.update(observable, dataModification);
@@ -297,7 +297,7 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 					}
 					for (Enumeration en = getDocItemFolder().getOrderedItems().elements(); en.hasMoreElements();) {
 						DocItem next = (DocItem) en.nextElement();
-						if ((next.getEmbeddingParentItem() == null) || (next.getEmbeddingParentItem().getFolder() != next.getFolder())) {
+						if (next.getEmbeddingParentItem() == null || next.getEmbeddingParentItem().getFolder() != next.getFolder()) {
 							addToChilds(next);
 						}
 					}

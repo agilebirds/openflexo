@@ -98,7 +98,7 @@ public class WSEDMEntityView extends WSEView<DMEntity> {
 	public DMProperty getSelectedDMProperty() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMProperty) {
 			return (DMProperty) selection.firstElement();
 		}
 		return null;

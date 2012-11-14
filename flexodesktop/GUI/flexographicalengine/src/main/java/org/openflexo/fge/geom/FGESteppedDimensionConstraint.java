@@ -65,7 +65,7 @@ public class FGESteppedDimensionConstraint {
 		double lWidth = Math.floor(d.width / hStep) * hStep;
 		double uWidth = lWidth + hStep;
 		double width = 0.0;
-		if ((Math.abs(lWidth - d.width) > Math.abs(uWidth - d.width) && uWidth < maxWidth) || lWidth < minWidth) {
+		if (Math.abs(lWidth - d.width) > Math.abs(uWidth - d.width) && uWidth < maxWidth || lWidth < minWidth) {
 			width = uWidth;
 		} else {
 			width = lWidth;
@@ -75,7 +75,7 @@ public class FGESteppedDimensionConstraint {
 		double lHeight = Math.floor(d.height / vStep) * vStep;
 		double uHeight = lHeight + vStep;
 		double height = 0.0;
-		if ((Math.abs(lHeight - d.height) > Math.abs(uHeight - d.height) && uHeight < maxHeight) || lHeight < minHeight) {
+		if (Math.abs(lHeight - d.height) > Math.abs(uHeight - d.height) && uHeight < maxHeight || lHeight < minHeight) {
 			height = uHeight;
 		} else {
 			height = lHeight;

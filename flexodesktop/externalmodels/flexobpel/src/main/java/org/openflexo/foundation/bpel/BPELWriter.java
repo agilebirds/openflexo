@@ -154,7 +154,7 @@ public class BPELWriter {
 		OutputPort portOUT = null;
 		if (process.getPortRegistery().getInOutPorts().size() == 1) {
 			portIN = (AbstractInPort) process.getPortRegistery().getInOutPorts().get(0);
-			portOUT = ((OutputPort) process.getPortRegistery().getInOutPorts().get(0));
+			portOUT = (OutputPort) process.getPortRegistery().getInOutPorts().get(0);
 		} else if (process.getPortRegistery().getNewPorts().size() == 1 && process.getPortRegistery().getOutPorts().size() == 1) {
 			portIN = (AbstractInPort) process.getPortRegistery().getNewPorts().get(0);
 			portOUT = (OutputPort) process.getPortRegistery().getOutPorts().get(0);
@@ -264,7 +264,7 @@ public class BPELWriter {
 
 		if (g instanceof Sequence) {
 			TSequence tSeq = new TSequence();
-			Sequence seq = ((Sequence) g);
+			Sequence seq = (Sequence) g;
 			for (ControlGraph currentGraph : seq.getStatements()) {
 				if (currentGraph != null) {
 					tSeq.getActivity().add(getBPELObject(currentGraph));
@@ -275,7 +275,7 @@ public class BPELWriter {
 
 		if (g instanceof Flow) {
 			TFlow tFlow = new TFlow();
-			Flow flow = ((Flow) g);
+			Flow flow = (Flow) g;
 			for (ControlGraph currentGraph : flow.getStatements()) {
 				if (currentGraph != null) {
 					tFlow.getActivity().add(getBPELObject(currentGraph));
@@ -285,7 +285,7 @@ public class BPELWriter {
 		}
 
 		if (g instanceof Conditional) {
-			Conditional cond = ((Conditional) g);
+			Conditional cond = (Conditional) g;
 			TIf tIf = new TIf();
 			TBooleanExpr tEx = new TBooleanExpr();
 			tIf.setCondition(tEx);
@@ -309,7 +309,7 @@ public class BPELWriter {
 		}
 
 		if (g instanceof BPELWSInvocation) {
-			BPELWSInvocation inv = ((BPELWSInvocation) g);
+			BPELWSInvocation inv = (BPELWSInvocation) g;
 			BPELPartnerLinkInvocation invoc = pLinks.findInvocation(inv.getSubProcessNode());
 			if (invoc == null) {
 				System.out.println("INVOC IS NULL : " + inv.getSubProcessNode().getName());
@@ -324,7 +324,7 @@ public class BPELWriter {
 		}
 
 		if (g instanceof Assignment) {
-			Assignment ass = ((Assignment) g);
+			Assignment ass = (Assignment) g;
 
 			String variableName = ass.getReceiver().getName();
 			/*
@@ -352,7 +352,7 @@ public class BPELWriter {
 			if (value.indexOf("$") == -1) {
 				TLiteral tLit = new TLiteral();
 				tLit.getContent().add(value);
-				tFrom.getContent().add((new ObjectFactory()).createLiteral(tLit));
+				tFrom.getContent().add(new ObjectFactory().createLiteral(tLit));
 			} else {
 				// String value=BPELPrettyPrinter.getInstance().getStringRepresentation(ass.getAssignmentValue());
 				tFrom.getContent().add(value);

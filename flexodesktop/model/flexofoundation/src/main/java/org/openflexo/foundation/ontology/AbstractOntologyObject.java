@@ -27,7 +27,8 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-public abstract class AbstractOntologyObject extends FlexoModelObject implements InspectableObject, OWL2URIDefinitions, RDFURIDefinitions, RDFSURIDefinitions {
+public abstract class AbstractOntologyObject extends FlexoModelObject implements InspectableObject, OWL2URIDefinitions, RDFURIDefinitions,
+		RDFSURIDefinitions {
 
 	private static final Logger logger = Logger.getLogger(AbstractOntologyObject.class.getPackage().getName());
 

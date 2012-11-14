@@ -43,7 +43,7 @@ public class XMLMapId {
 		NodeList propertiesNodeList;
 		Node tempNode;
 
-		if (!(mapIdNode.getNodeName().equals(XMLMapping.mapIdLabel))) {
+		if (!mapIdNode.getNodeName().equals(XMLMapping.mapIdLabel)) {
 			throw new InvalidModelException("Invalid tag '" + mapIdNode.getNodeName() + "' found in model file");
 		}
 
@@ -65,7 +65,7 @@ public class XMLMapId {
 			tempNode = propertiesNodeList.item(i);
 			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
 				if (tempNode.getNodeName().equals(XMLMapping.descriptionLabel)) {
-					if ((tempNode.getChildNodes().getLength() == 1) && (tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE)) {
+					if (tempNode.getChildNodes().getLength() == 1 && tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE) {
 						setDescription(tempNode.getFirstChild().getNodeValue());
 						// System.out.println("Description = "+getDescription());
 					}
@@ -117,7 +117,7 @@ public class XMLMapId {
 			Node tempAttribute;
 			NamedNodeMap attributes;
 
-			if (!(mapEntryNode.getNodeName().equals(XMLMapping.mapLabel))) {
+			if (!mapEntryNode.getNodeName().equals(XMLMapping.mapLabel)) {
 				throw new InvalidModelException("Invalid tag '" + mapEntryNode.getNodeName() + "' found in model file");
 			}
 
@@ -163,7 +163,7 @@ public class XMLMapId {
 				MapEntry next = (MapEntry) en.nextElement();
 				if (next.getEntityClass().isAssignableFrom(aClass)) {
 					// May match
-					if ((returned == null) || (returned.getEntityClass().isAssignableFrom(next.getEntityClass()))) {
+					if (returned == null || returned.getEntityClass().isAssignableFrom(next.getEntityClass())) {
 						returned = next;
 					}
 				}

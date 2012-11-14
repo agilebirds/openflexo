@@ -54,35 +54,35 @@ public class CEDControllerActionInitializer extends ControllerActionInitializer 
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new CEDSetPropertyInitializer(this)).init();
+		new CEDSetPropertyInitializer(this).init();
 
 		// CalcEditor perspective
-		(new CreateViewPointInitializer(this)).init();
-		(new AddEditionPatternInitializer(this)).init();
-		(new DeleteEditionPatternInitializer(this)).init();
-		(new DuplicateEditionPatternInitializer(this)).init();
+		new CreateViewPointInitializer(this).init();
+		new AddEditionPatternInitializer(this).init();
+		new DeleteEditionPatternInitializer(this).init();
+		new DuplicateEditionPatternInitializer(this).init();
 
 		// CalcDrawing edition
-		(new CreateCalcDrawingShemaInitializer(this)).init();
-		(new DeleteExampleDrawingInitializer(this)).init();
-		(new PushToPaletteInitializer(this)).init();
-		(new DeclareShapeInEditionPatternInitializer(this)).init();
-		(new DeclareConnectorInEditionPatternInitializer(this)).init();
-		(new DeleteCalcShemaElementsInitializer(this)).init();
+		new CreateCalcDrawingShemaInitializer(this).init();
+		new DeleteExampleDrawingInitializer(this).init();
+		new PushToPaletteInitializer(this).init();
+		new DeclareShapeInEditionPatternInitializer(this).init();
+		new DeclareConnectorInEditionPatternInitializer(this).init();
+		new DeleteCalcShemaElementsInitializer(this).init();
 
 		// Palette edition
-		(new CreateCalcPaletteInitializer(this)).init();
-		(new DeleteCalcPaletteInitializer(this)).init();
-		(new AddCalcPaletteElementInitializer(this)).init();
-		(new DeleteCalcPaletteElementInitializer(this)).init();
+		new CreateCalcPaletteInitializer(this).init();
+		new DeleteCalcPaletteInitializer(this).init();
+		new AddCalcPaletteElementInitializer(this).init();
+		new DeleteCalcPaletteElementInitializer(this).init();
 
 		// OntologyEditor perspective
-		(new CreateOntologyClassInitializer(this)).init();
-		(new CreateOntologyIndividualInitializer(this)).init();
-		(new CreateObjectPropertyInitializer(this)).init();
-		(new CreateDataPropertyInitializer(this)).init();
-		(new DeleteOntologyObjectsInitializer(this)).init();
-		(new AddAnnotationStatementInitializer(this)).init();
+		new CreateOntologyClassInitializer(this).init();
+		new CreateOntologyIndividualInitializer(this).init();
+		new CreateObjectPropertyInitializer(this).init();
+		new CreateDataPropertyInitializer(this).init();
+		new DeleteOntologyObjectsInitializer(this).init();
+		new AddAnnotationStatementInitializer(this).init();
 	}
 
 }

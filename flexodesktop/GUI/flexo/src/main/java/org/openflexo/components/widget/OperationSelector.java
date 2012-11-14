@@ -32,7 +32,7 @@ public class OperationSelector extends NodeSelector<OperationNode> {
 	protected static final String EMPTY_STRING = "";
 
 	public OperationSelector(OperationNode node) {
-		super((node != null ? node.getProject() : null), node, OperationNode.class);
+		super(node != null ? node.getProject() : null, node, OperationNode.class);
 	}
 
 }

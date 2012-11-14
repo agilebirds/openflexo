@@ -321,7 +321,7 @@ public class StatusInformation extends FileInfoContainer {
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("\nFile: "); // NOI18N
-		buf.append((file != null) ? file.getAbsolutePath() : "null"); // NOI18N
+		buf.append(file != null ? file.getAbsolutePath() : "null"); // NOI18N
 		buf.append("\nStatus is: "); // NOI18N
 		buf.append(getStatusString());
 		buf.append("\nWorking revision: "); // NOI18N

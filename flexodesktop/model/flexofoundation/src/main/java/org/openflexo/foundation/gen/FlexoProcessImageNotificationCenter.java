@@ -24,7 +24,7 @@ import org.openflexo.foundation.FlexoObservable;
 
 /**
  * This class should be removed as PPM is deprecated.
- *
+ * 
  */
 @Deprecated
 public class FlexoProcessImageNotificationCenter extends FlexoObservable {

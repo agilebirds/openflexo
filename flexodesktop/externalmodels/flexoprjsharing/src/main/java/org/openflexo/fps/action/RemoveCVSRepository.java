@@ -52,7 +52,7 @@ public class RemoveCVSRepository extends CVSAction<RemoveCVSRepository, CVSRepos
 
 		@Override
 		protected boolean isEnabledForSelection(CVSRepository object, Vector<FPSObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};

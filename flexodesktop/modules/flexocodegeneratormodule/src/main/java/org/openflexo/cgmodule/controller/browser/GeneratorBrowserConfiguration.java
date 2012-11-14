@@ -140,7 +140,8 @@ class GeneratorBrowserConfiguration implements BrowserConfiguration {
 		browser.setGenerationModifiedFilter(new CGFileFilter("generation_modified", UtilsIconLibrary.LEFT_MODIFICATION_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
-				return (file.getGenerationStatus().isGenerationModified() || (file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged));
+				return file.getGenerationStatus().isGenerationModified()
+						|| file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged;
 			}
 		});
 		browser.addToCustomFilters(browser.getGenerationModifiedFilter());

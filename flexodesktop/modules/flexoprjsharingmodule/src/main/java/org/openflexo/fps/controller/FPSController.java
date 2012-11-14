@@ -409,7 +409,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		public void focusGained(FocusEvent e) {
 			if (e.getComponent() instanceof JEditTextArea) {
 				((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
-				_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
+				_activeGenericCodeDisplayer = (JEditTextArea) e.getComponent();
 				refresh();
 			}
 		}
@@ -439,8 +439,8 @@ public class FPSController extends FlexoController implements SelectionManagingC
 				editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
 			} else {
 				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
-				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
-						: FlexoLocalization.localizedForKey("read_only")));
+				editorStatusLabel.setText(_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+						: FlexoLocalization.localizedForKey("read_only"));
 			}
 		}
 
@@ -478,10 +478,10 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		if (repository.isEnabled()) {
 			return true;
 		}
-		ReadOnlyTextFieldParameter userName = new ReadOnlyTextFieldParameter("userName", "user_name",
-				(repository.getUserName() == null ? "" : repository.getUserName()), 20);
-		TextFieldParameter passwd = new TextFieldParameter("passwd", "password", (repository.getPassword() == null ? ""
-				: repository.getPassword()));
+		ReadOnlyTextFieldParameter userName = new ReadOnlyTextFieldParameter("userName", "user_name", repository.getUserName() == null ? ""
+				: repository.getUserName(), 20);
+		TextFieldParameter passwd = new TextFieldParameter("passwd", "password", repository.getPassword() == null ? ""
+				: repository.getPassword());
 		passwd.setIsPassword(true);
 		CheckboxParameter storePasswd = new CheckboxParameter("storePasswd", "store_password", repository.getStorePassword());
 
@@ -504,7 +504,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		if (repository.isEnabled()) {
 			return true;
 		}
-		TextFieldParameter host = new TextFieldParameter("host", "host", (repository.getHostName() == null ? "" : repository.getHostName()));
+		TextFieldParameter host = new TextFieldParameter("host", "host", repository.getHostName() == null ? "" : repository.getHostName());
 
 		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, repository.getName() + " : "
 				+ FlexoLocalization.localizedForKey("unknown_host"), FlexoLocalization.localizedForKey("reenter_host"), host);

@@ -96,8 +96,8 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 	private void updateSelection(SelectionManager sm) {
 		if (sm.getSelectionSize() == 0) {
 			update(sm, new EmptySelection());
-		} else if ((sm.getSelectionSize() == 1) && (sm.getSelection().firstElement() instanceof InspectableObject)
-				&& (sm.getSelection().firstElement() instanceof ExecutableWorkflowElement)) {
+		} else if (sm.getSelectionSize() == 1 && sm.getSelection().firstElement() instanceof InspectableObject
+				&& sm.getSelection().firstElement() instanceof ExecutableWorkflowElement) {
 			ExecutableWorkflowElement objectToInspect = (ExecutableWorkflowElement) sm.getSelection().firstElement();
 			objectToInspect.setInterproceduralForControlGraphComputation(selectedInterprocedural);
 			objectToInspect.setProgrammingLanguageForControlGraphComputation(selectedLanguage);

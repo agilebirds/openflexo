@@ -41,7 +41,7 @@ public class ModView extends QuiduView {
 	}
 
 	public String getTypeParameter() {
-		return (String) params.get(1);
+		return params.get(1);
 	}
 
 	public void setSpecificationParameter(String o) {
@@ -49,7 +49,7 @@ public class ModView extends QuiduView {
 	}
 
 	public String getSpecificationParameter() {
-		return (String) params.get(2);
+		return params.get(2);
 	}
 
 	public ItemLabel getLabel() {

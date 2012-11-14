@@ -286,7 +286,7 @@ public class IEHeaderWidget extends IENonEditableTextWidget implements Extensibl
 		 */
 		@Override
 		public ValidationIssue applyValidation(Validable object) {
-			IEHeaderWidget header = ((IEHeaderWidget) object);
+			IEHeaderWidget header = (IEHeaderWidget) object;
 			HTMLListDescriptor desc = header.getHTMLListDescriptor();
 			if (desc == null) {
 				return new ValidationWarning(this, object, "headers_must_be_in_a_table_containing_a_repetition", new DeleteHeader());

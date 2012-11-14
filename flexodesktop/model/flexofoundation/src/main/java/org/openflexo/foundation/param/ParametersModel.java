@@ -159,7 +159,7 @@ public class ParametersModel extends TemporaryFlexoModelObject implements Inspec
 	@Override
 	public Class getTypeForKey(String key) {
 		ParameterDefinition param = parameterForKey(key);
-		if ((param != null) && (param.getValue() != null)) {
+		if (param != null && param.getValue() != null) {
 			return param.getValue().getClass();
 		}
 		return null;

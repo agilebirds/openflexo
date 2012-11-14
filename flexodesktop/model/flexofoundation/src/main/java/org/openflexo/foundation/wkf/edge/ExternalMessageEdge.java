@@ -125,7 +125,7 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 
 	public WKFBindingDefinition getAccessedProcessInstanceBindingDefinition() {
 		if (getServiceOperation() != null && getRelatedSubProcess() != null) {
-			boolean isNewPort = (getServiceOperation().getPort() instanceof NewPort);
+			boolean isNewPort = getServiceOperation().getPort() instanceof NewPort;
 			// TODO ? what for operation ??
 			return WKFBindingDefinition.get(this, ACCESSED_PROCESS_INSTANCE,
 					DMType.makeResolvedDMType(getRelatedSubProcess().getProcessDMEntity()), BindingDefinitionType.GET_SET, !isNewPort);
@@ -134,7 +134,7 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 	}
 
 	public AbstractBinding getAccessedProcessInstance() {
-		if ((_accessedProcessInstance != null) && (_accessedProcessInstance.getBindingDefinition() == null)) {
+		if (_accessedProcessInstance != null && _accessedProcessInstance.getBindingDefinition() == null) {
 			_accessedProcessInstance.setBindingDefinition(getAccessedProcessInstanceBindingDefinition());
 		}
 		return _accessedProcessInstance;
@@ -156,8 +156,8 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 	}
 
 	public WKFBindingDefinition getParentProcessInstanceBindingDefinition() {
-		if ((getRelatedSubProcess() != null) && (getRelatedSubProcess().getParentProcess() != null)) {
-			boolean isNewPort = (getFlexoPort() instanceof NewPort);
+		if (getRelatedSubProcess() != null && getRelatedSubProcess().getParentProcess() != null) {
+			boolean isNewPort = getFlexoPort() instanceof NewPort;
 			return WKFBindingDefinition.get(this, PARENT_PROCESS_INSTANCE,
 					DMType.makeResolvedDMType(getRelatedSubProcess().getParentProcess().getProcessDMEntity()), BindingDefinitionType.GET,
 					isNewPort);
@@ -166,7 +166,7 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 	}
 
 	public AbstractBinding getParentProcessInstance() {
-		if ((_parentProcessInstance != null) && (_parentProcessInstance.getBindingDefinition() == null)) {
+		if (_parentProcessInstance != null && _parentProcessInstance.getBindingDefinition() == null) {
 			_parentProcessInstance.setBindingDefinition(getParentProcessInstanceBindingDefinition());
 		}
 		return _parentProcessInstance;
@@ -189,7 +189,7 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 
 	public WKFBindingDefinition getReturnedProcessInstanceBindingDefinition() {
 		if (getRelatedSubProcess() != null) {
-			boolean isNewPort = (getFlexoPort() instanceof NewPort);
+			boolean isNewPort = getFlexoPort() instanceof NewPort;
 			// TODO ? what for operation ??
 			return WKFBindingDefinition.get(this, RETURNED_PROCESS_INSTANCE,
 					DMType.makeResolvedDMType(getRelatedSubProcess().getProcessDMEntity()), BindingDefinitionType.SET, isNewPort);
@@ -198,7 +198,7 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 	}
 
 	public AbstractBinding getReturnedProcessInstance() {
-		if ((_returnedProcessInstance != null) && (_returnedProcessInstance.getBindingDefinition() == null)) {
+		if (_returnedProcessInstance != null && _returnedProcessInstance.getBindingDefinition() == null) {
 			_returnedProcessInstance.setBindingDefinition(getReturnedProcessInstanceBindingDefinition());
 		}
 		return _returnedProcessInstance;
@@ -233,7 +233,7 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 		@Override
 		public ValidationIssue<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>> applyValidation(
 				ExternalMessageEdge<AbstractNode, AbstractNode> edge) {
-			if ((edge.getPortMapRegistery() == null) || (edge.getPortMapRegistery().getServiceInterface() == null)) {
+			if (edge.getPortMapRegistery() == null || edge.getPortMapRegistery().getServiceInterface() == null) {
 				ValidationError<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>> error = new ValidationError<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>>(
 						this, edge, "message_edge_refer_to_an_invalid_port_map_registery");
 				error.addToFixProposals(new DeletionFixProposal<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>>(

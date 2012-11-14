@@ -126,7 +126,7 @@ public class DMEIconLibrary extends IconLibrary {
 			}
 			return null;
 		} else if (object instanceof DMEOJoin) {
-			return (((DMEOJoin) object).isJoinValid() ? DMEIconLibrary.CONNECTED_ICON : DMEIconLibrary.DISCONNECTED_ICON);
+			return ((DMEOJoin) object).isJoinValid() ? DMEIconLibrary.CONNECTED_ICON : DMEIconLibrary.DISCONNECTED_ICON;
 		} else if (object instanceof DMTranstyper) {
 			return DMEIconLibrary.DM_TRANSTYPER_ICON;
 		} else if (object instanceof DMTranstyperEntry) {
@@ -138,7 +138,7 @@ public class DMEIconLibrary extends IconLibrary {
 	public static Icon iconForType(DMType type) {
 		if (type.getKindOfType() == KindOfType.UNRESOLVED) {
 			return IconLibrary.UNFIXABLE_ERROR_ICON;
-		} else if ((type.getKindOfType() == KindOfType.RESOLVED) || (type.getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
+		} else if (type.getKindOfType() == KindOfType.RESOLVED || type.getKindOfType() == KindOfType.RESOLVED_ARRAY) {
 			if (type.getBaseEntity().getIsNormalClass()) {
 				return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
 			} else if (type.getBaseEntity().getIsInterface()) {

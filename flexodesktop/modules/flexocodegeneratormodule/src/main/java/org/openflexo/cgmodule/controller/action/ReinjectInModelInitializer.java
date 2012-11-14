@@ -72,14 +72,14 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 				if (action.getFilesToReinjectInModel().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if ((action.getFilesToReinjectInModel().size() > 1 || (!(action.getFocusedObject() instanceof CGFile)))
-						&& (!(action.getContext() instanceof AcceptDiskUpdateAndReinjectInModel))) {
+				} else if ((action.getFilesToReinjectInModel().size() > 1 || !(action.getFocusedObject() instanceof CGFile))
+						&& !(action.getContext() instanceof AcceptDiskUpdateAndReinjectInModel)) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("reinject_in_model"),
 							FlexoLocalization.localizedForKey("reinject_in_model_description"), "reinject_in_model",
 							action.getFilesToReinjectInModel(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getGeneratorController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
 						action.setFilesToReinjectInModel(popup.getFileSet().getSelectedFiles());
 					} else {
 						return false;
@@ -104,8 +104,7 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 								FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_reinject_in_model"),
 								selectedJavaFiles, getProject(), getControllerActionInitializer().getGeneratorController());
 						popup.setVisible(true);
-						if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE)
-								&& (popup.getDMSet().getSelectedObjects().size() > 0)) {
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getDMSet().getSelectedObjects().size() > 0) {
 							action.setUpdatedSet(popup.getDMSet());
 							action.getProjectGenerator().startHandleLogs();
 							return true;

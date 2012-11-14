@@ -19,7 +19,6 @@
  */
 package org.openflexo.dre;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.dre.controller.DREController;
 import org.openflexo.drm.DocResourceManager;
@@ -27,12 +26,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalDREModule;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**

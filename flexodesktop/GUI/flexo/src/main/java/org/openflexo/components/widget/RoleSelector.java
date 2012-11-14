@@ -54,7 +54,7 @@ public class RoleSelector extends AbstractBrowserSelector<Role> {
 	@Override
 	public String renderedString(Role editedObject) {
 		if (editedObject != null) {
-			return (editedObject).getName();
+			return editedObject.getName();
 		}
 		return EMPTY_STRING;
 	}

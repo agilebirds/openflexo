@@ -69,9 +69,10 @@ public class TextQueryEngine {
 		} else {
 			for (int i = 0; i < text.length(); i++) {
 				if (text.regionMatches(!query.isCaseSensitive(), i, query.getSearchedText(), 0, query.getSearchedText().length())) {
-					if ((query.isWholeWord() && (i == 0 || !(Character.isLetterOrDigit(text.charAt(i - 1)) || text.charAt(i - 1) == '_')) && (i
-							+ query.getSearchedText().length() == text.length() || !(Character.isLetterOrDigit(text.charAt(i
-							+ query.getSearchedText().length())) || text.charAt(i + query.getSearchedText().length()) == '_')))
+					if (query.isWholeWord()
+							&& (i == 0 || !(Character.isLetterOrDigit(text.charAt(i - 1)) || text.charAt(i - 1) == '_'))
+							&& (i + query.getSearchedText().length() == text.length() || !(Character.isLetterOrDigit(text.charAt(i
+									+ query.getSearchedText().length())) || text.charAt(i + query.getSearchedText().length()) == '_'))
 							|| !query.isWholeWord()) {
 						Result r = result.new Result(i, i + query.getSearchedText().length());
 						result.addToResults(r);

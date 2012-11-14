@@ -36,21 +36,7 @@ import org.openflexo.toolbox.StringUtils;
 public abstract class PatternRole extends EditionPatternObject {
 
 	public static enum PatternRoleType {
-		Shape,
-		Connector,
-		Individual,
-		Class,
-		Property,
-		ObjectProperty,
-		DataProperty,
-		IsAStatement,
-		ObjectPropertyStatement,
-		DataPropertyStatement,
-		RestrictionStatement,
-		FlexoModelObject,
-		Diagram,
-		EditionPattern,
-		Primitive
+		Shape, Connector, Individual, Class, Property, ObjectProperty, DataProperty, IsAStatement, ObjectPropertyStatement, DataPropertyStatement, RestrictionStatement, FlexoModelObject, Diagram, EditionPattern, Primitive
 	}
 
 	private EditionPattern _pattern;

@@ -120,7 +120,7 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 	public WSService getSelectedWSService() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof WSService)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof WSService) {
 			return (WSService) selection.firstElement();
 		}
 		if (getSelectedServiceInterface() != null) {
@@ -142,7 +142,7 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 	public ServiceInterface getSelectedServiceInterface() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceInterface) {
 			return (ServiceInterface) selection.firstElement();
 		}
 		return null;
@@ -151,7 +151,7 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 	public WSDLRepository getSelectedWSDLRepository() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof WSDLRepository)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof WSDLRepository) {
 			return (WSDLRepository) selection.firstElement();
 		}
 		return null;

@@ -121,7 +121,7 @@ public final class InternalMessageInEdge extends InternalMessageEdge<AbstractInP
 			return false;
 		}
 
-		return (getEndNode().getNode().getProcess() == getPortRegistery().getProcess());
+		return getEndNode().getNode().getProcess() == getPortRegistery().getProcess();
 	}
 
 	public static class InternalMessageInEdgeMustBeValid extends ValidationRule<InternalMessageInEdgeMustBeValid, InternalMessageInEdge> {

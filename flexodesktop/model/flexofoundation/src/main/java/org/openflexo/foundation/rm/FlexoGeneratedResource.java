@@ -55,7 +55,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 	private Date _lastGenerationDate;
 
 	public Date getLastGenerationDate() {
-		if (_lastGenerationDate == null || (isConnected() && !getFile().exists())) {
+		if (_lastGenerationDate == null || isConnected() && !getFile().exists()) {
 			_lastGenerationDate = getDiskLastModifiedDate();
 		}
 		return _lastGenerationDate;
@@ -84,7 +84,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 	 * @return
 	 */
 	public synchronized boolean isLoaded() {
-		return (_resourceData != null);
+		return _resourceData != null;
 	}
 
 	// Enhance visibility of this method

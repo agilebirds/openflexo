@@ -86,12 +86,12 @@ public class ImportImageInitializer extends ActionInitializer {
 					}
 				});
 				chooser.setAcceptAllFileFilterUsed(false);
-				int returnVal = chooser.showOpenDialog((e != null && e.getSource() instanceof Component ? (Component) e.getSource()
-						: FlexoFrame.getActiveFrame()));
+				int returnVal = chooser.showOpenDialog(e != null && e.getSource() instanceof Component ? (Component) e.getSource()
+						: FlexoFrame.getActiveFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					GeneralPreferences.setLastImageDirectory(chooser.getSelectedFile().getParentFile());
 					FlexoPreferences.savePreferences(true);
-					(action).setFileToImport(chooser.getSelectedFile());
+					action.setFileToImport(chooser.getSelectedFile());
 					return true;
 				}
 				return false;

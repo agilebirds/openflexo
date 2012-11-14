@@ -85,7 +85,7 @@ public class WSEServiceOperationView extends WSEView<ServiceOperation> {
 	public MessageEntry getSelectedMessageEntry() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof MessageEntry)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof MessageEntry) {
 			return (MessageEntry) selection.firstElement();
 		}
 
@@ -95,7 +95,7 @@ public class WSEServiceOperationView extends WSEView<ServiceOperation> {
 	public AbstractMessageDefinition getSelectedMessageDefinition() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof AbstractMessageDefinition)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof AbstractMessageDefinition) {
 			return (MessageDefinition) selection.firstElement();
 		}
 		if (getSelectedMessageEntry() != null) {

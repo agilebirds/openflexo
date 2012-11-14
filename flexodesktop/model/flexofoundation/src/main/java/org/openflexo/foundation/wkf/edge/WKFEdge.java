@@ -169,7 +169,7 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 	@Override
 	public void setName(String aName) {
 		String oldValue = getName();
-		if ((oldValue == null) || (!oldValue.equals(aName))) {
+		if (oldValue == null || !oldValue.equals(aName)) {
 			_name = aName;
 			setChanged();
 			notifyObservers(new NameChanged(oldValue, aName));

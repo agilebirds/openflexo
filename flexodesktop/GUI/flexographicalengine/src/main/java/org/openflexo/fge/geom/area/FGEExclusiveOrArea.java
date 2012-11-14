@@ -50,7 +50,7 @@ public class FGEExclusiveOrArea extends FGEOperationArea {
 
 	@Override
 	public boolean containsPoint(FGEPoint p) {
-		return (area1.containsPoint(p) && !area2.containsPoint(p)) || (area2.containsPoint(p) && !area1.containsPoint(p));
+		return area1.containsPoint(p) && !area2.containsPoint(p) || area2.containsPoint(p) && !area1.containsPoint(p);
 	}
 
 	@Override

@@ -56,7 +56,7 @@ public class CTokenMarker extends TokenMarker {
 		boolean backslash = false;
 
 		loop: for (int i = offset; i < length; i++) {
-			int i1 = (i + 1);
+			int i1 = i + 1;
 
 			char c = array[i];
 			if (c == '\\') {
@@ -148,7 +148,7 @@ public class CTokenMarker extends TokenMarker {
 				if (c == '*' && length - i > 1) {
 					if (array[i1] == '/') {
 						i++;
-						addToken((i + 1) - lastOffset, token);
+						addToken(i + 1 - lastOffset, token);
 						token = Token.NULL;
 						lastOffset = lastKeyword = i + 1;
 					}

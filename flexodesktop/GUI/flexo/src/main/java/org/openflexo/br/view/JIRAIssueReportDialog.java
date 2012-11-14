@@ -330,8 +330,8 @@ public class JIRAIssueReportDialog {
 				steps++;
 			}
 			if (sendScreenshots) {
-				for (int i = 0; i < FlexoFrame.getFrames().length; i++) {
-					Frame frame = FlexoFrame.getFrames()[i];
+				for (int i = 0; i < Frame.getFrames().length; i++) {
+					Frame frame = Frame.getFrames()[i];
 					if (frame instanceof FlexoFrame) {
 						steps++;
 						for (Window w : frame.getOwnedWindows()) {
@@ -467,8 +467,8 @@ public class JIRAIssueReportDialog {
 						}
 					}
 					if (sendScreenshots) {
-						for (int i = 0; i < FlexoFrame.getFrames().length; i++) {
-							Frame frame = FlexoFrame.getFrames()[i];
+						for (int i = 0; i < Frame.getFrames().length; i++) {
+							Frame frame = Frame.getFrames()[i];
 							if (frame instanceof FlexoFrame) {
 								ProgressWindow.instance().setProgress(
 										FlexoLocalization.localizedForKey("sending_screenshot") + " " + frame.getTitle());

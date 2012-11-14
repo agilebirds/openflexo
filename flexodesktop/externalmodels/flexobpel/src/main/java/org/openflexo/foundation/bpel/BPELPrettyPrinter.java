@@ -80,7 +80,7 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 			return makeStringRepresentation((BinaryOperatorExpression) expression);
 		}
 		if (expression instanceof BindingValueVariable) {
-			return makeStringRepresentation(((BindingValueVariable) expression));
+			return makeStringRepresentation((BindingValueVariable) expression);
 		}
 
 		// return "<unknown "+expression.getClass().getSimpleName()+">";
@@ -145,12 +145,12 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 			BindingPathElement currentEl = vect.get(i);
 			String pack = currentEl.getEntity().getPackage().getName();
 			String ns = null;
-			if ((currentEl.getEntity().getRepository() instanceof WSDLRepository)) {
+			if (currentEl.getEntity().getRepository() instanceof WSDLRepository) {
 				WSDLRepository rep = (WSDLRepository) currentEl.getEntity().getRepository();
 
 				System.out.println("registered mappings : " + rep.getPackageToNamespace());
 
-				ns = (rep.getPackageToNamespace().get(pack));
+				ns = rep.getPackageToNamespace().get(pack);
 			}
 
 			// this is wrong, but we should add a namespace declaration for the exported package...

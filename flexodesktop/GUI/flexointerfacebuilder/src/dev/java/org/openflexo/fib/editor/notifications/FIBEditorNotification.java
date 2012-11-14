@@ -21,16 +21,15 @@ package org.openflexo.fib.editor.notifications;
 
 import org.openflexo.fib.model.FIBModelNotification;
 
-public class FIBEditorNotification<T extends Object> extends FIBModelNotification<T>
-{
-	public FIBEditorNotification(String attributeName, T oldValue, T newValue)
-	{
-		super(attributeName,oldValue,newValue);
+public class FIBEditorNotification<T extends Object> extends FIBModelNotification<T> {
+	public FIBEditorNotification(String attributeName, T oldValue, T newValue) {
+		super(attributeName, oldValue, newValue);
 	}
-	
-	public String toString()
-	{
-		return "FIBEditorNotification of "+getClass().getSimpleName()+" "+getAttributeName()+" old: "+oldValue()+" new: "+newValue();
+
+	@Override
+	public String toString() {
+		return "FIBEditorNotification of " + getClass().getSimpleName() + " " + getAttributeName() + " old: " + oldValue() + " new: "
+				+ newValue();
 	}
-	
+
 }

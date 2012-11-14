@@ -167,7 +167,7 @@ public final class OutPort extends FlexoPort implements OutputPort {
 
 	@Override
 	public boolean isCorrectelyLinked() {
-		return ((getIncomingPostConditions().size() > 0) && (getInvalidOutgoingPostConditions().size() == 0));
+		return getIncomingPostConditions().size() > 0 && getInvalidOutgoingPostConditions().size() == 0;
 	}
 
 	protected Vector<FlexoPostCondition<AbstractNode, AbstractNode>> getInvalidOutgoingPostConditions() {

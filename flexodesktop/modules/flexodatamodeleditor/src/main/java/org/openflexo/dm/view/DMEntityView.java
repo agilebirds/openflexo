@@ -117,7 +117,7 @@ public class DMEntityView extends DMView<DMEntity> {
 	public DMProperty getSelectedDMProperty() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMProperty) {
 			return (DMProperty) selection.firstElement();
 		}
 		return null;
@@ -126,7 +126,7 @@ public class DMEntityView extends DMView<DMEntity> {
 	public DMMethod getSelectedDMMethod() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMMethod)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMMethod) {
 			return (DMMethod) selection.firstElement();
 		}
 		return null;

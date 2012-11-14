@@ -147,11 +147,11 @@ public class PrintVisitor extends DescendingVisitor {
 			fill = align_at - column;
 			// System.err.println("< : " + align_at + ":" + column + ":" + fill);
 		} else {
-			fill = 8 - (column % 8);
+			fill = 8 - column % 8;
 			// System.err.println(">= : " + align_at + ":" + column + ":" + fill);
 		}
 
-		int spaces = 4 - (fill % 4);
+		int spaces = 4 - fill % 4;
 		for (int i = 0; i < spaces; i++) {
 			out.print(' ');
 		}

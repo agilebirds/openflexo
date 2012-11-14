@@ -95,7 +95,7 @@ public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoM
 		} else if (getFocusedObject() instanceof FlexoProcess) {
 			return ((FlexoProcess) getFocusedObject()).getProcessNode();
 		} else if (getFocusedObject() instanceof ProcessFolder) {
-			return ((ProcessFolder) getFocusedObject());
+			return (ProcessFolder) getFocusedObject();
 		}
 		return null;
 	}

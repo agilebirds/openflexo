@@ -102,7 +102,7 @@ public class VEClipboard extends FlexoClipboard {
 
 	@Override
 	protected boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
-		return (getSelectionManager().getSelectionSize() > 0);
+		return getSelectionManager().getSelectionSize() > 0;
 	}
 
 	protected void resetClipboard() {
@@ -126,6 +126,6 @@ public class VEClipboard extends FlexoClipboard {
 	}
 
 	protected boolean isTargetValidForPasting(FlexoModelObject pastingContext) {
-		return (_clipboardData instanceof ViewShape && pastingContext instanceof ViewShape);
+		return _clipboardData instanceof ViewShape && pastingContext instanceof ViewShape;
 	}
 }

@@ -180,7 +180,7 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 	}
 
 	public Vector<MessageEntryBinding> getBindings() {
-		if ((_bindings != null) && (getMessageDefinition() != null) && (_bindings.size() != getMessageDefinition().getEntries().size())) {
+		if (_bindings != null && getMessageDefinition() != null && _bindings.size() != getMessageDefinition().getEntries().size()) {
 			updateBindings();
 		}
 		return _bindings;
@@ -231,7 +231,7 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("received update in MessageBindings " + dataModification);
 		}
-		if ((o == getMessageDefinition()) && ((dataModification instanceof BindingAdded) || (dataModification instanceof BindingRemoved))) {
+		if (o == getMessageDefinition() && (dataModification instanceof BindingAdded || dataModification instanceof BindingRemoved)) {
 			updateBindings();
 			setChanged();
 			notifyObservers(dataModification);
@@ -309,7 +309,7 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 			while (en.hasMoreElements()) {
 				MessageEntryBinding binding = (MessageEntryBinding) en.nextElement();
 				AbstractBinding bv = binding.getBindingValue();
-				if ((bv != null) && (!bv.isBindingValid())) {
+				if (bv != null && !bv.isBindingValid()) {
 					ValidationError error;
 					error = new MissingRequiredBinding(bindings, binding) {
 						@Override
@@ -342,7 +342,7 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 				MessageEntryBinding binding = (MessageEntryBinding) en.nextElement();
 				if (binding.getBindingDefinition().getIsMandatory()) {
 					AbstractBinding bv = binding.getBindingValue();
-					if ((bv == null) || (!bv.isBindingValid())) {
+					if (bv == null || !bv.isBindingValid()) {
 						ValidationError error;
 						if (bv == null) {
 							error = new MissingRequiredBinding(bindings, binding) {

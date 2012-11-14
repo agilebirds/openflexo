@@ -39,7 +39,7 @@ public abstract class AbstractOperationNodeGR extends FlexoNodeGR<OperationNode>
 
 	@Override
 	public int getTopBorder() {
-		return (isInPalette ? super.getTopBorder() : REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX);
+		return isInPalette ? super.getTopBorder() : REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX;
 	}
 
 	@Override

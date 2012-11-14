@@ -76,13 +76,13 @@ public class DMReadOnlyEntityTableModel extends DMEntityTableModel {
 		addToColumns(new IconColumn<DMEntity>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMEntity entity) {
-				return (entity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return entity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEntity entity) {
-				return (entity.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return entity.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new StringColumn<DMEntity>("name", 150) {

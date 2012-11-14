@@ -365,7 +365,7 @@ public class FGEUnionArea extends FGEOperationArea {
 	}
 
 	public boolean isUnionOfFiniteGeometricObjects() {
-		return (isUnionOf(FGEGeometricObject.class) && isFinite());
+		return isUnionOf(FGEGeometricObject.class) && isFinite();
 	}
 
 	public boolean isUnionOfPoints() {

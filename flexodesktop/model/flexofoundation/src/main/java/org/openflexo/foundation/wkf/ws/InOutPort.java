@@ -147,7 +147,7 @@ public final class InOutPort extends AbstractInPort implements OutputPort {
 
 	@Override
 	public boolean isCorrectelyLinked() {
-		return ((getOutgoingPostConditions().size() > 0) && (getInvalidOutgoingPostConditions().size() == 0));
+		return getOutgoingPostConditions().size() > 0 && getInvalidOutgoingPostConditions().size() == 0;
 	}
 
 	protected Vector<FlexoPostCondition<AbstractNode, AbstractNode>> getInvalidOutgoingPostConditions() {

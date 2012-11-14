@@ -96,7 +96,7 @@ public class WSERepositoryFolderView extends WSEView<WSRepositoryFolder> {
 	public DMRepository getSelectedDMRepository() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMRepository) {
 			return (DMRepository) selection.firstElement();
 		}
 		return null;

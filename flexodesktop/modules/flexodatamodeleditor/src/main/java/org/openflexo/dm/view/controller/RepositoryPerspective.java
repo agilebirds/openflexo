@@ -98,7 +98,7 @@ class RepositoryPerspective extends DMPerspective<DMObject> {
 
 	@Override
 	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
-		if ((proposedObject instanceof DMObject) && hasModuleViewForObject(proposedObject)) {
+		if (proposedObject instanceof DMObject && hasModuleViewForObject(proposedObject)) {
 			return (DMObject) proposedObject;
 		}
 		return null;

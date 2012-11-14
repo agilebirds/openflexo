@@ -76,7 +76,8 @@ class ModelReinjectionPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedOutput) || (object instanceof GenerationRepository) || (object instanceof CGFile) || (object instanceof CGTemplate));
+		return object instanceof GeneratedOutput || object instanceof GenerationRepository || object instanceof CGFile
+				|| object instanceof CGTemplate;
 	}
 
 	@Override

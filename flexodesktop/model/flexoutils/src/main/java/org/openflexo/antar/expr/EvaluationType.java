@@ -33,63 +33,63 @@ public enum EvaluationType {
 	}
 
 	public boolean isLiteral() {
-		return (this == LITERAL);
+		return this == LITERAL;
 	}
 
 	public boolean isArithmetic() {
-		return (this == ARITHMETIC_FLOAT || this == ARITHMETIC_INTEGER);
+		return this == ARITHMETIC_FLOAT || this == ARITHMETIC_INTEGER;
 	}
 
 	public boolean isArithmeticInteger() {
-		return (this == ARITHMETIC_INTEGER);
+		return this == ARITHMETIC_INTEGER;
 	}
 
 	public boolean isArithmeticFloat() {
-		return (this == ARITHMETIC_FLOAT);
+		return this == ARITHMETIC_FLOAT;
 	}
 
 	public boolean isArithmeticOrLiteral() {
-		return (this == ARITHMETIC_FLOAT || this == ARITHMETIC_INTEGER || this == LITERAL);
+		return this == ARITHMETIC_FLOAT || this == ARITHMETIC_INTEGER || this == LITERAL;
 	}
 
 	public boolean isBoolean() {
-		return (this == BOOLEAN);
+		return this == BOOLEAN;
 	}
 
 	public boolean isBooleanOrLiteral() {
-		return (this == BOOLEAN || this == LITERAL);
+		return this == BOOLEAN || this == LITERAL;
 	}
 
 	public boolean isEnum() {
-		return (this == ENUM);
+		return this == ENUM;
 	}
 
 	public boolean isEnumOrLiteral() {
-		return (this == ENUM || this == LITERAL);
+		return this == ENUM || this == LITERAL;
 	}
 
 	public boolean isString() {
-		return (this == STRING);
+		return this == STRING;
 	}
 
 	public boolean isStringOrLiteral() {
-		return (this == STRING || this == LITERAL);
+		return this == STRING || this == LITERAL;
 	}
 
 	public boolean isDate() {
-		return (this == DATE);
+		return this == DATE;
 	}
 
 	public boolean isDateOrLiteral() {
-		return (this == DATE || this == LITERAL);
+		return this == DATE || this == LITERAL;
 	}
 
 	public boolean isDuration() {
-		return (this == DURATION);
+		return this == DURATION;
 	}
 
 	public boolean isDurationOrLiteral() {
-		return (this == DURATION || this == LITERAL);
+		return this == DURATION || this == LITERAL;
 	}
 
 }

@@ -47,13 +47,13 @@ public class WSEMessageEntryTableModel extends AbstractModel<ServiceMessageDefin
 			addToColumns(new StringColumn<MessageEntry>("name", 190) {
 				@Override
 				public String getValue(MessageEntry object) {
-					return (object).getVariableName();
+					return object.getVariableName();
 				}
 			});
 			addToColumns(new StringColumn<MessageEntry>("type", 150) {
 				@Override
 				public String getValue(MessageEntry object) {
-					return (object).getTypeClassName();
+					return object.getTypeClassName();
 				}
 
 				/*   public void setValue(FlexoModelObject object, String aValue)
@@ -67,12 +67,12 @@ public class WSEMessageEntryTableModel extends AbstractModel<ServiceMessageDefin
 			addToColumns(new EditableStringColumn<MessageEntry>("name", 190) {
 				@Override
 				public String getValue(MessageEntry object) {
-					return (object).getVariableName();
+					return object.getVariableName();
 				}
 
 				@Override
 				public void setValue(MessageEntry object, String aValue) {
-					(object).setVariableName(aValue);
+					object.setVariableName(aValue);
 					selectObject(object);
 				}
 
@@ -80,12 +80,12 @@ public class WSEMessageEntryTableModel extends AbstractModel<ServiceMessageDefin
 			addToColumns(new EntitySelectorColumn<MessageEntry, DMEntity>("type", 150, project, DMEntity.class) {
 				@Override
 				public DMEntity getValue(MessageEntry object) {
-					return (object).getType().getBaseEntity();
+					return object.getType().getBaseEntity();
 				}
 
 				@Override
 				public void setValue(MessageEntry object, DMEntity aValue) {
-					(object).getType().setBaseEntity(aValue);
+					object.getType().setBaseEntity(aValue);
 				}
 			});
 		}
@@ -102,7 +102,7 @@ public class WSEMessageEntryTableModel extends AbstractModel<ServiceMessageDefin
 
 	@Override
 	public MessageEntry elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getEntries().get(row);
 		} else {
 			return null;

@@ -67,13 +67,13 @@ public class WSEFolderTableModel extends AbstractModel<FlexoWSLibrary, WSFolder>
 		addToColumns(new StringColumn<WSFolder>("name", 200) {
 			@Override
 			public String getValue(WSFolder object) {
-				return (object).getLocalizedName();
+				return object.getLocalizedName();
 			}
 		});
 		addToColumns(new StringColumn<WSFolder>("description", 570) {
 			@Override
 			public String getValue(WSFolder object) {
-				return (object).getLocalizedDescription();
+				return object.getLocalizedDescription();
 			}
 		});
 		setRowHeight(20);

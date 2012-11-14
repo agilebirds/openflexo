@@ -137,7 +137,7 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 	public DMEOModel getSelectedDMEOModel() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOModel)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEOModel) {
 			return (DMEOModel) selection.firstElement();
 		}
 		if (getSelectedDMEOEntity() != null) {
@@ -149,7 +149,7 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 	public DMEOEntity getSelectedDMEOEntity() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOEntity)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEOEntity) {
 			return (DMEOEntity) selection.firstElement();
 		}
 		return null;

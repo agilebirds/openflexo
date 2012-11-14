@@ -62,8 +62,8 @@ public class AddMenuInitializer extends ActionInitializer {
 				if (((FlexoItemMenu) action.getFocusedObject()).getNavigationMenu().getMenuLabeled(menuLabel) != null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("a_menu_with_such_label_already_exists"));
 				}
-				(action).setMenuLabel(menuLabel);
-				(action).setFather((FlexoItemMenu) action.getFocusedObject());
+				action.setMenuLabel(menuLabel);
+				action.setFather((FlexoItemMenu) action.getFocusedObject());
 				return true;
 			}
 		};

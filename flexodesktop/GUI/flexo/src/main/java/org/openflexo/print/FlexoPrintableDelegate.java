@@ -265,10 +265,10 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 				// logger.info("Print page "+(pageIndex+1)+" scaleX="+g2.getTransform().getScaleX()+" scaleY="+g2.getTransform().getScaleY());
 				if (_paintMode == PaintMode.PREVIEW) {
 					g2.drawString("Page: " + (pageIndex + 1) + "/" + getNumberOfPages(), pageBounds.width / 2 - 35 + i * pageBounds.width,
-							(pageBounds.height - fontHeight - fontDesent - bottomMargin) + j * pageBounds.height);
+							pageBounds.height - fontHeight - fontDesent - bottomMargin + j * pageBounds.height);
 				} else if (_paintMode == PaintMode.PRINTING) {
 					g2.drawString("Page: " + (pageIndex + 1) + "/" + getNumberOfPages(), pageBounds.width / 2 - 35 + i * pageBounds.width,
-							(pageBounds.height - fontHeight - fontDesent) + j * pageBounds.height);
+							pageBounds.height - fontHeight - fontDesent + j * pageBounds.height);
 				}
 			}
 		}
@@ -287,7 +287,7 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 				// int pageIndex = j*widthPageNb+i;
 				if (_paintMode == PaintMode.PREVIEW) {
 					g2.drawString(getPrintTitle(), (int) (pageBounds.width / 2 - titleBounds.getWidth() / 2) + i * pageBounds.width,
-							(imageablePageBounds.y + 15) + j * pageBounds.height);
+							imageablePageBounds.y + 15 + j * pageBounds.height);
 				} else if (_paintMode == PaintMode.PRINTING) {
 					g2.drawString(getPrintTitle(), (int) (pageBounds.width / 2 - titleBounds.getWidth() / 2) + i * pageBounds.width, 15 + j
 							* pageBounds.height);
@@ -397,8 +397,8 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 		if (_pageFormat != null) {
 			Rectangle optimalBounds = getOptimalBounds();
 			Rectangle pageBounds = getPageRect(_pageFormat);
-			double scaleX = (double) pageBounds.width / ((double) (optimalBounds.x + optimalBounds.width + 1));
-			double scaleY = (double) pageBounds.height / ((double) (optimalBounds.y + optimalBounds.height + 1));
+			double scaleX = (double) pageBounds.width / (double) (optimalBounds.x + optimalBounds.width + 1);
+			double scaleY = (double) pageBounds.height / (double) (optimalBounds.y + optimalBounds.height + 1);
 			if (scaleX < scaleY) {
 				setScale(scaleX);
 			} else {

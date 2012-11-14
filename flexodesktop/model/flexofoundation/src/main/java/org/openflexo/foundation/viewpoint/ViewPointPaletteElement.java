@@ -139,7 +139,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		if (editionPattern != null) {
 			return editionPattern;
 		}
-		if ((_editionPatternId != null) && (getViewPoint() != null)) {
+		if (_editionPatternId != null && getViewPoint() != null) {
 			editionPattern = getViewPoint().getEditionPattern(_editionPatternId);
 			updateParameters();
 		}
@@ -157,12 +157,12 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		if (dropScheme != null) {
 			return dropScheme;
 		}
-		if ((_dropSchemeName != null) && (getEditionPattern() != null)
+		if (_dropSchemeName != null && getEditionPattern() != null
 				&& getEditionPattern().getEditionScheme(_dropSchemeName) instanceof DropScheme) {
 			dropScheme = (DropScheme) getEditionPattern().getEditionScheme(_dropSchemeName);
 			updateParameters();
 		}
-		if ((dropScheme == null) && (getEditionPattern() != null) && (getEditionPattern().getDropSchemes().size() > 0)) {
+		if (dropScheme == null && getEditionPattern() != null && getEditionPattern().getDropSchemes().size() > 0) {
 			dropScheme = getEditionPattern().getDropSchemes().firstElement();
 		}
 		return dropScheme;

@@ -49,7 +49,7 @@ public class FloatValue extends Value {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof FloatValue) {
-			return (getDoubleValue() == ((FloatValue) obj).getDoubleValue());
+			return getDoubleValue() == ((FloatValue) obj).getDoubleValue();
 		}
 		return super.equals(obj);
 	}

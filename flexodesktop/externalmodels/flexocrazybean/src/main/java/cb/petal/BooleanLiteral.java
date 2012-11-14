@@ -63,6 +63,6 @@ public class BooleanLiteral extends Literal {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof BooleanLiteral) && (((BooleanLiteral) o).value == this.value);
+		return o instanceof BooleanLiteral && ((BooleanLiteral) o).value == this.value;
 	}
 }

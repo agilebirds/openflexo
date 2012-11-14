@@ -57,7 +57,7 @@ public class ValidateProjectInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, ValidateProject action) {
 				// If disabled, don't do it
 				if (action.getContext() instanceof SynchronizeRepositoryCodeGeneration) {
-					return (GeneratorPreferences.getValidateBeforeGenerating());
+					return GeneratorPreferences.getValidateBeforeGenerating();
 				}
 				if (action.getProjectGenerator() != null) {
 					action.getProjectGenerator().startHandleLogs();

@@ -71,7 +71,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 				if (getController().getCurrentModuleView() instanceof CalcDrawingShemaModuleView
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 					CalcDrawingShemaController c = ((CalcDrawingShemaModuleView) getController().getCurrentModuleView()).getController();
-					ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) action.getFocusedObject().getGraphicalRepresentation();
+					ShapeGraphicalRepresentation gr = action.getFocusedObject().getGraphicalRepresentation();
 					ShapeView shapeView = c.getDrawingView().shapeViewForObject(gr);
 					BufferedImage image = shapeView.getScreenshot();
 					ShapeBorder b = gr.getBorder();

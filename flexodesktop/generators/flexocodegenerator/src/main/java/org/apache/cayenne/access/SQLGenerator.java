@@ -152,7 +152,7 @@ public class SQLGenerator extends MetaFileGenerator {
 			Iterator it = dbGenerator.configuredStatements().iterator();
 			String batchTerminator = dbGenerator.getAdapter().getBatchTerminator();
 
-			String lineEnd = (batchTerminator != null) ? "\n" + batchTerminator + "\n\n" : "\n\n";
+			String lineEnd = batchTerminator != null ? "\n" + batchTerminator + "\n\n" : "\n\n";
 
 			while (it.hasNext()) {
 				buf.append(it.next()).append(lineEnd);
@@ -177,7 +177,7 @@ public class SQLGenerator extends MetaFileGenerator {
 	@Override
 	public void generate(boolean forceRegenerate) {
 		try {
-			if (forceRegenerate || (generatedCode == null)) {
+			if (forceRegenerate || generatedCode == null) {
 				startGeneration();
 				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
 				generateCode();
@@ -255,7 +255,7 @@ public class SQLGenerator extends MetaFileGenerator {
 							externalType = "INTEGER";
 						}
 						int sqlType = TypesMapping.getSqlTypeByName(externalType);
-						if ((attribute.getMaxLength() < 1) && (prototype.getWidth() > 0)) {
+						if (attribute.getMaxLength() < 1 && prototype.getWidth() > 0) {
 							attribute.setMaxLength(prototype.getWidth());
 						}
 						attribute.setType(sqlType);
@@ -281,7 +281,7 @@ public class SQLGenerator extends MetaFileGenerator {
 		DMEOAttribute candidate = null;
 		while (en.hasNext()) {
 			candidate = en.next();
-			if ((candidate.getColumnName() != null) && candidate.getColumnName().equals(attributeName)) {
+			if (candidate.getColumnName() != null && candidate.getColumnName().equals(attributeName)) {
 				return candidate;
 			}
 		}
@@ -297,7 +297,7 @@ public class SQLGenerator extends MetaFileGenerator {
 			Enumeration<DMEOEntity> en2 = model.getEntities().elements();
 			while (en2.hasMoreElements()) {
 				candidate = en2.nextElement();
-				if ((candidate.getExternalName() != null) && candidate.getExternalName().equals(entityName)) {
+				if (candidate.getExternalName() != null && candidate.getExternalName().equals(entityName)) {
 					return candidate;
 				}
 			}

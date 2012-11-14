@@ -107,7 +107,7 @@ public class IELabelWidget extends IENonEditableTextWidget {
 		@Override
 		public ValidationIssue applyValidation(final Validable object) {
 			final IELabelWidget label = (IELabelWidget) object;
-			if ((label.getValue() != null) && label.getValue().trim().endsWith(":")
+			if (label.getValue() != null && label.getValue().trim().endsWith(":")
 					&& label.getValue().indexOf(":") != label.getValue().lastIndexOf(":")) {
 				ValidationWarning error = new ValidationWarning(this, object, "usually_labels_dont_have_double_double_dot");
 
@@ -142,7 +142,7 @@ public class IELabelWidget extends IENonEditableTextWidget {
 		@Override
 		public ValidationIssue applyValidation(final Validable object) {
 			final IELabelWidget label = (IELabelWidget) object;
-			if ((label.getValue() != null) && label.getValue().indexOf(":") == -1) {
+			if (label.getValue() != null && label.getValue().indexOf(":") == -1) {
 				ValidationWarning error = new ValidationWarning(this, object, "usually_labels_ends_with_double_dot");
 
 				error.addToFixProposals(new AddingDoubleDot(label));
@@ -180,7 +180,7 @@ public class IELabelWidget extends IENonEditableTextWidget {
 		@Override
 		public ValidationIssue applyValidation(final Validable object) {
 			final IELabelWidget label = (IELabelWidget) object;
-			if ((label.getValue() != null) && label.getValue().trim().endsWith(" :")) {
+			if (label.getValue() != null && label.getValue().trim().endsWith(" :")) {
 				ValidationWarning error = new ValidationWarning(this, object, "usually_labels_dont_have_white_space_before_double_dot");
 
 				error.addToFixProposals(new RemoveSpaceBeforeDoubleDot(label));

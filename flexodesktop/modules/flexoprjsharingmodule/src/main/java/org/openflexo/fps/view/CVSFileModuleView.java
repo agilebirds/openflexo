@@ -92,7 +92,7 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 	}
 
 	private void updateView(boolean forceRebuild) {
-		if ((forceRebuild) || (cvsStatus == CVSStatus.Unknown) || (cvsStatus != _cvsFile.getStatus()) || (isEdited != _cvsFile.isEdited())) {
+		if (forceRebuild || cvsStatus == CVSStatus.Unknown || cvsStatus != _cvsFile.getStatus() || isEdited != _cvsFile.isEdited()) {
 			logger.fine("CVSFileModuleView :" + _cvsFile.getFileName() + " rebuild view for new status " + _cvsFile.getStatus());
 			rebuildView();
 			_header.update();

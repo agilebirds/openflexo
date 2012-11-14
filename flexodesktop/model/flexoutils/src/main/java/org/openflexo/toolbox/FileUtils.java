@@ -705,8 +705,9 @@ public class FileUtils {
 	 */
 	public static String[] getPathComponents(String canonicalPath) {
 		String regex = File.separator;
-		if (regex.equals("\\"))
+		if (regex.equals("\\")) {
 			regex = "\\\\";
+		}
 		return canonicalPath.split(regex);
 	}
 

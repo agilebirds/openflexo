@@ -92,7 +92,7 @@ public class BeginActionNodeGR extends AbstractActionNodeGR {
 	 */
 	@Override
 	public double _getDefaultY() {
-		return (getActionNode().getParentPetriGraph().getIndexForBeginNode(getActionNode()) * 50) + DEFAULT_BEGIN_Y_OFFSET;
+		return getActionNode().getParentPetriGraph().getIndexForBeginNode(getActionNode()) * 50 + DEFAULT_BEGIN_Y_OFFSET;
 	}
 
 	@Override

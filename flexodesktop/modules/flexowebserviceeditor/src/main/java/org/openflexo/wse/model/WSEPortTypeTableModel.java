@@ -61,13 +61,13 @@ public class WSEPortTypeTableModel extends AbstractModel<WSService, ServiceInter
 			addToColumns(new StringColumn<ServiceInterface>("name", 190) {
 				@Override
 				public String getValue(ServiceInterface object) {
-					return (object).getName();
+					return object.getName();
 				}
 			});
 			addToColumns(new StringColumn<ServiceInterface>("description", 365) {
 				@Override
 				public String getValue(ServiceInterface object) {
-					return (object).getDescription();
+					return object.getDescription();
 				}
 				/*
 				            public void setValue(FlexoModelObject object, String aValue)
@@ -79,13 +79,13 @@ public class WSEPortTypeTableModel extends AbstractModel<WSService, ServiceInter
 			addToColumns(new EditableStringColumn<ServiceInterface>("name", 190) {
 				@Override
 				public String getValue(ServiceInterface object) {
-					return (object).getName();
+					return object.getName();
 				}
 
 				@Override
 				public void setValue(ServiceInterface object, String aValue) {
 					try {
-						(object).setName(aValue);
+						object.setName(aValue);
 					} catch (DuplicateWKFObjectException e) {
 						FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
 					} catch (DuplicateWSObjectException e) {
@@ -97,12 +97,12 @@ public class WSEPortTypeTableModel extends AbstractModel<WSService, ServiceInter
 			addToColumns(new EditableStringColumn<ServiceInterface>("description", 365) {
 				@Override
 				public String getValue(ServiceInterface object) {
-					return (object).getDescription();
+					return object.getDescription();
 				}
 
 				@Override
 				public void setValue(ServiceInterface object, String aValue) {
-					(object).setDescription(aValue);
+					object.setDescription(aValue);
 				}
 			});
 		}
@@ -126,7 +126,7 @@ public class WSEPortTypeTableModel extends AbstractModel<WSService, ServiceInter
 
 	@Override
 	public ServiceInterface elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return ((WSPortType) getWSPortTypes().get(row)).getServiceInterface();
 		} else {
 			return null;

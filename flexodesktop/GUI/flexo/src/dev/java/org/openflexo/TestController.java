@@ -217,7 +217,7 @@ public class TestController extends FlexoController implements SelectionManaging
 		@Override
 		protected FlexoModelObject getParentObject(FlexoModelObject object) {
 			if (object instanceof FlexoProcess) {
-				return (((FlexoProcess) object).getParentProcess());
+				return ((FlexoProcess) object).getParentProcess();
 			}
 			return null;
 		}

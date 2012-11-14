@@ -51,7 +51,7 @@ public class InspectAction extends FlexoGUIAction<InspectAction, FlexoModelObjec
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (object instanceof InspectableObject);
+			return object instanceof InspectableObject;
 		}
 
 	};

@@ -191,8 +191,9 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 		}
 		if (getWidget().getShowIcon() && getWidget().getIcon().isSet() && getWidget().getIcon().isValid()) {
 			for (JLabel l : labelsArray) {
-				if (l != null)
+				if (l != null) {
 					l.setFont(getFont());
+				}
 			}
 		}
 	}

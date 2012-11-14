@@ -52,8 +52,7 @@ public enum TextCSSClass implements StringConvertable/*extends FlexoObject imple
 
 	BLOC_BODY_CONTENT("DLBlockBodyContent", new Font("SansSerif", Font.PLAIN, 10)), BLOC_BODY_TITLE("DLBlockBodyTitle", new Font(
 			"SansSerif", Font.BOLD, 11)), BLOC_BODY_COMMENT("DLBlockBodyComment", new Font("SansSerif", Font.PLAIN, 9)), BLOC_BODY_EXTRA(
-			"DLBlockBodyExtra",
-			new Font("SansSerif", Font.ITALIC, 10));
+			"DLBlockBodyExtra", new Font("SansSerif", Font.ITALIC, 10));
 
 	private final String name;
 	private final Font font;

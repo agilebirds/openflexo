@@ -37,70 +37,61 @@ import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableTableWidget extends FIBTableWidget implements FIBEditableView<FIBTable,JTable> {
+public class FIBEditableTableWidget extends FIBTableWidget implements FIBEditableView<FIBTable, JTable> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableTableWidget.class.getPackage().getName());
 
-	private final FIBEditableViewDelegate<FIBTable,JTable> delegate;
-	
+	private final FIBEditableViewDelegate<FIBTable, JTable> delegate;
+
 	private final FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableTableWidget(FIBTable model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableTableWidget(FIBTable model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-		
-		delegate = new FIBEditableViewDelegate<FIBTable,JTable>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBTable, JTable>(this);
 		model.addObserver(this);
-	}	
-	
+	}
+
 	@Override
-	public void delete() 
-	{
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
-	}	
-	
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
+	}
+
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
 		return null;
 	}
-	
-	public FIBEditableViewDelegate<FIBTable,JTable> getDelegate()
-	{
+
+	@Override
+	public FIBEditableViewDelegate<FIBTable, JTable> getDelegate() {
 		return delegate;
 	}
-	
+
 	@Override
-	public void update(Observable o, Object dataModification) 
-	{
-		 if (dataModification instanceof FIBAddingNotification
-				 || dataModification instanceof FIBRemovingNotification) {
-			 	updateTable();
-		 }
-		 else if (dataModification instanceof FIBAttributeNotification) {			 
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
-				if (n.getAttribute() == FIBTable.Parameters.createNewRowOnClick
-						|| n.getAttribute() == FIBTable.Parameters.iteratorClass
-						|| n.getAttribute() == FIBTable.Parameters.rowHeight
-						|| n.getAttribute() == FIBTable.Parameters.visibleRowCount
-						|| n.getAttribute() == FIBTable.Parameters.showFooter) {
-					updateTable();
-				}
+	public void update(Observable o, Object dataModification) {
+		if (dataModification instanceof FIBAddingNotification || dataModification instanceof FIBRemovingNotification) {
+			updateTable();
+		} else if (dataModification instanceof FIBAttributeNotification) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBTable.Parameters.createNewRowOnClick || n.getAttribute() == FIBTable.Parameters.iteratorClass
+					|| n.getAttribute() == FIBTable.Parameters.rowHeight || n.getAttribute() == FIBTable.Parameters.visibleRowCount
+					|| n.getAttribute() == FIBTable.Parameters.showFooter) {
+				updateTable();
+			}
 
-		 }
-		 
+		}
+
 		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
 	}
-
 
 }

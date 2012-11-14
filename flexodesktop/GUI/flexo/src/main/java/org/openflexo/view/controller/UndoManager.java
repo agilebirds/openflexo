@@ -74,7 +74,7 @@ public class UndoManager {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Removing " + _actionHistory.firstElement());
 			}
-			(_actionHistory.firstElement()).delete();
+			_actionHistory.firstElement().delete();
 			_actionHistory.removeElementAt(0);
 			_lastDoneIndex--;
 		}
@@ -101,7 +101,7 @@ public class UndoManager {
 	public void undo() {
 		if (isUndoActive()) {
 			try {
-				((FlexoUndoableAction) (_actionHistory.get(_lastDoneIndex))).undoAction();
+				((FlexoUndoableAction) _actionHistory.get(_lastDoneIndex)).undoAction();
 				_lastDoneIndex--;
 				refreshControls();
 			} catch (FlexoException e) {
@@ -118,7 +118,7 @@ public class UndoManager {
 	public void redo() {
 		if (isRedoActive()) {
 			try {
-				((FlexoUndoableAction) (_actionHistory.get(_lastDoneIndex + 1))).redoAction();
+				((FlexoUndoableAction) _actionHistory.get(_lastDoneIndex + 1)).redoAction();
 				_lastDoneIndex++;
 				refreshControls();
 			} catch (FlexoException e) {
@@ -133,11 +133,11 @@ public class UndoManager {
 	}
 
 	private boolean isUndoActive() {
-		return ((_actionHistory.size() > 0) && (_lastDoneIndex > -1) && (_lastDoneIndex < _actionHistory.size()));
+		return _actionHistory.size() > 0 && _lastDoneIndex > -1 && _lastDoneIndex < _actionHistory.size();
 	}
 
 	private boolean isRedoActive() {
-		return ((_actionHistory.size() > 0) && (_lastDoneIndex < _actionHistory.size() - 1) && (_lastDoneIndex >= -1));
+		return _actionHistory.size() > 0 && _lastDoneIndex < _actionHistory.size() - 1 && _lastDoneIndex >= -1;
 	}
 
 	private void refreshControls() {

@@ -88,7 +88,7 @@ public abstract class ContextualMenuManager {
 
 	public void processMousePressed(MouseEvent e) {
 		resetContextualMenuTriggering();
-		_isPopupTriggering = e.isPopupTrigger() || (e.getButton() == MouseEvent.BUTTON3);
+		_isPopupTriggering = e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3;
 
 		if (e.getSource() instanceof Component) {
 			_invoker = (Component) e.getSource();
@@ -121,7 +121,7 @@ public abstract class ContextualMenuManager {
 					// pomme+ctrl+click sur file1 ou file2 pour avoir le menu contextuel avec l'item "compare with each other"
 
 					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-						isCtrlDown = ((e.getButton() == MouseEvent.BUTTON1) && e.isMetaDown());
+						isCtrlDown = e.getButton() == MouseEvent.BUTTON1 && e.isMetaDown();
 					}
 					// fin du mega hack
 
@@ -139,7 +139,7 @@ public abstract class ContextualMenuManager {
 		_isPopupTriggering = _isPopupTriggering || e.isPopupTrigger();
 
 		if (_isPopupTriggering) {
-			if ((e.getSource() == _invoker) /* && (hasSelection()) */) {
+			if (e.getSource() == _invoker /* && (hasSelection()) */) {
 				displayPopupMenu((Component) e.getSource(), e);
 				e.consume();
 				resetContextualMenuTriggering();
@@ -257,7 +257,7 @@ public abstract class ContextualMenuManager {
 			for (Enumeration<FlexoActionType> en = focusedObject.getActionList().elements(); en.hasMoreElements();) {
 				FlexoActionType next = en.nextElement();
 				if (filter.acceptActionType(next)
-						&& next.isVisible(focusedObject, (_selectionManager != null ? _selectionManager.getSelection() : null), _editor)) {
+						&& next.isVisible(focusedObject, _selectionManager != null ? _selectionManager.getSelection() : null, _editor)) {
 					contextualMenu.putAction(next);
 				}
 			}
@@ -486,7 +486,7 @@ public abstract class ContextualMenuManager {
 			FlexoActionType<A, T1, T2> actionType, FlexoModelObject focusedObject, JMenu menu) {
 		try {
 			FlexoAction action = actionType.makeNewAction((T1) focusedObject,
-					(_selectionManager != null ? (Vector<T2>) _selectionManager.getSelection() : null), _editor);
+					_selectionManager != null ? (Vector<T2>) _selectionManager.getSelection() : null, _editor);
 			action.setInvoker(_invoker);
 			JMenuItem item = menu.add(action);
 			if (actionType.getKeyStroke() != null) {
@@ -516,20 +516,20 @@ public abstract class ContextualMenuManager {
 		// Try to handle TabularBrowserView
 		if (e.getSource() instanceof JTreeTable) {
 			Component c = (Component) e.getSource();
-			while ((c != null) && (!(c instanceof TabularBrowserView))) {
+			while (c != null && !(c instanceof TabularBrowserView)) {
 				c = c.getParent();
 			}
-			if ((c != null) && (c instanceof TabularBrowserView)) {
+			if (c != null && c instanceof TabularBrowserView) {
 				return ((TabularBrowserView) c).getFocusedObject();
 			}
 		}
 		// Try to handle TabularView
 		if (e.getSource() instanceof JTable) {
 			Component c = (Component) e.getSource();
-			while ((c != null) && (!(c instanceof TabularView))) {
+			while (c != null && !(c instanceof TabularView)) {
 				c = c.getParent();
 			}
-			if ((c != null) && (c instanceof TabularView)) {
+			if (c != null && c instanceof TabularView) {
 				return ((TabularView) c).getFocusedObject();
 			}
 
@@ -537,10 +537,10 @@ public abstract class ContextualMenuManager {
 		// Finally handle browsers
 		if (e.getSource() instanceof JTree) {
 			Component c = (Component) e.getSource();
-			while ((c != null) && (!(c instanceof BrowserView))) {
+			while (c != null && !(c instanceof BrowserView)) {
 				c = c.getParent();
 			}
-			if ((c != null) && (c instanceof BrowserView)) {
+			if (c != null && c instanceof BrowserView) {
 				TreePath path = ((BrowserView) c).getTreeView().getClosestPathForLocation(e.getX(), e.getY());
 				if (path != null) {
 					return ((BrowserElement) path.getLastPathComponent()).getObject();

@@ -81,10 +81,10 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 	@Override
 	public boolean mayRepresents(FlexoModelObject anObject) {
 		if (anObject instanceof CGFile) {
-			return (anObject == _cgFile);
+			return anObject == _cgFile;
 		}
 		if (anObject instanceof AbstractCGFileVersion) {
-			return (((AbstractCGFileVersion) anObject).getCGFile() == _cgFile);
+			return ((AbstractCGFileVersion) anObject).getCGFile() == _cgFile;
 		}
 		return false;
 	}

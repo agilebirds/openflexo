@@ -53,7 +53,7 @@ public abstract class CVSAction<A extends FlexoAction<?, T1, FPSObject>, T1 exte
 		SharedProject returned = sharedProjectForObject(focusedObject);
 		if (globalSelection != null) {
 			Enumeration<FPSObject> en = globalSelection.elements();
-			while ((returned == null) && (en.hasMoreElements())) {
+			while (returned == null && en.hasMoreElements()) {
 				returned = sharedProjectForObject(en.nextElement());
 			}
 		}

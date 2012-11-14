@@ -172,7 +172,7 @@ public class ExpressionParser {
 		}
 		// System.out.println("considerAsOperator: "+symbol);
 		char firstChar = symbol.charAt(0);
-		if ((firstChar >= 'a' && firstChar <= 'z') || (firstChar >= 'A' && firstChar <= 'Z')) {
+		if (firstChar >= 'a' && firstChar <= 'z' || firstChar >= 'A' && firstChar <= 'Z') {
 			// Ignore this
 		} else {
 			// System.out.println("Ordinary char: "+firstChar);
@@ -182,7 +182,7 @@ public class ExpressionParser {
 
 	private Token parse(Reader rdr) throws ParseException {
 		ListOfToken unparsedList = parseLevel(initStreamTokenizer(rdr));
-		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token)) {
+		if (unparsedList.size() == 1 && unparsedList.firstElement() instanceof Token) {
 			return (Token) unparsedList.firstElement();
 		}
 		try {
@@ -208,7 +208,7 @@ public class ExpressionParser {
 			boolean levelSeemsToBeFinished = false;
 			boolean prefixedBy$ = false;
 
-			while ((!levelSeemsToBeFinished) && (input.nextToken() != StreamTokenizer.TT_EOF)) {
+			while (!levelSeemsToBeFinished && input.nextToken() != StreamTokenizer.TT_EOF) {
 				// System.out.println("currentInput="+currentInput+" input="+input);
 
 				if (input.ttype == StreamTokenizer.TT_WORD) {
@@ -342,9 +342,9 @@ public class ExpressionParser {
 		if (word.equals("")) {
 			return;
 		}
-		if ((word.equalsIgnoreCase("true")) || (word.equalsIgnoreCase("yes"))) {
+		if (word.equalsIgnoreCase("true") || word.equalsIgnoreCase("yes")) {
 			returned.add(new BooleanValue(true));
-		} else if ((word.equalsIgnoreCase("false")) || (word.equalsIgnoreCase("no"))) {
+		} else if (word.equalsIgnoreCase("false") || word.equalsIgnoreCase("no")) {
 			returned.add(new BooleanValue(false));
 		} else if (matchOperator(word) != null) {
 			returned.add(matchOperator(word));
@@ -375,9 +375,8 @@ public class ExpressionParser {
 	private UnaryOperator matchUnaryOperator(String anInput) {
 		for (UnaryOperator operator : getAllSupportedUnaryOperators()) {
 			try {
-				if ((anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)))
-						|| (getAlternativeSymbol(operator) != null && anInput.toUpperCase()
-								.equalsIgnoreCase(getAlternativeSymbol(operator)))) {
+				if (anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)) || getAlternativeSymbol(operator) != null
+						&& anInput.toUpperCase().equalsIgnoreCase(getAlternativeSymbol(operator))) {
 					return operator;
 				}
 			} catch (OperatorNotSupportedException e) {
@@ -390,9 +389,8 @@ public class ExpressionParser {
 	private BinaryOperator matchBinaryOperator(String anInput) {
 		for (BinaryOperator operator : getAllSupportedBinaryOperators()) {
 			try {
-				if ((anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)))
-						|| (getAlternativeSymbol(operator) != null && anInput.toUpperCase()
-								.equalsIgnoreCase(getAlternativeSymbol(operator)))) {
+				if (anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)) || getAlternativeSymbol(operator) != null
+						&& anInput.toUpperCase().equalsIgnoreCase(getAlternativeSymbol(operator))) {
 					return operator;
 				}
 			} catch (OperatorNotSupportedException e) {

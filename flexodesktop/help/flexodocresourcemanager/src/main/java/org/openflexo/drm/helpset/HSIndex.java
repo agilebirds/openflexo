@@ -66,7 +66,7 @@ public class HSIndex extends FlexoObject implements XMLSerializable {
 			_rootEntries = new Vector<HSIndexEntry>();
 			for (DocItem next : _drc.getAllItems()) {
 				if (next.isIncluded(configuration)) {
-					if ((next.getInheritanceParentItem() == null) && (!next.getIsEmbedded()) && (next.isPublished())) {
+					if (next.getInheritanceParentItem() == null && !next.getIsEmbedded() && next.isPublished()) {
 						logger.fine("Generate index entry for " + next);
 						_rootEntries.add(new HSIndexEntry(next));
 					}

@@ -2,31 +2,27 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TScientificNotationNumber extends Token
-{
-    public TScientificNotationNumber(String text)
-    {
-        setText(text);
-    }
+public final class TScientificNotationNumber extends Token {
+	public TScientificNotationNumber(String text) {
+		setText(text);
+	}
 
-    public TScientificNotationNumber(String text, int line, int pos)
-    {
-        setText(text);
-        setLine(line);
-        setPos(pos);
-    }
+	public TScientificNotationNumber(String text, int line, int pos) {
+		setText(text);
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TScientificNotationNumber(getText(), getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TScientificNotationNumber(getText(), getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTScientificNotationNumber(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTScientificNotationNumber(this);
+	}
 }

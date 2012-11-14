@@ -178,7 +178,7 @@ public abstract class UnresolvedConflictView extends JPanel implements Observer 
 			JScrollPane scrollPane = new JScrollPane(text);
 			// scrollPane.setPreferredSize(new Dimension(50,250));
 			scrollPane.getViewport().setPreferredSize(
-					new Dimension((getPreferredSize().width / 2) - scrollPane.getVerticalScrollBar().getWidth(), Math.min(200,
+					new Dimension(getPreferredSize().width / 2 - scrollPane.getVerticalScrollBar().getWidth(), Math.min(200,
 							Math.max(200, getPreferredSize().height))));
 			_thirdPartyChangePanel.add(scrollPane, BorderLayout.CENTER);
 		}
@@ -193,7 +193,7 @@ public abstract class UnresolvedConflictView extends JPanel implements Observer 
 			JScrollPane scrollPane = new JScrollPane(text);
 			// scrollPane.setPreferredSize(new Dimension(50,250));
 			scrollPane.getViewport().setPreferredSize(
-					new Dimension((getPreferredSize().width / 2) - scrollPane.getVerticalScrollBar().getWidth(), Math.min(200,
+					new Dimension(getPreferredSize().width / 2 - scrollPane.getVerticalScrollBar().getWidth(), Math.min(200,
 							Math.max(200, getPreferredSize().height))));
 			_yourChangePanel.add(scrollPane, BorderLayout.CENTER);
 			if (scrollPane.getVerticalScrollBar() != null) {

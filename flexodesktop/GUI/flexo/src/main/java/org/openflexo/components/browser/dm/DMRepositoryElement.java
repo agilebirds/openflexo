@@ -61,8 +61,8 @@ public class DMRepositoryElement extends DMElement {
 
 	@Override
 	public boolean isNameEditable() {
-		return (!(getDMRepository() instanceof JDKRepository) && !(getDMRepository() instanceof WORepository)
-				&& !(getDMRepository() instanceof ComponentRepository) && !(getDMRepository().isReadOnly()));
+		return !(getDMRepository() instanceof JDKRepository) && !(getDMRepository() instanceof WORepository)
+				&& !(getDMRepository() instanceof ComponentRepository) && !getDMRepository().isReadOnly();
 	}
 
 	@Override

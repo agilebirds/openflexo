@@ -134,7 +134,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 				int col = _table.columnAtPoint(p);
 				int row = _table.rowAtPoint(p);
 
-				if ((col > -1) && (col < _model.getColumnCount()) && (row > -1) && (row < _model.getRowCount())) {
+				if (col > -1 && col < _model.getColumnCount() && row > -1 && row < _model.getRowCount()) {
 
 					if (e.getClickCount() == 2) {
 						if (_model.isCellEditable(row, col)) {
@@ -143,7 +143,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 									logger.fine("Double-click detected in a editable cell. Do nothing !");
 								}
 							}
-						} else if ((row > -1) && (row < _model.getRowCount())) {
+						} else if (row > -1 && row < _model.getRowCount()) {
 							if (logger.isLoggable(Level.FINE)) {
 								if (logger.isLoggable(Level.FINE)) {
 									logger.fine("Double-click detected in a NON-editable cell. Select !");
@@ -156,7 +156,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 								logger.fine("Simple-click detected !");
 							}
 						}
-						if ((_table.getEditingRow() > -1) && (_table.getEditingRow() != row)) {
+						if (_table.getEditingRow() > -1 && _table.getEditingRow() != row) {
 							if (logger.isLoggable(Level.INFO)) {
 								logger.info("Change row where edition was started, fire stop editing !");
 							}

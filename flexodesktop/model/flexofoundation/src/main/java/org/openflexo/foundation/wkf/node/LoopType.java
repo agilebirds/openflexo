@@ -27,8 +27,7 @@ import org.openflexo.xmlcode.XMLSerializable;
 
 public enum LoopType implements XMLSerializable, StringConvertable {
 
-	WHILE("WHILE", "while"), UNTIL("UNTIL", "until"), FOR_INCREMENT("FOR_INCREMENT", "for_increment"), FOR_COLLECTION(
-			"FOR_COLLECTION",
+	WHILE("WHILE", "while"), UNTIL("UNTIL", "until"), FOR_INCREMENT("FOR_INCREMENT", "for_increment"), FOR_COLLECTION("FOR_COLLECTION",
 			"for_collection");
 
 	private final String name;

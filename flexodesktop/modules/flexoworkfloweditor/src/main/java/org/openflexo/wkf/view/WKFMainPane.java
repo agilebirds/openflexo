@@ -65,7 +65,7 @@ public class WKFMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 	public void performCollapseAll() {
 		if (getController().getCurrentModuleView() != null
 				&& getController().getCurrentModuleView().getRepresentedObject() instanceof FlexoProcess) {
-			FlexoProcess flexoProcess = ((FlexoProcess) getController().getCurrentModuleView().getRepresentedObject());
+			FlexoProcess flexoProcess = (FlexoProcess) getController().getCurrentModuleView().getRepresentedObject();
 			for (AbstractActivityNode node : flexoProcess.getAllAbstractActivityNodes()) {
 				if (node.hasContainedPetriGraph() && node.getOperationPetriGraph().getIsVisible()) {
 					OpenOperationLevel.actionType.makeNewAction(node, null, getController().getEditor()).doAction();
@@ -96,7 +96,7 @@ public class WKFMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 	@Override
 	protected FlexoModelObject getParentObject(FlexoModelObject object) {
 		if (object instanceof FlexoProcess) {
-			return (((FlexoProcess) object).getParentProcess());
+			return ((FlexoProcess) object).getParentProcess();
 		}
 		return null;
 	}

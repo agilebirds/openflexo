@@ -145,7 +145,7 @@ public class DMEOAttribute extends DMEOProperty {
 		setPrototype(null);
 		if (getEOAttribute() != null) {
 			try {
-				if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null)) {
+				if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null) {
 					getDMEOEntity().getEOEntity().removeAttribute(getEOAttribute());
 				} else if (getEOAttribute().getEntity() != null) {
 					if (logger.isLoggable(Level.WARNING)) {
@@ -184,7 +184,7 @@ public class DMEOAttribute extends DMEOProperty {
 
 	public EOAttribute getEOAttribute() {
 		if (_eoAttribute == null) {
-			if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null)) {
+			if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null) {
 				try {
 					_eoAttribute = getDMEOEntity().getEOEntity().attributeNamed(getName());
 				} catch (IllegalArgumentException e) {
@@ -218,10 +218,10 @@ public class DMEOAttribute extends DMEOProperty {
 	public String getJavaClassName() {
 		try {
 			if (getEOAttribute().getClassName() != null) {
-				return getEOAttribute().getClassName().substring((getEOAttribute().getClassName().lastIndexOf(".")) + 1);
+				return getEOAttribute().getClassName().substring(getEOAttribute().getClassName().lastIndexOf(".") + 1);
 			} else if (getEOAttribute().getPrototype() != null) {
 				return getEOAttribute().getPrototype().getClassName()
-						.substring((getEOAttribute().getPrototype().getClassName().lastIndexOf(".")) + 1);
+						.substring(getEOAttribute().getPrototype().getClassName().lastIndexOf(".") + 1);
 			} else {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No JavaClassName nor prototype is set on eoAttribute named \"" + getName() + "\" in entity "
@@ -248,7 +248,7 @@ public class DMEOAttribute extends DMEOProperty {
 
 	@Override
 	public void setName(String newName) throws IllegalArgumentException, InvalidNameException {
-		if ((name == null) || (!name.equals(newName))) {
+		if (name == null || !name.equals(newName)) {
 			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 				throw new InvalidNameException("'" + newName + "' is not a valid name for attribute.");
 			}
@@ -313,8 +313,8 @@ public class DMEOAttribute extends DMEOProperty {
 				if (!isDeserializing()
 						&& newName != null
 						&& newName.trim().length() > 0
-						&& (getColumnName() == null || getColumnName().equals(oldName) || (oldName != null && getColumnName().equals(
-								ToolBox.getDBTableNameFromPropertyName(oldName))))) {
+						&& (getColumnName() == null || getColumnName().equals(oldName) || oldName != null
+								&& getColumnName().equals(ToolBox.getDBTableNameFromPropertyName(oldName)))) {
 					setColumnName(ToolBox.getDBTableNameFromPropertyName(newName));
 				}
 				if (!isDeserializing() && newName != null && newName.trim().length() > 0 && getPrototype() == null
@@ -374,7 +374,7 @@ public class DMEOAttribute extends DMEOProperty {
 
 	public void setIsPrimaryKeyAttribute(boolean aBoolean) {
 		if (getIsPrimaryKeyAttribute() != aBoolean) {
-			if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null) && (getEOAttribute() != null)) {
+			if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null && getEOAttribute() != null) {
 				List<EOAttribute> arrayOfPrimaryKeyAttributes = getDMEOEntity().getEOEntity().getPrimaryKeyAttributes();
 				if (aBoolean) {
 					arrayOfPrimaryKeyAttributes.add(getEOAttribute());
@@ -401,7 +401,7 @@ public class DMEOAttribute extends DMEOProperty {
 
 	public void setIsUsedForLocking(boolean aBoolean) {
 		if (getIsUsedForLocking() != aBoolean) {
-			if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null) && (getEOAttribute() != null)) {
+			if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null && getEOAttribute() != null) {
 				List<EOAttribute> arrayOfAttributesUsedForLocking = getDMEOEntity().getEOEntity().getAttributesUsedForLocking();
 				if (aBoolean) {
 					arrayOfAttributesUsedForLocking.add(getEOAttribute());
@@ -523,7 +523,7 @@ public class DMEOAttribute extends DMEOProperty {
 		if (!isSerializing()) {
 			ensureBooleanPropertyCreation();
 		}
-		if ((getEOAttribute() != null) && (getEOAttribute().getPrototype() != null)) {
+		if (getEOAttribute() != null && getEOAttribute().getPrototype() != null) {
 			return getDMModel().getEOPrototypeRepository().getPrototype(getEOAttribute().getPrototype());
 		}
 		return null;
@@ -658,8 +658,8 @@ public class DMEOAttribute extends DMEOProperty {
 		@Override
 		public ValidationIssue applyValidation(final Validable object) {
 			final DMEOAttribute property = (DMEOAttribute) object;
-			if (property.getIsClassProperty() && (property.getEOAttribute() != null) && (property.getEOAttribute().getClassName() == null)
-					&& (property.getEOAttribute().getPrototype() == null)) {
+			if (property.getIsClassProperty() && property.getEOAttribute() != null && property.getEOAttribute().getClassName() == null
+					&& property.getEOAttribute().getPrototype() == null) {
 				ValidationError error = new ValidationError(this, object, "eoattribute_($object.name)_has_no_java_class");
 				for (Enumeration e = property.getDMModel().getEOPrototypeRepository().getEOPrototypeEntity().getAttributes().keys(); e
 						.hasMoreElements();) {

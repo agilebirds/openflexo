@@ -118,7 +118,7 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 	}*/
 
 	private String getParameterListAsString(boolean fullyQualified) {
-		String _searched = (fullyQualified ? _parameterListAsStringFQ : _parameterListAsString);
+		String _searched = fullyQualified ? _parameterListAsStringFQ : _parameterListAsString;
 		if (_searched == null) {
 			StringBuffer returned = new StringBuffer();
 			boolean isFirst = true;
@@ -135,7 +135,7 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 				_parameterListAsString = returned.toString();
 			}
 		}
-		return (fullyQualified ? _parameterListAsStringFQ : _parameterListAsString);
+		return fullyQualified ? _parameterListAsStringFQ : _parameterListAsString;
 	}
 
 	// Warning: no cache for this method

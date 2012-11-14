@@ -101,14 +101,14 @@ public abstract class ComponentElement extends BrowserElement implements Expansi
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-			return (getComponentDefinition() == _browser.getSelectionManager().getRootFocusedObject());
+			return getComponentDefinition() == _browser.getSelectionManager().getRootFocusedObject();
 		}
 		return false;
 	}
 
 	@Override
 	public boolean isExpanded() {
-		return (getComponentDefinition().isLoaded());
+		return getComponentDefinition().isLoaded();
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public abstract class ComponentElement extends BrowserElement implements Expansi
 
 	@Override
 	public FlexoModelObject getSelectableObject() {
-		if ((getComponentDefinition() != null) && (getComponentDefinition().isLoaded())) {
+		if (getComponentDefinition() != null && getComponentDefinition().isLoaded()) {
 			return getComponentDefinition().getWOComponent();
 		} else {
 			return getObject();

@@ -71,7 +71,7 @@ public class GroupModel extends ParametersContainerModelObject implements XMLSer
 		Iterator it = properties.values().iterator();
 		PropertyModel prop = null;
 		while (it.hasNext()) {
-			prop = ((PropertyModel) it.next());
+			prop = (PropertyModel) it.next();
 			if (prop.name.equals(propName)) {
 				return prop.getWidget();
 			}

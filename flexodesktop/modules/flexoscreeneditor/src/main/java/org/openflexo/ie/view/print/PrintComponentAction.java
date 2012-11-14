@@ -59,7 +59,7 @@ public class PrintComponentAction extends FlexoGUIAction<PrintComponentAction, F
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (getComponentForObject(object) != null);
+			return getComponentForObject(object) != null;
 		}
 
 	};
@@ -100,7 +100,7 @@ public class PrintComponentAction extends FlexoGUIAction<PrintComponentAction, F
 						FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_component_to_print"));
 					}
 				}
-				return (anAction.getFocusedObject() != null);
+				return anAction.getFocusedObject() != null;
 			}
 		}, controller.getModule());
 
@@ -112,7 +112,7 @@ public class PrintComponentAction extends FlexoGUIAction<PrintComponentAction, F
 				final PrintableIEWOComponentView printableComponentView = new PrintableIEWOComponentView(cd.getDummyComponentInstance(),
 						controller);
 				PrintComponentPreviewDialog dialog = new PrintComponentPreviewDialog(controller, printableComponentView);
-				return (dialog.getStatus() == PrintComponentPreviewDialog.ReturnedStatus.CONTINUE_PRINTING);
+				return dialog.getStatus() == PrintComponentPreviewDialog.ReturnedStatus.CONTINUE_PRINTING;
 			}
 		}, controller.getModule());
 

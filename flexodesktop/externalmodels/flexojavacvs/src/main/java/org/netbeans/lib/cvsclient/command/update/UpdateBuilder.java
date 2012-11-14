@@ -157,7 +157,7 @@ public class UpdateBuilder implements Builder {
 		outputDone();
 		fileInfoContainer = new DefaultFileInfoContainer();
 		fileInfoContainer.setType("?"); // NOI18N
-		String fileName = (line.substring(index)).trim();
+		String fileName = line.substring(index).trim();
 		fileInfoContainer.setFile(createFile(fileName));
 	}
 

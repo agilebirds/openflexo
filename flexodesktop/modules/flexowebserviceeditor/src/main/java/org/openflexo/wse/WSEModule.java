@@ -19,18 +19,13 @@
  */
 package org.openflexo.wse;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalWSEModule;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wse.controller.WSEController;
 

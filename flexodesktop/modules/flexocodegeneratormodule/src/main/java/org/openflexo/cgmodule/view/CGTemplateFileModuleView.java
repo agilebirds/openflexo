@@ -122,13 +122,13 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 			logger.warning("I should not come here !");
 		}
 
-		if ((_controller != null) && (_codeDisplayer != null)) {
+		if (_controller != null && _codeDisplayer != null) {
 			_codeDisplayer.addToFocusListener(_controller.getFooter());
 			_codeDisplayer.getInputHandler().addKeyBinding((ToolBox.getPLATFORM() == ToolBox.MACOS ? "M" : "C") + "+S",
 					new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							if ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited()) {
+							if (_CGTemplate instanceof CGTemplateFile && ((CGTemplateFile) _CGTemplate).isEdited()) {
 								SaveCustomTemplateFile save = SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) _CGTemplate,
 										null, _controller.getEditor());
 								save.doAction();
@@ -212,7 +212,7 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 
 		protected void update() {
 			title.setText(_CGTemplate.getTemplateName()
-					+ ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited() ? "["
+					+ (_CGTemplate instanceof CGTemplateFile && ((CGTemplateFile) _CGTemplate).isEdited() ? "["
 							+ FlexoLocalization.localizedForKey("edited") + "]" : ""));
 			for (FlexoActionButton button : actionButtons) {
 				button.update();
@@ -248,7 +248,7 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 			_codeDisplayer.refresh();
 		}
 
-		if ((previousDisplayContext != null) && (_codeDisplayer != null)) {
+		if (previousDisplayContext != null && _codeDisplayer != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Restore display context: " + previousDisplayContext);
 			}

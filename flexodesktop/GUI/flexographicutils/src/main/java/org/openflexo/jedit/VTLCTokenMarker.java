@@ -55,7 +55,7 @@ public class VTLCTokenMarker extends TokenMarker {
 		boolean backslash = false;
 		byte previousToken = Token.NULL;
 		loop: for (int i = offset; i < length; i++) {
-			int i1 = (i + 1);
+			int i1 = i + 1;
 
 			char c = array[i];
 			if (c == '\\') {
@@ -172,8 +172,7 @@ public class VTLCTokenMarker extends TokenMarker {
 					boolean acceptable = true;
 					int openingP = 0; // # Opening parenthesis
 					int openingB = 0; // # Opening brackets
-					boolean bracketsNotation = (tmp < array.length && array[tmp] == '{')
-							|| (tmp + 1 < array.length && array[tmp + 1] == '{');
+					boolean bracketsNotation = tmp < array.length && array[tmp] == '{' || tmp + 1 < array.length && array[tmp + 1] == '{';
 					if (bracketsNotation) {
 						while (tmp < array.length && acceptable) {
 							if (array[tmp] == '{') {
@@ -291,8 +290,7 @@ public class VTLCTokenMarker extends TokenMarker {
 					boolean acceptable = true;
 					int openingP = 0; // # Opening parenthesis
 					int openingB = 0; // # Opening brackets
-					boolean bracketsNotation = (tmp < array.length && array[tmp] == '{')
-							|| (tmp + 1 < array.length && array[tmp + 1] == '{');
+					boolean bracketsNotation = tmp < array.length && array[tmp] == '{' || tmp + 1 < array.length && array[tmp + 1] == '{';
 					if (bracketsNotation) {
 						while (tmp < array.length && acceptable) {
 							if (array[tmp] == '{') {
@@ -352,7 +350,7 @@ public class VTLCTokenMarker extends TokenMarker {
 					if (c == '*' && length - i > 1) {
 						if (array[i1] == '/') {
 							i++;
-							addToken((i + 1) - lastOffset, token);
+							addToken(i + 1 - lastOffset, token);
 							token = Token.NULL;
 							lastOffset = lastKeyword = i + 1;
 						}
@@ -393,7 +391,7 @@ public class VTLCTokenMarker extends TokenMarker {
 			case Token.KEYWORD5: // VTL directives
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, "if")) {
-					addToken((i + 2) - lastOffset, token);
+					addToken(i + 2 - lastOffset, token);
 					lastOffset = lastKeyword = i + 2;
 					i += 2;
 					token = Token.NULL;
@@ -402,7 +400,7 @@ public class VTLCTokenMarker extends TokenMarker {
 						previousToken = Token.NULL;
 					}
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "else")) {
-					addToken((i + 4) - lastOffset, token);
+					addToken(i + 4 - lastOffset, token);
 					lastOffset = lastKeyword = i + 4;
 					i += 4;
 					token = Token.NULL;
@@ -411,7 +409,7 @@ public class VTLCTokenMarker extends TokenMarker {
 						previousToken = Token.NULL;
 					}
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "elseif")) {
-					addToken((i + 6) - lastOffset, token);
+					addToken(i + 6 - lastOffset, token);
 					lastOffset = lastKeyword = i + 6;
 					i += 6;
 					token = Token.NULL;
@@ -420,7 +418,7 @@ public class VTLCTokenMarker extends TokenMarker {
 						previousToken = Token.NULL;
 					}
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "end")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = lastKeyword = i + 3;
 					i += 3;
 					token = Token.NULL;
@@ -429,7 +427,7 @@ public class VTLCTokenMarker extends TokenMarker {
 						previousToken = Token.NULL;
 					}
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "foreach")) {
-					addToken((i + 7) - lastOffset, token);
+					addToken(i + 7 - lastOffset, token);
 					lastOffset = lastKeyword = i + 7;
 					i += 7;
 					token = Token.NULL;
@@ -438,7 +436,7 @@ public class VTLCTokenMarker extends TokenMarker {
 						previousToken = Token.NULL;
 					}
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "macro")) {
-					addToken((i + 5) - lastOffset, token);
+					addToken(i + 5 - lastOffset, token);
 					lastOffset = lastKeyword = i + 5;
 					i += 5;
 					token = Token.NULL;
@@ -447,7 +445,7 @@ public class VTLCTokenMarker extends TokenMarker {
 						previousToken = Token.NULL;
 					}
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "set")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = lastKeyword = i + 3;
 					i += 3;
 					token = Token.NULL;
@@ -472,7 +470,7 @@ public class VTLCTokenMarker extends TokenMarker {
 				if (c == '*' && length - i > 1) {
 					if (array[i1] == '#') {
 						i++;
-						addToken((i + 1) - lastOffset, token);
+						addToken(i + 1 - lastOffset, token);
 						token = Token.NULL;
 						if (previousToken != Token.NULL) {
 							token = previousToken;

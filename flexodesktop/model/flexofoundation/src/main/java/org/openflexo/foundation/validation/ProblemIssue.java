@@ -84,7 +84,7 @@ public abstract class ProblemIssue<R extends ValidationRule<R, V>, V extends Val
 		if (_fixProposals == null) {
 			return null;
 		}
-		return (_fixProposals.elementAt(index));
+		return _fixProposals.elementAt(index);
 	}
 
 	public void revalidateAfterFixing(boolean isDeleteAction) {
@@ -118,7 +118,7 @@ public abstract class ProblemIssue<R extends ValidationRule<R, V>, V extends Val
 		}
 		for (Enumeration e = getRelatedValidableObjects().elements(); e.hasMoreElements();) {
 			Validable relatedValidable = (Validable) e.nextElement();
-			if (!((relatedValidable instanceof DeletableObject) && (((DeletableObject) relatedValidable).isDeleted()))) {
+			if (!(relatedValidable instanceof DeletableObject && ((DeletableObject) relatedValidable).isDeleted())) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Revalidate related");
 				}

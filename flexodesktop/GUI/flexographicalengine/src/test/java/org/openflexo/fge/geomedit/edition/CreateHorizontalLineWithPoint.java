@@ -45,7 +45,7 @@ public class CreateHorizontalLineWithPoint extends Edition {
 	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			graphics.setDefaultForeground(focusedForegroundStyle);
-			(FGELine.makeHorizontalLine(lastMouseLocation)).paint(graphics);
+			FGELine.makeHorizontalLine(lastMouseLocation).paint(graphics);
 		}
 	}
 }

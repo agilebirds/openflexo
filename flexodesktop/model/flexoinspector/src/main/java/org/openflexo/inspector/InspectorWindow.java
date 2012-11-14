@@ -68,7 +68,7 @@ public class InspectorWindow extends JDialog implements InspectingWidget {
 	@Override
 	public void newSelection(InspectorSelection selection) {
 		_content.newSelection(selection);
-		if ((selection instanceof UniqueSelection) && (_content.currentTabPanel != null)) {
+		if (selection instanceof UniqueSelection && _content.currentTabPanel != null) {
 			updateTitle(_content.currentTabPanel);
 		} else {
 			updateTitle();

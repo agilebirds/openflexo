@@ -318,7 +318,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	}
 
 	public String generateTimestamp() {
-		return (new Date()).toString();
+		return new Date().toString();
 	}
 
 	/**

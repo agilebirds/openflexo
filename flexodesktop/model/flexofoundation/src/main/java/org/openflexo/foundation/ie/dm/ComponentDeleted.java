@@ -44,7 +44,7 @@ public class ComponentDeleted extends IEDataModification implements RMNotificati
 
 	@Override
 	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
-		if ((originResource == component.getComponentLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
+		if (originResource == component.getComponentLibrary().getFlexoResource() /*&& targetResource == component.getComponentResource()*/) {
 			return true;
 		} else {
 			return false;

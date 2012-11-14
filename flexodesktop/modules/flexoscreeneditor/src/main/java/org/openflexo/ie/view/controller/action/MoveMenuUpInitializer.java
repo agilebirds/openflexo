@@ -59,7 +59,7 @@ public class MoveMenuUpInitializer extends ActionInitializer {
 						}
 					}
 					if (doable) {
-						(action).setItemMenu(item);
+						action.setItemMenu(item);
 					}
 				}
 				return doable;

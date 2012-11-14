@@ -54,7 +54,7 @@ public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingCon
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return (shape != null);
+			return shape != null;
 		}
 
 	};

@@ -417,7 +417,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 					statusLabel.setForeground(Color.BLACK);
 					displayItemStatus = false;
 				} else {
-					if ((_projectGenerators.get(repositoryToConsider) == null)
+					if (_projectGenerators.get(repositoryToConsider) == null
 							|| !_projectGenerators.get(repositoryToConsider).hasBeenInitialized()) {
 						statusLabel.setText(repName + FlexoLocalization.localizedForKey("code_generation_not_synchronized"));
 						displayItemStatus = false;
@@ -476,7 +476,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		public void focusGained(FocusEvent e) {
 			if (e.getComponent() instanceof JEditTextArea) {
 				((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
-				_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
+				_activeGenericCodeDisplayer = (JEditTextArea) e.getComponent();
 				refresh();
 			}
 		}
@@ -506,8 +506,8 @@ public class GeneratorController extends FlexoController implements SelectionMan
 				editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
 			} else {
 				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
-				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
-						: FlexoLocalization.localizedForKey("read_only")));
+				editorStatusLabel.setText(_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+						: FlexoLocalization.localizedForKey("read_only"));
 			}
 		}
 
@@ -629,7 +629,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		} else if (object instanceof CGTemplate) {
 			CGTemplate cgTemplateFile = (CGTemplate) object;
 			return cgTemplateFile.getTemplateName()
-					+ ((cgTemplateFile instanceof CGTemplateFile) && ((CGTemplateFile) cgTemplateFile).isEdited() ? "["
+					+ (cgTemplateFile instanceof CGTemplateFile && ((CGTemplateFile) cgTemplateFile).isEdited() ? "["
 							+ FlexoLocalization.localizedForKey("edited") + "]" : "");
 		}
 

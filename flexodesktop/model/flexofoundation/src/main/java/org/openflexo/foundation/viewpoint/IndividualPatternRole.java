@@ -52,7 +52,7 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 	}
 
 	public void setOntologicType(OntologyClass ontologyClass) {
-		conceptURI = (ontologyClass != null ? ontologyClass.getURI() : null);
+		conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
 	}
 
 	public static class IndividualPatternRoleMustDefineAValidConceptClass extends

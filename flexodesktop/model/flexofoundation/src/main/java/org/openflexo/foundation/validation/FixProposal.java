@@ -59,7 +59,7 @@ public abstract class FixProposal<R extends ValidationRule<R, V>, V extends Vali
 	}
 
 	public String getLocalizedMessage() {
-		if ((_localizedMessage == null) && (getProblemIssue() != null) && (getObject() != null)) {
+		if (_localizedMessage == null && getProblemIssue() != null && getObject() != null) {
 			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(_message, this);
 		}
 		return _localizedMessage;

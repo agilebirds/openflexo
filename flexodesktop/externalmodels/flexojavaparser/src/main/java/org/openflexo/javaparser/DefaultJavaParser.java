@@ -55,8 +55,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 		}
 
 		catch (ParseException e) {
-			if (logger.isLoggable(Level.INFO))
-			logger.info("Parse error");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Parse error");
+			}
 			throw new JavaParseException();
 		}
 
@@ -72,8 +73,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 		}
 
 		catch (ParseException e) {
-			if (logger.isLoggable(Level.INFO))
-			logger.info("Parse error");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Parse error");
+			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Code: " + classCode);
 			}
@@ -103,8 +105,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 		}
 
 		catch (ParseException e) {
-			if (logger.isLoggable(Level.INFO))
-			logger.info("Parse error: " + methodCode);
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Parse error: " + methodCode);
+			}
 			throw new JavaParseException();
 		}
 
@@ -133,8 +136,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 		}
 
 		catch (ParseException e) {
-			if (logger.isLoggable(Level.INFO))
-			logger.info("Parse error: " + fieldCode);
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Parse error: " + fieldCode);
+			}
 			throw new JavaParseException();
 		}
 
@@ -162,8 +166,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 		}
 
 		catch (ParseException e) {
-			if (logger.isLoggable(Level.INFO))
-			logger.info("Parse error");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Parse error");
+			}
 			throw new JavaParseException();
 		}
 	}
@@ -190,8 +195,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 		}
 
 		catch (ParseException e) {
-			if (logger.isLoggable(Level.INFO))
-			logger.info("Parse error");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Parse error");
+			}
 			throw new JavaParseException();
 		}
 
@@ -209,10 +215,10 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 		try {
 			ParsedJavadoc jd = parser.parseJavadocForMethod(codeToParse, null);
 			if (logger.isLoggable(Level.INFO)) {
-			for (ParsedJavadocItem d : jd.getDocletTags()) {
-				logger.info("tag " + d.getTag() + " name=[" + d.getParameterName() + "] value=(" + d.getParameterValue() + ")");
-			}
-			logger.info("jd comment=" + jd.getComment());
+				for (ParsedJavadocItem d : jd.getDocletTags()) {
+					logger.info("tag " + d.getTag() + " name=[" + d.getParameterName() + "] value=(" + d.getParameterValue() + ")");
+				}
+				logger.info("jd comment=" + jd.getComment());
 			}
 
 		} catch (JavaParseException e) {

@@ -2,7 +2,6 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-public abstract class PBinding extends Node
-{
-    // Empty body
+public abstract class PBinding extends Node {
+	// Empty body
 }

@@ -55,7 +55,7 @@ public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindo
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};
@@ -75,7 +75,7 @@ public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindo
 				if (anAction.getFocusedObject() == null) {
 					anAction.setFocusedObject(controller.getCurrentFlexoProcess());
 				}
-				return (anAction.getFocusedObject() != null);
+				return anAction.getFocusedObject() != null;
 			}
 		}, controller.getModule());
 

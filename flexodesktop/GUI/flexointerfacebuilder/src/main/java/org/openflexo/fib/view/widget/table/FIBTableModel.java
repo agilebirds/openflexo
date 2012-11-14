@@ -281,7 +281,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	}
 
 	public Object elementAt(int row) {
-		if ((getValues() != null) && (row >= 0) && (row < getValues().size())) {
+		if (getValues() != null && row >= 0 && row < getValues().size()) {
 			return getValues().get(row);
 		}
 		return null;
@@ -374,7 +374,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		AbstractColumn column = columnAt(col);
-		if ((column != null) && (column instanceof EditableColumn)) {
+		if (column != null && column instanceof EditableColumn) {
 			Object object = elementAt(row);
 			((EditableColumn) column).setValueFor(object, value);
 			fireCellUpdated(object, row, col);

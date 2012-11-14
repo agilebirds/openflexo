@@ -93,7 +93,7 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 	}
 
 	public boolean isLiteralRange() {
-		return (getRange() == getOntology().getOntologyObject(RDFSURIDefinitions.RDFS_LITERAL_URI));
+		return getRange() == getOntology().getOntologyObject(RDFSURIDefinitions.RDFS_LITERAL_URI);
 	}
 
 	@Override

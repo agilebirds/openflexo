@@ -72,13 +72,13 @@ public class DMRepositoryTableModel extends AbstractModel<DMRepositoryFolder, DM
 		addToColumns(new IconColumn<DMRepository>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMRepository repository) {
-				return (repository.isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return repository.isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMRepository repository) {
-				return (repository.isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return repository.isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new StringColumn<DMRepository>("name", 190) {
@@ -113,7 +113,7 @@ public class DMRepositoryTableModel extends AbstractModel<DMRepositoryFolder, DM
 
 	@Override
 	public DMRepository elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDMRepositoryFolder().getRepositoryAtIndex(row);
 		} else {
 			return null;
@@ -152,9 +152,9 @@ public class DMRepositoryTableModel extends AbstractModel<DMRepositoryFolder, DM
 	}
 
 	protected static String typeOfRepository(DMRepository repository) {
-		if ((repository instanceof JDKRepository) || (repository instanceof WORepository) || (repository instanceof ComponentRepository)
-				|| (repository instanceof ProcessInstanceRepository) || (repository instanceof ProcessBusinessDataRepository)
-				|| (repository instanceof EOPrototypeRepository) || (repository instanceof FlexoExecutionModelRepository)) {
+		if (repository instanceof JDKRepository || repository instanceof WORepository || repository instanceof ComponentRepository
+				|| repository instanceof ProcessInstanceRepository || repository instanceof ProcessBusinessDataRepository
+				|| repository instanceof EOPrototypeRepository || repository instanceof FlexoExecutionModelRepository) {
 			return repository.getLocalizedName();
 		} else if (repository instanceof ProjectRepository) {
 			return FlexoLocalization.localizedForKey("project_repository");

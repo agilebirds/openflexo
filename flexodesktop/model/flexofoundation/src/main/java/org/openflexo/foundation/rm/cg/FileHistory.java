@@ -73,7 +73,7 @@ public class FileHistory {
 			File[] candidates = directory.listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File dir, String name) {
-					return ((!name.equals(file.getName())) && (name.indexOf(file.getName()) == 0));
+					return !name.equals(file.getName()) && name.indexOf(file.getName()) == 0;
 				}
 			});
 			for (File candidate : candidates) {
@@ -99,7 +99,7 @@ public class FileHistory {
 
 	private CGRelease releaseForVersion(CGVersionIdentifier versionId) {
 		for (CGRelease release : _resource.getCGFile().getRepository().getReleases()) {
-			if ((release.getVersionIdentifier().major == versionId.major) && (release.getVersionIdentifier().minor == versionId.minor)) {
+			if (release.getVersionIdentifier().major == versionId.major && release.getVersionIdentifier().minor == versionId.minor) {
 				return release;
 			}
 		}
@@ -108,8 +108,8 @@ public class FileHistory {
 
 	private CGFileReleaseVersion releaseVersionForRelease(CGRelease release) {
 		for (CGFileReleaseVersion releaseVersion : _releasesVersion) {
-			if ((release.getVersionIdentifier().major == releaseVersion.getVersionId().major)
-					&& (release.getVersionIdentifier().minor == releaseVersion.getVersionId().minor)) {
+			if (release.getVersionIdentifier().major == releaseVersion.getVersionId().major
+					&& release.getVersionIdentifier().minor == releaseVersion.getVersionId().minor) {
 				return releaseVersion;
 			}
 		}
@@ -118,7 +118,7 @@ public class FileHistory {
 
 	private CGFileReleaseVersion releaseVersionForBeforeFirstRelease() {
 		for (CGFileReleaseVersion releaseVersion : _releasesVersion) {
-			if ((releaseVersion.getVersionId().major == 0) && (releaseVersion.getVersionId().minor == 0)) {
+			if (releaseVersion.getVersionId().major == 0 && releaseVersion.getVersionId().minor == 0) {
 				return releaseVersion;
 			}
 		}
@@ -134,7 +134,7 @@ public class FileHistory {
 
 		CGRelease release = null;
 		CGFileReleaseVersion fileReleaseVersion = null;
-		if ((versionId.major == 0) && (versionId.minor == 0)) {
+		if (versionId.major == 0 && versionId.minor == 0) {
 			fileReleaseVersion = releaseVersionForBeforeFirstRelease();
 		} else {
 			release = releaseForVersion(versionId);

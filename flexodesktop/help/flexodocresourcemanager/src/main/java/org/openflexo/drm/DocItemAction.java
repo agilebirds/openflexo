@@ -150,18 +150,18 @@ public class DocItemAction extends DRMObject {
 
 	public String getLocalizedSmallActionDate() {
 		// Typically "dd/MM/yyyy" in french, "MM/dd, yyyy" in english
-		return (new SimpleDateFormat(FlexoLocalization.localizedForKey("doc_item_action_date_format_simple")).format(getActionDate()));
+		return new SimpleDateFormat(FlexoLocalization.localizedForKey("doc_item_action_date_format_simple")).format(getActionDate());
 	}
 
 	public String getLocalizedFullActionDate() {
 		// Typically "dd/MM/yyyy" in french, "MM/dd, yyyy" in english
-		return (new SimpleDateFormat(FlexoLocalization.localizedForKey("doc_item_action_date_format_extended")).format(getActionDate()));
+		return new SimpleDateFormat(FlexoLocalization.localizedForKey("doc_item_action_date_format_extended")).format(getActionDate());
 	}
 
 	public boolean isApproved() {
 		for (Enumeration en = item.getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
-			if ((next.getVersion() == getVersion()) && (next.getActionType() == ActionType.APPROVED)) {
+			if (next.getVersion() == getVersion() && next.getActionType() == ActionType.APPROVED) {
 				return true;
 			}
 		}
@@ -170,19 +170,19 @@ public class DocItemAction extends DRMObject {
 
 	public boolean isPending() {
 		if (isProposal()) {
-			return ((!isApproved()) && (!isRefused()));
+			return !isApproved() && !isRefused();
 		}
 		return false;
 	}
 
 	public boolean isProposal() {
-		return ((getActionType() == ActionType.SUBMITTED) || (getActionType() == ActionType.REVIEWED));
+		return getActionType() == ActionType.SUBMITTED || getActionType() == ActionType.REVIEWED;
 	}
 
 	public boolean isRefused() {
 		for (Enumeration en = item.getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
-			if ((next.getVersion() == getVersion()) && (next.getActionType() == ActionType.REFUSED)) {
+			if (next.getVersion() == getVersion() && next.getActionType() == ActionType.REFUSED) {
 				return true;
 			}
 		}

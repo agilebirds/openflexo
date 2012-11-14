@@ -117,7 +117,7 @@ public class IEDeleteInitializer extends ActionInitializer {
 						} else {
 							String deleteAnyway = FlexoLocalization.localizedForKey("delete_anymay");
 							String cancel = FlexoLocalization.localizedForKey("cancel");
-							doIt = (FlexoController.selectOption(warnings, new String[] { deleteAnyway, cancel }, cancel) == 0);
+							doIt = FlexoController.selectOption(warnings, new String[] { deleteAnyway, cancel }, cancel) == 0;
 						}
 					}
 				} else if (folders.size() > 0) {

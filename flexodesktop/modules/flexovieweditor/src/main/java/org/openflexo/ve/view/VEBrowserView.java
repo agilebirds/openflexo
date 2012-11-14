@@ -103,13 +103,13 @@ public class VEBrowserView extends BrowserView {
 					if (over == null || dragged == null) {
 						return false;
 					}
-					return (dragged.getFolder() != over);
+					return dragged.getFolder() != over;
 				} else if (targ instanceof ViewLibraryElement) {
 					ViewLibrary over = ((ViewLibraryElement) targ).getViewLibrary();
 					if (over == null || dragged == null) {
 						return false;
 					}
-					return (dragged.getFolder() != over.getRootFolder());
+					return dragged.getFolder() != over.getRootFolder();
 				}
 			} else if (source instanceof ViewFolderElement) {
 				ViewFolder dragged = ((ViewFolderElement) source).getFolder();

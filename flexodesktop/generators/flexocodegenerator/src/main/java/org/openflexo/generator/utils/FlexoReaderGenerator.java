@@ -107,7 +107,7 @@ public class FlexoReaderGenerator extends MetaGenerator<FlexoModelObject, CGRepo
 				File temp = resource.getFile().getParentFile().getCanonicalFile();
 				File target = getRepository().getReaderRepository().getDirectory().getCanonicalFile();
 				relativePath = "";
-				while ((!temp.equals(target)) && (temp.getParentFile() != null)) {
+				while (!temp.equals(target) && temp.getParentFile() != null) {
 					if (relativePath.length() == 0) {
 						relativePath = temp.getName();
 					} else {

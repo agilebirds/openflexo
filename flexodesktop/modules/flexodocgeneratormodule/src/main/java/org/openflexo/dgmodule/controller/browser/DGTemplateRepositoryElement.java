@@ -63,7 +63,7 @@ public class DGTemplateRepositoryElement extends BrowserElement {
 
 	@Override
 	public boolean isNameEditable() {
-		return (getCGTemplateRepository() instanceof CustomCGTemplateRepository);
+		return getCGTemplateRepository() instanceof CustomCGTemplateRepository;
 	}
 
 	@Override

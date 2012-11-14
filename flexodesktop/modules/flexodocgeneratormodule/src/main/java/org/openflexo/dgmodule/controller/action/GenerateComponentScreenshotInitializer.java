@@ -79,7 +79,7 @@ public class GenerateComponentScreenshotInitializer extends ActionInitializer {
 						title = FlexoLocalization.localizedForKey("screenshot") + " " + action.getScreenshotResource().getFile().getName()
 								+ " " + FlexoLocalization.localizedForKey("was_up_to_date");
 					}
-					if ((controller instanceof DGController) && (((DGController) controller).getIgnoreScreenshotVisualization())) {
+					if (controller instanceof DGController && ((DGController) controller).getIgnoreScreenshotVisualization()) {
 						// Ignore
 					} else {
 						ShowScreenshotDialog newDialog = new ShowScreenshotDialog(title, action.getScreenshotResource(),

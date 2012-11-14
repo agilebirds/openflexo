@@ -98,6 +98,6 @@ public abstract class Value extends Token {
 	}
 
 	public String getPrefix() {
-		return (prefixedBy$ ? "$" : "");
+		return prefixedBy$ ? "$" : "";
 	}
 }

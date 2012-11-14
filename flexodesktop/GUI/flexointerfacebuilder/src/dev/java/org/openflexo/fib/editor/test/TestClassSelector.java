@@ -1,4 +1,5 @@
 package org.openflexo.fib.editor.test;
+
 /*
  * (c) Copyright 2010-2011 AgileBirds
  *
@@ -19,29 +20,23 @@ package org.openflexo.fib.editor.test;
  *
  */
 
-
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Observable;
-import java.util.Vector;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.toolbox.FileResource;
-
 
 public class TestClassSelector {
 
 	public static FileResource FIB_FILE = new FileResource("TestFIB/TestClassSelector.fib");
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData()
-			{
+			@Override
+			public Object[] getData() {
 				return FIBAbstractEditor.makeArray(LoadedClassesInfo.instance);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return FIB_FILE;
 			}
@@ -54,5 +49,5 @@ public class TestClassSelector {
 		});*/
 		editor.launch();
 	}
-	
+
 }

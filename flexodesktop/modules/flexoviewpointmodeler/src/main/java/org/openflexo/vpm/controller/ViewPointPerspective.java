@@ -218,8 +218,8 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof ViewPointLibrary) || (object instanceof ImportedOntology) || (object instanceof ViewPointPalette)
-				|| (object instanceof ExampleDrawingShema) || (object instanceof ViewPoint) || (object instanceof EditionPattern);
+		return object instanceof ViewPointLibrary || object instanceof ImportedOntology || object instanceof ViewPointPalette
+				|| object instanceof ExampleDrawingShema || object instanceof ViewPoint || object instanceof EditionPattern;
 	}
 
 	@Override
@@ -293,14 +293,14 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 		JTabbedPane paletteView = null;
 		if (getCurrentModuleView() instanceof CalcPaletteModuleView) {
 			controller = ((CalcPaletteModuleView) getCurrentModuleView()).getController();
-			paletteView = (((CalcPaletteModuleView) getCurrentModuleView()).getController()).getPaletteView();
+			paletteView = ((CalcPaletteModuleView) getCurrentModuleView()).getController().getPaletteView();
 		}
 		if (getCurrentModuleView() instanceof CalcDrawingShemaModuleView) {
 			controller = ((CalcDrawingShemaModuleView) getCurrentModuleView()).getController();
-			paletteView = (((CalcDrawingShemaModuleView) getCurrentModuleView()).getController()).getPaletteView();
+			paletteView = ((CalcDrawingShemaModuleView) getCurrentModuleView()).getController().getPaletteView();
 		}
 
-		if ((controller != null) && (paletteView != null)) {
+		if (controller != null && paletteView != null) {
 			JSplitPane splitPaneWithPalettesAndDocInspectorPanel = _splitPaneForProcess.get(controller);
 			if (splitPaneWithPalettesAndDocInspectorPanel == null) {
 				splitPaneWithPalettesAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paletteView,
@@ -344,8 +344,9 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 		if (object instanceof EditionPattern) {
 			return ((EditionPattern) object).getName();
 		}
-		if (object != null)
+		if (object != null) {
 			return object.getFullyQualifiedName();
+		}
 		return "null";
 	}
 

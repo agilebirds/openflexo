@@ -69,7 +69,7 @@ public class PortRegisteryElement extends BrowserElement implements ExpansionSyn
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
 			// logger.info("root focused object is "+_browser.getSelectionManager().getRootFocusedObject());
-			return (getPortRegistery().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+			return getPortRegistery().getProcess() == _browser.getSelectionManager().getRootFocusedObject();
 		}
 		return false;
 	}

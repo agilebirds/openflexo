@@ -314,7 +314,7 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 		if (progress != null) {
 			progress.setSecondaryProgress(FlexoLocalization.localizedForKey("indexing_helpset"));
 		}
-		(new JHIndexer(helpSetDirectory)).generate();
+		new JHIndexer(helpSetDirectory).generate();
 		if (progress != null) {
 			progress.setSecondaryProgress(FlexoLocalization.localizedForKey("copying_images"));
 		}

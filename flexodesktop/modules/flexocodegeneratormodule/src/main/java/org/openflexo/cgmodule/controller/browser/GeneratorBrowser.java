@@ -76,7 +76,7 @@ public class GeneratorBrowser extends ConfigurableProjectBrowser implements Flex
 	}
 
 	public static BrowserConfiguration makeBrowserConfigurationForFileHistory(final CGFile file) {
-		BrowserConfiguration returned = new GeneratorBrowserConfiguration((file != null ? file.getGeneratedCode() : null)) {
+		BrowserConfiguration returned = new GeneratorBrowserConfiguration(file != null ? file.getGeneratedCode() : null) {
 			@Override
 			public CGFile getDefaultRootObject() {
 				return file;

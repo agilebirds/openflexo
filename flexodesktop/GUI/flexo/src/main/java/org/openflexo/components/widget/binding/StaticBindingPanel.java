@@ -100,8 +100,8 @@ class StaticBindingPanel extends JPanel {
 			}
 		});
 		add(selectStaticBindingCB);
-		if ((_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null)) {
+		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null) {
 			enterValueTF = new JTextField(10);
 			enterValueTF.setFont(FlexoCst.SMALL_FONT);
 			add(enterValueTF);
@@ -348,9 +348,9 @@ class StaticBindingPanel extends JPanel {
 
 		}
 
-		if ((_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType().isObject())) {
+		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType().isObject()) {
 			final String SELECT = FlexoLocalization.localizedForKey("select");
 			final String BOOLEAN = FlexoLocalization.localizedForKey("boolean");
 			final String INTEGER = FlexoLocalization.localizedForKey("integer");

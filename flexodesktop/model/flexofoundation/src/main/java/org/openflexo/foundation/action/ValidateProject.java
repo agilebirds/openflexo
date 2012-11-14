@@ -117,7 +117,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 	private ValidationReport dmValidationReport = null;
 
 	public boolean isProjectValid() {
-		return (getErrorsNb() == 0);
+		return getErrorsNb() == 0;
 	}
 
 	public int getErrorsNb() {

@@ -51,7 +51,7 @@ public class OpenDMEntity extends FlexoGUIAction<OpenDMEntity, CGFile, CGObject>
 
 		@Override
 		protected boolean isEnabledForSelection(CGFile file, Vector<CGObject> globalSelection) {
-			return (file.getResource() != null && file instanceof ModelReinjectableFile && file.supportModelReinjection());
+			return file.getResource() != null && file instanceof ModelReinjectableFile && file.supportModelReinjection();
 		}
 
 	};

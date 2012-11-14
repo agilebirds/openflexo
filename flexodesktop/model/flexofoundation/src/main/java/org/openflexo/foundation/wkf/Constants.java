@@ -86,7 +86,7 @@ public class Constants {
 	/**
 	 * The centre of a FLEXO node
 	 */
-	public static final int FLEXO_NODE_CENTRE = (FLEXONODE_SIZE / 2);
+	public static final int FLEXO_NODE_CENTRE = FLEXONODE_SIZE / 2;
 
 	/**
 	 * the x position of the bounding box of a circle in a flexo node
@@ -101,7 +101,7 @@ public class Constants {
 	/**
 	 * The radius of the outer flexonode circle
 	 */
-	public static final int FLEXONODE_OUTER_RADIUS = (FLEXONODE_SIZE / 2)
+	public static final int FLEXONODE_OUTER_RADIUS = FLEXONODE_SIZE / 2
 			- (FLEXOPRECONDITION_RADIUS + FLEXOPRECONDITION_OFFSET + FLEXONODE_BORDER);
 
 	/**

@@ -107,8 +107,9 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 		setExpandHorizontally(expandHorizontally);
 		setExpandVertically(expandVertically);
 		setIndex(index);
-		if (location == TwoColsLayoutLocation.left)
+		if (location == TwoColsLayoutLocation.left) {
 			setInsetsTop(5);
+		}
 	}
 
 	protected TwoColsLayoutConstraints(String someConstraints) {

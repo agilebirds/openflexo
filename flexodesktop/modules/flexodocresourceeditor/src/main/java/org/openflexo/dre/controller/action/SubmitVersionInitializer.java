@@ -61,7 +61,7 @@ public class SubmitVersionInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<SubmitVersion>() {
 			@Override
 			public boolean run(ActionEvent e, SubmitVersion action) {
-				if ((action.getContext() != null) && (action.getContext() instanceof SubmitDocumentationAction)) {
+				if (action.getContext() != null && action.getContext() instanceof SubmitDocumentationAction) {
 					// In this case, action is a consequency of a SubmitDocumentationAction
 					// launched from anywhere, no need to perform initializer here
 					return true;

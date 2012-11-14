@@ -176,7 +176,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 
 			@Override
 			public void mouseReleased(MouseEvent mouseEvent) {
-				if (hasFilters() && ((popupMenu == null) || !popupMenu.isVisible())) {
+				if (hasFilters() && (popupMenu == null || !popupMenu.isVisible())) {
 					getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
 					getPopupMenu().grabFocus();
 				}
@@ -203,7 +203,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 	}
 
 	protected boolean hasFilters() {
-		return (_browserView.getBrowser().getConfigurableElementTypeFilters().size() + _browserView.getBrowser().getCustomFilters().size()) > 0;
+		return _browserView.getBrowser().getConfigurableElementTypeFilters().size() + _browserView.getBrowser().getCustomFilters().size() > 0;
 	}
 
 	/* protected void elementTypeFilterChanged()
@@ -275,7 +275,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 
 			@Override
 			public void menuKeyPressed(MenuKeyEvent e) {
-				if ((e.getKeyCode() == KeyEvent.VK_ESCAPE) && (popupMenu != null) && popupMenu.isVisible()) {
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE && popupMenu != null && popupMenu.isVisible()) {
 					closePopup();
 				}
 			}
@@ -293,7 +293,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 	}
 
 	protected void closePopup() {
-		if ((popupMenu != null) && popupMenu.isVisible()) {
+		if (popupMenu != null && popupMenu.isVisible()) {
 			popupMenu.setVisible(false);
 		}
 		popupMenu = null;
@@ -307,13 +307,13 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 	 *            the root container
 	 */
 	protected void addPopupClosers(Container c) {
-		if ((c == getWindow(this)) && (c != null)) {
+		if (c == getWindow(this) && c != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("addPopupClosers");
 			}
 			((Window) c).addWindowListener(this);
 		}
-		if ((c != popupMenu) && (c != null)) {
+		if (c != popupMenu && c != null) {
 			c.addMouseListener(this);
 			for (int i = 0; i < c.getComponents().length; i++) {
 				addPopupClosers((Container) c.getComponents()[i]);
@@ -335,7 +335,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 			}
 			((Window) c).removeWindowListener(this);
 		}
-		if ((c != popupMenu) && (c != null)) {
+		if (c != popupMenu && c != null) {
 			c.removeMouseListener(this);
 			for (int i = 0; i < c.getComponents().length; i++) {
 				removePopupClosers((Container) c.getComponents()[i]);
@@ -352,7 +352,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 	 */
 	protected Window getWindow(Component c) {
 		Component w = c;
-		while (!(w instanceof Window) && (w != null)) {
+		while (!(w instanceof Window) && w != null) {
 			w = w.getParent();
 		}
 		return (Window) w;
@@ -361,8 +361,8 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 	protected void handleSelectionChanged() {
 		FlexoModelObject focusedObject = getFocusedObject();
 		Vector<FlexoModelObject> globalSelection = buildGlobalSelection();
-		plusButton.setEnabled((focusedObject != null) && (getActionTypesWithAddType(focusedObject).size() > 0));
-		minusButton.setEnabled((focusedObject != null) && (getActionTypesWithDeleteType(focusedObject, globalSelection).size() > 0));
+		plusButton.setEnabled(focusedObject != null && getActionTypesWithAddType(focusedObject).size() > 0);
+		minusButton.setEnabled(focusedObject != null && getActionTypesWithDeleteType(focusedObject, globalSelection).size() > 0);
 		plusActionMenuNeedsRecomputed = true;
 	}
 
@@ -475,7 +475,7 @@ public class BrowserFooter extends JPanel implements MouseListener, WindowListen
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if ((e.getSource() != popupMenu) && (e.getSource() != optionsButton)) {
+		if (e.getSource() != popupMenu && e.getSource() != optionsButton) {
 			closePopup();
 		}
 	}

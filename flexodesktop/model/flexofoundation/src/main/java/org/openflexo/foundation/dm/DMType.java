@@ -302,7 +302,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		DMType returned = type.clone();
 		if (returned.getKindOfType() == KindOfType.UNRESOLVED) {
 			return returned;
-		} else if ((returned.getKindOfType() == KindOfType.RESOLVED) || (returned.getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
+		} else if (returned.getKindOfType() == KindOfType.RESOLVED || returned.getKindOfType() == KindOfType.RESOLVED_ARRAY) {
 			for (int i = 0; i < returned.parameters.size(); i++) {
 				DMType p = returned.parameters.elementAt(i);
 				if (p.isGeneric()) {
@@ -352,7 +352,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			if (returned.getUpperBounds() != null) {
 				for (int i = 0; i < returned.getUpperBounds().size(); i++) {
 					WildcardBound b = returned.getUpperBounds().elementAt(i);
-					if ((b.bound != null) && b.bound.isGeneric()) {
+					if (b.bound != null && b.bound.isGeneric()) {
 						returned.getUpperBounds().setElementAt(returned.new WildcardBound(makeInstantiatedDMType(b.bound, context)), i);
 					}
 				}
@@ -360,7 +360,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			if (returned.getLowerBounds() != null) {
 				for (int i = 0; i < returned.getLowerBounds().size(); i++) {
 					WildcardBound b = returned.getLowerBounds().elementAt(i);
-					if ((b.bound != null) && b.bound.isGeneric()) {
+					if (b.bound != null && b.bound.isGeneric()) {
 						returned.getLowerBounds().setElementAt(returned.new WildcardBound(makeInstantiatedDMType(b.bound, context)), i);
 					}
 				}
@@ -504,7 +504,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	private boolean _isNotUnresolvedTypeResolved() {
-		if ((getKindOfType() == KindOfType.RESOLVED) || (getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
+		if (getKindOfType() == KindOfType.RESOLVED || getKindOfType() == KindOfType.RESOLVED_ARRAY) {
 			for (DMType p : parameters) {
 				if (!p.isResolved()) {
 					return false;
@@ -579,7 +579,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	public FlexoProject getProject() {
 		if (getKindOfType() == KindOfType.UNRESOLVED) {
 			return _project;
-		} else if ((getKindOfType() == KindOfType.RESOLVED) || (getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
+		} else if (getKindOfType() == KindOfType.RESOLVED || getKindOfType() == KindOfType.RESOLVED_ARRAY) {
 			return getBaseEntity().getProject();
 		} else if (getKindOfType() == KindOfType.DKV) {
 			return getDomain().getProject();
@@ -623,7 +623,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 				setTypeVariable(null);
 				setDomain(null);
 			}
-			if ((baseEntity == null) || (baseEntity.getTypeVariables().size() == 0)) {
+			if (baseEntity == null || baseEntity.getTypeVariables().size() == 0) {
 				parameters.clear();
 			}
 			_parameterizedTypeVariables = null;
@@ -702,7 +702,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			return true;
 		}
 
-		if ((getKindOfType() == KindOfType.RESOLVED) && (type.getKindOfType() == KindOfType.RESOLVED)) {
+		if (getKindOfType() == KindOfType.RESOLVED && type.getKindOfType() == KindOfType.RESOLVED) {
 
 			if (isVoid()) {
 				return type.isVoid();
@@ -718,7 +718,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			}
 
 			if (isFloat()) {
-				return (type.isDouble() && permissive) || type.isFloat() || type.isLong() || type.isInteger() || type.isShort()
+				return type.isDouble() && permissive || type.isFloat() || type.isLong() || type.isInteger() || type.isShort()
 						|| type.isChar() || type.isByte();
 			}
 
@@ -727,22 +727,21 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			}
 
 			if (isInteger()) {
-				return (type.isLong() && permissive) || type.isInteger() || type.isShort() || type.isChar() || type.isByte();
+				return type.isLong() && permissive || type.isInteger() || type.isShort() || type.isChar() || type.isByte();
 			}
 
 			if (isShort()) {
-				return (type.isLong() && permissive) || (type.isInteger() && permissive) || type.isShort() || type.isChar()
-						|| type.isByte();
+				return type.isLong() && permissive || type.isInteger() && permissive || type.isShort() || type.isChar() || type.isByte();
 			}
 
 			if (isChar()) {
-				return (type.isLong() && permissive) || (type.isInteger() && permissive) || (type.isShort() && permissive) || type.isChar()
-						|| (type.isShort() && permissive);
+				return type.isLong() && permissive || type.isInteger() && permissive || type.isShort() && permissive || type.isChar()
+						|| type.isShort() && permissive;
 			}
 
 			if (isByte()) {
-				return (type.isLong() && permissive) || (type.isInteger() && permissive) || (type.isShort() && permissive)
-						|| (type.isChar() && permissive) || type.isByte();
+				return type.isLong() && permissive || type.isInteger() && permissive || type.isShort() && permissive || type.isChar()
+						&& permissive || type.isByte();
 			}
 
 			if (type.isBooleanPrimitive()) {
@@ -831,7 +830,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 
 				// If one of both paramters def is empty (parameters are not defined, as before java5)
 				// accept it without performing a test which is impossible to perform
-				if ((getParameters().size() == 0) || (type.getParameters().size() == 0)) {
+				if (getParameters().size() == 0 || type.getParameters().size() == 0) {
 					return true;
 				}
 
@@ -845,9 +844,9 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 					DMType localParam = getParameters().elementAt(i);
 					DMType sourceParam = type.getParameters().elementAt(i);
 
-					if ((localParam.getKindOfType() == KindOfType.WILDCARD) && (localParam.getUpperBounds().size() == 1)) {
+					if (localParam.getKindOfType() == KindOfType.WILDCARD && localParam.getUpperBounds().size() == 1) {
 						DMType resultingSourceParamType;
-						if ((sourceParam.getKindOfType() == KindOfType.WILDCARD) && (sourceParam.getUpperBounds().size() == 1)) {
+						if (sourceParam.getKindOfType() == KindOfType.WILDCARD && sourceParam.getUpperBounds().size() == 1) {
 							resultingSourceParamType = sourceParam.getUpperBounds().firstElement().bound;
 						} else {
 							resultingSourceParamType = sourceParam;
@@ -871,7 +870,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 
 		}
 
-		if ((getKindOfType() == KindOfType.DKV) && (type.getKindOfType() == KindOfType.DKV)) {
+		if (getKindOfType() == KindOfType.DKV && type.getKindOfType() == KindOfType.DKV) {
 			return getDomain() == type.getDomain();
 		}
 
@@ -885,7 +884,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification instanceof DMEntityClassNameChanged) && (observable == getBaseEntity())) {
+		if (dataModification instanceof DMEntityClassNameChanged && observable == getBaseEntity()) {
 			// TODO: handle class name changed
 			// Then forward this notification to all Typed declared to have this type
 			Vector<Typed> typedWithThisTypeClone = (Vector<Typed>) typedWithThisType.clone();
@@ -893,7 +892,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 				t.update(observable, dataModification);
 			}
 			clearStringRepresentationCache();
-		} else if ((dataModification instanceof EntityDeleted) && (observable == getBaseEntity())) {
+		} else if (dataModification instanceof EntityDeleted && observable == getBaseEntity()) {
 			// TODO: handle entity deleted
 			// Then forward this notification to all Typed declared to have this type
 			Vector<Typed> typedWithThisTypeClone = (Vector<Typed>) typedWithThisType.clone();
@@ -994,9 +993,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			return getValue();
 		}
 
-		else if ((getKindOfType() == KindOfType.RESOLVED) || (getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
-			if (((stringRepresentationCache == null) && !fullyQualified)
-					|| ((fullyQualifiedStringRepresentationCache == null) && fullyQualified)) {
+		else if (getKindOfType() == KindOfType.RESOLVED || getKindOfType() == KindOfType.RESOLVED_ARRAY) {
+			if (stringRepresentationCache == null && !fullyQualified || fullyQualifiedStringRepresentationCache == null && fullyQualified) {
 				StringBuilder returned = new StringBuilder();
 				returned.append(fullyQualified ? getBaseEntity().getFullQualifiedName() : getBaseEntity().getEntityClassName());
 				if (parameters.size() > 0) {
@@ -1039,11 +1037,10 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		}
 
 		else if (getKindOfType() == KindOfType.WILDCARD) {
-			if (((stringRepresentationCache == null) && !fullyQualified)
-					|| ((fullyQualifiedStringRepresentationCache == null) && fullyQualified)) {
+			if (stringRepresentationCache == null && !fullyQualified || fullyQualifiedStringRepresentationCache == null && fullyQualified) {
 				StringBuilder returned = new StringBuilder();
 				returned.append("?");
-				if ((getUpperBounds() != null) && (getUpperBounds().size() > 0)) {
+				if (getUpperBounds() != null && getUpperBounds().size() > 0) {
 					boolean isFirst = true;
 					for (WildcardBound b : getUpperBounds()) {
 						if (!b.bound.isObject()) {
@@ -1052,7 +1049,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 						}
 					}
 				}
-				if ((getLowerBounds() != null) && (getLowerBounds().size() > 0)) {
+				if (getLowerBounds() != null && getLowerBounds().size() > 0) {
 					boolean isFirst = true;
 					for (WildcardBound b : getLowerBounds()) {
 						returned.append((isFirst ? " super " : " & ") + b.bound.getStringRepresentation(fullyQualified));
@@ -1088,7 +1085,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	public boolean isGeneric() {
 		if (getKindOfType() == KindOfType.UNRESOLVED) {
 			return false;
-		} else if ((getKindOfType() == KindOfType.RESOLVED) || (getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
+		} else if (getKindOfType() == KindOfType.RESOLVED || getKindOfType() == KindOfType.RESOLVED_ARRAY) {
 			if (parameters.size() > 0) {
 				for (DMType p : parameters) {
 					if (p.isGeneric()) {
@@ -1108,14 +1105,14 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		}
 
 		else if (getKindOfType() == KindOfType.WILDCARD) {
-			if ((getUpperBounds() != null) && (getUpperBounds().size() > 0)) {
+			if (getUpperBounds() != null && getUpperBounds().size() > 0) {
 				for (WildcardBound b : getUpperBounds()) {
 					if (b.bound.isGeneric()) {
 						return true;
 					}
 				}
 			}
-			if ((getLowerBounds() != null) && (getLowerBounds().size() > 0)) {
+			if (getLowerBounds() != null && getLowerBounds().size() > 0) {
 				for (WildcardBound b : getLowerBounds()) {
 					if (b.bound.isGeneric()) {
 						return true;
@@ -1164,7 +1161,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	public DMGenericDeclaration getTypeVariableContext() {
 		// logger.info("Type: "+this+" owner="+getOwner()+" "+(getOwner()!=null && getOwner() instanceof
 		// DMType?"owner context="+((DMType)getOwner()).getTypeVariableContext():null));
-		if ((getOwner() != null) && (getOwner() instanceof DMGenericDeclaration)) {
+		if (getOwner() != null && getOwner() instanceof DMGenericDeclaration) {
 			return (DMGenericDeclaration) getOwner();
 		}
 		if (getOwner() instanceof DMType) {
@@ -1270,7 +1267,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			newObjectType.setOwner(DMType.this);
 			parameters.add(newObjectType);
 		}
-		if ((parameters.elementAt(index) == null) || (parameters.elementAt(index) != parameter)) {
+		if (parameters.elementAt(index) == null || parameters.elementAt(index) != parameter) {
 			parameters.setElementAt(parameter, index);
 			parameter.setOwner(DMType.this);
 			setChanged();
@@ -1365,7 +1362,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		if (getTypeVariable() != null) {
 			return KindOfType.TYPE_VARIABLE;
 		}
-		if ((getLowerBounds() != null) || (getUpperBounds() != null)) {
+		if (getLowerBounds() != null || getUpperBounds() != null) {
 			return KindOfType.WILDCARD;
 		}
 		return KindOfType.UNRESOLVED;
@@ -1551,7 +1548,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 				}
 
 				// May be it's a type variable ???
-				if ((returned == false) && (type.getTypeVariableContext() != null)) {
+				if (returned == false && type.getTypeVariableContext() != null) {
 					for (DMTypeVariable tv : type.getTypeVariableContext().getTypeVariables()) {
 						if (type._pendingInformations.baseString.equals(tv.getName())) {
 							type.setTypeVariable(tv);
@@ -1666,7 +1663,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 					parsed = parsed.substring(0, parsed.length() - 2);
 				}
 
-				if ((parsed.indexOf("<") > -1) && (parsed.lastIndexOf(">") > parsed.indexOf("<"))) {
+				if (parsed.indexOf("<") > -1 && parsed.lastIndexOf(">") > parsed.indexOf("<")) {
 					String params = parsed.substring(parsed.indexOf("<") + 1, parsed.lastIndexOf(">"));
 
 					DMTypeTokenizer tt = new DMTypeTokenizer(params);
@@ -1722,7 +1719,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 
 	@Override
 	public boolean isVoid() {
-		if (isResolved() && (getKindOfType() == KindOfType.RESOLVED)) {
+		if (isResolved() && getKindOfType() == KindOfType.RESOLVED) {
 			return getBaseEntity().isVoid();
 		}
 		return super.isVoid();
@@ -1730,84 +1727,82 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 
 	public boolean isBoolean() {
 		return _isBasicType()
-				&& (isBooleanPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Boolean.class)));
+				&& (isBooleanPrimitive() || getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Boolean.class));
 	}
 
 	public boolean isBooleanPrimitive() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("boolean"));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("boolean");
 	}
 
 	public boolean isInteger() {
 		return _isBasicType()
-				&& (isIntegerPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Integer.class)));
+				&& (isIntegerPrimitive() || getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Integer.class));
 	}
 
 	public boolean isIntegerPrimitive() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("int"));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("int");
 	}
 
 	public boolean isLong() {
-		return _isBasicType() && (isLongPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Long.class)));
+		return _isBasicType() && (isLongPrimitive() || getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Long.class));
 	}
 
 	public boolean isLongPrimitive() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("long"));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("long");
 	}
 
 	public boolean isShort() {
-		return _isBasicType()
-				&& (isShortPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Short.class)));
+		return _isBasicType() && (isShortPrimitive() || getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Short.class));
 	}
 
 	public boolean isShortPrimitive() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("short"));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("short");
 	}
 
 	public boolean isChar() {
 		return _isBasicType()
-				&& (isCharPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Character.class)));
+				&& (isCharPrimitive() || getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Character.class));
 	}
 
 	public boolean isCharPrimitive() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("char"));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("char");
 	}
 
 	public boolean isByte() {
-		return _isBasicType() && (isBytePrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Byte.class)));
+		return _isBasicType() && (isBytePrimitive() || getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Byte.class));
 	}
 
 	public boolean isBytePrimitive() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("byte"));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("byte");
 	}
 
 	public boolean isFloat() {
-		return _isBasicType()
-				&& (isFloatPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Float.class)));
+		return _isBasicType() && (isFloatPrimitive() || getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Float.class));
 	}
 
 	public boolean isFloatPrimitive() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("float"));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("float");
 	}
 
 	public boolean isDouble() {
 		return _isBasicType()
-				&& (isDoublePrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Double.class)));
+				&& (isDoublePrimitive() || getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Double.class));
 	}
 
 	public boolean isDoublePrimitive() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("double"));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getEntityNamed("double");
 	}
 
 	public boolean isString() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.String.class));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.String.class);
 	}
 
 	public boolean isObject() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Object.class));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Object.class);
 	}
 
 	public boolean isDuration() {
-		return _isBasicType() && (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(org.openflexo.toolbox.Duration.class));
+		return _isBasicType() && getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(org.openflexo.toolbox.Duration.class);
 	}
 
 	/**
@@ -1818,15 +1813,15 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	public boolean isEOEntity() {
-		return _isBasicType() && (getBaseEntity() instanceof DMEOEntity);
+		return _isBasicType() && getBaseEntity() instanceof DMEOEntity;
 	}
 
 	public boolean isBasicType() {
-		return _isBasicType() && (getBaseEntity().getTypeVariables().size() == 0);
+		return _isBasicType() && getBaseEntity().getTypeVariables().size() == 0;
 	}
 
 	private boolean _isBasicType() {
-		return (getKindOfType() == KindOfType.RESOLVED) && (getDimensions() == 0);
+		return getKindOfType() == KindOfType.RESOLVED && getDimensions() == 0;
 	}
 
 	@Override
@@ -2058,7 +2053,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	public String getDefaultValue() {
-		if (isPrimitive() && (getDimensions() == 0)) {
+		if (isPrimitive() && getDimensions() == 0) {
 			if (isBooleanPrimitive()) {
 				return "false";
 			} else if (isBytePrimitive()) {

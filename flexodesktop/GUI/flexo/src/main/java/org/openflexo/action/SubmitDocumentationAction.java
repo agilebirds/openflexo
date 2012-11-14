@@ -53,7 +53,7 @@ public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentatio
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (allowsDocSubmission && (object != null) && (object instanceof InspectableObject));
+			return allowsDocSubmission && object != null && object instanceof InspectableObject;
 		}
 
 		public boolean allowsDocSubmission() {

@@ -822,7 +822,7 @@ public class Diff {
 					   Only because the previous run was shifted here.  */
 
 					if (end != i_end && equivs[start] == equivs[end] && !other_changed[1 + j] && end != i_end
-							&& !((preceding >= 0 && start == preceding) || (other_preceding >= 0 && other_start == other_preceding))) {
+							&& !(preceding >= 0 && start == preceding || other_preceding >= 0 && other_start == other_preceding)) {
 						changed[1 + end++] = true;
 						changed[1 + start++] = false;
 						++i;

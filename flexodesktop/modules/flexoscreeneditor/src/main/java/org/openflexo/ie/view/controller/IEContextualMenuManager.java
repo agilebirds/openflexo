@@ -51,19 +51,19 @@ public class IEContextualMenuManager extends ContextualMenuManager {
 			return ((IEWOComponentView) focusedComponent).getModel();
 		}
 		if (focusedComponent instanceof DropZoneTopComponent) {
-			return (((DropZoneTopComponent) focusedComponent).getContainerModel());
+			return ((DropZoneTopComponent) focusedComponent).getContainerModel();
 		}
 		if (focusedComponent instanceof DropTabZone) {
-			return (((DropTabZone) focusedComponent).getContainerModel());
+			return ((DropTabZone) focusedComponent).getContainerModel();
 		}
 		if (focusedComponent instanceof DropTabZone) {
-			return (((DropTabZone) focusedComponent).getContainerModel());
+			return ((DropTabZone) focusedComponent).getContainerModel();
 		}
 		if (focusedComponent instanceof DropTableZone) {
-			return (((DropTableZone) focusedComponent).getContainerModel());
+			return ((DropTableZone) focusedComponent).getContainerModel();
 		}
 		if (focusedComponent instanceof ButtonPanel) {
-			return (((ButtonPanel) focusedComponent).getContainerModel());
+			return ((ButtonPanel) focusedComponent).getContainerModel();
 		}
 		return super.getFocusedObject(focusedComponent, e);
 	}

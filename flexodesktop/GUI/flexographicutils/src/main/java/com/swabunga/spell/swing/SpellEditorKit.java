@@ -191,7 +191,7 @@ public class SpellEditorKit extends StyledEditorKit {
 				if (bias[0] == Position.Bias.Backward && pos > 0) {
 					pos--;
 				}
-				if (pos >= 0 && (editor.getDocument() instanceof SpellCheckedDocument)) {
+				if (pos >= 0 && editor.getDocument() instanceof SpellCheckedDocument) {
 					SpellCheckedDocument hdoc = (SpellCheckedDocument) editor.getDocument();
 					Element elem = hdoc.getCharacterElement(pos);
 					if (!doesElementContainLocation(editor, elem, pos, e.getX(), e.getY())) {
@@ -242,9 +242,9 @@ public class SpellEditorKit extends StyledEditorKit {
 				try {
 					TextUI ui = editor.getUI();
 					Shape s1 = ui.modelToView(editor, offset, Position.Bias.Forward);
-					Rectangle r1 = (s1 instanceof Rectangle) ? (Rectangle) s1 : s1.getBounds();
+					Rectangle r1 = s1 instanceof Rectangle ? (Rectangle) s1 : s1.getBounds();
 					Shape s2 = ui.modelToView(editor, e.getEndOffset(), Position.Bias.Backward);
-					Rectangle r2 = (s2 instanceof Rectangle) ? (Rectangle) s2 : s2.getBounds();
+					Rectangle r2 = s2 instanceof Rectangle ? (Rectangle) s2 : s2.getBounds();
 					r1.add(r2);
 					return r1.contains(x, y);
 				} catch (BadLocationException ble) {

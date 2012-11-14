@@ -94,7 +94,7 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		processMousePressed(e);
-		if ((!e.isConsumed()) && (_contextualMenuManager != null)) {
+		if (!e.isConsumed() && _contextualMenuManager != null) {
 			_contextualMenuManager.processMousePressed(e);
 		}
 	}
@@ -102,7 +102,7 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		processMouseReleased(e);
-		if ((!e.isConsumed()) && (_contextualMenuManager != null)) {
+		if (!e.isConsumed() && _contextualMenuManager != null) {
 			_contextualMenuManager.processMouseReleased(e);
 		}
 	}

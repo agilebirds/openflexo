@@ -30,20 +30,11 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * 
  */
 public enum TDCSSType implements StringConvertable {
-	DL_LIST_CELL("DLListCell"),
-	DL_LIST_ROW_TITLE("DLListColumnTitle"),
-	DL_LIST_ROW_LAST_TITLE("DLListLastColumnTitle"),
-	DL_LIST_LAST_CELL("DLListLastCell"),
-	DL_BLOCKTOOLS_CONTENT_TITLE("DLBlockToolsContentTableTitle"),
-	DL_BLOCKTOOLS_CONTENT_CONTENT("DLBlockToolsContentTableContent"),
-	DL_BLOCKTOOLS("DLBlockTools"),
-	DL_BLOCKTOOLS_CONTENT("DLBlockToolsContent"),
-	DL_BLOCK_HEADER("DLBlockHeader"),
-	DL_BLOCK_BODY("DLBlockBody"),
-	DL_BLOCK_FOOTER("DLBlockFooter"),
-	DL_BLOCK_BODY_TITLE("DLBlockBodyTitle"),
-	DL_BLOCK_BODY_CONTENT("DLBlockBodyContent"),
-	DL_BLOCK_BODY_COMMENT("DLBlockBodyComment");
+	DL_LIST_CELL("DLListCell"), DL_LIST_ROW_TITLE("DLListColumnTitle"), DL_LIST_ROW_LAST_TITLE("DLListLastColumnTitle"), DL_LIST_LAST_CELL(
+			"DLListLastCell"), DL_BLOCKTOOLS_CONTENT_TITLE("DLBlockToolsContentTableTitle"), DL_BLOCKTOOLS_CONTENT_CONTENT(
+			"DLBlockToolsContentTableContent"), DL_BLOCKTOOLS("DLBlockTools"), DL_BLOCKTOOLS_CONTENT("DLBlockToolsContent"), DL_BLOCK_HEADER(
+			"DLBlockHeader"), DL_BLOCK_BODY("DLBlockBody"), DL_BLOCK_FOOTER("DLBlockFooter"), DL_BLOCK_BODY_TITLE("DLBlockBodyTitle"), DL_BLOCK_BODY_CONTENT(
+			"DLBlockBodyContent"), DL_BLOCK_BODY_COMMENT("DLBlockBodyComment");
 
 	private final String name;
 

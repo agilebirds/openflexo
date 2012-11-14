@@ -208,7 +208,7 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 	public abstract boolean handlesPaletteEdition();
 
 	public PalettePanel getCurrentPalettePanel() {
-		return (PalettePanel) (((JScrollPane) currentTabbedPane.getSelectedComponent()).getViewport().getView());
+		return (PalettePanel) ((JScrollPane) currentTabbedPane.getSelectedComponent()).getViewport().getView();
 	}
 
 	protected abstract PaletteTabbedPane makeTabbedPane();

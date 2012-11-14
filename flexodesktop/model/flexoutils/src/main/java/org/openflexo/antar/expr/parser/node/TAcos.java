@@ -2,37 +2,32 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TAcos extends Token
-{
-    public TAcos()
-    {
-        super.setText("acos");
-    }
+public final class TAcos extends Token {
+	public TAcos() {
+		super.setText("acos");
+	}
 
-    public TAcos(int line, int pos)
-    {
-        super.setText("acos");
-        setLine(line);
-        setPos(pos);
-    }
+	public TAcos(int line, int pos) {
+		super.setText("acos");
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TAcos(getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TAcos(getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTAcos(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTAcos(this);
+	}
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TAcos text.");
-    }
+	@Override
+	public void setText(@SuppressWarnings("unused") String text) {
+		throw new RuntimeException("Cannot change TAcos text.");
+	}
 }

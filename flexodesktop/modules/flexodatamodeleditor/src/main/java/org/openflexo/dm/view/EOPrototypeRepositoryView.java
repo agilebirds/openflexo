@@ -89,7 +89,7 @@ public class EOPrototypeRepositoryView extends DMView<EOPrototypeRepository> {
 	public DMEOPrototype getSelectedDMEOPrototype() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOPrototype)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEOPrototype) {
 			return (DMEOPrototype) selection.firstElement();
 		}
 		return null;

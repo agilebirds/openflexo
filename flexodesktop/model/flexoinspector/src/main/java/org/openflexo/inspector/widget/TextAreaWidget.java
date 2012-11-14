@@ -92,21 +92,21 @@ public class TextAreaWidget extends DenaliWidget<String> {
 		_textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}

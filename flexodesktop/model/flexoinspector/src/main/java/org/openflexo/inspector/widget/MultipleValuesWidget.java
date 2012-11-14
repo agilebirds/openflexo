@@ -137,7 +137,7 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 					return new Vector().toArray();
 				}
 			} else {
-				return (((ChoiceList) getObjectValue()).getAvailableValues()).toArray();
+				return ((ChoiceList) getObjectValue()).getAvailableValues().toArray();
 			}
 		} else if (_propertyModel.hasStaticList()) {
 			return _propertyModel.getStaticList().toArray();
@@ -210,7 +210,7 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 		protected DenaliListModel() {
 			super();
 			if (getModel() != null) {
-				if ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST)) {
+				if (valueType == CHOICE_LIST || valueType == STATIC_LIST || valueType == DYNAMIC_LIST) {
 					_values = getListValues();
 				} else if (valueType == DYNAMIC_HASH) {
 					_hashValues = getHashValues();
@@ -222,7 +222,7 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 		@Override
 		public int getSize() {
 			if (getModel() != null) {
-				if (_values != null && ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST))) {
+				if (_values != null && (valueType == CHOICE_LIST || valueType == STATIC_LIST || valueType == DYNAMIC_LIST)) {
 					return _values.length;
 				} else if (valueType == DYNAMIC_HASH) {
 					return _hashValues.size();
@@ -234,7 +234,7 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 		@Override
 		public Object getElementAt(int index) {
 			if (getModel() != null) {
-				if ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST)) {
+				if (valueType == CHOICE_LIST || valueType == STATIC_LIST || valueType == DYNAMIC_LIST) {
 					return _values[index];
 				} else if (valueType == DYNAMIC_HASH) {
 					Iterator it = _hashValues.values().iterator();

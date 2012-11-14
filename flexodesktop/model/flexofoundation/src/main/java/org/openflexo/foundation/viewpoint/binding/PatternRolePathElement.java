@@ -93,8 +93,9 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 	public Class<?> getDeclaringClass() {
 		if (container != null) {
 			return container.getClass();
-		} else
+		} else {
 			return Object.class;
+		}
 	}
 
 	@Override
@@ -151,7 +152,7 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 
 	@Override
 	public void setBindingValue(T value, Object target, BindingEvaluationContext context) {
-		if (target instanceof EditionPatternInstance && (value instanceof FlexoModelObject)) {
+		if (target instanceof EditionPatternInstance && value instanceof FlexoModelObject) {
 			((EditionPatternInstance) target).setPatternActor((FlexoModelObject) value, patternRole);
 		} else {
 			logger.warning("What to do with a " + target + " ?");

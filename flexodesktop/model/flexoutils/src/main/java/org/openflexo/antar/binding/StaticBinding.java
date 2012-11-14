@@ -112,7 +112,7 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 					return false;
 				}
 			}
-			return ((_owner == sb._owner) && sb.getValue() != null && getValue().equals(sb.getValue()));
+			return _owner == sb._owner && sb.getValue() != null && getValue().equals(sb.getValue());
 		} else {
 			return super.equals(object);
 		}

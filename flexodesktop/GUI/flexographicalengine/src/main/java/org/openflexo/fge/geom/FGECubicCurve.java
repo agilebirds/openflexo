@@ -191,9 +191,9 @@ public class FGECubicCurve extends Double implements FGEGeneralShape.GeneralShap
 	public boolean equals(Object obj) {
 		if (obj instanceof FGECubicCurve) {
 			FGECubicCurve s = (FGECubicCurve) obj;
-			return ((getP1().equals(s.getP1()) && getP2().equals(s.getP2()) && getCtrlP1().equals(s.getCtrlP1()) && getCtrlP2().equals(
-					s.getCtrlP2())) || (getP1().equals(s.getP2()) && getP2().equals(s.getP1()) && getCtrlP1().equals(s.getCtrlP2()) && getCtrlP2()
-					.equals(s.getCtrlP1())));
+			return getP1().equals(s.getP1()) && getP2().equals(s.getP2()) && getCtrlP1().equals(s.getCtrlP1())
+					&& getCtrlP2().equals(s.getCtrlP2()) || getP1().equals(s.getP2()) && getP2().equals(s.getP1())
+					&& getCtrlP1().equals(s.getCtrlP2()) && getCtrlP2().equals(s.getCtrlP1());
 		}
 		return false;
 	}

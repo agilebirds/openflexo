@@ -31,7 +31,7 @@ public abstract class OntologicObjectPatternRole extends PatternRole {
 		if (getEditionPattern() == null) {
 			return false;
 		}
-		return (getEditionPattern().getPrimaryConceptRole() == this);
+		return getEditionPattern().getPrimaryConceptRole() == this;
 	}
 
 	public void setIsPrimaryConceptRole(boolean isPrimary) {

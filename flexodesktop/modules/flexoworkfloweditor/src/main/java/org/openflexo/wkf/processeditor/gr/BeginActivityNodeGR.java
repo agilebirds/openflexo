@@ -103,7 +103,7 @@ public class BeginActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 	 */
 	@Override
 	public double _getDefaultY() {
-		return (getActivityNode().getParentPetriGraph().getIndexForBeginNode(getActivityNode()) * 80) + (isInRoot() ? 200 : 0)
+		return getActivityNode().getParentPetriGraph().getIndexForBeginNode(getActivityNode()) * 80 + (isInRoot() ? 200 : 0)
 				+ DEFAULT_BEGIN_Y_OFFSET + 10;
 	}
 

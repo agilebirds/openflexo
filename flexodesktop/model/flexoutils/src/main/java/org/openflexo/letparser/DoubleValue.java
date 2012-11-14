@@ -50,7 +50,7 @@ public class DoubleValue extends Value {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof DoubleValue) {
-			return (getDoubleValue() == ((DoubleValue) obj).getDoubleValue());
+			return getDoubleValue() == ((DoubleValue) obj).getDoubleValue();
 		}
 		return super.equals(obj);
 	}

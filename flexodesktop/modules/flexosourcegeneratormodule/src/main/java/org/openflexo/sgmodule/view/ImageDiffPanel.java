@@ -50,7 +50,7 @@ public class ImageDiffPanel extends JLayeredPane {
 		setLayout(new BorderLayout());
 		JPanel topPanel = new JPanel(new BorderLayout());
 
-		if ((leftLabel != null) || (rightLabel != null)) {
+		if (leftLabel != null || rightLabel != null) {
 
 			JPanel labelPanels = new JPanel(new GridLayout(1, 2));
 			JLabel _leftLabel = new JLabel(leftLabel, SwingConstants.CENTER);

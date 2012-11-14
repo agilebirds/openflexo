@@ -214,7 +214,7 @@ public class SimpleStringPattern implements StringPattern {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(this.getClass().isInstance(obj))) {
+			if (!this.getClass().isInstance(obj)) {
 				return false;
 			}
 			return match.equals(((SubPattern) obj).match);

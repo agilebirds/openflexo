@@ -65,19 +65,19 @@ public class DMPropertyTableModel extends AbstractModel<DMEntity, DMProperty> {
 		addToColumns(new IconColumn<DMProperty>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMProperty property) {
-				return (property.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return property.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMProperty property) {
-				return (property.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return property.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new ToggleIconColumn<DMProperty>("settable", 25) {
 			@Override
 			public Icon getIcon(DMProperty property) {
-				return (property.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON);
+				return property.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON;
 			}
 
 			@Override
@@ -87,16 +87,16 @@ public class DMPropertyTableModel extends AbstractModel<DMEntity, DMProperty> {
 
 			@Override
 			public String getLocalizedTooltip(DMProperty property) {
-				return (property.getIsSettable() ? FlexoLocalization.localizedForKey("can_be_set") : FlexoLocalization
-						.localizedForKey("cannot_be_set"));
+				return property.getIsSettable() ? FlexoLocalization.localizedForKey("can_be_set") : FlexoLocalization
+						.localizedForKey("cannot_be_set");
 			}
 		});
 		if (entity instanceof ComponentDMEntity) {
 			addToColumns(new ToggleIconColumn<DMProperty>("bindable", 25) {
 				@Override
 				public Icon getIcon(DMProperty property) {
-					return (((ComponentDMEntity) property.getEntity()).isBindable(property) ? DMEIconLibrary.BINDABLE_ICON
-							: DMEIconLibrary.NOT_BINDABLE_ICON);
+					return ((ComponentDMEntity) property.getEntity()).isBindable(property) ? DMEIconLibrary.BINDABLE_ICON
+							: DMEIconLibrary.NOT_BINDABLE_ICON;
 				}
 
 				@Override
@@ -107,8 +107,8 @@ public class DMPropertyTableModel extends AbstractModel<DMEntity, DMProperty> {
 
 				@Override
 				public String getLocalizedTooltip(DMProperty property) {
-					return (((ComponentDMEntity) property.getEntity()).isBindable(property) ? FlexoLocalization
-							.localizedForKey("is_bindable") : FlexoLocalization.localizedForKey("is_not_bindable"));
+					return ((ComponentDMEntity) property.getEntity()).isBindable(property) ? FlexoLocalization
+							.localizedForKey("is_bindable") : FlexoLocalization.localizedForKey("is_not_bindable");
 				}
 			});
 			addToColumns(new CheckColumn<DMProperty>("mandatory", 25) {
@@ -199,7 +199,7 @@ public class DMPropertyTableModel extends AbstractModel<DMEntity, DMProperty> {
 
 	@Override
 	public DMProperty elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDMEntity().getOrderedSingleProperties().elementAt(row);
 		} else {
 			return null;

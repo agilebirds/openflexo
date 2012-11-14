@@ -62,8 +62,8 @@ public class RegisterNewCGReleaseInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, final RegisterNewCGRelease action) {
 				Date registeringDate = new Date();
 				TextFieldParameter nameParam = new TextFieldParameter("name", "name", "");
-				ReadOnlyTextFieldParameter dateParam = new ReadOnlyTextFieldParameter("date", "date", (new SimpleDateFormat(
-						"dd/MM HH:mm:ss")).format(registeringDate));
+				ReadOnlyTextFieldParameter dateParam = new ReadOnlyTextFieldParameter("date", "date",
+						new SimpleDateFormat("dd/MM HH:mm:ss").format(registeringDate));
 				ReadOnlyTextFieldParameter userParam = new ReadOnlyTextFieldParameter("userId", "user_id",
 						FlexoModelObject.getCurrentUserIdentifier());
 				final RadioButtonListParameter<RegisterNewCGRelease.IncrementType> incTypeParam = new RadioButtonListParameter<RegisterNewCGRelease.IncrementType>(

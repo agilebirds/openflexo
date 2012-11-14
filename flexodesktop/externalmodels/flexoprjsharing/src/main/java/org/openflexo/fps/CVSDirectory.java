@@ -118,7 +118,7 @@ public class CVSDirectory extends CVSAbstractFile implements CVSContainer {
 	}
 
 	public boolean existsOnCVSRepository() {
-		return (_entry != null);
+		return _entry != null;
 	}
 
 	public void clear() {

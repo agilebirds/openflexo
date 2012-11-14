@@ -227,7 +227,7 @@ public class TabularBrowserModel extends ConfigurableProjectBrowser implements T
 		if (el instanceof BrowserElement) {
 			BrowserElement element = (BrowserElement) el;
 			AbstractColumn column = columnAt(col);
-			if ((column.isCellEditableFor((element).getObject())) && (column instanceof EditableColumn)) {
+			if (column.isCellEditableFor(element.getObject()) && column instanceof EditableColumn) {
 				((EditableColumn) column).setValueFor(element.getObject(), aValue);
 				return;
 			}

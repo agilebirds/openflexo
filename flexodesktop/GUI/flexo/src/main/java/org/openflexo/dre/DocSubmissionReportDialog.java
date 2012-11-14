@@ -232,7 +232,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 
 		protected void update() {
 			DocItemAction action = _docSubmissionReportModel.getActionAt(reviewTable.getSelectedRow());
-			if ((action != null) && (action.getVersion() != null)) {
+			if (action != null && action.getVersion() != null) {
 				shortHTMLDescriptionLabel.setText("<html>" + action.getVersion().getShortHTMLDescription() + "</html>");
 				fullHTMLDescriptionLabel.setText("<html>" + action.getVersion().getFullHTMLDescription() + "</html>");
 			} else {
@@ -344,7 +344,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return (columnIndex == 0 ? true : false);
+			return columnIndex == 0 ? true : false;
 		}
 
 		@Override
@@ -397,7 +397,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 			Vector<DocItemAction> returned = new Vector<DocItemAction>();
 
 			for (int i = 0; i < _shouldImport.size(); i++) {
-				if ((_shouldImport.elementAt(i)).booleanValue()) {
+				if (_shouldImport.elementAt(i).booleanValue()) {
 					returned.add(getActionAt(i));
 				}
 			}

@@ -52,8 +52,8 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
 				DGTemplateFileModuleView editor;
-				if ((action.getInvoker() != null) && (action.getInvoker() instanceof DGTemplateFileModuleView)
-						&& (((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+				if (action.getInvoker() != null && action.getInvoker() instanceof DGTemplateFileModuleView
+						&& ((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 					editor = (DGTemplateFileModuleView) action.getInvoker();
 				} else {
 					editor = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController().moduleViewForObject(
@@ -73,8 +73,8 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<EditCustomTemplateFile>() {
 			@Override
 			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
-				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof DGTemplateFileModuleView)
-						|| !(((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+				if (action.getInvoker() == null || !(action.getInvoker() instanceof DGTemplateFileModuleView)
+						|| !((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 					getControllerActionInitializer().getDGController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
 					getControllerActionInitializer().getDGController().selectAndFocusObject(action.getFocusedObject());
 				}

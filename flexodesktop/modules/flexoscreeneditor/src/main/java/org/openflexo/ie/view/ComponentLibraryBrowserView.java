@@ -70,10 +70,10 @@ public class ComponentLibraryBrowserView extends BrowserView {
 					boolean hasFocus) {
 				super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 				if (_controller.getCurrentModuleView() != null
-						&& (((BrowserElement) value).getObject() == _controller.getCurrentModuleView().getRepresentedObject() || (_controller
-								.getCurrentModuleView().getRepresentedObject() instanceof ComponentInstance && ((ComponentInstance) _controller
-								.getCurrentModuleView().getRepresentedObject()).getComponentDefinition() == (((BrowserElement) value)
-								.getObject())))) {
+						&& (((BrowserElement) value).getObject() == _controller.getCurrentModuleView().getRepresentedObject() || _controller
+								.getCurrentModuleView().getRepresentedObject() instanceof ComponentInstance
+								&& ((ComponentInstance) _controller.getCurrentModuleView().getRepresentedObject()).getComponentDefinition() == ((BrowserElement) value)
+										.getObject())) {
 					setBackground(getBackgroundSelectionColor());
 					setForeground(getTextSelectionColor());
 					selected = true;

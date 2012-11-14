@@ -57,7 +57,7 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new VESetPropertyInitializer(this)).init();
+		new VESetPropertyInitializer(this).init();
 
 		// Disabled copy/paste
 		if (VECst.CUT_COPY_PASTE_ENABLED) {
@@ -68,30 +68,30 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		}
 
 		// Shema library perspective
-		(new AddViewInitializer(this)).init();
-		(new AddViewFolderInitializer(this)).init();
-		(new DeleteViewInitializer(this)).init();
-		(new DeleteViewFolderInitializer(this)).init();
-		(new ResetGraphicalRepresentationInitializer(this)).init();
-		(new RefreshViewElementInitializer(this)).init();
-		(new ReindexViewElementsInitializer(this)).init();
+		new AddViewInitializer(this).init();
+		new AddViewFolderInitializer(this).init();
+		new DeleteViewInitializer(this).init();
+		new DeleteViewFolderInitializer(this).init();
+		new ResetGraphicalRepresentationInitializer(this).init();
+		new RefreshViewElementInitializer(this).init();
+		new ReindexViewElementsInitializer(this).init();
 
 		// Diagram perspective
-		(new AddShapeInitializer(this)).init();
-		(new AddConnectorInitializer(this)).init();
-		(new DeleteViewElementsInitializer(this)).init();
-		(new DropSchemeActionInitializer(this)).init();
-		(new LinkSchemeActionInitializer(this)).init();
-		(new ActionSchemeActionInitializer(this)).initForClass(ActionSchemeActionType.class);
-		(new NavigationSchemeActionInitializer(this)).initForClass(NavigationSchemeActionType.class);
+		new AddShapeInitializer(this).init();
+		new AddConnectorInitializer(this).init();
+		new DeleteViewElementsInitializer(this).init();
+		new DropSchemeActionInitializer(this).init();
+		new LinkSchemeActionInitializer(this).init();
+		new ActionSchemeActionInitializer(this).initForClass(ActionSchemeActionType.class);
+		new NavigationSchemeActionInitializer(this).initForClass(NavigationSchemeActionType.class);
 
 		// Ontology perspective
-		(new CreateOntologyClassInitializer(this)).init();
-		(new CreateOntologyIndividualInitializer(this)).init();
-		(new CreateObjectPropertyInitializer(this)).init();
-		(new CreateDataPropertyInitializer(this)).init();
-		(new DeleteOntologyObjectsInitializer(this)).init();
-		(new AddAnnotationStatementInitializer(this)).init();
+		new CreateOntologyClassInitializer(this).init();
+		new CreateOntologyIndividualInitializer(this).init();
+		new CreateObjectPropertyInitializer(this).init();
+		new CreateDataPropertyInitializer(this).init();
+		new DeleteOntologyObjectsInitializer(this).init();
+		new AddAnnotationStatementInitializer(this).init();
 	}
 
 }

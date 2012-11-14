@@ -112,7 +112,7 @@ public class WSELibraryView extends WSEView<FlexoWSLibrary> {
 	public WSFolder getSelectedWSFolder() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof WSFolder)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof WSFolder) {
 			return (WSFolder) selection.firstElement();
 		}
 		return null;

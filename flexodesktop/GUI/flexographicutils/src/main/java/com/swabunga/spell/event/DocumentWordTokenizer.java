@@ -259,15 +259,15 @@ public class DocumentWordTokenizer implements WordTokenizer {
 		// BreakIterator doesn't work when the first word in a sentence is not capitalised,
 		// but we need to check for capitalisation
 		if (startsSentence || currentWordPos < 2) {
-			return (true);
+			return true;
 		}
 
 		String textBefore = null;
 		try {
 			textBefore = document.getText(currentWordPos - 2, 2);
 		} catch (BadLocationException ex) {
-			return (false);
+			return false;
 		}
-		return (textBefore != null && ".".equals(textBefore.trim()));
+		return textBefore != null && ".".equals(textBefore.trim());
 	}
 }

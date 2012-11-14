@@ -99,7 +99,7 @@ public class TemplatesPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof CGTemplate);
+		return object instanceof CGTemplate;
 	}
 
 	@Override

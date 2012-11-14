@@ -251,7 +251,7 @@ public class ClassScope {
 	} // this class is not extendible
 
 	private static void getClassLoaderTree(final Class<?> cls, final Set<ClassLoader> resultSet) {
-		if ((cls != null) && (resultSet != null)) {
+		if (cls != null && resultSet != null) {
 			for (ClassLoader loader = cls.getClassLoader(); loader != null; loader = loader.getParent()) {
 				resultSet.add(loader);
 			}

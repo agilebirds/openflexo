@@ -79,8 +79,8 @@ public class CreateOntologyClass extends FlexoAction<CreateOntologyClass, Ontolo
 	CreateOntologyClass(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		newOntologyClassName = "NewClass";
-		fatherClass = (focusedObject instanceof OntologyClass ? (OntologyClass) focusedObject : focusedObject.getOntologyLibrary()
-				.getOWLOntology().getRootClass());
+		fatherClass = focusedObject instanceof OntologyClass ? (OntologyClass) focusedObject : focusedObject.getOntologyLibrary()
+				.getOWLOntology().getRootClass();
 		isValid();
 	}
 
@@ -100,7 +100,7 @@ public class CreateOntologyClass extends FlexoAction<CreateOntologyClass, Ontolo
 
 	public boolean isValid() {
 		boolean returned = !StringUtils.isEmpty(newOntologyClassName) && getOntology().testValidURI(newOntologyClassName);
-		validURILabel = (returned ? VALID_URI_LABEL : INVALID_URI_LABEL);
+		validURILabel = returned ? VALID_URI_LABEL : INVALID_URI_LABEL;
 		return returned;
 	}
 

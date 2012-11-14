@@ -273,12 +273,12 @@ public class TableSorter extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return (tableModel == null) ? 0 : tableModel.getRowCount();
+		return tableModel == null ? 0 : tableModel.getRowCount();
 	}
 
 	@Override
 	public int getColumnCount() {
-		return (tableModel == null) ? 0 : tableModel.getColumnCount();
+		return tableModel == null ? 0 : tableModel.getColumnCount();
 	}
 
 	@Override

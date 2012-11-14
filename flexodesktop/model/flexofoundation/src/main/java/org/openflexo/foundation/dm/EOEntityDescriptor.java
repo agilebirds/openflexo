@@ -56,7 +56,7 @@ public class EOEntityDescriptor {
 			_attributesList = new Vector<String>();
 			Iterator<EOAttribute> i = entity.getAttributes().iterator();
 			while (i.hasNext()) {
-				_attributesList.add((i.next()).getName());
+				_attributesList.add(i.next().getName());
 			}
 		}
 		return _attributesList;
@@ -69,7 +69,7 @@ public class EOEntityDescriptor {
 			_relationshipsList = new Vector<String>();
 			Iterator<EORelationship> i = entity.getRelationships().iterator();
 			while (i.hasNext()) {
-				_relationshipsList.add((i.next()).getName());
+				_relationshipsList.add(i.next().getName());
 			}
 		}
 		return _relationshipsList;

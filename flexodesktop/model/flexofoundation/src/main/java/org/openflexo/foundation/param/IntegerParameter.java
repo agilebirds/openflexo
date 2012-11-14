@@ -36,7 +36,7 @@ public class IntegerParameter extends ParameterDefinition<Integer> {
 	@Override
 	public int getIntegerValue() {
 		if (getValue() != null) {
-			return (getValue()).intValue();
+			return getValue().intValue();
 		}
 		return super.getIntegerValue();
 	}

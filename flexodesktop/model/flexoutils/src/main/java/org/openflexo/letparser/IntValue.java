@@ -50,7 +50,7 @@ public class IntValue extends Value {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof IntValue) {
-			return (getIntValue() == ((IntValue) obj).getIntValue());
+			return getIntValue() == ((IntValue) obj).getIntValue();
 		}
 		return super.equals(obj);
 	}

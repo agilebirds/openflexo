@@ -71,7 +71,7 @@ public class SGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 	}
 
 	public static BrowserConfiguration makeBrowserConfigurationForFileHistory(final CGFile file) {
-		BrowserConfiguration returned = new SGBrowserConfiguration((file != null ? file.getGeneratedCode() : null)) {
+		BrowserConfiguration returned = new SGBrowserConfiguration(file != null ? file.getGeneratedCode() : null) {
 			@Override
 			public CGFile getDefaultRootObject() {
 				return file;

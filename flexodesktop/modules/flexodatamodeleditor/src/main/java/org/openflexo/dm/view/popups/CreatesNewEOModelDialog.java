@@ -237,7 +237,7 @@ public class CreatesNewEOModelDialog extends FlexoDialog {
 
 	protected boolean checkEOModelOKForCreation() {
 		String newName = eoModelNameTextField.getText();
-		if ((newName == null) || (newName.trim().equals(""))) {
+		if (newName == null || newName.trim().equals("")) {
 			FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_a_valid_name"));
 			return false;
 		}

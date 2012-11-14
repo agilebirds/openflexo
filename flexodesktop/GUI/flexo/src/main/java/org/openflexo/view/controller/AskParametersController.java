@@ -54,7 +54,7 @@ public class AskParametersController implements AbstractController {
 	}
 
 	public static boolean hasInstance() {
-		return (_current != null);
+		return _current != null;
 	}
 
 	@Override

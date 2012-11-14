@@ -71,7 +71,7 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getProcess() != null)) {
+		if (!isObserverRegistered && getProcess() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());

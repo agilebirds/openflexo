@@ -66,7 +66,7 @@ public class PortMapElement extends BrowserElement {
 
 	@Override
 	public Icon getIcon() {
-		if ((getFlexoPortMap() != null)) {
+		if (getFlexoPortMap() != null) {
 			return WKFIconLibrary.getImageIconForPortmap(getFlexoPortMap());
 		}
 		return null;

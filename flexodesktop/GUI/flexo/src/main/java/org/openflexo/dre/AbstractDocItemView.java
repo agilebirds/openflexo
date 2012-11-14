@@ -573,8 +573,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 				if (isEditing()) {
 					closeEdition();
 				}
-				if ((historyPanel != null) && (historyPanel.getCurrentAction() != null)
-						&& (historyPanel.getCurrentAction().getVersion() != null)) {
+				if (historyPanel != null && historyPanel.getCurrentAction() != null && historyPanel.getCurrentAction().getVersion() != null) {
 					DocItemVersion version = historyPanel.getCurrentAction().getVersion();
 					if (version.getShortHTMLDescription() == null) {
 						shortHTMLDescriptionLabel.setForeground(Color.GRAY);
@@ -697,7 +696,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 			editButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (!getDocResourceManager().isEdited(_docItem) && (getCurrentAction() != null)) {
+					if (!getDocResourceManager().isEdited(_docItem) && getCurrentAction() != null) {
 						getDocResourceManager().editVersion(getCurrentAction().getVersion());
 					}
 					AbstractDocItemView.this.updateViewFromModel();
@@ -745,7 +744,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 			approveButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if ((getCurrentAction() != null) && (getCurrentAction().isProposal()) && (getCurrentAction().isPending())) {
+					if (getCurrentAction() != null && getCurrentAction().isProposal() && getCurrentAction().isPending()) {
 						historyPanel.setCurrentAction(getDocResourceManager().approveVersion(getCurrentAction().getVersion()));
 						AbstractDocItemView.this.updateViewFromModel();
 					}
@@ -758,7 +757,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 			refuseButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if ((getCurrentAction() != null) && (getCurrentAction().isProposal()) && (getCurrentAction().isPending())) {
+					if (getCurrentAction() != null && getCurrentAction().isProposal() && getCurrentAction().isPending()) {
 						historyPanel.setCurrentAction(getDocResourceManager().refuseVersion(getCurrentAction().getVersion()));
 						AbstractDocItemView.this.updateViewFromModel();
 					}
@@ -854,10 +853,10 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 					submitReviewButton.setEnabled(true);
 				} else {
 					submitReviewButton.setText(FlexoLocalization.localizedForKey("review"));
-					submitReviewButton.setEnabled((_docItem.getLastActionForLanguage(getCurrentLanguage()) == getCurrentAction()));
+					submitReviewButton.setEnabled(_docItem.getLastActionForLanguage(getCurrentLanguage()) == getCurrentAction());
 				}
-				if ((getCurrentAction() != null) && (getCurrentAction().isProposal())
-						&& (getCurrentAction().getVersion().getLanguage() == getCurrentLanguage())) {
+				if (getCurrentAction() != null && getCurrentAction().isProposal()
+						&& getCurrentAction().getVersion().getLanguage() == getCurrentLanguage()) {
 					approveButton.setEnabled(true);
 					refuseButton.setEnabled(true);
 					editButton.setEnabled(true);

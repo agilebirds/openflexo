@@ -46,23 +46,23 @@ public abstract class OperatorNodeExecution extends ControlGraphBuilder {
 	public static ControlGraphBuilder getExecutionNodeBuilder(OperatorNode operatorNode, FlexoPostCondition<?, ?> edge)
 			throws NotSupportedException, InvalidModelException {
 		if (operatorNode instanceof ANDOperator) {
-			return (new OperatorANDExecution((ANDOperator) operatorNode, edge));
+			return new OperatorANDExecution((ANDOperator) operatorNode, edge);
 		}
 
 		else if (operatorNode instanceof OROperator) {
-			return (new OperatorORExecution((OROperator) operatorNode));
+			return new OperatorORExecution((OROperator) operatorNode);
 		}
 
 		else if (operatorNode instanceof IFOperator) {
-			return (new OperatorIFExecution((IFOperator) operatorNode));
+			return new OperatorIFExecution((IFOperator) operatorNode);
 		}
 
 		else if (operatorNode instanceof LOOPOperator) {
-			return (new OperatorLOOPExecution((LOOPOperator) operatorNode));
+			return new OperatorLOOPExecution((LOOPOperator) operatorNode);
 		}
 
 		else if (operatorNode instanceof SWITCHOperator) {
-			return (new OperatorSWITCHExecution((SWITCHOperator) operatorNode));
+			return new OperatorSWITCHExecution((SWITCHOperator) operatorNode);
 		}
 
 		throw new NotSupportedException("Dont know what to do with a " + operatorNode);

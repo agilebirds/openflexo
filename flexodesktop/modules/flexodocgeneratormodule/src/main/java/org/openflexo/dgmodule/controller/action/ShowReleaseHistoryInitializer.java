@@ -79,8 +79,8 @@ public class ShowReleaseHistoryInitializer extends ActionInitializer {
 				InfoLabelParameter descriptionLabel = new InfoLabelParameter("description", "description", "", false) {
 					@Override
 					public String getValue() {
-						return (releasesParam.getSelectedObject() != null ? releasesParam.getSelectedObject().getDescription()
-								: FlexoLocalization.localizedForKey("no_selection"));
+						return releasesParam.getSelectedObject() != null ? releasesParam.getSelectedObject().getDescription()
+								: FlexoLocalization.localizedForKey("no_selection");
 					}
 				};
 				descriptionLabel.setDepends("releases");

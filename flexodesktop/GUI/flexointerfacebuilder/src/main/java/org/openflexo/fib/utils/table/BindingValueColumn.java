@@ -57,7 +57,7 @@ public abstract class BindingValueColumn<D extends Observable> extends CustomCol
 
 	private void updateSelectorWith(BindingSelector selector, D rowObject, AbstractBinding value) {
 		AbstractBinding oldBV = selector.getEditedObject();
-		if ((oldBV == null) || (!oldBV.equals(value))) {
+		if (oldBV == null || !oldBV.equals(value)) {
 			// selector.setEditedObjectAndUpdateBDAndOwner(value);
 			selector.setEditedObject(value);
 			selector.setRevertValue(value != null ? value.clone() : null);

@@ -45,12 +45,12 @@ public class OpenDiffEditor extends FlexoGUIAction<OpenDiffEditor, CGFile, CGObj
 
 		@Override
 		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return (object instanceof AbstractCGFile);
+			return object instanceof AbstractCGFile;
 		}
 
 		@Override
 		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};

@@ -237,7 +237,7 @@ public class DefaultInputHandler extends InputHandler {
 			} else if (o instanceof ActionListener) {
 				currentBindings = bindings;
 
-				executeAction(((ActionListener) o), evt.getSource(), null);
+				executeAction((ActionListener) o, evt.getSource(), null);
 
 				evt.consume();
 				return;
@@ -265,7 +265,7 @@ public class DefaultInputHandler extends InputHandler {
 				// Take care that keyCode may values 0 and data stored in keyChar !!!
 				// (SGU, 16/05/2007)
 				KeyStroke keyStroke;
-				if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+				if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
 					keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c), modifiers);
 				} else {
 					keyStroke = KeyStroke.getKeyStroke(keyCode, modifiers);
@@ -297,7 +297,7 @@ public class DefaultInputHandler extends InputHandler {
 				// 0-9 adds another 'digit' to the repeat number
 				if (repeat && Character.isDigit(c)) {
 					repeatCount *= 10;
-					repeatCount += (c - '0');
+					repeatCount += c - '0';
 					return;
 				}
 

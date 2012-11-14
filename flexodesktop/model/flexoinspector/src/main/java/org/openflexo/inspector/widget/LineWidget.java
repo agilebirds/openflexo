@@ -258,7 +258,7 @@ public class LineWidget extends JPanel implements InnerTabWidgetView {
 	public void switchObserved(InspectableObject newInspectable) {
 		Enumeration<DenaliWidget> en = _widgets.elements();
 		while (en.hasMoreElements()) {
-			(en.nextElement()).switchObserved(newInspectable);
+			en.nextElement().switchObserved(newInspectable);
 		}
 	}
 

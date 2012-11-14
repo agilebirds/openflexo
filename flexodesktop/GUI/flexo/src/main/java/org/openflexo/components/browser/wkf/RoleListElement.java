@@ -87,7 +87,7 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 				for (Enumeration<Role> e = getRoleList().getSortedRoles(); e.hasMoreElements();) {
 					Role r = e.nextElement();
 					Vector<Role> v = r.getRolesSpecializingMyself();
-					if (v.size() == 0 || (v.size() == 1 && v.firstElement() == r)) {
+					if (v.size() == 0 || v.size() == 1 && v.firstElement() == r) {
 						observeRole(r);
 						addToChilds(r);
 					}
