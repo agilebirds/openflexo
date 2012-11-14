@@ -84,7 +84,7 @@ public class ViewShape extends ViewElement {
 				ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
 				ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.relativeTextX,
 				ShapeGraphicalRepresentation.Parameters.relativeTextY);
-		applyGraphicalElementSpecifications();
+		refreshGraphicalRepresentation();
 	}
 
 	/**

@@ -77,7 +77,7 @@ public class ViewConnector extends ViewElement {
 		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
 				GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
 				GraphicalRepresentation.Parameters.absoluteTextY);
-		applyGraphicalElementSpecifications();
+		refreshGraphicalRepresentation();
 	}
 
 	/**
