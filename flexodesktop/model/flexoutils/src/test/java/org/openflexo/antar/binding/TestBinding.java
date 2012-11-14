@@ -194,7 +194,7 @@ public class TestBinding extends TestCase {
 
 		System.out.println("Evaluate " + bindingPath);
 
-		AbstractBinding binding = BINDING_FACTORY.convertFromString(bindingPath);
+		AbstractBinding binding = BINDING_FACTORY.convertFromString(bindingPath, BINDING_CONTEXT);
 		binding.setBindingDefinition(new BindingDefinition("test", expectedType, BindingDefinitionType.GET, true));
 
 		System.out.println("Parsed " + binding + " as " + binding.getClass());
