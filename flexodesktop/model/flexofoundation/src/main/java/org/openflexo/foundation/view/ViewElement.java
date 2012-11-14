@@ -393,7 +393,10 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		notifyObservers(new ElementUpdated(this));
 	}
 
-	public void resetGraphicalRepresentation() {
+	/**
+	 * Apply all graphical element specifications as it was defined in related pattern role
+	 */
+	protected void applyGraphicalElementSpecifications() {
 		if (getPatternRole() != null) {
 			for (GraphicalElementSpecification grSpec : getPatternRole().getGrSpecifications()) {
 				if (grSpec.getValue().isValid()) {
@@ -402,6 +405,18 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 			}
 		}
 
+	}
+
+	/**
+	 * Reset graphical representation to be the one defined in related pattern role
+	 */
+	public abstract void resetGraphicalRepresentation();
+
+	/**
+	 * Refresh graphical representation
+	 */
+	public void refreshGraphicalRepresentation() {
+		applyGraphicalElementSpecifications();
 	}
 
 	@Override
@@ -428,10 +443,13 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	 * @param index
 	 */
 	public void setIndexRelativeToEPType(int index) {
-		/*if (getIndex() != index && !isDeserializing()) {
+		if (getIndexRelativeToEPType() != index && !isDeserializing()) {
 			getParent().setIndexForChildRelativeToEPType(this, index);
-		}*/
-		System.out.println("Je dois mettre l'index a " + index);
+		}
+	}
+
+	protected void notifyIndexChange() {
+		refreshGraphicalRepresentation();
 	}
 
 }

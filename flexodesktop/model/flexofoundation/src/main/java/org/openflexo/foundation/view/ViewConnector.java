@@ -69,13 +69,24 @@ public class ViewConnector extends ViewElement {
 		return (ConnectorGraphicalRepresentation<ViewConnector>) super.getGraphicalRepresentation();
 	}
 
+	/**
+	 * Reset graphical representation to be the one defined in related pattern role
+	 */
 	@Override
 	public void resetGraphicalRepresentation() {
 		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
 				GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
 				GraphicalRepresentation.Parameters.absoluteTextY);
-		// getGraphicalRepresentation().notifyConnectorChanged();
-		super.resetGraphicalRepresentation();
+		applyGraphicalElementSpecifications();
+	}
+
+	/**
+	 * Refresh graphical representation
+	 */
+	@Override
+	public void refreshGraphicalRepresentation() {
+		super.refreshGraphicalRepresentation();
+		getGraphicalRepresentation().notifyConnectorChanged();
 	}
 
 	@Override

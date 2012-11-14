@@ -73,6 +73,9 @@ public class ViewShape extends ViewElement {
 		return (ShapeGraphicalRepresentation<ViewShape>) super.getGraphicalRepresentation();
 	}
 
+	/**
+	 * Reset graphical representation to be the one defined in related pattern role
+	 */
 	@Override
 	public void resetGraphicalRepresentation() {
 		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
@@ -81,8 +84,17 @@ public class ViewShape extends ViewElement {
 				ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
 				ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.relativeTextX,
 				ShapeGraphicalRepresentation.Parameters.relativeTextY);
-		// getGraphicalRepresentation().notifyShapeNeedsToBeRedrawn();
-		super.resetGraphicalRepresentation();
+		applyGraphicalElementSpecifications();
+	}
+
+	/**
+	 * Refresh graphical representation
+	 */
+	@Override
+	public void refreshGraphicalRepresentation() {
+		super.refreshGraphicalRepresentation();
+		getGraphicalRepresentation().updateConstraints();
+		getGraphicalRepresentation().notifyShapeNeedsToBeRedrawn();
 	}
 
 	@Override

@@ -32,13 +32,17 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Re-index view elements relatively to their corresponding EditionPattern.
@@ -90,13 +94,13 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 	 * First build the data structure supporting new indexing data
 	 */
 	private void init() {
-		for (ViewObject o : getFocusedObject().getChilds()) {
+
+		matchingEditionPatterns = getContainedEditionPattern(getContainer());
+
+		for (ViewObject o : getContainer().getChilds()) {
 			if (o instanceof ViewElement) {
 				ViewElement e = (ViewElement) o;
 				if (e.getEditionPattern() != null) {
-					if (!matchingEditionPatterns.contains(e.getEditionPattern())) {
-						matchingEditionPatterns.add(e.getEditionPattern());
-					}
 					OrderedElementList orderedList = reorderedElements.get(e.getEditionPattern());
 					if (orderedList == null) {
 						orderedList = new OrderedElementList(e.getEditionPattern());
@@ -108,13 +112,70 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		}
 	}
 
+	private static List<EditionPattern> getContainedEditionPattern(ViewObject element) {
+		ArrayList<EditionPattern> returned = new ArrayList<EditionPattern>();
+		// EditionPattern of current container is excluded, as we can
+		// find some other graphical elements representing same EP
+		EditionPattern excludedEditionPattern = null;
+		if (element instanceof ViewElement) {
+			excludedEditionPattern = ((ViewElement) element).getEditionPattern();
+		}
+		for (ViewObject o : element.getChilds()) {
+			if (o instanceof ViewElement) {
+				ViewElement e = (ViewElement) o;
+				if (e.getEditionPattern() != null) {
+					if (!returned.contains(e.getEditionPattern()) && (e.getEditionPattern() != excludedEditionPattern)) {
+						returned.add(e.getEditionPattern());
+					}
+				}
+			}
+		}
+		return returned;
+	}
+
+	public ViewObject getContainer() {
+		if (getContainedEditionPattern(getFocusedObject()).size() > 0) {
+			return getFocusedObject();
+		} else {
+			return getFocusedObject().getParent();
+		}
+	}
+
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Reindex " + getFocusedObject());
+		for (EditionPattern ep : getMatchingEditionPatterns()) {
+			OrderedElementList l = reorderedElements.get(ep);
+			List<ViewElement> currentList = getContainer().getChildsOfType(ep);
+			for (ViewElement e : l) {
+				int oldIndex = currentList.indexOf(e);
+				int newIndex = l.indexOf(e);
+				if (oldIndex != newIndex) {
+					logger.info("Re-index " + e + " from index " + oldIndex + " to " + newIndex);
+					e.setIndexRelativeToEPType(newIndex);
+				}
+			}
+		}
 	}
 
 	public List<EditionPattern> getMatchingEditionPatterns() {
 		return matchingEditionPatterns;
+	}
+
+	public String getExplicitDescription(ViewElement element) {
+		EditionPattern ep = element.getEditionPattern();
+		EditionPatternInstance epi = element.getEditionPatternInstance();
+		if (ep == null)
+			return "null";
+		for (GraphicalElementPatternRole pr : ep.getPatternRoles(GraphicalElementPatternRole.class)) {
+			GraphicalElementSpecification labelSpec = pr.getGraphicalElementSpecification(GraphicalElementPatternRole.LABEL_FEATURE);
+			if (labelSpec != null) {
+				String returned = (String) labelSpec.getValue().getBindingValue(epi);
+				if (StringUtils.isNotEmpty(returned)) {
+					return returned;
+				}
+			}
+		}
+		return element.toString();
 	}
 
 	public OrderedElementList getReorderedElements(EditionPattern editionPattern) {
@@ -122,22 +183,18 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 	}
 
 	public void elementFirst(ViewElement e, EditionPattern ep) {
-		System.out.println("First pour " + e + " and " + ep);
 		getReorderedElements(ep).elementFirst(e);
 	}
 
 	public void elementUp(ViewElement e, EditionPattern ep) {
-		System.out.println("Up pour " + e + " and " + ep);
 		getReorderedElements(ep).elementUp(e);
 	}
 
 	public void elementDown(ViewElement e, EditionPattern ep) {
-		System.out.println("Down pour " + e + " and " + ep);
 		getReorderedElements(ep).elementDown(e);
 	}
 
 	public void elementLast(ViewElement e, EditionPattern ep) {
-		System.out.println("Last pour " + e + " and " + ep);
 		getReorderedElements(ep).elementLast(e);
 	}
 
@@ -152,7 +209,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		}
 
 		public void elementFirst(ViewElement e) {
-			System.out.println("First pour " + e + " and " + editionPattern);
+			logger.fine("First for " + e + " and " + editionPattern);
 			int index = indexOf(e);
 			remove(e);
 			add(0, e);
@@ -160,7 +217,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		}
 
 		public void elementUp(ViewElement e) {
-			System.out.println("Up pour " + e + " and " + editionPattern);
+			logger.fine("Up for " + e + " and " + editionPattern);
 			int index = indexOf(e);
 			if (index > 0) {
 				remove(e);
@@ -170,7 +227,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		}
 
 		public void elementDown(ViewElement e) {
-			System.out.println("Down pour " + e + " and " + editionPattern);
+			logger.fine("Down for " + e + " and " + editionPattern);
 			int index = indexOf(e);
 			if (index < size() - 1) {
 				remove(e);
@@ -180,7 +237,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 		}
 
 		public void elementLast(ViewElement e) {
-			System.out.println("Last pour " + e + " and " + editionPattern);
+			logger.fine("Last for " + e + " and " + editionPattern);
 			int index = indexOf(e);
 			remove(e);
 			add(e);

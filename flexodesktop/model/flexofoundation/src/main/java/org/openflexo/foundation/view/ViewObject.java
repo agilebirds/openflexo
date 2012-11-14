@@ -48,7 +48,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	private View _shema;
 	private String _name;
 	private ViewObject parent = null;
-	private Vector<ViewObject> childs;
+	private Vector<ViewElement> childs;
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation is a org.openflexo.fge.GraphicalRepresentation.
@@ -67,7 +67,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	 */
 	public ViewObject(FlexoProject project) {
 		super(project);
-		childs = new Vector<ViewObject>();
+		childs = new Vector<ViewElement>();
 	}
 
 	/**
@@ -117,18 +117,18 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 		}
 	}
 
-	public Vector<ViewObject> getChilds() {
+	public Vector<ViewElement> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(Vector<ViewObject> someChilds) {
+	public void setChilds(Vector<ViewElement> someChilds) {
 		childs.addAll(someChilds);
 	}
 
-	public void addToChilds(ViewObject aChild) {
+	public void addToChilds(ViewElement aChild) {
 		// logger.info("****** addToChild() put "+aChild+" under "+this);
 		childs.add(aChild);
-		aChild.parent = this;
+		aChild.setParent(this);
 		setChanged();
 		if (aChild instanceof ViewShape) {
 			notifyObservers(new ShapeInserted((ViewShape) aChild, this));
@@ -138,7 +138,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 		}
 	}
 
-	public void removeFromChilds(ViewObject aChild) {
+	public void removeFromChilds(ViewElement aChild) {
 		childs.remove(aChild);
 		setChanged();
 		if (aChild instanceof ViewShape) {
@@ -155,11 +155,11 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	 * @param aChild
 	 * @param newIndex
 	 */
-	protected void setIndexForChild(ViewObject aChild, int newIndex) {
+	protected void setIndexForChild(ViewElement aChild, int newIndex) {
 		if (childs.contains(aChild) && childs.indexOf(aChild) != newIndex) {
 			childs.remove(aChild);
 			childs.insertElementAt(aChild, newIndex);
-			for (ViewObject o : childs) {
+			for (ViewElement o : childs) {
 				o.notifyIndexChange();
 			}
 		}
@@ -183,8 +183,8 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	 * @param index
 	 */
 	public void setIndex(int index) {
-		if (getIndex() != index && !isDeserializing()) {
-			getParent().setIndexForChild(this, index);
+		if (getIndex() != index && !isDeserializing() && (this instanceof ViewElement)) {
+			getParent().setIndexForChild((ViewElement) this, index);
 		}
 	}
 
@@ -194,18 +194,28 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	 * @param aChild
 	 * @param newIndex
 	 */
-	protected void setIndexForChildRelativeToEPType(ViewObject aChild, int newIndex) {
-		if (childs.contains(aChild) && childs.indexOf(aChild) != newIndex) {
-			childs.remove(aChild);
-			childs.insertElementAt(aChild, newIndex);
-			for (ViewObject o : childs) {
+	protected void setIndexForChildRelativeToEPType(ViewElement aChild, int newIndex) {
+		List<ViewElement> childsOfRightType = getChildsOfType(aChild.getEditionPattern());
+		if (childsOfRightType.contains(aChild) && childsOfRightType.indexOf(aChild) != newIndex) {
+			if (newIndex > 0) {
+				ViewElement previousElement = childsOfRightType.get(newIndex - 1);
+				int previousElementIndex = childs.indexOf(previousElement);
+				childs.remove(aChild);
+				childs.insertElementAt(aChild, previousElementIndex + 1);
+			} else {
+				ViewElement firstElement = childsOfRightType.get(0);
+				int firstElementIndex = childs.indexOf(firstElement);
+				childs.remove(aChild);
+				childs.insertElementAt(aChild, firstElementIndex);
+			}
+			for (ViewElement o : childs) {
 				o.notifyIndexChange();
 			}
 		}
 	}
 
-	public List<ViewObject> getChildsOfType(EditionPattern editionPattern) {
-		ArrayList<ViewObject> returned = new ArrayList<ViewObject>();
+	public List<ViewElement> getChildsOfType(EditionPattern editionPattern) {
+		ArrayList<ViewElement> returned = new ArrayList<ViewElement>();
 		for (ViewObject o : getChilds()) {
 			if (o instanceof ViewElement) {
 				ViewElement e = (ViewElement) o;
@@ -215,12 +225,6 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 			}
 		}
 		return returned;
-	}
-
-	protected void notifyIndexChange() {
-		System.out.println("Hop, l'index de " + this + " change pour " + getIndex());
-		setChanged();
-		notifyObservers(new ElementUpdated(this));
 	}
 
 	public <T extends ViewObject> Collection<T> getChildrenOfType(final Class<T> type) {
@@ -295,6 +299,10 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 
 	public ViewObject getParent() {
 		return parent;
+	}
+
+	protected void setParent(ViewObject parent) {
+		this.parent = parent;
 	}
 
 	public Vector<ViewObject> getAncestors() {
