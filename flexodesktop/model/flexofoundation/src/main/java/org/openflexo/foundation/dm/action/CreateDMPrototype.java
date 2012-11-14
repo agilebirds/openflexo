@@ -50,7 +50,7 @@ public class CreateDMPrototype extends FlexoAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DMPackage) && (!((DMPackage) object).getRepository().isReadOnly()));
+			return object != null && object instanceof DMPackage && !((DMPackage) object).getRepository().isReadOnly();
 		}
 
 	};

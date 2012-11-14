@@ -113,7 +113,7 @@ public abstract class TokenMarker {
 		 * duplicate it.
 		 */
 		if (!(lastLine == lineIndex && nextLineRequested)) {
-			nextLineRequested = (oldToken != token);
+			nextLineRequested = oldToken != token;
 		}
 
 		lastLine = lineIndex;

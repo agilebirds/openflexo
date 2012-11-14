@@ -95,7 +95,7 @@ public abstract class AbstractColumn<D extends Observable, T> {
 	}
 
 	public String getLocalizedTitle() {
-		if ((_title == null) || (!_displayTitle)) {
+		if (_title == null || !_displayTitle) {
 			return " ";
 		}
 		return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, getTitle());
@@ -186,7 +186,7 @@ public abstract class AbstractColumn<D extends Observable, T> {
 		}
 
 		protected void setComponentBackground(Component component, boolean hasFocus, boolean isSelected, int row, int column) {
-			if ((hasFocus) && ((getModel() != null) && (getModel().isCellEditable(row, column))) && (isSelected)) {
+			if (hasFocus && getModel() != null && getModel().isCellEditable(row, column) && isSelected) {
 				component.setForeground(SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
 			} else {
 				component.setForeground(UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);

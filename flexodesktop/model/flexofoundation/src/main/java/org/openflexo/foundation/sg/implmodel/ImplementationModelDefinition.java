@@ -69,7 +69,7 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 
 		if (checkUnicity) {
 			String resourceIdentifier = ImplementationModelResource.resourceIdentifierForName(modelName);
-			if ((project != null) && (project.isRegistered(resourceIdentifier))) {
+			if (project != null && project.isRegistered(resourceIdentifier)) {
 				throw new DuplicateResourceException(resourceIdentifier);
 			}
 		}
@@ -86,7 +86,7 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 	}
 
 	private void setImplementationModelName(String name) throws DuplicateResourceException, InvalidNameException {
-		if ((_name != null) && (!_name.equals(name)) && (name != null) && !isDeserializing()) {
+		if (_name != null && !_name.equals(name) && name != null && !isDeserializing()) {
 			if (!name.matches(IERegExp.JAVA_CLASS_NAME_REGEXP)) {
 				throw new InvalidNameException();
 			}
@@ -216,7 +216,7 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 	}
 
 	public boolean isLoaded() {
-		return (hasImplementationModelResource() && (getImplementationModelResource().isLoaded()));
+		return hasImplementationModelResource() && getImplementationModelResource().isLoaded();
 	}
 
 	public boolean hasImplementationModelResource() {

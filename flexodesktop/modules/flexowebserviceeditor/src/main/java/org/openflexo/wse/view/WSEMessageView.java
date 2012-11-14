@@ -76,7 +76,7 @@ public class WSEMessageView extends WSEView<ServiceMessageDefinition> {
 	public MessageEntry getSelectedMessageEntry() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof MessageEntry)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof MessageEntry) {
 			return (MessageEntry) selection.firstElement();
 		}
 		return null;

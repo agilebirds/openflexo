@@ -818,10 +818,10 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 				return null;
 			}
 		} /*
-		 * else { if (!(getParent() instanceof IESequenceTopComponent)) if (logger.isLoggable(Level.WARNING))
-		 * logger.warning("widgets located within a " + getParent().getClass().getName() + " are not capable to find their label"); return
-		 * null; }
-		 */
+			* else { if (!(getParent() instanceof IESequenceTopComponent)) if (logger.isLoggable(Level.WARNING))
+			* logger.warning("widgets located within a " + getParent().getClass().getName() + " are not capable to find their label"); return
+			* null; }
+			*/
 		return null;
 	}
 

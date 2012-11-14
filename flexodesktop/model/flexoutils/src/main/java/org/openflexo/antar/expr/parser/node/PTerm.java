@@ -2,7 +2,6 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-public abstract class PTerm extends Node
-{
-    // Empty body
+public abstract class PTerm extends Node {
+	// Empty body
 }

@@ -110,7 +110,7 @@ public class ConditionalOperator extends IEOperator {
 	public String evaluateConditionalValueString() {
 		if (getBindingConditional() != null) {
 			if (getBindingConditional() instanceof BooleanStaticBinding) {
-				return (((BooleanStaticBinding) getBindingConditional()).getValue() ? "true" : "false");
+				return ((BooleanStaticBinding) getBindingConditional()).getValue() ? "true" : "false";
 			} else {
 				return getBindingConditional().getCodeStringRepresentation();
 			}
@@ -122,7 +122,7 @@ public class ConditionalOperator extends IEOperator {
 	public String javaConditionalValueString() {
 		if (getBindingConditional() != null) {
 			if (getBindingConditional() instanceof BooleanStaticBinding) {
-				return (((BooleanStaticBinding) getBindingConditional()).getValue() ? "true" : "false");
+				return ((BooleanStaticBinding) getBindingConditional()).getValue() ? "true" : "false";
 			} else {
 				return getBindingConditional().getJavaCodeStringRepresentation();
 			}

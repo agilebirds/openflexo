@@ -62,13 +62,13 @@ public class AcceptDiskUpdateInitializer extends ActionInitializer {
 				if (action.getFilesToAccept().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if (action.getFilesToAccept().size() > 1 || (!(action.getFocusedObject() instanceof CGFile))) {
+				} else if (action.getFilesToAccept().size() > 1 || !(action.getFocusedObject() instanceof CGFile)) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("accept_disk_version"),
 							FlexoLocalization.localizedForKey("accept_disk_version_description"), "accept_disk_version",
 							action.getFilesToAccept(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getDGController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
 						action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
 					} else {
 						return false;

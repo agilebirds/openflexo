@@ -100,7 +100,7 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 			return super.getResourceFormat();
 		}
 		int index = fileName.lastIndexOf('.');
-		if ((index == -1) || (index == fileName.length())) {
+		if (index == -1 || index == fileName.length()) {
 			return super.getResourceFormat();
 		}
 		FileFormat returned = FileFormat.getDefaultFileFormatByExtension(fileName.substring(index + 1).toLowerCase());

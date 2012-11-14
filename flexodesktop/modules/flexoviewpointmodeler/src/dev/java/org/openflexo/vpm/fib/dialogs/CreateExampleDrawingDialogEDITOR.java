@@ -30,23 +30,21 @@ import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 
-
 public class CreateExampleDrawingDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
-			public Object[] getData() 
-			{
+			public Object[] getData() {
 				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
+				ViewPoint calc1 = calcLibrary
+						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
-				CreateExampleDrawing action = CreateExampleDrawing.actionType.makeNewAction(calc1, null,null);
+				CreateExampleDrawing action = CreateExampleDrawing.actionType.makeNewAction(calc1, null, null);
 				return makeArray(action);
 			}
+
 			@Override
 			public File getFIBFile() {
 				return CEDCst.CREATE_EXAMPLE_DRAWING_DIALOG_FIB;
@@ -55,11 +53,11 @@ public class CreateExampleDrawingDialogEDITOR {
 		editor.launch();
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private static FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
 }

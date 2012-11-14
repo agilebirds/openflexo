@@ -71,10 +71,8 @@ import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
 
 /**
- * This class handles computation of available modules and modules loading. Only
- * one instance of this class is instancied, and available all over Flexo
- * Application Suite. This is the ONLY ONE WAY to access external modules from a
- * given module.
+ * This class handles computation of available modules and modules loading. Only one instance of this class is instancied, and available all
+ * over Flexo Application Suite. This is the ONLY ONE WAY to access external modules from a given module.
  * 
  * @author sguerin
  */
@@ -91,8 +89,7 @@ public final class ModuleLoader implements IModuleLoader {
 	private Module activeModule = null;
 
 	/**
-	 * Hashtable where are stored Module instances (instance of FlexoModule
-	 * associated to a Module instance key.
+	 * Hashtable where are stored Module instances (instance of FlexoModule associated to a Module instance key.
 	 */
 	private Hashtable<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
 
@@ -184,8 +181,7 @@ public final class ModuleLoader implements IModuleLoader {
 	/**
 	 * @param moduleClass
 	 *            a module implementation class
-	 * @return the Module definition for the given moduleImplementation class or
-	 *         null if the Module is not available for the currentUserType
+	 * @return the Module definition for the given moduleImplementation class or null if the Module is not available for the currentUserType
 	 */
 	public Module getModule(Class<? extends FlexoModule> moduleClass) {
 		for (Module candidate : UserType.getCurrentUserType().getModules()) {
@@ -203,8 +199,7 @@ public final class ModuleLoader implements IModuleLoader {
 	/**
 	 * @param moduleName
 	 *            the name of a module
-	 * @return the Module definition for the given moduleName or null if the
-	 *         Module is not available for the currentUserType or the module
+	 * @return the Module definition for the given moduleName or null if the Module is not available for the currentUserType or the module
 	 *         name is unknown.
 	 * @see #isAvailable(Module)
 	 * @see UserType
@@ -241,8 +236,7 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * Given a list of modules, check if user type has right to use them and
-	 * register them consequently
+	 * Given a list of modules, check if user type has right to use them and register them consequently
 	 * 
 	 */
 	private void initialize() {
@@ -282,8 +276,7 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * Return all unloaded modules but available modules as a Vector of Module
-	 * instances
+	 * Return all unloaded modules but available modules as a Vector of Module instances
 	 * 
 	 * @return Vector
 	 */
@@ -299,8 +292,7 @@ public final class ModuleLoader implements IModuleLoader {
 	/**
 	 * @param module
 	 *            module to ignore while checking.
-	 * @return if there is still a loaded module requiring project (ignoring
-	 *         moduleToIgnore)
+	 * @return if there is still a loaded module requiring project (ignoring moduleToIgnore)
 	 */
 	public boolean isThereAnyLoadedModuleWithAProjectExcept(Module module) {
 		for (Module m : _modules.keySet()) {
@@ -515,8 +507,7 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * Called for quitting. Ask if saving must be performed, and exit on
-	 * request.
+	 * Called for quitting. Ask if saving must be performed, and exit on request.
 	 * 
 	 * @param askConfirmation
 	 *            if flexo must ask confirmation to the user
@@ -594,13 +585,10 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * Loop over loaded modules and ask to the controller of each module if a
-	 * project is loaded. Usage of this method is not recommended since it won't
-	 * be available in a further release supporting multiple projects loaded at
-	 * the same time.
+	 * Loop over loaded modules and ask to the controller of each module if a project is loaded. Usage of this method is not recommended
+	 * since it won't be available in a further release supporting multiple projects loaded at the same time.
 	 * 
-	 * @return the project currently loaded or null whenever there is no loaded
-	 *         project.
+	 * @return the project currently loaded or null whenever there is no loaded project.
 	 * @throws IllegalStateException
 	 *             whenever 2 distinct modules have 2 distinct projects loaded.
 	 */
@@ -663,8 +651,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 * @throws InstantiationException
 	 *             - if a new instance of the class couldn't be created
 	 * @throws ClassCastException
-	 *             - if className does not identify a class that extends
-	 *             LookAndFeel
+	 *             - if className does not identify a class that extends LookAndFeel
 	 */
 	// todo move this method somewhere else
 	public static void setLookAndFeel(String value) throws ClassNotFoundException, InstantiationException, IllegalAccessException,

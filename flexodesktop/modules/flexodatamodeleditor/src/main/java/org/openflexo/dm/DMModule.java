@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.dm.view.erdiagram.ERDiagramController;
 import org.openflexo.fge.Drawing;
@@ -43,12 +42,8 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.ResourceAdded;
 import org.openflexo.foundation.rm.ResourceType;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalDMModule;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**

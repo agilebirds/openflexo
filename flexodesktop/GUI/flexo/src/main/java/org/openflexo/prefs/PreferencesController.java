@@ -134,13 +134,13 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Implementation error : there is no instance of PreferencesController.");
 			}
-			(new Exception()).printStackTrace();
+			new Exception().printStackTrace();
 		}
 		return _current;
 	}
 
 	public static boolean hasInstance() {
-		return (_current != null);
+		return _current != null;
 	}
 
 	public static void register(ContextPreferences cp) {

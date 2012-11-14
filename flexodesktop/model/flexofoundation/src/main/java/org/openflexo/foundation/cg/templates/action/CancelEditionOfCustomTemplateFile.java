@@ -48,12 +48,12 @@ public class CancelEditionOfCustomTemplateFile extends FlexoAction<CancelEdition
 
 		@Override
 		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
-			return ((object != null) && (object.isCustomTemplate()));
+			return object != null && object.isCustomTemplate();
 		}
 
 		@Override
 		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
-			return ((object != null) && (object.isCustomTemplate()) && (object.isEdited()));
+			return object != null && object.isCustomTemplate() && object.isEdited();
 		}
 
 	};

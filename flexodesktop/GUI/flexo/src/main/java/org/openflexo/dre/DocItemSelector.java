@@ -55,7 +55,7 @@ public class DocItemSelector extends AbstractBrowserSelector<DocItem> {
 	@Override
 	public String renderedString(DocItem editedObject) {
 		if (editedObject != null) {
-			return (editedObject).getIdentifier();
+			return editedObject.getIdentifier();
 		}
 		return EMPTY_STRING;
 	}

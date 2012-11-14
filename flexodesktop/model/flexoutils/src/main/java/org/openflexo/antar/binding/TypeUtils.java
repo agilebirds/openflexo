@@ -78,7 +78,7 @@ public class TypeUtils {
 		}
 
 		// Special cases
-		if ((parentClass == Object.class) && childClass.isPrimitive()) {
+		if (parentClass == Object.class && childClass.isPrimitive()) {
 			return true;
 		}
 		if (parentClass.isPrimitive()) {
@@ -265,7 +265,7 @@ public class TypeUtils {
 		}*/
 
 		// If supplied type is null return false
-		if ((aType == null) || (anOtherType == null)) {
+		if (aType == null || anOtherType == null) {
 			return false;
 		}
 
@@ -297,7 +297,7 @@ public class TypeUtils {
 		}
 
 		if (isFloat(aType)) {
-			return (isDouble(anOtherType) && permissive) || isFloat(anOtherType) || isLong(anOtherType) || isInteger(anOtherType)
+			return isDouble(anOtherType) && permissive || isFloat(anOtherType) || isLong(anOtherType) || isInteger(anOtherType)
 					|| isShort(anOtherType) || isChar(anOtherType) || isByte(anOtherType);
 		}
 
@@ -306,22 +306,22 @@ public class TypeUtils {
 		}
 
 		if (isInteger(aType)) {
-			return (isLong(anOtherType) && permissive) || isInteger(anOtherType) || isShort(anOtherType) || isChar(anOtherType)
+			return isLong(anOtherType) && permissive || isInteger(anOtherType) || isShort(anOtherType) || isChar(anOtherType)
 					|| isByte(anOtherType);
 		}
 
 		if (isShort(aType)) {
-			return (isLong(anOtherType) && permissive) || (isInteger(anOtherType) && permissive) || isShort(anOtherType)
-					|| isChar(anOtherType) || isByte(anOtherType);
+			return isLong(anOtherType) && permissive || isInteger(anOtherType) && permissive || isShort(anOtherType) || isChar(anOtherType)
+					|| isByte(anOtherType);
 		}
 
 		if (isChar(aType)) {
-			return (isLong(anOtherType) && permissive) || (isInteger(anOtherType) && permissive) || (isShort(anOtherType) && permissive)
+			return isLong(anOtherType) && permissive || isInteger(anOtherType) && permissive || isShort(anOtherType) && permissive
 					|| isChar(anOtherType) || isByte(anOtherType);
 		}
 
 		if (isByte(aType)) {
-			return (isLong(anOtherType) && permissive) || (isInteger(anOtherType) && permissive) || (isShort(anOtherType) && permissive)
+			return isLong(anOtherType) && permissive || isInteger(anOtherType) && permissive || isShort(anOtherType) && permissive
 					|| isChar(anOtherType) || isByte(anOtherType);
 		}
 
@@ -341,7 +341,7 @@ public class TypeUtils {
 			if (anOtherType instanceof GenericArrayType) {
 				return isTypeAssignableFrom(((GenericArrayType) aType).getGenericComponentType(),
 						((GenericArrayType) anOtherType).getGenericComponentType(), permissive);
-			} else if ((anOtherType instanceof Class) && ((Class) anOtherType).isArray()) {
+			} else if (anOtherType instanceof Class && ((Class) anOtherType).isArray()) {
 				return isTypeAssignableFrom(((GenericArrayType) aType).getGenericComponentType(), ((Class) anOtherType).getComponentType(),
 						permissive);
 			}
@@ -349,7 +349,7 @@ public class TypeUtils {
 		}
 
 		// Look if we are on same class
-		if ((aType instanceof Class) && (anOtherType instanceof Class)) {
+		if (aType instanceof Class && anOtherType instanceof Class) {
 			return isClassAncestorOf((Class) aType, (Class) anOtherType);
 		}
 
@@ -359,12 +359,12 @@ public class TypeUtils {
 
 		// logger.info(""+getBaseClass(aType)+" is ancestor of "+getBaseClass(anOtherType));
 
-		if ((aType instanceof Class) || (anOtherType instanceof Class)) {
+		if (aType instanceof Class || anOtherType instanceof Class) {
 			// One of two types is not parameterized, we cannot check, return true
 			return true;
 		}
 
-		if ((aType instanceof ParameterizedType) && (anOtherType instanceof ParameterizedType)) {
+		if (aType instanceof ParameterizedType && anOtherType instanceof ParameterizedType) {
 			ParameterizedType t1 = (ParameterizedType) aType;
 			ParameterizedType t2 = (ParameterizedType) anOtherType;
 
@@ -481,8 +481,7 @@ public class TypeUtils {
 	}
 
 	public static boolean isResolved(Type type) {
-		return (type instanceof Class) || (type instanceof GenericArrayType) || (type instanceof ParameterizedType)
-				|| (type instanceof CustomType);
+		return type instanceof Class || type instanceof GenericArrayType || type instanceof ParameterizedType || type instanceof CustomType;
 	}
 
 	/**
@@ -515,14 +514,14 @@ public class TypeUtils {
 		}
 		if (type instanceof WildcardType) {
 			WildcardType w = (WildcardType) type;
-			if ((w.getUpperBounds() != null) && (w.getUpperBounds().length > 0)) {
+			if (w.getUpperBounds() != null && w.getUpperBounds().length > 0) {
 				for (Type b : w.getUpperBounds()) {
 					if (isGeneric(b)) {
 						return true;
 					}
 				}
 			}
-			if ((w.getLowerBounds() != null) && (w.getLowerBounds().length > 0)) {
+			if (w.getLowerBounds() != null && w.getLowerBounds().length > 0) {
 				for (Type b : w.getLowerBounds()) {
 					if (isGeneric(b)) {
 						return true;
@@ -589,7 +588,7 @@ public class TypeUtils {
 							}
 						}
 					}
-				} else if ((context instanceof Class) && (((Class) context).getGenericSuperclass() != null)) {
+				} else if (context instanceof Class && ((Class) context).getGenericSuperclass() != null) {
 					return makeInstantiatedType(type, ((Class) context).getGenericSuperclass());
 				}
 			} else if (gd instanceof Method) {
@@ -621,7 +620,7 @@ public class TypeUtils {
 	public static Type getSuperType(Type type) {
 		if (type instanceof ParameterizedType) {
 			ParameterizedType myType = (ParameterizedType) type;
-			Type superType = ((Class<?>) (myType.getRawType())).getGenericSuperclass();
+			Type superType = ((Class<?>) myType.getRawType()).getGenericSuperclass();
 			if (superType instanceof ParameterizedType) {
 				Type[] actualTypeArguments = new Type[((ParameterizedType) superType).getActualTypeArguments().length];
 				for (int i = 0; i < ((ParameterizedType) superType).getActualTypeArguments().length; i++) {

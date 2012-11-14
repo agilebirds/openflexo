@@ -39,7 +39,7 @@ public class InvalidEOModelFileException extends LoadResourceException {
 
 	@Override
 	public String getMessage() {
-		if ((_eoModelFile != null) && (_eoModelFile.getFile() != null)) {
+		if (_eoModelFile != null && _eoModelFile.getFile() != null) {
 			return "InvalidEOModelFileException: file: " + _eoModelFile.getFile().getAbsolutePath();
 		} else {
 			return "InvalidEOModelFileException: file is null";

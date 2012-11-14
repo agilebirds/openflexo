@@ -103,9 +103,9 @@ public class PetalTree extends JTree {
 				value = buf;
 			} else if (value instanceof List) {
 				value = "list " + ((List) value).getName();
-			} else if ((value instanceof StringLiteral)) {
+			} else if (value instanceof StringLiteral) {
 				value = '"' + (String) ((StringLiteral) value).getLiteralValue() + '"';
-			} else if ((value instanceof Value)) {
+			} else if (value instanceof Value) {
 				value = ((Value) value).getLiteralValue();
 			}
 
@@ -131,7 +131,7 @@ public class PetalTree extends JTree {
 			// int row = getRowForLocation(e.getX(), e.getY());
 			TreePath path = getPathForLocation(e.getX(), e.getY());
 
-			if ((path != null)) {
+			if (path != null) {
 				PetalNode node = (PetalNode) path.getLastPathComponent();
 
 				path = path.getParentPath();

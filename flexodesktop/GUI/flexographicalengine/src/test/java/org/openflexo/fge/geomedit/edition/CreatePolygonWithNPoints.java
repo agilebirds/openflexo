@@ -81,7 +81,7 @@ public class CreatePolygonWithNPoints extends Edition {
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
+			new FGESegment(p1, lastMouseLocation).paint(graphics);
 		} else {
 			Vector<FGEPoint> pts = new Vector<FGEPoint>();
 			graphics.setDefaultForeground(focusedForegroundStyle);
@@ -91,7 +91,7 @@ public class CreatePolygonWithNPoints extends Edition {
 				pts.add(p);
 			}
 			pts.add(lastMouseLocation);
-			(new FGEPolygon(Filling.NOT_FILLED, pts)).paint(graphics);
+			new FGEPolygon(Filling.NOT_FILLED, pts).paint(graphics);
 
 		}
 	}

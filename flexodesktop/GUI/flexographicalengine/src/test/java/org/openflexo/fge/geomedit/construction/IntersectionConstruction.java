@@ -48,7 +48,7 @@ public class IntersectionConstruction extends GeometricConstruction<FGEArea> {
 		FGEArea returned = o1.intersect(o2);
 		logger.info("Intersection between " + o1 + " and " + o2 + " gives " + returned);
 		if (returned == null) {
-			(new Exception("Unexpected intersection")).printStackTrace();
+			new Exception("Unexpected intersection").printStackTrace();
 		}
 		return returned;
 	}

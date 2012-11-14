@@ -87,7 +87,7 @@ public class RolePerspective extends FlexoPerspective<RoleList> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof RoleList) && !((RoleList) object).isImportedRoleList();
+		return object instanceof RoleList && !((RoleList) object).isImportedRoleList();
 	}
 
 	@Override

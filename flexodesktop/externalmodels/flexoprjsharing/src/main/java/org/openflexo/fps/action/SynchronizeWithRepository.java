@@ -54,7 +54,7 @@ public class SynchronizeWithRepository extends CVSAction<SynchronizeWithReposito
 
 		@Override
 		protected boolean isEnabledForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
-			return (object != null);
+			return object != null;
 		}
 
 	};

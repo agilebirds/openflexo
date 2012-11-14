@@ -122,7 +122,7 @@ public final class InternalMessageOutEdge extends InternalMessageEdge<PetriGraph
 			return false;
 		}
 
-		return (getStartNode().getProcess() == getPortRegistery().getProcess());
+		return getStartNode().getProcess() == getPortRegistery().getProcess();
 	}
 
 	public static class InternalMessageOutEdgeMustBeValid extends ValidationRule<InternalMessageOutEdgeMustBeValid, InternalMessageOutEdge> {

@@ -101,7 +101,7 @@ public class CreateDataProperty extends FlexoAction<CreateDataProperty, Ontology
 
 	public boolean isValid() {
 		boolean returned = !StringUtils.isEmpty(newPropertyName) && getOntology().testValidURI(newPropertyName);
-		validURILabel = (returned ? VALID_URI_LABEL : INVALID_URI_LABEL);
+		validURILabel = returned ? VALID_URI_LABEL : INVALID_URI_LABEL;
 		return returned;
 	}
 

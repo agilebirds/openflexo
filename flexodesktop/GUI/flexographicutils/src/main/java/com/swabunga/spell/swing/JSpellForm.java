@@ -237,8 +237,8 @@ public class JSpellForm extends JPanel implements ActionListener, ListSelectionL
 		} else if (ADD_CMD.equals(e.getActionCommand())) {
 			String inField = checkText.getText();
 			Object selObj = suggestList.getSelectedValue();
-			String selected = (selObj == null ? "" : selObj.toString());
-			String addString = (inField.equals(selected) ? spellEvent.getInvalidWord() : inField);
+			String selected = selObj == null ? "" : selObj.toString();
+			String addString = inField.equals(selected) ? spellEvent.getInvalidWord() : inField;
 
 			int n = JOptionPane.showConfirmDialog(this,
 					messages.getString(ADDWORD_1) + " '" + addString + "' " + messages.getString(ADDWORD_2), messages.getString(ADDWORD_3),

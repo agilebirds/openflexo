@@ -484,7 +484,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
 	private FIBComponent makeFIB(final EditionSchemeAction<?> action) {
 
-		paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null);
+		paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null;
 		final EditionScheme editionScheme = action.getEditionScheme();
 
 		FIBPanel returned = new FIBPanel() {
@@ -605,7 +605,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			dialog.setMinimumSize(new Dimension(500, 50));
 		}
 		dialog.showDialog();
-		return (dialog.getStatus() == Status.VALIDATED);
+		return dialog.getStatus() == Status.VALIDATED;
 	}
 
 	/*	private boolean _retrieveParameters(final EditionSchemeAction<?> action) {

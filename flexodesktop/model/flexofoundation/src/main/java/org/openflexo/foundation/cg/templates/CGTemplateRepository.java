@@ -71,25 +71,25 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 			}
 		}
 		ArrayListMultimap<String, CGTemplate> templates = ArrayListMultimap.create();
-		for(CGTemplate t: commonTemplates.findAllTemplates()) {
+		for (CGTemplate t : commonTemplates.findAllTemplates()) {
 			templates.put(t.getName(), t);
 		}
 		for (TargetType target : availableTargets) {
 			TargetSpecificCGTemplateSet specificTargetSet = getTemplateSetForTarget(target);
 			if (specificTargetSet != null) {
-				for(CGTemplate t: specificTargetSet.findAllTemplates()) {
+				for (CGTemplate t : specificTargetSet.findAllTemplates()) {
 					templates.put(t.getName(), t);
 				}
 			}
 		}
-		for(String key:templates.keySet()) {
+		for (String key : templates.keySet()) {
 			List<CGTemplate> t = templates.get(key);
-			if (t.size()==1) {
+			if (t.size() == 1) {
 				continue;
 			}
 			CGTemplate ref = t.get(0);
-			for(CGTemplate template:t) {
-				if (template!=ref && template.getLastUpdate().getTime()==ref.getLastUpdate().getTime()) {
+			for (CGTemplate template : t) {
+				if (template != ref && template.getLastUpdate().getTime() == ref.getLastUpdate().getTime()) {
 
 				}
 			}

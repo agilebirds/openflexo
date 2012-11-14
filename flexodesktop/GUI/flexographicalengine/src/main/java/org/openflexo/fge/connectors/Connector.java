@@ -161,10 +161,7 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	public static enum ConnectorType {
 		LINE,
 		// RECT_LINE,
-		RECT_POLYLIN,
-		CURVE,
-		CURVED_POLYLIN,
-		CUSTOM;
+		RECT_POLYLIN, CURVE, CURVED_POLYLIN, CUSTOM;
 
 		public ImageIcon getIcon() {
 			if (this == RECT_POLYLIN) {
@@ -204,33 +201,32 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 
 	private boolean layoutOfStartOrEndObjectHasChanged() {
 		// if (true) return true;
-		if ((startShape == null) || ((startShape != null) && (startShape.getShapeType() != getStartObject().getShape().getShapeType()))) {
+		if (startShape == null || startShape != null && startShape.getShapeType() != getStartObject().getShape().getShapeType()) {
 			// logger.info("Layout has changed because start shape change");
 			return true;
 		}
-		if ((startShapeDimension == null) || ((startShapeDimension != null) && !startShapeDimension.equals(getStartObject().getSize()))) {
+		if (startShapeDimension == null || startShapeDimension != null && !startShapeDimension.equals(getStartObject().getSize())) {
 			// logger.info("Layout has changed because start shape dimension change");
 			return true;
 		}
-		if ((startShapeLocation == null)
-				|| ((startShapeLocation != null) && !startShapeLocation.equals(getStartObject().getLocationInDrawing()))) {
+		if (startShapeLocation == null || startShapeLocation != null && !startShapeLocation.equals(getStartObject().getLocationInDrawing())) {
 			// logger.info("Layout has changed because start shape location change");
 			return true;
 		}
-		if ((endShape == null) || ((endShape != null) && (endShape.getShapeType() != getEndObject().getShape().getShapeType()))) {
+		if (endShape == null || endShape != null && endShape.getShapeType() != getEndObject().getShape().getShapeType()) {
 			// logger.info("Layout has changed because end shape change");
 			return true;
 		}
-		if ((endShapeDimension == null) || ((endShapeDimension != null) && !endShapeDimension.equals(getEndObject().getSize()))) {
+		if (endShapeDimension == null || endShapeDimension != null && !endShapeDimension.equals(getEndObject().getSize())) {
 			// logger.info("Layout has changed because end shape dimension change");
 			return true;
 		}
-		if ((endShapeLocation == null) || ((endShapeLocation != null) && !endShapeLocation.equals(getEndObject().getLocationInDrawing()))) {
+		if (endShapeLocation == null || endShapeLocation != null && !endShapeLocation.equals(getEndObject().getLocationInDrawing())) {
 			// logger.info("Layout has changed because end shape location change");
 			return true;
 		}
-		if ((knownConnectorUsedBounds == null)
-				|| ((knownConnectorUsedBounds != null) && !knownConnectorUsedBounds.equals(getConnectorUsedBounds()))) {
+		if (knownConnectorUsedBounds == null || knownConnectorUsedBounds != null
+				&& !knownConnectorUsedBounds.equals(getConnectorUsedBounds())) {
 			// logger.info("Layout has changed because knownConnectorUsedBounds change");
 			return true;
 		}

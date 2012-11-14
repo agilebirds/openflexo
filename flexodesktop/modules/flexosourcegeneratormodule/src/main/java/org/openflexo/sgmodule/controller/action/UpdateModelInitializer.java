@@ -72,7 +72,7 @@ public class UpdateModelInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_update"), selectedJavaFiles,
 							getProject(), getControllerActionInitializer().getSGController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getDMSet().getSelectedObjects().size() > 0) {
 						action.setUpdatedSet(popup.getDMSet());
 						action.getProjectGenerator().startHandleLogs();
 						return true;

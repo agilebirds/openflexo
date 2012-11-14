@@ -95,7 +95,7 @@ public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 
 		@Override
 		public String getValue(Key key) {
-			if ((_language != null) && (key.getDomain() != null)) {
+			if (_language != null && key.getDomain() != null) {
 				Value value = key.getDomain().getValue(key, _language);
 				if (value != null) {
 					return value.getValue();
@@ -106,7 +106,7 @@ public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 
 		@Override
 		public void setValue(Key key, String aValue) {
-			if ((_language != null) && (key.getDomain() != null)) {
+			if (_language != null && key.getDomain() != null) {
 				key.getDomain().putValueForLanguage(key, aValue, _language);
 			}
 		}
@@ -128,7 +128,7 @@ public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 
 	@Override
 	public Key elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return (Key) getDomain().getKeyList().elementAt(row);
 		} else {
 			return null;
@@ -158,7 +158,7 @@ public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 		LanguageValueColumn searchedColumn = null;
 		for (int i = 0; i < getColumnCount(); i++) {
 			AbstractColumn col = columnAt(i);
-			if ((col != null) && (col instanceof LanguageValueColumn) && (((LanguageValueColumn) col)._language == removedLanguage)) {
+			if (col != null && col instanceof LanguageValueColumn && ((LanguageValueColumn) col)._language == removedLanguage) {
 				searchedColumn = (LanguageValueColumn) col;
 			}
 		}
@@ -180,10 +180,10 @@ public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 			int firstRow = 0;
 			int lastRow = getRowCount() - 1;
 			if (dataModification.oldValue() != null && dataModification.newValue() != null) {
-				if (((Integer) dataModification.oldValue()) < ((Integer) dataModification.newValue())) {
+				if ((Integer) dataModification.oldValue() < (Integer) dataModification.newValue()) {
 					firstRow = ((Integer) dataModification.oldValue()).intValue() - 1;
 					lastRow = ((Integer) dataModification.newValue()).intValue() - 1;
-				} else if (((Integer) dataModification.oldValue()) > ((Integer) dataModification.newValue())) {
+				} else if ((Integer) dataModification.oldValue() > (Integer) dataModification.newValue()) {
 					firstRow = ((Integer) dataModification.newValue()).intValue() - 1;
 					lastRow = ((Integer) dataModification.oldValue()).intValue() - 1;
 				} else {

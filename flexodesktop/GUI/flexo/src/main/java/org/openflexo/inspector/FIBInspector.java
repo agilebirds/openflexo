@@ -159,7 +159,7 @@ public class FIBInspector extends FIBPanel {
 	private boolean ensureCreationOfTabForEP(EditionPattern ep) {
 		FIBTab returned = tabsForEP.get(ep);
 		if (returned == null) {
-			//System.out.println("Creating FIBTab for " + ep);
+			// System.out.println("Creating FIBTab for " + ep);
 			returned = makeFIBTab(ep, 0);
 			tabsForEP.put(ep, returned);
 			getTabPanel().addToSubComponents(returned);

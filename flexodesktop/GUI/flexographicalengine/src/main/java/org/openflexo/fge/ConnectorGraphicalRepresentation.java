@@ -69,21 +69,7 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	// *******************************************************************************
 
 	public static enum Parameters implements GRParameter {
-		connector,
-		foreground,
-		selectedForeground,
-		focusedForeground,
-		hasSelectedForeground,
-		hasFocusedForeground,
-		startSymbol,
-		endSymbol,
-		middleSymbol,
-		startSymbolSize,
-		endSymbolSize,
-		middleSymbolSize,
-		relativeMiddleSymbolLocation,
-		applyForegroundToSymbols,
-		debugCoveringArea
+		connector, foreground, selectedForeground, focusedForeground, hasSelectedForeground, hasFocusedForeground, startSymbol, endSymbol, middleSymbol, startSymbolSize, endSymbolSize, middleSymbolSize, relativeMiddleSymbolLocation, applyForegroundToSymbols, debugCoveringArea
 	}
 
 	private Connector connector = null;

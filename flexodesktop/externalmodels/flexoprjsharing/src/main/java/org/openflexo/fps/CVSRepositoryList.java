@@ -126,6 +126,6 @@ public class CVSRepositoryList extends FPSObject {
 
 	@Override
 	public boolean isContainedIn(FPSObject obj) {
-		return (obj == this);
+		return obj == this;
 	}
 }

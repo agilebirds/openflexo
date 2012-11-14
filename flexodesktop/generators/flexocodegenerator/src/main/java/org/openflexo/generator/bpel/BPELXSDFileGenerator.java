@@ -72,7 +72,7 @@ public class BPELXSDFileGenerator extends MetaFileGenerator {
 
 			FlexoProcess toTranslate = null;
 			for (FlexoProcess p : this.getProject().getAllLocalFlexoProcesses()) {
-				if ((p.getPortRegistery().getAllPorts().size() >= 1) && !p.getIsWebService()) {
+				if (p.getPortRegistery().getAllPorts().size() >= 1 && !p.getIsWebService()) {
 					toTranslate = p;
 				}
 			}

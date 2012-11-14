@@ -42,7 +42,7 @@ public class ProcessAutomergeInitializer {
 		public String getMergedResult(MergeChange change) {
 			int leftValue = getLeftIntAttributeValue(change);
 			int rightValue = getRightIntAttributeValue(change);
-			return StringEncoder.encodeInteger(((leftValue + rightValue) / 2));
+			return StringEncoder.encodeInteger((leftValue + rightValue) / 2);
 		}
 
 		@Override
@@ -61,7 +61,7 @@ public class ProcessAutomergeInitializer {
 		public String getMergedResult(MergeChange change) {
 			int leftValue = getLeftIntAttributeValue(change);
 			int rightValue = getRightIntAttributeValue(change);
-			return StringEncoder.encodeInteger(((leftValue + rightValue) / 2));
+			return StringEncoder.encodeInteger((leftValue + rightValue) / 2);
 		}
 
 		@Override

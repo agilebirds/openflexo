@@ -144,7 +144,7 @@ public class VerticalLayout implements LayoutManager {
 			int h = children[i].getPreferredSize().height + vmargin * 2;
 			children[i].setBounds(left, top, width, h);
 			top += h + vgap;
-			vroom -= (h + vgap);
+			vroom -= h + vgap;
 		}
 	}
 

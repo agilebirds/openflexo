@@ -105,7 +105,7 @@ public final class DeletePort extends AbstractInPort {
 		for (Enumeration e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
 			InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
 			AbstractNode nextNode = next.getNextNode();
-			if ((nextNode instanceof ActivityNode) && (((ActivityNode) nextNode).isEndNode())) {
+			if (nextNode instanceof ActivityNode && ((ActivityNode) nextNode).isEndNode()) {
 				if (!foundValidEdge) {
 					foundValidEdge = true;
 					isCorrectelyLinked = true;
@@ -126,7 +126,7 @@ public final class DeletePort extends AbstractInPort {
 		for (Enumeration e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
 			InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
 			AbstractNode nextNode = next.getNextNode();
-			if ((nextNode instanceof ActivityNode) && (((ActivityNode) nextNode).isEndNode())) {
+			if (nextNode instanceof ActivityNode && ((ActivityNode) nextNode).isEndNode()) {
 				if (!foundValidEdge) {
 					foundValidEdge = true;
 					// isCorrectelyLinked = true;

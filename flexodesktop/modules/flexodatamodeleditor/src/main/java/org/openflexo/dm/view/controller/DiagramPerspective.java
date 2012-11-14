@@ -204,7 +204,7 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	}*/
 
 	public DiagramView getCurrentDiagramView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof DiagramView)) {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof DiagramView) {
 			return (DiagramView) _controller.getCurrentModuleView();
 		}
 		return null;

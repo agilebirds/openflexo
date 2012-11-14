@@ -49,7 +49,7 @@ public class TeXTokenMarker extends TokenMarker {
 		int length = line.count + offset;
 		boolean backslash = false;
 		loop: for (int i = offset; i < length; i++) {
-			int i1 = (i + 1);
+			int i1 = i + 1;
 
 			char c = array[i];
 			// if a backslash is followed immediately
@@ -143,6 +143,6 @@ public class TeXTokenMarker extends TokenMarker {
 		if (lastOffset != length) {
 			addToken(length - lastOffset, token == BDFORMULA || token == EDFORMULA ? Token.KEYWORD2 : token);
 		}
-		return (token != Token.KEYWORD1 ? token : Token.NULL);
+		return token != Token.KEYWORD1 ? token : Token.NULL;
 	}
 }

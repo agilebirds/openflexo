@@ -165,7 +165,7 @@ public class WorkflowTextFileResource extends TextFileResource<DGTextGenerator<F
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getGenerator().getObject()) {
-			if ((dataModification.propertyName() != null) && dataModification.equals("dontGenerate")) {
+			if (dataModification.propertyName() != null && dataModification.equals("dontGenerate")) {
 				if (getGenerator().getObject().getDontGenerate()) {
 					logger.info("Handle dont generate for object");
 					setGenerator(null);

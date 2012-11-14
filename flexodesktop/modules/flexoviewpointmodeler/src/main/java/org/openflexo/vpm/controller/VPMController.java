@@ -45,6 +45,7 @@ import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.icon.OntologyIconLibrary;
@@ -452,6 +453,6 @@ public class VPMController extends FlexoController implements SelectionManagingC
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		return ViewPointObject.VALIDATION_MODEL;
+		return ViewPointLibraryObject.VALIDATION_MODEL;
 	}
 }

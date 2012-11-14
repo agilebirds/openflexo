@@ -52,7 +52,7 @@ public class BrowserFilterMenuItem extends JCheckBoxMenuItem implements ActionLi
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (_filter != null) {
-			_filter.setStatus((isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE));
+			_filter.setStatus(isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE);
 			if (_browser != null) {
 				_browser.update();
 			}

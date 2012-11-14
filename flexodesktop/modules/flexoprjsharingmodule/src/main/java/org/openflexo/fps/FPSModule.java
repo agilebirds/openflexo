@@ -21,20 +21,15 @@ package org.openflexo.fps;
 
 import java.util.logging.Logger;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalFPSModule;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**

@@ -79,7 +79,7 @@ public class CVSMergeEditor extends JLayeredPane {
 
 		JPanel southPanel = new JPanel(new BorderLayout());
 		southPanel.add(comparePanel, BorderLayout.CENTER);
-		if ((leftLabel != null) || (rightLabel != null)) {
+		if (leftLabel != null || rightLabel != null) {
 			JPanel labelPanels = new JPanel(new GridLayout(1, 2));
 			JLabel _leftLabel = new JLabel(leftLabel, SwingConstants.CENTER);
 			JLabel _rightLabel = new JLabel(rightLabel, SwingConstants.CENTER);

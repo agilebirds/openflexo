@@ -105,7 +105,7 @@ public class PetalParser {
 			throw new RuntimeException("Mismatch: Expected " + kind + " but got " + t.kind + " at line " + t.line);
 		}
 
-		if ((match != null) && !match.equals(t.image)) {
+		if (match != null && !match.equals(t.image)) {
 			throw new RuntimeException("Mismatch: Expected " + match + " but got " + t.image + " at line " + t.line);
 		}
 
@@ -310,7 +310,7 @@ public class PetalParser {
 		if (cat != null) {
 			File file = resolveReference(cat);
 
-			if ((file != null) && file.exists()) {
+			if (file != null && file.exists()) {
 				PetalParser p = PetalParser.createParser(file);
 				p.current_parent = parent;
 				p.parseObject();
@@ -404,7 +404,7 @@ public class PetalParser {
 			}
 
 		default:
-			if ((t.kind == Lexer.RPAREN) && rparen_ok) {
+			if (t.kind == Lexer.RPAREN && rparen_ok) {
 				return RPAREN;
 			} else {
 				throw new RuntimeException("Unexpected " + t.image);

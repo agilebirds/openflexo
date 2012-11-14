@@ -183,7 +183,7 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	 * @param index
 	 */
 	public void setIndex(int index) {
-		if (getIndex() != index && !isDeserializing() && (this instanceof ViewElement)) {
+		if (getIndex() != index && !isDeserializing() && this instanceof ViewElement) {
 			getParent().setIndexForChild((ViewElement) this, index);
 		}
 	}

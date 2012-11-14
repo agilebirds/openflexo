@@ -105,7 +105,7 @@ public class TextFieldWidget extends DenaliWidget<String> {
 				// if (logger.isLoggable(Level.FINE)) logger.finer
 				// ("changedUpdate() validateOnReturn="+validateOnReturn+"
 				// widgetUpdating="+widgetUpdating);
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					// if (logger.isLoggable(Level.FINE)) logger.fine
 					// ("changedUpdate()");e
 					updateModelFromWidget();
@@ -117,7 +117,7 @@ public class TextFieldWidget extends DenaliWidget<String> {
 				// if (logger.isLoggable(Level.FINE)) logger.finer
 				// ("insertUpdate() validateOnReturn="+validateOnReturn+"
 				// widgetUpdating="+widgetUpdating);
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					// if (logger.isLoggable(Level.FINE)) logger.fine
 					// ("insertUpdate()");
 					try {
@@ -142,7 +142,7 @@ public class TextFieldWidget extends DenaliWidget<String> {
 				// if (logger.isLoggable(Level.FINE)) logger.finer
 				// ("removeUpdate() validateOnReturn="+validateOnReturn+"
 				// widgetUpdating="+widgetUpdating);
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					// if (logger.isLoggable(Level.FINE)) logger.fine
 					// ("removeUpdate()");
 					updateModelFromWidget();

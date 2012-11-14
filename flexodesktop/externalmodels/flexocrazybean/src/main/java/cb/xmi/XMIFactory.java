@@ -282,7 +282,7 @@ public class XMIFactory {
 		setVisibility(attr, a);
 		setStereotype(attr, a);
 
-		String type = (attr.getType() == null) ? "int" : attr.getType();
+		String type = attr.getType() == null ? "int" : attr.getType();
 
 		a.setType(getClassifierFor(type));
 
@@ -305,7 +305,7 @@ public class XMIFactory {
 		setStereotype(op, m);
 		setConcurrency(op, m);
 
-		String type = (op.getResult() == null) ? "void" : op.getResult();
+		String type = op.getResult() == null ? "void" : op.getResult();
 
 		MParameter ret = new MParameterImpl();
 		ret.setName("return");
@@ -497,7 +497,7 @@ public class XMIFactory {
 		for (int i = 0; i < chars.length; i++) {
 			char ch = chars[i];
 
-			if ((ch == ':') && (chars[i + 1] == ':')) {
+			if (ch == ':' && chars[i + 1] == ':') {
 				buf.append('.');
 				i++;
 			} else {

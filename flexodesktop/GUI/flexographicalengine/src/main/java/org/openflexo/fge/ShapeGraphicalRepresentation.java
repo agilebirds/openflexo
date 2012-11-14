@@ -87,47 +87,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	// *******************************************************************************
 
 	public static enum Parameters implements GRParameter {
-		x,
-		y,
-		width,
-		height,
-		minimalWidth,
-		minimalHeight,
-		maximalWidth,
-		maximalHeight,
-		dimensionConstraintStep,
-		locationConstraints,
-		locationConstrainedArea,
-		dimensionConstraints,
-		adjustMinimalWidthToLabelWidth,
-		adjustMinimalHeightToLabelHeight,
-		adjustMaximalWidthToLabelWidth,
-		adjustMaximalHeightToLabelHeight,
-		foreground,
-		background,
-		selectedForeground,
-		selectedBackground,
-		focusedForeground,
-		focusedBackground,
-		hasSelectedForeground,
-		hasSelectedBackground,
-		hasFocusedForeground,
-		hasFocusedBackground,
-		border,
-		shapeType,
-		shape,
-		shadowStyle,
-		isFloatingLabel,
-		relativeTextX,
-		relativeTextY,
-		decorationPainter,
-		shapePainter,
-		specificStroke,
-		allowToLeaveBounds,
-		xConstraints,
-		yConstraints,
-		widthConstraints,
-		heightConstraints;
+		x, y, width, height, minimalWidth, minimalHeight, maximalWidth, maximalHeight, dimensionConstraintStep, locationConstraints, locationConstrainedArea, dimensionConstraints, adjustMinimalWidthToLabelWidth, adjustMinimalHeightToLabelHeight, adjustMaximalWidthToLabelWidth, adjustMaximalHeightToLabelHeight, foreground, background, selectedForeground, selectedBackground, focusedForeground, focusedBackground, hasSelectedForeground, hasSelectedBackground, hasFocusedForeground, hasFocusedBackground, border, shapeType, shape, shadowStyle, isFloatingLabel, relativeTextX, relativeTextY, decorationPainter, shapePainter, specificStroke, allowToLeaveBounds, xConstraints, yConstraints, widthConstraints, heightConstraints;
 	}
 
 	private double x = 0;

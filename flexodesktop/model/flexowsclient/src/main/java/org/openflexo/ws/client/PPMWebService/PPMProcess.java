@@ -115,29 +115,29 @@ public class PPMProcess extends PPMObject implements java.io.Serializable {
 			return true;
 		}
 		if (__equalsCalc != null) {
-			return (__equalsCalc == obj);
+			return __equalsCalc == obj;
 		}
 		__equalsCalc = obj;
 		boolean _equals;
 		_equals = true
-				&& ((this.businessDescription == null && other.getBusinessDescription() == null) || (this.businessDescription != null && this.businessDescription
-						.equals(other.getBusinessDescription())))
-				&& ((this.generalDescription == null && other.getGeneralDescription() == null) || (this.generalDescription != null && this.generalDescription
-						.equals(other.getGeneralDescription())))
-				&& ((this.name == null && other.getName() == null) || (this.name != null && this.name.equals(other.getName())))
-				&& ((this.parentProcess == null && other.getParentProcess() == null) || (this.parentProcess != null && this.parentProcess
-						.equals(other.getParentProcess())))
-				&& ((this.screenshoot == null && other.getScreenshoot() == null) || (this.screenshoot != null && java.util.Arrays.equals(
-						this.screenshoot, other.getScreenshoot())))
-				&& ((this.subProcesses == null && other.getSubProcesses() == null) || (this.subProcesses != null && java.util.Arrays
-						.equals(this.subProcesses, other.getSubProcesses())))
-				&& ((this.technicalDescription == null && other.getTechnicalDescription() == null) || (this.technicalDescription != null && this.technicalDescription
-						.equals(other.getTechnicalDescription())))
-				&& ((this.uri == null && other.getUri() == null) || (this.uri != null && this.uri.equals(other.getUri())))
-				&& ((this.userManualDescription == null && other.getUserManualDescription() == null) || (this.userManualDescription != null && this.userManualDescription
-						.equals(other.getUserManualDescription())))
-				&& ((this.versionUri == null && other.getVersionUri() == null) || (this.versionUri != null && this.versionUri.equals(other
-						.getVersionUri())));
+				&& (this.businessDescription == null && other.getBusinessDescription() == null || this.businessDescription != null
+						&& this.businessDescription.equals(other.getBusinessDescription()))
+				&& (this.generalDescription == null && other.getGeneralDescription() == null || this.generalDescription != null
+						&& this.generalDescription.equals(other.getGeneralDescription()))
+				&& (this.name == null && other.getName() == null || this.name != null && this.name.equals(other.getName()))
+				&& (this.parentProcess == null && other.getParentProcess() == null || this.parentProcess != null
+						&& this.parentProcess.equals(other.getParentProcess()))
+				&& (this.screenshoot == null && other.getScreenshoot() == null || this.screenshoot != null
+						&& java.util.Arrays.equals(this.screenshoot, other.getScreenshoot()))
+				&& (this.subProcesses == null && other.getSubProcesses() == null || this.subProcesses != null
+						&& java.util.Arrays.equals(this.subProcesses, other.getSubProcesses()))
+				&& (this.technicalDescription == null && other.getTechnicalDescription() == null || this.technicalDescription != null
+						&& this.technicalDescription.equals(other.getTechnicalDescription()))
+				&& (this.uri == null && other.getUri() == null || this.uri != null && this.uri.equals(other.getUri()))
+				&& (this.userManualDescription == null && other.getUserManualDescription() == null || this.userManualDescription != null
+						&& this.userManualDescription.equals(other.getUserManualDescription()))
+				&& (this.versionUri == null && other.getVersionUri() == null || this.versionUri != null
+						&& this.versionUri.equals(other.getVersionUri()));
 		__equalsCalc = null;
 		return _equals;
 	}

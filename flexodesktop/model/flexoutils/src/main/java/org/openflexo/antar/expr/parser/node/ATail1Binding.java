@@ -2,179 +2,143 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class ATail1Binding extends PBinding
-{
-    private TIdentifier _identifier_;
-    private TDot _dot_;
-    private PBinding _binding_;
+public final class ATail1Binding extends PBinding {
+	private TIdentifier _identifier_;
+	private TDot _dot_;
+	private PBinding _binding_;
 
-    public ATail1Binding()
-    {
-        // Constructor
-    }
+	public ATail1Binding() {
+		// Constructor
+	}
 
-    public ATail1Binding(
-        @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") TDot _dot_,
-        @SuppressWarnings("hiding") PBinding _binding_)
-    {
-        // Constructor
-        setIdentifier(_identifier_);
+	public ATail1Binding(@SuppressWarnings("hiding") TIdentifier _identifier_, @SuppressWarnings("hiding") TDot _dot_,
+			@SuppressWarnings("hiding") PBinding _binding_) {
+		// Constructor
+		setIdentifier(_identifier_);
 
-        setDot(_dot_);
+		setDot(_dot_);
 
-        setBinding(_binding_);
+		setBinding(_binding_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new ATail1Binding(
-            cloneNode(this._identifier_),
-            cloneNode(this._dot_),
-            cloneNode(this._binding_));
-    }
+	@Override
+	public Object clone() {
+		return new ATail1Binding(cloneNode(this._identifier_), cloneNode(this._dot_), cloneNode(this._binding_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseATail1Binding(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseATail1Binding(this);
+	}
 
-    public TIdentifier getIdentifier()
-    {
-        return this._identifier_;
-    }
+	public TIdentifier getIdentifier() {
+		return this._identifier_;
+	}
 
-    public void setIdentifier(TIdentifier node)
-    {
-        if(this._identifier_ != null)
-        {
-            this._identifier_.parent(null);
-        }
+	public void setIdentifier(TIdentifier node) {
+		if (this._identifier_ != null) {
+			this._identifier_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._identifier_ = node;
-    }
+		this._identifier_ = node;
+	}
 
-    public TDot getDot()
-    {
-        return this._dot_;
-    }
+	public TDot getDot() {
+		return this._dot_;
+	}
 
-    public void setDot(TDot node)
-    {
-        if(this._dot_ != null)
-        {
-            this._dot_.parent(null);
-        }
+	public void setDot(TDot node) {
+		if (this._dot_ != null) {
+			this._dot_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._dot_ = node;
-    }
+		this._dot_ = node;
+	}
 
-    public PBinding getBinding()
-    {
-        return this._binding_;
-    }
+	public PBinding getBinding() {
+		return this._binding_;
+	}
 
-    public void setBinding(PBinding node)
-    {
-        if(this._binding_ != null)
-        {
-            this._binding_.parent(null);
-        }
+	public void setBinding(PBinding node) {
+		if (this._binding_ != null) {
+			this._binding_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._binding_ = node;
-    }
+		this._binding_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._identifier_)
-            + toString(this._dot_)
-            + toString(this._binding_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._identifier_) + toString(this._dot_) + toString(this._binding_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._identifier_ == child)
-        {
-            this._identifier_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._identifier_ == child) {
+			this._identifier_ = null;
+			return;
+		}
 
-        if(this._dot_ == child)
-        {
-            this._dot_ = null;
-            return;
-        }
+		if (this._dot_ == child) {
+			this._dot_ = null;
+			return;
+		}
 
-        if(this._binding_ == child)
-        {
-            this._binding_ = null;
-            return;
-        }
+		if (this._binding_ == child) {
+			this._binding_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._identifier_ == oldChild)
-        {
-            setIdentifier((TIdentifier) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._identifier_ == oldChild) {
+			setIdentifier((TIdentifier) newChild);
+			return;
+		}
 
-        if(this._dot_ == oldChild)
-        {
-            setDot((TDot) newChild);
-            return;
-        }
+		if (this._dot_ == oldChild) {
+			setDot((TDot) newChild);
+			return;
+		}
 
-        if(this._binding_ == oldChild)
-        {
-            setBinding((PBinding) newChild);
-            return;
-        }
+		if (this._binding_ == oldChild) {
+			setBinding((PBinding) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

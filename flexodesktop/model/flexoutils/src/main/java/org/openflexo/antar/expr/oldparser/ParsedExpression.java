@@ -77,11 +77,11 @@ public abstract class ParsedExpression extends Token {
 	public abstract String toString();
 
 	protected static ParsedExpression makeExpression(ListOfToken aListOfTokens) throws ParseException {
-		if ((aListOfTokens.size() == 1) && (aListOfTokens.firstElement() instanceof ParsedExpression)) {
+		if (aListOfTokens.size() == 1 && aListOfTokens.firstElement() instanceof ParsedExpression) {
 			return (ParsedExpression) aListOfTokens.firstElement();
 		}
 
-		if ((aListOfTokens.size() == 1) && (aListOfTokens.firstElement() instanceof ListOfToken)) {
+		if (aListOfTokens.size() == 1 && aListOfTokens.firstElement() instanceof ListOfToken) {
 			return makeExpression((ListOfToken) aListOfTokens.firstElement());
 		} else {
 			boolean hasAmbigousOperators = false;
@@ -142,7 +142,7 @@ public abstract class ParsedExpression extends Token {
 		ListOfToken functionsReducedParamList = new ListOfToken();
 		for (int i = 0; i < aListOfTokens.size(); i++) {
 			AbstractToken tok = aListOfTokens.elementAt(i);
-			if ((tok instanceof Word) && (i + 1 < aListOfTokens.size()) && (aListOfTokens.elementAt(i + 1) instanceof ListOfToken)) {
+			if (tok instanceof Word && i + 1 < aListOfTokens.size() && aListOfTokens.elementAt(i + 1) instanceof ListOfToken) {
 				ListOfToken tryToBuildFunction = new ListOfToken();
 				tryToBuildFunction.add(tok);
 				tryToBuildFunction.add(aListOfTokens.elementAt(i + 1));

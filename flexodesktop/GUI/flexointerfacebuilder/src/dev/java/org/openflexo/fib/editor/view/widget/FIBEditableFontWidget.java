@@ -33,54 +33,49 @@ import org.openflexo.fib.view.widget.FIBFontWidget;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.FontSelector;
 
-public class FIBEditableFontWidget extends FIBFontWidget implements FIBEditableView<FIBFont,FontSelector> {
+public class FIBEditableFontWidget extends FIBFontWidget implements FIBEditableView<FIBFont, FontSelector> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableFontWidget.class.getPackage().getName());
 
-	private final FIBEditableViewDelegate<FIBFont,FontSelector> delegate;
-	
+	private final FIBEditableViewDelegate<FIBFont, FontSelector> delegate;
+
 	private final FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableFontWidget(FIBFont model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableFontWidget(FIBFont model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-		
-		delegate = new FIBEditableViewDelegate<FIBFont,FontSelector>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBFont, FontSelector>(this);
 		model.addObserver(this);
 	}
-	
-	
+
 	@Override
-	public void delete() 
-	{
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
-	}	
-	
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
+	}
+
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
 		return null;
 	}
-	
-	public FIBEditableViewDelegate<FIBFont,FontSelector> getDelegate()
-	{
+
+	@Override
+	public FIBEditableViewDelegate<FIBFont, FontSelector> getDelegate() {
 		return delegate;
 	}
 
 	@Override
-	public void update(Observable o, Object dataModification) 
-	{
+	public void update(Observable o, Object dataModification) {
 		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
 	}
 
 }

@@ -146,7 +146,7 @@ public class XMLTokenMarker extends TokenMarker {
 
 			case Token.LITERAL1:
 			case Token.LITERAL2: // strings
-				if ((token == Token.LITERAL1 && c == '\"') || (token == Token.LITERAL2 && c == '\'')) {
+				if (token == Token.LITERAL1 && c == '\"' || token == Token.LITERAL2 && c == '\'') {
 					addToken(ip1 - lastOffset, token);
 					lastOffset = ip1;
 					token = Token.KEYWORD1;
@@ -164,7 +164,7 @@ public class XMLTokenMarker extends TokenMarker {
 
 			case Token.COMMENT1: // Inside a comment
 				if (SyntaxUtilities.regionMatches(false, line, i, "-->")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = i + 3;
 					token = Token.NULL;
 				}
@@ -180,7 +180,7 @@ public class XMLTokenMarker extends TokenMarker {
 
 			case Token.KEYWORD3: // Inside a processor instruction
 				if (SyntaxUtilities.regionMatches(false, line, i, "?>")) {
-					addToken((i + 2) - lastOffset, token);
+					addToken(i + 2 - lastOffset, token);
 					lastOffset = i + 2;
 					token = Token.NULL;
 				}

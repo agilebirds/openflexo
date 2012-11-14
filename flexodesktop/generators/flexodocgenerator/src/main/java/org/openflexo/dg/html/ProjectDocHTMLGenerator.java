@@ -225,8 +225,8 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	}
 
 	public ProjectHTMLFileResource getProjectDocResource() {
-		return ((ProjectHTMLFileResource) getProject().resourceForKey(ResourceType.HTML_FILE,
-				ProjectHTMLFileResource.nameForRepositoryAndProject(this.getRepository(), getProject())));
+		return (ProjectHTMLFileResource) getProject().resourceForKey(ResourceType.HTML_FILE,
+				ProjectHTMLFileResource.nameForRepositoryAndProject(this.getRepository(), getProject()));
 	}
 
 	protected long lastLogUpdate;
@@ -238,7 +238,7 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (((dataModification.propertyName() != null) && dataModification.propertyName().equals("docType"))) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("docType")) {
 			getTemplateLocator().notifyTemplateModified();
 		}
 		if (dataModification instanceof TemplateFileNotification) {

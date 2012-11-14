@@ -83,7 +83,7 @@ public class CGRelease extends CGObject {
 
 	@Override
 	public boolean isContainedIn(CGObject obj) {
-		return (obj == getCGRepository());
+		return obj == getCGRepository();
 	}
 
 	@Override

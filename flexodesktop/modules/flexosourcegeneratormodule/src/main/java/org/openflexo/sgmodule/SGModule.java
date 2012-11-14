@@ -22,7 +22,6 @@ package org.openflexo.sgmodule;
 import java.util.Collection;
 import java.util.Hashtable;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
@@ -31,13 +30,9 @@ import org.openflexo.foundation.sg.implmodel.SGJarInspectorGroup;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinition;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalSGModule;
 import org.openflexo.sgmodule.controller.SGController;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**

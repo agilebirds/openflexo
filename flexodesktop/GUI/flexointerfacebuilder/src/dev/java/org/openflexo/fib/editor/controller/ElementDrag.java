@@ -27,8 +27,9 @@ public abstract class ElementDrag<T> implements Transferable {
 	}
 
 	public void reset() {
-		if (PaletteElement.logger.isLoggable(Level.FINE))
+		if (PaletteElement.logger.isLoggable(Level.FINE)) {
 			PaletteElement.logger.fine("Resetting drag");
+		}
 		int end = focusedComponentPath.size();
 		for (int i = 0; i < end; i++) {
 			FIBComponent c2 = focusedComponentPath.remove(focusedComponentPath.size() - 1);
@@ -41,16 +42,19 @@ public abstract class ElementDrag<T> implements Transferable {
 	}
 
 	public FIBComponent getCurrentlyFocusedComponent() {
-		if (focusedComponentPath.size() > 0)
+		if (focusedComponentPath.size() > 0) {
 			return focusedComponentPath.lastElement();
+		}
 		return null;
 	}
 
 	public void enterComponent(FIBComponent c, PlaceHolder ph, Point location) {
-		if (getController() == null)
+		if (getController() == null) {
 			return;
-		if (PaletteElement.logger.isLoggable(Level.FINE))
+		}
+		if (PaletteElement.logger.isLoggable(Level.FINE)) {
 			PaletteElement.logger.fine("Drag enter in component " + c + " ph=" + ph);
+		}
 		Vector<FIBComponent> appendingPath = new Vector<FIBComponent>();
 		FIBComponent current = c;
 		while (current != null && !focusedComponentPath.contains(current)) {
@@ -83,25 +87,28 @@ public abstract class ElementDrag<T> implements Transferable {
 			}
 		}
 
-		if (ph != null)
+		if (ph != null) {
 			ph.setFocused(true);
-		else {
+		} else {
 			FIBView v = getController().viewForComponent(c);
 			if (v instanceof FIBEditableView) {
 				((FIBEditableView) v).getDelegate().setFocused(true);
 			}
 		}
-		if (PaletteElement.logger.isLoggable(Level.FINE))
+		if (PaletteElement.logger.isLoggable(Level.FINE)) {
 			PaletteElement.logger.fine("focusedComponentPath=" + focusedComponentPath);
+		}
 	}
 
 	private boolean temporaryDisable = false;
 
 	public void exitComponent(FIBComponent c, PlaceHolder ph) {
-		if (getController() == null)
+		if (getController() == null) {
 			return;
-		if (PaletteElement.logger.isLoggable(Level.FINE))
+		}
+		if (PaletteElement.logger.isLoggable(Level.FINE)) {
 			PaletteElement.logger.fine("Drag exit from component " + c + " ph=" + ph);
+		}
 		if (temporaryDisable) {
 			temporaryDisable = false;
 			return;
@@ -120,16 +127,17 @@ public abstract class ElementDrag<T> implements Transferable {
 		} else {
 			// Weird....
 		}
-		if (ph != null)
+		if (ph != null) {
 			ph.setFocused(false);
-		else {
+		} else {
 			FIBView v = getController().viewForComponent(c);
 			if (v instanceof FIBEditableView) {
 				((FIBEditableView) v).getDelegate().setFocused(false);
 			}
 		}
-		if (PaletteElement.logger.isLoggable(Level.FINE))
+		if (PaletteElement.logger.isLoggable(Level.FINE)) {
 			PaletteElement.logger.fine("focusedComponentPath=" + focusedComponentPath);
+		}
 	}
 
 	@Override

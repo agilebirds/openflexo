@@ -116,7 +116,7 @@ public class TestCVS {
 		System.out.println("*************** On modifie le fichier !");
 		try {
 			FileUtils.saveToFile(new File("/tmp/CoucouLesGars/TestPrjCVS/coucou2"),
-					FileUtils.fileContents(new File("/tmp/CoucouLesGars/TestPrjCVS/coucou2")) + "\nAdded on " + (new java.util.Date()));
+					FileUtils.fileContents(new File("/tmp/CoucouLesGars/TestPrjCVS/coucou2")) + "\nAdded on " + new java.util.Date());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

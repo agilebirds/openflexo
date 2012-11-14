@@ -107,7 +107,7 @@ public class ComputeDiff {
 			int f0, l0 = 0, f1, l1 = 0, show_from = 0, show_to = 0;
 			int i;
 			Diff.change next;
-			boolean nontrivial = (ignore == null);
+			boolean nontrivial = ignore == null;
 
 			show_from = show_to = 0;
 
@@ -461,13 +461,13 @@ public class ComputeDiff {
 			StringBuffer removedStringBuffer = new StringBuffer();
 			removedStringBuffer.append("[");
 			for (int i = 0; i < removedString.length(); i++) {
-				removedStringBuffer.append(" " + (int) (removedString.charAt(i)));
+				removedStringBuffer.append(" " + (int) removedString.charAt(i));
 			}
 			removedStringBuffer.append("]" + "(" + removedString.length() + ")");
 			StringBuffer addedStringBuffer = new StringBuffer();
 			addedStringBuffer.append("[");
 			for (int i = 0; i < addedString.length(); i++) {
-				addedStringBuffer.append(" " + (int) (addedString.charAt(i)));
+				addedStringBuffer.append(" " + (int) addedString.charAt(i));
 			}
 			addedStringBuffer.append("]" + "(" + addedString.length() + ")");
 

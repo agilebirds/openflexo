@@ -615,7 +615,7 @@ public class FGEPolylin implements FGEGeometricObject<FGEPolylin> {
 		double middleDistancePath = getLength() * position;
 		double distance = 0;
 		for (FGESegment s : getSegments()) {
-			if ((distance <= middleDistancePath) && (distance + s.getLength() >= middleDistancePath)) {
+			if (distance <= middleDistancePath && distance + s.getLength() >= middleDistancePath) {
 				double ratio = (middleDistancePath - distance) / s.getLength();
 				FGEPoint p = new FGEPoint();
 				p.x = s.getP1().x + (s.getP2().x - s.getP1().x) * ratio;

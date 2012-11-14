@@ -53,7 +53,7 @@ public class UpdateFiles extends MultipleFileCVSAction<UpdateFiles> implements U
 
 		@Override
 		protected boolean accept(CVSFile aFile) {
-			return (aFile.getStatus().isRemotelyModified() && !aFile.getStatus().isConflicting());
+			return aFile.getStatus().isRemotelyModified() && !aFile.getStatus().isConflicting();
 		}
 
 	};

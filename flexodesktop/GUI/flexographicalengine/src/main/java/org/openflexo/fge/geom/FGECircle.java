@@ -46,7 +46,7 @@ public class FGECircle extends FGEEllips {
 			if (getIsFilled() != p.getIsFilled()) {
 				return false;
 			}
-			return ((Math.abs(getRadius() - p.getRadius()) <= EPSILON) && getCenter().equals(p.getCenter()));
+			return Math.abs(getRadius() - p.getRadius()) <= EPSILON && getCenter().equals(p.getCenter());
 		}
 		return super.equals(obj);
 	}

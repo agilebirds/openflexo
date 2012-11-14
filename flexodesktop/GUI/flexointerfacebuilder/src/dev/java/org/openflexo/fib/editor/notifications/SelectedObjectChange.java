@@ -21,13 +21,11 @@ package org.openflexo.fib.editor.notifications;
 
 import org.openflexo.fib.model.FIBComponent;
 
-public class SelectedObjectChange extends FIBEditorNotification<FIBComponent>
-{
+public class SelectedObjectChange extends FIBEditorNotification<FIBComponent> {
 	public static String SELECTION = "selection";
-	
-	public SelectedObjectChange(FIBComponent oldValue, FIBComponent newValue)
-	{
-		super(SELECTION,oldValue,newValue);
+
+	public SelectedObjectChange(FIBComponent oldValue, FIBComponent newValue) {
+		super(SELECTION, oldValue, newValue);
 	}
-	
+
 }

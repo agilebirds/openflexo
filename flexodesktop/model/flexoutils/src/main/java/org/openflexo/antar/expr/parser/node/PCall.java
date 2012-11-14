@@ -2,7 +2,6 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-public abstract class PCall extends Node
-{
-    // Empty body
+public abstract class PCall extends Node {
+	// Empty body
 }

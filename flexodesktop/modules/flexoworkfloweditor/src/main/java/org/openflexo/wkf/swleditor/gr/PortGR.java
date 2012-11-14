@@ -106,7 +106,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 	 */
 	@Override
 	public double getDefaultX() {
-		return (getPort().getIndex() * 80) + 20;
+		return getPort().getIndex() * 80 + 20;
 	}
 
 	/**

@@ -193,11 +193,13 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 				FIBComponent targetComponent = target.getFIBComponent();
 				FIBContainer containerComponent = targetComponent.getParent();
 
-				if (containerComponent == null)
+				if (containerComponent == null) {
 					return false;
+				}
 
-				if (targetComponent instanceof FIBTab && !(newComponent instanceof FIBPanel))
+				if (targetComponent instanceof FIBTab && !(newComponent instanceof FIBPanel)) {
 					return false;
+				}
 
 				if (targetComponent.getParent() instanceof FIBTabPanel && newComponent instanceof FIBPanel) {
 					// Special case where a new tab is added to a FIBTabPanel
@@ -243,11 +245,12 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 
 			// if the action is ok we go ahead
 			// otherwise we punt
-			if ((e.getDragAction() & dragAction) == 0)
+			if ((e.getDragAction() & dragAction) == 0) {
 				return;
-			// get the label's text and put it inside a Transferable
-			// Transferable transferable = new StringSelection(
-			// DragLabel.this.getText() );
+				// get the label's text and put it inside a Transferable
+				// Transferable transferable = new StringSelection(
+				// DragLabel.this.getText() );
+			}
 
 			PaletteElementDrag transferable = new PaletteElementDrag(PaletteElement.this, e.getDragOrigin());
 
@@ -279,13 +282,15 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 		 */
 		@Override
 		public void dragDropEnd(DragSourceDropEvent e) {
-			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag)
+			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag) {
 				((PaletteElementDrag) e.getDragSourceContext().getTransferable()).reset();
+			}
 
 			// getDrawingView().resetCapturedNode();
 			if (e.getDropSuccess() == false) {
-				if (FIBEditorPalette.logger.isLoggable(Level.INFO))
+				if (FIBEditorPalette.logger.isLoggable(Level.INFO)) {
 					FIBEditorPalette.logger.info("Dropping was not successful");
+				}
 				return;
 			}
 			/*
@@ -338,8 +343,9 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 			DragSourceContext context = e.getDragSourceContext();
 			// System.out.println("dragExit() with "+context+" component="+e.getSource());
 			// interface
-			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag)
+			if (e.getDragSourceContext().getTransferable() instanceof PaletteElementDrag) {
 				((PaletteElementDrag) e.getDragSourceContext().getTransferable()).reset();
+			}
 		}
 
 		/**

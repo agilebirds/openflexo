@@ -96,14 +96,14 @@ public class WSEPortTypeView extends WSEView<ServiceInterface> {
 	public ServiceOperation getSelectedServiceOperation() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceOperation)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceOperation) {
 			return (ServiceOperation) selection.firstElement();
 		}
 		if (getSelectedMessageDefinition() != null) {
-			return (getSelectedMessageDefinition()).getOperation();
+			return getSelectedMessageDefinition().getOperation();
 		}
 		if (getSelectedMessageEntry() != null) {
-			return ((ServiceMessageDefinition) (getSelectedMessageEntry().getMessage())).getOperation();
+			return ((ServiceMessageDefinition) getSelectedMessageEntry().getMessage()).getOperation();
 		}
 
 		return null;
@@ -112,7 +112,7 @@ public class WSEPortTypeView extends WSEView<ServiceInterface> {
 	public MessageEntry getSelectedMessageEntry() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof MessageEntry)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof MessageEntry) {
 			return (MessageEntry) selection.firstElement();
 		}
 
@@ -122,7 +122,7 @@ public class WSEPortTypeView extends WSEView<ServiceInterface> {
 	public ServiceMessageDefinition getSelectedMessageDefinition() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceMessageDefinition)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceMessageDefinition) {
 			return (ServiceMessageDefinition) selection.firstElement();
 		}
 		if (getSelectedMessageEntry() != null) {

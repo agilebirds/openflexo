@@ -39,15 +39,15 @@ import org.openflexo.toolbox.ClassScope;
 import org.openflexo.toolbox.StringUtils;
 
 public class LoadedClassesInfo extends Observable {
-	
+
 	private static final Logger logger = Logger.getLogger(LoadedClassesInfo.class.getPackage().getName());
 
-    static ClassLoader appLoader = ClassLoader.getSystemClassLoader();
+	static ClassLoader appLoader = ClassLoader.getSystemClassLoader();
 	static ClassLoader currentLoader = LoadedClassesInfo.class.getClassLoader();
 	static ClassLoader[] loaders = new ClassLoader[] { appLoader, currentLoader };
 
 	public static LoadedClassesInfo instance;
-	
+
 	static {
 		appLoader = ClassLoader.getSystemClassLoader();
 		currentLoader = LoadedClassesInfo.class.getClassLoader();
@@ -58,17 +58,16 @@ public class LoadedClassesInfo extends Observable {
 		}
 		instance = new LoadedClassesInfo();
 	}
-	
-	private final Hashtable<Package,PackageInfo> packages;
+
+	private final Hashtable<Package, PackageInfo> packages;
 	private Vector<PackageInfo> packageList;
 	private boolean needsReordering = true;
-	
-	private final Hashtable<String,Vector<ClassInfo>> classesForName;
-	
-	private LoadedClassesInfo()
-	{
+
+	private final Hashtable<String, Vector<ClassInfo>> classesForName;
+
+	private LoadedClassesInfo() {
 		classesForName = new Hashtable<String, Vector<ClassInfo>>();
-		packages = new Hashtable<Package,PackageInfo>() {
+		packages = new Hashtable<Package, PackageInfo>() {
 			@Override
 			public synchronized PackageInfo put(Package key, PackageInfo value) {
 				PackageInfo returned = super.put(key, value);
@@ -81,23 +80,22 @@ public class LoadedClassesInfo extends Observable {
 		for (Package p : Package.getPackages()) {
 			registerPackage(p);
 		}
-		final Class< ?>[] classes = ClassScope.getLoadedClasses(loaders);
-		for (Class< ?> cls : classes) {
+		final Class<?>[] classes = ClassScope.getLoadedClasses(loaders);
+		for (Class<?> cls : classes) {
 			registerClass(cls);
 			String className = cls.getName();
 			URL classLocation = ClassScope.getClassLocation(cls);
-			//System.out.println("Registered class: " + className + " from " +classLocation);
+			// System.out.println("Registered class: " + className + " from " +classLocation);
 		}
 	}
-	
-	public List<PackageInfo> getPackages()
-	{
+
+	public List<PackageInfo> getPackages() {
 		if (needsReordering) {
 			packageList = new Vector<PackageInfo>();
 			for (Package p : packages.keySet()) {
 				packageList.add(packages.get(p));
 			}
-			Collections.sort(packageList,new Comparator<PackageInfo>() {
+			Collections.sort(packageList, new Comparator<PackageInfo>() {
 				@Override
 				public int compare(PackageInfo o1, PackageInfo o2) {
 					return Collator.getInstance().compare(o1.packageName, o2.packageName);
@@ -107,46 +105,41 @@ public class LoadedClassesInfo extends Observable {
 		}
 		return packageList;
 	}
-	
-	private PackageInfo registerPackage(Package p)
-	{
+
+	private PackageInfo registerPackage(Package p) {
 		PackageInfo returned = packages.get(p);
 		if (returned == null) {
 			packages.put(p, returned = new PackageInfo(p));
 		}
 		return returned;
 	}
-	
-	private ClassInfo registerClass(Class c)
-	{
+
+	private ClassInfo registerClass(Class c) {
 		PackageInfo p = registerPackage(c.getPackage());
-		
-			logger.fine("Register class "+c);
-		
-		if (!c.isMemberClass() && !c.isAnonymousClass() && !c.isLocalClass()) {		
+
+		logger.fine("Register class " + c);
+
+		if (!c.isMemberClass() && !c.isAnonymousClass() && !c.isLocalClass()) {
 			ClassInfo returned = p.classes.get(c);
 			if (returned == null) {
 				p.classes.put(c, returned = new ClassInfo(c));
-				logger.fine("Store "+returned+" in package "+p.packageName);
+				logger.fine("Store " + returned + " in package " + p.packageName);
 			}
 			return returned;
-		}
-		else if (c.isMemberClass()) {
-			//System.out.println("Member class: "+c+" of "+c.getDeclaringClass());
+		} else if (c.isMemberClass()) {
+			// System.out.println("Member class: "+c+" of "+c.getDeclaringClass());
 			ClassInfo parentClass = registerClass(c.getEnclosingClass());
-			ClassInfo returned =  parentClass.declareMember(c);
+			ClassInfo returned = parentClass.declareMember(c);
 			return returned;
-		}
-		else {
-			//System.out.println("Ignored class: "+c);
+		} else {
+			// System.out.println("Ignored class: "+c);
 			return null;
 		}
 	}
-	
-	public class PackageInfo extends Observable
-	{
+
+	public class PackageInfo extends Observable {
 		public String packageName;
-		private final Hashtable<Class,ClassInfo> classes = new Hashtable<Class,ClassInfo>() {
+		private final Hashtable<Class, ClassInfo> classes = new Hashtable<Class, ClassInfo>() {
 			@Override
 			public synchronized ClassInfo put(Class key, ClassInfo value) {
 				ClassInfo returned = super.put(key, value);
@@ -162,15 +155,14 @@ public class LoadedClassesInfo extends Observable {
 		public PackageInfo(Package aPackage) {
 			packageName = aPackage.getName();
 		}
-		
-		public List<ClassInfo> getClasses()
-		{
+
+		public List<ClassInfo> getClasses() {
 			if (needsReordering) {
 				classesList = new Vector<ClassInfo>();
 				for (Class c : classes.keySet()) {
 					classesList.add(classes.get(c));
 				}
-				Collections.sort(classesList,new Comparator<ClassInfo>() {
+				Collections.sort(classesList, new Comparator<ClassInfo>() {
 					@Override
 					public int compare(ClassInfo o1, ClassInfo o2) {
 						return Collator.getInstance().compare(o1.className, o2.className);
@@ -180,10 +172,9 @@ public class LoadedClassesInfo extends Observable {
 			}
 			return classesList;
 		}
-		
-		public boolean isFiltered()
-		{
-			if ((getFilteredPackageName() == null) || StringUtils.isEmpty(getFilteredPackageName())) {
+
+		public boolean isFiltered() {
+			if (getFilteredPackageName() == null || StringUtils.isEmpty(getFilteredPackageName())) {
 				return false;
 			}
 			if (packageName.startsWith(getFilteredPackageName())) {
@@ -191,34 +182,31 @@ public class LoadedClassesInfo extends Observable {
 			}
 			String patternString = getFilteredPackageName();
 			if (patternString.startsWith("*")) {
-				patternString = "."+getFilteredPackageName();
+				patternString = "." + getFilteredPackageName();
 			}
 			try {
 				Pattern pattern = Pattern.compile(patternString);
 				Matcher matcher = pattern.matcher(packageName);
 				return !matcher.find();
-			}
-			catch (PatternSyntaxException e) {
-				logger.warning("PatternSyntaxException: "+patternString);
+			} catch (PatternSyntaxException e) {
+				logger.warning("PatternSyntaxException: " + patternString);
 				return false;
 			}
 		}
-		
-		public Icon getIcon() 
-		{
+
+		public Icon getIcon() {
 			return FIBIconLibrary.PACKAGE_ICON;
 		}
 
 	}
-	
-	public class ClassInfo extends Observable
-	{
+
+	public class ClassInfo extends Observable {
 		private final Class clazz;
 		public String className;
 		public String packageName;
 		public String fullQualifiedName;
-		
-		private final Hashtable<Class,ClassInfo> memberClasses  = new Hashtable<Class,ClassInfo>() {
+
+		private final Hashtable<Class, ClassInfo> memberClasses = new Hashtable<Class, ClassInfo>() {
 			@Override
 			public synchronized ClassInfo put(Class key, ClassInfo value) {
 				ClassInfo returned = super.put(key, value);
@@ -231,8 +219,7 @@ public class LoadedClassesInfo extends Observable {
 		private Vector<ClassInfo> memberClassesList;
 		private boolean needsReordering = true;
 
-		public ClassInfo(Class aClass) 
-		{
+		public ClassInfo(Class aClass) {
 			Vector<ClassInfo> listOfClassesWithThatName = classesForName.get(aClass.getSimpleName());
 			if (listOfClassesWithThatName == null) {
 				classesForName.put(aClass.getSimpleName(), listOfClassesWithThatName = new Vector<ClassInfo>());
@@ -242,28 +229,26 @@ public class LoadedClassesInfo extends Observable {
 			packageName = aClass.getPackage().getName();
 			fullQualifiedName = aClass.getName();
 			clazz = aClass;
-			logger.fine("Instanciate new ClassInfo for "+aClass);
+			logger.fine("Instanciate new ClassInfo for " + aClass);
 		}
-		
-		private ClassInfo declareMember(Class c)
-		{
+
+		private ClassInfo declareMember(Class c) {
 			ClassInfo returned = memberClasses.get(c);
 			if (returned == null) {
 				memberClasses.put(c, returned = new ClassInfo(c));
 				needsReordering = true;
-				logger.fine(toString()+": declare member: "+returned);
+				logger.fine(toString() + ": declare member: " + returned);
 			}
 			return returned;
 		}
 
-		public List<ClassInfo> getMemberClasses()
-		{
+		public List<ClassInfo> getMemberClasses() {
 			if (needsReordering) {
 				memberClassesList = new Vector<ClassInfo>();
 				for (Class c : memberClasses.keySet()) {
 					memberClassesList.add(memberClasses.get(c));
 				}
-				Collections.sort(memberClassesList,new Comparator<ClassInfo>() {
+				Collections.sort(memberClassesList, new Comparator<ClassInfo>() {
 					@Override
 					public int compare(ClassInfo o1, ClassInfo o2) {
 						return Collator.getInstance().compare(o1.className, o2.className);
@@ -273,14 +258,13 @@ public class LoadedClassesInfo extends Observable {
 			}
 			return memberClassesList;
 		}
-		
+
 		@Override
 		public String toString() {
-			return "ClassInfo["+clazz.getName()+"]";
+			return "ClassInfo[" + clazz.getName() + "]";
 		}
-		
-		public Icon getIcon() 
-		{
+
+		public Icon getIcon() {
 			if (clazz.isEnum()) {
 				return FIBIconLibrary.ENUM_ICON;
 			}
@@ -289,40 +273,35 @@ public class LoadedClassesInfo extends Observable {
 			}
 			return FIBIconLibrary.CLASS_ICON;
 		}
-		
 
 	}
 
 	private String filteredPackageName = "*";
 	private String filteredClassName = "";
-	
-	public String getFilteredPackageName() 
-	{
+
+	public String getFilteredPackageName() {
 		return filteredPackageName;
 	}
 
-	public void setFilteredPackageName(String filter) 
-	{
-		if ((filter == null) || !filter.equals(this.filteredPackageName)) {
+	public void setFilteredPackageName(String filter) {
+		if (filter == null || !filter.equals(this.filteredPackageName)) {
 			this.filteredPackageName = filter;
 			updateMatchingClasses();
 		}
 	}
 
-	public String getFilteredClassName() 
-	{
+	public String getFilteredClassName() {
 		return filteredClassName;
 	}
 
-	public void setFilteredClassName(String filteredClassName)
-	{
-		if ((filteredClassName == null) || !filteredClassName.equals(this.filteredClassName)) {
+	public void setFilteredClassName(String filteredClassName) {
+		if (filteredClassName == null || !filteredClassName.equals(this.filteredClassName)) {
 			this.filteredClassName = filteredClassName;
 			for (Package p : packages.keySet()) {
 				try {
-					Class foundClass = Class.forName(p.getName()+"."+filteredClassName);
+					Class foundClass = Class.forName(p.getName() + "." + filteredClassName);
 					registerClass(foundClass);
-					logger.info("Found class "+foundClass);
+					logger.info("Found class " + foundClass);
 				} catch (ClassNotFoundException e) {
 				}
 			}
@@ -330,14 +309,13 @@ public class LoadedClassesInfo extends Observable {
 		}
 	}
 
-	private void updateMatchingClasses()
-	{
+	private void updateMatchingClasses() {
 		matchingClasses.clear();
 
-		if (!StringUtils.isEmpty(filteredClassName)) {		
+		if (!StringUtils.isEmpty(filteredClassName)) {
 			String patternString = filteredClassName;
 			if (patternString.startsWith("*")) {
-				patternString = "."+filteredClassName;
+				patternString = "." + filteredClassName;
 			}
 			try {
 				Vector<ClassInfo> exactMatches = new Vector<ClassInfo>();
@@ -354,39 +332,36 @@ public class LoadedClassesInfo extends Observable {
 							if (!packageInfo.isFiltered()) {
 								if (!exactMatches.contains(potentialMatch)) {
 									matchingClasses.add(potentialMatch);
-									//System.out.println("Found "+potentialMatch);
+									// System.out.println("Found "+potentialMatch);
 								}
 							}
 						}
 					}
 				}
-			}
-			catch (PatternSyntaxException e) {
-				logger.warning("PatternSyntaxException: "+patternString);
+			} catch (PatternSyntaxException e) {
+				logger.warning("PatternSyntaxException: " + patternString);
 			}
 			if (matchingClasses.size() == 1) {
 				setSelectedClassInfo(matchingClasses.firstElement());
 			}
 		}
-		
+
 		setChanged();
 		notifyObservers();
 
 	}
-	
+
 	public Vector<ClassInfo> matchingClasses = new Vector<ClassInfo>();
 
 	private ClassInfo selectedClassInfo;
-	
-	public ClassInfo getSelectedClassInfo() 
-	{
+
+	public ClassInfo getSelectedClassInfo() {
 		return selectedClassInfo;
 	}
 
-	public void setSelectedClassInfo(ClassInfo selectedClassInfo) 
-	{
+	public void setSelectedClassInfo(ClassInfo selectedClassInfo) {
 		if (selectedClassInfo != this.selectedClassInfo) {
-			logger.info("setSelectedClassInfo with "+selectedClassInfo);
+			logger.info("setSelectedClassInfo with " + selectedClassInfo);
 			this.selectedClassInfo = selectedClassInfo;
 			setChanged();
 			notifyObservers();
@@ -414,25 +389,22 @@ public class LoadedClassesInfo extends Observable {
 			System.out.println("package:"+p.getName());
 		}
 	}*/
-	
-	public static void main(String[] args){
 
-            Pattern pattern = 
-            Pattern.compile("javadsq.*");
+	public static void main(String[] args) {
 
-            Matcher matcher = 
-            pattern.matcher("java.util.coucou");
+		Pattern pattern = Pattern.compile("javadsq.*");
 
-            boolean found = false;
-            while (matcher.find()) {
-                System.out.println("I found the text  starting at index and ending at index"+
-                    matcher.group()+ matcher.start()+ matcher.end());
-                found = true;
-            }
-            if(!found){
-                System.out.println("No match found.");
-            }
-    }
+		Matcher matcher = pattern.matcher("java.util.coucou");
 
+		boolean found = false;
+		while (matcher.find()) {
+			System.out.println("I found the text  starting at index and ending at index" + matcher.group() + matcher.start()
+					+ matcher.end());
+			found = true;
+		}
+		if (!found) {
+			System.out.println("No match found.");
+		}
+	}
 
 }

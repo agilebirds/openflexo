@@ -75,7 +75,7 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 	private Role _newRole;
 
 	static {
-		FlexoWorkflow.addActionForClass(actionType, FlexoWorkflow.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
 		FlexoModelObject.addActionForClass(actionType, RoleList.class);
 		FlexoModelObject.addActionForClass(actionType, Role.class);
 	}

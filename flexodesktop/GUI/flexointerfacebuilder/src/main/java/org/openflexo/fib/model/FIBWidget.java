@@ -59,19 +59,7 @@ public abstract class FIBWidget extends FIBComponent {
 			BindingDefinitionType.EXECUTE, false);
 
 	public static enum Parameters implements FIBModelAttribute {
-		enable,
-		format,
-		icon,
-		tooltip,
-		tooltipText,
-		localize,
-		manageDynamicModel,
-		readOnly,
-		clickAction,
-		doubleClickAction,
-		rightClickAction,
-		enterPressedAction,
-		valueChangedAction
+		enable, format, icon, tooltip, tooltipText, localize, manageDynamicModel, readOnly, clickAction, doubleClickAction, rightClickAction, enterPressedAction, valueChangedAction
 	}
 
 	private DataBinding tooltip;
@@ -349,7 +337,7 @@ public abstract class FIBWidget extends FIBComponent {
 						+ " dataType=" + ((FIBDropDown) FIBWidget.this).getDataType() + " obtained from "
 						+ ((FIBDropDown) FIBWidget.this).getDescription();
 			}
-			return "FIBFormatter[" + FIBWidget.this + "]" + " dataType=" + (FIBWidget.this).getDataType();
+			return "FIBFormatter[" + FIBWidget.this + "]" + " dataType=" + FIBWidget.this.getDataType();
 		}
 
 		@Override
@@ -431,7 +419,7 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public boolean hasClickAction() {
-		return (clickAction != null && clickAction.isValid());
+		return clickAction != null && clickAction.isValid();
 	}
 
 	public final DataBinding getClickAction() {
@@ -449,7 +437,7 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public boolean hasDoubleClickAction() {
-		return (doubleClickAction != null && doubleClickAction.isValid());
+		return doubleClickAction != null && doubleClickAction.isValid();
 	}
 
 	public DataBinding getDoubleClickAction() {
@@ -467,7 +455,7 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public boolean hasRightClickAction() {
-		return (rightClickAction != null && rightClickAction.isValid());
+		return rightClickAction != null && rightClickAction.isValid();
 	}
 
 	public DataBinding getRightClickAction() {
@@ -485,7 +473,7 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public boolean hasEnterPressedAction() {
-		return (enterPressedAction != null && enterPressedAction.isValid());
+		return enterPressedAction != null && enterPressedAction.isValid();
 	}
 
 	public DataBinding getEnterPressedAction() {

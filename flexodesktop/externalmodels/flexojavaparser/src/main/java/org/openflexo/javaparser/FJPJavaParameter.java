@@ -67,7 +67,7 @@ public class FJPJavaParameter extends FJPJavaElement implements ParsedJavaMethod
 	}
 
 	public boolean isArray() {
-		return (getType() != null ? getType().isArray() : false);
+		return getType() != null ? getType().isArray() : false;
 	}
 
 }

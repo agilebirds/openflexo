@@ -104,8 +104,8 @@ public class MessageEntryBinding extends FlexoModelObject implements Inspectable
 		// logger.info("_messageBindings="+_messageBindings);
 		// if (_messageBindings!=null) logger.info("_messageBindings.getMessageDefinition()="+_messageBindings.getMessageDefinition());
 		// logger.info("_bindingDefinitionName="+_bindingDefinitionName);
-		if ((_bindingDefinition == null) && (_messageBindings != null) && (_messageBindings.getMessageDefinition() != null)
-				&& (_bindingDefinitionName != null)) {
+		if (_bindingDefinition == null && _messageBindings != null && _messageBindings.getMessageDefinition() != null
+				&& _bindingDefinitionName != null) {
 			_bindingDefinition = _messageBindings.getMessageDefinition().entryWithName(_bindingDefinitionName);
 			if (getBindingValue() != null) {
 				if (getBindingValue().getBindingDefinition() == null) {
@@ -144,10 +144,10 @@ public class MessageEntryBinding extends FlexoModelObject implements Inspectable
 
 	public void setMessageBindings(MessageBindings messageBindings) {
 		_messageBindings = messageBindings;
-		if ((_bindingValue != null) && (getMessageEdge() != null)) {
+		if (_bindingValue != null && getMessageEdge() != null) {
 			_bindingValue.setOwner(getMessageEdge());
 		}
-		if ((_messageBindings != null) && (_messageBindings.getMessageDefinition() != null)) {
+		if (_messageBindings != null && _messageBindings.getMessageDefinition() != null) {
 			if (_bindingDefinitionName != null) {
 				setBindingDefinition(_messageBindings.getMessageDefinition().entryWithName(_bindingDefinitionName));
 			}

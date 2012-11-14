@@ -532,7 +532,7 @@ public class MergePanelElements implements Observer {
 						g.setColor(oldColor);
 					}
 				};
-				if ((change.getMergeChangeAction() == MergeChangeAction.AutomaticMergeResolving) && change.isResolved()) {
+				if (change.getMergeChangeAction() == MergeChangeAction.AutomaticMergeResolving && change.isResolved()) {
 					setToolTipText(change.getAutomaticMergeReason());
 				}
 			}
@@ -551,8 +551,7 @@ public class MergePanelElements implements Observer {
 							}
 						}
 					};
-					if ((change.getMergeChangeSource() == MergeChangeSource.Left)
-							|| (change.getMergeChangeSource() == MergeChangeSource.Right)) {
+					if (change.getMergeChangeSource() == MergeChangeSource.Left || change.getMergeChangeSource() == MergeChangeSource.Right) {
 						popupMenu.add(new ChangeActionCheckBoxMenuItem(getChangeAction(change, MergeChangeAction.KeepChange)));
 						popupMenu.add(new ChangeActionCheckBoxMenuItem(getChangeAction(change, MergeChangeAction.IgnoreChange)));
 					} else if (change.getMergeChangeSource() == MergeChangeSource.Conflict) {

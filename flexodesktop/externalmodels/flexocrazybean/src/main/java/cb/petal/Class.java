@@ -199,7 +199,7 @@ public class Class extends Inheritable {
 	public Class getSuperclass() {
 		java.util.List list = getSuperclasses();
 
-		if ((list == null) || (list.size() < 1)) {
+		if (list == null || list.size() < 1) {
 			return null;
 		} else {
 			return (Class) list.get(0);

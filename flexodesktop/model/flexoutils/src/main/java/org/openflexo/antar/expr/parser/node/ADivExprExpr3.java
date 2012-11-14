@@ -2,179 +2,143 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class ADivExprExpr3 extends PExpr3
-{
-    private PExpr3 _left_;
-    private TDiv _div_;
-    private PTerm _right_;
+public final class ADivExprExpr3 extends PExpr3 {
+	private PExpr3 _left_;
+	private TDiv _div_;
+	private PTerm _right_;
 
-    public ADivExprExpr3()
-    {
-        // Constructor
-    }
+	public ADivExprExpr3() {
+		// Constructor
+	}
 
-    public ADivExprExpr3(
-        @SuppressWarnings("hiding") PExpr3 _left_,
-        @SuppressWarnings("hiding") TDiv _div_,
-        @SuppressWarnings("hiding") PTerm _right_)
-    {
-        // Constructor
-        setLeft(_left_);
+	public ADivExprExpr3(@SuppressWarnings("hiding") PExpr3 _left_, @SuppressWarnings("hiding") TDiv _div_,
+			@SuppressWarnings("hiding") PTerm _right_) {
+		// Constructor
+		setLeft(_left_);
 
-        setDiv(_div_);
+		setDiv(_div_);
 
-        setRight(_right_);
+		setRight(_right_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new ADivExprExpr3(
-            cloneNode(this._left_),
-            cloneNode(this._div_),
-            cloneNode(this._right_));
-    }
+	@Override
+	public Object clone() {
+		return new ADivExprExpr3(cloneNode(this._left_), cloneNode(this._div_), cloneNode(this._right_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseADivExprExpr3(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseADivExprExpr3(this);
+	}
 
-    public PExpr3 getLeft()
-    {
-        return this._left_;
-    }
+	public PExpr3 getLeft() {
+		return this._left_;
+	}
 
-    public void setLeft(PExpr3 node)
-    {
-        if(this._left_ != null)
-        {
-            this._left_.parent(null);
-        }
+	public void setLeft(PExpr3 node) {
+		if (this._left_ != null) {
+			this._left_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._left_ = node;
-    }
+		this._left_ = node;
+	}
 
-    public TDiv getDiv()
-    {
-        return this._div_;
-    }
+	public TDiv getDiv() {
+		return this._div_;
+	}
 
-    public void setDiv(TDiv node)
-    {
-        if(this._div_ != null)
-        {
-            this._div_.parent(null);
-        }
+	public void setDiv(TDiv node) {
+		if (this._div_ != null) {
+			this._div_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._div_ = node;
-    }
+		this._div_ = node;
+	}
 
-    public PTerm getRight()
-    {
-        return this._right_;
-    }
+	public PTerm getRight() {
+		return this._right_;
+	}
 
-    public void setRight(PTerm node)
-    {
-        if(this._right_ != null)
-        {
-            this._right_.parent(null);
-        }
+	public void setRight(PTerm node) {
+		if (this._right_ != null) {
+			this._right_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._right_ = node;
-    }
+		this._right_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._left_)
-            + toString(this._div_)
-            + toString(this._right_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._left_) + toString(this._div_) + toString(this._right_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._left_ == child)
-        {
-            this._left_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._left_ == child) {
+			this._left_ = null;
+			return;
+		}
 
-        if(this._div_ == child)
-        {
-            this._div_ = null;
-            return;
-        }
+		if (this._div_ == child) {
+			this._div_ = null;
+			return;
+		}
 
-        if(this._right_ == child)
-        {
-            this._right_ = null;
-            return;
-        }
+		if (this._right_ == child) {
+			this._right_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._left_ == oldChild)
-        {
-            setLeft((PExpr3) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._left_ == oldChild) {
+			setLeft((PExpr3) newChild);
+			return;
+		}
 
-        if(this._div_ == oldChild)
-        {
-            setDiv((TDiv) newChild);
-            return;
-        }
+		if (this._div_ == oldChild) {
+			setDiv((TDiv) newChild);
+			return;
+		}
 
-        if(this._right_ == oldChild)
-        {
-            setRight((PTerm) newChild);
-            return;
-        }
+		if (this._right_ == oldChild) {
+			setRight((PTerm) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

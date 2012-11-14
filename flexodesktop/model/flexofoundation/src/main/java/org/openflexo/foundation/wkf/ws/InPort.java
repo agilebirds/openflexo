@@ -100,7 +100,7 @@ public final class InPort extends AbstractInPort {
 
 	@Override
 	public boolean isCorrectelyLinked() {
-		return ((getOutgoingPostConditions().size() > 0) && (getInvalidOutgoingPostConditions().size() == 0));
+		return getOutgoingPostConditions().size() > 0 && getInvalidOutgoingPostConditions().size() == 0;
 	}
 
 	protected Vector getInvalidOutgoingPostConditions() {

@@ -138,9 +138,9 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 				});
 				return new ImageIcon(image);
 			}
-			double widthRatio = ((double) getJComponent().getWidth()) / (imageWidth);
-			double heightRatio = ((double) getJComponent().getHeight()) / (imageHeight);
-			double ratio = (widthRatio < heightRatio ? widthRatio : heightRatio);
+			double widthRatio = (double) getJComponent().getWidth() / imageWidth;
+			double heightRatio = (double) getJComponent().getHeight() / imageHeight;
+			double ratio = widthRatio < heightRatio ? widthRatio : heightRatio;
 			int newWidth = (int) (imageWidth * ratio);
 			int newHeight = (int) (imageHeight * ratio);
 			return new ImageIcon(image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH));

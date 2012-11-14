@@ -55,23 +55,7 @@ public class FIBBrowser extends FIBWidget {
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		root,
-		iteratorClass,
-		visibleRowCount,
-		rowHeight,
-		boundToSelectionManager,
-		selectionMode,
-		selected,
-		elements,
-		showFooter,
-		rootVisible,
-		showRootsHandle,
-		textSelectionColor,
-		textNonSelectionColor,
-		backgroundSelectionColor,
-		backgroundSecondarySelectionColor,
-		backgroundNonSelectionColor,
-		borderSelectionColor
+		root, iteratorClass, visibleRowCount, rowHeight, boundToSelectionManager, selectionMode, selected, elements, showFooter, rootVisible, showRootsHandle, textSelectionColor, textNonSelectionColor, backgroundSelectionColor, backgroundSecondarySelectionColor, backgroundNonSelectionColor, borderSelectionColor
 	}
 
 	public enum SelectionMode {

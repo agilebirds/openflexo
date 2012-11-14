@@ -72,7 +72,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 
 		@Override
 		protected boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
-			return (object instanceof View || object instanceof ViewShape);
+			return object instanceof View || object instanceof ViewShape;
 		}
 
 	};
@@ -124,7 +124,7 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 			if (o instanceof ViewElement) {
 				ViewElement e = (ViewElement) o;
 				if (e.getEditionPattern() != null) {
-					if (!returned.contains(e.getEditionPattern()) && (e.getEditionPattern() != excludedEditionPattern)) {
+					if (!returned.contains(e.getEditionPattern()) && e.getEditionPattern() != excludedEditionPattern) {
 						returned.add(e.getEditionPattern());
 					}
 				}
@@ -164,8 +164,9 @@ public class ReindexViewElements extends FlexoAction<ReindexViewElements, ViewOb
 	public String getExplicitDescription(ViewElement element) {
 		EditionPattern ep = element.getEditionPattern();
 		EditionPatternInstance epi = element.getEditionPatternInstance();
-		if (ep == null)
+		if (ep == null) {
 			return "null";
+		}
 		for (GraphicalElementPatternRole pr : ep.getPatternRoles(GraphicalElementPatternRole.class)) {
 			GraphicalElementSpecification labelSpec = pr.getGraphicalElementSpecification(GraphicalElementPatternRole.LABEL_FEATURE);
 			if (labelSpec != null) {

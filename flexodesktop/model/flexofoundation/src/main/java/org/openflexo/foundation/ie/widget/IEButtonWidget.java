@@ -311,7 +311,7 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 			if (getFile() != null) {
 				if (maintainAspectRatio) {
 					if (getImageInformation() != null) {
-						this.heightPixel = (widthPixel * getImageInformation().getHeight()) / getImageInformation().getWidth();
+						this.heightPixel = widthPixel * getImageInformation().getHeight() / getImageInformation().getWidth();
 						setChanged();
 						notifyObservers(new IEDataModification("heightPixel", null, heightPixel));
 					}
@@ -347,7 +347,7 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 			if (getFile() != null) {
 				if (maintainAspectRatio) {
 					if (getImageInformation() != null) {
-						this.widthPixel = (heightPixel * getImageInformation().getWidth()) / getImageInformation().getHeight();
+						this.widthPixel = heightPixel * getImageInformation().getWidth() / getImageInformation().getHeight();
 						setChanged();
 						notifyObservers(new IEDataModification("widthPixel", null, widthPixel));
 					}

@@ -860,9 +860,9 @@ public class LoadableDMEntity extends DMEntity {
 	 * Build a new DMProperty
 	 */
 	private static DMProperty makeProperty(Field field, DMModel dmModel, DMRepository repository, /*
-																								 * boolean includesGetOnlyProperties,
-																								 * boolean includesMethods,
-																								 */
+																									* boolean includesGetOnlyProperties,
+																									* boolean includesMethods,
+																									*/
 			boolean importReferencedEntities/* , Vector excludedSignatures */) {
 		// Class type = field.getDeclaringClass();
 		Type fieldType = field.getGenericType();

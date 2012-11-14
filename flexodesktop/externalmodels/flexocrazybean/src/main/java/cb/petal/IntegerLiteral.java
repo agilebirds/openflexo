@@ -60,6 +60,6 @@ public class IntegerLiteral extends Literal {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof IntegerLiteral) && (((IntegerLiteral) o).value == this.value);
+		return o instanceof IntegerLiteral && ((IntegerLiteral) o).value == this.value;
 	}
 }

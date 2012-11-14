@@ -193,7 +193,7 @@ public class DescribeClass {
 
 	protected void renderValue(PrintStream out, RDFNode value) {
 		if (value.canAs(OntClass.class)) {
-			renderClassDescription(out, (OntClass) value.as(OntClass.class));
+			renderClassDescription(out, value.as(OntClass.class));
 		} else if (value instanceof Resource) {
 			Resource r = (Resource) value;
 			if (r.isAnon()) {

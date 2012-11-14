@@ -66,7 +66,7 @@ public class ProcessFolderJSFileResource extends JSFileResource<DGJSGenerator<Pr
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getProcessFolder() != null)) {
+		if (!isObserverRegistered && getProcessFolder() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());

@@ -65,8 +65,8 @@ public class ConditionalExpression extends Expression {
 		Expression transformedThenExpression = thenExpression.transform(transformer);
 		Expression transformedElseExpression = elseExpression.transform(transformer);
 
-		if ((!transformedCondition.equals(condition)) || (!transformedThenExpression.equals(thenExpression))
-				|| (!transformedElseExpression.equals(elseExpression))) {
+		if (!transformedCondition.equals(condition) || !transformedThenExpression.equals(thenExpression)
+				|| !transformedElseExpression.equals(elseExpression)) {
 			expression = new ConditionalExpression(transformedCondition, transformedThenExpression, transformedElseExpression);
 		}
 

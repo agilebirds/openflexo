@@ -102,18 +102,18 @@ public class JavaCodeMerger {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Merging property " + p.getName());
 					}
-					if ((p.getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
-							|| (p.getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
-							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
-							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
+					if (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD
+							|| p.getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD
+							|| p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD
+							|| p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD
+							|| p.getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD) {
 						javaCode = appendSourceCode(p.getFieldSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode,
 								PreferredLocation.AFTER_LAST_FIELD, entity.getProject());
 						parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
 					}
-					if ((p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)
-							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
-							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)) {
+					if (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY
+							|| p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD
+							|| p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD) {
 						javaCode = appendSourceCode(p.getGetterSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode,
 								PreferredLocation.END_OF_CLASS, entity.getProject());
 						parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
@@ -122,7 +122,7 @@ public class JavaCodeMerger {
 									javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
 							parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
 						}
-						if ((p.getCardinality() == DMCardinality.VECTOR) || (p.getCardinality() == DMCardinality.HASHTABLE)) {
+						if (p.getCardinality() == DMCardinality.VECTOR || p.getCardinality() == DMCardinality.HASHTABLE) {
 							javaCode = appendSourceCode(p.getAdditionSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass,
 									javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
 							parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());

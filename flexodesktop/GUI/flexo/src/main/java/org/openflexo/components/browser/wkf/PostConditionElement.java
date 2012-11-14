@@ -84,7 +84,7 @@ public class PostConditionElement extends BrowserElement {
 
 	@Override
 	public String getName() {
-		if ((getPostCondition().getName() != null) && (!(getPostCondition().getName().trim().equals("")))) {
+		if (getPostCondition().getName() != null && !getPostCondition().getName().trim().equals("")) {
 			return getPostCondition().getName();
 		} else {
 			return FlexoLocalization.localizedForKey(getPostCondition().getClassNameKey());

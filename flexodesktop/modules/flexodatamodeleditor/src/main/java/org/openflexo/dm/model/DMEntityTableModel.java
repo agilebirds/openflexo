@@ -83,13 +83,13 @@ public class DMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 		addToColumns(new IconColumn<DMEntity>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMEntity entity) {
-				return (entity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return entity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEntity entity) {
-				return (entity.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return entity.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new EditableStringColumn<DMEntity>("name", 150) {
@@ -173,7 +173,7 @@ public class DMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 
 	@Override
 	public DMEntity elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDMPackage().getOrderedChildren().elementAt(row);
 		} else {
 			return null;

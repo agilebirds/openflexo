@@ -197,7 +197,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		if (getEORelationship() != null) {
 			resetJoins();
 			try {
-				if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null)) {
+				if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null) {
 					getDMEOEntity().getEOEntity().removeRelationship(getEORelationship());
 				} else if (getEORelationship().getEntity() != null) {
 					if (logger.isLoggable(Level.WARNING)) {
@@ -236,7 +236,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	public EORelationship getEORelationship() {
 		// logger.info("getEORelationship(), _eoRelationship="+_eoRelationship+" getDMEOEntity()="+getDMEOEntity());
 		if (_eoRelationship == null) {
-			if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null)) {
+			if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null) {
 				try {
 					// logger.info("Build EORelationship");
 					_eoRelationship = getDMEOEntity().getEOEntity().relationshipNamed(getName());
@@ -261,7 +261,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 	@Override
 	public void setName(String newName) throws IllegalArgumentException, InvalidNameException {
-		if ((name == null) || (!name.equals(newName))) {
+		if (name == null || !name.equals(newName)) {
 			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 				throw new InvalidNameException("'" + newName + "' is not a valid name for relationship.");
 			}
@@ -338,7 +338,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 		if (getEORelationship() != null) {
 			boolean old = getEORelationship().getIsToMany();
-			if ((old && aBoolean) || (!old && !aBoolean)) {
+			if (old && aBoolean || !old && !aBoolean) {
 				return;
 			}
 			getEORelationship().setIsToMany(aBoolean);
@@ -1020,7 +1020,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		@Override
 		public ValidationIssue applyValidation(final Validable object) {
 			final DMEORelationship property = (DMEORelationship) object;
-			if ((property.getIsToMany()) && (property.getEORelationship() != null) && (property.getEORelationship().getIsMandatory())) {
+			if (property.getIsToMany() && property.getEORelationship() != null && property.getEORelationship().getIsMandatory()) {
 				ValidationWarning error = new ValidationWarning(this, object, "relationship_($object.name)_is_tomany_and_mandatory");
 				error.addToFixProposals(new SetRelationNotMandatory());
 

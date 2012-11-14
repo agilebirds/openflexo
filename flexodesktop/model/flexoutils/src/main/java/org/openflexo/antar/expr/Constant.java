@@ -38,7 +38,7 @@ public abstract class Constant<V> extends Expression {
 			return Constant.ObjectSymbolicConstant.NULL;
 		}
 		if (value instanceof Boolean) {
-			if (((Boolean) value)) {
+			if ((Boolean) value) {
 				return Constant.BooleanConstant.TRUE;
 			} else {
 				return Constant.BooleanConstant.FALSE;
@@ -46,7 +46,7 @@ public abstract class Constant<V> extends Expression {
 		} else if (value instanceof Character) {
 			return new Constant.StringConstant(((Character) value).toString());
 		} else if (value instanceof String) {
-			return new Constant.StringConstant(((String) value));
+			return new Constant.StringConstant((String) value);
 		} else if (value.getClass().isEnum()) {
 			return new Constant.EnumConstant(((Enum) value).name());
 		} else if (value instanceof Float) {

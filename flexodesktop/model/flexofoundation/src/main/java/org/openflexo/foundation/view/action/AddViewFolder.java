@@ -53,7 +53,7 @@ public class AddViewFolder extends FlexoAction<AddViewFolder, ViewLibraryObject,
 
 		@Override
 		protected boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
-			return ((object != null) && ((object instanceof ViewFolder) || (object instanceof ViewLibrary)));
+			return object != null && (object instanceof ViewFolder || object instanceof ViewLibrary);
 		}
 
 	};

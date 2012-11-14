@@ -23,40 +23,28 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringRepresentable;
 
 public enum GenerationStatus implements StringRepresentable {
-	UpToDate,
-	GenerationModified,
-	GenerationAdded,
-	GenerationRemoved,
-	OverrideScheduled,
-	DiskModified,
-	DiskRemoved,
-	ConflictingUnMerged,
-	ConflictingMarkedAsMerged,
-	CodeGenerationNotAvailable,
-	CodeGenerationNotSynchronized,
-	GenerationError,
-	NotGenerated,
-	Unknown;
+	UpToDate, GenerationModified, GenerationAdded, GenerationRemoved, OverrideScheduled, DiskModified, DiskRemoved, ConflictingUnMerged, ConflictingMarkedAsMerged, CodeGenerationNotAvailable, CodeGenerationNotSynchronized, GenerationError, NotGenerated, Unknown;
 
 	public boolean isGenerationAvailable() {
-		return ((this == UpToDate) || (this == GenerationModified) || (this == GenerationAdded) || (this == GenerationRemoved)
-				|| (this == OverrideScheduled) || (this == DiskModified) || (this == DiskRemoved) || (this == ConflictingUnMerged) || (this == ConflictingMarkedAsMerged));
+		return this == UpToDate || this == GenerationModified || this == GenerationAdded || this == GenerationRemoved
+				|| this == OverrideScheduled || this == DiskModified || this == DiskRemoved || this == ConflictingUnMerged
+				|| this == ConflictingMarkedAsMerged;
 	}
 
 	public boolean isAbnormal() {
-		return ((this == CodeGenerationNotAvailable) || (this == NotGenerated) || (this == Unknown) || (this == GenerationError));
+		return this == CodeGenerationNotAvailable || this == NotGenerated || this == Unknown || this == GenerationError;
 	}
 
 	public boolean isGenerationModified() {
-		return ((this == GenerationModified) || (this == GenerationAdded) || (this == GenerationRemoved) || (this == OverrideScheduled));
+		return this == GenerationModified || this == GenerationAdded || this == GenerationRemoved || this == OverrideScheduled;
 	}
 
 	public boolean isDiskModified() {
-		return ((this == DiskModified) || (this == DiskRemoved));
+		return this == DiskModified || this == DiskRemoved;
 	}
 
 	public boolean isConflicting() {
-		return ((this == ConflictingUnMerged) || (this == ConflictingMarkedAsMerged));
+		return this == ConflictingUnMerged || this == ConflictingMarkedAsMerged;
 	}
 
 	public String getLocalizedStringRepresentation() {

@@ -61,13 +61,13 @@ public class DMMethodTableModel extends AbstractModel<DMEntity, DMMethod> {
 		addToColumns(new IconColumn<DMMethod>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMMethod method) {
-				return (method.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return method.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMMethod method) {
-				return (method.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return method.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new EditableStringColumn<DMMethod>(METHOD_NAME_COLUMN_TITLE, 150) {
@@ -146,7 +146,7 @@ public class DMMethodTableModel extends AbstractModel<DMEntity, DMMethod> {
 
 	@Override
 	public DMMethod elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDMEntity().getOrderedMethods().elementAt(row);
 		} else {
 			return null;

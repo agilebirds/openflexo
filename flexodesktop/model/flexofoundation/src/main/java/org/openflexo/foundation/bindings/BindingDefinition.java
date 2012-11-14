@@ -117,7 +117,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 					return false;
 				}
 			}
-			return ((_owner == bd._owner) && (_type == bd._type) && (_isMandatory == bd._isMandatory));
+			return _owner == bd._owner && _type == bd._type && _isMandatory == bd._isMandatory;
 		} else {
 			return super.equals(object);
 		}
@@ -133,7 +133,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	}
 
 	public boolean getIsSettable() {
-		return (getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET);
+		return getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET;
 	}
 
 	public void setIsSettable(boolean settable) {
@@ -160,7 +160,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	@Override
 	public void setType(DMType type) {
 		logger.info("setType() with " + type);
-		if ((type == null && _type != null) || (type != null && !type.equals(_type))) {
+		if (type == null && _type != null || type != null && !type.equals(_type)) {
 			DMType oldType = _type;
 			if (oldType != null) {
 				oldType.removeFromTypedWithThisType(this);
@@ -269,7 +269,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 		public int compare(BindingDefinition o1, BindingDefinition o2) {
 			String s1 = o1.getVariableName();
 			String s2 = o2.getVariableName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;

@@ -76,7 +76,7 @@ public final class TabComponentDefinition extends PartialComponentDefinition imp
 		super(aComponentName, componentLibrary, aFolder, prj);
 		if (checkUnicity) {
 			String resourceIdentifier = FlexoTabComponentResource.resourceIdentifierForName(aComponentName);
-			if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
+			if (aFolder != null && aFolder.getProject() != null && aFolder.getProject().isRegistered(resourceIdentifier)) {
 				aFolder.removeFromComponents(this);
 				throw new DuplicateResourceException(resourceIdentifier);
 			}

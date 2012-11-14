@@ -9,32 +9,29 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class TestModule extends FlexoModule {
-	
-	public TestModule(InteractiveFlexoEditor projectEditor) 
-	{
+
+	public TestModule(InteractiveFlexoEditor projectEditor) {
 		super(projectEditor);
 	}
-	
+
 	@Override
-	public void setFlexoController(FlexoController controller) 
-	{
+	public void setFlexoController(FlexoController controller) {
 		super.setFlexoController(controller);
 	}
-	
+
 	@Override
 	public InspectorGroup[] getInspectorGroups() {
-		return new InspectorGroup[]{Inspectors.WKF};
+		return new InspectorGroup[] { Inspectors.WKF };
 	}
-	
+
 	@Override
 	public FlexoModelObject getDefaultObjectToSelect() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
-	public Module getModule() 
-	{
+	public Module getModule() {
 		return Module.TEST_MODULE;
 	}
 }

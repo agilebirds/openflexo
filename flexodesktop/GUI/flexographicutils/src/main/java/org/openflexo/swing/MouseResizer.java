@@ -270,10 +270,10 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 	}
 
 	private boolean isWithinResizeZone(MouseEvent e) {
-		return (e.getX() >= -RESIZE_ZONE_WIDTH && e.getX() <= RESIZE_ZONE_WIDTH)
-				|| (e.getY() >= -RESIZE_ZONE_WIDTH && e.getY() <= RESIZE_ZONE_WIDTH)
-				|| (e.getX() <= getComponentWidth() + RESIZE_ZONE_WIDTH && e.getX() >= getComponentWidth() - RESIZE_ZONE_WIDTH)
-				|| (e.getY() <= getComponentHeight() + RESIZE_ZONE_WIDTH && e.getY() >= getComponentHeight() - RESIZE_ZONE_WIDTH);
+		return e.getX() >= -RESIZE_ZONE_WIDTH && e.getX() <= RESIZE_ZONE_WIDTH || e.getY() >= -RESIZE_ZONE_WIDTH
+				&& e.getY() <= RESIZE_ZONE_WIDTH || e.getX() <= getComponentWidth() + RESIZE_ZONE_WIDTH
+				&& e.getX() >= getComponentWidth() - RESIZE_ZONE_WIDTH || e.getY() <= getComponentHeight() + RESIZE_ZONE_WIDTH
+				&& e.getY() >= getComponentHeight() - RESIZE_ZONE_WIDTH;
 	}
 
 	/**

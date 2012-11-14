@@ -147,7 +147,8 @@ class SGBrowserConfiguration implements BrowserConfiguration {
 		browser.setGenerationModifiedFilter(new CGFileFilter("generation_modified", UtilsIconLibrary.LEFT_MODIFICATION_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
-				return (file.getGenerationStatus().isGenerationModified() || (file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged));
+				return file.getGenerationStatus().isGenerationModified()
+						|| file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged;
 			}
 		});
 		browser.addToCustomFilters(browser.getGenerationModifiedFilter());
@@ -236,7 +237,7 @@ class SGBrowserConfiguration implements BrowserConfiguration {
 			} else if (object instanceof TechnologyModelObject) {
 
 				TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule
-						.getTechnologyModuleGUIFactory((((TechnologyModelObject) object).getTechnologyModuleImplementation()).getClass());
+						.getTechnologyModuleGUIFactory(((TechnologyModelObject) object).getTechnologyModuleImplementation().getClass());
 				if (technologyModuleGUIFactory != null) {
 					TechnologyModuleBrowserElement<?> element = technologyModuleGUIFactory.createBrowserElement(
 							(TechnologyModelObject) object, browser, parent);

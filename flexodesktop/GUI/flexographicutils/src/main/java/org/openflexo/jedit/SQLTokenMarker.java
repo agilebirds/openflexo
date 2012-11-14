@@ -60,7 +60,7 @@ public class SQLTokenMarker extends TokenMarker {
 				if (token == Token.COMMENT1 && length - i >= 1 && line.array[i + 1] == '/') {
 					token = Token.NULL;
 					i++;
-					addToken((i + 1) - lastOffset, Token.COMMENT1);
+					addToken(i + 1 - lastOffset, Token.COMMENT1);
 					lastOffset = i + 1;
 				} else if (token == Token.NULL) {
 					searchBack(line, i);
@@ -80,7 +80,7 @@ public class SQLTokenMarker extends TokenMarker {
 				if (token == Token.LITERAL1 && literalChar == '[') {
 					token = Token.NULL;
 					literalChar = 0;
-					addToken((i + 1) - lastOffset, Token.LITERAL1);
+					addToken(i + 1 - lastOffset, Token.LITERAL1);
 					lastOffset = i + 1;
 				}
 				break;
@@ -117,7 +117,7 @@ public class SQLTokenMarker extends TokenMarker {
 				break;
 			case ':':
 				if (token == Token.NULL) {
-					addToken((i + 1) - lastOffset, Token.LABEL);
+					addToken(i + 1 - lastOffset, Token.LABEL);
 					lastOffset = i + 1;
 				}
 				break;
@@ -167,7 +167,7 @@ public class SQLTokenMarker extends TokenMarker {
 				} else if (token == Token.LITERAL1 && literalChar == line.array[i]) {
 					token = Token.NULL;
 					literalChar = 0;
-					addToken((i + 1) - lastOffset, Token.LITERAL1);
+					addToken(i + 1 - lastOffset, Token.LITERAL1);
 					lastOffset = i + 1;
 				}
 				break;

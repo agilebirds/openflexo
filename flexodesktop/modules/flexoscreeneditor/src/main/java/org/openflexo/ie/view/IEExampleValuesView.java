@@ -144,7 +144,7 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 
 			@Override
 			public FlexoModelObject getDefaultRootObject() {
-				return (rootObject).getComponentDefinition();
+				return rootObject.getComponentDefinition();
 			}
 
 			@Override

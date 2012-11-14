@@ -212,7 +212,7 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	  */
 	@Override
 	public int getEditingRow() {
-		return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1 : editingRow;
+		return getColumnClass(editingColumn) == TreeTableModel.class ? -1 : editingRow;
 	}
 
 	//

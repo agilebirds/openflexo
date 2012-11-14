@@ -126,7 +126,7 @@ public class FCH {
 		        return 0;
 		    }
 		});*/
-		Vector<Component> sortedConcernedComponents = (new SortComponents(concernedComponents, window)).getSortedVector();
+		Vector<Component> sortedConcernedComponents = new SortComponents(concernedComponents, window).getSortedVector();
 
 		/*  i=0;
 		  for (Enumeration en=sortedConcernedComponents.elements(); en.hasMoreElements();i++) {
@@ -213,7 +213,7 @@ public class FCH {
 		JComponent parent = null;
 		DocItem parentItem = null;
 		JComponent current = component;
-		while ((parentItem == null) && (current.getParent() != null) && (current.getParent() instanceof JComponent)) {
+		while (parentItem == null && current.getParent() != null && current.getParent() instanceof JComponent) {
 			current = (JComponent) current.getParent();
 			parentItem = getDocForComponent(current);
 			if (parentItem != null) {
@@ -305,7 +305,7 @@ public class FCH {
 			DocItemFolder moduleViewFolder = DocItemFolder.createDocItemFolder(moduleViewIdentifier, "Documentation on that view", folder,
 					drc);
 			mainPaneItem.addToInheritanceChildItems(moduleViewFolder.getPrimaryDocItem());
-			if ((view.getPerspective() != null) && (folder.getPrimaryDocItem() != null)) {
+			if (view.getPerspective() != null && folder.getPrimaryDocItem() != null) {
 				moduleViewFolder.getPrimaryDocItem().addToRelatedToItems(folder.getPrimaryDocItem());
 			}
 		}

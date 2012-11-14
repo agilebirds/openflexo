@@ -57,11 +57,11 @@ public class DeclareShapeInEditionPatternDialogEDITOR {
 		editor.launch();
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private static FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
 }

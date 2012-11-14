@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class ACallBinding extends PBinding
-{
-    private PCall _call_;
+public final class ACallBinding extends PBinding {
+	private PCall _call_;
 
-    public ACallBinding()
-    {
-        // Constructor
-    }
+	public ACallBinding() {
+		// Constructor
+	}
 
-    public ACallBinding(
-        @SuppressWarnings("hiding") PCall _call_)
-    {
-        // Constructor
-        setCall(_call_);
+	public ACallBinding(@SuppressWarnings("hiding") PCall _call_) {
+		// Constructor
+		setCall(_call_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new ACallBinding(
-            cloneNode(this._call_));
-    }
+	@Override
+	public Object clone() {
+		return new ACallBinding(cloneNode(this._call_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseACallBinding(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseACallBinding(this);
+	}
 
-    public PCall getCall()
-    {
-        return this._call_;
-    }
+	public PCall getCall() {
+		return this._call_;
+	}
 
-    public void setCall(PCall node)
-    {
-        if(this._call_ != null)
-        {
-            this._call_.parent(null);
-        }
+	public void setCall(PCall node) {
+		if (this._call_ != null) {
+			this._call_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._call_ = node;
-    }
+		this._call_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._call_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._call_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._call_ == child)
-        {
-            this._call_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._call_ == child) {
+			this._call_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._call_ == oldChild)
-        {
-            setCall((PCall) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._call_ == oldChild) {
+			setCall((PCall) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

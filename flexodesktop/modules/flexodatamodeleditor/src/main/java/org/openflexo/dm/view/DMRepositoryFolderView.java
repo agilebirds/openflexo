@@ -99,7 +99,7 @@ public class DMRepositoryFolderView extends DMView<DMRepositoryFolder> {
 	public DMRepository getSelectedDMRepository() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMRepository) {
 			return (DMRepository) selection.firstElement();
 		}
 		return null;

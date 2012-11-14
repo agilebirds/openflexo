@@ -330,8 +330,9 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		}
 		if (object.getEmbeddedObjects() != null) {
 			for (FIBModelObject o : object.getEmbeddedObjects()) {
-				if (isNameUsedInHierarchy(aName, o))
+				if (isNameUsedInHierarchy(aName, o)) {
 					return true;
+				}
 			}
 		}
 		return false;

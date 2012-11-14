@@ -116,7 +116,7 @@ public class WSEPortTypeFolderView extends WSEView<WSPortTypeFolder> {
 	public ServiceInterface getSelectedServiceInterface() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceInterface) {
 			return (ServiceInterface) selection.firstElement();
 		}
 		if (getSelectedServiceOperation() != null) {
@@ -129,7 +129,7 @@ public class WSEPortTypeFolderView extends WSEView<WSPortTypeFolder> {
 	public ServiceOperation getSelectedServiceOperation() {
 		WSESelectionManager sm = getWSEController().getWSESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceOperation)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceOperation) {
 			return (ServiceOperation) selection.firstElement();
 		}
 		return null;

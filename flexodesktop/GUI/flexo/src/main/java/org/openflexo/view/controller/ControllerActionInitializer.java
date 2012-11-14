@@ -123,14 +123,14 @@ public class ControllerActionInitializer {
      * 
      */
 	private void initializeExcelAction() {
-		(new ProjectExcelExportInitializer(this)).init();
+		new ProjectExcelExportInitializer(this).init();
 	}
 
 	protected void initializeHelpAction() {
 		getController().getEditor().registerInitializerFor(HelpAction.actionType, new FlexoActionInitializer<HelpAction>() {
 			@Override
 			public boolean run(ActionEvent e, HelpAction action) {
-				return (action.getFocusedObject() instanceof InspectableObject);
+				return action.getFocusedObject() instanceof InspectableObject;
 			}
 		}, getController().getModule());
 		getController().getEditor().registerFinalizerFor(HelpAction.actionType, new FlexoActionFinalizer<HelpAction>() {
@@ -236,7 +236,7 @@ public class ControllerActionInitializer {
 				new FlexoActionFinalizer<SubmitDocumentationAction>() {
 					@Override
 					public boolean run(ActionEvent e, SubmitDocumentationAction action) {
-						if ((action.getContext() != null) && (action.getContext() instanceof SubmitVersion)) {
+						if (action.getContext() != null && action.getContext() instanceof SubmitVersion) {
 							((SubmitVersion) action.getContext()).doAction();
 							FlexoController.notify(FlexoLocalization.localizedForKey("submission_has_been_successfully_recorded"));
 							return true;

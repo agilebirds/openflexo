@@ -37,7 +37,6 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.popups.AskNewComponentDialog;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.view.controller.ActionInitializer;

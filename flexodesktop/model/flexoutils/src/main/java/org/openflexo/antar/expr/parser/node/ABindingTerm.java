@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class ABindingTerm extends PTerm
-{
-    private PBinding _binding_;
+public final class ABindingTerm extends PTerm {
+	private PBinding _binding_;
 
-    public ABindingTerm()
-    {
-        // Constructor
-    }
+	public ABindingTerm() {
+		// Constructor
+	}
 
-    public ABindingTerm(
-        @SuppressWarnings("hiding") PBinding _binding_)
-    {
-        // Constructor
-        setBinding(_binding_);
+	public ABindingTerm(@SuppressWarnings("hiding") PBinding _binding_) {
+		// Constructor
+		setBinding(_binding_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new ABindingTerm(
-            cloneNode(this._binding_));
-    }
+	@Override
+	public Object clone() {
+		return new ABindingTerm(cloneNode(this._binding_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseABindingTerm(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseABindingTerm(this);
+	}
 
-    public PBinding getBinding()
-    {
-        return this._binding_;
-    }
+	public PBinding getBinding() {
+		return this._binding_;
+	}
 
-    public void setBinding(PBinding node)
-    {
-        if(this._binding_ != null)
-        {
-            this._binding_.parent(null);
-        }
+	public void setBinding(PBinding node) {
+		if (this._binding_ != null) {
+			this._binding_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._binding_ = node;
-    }
+		this._binding_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._binding_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._binding_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._binding_ == child)
-        {
-            this._binding_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._binding_ == child) {
+			this._binding_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._binding_ == oldChild)
-        {
-            setBinding((PBinding) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._binding_ == oldChild) {
+			setBinding((PBinding) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

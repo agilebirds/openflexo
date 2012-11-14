@@ -43,7 +43,7 @@ public class Decision extends QuidObject implements Named {
 
 	@Override
 	public String getNameParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	@Override

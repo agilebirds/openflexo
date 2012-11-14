@@ -830,11 +830,11 @@ public class DMEOModel extends DMObject implements DMEOObject {
 			if (f.getName().toLowerCase().endsWith(".eomodeld")) {
 				return EOMODEL_ICON;
 			}/*
-			 * else if (f.isDirectory() && f.listFiles(new java.io.FileFilter() {
-			 * 
-			 * public boolean accept(File f) { return !f.isDirectory() && f.getName().toLowerCase().endsWith("index.eomodeld"); } }).length
-			 * > 0) return DM_EOMODEL_ICON;
-			 */else {
+				* else if (f.isDirectory() && f.listFiles(new java.io.FileFilter() {
+				* 
+				* public boolean accept(File f) { return !f.isDirectory() && f.getName().toLowerCase().endsWith("index.eomodeld"); } }).length
+				* > 0) return DM_EOMODEL_ICON;
+				*/else {
 				return super.getIcon(f);
 			}
 		}

@@ -44,9 +44,9 @@ public class GeomTools {
 	}
 
 	public static double distance(Point p1, Point p2) {
-		float x2 = (p1.x - p2.x);
+		float x2 = p1.x - p2.x;
 		x2 = x2 * x2;
-		float y2 = (p1.y - p2.y);
+		float y2 = p1.y - p2.y;
 		y2 = y2 * y2;
 		return Math.sqrt(x2 + y2);
 	}
@@ -60,7 +60,7 @@ public class GeomTools {
 	public static double rotationAngle(Point pivot, Point p1, Point p2) {
 		double vectProduct = (p1.x - pivot.x) * (p2.x - pivot.x) + (p1.y - pivot.y) * (p2.y - pivot.y);
 		double returned = Math.acos(vectProduct / (distance(pivot, p1) * distance(pivot, p2)));
-		float sign = ((p1.x - pivot.x) * (p2.y - pivot.y) - (p2.x - pivot.x) * (p1.y - pivot.y));
+		float sign = (p1.x - pivot.x) * (p2.y - pivot.y) - (p2.x - pivot.x) * (p1.y - pivot.y);
 		if (sign < 0) {
 			returned = -returned;
 		}

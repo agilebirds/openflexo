@@ -130,8 +130,8 @@ public final class ForwardWSEdge extends ExternalMessageEdge<AbstractInPort, Fle
 			return false;
 		}
 
-		return (getStartNode().getProcess() == getEndNode().getProcess() && (getEndNode().getSubProcessNode().getSubProcess()
-				.getIsWebService()));
+		return getStartNode().getProcess() == getEndNode().getProcess()
+				&& getEndNode().getSubProcessNode().getSubProcess().getIsWebService();
 	}
 
 	public static class ForwardWSEdgeMustBeValid extends ValidationRule<ForwardWSEdgeMustBeValid, ForwardWSEdge> {

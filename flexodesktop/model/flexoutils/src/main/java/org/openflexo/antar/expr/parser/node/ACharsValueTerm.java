@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class ACharsValueTerm extends PTerm
-{
-    private TCharsValue _charsValue_;
+public final class ACharsValueTerm extends PTerm {
+	private TCharsValue _charsValue_;
 
-    public ACharsValueTerm()
-    {
-        // Constructor
-    }
+	public ACharsValueTerm() {
+		// Constructor
+	}
 
-    public ACharsValueTerm(
-        @SuppressWarnings("hiding") TCharsValue _charsValue_)
-    {
-        // Constructor
-        setCharsValue(_charsValue_);
+	public ACharsValueTerm(@SuppressWarnings("hiding") TCharsValue _charsValue_) {
+		// Constructor
+		setCharsValue(_charsValue_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new ACharsValueTerm(
-            cloneNode(this._charsValue_));
-    }
+	@Override
+	public Object clone() {
+		return new ACharsValueTerm(cloneNode(this._charsValue_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseACharsValueTerm(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseACharsValueTerm(this);
+	}
 
-    public TCharsValue getCharsValue()
-    {
-        return this._charsValue_;
-    }
+	public TCharsValue getCharsValue() {
+		return this._charsValue_;
+	}
 
-    public void setCharsValue(TCharsValue node)
-    {
-        if(this._charsValue_ != null)
-        {
-            this._charsValue_.parent(null);
-        }
+	public void setCharsValue(TCharsValue node) {
+		if (this._charsValue_ != null) {
+			this._charsValue_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._charsValue_ = node;
-    }
+		this._charsValue_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._charsValue_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._charsValue_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._charsValue_ == child)
-        {
-            this._charsValue_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._charsValue_ == child) {
+			this._charsValue_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._charsValue_ == oldChild)
-        {
-            setCharsValue((TCharsValue) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._charsValue_ == oldChild) {
+			setCharsValue((TCharsValue) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

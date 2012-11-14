@@ -79,10 +79,7 @@ public class TTo {
 
 	@XmlElementRefs({
 			@XmlElementRef(name = "query", namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/", type = JAXBElement.class),
-			@XmlElementRef(
-					name = "documentation",
-					namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/",
-					type = JAXBElement.class) })
+			@XmlElementRef(name = "documentation", namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/", type = JAXBElement.class) })
 	@XmlMixed
 	@XmlAnyElement(lax = true)
 	protected List<Object> content;

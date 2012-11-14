@@ -82,7 +82,7 @@ public class BindingVariable extends FlexoModelObject implements Typed {
 
 	@Override
 	public void setType(DMType type) {
-		if ((type == null && _type != null) || (type != null && !type.equals(_type))) {
+		if (type == null && _type != null || type != null && !type.equals(_type)) {
 			DMType oldType = _type;
 			if (oldType != null) {
 				oldType.removeFromTypedWithThisType(this);

@@ -65,7 +65,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.PredefinedSection;
-import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -197,15 +196,18 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 		}
 		if (readersGuideGenerator == null) {
 			readersGuideGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), READERS_TEMPLATE_NAME, "ReadersGuide",
-					DGGenerator.nameForReadersGuideNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.READERS_GUIDE));
+					DGGenerator.nameForReadersGuideNoExt(getRepository()), getRepository().getTOCEntryWithID(
+							PredefinedSection.PredefinedSectionType.READERS_GUIDE));
 		}
 		if (definitionsGenerator == null) {
 			definitionsGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), DEFINITIONS_TEMPLATE_NAME, "Definitions",
-					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.DEFINITIONS));
+					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(
+							PredefinedSection.PredefinedSectionType.DEFINITIONS));
 		}
 		if (rolesGenerator == null) {
 			rolesGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), ROLES_TEMPLATE_NAME, "Roles",
-					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(PredefinedSection.PredefinedSectionType.ROLES));
+					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(
+							PredefinedSection.PredefinedSectionType.ROLES));
 		}
 		if (stylesAndImagesGenerator == null) {
 			stylesAndImagesGenerator = new StylesAndImagesGenerator(this, getProject());
@@ -484,8 +486,8 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	}
 
 	public ProjectLatexFileResource getProjectDocResource() {
-		return ((ProjectLatexFileResource) getProject().resourceForKey(ResourceType.LATEX_FILE,
-				ProjectLatexFileResource.nameForRepositoryAndProject(this.getRepository(), getProject())));
+		return (ProjectLatexFileResource) getProject().resourceForKey(ResourceType.LATEX_FILE,
+				ProjectLatexFileResource.nameForRepositoryAndProject(this.getRepository(), getProject()));
 	}
 
 	/**
@@ -610,7 +612,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 								if (System.currentTimeMillis() - lastLogUpdate > getLatexTimeOutInMillis()) {
 									current.interrupt();
 									if (logger.isLoggable(Level.WARNING)) {
-										logger.warning("pdflatex timeout: no log for " + (getLatexTimeOutInMillis() / 1000) + " seconds.");
+										logger.warning("pdflatex timeout: no log for " + getLatexTimeOutInMillis() / 1000 + " seconds.");
 									}
 									return;
 								}
@@ -715,8 +717,7 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 									if (System.currentTimeMillis() - lastLogUpdate > getLatexTimeOutInMillis()) {
 										current.interrupt();
 										if (logger.isLoggable(Level.WARNING)) {
-											logger.warning("pdflatex timeout: no log for " + (getLatexTimeOutInMillis() / 1000)
-													+ " seconds.");
+											logger.warning("pdflatex timeout: no log for " + getLatexTimeOutInMillis() / 1000 + " seconds.");
 										}
 										return;
 									}

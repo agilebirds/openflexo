@@ -124,8 +124,9 @@ public class AddEditionPattern extends AssignableAction {
 	}
 
 	public String _getCreationSchemeURI() {
-		if (getCreationScheme() != null)
+		if (getCreationScheme() != null) {
 			return getCreationScheme().getURI();
+		}
 		return _creationSchemeURI;
 	}
 
@@ -387,7 +388,7 @@ public class AddEditionPattern extends AssignableAction {
 							} else {
 								issues.add(new ValidationError(this, action, "parameter_s_value_is_not_defined: " + p.getParam().getName()));
 							}
-						} else if (!(p.getValue().isValid())) {
+						} else if (!p.getValue().isValid()) {
 							logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
 									+ p.action.getFullyQualifiedName() + ". Reason follows.");
 							p.getValue().getBinding().debugIsBindingValid();

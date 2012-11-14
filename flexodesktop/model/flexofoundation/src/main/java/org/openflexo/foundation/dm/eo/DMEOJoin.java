@@ -180,9 +180,9 @@ public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject 
 
 	public boolean isJoinValid() {
 		if (getDMEORelationship() == null) {
-			return ((getSourceAttribute() != null) && (getDestinationAttribute() != null));
+			return getSourceAttribute() != null && getDestinationAttribute() != null;
 		}
-		return (_eoJoin != null);
+		return _eoJoin != null;
 	}
 
 	public void setSourceAttribute(DMEOAttribute sourceAttribute) throws EOAccessException, InvalidJoinException {
@@ -220,9 +220,9 @@ public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject 
 		if (getDMEORelationship() == null) {
 			return;
 		}
-		if ((getEORelationship() != null) && (getDestinationEntity() != null) && (_sourceAttribute != null)
-				&& (_destinationAttribute != null) && (_destinationAttribute.getDMEOEntity() == getDestinationEntity())
-				&& (_sourceAttribute.getEOAttribute() != null) && (_destinationAttribute.getEOAttribute() != null)) {
+		if (getEORelationship() != null && getDestinationEntity() != null && _sourceAttribute != null && _destinationAttribute != null
+				&& _destinationAttribute.getDMEOEntity() == getDestinationEntity() && _sourceAttribute.getEOAttribute() != null
+				&& _destinationAttribute.getEOAttribute() != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Make new EOJoin");
 			}

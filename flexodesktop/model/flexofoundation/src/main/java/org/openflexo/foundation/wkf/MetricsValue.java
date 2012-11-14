@@ -356,9 +356,9 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 		}
 		switch (getMetricsDefinition().getType()) {
 		case NUMBER:
-			return getIntValue().toString() + getUnit() != null ? (" " + getUnit()) : "";
+			return getIntValue().toString() + getUnit() != null ? " " + getUnit() : "";
 		case DOUBLE:
-			return getDoubleValue().toString() + getUnit() != null ? (" " + getUnit()) : "";
+			return getDoubleValue().toString() + getUnit() != null ? " " + getUnit() : "";
 		case TEXT:
 			return getStringValue();
 		case TIME:

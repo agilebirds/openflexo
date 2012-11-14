@@ -137,7 +137,7 @@ public class IETDFlowLayout extends FlowLayout {
 					Dimension d = m.getPreferredSize();
 					m.setSize(d.width, d.height);
 
-					if ((x == 0) || ((x + d.width) <= maxwidth)) {
+					if (x == 0 || x + d.width <= maxwidth) {
 						if (x > 0) {
 							x += getHgap();
 						}

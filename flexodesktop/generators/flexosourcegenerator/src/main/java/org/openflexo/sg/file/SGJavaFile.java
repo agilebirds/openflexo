@@ -180,11 +180,11 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 		if (!supportModelReinjection()) {
 			return false;
 		}
-		return (getJavaResource().getLastModelReinjectingDate().before(getResource().getDiskLastModifiedDate()));
+		return getJavaResource().getLastModelReinjectingDate().before(getResource().getDiskLastModifiedDate());
 	}
 
 	public Date getLastModelReinjectingDate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
+		if (getResource() != null && getResource().getResourceFile() != null) {
 			return getJavaResource().getLastModelReinjectingDate();
 		}
 		return null;
@@ -195,7 +195,7 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 			if (getLastModelReinjectingDate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
 			}
-			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastModelReinjectingDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastModelReinjectingDate());
 		}
 		return "???";
 	}

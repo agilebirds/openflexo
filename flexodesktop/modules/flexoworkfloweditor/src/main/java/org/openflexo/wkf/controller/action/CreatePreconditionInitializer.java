@@ -129,8 +129,8 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 						Vector<FlexoNode> unboundBeginNodes = pg.getUnboundBeginNodes();
 						Vector<FlexoNode> alreadyBoundBeginNodes = pg.getBoundBeginNodes();
 
-						FlexoNode firstUnboundBeginNode = (unboundBeginNodes.size() > 0 ? unboundBeginNodes.firstElement() : null);
-						FlexoNode firstBoundBeginNode = (alreadyBoundBeginNodes.size() > 0 ? alreadyBoundBeginNodes.firstElement() : null);
+						FlexoNode firstUnboundBeginNode = unboundBeginNodes.size() > 0 ? unboundBeginNodes.firstElement() : null;
+						FlexoNode firstBoundBeginNode = alreadyBoundBeginNodes.size() > 0 ? alreadyBoundBeginNodes.firstElement() : null;
 
 						boolean hasUnboundBeginNodes = unboundBeginNodes.size() > 0;
 						boolean hasAlreadyBoundBeginNodes = alreadyBoundBeginNodes.size() > 0;
@@ -153,9 +153,9 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 							String[] choices = availableChoices.toArray(new String[availableChoices.size()]);
 							RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice",
 									"choose_an_option",
-									(firstUnboundBeginNode != null ? CHOOSE_EXISTING_UNBOUND_BEGIN_NODE : (firstBoundBeginNode != null
+									firstUnboundBeginNode != null ? CHOOSE_EXISTING_UNBOUND_BEGIN_NODE : firstBoundBeginNode != null
 											&& action.allowsToSelectPreconditionOnly() ? CHOOSE_EXISTING_ALREADY_BOUND_BEGIN_NODE
-											: CREATE_NEW_BEGIN_NODE)), choices);
+											: CREATE_NEW_BEGIN_NODE, choices);
 							String nodeNameProposal;
 							if (action.getFocusedObject() instanceof AbstractActivityNode) {
 								nodeNameProposal = pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("begin_node"),

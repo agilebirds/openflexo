@@ -54,7 +54,7 @@ public class WSETabularView extends TabularView {
 				return wsr.getWSService();
 			}
 		} else if (object instanceof DMObject) {
-			return (DMObject) (((DMObject) object).getParent());
+			return (DMObject) ((DMObject) object).getParent();
 		} else if (object instanceof ServiceInterface) {
 			WSPortType wsp = ((ServiceInterface) object).getProject().getFlexoWSLibrary()
 					.getWSPortTypeNamed(((ServiceInterface) object).getName());

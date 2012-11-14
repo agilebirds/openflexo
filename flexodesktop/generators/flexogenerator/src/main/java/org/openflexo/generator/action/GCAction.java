@@ -42,7 +42,7 @@ public abstract class GCAction<A extends GCAction<A, T1>, T1 extends CGObject> e
 	}
 
 	public static ProjectGeneratorFactory getProjectGeneratorFactory(GenerationRepository repository) {
-		return ((ProjectGeneratorFactory) repository.getGeneratedCode().getFactory());
+		return (ProjectGeneratorFactory) repository.getGeneratedCode().getFactory();
 	}
 
 	private AbstractProjectGenerator<? extends GenerationRepository> _projectGenerator;
@@ -58,7 +58,7 @@ public abstract class GCAction<A extends GCAction<A, T1>, T1 extends CGObject> e
 
 	public AbstractProjectGenerator<? extends GenerationRepository> getProjectGenerator() {
 		GenerationRepository repository = getRepository();
-		if ((_projectGenerator == null) && (repository != null)) {
+		if (_projectGenerator == null && repository != null) {
 			if (repository.getProjectGenerator() instanceof AbstractProjectGenerator) {
 				_projectGenerator = (AbstractProjectGenerator<? extends GenerationRepository>) repository.getProjectGenerator();
 			}
@@ -104,7 +104,7 @@ public abstract class GCAction<A extends GCAction<A, T1>, T1 extends CGObject> e
 		Vector<AbstractCGFile> returned = new Vector<AbstractCGFile>();
 		for (CGFile file : repository.getFiles()) {
 			for (CGObject obj : selectedTopLevelObject) {
-				if ((obj.contains(file)) && (file instanceof AbstractCGFile)) {
+				if (obj.contains(file) && file instanceof AbstractCGFile) {
 					returned.add((AbstractCGFile) file);
 				}
 			}

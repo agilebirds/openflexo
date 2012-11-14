@@ -34,10 +34,6 @@ import javax.swing.tree.TreeNode;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dm.action.CreateDMEntity;
-import org.openflexo.foundation.dm.action.ImportJDKEntity;
-import org.openflexo.foundation.dm.action.UpdateLoadableDMEntity;
 import org.openflexo.foundation.dm.dm.EntityDeleted;
 import org.openflexo.foundation.dm.dm.EntityRegistered;
 import org.openflexo.foundation.dm.dm.EntityUnregistered;
@@ -168,7 +164,7 @@ public class DMPackage extends DMObject {
 			}
 		}
 
-		return ((getRepository() != null) && (!getRepository().isReadOnly()));
+		return getRepository() != null && !getRepository().isReadOnly();
 	}
 
 	public DMRepository getRepository() {
@@ -314,7 +310,7 @@ public class DMPackage extends DMObject {
 		public int compare(DMEntity o1, DMEntity o2) {
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;

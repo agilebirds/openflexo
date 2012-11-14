@@ -202,33 +202,40 @@ public class LoggingFilter {
 
 	public boolean filterDoesApply(LogRecord record) {
 		if (getHasFilteredMessage()) {
-			if (!messageMatches(record))
+			if (!messageMatches(record)) {
 				return false;
+			}
 		}
 		if (getHasFilteredLevel()) {
-			if (!levelMatches(record))
+			if (!levelMatches(record)) {
 				return false;
+			}
 		}
 		if (getHasFilteredDate()) {
-			if (!dateMatches(record))
+			if (!dateMatches(record)) {
 				return false;
+			}
 		}
 		if (getHasFilteredSequence()) {
-			if (!sequenceMatches(record))
+			if (!sequenceMatches(record)) {
 				return false;
+			}
 
 		}
 		if (getHasFilteredSource()) {
-			if (!sourceMatches(record))
+			if (!sourceMatches(record)) {
 				return false;
+			}
 		}
 		if (getHasFilteredStacktrace()) {
-			if (!stacktraceMatches(record))
+			if (!stacktraceMatches(record)) {
 				return false;
+			}
 		}
 		if (getHasFilteredThread()) {
-			if (!threadMatches(record))
+			if (!threadMatches(record)) {
 				return false;
+			}
 		}
 		return true;
 	}

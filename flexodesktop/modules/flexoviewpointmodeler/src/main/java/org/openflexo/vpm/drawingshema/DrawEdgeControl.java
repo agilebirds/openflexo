@@ -95,8 +95,7 @@ public class DrawEdgeControl extends MouseDragControl {
 											ConnectorPatternRole patternRole = ((AddConnector) a).getPatternRole();
 											logger.warning("Implement this !!!");
 											String text = patternRole.getLabel().getBinding().toString();// Value(null);
-											performAddConnector(controller,
-													(ConnectorGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation(), text);
+											performAddConnector(controller, patternRole.getGraphicalRepresentation(), text);
 											return;
 										}
 									}

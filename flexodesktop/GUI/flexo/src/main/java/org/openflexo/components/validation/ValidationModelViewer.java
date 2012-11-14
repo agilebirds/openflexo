@@ -124,7 +124,7 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 					return;
 				}
 				int selectedRow = _validationModelList.getSelectedIndex();
-				if ((selectedRow >= 0) && (_validationModel != null) && (selectedRow < _validationModel.getSize())) {
+				if (selectedRow >= 0 && _validationModel != null && selectedRow < _validationModel.getSize()) {
 					ValidationRuleSet ruleSet = (ValidationRuleSet) _validationModel.getElementAt(selectedRow);
 					setCurrentRuleSet(ruleSet);
 				} else {
@@ -145,7 +145,7 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 					return;
 				}
 				int selectedRow = _ruleSetList.getSelectedIndex();
-				if ((selectedRow >= 0) && (_currentRuleSet != null) && (selectedRow < _currentRuleSet.getSize())) {
+				if (selectedRow >= 0 && _currentRuleSet != null && selectedRow < _currentRuleSet.getSize()) {
 					ValidationRule rule = _currentRuleSet.getElementAt(selectedRow);
 					setCurrentRule(rule);
 				} else {

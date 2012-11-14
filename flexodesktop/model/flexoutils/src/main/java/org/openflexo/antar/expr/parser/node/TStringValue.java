@@ -2,31 +2,27 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class TStringValue extends Token
-{
-    public TStringValue(String text)
-    {
-        setText(text);
-    }
+public final class TStringValue extends Token {
+	public TStringValue(String text) {
+		setText(text);
+	}
 
-    public TStringValue(String text, int line, int pos)
-    {
-        setText(text);
-        setLine(line);
-        setPos(pos);
-    }
+	public TStringValue(String text, int line, int pos) {
+		setText(text);
+		setLine(line);
+		setPos(pos);
+	}
 
-    @Override
-    public Object clone()
-    {
-      return new TStringValue(getText(), getLine(), getPos());
-    }
+	@Override
+	public Object clone() {
+		return new TStringValue(getText(), getLine(), getPos());
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTStringValue(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseTStringValue(this);
+	}
 }

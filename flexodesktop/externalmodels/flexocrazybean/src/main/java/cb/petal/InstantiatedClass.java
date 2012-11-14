@@ -41,7 +41,7 @@ public class InstantiatedClass extends DerivedClass {
 	}
 
 	public String getActualParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	public String getModule() {

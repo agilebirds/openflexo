@@ -99,7 +99,7 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 		if (paletteWidget.getScreenshotFile(css) != null && paletteWidget.getScreenshotFile(css).exists()) {
 			_label.setPreferredSize(null);
 			if (resizeScreenshot) {
-				_label.setIcon((ImageUtils.getThumbnail(new ImageIcon(paletteWidget.getScreenshotFile(css).getAbsolutePath()), 85)));
+				_label.setIcon(ImageUtils.getThumbnail(new ImageIcon(paletteWidget.getScreenshotFile(css).getAbsolutePath()), 85));
 			} else {
 				_label.setIcon(new ImageIcon(paletteWidget.getScreenshotFile(css).getAbsolutePath()));
 			}

@@ -53,74 +53,74 @@ public class DMReadOnlyEOAttributeTableModel extends DMEOAttributeTableModel {
 		addToColumns(new IconColumn<DMEOAttribute>("primary_key", 25) {
 			@Override
 			public Icon getIcon(DMEOAttribute attribute) {
-				return (attribute.getIsPrimaryKeyAttribute() ? DMEIconLibrary.KEY_ICON : null);
+				return attribute.getIsPrimaryKeyAttribute() ? DMEIconLibrary.KEY_ICON : null;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOAttribute attribute) {
-				return (attribute.getIsPrimaryKeyAttribute() ? FlexoLocalization.localizedForKey("primary_key") : FlexoLocalization
-						.localizedForKey("not_primary_key"));
+				return attribute.getIsPrimaryKeyAttribute() ? FlexoLocalization.localizedForKey("primary_key") : FlexoLocalization
+						.localizedForKey("not_primary_key");
 			}
 
 		});
 		addToColumns(new IconColumn<DMEOAttribute>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMEOAttribute attribute) {
-				return (attribute.getIsReadOnlyAttribute() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return attribute.getIsReadOnlyAttribute() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOAttribute attribute) {
-				return (attribute.getIsReadOnlyAttribute() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return attribute.getIsReadOnlyAttribute() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new IconColumn<DMEOAttribute>("lock", 25) {
 			@Override
 			public Icon getIcon(DMEOAttribute attribute) {
-				return (attribute.getIsUsedForLocking() ? DMEIconLibrary.LOCK_ICON : null);
+				return attribute.getIsUsedForLocking() ? DMEIconLibrary.LOCK_ICON : null;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOAttribute attribute) {
-				return (attribute.getIsUsedForLocking() ? FlexoLocalization.localizedForKey("is_used_for_locking") : FlexoLocalization
-						.localizedForKey("is_not_used_for_locking"));
+				return attribute.getIsUsedForLocking() ? FlexoLocalization.localizedForKey("is_used_for_locking") : FlexoLocalization
+						.localizedForKey("is_not_used_for_locking");
 			}
 		});
 		addToColumns(new IconColumn<DMEOAttribute>("settable", 25) {
 			@Override
 			public Icon getIcon(DMEOAttribute attribute) {
-				return (attribute.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON);
+				return attribute.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOAttribute attribute) {
-				return (attribute.getIsSettable() ? FlexoLocalization.localizedForKey("can_be_set") : FlexoLocalization
-						.localizedForKey("cannot_be_set"));
+				return attribute.getIsSettable() ? FlexoLocalization.localizedForKey("can_be_set") : FlexoLocalization
+						.localizedForKey("cannot_be_set");
 			}
 		});
 		addToColumns(new IconColumn<DMEOAttribute>("class_property", 25) {
 			@Override
 			public Icon getIcon(DMEOAttribute attribute) {
-				return (attribute.getIsClassProperty() ? DMEIconLibrary.CLASS_PROPERTY_ICON : null);
+				return attribute.getIsClassProperty() ? DMEIconLibrary.CLASS_PROPERTY_ICON : null;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOAttribute attribute) {
-				return (attribute.getIsClassProperty() ? FlexoLocalization.localizedForKey("is_class_property") : FlexoLocalization
-						.localizedForKey("is_not_class_property"));
+				return attribute.getIsClassProperty() ? FlexoLocalization.localizedForKey("is_class_property") : FlexoLocalization
+						.localizedForKey("is_not_class_property");
 			}
 		});
 		addToColumns(new IconColumn<DMEOAttribute>("allows_null", 20) {
 			@Override
 			public Icon getIcon(DMEOAttribute attribute) {
-				return (!attribute.getAllowsNull() ? DMEIconLibrary.NULL_PROPERTY_ICON : null);
+				return !attribute.getAllowsNull() ? DMEIconLibrary.NULL_PROPERTY_ICON : null;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOAttribute attribute) {
-				return (attribute.getAllowsNull() ? FlexoLocalization.localizedForKey("allows_null") : FlexoLocalization
-						.localizedForKey("does_not_allows_null"));
+				return attribute.getAllowsNull() ? FlexoLocalization.localizedForKey("allows_null") : FlexoLocalization
+						.localizedForKey("does_not_allows_null");
 			}
 		});
 		addToColumns(new StringColumn<DMEOAttribute>("name", 150) {
@@ -140,8 +140,8 @@ public class DMReadOnlyEOAttributeTableModel extends DMEOAttributeTableModel {
 		addToColumns(new StringColumn<DMEOAttribute>("prototype", 150) {
 			@Override
 			public String getValue(DMEOAttribute attribute) {
-				if (attribute != null && (attribute.getPrototype()) != null) {
-					return (attribute.getPrototype()).getName();
+				if (attribute != null && attribute.getPrototype() != null) {
+					return attribute.getPrototype().getName();
 				}
 				return null;
 			}

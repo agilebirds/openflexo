@@ -83,7 +83,7 @@ public class DMRepositorySelector extends AbstractBrowserSelector<DMRepository> 
 		// private DMModel _dmModel;
 
 		protected DataModelBrowser(/* DMModel dataModel */) {
-			super((getDataModel() != null ? getDataModel().getProject() : null), false);
+			super(getDataModel() != null ? getDataModel().getProject() : null, false);
 			init();
 		}
 

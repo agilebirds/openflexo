@@ -71,7 +71,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 			Point p = e.getPoint();
 			int col = _table.columnAtPoint(p);
 			int row = _table.rowAtPoint(p);
-			if ((col > -1) && (col < _model.getColumnCount()) && (row > -1) && (row < _model.getRowCount())) {
+			if (col > -1 && col < _model.getColumnCount() && row > -1 && row < _model.getRowCount()) {
 
 				if (e.getClickCount() == 2) {
 					if (_model.isCellEditable(row, col)) {
@@ -80,7 +80,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 								logger.fine("Double-click detected in a editable cell. Do nothing !");
 							}
 						}
-					} else if ((row > -1) && (row < _model.getRowCount())) {
+					} else if (row > -1 && row < _model.getRowCount()) {
 						if (logger.isLoggable(Level.FINE)) {
 							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("Double-click detected in a NON-editable cell. Select !");
@@ -101,7 +101,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 					// _focusedObject = selectMe;
 					// updateSlaveTabularViews();
 
-					if ((_table.getEditingRow() > -1) && (_table.getEditingRow() != row)) {
+					if (_table.getEditingRow() > -1 && _table.getEditingRow() != row) {
 						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Change row where edition was started, fire stop editing !");
 						}
@@ -119,7 +119,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 					}
 				}
 			} else {
-				if ((_table.getEditingRow() > -1) && (_table.getEditingRow() != row)) {
+				if (_table.getEditingRow() > -1 && _table.getEditingRow() != row) {
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Clicked outside the table, stop cell edition!");
 					}
@@ -134,7 +134,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		@Override
 		public void mousePressed(MouseEvent e) {
 			super.mousePressed(e);
-			if ((!e.isConsumed()) && (_controller.getSelectionManager() != null)) {
+			if (!e.isConsumed() && _controller.getSelectionManager() != null) {
 				_controller.getSelectionManager().getContextualMenuManager().processMousePressed(e);
 			}
 
@@ -143,7 +143,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			super.mouseReleased(e);
-			if ((!e.isConsumed()) && (_controller.getSelectionManager() != null)) {
+			if (!e.isConsumed() && _controller.getSelectionManager() != null) {
 				_controller.getSelectionManager().getContextualMenuManager().processMouseReleased(e);
 			}
 		}
@@ -270,7 +270,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				super.mouseMoved(e);
-				if ((!e.isConsumed()) && (_controller.getSelectionManager() != null)) {
+				if (!e.isConsumed() && _controller.getSelectionManager() != null) {
 					_controller.getSelectionManager().getContextualMenuManager().processMouseMoved(e);
 				}
 			}
@@ -681,7 +681,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	@Override
 	public boolean mayRepresents(FlexoModelObject anObject) {
-		boolean b = (getModel().indexOf(anObject) > -1);
+		boolean b = getModel().indexOf(anObject) > -1;
 		Enumeration<TabularView> en = _slaveTabularViews.elements();
 		while (en.hasMoreElements() && !b) {
 			TabularView v = en.nextElement();
@@ -707,7 +707,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 			logger.fine("TabularView for " + getObject() + " fireObjectSelected() with " + object);
 		}
 		FlexoModelObject parent = getParentObject(object);
-		if ((getMasterTabularView() != null) && (parent != null)) {
+		if (getMasterTabularView() != null && parent != null) {
 			// If master tabular view not null (means that is is a slave
 			// tabular view), and if current selection has no object selected
 			// in master view, then select object in master view
@@ -738,12 +738,12 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 			logger.fine("TabularView for " + getObject() + " fireObjectDeselected() with " + object);
 		}
 		FlexoModelObject parent = getParentObject(object);
-		if ((getMasterTabularView() != null) && (parent != null)) {
+		if (getMasterTabularView() != null && parent != null) {
 			// If master tabular view not null (means that is is a slave
 			// tabular view), and if parent of deselected object is selected
 			// in parent view but not contained in selection, also deselect
 			// parent object from master view
-			if ((getMasterTabularView().getSelectedObjects().contains(parent) && (!getSelectionManager().selectionContains(parent)))) {
+			if (getMasterTabularView().getSelectedObjects().contains(parent) && !getSelectionManager().selectionContains(parent)) {
 				getMasterTabularView().fireObjectDeselected(parent);
 			}
 		}
@@ -758,7 +758,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 				updateSlaveTabularViews();
 			}
 		}
-		if ((getSlaveTabularViews().size() > 0) && (getSelectedObjects().size() == 0)) {
+		if (getSlaveTabularViews().size() > 0 && getSelectedObjects().size() == 0) {
 			// If this view is a master view that have slave views
 			// and if current selection is now empty, we might check
 			// if some slave views needs this master view to be set

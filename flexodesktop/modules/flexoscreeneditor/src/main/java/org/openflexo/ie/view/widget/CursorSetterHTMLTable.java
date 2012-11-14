@@ -95,7 +95,7 @@ public class CursorSetterHTMLTable extends MouseMotionAdapter {
 
 	public boolean isNearBorder(Point p) {
 		int curX = p.x;
-		return (curX < OFFSET && !ignoreLeftSide) || (Math.abs(curX - _layedoutComponent.getWidth()) < OFFSET && !ignoreRightSide);
+		return curX < OFFSET && !ignoreLeftSide || Math.abs(curX - _layedoutComponent.getWidth()) < OFFSET && !ignoreRightSide;
 	}
 
 	public static int OFFSET = 3;

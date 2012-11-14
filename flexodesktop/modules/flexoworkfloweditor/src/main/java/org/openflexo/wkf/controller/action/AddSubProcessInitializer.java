@@ -143,11 +143,11 @@ public class AddSubProcessInitializer extends ActionInitializer {
 			@Override
 			public boolean handleException(FlexoException exception, AddSubProcess action) {
 				if (exception instanceof DuplicateResourceException) {
-					FlexoController.notify("Process named " + (action).getNewProcessName() + " already exists !");
+					FlexoController.notify("Process named " + action.getNewProcessName() + " already exists !");
 					return false;
 				}
 				if (exception instanceof InvalidFileNameException) {
-					FlexoController.notify("Process named " + (action).getNewProcessName() + " is_not_valid");
+					FlexoController.notify("Process named " + action.getNewProcessName() + " is_not_valid");
 					return false;
 				}
 				return false;

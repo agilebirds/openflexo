@@ -75,9 +75,9 @@ public class ShowFileVersion extends FlexoGUIAction<ShowFileVersion, CGFile, CGO
 			} else if (_source == ContentSourceType.LastAccepted) {
 				return file.hasVersionOnDisk();
 			} else if (_source == ContentSourceType.HistoryVersion) {
-				return (file.getRepository().getManageHistory() && file.getResource().isLoaded()
-						&& file.getGeneratedResourceData() instanceof AbstractGeneratedFile && ((AbstractGeneratedFile) file
-						.getGeneratedResourceData()).getHistory().getReleasesVersion().size() > 0);
+				return file.getRepository().getManageHistory() && file.getResource().isLoaded()
+						&& file.getGeneratedResourceData() instanceof AbstractGeneratedFile
+						&& ((AbstractGeneratedFile) file.getGeneratedResourceData()).getHistory().getReleasesVersion().size() > 0;
 			}
 			return false;
 		}

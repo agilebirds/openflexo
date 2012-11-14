@@ -62,7 +62,7 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 
 		@Override
 		protected boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
-			return (object instanceof ViewFolder || object instanceof ViewDefinition || object instanceof ViewLibrary);
+			return object instanceof ViewFolder || object instanceof ViewDefinition || object instanceof ViewLibrary;
 		}
 
 	};
@@ -145,11 +145,11 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 
 	public ViewFolder getFolder() {
 		if (_folder == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewDefinition)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof ViewDefinition) {
 				_folder = ((ViewDefinition) getFocusedObject()).getFolder();
-			} else if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewFolder)) {
+			} else if (getFocusedObject() != null && getFocusedObject() instanceof ViewFolder) {
 				_folder = (ViewFolder) getFocusedObject();
-			} else if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewLibrary)) {
+			} else if (getFocusedObject() != null && getFocusedObject() instanceof ViewLibrary) {
 				_folder = ((ViewLibrary) getFocusedObject()).getRootFolder();
 			}
 

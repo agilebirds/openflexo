@@ -85,7 +85,7 @@ public class AnnotationPropertySelector extends AbstractBrowserSelector<Ontology
 	protected class OntologyBrowser extends ProjectBrowser {
 
 		protected OntologyBrowser() {
-			super((getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null), false);
+			super(getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null, false);
 			init();
 		}
 

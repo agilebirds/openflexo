@@ -109,7 +109,7 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoProcess) && !((FlexoProcess) object).isImported();
+		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class SwimmingLanePerspective extends FlexoPerspective<FlexoProcess> {
 	}
 
 	public SwimmingLaneView getCurrentProcessView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof SwimmingLaneView)) {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof SwimmingLaneView) {
 			return (SwimmingLaneView) _controller.getCurrentModuleView();
 		}
 		return null;

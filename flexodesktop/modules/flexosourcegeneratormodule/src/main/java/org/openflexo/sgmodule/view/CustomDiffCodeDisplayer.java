@@ -71,12 +71,12 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 		@Override
 		public void update() {
 			removeAll();
-			if ((getLeft() == null) || (getRight() == null)) {
+			if (getLeft() == null || getRight() == null) {
 				return;
 			}
 			_diffReport = ComputeDiff.diff(getLeft(), getRight());
-			String leftLabel = (_left != null ? _left.getStringRepresentation() : "null");
-			String rightLabel = (_right != null ? _right.getStringRepresentation() : "null");
+			String leftLabel = _left != null ? _left.getStringRepresentation() : "null";
+			String rightLabel = _right != null ? _right.getStringRepresentation() : "null";
 			boolean isLeftOriented = false;
 			_diffPanel = new DiffPanel(_diffReport, getTokenMarkerStyle(), leftLabel, rightLabel,
 					FlexoLocalization.localizedForKey("no_structural_changes"), isLeftOriented);

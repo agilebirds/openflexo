@@ -373,6 +373,6 @@ public class Duration extends KVCObject implements StringConvertable, Cloneable,
 		if (returned != 0) {
 			return returned;
 		}
-		return (new Long(getValue())).compareTo(new Long(o.getValue()));
+		return new Long(getValue()).compareTo(new Long(o.getValue()));
 	}
 }

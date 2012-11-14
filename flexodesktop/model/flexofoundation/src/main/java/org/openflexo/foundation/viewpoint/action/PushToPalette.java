@@ -129,7 +129,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShap
 				gr.setIsFloatingLabel(false);
 				graphicalRepresentation = gr;
 			} else {
-				GraphicalRepresentation gr = (GraphicalRepresentation) getFocusedObject().getGraphicalRepresentation();
+				GraphicalRepresentation gr = getFocusedObject().getGraphicalRepresentation();
 				if (gr instanceof ShapeGraphicalRepresentation) {
 					graphicalRepresentation = new ShapeGraphicalRepresentation();
 					((ShapeGraphicalRepresentation) graphicalRepresentation).setsWith(gr);

@@ -46,6 +46,7 @@ public interface IObject extends FlexoXMLSerializable, Validable {
 
 	public abstract FlexoProject getProject();
 
+	@Override
 	public boolean isDeleted();
 
 	// ==========================================================================

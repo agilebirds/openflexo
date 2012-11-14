@@ -262,8 +262,8 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 	}
 
 	protected void update() {
-		saveSelectedButton.setEnabled(getActivePanel() != null && (getActivePanel() == _storageResourcesPanel)
-				&& (getActivePanel().getSelectedResource() != null));
+		saveSelectedButton.setEnabled(getActivePanel() != null && getActivePanel() == _storageResourcesPanel
+				&& getActivePanel().getSelectedResource() != null);
 		loadSelectedButton.setEnabled(getActivePanel() != null && getActivePanel().getSelectedResource() != null);
 		deleteSelectedButton.setEnabled(getActivePanel() != null && getActivePanel().getSelectedResource() != null);
 	}

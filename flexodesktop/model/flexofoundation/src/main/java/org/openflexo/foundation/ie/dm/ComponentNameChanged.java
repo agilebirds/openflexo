@@ -59,8 +59,8 @@ public class ComponentNameChanged extends IEDataModification implements RMNotifi
 	@Override
 	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
 		// return true;
-		if ((originResource == component.getComponentLibrary().getFlexoResource())
-				&& ((targetResource instanceof FlexoComponentResource) || ((targetResource instanceof FlexoProcessResource)) || ((targetResource instanceof FlexoNavigationMenuResource)))) {
+		if (originResource == component.getComponentLibrary().getFlexoResource()
+				&& (targetResource instanceof FlexoComponentResource || targetResource instanceof FlexoProcessResource || targetResource instanceof FlexoNavigationMenuResource)) {
 			return true;
 		} else {
 			return false;

@@ -130,7 +130,7 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 				}
 			}
 
-			else if (gr.getDrawable() instanceof AbstractActivityNode && (object instanceof EventNode)) {
+			else if (gr.getDrawable() instanceof AbstractActivityNode && object instanceof EventNode) {
 				container = ((AbstractActivityNode) gr.getDrawable()).getProcess().getActivityPetriGraph();
 				((EventNode) object).setBoundaryOf((AbstractActivityNode) gr.getDrawable());
 				DropWKFElement action = createAndExecuteDropElementAction(dropLocation, container, null, true);

@@ -91,7 +91,7 @@ public final class IEOperationComponent extends IEPageComponent {
 	// ===============================================
 
 	public boolean usesTabComponent(TabComponentDefinition tab) {
-		return (getAllTabComponentInstances(tab).size() > 0);
+		return getAllTabComponentInstances(tab).size() > 0;
 	}
 
 	public Vector<TabComponentDefinition> getUsedTabComponents() {
@@ -107,7 +107,7 @@ public final class IEOperationComponent extends IEPageComponent {
 	public Vector<TabComponentInstance> getAllTabComponentInstances() {
 		Vector<TabComponentInstance> returned = new Vector<TabComponentInstance>();
 		for (ComponentInstance ci : getAllComponentInstances()) {
-			if ((ci instanceof TabComponentInstance) && (ci.getComponentDefinition() != null)) {
+			if (ci instanceof TabComponentInstance && ci.getComponentDefinition() != null) {
 				returned.add((TabComponentInstance) ci);
 			}
 		}

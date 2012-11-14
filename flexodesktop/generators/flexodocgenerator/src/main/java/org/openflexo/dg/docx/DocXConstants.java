@@ -28,22 +28,7 @@ import org.openflexo.toolbox.ToolBox;
 public class DocXConstants {
 
 	public enum HighlightColorValues {
-		Black,
-		Blue,
-		Cyan,
-		DarkBlue,
-		DarkCyan,
-		DarkGray,
-		DarkGreen,
-		DarkMagenta,
-		DarkRed,
-		DarkYellow,
-		Green,
-		LightGray,
-		Magenta,
-		Red,
-		White,
-		Yellow;
+		Black, Blue, Cyan, DarkBlue, DarkCyan, DarkGray, DarkGreen, DarkMagenta, DarkRed, DarkYellow, Green, LightGray, Magenta, Red, White, Yellow;
 
 		@Override
 		public String toString() {

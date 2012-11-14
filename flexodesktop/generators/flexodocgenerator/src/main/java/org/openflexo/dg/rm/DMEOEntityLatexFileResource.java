@@ -73,7 +73,7 @@ public class DMEOEntityLatexFileResource extends LatexFileResource<DGLatexGenera
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getEntity() != null)) {
+		if (!isObserverRegistered && getEntity() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getEntity());

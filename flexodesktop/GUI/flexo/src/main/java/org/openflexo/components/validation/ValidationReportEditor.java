@@ -169,7 +169,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					if ((_currentIssue != null) && (_currentIssue.getSize() > 0)) {
+					if (_currentIssue != null && _currentIssue.getSize() > 0) {
 						applyFixProposal((FixProposal) _currentIssue.getElementAt(0));
 					}
 				}
@@ -222,7 +222,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 					return;
 				}
 				int selectedRow = fixProposalList.getSelectedIndex();
-				if ((selectedRow >= 0) && (selectedRow < _currentIssue.getSize())) {
+				if (selectedRow >= 0 && selectedRow < _currentIssue.getSize()) {
 					FixProposal proposal = (FixProposal) _currentIssue.getElementAt(selectedRow);
 					setCurrentFixProposal(proposal);
 				} else {

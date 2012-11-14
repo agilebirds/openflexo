@@ -68,7 +68,7 @@ public class Word implements Comparator {
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Word) {
-			return (((Word) o).getWord().equals(getWord()));
+			return ((Word) o).getWord().equals(getWord());
 		}
 		return false;
 	}

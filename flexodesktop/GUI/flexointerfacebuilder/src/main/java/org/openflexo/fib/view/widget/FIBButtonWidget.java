@@ -102,8 +102,8 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 
 	protected void updateLabel() {
 		// logger.info("Button update label with key="+getWidget().getLabel());
-		buttonWidget.setText(getValue() != null ? (getWidget().getLocalize() ? getLocalized(getValue()) : getValue()) : (getWidget()
-				.getLocalize() ? getLocalized(getWidget().getLabel()) : getWidget().getLabel()));
+		buttonWidget.setText(getValue() != null ? getWidget().getLocalize() ? getLocalized(getValue()) : getValue() : getWidget()
+				.getLocalize() ? getLocalized(getWidget().getLabel()) : getWidget().getLabel());
 	}
 
 	protected void updateIcon() {

@@ -75,14 +75,14 @@ public class DiffHighlight extends LinesHighlight {
 	}
 
 	private void setColors() {
-		ADDITION_SELECTED_COLOR = (diffTA.isLeftOriented() ? new Color(255, 190, 182) : new Color(181, 213, 255));
-		ADDITION_UNSELECTED_COLOR = (diffTA.isLeftOriented() ? new Color(255, 214, 214) : new Color(230, 255, 255));
-		ADDITION_SELECTED_BORDER_COLOR = (diffTA.isLeftOriented() ? Color.RED : Color.BLUE);
+		ADDITION_SELECTED_COLOR = diffTA.isLeftOriented() ? new Color(255, 190, 182) : new Color(181, 213, 255);
+		ADDITION_UNSELECTED_COLOR = diffTA.isLeftOriented() ? new Color(255, 214, 214) : new Color(230, 255, 255);
+		ADDITION_SELECTED_BORDER_COLOR = diffTA.isLeftOriented() ? Color.RED : Color.BLUE;
 		ADDITION_UNSELECTED_BORDER_COLOR = ADDITION_SELECTED_COLOR;
 
-		REMOVAL_SELECTED_COLOR = (diffTA.isLeftOriented() ? new Color(181, 213, 255) : new Color(255, 190, 182));
-		REMOVAL_UNSELECTED_COLOR = (diffTA.isLeftOriented() ? new Color(230, 255, 255) : new Color(255, 214, 214));
-		REMOVAL_SELECTED_BORDER_COLOR = (diffTA.isLeftOriented() ? Color.BLUE : Color.RED);
+		REMOVAL_SELECTED_COLOR = diffTA.isLeftOriented() ? new Color(181, 213, 255) : new Color(255, 190, 182);
+		REMOVAL_UNSELECTED_COLOR = diffTA.isLeftOriented() ? new Color(230, 255, 255) : new Color(255, 214, 214);
+		REMOVAL_SELECTED_BORDER_COLOR = diffTA.isLeftOriented() ? Color.BLUE : Color.RED;
 		REMOVAL_UNSELECTED_BORDER_COLOR = REMOVAL_SELECTED_COLOR;
 
 		MODIFICATION_SELECTED_COLOR = new Color(255, 248, 150);

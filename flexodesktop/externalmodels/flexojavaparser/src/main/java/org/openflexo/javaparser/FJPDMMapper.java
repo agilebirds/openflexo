@@ -311,10 +311,10 @@ public class FJPDMMapper {
 
 			// Beautify property name
 
-			if ((propertyName.length() > 3) && (propertyName.substring(0, 3).equalsIgnoreCase("get"))) {
+			if (propertyName.length() > 3 && propertyName.substring(0, 3).equalsIgnoreCase("get")) {
 				propertyName = propertyName.substring(3);
 			}
-			if ((propertyName.length() > 1) && (propertyName.substring(0, 1).equals("_"))) {
+			if (propertyName.length() > 1 && propertyName.substring(0, 1).equals("_")) {
 				propertyName = propertyName.substring(1);
 			}
 
@@ -323,8 +323,8 @@ public class FJPDMMapper {
 
 			// Is there a SET method ?
 			FJPJavaMethod setMethod = searchMatchingSetMethod(parentClass, propertyName, returnType);
-			boolean isSettable = (setMethod != null);
-			if ((setMethod != null) && (excludedSignatures != null)) {
+			boolean isSettable = setMethod != null;
+			if (setMethod != null && excludedSignatures != null) {
 				excludedSignatures.add(setMethod.getCallSignature());
 			}
 
@@ -360,7 +360,7 @@ public class FJPDMMapper {
 						isSettable = false;
 					}
 				}
-				if ((addToMethods.size() == 0) || (removeFromMethods.size() == 0)) {
+				if (addToMethods.size() == 0 || removeFromMethods.size() == 0) {
 					isSettable = false;
 				}
 				if (addToMethods.size() > 0) {
@@ -399,7 +399,7 @@ public class FJPDMMapper {
 						excludedSignatures.add(next.getMethod().getCallSignature());
 					}
 				}
-				if ((setMethods.size() == 0) || (removeMethods.size() == 0)) {
+				if (setMethods.size() == 0 || removeMethods.size() == 0) {
 					isSettable = false;
 				}
 				if (setMethods.size() > 0) {
@@ -664,7 +664,7 @@ public class FJPDMMapper {
 		if (propertyName.endsWith("ies")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 3) + "y";
 			pluralPropertyName = propertyName;
-		} else if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		} else if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -695,7 +695,7 @@ public class FJPDMMapper {
 		if (propertyName.endsWith("ies")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 3) + "y";
 			pluralPropertyName = propertyName;
-		} else if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		} else if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -723,7 +723,7 @@ public class FJPDMMapper {
 		String singularPropertyName;
 		String pluralPropertyName;
 
-		if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -751,7 +751,7 @@ public class FJPDMMapper {
 		String singularPropertyName;
 		String pluralPropertyName;
 
-		if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -782,7 +782,7 @@ public class FJPDMMapper {
 		for (int i = 0; i < allMethods.length; i++) {
 			FJPJavaMethod tempMethod = allMethods[i];
 			for (int j = 0; j < searchedNames.length; j++) {
-				if ((tempMethod.getName().equalsIgnoreCase(searchedNames[j])) && (tempMethod.getParameters().size() == paramNumber)) {
+				if (tempMethod.getName().equalsIgnoreCase(searchedNames[j]) && tempMethod.getParameters().size() == paramNumber) {
 					// This is a good candidate
 					returnedTreeSet.add(new AccessorMethod(tempMethod));
 				}
@@ -873,8 +873,8 @@ public class FJPDMMapper {
 
 					for (int i = 0; i < getMethod().getParameters().size(); i++) {
 
-						Type localParameterType = (getMethod().getParameters().get(i)).getType();
-						Type comparedParameterType = (comparedAccessorMethod.getMethod().getParameters().get(i)).getType();
+						Type localParameterType = getMethod().getParameters().get(i).getType();
+						Type comparedParameterType = comparedAccessorMethod.getMethod().getParameters().get(i).getType();
 
 						if (!localParameterType.equals(comparedParameterType)) {
 

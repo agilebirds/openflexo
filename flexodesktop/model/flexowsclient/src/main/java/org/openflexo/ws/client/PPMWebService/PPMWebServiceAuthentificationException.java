@@ -84,14 +84,14 @@ public class PPMWebServiceAuthentificationException extends org.apache.axis.Axis
 			return true;
 		}
 		if (__equalsCalc != null) {
-			return (__equalsCalc == obj);
+			return __equalsCalc == obj;
 		}
 		__equalsCalc = obj;
 		boolean _equals;
 		_equals = true
-				&& ((this.cause1 == null && other.getCause1() == null) || (this.cause1 != null && this.cause1.equals(other.getCause1())))
-				&& ((this.message1 == null && other.getMessage1() == null) || (this.message1 != null && this.message1.equals(other
-						.getMessage1())));
+				&& (this.cause1 == null && other.getCause1() == null || this.cause1 != null && this.cause1.equals(other.getCause1()))
+				&& (this.message1 == null && other.getMessage1() == null || this.message1 != null
+						&& this.message1.equals(other.getMessage1()));
 		__equalsCalc = null;
 		return _equals;
 	}

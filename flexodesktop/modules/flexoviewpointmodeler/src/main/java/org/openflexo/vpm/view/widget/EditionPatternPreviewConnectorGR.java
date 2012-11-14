@@ -141,7 +141,7 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 			}
 		} else if (dataModification instanceof GraphicalRepresentationChanged) {
 			logger.info("Handle GR change !!!");
-			setsWith((ConnectorGraphicalRepresentation<?>) getPatternRole().getGraphicalRepresentation());
+			setsWith(getPatternRole().getGraphicalRepresentation());
 		}
 	}
 

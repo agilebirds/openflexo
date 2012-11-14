@@ -44,7 +44,7 @@ public class FGEEllips extends FGEArc {
 	}
 
 	public FGEEllips(double x, double y, double w, double h, Filling filling) {
-		super(x, y, w, h, 0, 360, (filling == Filling.FILLED ? ArcType.PIE : ArcType.OPEN));
+		super(x, y, w, h, 0, 360, filling == Filling.FILLED ? ArcType.PIE : ArcType.OPEN);
 		_filling = filling;
 	}
 
@@ -59,7 +59,7 @@ public class FGEEllips extends FGEArc {
 
 	@Override
 	public void setIsFilled(boolean filled) {
-		_filling = (filled ? Filling.FILLED : Filling.NOT_FILLED);
+		_filling = filled ? Filling.FILLED : Filling.NOT_FILLED;
 		super.setIsFilled(filled);
 	}
 
@@ -90,7 +90,7 @@ public class FGEEllips extends FGEArc {
 		// TODO: this implementation is not correct if AffineTransform contains rotation and if
 		// width not equals to height
 
-		FGEPoint newCenter = (new FGEPoint(getX() + getWidth() / 2, getY() + getHeight() / 2)).transform(t);
+		FGEPoint newCenter = new FGEPoint(getX() + getWidth() / 2, getY() + getHeight() / 2).transform(t);
 
 		FGERectangle bounds = new FGERectangle(getX(), getY(), getWidth(), getHeight());
 		FGEArea t_bounds = bounds.transform(t);
@@ -110,8 +110,8 @@ public class FGEEllips extends FGEArc {
 			if (getIsFilled() != p.getIsFilled()) {
 				return false;
 			}
-			return ((Math.abs(getX() - p.getX()) <= EPSILON) && (Math.abs(getY() - p.getY()) <= EPSILON)
-					&& (Math.abs(getWidth() - p.getWidth()) <= EPSILON) && (Math.abs(getHeight() - p.getHeight()) <= EPSILON));
+			return Math.abs(getX() - p.getX()) <= EPSILON && Math.abs(getY() - p.getY()) <= EPSILON
+					&& Math.abs(getWidth() - p.getWidth()) <= EPSILON && Math.abs(getHeight() - p.getHeight()) <= EPSILON;
 		}
 		return super.equals(obj);
 	}

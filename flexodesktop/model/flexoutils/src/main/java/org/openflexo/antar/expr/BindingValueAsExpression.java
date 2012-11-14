@@ -101,7 +101,7 @@ public class BindingValueAsExpression extends Expression {
 	}
 
 	public boolean isSimpleVariable() {
-		return getBindingPath().size() == 1 && (getBindingPath().get(0) instanceof NormalBindingPathElement);
+		return getBindingPath().size() == 1 && getBindingPath().get(0) instanceof NormalBindingPathElement;
 	}
 
 	/*@Override

@@ -56,7 +56,7 @@ public class BuildPropertiesResource extends TextFileResource<BuildPropertiesGen
 		}
 		if (resource instanceof GeneratedCodeResource) {
 			GeneratedCodeResource res = (GeneratedCodeResource) resource;
-			if (res.isLoaded() && (getRepository() != null)) {
+			if (res.isLoaded() && getRepository() != null) {
 				if (getRepository().getLastWarNameUpdate().before(requestDate)
 						|| getRepository().getLastWarNameUpdate().equals(requestDate)) {
 					if (logger.isLoggable(Level.FINER)) {

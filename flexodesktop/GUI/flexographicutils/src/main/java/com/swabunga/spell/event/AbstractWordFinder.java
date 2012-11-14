@@ -187,7 +187,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 
 		char curr = text.charAt(posn);
 
-		if ((posn == 0) || (posn == text.length() - 1)) {
+		if (posn == 0 || posn == text.length() - 1) {
 			return Character.isLetterOrDigit(curr);
 		}
 
@@ -199,7 +199,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 		case '@':
 		case '.':
 		case '_':
-			out = (Character.isLetterOrDigit(prev) && Character.isLetterOrDigit(next));
+			out = Character.isLetterOrDigit(prev) && Character.isLetterOrDigit(next);
 			break;
 		default:
 			out = Character.isLetterOrDigit(curr);
@@ -211,7 +211,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 	protected boolean isWordChar(char c) {
 		boolean out = false;
 
-		if (Character.isLetterOrDigit(c) || (c == '\'')) {
+		if (Character.isLetterOrDigit(c) || c == '\'') {
 			out = true;
 		}
 
@@ -258,7 +258,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 		int slen = startIgnore.length();
 		int elen = endIgnore.length();
 
-		if (!((newIndex + slen) >= len)) {
+		if (!(newIndex + slen >= len)) {
 			String seg = text.substring(newIndex, newIndex + slen);
 
 			// System.out.println(seg + ":" + seg.length()+ ":" + startIgnore + ":" + slen);
@@ -266,7 +266,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 				newIndex += slen;
 				cycle: while (true) {
 
-					if (newIndex == (text.length() - elen)) {
+					if (newIndex == text.length() - elen) {
 
 						break cycle;
 					}

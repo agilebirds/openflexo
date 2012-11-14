@@ -58,7 +58,7 @@ public class HTMLTokenMarker extends TokenMarker {
 		boolean backslash = false;
 
 		loop: for (int i = offset; i < length; i++) {
-			int i1 = (i + 1);
+			int i1 = i + 1;
 
 			char c = array[i];
 			if (c == '\\') {
@@ -82,7 +82,7 @@ public class HTMLTokenMarker extends TokenMarker {
 							size++;
 						}
 						addToken(size + 1, Token.KEYWORD3);
-						lastOffset = lastKeyword = (i += size);
+						lastOffset = lastKeyword = i += size;
 						token = JAVASCRIPT;
 					} else if (SyntaxUtilities.regionMatches(true, line, i1, "WEBOBJECT")) {
 						i += 9;
@@ -212,7 +212,7 @@ public class HTMLTokenMarker extends TokenMarker {
 			case Token.COMMENT1: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, "-->")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = lastKeyword = i + 3;
 					token = Token.NULL;
 				}
@@ -220,7 +220,7 @@ public class HTMLTokenMarker extends TokenMarker {
 			case Token.WEBOBJECT: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, ">")) {
-					addToken((i + 1) - lastOffset, token);
+					addToken(i + 1 - lastOffset, token);
 					lastOffset = lastKeyword = i + 1;
 					token = Token.NULL;
 				}
@@ -228,7 +228,7 @@ public class HTMLTokenMarker extends TokenMarker {
 			case Token.TABLE: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, ">")) {
-					addToken((i + 1) - lastOffset, token);
+					addToken(i + 1 - lastOffset, token);
 					lastOffset = lastKeyword = i + 1;
 					token = Token.NULL;
 				}
@@ -236,7 +236,7 @@ public class HTMLTokenMarker extends TokenMarker {
 			case Token.TR: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, ">")) {
-					addToken((i + 1) - lastOffset, token);
+					addToken(i + 1 - lastOffset, token);
 					lastOffset = lastKeyword = i + 1;
 					token = Token.NULL;
 				}
@@ -244,7 +244,7 @@ public class HTMLTokenMarker extends TokenMarker {
 			case Token.TD: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, ">")) {
-					addToken((i + 1) - lastOffset, token);
+					addToken(i + 1 - lastOffset, token);
 					lastOffset = lastKeyword = i + 1;
 					token = Token.NULL;
 				}
@@ -252,27 +252,27 @@ public class HTMLTokenMarker extends TokenMarker {
 			case Token.KEYWORD1:
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, "if")) {
-					addToken((i + 2) - lastOffset, token);
+					addToken(i + 2 - lastOffset, token);
 					lastOffset = lastKeyword = i + 2;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "else")) {
-					addToken((i + 4) - lastOffset, token);
+					addToken(i + 4 - lastOffset, token);
 					lastOffset = lastKeyword = i + 4;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "end")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = lastKeyword = i + 3;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "foreach")) {
-					addToken((i + 7) - lastOffset, token);
+					addToken(i + 7 - lastOffset, token);
 					lastOffset = lastKeyword = i + 7;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "macro")) {
-					addToken((i + 5) - lastOffset, token);
+					addToken(i + 5 - lastOffset, token);
 					lastOffset = lastKeyword = i + 5;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "set")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = lastKeyword = i + 3;
 					token = Token.NULL;
 				}
@@ -290,7 +290,7 @@ public class HTMLTokenMarker extends TokenMarker {
 					if (SyntaxUtilities.regionMatches(true, line, i1, "/script>")) {
 						addToken(i - lastOffset, Token.NULL);
 						addToken(9, Token.KEYWORD3);
-						lastOffset = lastKeyword = (i += 9);
+						lastOffset = lastKeyword = i += 9;
 						token = Token.NULL;
 					}
 					break;

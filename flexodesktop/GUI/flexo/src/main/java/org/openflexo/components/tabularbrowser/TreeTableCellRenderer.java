@@ -177,9 +177,9 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
 	protected void notifyPointerOn(Point p) {
 		// logger.info("notifyPointerOn "+p);
-		if ((_table.columnAtPoint(p) == 0) && (!pointerOnTree)) {
+		if (_table.columnAtPoint(p) == 0 && !pointerOnTree) {
 			pointerEnteredTree();
-		} else if ((_table.columnAtPoint(p) != 0) && (pointerOnTree)) {
+		} else if (_table.columnAtPoint(p) != 0 && pointerOnTree) {
 			pointerExitedTree();
 		}
 	}
@@ -319,7 +319,7 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 	}
 
 	protected void setComponentBackground(Component component, boolean hasFocus, boolean isSelected, int row, int column) {
-		if ((hasFocus) && (isSelected)) {
+		if (hasFocus && isSelected) {
 			component.setForeground(ColorCst.SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
 		} else {
 			component.setForeground(ColorCst.UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
@@ -367,7 +367,7 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 				boolean hasFocus) {
 			super.getTreeCellRendererComponent(arg0, object, selected, expanded, leaf, row, hasFocus);
 			_row = row;
-			if ((object instanceof BrowserElement) && (((BrowserElement) object).getObject() != null)) {
+			if (object instanceof BrowserElement && ((BrowserElement) object).getObject() != null) {
 				Integer rowInt = new Integer(_row);
 				_elementsForRow.put(rowInt, (BrowserElement) object);
 				_rowForObjects.put(((BrowserElement) object).getObject(), rowInt);

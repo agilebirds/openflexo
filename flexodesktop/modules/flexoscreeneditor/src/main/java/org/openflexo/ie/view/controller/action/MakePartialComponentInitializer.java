@@ -56,8 +56,8 @@ public class MakePartialComponentInitializer extends ActionInitializer {
 						getProject().getFlexoComponentLibrary().getRootFolder().getFolderTyped(FolderType.PARTIAL_COMPONENT_FOLDER) };
 				if (nameAndFolder[0] != null && ((String) nameAndFolder[0]).trim().length() > 0 && nameAndFolder[1] != null
 						&& getProject().getFlexoComponentLibrary().getComponentNamed((String) nameAndFolder[0]) == null) {
-					(action).setNewComponentName((String) nameAndFolder[0]);
-					(action).setNewComponentFolder((FlexoComponentFolder) nameAndFolder[1]);
+					action.setNewComponentName((String) nameAndFolder[0]);
+					action.setNewComponentFolder((FlexoComponentFolder) nameAndFolder[1]);
 					return true;
 				}
 				return false;
@@ -70,8 +70,8 @@ public class MakePartialComponentInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<MakePartialComponent>() {
 			@Override
 			public boolean run(ActionEvent e, MakePartialComponent action) {
-				if ((action).getNewComponentResource() != null) {
-					getModule().retainResource((action).getNewComponentResource());
+				if (action.getNewComponentResource() != null) {
+					getModule().retainResource(action.getNewComponentResource());
 				}
 				return true;
 			}

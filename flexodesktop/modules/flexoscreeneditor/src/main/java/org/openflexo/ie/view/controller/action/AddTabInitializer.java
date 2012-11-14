@@ -67,7 +67,7 @@ public class AddTabInitializer extends ActionInitializer {
 				if (action.getFocusedObject() instanceof IESequenceTab) {
 					tabContainer = (IESequenceTab) action.getFocusedObject();
 				} else if (action.getFocusedObject() instanceof IETabWidget) {
-					tabContainer = ((IESequenceTab) ((IETabWidget) action.getFocusedObject()).getParent());
+					tabContainer = (IESequenceTab) ((IETabWidget) action.getFocusedObject()).getParent();
 				}
 				if (tabContainer == null) {
 					return false;
@@ -89,7 +89,7 @@ public class AddTabInitializer extends ActionInitializer {
 						return false;
 					}
 
-					if ((newThumbWOName == null || newThumbWOName.equals(""))
+					if (newThumbWOName == null || newThumbWOName.equals("")
 							|| !IERegExp.JAVA_CLASS_NAME_PATTERN.matcher(newThumbWOName).matches()) {
 						FlexoController.showError(FlexoLocalization
 								.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
@@ -98,12 +98,12 @@ public class AddTabInitializer extends ActionInitializer {
 				}
 				FlexoComponentFolder selectedFolder = getControllerActionInitializer().getIEController().getProject()
 						.getFlexoComponentLibrary().getRootFolder();
-				(action).setFolder(selectedFolder);
-				(action).setTabTitle(newTabDialog.getTabTitle());
-				(action).setTabContainer(tabContainer);
+				action.setFolder(selectedFolder);
+				action.setTabTitle(newTabDialog.getTabTitle());
+				action.setTabContainer(tabContainer);
 				boolean executeAction = false;
 				if (newTabDialog.getStatus() == AskNewTabDialog.VALIDATE_NEW_TAB) {
-					(action).setTabName(newTabDialog.getTabName());
+					action.setTabName(newTabDialog.getTabName());
 					executeAction = true;
 				} else if (newTabDialog.getStatus() == AskNewTabDialog.VALIDATE_EXISTING_TAB) {
 					ComponentDefinition compDef = getControllerActionInitializer().getIEController().getProject()
@@ -118,8 +118,8 @@ public class AddTabInitializer extends ActionInitializer {
 					}
 					if (alreadyInContainer) {
 						if (FlexoController.confirm("add_tab_already_in_tab_container")) {
-							DuplicateComponentAction dupAction = (DuplicateComponentAction) DuplicateComponentAction.actionType
-									.makeNewAction(compDef, EmptyVector.EMPTY_VECTOR, action.getEditor());
+							DuplicateComponentAction dupAction = DuplicateComponentAction.actionType.makeNewAction(compDef,
+									EmptyVector.EMPTY_VECTOR, action.getEditor());
 							dupAction.doAction();
 							compDef = dupAction.getComponentDefinition();
 							if (compDef == null) {
@@ -129,7 +129,7 @@ public class AddTabInitializer extends ActionInitializer {
 							return false;
 						}
 					}
-					(action).setTabDef((TabComponentDefinition) compDef);
+					action.setTabDef((TabComponentDefinition) compDef);
 					executeAction = true;
 				}
 				return executeAction;
@@ -142,7 +142,7 @@ public class AddTabInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddTab>() {
 			@Override
 			public boolean run(ActionEvent e, AddTab action) {
-				getControllerActionInitializer().getIEController().getModule().retain(((action).getTabDef()).getWOComponent());
+				getControllerActionInitializer().getIEController().getModule().retain(action.getTabDef().getWOComponent());
 				return true;
 			}
 		};

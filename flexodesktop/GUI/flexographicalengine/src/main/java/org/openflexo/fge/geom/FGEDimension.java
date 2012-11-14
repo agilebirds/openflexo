@@ -52,8 +52,8 @@ public class FGEDimension extends Dimension2D {
 	public boolean equals(Object obj) {
 		if (obj instanceof FGEDimension) {
 			FGEDimension s = (FGEDimension) obj;
-			return (Math.abs(getWidth() - s.getWidth()) < FGEGeometricObject.EPSILON)
-					&& (Math.abs(getHeight() - s.getHeight()) < FGEGeometricObject.EPSILON);
+			return Math.abs(getWidth() - s.getWidth()) < FGEGeometricObject.EPSILON
+					&& Math.abs(getHeight() - s.getHeight()) < FGEGeometricObject.EPSILON;
 		}
 		return super.equals(obj);
 	}

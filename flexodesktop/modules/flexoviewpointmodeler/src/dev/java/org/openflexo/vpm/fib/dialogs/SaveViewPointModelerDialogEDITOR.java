@@ -26,15 +26,12 @@ import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.VPMModule;
 import org.openflexo.vpm.controller.VPMController;
 
-
 public class SaveViewPointModelerDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData() 
-			{
+			@Override
+			public Object[] getData() {
 				VPMController controller = null;
 				try {
 					VPMModule module = new VPMModule();
@@ -45,6 +42,8 @@ public class SaveViewPointModelerDialogEDITOR {
 				}
 				return makeArray(controller);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return CEDCst.SAVE_VPM_DIALOG_FIB;
 			}

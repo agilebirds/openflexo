@@ -13,6 +13,7 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.IsAStatement;
+import org.openflexo.foundation.ontology.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
@@ -23,10 +24,10 @@ import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyRestrictionClass.RestrictionType;
 import org.openflexo.foundation.ontology.OntologyStatement;
+import org.openflexo.foundation.ontology.RDFURIDefinitions;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubClassStatement;
-import org.openflexo.foundation.ontology.SubPropertyOfProperty.SubDataPropertyOfProperty;
-import org.openflexo.foundation.ontology.SubPropertyOfProperty.SubObjectPropertyOfProperty;
+import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
@@ -277,7 +278,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		@Override
 		public Type getType() {
 			if (((PropertyPatternRole) getPatternRole()).getParentProperty() != null) {
-				return SubDataPropertyOfProperty.getSubPropertyOfProperty(((PropertyPatternRole) getPatternRole()).getParentProperty());
+				return SubPropertyOfProperty.getSubPropertyOfProperty(((PropertyPatternRole) getPatternRole()).getParentProperty());
 			}
 			return OntologyProperty.class;
 		}
@@ -285,7 +286,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		@Override
 		public OntologyClass getOntologicType() {
 			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
-				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OntologyObject.RDF_PROPERTY_URI);
+				return getPatternRole().getViewPoint().getViewpointOntology().getClass(RDFURIDefinitions.RDF_PROPERTY_URI);
 			}
 			return null;
 		}
@@ -300,7 +301,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		@Override
 		public Type getType() {
 			if (((DataPropertyPatternRole) getPatternRole()).getParentProperty() != null) {
-				return SubDataPropertyOfProperty.getSubPropertyOfProperty(((DataPropertyPatternRole) getPatternRole()).getParentProperty());
+				return SubPropertyOfProperty.getSubPropertyOfProperty(((DataPropertyPatternRole) getPatternRole()).getParentProperty());
 			}
 			return OntologyDataProperty.class;
 		}
@@ -308,7 +309,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		@Override
 		public OntologyClass getOntologicType() {
 			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
-				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OntologyObject.OWL_DATA_PROPERTY_URI);
+				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OWL2URIDefinitions.OWL_DATA_PROPERTY_URI);
 			}
 			return null;
 		}
@@ -324,8 +325,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		@Override
 		public Type getType() {
 			if (((ObjectPropertyPatternRole) getPatternRole()).getParentProperty() != null) {
-				return SubObjectPropertyOfProperty.getSubPropertyOfProperty(((ObjectPropertyPatternRole) getPatternRole())
-						.getParentProperty());
+				return SubPropertyOfProperty.getSubPropertyOfProperty(((ObjectPropertyPatternRole) getPatternRole()).getParentProperty());
 			}
 			return OntologyObjectProperty.class;
 		}
@@ -333,7 +333,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		@Override
 		public OntologyClass getOntologicType() {
 			if (getPatternRole().getViewPoint().getViewpointOntology() != null) {
-				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OntologyObject.OWL_OBJECT_PROPERTY_URI);
+				return getPatternRole().getViewPoint().getViewpointOntology().getClass(OWL2URIDefinitions.OWL_OBJECT_PROPERTY_URI);
 			}
 			return null;
 		}

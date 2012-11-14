@@ -119,7 +119,7 @@ public class DMRepositoryView extends DMView<DMRepository> {
 	public DMPackage getSelectedDMPackage() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMPackage)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMPackage) {
 			return (DMPackage) selection.firstElement();
 		}
 		if (getSelectedDMEntity() != null) {
@@ -131,7 +131,7 @@ public class DMRepositoryView extends DMView<DMRepository> {
 	public DMEntity getSelectedDMEntity() {
 		DMSelectionManager sm = getDMController().getDMSelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEntity)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DMEntity) {
 			return (DMEntity) selection.firstElement();
 		}
 		return null;

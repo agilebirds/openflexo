@@ -37,35 +37,32 @@ import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableTabPanelView extends FIBTabPanelView implements FIBEditableView<FIBTabPanel,JTabbedPane> {
+public class FIBEditableTabPanelView extends FIBTabPanelView implements FIBEditableView<FIBTabPanel, JTabbedPane> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableTabPanelView.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBTabPanel,JTabbedPane> delegate;
-	
+	private FIBEditableViewDelegate<FIBTabPanel, JTabbedPane> delegate;
+
 	private Vector<PlaceHolder> placeholders;
-	
+
 	private FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableTabPanelView(FIBTabPanel model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableTabPanelView(FIBTabPanel model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-	
-		delegate = new FIBEditableViewDelegate<FIBTabPanel,JTabbedPane>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBTabPanel, JTabbedPane>(this);
 		placeholders = new Vector<PlaceHolder>();
 		model.addObserver(this);
 	}
-	
-	
-	public void delete() 
-	{
+
+	@Override
+	public void delete() {
 		placeholders.clear();
 		placeholders = null;
 		delegate.delete();
@@ -73,33 +70,33 @@ public class FIBEditableTabPanelView extends FIBTabPanelView implements FIBEdita
 		super.delete();
 	}
 
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
 		return placeholders;
 	}
-	
-	public FIBEditableViewDelegate<FIBTabPanel,JTabbedPane> getDelegate()
-	{
+
+	@Override
+	public FIBEditableViewDelegate<FIBTabPanel, JTabbedPane> getDelegate() {
 		return delegate;
 	}
 
-	public void update(Observable o, Object dataModification) 
-	{
+	@Override
+	public void update(Observable o, Object dataModification) {
 		// Tab added
 		if (dataModification instanceof FIBAddingNotification) {
-			if (((FIBAddingNotification)dataModification).getAddedValue() instanceof FIBTab) {
+			if (((FIBAddingNotification) dataModification).getAddedValue() instanceof FIBTab) {
 				updateLayout();
 			}
 		}
 		// Tab removed
 		else if (dataModification instanceof FIBRemovingNotification) {
-			if (((FIBRemovingNotification)dataModification).getRemovedValue() instanceof FIBTab) {
+			if (((FIBRemovingNotification) dataModification).getRemovedValue() instanceof FIBTab) {
 				updateLayout();
 			}
 		}
 		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
 	}
 
 }

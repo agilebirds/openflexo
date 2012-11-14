@@ -39,13 +39,7 @@ import org.w3c.dom.Node;
 public class ModelProperty {
 
 	public enum PropertyType {
-		SINGLE_PROPERTY_TYPE,
-		ARRAY_PROPERTY_TYPE,
-		VECTOR_PROPERTY_TYPE,
-		HASHTABLE_PROPERTY_TYPE,
-		PROPERTIES_PROPERTY_TYPE,
-		UNMAPPED_ATTRIBUTES_TYPE,
-		COMPLEX_PROPERTY_TYPE;
+		SINGLE_PROPERTY_TYPE, ARRAY_PROPERTY_TYPE, VECTOR_PROPERTY_TYPE, HASHTABLE_PROPERTY_TYPE, PROPERTIES_PROPERTY_TYPE, UNMAPPED_ATTRIBUTES_TYPE, COMPLEX_PROPERTY_TYPE;
 	}
 
 	/** Stores name of this property */
@@ -203,12 +197,12 @@ public class ModelProperty {
 			throw new InvalidModelException("No attribute 'name' defined for tag 'property' in model file");
 		}
 
-		if ((xmlTag == null) && (!isText) && (propertyType != PropertyType.PROPERTIES_PROPERTY_TYPE) && (contains == null)) {
+		if (xmlTag == null && !isText && propertyType != PropertyType.PROPERTIES_PROPERTY_TYPE && contains == null) {
 			throw new InvalidModelException(
 					"No attribute 'xmlTag' or 'contains' defined for tag 'property' in model file while xml tag 'text' is not set to true.");
 		}
 
-		if ((xmlTag != null) && (getDefaultXmlTag() != null)) {
+		if (xmlTag != null && getDefaultXmlTag() != null) {
 			if (getDefaultXmlTag().equalsIgnoreCase(XMLMapping.classNameLabel)) {
 				// throw new InvalidModelException("Invalid xml property name:
 				// "+xmlTag+" is a reserved keyword");
@@ -288,7 +282,7 @@ public class ModelProperty {
 			throw new InvalidModelException("Specified ModelEntity object is null");
 		}
 
-		if (!(aPropertyNode.getNodeName().equals(XMLMapping.propertyLabel))) {
+		if (!aPropertyNode.getNodeName().equals(XMLMapping.propertyLabel)) {
 			throw new InvalidModelException("Invalid tag '" + aPropertyNode.getNodeName() + "' found in model file");
 		} // end of if ()
 
@@ -468,7 +462,7 @@ public class ModelProperty {
 			return false;
 		} else {
 			for (int i = 0; i < xmlTag.length; i++) {
-				if ((xmlTag[i] != null) && (xmlTag[i].equals(aTagName))) {
+				if (xmlTag[i] != null && xmlTag[i].equals(aTagName)) {
 					return true;
 				}
 			}
@@ -481,7 +475,7 @@ public class ModelProperty {
 	 * well-defined values
 	 */
 	public String[] getXmlTags() {
-		if (((xmlTag == null) || (handledXMLTagsNeedsUpdate)) && (containsClass != null)) {
+		if ((xmlTag == null || handledXMLTagsNeedsUpdate) && containsClass != null) {
 			XMLMapping model = modelEntity.getModel();
 			// System.out.println ("updateHandledXMLTags() for "+getName()+"
 			// contains="+containsClass.getName()+" already
@@ -552,7 +546,7 @@ public class ModelProperty {
 	}
 
 	public boolean hasXmlTag() {
-		return ((xmlTag != null) && (xmlTag.length > 0));
+		return xmlTag != null && xmlTag.length > 0;
 	}
 
 	/**
@@ -562,7 +556,7 @@ public class ModelProperty {
 	 */
 	public String getDefaultXmlTag() {
 
-		if ((xmlTag != null) && (xmlTag.length > 0)) {
+		if (xmlTag != null && xmlTag.length > 0) {
 			return xmlTag[0];
 		} else {
 			throw new InvalidModelException("No XML tag defined for property '" + getName() + "'. Is it an abstract entity ?");
@@ -591,7 +585,7 @@ public class ModelProperty {
 	}
 
 	public boolean isInherited(ModelEntity entity) {
-		return (entity.inheritedModelProperties.get(getName()) != null);
+		return entity.inheritedModelProperties.get(getName()) != null;
 	}
 
 	public ModelEntity getInheritedEntity(ModelEntity entity) {
@@ -600,8 +594,8 @@ public class ModelProperty {
 
 	public boolean isPrimitive() {
 
-		return ((getType().isPrimitive()) || (StringEncoder.isConvertable(getType()))
-				|| (propertyType == PropertyType.PROPERTIES_PROPERTY_TYPE) || (propertyType == PropertyType.UNMAPPED_ATTRIBUTES_TYPE));
+		return getType().isPrimitive() || StringEncoder.isConvertable(getType()) || propertyType == PropertyType.PROPERTIES_PROPERTY_TYPE
+				|| propertyType == PropertyType.UNMAPPED_ATTRIBUTES_TYPE;
 	}
 
 	public boolean isSingle() {

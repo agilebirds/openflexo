@@ -127,7 +127,7 @@ public final class ExternalMessageOutEdge extends ExternalMessageEdge<FlexoPortM
 		if (getEndNode() instanceof FlexoPreCondition) {
 			FlexoPetriGraph pg = getPortMapRegistery().getSubProcessNode().getParentPetriGraph();
 			if (getEndNode().getNode() != null) {
-				return (((FlexoPreCondition) getEndNode()).getAttachedNode().getActivityPetriGraph() == pg);
+				return ((FlexoPreCondition) getEndNode()).getAttachedNode().getActivityPetriGraph() == pg;
 			}
 			return false;
 		}

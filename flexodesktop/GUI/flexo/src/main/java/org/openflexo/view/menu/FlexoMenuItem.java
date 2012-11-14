@@ -109,7 +109,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 	@Override
 	public FlexoModelObject getFocusedObject() {
 		if (_controller instanceof SelectionManagingController) {
-			return (((SelectionManagingController) _controller).getSelectionManager().getLastSelectedObject());
+			return ((SelectionManagingController) _controller).getSelectionManager().getLastSelectedObject();
 		}
 		return null;
 	}
@@ -117,7 +117,7 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 	@Override
 	public Vector<FlexoModelObject> getGlobalSelection() {
 		if (_controller instanceof SelectionManagingController) {
-			return (((SelectionManagingController) _controller).getSelectionManager().getSelection());
+			return ((SelectionManagingController) _controller).getSelectionManager().getSelection();
 		}
 		return null;
 	}
@@ -142,8 +142,8 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 			setEnabled(true);
 			return;
 		}
-		if ((_action instanceof FlexoActionType) && (getSelectionManager() != null)) {
-			if (((getFocusedObject() == null) || (getFocusedObject().getActionList().indexOf((_action)) > -1))) {
+		if (_action instanceof FlexoActionType && getSelectionManager() != null) {
+			if (getFocusedObject() == null || getFocusedObject().getActionList().indexOf(_action) > -1) {
 				setEnabled(((FlexoActionType) _action).isEnabled(getFocusedObject(), getGlobalSelection(), _controller.getEditor()));
 			} else {
 				setEnabled(false);

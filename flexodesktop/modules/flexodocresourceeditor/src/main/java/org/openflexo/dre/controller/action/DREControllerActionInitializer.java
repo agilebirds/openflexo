@@ -54,26 +54,26 @@ public class DREControllerActionInitializer extends ControllerActionInitializer 
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new DRESetPropertyInitializer(this)).init();
+		new DRESetPropertyInitializer(this).init();
 
-		(new CreateDocItemInitializer(this)).init();
-		(new CreateDocItemFolderInitializer(this)).init();
+		new CreateDocItemInitializer(this).init();
+		new CreateDocItemFolderInitializer(this).init();
 
-		(new DeleteDocItemFolderInitializer(this)).init();
+		new DeleteDocItemFolderInitializer(this).init();
 
-		(new AddToInheritanceChildItemInitializer(this)).init();
-		(new AddToEmbeddingChildItemInitializer(this)).init();
-		(new AddToRelatedToItemInitializer(this)).init();
-		(new RemoveInheritanceChildItemInitializer(this)).init();
-		(new RemoveEmbeddingChildItemInitializer(this)).init();
-		(new RemoveRelatedToItemInitializer(this)).init();
+		new AddToInheritanceChildItemInitializer(this).init();
+		new AddToEmbeddingChildItemInitializer(this).init();
+		new AddToRelatedToItemInitializer(this).init();
+		new RemoveInheritanceChildItemInitializer(this).init();
+		new RemoveEmbeddingChildItemInitializer(this).init();
+		new RemoveRelatedToItemInitializer(this).init();
 
-		(new SubmitVersionInitializer(this)).init();
-		(new ApproveVersionInitializer(this)).init();
-		(new RefuseVersionInitializer(this)).init();
+		new SubmitVersionInitializer(this).init();
+		new ApproveVersionInitializer(this).init();
+		new RefuseVersionInitializer(this).init();
 
-		(new GenerateHelpSetInitializer(this)).init();
-		(new ImportDocSubmissionReportInitializer(this)).init();
+		new GenerateHelpSetInitializer(this).init();
+		new ImportDocSubmissionReportInitializer(this).init();
 	}
 
 }

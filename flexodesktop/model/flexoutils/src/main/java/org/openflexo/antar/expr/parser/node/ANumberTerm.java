@@ -2,93 +2,76 @@
 
 package org.openflexo.antar.expr.parser.node;
 
-import org.openflexo.antar.expr.parser.analysis.*;
+import org.openflexo.antar.expr.parser.analysis.Analysis;
 
 @SuppressWarnings("nls")
-public final class ANumberTerm extends PTerm
-{
-    private PNumber _number_;
+public final class ANumberTerm extends PTerm {
+	private PNumber _number_;
 
-    public ANumberTerm()
-    {
-        // Constructor
-    }
+	public ANumberTerm() {
+		// Constructor
+	}
 
-    public ANumberTerm(
-        @SuppressWarnings("hiding") PNumber _number_)
-    {
-        // Constructor
-        setNumber(_number_);
+	public ANumberTerm(@SuppressWarnings("hiding") PNumber _number_) {
+		// Constructor
+		setNumber(_number_);
 
-    }
+	}
 
-    @Override
-    public Object clone()
-    {
-        return new ANumberTerm(
-            cloneNode(this._number_));
-    }
+	@Override
+	public Object clone() {
+		return new ANumberTerm(cloneNode(this._number_));
+	}
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseANumberTerm(this);
-    }
+	@Override
+	public void apply(Switch sw) {
+		((Analysis) sw).caseANumberTerm(this);
+	}
 
-    public PNumber getNumber()
-    {
-        return this._number_;
-    }
+	public PNumber getNumber() {
+		return this._number_;
+	}
 
-    public void setNumber(PNumber node)
-    {
-        if(this._number_ != null)
-        {
-            this._number_.parent(null);
-        }
+	public void setNumber(PNumber node) {
+		if (this._number_ != null) {
+			this._number_.parent(null);
+		}
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
+		if (node != null) {
+			if (node.parent() != null) {
+				node.parent().removeChild(node);
+			}
 
-            node.parent(this);
-        }
+			node.parent(this);
+		}
 
-        this._number_ = node;
-    }
+		this._number_ = node;
+	}
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._number_);
-    }
+	@Override
+	public String toString() {
+		return "" + toString(this._number_);
+	}
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._number_ == child)
-        {
-            this._number_ = null;
-            return;
-        }
+	@Override
+	void removeChild(@SuppressWarnings("unused") Node child) {
+		// Remove child
+		if (this._number_ == child) {
+			this._number_ = null;
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._number_ == oldChild)
-        {
-            setNumber((PNumber) newChild);
-            return;
-        }
+	@Override
+	void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild) {
+		// Replace child
+		if (this._number_ == oldChild) {
+			setNumber((PNumber) newChild);
+			return;
+		}
 
-        throw new RuntimeException("Not a child.");
-    }
+		throw new RuntimeException("Not a child.");
+	}
 }

@@ -32,7 +32,7 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 	}
 
 	public void setParentProperty(OntologyProperty ontologyProperty) {
-		parentPropertyURI = (ontologyProperty != null ? ontologyProperty.getURI() : null);
+		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
 	}
 
 	public String _getDomainURI() {

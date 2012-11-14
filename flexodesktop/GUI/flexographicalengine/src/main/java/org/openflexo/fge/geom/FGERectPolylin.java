@@ -605,9 +605,9 @@ public class FGERectPolylin extends FGEPolylin {
 		for (FGESegment s1 : getSegments()) {
 			for (FGESegment s2 : getSegments()) {
 				if (s1 != s2
-						&& (s1.overlap(s2) || (s1.intersectsInsideSegment(s2) && !s1.getLineIntersection(s2).equals(s1.getP1())
-								&& !s1.getLineIntersection(s2).equals(s1.getP2()) && !s1.getLineIntersection(s2).equals(s2.getP1()) && !s1
-								.getLineIntersection(s2).equals(s2.getP2())))) {
+						&& (s1.overlap(s2) || s1.intersectsInsideSegment(s2) && !s1.getLineIntersection(s2).equals(s1.getP1())
+								&& !s1.getLineIntersection(s2).equals(s1.getP2()) && !s1.getLineIntersection(s2).equals(s2.getP1())
+								&& !s1.getLineIntersection(s2).equals(s2.getP2()))) {
 					return true;
 				}
 			}
@@ -726,12 +726,12 @@ public class FGERectPolylin extends FGEPolylin {
 
 		for (int i = 0; i < _segments.size(); i++) {
 			FGESegment s = _segments.get(i);
-			FGESegment next = (i < _segments.size() - 1 ? _segments.get(i + 1) : null);
+			FGESegment next = i < _segments.size() - 1 ? _segments.get(i + 1) : null;
 			if (next == null) {
 				if (current == null) {
 					s.paint(g);
 				} else {
-					(new FGESegment(current, s.getP2())).paint(g);
+					new FGESegment(current, s.getP2()).paint(g);
 				}
 			} else {
 				FGEPoint p = s.getP2();
@@ -850,9 +850,9 @@ public class FGERectPolylin extends FGEPolylin {
 					g.useDefaultForegroundStyle();
 
 					if (current == null) {
-						(new FGESegment(s.getP1(), startRound)).paint(g);
+						new FGESegment(s.getP1(), startRound).paint(g);
 					} else {
-						(new FGESegment(current, startRound)).paint(g);
+						new FGESegment(current, startRound).paint(g);
 					}
 					arc.paint(g);
 					current = endRound;
@@ -899,11 +899,11 @@ public class FGERectPolylin extends FGEPolylin {
 			// FGEPoint p_start = startArea.getNearestPoint(p);
 			// FGEPoint p_end = endArea.getNearestPoint(p);
 
-			FGEPoint p_start = (startOrientation.isHorizontal() ? nearestPointOnHorizontalLine(p, startArea) : nearestPointOnVerticalLine(
-					p, startArea));
+			FGEPoint p_start = startOrientation.isHorizontal() ? nearestPointOnHorizontalLine(p, startArea) : nearestPointOnVerticalLine(p,
+					startArea);
 
-			FGEPoint p_end = (endOrientation.isHorizontal() ? nearestPointOnHorizontalLine(p, endArea) : nearestPointOnVerticalLine(p,
-					endArea));
+			FGEPoint p_end = endOrientation.isHorizontal() ? nearestPointOnHorizontalLine(p, endArea) : nearestPointOnVerticalLine(p,
+					endArea);
 
 			addToPoints(p_start);
 			addToPoints(p);
@@ -915,11 +915,11 @@ public class FGERectPolylin extends FGEPolylin {
 			// FGEPoint p_start = startArea.getNearestPoint(p);
 			// FGEPoint p_end = endArea.getNearestPoint(p);
 
-			FGEPoint p_start = (startOrientation.isHorizontal() ? nearestPointOnHorizontalLine(p, startArea) : nearestPointOnVerticalLine(
-					p, startArea));
+			FGEPoint p_start = startOrientation.isHorizontal() ? nearestPointOnHorizontalLine(p, startArea) : nearestPointOnVerticalLine(p,
+					startArea);
 
-			FGEPoint p_end = (endOrientation.isHorizontal() ? nearestPointOnHorizontalLine(p, endArea) : nearestPointOnVerticalLine(p,
-					endArea));
+			FGEPoint p_end = endOrientation.isHorizontal() ? nearestPointOnHorizontalLine(p, endArea) : nearestPointOnVerticalLine(p,
+					endArea);
 
 			if (FGEPoint.areAligned(p_start, p, p_end) && straightWhenPossible) {
 				addToPoints(p_start);
@@ -931,7 +931,7 @@ public class FGERectPolylin extends FGEPolylin {
 				addToPoints(p_end);
 				return;
 			}
-		} else if ((intersect instanceof FGEShape) || (intersect.isFinite() && intersect.getEmbeddingBounds() != null)) {
+		} else if (intersect instanceof FGEShape || intersect.isFinite() && intersect.getEmbeddingBounds() != null) {
 
 			FGEPoint center;
 
@@ -949,11 +949,11 @@ public class FGERectPolylin extends FGEPolylin {
 				center = intersect.getEmbeddingBounds().getCenter();
 			}
 
-			FGEPoint p_start = (startOrientation.isHorizontal() ? nearestPointOnHorizontalLine(center, startArea)
-					: nearestPointOnVerticalLine(center, startArea));
+			FGEPoint p_start = startOrientation.isHorizontal() ? nearestPointOnHorizontalLine(center, startArea)
+					: nearestPointOnVerticalLine(center, startArea);
 
-			FGEPoint p_end = (endOrientation.isHorizontal() ? nearestPointOnHorizontalLine(center, endArea) : nearestPointOnVerticalLine(
-					center, endArea));
+			FGEPoint p_end = endOrientation.isHorizontal() ? nearestPointOnHorizontalLine(center, endArea) : nearestPointOnVerticalLine(
+					center, endArea);
 
 			// FGEPoint p_start = FGEPoint.getNearestPoint(center,startArea.nearestPointFrom(center,
 			// startOrientation.getOpposite()),startArea.nearestPointFrom(center, startOrientation));
@@ -1031,7 +1031,7 @@ public class FGERectPolylin extends FGEPolylin {
 			computeAs(new FGERectPolylin(endArea, endOrientation, startArea, startOrientation, straightWhenPossible, overlapX, overlapY));
 		} else {
 			logger.warning("Unexpected case: startOrientation=" + startOrientation + " endOrientation=" + endOrientation);
-			(new Exception("???")).printStackTrace();
+			new Exception("???").printStackTrace();
 		}
 
 	}
@@ -1162,8 +1162,8 @@ public class FGERectPolylin extends FGEPolylin {
 		if (getMaxXFor(startAnchorArea) > getMinXFor(endAnchorArea)) {
 			// if (getMinXFor(startAnchorArea) > getMaxXFor(endAnchorArea)) { /* XXX */
 
-			double middleY = (significativeStartLocation.y <= significativeEndLocation.y ? (getMaxYFor(startArea) + getMinYFor(endArea)) / 2
-					: (getMinYFor(startArea) + getMaxYFor(endArea)) / 2);
+			double middleY = significativeStartLocation.y <= significativeEndLocation.y ? (getMaxYFor(startArea) + getMinYFor(endArea)) / 2
+					: (getMinYFor(startArea) + getMaxYFor(endArea)) / 2;
 			FGELine line = FGELine.makeHorizontalLine(new FGEPoint(0, middleY));
 			// FGELine line1 = FGELine.makeVerticalLine(new FGEPoint(getMaxXFor(startAnchorArea)+overlapX,0));
 			// FGELine line2 = FGELine.makeVerticalLine(new FGEPoint(getMinXFor(endAnchorArea)-overlapX,0));
@@ -1187,8 +1187,8 @@ public class FGERectPolylin extends FGEPolylin {
 			addToPoints(p_end);
 		} else {
 			FGELine line = FGELine.makeVerticalLine(new FGEPoint(
-					(significativeStartLocation.x <= significativeEndLocation.x ? (getMaxXFor(startArea) + getMinXFor(endArea)) / 2
-							: (getMinXFor(startArea) + getMaxXFor(endArea)) / 2), 0));
+					significativeStartLocation.x <= significativeEndLocation.x ? (getMaxXFor(startArea) + getMinXFor(endArea)) / 2
+							: (getMinXFor(startArea) + getMaxXFor(endArea)) / 2, 0));
 
 			FGEPoint p1 = getLocationFor(resultingStartArea.intersect(line));
 			FGEPoint p2 = getLocationFor(resultingEndArea.intersect(line));
@@ -1219,8 +1219,8 @@ public class FGERectPolylin extends FGEPolylin {
 		if (getMaxYFor(startAnchorArea) > getMinYFor(endAnchorArea)) {
 			// if (getMinYFor(startAnchorArea) > getMaxYFor(endAnchorArea)) { /* XXX */
 
-			double middleX = (significativeStartLocation.x <= significativeEndLocation.x ? (getMaxXFor(startArea) + getMinXFor(endArea)) / 2
-					: (getMinXFor(startArea) + getMaxXFor(endArea)) / 2);
+			double middleX = significativeStartLocation.x <= significativeEndLocation.x ? (getMaxXFor(startArea) + getMinXFor(endArea)) / 2
+					: (getMinXFor(startArea) + getMaxXFor(endArea)) / 2;
 			FGELine line = FGELine.makeVerticalLine(new FGEPoint(middleX, 0));
 			// FGELine line1 = FGELine.makeHorizontalLine(new FGEPoint(0,getMinYFor(startAnchorArea)+overlapY)); /* XXX */
 			// FGELine line2 = FGELine.makeHorizontalLine(new FGEPoint(0,getMaxYFor(endAnchorArea)-overlapY)); /* XXX */
@@ -1245,8 +1245,8 @@ public class FGERectPolylin extends FGEPolylin {
 		} else {
 
 			FGELine line = FGELine.makeHorizontalLine(new FGEPoint(0,
-					(significativeStartLocation.y <= significativeEndLocation.y ? (getMaxYFor(startArea) + getMinYFor(endArea)) / 2
-							: (getMinYFor(startArea) + getMaxYFor(endArea)) / 2)));
+					significativeStartLocation.y <= significativeEndLocation.y ? (getMaxYFor(startArea) + getMinYFor(endArea)) / 2
+							: (getMinYFor(startArea) + getMaxYFor(endArea)) / 2));
 			FGELine alternativeLine = FGELine.makeHorizontalLine(new FGEPoint(0,
 					(significativeStartLocation.y + significativeEndLocation.y) / 2));
 
@@ -1803,7 +1803,7 @@ public class FGERectPolylin extends FGEPolylin {
 		double middleDistancePath = getLength() / 2;
 		double distance = 0;
 		for (FGESegment s : getSegments()) {
-			if ((distance <= middleDistancePath) && (distance + s.getLength() >= middleDistancePath)) {
+			if (distance <= middleDistancePath && distance + s.getLength() >= middleDistancePath) {
 				return s;
 			}
 			distance += s.getLength();
@@ -2131,7 +2131,7 @@ public class FGERectPolylin extends FGEPolylin {
 			return true;
 		}
 		FGERectPolylin normalizedRect = makeNormalizedRectPolylin();
-		return (normalizedRect.getPointsNb() == getPointsNb());
+		return normalizedRect.getPointsNb() == getPointsNb();
 	}
 
 	public void normalize() {

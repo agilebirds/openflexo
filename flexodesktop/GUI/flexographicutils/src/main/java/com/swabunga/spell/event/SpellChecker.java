@@ -238,7 +238,7 @@ public class SpellChecker {
 		boolean isUpper = Character.isUpperCase(word.charAt(0));
 		// Ignore the first character if this word starts the sentence and the first
 		// character was upper cased, since this is normal behaviour
-		if ((startsSentence) && isUpper && (strLen > 1)) {
+		if (startsSentence && isUpper && strLen > 1) {
 			isUpper = Character.isUpperCase(word.charAt(1));
 		}
 		if (isUpper) {
@@ -408,10 +408,10 @@ public class SpellChecker {
 			String word = tokenizer.nextWord();
 			// Check the spelling of the word
 			if (!isCorrect(word)) {
-				if ((config.getBoolean(Configuration.SPELL_IGNOREMIXEDCASE) && isMixedCaseWord(word, tokenizer.isNewSentence()))
-						|| (config.getBoolean(Configuration.SPELL_IGNOREUPPERCASE) && isUpperCaseWord(word))
-						|| (config.getBoolean(Configuration.SPELL_IGNOREDIGITWORDS) && isDigitWord(word))
-						|| (config.getBoolean(Configuration.SPELL_IGNOREINTERNETADDRESSES) && isINETWord(word))) {
+				if (config.getBoolean(Configuration.SPELL_IGNOREMIXEDCASE) && isMixedCaseWord(word, tokenizer.isNewSentence())
+						|| config.getBoolean(Configuration.SPELL_IGNOREUPPERCASE) && isUpperCaseWord(word)
+						|| config.getBoolean(Configuration.SPELL_IGNOREDIGITWORDS) && isDigitWord(word)
+						|| config.getBoolean(Configuration.SPELL_IGNOREINTERNETADDRESSES) && isINETWord(word)) {
 					// Null event. Since we are ignoring this word due
 					// to one of the above cases.
 				} else {
@@ -485,6 +485,6 @@ public class SpellChecker {
 		// if !SPELL_IGNORESENTENCECAPITALIZATION, capitalize suggestions only for the first word in a sentence
 		boolean configCapitalize = !config.getBoolean(Configuration.SPELL_IGNORESENTENCECAPITALIZATION);
 		boolean uppercase = Character.isUpperCase(word.charAt(0));
-		return (configCapitalize && wordTokenizer.isNewSentence()) || (!configCapitalize && uppercase);
+		return configCapitalize && wordTokenizer.isNewSentence() || !configCapitalize && uppercase;
 	}
 }

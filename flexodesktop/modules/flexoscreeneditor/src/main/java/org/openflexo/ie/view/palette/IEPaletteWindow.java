@@ -72,7 +72,7 @@ public class IEPaletteWindow extends FlexoPaletteWindow {
 	}
 
 	public void setCurrentCSSStyle(String css) {
-		(getPalette()).setCurrentCSSStyle(css);
+		getPalette().setCurrentCSSStyle(css);
 	}
 
 	@Override

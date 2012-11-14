@@ -25,7 +25,7 @@ public class FIBEmbeddedEditor {
 
 	private File fibFile;
 	private Object[] data;
-	
+
 	public FIBEmbeddedEditor(File aFile, Object object) {
 		super();
 		this.fibFile = aFile;
@@ -36,21 +36,23 @@ public class FIBEmbeddedEditor {
 			public File getFIBFile() {
 				return fibFile;
 			}
+
 			@Override
 			public Object[] getData() {
 				return data;
 			}
+
 			@Override
 			public boolean showExitMenuItem() {
 				return false;
 			};
 		}.launch();
 	}
-	
+
 	public Object[] getData() {
 		return data;
 	}
-	
+
 	public File getFIBFile() {
 		return fibFile;
 	}

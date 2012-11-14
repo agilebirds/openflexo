@@ -495,7 +495,7 @@ public class XMLMapping {
 			tempNode = entitiesNodeList.item(i);
 			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
 				if (tempNode.getNodeName().equals(XMLMapping.descriptionLabel)) {
-					if ((tempNode.getChildNodes().getLength() == 1) && (tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE)) {
+					if (tempNode.getChildNodes().getLength() == 1 && tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE) {
 						setDescription(tempNode.getFirstChild().getNodeValue());
 					}
 				} else if (tempNode.getNodeName().equals(XMLMapping.entityLabel)) {
@@ -645,7 +645,7 @@ public class XMLMapping {
 		Class currentClass = aClass;
 		ModelEntity returned = entityWithClassName(currentClass.getName());
 
-		while ((currentClass != null) && (currentClass.getSuperclass() != null) && (returned == null)) {
+		while (currentClass != null && currentClass.getSuperclass() != null && returned == null) {
 			currentClass = currentClass.getSuperclass();
 			returned = entityWithClassName(currentClass.getName());
 		}
@@ -734,7 +734,7 @@ public class XMLMapping {
 	 * Return boolean indicating if a builder class has been defined for this model
 	 */
 	public boolean hasBuilderClass() {
-		return (builderClass != null);
+		return builderClass != null;
 	}
 
 	public String getDescription() {
@@ -796,7 +796,7 @@ public class XMLMapping {
 					int entLevel = ((Integer) potentialEntities.get(ent)).intValue();
 					// System.out.println ("I have "+ent.getName()+" with level
 					// "+entLevel);
-					if ((returned == null) || (entLevel < bestLevel)) {
+					if (returned == null || entLevel < bestLevel) {
 						returned = ent;
 						bestLevel = entLevel;
 					}

@@ -41,20 +41,7 @@ import org.openflexo.inspector.HasIcon;
 public interface ConnectorSymbol {
 
 	public static enum StartSymbolType implements ConnectorSymbol, HasIcon {
-		NONE,
-		ARROW,
-		PLAIN_ARROW,
-		FILLED_ARROW,
-		PLAIN_DOUBLE_ARROW,
-		FILLED_DOUBLE_ARROW,
-		PLAIN_CIRCLE,
-		FILLED_CIRCLE,
-		PLAIN_SQUARE,
-		FILLED_SQUARE,
-		PLAIN_DIAMOND,
-		PLAIN_LONG_DIAMOND,
-		FILLED_DIAMOND,
-		DEFAULT_FLOW;
+		NONE, ARROW, PLAIN_ARROW, FILLED_ARROW, PLAIN_DOUBLE_ARROW, FILLED_DOUBLE_ARROW, PLAIN_CIRCLE, FILLED_CIRCLE, PLAIN_SQUARE, FILLED_SQUARE, PLAIN_DIAMOND, PLAIN_LONG_DIAMOND, FILLED_DIAMOND, DEFAULT_FLOW;
 
 		@Override
 		public ImageIcon getIcon() {
@@ -78,7 +65,7 @@ public interface ConnectorSymbol {
 				return FGEIconLibrary.START_PLAIN_SQUARE_ICON;
 			} else if (this == FILLED_SQUARE) {
 				return FGEIconLibrary.START_FILLED_SQUARE_ICON;
-			} else if ((this == PLAIN_DIAMOND) || (this == PLAIN_LONG_DIAMOND)) {
+			} else if (this == PLAIN_DIAMOND || this == PLAIN_LONG_DIAMOND) {
 				return FGEIconLibrary.START_PLAIN_DIAMOND_ICON;
 			} else if (this == FILLED_DIAMOND) {
 				return FGEIconLibrary.START_FILLED_DIAMOND_ICON;
@@ -171,18 +158,7 @@ public interface ConnectorSymbol {
 	}
 
 	public static enum EndSymbolType implements ConnectorSymbol, HasIcon {
-		NONE,
-		ARROW,
-		PLAIN_ARROW,
-		FILLED_ARROW,
-		PLAIN_DOUBLE_ARROW,
-		FILLED_DOUBLE_ARROW,
-		PLAIN_CIRCLE,
-		FILLED_CIRCLE,
-		PLAIN_SQUARE,
-		FILLED_SQUARE,
-		PLAIN_DIAMOND,
-		FILLED_DIAMOND;
+		NONE, ARROW, PLAIN_ARROW, FILLED_ARROW, PLAIN_DOUBLE_ARROW, FILLED_DOUBLE_ARROW, PLAIN_CIRCLE, FILLED_CIRCLE, PLAIN_SQUARE, FILLED_SQUARE, PLAIN_DIAMOND, FILLED_DIAMOND;
 
 		@Override
 		public ImageIcon getIcon() {
@@ -289,18 +265,7 @@ public interface ConnectorSymbol {
 	}
 
 	public static enum MiddleSymbolType implements ConnectorSymbol, HasIcon {
-		NONE,
-		ARROW,
-		PLAIN_ARROW,
-		FILLED_ARROW,
-		PLAIN_DOUBLE_ARROW,
-		FILLED_DOUBLE_ARROW,
-		PLAIN_CIRCLE,
-		FILLED_CIRCLE,
-		PLAIN_SQUARE,
-		FILLED_SQUARE,
-		PLAIN_DIAMOND,
-		FILLED_DIAMOND;
+		NONE, ARROW, PLAIN_ARROW, FILLED_ARROW, PLAIN_DOUBLE_ARROW, FILLED_DOUBLE_ARROW, PLAIN_CIRCLE, FILLED_CIRCLE, PLAIN_SQUARE, FILLED_SQUARE, PLAIN_DIAMOND, FILLED_DIAMOND;
 
 		@Override
 		public ImageIcon getIcon() {

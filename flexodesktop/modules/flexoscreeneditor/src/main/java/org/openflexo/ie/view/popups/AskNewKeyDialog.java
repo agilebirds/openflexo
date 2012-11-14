@@ -294,7 +294,7 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 			KeyValueJTextField tf = en.nextElement();
 			String valueText = tf.getText();
 			if (tf.getText() == null || tf.getText().trim().length() == 0
-					|| (newKeyTextField.getText().equals(valueText.substring(0, valueText.length() - 1)))) {
+					|| newKeyTextField.getText().equals(valueText.substring(0, valueText.length() - 1))) {
 				tf.setText(newKeyTextField.getText());
 			}
 		}

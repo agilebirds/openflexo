@@ -29,7 +29,6 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.generator.action.OpenDMEntity;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.toolbox.ToolBox;

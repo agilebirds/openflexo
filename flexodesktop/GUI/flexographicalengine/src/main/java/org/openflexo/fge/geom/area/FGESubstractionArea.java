@@ -112,7 +112,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 		if (substractedArea instanceof FGEEmptyArea) {
 			return containerArea.clone();
 		}
-		if (checkNonNullIntersection && (containerArea.intersect(substractedArea) instanceof FGEEmptyArea)) {
+		if (checkNonNullIntersection && containerArea.intersect(substractedArea) instanceof FGEEmptyArea) {
 			return containerArea.clone();
 		}
 		if (substractedArea.containsArea(containerArea)) {
@@ -129,7 +129,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 	@Override
 	public boolean containsPoint(FGEPoint p) {
 		return containerArea.containsPoint(p)
-				&& (!substractedArea.containsPoint(p) || (!isStrict() && isPointLocatedOnSubstractedAreaBorder(p)));
+				&& (!substractedArea.containsPoint(p) || !isStrict() && isPointLocatedOnSubstractedAreaBorder(p));
 	}
 
 	@Override

@@ -85,10 +85,10 @@ public class Importer implements DataImporter {
 
 	@Override
 	public Object importInProject(FlexoProject project, File importedFile, Object[] parameters) {
-		String repositoryName = (parameters.length >= 1 ? (String) parameters[0] : null);
-		String packageName = (parameters.length >= 2 ? (String) parameters[1] : DMPackage.DEFAULT_PACKAGE_NAME);
-		flexoAction = (parameters.length >= 3 ? (FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject>) parameters[2]
-				: null);
+		String repositoryName = parameters.length >= 1 ? (String) parameters[0] : null;
+		String packageName = parameters.length >= 2 ? (String) parameters[1] : DMPackage.DEFAULT_PACKAGE_NAME;
+		flexoAction = parameters.length >= 3 ? (FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject>) parameters[2]
+				: null;
 		this.project = project;
 
 		String[] args = new String[] { importedFile.getAbsolutePath() };
@@ -346,7 +346,7 @@ public class Importer implements DataImporter {
 	 * @param modelObject
 	 */
 	private void extractProperties(cb.petal.PetalObject petalObject, FlexoModelObject modelObject) {
-		for (String name : (java.util.List<String>) petalObject.getNames()) {
+		for (String name : petalObject.getNames()) {
 			if (propertyWithNameShouldBeIgnored(name)) {
 				continue;
 			}

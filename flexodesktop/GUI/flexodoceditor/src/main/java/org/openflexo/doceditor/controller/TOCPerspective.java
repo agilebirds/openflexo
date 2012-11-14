@@ -105,7 +105,7 @@ public class TOCPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof TOCEntry) || (object instanceof TOCRepository) || (object instanceof TOCData));
+		return object instanceof TOCEntry || object instanceof TOCRepository || object instanceof TOCData;
 	}
 
 	@Override

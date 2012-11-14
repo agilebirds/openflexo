@@ -46,7 +46,7 @@ public class SelectionSynchronizedFIBView<O> extends FlexoFIBView<O> implements 
 	static final Logger logger = Logger.getLogger(SelectionSynchronizedFIBView.class.getPackage().getName());
 
 	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile) {
-		this(representedObject, controller, fibFile, false, (controller != null ? controller.willLoad(fibFile) : null));
+		this(representedObject, controller, fibFile, false, controller != null ? controller.willLoad(fibFile) : null);
 	}
 
 	public SelectionSynchronizedFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {

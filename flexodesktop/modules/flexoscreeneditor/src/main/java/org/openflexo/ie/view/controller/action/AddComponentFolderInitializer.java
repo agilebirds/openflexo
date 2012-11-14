@@ -60,11 +60,11 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddComponentFolder action) {
 				FlexoComponentFolder parentFolder = null;
-				if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof ComponentDefinition)) {
+				if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ComponentDefinition) {
 					parentFolder = ((ComponentDefinition) action.getFocusedObject()).getFolder();
-				} else if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof FlexoComponentFolder)) {
+				} else if (action.getFocusedObject() != null && action.getFocusedObject() instanceof FlexoComponentFolder) {
 					parentFolder = (FlexoComponentFolder) action.getFocusedObject();
-				} else if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof FlexoComponentLibrary)) {
+				} else if (action.getFocusedObject() != null && action.getFocusedObject() instanceof FlexoComponentLibrary) {
 					parentFolder = ((FlexoComponentLibrary) action.getFocusedObject()).getRootFolder();
 				}
 				if (parentFolder != null) {
@@ -86,8 +86,8 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 							newFolderName = null;
 						}
 					}
-					(action).setParentFolder(parentFolder);
-					(action).setNewFolderName(newFolderName);
+					action.setParentFolder(parentFolder);
+					action.setNewFolderName(newFolderName);
 					return true;
 				} else {
 					return false;

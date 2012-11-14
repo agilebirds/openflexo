@@ -112,7 +112,7 @@ public class ProcessPerspective extends FlexoPerspective<FlexoProcess> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoProcess) && !((FlexoProcess) object).isImported();
+		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class ProcessPerspective extends FlexoPerspective<FlexoProcess> {
 	}
 
 	public ProcessView getCurrentProcessView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof ProcessView)) {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof ProcessView) {
 			return (ProcessView) _controller.getCurrentModuleView();
 		}
 		return null;

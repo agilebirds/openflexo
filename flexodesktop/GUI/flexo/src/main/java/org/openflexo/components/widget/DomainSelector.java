@@ -81,7 +81,7 @@ public class DomainSelector extends AbstractBrowserSelector<Domain> {
 	protected class DomainBrowser extends ProjectBrowser {
 
 		protected DomainBrowser() {
-			super((getDKVModel() != null ? getDKVModel().getProject() : null), false);
+			super(getDKVModel() != null ? getDKVModel().getProject() : null, false);
 			init();
 		}
 

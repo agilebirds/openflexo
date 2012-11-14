@@ -14,6 +14,7 @@ import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.foundation.ontology.OWL2URIDefinitions;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
@@ -349,7 +350,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 		@Override
 		public OntologyClass getOntologicType() {
 			if (getViewpointOntology() != null) {
-				return getViewpointOntology().getClass(OntologyObject.OWL_DATA_PROPERTY_URI);
+				return getViewpointOntology().getClass(OWL2URIDefinitions.OWL_DATA_PROPERTY_URI);
 			}
 			return null;
 		}
@@ -369,7 +370,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 		@Override
 		public OntologyClass getOntologicType() {
 			if (getViewpointOntology() != null) {
-				return getViewpointOntology().getClass(OntologyObject.OWL_OBJECT_PROPERTY_URI);
+				return getViewpointOntology().getClass(OWL2URIDefinitions.OWL_OBJECT_PROPERTY_URI);
 			}
 			return null;
 		}

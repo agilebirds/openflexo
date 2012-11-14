@@ -63,7 +63,7 @@ public class FGEGrid implements FGEArea {
 			return containsPoint((FGEPoint) a);
 		}
 		if (a instanceof FGEGrid) {
-			FGEGrid grid = ((FGEGrid) a);
+			FGEGrid grid = (FGEGrid) a;
 			return grid.origin.equals(origin) && grid.hStep == hStep && grid.vStep == vStep;
 		}
 		return false;
@@ -76,8 +76,8 @@ public class FGEGrid implements FGEArea {
 
 	@Override
 	public boolean containsPoint(FGEPoint p) {
-		return Math.abs(Math.IEEEremainder((p.x - origin.x), hStep)) < FGEGeometricObject.EPSILON
-				&& Math.abs(Math.IEEEremainder((p.y - origin.y), vStep)) < FGEGeometricObject.EPSILON;
+		return Math.abs(Math.IEEEremainder(p.x - origin.x, hStep)) < FGEGeometricObject.EPSILON
+				&& Math.abs(Math.IEEEremainder(p.y - origin.y, vStep)) < FGEGeometricObject.EPSILON;
 	}
 
 	@Override

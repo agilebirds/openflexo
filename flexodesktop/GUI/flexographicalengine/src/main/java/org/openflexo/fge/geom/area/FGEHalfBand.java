@@ -284,8 +284,8 @@ public class FGEHalfBand implements FGEArea {
 	public boolean equals(Object obj) {
 		if (obj instanceof FGEHalfBand) {
 			FGEHalfBand hb = (FGEHalfBand) obj;
-			return (hb.halfLine1.equals(halfLine1) && hb.halfLine2.equals(halfLine2))
-					|| (hb.halfLine2.equals(halfLine1) && hb.halfLine1.equals(halfLine2));
+			return hb.halfLine1.equals(halfLine1) && hb.halfLine2.equals(halfLine2) || hb.halfLine2.equals(halfLine1)
+					&& hb.halfLine1.equals(halfLine2);
 		}
 		return false;
 	}
@@ -382,28 +382,28 @@ public class FGEHalfBand implements FGEArea {
 			if (halfLine1.isVertical()) {
 				return clone();
 			} else {
-				FGEPoint p = (limit.getP1().y > limit.getP2().y ? limit.getP1() : limit.getP2());
+				FGEPoint p = limit.getP1().y > limit.getP2().y ? limit.getP1() : limit.getP2();
 				return new FGEHalfPlane(FGELine.makeVerticalLine(p), halfLine1.getOpposite());
 			}
 		} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 			if (halfLine1.isVertical()) {
 				return clone();
 			} else {
-				FGEPoint p = (limit.getP1().y > limit.getP2().y ? limit.getP2() : limit.getP1());
+				FGEPoint p = limit.getP1().y > limit.getP2().y ? limit.getP2() : limit.getP1();
 				return new FGEHalfPlane(FGELine.makeVerticalLine(p), halfLine1.getOpposite());
 			}
 		} else if (orientation == SimplifiedCardinalDirection.EAST) {
 			if (halfLine1.isHorizontal()) {
 				return clone();
 			} else {
-				FGEPoint p = (limit.getP1().x > limit.getP2().x ? limit.getP2() : limit.getP1());
+				FGEPoint p = limit.getP1().x > limit.getP2().x ? limit.getP2() : limit.getP1();
 				return new FGEHalfPlane(FGELine.makeHorizontalLine(p), halfLine1.getOpposite());
 			}
 		} else if (orientation == SimplifiedCardinalDirection.WEST) {
 			if (halfLine1.isHorizontal()) {
 				return clone();
 			} else {
-				FGEPoint p = (limit.getP1().x > limit.getP2().x ? limit.getP1() : limit.getP2());
+				FGEPoint p = limit.getP1().x > limit.getP2().x ? limit.getP1() : limit.getP2();
 				return new FGEHalfPlane(FGELine.makeHorizontalLine(p), halfLine1.getOpposite());
 			}
 		}

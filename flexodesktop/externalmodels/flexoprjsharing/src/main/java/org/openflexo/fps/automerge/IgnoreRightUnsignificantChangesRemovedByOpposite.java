@@ -80,15 +80,15 @@ public class IgnoreRightUnsignificantChangesRemovedByOpposite extends AbstractAu
 
 	public static boolean isXMLAttributeValueConflict(DiffChange change, DiffSource leftSource, DiffSource rightSource, String attributeName) {
 		try {
-			if ((change.getFirst0() == change.getLast0()) && (change.getFirst1() == change.getLast1())) {
-				if ((relativeLeftTokenAt(change, leftSource, -3).equals(attributeName))
-						&& (relativeLeftTokenAt(change, leftSource, -2).equals("="))
-						&& (relativeLeftTokenAt(change, leftSource, -1).equals(QUOTE))
-						&& (relativeLeftTokenAt(change, leftSource, 1).equals(QUOTE))
-						&& (relativeRightTokenAt(change, rightSource, -3).equals(attributeName))
-						&& (relativeRightTokenAt(change, rightSource, -2).equals("="))
-						&& (relativeRightTokenAt(change, rightSource, -1).equals(QUOTE))
-						&& (relativeRightTokenAt(change, rightSource, 1).equals(QUOTE))) {
+			if (change.getFirst0() == change.getLast0() && change.getFirst1() == change.getLast1()) {
+				if (relativeLeftTokenAt(change, leftSource, -3).equals(attributeName)
+						&& relativeLeftTokenAt(change, leftSource, -2).equals("=")
+						&& relativeLeftTokenAt(change, leftSource, -1).equals(QUOTE)
+						&& relativeLeftTokenAt(change, leftSource, 1).equals(QUOTE)
+						&& relativeRightTokenAt(change, rightSource, -3).equals(attributeName)
+						&& relativeRightTokenAt(change, rightSource, -2).equals("=")
+						&& relativeRightTokenAt(change, rightSource, -1).equals(QUOTE)
+						&& relativeRightTokenAt(change, rightSource, 1).equals(QUOTE)) {
 					return true;
 				}
 			}
@@ -128,8 +128,8 @@ public class IgnoreRightUnsignificantChangesRemovedByOpposite extends AbstractAu
 		}
 
 		try {
-			if ((relativeLeftTokenAt(change, leftSource, startTokenRelativeIndex - 2).equals(attributeName))
-					&& (relativeLeftTokenAt(change, leftSource, startTokenRelativeIndex - 1).equals("="))) {
+			if (relativeLeftTokenAt(change, leftSource, startTokenRelativeIndex - 2).equals(attributeName)
+					&& relativeLeftTokenAt(change, leftSource, startTokenRelativeIndex - 1).equals("=")) {
 
 				StringBuffer sb = new StringBuffer();
 				for (int i = startTokenRelativeIndex + 1; i < endTokenRelativeIndex; i++) {
@@ -174,8 +174,8 @@ public class IgnoreRightUnsignificantChangesRemovedByOpposite extends AbstractAu
 		}
 
 		try {
-			if ((relativeRightTokenAt(change, rightSource, startTokenRelativeIndex - 2).equals(attributeName))
-					&& (relativeRightTokenAt(change, rightSource, startTokenRelativeIndex - 1).equals("="))) {
+			if (relativeRightTokenAt(change, rightSource, startTokenRelativeIndex - 2).equals(attributeName)
+					&& relativeRightTokenAt(change, rightSource, startTokenRelativeIndex - 1).equals("=")) {
 
 				StringBuffer sb = new StringBuffer();
 				for (int i = startTokenRelativeIndex + 1; i < endTokenRelativeIndex; i++) {

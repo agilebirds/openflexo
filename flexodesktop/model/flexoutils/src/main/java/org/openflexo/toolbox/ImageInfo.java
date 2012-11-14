@@ -314,21 +314,21 @@ public class ImageInfo {
 		if (read(a) != 11) {
 			return false;
 		}
-		if ((!equals(a, 0, GIF_MAGIC_89A, 0, 4)) && (!equals(a, 0, GIF_MAGIC_87A, 0, 4))) {
+		if (!equals(a, 0, GIF_MAGIC_89A, 0, 4) && !equals(a, 0, GIF_MAGIC_87A, 0, 4)) {
 			return false;
 		}
 		format = FORMAT_GIF;
 		width = getShortLittleEndian(a, 4);
 		height = getShortLittleEndian(a, 6);
 		int flags = a[8] & 0xff;
-		bitsPerPixel = ((flags >> 4) & 0x07) + 1;
+		bitsPerPixel = (flags >> 4 & 0x07) + 1;
 		// progressive = (flags & 0x02) != 0;
 		if (!determineNumberOfImages) {
 			return true;
 		}
 		// skip global color palette
 		if ((flags & 0x80) != 0) {
-			int tableSize = (1 << ((flags & 7) + 1)) * 3;
+			int tableSize = (1 << (flags & 7) + 1) * 3;
 			skip(tableSize);
 		}
 		numberOfImages = 0;
@@ -336,7 +336,7 @@ public class ImageInfo {
 		do {
 			blockType = read();
 			switch (blockType) {
-			case (0x2c): // image separator
+			case 0x2c: // image separator
 			{
 				if (read(a, 0, 9) != 9) {
 					return false;
@@ -366,7 +366,7 @@ public class ImageInfo {
 				numberOfImages++;
 				break;
 			}
-			case (0x21): // extension
+			case 0x21: // extension
 			{
 				int extensionType = read();
 				if (collectComments && extensionType == 0xfe) {
@@ -400,7 +400,7 @@ public class ImageInfo {
 				}
 				break;
 			}
-			case (0x3b): // end of file
+			case 0x3b: // end of file
 			{
 				break;
 			}
@@ -446,7 +446,7 @@ public class ImageInfo {
 				width = getShortBigEndian(a, 0);
 				height = getShortBigEndian(a, 2);
 				bitsPerPixel = a[8] & 0xff;
-				return (width > 0 && height > 0 && bitsPerPixel > 0 && bitsPerPixel < 33);
+				return width > 0 && height > 0 && bitsPerPixel > 0 && bitsPerPixel < 33;
 			} else {
 				skip(size);
 			}
@@ -627,7 +627,7 @@ public class ImageInfo {
 					return false;
 				}
 				for (int i = 0; i < 25; i++) {
-					if (maxSample < (1 << (i + 1))) {
+					if (maxSample < 1 << i + 1) {
 						bitsPerPixel = i + 1;
 						if (format == FORMAT_PPM) {
 							bitsPerPixel *= 3;
@@ -655,7 +655,7 @@ public class ImageInfo {
 		int channels = getShortBigEndian(a, 10);
 		int depth = getShortBigEndian(a, 20);
 		bitsPerPixel = channels * depth;
-		return (width > 0 && height > 0 && bitsPerPixel > 0 && bitsPerPixel <= 64);
+		return width > 0 && height > 0 && bitsPerPixel > 0 && bitsPerPixel <= 64;
 	}
 
 	private boolean checkRas() throws IOException {
@@ -671,7 +671,7 @@ public class ImageInfo {
 		width = getIntBigEndian(a, 2);
 		height = getIntBigEndian(a, 6);
 		bitsPerPixel = getIntBigEndian(a, 10);
-		return (width > 0 && height > 0 && bitsPerPixel > 0 && bitsPerPixel <= 24);
+		return width > 0 && height > 0 && bitsPerPixel > 0 && bitsPerPixel <= 24;
 	}
 
 	/**
@@ -831,7 +831,7 @@ public class ImageInfo {
 		int h = getHeight();
 		int ph = getPhysicalHeightDpi();
 		if (h > 0 && ph > 0) {
-			return ((float) h) / ((float) ph);
+			return (float) h / (float) ph;
 		} else {
 			return -1.0f;
 		}
@@ -861,18 +861,18 @@ public class ImageInfo {
 		int w = getWidth();
 		int pw = getPhysicalWidthDpi();
 		if (w > 0 && pw > 0) {
-			return ((float) w) / ((float) pw);
+			return (float) w / (float) pw;
 		} else {
 			return -1.0f;
 		}
 	}
 
 	private static int getShortBigEndian(byte[] a, int offs) {
-		return (a[offs] & 0xff) << 8 | (a[offs + 1] & 0xff);
+		return (a[offs] & 0xff) << 8 | a[offs + 1] & 0xff;
 	}
 
 	private static int getShortLittleEndian(byte[] a, int offs) {
-		return (a[offs] & 0xff) | (a[offs + 1] & 0xff) << 8;
+		return a[offs] & 0xff | (a[offs + 1] & 0xff) << 8;
 	}
 
 	/**
@@ -1032,7 +1032,7 @@ public class ImageInfo {
 		boolean finished;
 		do {
 			int value = read();
-			finished = (value == -1 || value == 10);
+			finished = value == -1 || value == 10;
 			if (!finished) {
 				sb.append((char) value);
 			}

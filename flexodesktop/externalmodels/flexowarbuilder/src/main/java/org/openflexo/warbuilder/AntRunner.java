@@ -226,7 +226,7 @@ public class AntRunner implements BuildListener {
 		}
 		if (_observableWhereForwardingAntBuildMessage != null) {
 			String message = formatMessage(arg0.getTarget());
-			if ((message == null && lastMessage != null) || (message != null && !message.equals(lastMessage))) {
+			if (message == null && lastMessage != null || message != null && !message.equals(lastMessage)) {
 				_observableWhereForwardingAntBuildMessage.notifyObservers(new GenerationProgressNotification(message, true));
 				lastMessage = message;
 			}

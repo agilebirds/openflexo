@@ -53,8 +53,8 @@ public class GoToCorrespondingJavaInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, GoToCorrespondingJava action) {
 				CGWOFile file = action.getFocusedObject();
 				for (CGFile f : file.getRepository().getFiles()) {
-					if ((f != file) && (f instanceof CGJavaFile) && (f.getResource() != null)
-							&& (f.getResource().getGenerator() == file.getResource().getGenerator())) {
+					if (f != file && f instanceof CGJavaFile && f.getResource() != null
+							&& f.getResource().getGenerator() == file.getResource().getGenerator()) {
 						getController().setCurrentEditedObjectAsModuleView(f);
 						return true;
 					}

@@ -73,8 +73,8 @@ public class OperationNodeElement extends BrowserElement implements ExpansionSyn
 		if (getOperationNode().getActionPetriGraph() != null) {
 			getOperationNode().getActionPetriGraph().addObserver(this);
 			isObserving = true;
-		} else if ((getOperationNode() instanceof SelfExecutableNode)
-				&& (((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph() != null)) {
+		} else if (getOperationNode() instanceof SelfExecutableNode
+				&& ((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph() != null) {
 			((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph().addObserver(this);
 			isObserving = true;
 		}
@@ -85,8 +85,8 @@ public class OperationNodeElement extends BrowserElement implements ExpansionSyn
 		if (getOperationNode().getActionPetriGraph() != null) {
 			getOperationNode().getActionPetriGraph().deleteObserver(this);
 			isObserving = false;
-		} else if ((getOperationNode() instanceof SelfExecutableNode)
-				&& (((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph() != null)) {
+		} else if (getOperationNode() instanceof SelfExecutableNode
+				&& ((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph() != null) {
 			((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph().deleteObserver(this);
 			isObserving = false;
 		}
@@ -114,8 +114,8 @@ public class OperationNodeElement extends BrowserElement implements ExpansionSyn
 					addToChilds(node);
 				}
 			}
-		} else if ((getOperationNode() instanceof SelfExecutableNode)
-				&& (((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph() != null)) {
+		} else if (getOperationNode() instanceof SelfExecutableNode
+				&& ((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph() != null) {
 			addObserver();
 			Enumeration<PetriGraphNode> en = ((SelfExecutableNode) getOperationNode()).getExecutionPetriGraph().getSortedNodes();
 			while (en.hasMoreElements()) {
@@ -176,7 +176,7 @@ public class OperationNodeElement extends BrowserElement implements ExpansionSyn
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-			return (getOperationNode().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+			return getOperationNode().getProcess() == _browser.getSelectionManager().getRootFocusedObject();
 		}
 		return false;
 	}
@@ -219,10 +219,10 @@ public class OperationNodeElement extends BrowserElement implements ExpansionSyn
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (_browser != null) {
-			if ((dataModification instanceof ObjectVisibilityChanged) || (dataModification instanceof PetriGraphHasBeenClosed)
-					|| (dataModification instanceof PetriGraphHasBeenOpened)) {
+			if (dataModification instanceof ObjectVisibilityChanged || dataModification instanceof PetriGraphHasBeenClosed
+					|| dataModification instanceof PetriGraphHasBeenOpened) {
 				_browser.notifyExpansionChanged(this);
-			} else if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("index")) {
+			} else if (dataModification.propertyName() != null && dataModification.propertyName().equals("index")) {
 				return;
 			} else {
 				super.update(observable, dataModification);
@@ -246,8 +246,8 @@ public class OperationNodeElement extends BrowserElement implements ExpansionSyn
 			return ((PreConditionElement) next).getPreCondition().isContainedIn(getOperationNode());
 		} else if (next instanceof PostConditionElement) {
 			FlexoPostCondition edge = ((PostConditionElement) next).getPostCondition();
-			if (((edge.getNextNode() != null) && edge.getNextNode().isContainedIn(getOperationNode()))
-					&& ((edge.getStartNode() != null) && edge.getStartNode().isContainedIn(getOperationNode()))) {
+			if (edge.getNextNode() != null && edge.getNextNode().isContainedIn(getOperationNode()) && edge.getStartNode() != null
+					&& edge.getStartNode().isContainedIn(getOperationNode())) {
 				return true;
 			}
 			return false;

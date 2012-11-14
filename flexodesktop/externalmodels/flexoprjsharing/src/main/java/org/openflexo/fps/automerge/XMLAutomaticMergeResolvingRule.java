@@ -34,11 +34,11 @@ public abstract class XMLAutomaticMergeResolvingRule extends AbstractAutomaticMe
 
 	public static boolean isXMLAttributeValueConflict(MergeChange change, String attributeName) {
 		try {
-			if ((change.getFirst0() == change.getLast0()) && (change.getFirst2() == change.getLast2())) {
-				if ((relativeLeftTokenAt(change, -3).equals(attributeName)) && (relativeLeftTokenAt(change, -2).equals("="))
-						&& (relativeLeftTokenAt(change, -1).equals(QUOTE)) && (relativeLeftTokenAt(change, 1).equals(QUOTE))
-						&& (relativeRightTokenAt(change, -3).equals(attributeName)) && (relativeRightTokenAt(change, -2).equals("="))
-						&& (relativeRightTokenAt(change, -1).equals(QUOTE)) && (relativeRightTokenAt(change, 1).equals(QUOTE))) {
+			if (change.getFirst0() == change.getLast0() && change.getFirst2() == change.getLast2()) {
+				if (relativeLeftTokenAt(change, -3).equals(attributeName) && relativeLeftTokenAt(change, -2).equals("=")
+						&& relativeLeftTokenAt(change, -1).equals(QUOTE) && relativeLeftTokenAt(change, 1).equals(QUOTE)
+						&& relativeRightTokenAt(change, -3).equals(attributeName) && relativeRightTokenAt(change, -2).equals("=")
+						&& relativeRightTokenAt(change, -1).equals(QUOTE) && relativeRightTokenAt(change, 1).equals(QUOTE)) {
 					return true;
 				}
 			}
@@ -50,15 +50,15 @@ public abstract class XMLAutomaticMergeResolvingRule extends AbstractAutomaticMe
 
 	public static boolean isXMLValueConflict(MergeChange change, String elementName) {
 		try {
-			if ((change.getFirst0() == change.getLast0()) && (change.getFirst2() == change.getLast2())) {
+			if (change.getFirst0() == change.getLast0() && change.getFirst2() == change.getLast2()) {
 
-				if ((relativeLeftTokenAt(change, -3).equals("<")) && (relativeLeftTokenAt(change, -2).equals(elementName))
-						&& (relativeLeftTokenAt(change, -1).equals(">")) && (relativeLeftTokenAt(change, 1).equals("<"))
-						&& (relativeLeftTokenAt(change, 2).equals("/")) && (relativeLeftTokenAt(change, 3).equals(elementName))
-						&& (relativeLeftTokenAt(change, 4).equals(">")) && (relativeRightTokenAt(change, -3).equals("<"))
-						&& (relativeRightTokenAt(change, -2).equals(elementName)) && (relativeRightTokenAt(change, -1).equals(">"))
-						&& (relativeRightTokenAt(change, 1).equals("<")) && (relativeRightTokenAt(change, 2).equals("/"))
-						&& (relativeRightTokenAt(change, 3).equals(elementName)) && (relativeRightTokenAt(change, 4).equals(">"))) {
+				if (relativeLeftTokenAt(change, -3).equals("<") && relativeLeftTokenAt(change, -2).equals(elementName)
+						&& relativeLeftTokenAt(change, -1).equals(">") && relativeLeftTokenAt(change, 1).equals("<")
+						&& relativeLeftTokenAt(change, 2).equals("/") && relativeLeftTokenAt(change, 3).equals(elementName)
+						&& relativeLeftTokenAt(change, 4).equals(">") && relativeRightTokenAt(change, -3).equals("<")
+						&& relativeRightTokenAt(change, -2).equals(elementName) && relativeRightTokenAt(change, -1).equals(">")
+						&& relativeRightTokenAt(change, 1).equals("<") && relativeRightTokenAt(change, 2).equals("/")
+						&& relativeRightTokenAt(change, 3).equals(elementName) && relativeRightTokenAt(change, 4).equals(">")) {
 					return true;
 				}
 			}
@@ -108,8 +108,8 @@ public abstract class XMLAutomaticMergeResolvingRule extends AbstractAutomaticMe
 		}
 
 		try {
-			if ((relativeLeftTokenAt(change, startTokenRelativeIndex - 2).equals(attributeName))
-					&& (relativeLeftTokenAt(change, startTokenRelativeIndex - 1).equals("="))) {
+			if (relativeLeftTokenAt(change, startTokenRelativeIndex - 2).equals(attributeName)
+					&& relativeLeftTokenAt(change, startTokenRelativeIndex - 1).equals("=")) {
 
 				StringBuffer sb = new StringBuffer();
 				DiffSource leftSource = change.getMerge().getLeftSource();
@@ -156,8 +156,8 @@ public abstract class XMLAutomaticMergeResolvingRule extends AbstractAutomaticMe
 		}
 
 		try {
-			if ((relativeRightTokenAt(change, startTokenRelativeIndex - 2).equals(attributeName))
-					&& (relativeRightTokenAt(change, startTokenRelativeIndex - 1).equals("="))) {
+			if (relativeRightTokenAt(change, startTokenRelativeIndex - 2).equals(attributeName)
+					&& relativeRightTokenAt(change, startTokenRelativeIndex - 1).equals("=")) {
 
 				StringBuffer sb = new StringBuffer();
 				DiffSource rightSource = change.getMerge().getRightSource();

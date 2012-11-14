@@ -48,7 +48,7 @@ public class List implements PetalNode {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof List) && ((List) o).name.equals(this.name) && ((List) o).list.equals(this.list);
+		return o instanceof List && ((List) o).name.equals(this.name) && ((List) o).list.equals(this.list);
 	}
 
 	public void setName(String n) {

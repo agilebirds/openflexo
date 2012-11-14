@@ -44,7 +44,7 @@ public class MakeFlexoProcessContextFreeInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<MakeFlexoProcessContextFree>() {
 			@Override
 			public boolean run(ActionEvent e, MakeFlexoProcessContextFree action) {
-				return (action.getFocusedObject() != null);
+				return action.getFocusedObject() != null;
 			}
 		};
 	}

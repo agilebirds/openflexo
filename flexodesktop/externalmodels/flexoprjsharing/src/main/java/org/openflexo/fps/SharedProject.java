@@ -335,7 +335,7 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 			commitBinaryFiles.doAction();
 		}
 		long end = System.currentTimeMillis();
-		logger.info("Project sharing DONE in " + ((end - start) / 1000) + " seconds.");
+		logger.info("Project sharing DONE in " + (end - start) / 1000 + " seconds.");
 
 		return returned;
 	}

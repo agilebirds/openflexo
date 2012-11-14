@@ -167,7 +167,7 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() instanceof JCheckBox) {
-					JCheckBox c = ((JCheckBox) e.getSource());
+					JCheckBox c = (JCheckBox) e.getSource();
 					if (c.isSelected()) {
 						Enumeration<JCheckBox> en = checkBoxes.elements();
 						while (en.hasMoreElements()) {

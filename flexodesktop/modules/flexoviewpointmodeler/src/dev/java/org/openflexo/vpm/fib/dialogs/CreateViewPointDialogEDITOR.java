@@ -29,21 +29,18 @@ import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 
-
 public class CreateViewPointDialogEDITOR {
 
-	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
-			public Object[] getData() 
-			{
+			public Object[] getData() {
 				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				CreateViewPoint action = CreateViewPoint.actionType.makeNewAction(calcLibrary, null,null);
+				CreateViewPoint action = CreateViewPoint.actionType.makeNewAction(calcLibrary, null, null);
 				return makeArray(action);
 			}
+
 			@Override
 			public File getFIBFile() {
 				return CEDCst.CREATE_VIEW_POINT_DIALOG_FIB;
@@ -52,11 +49,11 @@ public class CreateViewPointDialogEDITOR {
 		editor.launch();
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private static FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
 }

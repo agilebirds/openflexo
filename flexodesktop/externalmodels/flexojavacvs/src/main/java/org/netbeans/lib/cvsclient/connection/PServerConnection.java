@@ -177,7 +177,7 @@ public class PServerConnection extends AbstractConnection {
 		}
 
 		try {
-			SocketFactory sf = (socketFactory != null) ? socketFactory : SocketFactory.getDefault();
+			SocketFactory sf = socketFactory != null ? socketFactory : SocketFactory.getDefault();
 			socket = sf.createSocket(hostName, port);
 
 			BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream(), 32768);

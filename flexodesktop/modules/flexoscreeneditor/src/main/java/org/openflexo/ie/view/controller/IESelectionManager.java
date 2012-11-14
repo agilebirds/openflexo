@@ -95,7 +95,7 @@ public class IESelectionManager extends MouseSelectionManager {
 				processSelection(((ButtonPanel) clickedContainer).getContainerModel(), isShiftDown);
 			}
 
-		} else if ((clickCount == 2) && (clickedContainer instanceof DoubleClickResponder)) {
+		} else if (clickCount == 2 && clickedContainer instanceof DoubleClickResponder) {
 			((DoubleClickResponder) clickedContainer).performDoubleClick(clickedContainer, clickedPoint, isShiftDown);
 		}
 	}

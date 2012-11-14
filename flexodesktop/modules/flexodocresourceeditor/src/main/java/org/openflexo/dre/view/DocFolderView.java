@@ -107,7 +107,7 @@ public class DocFolderView extends DREView<DocItemFolder> {
 	public DocItemFolder getSelectedDocItemFolder() {
 		DRESelectionManager sm = getDREController().getDRESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DocItemFolder)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DocItemFolder) {
 			return (DocItemFolder) selection.firstElement();
 		}
 		return null;
@@ -116,7 +116,7 @@ public class DocFolderView extends DREView<DocItemFolder> {
 	public DocItem getSelectedDocItem() {
 		DRESelectionManager sm = getDREController().getDRESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DocItem)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof DocItem) {
 			return (DocItem) selection.firstElement();
 		}
 		return null;

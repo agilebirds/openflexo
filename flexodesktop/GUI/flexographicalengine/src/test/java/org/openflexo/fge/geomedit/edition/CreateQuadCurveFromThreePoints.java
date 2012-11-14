@@ -65,7 +65,7 @@ public class CreateQuadCurveFromThreePoints extends Edition {
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
+			new FGESegment(p1, lastMouseLocation).paint(graphics);
 		} else if (currentStep == 2) {
 			// Draw construction
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
@@ -82,7 +82,7 @@ public class CreateQuadCurveFromThreePoints extends Edition {
 			p2.paint(graphics);
 			lastMouseLocation.paint(graphics);
 
-			(new FGEQuadCurve(p1, lastMouseLocation, p2)).paint(graphics);
+			new FGEQuadCurve(p1, lastMouseLocation, p2).paint(graphics);
 		}
 	}
 }

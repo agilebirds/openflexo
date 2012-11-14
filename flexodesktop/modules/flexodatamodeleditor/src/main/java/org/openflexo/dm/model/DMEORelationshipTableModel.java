@@ -67,7 +67,7 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 				if (relationship == null) {
 					return null;
 				}
-				return (relationship.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				return relationship.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
@@ -80,8 +80,8 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 
 			@Override
 			public String getLocalizedTooltip(DMEORelationship relationship) {
-				return (relationship.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return relationship.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new ToggleIconColumn<DMEORelationship>("settable", 25) {
@@ -90,7 +90,7 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 				if (relationship == null) {
 					return null;
 				}
-				return (relationship.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON);
+				return relationship.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON;
 			}
 
 			@Override
@@ -103,8 +103,8 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 
 			@Override
 			public String getLocalizedTooltip(DMEORelationship relationship) {
-				return (relationship.getIsSettable() ? FlexoLocalization.localizedForKey("can_be_set") : FlexoLocalization
-						.localizedForKey("cannot_be_set"));
+				return relationship.getIsSettable() ? FlexoLocalization.localizedForKey("can_be_set") : FlexoLocalization
+						.localizedForKey("cannot_be_set");
 			}
 		});
 		addToColumns(new ToggleIconColumn<DMEORelationship>("class_property", 25) {
@@ -113,7 +113,7 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 				if (relationship == null) {
 					return null;
 				}
-				return (relationship.getIsClassProperty() ? DMEIconLibrary.CLASS_PROPERTY_ICON : null);
+				return relationship.getIsClassProperty() ? DMEIconLibrary.CLASS_PROPERTY_ICON : null;
 			}
 
 			@Override
@@ -144,8 +144,8 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 
 			@Override
 			public String getLocalizedTooltip(DMEORelationship relationship) {
-				return (relationship.getIsToMany() ? FlexoLocalization.localizedForKey("to_many") : FlexoLocalization
-						.localizedForKey("to_one"));
+				return relationship.getIsToMany() ? FlexoLocalization.localizedForKey("to_many") : FlexoLocalization
+						.localizedForKey("to_one");
 			}
 
 		});
@@ -240,7 +240,7 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 
 	@Override
 	public DMEORelationship elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDMEOEntity().getOrderedRelationships().elementAt(row);
 		} else {
 			return null;

@@ -66,7 +66,7 @@ public final class SelfExecutableActionNode extends ActionNode implements SelfEx
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
-		for (int i = 0; (i < assignments.size()) && (i < assignmentDescriptions.size()); i++) {
+		for (int i = 0; i < assignments.size() && i < assignmentDescriptions.size(); i++) {
 			String desc = assignmentDescriptions.get(i);
 			if ("null".equals(desc)) {
 				desc = null;

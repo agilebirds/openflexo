@@ -87,7 +87,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	private LocalizedEntry getEntry(Language language, String key) {
 		for (LocalizedEntry entry : getEntries()) {
-			if ((Language.retrieveLanguage(entry.getLanguage()) == language) && key.equals(entry.getKey())) {
+			if (Language.retrieveLanguage(entry.getLanguage()) == language && key.equals(entry.getKey())) {
 				return entry;
 			}
 		}

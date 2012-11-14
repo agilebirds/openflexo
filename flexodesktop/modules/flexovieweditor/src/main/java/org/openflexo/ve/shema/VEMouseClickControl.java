@@ -45,13 +45,13 @@ public class VEMouseClickControl extends MouseClickControl {
 			for (GraphicalElementAction action : patternRole.getActions(mask)) {
 				if (action.evaluateCondition(ve.getEditionPatternReference())) {
 					if (action.getAbstractActionScheme() instanceof NavigationScheme) {
-						NavigationSchemeAction navigationAction = (new NavigationSchemeActionType(
-								(NavigationScheme) action.getAbstractActionScheme(), ve.getEditionPatternReference())).makeNewAction(ve,
+						NavigationSchemeAction navigationAction = new NavigationSchemeActionType(
+								(NavigationScheme) action.getAbstractActionScheme(), ve.getEditionPatternReference()).makeNewAction(ve,
 								null, editor);
 						navigationAction.doAction();
 					} else if (action.getAbstractActionScheme() instanceof ActionScheme) {
-						ActionSchemeAction actionAction = (new ActionSchemeActionType((ActionScheme) action.getAbstractActionScheme(),
-								ve.getEditionPatternReference())).makeNewAction(ve, null, editor);
+						ActionSchemeAction actionAction = new ActionSchemeActionType((ActionScheme) action.getAbstractActionScheme(),
+								ve.getEditionPatternReference()).makeNewAction(ve, null, editor);
 						actionAction.doAction();
 					}
 				}

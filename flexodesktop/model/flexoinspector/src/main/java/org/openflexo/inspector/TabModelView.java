@@ -505,7 +505,7 @@ public class TabModelView extends JPanel {
 	public void performObserverSwitch(InspectableObject newInspectable) {
 		Enumeration<InnerTabWidgetView> en = _widgets.elements();
 		while (en.hasMoreElements()) {
-			(en.nextElement()).switchObserved(newInspectable);
+			en.nextElement().switchObserved(newInspectable);
 		}
 	}
 

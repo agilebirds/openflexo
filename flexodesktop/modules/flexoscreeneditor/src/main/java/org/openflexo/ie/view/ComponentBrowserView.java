@@ -61,8 +61,8 @@ public class ComponentBrowserView extends BrowserView {
 	public void treeSingleClick(FlexoModelObject object) {
 		if (object instanceof IETabWidget) {
 			if (_controller.getCurrentEditedComponent() != null) {
-				if ((_controller.getCurrentEditedComponent()).getComponentDefinition().getWOComponent() instanceof IEPageComponent) {
-					Enumeration en = ((IEPageComponent) (_controller.getCurrentEditedComponent()).getComponentDefinition().getWOComponent())
+				if (_controller.getCurrentEditedComponent().getComponentDefinition().getWOComponent() instanceof IEPageComponent) {
+					Enumeration en = ((IEPageComponent) _controller.getCurrentEditedComponent().getComponentDefinition().getWOComponent())
 							.topComponents();
 					while (en.hasMoreElements()) {
 						Object obj = en.nextElement();

@@ -124,7 +124,7 @@ public class ExportCommand extends RepositoryCommand {
 		if (useHeadIfNotFound) {
 			requests.add(FIRST_INDEX, new ArgumentRequest("-f")); // NOI18N
 		}
-		if (exportDirectory != null && (!exportDirectory.equals(""))) {
+		if (exportDirectory != null && !exportDirectory.equals("")) {
 			requests.add(FIRST_INDEX, new ArgumentRequest("-d")); // NOI18N
 			requests.add(SECOND_INDEX, new ArgumentRequest(getExportDirectory()));
 		}

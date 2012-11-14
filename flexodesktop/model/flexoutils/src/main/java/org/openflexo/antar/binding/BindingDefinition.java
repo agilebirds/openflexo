@@ -70,7 +70,7 @@ public class BindingDefinition extends Observable {
 					return false;
 				}
 			}
-			return ((_type == bd._type) && (_isMandatory == bd._isMandatory));
+			return _type == bd._type && _isMandatory == bd._isMandatory;
 		} else {
 			return super.equals(object);
 		}
@@ -85,7 +85,7 @@ public class BindingDefinition extends Observable {
 	}
 
 	public boolean getIsSettable() {
-		return (getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET);
+		return getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET;
 	}
 
 	public Type getType() {
@@ -128,7 +128,7 @@ public class BindingDefinition extends Observable {
 		public int compare(BindingDefinition o1, BindingDefinition o2) {
 			String s1 = o1.getVariableName();
 			String s2 = o2.getVariableName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;

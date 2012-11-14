@@ -189,10 +189,10 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 		}
 
 		for (DiffChange change : diffReport.getChanges()) {
-			int startIndex = (isRight() ? change.getFirst1() : change.getFirst0());
-			int endIndex = (isRight() ? change.getLast1() : change.getLast0());
-			int oppositeStartIndex = (isLeft() ? change.getFirst1() : change.getFirst0());
-			int oppositeEndIndex = (isLeft() ? change.getLast1() : change.getLast0());
+			int startIndex = isRight() ? change.getFirst1() : change.getFirst0();
+			int endIndex = isRight() ? change.getLast1() : change.getLast0();
+			int oppositeStartIndex = isLeft() ? change.getFirst1() : change.getFirst0();
+			int oppositeEndIndex = isLeft() ? change.getLast1() : change.getLast0();
 			int range = endIndex - startIndex;
 			int oppositeRange = oppositeEndIndex - oppositeStartIndex;
 			if (range != oppositeRange) {
@@ -247,7 +247,7 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 		int returned = 0;
 		int i;
 		for (i = 0; i < text.length && text[i].lineNb < lineNb; i++) {
-			returned += (text[i].isExtraLine() ? 1 : text[i].getStringValue().length() + 1);
+			returned += text[i].isExtraLine() ? 1 : text[i].getStringValue().length() + 1;
 		}
 		if (isFirst) {
 			int j = i - 1;
@@ -329,11 +329,11 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 		int endPLine;
 
 		ChangeBounds(DiffChange change) {
-			beginLine = (isRight() ? change.getFirst1() : change.getFirst0());
-			endLine = (isRight() ? change.getLast1() : change.getLast0());
+			beginLine = isRight() ? change.getFirst1() : change.getFirst0();
+			endLine = isRight() ? change.getLast1() : change.getLast0();
 			beginIndex = lineToChar(beginLine, true);
 			endIndex = lineToChar(endLine, false);
-			if ((isRight() && change.getFirst1() > change.getLast1()) || (isLeft() && change.getFirst0() > change.getLast0())) {
+			if (isRight() && change.getFirst1() > change.getLast1() || isLeft() && change.getFirst0() > change.getLast0()) {
 				beginIndex = beginIndex - 1;
 			}
 

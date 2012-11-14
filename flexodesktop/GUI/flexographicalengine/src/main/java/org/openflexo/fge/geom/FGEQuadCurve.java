@@ -133,7 +133,7 @@ public class FGEQuadCurve extends Double implements FGEGeneralShape.GeneralShape
 
 	public void setP3(FGEPoint aPoint) {
 		FGEPoint pp = FGEPoint.middleOf(getP1(), getP2());
-		FGEPoint cp = (new FGESegment(pp, aPoint)).getScaledPoint(2);
+		FGEPoint cp = new FGESegment(pp, aPoint).getScaledPoint(2);
 		setCtrlPoint(cp);
 	}
 
@@ -310,8 +310,8 @@ public class FGEQuadCurve extends Double implements FGEGeneralShape.GeneralShape
 	public boolean equals(Object obj) {
 		if (obj instanceof FGEQuadCurve) {
 			FGEQuadCurve s = (FGEQuadCurve) obj;
-			return ((getP1().equals(s.getP1()) || getP1().equals(s.getP2())) && (getP2().equals(s.getP1()) || getP2().equals(s.getP2())) && (getCtrlPoint()
-					.equals(s.getCtrlPoint())));
+			return (getP1().equals(s.getP1()) || getP1().equals(s.getP2())) && (getP2().equals(s.getP1()) || getP2().equals(s.getP2()))
+					&& getCtrlPoint().equals(s.getCtrlPoint());
 		}
 		return false;
 	}
@@ -374,7 +374,7 @@ public class FGEQuadCurve extends Double implements FGEGeneralShape.GeneralShape
 	}
 
 	private boolean rectangleContains(double x, double y, double rx, double ry, double rw, double rh) {
-		return (x >= rx && y >= ry && x < rx + rw && y < ry + rh);
+		return x >= rx && y >= ry && x < rx + rw && y < ry + rh;
 	}
 
 	/**
@@ -420,25 +420,25 @@ public class FGEQuadCurve extends Double implements FGEGeneralShape.GeneralShape
 		boolean result;
 		switch (nRoots) {
 		case 1:
-			result = (eqn[0] >= 0) && (eqn[0] <= 1);
+			result = eqn[0] >= 0 && eqn[0] <= 1;
 			if (result) {
 				double intersection = evalQuadraticCurve(pb0, pb1, pb2, eqn[0]);
-				result = (intersection >= from) && (intersection <= to);
+				result = intersection >= from && intersection <= to;
 			}
 			break;
 		case 2:
-			result = (eqn[0] >= 0) && (eqn[0] <= 1);
+			result = eqn[0] >= 0 && eqn[0] <= 1;
 			if (result) {
 				double intersection = evalQuadraticCurve(pb0, pb1, pb2, eqn[0]);
-				result = (intersection >= from) && (intersection <= to);
+				result = intersection >= from && intersection <= to;
 			}
 
 			// If the first root is not a valid intersection, try the other one
 			if (!result) {
-				result = (eqn[1] >= 0) && (eqn[1] <= 1);
+				result = eqn[1] >= 0 && eqn[1] <= 1;
 				if (result) {
 					double intersection = evalQuadraticCurve(pb0, pb1, pb2, eqn[1]);
-					result = (intersection >= from) && (intersection <= to);
+					result = intersection >= from && intersection <= to;
 				}
 			}
 

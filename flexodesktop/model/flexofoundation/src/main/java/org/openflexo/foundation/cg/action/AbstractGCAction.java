@@ -80,7 +80,7 @@ public abstract class AbstractGCAction<A extends FlexoAction<?, T1, CGObject>, T
 		GenerationRepository returned = repositoryForObject(focusedObject);
 		if (globalSelection != null && returned != null) {
 			Enumeration<CGObject> en = globalSelection.elements();
-			while ((returned == null) && (en.hasMoreElements())) {
+			while (returned == null && en.hasMoreElements()) {
 				returned = repositoryForObject(en.nextElement());
 			}
 		}

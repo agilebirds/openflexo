@@ -334,7 +334,7 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 	}
 
 	public boolean isSingleNode() {
-		return (_nodes.size() == 1);
+		return _nodes.size() == 1;
 	}
 
 	public PetriGraphNode getFirstNode() {
@@ -394,7 +394,7 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 		OperationNode cur = null;
 		for (Enumeration<OperationNode> e = allOperationNodes.elements(); e.hasMoreElements();) {
 			cur = e.nextElement();
-			if ((cur.getComponentInstance() != null) && (cur.getComponentInstance().getComponentDefinition() != null)) {
+			if (cur.getComponentInstance() != null && cur.getComponentInstance().getComponentDefinition() != null) {
 				returned.add(cur);
 			}
 		}

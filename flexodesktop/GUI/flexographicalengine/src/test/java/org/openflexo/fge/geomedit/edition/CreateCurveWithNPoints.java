@@ -81,7 +81,7 @@ public class CreateCurveWithNPoints extends Edition {
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
+			new FGESegment(p1, lastMouseLocation).paint(graphics);
 		} else {
 			Vector<FGEPoint> pts = new Vector<FGEPoint>();
 			graphics.setDefaultForeground(focusedForegroundStyle);
@@ -91,7 +91,7 @@ public class CreateCurveWithNPoints extends Edition {
 				pts.add(p);
 			}
 			pts.add(lastMouseLocation);
-			(new FGEComplexCurve(Closure.OPEN_NOT_FILLED, pts)).paint(graphics);
+			new FGEComplexCurve(Closure.OPEN_NOT_FILLED, pts).paint(graphics);
 
 		}
 	}

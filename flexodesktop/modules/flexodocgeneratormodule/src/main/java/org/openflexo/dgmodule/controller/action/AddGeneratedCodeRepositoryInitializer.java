@@ -68,7 +68,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddGeneratedCodeRepository>() {
 			@Override
 			public boolean run(ActionEvent e, final AddGeneratedCodeRepository action) {
-				if ((action.getNewGeneratedCodeRepositoryName() == null) || (action.getNewGeneratedCodeRepositoryDirectory() == null)) {
+				if (action.getNewGeneratedCodeRepositoryName() == null || action.getNewGeneratedCodeRepositoryDirectory() == null) {
 					Vector<Format> values = new Vector<Format>();
 					values.add(Format.HTML);
 					values.add(Format.LATEX);
@@ -81,8 +81,8 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 							action.getNewDocType());
 					targetType.setShowReset(false);
 					final TextFieldParameter paramName = new TextFieldParameter("name", "repository_name",
-							(action.getNewGeneratedCodeRepositoryName() == null ? gc.getProject().getNextExternalRepositoryIdentifier(
-									FlexoLocalization.localizedForKey("generated_doc")) : action.getNewGeneratedCodeRepositoryName()));
+							action.getNewGeneratedCodeRepositoryName() == null ? gc.getProject().getNextExternalRepositoryIdentifier(
+									FlexoLocalization.localizedForKey("generated_doc")) : action.getNewGeneratedCodeRepositoryName());
 					DynamicDropDownParameter<TOCRepository> paramToc = null;
 					if (getProject().getTOCData().getRepositories().size() > 0) {
 						paramToc = new DynamicDropDownParameter<TOCRepository>("toc", "toc", getProject().getTOCData().getRepositories(),
@@ -125,13 +125,13 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("enter_parameters_for_the_new_generated_doc_repository"), pd);
 					System.setProperty("apple.awt.fileDialogForDirectories", "false");
 
-					while ((dialog.getStatus() == AskParametersDialog.VALIDATE)
-							&& (getProject().getExternalRepositoryWithDirectory(paramDir.getValue()) != null)) {
+					while (dialog.getStatus() == AskParametersDialog.VALIDATE
+							&& getProject().getExternalRepositoryWithDirectory(paramDir.getValue()) != null) {
 						if (getProject().getExternalRepositoryWithDirectory(paramDir.getValue()) != null) {
 							dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 									FlexoLocalization.localizedForKey("directory_is_already_used"),
 									FlexoLocalization.localizedForKey("confirm_source_directory_for_new_generated_doc"), paramDir);
-						} else if ((paramDir.getValue() != null) && new File(paramDir.getValue(), FileHistory.HISTORY_DIR).exists()) {
+						} else if (paramDir.getValue() != null && new File(paramDir.getValue(), FileHistory.HISTORY_DIR).exists()) {
 							dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 									FlexoLocalization.localizedForKey("directory_seems_to_be_already_used"),
 									FlexoLocalization.localizedForKey("confirm_source_directory_for_new_generated_doc"), paramDir);

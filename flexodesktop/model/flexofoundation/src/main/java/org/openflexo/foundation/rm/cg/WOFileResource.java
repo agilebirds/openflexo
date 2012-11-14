@@ -114,21 +114,21 @@ public class WOFileResource<G extends IFlexoResourceGenerator, F extends CGFile>
 	}
 
 	public String getCurrentHTMLGeneration() {
-		if ((getGenerator() != null) && (!hasGenerationError()) && getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
+		if (getGenerator() != null && !hasGenerationError() && getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
 			return ((GeneratedComponent) getGenerator().getGeneratedCode()).html();
 		}
 		return null;
 	}
 
 	public String getCurrentWODGeneration() {
-		if ((getGenerator() != null) && (!hasGenerationError()) && getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
+		if (getGenerator() != null && !hasGenerationError() && getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
 			return ((GeneratedComponent) getGenerator().getGeneratedCode()).wod();
 		}
 		return null;
 	}
 
 	public String getCurrentWOOGeneration() {
-		if ((getGenerator() != null) && (!hasGenerationError()) && getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
+		if (getGenerator() != null && !hasGenerationError() && getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
 			return ((GeneratedComponent) getGenerator().getGeneratedCode()).woo();
 		}
 		return null;

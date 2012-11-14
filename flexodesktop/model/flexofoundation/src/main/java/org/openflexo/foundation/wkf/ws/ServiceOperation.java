@@ -227,7 +227,7 @@ public class ServiceOperation extends WKFObject implements InspectableObject, Le
 		Vector allOperations = serviceInterface.getOperations();
 		for (Enumeration e = allOperations.elements(); e.hasMoreElements();) {
 			ServiceOperation p = (ServiceOperation) e.nextElement();
-			if ((p != currentOp) && (p.getName().equals(aName))) {
+			if (p != currentOp && p.getName().equals(aName)) {
 				throw new DuplicateWKFObjectException(p, "service_operation_with_the_same_name_already_exist");
 			}
 		}
@@ -252,7 +252,7 @@ public class ServiceOperation extends WKFObject implements InspectableObject, Le
 
 	public void setInputMessageDefinition(ServiceMessageDefinition aMessageDefinition) {
 		// conditions isInOperation etc can be incoherent during Deserialization !
-		if (isDeserializing() || (isInOperation() || isInOutOperation())) {
+		if (isDeserializing() || isInOperation() || isInOutOperation()) {
 			if (aMessageDefinition != _inputMessageDefinition) {
 				if (aMessageDefinition != null) {
 					aMessageDefinition.setOperation(this);
@@ -286,7 +286,7 @@ public class ServiceOperation extends WKFObject implements InspectableObject, Le
 	}
 
 	public void setOutputMessageDefinition(ServiceMessageDefinition aMessageDefinition) {
-		if (isDeserializing() || (isOutOperation() || isInOutOperation())) {
+		if (isDeserializing() || isOutOperation() || isInOutOperation()) {
 			if (aMessageDefinition != _outputMessageDefinition) {
 				if (aMessageDefinition != null) {
 					aMessageDefinition.setOperation(this);
@@ -307,7 +307,7 @@ public class ServiceOperation extends WKFObject implements InspectableObject, Le
 	}
 
 	public ServiceInputMessageBindings getInputMessageBindings() {
-		if (isInputOperation() && (_inputMessageBindings == null) && (((AbstractInPort) getPort()).getInputMessageDefinition() != null)) {
+		if (isInputOperation() && _inputMessageBindings == null && ((AbstractInPort) getPort()).getInputMessageDefinition() != null) {
 			_inputMessageBindings = new ServiceInputMessageBindings(this, ((AbstractInPort) getPort()).getInputMessageDefinition());
 		}
 		return _inputMessageBindings;
@@ -322,7 +322,7 @@ public class ServiceOperation extends WKFObject implements InspectableObject, Le
 	}
 
 	public ServiceOutputMessageBindings getOutputMessageBindings() {
-		if (isOutputOperation() && (_outputMessageBindings == null)) {
+		if (isOutputOperation() && _outputMessageBindings == null) {
 			_outputMessageBindings = new ServiceOutputMessageBindings(this, getOutputMessageDefinition());
 		}
 		return _outputMessageBindings;

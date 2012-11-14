@@ -88,8 +88,8 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 				initialPolylin.getSegmentNb() - 1).getOpposite();
 		SimplifiedCardinalDirection initialLastOrientation = initialPolylin.getApproximatedOrientationOfSegment(
 				initialPolylin.getSegmentNb() - 2).getOpposite();
-		SimplifiedCardinalDirection initialPreviousOrientation = (initialPolylin.getSegmentNb() > 2 ? initialPolylin
-				.getApproximatedOrientationOfSegment(initialPolylin.getSegmentNb() - 3).getOpposite() : null);
+		SimplifiedCardinalDirection initialPreviousOrientation = initialPolylin.getSegmentNb() > 2 ? initialPolylin
+				.getApproximatedOrientationOfSegment(initialPolylin.getSegmentNb() - 3).getOpposite() : null;
 
 		if (endArea.getOrthogonalPerspectiveArea(initialEndOrientation).containsPoint(newLastCPLocation)) {
 			// OK, the new location will not modify general structure of connector
@@ -117,8 +117,8 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 						initialPolylin.getApproximatedOrientationOfSegment(initialPolylin.getSegmentNb() - 3), newLastCPLocation,
 						initialLastOrientation, true, getConnector().getOverlapXResultingFromPixelOverlap(), getConnector()
 								.getOverlapYResultingFromPixelOverlap());
-				FGERectPolylin appendingPath = (appendingPath1.getPointsNb() <= appendingPath2.getPointsNb() ? appendingPath1
-						: appendingPath2);
+				FGERectPolylin appendingPath = appendingPath1.getPointsNb() <= appendingPath2.getPointsNb() ? appendingPath1
+						: appendingPath2;
 
 				FGERectPolylin mergedPolylin = getConnector().mergePolylins(appendingPath, 0, appendingPath.getPointsNb() - 2,
 						getPolylin(), getPolylin().getPointsNb() - 2, getPolylin().getPointsNb() - 1);

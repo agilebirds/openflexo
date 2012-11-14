@@ -150,7 +150,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		StringTokenizer strTok = new StringTokenizer(listAccessor, ".");
 		String accessor;
 		Object currentObject = object;
-		while (strTok.hasMoreTokens() && (currentObject != null) && (currentObject instanceof KeyValueCoding)) {
+		while (strTok.hasMoreTokens() && currentObject != null && currentObject instanceof KeyValueCoding) {
 			accessor = strTok.nextToken();
 			if (currentObject != null) {
 				currentObject = ((KeyValueCoding) currentObject).objectForKey(accessor);
@@ -225,7 +225,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 	public String getStringRepresentation(Object object) {
 		if (object instanceof String) {
 			return (String) object;
-		} else if ((object instanceof KeyValueCoding) && (hasFormatter())) {
+		} else if (object instanceof KeyValueCoding && hasFormatter()) {
 			return getFormattedObject((KeyValueCoding) object);
 		} else if (object instanceof StringConvertable) {
 			return ((StringConvertable) object).getConverter().convertToString(object);
@@ -253,7 +253,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 	}
 
 	public boolean isEditable(Object object) {
-		if (hasValueForParameter("isEditable") && (object instanceof KeyValueCoding)) {
+		if (hasValueForParameter("isEditable") && object instanceof KeyValueCoding) {
 			Object currentObject = getObjectForMultipleAccessors((KeyValueCoding) object, getValueForParameter("isEditable"));
 			if (currentObject instanceof Boolean) {
 				return (Boolean) currentObject;
@@ -341,7 +341,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		StringTokenizer strTok = new StringTokenizer(keyPath, ".");
 		String accessor;
 		Object currentObject = object;
-		while (strTok.hasMoreTokens() && (currentObject != null) && (currentObject instanceof KeyValueCoding)) {
+		while (strTok.hasMoreTokens() && currentObject != null && currentObject instanceof KeyValueCoding) {
 			accessor = strTok.nextToken();
 			if (strTok.hasMoreTokens()) {
 				if (currentObject != null) {
@@ -452,7 +452,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 				}
 				return;
 			}
-		} else if ((newValue != null) && (oldValue.equals(newValue))) {
+		} else if (newValue != null && oldValue.equals(newValue)) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Same value. Ignored.");
 			}

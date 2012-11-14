@@ -53,14 +53,14 @@ public class DMReadOnlyPackageTableModel extends DMPackageTableModel {
 		addToColumns(new IconColumn<DMPackage>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMPackage aPackage) {
-				return (aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON
-						: DMEIconLibrary.MODIFIABLE_ICON);
+				return aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON
+						: DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMPackage aPackage) {
-				return (aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? FlexoLocalization
-						.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
+				return aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? FlexoLocalization
+						.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new StringColumn<DMPackage>("name", 745) {

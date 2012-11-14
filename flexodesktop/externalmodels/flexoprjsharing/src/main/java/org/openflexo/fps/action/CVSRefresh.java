@@ -58,7 +58,7 @@ public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSE
 
 		@Override
 		protected boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
-			return (object instanceof CVSRepositoryList) || (object instanceof CVSRepository) || (object instanceof CVSModule);
+			return object instanceof CVSRepositoryList || object instanceof CVSRepository || object instanceof CVSModule;
 		}
 
 		@Override

@@ -76,7 +76,7 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 
 	@Override
 	public void setIsFilled(boolean filled) {
-		_filling = (filled ? Filling.FILLED : Filling.NOT_FILLED);
+		_filling = filled ? Filling.FILLED : Filling.NOT_FILLED;
 	}
 
 	@Override
@@ -646,16 +646,16 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 
 	@Override
 	public boolean containsPoint(FGEPoint p) {
-		if ((p.x >= getX() - EPSILON) && (p.x <= getX() + getWidth() + EPSILON) && (p.y >= getY() - EPSILON)
-				&& (p.y <= getY() + getHeight() + EPSILON)) {
+		if (p.x >= getX() - EPSILON && p.x <= getX() + getWidth() + EPSILON && p.y >= getY() - EPSILON
+				&& p.y <= getY() + getHeight() + EPSILON) {
 
 			if (!getIsFilled()) {
 				FGESegment north = getArcExcludedNorth();
 				FGESegment south = getArcExcludedSouth();
 				FGESegment west = getArcExcludedWest();
 				FGESegment east = getArcExcludedEast();
-				return (north.contains(p) || south.contains(p) || east.contains(p) || west.contains(p) || getNorthEastRound().contains(p)
-						|| getNorthWestRound().contains(p) || getSouthEastRound().contains(p) || getSouthWestRound().contains(p));
+				return north.contains(p) || south.contains(p) || east.contains(p) || west.contains(p) || getNorthEastRound().contains(p)
+						|| getNorthWestRound().contains(p) || getSouthEastRound().contains(p) || getSouthWestRound().contains(p);
 			} else {
 				if (new FGERectangle(new FGEPoint(getX(), getY() + archeight / 2), new FGEDimension(getWidth(), getHeight() - archeight),
 						Filling.FILLED).contains(p)) {
@@ -665,8 +665,8 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 						Filling.FILLED).contains(p)) {
 					return true;
 				}
-				return (getFilledNorthEastRound().containsPoint(p) || getFilledNorthWestRound().containsPoint(p)
-						|| getFilledSouthEastRound().containsPoint(p) || getFilledSouthWestRound().containsPoint(p));
+				return getFilledNorthEastRound().containsPoint(p) || getFilledNorthWestRound().containsPoint(p)
+						|| getFilledSouthEastRound().containsPoint(p) || getFilledSouthWestRound().containsPoint(p);
 			}
 		}
 		return false;
@@ -678,7 +678,7 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 			return false;
 		}
 		if (l instanceof FGESegment) {
-			return (containsPoint(l.getP1()) && containsPoint(l.getP2()));
+			return containsPoint(l.getP1()) && containsPoint(l.getP2());
 		}
 		return false;
 	}
@@ -701,8 +701,8 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 	public FGEArea transform(AffineTransform t) {
 		// TODO: not valid for AffineTransform containing rotations
 
-		FGEPoint p1 = (new FGEPoint(getX(), getY())).transform(t);
-		FGEPoint p2 = (new FGEPoint(getX() + getWidth(), getY() + getHeight())).transform(t);
+		FGEPoint p1 = new FGEPoint(getX(), getY()).transform(t);
+		FGEPoint p2 = new FGEPoint(getX() + getWidth(), getY() + getHeight()).transform(t);
 
 		// TODO: if transformation contains a rotation, turn into a regular polygon
 		// arcwidth,archeight must also be computed according to this rotation
@@ -764,9 +764,9 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 			if (getIsFilled() != p.getIsFilled()) {
 				return false;
 			}
-			return ((Math.abs(getX() - p.getX()) <= EPSILON) && (Math.abs(getY() - p.getY()) <= EPSILON)
-					&& (Math.abs(getWidth() - p.getWidth()) <= EPSILON) && (Math.abs(getHeight() - p.getHeight()) <= EPSILON)
-					&& (Math.abs(getArcWidth() - p.getArcWidth()) <= EPSILON) && (Math.abs(getArcHeight() - p.getArcHeight()) <= EPSILON));
+			return Math.abs(getX() - p.getX()) <= EPSILON && Math.abs(getY() - p.getY()) <= EPSILON
+					&& Math.abs(getWidth() - p.getWidth()) <= EPSILON && Math.abs(getHeight() - p.getHeight()) <= EPSILON
+					&& Math.abs(getArcWidth() - p.getArcWidth()) <= EPSILON && Math.abs(getArcHeight() - p.getArcHeight()) <= EPSILON;
 		}
 		return super.equals(obj);
 	}
